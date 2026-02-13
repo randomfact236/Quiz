@@ -239,6 +239,19 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
 }
 
 function TimerChallengesPage(): JSX.Element {
+  const subjects = [
+    { id: 'science', name: 'Science', emoji: '🔬' },
+    { id: 'math', name: 'Math', emoji: '🔢' },
+    { id: 'history', name: 'History', emoji: '📜' },
+    { id: 'geography', name: 'Geography', emoji: '🌍' },
+    { id: 'english', name: 'English', emoji: '📖' },
+    { id: 'environment', name: 'Environment', emoji: '🌱' },
+    { id: 'technology', name: 'Technology', emoji: '💻' },
+    { id: 'business', name: 'Business', emoji: '💼' },
+    { id: 'health', name: 'Health', emoji: '💪' },
+    { id: 'parenting', name: 'Parenting', emoji: '👶' },
+  ];
+
   const levels = [
     { id: 'easy', color: 'bg-green-500', label: '🟢 EASY' },
     { id: 'medium', color: 'bg-yellow-500', label: '🟡 MEDIUM' },
@@ -257,6 +270,37 @@ function TimerChallengesPage(): JSX.Element {
         <h1 className="mb-8 text-center text-3xl font-bold text-white">
           ⏱️ Timer Challenges ⏱️
         </h1>
+
+        {/* Subject-wise Mix */}
+        <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+          <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4">
+            <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
+            <p className="text-sm text-white/80">Choose level - All 20 chapters mixed per subject</p>
+          </div>
+          <div className="p-4">
+            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+              {levels.map((level) => (
+                <button
+                  key={`subject-${level.id}`}
+                  className={`rounded-xl ${level.color} p-3 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                >
+                  <div className="font-bold text-sm">{level.label}</div>
+                </button>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+              {subjects.map((subject) => (
+                <button
+                  key={subject.id}
+                  className="rounded-xl bg-gradient-to-r from-teal-100 to-emerald-100 p-3 text-center transition-all hover:scale-105 hover:shadow-lg border border-teal-200"
+                >
+                  <div className="text-xl">{subject.emoji}</div>
+                  <div className="text-xs font-semibold text-teal-800">{subject.name}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Level-wise Mix */}
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
@@ -294,6 +338,19 @@ function TimerChallengesPage(): JSX.Element {
 }
 
 function PracticeModePage(): JSX.Element {
+  const subjects = [
+    { id: 'science', name: 'Science', emoji: '🔬' },
+    { id: 'math', name: 'Math', emoji: '🔢' },
+    { id: 'history', name: 'History', emoji: '📜' },
+    { id: 'geography', name: 'Geography', emoji: '🌍' },
+    { id: 'english', name: 'English', emoji: '📖' },
+    { id: 'environment', name: 'Environment', emoji: '🌱' },
+    { id: 'technology', name: 'Technology', emoji: '💻' },
+    { id: 'business', name: 'Business', emoji: '💼' },
+    { id: 'health', name: 'Health', emoji: '💪' },
+    { id: 'parenting', name: 'Parenting', emoji: '👶' },
+  ];
+
   const levels = [
     { id: 'easy', color: 'bg-green-500', label: '🟢 EASY' },
     { id: 'medium', color: 'bg-yellow-500', label: '🟡 MEDIUM' },
@@ -312,6 +369,37 @@ function PracticeModePage(): JSX.Element {
         <h1 className="mb-8 text-center text-3xl font-bold text-white">
           🎯 Practice Mode 🎯
         </h1>
+
+        {/* Subject-wise Mix */}
+        <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+          <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-4">
+            <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
+            <p className="text-sm text-white/80">Choose level - All 20 chapters mixed per subject</p>
+          </div>
+          <div className="p-4">
+            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+              {levels.map((level) => (
+                <button
+                  key={`subject-${level.id}`}
+                  className={`rounded-xl ${level.color} p-3 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                >
+                  <div className="font-bold text-sm">{level.label}</div>
+                </button>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+              {subjects.map((subject) => (
+                <button
+                  key={subject.id}
+                  className="rounded-xl bg-gradient-to-r from-cyan-100 to-blue-100 p-3 text-center transition-all hover:scale-105 hover:shadow-lg border border-cyan-200"
+                >
+                  <div className="text-xl">{subject.emoji}</div>
+                  <div className="text-xs font-semibold text-cyan-800">{subject.name}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Level-wise Mix */}
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
