@@ -1,0 +1,99 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ai-quiz-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aiquiz
+      POSTGRES_PASSWORD: aiquiz_secure_password
+      POSTGRES_DB: aiquiz
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiquiz -d aiquiz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-quiz-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ai-quiz-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass aiquiz_redis_password
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "aiquiz_redis_password", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-quiz-network
+
+  # RabbitMQ Message Queue
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ai-quiz-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: aiquiz
+      RABBITMQ_DEFAULT_PASS: aiquiz_rabbitmq_password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - ai-quiz-network
+
+  # MinIO Object Storage
+  minio:
+    image: minio/minio:latest
+    container_name: ai-quiz-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: aiquiz
+      MINIO_ROOT_PASSWORD: aiquiz_minio_password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - ai-quiz-network
+
+networks:
+  ai-quiz-network:
+    driver: bridge
+    name: ai-quiz-network
+
+volumes:
+  postgres_data:
+    name: ai-quiz-postgres-data
+  redis_data:
+    name: ai-quiz-redis-data
+  rabbitmq_data:
+    name: ai-quiz-rabbitmq-data
+  minio_data:
+    name: ai-quiz-minio-data
