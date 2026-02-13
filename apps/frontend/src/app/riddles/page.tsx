@@ -1,7 +1,11 @@
-'use client';
-import { CollapsibleSection } from '@/components/CollapsibleSection';
+import type { Metadata } from 'next';
 
-const normalChapters = [
+export const metadata: Metadata = {
+  title: 'Riddles',
+  description: 'Challenge your mind with 20 chapters of riddles from easy to mind-bending.',
+};
+
+const riddleChapters = [
   { num: 1, title: 'Trick Questions', difficulty: 'Easy', icon: '🎯' },
   { num: 2, title: 'Puzzle Stories', difficulty: 'Easy', icon: '📖' },
   { num: 3, title: 'Number Riddles', difficulty: 'Medium', icon: '🔢' },
@@ -12,9 +16,6 @@ const normalChapters = [
   { num: 8, title: 'Everyday Objects', difficulty: 'Easy', icon: '🏺' },
   { num: 9, title: 'Lateral Thinking', difficulty: 'Hard', icon: '🔄' },
   { num: 10, title: 'Wordplay', difficulty: 'Medium', icon: '📝' },
-];
-
-const quickChapters = [
   { num: 11, title: 'Visual Riddles', difficulty: 'Medium', icon: '👁️' },
   { num: 12, title: 'Pattern Recognition', difficulty: 'Hard', icon: '🔲' },
   { num: 13, title: 'Short & Quick', difficulty: 'Easy', icon: '⚡' },
@@ -30,79 +31,50 @@ const quickChapters = [
 function getDifficultyColor(difficulty: string): string {
   switch (difficulty) {
     case 'Easy':
-      return 'bg-green-100 text-green-700 border-green-200';
+      return 'bg-green-100 text-green-700';
     case 'Medium':
-      return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      return 'bg-yellow-100 text-yellow-700';
     case 'Hard':
-      return 'bg-orange-100 text-orange-700 border-orange-200';
+      return 'bg-orange-100 text-orange-700';
     case 'Expert':
-      return 'bg-red-100 text-red-700 border-red-200';
+      return 'bg-red-100 text-red-700';
     default:
-      return 'bg-gray-100 text-gray-700 border-gray-200';
+      return 'bg-gray-100 text-gray-700';
   }
-}
-
-function ChapterCard({ chapter }: { chapter: typeof normalChapters[0] }): JSX.Element {
-  return (
-    <div
-      className="group cursor-pointer rounded-xl bg-white p-4 shadow-md transition-all hover:scale-105 hover:shadow-lg border border-gray-100 hover:border-blue-200"
-    >
-      <div className="flex items-center gap-3 mb-2">
-        <span className="text-2xl transition-transform group-hover:scale-110">{chapter.icon}</span>
-        <span className="text-sm font-medium text-gray-500">
-          Chapter {chapter.num}
-        </span>
-      </div>
-      <h2 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{chapter.title}</h2>
-      <span
-        className={`inline-block rounded-full px-2 py-1 text-xs font-medium border ${getDifficultyColor(chapter.difficulty)}`}
-      >
-        {chapter.difficulty}
-      </span>
-    </div>
-  );
 }
 
 export default function RiddlesPage(): JSX.Element {
   return (
-    <main id="main-content" className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-12">
-      <div className="container mx-auto max-w-4xl">
-        <h1 className="mb-4 text-center text-4xl font-bold text-white">
+    <main id="main-content" className="min-h-screen bg-secondary-50 px-4 py-12">
+      <div className="container mx-auto">
+        <h1 className="mb-4 text-center text-4xl font-bold text-secondary-900">
           🧩 Riddles
         </h1>
-        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-white/80">
+        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-secondary-600">
           Challenge yourself with 20 chapters of mind-bending riddles!
         </p>
 
-        {/* Normal Section */}
-        <CollapsibleSection
-          title="Normal Section"
-          subtitle="Classic riddles for thoughtful solving"
-          icon="📚"
-          headerColor="from-blue-500 to-indigo-500"
-          defaultOpen={true}
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {normalChapters.map((chapter) => (
-              <ChapterCard key={chapter.num} chapter={chapter} />
-            ))}
-          </div>
-        </CollapsibleSection>
-
-        {/* Quick Section */}
-        <CollapsibleSection
-          title="Quick Section"
-          subtitle="Fast-paced riddles for quick thinkers"
-          icon="⚡"
-          headerColor="from-orange-500 to-red-500"
-          defaultOpen={true}
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {quickChapters.map((chapter) => (
-              <ChapterCard key={chapter.num} chapter={chapter} />
-            ))}
-          </div>
-        </CollapsibleSection>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {riddleChapters.map((chapter) => (
+            <div
+              key={chapter.num}
+              className="card hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1 p-4"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">{chapter.icon}</span>
+                <span className="text-sm font-medium text-secondary-500">
+                  Chapter {chapter.num}
+                </span>
+              </div>
+              <h2 className="font-semibold text-secondary-900 mb-2">{chapter.title}</h2>
+              <span
+                className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getDifficultyColor(chapter.difficulty)}`}
+              >
+                {chapter.difficulty}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );
