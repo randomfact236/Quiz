@@ -298,15 +298,17 @@ function TimerChallengesPage(): JSX.Element {
                   </button>
                   {/* Show levels when subject is selected */}
                   {selectedSubject === subject.id && (
-                    <div className="grid grid-cols-1 gap-1 animate-in fade-in slide-in-from-top-2">
-                      {levels.map((level) => (
-                        <button
-                          key={level.id}
-                          className={`rounded-lg ${level.color} px-2 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
-                        >
-                          {level.label}
-                        </button>
-                      ))}
+                    <div className="col-span-full mt-2">
+                      <div className="flex flex-wrap gap-1 animate-in fade-in slide-in-from-top-2">
+                        {levels.map((level) => (
+                          <button
+                            key={level.id}
+                            className={`rounded-lg ${level.color} px-3 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md flex-1 min-w-[60px]`}
+                          >
+                            {level.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -410,15 +412,17 @@ function PracticeModePage(): JSX.Element {
                   </button>
                   {/* Show levels when subject is selected */}
                   {selectedSubject === subject.id && (
-                    <div className="grid grid-cols-1 gap-1 animate-in fade-in slide-in-from-top-2">
-                      {levels.map((level) => (
-                        <button
-                          key={level.id}
-                          className={`rounded-lg ${level.color} px-2 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
-                        >
-                          {level.label}
-                        </button>
-                      ))}
+                    <div className="col-span-full mt-2">
+                      <div className="flex flex-wrap gap-1 animate-in fade-in slide-in-from-top-2">
+                        {levels.map((level) => (
+                          <button
+                            key={level.id}
+                            className={`rounded-lg ${level.color} px-3 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md flex-1 min-w-[60px]`}
+                          >
+                            {level.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
