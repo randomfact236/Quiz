@@ -7,16 +7,26 @@ import {
   Body,
   Param,
   Query,
+  HttpCode,
+  HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { DadJokesService } from './dad-jokes.service';
+import {
+  CreateDadJokeDto,
+  CreateJokeCategoryDto,
+  UpdateJokeCategoryDto,
+  PaginationDto,
+  SearchJokesDto,
+  BulkImportResultDto,
+  BulkDeleteDto,
+} from '../common/dto/base.dto';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { CreateDadJokeDto, PaginationDto } from '../common/dto/base.dto';
 
 @ApiTags('Dad Jokes')
 @Controller('jokes')
@@ -26,40 +36,63 @@ export class DadJokesController {
   // ==================== PUBLIC ENDPOINTS ====================
 
   @Get()
-  @ApiOperation({ summary: 'Get all dad jokes' })
-  async getAllJokes(@Query() pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
+  @ApiOperation({ summary: 'Get all dad jokes with pagination' })
+  @ApiResponse({ status: 200, description: 'Returns paginated dad jokes' })
+  findAll(@Query() pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
     return this.jokesService.findAllJokes(pagination);
   }
 
   @Get('random')
   @ApiOperation({ summary: 'Get a random dad joke' })
-  async getRandomJoke(): Promise<DadJoke> {
+  @ApiResponse({ status: 200, description: 'Returns a random joke' })
+  @ApiResponse({ status: 404, description: 'No jokes found' })
+  findRandom(): Promise<DadJoke> {
     return this.jokesService.findRandomJoke();
+  }
+
+  @Get('search')
+  @ApiOperation({ summary: 'Search dad jokes' })
+  @ApiResponse({ status: 200, description: 'Returns filtered jokes' })
+  search(@Query() searchDto: SearchJokesDto): Promise<{ data: DadJoke[]; total: number }> {
+    return this.jokesService.searchJokes(searchDto);
   }
 
   @Get('categories')
   @ApiOperation({ summary: 'Get all joke categories' })
-  async getAllCategories(): Promise<JokeCategory[]> {
+  @ApiResponse({ status: 200, description: 'Returns all categories' })
+  findCategories(): Promise<JokeCategory[]> {
     return this.jokesService.findAllCategories();
   }
 
-  @Get('category/:categoryId')
-  @ApiOperation({ summary: 'Get jokes by category' })
-  async getJokesByCategory(
-    @Param('categoryId') categoryId: string,
-    @Query() pagination: PaginationDto,
-  ): Promise<{ data: DadJoke[]; total: number }> {
-    return this.jokesService.findJokesByCategory(categoryId, pagination);
+  @Get('categories/:id')
+  @ApiOperation({ summary: 'Get category by ID with jokes' })
+  @ApiResponse({ status: 200, description: 'Returns category' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  findCategoryById(@Param('id') id: string): Promise<JokeCategory> {
+    return this.jokesService.findCategoryById(id);
   }
 
-  // ==================== ADMIN ENDPOINTS ====================
+  @Get('category/:id')
+  @ApiOperation({ summary: 'Get jokes by category' })
+  @ApiResponse({ status: 200, description: 'Returns jokes in category' })
+  findByCategory(
+    @Param('id') id: string,
+    @Query() pagination: PaginationDto,
+  ): Promise<{ data: DadJoke[]; total: number }> {
+    return this.jokesService.findJokesByCategory(id, pagination);
+  }
+
+  // ==================== ADMIN ENDPOINTS - JOKES ====================
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new dad joke (Admin only)' })
-  async createJoke(@Body() dto: CreateDadJokeDto): Promise<DadJoke> {
+  @ApiOperation({ summary: 'Create a new dad joke (Admin only)' })
+  @ApiResponse({ status: 201, description: 'Joke created successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  create(@Body() dto: CreateDadJokeDto): Promise<DadJoke> {
     return this.jokesService.createJoke(dto);
   }
 
@@ -67,21 +100,21 @@ export class DadJokesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create jokes (Admin only)' })
-  async createJokesBulk(@Body() dto: CreateDadJokeDto[]): Promise<{ count: number }> {
+  @ApiOperation({ summary: 'Bulk create dad jokes (Admin only)' })
+  @ApiResponse({ status: 201, description: 'Jokes created successfully', type: BulkImportResultDto })
+  async createBulk(@Body() dto: CreateDadJokeDto[]): Promise<BulkImportResultDto> {
     const count = await this.jokesService.createJokesBulk(dto);
-    return { count };
+    return { success: count, failed: dto.length - count };
   }
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update joke (Admin only)' })
-  async updateJoke(
-    @Param('id') id: string,
-    @Body() dto: Partial<CreateDadJokeDto>,
-  ): Promise<DadJoke> {
+  @ApiOperation({ summary: 'Update a dad joke (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Joke updated successfully' })
+  @ApiResponse({ status: 404, description: 'Joke not found' })
+  update(@Param('id') id: string, @Body() dto: Partial<CreateDadJokeDto>): Promise<DadJoke> {
     return this.jokesService.updateJoke(id, dto);
   }
 
@@ -89,42 +122,68 @@ export class DadJokesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete joke (Admin only)' })
-  async deleteJoke(@Param('id') id: string): Promise<{ message: string }> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a dad joke (Admin only)' })
+  @ApiResponse({ status: 204, description: 'Joke deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Joke not found' })
+  async remove(@Param('id') id: string): Promise<void> {
     await this.jokesService.deleteJoke(id);
-    return { message: 'Joke deleted successfully' };
   }
 
-  // ==================== CATEGORY MANAGEMENT ====================
+  @Post('bulk-delete')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Bulk delete dad jokes (Admin only)' })
+  @ApiResponse({ status: 204, description: 'Jokes deleted successfully' })
+  async removeBulk(@Body() dto: BulkDeleteDto): Promise<void> {
+    for (const id of dto.ids) {
+      await this.jokesService.deleteJoke(id);
+    }
+  }
+
+  // ==================== ADMIN ENDPOINTS - CATEGORIES ====================
 
   @Post('categories')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create joke category (Admin only)' })
-  async createCategory(@Body() dto: { name: string }): Promise<JokeCategory> {
-    return this.jokesService.createCategory(dto.name);
+  @ApiOperation({ summary: 'Create a new joke category (Admin only)' })
+  @ApiResponse({ status: 201, description: 'Category created successfully' })
+  createCategory(@Body() dto: CreateJokeCategoryDto): Promise<JokeCategory> {
+    return this.jokesService.createCategory(dto);
   }
 
   @Put('categories/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update category (Admin only)' })
-  async updateCategory(
-    @Param('id') id: string,
-    @Body() dto: { name: string },
-  ): Promise<JokeCategory> {
-    return this.jokesService.updateCategory(id, dto.name);
+  @ApiOperation({ summary: 'Update a joke category (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Category updated successfully' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  updateCategory(@Param('id') id: string, @Body() dto: UpdateJokeCategoryDto): Promise<JokeCategory> {
+    return this.jokesService.updateCategory(id, dto);
   }
 
   @Delete('categories/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete category (Admin only)' })
-  async deleteCategory(@Param('id') id: string): Promise<{ message: string }> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a joke category and all its jokes (Admin only)' })
+  @ApiResponse({ status: 204, description: 'Category deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  async removeCategory(@Param('id') id: string): Promise<void> {
     await this.jokesService.deleteCategory(id);
-    return { message: 'Category deleted successfully' };
+  }
+
+  // ==================== STATS ====================
+
+  @Get('stats/overview')
+  @ApiOperation({ summary: 'Get dad jokes statistics' })
+  @ApiResponse({ status: 200, description: 'Returns statistics' })
+  getStats(): Promise<{ totalJokes: number; totalCategories: number; jokesByCategory: Record<string, number> }> {
+    return this.jokesService.getStats();
   }
 }
