@@ -316,11 +316,11 @@ function TimerChallengesPage(): JSX.Element {
                     Close
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-2 justify-start">
                   {levels.map((level) => (
                     <button
                       key={level.id}
-                      className={`rounded-lg ${level.color} px-4 py-2 text-center text-white text-sm font-bold transition-all hover:scale-105 hover:shadow-md flex-1 min-w-[80px]`}
+                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
                     >
                       {level.label}
                     </button>
@@ -444,11 +444,11 @@ function PracticeModePage(): JSX.Element {
                     Close
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-2 justify-start">
                   {levels.map((level) => (
                     <button
                       key={level.id}
-                      className={`rounded-lg ${level.color} px-4 py-2 text-center text-white text-sm font-bold transition-all hover:scale-105 hover:shadow-md flex-1 min-w-[80px]`}
+                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
                     >
                       {level.label}
                     </button>
