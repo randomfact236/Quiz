@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { CollapsibleSection } from '@/components/CollapsibleSection';
 
 function QuizContent(): JSX.Element {
   const searchParams = useSearchParams();
@@ -131,6 +132,10 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 
   const info = subjectInfo[subject] || { emoji: '📚', name: subject, chapters: Array.from({length: 20}, (_, i) => `Chapter ${i + 1}`) };
 
+  // Split chapters into normal and quick sections (first 10 normal, last 10 quick)
+  const normalChapters = info.chapters.slice(0, 10);
+  const quickChapters = info.chapters.slice(10, 20);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
       <div className="mx-auto max-w-2xl">
@@ -143,18 +148,49 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         </h1>
         <p className="mb-8 text-center text-white/80">Select a Chapter</p>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {info.chapters.map((chapterName, index) => (
-            <Link
-              key={index}
-              href={`/quiz?subject=${subject}&chapter=${index + 1}`}
-              className="flex flex-col items-center rounded-xl bg-white/95 p-4 text-center shadow-md transition-all hover:scale-105 hover:bg-white hover:shadow-lg"
-            >
-              <span className="mb-1 text-lg font-bold text-gray-400">Ch.{index + 1}</span>
-              <span className="text-sm font-medium text-gray-700">{chapterName}</span>
-            </Link>
-          ))}
-        </div>
+        {/* Normal Section - Default Open */}
+        <CollapsibleSection
+          title="Normal Section"
+          subtitle="Standard chapters with progressive learning"
+          icon="📚"
+          headerColor="from-blue-500 to-indigo-500"
+          defaultOpen={true}
+        >
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {normalChapters.map((chapterName, index) => (
+              <Link
+                key={`normal-${index}`}
+                href={`/quiz?subject=${subject}&chapter=${index + 1}`}
+                className="flex flex-col items-center rounded-xl bg-white p-4 text-center shadow-md transition-all hover:scale-105 hover:bg-blue-50 hover:shadow-lg border border-gray-100"
+              >
+                <span className="mb-1 text-lg font-bold text-blue-400">Ch.{index + 1}</span>
+                <span className="text-sm font-medium text-gray-700">{chapterName}</span>
+              </Link>
+            ))}
+          </div>
+        </CollapsibleSection>
+
+        {/* Quick Section - Default Open */}
+        <CollapsibleSection
+          title="Quick Section"
+          subtitle="Advanced chapters for quick practice"
+          icon="⚡"
+          headerColor="from-orange-500 to-red-500"
+          defaultOpen={true}
+        >
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {quickChapters.map((chapterName, index) => (
+              <Link
+                key={`quick-${index + 10}`}
+                href={`/quiz?subject=${subject}&chapter=${index + 11}`}
+                className="flex flex-col items-center rounded-xl bg-white p-4 text-center shadow-md transition-all hover:scale-105 hover:bg-orange-50 hover:shadow-lg border border-gray-100"
+              >
+                <span className="mb-1 text-lg font-bold text-orange-400">Ch.{index + 11}</span>
+                <span className="text-sm font-medium text-gray-700">{chapterName}</span>
+              </Link>
+            ))}
+          </div>
+        </CollapsibleSection>
       </div>
     </main>
   );
@@ -197,12 +233,14 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
         <p className="mb-8 text-center text-white/80">{info.name}</p>
 
         {/* Normal Level Section */}
-        <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-4">
-            <h2 className="text-xl font-bold text-white">📚 Normal Level</h2>
-            <p className="text-sm text-white/80">Practice at your own pace - No time limit</p>
-          </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+        <CollapsibleSection
+          title="Normal Level"
+          subtitle="Practice at your own pace - No time limit"
+          icon="📚"
+          headerColor="from-blue-500 to-indigo-500"
+          defaultOpen={true}
+        >
+          <div className="grid gap-3 sm:grid-cols-5">
             {levels.map((level) => (
               <button
                 key={`normal-${level.id}`}
@@ -213,15 +251,17 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
               </button>
             ))}
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Quick Pick Section */}
-        <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4">
-            <h2 className="text-xl font-bold text-white">⚡ Quick Pick</h2>
-            <p className="text-sm text-white/80">Time-bound challenge - Beat the clock!</p>
-          </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+        <CollapsibleSection
+          title="Quick Pick"
+          subtitle="Time-bound challenge - Beat the clock!"
+          icon="⚡"
+          headerColor="from-orange-500 to-red-500"
+          defaultOpen={true}
+        >
+          <div className="grid gap-3 sm:grid-cols-5">
             {levels.map((level) => (
               <button
                 key={`quick-${level.id}`}
@@ -232,7 +272,7 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
               </button>
             ))}
           </div>
-        </div>
+        </CollapsibleSection>
       </div>
     </main>
   );
@@ -259,12 +299,14 @@ function TimerChallengesPage(): JSX.Element {
         </h1>
 
         {/* Level-wise Mix */}
-        <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4">
-            <h2 className="text-xl font-bold text-white">🌈 Level-wise Mix (All Subjects)</h2>
-            <p className="text-sm text-white/80">Same level, all subjects mixed</p>
-          </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+        <CollapsibleSection
+          title="Level-wise Mix"
+          subtitle="Same level, all subjects mixed"
+          icon="🌈"
+          headerColor="from-purple-500 to-pink-500"
+          defaultOpen={true}
+        >
+          <div className="grid gap-3 sm:grid-cols-5">
             {levels.map((level) => (
               <button
                 key={level.id}
@@ -274,20 +316,20 @@ function TimerChallengesPage(): JSX.Element {
               </button>
             ))}
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Complete Mix */}
-        <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-red-500 to-orange-500 p-4">
-            <h2 className="text-xl font-bold text-white">🔥 Complete Mix</h2>
-            <p className="text-sm text-white/80">All subjects, all levels, all chapters mixed!</p>
-          </div>
-          <div className="p-4">
-            <button className="w-full rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
-              🌟 START COMPLETE MIX
-            </button>
-          </div>
-        </div>
+        <CollapsibleSection
+          title="Complete Mix"
+          subtitle="All subjects, all levels, all chapters mixed!"
+          icon="🔥"
+          headerColor="from-red-500 to-orange-500"
+          defaultOpen={true}
+        >
+          <button className="w-full rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
+            🌟 START COMPLETE MIX
+          </button>
+        </CollapsibleSection>
       </div>
     </main>
   );
@@ -314,12 +356,14 @@ function PracticeModePage(): JSX.Element {
         </h1>
 
         {/* Level-wise Mix */}
-        <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-4">
-            <h2 className="text-xl font-bold text-white">🌈 Level-wise Mix (All Subjects)</h2>
-            <p className="text-sm text-white/80">Same level, all subjects mixed - No timer</p>
-          </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+        <CollapsibleSection
+          title="Level-wise Mix"
+          subtitle="Same level, all subjects mixed - No timer"
+          icon="🌈"
+          headerColor="from-teal-500 to-cyan-500"
+          defaultOpen={true}
+        >
+          <div className="grid gap-3 sm:grid-cols-5">
             {levels.map((level) => (
               <button
                 key={level.id}
@@ -329,20 +373,20 @@ function PracticeModePage(): JSX.Element {
               </button>
             ))}
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Complete Mix */}
-        <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-4">
-            <h2 className="text-xl font-bold text-white">🔥 Complete Mix</h2>
-            <p className="text-sm text-white/80">Ultimate practice - No timer</p>
-          </div>
-          <div className="p-4">
-            <button className="w-full rounded-xl bg-gradient-to-r from-indigo-400 to-purple-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
-              🌟 START COMPLETE MIX
-            </button>
-          </div>
-        </div>
+        <CollapsibleSection
+          title="Complete Mix"
+          subtitle="Ultimate practice - No timer"
+          icon="🔥"
+          headerColor="from-indigo-500 to-purple-500"
+          defaultOpen={true}
+        >
+          <button className="w-full rounded-xl bg-gradient-to-r from-indigo-400 to-purple-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
+            🌟 START COMPLETE MIX
+          </button>
+        </CollapsibleSection>
       </div>
     </main>
   );
