@@ -283,7 +283,7 @@ function TimerChallengesPage(): JSX.Element {
           </div>
           <div className="p-4">
             {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               {subjects.map((subject) => (
                 <button
                   key={subject.id}
@@ -302,10 +302,10 @@ function TimerChallengesPage(): JSX.Element {
               ))}
             </div>
             
-            {/* Levels Row - Shows below subjects when one is selected */}
+            {/* Levels Section - Shows below subjects when one is selected */}
             {selectedSubject && selectedSubjectData && (
               <div className="mt-4 pt-4 border-t-2 border-teal-100 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-bold text-teal-700">
                     {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
                   </span>
@@ -316,11 +316,11 @@ function TimerChallengesPage(): JSX.Element {
                     Close
                   </button>
                 </div>
-                <div className="flex flex-row flex-wrap gap-2 justify-start">
+                <div className="flex flex-row gap-2">
                   {levels.map((level) => (
                     <button
                       key={level.id}
-                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
+                      className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md`}
                     >
                       {level.label}
                     </button>
@@ -411,7 +411,7 @@ function PracticeModePage(): JSX.Element {
           </div>
           <div className="p-4">
             {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               {subjects.map((subject) => (
                 <button
                   key={subject.id}
@@ -430,10 +430,10 @@ function PracticeModePage(): JSX.Element {
               ))}
             </div>
             
-            {/* Levels Row - Shows below subjects when one is selected */}
+            {/* Levels Section - Shows below subjects when one is selected */}
             {selectedSubject && selectedSubjectData && (
               <div className="mt-4 pt-4 border-t-2 border-cyan-100 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-bold text-cyan-700">
                     {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
                   </span>
@@ -444,11 +444,11 @@ function PracticeModePage(): JSX.Element {
                     Close
                   </button>
                 </div>
-                <div className="flex flex-row flex-wrap gap-2 justify-start">
+                <div className="flex flex-row gap-2">
                   {levels.map((level) => (
                     <button
                       key={level.id}
-                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
+                      className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md`}
                     >
                       {level.label}
                     </button>
