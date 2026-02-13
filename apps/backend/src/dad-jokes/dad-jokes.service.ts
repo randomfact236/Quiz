@@ -3,10 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
+import { JokeSubject } from './entities/joke-subject.entity';
+import { JokeChapter } from './entities/joke-chapter.entity';
+import { QuizJoke } from './entities/quiz-joke.entity';
 import {
   CreateDadJokeDto,
   CreateJokeCategoryDto,
   UpdateJokeCategoryDto,
+  CreateJokeSubjectDto,
+  UpdateJokeSubjectDto,
+  CreateJokeChapterDto,
+  UpdateJokeChapterDto,
+  CreateQuizJokeDto,
+  UpdateQuizJokeDto,
   PaginationDto,
   SearchJokesDto,
 } from '../common/dto/base.dto';
@@ -19,10 +28,16 @@ export class DadJokesService {
     private jokeRepo: Repository<DadJoke>,
     @InjectRepository(JokeCategory)
     private categoryRepo: Repository<JokeCategory>,
+    @InjectRepository(JokeSubject)
+    private subjectRepo: Repository<JokeSubject>,
+    @InjectRepository(JokeChapter)
+    private chapterRepo: Repository<JokeChapter>,
+    @InjectRepository(QuizJoke)
+    private quizJokeRepo: Repository<QuizJoke>,
     private cacheService: CacheService,
   ) {}
 
-  // ==================== JOKES ====================
+  // ==================== CLASSIC JOKES ====================
 
   async findAllJokes(pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
@@ -141,7 +156,7 @@ export class DadJokesService {
     await this.cacheService.delPattern('jokes:*');
   }
 
-  // ==================== CATEGORIES ====================
+  // ==================== CLASSIC CATEGORIES ====================
 
   async findAllCategories(): Promise<JokeCategory[]> {
     return this.cacheService.getOrSet(
@@ -202,7 +217,6 @@ export class DadJokesService {
       throw new NotFoundException('Category not found');
     }
 
-    // Delete all jokes in this category first
     if (category.jokes !== undefined && category.jokes !== null && category.jokes.length > 0) {
       await this.jokeRepo.remove(category.jokes);
     }
@@ -211,23 +225,242 @@ export class DadJokesService {
     await this.cacheService.del('jokes:categories');
   }
 
+  // ==================== QUIZ FORMAT - SUBJECTS ====================
+
+  async findAllSubjects(): Promise<JokeSubject[]> {
+    return this.cacheService.getOrSet(
+      'jokes:subjects',
+      async () => {
+        return this.subjectRepo.find({
+          where: { isActive: true },
+          order: { order: 'ASC', name: 'ASC' },
+          relations: ['chapters'],
+        });
+      },
+      3600,
+    );
+  }
+
+  async findSubjectBySlug(slug: string): Promise<JokeSubject> {
+    const subject = await this.subjectRepo.findOne({
+      where: { slug },
+      relations: ['chapters'],
+    });
+    if (subject === null) {
+      throw new NotFoundException('Subject not found');
+    }
+    return subject;
+  }
+
+  async createSubject(dto: CreateJokeSubjectDto): Promise<JokeSubject> {
+    const subject = this.subjectRepo.create({
+      ...dto,
+      isActive: true,
+    });
+    const saved = await this.subjectRepo.save(subject);
+    await this.cacheService.del('jokes:subjects');
+    return saved;
+  }
+
+  async updateSubject(id: string, dto: UpdateJokeSubjectDto): Promise<JokeSubject> {
+    const subject = await this.subjectRepo.findOne({ where: { id } });
+    if (subject === null) {
+      throw new NotFoundException('Subject not found');
+    }
+    Object.assign(subject, dto);
+    const saved = await this.subjectRepo.save(subject);
+    await this.cacheService.del('jokes:subjects');
+    return saved;
+  }
+
+  async deleteSubject(id: string): Promise<void> {
+    const result = await this.subjectRepo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Subject not found');
+    }
+    await this.cacheService.del('jokes:subjects');
+  }
+
+  // ==================== QUIZ FORMAT - CHAPTERS ====================
+
+  async findChaptersBySubject(subjectId: string): Promise<JokeChapter[]> {
+    return this.chapterRepo.find({
+      where: { subject: { id: subjectId } },
+      order: { chapterNumber: 'ASC' },
+      relations: ['subject'],
+    });
+  }
+
+  async createChapter(dto: CreateJokeChapterDto): Promise<JokeChapter> {
+    const subject = await this.subjectRepo.findOne({ where: { id: dto.subjectId } });
+    if (subject === null) {
+      throw new NotFoundException('Subject not found');
+    }
+    const chapter = this.chapterRepo.create({
+      name: dto.name,
+      chapterNumber: dto.chapterNumber,
+      subject,
+    });
+    return this.chapterRepo.save(chapter);
+  }
+
+  async updateChapter(id: string, dto: UpdateJokeChapterDto): Promise<JokeChapter> {
+    const chapter = await this.chapterRepo.findOne({ where: { id } });
+    if (chapter === null) {
+      throw new NotFoundException('Chapter not found');
+    }
+    if (dto.name !== undefined && dto.name.length > 0) {
+      chapter.name = dto.name;
+    }
+    if (dto.chapterNumber !== undefined) {
+      chapter.chapterNumber = dto.chapterNumber;
+    }
+    return this.chapterRepo.save(chapter);
+  }
+
+  async deleteChapter(id: string): Promise<void> {
+    const result = await this.chapterRepo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Chapter not found');
+    }
+  }
+
+  // ==================== QUIZ FORMAT - JOKES ====================
+
+  async findQuizJokesByChapter(
+    chapterId: string,
+    pagination: PaginationDto,
+  ): Promise<{ data: QuizJoke[]; total: number }> {
+    const page = pagination.page ?? 1;
+    const limit = pagination.limit ?? 10;
+    const [data, total] = await this.quizJokeRepo.findAndCount({
+      where: { chapter: { id: chapterId } },
+      relations: ['chapter'],
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'ASC' },
+    });
+    return { data, total };
+  }
+
+  async findRandomQuizJokes(level: string, count: number): Promise<QuizJoke[]> {
+    return this.quizJokeRepo
+      .createQueryBuilder('joke')
+      .where('joke.level = :level', { level })
+      .orderBy('RANDOM()')
+      .limit(count)
+      .getMany();
+  }
+
+  async findMixedQuizJokes(count: number): Promise<QuizJoke[]> {
+    return this.quizJokeRepo
+      .createQueryBuilder('joke')
+      .orderBy('RANDOM()')
+      .limit(count)
+      .getMany();
+  }
+
+  async createQuizJoke(dto: CreateQuizJokeDto): Promise<QuizJoke> {
+    const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+    if (chapter === null) {
+      throw new NotFoundException('Chapter not found');
+    }
+    const joke = this.quizJokeRepo.create({
+      question: dto.question,
+      options: dto.options,
+      correctAnswer: dto.correctAnswer,
+      level: dto.level,
+      explanation: dto.explanation,
+      punchline: dto.punchline,
+      chapter,
+    });
+    return this.quizJokeRepo.save(joke);
+  }
+
+  async createQuizJokesBulk(dto: CreateQuizJokeDto[]): Promise<number> {
+    const jokes: QuizJoke[] = [];
+    for (const j of dto) {
+      const chapter = await this.chapterRepo.findOne({ where: { id: j.chapterId } });
+      if (chapter !== null) {
+        const joke = this.quizJokeRepo.create({
+          question: j.question,
+          options: j.options,
+          correctAnswer: j.correctAnswer,
+          level: j.level,
+          explanation: j.explanation,
+          punchline: j.punchline,
+          chapter,
+        });
+        jokes.push(joke);
+      }
+    }
+    const saved = await this.quizJokeRepo.save(jokes);
+    return saved.length;
+  }
+
+  async updateQuizJoke(id: string, dto: Partial<CreateQuizJokeDto>): Promise<QuizJoke> {
+    const joke = await this.quizJokeRepo.findOne({ where: { id } });
+    if (joke === null) {
+      throw new NotFoundException('Quiz joke not found');
+    }
+    if (dto.question !== undefined && dto.question.length > 0) {
+      joke.question = dto.question;
+    }
+    if (dto.options !== undefined) {
+      joke.options = dto.options;
+    }
+    if (dto.correctAnswer !== undefined && dto.correctAnswer.length > 0) {
+      joke.correctAnswer = dto.correctAnswer;
+    }
+    if (dto.level !== undefined && dto.level.length > 0) {
+      joke.level = dto.level;
+    }
+    if (dto.explanation !== undefined) {
+      joke.explanation = dto.explanation;
+    }
+    if (dto.punchline !== undefined) {
+      joke.punchline = dto.punchline;
+    }
+    if (dto.chapterId !== undefined && dto.chapterId.length > 0) {
+      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+      if (chapter === null) {
+        throw new NotFoundException('Chapter not found');
+      }
+      joke.chapter = chapter;
+    }
+    return this.quizJokeRepo.save(joke);
+  }
+
+  async deleteQuizJoke(id: string): Promise<void> {
+    const result = await this.quizJokeRepo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Quiz joke not found');
+    }
+  }
+
   // ==================== STATS ====================
 
   async getStats(): Promise<{
-    totalJokes: number;
+    totalClassicJokes: number;
     totalCategories: number;
-    jokesByCategory: Record<string, number>;
+    totalQuizJokes: number;
+    totalSubjects: number;
+    totalChapters: number;
   }> {
-    const totalJokes = await this.jokeRepo.count();
-    const totalCategories = await this.categoryRepo.count();
+    const [totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters] = await Promise.all([
+      this.jokeRepo.count(),
+      this.categoryRepo.count(),
+      this.quizJokeRepo.count(),
+      this.subjectRepo.count(),
+      this.chapterRepo.count(),
+    ]);
 
-    const categories = await this.categoryRepo.find({ relations: ['jokes'] });
-    const jokesByCategory: Record<string, number> = {};
-
-    for (const cat of categories) {
-      jokesByCategory[cat.name] = cat.jokes?.length ?? 0;
-    }
-
-    return { totalJokes, totalCategories, jokesByCategory };
+    return {
+      totalClassicJokes,
+      totalCategories,
+      totalQuizJokes,
+      totalSubjects,
+      totalChapters,
+    };
   }
 }

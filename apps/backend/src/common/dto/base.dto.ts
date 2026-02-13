@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // ==================== PAGINATION ====================
@@ -143,7 +143,7 @@ export class UpdateRiddleCategoryDto {
   emoji?: string;
 }
 
-// ==================== DAD JOKES ====================
+// ==================== DAD JOKES (Classic Format) ====================
 
 export class CreateDadJokeDto {
   @ApiProperty({ example: 'Why don\'t scientists trust atoms?' })
@@ -169,7 +169,7 @@ export class UpdateDadJokeDto {
   categoryId?: string;
 }
 
-// ==================== RIDDLES ====================
+// ==================== RIDDLES (Classic Format) ====================
 
 export class CreateRiddleDto {
   @ApiProperty({ example: 'What has keys but no locks?' })
@@ -212,6 +212,352 @@ export class UpdateRiddleDto {
   @IsOptional()
   @IsString()
   categoryId?: string;
+}
+
+// ==================== JOKE SUBJECTS (Quiz Format) ====================
+
+export class CreateJokeSubjectDto {
+  @ApiProperty({ example: 'dad-jokes', description: 'Unique slug' })
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
+
+  @ApiProperty({ example: 'Dad Jokes', description: 'Subject name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: '😂', description: 'Subject emoji' })
+  @IsString()
+  @IsNotEmpty()
+  emoji: string;
+
+  @ApiPropertyOptional({ example: 'Classic dad jokes for everyone' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+export class UpdateJokeSubjectDto {
+  @ApiPropertyOptional({ example: 'dad-jokes' })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiPropertyOptional({ example: 'Dad Jokes' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: '😂' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
+  @ApiPropertyOptional({ example: 'Classic dad jokes for everyone' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+// ==================== JOKE CHAPTERS (Quiz Format) ====================
+
+export class CreateJokeChapterDto {
+  @ApiProperty({ example: 'Programming Jokes' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: 1 })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  chapterNumber: number;
+
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsString()
+  @IsNotEmpty()
+  subjectId: string;
+}
+
+export class UpdateJokeChapterDto {
+  @ApiPropertyOptional({ example: 'Programming Jokes' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  chapterNumber?: number;
+}
+
+// ==================== QUIZ JOKES (Quiz Format) ====================
+
+export class CreateQuizJokeDto {
+  @ApiProperty({ example: 'Why don\'t scientists trust atoms?' })
+  @IsString()
+  @IsNotEmpty()
+  question: string;
+
+  @ApiProperty({ example: ['Because they make up everything', 'They are too small', 'They are unstable', 'They are radioactive'], type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  options: string[];
+
+  @ApiProperty({ example: 'Because they make up everything' })
+  @IsString()
+  @IsNotEmpty()
+  correctAnswer: string;
+
+  @ApiProperty({ example: 'easy', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
+  level: string;
+
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsString()
+  @IsNotEmpty()
+  chapterId: string;
+
+  @ApiPropertyOptional({ example: 'The punchline plays on the double meaning of "make up"' })
+  @IsOptional()
+  @IsString()
+  explanation?: string;
+
+  @ApiPropertyOptional({ example: 'Because they make up everything!' })
+  @IsOptional()
+  @IsString()
+  punchline?: string;
+}
+
+export class UpdateQuizJokeDto {
+  @ApiPropertyOptional({ example: 'Why don\'t scientists trust atoms?' })
+  @IsOptional()
+  @IsString()
+  question?: string;
+
+  @ApiPropertyOptional({ example: ['Because they make up everything', 'They are too small', 'They are unstable', 'They are radioactive'], type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  options?: string[];
+
+  @ApiPropertyOptional({ example: 'Because they make up everything' })
+  @IsOptional()
+  @IsString()
+  correctAnswer?: string;
+
+  @ApiPropertyOptional({ example: 'easy', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @IsOptional()
+  @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
+  level?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsOptional()
+  @IsString()
+  chapterId?: string;
+
+  @ApiPropertyOptional({ example: 'The punchline plays on the double meaning of "make up"' })
+  @IsOptional()
+  @IsString()
+  explanation?: string;
+
+  @ApiPropertyOptional({ example: 'Because they make up everything!' })
+  @IsOptional()
+  @IsString()
+  punchline?: string;
+}
+
+// ==================== RIDDLE SUBJECTS (Quiz Format) ====================
+
+export class CreateRiddleSubjectDto {
+  @ApiProperty({ example: 'brain-teasers', description: 'Unique slug' })
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
+
+  @ApiProperty({ example: 'Brain Teasers', description: 'Subject name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: '🧩', description: 'Subject emoji' })
+  @IsString()
+  @IsNotEmpty()
+  emoji: string;
+
+  @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+export class UpdateRiddleSubjectDto {
+  @ApiPropertyOptional({ example: 'brain-teasers' })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiPropertyOptional({ example: 'Brain Teasers' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: '🧩' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
+  @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+// ==================== RIDDLE CHAPTERS (Quiz Format) ====================
+
+export class CreateRiddleChapterDto {
+  @ApiProperty({ example: 'Logic Puzzles' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: 1 })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  chapterNumber: number;
+
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsString()
+  @IsNotEmpty()
+  subjectId: string;
+}
+
+export class UpdateRiddleChapterDto {
+  @ApiPropertyOptional({ example: 'Logic Puzzles' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  chapterNumber?: number;
+}
+
+// ==================== QUIZ RIDDLES (Quiz Format) ====================
+
+export class CreateQuizRiddleDto {
+  @ApiProperty({ example: 'What has keys but no locks?' })
+  @IsString()
+  @IsNotEmpty()
+  question: string;
+
+  @ApiProperty({ example: ['A piano', 'A keyboard', 'A map', 'A car'], type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  options: string[];
+
+  @ApiProperty({ example: 'A piano' })
+  @IsString()
+  @IsNotEmpty()
+  correctAnswer: string;
+
+  @ApiProperty({ example: 'medium', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
+  level: string;
+
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsString()
+  @IsNotEmpty()
+  chapterId: string;
+
+  @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
+  @IsOptional()
+  @IsString()
+  explanation?: string;
+
+  @ApiPropertyOptional({ example: 'Think about musical instruments' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
+}
+
+export class UpdateQuizRiddleDto {
+  @ApiPropertyOptional({ example: 'What has keys but no locks?' })
+  @IsOptional()
+  @IsString()
+  question?: string;
+
+  @ApiPropertyOptional({ example: ['A piano', 'A keyboard', 'A map', 'A car'], type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  options?: string[];
+
+  @ApiPropertyOptional({ example: 'A piano' })
+  @IsOptional()
+  @IsString()
+  correctAnswer?: string;
+
+  @ApiPropertyOptional({ example: 'medium', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @IsOptional()
+  @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
+  level?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsOptional()
+  @IsString()
+  chapterId?: string;
+
+  @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
+  @IsOptional()
+  @IsString()
+  explanation?: string;
+
+  @ApiPropertyOptional({ example: 'Think about musical instruments' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
 }
 
 // ==================== QUESTIONS ====================

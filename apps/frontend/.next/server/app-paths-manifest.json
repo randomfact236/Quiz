@@ -2,6 +2,7 @@
   "/quiz/page": "app/quiz/page.js",
   "/page": "app/page.js",
   "/jokes/page": "app/jokes/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/riddles/page": "app/riddles/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js"
 }
