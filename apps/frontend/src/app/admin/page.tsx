@@ -1143,12 +1143,82 @@ function QuestionManagementSection({
   );
 }
 
-// Jokes Section
+// Types for Jokes (Simple format - no levels)
+type Joke = {
+  id: number;
+  joke: string;
+  category: string;
+};
+
+type JokeCategory = {
+  id: number;
+  name: string;
+  emoji: string;
+};
+
+// Types for Riddles (Quiz format - no subjects, only chapters)
+type Riddle = {
+  id: number;
+  question: string;
+  optionA: string;
+  optionB: string;
+  optionC: string;
+  optionD: string;
+  correctAnswer: string;
+  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  chapter: string;
+};
+
+// Initial data for Jokes (Simple format)
+const initialJokeCategories: JokeCategory[] = [
+  { id: 1, name: 'Classic Dad Jokes', emoji: '😂' },
+  { id: 2, name: 'Programming Jokes', emoji: '💻' },
+  { id: 3, name: 'Kids Jokes', emoji: '🧒' },
+  { id: 4, name: 'Office Jokes', emoji: '💼' },
+];
+
+const initialJokes: Joke[] = [
+  { id: 1, joke: 'Why don\'t scientists trust atoms? Because they make up everything!', category: 'Classic Dad Jokes' },
+  { id: 2, joke: 'Why did the scarecrow win an award? He was outstanding in his field!', category: 'Classic Dad Jokes' },
+  { id: 3, joke: 'Why do programmers prefer dark mode? Because light attracts bugs!', category: 'Programming Jokes' },
+  { id: 4, joke: 'What do you call a fake noodle? An impasta!', category: 'Classic Dad Jokes' },
+  { id: 5, joke: 'Why did the bicycle fall over? It was two tired!', category: 'Classic Dad Jokes' },
+  { id: 6, joke: 'How do you organize a space party? You planet!', category: 'Classic Dad Jokes' },
+];
+
+// Initial data for Riddles (Same format as Quiz - no subjects, only chapters)
+const initialRiddles: Riddle[] = [
+  { id: 1, question: 'What has keys but no locks?', optionA: 'A piano', optionB: 'A keyboard', optionC: 'A map', optionD: 'A car', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
+  { id: 2, question: 'What has a head and a tail but no body?', optionA: 'A coin', optionB: 'A snake', optionC: 'A rope', optionD: 'A bookmark', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
+  { id: 3, question: 'What gets wetter the more it dries?', optionA: 'A towel', optionB: 'A sponge', optionC: 'Water', optionD: 'Rain', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
+  { id: 4, question: 'I speak without a mouth and hear without ears. What am I?', optionA: 'An echo', optionB: 'A ghost', optionC: 'A phone', optionD: 'Radio', correctAnswer: 'A', level: 'medium', chapter: 'Nature Riddles' },
+  { id: 5, question: 'The more you take, the more you leave behind. What am I?', optionA: 'Footsteps', optionB: 'Memories', optionC: 'Time', optionD: 'Money', correctAnswer: 'A', level: 'medium', chapter: 'Abstract Riddles' },
+  { id: 6, question: 'What has cities but no houses, forests but no trees?', optionA: 'A map', optionB: 'A globe', optionC: 'A book', optionD: 'A painting', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
+];
+
+// Jokes Section (Simple format - no levels)
 function JokesSection(): JSX.Element {
+  const [jokeCategories] = useState<JokeCategory[]>(initialJokeCategories);
+  const [allJokes] = useState<Joke[]>(initialJokes);
+  const [jokeFilterCategory, setJokeFilterCategory] = useState<string>('');
+  const [jokeSearch, setJokeSearch] = useState<string>('');
+  const [jokePage, setJokePage] = useState(1);
+  const jokesPerPage = 10;
+
+  const filteredJokes = allJokes.filter(joke => {
+    const matchesCategory = !jokeFilterCategory || joke.category === jokeFilterCategory;
+    const matchesSearch = !jokeSearch || 
+      joke.joke.toLowerCase().includes(jokeSearch.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const totalJokePages = Math.ceil(filteredJokes.length / jokesPerPage);
+  const paginatedJokes = filteredJokes.slice((jokePage - 1) * jokesPerPage, jokePage * jokesPerPage);
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Manage Dad Jokes</h3>
+        <h3 className="text-lg font-semibold">😂 Dad Jokes Management</h3>
         <div className="flex gap-2">
           <button className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600">
             📤 Bulk Import
@@ -1159,49 +1229,145 @@ function JokesSection(): JSX.Element {
         </div>
       </div>
 
-      <div className="mb-4 flex gap-4">
-        <select className="rounded-lg border border-gray-300 px-4 py-2">
-          <option>All Categories</option>
-          <option>Puns</option>
-          <option>One-liners</option>
-          <option>Wordplay</option>
+      {/* Filters */}
+      <div className="mb-4 flex flex-wrap gap-3">
+        <select 
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          value={jokeFilterCategory}
+          onChange={(e) => setJokeFilterCategory(e.target.value)}
+        >
+          <option value="">All Categories</option>
+          {jokeCategories.map(c => (
+            <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>
+          ))}
         </select>
         <input 
           type="text" 
           placeholder="Search jokes..." 
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-2"
+          className="flex-1 min-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          value={jokeSearch}
+          onChange={(e) => setJokeSearch(e.target.value)}
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        {[1, 2, 3, 4].map((j) => (
-          <div key={j} className="rounded-xl bg-white p-6 shadow-md">
-            <p className="text-gray-800">
-              Why don&apos;t scientists trust atoms? Because they make up everything! 😂
-            </p>
-            <div className="mt-4 flex items-center justify-between">
-              <span className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-800">Puns</span>
-              <div className="flex gap-2">
-                <button className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200">Edit</button>
-                <button className="rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200">Delete</button>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Table */}
+      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">ID</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Joke</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {paginatedJokes.map((joke) => (
+              <tr key={joke.id} className="hover:bg-gray-50">
+                <td className="px-4 py-3 text-sm text-gray-600">#{joke.id}</td>
+                <td className="px-4 py-3">
+                  <p className="text-sm text-gray-800">{joke.joke}</p>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
+                    {joke.category}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex gap-2">
+                    <button className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200">Edit</button>
+                    <button className="rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {paginatedJokes.length === 0 && (
+          <div className="p-8 text-center text-gray-500">No jokes found matching your filters</div>
+        )}
       </div>
+
+      {/* Pagination */}
+      {totalJokePages > 1 && (
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            Showing {((jokePage - 1) * jokesPerPage) + 1} - {Math.min(jokePage * jokesPerPage, filteredJokes.length)} of {filteredJokes.length} jokes
+          </p>
+          <div className="flex gap-2">
+            <button 
+              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+              onClick={() => setJokePage(p => p - 1)}
+              disabled={jokePage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-3 py-1 text-sm">{jokePage} / {totalJokePages}</span>
+            <button 
+              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+              onClick={() => setJokePage(p => p + 1)}
+              disabled={jokePage === totalJokePages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-// Riddles Section
+// Riddles Section (Quiz format - no subject, only chapters)
 function RiddlesSection(): JSX.Element {
+  const [allRiddles] = useState<Riddle[]>(initialRiddles);
+  const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
+  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
+  const [riddleSearch, setRiddleSearch] = useState<string>('');
+  const [riddlePage, setRiddlePage] = useState(1);
+  const riddlesPerPage = 10;
+
+  // Get unique chapters from riddles
+  const chapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
+
+  const filteredRiddles = allRiddles.filter(riddle => {
+    const matchesLevel = !riddleFilterLevel || riddle.level === riddleFilterLevel;
+    const matchesChapter = !riddleFilterChapter || riddle.chapter === riddleFilterChapter;
+    const matchesSearch = !riddleSearch || 
+      riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+      riddle.optionA.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+      riddle.optionB.toLowerCase().includes(riddleSearch.toLowerCase());
+    return matchesLevel && matchesChapter && matchesSearch;
+  });
+
+  const totalRiddlePages = Math.ceil(filteredRiddles.length / riddlesPerPage);
+  const paginatedRiddles = filteredRiddles.slice((riddlePage - 1) * riddlesPerPage, riddlePage * riddlesPerPage);
+
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-orange-100 text-orange-800';
+      case 'expert': return 'bg-red-100 text-red-800';
+      case 'extreme': return 'bg-purple-100 text-purple-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const isCorrectOption = (riddle: Riddle, option: string) => riddle.correctAnswer === option;
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Manage Riddles</h3>
+        <div>
+          <h3 className="text-lg font-semibold">🎭 Riddles Management</h3>
+          <p className="text-sm text-gray-500">{filteredRiddles.length} total riddles</p>
+        </div>
         <div className="flex gap-2">
-          <button className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600">
-            📤 Bulk Import
+          <button className="rounded-lg bg-emerald-500 px-4 py-2 text-white transition-colors hover:bg-emerald-600">
+            📥 Export
+          </button>
+          <button className="rounded-lg bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600">
+            📤 Import
           </button>
           <button className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
             + Add Riddle
@@ -1209,46 +1375,173 @@ function RiddlesSection(): JSX.Element {
         </div>
       </div>
 
-      <div className="mb-4 flex gap-4">
-        <select className="rounded-lg border border-gray-300 px-4 py-2">
-          <option>All Categories</option>
-          <option>Logic</option>
-          <option>Word Play</option>
-          <option>Math</option>
-        </select>
-        <select className="rounded-lg border border-gray-300 px-4 py-2">
-          <option>All Difficulties</option>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-        </select>
-        <input 
-          type="text" 
-          placeholder="Search riddles..." 
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-2"
-        />
+      {/* Filters - Chapter and Level as button rows */}
+      <div className="mb-4 space-y-3">
+        {/* Chapter Row */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-600 mr-1">Chapter:</span>
+          <button
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              riddleFilterChapter === '' 
+                ? 'bg-green-500 text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            onClick={() => setRiddleFilterChapter('')}
+          >
+            All Chapters
+          </button>
+          {chapters.map(chapter => (
+            <button
+              key={chapter}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                riddleFilterChapter === chapter 
+                  ? 'bg-green-500 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              onClick={() => setRiddleFilterChapter(chapter)}
+            >
+              {chapter}
+            </button>
+          ))}
+          <button className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 hover:bg-purple-200 transition-colors">
+            + Add Chapter
+          </button>
+        </div>
+
+        {/* Level Row */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-600 mr-1">Level:</span>
+          <button
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              riddleFilterLevel === '' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            onClick={() => setRiddleFilterLevel('')}
+          >
+            All Levels
+          </button>
+          {[
+            { value: 'easy', label: 'Easy', color: 'bg-green-500' },
+            { value: 'medium', label: 'Medium', color: 'bg-yellow-500' },
+            { value: 'hard', label: 'Hard', color: 'bg-orange-500' },
+            { value: 'expert', label: 'Expert', color: 'bg-red-500' },
+            { value: 'extreme', label: 'Extreme', color: 'bg-gray-700' },
+          ].map(({ value, label }) => (
+            <button
+              key={value}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                riddleFilterLevel === value 
+                  ? 'bg-purple-500 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              onClick={() => setRiddleFilterLevel(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Search Row */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600 mr-1">Search:</span>
+          <input 
+            type="text" 
+            placeholder="Type to search riddles..." 
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            value={riddleSearch}
+            onChange={(e) => setRiddleSearch(e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="space-y-4">
-        {[1, 2, 3].map((r) => (
-          <div key={r} className="rounded-xl bg-white p-6 shadow-md">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-lg font-medium">What has keys but no locks?</p>
-                <p className="mt-2 text-green-600"><strong>Answer:</strong> A piano</p>
-                <div className="mt-2 flex gap-2">
-                  <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">Word Play</span>
-                  <span className="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-800">Easy</span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button className="rounded bg-blue-100 px-3 py-1 text-blue-600 hover:bg-blue-200">Edit</button>
-                <button className="rounded bg-red-100 px-3 py-1 text-red-600 hover:bg-red-200">Delete</button>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Table - Exact Quiz format with separate option columns */}
+      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">#</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">QUESTION</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION A</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION B</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION C</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION D</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">ANSWER</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">LEVEL</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {paginatedRiddles.map((riddle, index) => (
+              <tr key={riddle.id} className="hover:bg-gray-50">
+                <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
+                <td className="px-3 py-4">
+                  <p className="text-sm font-medium text-gray-800">{riddle.question}</p>
+                  <p className="text-xs text-gray-500 mt-1">{riddle.chapter}</p>
+                  <div className="mt-2 flex gap-2">
+                    <button className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100">
+                      ✏️ Edit
+                    </button>
+                    <button className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100">
+                      🗑️ Delete
+                    </button>
+                  </div>
+                </td>
+                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'A') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
+                  {riddle.optionA}
+                </td>
+                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'B') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
+                  {riddle.optionB}
+                </td>
+                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'C') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
+                  {riddle.optionC}
+                </td>
+                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'D') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
+                  {riddle.optionD}
+                </td>
+                <td className="px-3 py-4">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white">
+                    {riddle.correctAnswer}
+                  </span>
+                </td>
+                <td className="px-3 py-4">
+                  <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${getLevelColor(riddle.level)}`}>
+                    {riddle.level}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {paginatedRiddles.length === 0 && (
+          <div className="p-8 text-center text-gray-500">No riddles found matching your filters</div>
+        )}
       </div>
+
+      {/* Pagination */}
+      {totalRiddlePages > 1 && (
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            Showing {((riddlePage - 1) * riddlesPerPage) + 1} - {Math.min(riddlePage * riddlesPerPage, filteredRiddles.length)} of {filteredRiddles.length} riddles
+          </p>
+          <div className="flex gap-2">
+            <button 
+              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+              onClick={() => setRiddlePage(p => p - 1)}
+              disabled={riddlePage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-3 py-1 text-sm">{riddlePage} / {totalRiddlePages}</span>
+            <button 
+              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+              onClick={() => setRiddlePage(p => p + 1)}
+              disabled={riddlePage === totalRiddlePages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

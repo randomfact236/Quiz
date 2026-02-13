@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Riddles',
@@ -6,72 +7,94 @@ export const metadata: Metadata = {
 };
 
 const riddleChapters = [
-  { num: 1, title: 'Trick Questions', difficulty: 'Easy', icon: '🎯' },
-  { num: 2, title: 'Puzzle Stories', difficulty: 'Easy', icon: '📖' },
-  { num: 3, title: 'Number Riddles', difficulty: 'Medium', icon: '🔢' },
-  { num: 4, title: 'Classic Riddles', difficulty: 'Easy', icon: '📜' },
-  { num: 5, title: 'Brain Teasers', difficulty: 'Medium', icon: '🧠' },
-  { num: 6, title: 'Funny Riddles', difficulty: 'Easy', icon: '😂' },
-  { num: 7, title: 'Mystery Riddles', difficulty: 'Medium', icon: '🔍' },
-  { num: 8, title: 'Everyday Objects', difficulty: 'Easy', icon: '🏺' },
-  { num: 9, title: 'Lateral Thinking', difficulty: 'Hard', icon: '🔄' },
-  { num: 10, title: 'Wordplay', difficulty: 'Medium', icon: '📝' },
-  { num: 11, title: 'Visual Riddles', difficulty: 'Medium', icon: '👁️' },
-  { num: 12, title: 'Pattern Recognition', difficulty: 'Hard', icon: '🔲' },
-  { num: 13, title: 'Short & Quick', difficulty: 'Easy', icon: '⚡' },
-  { num: 14, title: 'Long Story Riddles', difficulty: 'Medium', icon: '📚' },
-  { num: 15, title: 'Kids Riddles', difficulty: 'Easy', icon: '🧒' },
-  { num: 16, title: 'Hardest Riddles', difficulty: 'Expert', icon: '💀' },
-  { num: 17, title: 'Mixed Bag', difficulty: 'Medium', icon: '🎲' },
-  { num: 18, title: 'Animal Riddles', difficulty: 'Easy', icon: '🦁' },
-  { num: 19, title: 'Paradox Riddles', difficulty: 'Expert', icon: '🌀' },
-  { num: 20, title: 'Deduction Riddles', difficulty: 'Hard', icon: '🔎' },
+  { num: 1, title: 'Trick Questions', icon: '🤔', count: 85 },
+  { num: 2, title: 'Puzzle Stories', icon: '📖', count: 100 },
+  { num: 3, title: 'Logic Puzzles', icon: '🧩', count: 109 },
+  { num: 4, title: 'Word Play', icon: '🔤', count: 72 },
+  { num: 5, title: 'Math Riddles', icon: '🔢', count: 78 },
+  { num: 6, title: 'Mystery Cases', icon: '🔍', count: 74 },
+  { num: 7, title: 'Brain Teasers', icon: '🧠', count: 107 },
+  { num: 8, title: 'Visual Puzzles', icon: '👁️', count: 90 },
+  { num: 9, title: 'Lateral Thinking', icon: '💭', count: 79 },
+  { num: 10, title: 'Classic Riddles', icon: '📜', count: 94 },
+  { num: 11, title: 'Funny Riddles', icon: '😂', count: 88 },
+  { num: 12, title: 'Mystery Riddles', icon: '🕵️', count: 82 },
+  { num: 13, title: 'Everyday Objects', icon: '🏺', count: 76 },
+  { num: 14, title: 'Wordplay', icon: '📝', count: 95 },
+  { num: 15, title: 'Pattern Recognition', icon: '🔲', count: 67 },
+  { num: 16, title: 'Short & Quick', icon: '⚡', count: 110 },
+  { num: 17, title: 'Long Story Riddles', icon: '📚', count: 45 },
+  { num: 18, title: 'Kids Riddles', icon: '🧒', count: 120 },
+  { num: 19, title: 'Animal Riddles', icon: '🦁', count: 86 },
+  { num: 20, title: 'Deduction Riddles', icon: '🔎', count: 71 },
 ];
-
-function getDifficultyColor(difficulty: string): string {
-  switch (difficulty) {
-    case 'Easy':
-      return 'bg-green-100 text-green-700';
-    case 'Medium':
-      return 'bg-yellow-100 text-yellow-700';
-    case 'Hard':
-      return 'bg-orange-100 text-orange-700';
-    case 'Expert':
-      return 'bg-red-100 text-red-700';
-    default:
-      return 'bg-gray-100 text-gray-700';
-  }
-}
 
 export default function RiddlesPage(): JSX.Element {
   return (
-    <main id="main-content" className="min-h-screen bg-secondary-50 px-4 py-12">
-      <div className="container mx-auto">
-        <h1 className="mb-4 text-center text-4xl font-bold text-secondary-900">
-          🧩 Riddles
-        </h1>
-        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-secondary-600">
-          Challenge yourself with 20 chapters of mind-bending riddles!
-        </p>
+    <main className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+      <div className="mx-auto max-w-4xl">
+        {/* Back Button */}
+        <Link href="/" className="mb-6 inline-block rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md">
+          ← Back to Home
+        </Link>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <h1 className="mb-2 text-4xl font-bold text-gray-800">
+            <span className="mx-2">🎭</span>
+            Riddles
+            <span className="mx-2">🎭</span>
+          </h1>
+          <p className="text-lg text-gray-600">Challenge your brain!</p>
+        </div>
+
+        {/* Mode Selection Cards */}
+        <div className="mb-12 grid gap-6 sm:grid-cols-2">
+          {/* Timer Challenge Card */}
+          <div className="rounded-2xl bg-white p-8 text-center shadow-lg">
+            <div className="mb-4 flex justify-center">
+              <span className="text-4xl">⏱️</span>
+            </div>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Timer Challenge</h2>
+            <p className="mb-6 text-gray-500">Race against time!</p>
+            <button className="rounded-full bg-gradient-to-r from-pink-400 to-rose-500 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:scale-105 hover:shadow-lg">
+              All 1665 Riddles Mix
+            </button>
+          </div>
+
+          {/* No Timer Challenge Card */}
+          <div className="rounded-2xl bg-white p-8 text-center shadow-lg">
+            <div className="mb-4 flex justify-center">
+              <span className="text-4xl">♾️</span>
+            </div>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">No Timer Challenge</h2>
+            <p className="mb-6 text-gray-500">Take your time</p>
+            <button className="rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:scale-105 hover:shadow-lg">
+              All 1665 Riddles Mix
+            </button>
+          </div>
+        </div>
+
+        {/* Browse by Chapter Section */}
+        <div className="mb-6 text-center">
+          <h2 className="mb-8 text-2xl font-bold text-gray-700">
+            <span className="mr-2">📚</span>
+            Browse by Chapter
+          </h2>
+        </div>
+
+        {/* Chapter Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {riddleChapters.map((chapter) => (
             <div
               key={chapter.num}
-              className="card hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1 p-4"
+              className="cursor-pointer rounded-xl bg-white p-5 text-center shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">{chapter.icon}</span>
-                <span className="text-sm font-medium text-secondary-500">
-                  Chapter {chapter.num}
-                </span>
+              <div className="mb-3 flex justify-center">
+                <span className="text-3xl">{chapter.icon}</span>
               </div>
-              <h2 className="font-semibold text-secondary-900 mb-2">{chapter.title}</h2>
-              <span
-                className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getDifficultyColor(chapter.difficulty)}`}
-              >
-                {chapter.difficulty}
-              </span>
+              <h3 className="mb-1 text-sm font-bold text-gray-800">{chapter.title}</h3>
+              <p className="text-xs text-gray-500">{chapter.count}</p>
             </div>
           ))}
         </div>
