@@ -262,6 +262,8 @@ function TimerChallengesPage(): JSX.Element {
     { id: 'extreme', color: 'bg-gray-800', label: '⚫ EXTREME' },
   ];
 
+  const selectedSubjectData = subjects.find(s => s.id === selectedSubject);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
       <div className="mx-auto max-w-2xl">
@@ -277,43 +279,55 @@ function TimerChallengesPage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
+            <p className="text-sm text-white/80">Click a subject, then choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
             {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
               {subjects.map((subject) => (
-                <div key={subject.id} className="contents">
-                  <button
-                    onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
-                    className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                      selectedSubject === subject.id
-                        ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600 ring-2 ring-teal-300'
-                        : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
-                    }`}
-                  >
-                    <div className="text-xl">{subject.emoji}</div>
-                    <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-teal-800'}`}>
-                      {subject.name}
-                    </div>
-                  </button>
-                  
-                  {/* Levels appear directly below the clicked subject */}
-                  {selectedSubject === subject.id && (
-                    <div className="col-span-2 sm:col-span-1 grid grid-cols-5 gap-1 animate-in fade-in slide-in-from-top-1">
-                      {levels.map((level) => (
-                        <button
-                          key={level.id}
-                          className={`rounded ${level.color} py-2 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
-                        >
-                          {level.label.split(' ')[0]}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <button
+                  key={subject.id}
+                  onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
+                  className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                    selectedSubject === subject.id
+                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600 ring-2 ring-teal-300'
+                      : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
+                  }`}
+                >
+                  <div className="text-xl">{subject.emoji}</div>
+                  <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-teal-800'}`}>
+                    {subject.name}
+                  </div>
+                </button>
               ))}
             </div>
+            
+            {/* Levels Row - Shows below subjects when one is selected */}
+            {selectedSubject && selectedSubjectData && (
+              <div className="mt-4 pt-4 border-t-2 border-teal-100 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-bold text-teal-700">
+                    {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
+                  </span>
+                  <button 
+                    onClick={() => setSelectedSubject(null)}
+                    className="text-xs text-teal-500 hover:text-teal-700 underline"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="flex flex-row flex-wrap gap-2 justify-start">
+                  {levels.map((level) => (
+                    <button
+                      key={level.id}
+                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
+                    >
+                      {level.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -376,6 +390,8 @@ function PracticeModePage(): JSX.Element {
     { id: 'extreme', color: 'bg-gray-800', label: '⚫ EXTREME' },
   ];
 
+  const selectedSubjectData = subjects.find(s => s.id === selectedSubject);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
       <div className="mx-auto max-w-2xl">
@@ -391,43 +407,55 @@ function PracticeModePage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
+            <p className="text-sm text-white/80">Click a subject, then choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
             {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
               {subjects.map((subject) => (
-                <div key={subject.id} className="contents">
-                  <button
-                    onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
-                    className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                      selectedSubject === subject.id
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600 ring-2 ring-cyan-300'
-                        : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
-                    }`}
-                  >
-                    <div className="text-xl">{subject.emoji}</div>
-                    <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-cyan-800'}`}>
-                      {subject.name}
-                    </div>
-                  </button>
-                  
-                  {/* Levels appear directly below the clicked subject */}
-                  {selectedSubject === subject.id && (
-                    <div className="col-span-2 sm:col-span-1 grid grid-cols-5 gap-1 animate-in fade-in slide-in-from-top-1">
-                      {levels.map((level) => (
-                        <button
-                          key={level.id}
-                          className={`rounded ${level.color} py-2 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
-                        >
-                          {level.label.split(' ')[0]}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <button
+                  key={subject.id}
+                  onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
+                  className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                    selectedSubject === subject.id
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600 ring-2 ring-cyan-300'
+                      : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
+                  }`}
+                >
+                  <div className="text-xl">{subject.emoji}</div>
+                  <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-cyan-800'}`}>
+                    {subject.name}
+                  </div>
+                </button>
               ))}
             </div>
+            
+            {/* Levels Row - Shows below subjects when one is selected */}
+            {selectedSubject && selectedSubjectData && (
+              <div className="mt-4 pt-4 border-t-2 border-cyan-100 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-bold text-cyan-700">
+                    {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
+                  </span>
+                  <button 
+                    onClick={() => setSelectedSubject(null)}
+                    className="text-xs text-cyan-500 hover:text-cyan-700 underline"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="flex flex-row flex-wrap gap-2 justify-start">
+                  {levels.map((level) => (
+                    <button
+                      key={level.id}
+                      className={`rounded-lg ${level.color} px-3 py-2 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md w-[calc(20%-8px)] min-w-[70px]`}
+                    >
+                      {level.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
