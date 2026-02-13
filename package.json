@@ -36,6 +36,9 @@
     "docker:up": "docker-compose -f infrastructure/docker/docker-compose.yml up -d",
     "docker:down": "docker-compose -f infrastructure/docker/docker-compose.yml down",
     "docker:build": "docker-compose -f infrastructure/docker/docker-compose.yml build",
+    "fix": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -All",
+    "fix:frontend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Frontend",
+    "fix:backend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Backend",
     "prepare": "husky install"
   },
   "devDependencies": {
