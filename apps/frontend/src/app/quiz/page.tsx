@@ -262,7 +262,20 @@ function TimerChallengesPage(): JSX.Element {
     { id: 'extreme', color: 'bg-gray-800', label: '⚫ EXTREME' },
   ];
 
-  const selectedSubjectData = subjects.find(s => s.id === selectedSubject);
+  // Determine which row's levels to show (0-indexed)
+  const getSelectedRow = (): number => {
+    if (!selectedSubject) return -1;
+    const index = subjects.findIndex(s => s.id === selectedSubject);
+    return Math.floor(index / 5);
+  };
+
+  const selectedRow = getSelectedRow();
+
+  // Split subjects into rows of 5
+  const rows: typeof subjects[] = [];
+  for (let i = 0; i < subjects.length; i += 5) {
+    rows.push(subjects.slice(i, i + 5));
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
@@ -279,55 +292,52 @@ function TimerChallengesPage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Click a subject, then choose level - All 20 chapters mixed</p>
+            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
-            {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-              {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
-                  className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                    selectedSubject === subject.id
-                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600 ring-2 ring-teal-300'
-                      : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
-                  }`}
-                >
-                  <div className="text-xl">{subject.emoji}</div>
-                  <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-teal-800'}`}>
-                    {subject.name}
+            {/* Render each row */}
+            {rows.map((row, rowIndex) => (
+              <div key={rowIndex} className={rowIndex > 0 ? 'mt-3' : ''}>
+                {/* Subjects Row */}
+                <div className="grid grid-cols-5 gap-3">
+                  {row.map((subject) => {
+                    const isSelected = selectedSubject === subject.id;
+                    return (
+                      <button
+                        key={subject.id}
+                        onClick={() => setSelectedSubject(isSelected ? null : subject.id)}
+                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                          isSelected
+                            ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600'
+                            : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
+                        }`}
+                      >
+                        <div className="text-xl">{subject.emoji}</div>
+                        <div className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-teal-800'}`}>
+                          {subject.name}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                {/* Levels Row - appears after the subject row if a subject in this row is selected */}
+                {selectedRow === rowIndex && (
+                  <div className="mt-3 mb-3 animate-in fade-in slide-in-from-top-1">
+                    <div className="flex gap-2">
+                      {levels.map((level) => (
+                        <button
+                          key={level.id}
+                          className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                        >
+                          {level.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </button>
-              ))}
-            </div>
-            
-            {/* Levels Section - Shows below subjects when one is selected */}
-            {selectedSubject && selectedSubjectData && (
-              <div className="mt-4 pt-4 border-t-2 border-teal-100 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-bold text-teal-700">
-                    {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
-                  </span>
-                  <button 
-                    onClick={() => setSelectedSubject(null)}
-                    className="text-xs text-teal-500 hover:text-teal-700 underline"
-                  >
-                    Close
-                  </button>
-                </div>
-                <div className="flex flex-row gap-2">
-                  {levels.map((level) => (
-                    <button
-                      key={level.id}
-                      className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md`}
-                    >
-                      {level.label}
-                    </button>
-                  ))}
-                </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -390,7 +400,20 @@ function PracticeModePage(): JSX.Element {
     { id: 'extreme', color: 'bg-gray-800', label: '⚫ EXTREME' },
   ];
 
-  const selectedSubjectData = subjects.find(s => s.id === selectedSubject);
+  // Determine which row's levels to show (0-indexed)
+  const getSelectedRow = (): number => {
+    if (!selectedSubject) return -1;
+    const index = subjects.findIndex(s => s.id === selectedSubject);
+    return Math.floor(index / 5);
+  };
+
+  const selectedRow = getSelectedRow();
+
+  // Split subjects into rows of 5
+  const rows: typeof subjects[] = [];
+  for (let i = 0; i < subjects.length; i += 5) {
+    rows.push(subjects.slice(i, i + 5));
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
@@ -407,55 +430,52 @@ function PracticeModePage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Click a subject, then choose level - All 20 chapters mixed</p>
+            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
-            {/* Subjects Grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-              {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
-                  className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                    selectedSubject === subject.id
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600 ring-2 ring-cyan-300'
-                      : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
-                  }`}
-                >
-                  <div className="text-xl">{subject.emoji}</div>
-                  <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-cyan-800'}`}>
-                    {subject.name}
+            {/* Render each row */}
+            {rows.map((row, rowIndex) => (
+              <div key={rowIndex} className={rowIndex > 0 ? 'mt-3' : ''}>
+                {/* Subjects Row */}
+                <div className="grid grid-cols-5 gap-3">
+                  {row.map((subject) => {
+                    const isSelected = selectedSubject === subject.id;
+                    return (
+                      <button
+                        key={subject.id}
+                        onClick={() => setSelectedSubject(isSelected ? null : subject.id)}
+                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                          isSelected
+                            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600'
+                            : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
+                        }`}
+                      >
+                        <div className="text-xl">{subject.emoji}</div>
+                        <div className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-cyan-800'}`}>
+                          {subject.name}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                {/* Levels Row - appears after the subject row if a subject in this row is selected */}
+                {selectedRow === rowIndex && (
+                  <div className="mt-3 mb-3 animate-in fade-in slide-in-from-top-1">
+                    <div className="flex gap-2">
+                      {levels.map((level) => (
+                        <button
+                          key={level.id}
+                          className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                        >
+                          {level.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </button>
-              ))}
-            </div>
-            
-            {/* Levels Section - Shows below subjects when one is selected */}
-            {selectedSubject && selectedSubjectData && (
-              <div className="mt-4 pt-4 border-t-2 border-cyan-100 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-bold text-cyan-700">
-                    {selectedSubjectData.emoji} {selectedSubjectData.name} - Choose Level:
-                  </span>
-                  <button 
-                    onClick={() => setSelectedSubject(null)}
-                    className="text-xs text-cyan-500 hover:text-cyan-700 underline"
-                  >
-                    Close
-                  </button>
-                </div>
-                <div className="flex flex-row gap-2">
-                  {levels.map((level) => (
-                    <button
-                      key={level.id}
-                      className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs sm:text-sm font-bold transition-all hover:scale-105 hover:shadow-md`}
-                    >
-                      {level.label}
-                    </button>
-                  ))}
-                </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
         </div>
 
