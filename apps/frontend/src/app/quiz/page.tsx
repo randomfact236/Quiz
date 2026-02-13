@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 
 function QuizContent(): JSX.Element {
   const searchParams = useSearchParams();
@@ -239,6 +239,8 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
 }
 
 function TimerChallengesPage(): JSX.Element {
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+
   const subjects = [
     { id: 'science', name: 'Science', emoji: '🔬' },
     { id: 'math', name: 'Math', emoji: '🔢' },
@@ -275,28 +277,39 @@ function TimerChallengesPage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Choose level - All 20 chapters mixed per subject</p>
+            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
-            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
-              {levels.map((level) => (
-                <button
-                  key={`subject-${level.id}`}
-                  className={`rounded-xl ${level.color} p-3 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
-                >
-                  <div className="font-bold text-sm">{level.label}</div>
-                </button>
-              ))}
-            </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
               {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  className="rounded-xl bg-gradient-to-r from-teal-100 to-emerald-100 p-3 text-center transition-all hover:scale-105 hover:shadow-lg border border-teal-200"
-                >
-                  <div className="text-xl">{subject.emoji}</div>
-                  <div className="text-xs font-semibold text-teal-800">{subject.name}</div>
-                </button>
+                <div key={subject.id} className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
+                    className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                      selectedSubject === subject.id
+                        ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600'
+                        : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
+                    }`}
+                  >
+                    <div className="text-xl">{subject.emoji}</div>
+                    <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-teal-800'}`}>
+                      {subject.name}
+                    </div>
+                  </button>
+                  {/* Show levels when subject is selected */}
+                  {selectedSubject === subject.id && (
+                    <div className="grid grid-cols-1 gap-1 animate-in fade-in slide-in-from-top-2">
+                      {levels.map((level) => (
+                        <button
+                          key={level.id}
+                          className={`rounded-lg ${level.color} px-2 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                        >
+                          {level.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>
@@ -338,6 +351,8 @@ function TimerChallengesPage(): JSX.Element {
 }
 
 function PracticeModePage(): JSX.Element {
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+
   const subjects = [
     { id: 'science', name: 'Science', emoji: '🔬' },
     { id: 'math', name: 'Math', emoji: '🔢' },
@@ -374,28 +389,39 @@ function PracticeModePage(): JSX.Element {
         <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
           <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-4">
             <h2 className="text-xl font-bold text-white">📚 Subject-wise Mix</h2>
-            <p className="text-sm text-white/80">Choose level - All 20 chapters mixed per subject</p>
+            <p className="text-sm text-white/80">Click a subject to choose level - All 20 chapters mixed</p>
           </div>
           <div className="p-4">
-            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
-              {levels.map((level) => (
-                <button
-                  key={`subject-${level.id}`}
-                  className={`rounded-xl ${level.color} p-3 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
-                >
-                  <div className="font-bold text-sm">{level.label}</div>
-                </button>
-              ))}
-            </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
               {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  className="rounded-xl bg-gradient-to-r from-cyan-100 to-blue-100 p-3 text-center transition-all hover:scale-105 hover:shadow-lg border border-cyan-200"
-                >
-                  <div className="text-xl">{subject.emoji}</div>
-                  <div className="text-xs font-semibold text-cyan-800">{subject.name}</div>
-                </button>
+                <div key={subject.id} className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setSelectedSubject(selectedSubject === subject.id ? null : subject.id)}
+                    className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
+                      selectedSubject === subject.id
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600'
+                        : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
+                    }`}
+                  >
+                    <div className="text-xl">{subject.emoji}</div>
+                    <div className={`text-xs font-semibold ${selectedSubject === subject.id ? 'text-white' : 'text-cyan-800'}`}>
+                      {subject.name}
+                    </div>
+                  </button>
+                  {/* Show levels when subject is selected */}
+                  {selectedSubject === subject.id && (
+                    <div className="grid grid-cols-1 gap-1 animate-in fade-in slide-in-from-top-2">
+                      {levels.map((level) => (
+                        <button
+                          key={level.id}
+                          className={`rounded-lg ${level.color} px-2 py-1.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                        >
+                          {level.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>
