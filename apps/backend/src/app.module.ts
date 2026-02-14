@@ -9,6 +9,8 @@ import helmet from 'helmet';
 import { QuizModule } from './quiz/quiz.module';
 import { DadJokesModule } from './dad-jokes/dad-jokes.module';
 import { RiddlesModule } from './riddles/riddles.module';
+import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
+import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
@@ -55,6 +57,8 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     QuizModule,
     DadJokesModule,
     RiddlesModule,
+    ImageRiddlesModule,
+    AdminImageRiddlesModule,
     UsersModule,
     AuthModule,
     HealthModule,

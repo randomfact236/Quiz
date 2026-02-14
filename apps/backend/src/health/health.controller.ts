@@ -22,11 +22,13 @@ export class HealthController {
   @HealthCheck()
   @ApiOperation({ summary: 'Check overall health status' })
   check() {
+    const isWindows = process.platform === 'win32';
+    const diskPath = isWindows ? 'C:\\' : '/';
     return this.health.check([
       () => this.db.pingCheck('database'),
       () => this.memory.checkHeap('memory_heap', 150 * 1024 * 1024),
       () => this.memory.checkRSS('memory_rss', 150 * 1024 * 1024),
-      () => this.disk.checkStorage('disk', { path: '/', thresholdPercent: 0.9 }),
+      () => this.disk.checkStorage('disk', { path: diskPath, thresholdPercent: 0.9 }),
     ]);
   }
 

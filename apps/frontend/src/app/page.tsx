@@ -181,6 +181,11 @@ export default function HomePage(): JSX.Element {
               <span className="mt-2 font-bold text-gray-800">Riddles</span>
               <span className="text-sm text-gray-500">Brain Teasers</span>
             </Link>
+            <Link href="/image-riddles" className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl">
+              <span className="text-4xl">🖼️</span>
+              <span className="mt-2 font-bold text-gray-800">Image Riddles</span>
+              <span className="text-sm text-gray-500">Visual Puzzles</span>
+            </Link>
             <Link href="/jokes" className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl">
               <span className="text-4xl">😂</span>
               <span className="mt-2 font-bold text-gray-800">Dad Jokes</span>

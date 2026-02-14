@@ -24,7 +24,7 @@ type Subject = {
   category: 'academic' | 'professional';
 };
 
-type MenuSection = 'dashboard' | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology' | 'jokes' | 'riddles' | 'users' | 'settings';
+type MenuSection = 'dashboard' | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology' | 'jokes' | 'riddles' | 'image-riddles' | 'users' | 'settings';
 
 // Initial Data
 const initialQuestions: Record<string, Question[]> = {
@@ -236,6 +236,13 @@ export default function AdminPage(): JSX.Element {
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('riddles')}
               />
+              <MenuItem 
+                emoji="🖼️" 
+                label="Image Riddles" 
+                active={activeSection === 'image-riddles'}
+                expanded={sidebarOpen}
+                onClick={() => setActiveSection('image-riddles')}
+              />
             </>
           )}
 
@@ -282,6 +289,7 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'dashboard' && '📊 Dashboard'}
               {activeSection === 'jokes' && '😂 Dad Jokes Management'}
               {activeSection === 'riddles' && '🎭 Riddles Management'}
+              {activeSection === 'image-riddles' && '🖼️ Image Riddles Management'}
               {activeSection === 'users' && '👥 User Management'}
               {activeSection === 'settings' && '⚙️ Settings'}
               {subjects.some(s => s.slug === activeSection) && (
@@ -327,6 +335,7 @@ export default function AdminPage(): JSX.Element {
           )}
           {activeSection === 'jokes' && <JokesSection />}
           {activeSection === 'riddles' && <RiddlesSection />}
+          {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <UsersSection />}
           {activeSection === 'settings' && <SettingsSection />}
         </div>
@@ -1615,6 +1624,326 @@ function UsersSection(): JSX.Element {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+}
+
+// Image Riddles Admin Section
+function ImageRiddlesAdminSection(): JSX.Element {
+  const [imageRiddles, setImageRiddles] = useState([
+    {
+      id: '1',
+      title: 'What is hidden in this painting?',
+      imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&h=400&fit=crop',
+      answer: 'A face looking to the left',
+      hint: 'Look at the center and tilt your head',
+      difficulty: 'medium',
+      timerSeconds: null,
+      showTimer: true,
+      isActive: true,
+      category: { name: 'Optical Illusions', emoji: '👁️' },
+    },
+    {
+      id: '2',
+      title: 'Spot the anomaly in this landscape',
+      imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
+      answer: 'The reflection is upside down',
+      hint: 'Check the water carefully',
+      difficulty: 'hard',
+      timerSeconds: 90,
+      showTimer: true,
+      isActive: true,
+      category: { name: 'Hidden Objects', emoji: '🔍' },
+    },
+    {
+      id: '3',
+      title: 'How many animals can you find?',
+      imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&h=400&fit=crop',
+      answer: 'Five: two birds, a deer, a rabbit, and a fox',
+      hint: 'Look carefully at the trees and bushes',
+      difficulty: 'easy',
+      timerSeconds: null,
+      showTimer: true,
+      isActive: true,
+      category: { name: 'Hidden Objects', emoji: '🔍' },
+    },
+    {
+      id: '4',
+      title: 'Count the triangles',
+      imageUrl: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&h=400&fit=crop',
+      answer: '16 triangles total',
+      hint: 'Count both small and large triangles',
+      difficulty: 'medium',
+      timerSeconds: null,
+      showTimer: true,
+      isActive: true,
+      category: { name: 'Pattern Recognition', emoji: '🔲' },
+    },
+    {
+      id: '5',
+      title: 'What time does the sundial show?',
+      imageUrl: 'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=600&h=400&fit=crop',
+      answer: 'About 2:30 PM',
+      hint: 'Look at the shadow and the Roman numerals',
+      difficulty: 'expert',
+      timerSeconds: null,
+      showTimer: true,
+      isActive: true,
+      category: { name: 'Perspective Puzzles', emoji: '📐' },
+    },
+  ]);
+
+  const [categories] = useState([
+    { id: '1', name: 'Optical Illusions', emoji: '👁️', count: 2 },
+    { id: '2', name: 'Hidden Objects', emoji: '🔍', count: 2 },
+    { id: '3', name: 'Pattern Recognition', emoji: '🔲', count: 1 },
+    { id: '4', name: 'Perspective Puzzles', emoji: '📐', count: 1 },
+  ]);
+
+  const [filterDifficulty, setFilterDifficulty] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredRiddles = imageRiddles.filter(riddle => {
+    const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
+    const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
+    const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesDifficulty && matchesCategory && matchesSearch;
+  });
+
+  const toggleActive = (id: string) => {
+    setImageRiddles(prev => prev.map(r => 
+      r.id === id ? { ...r, isActive: !r.isActive } : r
+    ));
+  };
+
+  const deleteRiddle = (id: string) => {
+    if (confirm('Are you sure you want to delete this riddle?')) {
+      setImageRiddles(prev => prev.filter(r => r.id !== id));
+    }
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-orange-100 text-orange-800';
+      case 'expert': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const stats = {
+    total: imageRiddles.length,
+    active: imageRiddles.filter(r => r.isActive).length,
+    categories: categories.length,
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-xl bg-blue-50 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Riddles</p>
+              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.total}</p>
+            </div>
+            <span className="text-4xl">🧩</span>
+          </div>
+        </div>
+        <div className="rounded-xl bg-green-50 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Active</p>
+              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.active}</p>
+            </div>
+            <span className="text-4xl">✅</span>
+          </div>
+        </div>
+        <div className="rounded-xl bg-purple-50 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Categories</p>
+              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.categories}</p>
+            </div>
+            <span className="text-4xl">🏷️</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Search and Add */}
+      <div className="rounded-xl bg-white p-4 shadow-md">
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search riddles..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
+          />
+          <div className="flex-1" />
+          <button className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600">
+            + Add Riddle
+          </button>
+        </div>
+      </div>
+
+      {/* Categories Row */}
+      <div className="rounded-xl bg-white p-4 shadow-md">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-600">Categories:</span>
+          <button
+            onClick={() => setFilterCategory('')}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              filterCategory === '' 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            All
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setFilterCategory(filterCategory === cat.name ? '' : cat.name)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                filterCategory === cat.name 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {cat.emoji} {cat.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Difficulty Row */}
+      <div className="rounded-xl bg-white p-4 shadow-md">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-600">Difficulty:</span>
+          <button
+            onClick={() => setFilterDifficulty('')}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              filterDifficulty === '' 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            All
+          </button>
+          {['easy', 'medium', 'hard', 'expert'].map(diff => (
+            <button
+              key={diff}
+              onClick={() => setFilterDifficulty(filterDifficulty === diff ? '' : diff)}
+              className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors ${
+                filterDifficulty === diff 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {diff}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Riddles Table */}
+      <div className="overflow-hidden rounded-xl bg-white shadow-md">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Image</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Difficulty</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Timer</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {filteredRiddles.map((riddle) => (
+              <tr key={riddle.id} className="hover:bg-gray-50">
+                <td className="px-6 py-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={riddle.imageUrl}
+                    alt={riddle.title}
+                    className="h-16 w-16 rounded-lg object-cover"
+                  />
+                </td>
+                <td className="px-6 py-4">
+                  <p className="font-medium text-gray-900">{riddle.title}</p>
+                  <p className="text-sm text-gray-500 truncate max-w-xs">Answer: {riddle.answer}</p>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-sm text-gray-600">
+                    {riddle.category?.emoji} {riddle.category?.name}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${getDifficultyColor(riddle.difficulty)}`}>
+                    {riddle.difficulty}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-500">
+                  {riddle.timerSeconds ? `${riddle.timerSeconds}s` : 'Default (90s)'}
+                </td>
+                <td className="px-6 py-4">
+                  <button
+                    onClick={() => toggleActive(riddle.id)}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                      riddle.isActive
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-red-100 text-red-700 hover:bg-red-200'
+                    }`}
+                  >
+                    {riddle.isActive ? 'Active' : 'Inactive'}
+                  </button>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex gap-2">
+                    <button className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-200">
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteRiddle(riddle.id)}
+                      className="rounded-lg bg-red-100 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Categories Section */}
+      <div className="rounded-xl bg-white p-6 shadow-md">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
+          <button className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600">
+            + Add Category
+          </button>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat) => (
+            <div key={cat.id} className="rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{cat.emoji}</span>
+                <div>
+                  <p className="font-medium text-gray-900">{cat.name}</p>
+                  <p className="text-sm text-gray-500">{cat.count} riddles</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
