@@ -8,8 +8,10 @@ import {
   Param,
   Query,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { QuizService } from './quiz.service';
 import { Subject } from './entities/subject.entity';
 import { Chapter } from './entities/chapter.entity';
@@ -22,6 +24,9 @@ import {
   CreateSubjectDto,
   PaginationDto,
 } from '../common/dto/base.dto';
+import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
+import { StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 
 @ApiTags('Quiz')
 @Controller('quiz')
@@ -119,6 +124,19 @@ export class QuizController {
 
   // ==================== QUESTIONS ====================
 
+  @Get('questions')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all questions with optional status filter (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
+  async getAllQuestions(
+    @Query() pagination: PaginationDto,
+    @Query() filter: StatusFilterDto,
+  ): Promise<{ data: Question[]; total: number }> {
+    return this.quizService.findAllQuestions(pagination, filter.status);
+  }
+
   @Get('questions/:chapterId')
   @ApiOperation({ summary: 'Get questions by chapter ID' })
   async getQuestionsByChapter(
@@ -140,7 +158,7 @@ export class QuizController {
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed questions from all subjects' })
   async getMixedQuestions(@Query('count') count?: string): Promise<Question[]> {
-    return this.quizService.findMixedQuestions(count ? parseInt(count) : 20);
+    return this.quizService.findMixedQuestions(count ? parseInt(count) : DEFAULT_PAGE_SIZE);
   }
 
   @Post('questions')
@@ -182,5 +200,28 @@ export class QuizController {
   async deleteQuestion(@Param('id') id: string): Promise<{ message: string }> {
     await this.quizService.deleteQuestion(id);
     return { message: 'Question deleted successfully' };
+  }
+
+  // ==================== BULK ACTIONS ====================
+
+  @Post('bulk-action')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Execute bulk action on questions (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
+  async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
+    return this.quizService.bulkAction(dto.ids, dto.action);
+  }
+
+  @Get('status-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get question counts by status (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
+  async getStatusCounts(): Promise<StatusCountResponseDto> {
+    return this.quizService.getStatusCounts();
   }
 }

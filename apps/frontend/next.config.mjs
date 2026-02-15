@@ -3,12 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  
+
   // Performance optimizations
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
-  
+
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -19,7 +19,7 @@ const nextConfig = {
       },
     ],
   },
-  
+
   // Security headers
   async headers() {
     return [
@@ -35,7 +35,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Redirects
   async redirects() {
     return [
@@ -46,10 +46,10 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Environment variables exposed to browser
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3003/api',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api',
   },
 };
 

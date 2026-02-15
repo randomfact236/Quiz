@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn } from 'typeorm';
 import { RiddleCategory } from './riddle-category.entity';
+import { ContentStatus } from '../../common/enums/content-status.enum';
 
 @Entity('riddles')
 export class Riddle {
@@ -20,4 +21,14 @@ export class Riddle {
 
   @Column({ nullable: true })
   categoryId: string;
+
+  @Column({
+    type: 'enum',
+    enum: ContentStatus,
+    default: ContentStatus.DRAFT,
+  })
+  status: ContentStatus;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

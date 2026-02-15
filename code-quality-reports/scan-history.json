@@ -1,0 +1,308 @@
+{
+  "scans": [
+    {
+      "scanId": "SCAN-1771153393818-R0P784",
+      "timestamp": "2026-02-15T11:03:13.818Z",
+      "duration": 6711,
+      "totalFiles": 100,
+      "totalIssues": 800,
+      "overallScore": 2.5,
+      "categoryScores": [
+        {
+          "category": "type-safety",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 189,
+          "criticalCount": 0,
+          "highCount": 43,
+          "mediumCount": 146,
+          "lowCount": 0
+        },
+        {
+          "category": "security",
+          "score": 10,
+          "maxScore": 10,
+          "issueCount": 0,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 0,
+          "lowCount": 0
+        },
+        {
+          "category": "performance",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 94,
+          "criticalCount": 0,
+          "highCount": 56,
+          "mediumCount": 38,
+          "lowCount": 0
+        },
+        {
+          "category": "accessibility",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 170,
+          "criticalCount": 0,
+          "highCount": 3,
+          "mediumCount": 167,
+          "lowCount": 0
+        },
+        {
+          "category": "best-practices",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 160,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 71,
+          "lowCount": 89
+        },
+        {
+          "category": "enterprise",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 187,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 29,
+          "lowCount": 158
+        }
+      ],
+      "passedQualityGate": false,
+      "criticalIssues": 0,
+      "highIssues": 102,
+      "mediumIssues": 451,
+      "lowIssues": 247,
+      "autoFixableCount": 71
+    },
+    {
+      "scanId": "SCAN-1771153417368-41VI82",
+      "timestamp": "2026-02-15T11:03:37.368Z",
+      "duration": 9382,
+      "totalFiles": 100,
+      "totalIssues": 800,
+      "overallScore": 2.5,
+      "categoryScores": [
+        {
+          "category": "type-safety",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 189,
+          "criticalCount": 0,
+          "highCount": 43,
+          "mediumCount": 146,
+          "lowCount": 0
+        },
+        {
+          "category": "security",
+          "score": 10,
+          "maxScore": 10,
+          "issueCount": 0,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 0,
+          "lowCount": 0
+        },
+        {
+          "category": "performance",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 94,
+          "criticalCount": 0,
+          "highCount": 56,
+          "mediumCount": 38,
+          "lowCount": 0
+        },
+        {
+          "category": "accessibility",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 170,
+          "criticalCount": 0,
+          "highCount": 3,
+          "mediumCount": 167,
+          "lowCount": 0
+        },
+        {
+          "category": "best-practices",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 160,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 71,
+          "lowCount": 89
+        },
+        {
+          "category": "enterprise",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 187,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 29,
+          "lowCount": 158
+        }
+      ],
+      "passedQualityGate": false,
+      "criticalIssues": 0,
+      "highIssues": 102,
+      "mediumIssues": 451,
+      "lowIssues": 247,
+      "autoFixableCount": 71
+    },
+    {
+      "scanId": "SCAN-1771153477209-D59CFL",
+      "timestamp": "2026-02-15T11:04:37.209Z",
+      "duration": 7718,
+      "totalFiles": 100,
+      "totalIssues": 800,
+      "overallScore": 2.5,
+      "categoryScores": [
+        {
+          "category": "type-safety",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 189,
+          "criticalCount": 0,
+          "highCount": 43,
+          "mediumCount": 146,
+          "lowCount": 0
+        },
+        {
+          "category": "security",
+          "score": 10,
+          "maxScore": 10,
+          "issueCount": 0,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 0,
+          "lowCount": 0
+        },
+        {
+          "category": "performance",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 94,
+          "criticalCount": 0,
+          "highCount": 56,
+          "mediumCount": 38,
+          "lowCount": 0
+        },
+        {
+          "category": "accessibility",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 170,
+          "criticalCount": 0,
+          "highCount": 3,
+          "mediumCount": 167,
+          "lowCount": 0
+        },
+        {
+          "category": "best-practices",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 160,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 71,
+          "lowCount": 89
+        },
+        {
+          "category": "enterprise",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 187,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 29,
+          "lowCount": 158
+        }
+      ],
+      "passedQualityGate": false,
+      "criticalIssues": 0,
+      "highIssues": 102,
+      "mediumIssues": 451,
+      "lowIssues": 247,
+      "autoFixableCount": 71
+    },
+    {
+      "scanId": "SCAN-1771153490353-A02CUX",
+      "timestamp": "2026-02-15T11:04:50.353Z",
+      "duration": 6531,
+      "totalFiles": 100,
+      "totalIssues": 800,
+      "overallScore": 2.5,
+      "categoryScores": [
+        {
+          "category": "type-safety",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 189,
+          "criticalCount": 0,
+          "highCount": 43,
+          "mediumCount": 146,
+          "lowCount": 0
+        },
+        {
+          "category": "security",
+          "score": 10,
+          "maxScore": 10,
+          "issueCount": 0,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 0,
+          "lowCount": 0
+        },
+        {
+          "category": "performance",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 94,
+          "criticalCount": 0,
+          "highCount": 56,
+          "mediumCount": 38,
+          "lowCount": 0
+        },
+        {
+          "category": "accessibility",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 170,
+          "criticalCount": 0,
+          "highCount": 3,
+          "mediumCount": 167,
+          "lowCount": 0
+        },
+        {
+          "category": "best-practices",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 160,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 71,
+          "lowCount": 89
+        },
+        {
+          "category": "enterprise",
+          "score": 0,
+          "maxScore": 10,
+          "issueCount": 187,
+          "criticalCount": 0,
+          "highCount": 0,
+          "mediumCount": 29,
+          "lowCount": 158
+        }
+      ],
+      "passedQualityGate": false,
+      "criticalIssues": 0,
+      "highIssues": 102,
+      "mediumIssues": 451,
+      "lowIssues": 247,
+      "autoFixableCount": 71
+    }
+  ]
+}

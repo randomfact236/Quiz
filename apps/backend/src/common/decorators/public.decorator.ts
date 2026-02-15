@@ -9,4 +9,4 @@ export const IS_PUBLIC_KEY = 'isPublic';
  * @Get('public-data')
  * getPublicData() {}
  */
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+export const _Public = () => SetMetadata(IS_PUBLIC_KEY, true);

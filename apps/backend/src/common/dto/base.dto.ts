@@ -2,6 +2,17 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import {
+  MIN_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  MAX_PAGE_SIZE,
+  MAX_BULK_ITEMS,
+  MIN_ORDER_VALUE,
+  MAX_ORDER_VALUE,
+  MIN_TIMER_SECONDS,
+  MAX_TIMER_SECONDS,
+} from '../constants/app.constants';
+
 // ==================== PAGINATION ====================
 
 export class PaginationDto {
@@ -9,15 +20,15 @@ export class PaginationDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  @Min(1)
+  @Min(MIN_PAGE_NUMBER)
   page?: number;
 
-  @ApiPropertyOptional({ description: 'Items per page', default: 10 })
+  @ApiPropertyOptional({ description: 'Items per page', default: DEFAULT_PAGE_SIZE })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  @Min(1)
-  @Max(100)
+  @Min(MIN_PAGE_NUMBER)
+  @Max(MAX_PAGE_SIZE)
   limit?: number;
 }
 
@@ -654,6 +665,326 @@ export class UpdateSubjectDto {
   @IsOptional()
   @IsString()
   description?: string;
+}
+
+// ==================== IMAGE RIDDLE CATEGORIES ====================
+
+export class CreateImageRiddleCategoryDto {
+  @ApiProperty({ example: 'Optical Illusions', description: 'Category name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiPropertyOptional({ example: '🖼️', description: 'Category emoji' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
+  @ApiPropertyOptional({ example: 'Mind-bending visual puzzles' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+export class UpdateImageRiddleCategoryDto {
+  @ApiPropertyOptional({ example: 'Optical Illusions' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: '🖼️' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
+  @ApiPropertyOptional({ example: 'Mind-bending visual puzzles' })
+  @IsOptional()
+  @IsString()
+  description?: string | null;
+}
+
+// ==================== IMAGE RIDDLE ACTION OPTIONS ====================
+
+import { 
+  IActionOption, 
+  ActionOptionType, 
+  ActionOptionStyle, 
+  ActionOptionSize, 
+  ActionPosition 
+} from '../../image-riddles/entities/image-riddle-action.entity';
+
+/**
+ * Action Option DTO - For creating/updating action options
+ */
+export class ActionOptionDto implements Partial<IActionOption> {
+  @ApiProperty({ example: 'show-hint', description: 'Unique action identifier' })
+  @IsString()
+  @IsNotEmpty()
+  id!: string;
+
+  @ApiProperty({ example: 'Show Hint', description: 'Display label' })
+  @IsString()
+  @IsNotEmpty()
+  label!: string;
+
+  @ApiProperty({ example: 'button', enum: ['button', 'link', 'toggle', 'dropdown', 'custom'] })
+  @IsEnum(['button', 'link', 'toggle', 'dropdown', 'custom'])
+  type!: ActionOptionType;
+
+  @ApiProperty({ example: 'primary', enum: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'] })
+  @IsEnum(['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'])
+  style!: ActionOptionStyle;
+
+  @ApiProperty({ example: 'md', enum: ['xs', 'sm', 'md', 'lg', 'xl'] })
+  @IsEnum(['xs', 'sm', 'md', 'lg', 'xl'])
+  size!: ActionOptionSize;
+
+  @ApiPropertyOptional({ example: '💡', description: 'Icon emoji or identifier' })
+  @IsOptional()
+  @IsString()
+  icon?: string;
+
+  @ApiPropertyOptional({ example: 'left', enum: ['left', 'right', 'only'] })
+  @IsOptional()
+  @IsEnum(['left', 'right', 'only'])
+  iconPosition?: 'left' | 'right' | 'only';
+
+  @ApiPropertyOptional({ example: 'Get a hint', description: 'Tooltip text' })
+  @IsOptional()
+  @IsString()
+  tooltip?: string;
+
+  @ApiProperty({ example: 'Show hint for this riddle', description: 'ARIA accessibility label' })
+  @IsString()
+  @IsNotEmpty()
+  ariaLabel!: string;
+
+  @ApiPropertyOptional({ example: 'Alt+H', description: 'Keyboard shortcut' })
+  @IsOptional()
+  @IsString()
+  keyboardShortcut?: string;
+
+  @ApiPropertyOptional({ example: 'below_question', enum: ['below_question', 'above_image', 'below_image', 'floating'] })
+  @IsOptional()
+  @IsEnum(['below_question', 'above_image', 'below_image', 'floating'])
+  position?: ActionPosition;
+
+  @ApiPropertyOptional({ example: 10, description: 'Display order (lower = first)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  @Max(MAX_ORDER_VALUE)
+  order?: number;
+
+  @ApiPropertyOptional({ description: 'Action-specific data payload' })
+  @IsOptional()
+  payload?: Record<string, unknown>;
+
+  @ApiPropertyOptional({ example: 'https://example.com', description: 'URL for link actions' })
+  @IsOptional()
+  @IsString()
+  href?: string;
+
+  @ApiPropertyOptional({ example: false, description: 'Open link in new tab' })
+  @IsOptional()
+  @IsBoolean()
+  openInNewTab?: boolean;
+
+  @ApiPropertyOptional({ description: 'Visibility conditions' })
+  @IsOptional()
+  visibilityConditions?: {
+    showWhenTimerRunning?: boolean;
+    showWhenTimerPaused?: boolean;
+    showWhenTimeUp?: boolean;
+    showWhenAnswerRevealed?: boolean;
+    showWhenAnswerHidden?: boolean;
+    customCondition?: string;
+  };
+
+  @ApiPropertyOptional({ description: 'Animation settings' })
+  @IsOptional()
+  animation?: {
+    entrance?: 'fade' | 'slideUp' | 'slideDown' | 'scale' | 'bounce';
+    hover?: 'pulse' | 'scale' | 'glow' | 'none';
+    click?: 'ripple' | 'press' | 'none';
+    duration: number;
+    delay: number;
+  };
+
+  @ApiPropertyOptional({ description: 'Confirmation dialog settings' })
+  @IsOptional()
+  confirmDialog?: {
+    enabled: boolean;
+    title?: string;
+    message?: string;
+    confirmText?: string;
+    cancelText?: string;
+    confirmStyle?: ActionOptionStyle;
+    cancelStyle?: ActionOptionStyle;
+  };
+
+  @ApiPropertyOptional({ description: 'Loading state settings' })
+  @IsOptional()
+  loading?: {
+    showSpinner: boolean;
+    text?: string;
+    disableWhileLoading: boolean;
+  };
+
+  @ApiPropertyOptional({ example: 'hint_clicked', description: 'Analytics event name' })
+  @IsOptional()
+  @IsString()
+  analyticsEvent?: string;
+}
+
+// ==================== IMAGE RIDDLES ====================
+
+export class CreateImageRiddleDto {
+  @ApiProperty({ example: 'What do you see in this image?' })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty({ example: 'https://example.com/image.jpg', description: 'Image URL' })
+  @IsString()
+  @IsNotEmpty()
+  imageUrl: string;
+
+  @ApiProperty({ example: 'A hidden face in the tree' })
+  @IsString()
+  @IsNotEmpty()
+  answer: string;
+
+  @ApiPropertyOptional({ example: 'Look closely at the branches' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
+
+  @ApiProperty({ example: 'medium', enum: ['easy', 'medium', 'hard', 'expert'] })
+  @IsEnum(['easy', 'medium', 'hard', 'expert'])
+  difficulty: string;
+
+  @ApiPropertyOptional({ example: 60, description: 'Custom timer in seconds (null = use difficulty default)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(MIN_TIMER_SECONDS)
+  @Max(MAX_TIMER_SECONDS)
+  timerSeconds?: number | null;
+
+  @ApiPropertyOptional({ example: true, description: 'Whether to show timer to user' })
+  @IsOptional()
+  @IsBoolean()
+  showTimer?: boolean;
+
+  @ApiPropertyOptional({ example: 'An optical illusion image showing a hidden face', description: 'Alt text for accessibility' })
+  @IsOptional()
+  @IsString()
+  altText?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Custom action options displayed below the question',
+    type: [ActionOptionDto]
+  })
+  @IsOptional()
+  @IsArray()
+  actionOptions?: ActionOptionDto[];
+
+  @ApiPropertyOptional({ example: true, description: 'Use default action options when custom not provided' })
+  @IsOptional()
+  @IsBoolean()
+  useDefaultActions?: boolean;
+}
+
+export class UpdateImageRiddleDto {
+  @ApiPropertyOptional({ example: 'What do you see in this image?' })
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @ApiPropertyOptional({ example: 'https://example.com/image.jpg' })
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @ApiPropertyOptional({ example: 'A hidden face in the tree' })
+  @IsOptional()
+  @IsString()
+  answer?: string;
+
+  @ApiPropertyOptional({ example: 'Look closely at the branches' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
+
+  @ApiPropertyOptional({ example: 'medium', enum: ['easy', 'medium', 'hard', 'expert'] })
+  @IsOptional()
+  @IsEnum(['easy', 'medium', 'hard', 'expert'])
+  difficulty?: string;
+
+  @ApiPropertyOptional({ example: 60, description: 'Custom timer in seconds (null = use difficulty default)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(MIN_TIMER_SECONDS)
+  @Max(MAX_TIMER_SECONDS)
+  timerSeconds?: number | null;
+
+  @ApiPropertyOptional({ example: true, description: 'Whether to show timer to user' })
+  @IsOptional()
+  @IsBoolean()
+  showTimer?: boolean;
+
+  @ApiPropertyOptional({ example: 'An optical illusion image' })
+  @IsOptional()
+  @IsString()
+  altText?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiPropertyOptional({ 
+    description: 'Custom action options displayed below the question',
+    type: [ActionOptionDto]
+  })
+  @IsOptional()
+  @IsArray()
+  actionOptions?: ActionOptionDto[];
+
+  @ApiPropertyOptional({ example: true, description: 'Use default action options when custom not provided' })
+  @IsOptional()
+  @IsBoolean()
+  useDefaultActions?: boolean;
+}
+
+export class SearchImageRiddlesDto extends PaginationDto {
+  @ApiPropertyOptional({ description: 'Search in title or answer' })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by category ID' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by difficulty', enum: ['easy', 'medium', 'hard', 'expert'] })
+  @IsOptional()
+  @IsEnum(['easy', 'medium', 'hard', 'expert'])
+  difficulty?: string;
 }
 
 // ==================== USER ANSWERS ====================

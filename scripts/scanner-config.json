@@ -1,0 +1,190 @@
+{
+  "name": "AI Quiz Platform - Enterprise Code Scanner",
+  "version": "2.0.0",
+  "include": [
+    "apps/**/*.{ts,tsx}",
+    "libs/**/*.{ts,tsx}"
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/*.d.ts",
+    "**/coverage/**",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx"
+  ],
+  "rules": {
+    "no-any": {
+      "severity": "high",
+      "enabled": true,
+      "description": "Usage of 'any' type reduces type safety"
+    },
+    "no-console": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "console.log should be replaced with proper logger",
+      "allowedIn": ["scripts/**", "**/*.config.*"]
+    },
+    "require-return-type": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Functions should have explicit return types",
+      "excludeFor": ["arrow-functions", "private-methods"]
+    },
+    "max-function-length": {
+      "severity": "low",
+      "enabled": true,
+      "maxLines": 50,
+      "description": "Functions should not exceed 50 lines"
+    },
+    "max-file-length": {
+      "severity": "low",
+      "enabled": true,
+      "maxLines": 500,
+      "description": "Files should not exceed 500 lines"
+    },
+    "no-eval": {
+      "severity": "critical",
+      "enabled": true,
+      "description": "eval() is dangerous and should never be used"
+    },
+    "no-innerhtml": {
+      "severity": "critical",
+      "enabled": true,
+      "description": "innerHTML with unsanitized input can lead to XSS"
+    },
+    "no-hardcoded-secrets": {
+      "severity": "critical",
+      "enabled": true,
+      "description": "Hardcoded secrets pose security risk",
+      "patterns": [
+        "password\\s*=\\s*['\"][^'\"]+['\"]",
+        "secret\\s*=\\s*['\"][^'\"]+['\"]",
+        "api[_-]?key\\s*=\\s*['\"][^'\"]{8,}['\"]",
+        "token\\s*=\\s*['\"][^'\"]{20,}['\"]"
+      ]
+    },
+    "no-dangerously-set-inner-html": {
+      "severity": "critical",
+      "enabled": true,
+      "description": "dangerouslySetInnerHTML can lead to XSS attacks"
+    },
+    "require-useeffect-cleanup": {
+      "severity": "high",
+      "enabled": true,
+      "description": "useEffect with subscriptions/intervals needs cleanup"
+    },
+    "no-object-literal-in-jsx": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Object/array literals in JSX cause unnecessary re-renders"
+    },
+    "no-entire-library-import": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Import specific modules instead of entire libraries",
+      "libraries": ["lodash", "moment", "rxjs"]
+    },
+    "require-react-keys": {
+      "severity": "high",
+      "enabled": true,
+      "description": "List items must have unique keys"
+    },
+    "no-missing-error-boundary": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Components should be wrapped in error boundaries"
+    },
+    "no-unused-variables": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Unused variables should be removed"
+    },
+    "no-magic-numbers": {
+      "severity": "low",
+      "enabled": true,
+      "description": "Magic numbers should be named constants",
+      "allowed": [0, 1, -1, 100, 1000]
+    },
+    "no-todo-fixme": {
+      "severity": "low",
+      "enabled": true,
+      "description": "TODO/FIXME comments should be addressed"
+    },
+    "require-img-alt": {
+      "severity": "high",
+      "enabled": true,
+      "description": "Images must have alt text for accessibility"
+    },
+    "require-aria-label": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Interactive elements should have aria-labels"
+    },
+    "require-input-label": {
+      "severity": "medium",
+      "enabled": true,
+      "description": "Form inputs should have associated labels"
+    },
+    "require-jsdoc": {
+      "severity": "low",
+      "enabled": true,
+      "description": "Public APIs should have JSDoc comments",
+      "requireFor": ["exported-functions", "classes", "interfaces"]
+    },
+    "max-cyclomatic-complexity": {
+      "severity": "medium",
+      "enabled": true,
+      "maxComplexity": 10,
+      "description": "Functions should have cyclomatic complexity <= 10"
+    },
+    "no-duplicate-code": {
+      "severity": "low",
+      "enabled": true,
+      "minLines": 5,
+      "description": "Duplicate code blocks should be refactored"
+    }
+  },
+  "qualityGates": {
+    "noCriticalIssues": true,
+    "noHighSeveritySecurityIssues": true,
+    "minOverallScore": 9.0,
+    "minTypeSafetyScore": 9.5,
+    "minSecurityScore": 9.5,
+    "minPerformanceScore": 8.0,
+    "minAccessibilityScore": 8.0
+  },
+  "scoring": {
+    "weights": {
+      "type-safety": 0.25,
+      "security": 0.25,
+      "performance": 0.15,
+      "accessibility": 0.15,
+      "best-practices": 0.10,
+      "enterprise": 0.10
+    },
+    "severityPenalties": {
+      "critical": 10,
+      "high": 5,
+      "medium": 2,
+      "low": 0.5
+    }
+  },
+  "autoFix": {
+    "enabled": true,
+    "rules": [
+      "no-any",
+      "no-console",
+      "no-unused-variables"
+    ]
+  },
+  "reporting": {
+    "outputDir": "code-quality-reports",
+    "formats": ["json", "markdown", "html"],
+    "historyFile": "code-quality-reports/scan-history.json"
+  }
+}

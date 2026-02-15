@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export const _metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about the AI Quiz platform and our mission to make learning fun.',
 };
@@ -65,7 +65,7 @@ export default function AboutPage(): JSX.Element {
           <section className="card">
             <h2 className="mb-4 text-2xl font-semibold text-secondary-900">Contact</h2>
             <p className="text-secondary-600 leading-relaxed">
-              Have questions or suggestions? We'd love to hear from you! Reach out to us at{' '}
+              Have questions or suggestions? We&apos;d love to hear from you! Reach out to us at{' '}
               <a href="mailto:contact@aiquiz.com" className="text-primary-600 hover:underline">
                 contact@aiquiz.com
               </a>

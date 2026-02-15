@@ -1,8 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
+
 
 function QuizContent(): JSX.Element {
   const searchParams = useSearchParams();
@@ -58,14 +59,16 @@ function SubjectSelection(): JSX.Element {
           📚 Choose a Subject
         </h1>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
           {subjects.map((subj) => (
             <Link
               key={subj.id}
               href={`/quiz?subject=${subj.id}`}
               className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
+              aria-label={`Select ${subj.name} subject`}
+              role="listitem"
             >
-              <span className="text-4xl">{subj.emoji}</span>
+              <span className="text-4xl" aria-hidden="true">{subj.emoji}</span>
               <span className="mt-2 font-bold text-gray-800">{subj.name}</span>
             </Link>
           ))}
@@ -77,59 +80,59 @@ function SubjectSelection(): JSX.Element {
 
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   const subjectInfo: Record<string, { emoji: string; name: string; chapters: string[] }> = {
-    science: { 
-      emoji: '🔬', 
+    science: {
+      emoji: '🔬',
       name: 'Science',
       chapters: ['Physics Basics', 'Chemistry Fundamentals', 'Biology Essentials', 'Earth Science', 'Astronomy', 'Scientific Method', 'Matter & Energy', 'Forces & Motion', 'Living Organisms', 'Ecosystems', 'Human Body', 'Cells & Genetics', 'Periodic Table', 'Chemical Reactions', 'Light & Sound', 'Electricity', 'Magnetism', 'Weather & Climate', 'Space Exploration', 'Scientific Discoveries']
     },
-    math: { 
-      emoji: '🔢', 
+    math: {
+      emoji: '🔢',
       name: 'Math',
       chapters: ['Arithmetic', 'Algebra Basics', 'Geometry', 'Fractions', 'Decimals', 'Percentages', 'Word Problems', 'Statistics', 'Probability', 'Ratios', 'Measurement', 'Time & Money', 'Patterns', 'Graphs', 'Equations', 'Angles', 'Shapes', 'Area & Perimeter', 'Volume', 'Problem Solving']
     },
-    history: { 
-      emoji: '📜', 
+    history: {
+      emoji: '📜',
       name: 'History',
       chapters: ['Ancient Civilizations', 'Medieval Period', 'Renaissance', 'Industrial Revolution', 'World Wars', 'Cold War', 'Modern History', 'Revolutionary Movements', 'Famous Leaders', 'Ancient Egypt', 'Roman Empire', 'Greek Civilization', 'Asian History', 'American History', 'European History', 'African History', 'World Cultures', 'Historical Events', 'Archaeology', 'Historical Figures']
     },
-    geography: { 
-      emoji: '🌍', 
+    geography: {
+      emoji: '🌍',
       name: 'Geography',
       chapters: ['World Continents', 'Countries', 'Capitals', 'Oceans & Seas', 'Mountains', 'Rivers & Lakes', 'Deserts', 'Climate Zones', 'Population', 'Natural Resources', 'Landmarks', 'Maps & Coordinates', 'Flags', 'Currencies', 'Languages', 'Cultures', 'Ecosystems', 'Natural Disasters', 'Urban Geography', 'Exploration']
     },
-    english: { 
-      emoji: '📖', 
+    english: {
+      emoji: '📖',
       name: 'English',
       chapters: ['Grammar Basics', 'Vocabulary', 'Reading Comprehension', 'Writing Skills', 'Punctuation', 'Spelling', 'Parts of Speech', 'Sentence Structure', 'Literature', 'Poetry', 'Shakespeare', 'Novels', 'Short Stories', 'Essays', 'Creative Writing', 'Idioms', 'Synonyms & Antonyms', 'Homophones', 'Figures of Speech', 'Language History']
     },
-    environment: { 
-      emoji: '🌱', 
+    environment: {
+      emoji: '🌱',
       name: 'Environment',
       chapters: ['Ecosystems', 'Climate Change', 'Renewable Energy', 'Conservation', 'Pollution', 'Recycling', 'Endangered Species', 'Biodiversity', 'Water Cycle', 'Carbon Footprint', 'Sustainable Living', 'Natural Resources', 'Deforestation', 'Oceans & Marine Life', 'Wildlife Protection', 'Green Technology', 'Environmental Laws', 'Global Warming', 'Habitats', 'Environmental Science']
     },
-    technology: { 
-      emoji: '💻', 
+    technology: {
+      emoji: '💻',
       name: 'Technology',
       chapters: ['Computer Basics', 'Internet', 'Programming', 'Software', 'Hardware', 'Networking', 'Cybersecurity', 'Artificial Intelligence', 'Mobile Technology', 'Cloud Computing', 'Data Science', 'Web Development', 'Operating Systems', 'Databases', 'Digital Communication', 'IoT', 'Blockchain', 'Robotics', 'Tech History', 'Future Tech']
     },
-    business: { 
-      emoji: '💼', 
+    business: {
+      emoji: '💼',
       name: 'Business',
       chapters: ['Entrepreneurship', 'Marketing', 'Finance', 'Management', 'Economics', 'Accounting', 'Business Ethics', 'Leadership', 'Negotiation', 'Business Law', 'Investment', 'Banking', 'Stock Market', 'Startups', 'E-commerce', 'Global Business', 'Human Resources', 'Operations', 'Strategy', 'Business Communication']
     },
-    health: { 
-      emoji: '💪', 
+    health: {
+      emoji: '💪',
       name: 'Health',
       chapters: ['Nutrition', 'Exercise', 'Mental Health', 'First Aid', 'Diseases', 'Medicine', 'Hygiene', 'Sleep', 'Stress Management', 'Healthy Lifestyle', 'Vitamins', 'Diet Plans', 'Fitness Goals', 'Body Systems', 'Common Illnesses', 'Prevention', 'Mental Wellness', 'Physical Therapy', 'Health Myths', 'Public Health']
     },
-    parenting: { 
-      emoji: '👶', 
+    parenting: {
+      emoji: '👶',
       name: 'Parenting',
       chapters: ['Baby Care', 'Toddler Development', 'Child Psychology', 'Education', 'Discipline', 'Nutrition for Kids', 'Safety', 'Sleep Training', 'Potty Training', 'Screen Time', 'Sibling Rivalry', 'Teen Years', 'Communication', 'Building Confidence', 'Emotional Intelligence', 'Learning Disabilities', 'Gifted Children', 'Special Needs', 'Family Activities', 'Work-Life Balance']
     },
   };
 
-  const info = subjectInfo[subject] || { emoji: '📚', name: subject, chapters: Array.from({length: 20}, (_, i) => `Chapter ${i + 1}`) };
+  const info = subjectInfo[subject] || { emoji: '📚', name: subject, chapters: Array.from({ length: 20 }, (_, i) => `Chapter ${i + 1}`) };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
@@ -143,12 +146,14 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         </h1>
         <p className="mb-8 text-center text-white/80">Select a Chapter</p>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="list">
           {info.chapters.map((chapterName, index) => (
             <Link
-              key={index}
+              key={`${subject}-chapter-${chapterName}-${index}`}
               href={`/quiz?subject=${subject}&chapter=${index + 1}`}
               className="flex flex-col items-center rounded-xl bg-white/95 p-4 text-center shadow-md transition-all hover:scale-105 hover:bg-white hover:shadow-lg"
+              aria-label={`Select Chapter ${index + 1}: ${chapterName}`}
+              role="listitem"
             >
               <span className="mb-1 text-lg font-bold text-gray-400">Ch.{index + 1}</span>
               <span className="text-sm font-medium text-gray-700">{chapterName}</span>
@@ -202,11 +207,12 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
             <h2 className="text-xl font-bold text-white">📚 Normal Level</h2>
             <p className="text-sm text-white/80">Practice at your own pace - No time limit</p>
           </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+          <div className="grid gap-3 p-4 sm:grid-cols-5" role="group" aria-label="Normal level difficulty selection">
             {levels.map((level) => (
               <button
                 key={`normal-${level.id}`}
                 className={`rounded-xl ${level.color} p-4 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                aria-label={`Start ${level.label} normal level quiz with ${level.sublabel}`}
               >
                 <div className="font-bold">{level.label}</div>
                 <div className="mt-2 text-xs">{level.sublabel}</div>
@@ -221,11 +227,12 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
             <h2 className="text-xl font-bold text-white">⚡ Quick Pick</h2>
             <p className="text-sm text-white/80">Time-bound challenge - Beat the clock!</p>
           </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+          <div className="grid gap-3 p-4 sm:grid-cols-5" role="group" aria-label="Quick pick timed difficulty selection">
             {levels.map((level) => (
               <button
                 key={`quick-${level.id}`}
                 className={`rounded-xl ${level.color} p-4 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                aria-label={`Start ${level.label} timed quiz with ${level.timer}`}
               >
                 <div className="font-bold">{level.label}</div>
                 <div className="mt-2 text-xs">⏱️ {level.timer}</div>
@@ -264,7 +271,7 @@ function TimerChallengesPage(): JSX.Element {
 
   // Determine which row's levels to show (0-indexed)
   const getSelectedRow = (): number => {
-    if (!selectedSubject) return -1;
+    if (!selectedSubject) {return -1;}
     const index = subjects.findIndex(s => s.id === selectedSubject);
     return Math.floor(index / 5);
   };
@@ -299,20 +306,21 @@ function TimerChallengesPage(): JSX.Element {
             {rows.map((row, rowIndex) => (
               <div key={rowIndex} className={rowIndex > 0 ? 'mt-3' : ''}>
                 {/* Subjects Row */}
-                <div className="grid grid-cols-5 gap-3">
+                <div className="grid grid-cols-5 gap-3" role="group" aria-label="Subject selection">
                   {row.map((subject) => {
                     const isSelected = selectedSubject === subject.id;
                     return (
                       <button
                         key={subject.id}
                         onClick={() => setSelectedSubject(isSelected ? null : subject.id)}
-                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                          isSelected
-                            ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600'
-                            : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
-                        }`}
+                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${isSelected
+                          ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white border-teal-600'
+                          : 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-200'
+                          }`}
+                        aria-label={`Select ${subject.name} subject`}
+                        aria-pressed={isSelected}
                       >
-                        <div className="text-xl">{subject.emoji}</div>
+                        <div className="text-xl" aria-hidden="true">{subject.emoji}</div>
                         <div className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-teal-800'}`}>
                           {subject.name}
                         </div>
@@ -320,15 +328,16 @@ function TimerChallengesPage(): JSX.Element {
                     );
                   })}
                 </div>
-                
+
                 {/* Levels Row - appears after the subject row if a subject in this row is selected */}
                 {selectedRow === rowIndex && (
                   <div className="mt-3 mb-3 animate-in fade-in slide-in-from-top-1">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2" role="group" aria-label="Level selection">
                       {levels.map((level) => (
                         <button
                           key={level.id}
                           className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                          aria-label={`Start ${level.label} timer challenge`}
                         >
                           {level.label}
                         </button>
@@ -347,11 +356,12 @@ function TimerChallengesPage(): JSX.Element {
             <h2 className="text-xl font-bold text-white">🌈 Level-wise Mix (All Subjects)</h2>
             <p className="text-sm text-white/80">Same level, all subjects mixed</p>
           </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+          <div className="grid gap-3 p-4 sm:grid-cols-5" role="group" aria-label="Level-wise mix difficulty selection">
             {levels.map((level) => (
               <button
                 key={level.id}
                 className={`rounded-xl ${level.color} p-4 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                aria-label={`Start ${level.label} level-wise mix quiz`}
               >
                 <div className="font-bold">{level.label}</div>
               </button>
@@ -366,7 +376,10 @@ function TimerChallengesPage(): JSX.Element {
             <p className="text-sm text-white/80">All subjects, all levels, all chapters mixed!</p>
           </div>
           <div className="p-4">
-            <button className="w-full rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
+            <button 
+              className="w-full rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
+              aria-label="Start complete mix timer challenge with all subjects and levels"
+            >
               🌟 START COMPLETE MIX
             </button>
           </div>
@@ -402,7 +415,7 @@ function PracticeModePage(): JSX.Element {
 
   // Determine which row's levels to show (0-indexed)
   const getSelectedRow = (): number => {
-    if (!selectedSubject) return -1;
+    if (!selectedSubject) {return -1;}
     const index = subjects.findIndex(s => s.id === selectedSubject);
     return Math.floor(index / 5);
   };
@@ -437,20 +450,21 @@ function PracticeModePage(): JSX.Element {
             {rows.map((row, rowIndex) => (
               <div key={rowIndex} className={rowIndex > 0 ? 'mt-3' : ''}>
                 {/* Subjects Row */}
-                <div className="grid grid-cols-5 gap-3">
+                <div className="grid grid-cols-5 gap-3" role="group" aria-label="Practice mode subject selection">
                   {row.map((subject) => {
                     const isSelected = selectedSubject === subject.id;
                     return (
                       <button
                         key={subject.id}
                         onClick={() => setSelectedSubject(isSelected ? null : subject.id)}
-                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${
-                          isSelected
-                            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600'
-                            : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
-                        }`}
+                        className={`rounded-xl p-3 text-center transition-all hover:scale-105 hover:shadow-lg border ${isSelected
+                          ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-600'
+                          : 'bg-gradient-to-r from-cyan-100 to-blue-100 border-cyan-200'
+                          }`}
+                        aria-label={`Select ${subject.name} for practice`}
+                        aria-pressed={isSelected}
                       >
-                        <div className="text-xl">{subject.emoji}</div>
+                        <div className="text-xl" aria-hidden="true">{subject.emoji}</div>
                         <div className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-cyan-800'}`}>
                           {subject.name}
                         </div>
@@ -458,15 +472,16 @@ function PracticeModePage(): JSX.Element {
                     );
                   })}
                 </div>
-                
+
                 {/* Levels Row - appears after the subject row if a subject in this row is selected */}
                 {selectedRow === rowIndex && (
                   <div className="mt-3 mb-3 animate-in fade-in slide-in-from-top-1">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2" role="group" aria-label="Practice level selection">
                       {levels.map((level) => (
                         <button
                           key={level.id}
                           className={`flex-1 rounded-lg ${level.color} py-2.5 text-center text-white text-xs font-bold transition-all hover:scale-105 hover:shadow-md`}
+                          aria-label={`Start ${level.label} practice mode`}
                         >
                           {level.label}
                         </button>
@@ -485,11 +500,12 @@ function PracticeModePage(): JSX.Element {
             <h2 className="text-xl font-bold text-white">🌈 Level-wise Mix (All Subjects)</h2>
             <p className="text-sm text-white/80">Same level, all subjects mixed - No timer</p>
           </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-5">
+          <div className="grid gap-3 p-4 sm:grid-cols-5" role="group" aria-label="Practice level-wise mix selection">
             {levels.map((level) => (
               <button
                 key={level.id}
                 className={`rounded-xl ${level.color} p-4 text-center text-white transition-all hover:scale-105 hover:shadow-lg`}
+                aria-label={`Start ${level.label} practice level-wise mix`}
               >
                 <div className="font-bold">{level.label}</div>
               </button>
@@ -504,11 +520,15 @@ function PracticeModePage(): JSX.Element {
             <p className="text-sm text-white/80">Ultimate practice - No timer</p>
           </div>
           <div className="p-4">
-            <button className="w-full rounded-xl bg-gradient-to-r from-indigo-400 to-purple-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg">
+            <button 
+              className="w-full rounded-xl bg-gradient-to-r from-indigo-400 to-purple-500 p-6 text-center text-xl font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
+              aria-label="Start complete practice mix with all subjects and levels"
+            >
               🌟 START COMPLETE MIX
             </button>
           </div>
         </div>
+
       </div>
     </main>
   );
@@ -516,7 +536,7 @@ function PracticeModePage(): JSX.Element {
 
 export default function QuizPage(): JSX.Element {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]"><p className="text-xl text-white">Loading...</p></div>}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]" role="status" aria-live="polite"><p className="text-xl text-white">Loading quiz...</p></div>}>
       <QuizContent />
     </Suspense>
   );

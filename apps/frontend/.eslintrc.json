@@ -1,0 +1,14 @@
+{
+    "root": true,
+    "extends": "next/core-web-vitals",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "./tsconfig.json"
+            }
+        }
+    }
+}

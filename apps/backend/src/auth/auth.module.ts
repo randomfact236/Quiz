@@ -7,6 +7,18 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 
+/**
+ * Authentication module providing JWT-based authentication
+ * 
+ * @description Configures Passport JWT authentication with async JWT
+ * secret loading from environment variables. Exports AuthService
+ * for use in other modules requiring authentication capabilities.
+ * 
+ * @class
+ * @example
+ * // Import in other modules to use authentication
+ * imports: [AuthModule]
+ */
 @Module({
   imports: [
     UsersModule,

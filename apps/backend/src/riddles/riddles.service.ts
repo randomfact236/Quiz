@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
 import { Riddle } from './entities/riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
@@ -20,9 +20,18 @@ import {
   SearchRiddlesDto,
 } from '../common/dto/base.dto';
 import { CacheService } from '../common/cache/cache.service';
+import { settings } from '../config/settings';
+import { BulkActionService } from '../common/services/bulk-action.service';
+import { BulkActionType } from '../common/enums/bulk-action.enum';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { ContentStatus } from '../common/enums/content-status.enum';
+import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
+import { computeRiddleStats, RiddlesStats } from './riddles-stats.util';
 
 @Injectable()
 export class RiddlesService {
+  private readonly logger = new Logger(RiddlesService.name);
+
   constructor(
     @InjectRepository(Riddle)
     private riddleRepo: Repository<Riddle>,
@@ -35,14 +44,26 @@ export class RiddlesService {
     @InjectRepository(QuizRiddle)
     private quizRiddleRepo: Repository<QuizRiddle>,
     private cacheService: CacheService,
-  ) {}
+    private dataSource: DataSource,
+    private bulkActionService: BulkActionService,
+  ) { }
 
   // ==================== CLASSIC RIDDLES ====================
 
-  async findAllRiddles(pagination: PaginationDto): Promise<{ data: Riddle[]; total: number }> {
+  async findAllRiddles(
+    pagination: PaginationDto,
+    status?: ContentStatus,
+  ): Promise<{ data: Riddle[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
+    
+    const where: FindOptionsWhere<Riddle> = {};
+    if (status) {
+      where.status = status;
+    }
+
     const [data, total] = await this.riddleRepo.findAndCount({
+      where,
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
@@ -55,6 +76,7 @@ export class RiddlesService {
     const riddle = await this.riddleRepo
       .createQueryBuilder('riddle')
       .leftJoinAndSelect('riddle.category', 'category')
+      .where('riddle.status = :status', { status: ContentStatus.PUBLISHED })
       .orderBy('RANDOM()')
       .getOne();
     if (riddle === null) {
@@ -70,7 +92,7 @@ export class RiddlesService {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
     const [data, total] = await this.riddleRepo.findAndCount({
-      where: { category: { id: categoryId } },
+      where: { category: { id: categoryId }, status: ContentStatus.PUBLISHED },
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
@@ -85,7 +107,7 @@ export class RiddlesService {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
     const [data, total] = await this.riddleRepo.findAndCount({
-      where: { difficulty },
+      where: { difficulty, status: ContentStatus.PUBLISHED },
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
@@ -95,11 +117,12 @@ export class RiddlesService {
 
   async searchRiddles(searchDto: SearchRiddlesDto): Promise<{ data: Riddle[]; total: number }> {
     const page = searchDto.page ?? 1;
-    const limit = searchDto.limit ?? 10;
+    const limit = searchDto.limit ?? settings.global.pagination.defaultLimit;
 
     const queryBuilder = this.riddleRepo
       .createQueryBuilder('riddle')
-      .leftJoinAndSelect('riddle.category', 'category');
+      .leftJoinAndSelect('riddle.category', 'category')
+      .where('riddle.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
       queryBuilder.where('(riddle.question ILIKE :search OR riddle.answer ILIKE :search)', {
@@ -134,6 +157,7 @@ export class RiddlesService {
       answer: dto.answer,
       difficulty: dto.difficulty,
       category,
+      status: ContentStatus.DRAFT,
     });
     const saved = await this.riddleRepo.save(riddle);
     await this.cacheService.delPattern('riddles:*');
@@ -150,6 +174,7 @@ export class RiddlesService {
           answer: r.answer,
           difficulty: r.difficulty,
           category,
+          status: ContentStatus.DRAFT,
         });
         riddles.push(riddle);
       }
@@ -161,25 +186,28 @@ export class RiddlesService {
 
   async updateRiddle(id: string, dto: Partial<CreateRiddleDto>): Promise<Riddle> {
     const riddle = await this.riddleRepo.findOne({ where: { id }, relations: ['category'] });
+    if (riddle === null) throw new NotFoundException('Riddle not found');
+    const fields: (keyof CreateRiddleDto)[] = ['question', 'answer', 'difficulty'];
+    fields.forEach(field => {
+      const value = dto[field];
+      if (value?.length) (riddle[field] as string) = value;
+    });
+    if (dto.categoryId?.length) {
+      const category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
+      if (category === null) throw new NotFoundException('Category not found');
+      riddle.category = category;
+    }
+    const saved = await this.riddleRepo.save(riddle);
+    await this.cacheService.delPattern('riddles:*');
+    return saved;
+  }
+
+  async updateRiddleStatus(id: string, status: ContentStatus): Promise<Riddle> {
+    const riddle = await this.riddleRepo.findOne({ where: { id } });
     if (riddle === null) {
       throw new NotFoundException('Riddle not found');
     }
-    if (dto.question !== undefined && dto.question.length > 0) {
-      riddle.question = dto.question;
-    }
-    if (dto.answer !== undefined && dto.answer.length > 0) {
-      riddle.answer = dto.answer;
-    }
-    if (dto.difficulty !== undefined && dto.difficulty.length > 0) {
-      riddle.difficulty = dto.difficulty;
-    }
-    if (dto.categoryId !== undefined && dto.categoryId.length > 0) {
-      const category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
-      if (category === null) {
-        throw new NotFoundException('Category not found');
-      }
-      riddle.category = category;
-    }
+    riddle.status = status;
     const saved = await this.riddleRepo.save(riddle);
     await this.cacheService.delPattern('riddles:*');
     return saved;
@@ -204,7 +232,7 @@ export class RiddlesService {
           relations: ['riddles'],
         });
       },
-      3600,
+      DEFAULT_CACHE_TTL_S,
     );
   }
 
@@ -222,7 +250,7 @@ export class RiddlesService {
   async createCategory(dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
     const category = this.categoryRepo.create({
       name: dto.name,
-      emoji: dto.emoji ?? '🧩',
+      emoji: dto.emoji ?? settings.riddles.defaults.categoryEmoji,
     });
     const saved = await this.categoryRepo.save(category);
     await this.cacheService.del('riddles:categories');
@@ -231,15 +259,9 @@ export class RiddlesService {
 
   async updateCategory(id: string, dto: UpdateRiddleCategoryDto): Promise<RiddleCategory> {
     const category = await this.categoryRepo.findOne({ where: { id } });
-    if (category === null) {
-      throw new NotFoundException('Category not found');
-    }
-    if (dto.name !== undefined && dto.name.length > 0) {
-      category.name = dto.name;
-    }
-    if (dto.emoji !== undefined) {
-      category.emoji = dto.emoji;
-    }
+    if (category === null) throw new NotFoundException('Category not found');
+    if (dto.name?.length) category.name = dto.name;
+    if (dto.emoji !== undefined) category.emoji = dto.emoji;
     const saved = await this.categoryRepo.save(category);
     await this.cacheService.del('riddles:categories');
     return saved;
@@ -274,7 +296,7 @@ export class RiddlesService {
           relations: ['chapters'],
         });
       },
-      3600,
+      DEFAULT_CACHE_TTL_S,
     );
   }
 
@@ -301,9 +323,7 @@ export class RiddlesService {
 
   async updateSubject(id: string, dto: UpdateRiddleSubjectDto): Promise<RiddleSubject> {
     const subject = await this.subjectRepo.findOne({ where: { id } });
-    if (subject === null) {
-      throw new NotFoundException('Subject not found');
-    }
+    if (subject === null) throw new NotFoundException('Subject not found');
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.del('riddles:subjects');
@@ -343,15 +363,9 @@ export class RiddlesService {
 
   async updateChapter(id: string, dto: UpdateRiddleChapterDto): Promise<RiddleChapter> {
     const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (chapter === null) {
-      throw new NotFoundException('Chapter not found');
-    }
-    if (dto.name !== undefined && dto.name.length > 0) {
-      chapter.name = dto.name;
-    }
-    if (dto.chapterNumber !== undefined) {
-      chapter.chapterNumber = dto.chapterNumber;
-    }
+    if (chapter === null) throw new NotFoundException('Chapter not found');
+    if (dto.name?.length) chapter.name = dto.name;
+    if (dto.chapterNumber !== undefined) chapter.chapterNumber = dto.chapterNumber;
     return this.chapterRepo.save(chapter);
   }
 
@@ -437,32 +451,18 @@ export class RiddlesService {
 
   async updateQuizRiddle(id: string, dto: Partial<CreateQuizRiddleDto>): Promise<QuizRiddle> {
     const riddle = await this.quizRiddleRepo.findOne({ where: { id } });
-    if (riddle === null) {
-      throw new NotFoundException('Quiz riddle not found');
-    }
-    if (dto.question !== undefined && dto.question.length > 0) {
-      riddle.question = dto.question;
-    }
-    if (dto.options !== undefined) {
-      riddle.options = dto.options;
-    }
-    if (dto.correctAnswer !== undefined && dto.correctAnswer.length > 0) {
-      riddle.correctAnswer = dto.correctAnswer;
-    }
-    if (dto.level !== undefined && dto.level.length > 0) {
-      riddle.level = dto.level;
-    }
-    if (dto.explanation !== undefined) {
-      riddle.explanation = dto.explanation;
-    }
-    if (dto.hint !== undefined) {
-      riddle.hint = dto.hint;
-    }
-    if (dto.chapterId !== undefined && dto.chapterId.length > 0) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (chapter === null) {
-        throw new NotFoundException('Chapter not found');
+    if (riddle === null) throw new NotFoundException('Quiz riddle not found');
+    const stringFields = ['question', 'correctAnswer', 'level', 'explanation', 'hint'] as const;
+    stringFields.forEach(field => {
+      const value = dto[field];
+      if (value !== undefined && (field === 'explanation' || field === 'hint' || value.length > 0)) {
+        (riddle[field] as string | undefined) = value;
       }
+    });
+    if (dto.options !== undefined) riddle.options = dto.options;
+    if (dto.chapterId?.length) {
+      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+      if (chapter === null) throw new NotFoundException('Chapter not found');
       riddle.chapter = chapter;
     }
     return this.quizRiddleRepo.save(riddle);
@@ -475,37 +475,25 @@ export class RiddlesService {
     }
   }
 
+  // ==================== BULK ACTIONS ====================
+
+  async bulkActionClassic(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
+    this.logger.log(`[RiddlesService] Executing bulk ${action} on ${ids.length} classic riddles`);
+    const result = await this.bulkActionService.executeBulkAction(this.riddleRepo, 'riddle', ids, action);
+    if (result.succeeded > 0) {
+      await this.cacheService.delPattern('riddles:*');
+      this.logger.log(`[RiddlesService] Cache invalidated after bulk ${action}`);
+    }
+    return result;
+  }
+
+  async getStatusCounts(): Promise<StatusCountResponse> {
+    return this.bulkActionService.getStatusCounts(this.riddleRepo);
+  }
+
   // ==================== STATS ====================
 
-  async getStats(): Promise<{
-    totalClassicRiddles: number;
-    totalCategories: number;
-    totalQuizRiddles: number;
-    totalSubjects: number;
-    totalChapters: number;
-    riddlesByDifficulty: Record<string, number>;
-  }> {
-    const [totalClassicRiddles, totalCategories, totalQuizRiddles, totalSubjects, totalChapters] = await Promise.all([
-      this.riddleRepo.count(),
-      this.categoryRepo.count(),
-      this.quizRiddleRepo.count(),
-      this.subjectRepo.count(),
-      this.chapterRepo.count(),
-    ]);
-
-    const riddlesByDifficulty: Record<string, number> = {
-      easy: await this.riddleRepo.count({ where: { difficulty: 'easy' } }),
-      medium: await this.riddleRepo.count({ where: { difficulty: 'medium' } }),
-      hard: await this.riddleRepo.count({ where: { difficulty: 'hard' } }),
-    };
-
-    return {
-      totalClassicRiddles,
-      totalCategories,
-      totalQuizRiddles,
-      totalSubjects,
-      totalChapters,
-      riddlesByDifficulty,
-    };
+  async getStats(): Promise<RiddlesStats> {
+    return computeRiddleStats(this.riddleRepo, this.categoryRepo, this.quizRiddleRepo, this.subjectRepo, this.chapterRepo);
   }
 }

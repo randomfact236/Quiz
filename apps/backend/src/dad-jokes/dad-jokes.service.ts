@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
 import { JokeSubject } from './entities/joke-subject.entity';
@@ -20,9 +20,18 @@ import {
   SearchJokesDto,
 } from '../common/dto/base.dto';
 import { CacheService } from '../common/cache/cache.service';
+import { settings } from '../config/settings';
+import { BulkActionService } from '../common/services/bulk-action.service';
+import { BulkActionType } from '../common/enums/bulk-action.enum';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { ContentStatus } from '../common/enums/content-status.enum';
+import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
+import { computeDadJokeStats, DadJokesStats } from './dad-jokes-stats.util';
 
 @Injectable()
 export class DadJokesService {
+  private readonly logger = new Logger(DadJokesService.name);
+
   constructor(
     @InjectRepository(DadJoke)
     private jokeRepo: Repository<DadJoke>,
@@ -35,14 +44,26 @@ export class DadJokesService {
     @InjectRepository(QuizJoke)
     private quizJokeRepo: Repository<QuizJoke>,
     private cacheService: CacheService,
-  ) {}
+    private dataSource: DataSource,
+    private bulkActionService: BulkActionService,
+  ) { }
 
   // ==================== CLASSIC JOKES ====================
 
-  async findAllJokes(pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
+  async findAllJokes(
+    pagination: PaginationDto,
+    status?: ContentStatus,
+  ): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
+    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
+    
+    const where: FindOptionsWhere<DadJoke> = {};
+    if (status) {
+      where.status = status;
+    }
+
     const [data, total] = await this.jokeRepo.findAndCount({
+      where,
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
@@ -55,6 +76,7 @@ export class DadJokesService {
     const joke = await this.jokeRepo
       .createQueryBuilder('joke')
       .leftJoinAndSelect('joke.category', 'category')
+      .where('joke.status = :status', { status: ContentStatus.PUBLISHED })
       .orderBy('RANDOM()')
       .getOne();
     if (joke === null) {
@@ -68,23 +90,25 @@ export class DadJokesService {
     pagination: PaginationDto,
   ): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
+    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
     const [data, total] = await this.jokeRepo.findAndCount({
-      where: { category: { id: categoryId } },
+      where: { category: { id: categoryId }, status: ContentStatus.PUBLISHED },
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
+      order: { id: 'DESC' },
     });
     return { data, total };
   }
 
   async searchJokes(searchDto: SearchJokesDto): Promise<{ data: DadJoke[]; total: number }> {
     const page = searchDto.page ?? 1;
-    const limit = searchDto.limit ?? 10;
+    const limit = searchDto.limit ?? settings.global.pagination.defaultLimit;
 
     const queryBuilder = this.jokeRepo
       .createQueryBuilder('joke')
-      .leftJoinAndSelect('joke.category', 'category');
+      .leftJoinAndSelect('joke.category', 'category')
+      .where('joke.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
       queryBuilder.where('joke.joke ILIKE :search', { search: `%${searchDto.search}%` });
@@ -108,7 +132,7 @@ export class DadJokesService {
     if (category === null) {
       throw new NotFoundException('Category not found');
     }
-    const joke = this.jokeRepo.create({ joke: dto.joke, category });
+    const joke = this.jokeRepo.create({ joke: dto.joke, category, status: ContentStatus.DRAFT });
     const saved = await this.jokeRepo.save(joke);
     await this.cacheService.delPattern('jokes:*');
     return saved;
@@ -119,7 +143,7 @@ export class DadJokesService {
     for (const j of dto) {
       const category = await this.categoryRepo.findOne({ where: { id: j.categoryId } });
       if (category !== null) {
-        const joke = this.jokeRepo.create({ joke: j.joke, category });
+        const joke = this.jokeRepo.create({ joke: j.joke, category, status: ContentStatus.DRAFT });
         jokes.push(joke);
       }
     }
@@ -148,6 +172,17 @@ export class DadJokesService {
     return saved;
   }
 
+  async updateJokeStatus(id: string, status: ContentStatus): Promise<DadJoke> {
+    const joke = await this.jokeRepo.findOne({ where: { id } });
+    if (joke === null) {
+      throw new NotFoundException('Joke not found');
+    }
+    joke.status = status;
+    const saved = await this.jokeRepo.save(joke);
+    await this.cacheService.delPattern('jokes:*');
+    return saved;
+  }
+
   async deleteJoke(id: string): Promise<void> {
     const result = await this.jokeRepo.delete(id);
     if (result.affected === 0) {
@@ -167,7 +202,7 @@ export class DadJokesService {
           relations: ['jokes'],
         });
       },
-      3600,
+      DEFAULT_CACHE_TTL_S,
     );
   }
 
@@ -185,7 +220,7 @@ export class DadJokesService {
   async createCategory(dto: CreateJokeCategoryDto): Promise<JokeCategory> {
     const category = this.categoryRepo.create({
       name: dto.name,
-      emoji: dto.emoji ?? '😂',
+      emoji: dto.emoji ?? settings.dadJokes.defaults.categoryEmoji,
     });
     const saved = await this.categoryRepo.save(category);
     await this.cacheService.del('jokes:categories');
@@ -237,7 +272,7 @@ export class DadJokesService {
           relations: ['chapters'],
         });
       },
-      3600,
+      DEFAULT_CACHE_TTL_S,
     );
   }
 
@@ -332,7 +367,7 @@ export class DadJokesService {
     pagination: PaginationDto,
   ): Promise<{ data: QuizJoke[]; total: number }> {
     const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
+    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
     const [data, total] = await this.quizJokeRepo.findAndCount({
       where: { chapter: { id: chapterId } },
       relations: ['chapter'],
@@ -403,29 +438,17 @@ export class DadJokesService {
     if (joke === null) {
       throw new NotFoundException('Quiz joke not found');
     }
-    if (dto.question !== undefined && dto.question.length > 0) {
-      joke.question = dto.question;
-    }
-    if (dto.options !== undefined) {
-      joke.options = dto.options;
-    }
-    if (dto.correctAnswer !== undefined && dto.correctAnswer.length > 0) {
-      joke.correctAnswer = dto.correctAnswer;
-    }
-    if (dto.level !== undefined && dto.level.length > 0) {
-      joke.level = dto.level;
-    }
-    if (dto.explanation !== undefined) {
-      joke.explanation = dto.explanation;
-    }
-    if (dto.punchline !== undefined) {
-      joke.punchline = dto.punchline;
-    }
-    if (dto.chapterId !== undefined && dto.chapterId.length > 0) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (chapter === null) {
-        throw new NotFoundException('Chapter not found');
+    const stringFields = ['question', 'correctAnswer', 'level', 'explanation', 'punchline'] as const;
+    stringFields.forEach(field => {
+      const value = dto[field];
+      if (value !== undefined && (field === 'explanation' || field === 'punchline' || value.length > 0)) {
+        (joke[field] as string | undefined) = value;
       }
+    });
+    if (dto.options !== undefined) joke.options = dto.options;
+    if (dto.chapterId?.length) {
+      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+      if (chapter === null) throw new NotFoundException('Chapter not found');
       joke.chapter = chapter;
     }
     return this.quizJokeRepo.save(joke);
@@ -438,29 +461,31 @@ export class DadJokesService {
     }
   }
 
+  // ==================== BULK ACTIONS ====================
+
+  async bulkActionClassic(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
+    this.logger.log(`[DadJokesService] Executing bulk ${action} on ${ids.length} classic jokes`);
+    const result = await this.bulkActionService.executeBulkAction(this.jokeRepo, 'joke', ids, action);
+    if (result.succeeded > 0) {
+      await this.cacheService.delPattern('jokes:*');
+      this.logger.log(`[DadJokesService] Cache invalidated after bulk ${action}`);
+    }
+    return result;
+  }
+
+  async getStatusCounts(): Promise<StatusCountResponse> {
+    return this.bulkActionService.getStatusCounts(this.jokeRepo);
+  }
+
   // ==================== STATS ====================
 
-  async getStats(): Promise<{
-    totalClassicJokes: number;
-    totalCategories: number;
-    totalQuizJokes: number;
-    totalSubjects: number;
-    totalChapters: number;
-  }> {
-    const [totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters] = await Promise.all([
-      this.jokeRepo.count(),
-      this.categoryRepo.count(),
-      this.quizJokeRepo.count(),
-      this.subjectRepo.count(),
-      this.chapterRepo.count(),
-    ]);
-
-    return {
-      totalClassicJokes,
-      totalCategories,
-      totalQuizJokes,
-      totalSubjects,
-      totalChapters,
-    };
+  async getStats(): Promise<DadJokesStats> {
+    return computeDadJokeStats(
+      this.jokeRepo,
+      this.categoryRepo,
+      this.quizJokeRepo,
+      this.subjectRepo,
+      this.chapterRepo,
+    );
   }
 }

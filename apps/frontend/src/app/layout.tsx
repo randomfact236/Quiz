@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import Header from '@/components/Header';
+
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import MobileFooter from '@/components/MobileFooter';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import './globals.css';
 
 const inter = Inter({
@@ -80,16 +83,19 @@ export default function RootLayout({
 }>): JSX.Element {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col bg-white font-sans antialiased">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
-        >
-          Skip to main content
-        </a>
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
+      <body className="flex min-h-screen flex-col bg-white dark:bg-secondary-900 font-sans antialiased transition-colors duration-300">
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
+          >
+            Skip to main content
+          </a>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+          <MobileFooter />
+        </ThemeProvider>
       </body>
     </html>
   );

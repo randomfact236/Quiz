@@ -1,12 +1,13 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { DB_PORT } from '../common/constants/app.constants';
 
 dotenv.config();
 
-export const dataSourceOptions: DataSourceOptions = {
+export const _dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
+  port: parseInt(process.env.DB_PORT || String(DB_PORT)),
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'ai_quiz',
@@ -16,6 +17,6 @@ export const dataSourceOptions: DataSourceOptions = {
   logging: true,
 };
 
-const dataSource = new DataSource(dataSourceOptions);
+const _dataSource = new DataSource(_dataSourceOptions);
 
-export default dataSource;
+export default _dataSource;

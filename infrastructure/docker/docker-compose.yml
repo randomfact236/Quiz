@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: aiquiz_secure_password
       POSTGRES_DB: aiquiz
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
     command: redis-server --appendonly yes --requirepass aiquiz_redis_password
     ports:
-      - "6380:6379"
+      - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -48,9 +48,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: aiquiz
       RABBITMQ_DEFAULT_PASS: aiquiz_rabbitmq_password
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    # RabbitMQ ports managed externally
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
@@ -70,9 +68,7 @@ services:
     environment:
       MINIO_ROOT_USER: aiquiz
       MINIO_ROOT_PASSWORD: aiquiz_minio_password
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+    # MinIO ports managed externally
     volumes:
       - minio_data:/data
     healthcheck:

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "AI Quiz Platform Backend - Enterprise Grade NestJS API",
   "scripts": {
+    "prestart": "node scripts/validate-port.js",
+    "prestart:dev": "node scripts/validate-port.js",
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",

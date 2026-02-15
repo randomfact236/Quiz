@@ -18,6 +18,7 @@
     "libs/*"
   ],
   "scripts": {
+    "predev": "npm run validate:ports",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "dev:backend": "npm run start:dev --workspace=apps/backend",
@@ -39,13 +40,24 @@
     "fix": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -All",
     "fix:frontend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Frontend",
     "fix:backend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Backend",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "validate:ports": "node scripts/validate-ports.js",
+    "ports:status": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action status",
+    "ports:setup": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action setup",
+    "ports:release": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action release",
+    "scan:code": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts",
+    "scan:code:fix": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --fix",
+    "scan:code:strict": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --threshold 9.5",
+    "scan:code:compare": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --compare",
+    "scan:code:verbose": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --verbose",
+    "quality:gate": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --threshold 9.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -56,6 +68,8 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
     "rimraf": "^5.0.5",
+    "ts-morph": "^21.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "lint-staged": {

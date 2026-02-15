@@ -1,0 +1,34 @@
+# AI QUIZ PLATFORM - PORT RESERVATION LOCK FILE
+# ================================================
+# WARNING: This project is RESTRICTED to the following ports ONLY.
+# Using any other port will cause the application to fail validation.
+# 
+# To reserve these ports in Windows (requires Admin):
+#   Run: setup-port-security.bat as Administrator
+#
+# PORT ALLOCATIONS:
+# -----------------
+FRONTEND_PORT=3010
+BACKEND_PORT=4000
+POSTGRESQL_PORT=5432
+REDIS_PORT=6379
+
+# RESTRICTION RULES:
+# ------------------
+# 1. No service in this project may use ports outside the above list
+# 2. These ports are reserved for exclusive use by AI Quiz Platform
+# 3. External access to these ports is blocked by firewall rules
+# 4. Port validation runs before server startup
+#
+# VALIDATION:
+# -----------
+# Run: server-manager.ps1 -Action validate
+# 
+# SECURITY:
+# ---------
+# Run as Admin: port-security-enforcer.ps1 -Action setup
+# This reserves ports in Windows and creates firewall rules.
+
+ALLOWED_PORTS=3010,4000,5432,6379
+PROJECT_NAME=AI-Quiz-Platform
+LOCK_VERSION=1.0

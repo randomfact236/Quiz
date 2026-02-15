@@ -1,9 +1,26 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // Types
+
+// Status Dashboard & Bulk Actions
+import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
+import { FileUploader } from '@/components/ui/FileUploader';
+import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection } from './components';
+import { StatusDashboard } from '@/components/ui/StatusDashboard';
+// StatusService moved to hook usage
+// import { StatusService } from '@/services/status.service';
+import {
+  initialJokes as libInitialJokes,
+  initialRiddles as libInitialRiddles,
+  initialImageRiddles as libInitialImageRiddles
+} from '@/lib/initial-data';
+import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
+import type { StatusFilter, BulkActionType } from '@/types/status.types';
+import { parseCSVLine } from './utils';
+
 type Question = {
   id: number;
   question: string;
@@ -14,6 +31,7 @@ type Question = {
   correctAnswer: string;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapter: string;
+  status?: ContentStatus;
 };
 
 type Subject = {
@@ -25,6 +43,100 @@ type Subject = {
 };
 
 type MenuSection = 'dashboard' | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology' | 'jokes' | 'riddles' | 'image-riddles' | 'users' | 'settings';
+
+// ============================================================================
+// ENTERPRISE-GRADE CONTENT TYPES
+// ============================================================================
+
+/** Content Status Type */
+type ContentStatus = 'published' | 'draft' | 'trash';
+
+/** Joke Type - Enterprise Grade */
+type Joke = {
+  id: number;
+  joke: string;
+  category: string;
+  status: ContentStatus;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+/** Joke Category Type */
+type JokeCategory = {
+  id: number;
+  name: string;
+  emoji: string;
+  description?: string;
+};
+
+/** Riddle Type - Enterprise Grade */
+type Riddle = {
+  id: number;
+  question: string;
+  answer?: string;
+  options: string[];
+  correctOption: string;
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  chapter: string;
+  status: ContentStatus;
+  hint?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+/** Image Riddle Type - Enterprise Grade */
+type ImageRiddle = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  altText?: string;
+  answer: string;
+  hint: string;
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  category: { name: string; emoji: string };
+  status: ContentStatus;
+  timerSeconds?: number | null;
+  showTimer: boolean;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+
+
+// ============================================================================
+// ENTERPRISE-GRADE VALIDATION RESULTS
+// ============================================================================
+
+type ValidationResult<T> = {
+  isValid: boolean;
+  data: T | null;
+  errors: string[];
+  warnings: string[];
+};
+
+type ImportResult<T> = {
+  success: boolean;
+  imported: T[];
+  failed: { row: number; error: string; data: unknown }[];
+  total: number;
+};
+
+// ============================================================================
+// ENTERPRISE-GRADE IMPORT/EXPORT CONFIG
+// ============================================================================
+
+type ImportExportConfig<T> = {
+  entityName: string;
+  filePrefix: string;
+  csvHeaders: string[];
+  jsonRootKey: string;
+  validators: {
+    required: (keyof T)[];
+    enumFields?: Record<string, string[]>;
+    maxLength?: Record<string, number>;
+  };
+};
 
 // Initial Data
 const initialQuestions: Record<string, Question[]> = {
@@ -41,13 +153,13 @@ const initialQuestions: Record<string, Question[]> = {
     { id: 10, question: 'What is the largest organ in the human body?', optionA: 'Heart', optionB: 'Liver', optionC: 'Skin', optionD: 'Brain', correctAnswer: 'C', level: 'easy', chapter: 'Human Anatomy' },
   ],
   math: [
-    { id: 1, question: 'What is 15 × 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication' },
+    { id: 1, question: 'What is 15 Ã— 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication' },
     { id: 2, question: 'What is the square root of 144?', optionA: '10', optionB: '11', optionC: '12', optionD: '13', correctAnswer: 'C', level: 'easy', chapter: 'Square Roots' },
-    { id: 3, question: 'What is the value of π (pi) to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants' },
+    { id: 3, question: 'What is the value of Ï€ (pi) to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants' },
     { id: 4, question: 'Solve: 2x + 5 = 15', optionA: 'x = 3', optionB: 'x = 4', optionC: 'x = 5', optionD: 'x = 6', correctAnswer: 'C', level: 'medium', chapter: 'Algebra' },
     { id: 5, question: 'What is 25% of 200?', optionA: '25', optionB: '50', optionC: '75', optionD: '100', correctAnswer: 'B', level: 'easy', chapter: 'Percentages' },
-    { id: 6, question: 'What is the sum of angles in a triangle?', optionA: '90°', optionB: '180°', optionC: '270°', optionD: '360°', correctAnswer: 'B', level: 'easy', chapter: 'Geometry' },
-    { id: 7, question: 'What is 7² + 3²?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents' },
+    { id: 6, question: 'What is the sum of angles in a triangle?', optionA: '90Â°', optionB: '180Â°', optionC: '270Â°', optionD: '360Â°', correctAnswer: 'B', level: 'easy', chapter: 'Geometry' },
+    { id: 7, question: 'What is 7Â² + 3Â²?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents' },
     { id: 8, question: 'Simplify: 3/4 + 1/4', optionA: '1/2', optionB: '3/8', optionC: '1', optionD: '4/8', correctAnswer: 'C', level: 'easy', chapter: 'Fractions' },
   ],
   history: [
@@ -85,12 +197,12 @@ const initialQuestions: Record<string, Question[]> = {
 };
 
 const initialSubjects: Subject[] = [
-  { id: 1, slug: 'science', name: 'Science', emoji: '🔬', category: 'academic' },
-  { id: 2, slug: 'math', name: 'Math', emoji: '🔢', category: 'academic' },
-  { id: 3, slug: 'history', name: 'History', emoji: '📜', category: 'academic' },
-  { id: 4, slug: 'geography', name: 'Geography', emoji: '🌍', category: 'academic' },
-  { id: 5, slug: 'english', name: 'English', emoji: '📖', category: 'academic' },
-  { id: 6, slug: 'technology', name: 'Technology', emoji: '💻', category: 'professional' },
+  { id: 1, slug: 'science', name: 'Science', emoji: 'ðŸ”¬', category: 'academic' },
+  { id: 2, slug: 'math', name: 'Math', emoji: 'ðŸ”¢', category: 'academic' },
+  { id: 3, slug: 'history', name: 'History', emoji: 'ðŸ“œ', category: 'academic' },
+  { id: 4, slug: 'geography', name: 'Geography', emoji: 'ðŸŒ', category: 'academic' },
+  { id: 5, slug: 'english', name: 'English', emoji: 'ðŸ“–', category: 'academic' },
+  { id: 6, slug: 'technology', name: 'Technology', emoji: 'ðŸ’»', category: 'professional' },
 ];
 
 export default function AdminPage(): JSX.Element {
@@ -98,10 +210,22 @@ export default function AdminPage(): JSX.Element {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [quizModuleExpanded, setQuizModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
-  
+
   // Dynamic data state
-  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions);
+  const [subjects, setSubjects] = useState<Subject[]>(() => getItem(STORAGE_KEYS.SUBJECTS, initialSubjects));
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() => getItem(STORAGE_KEYS.QUESTIONS, initialQuestions));
+
+  // Jokes state (shared with JokesSection component)
+  const { allJokes, setAllJokes } = useGlobalJokes();
+
+  // Persistence effects
+  useEffect(() => {
+    setItem(STORAGE_KEYS.SUBJECTS, subjects);
+  }, [subjects]);
+
+  useEffect(() => {
+    setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
+  }, [allQuestions]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -141,7 +265,7 @@ export default function AdminPage(): JSX.Element {
       level: 'easy',
       chapter: chapterName,
     };
-    
+
     setAllQuestions(prev => ({
       ...prev,
       [subjectSlug]: [...(prev[subjectSlug] ?? []), newQuestion],
@@ -150,28 +274,28 @@ export default function AdminPage(): JSX.Element {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col`}>
         {/* Logo */}
         <div className="border-b border-gray-800 p-4">
           <div className="flex items-center justify-between">
-            {sidebarOpen && <h1 className="text-xl font-bold">🎮 Admin Panel</h1>}
-            <button 
+            {sidebarOpen && <h1 className="text-xl font-bold">ðŸŽ® Admin Panel</h1>}
+            <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="rounded-lg p-2 hover:bg-gray-800"
             >
-              {sidebarOpen ? '◀' : '▶'}
+              {sidebarOpen ? 'â—€' : 'â–¶'}
             </button>
           </div>
         </div>
-        
+
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-2">
           {/* Dashboard */}
-          <MenuItem 
-            emoji="📊" 
-            label="Dashboard" 
+          <MenuItem
+            emoji="ðŸ“Š"
+            label="Dashboard"
             active={activeSection === 'dashboard'}
             expanded={sidebarOpen}
             onClick={() => setActiveSection('dashboard')}
@@ -184,20 +308,20 @@ export default function AdminPage(): JSX.Element {
           >
             {sidebarOpen ? (
               <>
-                <span>📚 Quiz Module</span>
-                <span className={`transition-transform ${quizModuleExpanded ? 'rotate-180' : ''}`}>▼</span>
+                <span>ðŸ“š Quiz Module</span>
+                <span className={`transition-transform ${quizModuleExpanded ? 'rotate-180' : ''}`}>â–¼</span>
               </>
             ) : (
-              <span className="text-lg">📚</span>
+              <span className="text-lg">ðŸ“š</span>
             )}
           </button>
 
           {/* Subject List - Dynamic */}
           {quizModuleExpanded && subjects.map((subject) => (
-            <MenuItem 
+            <MenuItem
               key={subject.id}
-              emoji={subject.emoji} 
-              label={subject.name} 
+              emoji={subject.emoji}
+              label={subject.name}
               active={activeSection === subject.slug as MenuSection}
               expanded={sidebarOpen}
               onClick={() => setActiveSection(subject.slug as MenuSection)}
@@ -211,34 +335,34 @@ export default function AdminPage(): JSX.Element {
           >
             {sidebarOpen ? (
               <>
-                <span>🎮 Other Modules</span>
-                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}>▼</span>
+                <span>ðŸŽ® Other Modules</span>
+                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}>â–¼</span>
               </>
             ) : (
-              <span className="text-lg">🎮</span>
+              <span className="text-lg">ðŸŽ®</span>
             )}
           </button>
 
           {/* Dad Jokes & Riddles */}
           {otherModulesExpanded && (
             <>
-              <MenuItem 
-                emoji="😂" 
-                label="Dad Jokes" 
+              <MenuItem
+                emoji="ðŸ˜‚"
+                label="Dad Jokes"
                 active={activeSection === 'jokes'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('jokes')}
               />
-              <MenuItem 
-                emoji="🎭" 
-                label="Riddles" 
+              <MenuItem
+                emoji="ðŸŽ­"
+                label="Riddles"
                 active={activeSection === 'riddles'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('riddles')}
               />
-              <MenuItem 
-                emoji="🖼️" 
-                label="Image Riddles" 
+              <MenuItem
+                emoji="ðŸ–¼ï¸"
+                label="Image Riddles"
                 active={activeSection === 'image-riddles'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('image-riddles')}
@@ -249,19 +373,19 @@ export default function AdminPage(): JSX.Element {
           {/* System */}
           {sidebarOpen && (
             <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              ⚙️ System
+              âš™ï¸ System
             </div>
           )}
-          <MenuItem 
-            emoji="👥" 
-            label="Users" 
+          <MenuItem
+            emoji="ðŸ‘¥"
+            label="Users"
             active={activeSection === 'users'}
             expanded={sidebarOpen}
             onClick={() => setActiveSection('users')}
           />
-          <MenuItem 
-            emoji="⚙️" 
-            label="Settings" 
+          <MenuItem
+            emoji="âš™ï¸"
+            label="Settings"
             active={activeSection === 'settings'}
             expanded={sidebarOpen}
             onClick={() => setActiveSection('settings')}
@@ -270,11 +394,11 @@ export default function AdminPage(): JSX.Element {
 
         {/* Back to Site */}
         <div className="border-t border-gray-800 p-4">
-          <Link 
+          <Link
             href="/"
             className="flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 text-gray-300 transition-colors hover:bg-gray-700"
           >
-            <span>🏠</span>
+            <span>ðŸ </span>
             {sidebarOpen && <span>Back to Site</span>}
           </Link>
         </div>
@@ -283,21 +407,21 @@ export default function AdminPage(): JSX.Element {
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="bg-white shadow-sm">
+        <header className="bg-white shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
           <div className="flex items-center justify-between px-6 py-4">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              {activeSection === 'dashboard' && '📊 Dashboard'}
-              {activeSection === 'jokes' && '😂 Dad Jokes Management'}
-              {activeSection === 'riddles' && '🎭 Riddles Management'}
-              {activeSection === 'image-riddles' && '🖼️ Image Riddles Management'}
-              {activeSection === 'users' && '👥 User Management'}
-              {activeSection === 'settings' && '⚙️ Settings'}
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100">
+              {activeSection === 'dashboard' && 'ðŸ“Š Dashboard'}
+              {activeSection === 'jokes' && 'ðŸ˜‚ Dad Jokes Management'}
+              {activeSection === 'riddles' && 'ðŸŽ­ Riddles Management'}
+              {activeSection === 'image-riddles' && 'ðŸ–¼ï¸ Image Riddles Management'}
+              {activeSection === 'users' && 'ðŸ‘¥ User Management'}
+              {activeSection === 'settings' && 'âš™ï¸ Settings'}
               {subjects.some(s => s.slug === activeSection) && (
                 `${subjects.find(s => s.slug === activeSection)?.emoji ?? ''} ${subjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management`
               )}
             </h2>
             <div className="flex items-center gap-4">
-              <span className="text-gray-600">Welcome, Admin</span>
+              <span className="text-gray-600 dark:text-secondary-400">Welcome, Admin</span>
               <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                 A
               </div>
@@ -308,17 +432,17 @@ export default function AdminPage(): JSX.Element {
         {/* Content Area */}
         <div className="p-6">
           {activeSection === 'dashboard' && (
-            <DashboardSection 
-              onSelectSubject={setActiveSection} 
+            <DashboardSection
+              onSelectSubject={setActiveSection}
               subjects={subjects}
               allQuestions={allQuestions}
               onAddSubject={() => setShowAddSubjectModal(true)}
             />
           )}
           {subjects.some(s => s.slug === activeSection) && (
-            <QuestionManagementSection 
-              subject={getSubjectFromSection(activeSection) as Subject} 
-              questions={getQuestionsForSubject(activeSection)} 
+            <QuestionManagementSection
+              subject={getSubjectFromSection(activeSection) as Subject}
+              questions={getQuestionsForSubject(activeSection)}
               allSubjects={subjects}
               onSubjectSelect={handleSubjectSelect}
               onAddChapter={() => {
@@ -333,7 +457,7 @@ export default function AdminPage(): JSX.Element {
               }}
             />
           )}
-          {activeSection === 'jokes' && <JokesSection />}
+          {activeSection === 'jokes' && <JokesSection allJokes={allJokes} setAllJokes={setAllJokes} />}
           {activeSection === 'riddles' && <RiddlesSection />}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <UsersSection />}
@@ -343,7 +467,7 @@ export default function AdminPage(): JSX.Element {
 
       {/* Add Subject Modal */}
       {showAddSubjectModal && (
-        <AddSubjectModal 
+        <AddSubjectModal
           onClose={() => setShowAddSubjectModal(false)}
           onAdd={handleAddSubject}
           existingSlugs={subjects.map(s => s.slug)}
@@ -352,7 +476,7 @@ export default function AdminPage(): JSX.Element {
 
       {/* Add Chapter Modal */}
       {showAddChapterModal && (
-        <AddChapterModal 
+        <AddChapterModal
           onClose={() => setShowAddChapterModal(false)}
           onAdd={(chapterName) => handleAddChapter(selectedSubjectForChapter, chapterName)}
           subjectName={subjects.find(s => s.slug === selectedSubjectForChapter)?.name ?? ''}
@@ -373,9 +497,8 @@ function MenuItem({ emoji, label, active, expanded, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
-        active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
-      }`}
+      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+        }`}
     >
       <span className="text-xl">{emoji}</span>
       {expanded && <span>{label}</span>}
@@ -390,14 +513,14 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
   existingSlugs: string[];
 }): JSX.Element {
   const [name, setName] = useState('');
-  const [emoji, setEmoji] = useState('📚');
+  const [emoji, setEmoji] = useState('ðŸ“š');
   const [category, setCategory] = useState<'academic' | 'professional'>('academic');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    
+
     if (!name.trim()) {
       setError('Subject name is required');
       return;
@@ -418,38 +541,38 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
-        <h3 className="text-xl font-bold mb-4">Add New Subject</h3>
+      <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+        <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-secondary-100">Add New Subject</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="subjectName" className="block text-sm font-medium text-gray-700 mb-1">Subject Name</label>
+            <label htmlFor="subjectName" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Subject Name</label>
             <input
               id="subjectName"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
               placeholder="e.g., Physics"
             />
           </div>
           <div>
-            <label htmlFor="subjectEmoji" className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+            <label htmlFor="subjectEmoji" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Emoji</label>
             <input
               id="subjectEmoji"
               type="text"
               value={emoji}
               onChange={(e) => setEmoji(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
-              placeholder="e.g., ⚛️"
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
+              placeholder="e.g., âš›ï¸"
             />
           </div>
           <div>
-            <label htmlFor="subjectCategory" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <label htmlFor="subjectCategory" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Category</label>
             <select
               id="subjectCategory"
               value={category}
               onChange={(e) => setCategory(e.target.value as 'academic' | 'professional')}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
             >
               <option value="academic">Academic</option>
               <option value="professional">Professional</option>
@@ -460,7 +583,7 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+              className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
             >
               Cancel
             </button>
@@ -488,7 +611,7 @@ function AddChapterModal({ onClose, onAdd, subjectName }: {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!chapterName.trim()) {
       setError('Chapter name is required');
       return;
@@ -499,18 +622,18 @@ function AddChapterModal({ onClose, onAdd, subjectName }: {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
-        <h3 className="text-xl font-bold mb-1">Add New Chapter</h3>
-        <p className="text-gray-500 text-sm mb-4">for {subjectName}</p>
+      <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+        <h3 className="text-xl font-bold mb-1 text-gray-900 dark:text-secondary-100">Add New Chapter</h3>
+        <p className="text-gray-500 dark:text-secondary-400 text-sm mb-4">for {subjectName}</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="chapterName" className="block text-sm font-medium text-gray-700 mb-1">Chapter Name</label>
+            <label htmlFor="chapterName" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Chapter Name</label>
             <input
               id="chapterName"
               type="text"
               value={chapterName}
               onChange={(e) => setChapterName(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
               placeholder="e.g., Quantum Mechanics"
             />
           </div>
@@ -519,7 +642,7 @@ function AddChapterModal({ onClose, onAdd, subjectName }: {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+              className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
             >
               Cancel
             </button>
@@ -537,7 +660,7 @@ function AddChapterModal({ onClose, onAdd, subjectName }: {
 }
 
 // Dashboard Section
-function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject }: { 
+function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject }: {
   onSelectSubject: (section: MenuSection) => void;
   subjects: Subject[];
   allQuestions: Record<string, Question[]>;
@@ -556,7 +679,7 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {subjects.map((subject) => (
-          <button 
+          <button
             key={subject.slug}
             onClick={() => onSelectSubject(subject.slug as MenuSection)}
             className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow text-left"
@@ -577,93 +700,6 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
   );
 }
 
-// Convert questions to CSV format
-function questionsToCSV(questions: Question[], subjectName: string): string {
-  const headers = ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter', 'Subject'];
-  const rows = questions.map(q => [
-    q.id,
-    `"${q.question.replace(/"/g, '""')}"`,
-    `"${q.optionA.replace(/"/g, '""')}"`,
-    `"${q.optionB.replace(/"/g, '""')}"`,
-    `"${q.optionC.replace(/"/g, '""')}"`,
-    `"${q.optionD.replace(/"/g, '""')}"`,
-    q.correctAnswer,
-    q.level,
-    `"${q.chapter.replace(/"/g, '""')}"`,
-    subjectName,
-  ]);
-  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-}
-
-// Parse CSV to questions
-function parseCSV(csvText: string): Partial<Question>[] {
-  const lines = csvText.trim().split('\n');
-  if (lines.length < 2) return [];
-  
-  const firstLine = lines[0];
-  if (!firstLine) return [];
-  
-  const headers = firstLine.split(',').map(h => (h?.trim() ?? '').toLowerCase().replace(/"/g, ''));
-  const questions: Partial<Question>[] = [];
-  
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line) continue;
-    const values = parseCSVLine(line);
-    if (values.length < 8) continue;
-    
-    // Helper to safely get value from headers or fallback to index
-    const getValue = (index: number, headerName: string): string => {
-      const headerIndex = headers.indexOf(headerName);
-      if (headerIndex !== -1 && headerIndex < values.length && values[headerIndex]) {
-        return values[headerIndex] ?? '';
-      }
-      return (index < values.length ? values[index] : '') ?? '';
-    };
-    
-    const q: Partial<Question> = {
-      question: getValue(1, 'question'),
-      optionA: getValue(2, 'option a'),
-      optionB: getValue(3, 'option b'),
-      optionC: getValue(4, 'option c'),
-      optionD: getValue(5, 'option d'),
-      correctAnswer: getValue(6, 'correct answer'),
-      level: (getValue(7, 'level') || 'easy') as Question['level'],
-      chapter: getValue(8, 'chapter') || 'General',
-    };
-    
-    if (q.question) questions.push(q);
-  }
-  
-  return questions;
-}
-
-// Parse a single CSV line (handles quoted values)
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
-  let current = '';
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  result.push(current.trim());
-  return result;
-}
-
 // Download file helper
 function downloadFile(content: string, filename: string, type: string): void {
   const blob = new Blob([content], { type });
@@ -677,883 +713,373 @@ function downloadFile(content: string, filename: string, type: string): void {
   URL.revokeObjectURL(url);
 }
 
-// Question Management Section with Table
-function QuestionManagementSection({ 
-  subject, 
-  questions, 
-  allSubjects, 
-  onSubjectSelect,
-  onAddChapter,
-  onQuestionsImport,
-}: { 
-  subject: Subject; 
-  questions: Question[]; 
-  allSubjects: Subject[];
-  onSubjectSelect: (slug: string) => void;
-  onAddChapter: () => void;
-  onQuestionsImport: (subjectSlug: string, newQuestions: Question[]) => void;
-}): JSX.Element {
-  const [filterLevel, setFilterLevel] = useState<string>('all');
-  const [filterChapter, setFilterChapter] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showImportModal, setShowImportModal] = useState(false);
-  const [importError, setImportError] = useState('');
-  const [importPreview, setImportPreview] = useState<Partial<Question>[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+// ============================================================================
+// ENTERPRISE-GRADE IMPORT/EXPORT UTILITIES
+// ============================================================================
 
-  // Get unique chapters for this subject
-  const chapters = [...new Set(questions.map(q => q.chapter))];
+/** 
+ * Enterprise-Grade CSV Validator
+ * Validates CSV content against expected headers and structure
+ */
+function validateCSVStructure(csvText: string, expectedHeaders: string[]): ValidationResult<string[]> {
+  const errors: string[] = [];
+  const warnings: string[] = [];
 
-  // Filter questions
-  const filteredQuestions = questions.filter(q => {
-    const matchesLevel = filterLevel === 'all' || q.level === filterLevel;
-    const matchesChapter = filterChapter === 'all' || q.chapter === filterChapter;
-    const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesLevel && matchesChapter && matchesSearch;
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) {
+    errors.push('CSV file must have at least a header row and one data row');
+    return { isValid: false, data: null, errors, warnings };
+  }
+
+  const firstLine = lines[0];
+  if (!firstLine) {
+    errors.push('CSV header row is empty');
+    return { isValid: false, data: null, errors, warnings };
+  }
+
+  const headers = parseCSVLine(firstLine).map(h => h.toLowerCase().trim());
+
+  // Check for required headers
+  const missingHeaders = expectedHeaders.filter(h =>
+    !headers.some(header => header.includes(h.toLowerCase()))
+  );
+
+  if (missingHeaders.length > 0) {
+    warnings.push(`Missing recommended headers: ${missingHeaders.join(', ')}`);
+  }
+
+  // Check for empty rows
+  const emptyRows = lines.filter((line, idx) => idx > 0 && (!line || line.trim() === ''));
+  if (emptyRows.length > 0) {
+    warnings.push(`${emptyRows.length} empty rows detected and will be skipped`);
+  }
+
+  return {
+    isValid: errors.length === 0,
+    data: lines,
+    errors,
+    warnings
+  };
+}
+
+/** 
+ * Enterprise-Grade JSON Validator
+ * Validates JSON content structure
+ */
+function validateJSONStructure<T>(jsonText: string, rootKey?: string): ValidationResult<T[]> {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  try {
+    const parsed = JSON.parse(jsonText);
+
+    let dataArray: T[];
+    if (rootKey && parsed[rootKey]) {
+      dataArray = Array.isArray(parsed[rootKey]) ? parsed[rootKey] : [parsed[rootKey]];
+    } else if (Array.isArray(parsed)) {
+      dataArray = parsed;
+    } else {
+      dataArray = [parsed];
+    }
+
+    if (dataArray.length === 0) {
+      errors.push('No data records found in JSON file');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      data: dataArray,
+      errors,
+      warnings
+    };
+  } catch (err) {
+    errors.push(`Invalid JSON format: ${(err as Error).message}`);
+    return { isValid: false, data: null, errors, warnings };
+  }
+}
+
+/**
+ * Enterprise-Grade Entity Validator
+ * Validates entity data against configuration rules
+ */
+function validateEntity<T extends Record<string, unknown>>(
+  entity: Partial<T>,
+  config: ImportExportConfig<T>,
+  rowIndex: number
+): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+
+  // Check required fields
+  config.validators.required.forEach(field => {
+    const value = entity[field];
+    if (value === undefined || value === null || value === '') {
+      errors.push(`Row ${rowIndex}: Missing required field "${String(field)}"`);
+    }
   });
 
-  // Export to CSV
-  const handleExportCSV = () => {
-    const csv = questionsToCSV(filteredQuestions, subject.name);
-    downloadFile(csv, `${subject.name}_questions.csv`, 'text/csv');
-  };
-
-  // Export to JSON
-  const handleExportJSON = () => {
-    const data = {
-      subject: subject.name,
-      exportedAt: new Date().toISOString(),
-      questions: filteredQuestions,
-    };
-    downloadFile(JSON.stringify(data, null, 2), `${subject.name}_questions.json`, 'application/json');
-  };
-
-  // Handle file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    setImportError('');
-    const reader = new FileReader();
-    
-    reader.onload = (event) => {
-      try {
-        const content = event.target?.result as string;
-        let parsed: Partial<Question>[] = [];
-        
-        if (file.name.endsWith('.json')) {
-          const data = JSON.parse(content);
-          parsed = Array.isArray(data.questions) ? data.questions : Array.isArray(data) ? data : [];
-        } else {
-          parsed = parseCSV(content);
+  // Check enum fields
+  if (config.validators.enumFields) {
+    Object.entries(config.validators.enumFields).forEach(([field, validValues]) => {
+      const value = entity[field as keyof T];
+      if (value !== undefined && value !== null && value !== '') {
+        if (!validValues.includes(String(value))) {
+          errors.push(`Row ${rowIndex}: Invalid value "${value}" for field "${field}". Valid values: ${validValues.join(', ')}`);
         }
-        
-        if (parsed.length === 0) {
-          setImportError('No valid questions found in file');
-          return;
-        }
-        
-        setImportPreview(parsed);
-      } catch (err) {
-        setImportError('Failed to parse file: ' + (err as Error).message);
       }
+    });
+  }
+
+  // Check max length
+  if (config.validators.maxLength) {
+    Object.entries(config.validators.maxLength).forEach(([field, maxLen]) => {
+      const value = entity[field as keyof T];
+      if (value !== undefined && value !== null) {
+        const strValue = String(value);
+        if (strValue.length > maxLen) {
+          errors.push(`Row ${rowIndex}: Field "${field}" exceeds maximum length of ${maxLen} characters`);
+        }
+      }
+    });
+  }
+
+  return { isValid: errors.length === 0, errors };
+}
+
+/**
+ * Enterprise-Grade Generic CSV Exporter
+ */
+function exportToCSV<T extends Record<string, unknown>>(
+  items: T[],
+  config: ImportExportConfig<T>,
+  metadata?: Record<string, string>
+): string {
+  const headers = config.csvHeaders;
+
+  const rows = items.map(item =>
+    headers.map(header => {
+      const key = header.toLowerCase().replace(/\s+/g, '') as keyof T;
+      const value = item[key];
+
+      if (value === null || value === undefined) { return ''; }
+
+      const strValue = String(value);
+      // Escape quotes and wrap in quotes if contains comma or newline
+      if (strValue.includes(',') || strValue.includes('\n') || strValue.includes('"')) {
+        return `"${strValue.replace(/"/g, '""')}"`;
+      }
+      return strValue;
+    })
+  );
+
+  // Add metadata header if provided
+  let csvContent = '';
+  if (metadata) {
+    csvContent += '# ' + Object.entries(metadata).map(([k, v]) => `${k}: ${v}`).join(' | ') + '\n';
+  }
+
+  csvContent += [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  return csvContent;
+}
+
+/**
+ * Enterprise-Grade Generic JSON Exporter
+ */
+function exportToJSON<T>(
+  items: T[],
+  config: ImportExportConfig<T>,
+  metadata?: Record<string, unknown>
+): string {
+  const data: Record<string, unknown> = {
+    [config.jsonRootKey]: items,
+    exportedAt: new Date().toISOString(),
+    version: '1.0.0',
+  };
+
+  if (metadata) {
+    data['metadata'] = metadata;
+  }
+
+  return JSON.stringify(data, null, 2);
+}
+
+/**
+ * Enterprise-Grade Generic CSV Importer
+ */
+function importFromCSV<T extends Record<string, unknown>>(
+  csvText: string,
+  config: ImportExportConfig<T>,
+  mapper: (values: string[], headers: string[]) => Partial<T>
+): ImportResult<T> {
+  const imported: T[] = [];
+  const failed: { row: number; error: string; data: unknown }[] = [];
+
+  const validation = validateCSVStructure(csvText, config.csvHeaders);
+  if (!validation.isValid || !validation.data) {
+    return {
+      success: false,
+      imported,
+      failed: validation.errors.map((err, errIndex) => ({
+        row: errIndex,
+        error: err,
+        data: null
+      })),
+      total: 0
     };
-    
-    reader.readAsText(file);
-  };
+  }
 
-  // Confirm import
-  const handleConfirmImport = () => {
-    const newQuestions: Question[] = importPreview
-      .filter(q => q.question && q.question.trim())
-      .map((q, index) => ({
-        id: Date.now() + index,
-        question: q.question?.trim() ?? '',
-        optionA: q.optionA?.trim() ?? '',
-        optionB: q.optionB?.trim() ?? '',
-        optionC: q.optionC?.trim() ?? '',
-        optionD: q.optionD?.trim() ?? '',
-        correctAnswer: (q.correctAnswer?.trim() as Question['correctAnswer']) ?? 'A',
-        level: (q.level as Question['level']) ?? 'easy',
-        chapter: q.chapter?.trim() ?? 'General',
-      }));
-    
-    onQuestionsImport(subject.slug, newQuestions);
-    setShowImportModal(false);
-    setImportPreview([]);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
+  const lines = validation.data;
+  const firstLine = lines[0];
+  if (!firstLine) {
+    return { success: false, imported, failed, total: 0 };
+  }
 
-  const getLevelBadgeColor = (level: string): string => {
-    switch (level) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-orange-100 text-orange-800';
-      case 'expert': return 'bg-red-100 text-red-800';
-      case 'extreme': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+  const headers = parseCSVLine(firstLine);
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line || line.trim() === '') { continue; }
+
+    const values = parseCSVLine(line);
+    try {
+      const partialData = mapper(values, headers);
+      const validation = validateEntity(partialData, config, i);
+
+      if (validation.isValid) {
+        imported.push(partialData as T);
+      } else {
+        failed.push({ row: i, error: validation.errors.join('; '), data: partialData });
+      }
+    } catch (err) {
+      failed.push({ row: i, error: (err as Error).message, data: line });
     }
+  }
+
+  return {
+    success: failed.length === 0,
+    imported,
+    failed,
+    total: imported.length + failed.length
   };
-
-  const getLevelButtonColor = (level: string): string => {
-    switch (level) {
-      case 'easy': return 'bg-green-500 text-white';
-      case 'medium': return 'bg-yellow-500 text-white';
-      case 'hard': return 'bg-orange-500 text-white';
-      case 'expert': return 'bg-red-500 text-white';
-      case 'extreme': return 'bg-purple-500 text-white';
-      default: return 'bg-gray-500 text-white';
-    }
-  };
-
-  return (
-    <div>
-      {/* Subject Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-4xl">{subject.emoji}</span>
-          <div>
-            <h3 className="text-xl font-bold text-gray-800">{subject.name}</h3>
-            <p className="text-sm text-gray-500">{questions.length} total questions</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <div className="relative group">
-            <button className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600 flex items-center gap-2">
-              📤 Export
-            </button>
-            <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border hidden group-hover:block z-10">
-              <button
-                onClick={handleExportCSV}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-t-lg text-sm"
-              >
-                Export as CSV
-              </button>
-              <button
-                onClick={handleExportJSON}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-lg text-sm"
-              >
-                Export as JSON
-              </button>
-            </div>
-          </div>
-          <button 
-            onClick={() => setShowImportModal(true)}
-            className="rounded-lg bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600 flex items-center gap-2"
-          >
-            📥 Import
-          </button>
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
-            + Add Question
-          </button>
-        </div>
-      </div>
-
-      {/* Filter Bar */}
-      <div className="mb-4 rounded-xl bg-white p-4 shadow-md space-y-4">
-        {/* Subject Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Subject:</span>
-          {allSubjects.map(s => (
-            <button
-              key={s.slug}
-              onClick={() => onSubjectSelect(s.slug)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                subject.slug === s.slug 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {s.emoji} {s.name}
-            </button>
-          ))}
-        </div>
-
-        {/* Chapter Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Chapter:</span>
-          <button
-            onClick={() => setFilterChapter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              filterChapter === 'all' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            All Chapters
-          </button>
-          {chapters.map(ch => (
-            <button
-              key={ch}
-              onClick={() => setFilterChapter(ch)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                filterChapter === ch 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {ch}
-            </button>
-          ))}
-          <button
-            onClick={onAddChapter}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center gap-1"
-          >
-            <span>+</span> Add Chapter
-          </button>
-        </div>
-
-        {/* Level Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Level:</span>
-          {['all', 'easy', 'medium', 'hard', 'expert', 'extreme'].map(level => (
-            <button
-              key={level}
-              onClick={() => setFilterLevel(level)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${
-                filterLevel === level 
-                  ? level === 'all' 
-                    ? 'bg-purple-500 text-white' 
-                    : getLevelButtonColor(level)
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {level === 'all' ? 'All Levels' : level}
-            </button>
-          ))}
-        </div>
-
-        {/* Search Row */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-600">Search:</span>
-          <input 
-            type="text" 
-            placeholder="Type to search questions..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
-          />
-          {searchTerm && (
-            <button 
-              onClick={() => setSearchTerm('')}
-              className="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm"
-            >
-              ✕ Clear
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Import Modal */}
-      {showImportModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
-            <h3 className="text-xl font-bold mb-4">Bulk Import Questions</h3>
-            
-            {!importPreview.length ? (
-              <div className="space-y-4">
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".csv,.json"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="rounded-lg bg-blue-500 px-6 py-3 text-white hover:bg-blue-600"
-                  >
-                    📁 Select CSV or JSON File
-                  </button>
-                  <p className="text-gray-500 mt-2 text-sm">
-                    Supported formats: CSV, JSON
-                  </p>
-                </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg text-sm">
-                  <p className="font-medium mb-2">CSV Format (with headers):</p>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                    Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
-                  </code>
-                  <p className="font-medium mt-3 mb-2">JSON Format:</p>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                    {`{"questions": [{"question": "...", "optionA": "...", "optionB": "...", "optionC": "...", "optionD": "...", "correctAnswer": "A", "level": "easy", "chapter": "..."}]}`}
-                  </code>
-                </div>
-                
-                {importError && (
-                  <p className="text-red-500 text-sm">{importError}</p>
-                )}
-                
-                <div className="flex gap-2 pt-2">
-                  <button
-                    onClick={() => {
-                      setShowImportModal(false);
-                      setImportError('');
-                      if (fileInputRef.current) fileInputRef.current.value = '';
-                    }}
-                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <p className="text-green-600 font-medium">
-                  ✓ Found {importPreview.length} questions to import
-                </p>
-                
-                <div className="max-h-64 overflow-auto border rounded-lg">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-50 sticky top-0">
-                      <tr>
-                        <th className="px-3 py-2 text-left">Question</th>
-                        <th className="px-3 py-2 text-left">Options</th>
-                        <th className="px-3 py-2 text-left">Answer</th>
-                        <th className="px-3 py-2 text-left">Level</th>
-                        <th className="px-3 py-2 text-left">Chapter</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {importPreview.slice(0, 5).map((q, i) => (
-                        <tr key={i} className="border-t">
-                          <td className="px-3 py-2 truncate max-w-xs">{q.question}</td>
-                          <td className="px-3 py-2 text-xs text-gray-500">
-                            A: {q.optionA}, B: {q.optionB}...
-                          </td>
-                          <td className="px-3 py-2">{q.correctAnswer}</td>
-                          <td className="px-3 py-2">{q.level}</td>
-                          <td className="px-3 py-2">{q.chapter}</td>
-                        </tr>
-                      ))}
-                      {importPreview.length > 5 && (
-                        <tr>
-                          <td colSpan={5} className="px-3 py-2 text-center text-gray-500">
-                            ... and {importPreview.length - 5} more
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                
-                <div className="flex gap-2 pt-2">
-                  <button
-                    onClick={() => {
-                      setImportPreview([]);
-                      if (fileInputRef.current) fileInputRef.current.value = '';
-                    }}
-                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleConfirmImport}
-                    className="flex-1 rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-                  >
-                    Import {importPreview.length} Questions
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Questions Table */}
-      <div className="overflow-hidden rounded-xl bg-white shadow-md">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-12">#</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Question</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">Option A</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">Option B</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">Option C</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">Option D</th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-20">Answer</th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-24">Level</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredQuestions.map((q, index) => (
-                <tr key={q.id} className="hover:bg-gray-50">
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500 align-top">
-                    {index + 1}
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="max-w-xs">
-                      <p className="text-sm font-medium text-gray-900" title={q.question}>
-                        {q.question}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">{q.chapter}</p>
-                      <div className="flex gap-2 mt-2">
-                        <button className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200" title="Edit">
-                          ✏️ Edit
-                        </button>
-                        <button className="rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200" title="Delete">
-                          🗑️ Delete
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span className={`px-2 py-1 rounded ${q.correctAnswer === 'A' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600'}`}>
-                      {q.optionA}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span className={`px-2 py-1 rounded ${q.correctAnswer === 'B' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600'}`}>
-                      {q.optionB}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span className={`px-2 py-1 rounded ${q.correctAnswer === 'C' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600'}`}>
-                      {q.optionC}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span className={`px-2 py-1 rounded ${q.correctAnswer === 'D' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600'}`}>
-                      {q.optionD}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-center align-top">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white">
-                      {q.correctAnswer}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-center align-top">
-                    <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getLevelBadgeColor(q.level)}`}>
-                      {q.level}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Table Footer */}
-        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
-          <p className="text-sm text-gray-500">
-            Showing <span className="font-medium">{filteredQuestions.length}</span> of <span className="font-medium">{questions.length}</span> questions
-          </p>
-          <div className="flex gap-1">
-            <button className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300">Previous</button>
-            <button className="rounded bg-blue-500 px-3 py-1 text-sm text-white">1</button>
-            <button className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300">Next</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
-// Types for Jokes (Simple format - no levels)
-type Joke = {
-  id: number;
-  joke: string;
-  category: string;
+// ============================================================================
+// ENTITY-SPECIFIC CONFIGURATIONS
+// ============================================================================
+
+/** Joke Import/Export Config */
+const jokeConfig: ImportExportConfig<Joke> = {
+  entityName: 'Joke',
+  filePrefix: 'jokes',
+  csvHeaders: ['ID', 'Joke', 'Category'],
+  jsonRootKey: 'jokes',
+  validators: {
+    required: ['joke', 'category'],
+    maxLength: { joke: 2000, category: 100 },
+  },
 };
 
-type JokeCategory = {
-  id: number;
-  name: string;
-  emoji: string;
+/** Riddle Import/Export Config */
+const riddleConfig: ImportExportConfig<Riddle> = {
+  entityName: 'Riddle',
+  filePrefix: 'riddles',
+  csvHeaders: ['ID', 'Question', 'Answer', 'OptionA', 'OptionB', 'OptionC', 'OptionD', 'CorrectOption', 'Difficulty', 'Chapter', 'Hint'],
+  jsonRootKey: 'riddles',
+  validators: {
+    required: ['question', 'answer', 'options', 'correctOption', 'difficulty', 'chapter'],
+    enumFields: {
+      difficulty: ['easy', 'medium', 'hard', 'expert', 'extreme'],
+      correctOption: ['A', 'B', 'C', 'D'],
+    },
+    maxLength: { question: 1000, answer: 500, chapter: 200, hint: 500 },
+  },
 };
 
-// Types for Riddles (Quiz format - no subjects, only chapters)
-type Riddle = {
-  id: number;
-  question: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-  chapter: string;
-};
+// ============================================================================
+// ENTITY-SPECIFIC EXPORTERS
+// ============================================================================
 
-// Initial data for Jokes (Simple format)
-const initialJokeCategories: JokeCategory[] = [
-  { id: 1, name: 'Classic Dad Jokes', emoji: '😂' },
-  { id: 2, name: 'Programming Jokes', emoji: '💻' },
-  { id: 3, name: 'Kids Jokes', emoji: '🧒' },
-  { id: 4, name: 'Office Jokes', emoji: '💼' },
-];
+function jokesToCSV(jokes: Joke[]): string {
+  return exportToCSV(jokes, jokeConfig, { count: jokes.length.toString() });
+}
 
-const initialJokes: Joke[] = [
-  { id: 1, joke: 'Why don\'t scientists trust atoms? Because they make up everything!', category: 'Classic Dad Jokes' },
-  { id: 2, joke: 'Why did the scarecrow win an award? He was outstanding in his field!', category: 'Classic Dad Jokes' },
-  { id: 3, joke: 'Why do programmers prefer dark mode? Because light attracts bugs!', category: 'Programming Jokes' },
-  { id: 4, joke: 'What do you call a fake noodle? An impasta!', category: 'Classic Dad Jokes' },
-  { id: 5, joke: 'Why did the bicycle fall over? It was two tired!', category: 'Classic Dad Jokes' },
-  { id: 6, joke: 'How do you organize a space party? You planet!', category: 'Classic Dad Jokes' },
-];
+function jokesToJSON(jokes: Joke[]): string {
+  return exportToJSON(jokes, jokeConfig, { count: jokes.length });
+}
 
-// Initial data for Riddles (Same format as Quiz - no subjects, only chapters)
-const initialRiddles: Riddle[] = [
-  { id: 1, question: 'What has keys but no locks?', optionA: 'A piano', optionB: 'A keyboard', optionC: 'A map', optionD: 'A car', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
-  { id: 2, question: 'What has a head and a tail but no body?', optionA: 'A coin', optionB: 'A snake', optionC: 'A rope', optionD: 'A bookmark', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
-  { id: 3, question: 'What gets wetter the more it dries?', optionA: 'A towel', optionB: 'A sponge', optionC: 'Water', optionD: 'Rain', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
-  { id: 4, question: 'I speak without a mouth and hear without ears. What am I?', optionA: 'An echo', optionB: 'A ghost', optionC: 'A phone', optionD: 'Radio', correctAnswer: 'A', level: 'medium', chapter: 'Nature Riddles' },
-  { id: 5, question: 'The more you take, the more you leave behind. What am I?', optionA: 'Footsteps', optionB: 'Memories', optionC: 'Time', optionD: 'Money', correctAnswer: 'A', level: 'medium', chapter: 'Abstract Riddles' },
-  { id: 6, question: 'What has cities but no houses, forests but no trees?', optionA: 'A map', optionB: 'A globe', optionC: 'A book', optionD: 'A painting', correctAnswer: 'A', level: 'easy', chapter: 'Object Riddles' },
-];
+function riddlesToCSV(riddles: Riddle[]): string {
+  return exportToCSV(riddles, riddleConfig, { count: riddles.length.toString() });
+}
 
-// Jokes Section (Simple format - no levels)
-function JokesSection(): JSX.Element {
-  const [jokeCategories] = useState<JokeCategory[]>(initialJokeCategories);
-  const [allJokes] = useState<Joke[]>(initialJokes);
-  const [jokeFilterCategory, setJokeFilterCategory] = useState<string>('');
-  const [jokeSearch, setJokeSearch] = useState<string>('');
-  const [jokePage, setJokePage] = useState(1);
-  const jokesPerPage = 10;
+function riddlesToJSON(riddles: Riddle[]): string {
+  return exportToJSON(riddles, riddleConfig, { count: riddles.length });
+}
 
-  const filteredJokes = allJokes.filter(joke => {
-    const matchesCategory = !jokeFilterCategory || joke.category === jokeFilterCategory;
-    const matchesSearch = !jokeSearch || 
-      joke.joke.toLowerCase().includes(jokeSearch.toLowerCase());
-    return matchesCategory && matchesSearch;
+
+
+// ============================================================================
+// ENTITY-SPECIFIC IMPORTERS
+// ============================================================================
+
+function parseJokeCSV(csvText: string): ImportResult<Joke> {
+  return importFromCSV(csvText, jokeConfig, (values, headers) => {
+    const getValue = (_index: number, headerName: string): string => {
+      const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
+      return headerIndex !== -1 && headerIndex < values.length ? values[headerIndex] ?? '' : '';
+    };
+
+    return {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      joke: getValue(1, 'joke'),
+      category: getValue(2, 'category') || 'General',
+    };
   });
-
-  const totalJokePages = Math.ceil(filteredJokes.length / jokesPerPage);
-  const paginatedJokes = filteredJokes.slice((jokePage - 1) * jokesPerPage, jokePage * jokesPerPage);
-
-  return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">😂 Dad Jokes Management</h3>
-        <div className="flex gap-2">
-          <button className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600">
-            📤 Bulk Import
-          </button>
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
-            + Add Joke
-          </button>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="mb-4 flex flex-wrap gap-3">
-        <select 
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
-          value={jokeFilterCategory}
-          onChange={(e) => setJokeFilterCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {jokeCategories.map(c => (
-            <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>
-          ))}
-        </select>
-        <input 
-          type="text" 
-          placeholder="Search jokes..." 
-          className="flex-1 min-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
-          value={jokeSearch}
-          onChange={(e) => setJokeSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Table */}
-      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">ID</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Joke</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {paginatedJokes.map((joke) => (
-              <tr key={joke.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm text-gray-600">#{joke.id}</td>
-                <td className="px-4 py-3">
-                  <p className="text-sm text-gray-800">{joke.joke}</p>
-                </td>
-                <td className="px-4 py-3">
-                  <span className="inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
-                    {joke.category}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-2">
-                    <button className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200">Edit</button>
-                    <button className="rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200">Delete</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {paginatedJokes.length === 0 && (
-          <div className="p-8 text-center text-gray-500">No jokes found matching your filters</div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {totalJokePages > 1 && (
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Showing {((jokePage - 1) * jokesPerPage) + 1} - {Math.min(jokePage * jokesPerPage, filteredJokes.length)} of {filteredJokes.length} jokes
-          </p>
-          <div className="flex gap-2">
-            <button 
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setJokePage(p => p - 1)}
-              disabled={jokePage === 1}
-            >
-              Previous
-            </button>
-            <span className="px-3 py-1 text-sm">{jokePage} / {totalJokePages}</span>
-            <button 
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setJokePage(p => p + 1)}
-              disabled={jokePage === totalJokePages}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 }
 
-// Riddles Section (Quiz format - no subject, only chapters)
-function RiddlesSection(): JSX.Element {
-  const [allRiddles] = useState<Riddle[]>(initialRiddles);
-  const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
-  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
-  const [riddleSearch, setRiddleSearch] = useState<string>('');
-  const [riddlePage, setRiddlePage] = useState(1);
-  const riddlesPerPage = 10;
+function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
+  return importFromCSV(csvText, riddleConfig, (values, headers) => {
+    const getValue = (_index: number, headerName: string): string => {
+      const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
+      return headerIndex !== -1 && headerIndex < values.length ? values[headerIndex] ?? '' : '';
+    };
 
-  // Get unique chapters from riddles
-  const chapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
+    const options = [
+      getValue(3, 'optiona') || getValue(2, 'answer'),
+      getValue(4, 'optionb'),
+      getValue(5, 'optionc'),
+      getValue(6, 'optiond'),
+    ].filter(Boolean);
 
-  const filteredRiddles = allRiddles.filter(riddle => {
-    const matchesLevel = !riddleFilterLevel || riddle.level === riddleFilterLevel;
-    const matchesChapter = !riddleFilterChapter || riddle.chapter === riddleFilterChapter;
-    const matchesSearch = !riddleSearch || 
-      riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.optionA.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.optionB.toLowerCase().includes(riddleSearch.toLowerCase());
-    return matchesLevel && matchesChapter && matchesSearch;
+    return {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      question: getValue(1, 'question'),
+      answer: getValue(2, 'answer'),
+      options: options.length >= 2 ? options : ['Option A', 'Option B', 'Option C', 'Option D'],
+      correctOption: getValue(7, 'correctoption') || 'A',
+      difficulty: (getValue(8, 'difficulty') || 'medium') as Riddle['difficulty'],
+      chapter: getValue(9, 'chapter') || 'General',
+      hint: getValue(10, 'hint'),
+    };
   });
-
-  const totalRiddlePages = Math.ceil(filteredRiddles.length / riddlesPerPage);
-  const paginatedRiddles = filteredRiddles.slice((riddlePage - 1) * riddlesPerPage, riddlePage * riddlesPerPage);
-
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-orange-100 text-orange-800';
-      case 'expert': return 'bg-red-100 text-red-800';
-      case 'extreme': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const isCorrectOption = (riddle: Riddle, option: string) => riddle.correctAnswer === option;
-
-  return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">🎭 Riddles Management</h3>
-          <p className="text-sm text-gray-500">{filteredRiddles.length} total riddles</p>
-        </div>
-        <div className="flex gap-2">
-          <button className="rounded-lg bg-emerald-500 px-4 py-2 text-white transition-colors hover:bg-emerald-600">
-            📥 Export
-          </button>
-          <button className="rounded-lg bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600">
-            📤 Import
-          </button>
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
-            + Add Riddle
-          </button>
-        </div>
-      </div>
-
-      {/* Filters - Chapter and Level as button rows */}
-      <div className="mb-4 space-y-3">
-        {/* Chapter Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-gray-600 mr-1">Chapter:</span>
-          <button
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              riddleFilterChapter === '' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-            onClick={() => setRiddleFilterChapter('')}
-          >
-            All Chapters
-          </button>
-          {chapters.map(chapter => (
-            <button
-              key={chapter}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                riddleFilterChapter === chapter 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              onClick={() => setRiddleFilterChapter(chapter)}
-            >
-              {chapter}
-            </button>
-          ))}
-          <button className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 hover:bg-purple-200 transition-colors">
-            + Add Chapter
-          </button>
-        </div>
-
-        {/* Level Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-gray-600 mr-1">Level:</span>
-          <button
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              riddleFilterLevel === '' 
-                ? 'bg-purple-500 text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-            onClick={() => setRiddleFilterLevel('')}
-          >
-            All Levels
-          </button>
-          {[
-            { value: 'easy', label: 'Easy', color: 'bg-green-500' },
-            { value: 'medium', label: 'Medium', color: 'bg-yellow-500' },
-            { value: 'hard', label: 'Hard', color: 'bg-orange-500' },
-            { value: 'expert', label: 'Expert', color: 'bg-red-500' },
-            { value: 'extreme', label: 'Extreme', color: 'bg-gray-700' },
-          ].map(({ value, label }) => (
-            <button
-              key={value}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                riddleFilterLevel === value 
-                  ? 'bg-purple-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              onClick={() => setRiddleFilterLevel(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Search Row */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600 mr-1">Search:</span>
-          <input 
-            type="text" 
-            placeholder="Type to search riddles..." 
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
-            value={riddleSearch}
-            onChange={(e) => setRiddleSearch(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Table - Exact Quiz format with separate option columns */}
-      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">#</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">QUESTION</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION A</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION B</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION C</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION D</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">ANSWER</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">LEVEL</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {paginatedRiddles.map((riddle, index) => (
-              <tr key={riddle.id} className="hover:bg-gray-50">
-                <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
-                <td className="px-3 py-4">
-                  <p className="text-sm font-medium text-gray-800">{riddle.question}</p>
-                  <p className="text-xs text-gray-500 mt-1">{riddle.chapter}</p>
-                  <div className="mt-2 flex gap-2">
-                    <button className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100">
-                      ✏️ Edit
-                    </button>
-                    <button className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100">
-                      🗑️ Delete
-                    </button>
-                  </div>
-                </td>
-                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'A') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
-                  {riddle.optionA}
-                </td>
-                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'B') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
-                  {riddle.optionB}
-                </td>
-                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'C') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
-                  {riddle.optionC}
-                </td>
-                <td className={`px-3 py-4 text-sm ${isCorrectOption(riddle, 'D') ? 'font-semibold text-green-700 bg-green-50' : 'text-gray-700'}`}>
-                  {riddle.optionD}
-                </td>
-                <td className="px-3 py-4">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white">
-                    {riddle.correctAnswer}
-                  </span>
-                </td>
-                <td className="px-3 py-4">
-                  <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${getLevelColor(riddle.level)}`}>
-                    {riddle.level}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {paginatedRiddles.length === 0 && (
-          <div className="p-8 text-center text-gray-500">No riddles found matching your filters</div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {totalRiddlePages > 1 && (
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Showing {((riddlePage - 1) * riddlesPerPage) + 1} - {Math.min(riddlePage * riddlesPerPage, filteredRiddles.length)} of {filteredRiddles.length} riddles
-          </p>
-          <div className="flex gap-2">
-            <button 
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setRiddlePage(p => p - 1)}
-              disabled={riddlePage === 1}
-            >
-              Previous
-            </button>
-            <span className="px-3 py-1 text-sm">{riddlePage} / {totalRiddlePages}</span>
-            <button 
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setRiddlePage(p => p + 1)}
-              disabled={riddlePage === totalRiddlePages}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 }
+
+// ============================================================================
+// GLOBAL JOKES STATE (shared with JokesSection component)
+// ============================================================================
+
+function useGlobalJokes() {
+  const [allJokes, setAllJokes] = useState<Joke[]>(() => getItem(STORAGE_KEYS.JOKES, libInitialJokes));
+
+  // Persistence
+  useEffect(() => {
+    setItem(STORAGE_KEYS.JOKES, allJokes);
+  }, [allJokes]);
+
+  return { allJokes, setAllJokes };
+}
+
+// Initial data is now imported from @/lib/initial-data
+// to support standalone persistence without cluttering this file.
+
 
 // Users Section
 function UsersSection(): JSX.Element {
@@ -1572,9 +1098,9 @@ function UsersSection(): JSX.Element {
           <option>Admin</option>
           <option>User</option>
         </select>
-        <input 
-          type="text" 
-          placeholder="Search users..." 
+        <input
+          type="text"
+          placeholder="Search users..."
           className="flex-1 rounded-lg border border-gray-300 px-4 py-2"
         />
       </div>
@@ -1595,8 +1121,8 @@ function UsersSection(): JSX.Element {
               { name: 'Admin', email: 'admin@aiquiz.com', role: 'admin', date: '2026-01-01' },
               { name: 'John Doe', email: 'john@example.com', role: 'user', date: '2026-02-10' },
               { name: 'Jane Smith', email: 'jane@example.com', role: 'user', date: '2026-02-12' },
-            ].map((user, i) => (
-              <tr key={i} className="hover:bg-gray-50">
+            ].map((user) => (
+              <tr key={`user-${user.email}`} className="hover:bg-gray-50">
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
@@ -1607,9 +1133,8 @@ function UsersSection(): JSX.Element {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
                 <td className="whitespace-nowrap px-6 py-4">
-                  <span className={`rounded-full px-2 py-1 text-xs ${
-                    user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
+                  <span className={`rounded-full px-2 py-1 text-xs ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
                     {user.role}
                   </span>
                 </td>
@@ -1629,367 +1154,4 @@ function UsersSection(): JSX.Element {
   );
 }
 
-// Image Riddles Admin Section
-function ImageRiddlesAdminSection(): JSX.Element {
-  const [imageRiddles, setImageRiddles] = useState([
-    {
-      id: '1',
-      title: 'What is hidden in this painting?',
-      imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&h=400&fit=crop',
-      answer: 'A face looking to the left',
-      hint: 'Look at the center and tilt your head',
-      difficulty: 'medium',
-      timerSeconds: null,
-      showTimer: true,
-      isActive: true,
-      category: { name: 'Optical Illusions', emoji: '👁️' },
-    },
-    {
-      id: '2',
-      title: 'Spot the anomaly in this landscape',
-      imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-      answer: 'The reflection is upside down',
-      hint: 'Check the water carefully',
-      difficulty: 'hard',
-      timerSeconds: 90,
-      showTimer: true,
-      isActive: true,
-      category: { name: 'Hidden Objects', emoji: '🔍' },
-    },
-    {
-      id: '3',
-      title: 'How many animals can you find?',
-      imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&h=400&fit=crop',
-      answer: 'Five: two birds, a deer, a rabbit, and a fox',
-      hint: 'Look carefully at the trees and bushes',
-      difficulty: 'easy',
-      timerSeconds: null,
-      showTimer: true,
-      isActive: true,
-      category: { name: 'Hidden Objects', emoji: '🔍' },
-    },
-    {
-      id: '4',
-      title: 'Count the triangles',
-      imageUrl: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&h=400&fit=crop',
-      answer: '16 triangles total',
-      hint: 'Count both small and large triangles',
-      difficulty: 'medium',
-      timerSeconds: null,
-      showTimer: true,
-      isActive: true,
-      category: { name: 'Pattern Recognition', emoji: '🔲' },
-    },
-    {
-      id: '5',
-      title: 'What time does the sundial show?',
-      imageUrl: 'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=600&h=400&fit=crop',
-      answer: 'About 2:30 PM',
-      hint: 'Look at the shadow and the Roman numerals',
-      difficulty: 'expert',
-      timerSeconds: null,
-      showTimer: true,
-      isActive: true,
-      category: { name: 'Perspective Puzzles', emoji: '📐' },
-    },
-  ]);
 
-  const [categories] = useState([
-    { id: '1', name: 'Optical Illusions', emoji: '👁️', count: 2 },
-    { id: '2', name: 'Hidden Objects', emoji: '🔍', count: 2 },
-    { id: '3', name: 'Pattern Recognition', emoji: '🔲', count: 1 },
-    { id: '4', name: 'Perspective Puzzles', emoji: '📐', count: 1 },
-  ]);
-
-  const [filterDifficulty, setFilterDifficulty] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredRiddles = imageRiddles.filter(riddle => {
-    const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
-    const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
-    const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesDifficulty && matchesCategory && matchesSearch;
-  });
-
-  const toggleActive = (id: string) => {
-    setImageRiddles(prev => prev.map(r => 
-      r.id === id ? { ...r, isActive: !r.isActive } : r
-    ));
-  };
-
-  const deleteRiddle = (id: string) => {
-    if (confirm('Are you sure you want to delete this riddle?')) {
-      setImageRiddles(prev => prev.filter(r => r.id !== id));
-    }
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-orange-100 text-orange-800';
-      case 'expert': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const stats = {
-    total: imageRiddles.length,
-    active: imageRiddles.filter(r => r.isActive).length,
-    categories: categories.length,
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl bg-blue-50 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Riddles</p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.total}</p>
-            </div>
-            <span className="text-4xl">🧩</span>
-          </div>
-        </div>
-        <div className="rounded-xl bg-green-50 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Active</p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.active}</p>
-            </div>
-            <span className="text-4xl">✅</span>
-          </div>
-        </div>
-        <div className="rounded-xl bg-purple-50 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Categories</p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">{stats.categories}</p>
-            </div>
-            <span className="text-4xl">🏷️</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Search and Add */}
-      <div className="rounded-xl bg-white p-4 shadow-md">
-        <div className="flex flex-wrap items-center gap-3">
-          <input
-            type="text"
-            placeholder="Search riddles..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
-          />
-          <div className="flex-1" />
-          <button className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600">
-            + Add Riddle
-          </button>
-        </div>
-      </div>
-
-      {/* Categories Row */}
-      <div className="rounded-xl bg-white p-4 shadow-md">
-        <div className="mb-2 flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-600">Categories:</span>
-          <button
-            onClick={() => setFilterCategory('')}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              filterCategory === '' 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            All
-          </button>
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setFilterCategory(filterCategory === cat.name ? '' : cat.name)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                filterCategory === cat.name 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {cat.emoji} {cat.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Difficulty Row */}
-      <div className="rounded-xl bg-white p-4 shadow-md">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-600">Difficulty:</span>
-          <button
-            onClick={() => setFilterDifficulty('')}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              filterDifficulty === '' 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            All
-          </button>
-          {['easy', 'medium', 'hard', 'expert'].map(diff => (
-            <button
-              key={diff}
-              onClick={() => setFilterDifficulty(filterDifficulty === diff ? '' : diff)}
-              className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors ${
-                filterDifficulty === diff 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {diff}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Riddles Table */}
-      <div className="overflow-hidden rounded-xl bg-white shadow-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Image</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Category</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Difficulty</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Timer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {filteredRiddles.map((riddle) => (
-              <tr key={riddle.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={riddle.imageUrl}
-                    alt={riddle.title}
-                    className="h-16 w-16 rounded-lg object-cover"
-                  />
-                </td>
-                <td className="px-6 py-4">
-                  <p className="font-medium text-gray-900">{riddle.title}</p>
-                  <p className="text-sm text-gray-500 truncate max-w-xs">Answer: {riddle.answer}</p>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-sm text-gray-600">
-                    {riddle.category?.emoji} {riddle.category?.name}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${getDifficultyColor(riddle.difficulty)}`}>
-                    {riddle.difficulty}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {riddle.timerSeconds ? `${riddle.timerSeconds}s` : 'Default (90s)'}
-                </td>
-                <td className="px-6 py-4">
-                  <button
-                    onClick={() => toggleActive(riddle.id)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                      riddle.isActive
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : 'bg-red-100 text-red-700 hover:bg-red-200'
-                    }`}
-                  >
-                    {riddle.isActive ? 'Active' : 'Inactive'}
-                  </button>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex gap-2">
-                    <button className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-200">
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deleteRiddle(riddle.id)}
-                      className="rounded-lg bg-red-100 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Categories Section */}
-      <div className="rounded-xl bg-white p-6 shadow-md">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
-          <button className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600">
-            + Add Category
-          </button>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((cat) => (
-            <div key={cat.id} className="rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{cat.emoji}</span>
-                <div>
-                  <p className="font-medium text-gray-900">{cat.name}</p>
-                  <p className="text-sm text-gray-500">{cat.count} riddles</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Settings Section
-function SettingsSection(): JSX.Element {
-  return (
-    <div className="space-y-6">
-      <div className="rounded-xl bg-white p-6 shadow-md">
-        <h3 className="mb-4 text-lg font-semibold">General Settings</h3>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="siteName" className="block text-sm font-medium text-gray-700">Site Name</label>
-            <input id="siteName" type="text" defaultValue="AI Quiz Platform" className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2" />
-          </div>
-          <div>
-            <label htmlFor="siteDescription" className="block text-sm font-medium text-gray-700">Site Description</label>
-            <textarea id="siteDescription" defaultValue="A fun and educational quiz platform" className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2" rows={3} />
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-xl bg-white p-6 shadow-md">
-        <h3 className="mb-4 text-lg font-semibold">Quiz Settings</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span>Enable Timer Mode</span>
-            <button className="rounded-full bg-blue-500 px-4 py-2 text-white">ON</button>
-          </div>
-          <div className="flex items-center justify-between">
-            <span>Show Explanations</span>
-            <button className="rounded-full bg-blue-500 px-4 py-2 text-white">ON</button>
-          </div>
-          <div>
-            <label htmlFor="questionsPerQuiz" className="block text-sm font-medium text-gray-700">Questions per Quiz</label>
-            <input id="questionsPerQuiz" type="number" defaultValue="10" className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2" />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <button className="rounded-lg bg-blue-500 px-6 py-2 text-white transition-colors hover:bg-blue-600">
-          Save Settings
-        </button>
-      </div>
-    </div>
-  );
-}

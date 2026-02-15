@@ -1,17 +1,18 @@
 @echo off
 echo ========================================
-echo   AI Quiz Platform - Server Launcher
+echo   AI QUIZ PLATFORM - STARTING SERVERS
 echo ========================================
 echo.
-echo Starting servers with automatic health checks...
-echo.
-powershell -ExecutionPolicy Bypass -File "%~dp0launch-servers.ps1"
-if errorlevel 1 (
+
+powershell -ExecutionPolicy Bypass -File "%~dp0start-servers-robust.ps1"
+
+if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo ========================================
-    echo   ERROR: Failed to start servers
-    echo ========================================
+    echo ERROR: Failed to start servers!
+    echo Check the error messages above.
     pause
     exit /b 1
 )
+
+echo.
 pause

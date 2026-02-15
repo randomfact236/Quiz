@@ -1,1 +1,31 @@
+# Dependencies
 node_modules
+
+# Build outputs
+.next
+dist
+build
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
+*.err
+
+# PID files
+*.pid
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.idea
+
+# Temporary files
+*.tmp
+*.temp

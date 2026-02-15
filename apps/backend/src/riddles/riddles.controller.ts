@@ -26,7 +26,6 @@ import {
   PaginationDto,
   SearchRiddlesDto,
   BulkImportResultDto,
-  BulkDeleteDto,
 } from '../common/dto/base.dto';
 import { Riddle } from './entities/riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
@@ -36,6 +35,8 @@ import { QuizRiddle } from './entities/quiz-riddle.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 
 @ApiTags('Riddles')
 @Controller('riddles')
@@ -47,8 +48,11 @@ export class RiddlesController {
   @Get('classic')
   @ApiOperation({ summary: 'Get all classic riddles with pagination' })
   @ApiResponse({ status: 200, description: 'Returns paginated riddles' })
-  findAllClassic(@Query() pagination: PaginationDto): Promise<{ data: Riddle[]; total: number }> {
-    return this.riddlesService.findAllRiddles(pagination);
+  findAllClassic(
+    @Query() pagination: PaginationDto,
+    @Query() filter: StatusFilterDto,
+  ): Promise<{ data: Riddle[]; total: number }> {
+    return this.riddlesService.findAllRiddles(pagination, filter.status);
   }
 
   @Get('classic/random')
@@ -146,16 +150,27 @@ export class RiddlesController {
     await this.riddlesService.deleteRiddle(id);
   }
 
-  @Post('classic/bulk-delete')
+  // ==================== BULK ACTIONS - CLASSIC RIDDLES ====================
+
+  @Post('classic/bulk-action')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Bulk delete classic riddles (Admin only)' })
-  async removeClassicBulk(@Body() dto: BulkDeleteDto): Promise<void> {
-    for (const id of dto.ids) {
-      await this.riddlesService.deleteRiddle(id);
-    }
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Execute bulk action on classic riddles (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
+  async executeBulkActionClassic(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
+    return this.riddlesService.bulkActionClassic(dto.ids, dto.action);
+  }
+
+  @Get('classic/status-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get classic riddle counts by status (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
+  async getStatusCounts(): Promise<StatusCountResponseDto> {
+    return this.riddlesService.getStatusCounts();
   }
 
   @Post('classic/categories')
@@ -236,7 +251,7 @@ export class RiddlesController {
   @ApiOperation({ summary: 'Get mixed quiz riddles from all chapters' })
   @ApiResponse({ status: 200, description: 'Returns mixed riddles' })
   getMixedQuizRiddles(@Query('count') count?: string): Promise<QuizRiddle[]> {
-    return this.riddlesService.findMixedQuizRiddles(count ? parseInt(count) : 20);
+    return this.riddlesService.findMixedQuizRiddles(count ? parseInt(count) : DEFAULT_PAGE_SIZE);
   }
 
   // ==================== QUIZ FORMAT - ADMIN ====================

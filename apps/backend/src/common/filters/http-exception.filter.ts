@@ -9,6 +9,11 @@ import {
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * Type for error details - can be a record of unknown values or an array of unknown values
+ */
+type ErrorDetails = Record<string, unknown> | unknown[];
+
 interface ErrorResponse {
   statusCode: number;
   timestamp: string;
@@ -17,7 +22,7 @@ interface ErrorResponse {
   method: string;
   message: string;
   error: string;
-  details?: any;
+  details?: ErrorDetails;
   stack?: string;
 }
 
@@ -43,10 +48,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       const exceptionResponse = httpException.getResponse();
 
       if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-        const responseObj = exceptionResponse as any;
-        message = responseObj.message || message;
-        error = responseObj.error || error;
-        details = responseObj.details;
+        const responseObj = exceptionResponse as Record<string, unknown>;
+        message = typeof responseObj.message === 'string' ? responseObj.message : message;
+        error = typeof responseObj.error === 'string' ? responseObj.error : error;
+        details = responseObj.details as ErrorDetails | undefined;
       } else {
         message = exceptionResponse as string;
       }
