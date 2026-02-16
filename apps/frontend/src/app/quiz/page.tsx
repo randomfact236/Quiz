@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon, CheckCircle, Trophy } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { getChapterProgress } from '@/lib/progress';
 
 interface Subject {
   id: number;
@@ -262,6 +263,9 @@ interface ChapterInfo {
   name: string;
   questionCount: number;
   levels: Set<string>;
+  isCompleted: boolean;
+  bestScore: number;
+  attempts: number;
 }
 
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
@@ -283,10 +287,16 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       const chapterName = q.chapter || 'General';
       
       if (!chapterMap.has(chapterName)) {
+        // Get progress for this chapter
+        const progress = getChapterProgress(subject, chapterName);
+        
         chapterMap.set(chapterName, {
           name: chapterName,
           questionCount: 0,
           levels: new Set(),
+          isCompleted: progress?.completed ?? false,
+          bestScore: progress?.bestScore ?? 0,
+          attempts: progress?.attempts ?? 0,
         });
       }
       
@@ -345,14 +355,35 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
               href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
               className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-xl font-bold text-indigo-600">
-                {index + 1}
+              <div className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${
+                chapter.isCompleted 
+                  ? 'bg-green-100 text-green-600' 
+                  : chapter.attempts > 0 
+                    ? 'bg-yellow-100 text-yellow-600'
+                    : 'bg-indigo-100 text-indigo-600'
+              }`}>
+                {chapter.isCompleted ? (
+                  <CheckCircle className="h-6 w-6" />
+                ) : (
+                  index + 1
+                )}
               </div>
               <div className="flex-1">
                 <h3 className="font-bold text-gray-800">{chapter.name}</h3>
                 <p className="text-sm text-gray-500">
                   {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
                 </p>
+                {chapter.attempts > 0 && (
+                  <div className="mt-1 flex items-center gap-2 text-xs">
+                    <span className="flex items-center gap-1 text-green-600">
+                      <Trophy className="h-3 w-3" />
+                      Best: {chapter.bestScore}
+                    </span>
+                    <span className="text-gray-400">
+                      ({chapter.attempts} attempt{chapter.attempts !== 1 ? 's' : ''})
+                    </span>
+                  </div>
+                )}
               </div>
               <span className="text-2xl text-gray-400">→</span>
             </Link>

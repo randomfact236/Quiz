@@ -131,8 +131,8 @@ export interface Achievement {
   description: string;
   icon: string;
   condition: {
-    type: 'quiz_count' | 'perfect_score' | 'streak' | 'chapter_complete' | 'subject_master';
+    type: 'quiz_count' | 'perfect_score' | 'streak' | 'chapter_complete' | 'subject_master' | 'speed_run' | 'subject_explore' | 'retry' | 'accuracy';
     threshold: number;
   };
-  unlockedAt?: string;
+  unlockedAt?: string | undefined;
 }
