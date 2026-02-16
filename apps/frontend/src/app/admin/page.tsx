@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   FlaskConical, 
   Calculator, 
@@ -264,28 +264,32 @@ export default function AdminPage(): JSX.Element {
     }
   }, [activeSection, isHydrated]);
 
-  // Helper to fix corrupted emojis in subjects from localStorage
-  const sanitizeSubjects = (storedSubjects: Subject[]): Subject[] => {
-    // Valid icon keys that we accept
-    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home'];
+  // Helper to normalize subject emojis - preserves custom emojis
+  const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
+    // Valid icon keys that we accept (Lucide icon names)
+    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home', 'book-open', 'help-circle', 'graduation-cap', 'briefcase', 'gamepad-2'];
     
     return storedSubjects.map(subject => {
-      // If emoji is not a valid icon key, it's corrupted - replace with slug
-      if (!validIconKeys.includes(subject.emoji)) {
-        // Map subject slugs to appropriate icons
-        const slugToIcon: Record<string, string> = {
-          'science': 'science',
-          'math': 'math', 
-          'history': 'history',
-          'geography': 'geography',
-          'english': 'english',
-          'technology': 'technology',
-        };
-        return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
+      // Check if emoji is a valid icon key OR a custom emoji (contains emoji characters)
+      const isCustomEmoji = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(subject.emoji);
+      
+      // If it's a valid icon key or custom emoji, keep it
+      if (validIconKeys.includes(subject.emoji) || isCustomEmoji) {
+        return subject;
       }
-      return subject;
+      
+      // Otherwise, map subject slug to appropriate icon
+      const slugToIcon: Record<string, string> = {
+        'science': 'science',
+        'math': 'math', 
+        'history': 'history',
+        'geography': 'geography',
+        'english': 'english',
+        'technology': 'technology',
+      };
+      return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
     });
-  };
+  }, []);
 
   // Dynamic data state
   const [subjects, setSubjects] = useState<Subject[]>(() => {
@@ -297,15 +301,15 @@ export default function AdminPage(): JSX.Element {
   // Jokes state (shared with JokesSection component)
   const { allJokes, setAllJokes } = useGlobalJokes();
 
-  // One-time migration: Clear corrupted localStorage data on first load
+  // Migration: Fix any corrupted emojis in existing subjects (runs once)
   useEffect(() => {
-    const MIGRATION_KEY = 'aiquiz:emoji-migration-v1';
+    const MIGRATION_KEY = 'aiquiz:emoji-migration-v2';
     if (typeof window !== 'undefined' && !localStorage.getItem(MIGRATION_KEY)) {
-      // Force reset subjects to fix corrupted emojis
-      setSubjects(initialSubjects);
+      // Sanitize existing subjects without resetting to defaults
+      setSubjects(prev => sanitizeSubjects(prev));
       localStorage.setItem(MIGRATION_KEY, 'done');
     }
-  }, []);
+  }, [sanitizeSubjects]);
 
   // Persistence effects
   useEffect(() => {

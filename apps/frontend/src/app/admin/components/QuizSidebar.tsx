@@ -37,7 +37,8 @@ export function QuizSidebar({
   onReorderSubjects,
 }: QuizSidebarProps): JSX.Element {
   const [draggedId, setDraggedId] = useState<number | null>(null);
-  const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const [dropTargetCategory, setDropTargetCategory] = useState<string | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
   // Group subjects by category - memoized to prevent recalculation
   const academicSubjects = useMemo(() => 
@@ -56,72 +57,92 @@ export function QuizSidebar({
   const handleDragStart = useCallback((e: React.DragEvent, subject: Subject) => {
     setDraggedId(subject.id);
     e.dataTransfer.effectAllowed = 'move';
+    // Set drag data
+    e.dataTransfer.setData('text/plain', String(subject.id));
   }, []);
 
-  const handleDragOver = useCallback((e: React.DragEvent, category: string) => {
+  const handleDragOver = useCallback((e: React.DragEvent, category: string, index?: number) => {
     e.preventDefault();
     e.stopPropagation();
     e.dataTransfer.dropEffect = 'move';
-    if (dropTarget !== category) {
-      setDropTarget(category);
+    
+    setDropTargetCategory(category);
+    if (index !== undefined) {
+      setDropTargetIndex(index);
     }
-  }, [dropTarget]);
+  }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.stopPropagation();
-    // Small delay to prevent flickering when moving between child elements
-    setTimeout(() => {
-      setDropTarget(null);
-    }, 50);
+    setDropTargetCategory(null);
+    setDropTargetIndex(null);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent, targetCategory: string, targetIndex?: number) => {
     e.preventDefault();
-    setDropTarget(null);
-
-    if (draggedId === null) return;
-
-    const draggedSubject = subjects.find(s => s.id === draggedId);
-    if (!draggedSubject) return;
-
-    // Get subjects in target category
-    const targetSubjects = subjects.filter(s => s.category === targetCategory).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    e.stopPropagation();
     
-    // Create new subjects array
-    const newSubjects = subjects.map(s => {
-      if (s.id === draggedId) {
+    const draggedIdStr = e.dataTransfer.getData('text/plain');
+    const draggedIdNum = parseInt(draggedIdStr, 10);
+    
+    setDropTargetCategory(null);
+    setDropTargetIndex(null);
+
+    if (!draggedIdStr || isNaN(draggedIdNum)) {
+      setDraggedId(null);
+      return;
+    }
+
+    const draggedSubject = subjects.find(s => s.id === draggedIdNum);
+    if (!draggedSubject) {
+      setDraggedId(null);
+      return;
+    }
+
+    // If dropping in same category at same position, do nothing
+    if (draggedSubject.category === targetCategory && targetIndex !== undefined) {
+      const categorySubjects = subjects.filter(s => s.category === targetCategory).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      const currentIndex = categorySubjects.findIndex(s => s.id === draggedIdNum);
+      if (currentIndex === targetIndex || currentIndex === targetIndex - 1) {
+        setDraggedId(null);
+        return;
+      }
+    }
+
+    // Create new subjects array with updated category
+    let newSubjects = subjects.map(s => {
+      if (s.id === draggedIdNum) {
         return { ...s, category: targetCategory as 'academic' | 'professional' | 'entertainment' };
       }
       return s;
     });
 
-    // Reorder within the target category
-    if (targetIndex !== undefined) {
-      const categorySubjects = newSubjects.filter(s => s.category === targetCategory);
-      const otherSubjects = newSubjects.filter(s => s.category !== targetCategory);
-      
-      const movedSubject = categorySubjects.find(s => s.id === draggedId)!;
-      const otherCategorySubjects = categorySubjects.filter(s => s.id !== draggedId);
-      
-      otherCategorySubjects.splice(targetIndex, 0, movedSubject);
-      
-      // Update order for all subjects in category
-      const reorderedCategorySubjects = otherCategorySubjects.map((s, idx) => ({
-        ...s,
-        order: idx,
-      }));
+    // Get subjects in target category
+    const categorySubjects = newSubjects.filter(s => s.category === targetCategory).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    const otherSubjects = newSubjects.filter(s => s.category !== targetCategory);
+    
+    // Remove dragged subject from current position
+    const movedSubject = categorySubjects.find(s => s.id === draggedIdNum)!;
+    let reorderedCategorySubjects = categorySubjects.filter(s => s.id !== draggedIdNum);
+    
+    // Insert at new position
+    const insertIndex = targetIndex !== undefined ? targetIndex : reorderedCategorySubjects.length;
+    reorderedCategorySubjects.splice(insertIndex, 0, movedSubject);
+    
+    // Update order for all subjects in category
+    reorderedCategorySubjects = reorderedCategorySubjects.map((s, idx) => ({
+      ...s,
+      order: idx,
+    }));
 
-      onReorderSubjects([...otherSubjects, ...reorderedCategorySubjects]);
-    } else {
-      onReorderSubjects(newSubjects);
-    }
-
+    onReorderSubjects([...otherSubjects, ...reorderedCategorySubjects]);
     setDraggedId(null);
-  }, [draggedId, subjects, onReorderSubjects]);
+  }, [subjects, onReorderSubjects]);
 
   const handleDragEnd = useCallback(() => {
     setDraggedId(null);
-    setDropTarget(null);
+    setDropTargetCategory(null);
+    setDropTargetIndex(null);
   }, []);
 
   const renderCategorySection = (
@@ -129,7 +150,7 @@ export function QuizSidebar({
     categorySubjects: Subject[],
     category: 'academic' | 'professional' | 'entertainment'
   ) => {
-    const isDropTarget = dropTarget === category;
+    const isDropTarget = dropTargetCategory === category && dropTargetIndex === null;
 
     return (
       <div
@@ -169,10 +190,11 @@ export function QuizSidebar({
               {sidebarOpen ? 'No subjects yet' : '-'}
             </div>
           ) : (
-            categorySubjects.map((subject) => (
+            categorySubjects.map((subject, index) => (
               <SubjectItem
                 key={subject.id}
                 subject={subject}
+                index={index}
                 isActive={activeSection === subject.slug}
                 isDragging={draggedId === subject.id}
                 sidebarOpen={sidebarOpen}
@@ -228,6 +250,7 @@ export function QuizSidebar({
 // Memoized Subject Item component to prevent unnecessary re-renders
 interface SubjectItemProps {
   subject: Subject;
+  index: number;
   isActive: boolean;
   isDragging: boolean;
   sidebarOpen: boolean;
@@ -241,6 +264,7 @@ interface SubjectItemProps {
 
 const SubjectItem = React.memo(function SubjectItem({
   subject,
+  index,
   isActive,
   isDragging,
   sidebarOpen,
@@ -251,15 +275,25 @@ const SubjectItem = React.memo(function SubjectItem({
   onDragEnd,
   onDrop,
 }: SubjectItemProps) {
+  const [isDragOver, setIsDragOver] = useState(false);
+
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+    setIsDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.stopPropagation();
+    setIsDragOver(false);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.stopPropagation();
-    onDrop(e, category);
-  }, [category, onDrop]);
+    setIsDragOver(false);
+    onDrop(e, category, index);
+  }, [category, index, onDrop]);
 
   const handleEdit = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -272,13 +306,16 @@ const SubjectItem = React.memo(function SubjectItem({
       onDragStart={(e) => onDragStart(e, subject)}
       onDragEnd={onDragEnd}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`group flex items-center gap-2 px-3 py-2 cursor-pointer will-change-transform ${
+      className={`group flex items-center gap-2 px-3 py-2 cursor-pointer will-change-transform border-t-2 border-b-2 ${
         isActive
           ? 'bg-blue-600 text-white'
-          : 'text-gray-300 hover:bg-gray-800'
+          : isDragOver
+            ? 'bg-blue-500/20 border-blue-500'
+            : 'text-gray-300 hover:bg-gray-800 border-transparent'
       } ${isDragging ? 'opacity-50' : ''}`}
-      style={{ transition: 'background-color 0.1s ease, opacity 0.1s ease' }}
+      style={{ transition: 'background-color 0.15s ease, opacity 0.15s ease, border-color 0.15s ease' }}
       onClick={() => onSelect(subject.slug)}
     >
       <span
