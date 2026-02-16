@@ -57,9 +57,9 @@ function PracticeContent(): JSX.Element {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const subject = searchParams.get('subject') || '';
-  const chapter = searchParams.get('chapter') || '';
-  const mode = searchParams.get('mode') || 'all'; // 'all' or 'missed'
+  const subject = searchParams?.get('subject') || '';
+  const chapter = searchParams?.get('chapter') || '';
+  const mode = searchParams?.get('mode') || 'all'; // 'all' or 'missed'
   
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);

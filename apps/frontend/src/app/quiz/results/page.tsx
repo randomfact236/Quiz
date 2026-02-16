@@ -72,7 +72,7 @@ function calculateResult(session: QuizSession): QuizResult {
 function ResultsContent(): JSX.Element {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const sessionId = searchParams.get('session') || '';
+  const sessionId = searchParams?.get('session') || '';
   
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showReview, setShowReview] = useState(false);

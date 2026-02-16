@@ -464,9 +464,9 @@ function PracticeModePage(): JSX.Element {
 
 function QuizContent(): JSX.Element {
   const searchParams = useSearchParams();
-  const subject = searchParams.get('subject');
-  const chapter = searchParams.get('chapter');
-  const mode = searchParams.get('mode');
+  const subject = searchParams?.get('subject') || '';
+  const chapter = searchParams?.get('chapter') || '';
+  const mode = searchParams?.get('mode') || '';
 
   // If chapter is selected, show level selection
   if (subject && chapter) {

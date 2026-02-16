@@ -31,9 +31,9 @@ function QuizContent(): JSX.Element {
   const [showPauseModal, setShowPauseModal] = useState(false);
 
   // Get URL params
-  const subject = searchParams.get('subject') || '';
-  const chapter = searchParams.get('chapter') || '';
-  const level = searchParams.get('level') || '';
+  const subject = searchParams?.get('subject') || '';
+  const chapter = searchParams?.get('chapter') || '';
+  const level = searchParams?.get('level') || '';
 
   // Validate params
   useEffect(() => {

@@ -12,6 +12,8 @@ const nextConfig = {
     unoptimized: true,
   },
   
+
+  
   // Webpack configuration for Docker
   webpack: (config, { dev, isServer }) => {
     // Fix for chunk loading issues in Docker
