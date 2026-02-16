@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 import { Subject } from './entities/subject.entity';
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
@@ -30,9 +30,22 @@ export class QuizService {
 
   // ==================== SUBJECTS ====================
 
-  async findAllSubjects(): Promise<Subject[]> {
-    return this.cacheService.getOrSet(settings.quiz.cache.allSubjectsKey, async () => {
-      return this.subjectRepo.find({ order: { name: 'ASC' } });
+  async findAllSubjects(pagination?: PaginationDto): Promise<{ data: Subject[]; total: number }> {
+    const cacheKey = pagination 
+      ? `${settings.quiz.cache.allSubjectsKey}:page:${pagination.page}:limit:${pagination.limit}`
+      : settings.quiz.cache.allSubjectsKey;
+      
+    return this.cacheService.getOrSet(cacheKey, async () => {
+      const page = pagination?.page ?? 1;
+      const limit = pagination?.limit ?? 100; // Default to 100 for backward compatibility
+      
+      const [data, total] = await this.subjectRepo.findAndCount({
+        order: { name: 'ASC' },
+        skip: (page - 1) * limit,
+        take: limit,
+      });
+      
+      return { data, total };
     }, settings.quiz.cache.subjectsTtl);
   }
 
@@ -133,22 +146,79 @@ export class QuizService {
   }
 
   async findRandomQuestions(level: string, count: number): Promise<Question[]> {
-    return this.questionRepo
+    // Validate level parameter
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+    if (!validLevels.includes(level)) {
+      throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
+    }
+
+    // More efficient random selection using offset-based approach
+    const totalCount = await this.questionRepo.count({ 
+      where: { level, status: ContentStatus.PUBLISHED } 
+    });
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.questionRepo.find({ 
+        where: { level, status: ContentStatus.PUBLISHED } 
+      });
+    }
+
+    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
+    const allIds = await this.questionRepo
       .createQueryBuilder('question')
+      .select('question.id')
       .where('question.level = :level', { level })
       .andWhere('question.status = :status', { status: ContentStatus.PUBLISHED })
-      .orderBy('RANDOM()')
-      .limit(count)
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(q => q.id);
+
+    return this.questionRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async findMixedQuestions(count: number): Promise<Question[]> {
-    return this.questionRepo
+    // More efficient random selection
+    const totalCount = await this.questionRepo.count({ 
+      where: { status: ContentStatus.PUBLISHED } 
+    });
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.questionRepo.find({ 
+        where: { status: ContentStatus.PUBLISHED },
+        relations: ['chapter'],
+      });
+    }
+
+    // Get all IDs, shuffle, then fetch selected
+    const allIds = await this.questionRepo
       .createQueryBuilder('question')
+      .select('question.id')
       .where('question.status = :status', { status: ContentStatus.PUBLISHED })
-      .orderBy('RANDOM()')
-      .limit(count)
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(q => q.id);
+
+    return this.questionRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {
@@ -166,12 +236,48 @@ export class QuizService {
     return this.questionRepo.save(question);
   }
 
-  async createQuestionsBulk(dto: CreateQuestionDto[]): Promise<number> {
-    const questions: Question[] = [];
-    for (const q of dto) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: q.chapterId } });
-      if (chapter) {
-        const question = this.questionRepo.create({
+  async createQuestionsBulk(dto: CreateQuestionDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
+
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No questions provided for bulk creation');
+    }
+
+    // Limit batch size
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} questions`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique chapter IDs for batch fetch - fixes N+1 query
+      const chapterIds = [...new Set(dto.map(q => q.chapterId))];
+      const chapters = await transactionalEntityManager.find(Chapter, {
+        where: { id: In(chapterIds) },
+      });
+
+      // Create a map for quick lookup
+      const chapterMap = new Map(chapters.map(c => [c.id, c]));
+
+      const questions: Question[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const q = dto[i];
+        const chapter = chapterMap.get(q.chapterId);
+        
+        if (!chapter) {
+          errors.push(`Row ${i + 1}: Chapter not found (ID: ${q.chapterId})`);
+          continue;
+        }
+
+        // Validate level
+        const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+        if (!validLevels.includes(q.level)) {
+          errors.push(`Row ${i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`);
+          continue;
+        }
+
+        const question = transactionalEntityManager.create(Question, {
           question: q.question,
           correctAnswer: q.correctAnswer,
           options: q.wrongAnswers,
@@ -182,19 +288,42 @@ export class QuizService {
         });
         questions.push(question);
       }
-    }
-    const saved = await this.questionRepo.save(questions);
-    return saved.length;
+
+      if (questions.length === 0) {
+        throw new BadRequestException(`No valid questions to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(questions);
+      return { count: saved.length, errors };
+    });
   }
 
   async updateQuestion(id: string, dto: Partial<CreateQuestionDto>): Promise<Question> {
     const question = await this.questionRepo.findOne({ where: { id } });
     if (!question) throw new NotFoundException('Question not found');
-    if (dto.question) question.question = dto.question;
-    if (dto.correctAnswer) question.correctAnswer = dto.correctAnswer;
-    if (dto.wrongAnswers) question.options = dto.wrongAnswers;
-    if (dto.level) question.level = dto.level;
-    if (dto.explanation !== undefined) question.explanation = dto.explanation;
+    
+    // Update fields with proper empty string handling
+    if (dto.question !== undefined) {
+      question.question = dto.question;
+    }
+    if (dto.correctAnswer !== undefined) {
+      question.correctAnswer = dto.correctAnswer;
+    }
+    if (dto.wrongAnswers !== undefined) {
+      question.options = dto.wrongAnswers;
+    }
+    if (dto.level !== undefined) {
+      // Validate level if provided
+      const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+      if (!validLevels.includes(dto.level)) {
+        throw new BadRequestException(`Invalid level: ${dto.level}. Valid values: ${validLevels.join(', ')}`);
+      }
+      question.level = dto.level;
+    }
+    if (dto.explanation !== undefined) {
+      question.explanation = dto.explanation;
+    }
+    
     return this.questionRepo.save(question);
   }
 

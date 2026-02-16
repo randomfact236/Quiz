@@ -8,6 +8,12 @@ const ALLOWED_PORTS = [3010, 4000, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 
 function validatePort() {
+  // Skip validation in Docker
+  if (process.env.DOCKER_ENV === 'true' || process.env.CONTAINER_ENV === 'true') {
+    console.log(`✓ ${PROJECT_NAME} starting (Docker mode)`);
+    process.exit(0);
+  }
+  
   const args = process.argv.slice(2);
   const portArg = args.find(arg => arg.includes('-p') || arg.includes('--port'));
   

@@ -115,7 +115,7 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
 }
 
 /**
- * Parse CSV line (handles quoted values)
+ * Parse CSV line (handles quoted values and empty fields)
  */
 export function parseCSVLine(line: string): string[] {
   const result: string[] = [];
@@ -140,6 +140,186 @@ export function parseCSVLine(line: string): string[] {
   }
   result.push(current.trim());
   return result;
+}
+
+// ============================================================================
+// QUESTION IMPORT/EXPORT CONFIGURATION (Matches animals-questions.csv format)
+// ============================================================================
+
+import type { Question } from '../types';
+
+/** Question CSV Config for format: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter */
+export const questionCSVConfig = {
+  headers: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
+};
+
+/**
+ * Parse Question CSV in animals-questions.csv format
+ * Handles: comment lines (# Subject: xxx), empty option fields, quoted values
+ */
+export function parseQuestionCSV(csvText: string): { success: boolean; imported: Question[]; failed: { row: number; error: string; data: unknown }[]; total: number } {
+  const imported: Question[] = [];
+  const failed: { row: number; error: string; data: unknown }[] = [];
+  
+  const lines = csvText.trim().split('\n');
+  
+  // Skip comment lines (starting with #) and find header
+  let headerIndex = 0;
+  let subjectName = '';
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]?.trim() ?? '';
+    if (line.startsWith('#')) {
+      // Extract subject name from comment like "# Subject: Animals"
+      const match = line.match(/#\s*Subject:\s*(.+)/i);
+      if (match?.[1]) {
+        subjectName = match[1].trim();
+      }
+      headerIndex = i + 1;
+    } else if (line.includes('Question') && line.includes('Option')) {
+      headerIndex = i;
+      break;
+    }
+  }
+  
+  const headerLine = lines[headerIndex];
+  if (headerIndex >= lines.length || !headerLine) {
+    return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0 };
+  }
+  
+  // Parse headers
+  const headers = parseCSVLine(headerLine);
+  
+  // Find column indices (flexible matching)
+  const getColumnIndex = (...names: string[]) => {
+    for (const name of names) {
+      const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
+      if (idx !== -1) return idx;
+    }
+    return -1;
+  };
+  
+  const colIndex = {
+    id: getColumnIndex('id'),
+    question: getColumnIndex('question'),
+    optionA: getColumnIndex('option a'),
+    optionB: getColumnIndex('option b'),
+    optionC: getColumnIndex('option c'),
+    optionD: getColumnIndex('option d'),
+    correctAnswer: getColumnIndex('correct answer'),
+    level: getColumnIndex('level'),
+    chapter: getColumnIndex('chapter'),
+  };
+  
+  // Validate required columns
+  const requiredCols = ['question', 'optionA', 'optionB', 'correctAnswer', 'level'];
+  const missingCols = requiredCols.filter(col => colIndex[col as keyof typeof colIndex] === -1);
+  
+  if (missingCols.length > 0) {
+    return { 
+      success: false, 
+      imported: [], 
+      failed: [{ row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers }], 
+      total: 0 
+    };
+  }
+  
+  // Parse data rows
+  for (let i = headerIndex + 1; i < lines.length; i++) {
+    const rawLine = lines[i];
+    if (!rawLine) continue;
+    const line = rawLine.trim();
+    if (!line) continue; // Skip empty lines
+    
+    const values = parseCSVLine(line);
+    
+    try {
+      const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
+      
+      const questionText = getValue(colIndex.question);
+      const optionA = getValue(colIndex.optionA);
+      const optionB = getValue(colIndex.optionB);
+      const optionC = colIndex.optionC !== -1 ? getValue(colIndex.optionC) : '';
+      const optionD = colIndex.optionD !== -1 ? getValue(colIndex.optionD) : '';
+      const correctAnswer = getValue(colIndex.correctAnswer) || 'A';
+      const level = (getValue(colIndex.level) || 'easy').toLowerCase() as Question['level'];
+      const chapter = getValue(colIndex.chapter) || subjectName || 'General';
+      
+      // Validate
+      if (!questionText) {
+        failed.push({ row: i, error: 'Missing question text', data: line });
+        continue;
+      }
+      
+      if (!optionA || !optionB) {
+        failed.push({ row: i, error: 'Missing required options (A and B)', data: line });
+        continue;
+      }
+      
+      // Map correct answer letter to option text
+      imported.push({
+        id: Date.now() + i,
+        question: questionText,
+        optionA,
+        optionB,
+        optionC: optionC || '',
+        optionD: optionD || '',
+        correctAnswer: correctAnswer.toUpperCase(),
+        level,
+        chapter,
+        status: 'published',
+      });
+    } catch (err) {
+      failed.push({ row: i, error: (err as Error).message, data: line });
+    }
+  }
+  
+  return {
+    success: failed.length === 0,
+    imported,
+    failed,
+    total: imported.length + failed.length,
+  };
+}
+
+/**
+ * Export questions to CSV format matching animals-questions.csv
+ */
+export function exportQuestionsToCSV(questions: Question[], subjectName: string = 'General'): string {
+  const lines: string[] = [];
+  
+  // Add subject comment
+  lines.push(`# Subject: ${subjectName}`);
+  
+  // Add headers
+  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
+  
+  // Add data rows
+  questions.forEach((q, idx) => {
+    const escapeCSV = (value: string) => {
+      if (!value) return '';
+      if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+        return `"${value.replace(/"/g, '""')}"`;
+      }
+      return value;
+    };
+    
+    const row = [
+      idx + 1,
+      escapeCSV(q.question),
+      escapeCSV(q.optionA),
+      escapeCSV(q.optionB),
+      escapeCSV(q.optionC || ''),
+      escapeCSV(q.optionD || ''),
+      q.correctAnswer || 'A',
+      q.level,
+      escapeCSV(q.chapter),
+    ];
+    
+    lines.push(row.join(','));
+  });
+  
+  return lines.join('\n');
 }
 
 /**
@@ -224,7 +404,7 @@ export function validateJSONStructure<T>(jsonText: string, rootKey?: string): Va
 /**
  * Enterprise-Grade Generic CSV Exporter
  */
-export function exportToCSV<T extends Record<string, unknown> | object>(
+export function exportToCSV<T>(
   items: T[],
   config: ImportExportConfig<T>,
   metadata?: Record<string, string>

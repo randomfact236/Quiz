@@ -58,11 +58,11 @@ export function TopicsSection(): JSX.Element {
   ];
 
   const entertainmentTopics = [
-    { emoji: '🐾', label: 'Animals', soon: true },
-    { emoji: '🎬', label: 'Movies', soon: true },
-    { emoji: '🏆', label: 'Sports', soon: true },
-    { emoji: '🍔', label: 'Food', soon: true },
-    { emoji: '🎨', label: 'Art', soon: true },
+    { emoji: '🐾', label: 'Animals', soon: true, href: '/quiz/animals' },
+    { emoji: '🎬', label: 'Movies', soon: true, href: '/quiz/movies' },
+    { emoji: '🏆', label: 'Sports', soon: true, href: '/quiz/sports' },
+    { emoji: '🍔', label: 'Food', soon: true, href: '/quiz/food' },
+    { emoji: '🎨', label: 'Art', soon: true, href: '/quiz/art' },
   ];
 
   return (

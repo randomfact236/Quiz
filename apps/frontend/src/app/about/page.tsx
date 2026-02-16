@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-export const _metadata: Metadata = {
+export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about the AI Quiz platform and our mission to make learning fun.',
 };

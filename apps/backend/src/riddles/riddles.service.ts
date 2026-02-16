@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 import { Riddle } from './entities/riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
@@ -73,12 +73,24 @@ export class RiddlesService {
   }
 
   async findRandomRiddle(): Promise<Riddle> {
+    // More efficient random selection using offset with count
+    const count = await this.riddleRepo.count({
+      where: { status: ContentStatus.PUBLISHED },
+    });
+    
+    if (count === 0) {
+      throw new NotFoundException('No riddles found');
+    }
+
+    const randomOffset = Math.floor(Math.random() * count);
     const riddle = await this.riddleRepo
       .createQueryBuilder('riddle')
       .leftJoinAndSelect('riddle.category', 'category')
       .where('riddle.status = :status', { status: ContentStatus.PUBLISHED })
-      .orderBy('RANDOM()')
+      .skip(randomOffset)
+      .take(1)
       .getOne();
+      
     if (riddle === null) {
       throw new NotFoundException('No riddles found');
     }
@@ -125,7 +137,7 @@ export class RiddlesService {
       .where('riddle.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
-      queryBuilder.where('(riddle.question ILIKE :search OR riddle.answer ILIKE :search)', {
+      queryBuilder.andWhere('(riddle.question ILIKE :search OR riddle.answer ILIKE :search)', {
         search: `%${searchDto.search}%`,
       });
     }
@@ -164,12 +176,41 @@ export class RiddlesService {
     return saved;
   }
 
-  async createRiddlesBulk(dto: CreateRiddleDto[]): Promise<number> {
-    const riddles: Riddle[] = [];
-    for (const r of dto) {
-      const category = await this.categoryRepo.findOne({ where: { id: r.categoryId } });
-      if (category !== null) {
-        const riddle = this.riddleRepo.create({
+  async createRiddlesBulk(dto: CreateRiddleDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
+
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No riddles provided for bulk creation');
+    }
+
+    // Limit batch size to prevent memory issues
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} riddles`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique category IDs for batch fetch - fixes N+1 query
+      const categoryIds = [...new Set(dto.map(r => r.categoryId))];
+      const categories = await transactionalEntityManager.find(RiddleCategory, {
+        where: { id: In(categoryIds) },
+      });
+
+      // Create a map for quick lookup
+      const categoryMap = new Map(categories.map(c => [c.id, c]));
+
+      const riddles: Riddle[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const r = dto[i];
+        const category = categoryMap.get(r.categoryId);
+        
+        if (!category) {
+          errors.push(`Row ${i + 1}: Category not found (ID: ${r.categoryId})`);
+          continue;
+        }
+
+        const riddle = transactionalEntityManager.create(Riddle, {
           question: r.question,
           answer: r.answer,
           difficulty: r.difficulty,
@@ -178,10 +219,18 @@ export class RiddlesService {
         });
         riddles.push(riddle);
       }
-    }
-    const saved = await this.riddleRepo.save(riddles);
-    await this.cacheService.delPattern('riddles:*');
-    return saved.length;
+
+      if (riddles.length === 0) {
+        throw new BadRequestException(`No valid riddles to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(riddles);
+      
+      // Only invalidate cache if transaction succeeds
+      await this.cacheService.delPattern('riddles:*');
+      
+      return { count: saved.length, errors };
+    });
   }
 
   async updateRiddle(id: string, dto: Partial<CreateRiddleDto>): Promise<Riddle> {
@@ -395,20 +444,68 @@ export class RiddlesService {
   }
 
   async findRandomQuizRiddles(level: string, count: number): Promise<QuizRiddle[]> {
-    return this.quizRiddleRepo
+    // Validate level parameter
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+    if (!validLevels.includes(level)) {
+      throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
+    }
+
+    // More efficient random selection using offset-based approach
+    const totalCount = await this.quizRiddleRepo.count({ where: { level } });
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.quizRiddleRepo.find({ where: { level } });
+    }
+
+    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
+    const allIds = await this.quizRiddleRepo
       .createQueryBuilder('riddle')
+      .select('riddle.id')
       .where('riddle.level = :level', { level })
-      .orderBy('RANDOM()')
-      .limit(count)
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(r => r.id);
+
+    return this.quizRiddleRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async findMixedQuizRiddles(count: number): Promise<QuizRiddle[]> {
-    return this.quizRiddleRepo
+    // More efficient random selection
+    const totalCount = await this.quizRiddleRepo.count();
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.quizRiddleRepo.find({ relations: ['chapter'] });
+    }
+
+    // Get all IDs, shuffle, then fetch selected
+    const allIds = await this.quizRiddleRepo
       .createQueryBuilder('riddle')
-      .orderBy('RANDOM()')
-      .limit(count)
+      .select('riddle.id')
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(r => r.id);
+
+    return this.quizRiddleRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async createQuizRiddle(dto: CreateQuizRiddleDto): Promise<QuizRiddle> {
@@ -428,12 +525,41 @@ export class RiddlesService {
     return this.quizRiddleRepo.save(riddle);
   }
 
-  async createQuizRiddlesBulk(dto: CreateQuizRiddleDto[]): Promise<number> {
-    const riddles: QuizRiddle[] = [];
-    for (const r of dto) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: r.chapterId } });
-      if (chapter !== null) {
-        const riddle = this.quizRiddleRepo.create({
+  async createQuizRiddlesBulk(dto: CreateQuizRiddleDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
+
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No quiz riddles provided for bulk creation');
+    }
+
+    // Limit batch size
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} riddles`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique chapter IDs for batch fetch - fixes N+1 query
+      const chapterIds = [...new Set(dto.map(r => r.chapterId))];
+      const chapters = await transactionalEntityManager.find(RiddleChapter, {
+        where: { id: In(chapterIds) },
+      });
+
+      // Create a map for quick lookup
+      const chapterMap = new Map(chapters.map(c => [c.id, c]));
+
+      const riddles: QuizRiddle[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const r = dto[i];
+        const chapter = chapterMap.get(r.chapterId);
+        
+        if (!chapter) {
+          errors.push(`Row ${i + 1}: Chapter not found (ID: ${r.chapterId})`);
+          continue;
+        }
+
+        const riddle = transactionalEntityManager.create(QuizRiddle, {
           question: r.question,
           options: r.options,
           correctAnswer: r.correctAnswer,
@@ -444,9 +570,14 @@ export class RiddlesService {
         });
         riddles.push(riddle);
       }
-    }
-    const saved = await this.quizRiddleRepo.save(riddles);
-    return saved.length;
+
+      if (riddles.length === 0) {
+        throw new BadRequestException(`No valid riddles to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(riddles);
+      return { count: saved.length, errors };
+    });
   }
 
   async updateQuizRiddle(id: string, dto: Partial<CreateQuizRiddleDto>): Promise<QuizRiddle> {

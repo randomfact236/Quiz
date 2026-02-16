@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ImageRiddle } from './entities/image-riddle.entity';
 import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
@@ -93,8 +93,8 @@ export async function updateCategory(
  * @returns Processed action options or null
  * @throws Error if validation fails
  */
-function processActionOptions(actionOptions: IActionOption[]): IActionOption[] | null {
-  if (actionOptions.length === 0) {
+function processActionOptions(actionOptions?: IActionOption[]): IActionOption[] | null {
+  if (!actionOptions || actionOptions.length === 0) {
     return null;
   }
 
@@ -109,7 +109,7 @@ function processActionOptions(actionOptions: IActionOption[]): IActionOption[] |
   for (const action of processedOptions) {
     const validation = validateActionOption(action);
     if (!validation.isValid) {
-      throw new Error(`Action '${action.id}' validation failed: ${validation.errors.join(', ')}`);
+      throw new BadRequestException(`Action '${action.id}' validation failed: ${validation.errors.join(', ')}`);
     }
   }
 
@@ -134,6 +134,6 @@ export function updateActionOptions(
     return riddle;
   }
 
-  riddle.actionOptions = processActionOptions(dto.actionOptions);
+  riddle.actionOptions = processActionOptions(dto.actionOptions as any);
   return riddle;
 }

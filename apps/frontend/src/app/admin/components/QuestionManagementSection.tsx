@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { FileUploader } from '@/components/ui/FileUploader';
+import { Pencil, Trash2, FileQuestion } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
-import { downloadFile, parseCSVLine } from '../utils';
+import { downloadFile, parseCSVLine, parseQuestionCSV, exportQuestionsToCSV } from '../utils';
 
 /**
  * Props for the QuestionManagementSection component
@@ -23,6 +24,8 @@ interface QuestionManagementSectionProps {
   onAddChapter: () => void;
   /** Callback when questions are imported */
   onQuestionsImport: (subjectSlug: string, newQuestions: Question[]) => void;
+  /** Callback when questions are updated (edited, deleted, status changed) */
+  onQuestionsUpdate: (subjectSlug: string, updatedQuestions: Question[]) => void;
 }
 
 /**
@@ -61,6 +64,7 @@ export function QuestionManagementSection({
   onSubjectSelect,
   onAddChapter,
   onQuestionsImport,
+  onQuestionsUpdate,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states
   const [filterLevel, setFilterLevel] = useState<string>('all');
@@ -75,17 +79,37 @@ export function QuestionManagementSection({
   // Data states
   const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState('1');
+  const questionsPerPage = 10;
+
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [importError, setImportError] = useState('');
   const [importPreview, setImportPreview] = useState<Partial<Question>[]>([]);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
+  const [uploadKey, setUploadKey] = useState(0); // Used to force FileUploader remount
+
+  // Reset import state when modal opens
+  useEffect(() => {
+    if (showImportModal) {
+      setImportError('');
+      setImportPreview([]);
+      setUploadKey(prev => prev + 1); // Force FileUploader remount
+    }
+  }, [showImportModal]);
 
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
   const importModalRef = useRef<HTMLDivElement>(null);
   const addModalRef = useRef<HTMLDivElement>(null);
+  const editModalRef = useRef<HTMLDivElement>(null);
+  const deleteModalRef = useRef<HTMLDivElement>(null);
   const exportDropdownRef = useRef<HTMLDivElement>(null);
 
   // Form state for adding question
@@ -100,30 +124,98 @@ export function QuestionManagementSection({
     chapter: '',
   });
 
-  // Sync local questions when props change
+  // Track previous questions to avoid unnecessary updates
+  const prevQuestionsRef = useRef(questions);
+  
+  // Sync local questions when props change (only if props are different from current local state)
   useEffect(() => {
-    setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
+    const questionsWithStatus = questions.map((q) => ({ ...q, status: q.status || 'published' }));
+    const isDifferentFromLocal = JSON.stringify(localQuestions) !== JSON.stringify(questionsWithStatus);
+    const isDifferentFromPrev = JSON.stringify(prevQuestionsRef.current) !== JSON.stringify(questions);
+    
+    // Only update if props changed from previous AND are different from local state
+    if (isDifferentFromPrev && isDifferentFromLocal) {
+      setLocalQuestions(questionsWithStatus);
+    }
+    prevQuestionsRef.current = questions;
   }, [questions]);
 
-  // Get unique chapters for this subject
-  const chapters = [...new Set(localQuestions.map((q) => q.chapter))];
+  // Persist local questions changes back to parent (for delete, edit, status changes)
+  const isUpdatingRef = useRef(false);
+  useEffect(() => {
+    if (isUpdatingRef.current) return; // Skip if we're in the middle of an update
+    
+    const questionsWithStatus = questions.map((q) => ({ ...q, status: q.status || 'published' }));
+    const isDifferent = JSON.stringify(localQuestions) !== JSON.stringify(questionsWithStatus);
+    
+    if (isDifferent && localQuestions.length > 0) {
+      isUpdatingRef.current = true;
+      onQuestionsUpdate(subject.slug, localQuestions);
+      // Reset after a short delay to allow the update to propagate
+      setTimeout(() => { isUpdatingRef.current = false; }, 0);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localQuestions]); // Only depend on localQuestions, not on questions or subject.slug
 
-  // Calculate status counts
-  const statusCounts = {
+  // Get unique chapters for this subject - memoized
+  const chapters = useMemo(() => 
+    [...new Set(localQuestions.map((q) => q.chapter))],
+    [localQuestions]
+  );
+
+  // Calculate status counts - memoized
+  const statusCounts = useMemo(() => ({
     total: localQuestions.length,
     published: localQuestions.filter((q) => q.status === 'published').length,
     draft: localQuestions.filter((q) => q.status === 'draft').length,
     trash: localQuestions.filter((q) => q.status === 'trash').length,
+  }), [localQuestions]);
+
+  // Filter questions - memoized
+  const filteredQuestions = useMemo(() => {
+    return localQuestions.filter((q) => {
+      const matchesLevel = filterLevel === 'all' || q.level === filterLevel;
+      const matchesChapter = filterChapter === 'all' || q.chapter === filterChapter;
+      const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || q.status === statusFilter;
+      return matchesLevel && matchesChapter && matchesSearch && matchesStatus;
+    });
+  }, [localQuestions, filterLevel, filterChapter, searchTerm, statusFilter]);
+
+  // Pagination calculations - memoized
+  const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+  const startIndex = (currentPage - 1) * questionsPerPage;
+  const paginatedQuestions = useMemo(() => 
+    filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
+    [filteredQuestions, startIndex, questionsPerPage]
+  );
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+    setPageInput('1');
+  }, [filterLevel, filterChapter, searchTerm, statusFilter]);
+
+  // Update page input when current page changes
+  useEffect(() => {
+    setPageInput(String(currentPage));
+  }, [currentPage]);
+
+  // Handle page input change
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPageInput(value);
   };
 
-  // Filter questions
-  const filteredQuestions = localQuestions.filter((q) => {
-    const matchesLevel = filterLevel === 'all' || q.level === filterLevel;
-    const matchesChapter = filterChapter === 'all' || q.chapter === filterChapter;
-    const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || q.status === statusFilter;
-    return matchesLevel && matchesChapter && matchesSearch && matchesStatus;
-  });
+  // Handle page input submit (on Enter or blur)
+  const handlePageInputSubmit = () => {
+    const page = parseInt(pageInput, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    } else {
+      setPageInput(String(currentPage));
+    }
+  };
 
   // Selection handlers
   const toggleSelection = useCallback((id: string) => {
@@ -131,8 +223,8 @@ export function QuestionManagementSection({
   }, []);
 
   const selectAll = useCallback(() => {
-    setSelectedIds(filteredQuestions.map((q) => String(q.id)));
-  }, [filteredQuestions]);
+    setSelectedIds(paginatedQuestions.map((q) => String(q.id)));
+  }, [paginatedQuestions]);
 
   const deselectAll = useCallback(() => {
     setSelectedIds([]);
@@ -268,22 +360,83 @@ export function QuestionManagementSection({
     resetQuestionForm();
   }, [questionForm, subject.slug, onQuestionsImport, resetQuestionForm]);
 
-  // Convert questions to CSV
-  const questionsToCSV = useCallback((qs: Question[], subjectName: string): string => {
-    const csvHeaders = ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'];
-    const rows = qs.map((q) => [
-      q.id,
-      `"${q.question.replace(/"/g, '""')}"`,
-      `"${q.optionA.replace(/"/g, '""')}"`,
-      `"${q.optionB.replace(/"/g, '""')}"`,
-      `"${q.optionC.replace(/"/g, '""')}"`,
-      `"${q.optionD.replace(/"/g, '""')}"`,
-      q.correctAnswer,
-      q.level,
-      `"${q.chapter.replace(/"/g, '""')}"`,
-    ]);
-    return `# Subject: ${subjectName}\n${csvHeaders.join(',')}\n${rows.map((r) => r.join(',')).join('\n')}`;
+  // Handle edit question
+  const handleEditQuestion = useCallback(() => {
+    if (!selectedQuestion) return;
+    
+    if (
+      !questionForm.question.trim() ||
+      !questionForm.optionA.trim() ||
+      !questionForm.optionB.trim() ||
+      !questionForm.chapter.trim()
+    ) {
+      return;
+    }
+
+    const updatedQuestion: Question = {
+      ...selectedQuestion,
+      question: questionForm.question.trim(),
+      optionA: questionForm.optionA.trim(),
+      optionB: questionForm.optionB.trim(),
+      optionC: questionForm.optionC.trim(),
+      optionD: questionForm.optionD.trim(),
+      correctAnswer: questionForm.correctAnswer,
+      level: questionForm.level,
+      chapter: questionForm.chapter.trim(),
+    };
+
+    setLocalQuestions(prev => 
+      prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
+    );
+    setShowEditModal(false);
+    setSelectedQuestion(null);
+    resetQuestionForm();
+  }, [questionForm, selectedQuestion, resetQuestionForm]);
+
+  // Handle delete question
+  const handleDeleteQuestion = useCallback(() => {
+    if (!selectedQuestion) return;
+
+    if (selectedQuestion.status === 'trash') {
+      // Permanent delete if already in trash
+      setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
+    } else {
+      // Move to trash otherwise
+      setLocalQuestions(prev => 
+        prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
+      );
+    }
+    setShowDeleteModal(false);
+    setSelectedQuestion(null);
+  }, [selectedQuestion]);
+
+  // Open edit modal with question data
+  const openEditModal = useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setQuestionForm({
+      question: question.question,
+      optionA: question.optionA,
+      optionB: question.optionB,
+      optionC: question.optionC,
+      optionD: question.optionD,
+      correctAnswer: question.correctAnswer,
+      level: question.level,
+      chapter: question.chapter,
+    });
+    setShowEditModal(true);
   }, []);
+
+  // Open delete modal
+  const openDeleteModal = useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setShowDeleteModal(true);
+  }, []);
+
+  // Export to CSV using the standardized format
+  const handleExportCSV = useCallback(() => {
+    const csv = exportQuestionsToCSV(filteredQuestions, subject.name);
+    downloadFile(csv, `${subject.name.replace(/\s+/g, '_').toLowerCase()}_questions.csv`, 'text/csv');
+  }, [filteredQuestions, subject.name]);
 
   // Parse CSV content
   const parseCSV = useCallback((csvText: string): Partial<Question>[] => {
@@ -314,12 +467,6 @@ export function QuestionManagementSection({
     return result;
   }, []);
 
-  // Export to CSV
-  const handleExportCSV = useCallback(() => {
-    const csv = questionsToCSV(filteredQuestions, subject.name);
-    downloadFile(csv, `${subject.name}_questions.csv`, 'text/csv');
-  }, [filteredQuestions, subject.name, questionsToCSV]);
-
   // Export to JSON
   const handleExportJSON = useCallback(() => {
     const data = {
@@ -341,7 +488,9 @@ export function QuestionManagementSection({
           const content = event.target?.result as string;
           let parsed: Partial<Question>[] = [];
 
-          if (file.name.endsWith('.json')) {
+          // Parse as JSON for .json files, CSV for .csv files
+          const fileName = file.name.toLowerCase();
+          if (fileName.endsWith('.json')) {
             const data = JSON.parse(content);
             parsed = Array.isArray(data.questions)
               ? data.questions
@@ -349,7 +498,16 @@ export function QuestionManagementSection({
                 ? data
                 : [];
           } else {
-            parsed = parseCSV(content);
+            // Use the new CSV parser that handles animals-questions.csv format
+            const result = parseQuestionCSV(content);
+            if (result.failed.length > 0 && result.imported.length === 0) {
+              setImportError(`Import failed: ${result.failed.map(f => `Row ${f.row}: ${f.error}`).join(', ')}`);
+              return;
+            }
+            if (result.failed.length > 0) {
+              console.warn('Some rows failed to import:', result.failed);
+            }
+            parsed = result.imported;
           }
 
           if (parsed.length === 0) {
@@ -442,6 +600,37 @@ export function QuestionManagementSection({
     }
     return undefined;
   }, [showAddModal, resetQuestionForm]);
+
+  // Handle outside click for edit question modal
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (editModalRef.current && !editModalRef.current.contains(event.target as Node)) {
+        setShowEditModal(false);
+        setSelectedQuestion(null);
+        resetQuestionForm();
+      }
+    };
+    if (showEditModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return undefined;
+  }, [showEditModal, resetQuestionForm]);
+
+  // Handle outside click for delete modal
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (deleteModalRef.current && !deleteModalRef.current.contains(event.target as Node)) {
+        setShowDeleteModal(false);
+        setSelectedQuestion(null);
+      }
+    };
+    if (showDeleteModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return undefined;
+  }, [showDeleteModal]);
 
   const hasActiveFilters = searchTerm || filterLevel !== 'all' || filterChapter !== 'all' || statusFilter !== 'all';
 
@@ -657,6 +846,7 @@ export function QuestionManagementSection({
             {!importPreview.length ? (
               <div className="space-y-4">
                 <FileUploader
+                  key={uploadKey}
                   onFileSelect={handleFileUpload}
                   accept=".csv,.json"
                   label="Select CSV or JSON File"
@@ -665,10 +855,16 @@ export function QuestionManagementSection({
 
                 <div className="bg-gray-50 p-4 rounded-lg text-sm">
                   <p className="font-medium mb-2">CSV Format (with headers):</p>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                    Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto mb-2">
+                    # Subject: SubjectName
                   </code>
-                  <p className="font-medium mt-3 mb-2">JSON Format:</p>
+                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                    ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+                  </code>
+                  <p className="text-xs text-gray-600 mt-1 mb-3">
+                    Supports: comment lines (#), quoted values, empty options for True/False questions
+                  </p>
+                  <p className="font-medium mb-2">JSON Format:</p>
                   <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
                     {`{"questions": [{"question": "...", "optionA": "...", "optionB": "...", "optionC": "...", "optionD": "...", "correctAnswer": "A", "level": "easy", "chapter": "..."}]}`}
                   </code>
@@ -948,13 +1144,240 @@ export function QuestionManagementSection({
         </div>
       )}
 
+      {/* Edit Question Modal */}
+      {showEditModal && selectedQuestion && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+          <div ref={editModalRef} className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
+            <h3 id="edit-modal-title" className="text-xl font-bold mb-4">
+              ✏️ Edit Question
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="edit-question-text" className="block text-sm font-medium text-gray-700 mb-1">
+                  Question *
+                </label>
+                <textarea
+                  id="edit-question-text"
+                  value={questionForm.question}
+                  onChange={(e) =>
+                    setQuestionForm((prev) => ({ ...prev, question: e.target.value }))
+                  }
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  rows={3}
+                  placeholder="Enter the question..."
+                  aria-required="true"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="edit-option-a" className="block text-sm font-medium text-gray-700 mb-1">
+                    Option A *
+                  </label>
+                  <input
+                    id="edit-option-a"
+                    type="text"
+                    value={questionForm.optionA}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, optionA: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Option A"
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="edit-option-b" className="block text-sm font-medium text-gray-700 mb-1">
+                    Option B *
+                  </label>
+                  <input
+                    id="edit-option-b"
+                    type="text"
+                    value={questionForm.optionB}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, optionB: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Option B"
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="edit-option-c" className="block text-sm font-medium text-gray-700 mb-1">
+                    Option C
+                  </label>
+                  <input
+                    id="edit-option-c"
+                    type="text"
+                    value={questionForm.optionC}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, optionC: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Option C"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="edit-option-d" className="block text-sm font-medium text-gray-700 mb-1">
+                    Option D
+                  </label>
+                  <input
+                    id="edit-option-d"
+                    type="text"
+                    value={questionForm.optionD}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, optionD: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Option D"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label htmlFor="edit-correct-answer" className="block text-sm font-medium text-gray-700 mb-1">
+                    Correct Answer *
+                  </label>
+                  <select
+                    id="edit-correct-answer"
+                    value={questionForm.correctAnswer}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, correctAnswer: e.target.value as Question['correctAnswer'] }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    aria-required="true"
+                  >
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="edit-level" className="block text-sm font-medium text-gray-700 mb-1">
+                    Level *
+                  </label>
+                  <select
+                    id="edit-level"
+                    value={questionForm.level}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, level: e.target.value as Question['level'] }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    aria-required="true"
+                  >
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="expert">Expert</option>
+                    <option value="extreme">Extreme</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="edit-chapter" className="block text-sm font-medium text-gray-700 mb-1">
+                    Chapter *
+                  </label>
+                  <select
+                    id="edit-chapter"
+                    value={questionForm.chapter}
+                    onChange={(e) =>
+                      setQuestionForm((prev) => ({ ...prev, chapter: e.target.value }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    aria-required="true"
+                  >
+                    <option value="">Select Chapter</option>
+                    {chapters.map((ch) => (
+                      <option key={ch} value={ch}>
+                        {ch}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setSelectedQuestion(null);
+                    resetQuestionForm();
+                  }}
+                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditQuestion}
+                  disabled={
+                    !questionForm.question.trim() ||
+                    !questionForm.optionA.trim() ||
+                    !questionForm.optionB.trim() ||
+                    !questionForm.chapter.trim()
+                  }
+                  className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedQuestion && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+          <div ref={deleteModalRef} className="bg-white rounded-xl p-6 w-full max-w-md">
+            <h3 id="delete-modal-title" className="text-xl font-bold mb-4 text-red-600">
+              🗑️ {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
+            </h3>
+            
+            <p className="text-gray-600 mb-6">
+              {selectedQuestion.status === 'trash' 
+                ? `Are you sure you want to permanently delete this question? This action cannot be undone.`
+                : `Are you sure you want to move this question to trash? You can restore it later from the Trash section.`}
+            </p>
+
+            <div className="bg-gray-50 p-3 rounded-lg mb-6">
+              <p className="font-medium text-gray-800">{selectedQuestion.question}</p>
+              <p className="text-sm text-gray-500 mt-1">Chapter: {selectedQuestion.chapter}</p>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedQuestion(null);
+                }}
+                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteQuestion}
+                className={`flex-1 rounded-lg px-4 py-2 text-white ${
+                  selectedQuestion.status === 'trash' 
+                    ? 'bg-red-600 hover:bg-red-700' 
+                    : 'bg-yellow-500 hover:bg-yellow-600'
+                }`}
+              >
+                {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Questions Table */}
       <div className="overflow-hidden rounded-xl bg-white shadow-md">
         <div className="overflow-x-auto">
           <table className="w-full" aria-label="Questions table">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 sticky top-0 z-10">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-10">
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-10">
                   <input
                     type="checkbox"
                     checked={selectedIds.length > 0 && selectedIds.length === filteredQuestions.length}
@@ -965,143 +1388,55 @@ export function QuestionManagementSection({
                     aria-label="Select all questions"
                   />
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-12">
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-12">
                   #
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 min-w-[200px]">
                   Question
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
-                  Option A
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
+                  Chapter
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
-                  Option B
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-48">
+                  Options
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
-                  Option C
+                <th className="px-3 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-16">
+                  Ans
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
-                  Option D
-                </th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-20">
-                  Answer
-                </th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-24">
+                <th className="px-3 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-20">
                   Level
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-24">
+                <th className="px-3 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 w-20">
                   Status
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredQuestions.map((q, index) => (
-                <tr key={q.id} className="hover:bg-gray-50">
-                  <td className="whitespace-nowrap px-4 py-3 align-top">
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.includes(String(q.id))}
-                      onChange={() => toggleSelection(String(q.id))}
-                      className="rounded border-gray-300"
-                      aria-label={`Select question ${q.question.slice(0, 30)}...`}
-                    />
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500 align-top">
-                    {index + 1}
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="max-w-xs">
-                      <p className="text-sm font-medium text-gray-900" title={q.question}>
-                        {q.question}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">{q.chapter}</p>
-                      <div className="flex gap-2 mt-2">
-                        <button
-                          className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200"
-                          title="Edit question"
-                          aria-label={`Edit question ${q.question.slice(0, 30)}...`}
-                        >
-                          ✏️ Edit
-                        </button>
-                        <button
-                          className="rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200"
-                          title="Delete question"
-                          aria-label={`Delete question ${q.question.slice(0, 30)}...`}
-                        >
-                          🗑️ Delete
-                        </button>
-                      </div>
+              {filteredQuestions.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-4 py-12 text-center">
+                    <div className="flex flex-col items-center">
+                      <FileQuestion className="w-12 h-12 text-gray-300 mb-3" />
+                      <p className="text-gray-500 font-medium">No questions found</p>
+                      <p className="text-gray-400 text-sm mt-1">Try adjusting filters or add new questions</p>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        q.correctAnswer === 'A'
-                          ? 'bg-green-50 text-green-700 font-medium'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {q.optionA}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        q.correctAnswer === 'B'
-                          ? 'bg-green-50 text-green-700 font-medium'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {q.optionB}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        q.correctAnswer === 'C'
-                          ? 'bg-green-50 text-green-700 font-medium'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {q.optionC}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm align-top">
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        q.correctAnswer === 'D'
-                          ? 'bg-green-50 text-green-700 font-medium'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {q.optionD}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-center align-top">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white">
-                      {q.correctAnswer}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-center align-top">
-                    <span
-                      className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getLevelBadgeColor(
-                        q.level
-                      )}`}
-                    >
-                      {q.level}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-center align-top">
-                    <span
-                      className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(
-                        q.status
-                      )}`}
-                    >
-                      {q.status || 'published'}
-                    </span>
-                  </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedQuestions.map((q, index) => (
+                  <QuestionRow
+                    key={q.id}
+                    question={q}
+                    index={startIndex + index + 1}
+                    isSelected={selectedIds.includes(String(q.id))}
+                    onToggleSelection={toggleSelection}
+                    onEdit={openEditModal}
+                    onDelete={openDeleteModal}
+                    getLevelBadgeColor={getLevelBadgeColor}
+                    getStatusBadgeColor={getStatusBadgeColor}
+                  />
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -1109,18 +1444,157 @@ export function QuestionManagementSection({
         {/* Table Footer */}
         <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
           <p className="text-sm text-gray-500">
-            Showing <span className="font-medium">{filteredQuestions.length}</span> of{' '}
-            <span className="font-medium">{localQuestions.length}</span> questions
+            Showing <span className="font-medium">{Math.min(startIndex + 1, filteredQuestions.length)}</span> - {' '}
+            <span className="font-medium">{Math.min(startIndex + questionsPerPage, filteredQuestions.length)}</span> of{' '}
+            <span className="font-medium">{filteredQuestions.length}</span> questions
           </p>
-          <div className="flex gap-1">
-            <button className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300">Previous</button>
-            <button className="rounded bg-blue-500 px-3 py-1 text-sm text-white">1</button>
-            <button className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300">Next</button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-gray-600 flex items-center gap-1">
+              Page
+              <input
+                type="text"
+                value={pageInput}
+                onChange={handlePageInputChange}
+                onBlur={handlePageInputSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
+                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+              />
+              of <span className="font-medium">{totalPages || 1}</span>
+            </span>
+            <button 
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+// Memoized Question Row component to prevent unnecessary re-renders
+interface QuestionRowProps {
+  question: Question;
+  index: number;
+  isSelected: boolean;
+  onToggleSelection: (id: string) => void;
+  onEdit: (question: Question) => void;
+  onDelete: (question: Question) => void;
+  getLevelBadgeColor: (level: string) => string;
+  getStatusBadgeColor: (status?: ContentStatus) => string;
+}
+
+const QuestionRow = React.memo(function QuestionRow({
+  question,
+  index,
+  isSelected,
+  onToggleSelection,
+  onEdit,
+  onDelete,
+  getLevelBadgeColor,
+  getStatusBadgeColor,
+}: QuestionRowProps) {
+  const handleToggle = useCallback(() => {
+    onToggleSelection(String(question.id));
+  }, [onToggleSelection, question.id]);
+
+  const handleEdit = useCallback(() => {
+    onEdit(question);
+  }, [onEdit, question]);
+
+  const handleDelete = useCallback(() => {
+    onDelete(question);
+  }, [onDelete, question]);
+
+  return (
+    <tr className="hover:bg-gray-50 will-change-transform" style={{ transition: 'background-color 0.1s ease' }}>
+      <td className="whitespace-nowrap px-3 py-3 align-top">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={handleToggle}
+          className="rounded border-gray-300"
+          aria-label={`Select question ${question.question.slice(0, 30)}...`}
+        />
+      </td>
+      <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 align-top">
+        {index}
+      </td>
+      <td className="px-3 py-3 align-top">
+        <p className="text-sm font-medium text-gray-900 line-clamp-2" title={question.question}>
+          {question.question}
+        </p>
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={handleEdit}
+            className="inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-1 text-xs text-blue-600 hover:bg-blue-200"
+            title="Edit question"
+          >
+            <Pencil className="w-3 h-3" />
+            Edit
+          </button>
+          <button
+            onClick={handleDelete}
+            className="inline-flex items-center gap-1 rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200"
+            title="Delete question"
+          >
+            <Trash2 className="w-3 h-3" />
+            Delete
+          </button>
+        </div>
+      </td>
+      <td className="px-3 py-3 align-top">
+        <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+          {question.chapter || 'General'}
+        </span>
+      </td>
+      <td className="px-3 py-3 align-top">
+        <div className="space-y-1 text-xs">
+          <div className={question.correctAnswer === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+            A. {question.optionA}
+          </div>
+          <div className={question.correctAnswer === 'B' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+            B. {question.optionB}
+          </div>
+          {question.optionC && (
+            <div className={question.correctAnswer === 'C' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              C. {question.optionC}
+            </div>
+          )}
+          {question.optionD && (
+            <div className={question.correctAnswer === 'D' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              D. {question.optionD}
+            </div>
+          )}
+        </div>
+      </td>
+      <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
+          {question.correctAnswer}
+        </span>
+      </td>
+      <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+        <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getLevelBadgeColor(question.level)}`}>
+          {question.level}
+        </span>
+      </td>
+      <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+        <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(question.status)}`}>
+          {question.status || 'published'}
+        </span>
+      </td>
+    </tr>
+  );
+});
 
 export default QuestionManagementSection;

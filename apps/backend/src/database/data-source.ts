@@ -1,22 +1,26 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import * as dotenv from 'dotenv';
-import { DB_PORT } from '../common/constants/app.constants';
+/**
+ * ============================================================================
+ * Data Source Configuration
+ * ============================================================================
+ * Main TypeORM data source configuration for:
+ * - Application runtime
+ * - CLI operations (migrations)
+ * - Scripts
+ * 
+ * SECURITY: All credentials from environment variables, no hardcoded defaults
+ * ============================================================================
+ */
 
-dotenv.config();
+import { DataSource } from 'typeorm';
+import { getCliDatabaseConfig, validateDatabaseEnv } from './database-config';
 
-export const _dataSourceOptions: DataSourceOptions = {
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || String(DB_PORT)),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_DATABASE || 'ai_quiz',
-  entities: ['src/**/*.entity{.ts,.js}'],
-  migrations: ['src/database/migrations/*{.ts,.js}'],
-  synchronize: false,
-  logging: true,
-};
+// Validate environment variables before creating data source
+validateDatabaseEnv();
 
+// Export configuration options for use in other modules
+export const _dataSourceOptions = getCliDatabaseConfig();
+
+// Create and export the data source instance
 const _dataSource = new DataSource(_dataSourceOptions);
 
 export default _dataSource;

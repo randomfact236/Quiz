@@ -10,6 +10,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { QuizService } from './quiz.service';
@@ -37,7 +38,7 @@ export class QuizController {
 
   @Get('subjects')
   @ApiOperation({ summary: 'Get all subjects' })
-  async getAllSubjects(): Promise<Subject[]> {
+  async getAllSubjects(): Promise<{ data: Subject[]; total: number }> {
     return this.quizService.findAllSubjects();
   }
 
@@ -146,19 +147,33 @@ export class QuizController {
     return this.quizService.findQuestionsByChapter(chapterId, pagination);
   }
 
+  private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {
+    if (!count) return defaultValue;
+    const parsed = parseInt(count, 10);
+    if (isNaN(parsed) || parsed < 1) {
+      throw new BadRequestException('Count must be a positive number');
+    }
+    if (parsed > max) {
+      throw new BadRequestException(`Count cannot exceed ${max}`);
+    }
+    return parsed;
+  }
+
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
     @Param('level') level: string,
     @Query('count') count?: string,
   ): Promise<Question[]> {
-    return this.quizService.findRandomQuestions(level, count ? parseInt(count) : 10);
+    const validCount = this.validateCount(count, 10);
+    return this.quizService.findRandomQuestions(level, validCount);
   }
 
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed questions from all subjects' })
   async getMixedQuestions(@Query('count') count?: string): Promise<Question[]> {
-    return this.quizService.findMixedQuestions(count ? parseInt(count) : DEFAULT_PAGE_SIZE);
+    const validCount = this.validateCount(count, DEFAULT_PAGE_SIZE);
+    return this.quizService.findMixedQuestions(validCount);
   }
 
   @Post('questions')
@@ -175,9 +190,16 @@ export class QuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create questions (Admin only)' })
-  async createQuestionsBulk(@Body() dto: CreateQuestionDto[]): Promise<{ count: number }> {
-    const count = await this.quizService.createQuestionsBulk(dto);
-    return { count };
+  async createQuestionsBulk(@Body() dto: CreateQuestionDto[]): Promise<{ count: number; errors: string[] }> {
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('Request body must be a non-empty array of questions');
+    }
+    // Limit array size to prevent memory issues
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Cannot create more than ${MAX_BULK_SIZE} questions in one request. Provided: ${dto.length}`);
+    }
+    return await this.quizService.createQuestionsBulk(dto);
   }
 
   @Put('questions/:id')

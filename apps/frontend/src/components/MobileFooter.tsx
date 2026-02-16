@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Laugh, FileImage, X, BookOpen, Brain } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Drawer Types
 type DrawerType = 'quiz' | 'jokes' | 'riddles' | 'image-riddles' | null;
@@ -65,6 +65,13 @@ const drawerTransition = { type: 'spring' as const, damping: 25, stiffness: 200 
 
 export default function MobileFooter() {
     const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null);
+    const [isClient, setIsClient] = useState(false);
+    const [currentPath, setCurrentPath] = useState('/');
+
+    useEffect(() => {
+        setIsClient(true);
+        setCurrentPath(window.location.pathname);
+    }, []);
 
     const toggleDrawer = (drawer: DrawerType) => {
         if (activeDrawer === drawer) {
@@ -194,7 +201,7 @@ export default function MobileFooter() {
                         href="/"
                         className="flex flex-col items-center p-2 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 group"
                         aria-label="Navigate to Home"
-                        aria-selected={activeDrawer === null && typeof window !== 'undefined' && window.location.pathname === '/'}
+                        aria-selected={isClient && activeDrawer === null && currentPath === '/'}
                         role="tab"
                     >
                         <Home size={24} className="group-hover:scale-110 transition-transform" aria-hidden="true" />

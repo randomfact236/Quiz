@@ -70,7 +70,8 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleSearch, setRiddleSearch] = useState<string>('');
   const [riddlePage, setRiddlePage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [pageInput, setPageInput] = useState('1');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const riddlesPerPage = 10;
@@ -134,6 +135,25 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
     (riddlePage - 1) * riddlesPerPage,
     riddlePage * riddlesPerPage
   );
+
+  // Sync pageInput with riddlePage
+  useEffect(() => {
+    setPageInput(String(riddlePage));
+  }, [riddlePage]);
+
+  // Page input handlers
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageInput(e.target.value);
+  };
+
+  const handlePageInputSubmit = () => {
+    const page = parseInt(pageInput, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalRiddlePages) {
+      setRiddlePage(page);
+    } else {
+      setPageInput(String(riddlePage));
+    }
+  };
 
   // Selection handlers
   const toggleSelection = (id: string) => {
@@ -634,15 +654,13 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
                   aria-label="Select all riddles"
                 />
               </th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">#</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">QUESTION</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION A</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION B</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION C</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">OPTION D</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">ANSWER</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">LEVEL</th>
-              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">STATUS</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-12">#</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">Question</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-28">Chapter</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-48">Options</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-16">Ans</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">Level</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -658,9 +676,8 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
                   />
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
-                <td className="px-3 py-4">
-                  <p className="text-sm font-medium text-gray-800">{riddle.question}</p>
-                  <p className="mt-1 text-xs text-gray-500">{riddle.chapter}</p>
+                <td className="px-3 py-3 align-top">
+                  <p className="text-sm font-medium text-gray-800 line-clamp-2">{riddle.question}</p>
                   <div className="mt-2 flex gap-2">
                     <button
                       onClick={() => openEditModal(riddle)}
@@ -678,62 +695,43 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
                     </button>
                   </div>
                 </td>
-                <td
-                  className={`px-3 py-4 text-sm ${
-                    isCorrectOption(riddle, 0)
-                      ? 'bg-green-50 font-semibold text-green-700'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {riddle.options[0]}
+                <td className="px-3 py-3 align-top">
+                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+                    {riddle.chapter || 'General'}
+                  </span>
                 </td>
-                <td
-                  className={`px-3 py-4 text-sm ${
-                    isCorrectOption(riddle, 1)
-                      ? 'bg-green-50 font-semibold text-green-700'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {riddle.options[1]}
+                <td className="px-3 py-3 align-top">
+                  <div className="space-y-1 text-xs">
+                    <div className={isCorrectOption(riddle, 0) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                      A. {riddle.options[0]}
+                    </div>
+                    <div className={isCorrectOption(riddle, 1) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                      B. {riddle.options[1]}
+                    </div>
+                    {riddle.options[2] && (
+                      <div className={isCorrectOption(riddle, 2) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                        C. {riddle.options[2]}
+                      </div>
+                    )}
+                    {riddle.options[3] && (
+                      <div className={isCorrectOption(riddle, 3) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                        D. {riddle.options[3]}
+                      </div>
+                    )}
+                  </div>
                 </td>
-                <td
-                  className={`px-3 py-4 text-sm ${
-                    isCorrectOption(riddle, 2)
-                      ? 'bg-green-50 font-semibold text-green-700'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {riddle.options[2]}
-                </td>
-                <td
-                  className={`px-3 py-4 text-sm ${
-                    isCorrectOption(riddle, 3)
-                      ? 'bg-green-50 font-semibold text-green-700'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {riddle.options[3]}
-                </td>
-                <td className="px-3 py-4">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white">
+                <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
                     {riddle.correctOption}
                   </span>
                 </td>
-                <td className="px-3 py-4">
-                  <span
-                    className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${getDifficultyColor(
-                      riddle.difficulty
-                    )}`}
-                  >
+                <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+                  <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getDifficultyColor(riddle.difficulty)}`}>
                     {riddle.difficulty}
                   </span>
                 </td>
-                <td className="px-3 py-4">
-                  <span
-                    className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(
-                      riddle.status
-                    )}`}
-                  >
+                <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+                  <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(riddle.status)}`}>
                     {riddle.status}
                   </span>
                 </td>
@@ -742,35 +740,46 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
           </tbody>
         </table>
         {paginatedRiddles.length === 0 && (
-          <div className="p-8 text-center text-gray-500">No riddles found matching your filters</div>
+          <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+            <svg className="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="font-medium">No riddles found</p>
+            <p className="text-sm text-gray-400 mt-1">Try adjusting filters or add new riddles</p>
+          </div>
         )}
       </div>
 
       {/* Pagination */}
-      {totalRiddlePages > 1 && (
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Showing {((riddlePage - 1) * riddlesPerPage) + 1} -{' '}
-            {Math.min(riddlePage * riddlesPerPage, filteredRiddles.length)} of{' '}
-            {filteredRiddles.length} riddles
+      {filteredRiddles.length > 0 && (
+        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
+          <p className="text-sm text-gray-500">
+            Showing {Math.min((riddlePage - 1) * riddlesPerPage + 1, filteredRiddles.length)} - {Math.min(riddlePage * riddlesPerPage, filteredRiddles.length)} of {filteredRiddles.length} items
           </p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setRiddlePage(p => p - 1)}
+              onClick={() => setRiddlePage(p => Math.max(1, p - 1))}
               disabled={riddlePage === 1}
-              aria-label="Previous page"
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="px-3 py-1 text-sm">
-              {riddlePage} / {totalRiddlePages}
+            <span className="text-sm text-gray-600 flex items-center gap-1">
+              Page
+              <input
+                type="text"
+                value={pageInput}
+                onChange={handlePageInputChange}
+                onBlur={handlePageInputSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
+                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+              />
+              of <span className="font-medium">{totalRiddlePages || 1}</span>
             </span>
             <button
-              className="rounded-lg border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
-              onClick={() => setRiddlePage(p => p + 1)}
-              disabled={riddlePage === totalRiddlePages}
-              aria-label="Next page"
+              onClick={() => setRiddlePage(p => Math.min(totalRiddlePages, p + 1))}
+              disabled={riddlePage >= totalRiddlePages}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
               Next
             </button>

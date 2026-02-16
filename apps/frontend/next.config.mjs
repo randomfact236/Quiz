@@ -3,53 +3,30 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-
-  // Performance optimizations
-  experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
-  },
-
-  // Image optimization
+  
+  // Output standalone for Docker
+  output: 'standalone',
+  
+  // Disable image optimization in dev
   images: {
-    formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    unoptimized: true,
   },
-
-  // Security headers
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        ],
-      },
-    ];
+  
+  // Webpack configuration for Docker
+  webpack: (config, { dev, isServer }) => {
+    // Fix for chunk loading issues in Docker
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
   },
-
-  // Redirects
-  async redirects() {
-    return [
-      {
-        source: '/home',
-        destination: '/',
-        permanent: true,
-      },
-    ];
-  },
-
-  // Environment variables exposed to browser
+  
+  // Environment variables
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api',
   },
 };
 

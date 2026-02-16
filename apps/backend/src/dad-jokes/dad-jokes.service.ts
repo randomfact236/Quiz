@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
 import { JokeSubject } from './entities/joke-subject.entity';
@@ -73,12 +73,24 @@ export class DadJokesService {
   }
 
   async findRandomJoke(): Promise<DadJoke> {
+    // More efficient random selection using offset with count
+    const count = await this.jokeRepo.count({
+      where: { status: ContentStatus.PUBLISHED },
+    });
+    
+    if (count === 0) {
+      throw new NotFoundException('No jokes found');
+    }
+
+    const randomOffset = Math.floor(Math.random() * count);
     const joke = await this.jokeRepo
       .createQueryBuilder('joke')
       .leftJoinAndSelect('joke.category', 'category')
       .where('joke.status = :status', { status: ContentStatus.PUBLISHED })
-      .orderBy('RANDOM()')
+      .skip(randomOffset)
+      .take(1)
       .getOne();
+      
     if (joke === null) {
       throw new NotFoundException('No jokes found');
     }
@@ -111,7 +123,10 @@ export class DadJokesService {
       .where('joke.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
-      queryBuilder.where('joke.joke ILIKE :search', { search: `%${searchDto.search}%` });
+      // SECURITY: Use andWhere to preserve status filter
+      // Input sanitization: search term is parameterized by TypeORM
+      const sanitizedSearch = searchDto.search.replace(/[%_]/g, '\\$&');
+      queryBuilder.andWhere('joke.joke ILIKE :search', { search: `%${sanitizedSearch}%` });
     }
 
     if (searchDto.categoryId !== undefined && searchDto.categoryId.length > 0) {
@@ -138,18 +153,59 @@ export class DadJokesService {
     return saved;
   }
 
-  async createJokesBulk(dto: CreateDadJokeDto[]): Promise<number> {
-    const jokes: DadJoke[] = [];
-    for (const j of dto) {
-      const category = await this.categoryRepo.findOne({ where: { id: j.categoryId } });
-      if (category !== null) {
-        const joke = this.jokeRepo.create({ joke: j.joke, category, status: ContentStatus.DRAFT });
+  async createJokesBulk(dto: CreateDadJokeDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
+
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No jokes provided for bulk creation');
+    }
+
+    // Limit batch size
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} jokes`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique category IDs for batch fetch - fixes N+1 query
+      const categoryIds = [...new Set(dto.map(j => j.categoryId))];
+      const categories = await transactionalEntityManager.find(JokeCategory, {
+        where: { id: In(categoryIds) },
+      });
+
+      // Create a map for quick lookup
+      const categoryMap = new Map(categories.map(c => [c.id, c]));
+
+      const jokes: DadJoke[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const j = dto[i];
+        const category = categoryMap.get(j.categoryId);
+        
+        if (!category) {
+          errors.push(`Row ${i + 1}: Category not found (ID: ${j.categoryId})`);
+          continue;
+        }
+
+        const joke = transactionalEntityManager.create(DadJoke, {
+          joke: j.joke,
+          category,
+          status: ContentStatus.DRAFT,
+        });
         jokes.push(joke);
       }
-    }
-    const saved = await this.jokeRepo.save(jokes);
-    await this.cacheService.delPattern('jokes:*');
-    return saved.length;
+
+      if (jokes.length === 0) {
+        throw new BadRequestException(`No valid jokes to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(jokes);
+      
+      // Only invalidate cache if transaction succeeds
+      await this.cacheService.delPattern('jokes:*');
+      
+      return { count: saved.length, errors };
+    });
   }
 
   async updateJoke(id: string, dto: Partial<CreateDadJokeDto>): Promise<DadJoke> {
@@ -379,20 +435,68 @@ export class DadJokesService {
   }
 
   async findRandomQuizJokes(level: string, count: number): Promise<QuizJoke[]> {
-    return this.quizJokeRepo
+    // Validate level parameter
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+    if (!validLevels.includes(level)) {
+      throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
+    }
+
+    // More efficient random selection
+    const totalCount = await this.quizJokeRepo.count({ where: { level } });
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.quizJokeRepo.find({ where: { level } });
+    }
+
+    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
+    const allIds = await this.quizJokeRepo
       .createQueryBuilder('joke')
+      .select('joke.id')
       .where('joke.level = :level', { level })
-      .orderBy('RANDOM()')
-      .limit(count)
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(j => j.id);
+
+    return this.quizJokeRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async findMixedQuizJokes(count: number): Promise<QuizJoke[]> {
-    return this.quizJokeRepo
+    // More efficient random selection
+    const totalCount = await this.quizJokeRepo.count();
+    
+    if (totalCount === 0) {
+      return [];
+    }
+
+    // If requesting more than available, return all
+    if (count >= totalCount) {
+      return this.quizJokeRepo.find({ relations: ['chapter'] });
+    }
+
+    // Get all IDs, shuffle, then fetch selected
+    const allIds = await this.quizJokeRepo
       .createQueryBuilder('joke')
-      .orderBy('RANDOM()')
-      .limit(count)
+      .select('joke.id')
       .getMany();
+    
+    // Shuffle and pick count items
+    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    const selectedIds = shuffled.map(j => j.id);
+
+    return this.quizJokeRepo.find({
+      where: { id: In(selectedIds) },
+      relations: ['chapter'],
+    });
   }
 
   async createQuizJoke(dto: CreateQuizJokeDto): Promise<QuizJoke> {
@@ -412,12 +516,48 @@ export class DadJokesService {
     return this.quizJokeRepo.save(joke);
   }
 
-  async createQuizJokesBulk(dto: CreateQuizJokeDto[]): Promise<number> {
-    const jokes: QuizJoke[] = [];
-    for (const j of dto) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: j.chapterId } });
-      if (chapter !== null) {
-        const joke = this.quizJokeRepo.create({
+  async createQuizJokesBulk(dto: CreateQuizJokeDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
+
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No quiz jokes provided for bulk creation');
+    }
+
+    // Limit batch size
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} jokes`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique chapter IDs for batch fetch - fixes N+1 query
+      const chapterIds = [...new Set(dto.map(j => j.chapterId))];
+      const chapters = await transactionalEntityManager.find(JokeChapter, {
+        where: { id: In(chapterIds) },
+      });
+
+      // Create a map for quick lookup
+      const chapterMap = new Map(chapters.map(c => [c.id, c]));
+
+      const jokes: QuizJoke[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const j = dto[i];
+        const chapter = chapterMap.get(j.chapterId);
+        
+        if (!chapter) {
+          errors.push(`Row ${i + 1}: Chapter not found (ID: ${j.chapterId})`);
+          continue;
+        }
+
+        // Validate level
+        const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+        if (!validLevels.includes(j.level)) {
+          errors.push(`Row ${i + 1}: Invalid level '${j.level}'. Valid: ${validLevels.join(', ')}`);
+          continue;
+        }
+
+        const joke = transactionalEntityManager.create(QuizJoke, {
           question: j.question,
           options: j.options,
           correctAnswer: j.correctAnswer,
@@ -428,9 +568,14 @@ export class DadJokesService {
         });
         jokes.push(joke);
       }
-    }
-    const saved = await this.quizJokeRepo.save(jokes);
-    return saved.length;
+
+      if (jokes.length === 0) {
+        throw new BadRequestException(`No valid jokes to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(jokes);
+      return { count: saved.length, errors };
+    });
   }
 
   async updateQuizJoke(id: string, dto: Partial<CreateQuizJokeDto>): Promise<QuizJoke> {

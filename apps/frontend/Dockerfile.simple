@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY apps/frontend/package*.json ./apps/frontend/
+
+# Install dependencies
+RUN npm ci && npm cache clean --force
+
+# Copy source code
+COPY apps/frontend ./apps/frontend
+COPY libs ./libs/
+COPY tsconfig.json ./
+
+WORKDIR /app/apps/frontend
+
+EXPOSE 3010
+
+CMD ["npm", "run", "dev"]

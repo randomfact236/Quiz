@@ -33,7 +33,8 @@ export interface Subject {
   slug: string;
   name: string;
   emoji: string;
-  category: 'academic' | 'professional';
+  category: 'academic' | 'professional' | 'entertainment';
+  order?: number;
 }
 
 /** Menu Section Type */

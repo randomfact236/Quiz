@@ -18,6 +18,11 @@ export interface RiddlesStats {
 }
 
 /**
+ * Valid difficulty levels for classic riddles
+ */
+const CLASSIC_DIFFICULTIES = ['easy', 'medium', 'hard'];
+
+/**
  * Compute riddles statistics
  * @param riddleRepo - Riddle repository
  * @param categoryRepo - Category repository
@@ -25,6 +30,7 @@ export interface RiddlesStats {
  * @param subjectRepo - Subject repository
  * @param chapterRepo - Chapter repository
  * @returns Statistics for riddles
+ * @throws Error if database query fails
  */
 export async function computeRiddleStats(
   riddleRepo: Repository<Riddle>,
@@ -33,26 +39,50 @@ export async function computeRiddleStats(
   subjectRepo: Repository<RiddleSubject>,
   chapterRepo: Repository<RiddleChapter>,
 ): Promise<RiddlesStats> {
-  const [totalClassicRiddles, totalCategories, totalQuizRiddles, totalSubjects, totalChapters] = await Promise.all([
-    riddleRepo.count(),
-    categoryRepo.count(),
-    quizRiddleRepo.count(),
-    subjectRepo.count(),
-    chapterRepo.count(),
-  ]);
+  try {
+    // Get basic counts in parallel
+    const [totalClassicRiddles, totalCategories, totalQuizRiddles, totalSubjects, totalChapters] = await Promise.all([
+      riddleRepo.count(),
+      categoryRepo.count(),
+      quizRiddleRepo.count(),
+      subjectRepo.count(),
+      chapterRepo.count(),
+    ]);
 
-  const riddlesByDifficulty: Record<string, number> = {
-    easy: await riddleRepo.count({ where: { difficulty: 'easy' } }),
-    medium: await riddleRepo.count({ where: { difficulty: 'medium' } }),
-    hard: await riddleRepo.count({ where: { difficulty: 'hard' } }),
-  };
+    // Get counts by difficulty dynamically
+    const riddlesByDifficulty: Record<string, number> = {};
+    
+    // Query for each difficulty level
+    for (const difficulty of CLASSIC_DIFFICULTIES) {
+      riddlesByDifficulty[difficulty] = await riddleRepo.count({ 
+        where: { difficulty } 
+      });
+    }
 
-  return {
-    totalClassicRiddles,
-    totalCategories,
-    totalQuizRiddles,
-    totalSubjects,
-    totalChapters,
-    riddlesByDifficulty,
-  };
+    // Also check for any other difficulty values in the database
+    const distinctDifficulties = await riddleRepo
+      .createQueryBuilder('riddle')
+      .select('DISTINCT riddle.difficulty', 'difficulty')
+      .getRawMany<{ difficulty: string }>();
+
+    // Add any additional difficulty levels found
+    for (const { difficulty } of distinctDifficulties) {
+      if (!CLASSIC_DIFFICULTIES.includes(difficulty)) {
+        riddlesByDifficulty[difficulty] = await riddleRepo.count({ 
+          where: { difficulty } 
+        });
+      }
+    }
+
+    return {
+      totalClassicRiddles,
+      totalCategories,
+      totalQuizRiddles,
+      totalSubjects,
+      totalChapters,
+      riddlesByDifficulty,
+    };
+  } catch (error) {
+    throw new Error(`Failed to compute riddle statistics: ${(error as Error).message}`);
+  }
 }

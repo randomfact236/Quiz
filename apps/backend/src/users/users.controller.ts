@@ -1,6 +1,9 @@
-import { Controller, Get, Put, Body, Param, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Put, Body, Param, UseGuards, Request, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 /**
  * Interface for authenticated user in request
@@ -32,7 +35,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all users (Admin only)' })
   async getAll(): Promise<unknown[]> {
     return this.usersService.getAll();
   }
@@ -48,8 +54,17 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get user by ID' })
-  async getById(@Param('id') id: string): Promise<unknown> {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user by ID (Authenticated users only)' })
+  async getById(
+    @Param('id') id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<unknown> {
+    // Users can only access their own profile unless they are admin
+    if (req.user?.id !== id && req.user?.role !== 'admin') {
+      throw new ForbiddenException('You can only access your own profile');
+    }
     return this.usersService.findById(id);
   }
 

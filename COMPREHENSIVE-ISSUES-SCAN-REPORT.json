@@ -1,0 +1,1124 @@
+{
+  "scan_metadata": {
+    "generated_at": "2026-02-15T23:45:56+05:45",
+    "project": "Quiz Application",
+    "scan_type": "Full Codebase Analysis",
+    "verification_status": "All critical and high-severity issues verified against actual code",
+    "total_issues": 98,
+    "issues_by_severity": {
+      "critical": 6,
+      "high": 18,
+      "medium": 49,
+      "low": 25
+    },
+    "issues_by_type": {
+      "security": 23,
+      "error_handling": 20,
+      "logic": 19,
+      "performance": 17,
+      "quality": 19
+    }
+  },
+  "issues_by_feature": {
+    "authentication": {
+      "feature_name": "Authentication & Authorization",
+      "issue_count": 8,
+      "critical_issues": [
+        {
+          "id": "AUTH-001",
+          "file": "apps/backend/src/auth/jwt.strategy.ts",
+          "line": 50,
+          "type": "security",
+          "severity": "critical",
+          "title": "Hardcoded JWT secret fallback",
+          "description": "The JWT strategy uses a hardcoded fallback secret 'your-secret-key' when JWT_SECRET environment variable is not set. This is a critical security vulnerability as it allows attackers to forge tokens if the application is misconfigured.",
+          "code_snippet": "secretOrKey: configService.get('JWT_SECRET', 'your-secret-key'),",
+          "recommendation": "Remove the fallback value and require JWT_SECRET to be explicitly set. Throw an error if the secret is undefined: `secretOrKey: configService.getOrThrow('JWT_SECRET')`",
+          "verified": true
+        },
+        {
+          "id": "AUTH-002",
+          "file": "apps/backend/src/users/users.controller.ts",
+          "line": 34,
+          "type": "security",
+          "severity": "critical",
+          "title": "Unprotected getAll endpoint",
+          "description": "The getAll() endpoint returns all users without any authentication or authorization guards. This exposes user data (including emails, names, roles) to unauthenticated users, violating privacy and security principles.",
+          "code_snippet": "@Get()\n@ApiOperation({ summary: 'Get all users' })\nasync getAll(): Promise<unknown[]> {\n  return this.usersService.getAll();\n}",
+          "recommendation": "Add @UseGuards(JwtAuthGuard, RolesGuard) and @Roles('admin') decorators to restrict access to administrators only.",
+          "verified": true
+        }
+      ],
+      "high_issues": [
+        {
+          "id": "AUTH-003",
+          "file": "apps/backend/src/auth/auth.service.ts",
+          "line": 56,
+          "type": "security",
+          "severity": "high",
+          "title": "JWT tokens lack expiration",
+          "description": "The JWT tokens are signed without specifying an expiration time. This creates tokens that never expire, which is a security risk if tokens are leaked. Compromised tokens would remain valid indefinitely.",
+          "code_snippet": "const token = this.jwtService.sign({ id: user.id, email: user.email, role: user.role });",
+          "recommendation": "Add an expiresIn option: `this.jwtService.sign(payload, { expiresIn: '24h' })` or configure it globally in JwtModule",
+          "verified": true
+        },
+        {
+          "id": "AUTH-004",
+          "file": "apps/backend/src/auth/jwt.strategy.ts",
+          "line": 68,
+          "type": "security",
+          "severity": "high",
+          "title": "Missing user existence validation in JWT strategy",
+          "description": "The validate method returns the result of authService.validateUser() directly without checking if the user exists. If a user is deleted after token issuance but before token expiration, the token remains valid with a null user.",
+          "code_snippet": "async validate(payload: JwtPayload): Promise<User | null> {\n    return await this.authService.validateUser(payload.id);\n  }",
+          "recommendation": "Add validation to throw UnauthorizedException if user is null: `const user = await this.authService.validateUser(payload.id); if (!user) throw new UnauthorizedException(); return user;`",
+          "verified": true
+        },
+        {
+          "id": "AUTH-005",
+          "file": "apps/backend/src/users/users.controller.ts",
+          "line": 50,
+          "type": "security",
+          "severity": "high",
+          "title": "IDOR vulnerability in getById endpoint",
+          "description": "The getById() endpoint allows anyone to fetch any user's profile by ID without authentication. This is an Insecure Direct Object Reference (IDOR) vulnerability.",
+          "code_snippet": "@Get(':id')\n@ApiOperation({ summary: 'Get user by ID' })\nasync getById(@Param('id') id: string): Promise<unknown> {\n  return this.usersService.findById(id);\n}",
+          "recommendation": "Add @UseGuards(JwtAuthGuard) and ensure users can only access their own profile unless they are admins.",
+          "verified": true
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "AUTH-006",
+          "file": "apps/backend/src/auth/auth.service.ts",
+          "line": 52,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Incorrect exception type for duplicate email",
+          "description": "Using UnauthorizedException for an already existing email during registration is semantically incorrect. This should be a ConflictException (409).",
+          "recommendation": "Change to `throw new ConflictException('Email already exists');`"
+        },
+        {
+          "id": "AUTH-007",
+          "file": "apps/backend/src/users/users.service.ts",
+          "line": 38,
+          "type": "security",
+          "severity": "medium",
+          "title": "Mass assignment vulnerability in updateProfile",
+          "description": "The updateProfile method accepts Partial<User> which allows attackers to modify sensitive fields like 'password', 'role', or 'email'.",
+          "recommendation": "Create a dedicated UpdateProfileDto with only allowed fields"
+        },
+        {
+          "id": "AUTH-008",
+          "file": "apps/backend/src/users/users.service.ts",
+          "line": 14,
+          "type": "security",
+          "severity": "medium",
+          "title": "Weak bcrypt salt rounds",
+          "description": "The bcrypt.hash uses only 10 salt rounds which is becoming weaker as computing power increases. Current OWASP recommendations suggest 12-14 rounds.",
+          "recommendation": "Increase salt rounds to at least 12, preferably 14"
+        }
+      ]
+    },
+    "settings": {
+      "feature_name": "Settings Module",
+      "issue_count": 5,
+      "critical_issues": [
+        {
+          "id": "SET-001",
+          "file": "apps/backend/src/settings/settings.controller.ts",
+          "line": 1,
+          "type": "security",
+          "severity": "critical",
+          "title": "Authentication and authorization completely disabled",
+          "description": "The JwtAuthGuard, RolesGuard, and Roles decorators are commented out, leaving the entire settings API open to unauthenticated users.",
+          "code_snippet": "// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';\n// import { RolesGuard } from '../auth/guards/roles.guard';\n// import { Roles } from '../auth/decorators/roles.decorator';",
+          "recommendation": "Uncomment and enable all authentication and authorization guards.",
+          "verified": true
+        }
+      ],
+      "high_issues": [
+        {
+          "id": "SET-002",
+          "file": "apps/backend/src/settings/settings.controller.ts",
+          "line": 19,
+          "type": "validation",
+          "severity": "high",
+          "title": "No input validation for settings updates",
+          "description": "The updateSettings endpoint accepts arbitrary Record<string, SettingsValue> without any validation.",
+          "recommendation": "Create a DTO with class-validator decorators to validate all setting keys and values."
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "SET-003",
+          "file": "apps/backend/src/settings/settings.service.ts",
+          "line": 122,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Inefficient N+1 query pattern in updateSettings",
+          "description": "The updateSettings method calls updateSetting in a loop for each key, causing N+1 database queries.",
+          "recommendation": "Use a batch update query or wrap the loop in a transaction."
+        },
+        {
+          "id": "SET-004",
+          "file": "apps/backend/src/settings/settings.service.ts",
+          "line": 102,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Missing error handling for invalid keys",
+          "description": "The updateSetting method accepts any arbitrary key without validating it against allowed settings schema.",
+          "recommendation": "Add validation to ensure only whitelisted setting keys can be created or updated."
+        },
+        {
+          "id": "SET-005",
+          "file": "apps/backend/src/settings/settings.service.ts",
+          "line": 66,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Potential prototype pollution in deepMerge",
+          "description": "The deepMerge method uses Object.assign without checking for prototype pollution vulnerabilities.",
+          "recommendation": "Add checks to prevent merging of '__proto__', 'constructor', and 'prototype' keys."
+        }
+      ]
+    },
+    "database": {
+      "feature_name": "Database & Infrastructure",
+      "issue_count": 6,
+      "critical_issues": [
+        {
+          "id": "DB-001",
+          "file": "apps/backend/src/database/data-source.ts",
+          "line": 11,
+          "type": "security",
+          "severity": "critical",
+          "title": "Hardcoded database credentials",
+          "description": "The database configuration contains hardcoded default credentials (username: 'postgres', password: 'postgres').",
+          "code_snippet": "username: process.env.DB_USERNAME || 'postgres',\npassword: process.env.DB_PASSWORD || 'postgres',",
+          "recommendation": "Remove default credentials and throw an error if required environment variables are not set.",
+          "verified": true
+        },
+        {
+          "id": "DB-002",
+          "file": "apps/backend/src/database/seed.ts",
+          "line": 27,
+          "type": "security",
+          "severity": "critical",
+          "title": "Hardcoded database credentials in seed file",
+          "description": "The seed file contains hardcoded default database credentials.",
+          "recommendation": "Remove default credentials and require explicit environment variable configuration.",
+          "verified": true
+        }
+      ],
+      "high_issues": [
+        {
+          "id": "DB-003",
+          "file": "apps/backend/src/database/seed.ts",
+          "line": 29,
+          "type": "security",
+          "severity": "high",
+          "title": "Dangerous synchronize: true in seed file",
+          "description": "The seed DataSource has synchronize: true which can drop and recreate database tables automatically.",
+          "recommendation": "Set synchronize to false and use explicit migrations instead."
+        },
+        {
+          "id": "DB-004",
+          "file": "apps/backend/src/common/cache/cache.service.ts",
+          "line": 57,
+          "type": "performance",
+          "severity": "high",
+          "title": "Inefficient Redis KEYS command usage",
+          "description": "The delPattern method uses the Redis KEYS command which is O(N) and blocks the entire Redis server.",
+          "recommendation": "Use SCAN instead of KEYS for production workloads."
+        },
+        {
+          "id": "DB-005",
+          "file": "apps/backend/src/common/services/bulk-action.service.ts",
+          "line": 109,
+          "type": "logic",
+          "severity": "high",
+          "title": "Partial transaction commit allows inconsistent state",
+          "description": "The bulk action service commits the transaction if ANY items succeeded, even if others failed.",
+          "recommendation": "Change logic to commit only when all succeed, otherwise rollback."
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "DB-006",
+          "file": "apps/backend/src/database/data-source.ts",
+          "line": 17,
+          "type": "security",
+          "severity": "medium",
+          "title": "Database query logging enabled",
+          "description": "Database logging is enabled in the data source configuration. In production, this could log sensitive data.",
+          "recommendation": "Set logging based on environment: logging: process.env.NODE_ENV !== 'production'"
+        }
+      ]
+    },
+    "riddles": {
+      "feature_name": "Riddles Module",
+      "issue_count": 12,
+      "high_issues": [
+        {
+          "id": "RID-001",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 128,
+          "type": "logic",
+          "severity": "high",
+          "title": "Status filter lost in search query",
+          "description": "The searchRiddles method uses .where() which overwrites the previous where clause. This means the PUBLISHED status filter is lost when a search term is provided.",
+          "code_snippet": "if (searchDto.search !== undefined && searchDto.search.length > 0) {\n  queryBuilder.where('(riddle.question ILIKE :search OR riddle.answer ILIKE :search)', {\n    search: `%${searchDto.search}%`,\n  });\n}",
+          "recommendation": "Change .where() to .andWhere() to preserve the status filter.",
+          "verified": true
+        },
+        {
+          "id": "RID-002",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 167,
+          "type": "logic",
+          "severity": "high",
+          "title": "No transaction in bulk operations",
+          "description": "Bulk operations don't use database transactions. If an error occurs mid-operation, some records may be saved while others aren't.",
+          "recommendation": "Wrap bulk operations in a transaction using this.dataSource.transaction()."
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "RID-003",
+          "file": "apps/backend/src/riddles/riddles.controller.ts",
+          "line": 247,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Unvalidated parseInt for count parameter"
+        },
+        {
+          "id": "RID-004",
+          "file": "apps/backend/src/riddles/riddles.controller.ts",
+          "line": 254,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Unvalidated parseInt for count parameter in mixed quiz"
+        },
+        {
+          "id": "RID-005",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 80,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Inefficient random riddle selection using RANDOM()"
+        },
+        {
+          "id": "RID-006",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 401,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Inefficient random quiz riddle selection"
+        },
+        {
+          "id": "RID-007",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 409,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Inefficient mixed quiz riddle selection"
+        },
+        {
+          "id": "RID-008",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 167,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Silent failures in bulk creation"
+        },
+        {
+          "id": "RID-009",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 431,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Silent failures in quiz riddles bulk creation"
+        },
+        {
+          "id": "RID-010",
+          "file": "apps/backend/src/riddles/riddles.service.ts",
+          "line": 167,
+          "type": "performance",
+          "severity": "medium",
+          "title": "N+1 query problem in bulk creation"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "RID-011",
+          "file": "apps/backend/src/riddles/riddles-stats.util.ts",
+          "line": 44,
+          "type": "logic",
+          "severity": "low",
+          "title": "Missing difficulty levels in stats"
+        },
+        {
+          "id": "RID-012",
+          "file": "apps/backend/src/riddles/entities/riddle.entity.ts",
+          "line": 32,
+          "type": "quality",
+          "severity": "low",
+          "title": "Missing createdAt timestamp"
+        }
+      ]
+    },
+    "dad_jokes": {
+      "feature_name": "Dad Jokes Module",
+      "issue_count": 12,
+      "high_issues": [
+        {
+          "id": "JOKE-001",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 114,
+          "type": "logic",
+          "severity": "high",
+          "title": "Search overwrites status filter",
+          "description": "Same issue as riddles - uses .where() instead of .andWhere()",
+          "verified": true
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "JOKE-002",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 111,
+          "type": "security",
+          "severity": "medium",
+          "title": "SQL injection risk in search query"
+        },
+        {
+          "id": "JOKE-003",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 141,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Bulk create silently skips invalid entries"
+        },
+        {
+          "id": "JOKE-004",
+          "file": "apps/backend/src/dad-jokes/dad-jokes-quiz.controller.ts",
+          "line": 88,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Unvalidated count parameter in random jokes endpoint"
+        },
+        {
+          "id": "JOKE-005",
+          "file": "apps/backend/src/dad-jokes/dad-jokes-quiz.controller.ts",
+          "line": 95,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Unvalidated count parameter in mixed jokes endpoint"
+        },
+        {
+          "id": "JOKE-006",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 381,
+          "type": "validation",
+          "severity": "medium",
+          "title": "No validation on level parameter"
+        },
+        {
+          "id": "JOKE-007",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.controller.ts",
+          "line": 123,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Update endpoint accepts Partial DTO without validation"
+        },
+        {
+          "id": "JOKE-008",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 415,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Bulk quiz create silently skips invalid entries"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "JOKE-009",
+          "file": "apps/backend/src/dad-jokes/dad-jokes-stats.util.ts",
+          "line": 28,
+          "type": "error-handling",
+          "severity": "low",
+          "title": "No error handling for database count operations"
+        },
+        {
+          "id": "JOKE-010",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.service.ts",
+          "line": 53,
+          "type": "validation",
+          "severity": "low",
+          "title": "Missing pagination limit validation"
+        },
+        {
+          "id": "JOKE-011",
+          "file": "apps/backend/src/dad-jokes/dad-jokes.controller.ts",
+          "line": 27,
+          "type": "quality",
+          "severity": "low",
+          "title": "Unused import ApiParam"
+        },
+        {
+          "id": "JOKE-012",
+          "file": "apps/backend/src/dad-jokes/dad-jokes-quiz.controller.ts",
+          "line": 13,
+          "type": "quality",
+          "severity": "low",
+          "title": "Unused import ApiParam"
+        }
+      ]
+    },
+    "image_riddles": {
+      "feature_name": "Image Riddles Module",
+      "issue_count": 10,
+      "critical_issues": [
+        {
+          "id": "IMG-001",
+          "file": "apps/backend/src/image-riddles/image-riddles-update.helper.ts",
+          "line": 96,
+          "type": "error-handling",
+          "severity": "critical",
+          "title": "Missing undefined check before array access",
+          "description": "The processActionOptions function does not check if actionOptions is undefined before accessing .length property."
+        }
+      ],
+      "high_issues": [
+        {
+          "id": "IMG-002",
+          "file": "apps/backend/src/image-riddles/image-riddles.service.ts",
+          "line": 214,
+          "type": "security",
+          "severity": "high",
+          "title": "SQL Injection vulnerability in search query"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "IMG-003",
+          "file": "apps/backend/src/image-riddles/image-riddles.service.ts",
+          "line": 289,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Silent failure in bulk create for invalid categories"
+        },
+        {
+          "id": "IMG-004",
+          "file": "apps/backend/src/image-riddles/image-riddles-update.helper.ts",
+          "line": 78,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Missing validation for empty string categoryId"
+        },
+        {
+          "id": "IMG-005",
+          "file": "apps/backend/src/image-riddles/image-riddles.service.ts",
+          "line": 413,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Inefficient multiple database queries for stats"
+        },
+        {
+          "id": "IMG-006",
+          "file": "apps/backend/src/image-riddles/image-riddles.controller.ts",
+          "line": 134,
+          "type": "validation",
+          "severity": "medium",
+          "title": "No validation for empty bulk create array"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "IMG-007",
+          "file": "apps/backend/src/image-riddles/image-riddles.service.ts",
+          "line": 163,
+          "type": "performance",
+          "severity": "low",
+          "title": "Non-deterministic random query performance issues"
+        },
+        {
+          "id": "IMG-008",
+          "file": "apps/backend/src/image-riddles/entities/image-riddle.entity.ts",
+          "line": 82,
+          "type": "validation",
+          "severity": "low",
+          "title": "No database-level constraint for actionOptions uniqueness"
+        },
+        {
+          "id": "IMG-009",
+          "file": "apps/backend/src/image-riddles/image-riddles-update.helper.ts",
+          "line": 30,
+          "type": "validation",
+          "severity": "low",
+          "title": "No input validation on imageUrl format"
+        },
+        {
+          "id": "IMG-010",
+          "file": "apps/backend/src/image-riddles/image-riddles.service.ts",
+          "line": 269,
+          "type": "error-handling",
+          "severity": "low",
+          "title": "Generic Error thrown instead of HTTP exception"
+        }
+      ]
+    },
+    "quiz": {
+      "feature_name": "Quiz Module",
+      "issue_count": 10,
+      "high_issues": [
+        {
+          "id": "QUIZ-001",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 169,
+          "type": "performance",
+          "severity": "high",
+          "title": "N+1 query problem in bulk create"
+        },
+        {
+          "id": "QUIZ-002",
+          "file": "apps/backend/src/quiz/quiz.controller.ts",
+          "line": 178,
+          "type": "validation",
+          "severity": "high",
+          "title": "Missing validation for bulk create array size"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "QUIZ-003",
+          "file": "apps/backend/src/quiz/quiz.controller.ts",
+          "line": 38,
+          "type": "security",
+          "severity": "medium",
+          "title": "Unprotected GET endpoints without authentication"
+        },
+        {
+          "id": "QUIZ-004",
+          "file": "apps/backend/src/quiz/quiz.controller.ts",
+          "line": 140,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Route parameter conflict in questions endpoint"
+        },
+        {
+          "id": "QUIZ-005",
+          "file": "apps/backend/src/quiz/quiz.controller.ts",
+          "line": 155,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Missing input validation for count parameter"
+        },
+        {
+          "id": "QUIZ-006",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 169,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Silent failure on invalid chapter in bulk create"
+        },
+        {
+          "id": "QUIZ-007",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 33,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Missing pagination on findAllSubjects"
+        },
+        {
+          "id": "QUIZ-008",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 135,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Database-specific RANDOM() function"
+        },
+        {
+          "id": "QUIZ-009",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 154,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Potential field mapping error"
+        },
+        {
+          "id": "QUIZ-010",
+          "file": "apps/backend/src/quiz/quiz.service.ts",
+          "line": 190,
+          "type": "validation",
+          "severity": "medium",
+          "title": "Missing validation for empty string values in update"
+        }
+      ]
+    },
+    "frontend_admin": {
+      "feature_name": "Frontend - Admin Components",
+      "issue_count": 14,
+      "high_issues": [
+        {
+          "id": "FE-ADM-001",
+          "file": "apps/frontend/src/app/admin/page.tsx",
+          "line": 444,
+          "type": "types",
+          "severity": "high",
+          "title": "Unsafe type assertion for potentially null value"
+        },
+        {
+          "id": "FE-ADM-002",
+          "file": "apps/frontend/src/app/admin/page.tsx",
+          "line": 1069,
+          "type": "logic",
+          "severity": "high",
+          "title": "Hook defined after component usage can cause errors"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "FE-ADM-003",
+          "file": "apps/frontend/src/app/admin/page.tsx",
+          "line": 258,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Non-unique ID generation using Date.now()"
+        },
+        {
+          "id": "FE-ADM-004",
+          "file": "apps/frontend/src/app/admin/components/ImageRiddlesAdminSection.tsx",
+          "line": 387,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Unmemoized filter calculations causing unnecessary re-renders"
+        },
+        {
+          "id": "FE-ADM-005",
+          "file": "apps/frontend/src/app/admin/components/ImageRiddlesAdminSection.tsx",
+          "line": 837,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Using img tag instead of Next.js Image component"
+        },
+        {
+          "id": "FE-ADM-006",
+          "file": "apps/frontend/src/app/admin/components/ImageRiddlesAdminSection.tsx",
+          "line": 453,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Missing FileReader error handling"
+        },
+        {
+          "id": "FE-ADM-007",
+          "file": "apps/frontend/src/app/admin/components/JokesSection.tsx",
+          "line": 139,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Missing FileReader error handling"
+        },
+        {
+          "id": "FE-ADM-008",
+          "file": "apps/frontend/src/app/admin/components/JokesSection.tsx",
+          "line": 73,
+          "type": "types",
+          "severity": "medium",
+          "title": "Unsafe type assertion in filter operation"
+        },
+        {
+          "id": "FE-ADM-009",
+          "file": "apps/frontend/src/app/admin/components/QuestionManagementSection.tsx",
+          "line": 120,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Unmemoized filtered questions calculation"
+        },
+        {
+          "id": "FE-ADM-010",
+          "file": "apps/frontend/src/app/admin/components/QuestionManagementSection.tsx",
+          "line": 337,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Missing FileReader error handling"
+        },
+        {
+          "id": "FE-ADM-011",
+          "file": "apps/frontend/src/app/admin/components/RiddlesSection.tsx",
+          "line": 120,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Unmemoized filtered riddles calculation"
+        },
+        {
+          "id": "FE-ADM-012",
+          "file": "apps/frontend/src/app/admin/components/RiddlesSection.tsx",
+          "line": 198,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Missing FileReader error handling"
+        },
+        {
+          "id": "FE-ADM-013",
+          "file": "apps/frontend/src/app/admin/components/SettingsSection.tsx",
+          "line": 80,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Generic error handling without specific messages"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "FE-ADM-014",
+          "file": "apps/frontend/src/app/admin/components/ImageRiddlesAdminSection.tsx",
+          "line": 1237,
+          "type": "logic",
+          "severity": "low",
+          "title": "Button without onClick handler"
+        }
+      ]
+    },
+    "frontend_pages": {
+      "feature_name": "Frontend - Pages",
+      "issue_count": 12,
+      "high_issues": [
+        {
+          "id": "FE-PAGE-001",
+          "file": "apps/frontend/src/app/riddles/page.tsx",
+          "line": 196,
+          "type": "logic",
+          "severity": "high",
+          "title": "Unsafe array indexing with charCodeAt calculation"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "FE-PAGE-002",
+          "file": "apps/frontend/src/app/riddles/page.tsx",
+          "line": 47,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "LocalStorage access without try-catch"
+        },
+        {
+          "id": "FE-PAGE-003",
+          "file": "apps/frontend/src/app/jokes/page.tsx",
+          "line": 48,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "LocalStorage access without try-catch"
+        },
+        {
+          "id": "FE-PAGE-004",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 99,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Incomplete/corrupted base64 audio data"
+        },
+        {
+          "id": "FE-PAGE-005",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 837,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Using native img instead of Next.js Image"
+        },
+        {
+          "id": "FE-PAGE-006",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 907,
+          "type": "performance",
+          "severity": "medium",
+          "title": "Using native img without dimensions in modal"
+        },
+        {
+          "id": "FE-PAGE-007",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 570,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "LocalStorage access without error handling in state initializer"
+        },
+        {
+          "id": "FE-PAGE-008",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 93,
+          "type": "memory",
+          "severity": "medium",
+          "title": "Audio element not cleaned up on unmount"
+        },
+        {
+          "id": "FE-PAGE-009",
+          "file": "apps/frontend/src/app/quiz/page.tsx",
+          "line": 212,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Buttons without type=\"button\" or onClick handlers"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "FE-PAGE-010",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 538,
+          "type": "quality",
+          "severity": "low",
+          "title": "Using alert() for user feedback"
+        },
+        {
+          "id": "FE-PAGE-011",
+          "file": "apps/frontend/src/app/image-riddles/page.tsx",
+          "line": 147,
+          "type": "error-handling",
+          "severity": "low",
+          "title": "Unhandled promise rejection in audio play"
+        },
+        {
+          "id": "FE-PAGE-012",
+          "file": "apps/frontend/src/app/quiz/page.tsx",
+          "line": 66,
+          "type": "security",
+          "severity": "low",
+          "title": "Potential URL injection in query parameters"
+        }
+      ]
+    },
+    "frontend_components": {
+      "feature_name": "Frontend - Components",
+      "issue_count": 9,
+      "high_issues": [
+        {
+          "id": "FE-COMP-001",
+          "file": "apps/frontend/src/components/ui/BulkActionToolbar.tsx",
+          "line": 94,
+          "type": "logic",
+          "severity": "high",
+          "title": "Potential undefined Icon component access"
+        },
+        {
+          "id": "FE-COMP-002",
+          "file": "apps/frontend/src/components/ui/BulkActionToolbar.tsx",
+          "line": 249,
+          "type": "logic",
+          "severity": "high",
+          "title": "Potential undefined Icon component access"
+        },
+        {
+          "id": "FE-COMP-003",
+          "file": "apps/frontend/src/components/ui/BulkActionToolbar.tsx",
+          "line": 334,
+          "type": "error-handling",
+          "severity": "high",
+          "title": "Unhandled promise rejection in handleConfirm"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "FE-COMP-004",
+          "file": "apps/frontend/src/components/ui/FileUploader.tsx",
+          "line": 50,
+          "type": "security",
+          "severity": "medium",
+          "title": "Overly permissive MIME type validation"
+        },
+        {
+          "id": "FE-COMP-005",
+          "file": "apps/frontend/src/contexts/ThemeContext.tsx",
+          "line": 37,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Unprotected localStorage access"
+        },
+        {
+          "id": "FE-COMP-006",
+          "file": "apps/frontend/src/contexts/ThemeContext.tsx",
+          "line": 87,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Unprotected localStorage.setItem in setTheme"
+        },
+        {
+          "id": "FE-COMP-007",
+          "file": "apps/frontend/src/contexts/ThemeContext.tsx",
+          "line": 94,
+          "type": "error-handling",
+          "severity": "medium",
+          "title": "Unprotected localStorage.setItem in toggleTheme"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "FE-COMP-008",
+          "file": "apps/frontend/src/components/ui/FileUploader.tsx",
+          "line": 141,
+          "type": "quality",
+          "severity": "low",
+          "title": "Missing event prevention on keyboard handler"
+        },
+        {
+          "id": "FE-COMP-009",
+          "file": "apps/frontend/src/components/ui/ToastContainer.tsx",
+          "line": 84,
+          "type": "types",
+          "severity": "low",
+          "title": "Non-null assertion on potentially undefined icon style"
+        }
+      ]
+    },
+    "frontend_hooks": {
+      "feature_name": "Frontend - Hooks & Services",
+      "issue_count": 10,
+      "high_issues": [
+        {
+          "id": "FE-HOOK-001",
+          "file": "apps/frontend/src/services/settings.service.ts",
+          "line": 74,
+          "type": "logic",
+          "severity": "high",
+          "title": "Shallow merge causes data loss for nested objects"
+        }
+      ],
+      "medium_issues": [
+        {
+          "id": "FE-HOOK-002",
+          "file": "apps/frontend/src/hooks/useBulkActions.ts",
+          "line": 161,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Stale closure in retry function"
+        },
+        {
+          "id": "FE-HOOK-003",
+          "file": "apps/frontend/src/hooks/useStatusCounts.ts",
+          "line": 91,
+          "type": "types",
+          "severity": "medium",
+          "title": "Incorrect NodeJS type in browser environment"
+        },
+        {
+          "id": "FE-HOOK-004",
+          "file": "apps/frontend/src/hooks/useStatusCounts.ts",
+          "line": 147,
+          "type": "logic",
+          "severity": "medium",
+          "title": "isStale remains true on fetch failure"
+        },
+        {
+          "id": "FE-HOOK-005",
+          "file": "apps/frontend/src/services/settings.service.ts",
+          "line": 68,
+          "type": "security",
+          "severity": "medium",
+          "title": "No input validation on settings updates"
+        },
+        {
+          "id": "FE-HOOK-006",
+          "file": "apps/frontend/src/lib/utils.ts",
+          "line": 41,
+          "type": "security",
+          "severity": "medium",
+          "title": "Predictable ID generation using Math.random"
+        },
+        {
+          "id": "FE-HOOK-007",
+          "file": "apps/frontend/src/lib/utils.ts",
+          "line": 74,
+          "type": "memory",
+          "severity": "medium",
+          "title": "Potential memory leak in debounce function"
+        },
+        {
+          "id": "FE-HOOK-008",
+          "file": "apps/frontend/src/lib/utils.ts",
+          "line": 129,
+          "type": "logic",
+          "severity": "medium",
+          "title": "Negative slice index when maxLength is too small"
+        }
+      ],
+      "low_issues": [
+        {
+          "id": "FE-HOOK-009",
+          "file": "apps/frontend/src/hooks/useBulkActions.ts",
+          "line": 204,
+          "type": "quality",
+          "severity": "low",
+          "title": "Typo in success message (Succesfully)"
+        },
+        {
+          "id": "FE-HOOK-010",
+          "file": "apps/frontend/src/lib/utils.ts",
+          "line": 41,
+          "type": "quality",
+          "severity": "low",
+          "title": "Deprecated substr() method usage"
+        }
+      ]
+    }
+  },
+  "priority_fixes": {
+    "immediate_action": [
+      {
+        "id": "AUTH-001",
+        "issue": "Remove hardcoded JWT secret fallback",
+        "risk": "Token forgery, complete auth bypass",
+        "fix_time": "24 hours"
+      },
+      {
+        "id": "AUTH-002",
+        "issue": "Add authentication to users endpoints",
+        "risk": "Data breach, user enumeration",
+        "fix_time": "24 hours"
+      },
+      {
+        "id": "SET-001",
+        "issue": "Enable authentication on settings endpoints",
+        "risk": "System compromise, configuration tampering",
+        "fix_time": "24 hours"
+      },
+      {
+        "id": "DB-001",
+        "issue": "Remove hardcoded database credentials",
+        "risk": "Database compromise",
+        "fix_time": "24 hours"
+      }
+    ],
+    "high_priority": [
+      {
+        "id": "RID-001",
+        "issue": "Fix status filter overwrite bugs",
+        "risk": "Exposing unpublished/draft content",
+        "fix_time": "1 week"
+      },
+      {
+        "id": "AUTH-003",
+        "issue": "Add JWT token expiration",
+        "risk": "Permanent token validity if leaked",
+        "fix_time": "1 week"
+      },
+      {
+        "id": "RID-002",
+        "issue": "Add transactions to bulk operations",
+        "risk": "Database inconsistency",
+        "fix_time": "1 week"
+      },
+      {
+        "id": "QUIZ-001",
+        "issue": "Fix N+1 query problems",
+        "risk": "Performance degradation",
+        "fix_time": "1 week"
+      }
+    ]
+  },
+  "false_positives": [
+    {
+      "issue": "User entity import unused in auth.service.ts",
+      "reason": "Actually used as type reference in JSDoc and return types"
+    },
+    {
+      "issue": "Async/await redundancy in jwt.strategy.ts",
+      "reason": "While technically redundant, improves readability"
+    }
+  ]
+}

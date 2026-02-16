@@ -1,25 +1,39 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { 
+  FlaskConical, 
+  Calculator, 
+  Scroll, 
+  Globe, 
+  BookOpen, 
+  Laptop, 
+  LayoutDashboard, 
+  Gamepad2,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Smile,
+  Puzzle,
+  Image as ImageIcon,
+  Settings,
+  Users,
+  Home
+} from 'lucide-react';
 
 // Types
 
 // Status Dashboard & Bulk Actions
-import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
-import { FileUploader } from '@/components/ui/FileUploader';
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection } from './components';
-import { StatusDashboard } from '@/components/ui/StatusDashboard';
+import { QuizSidebar } from './components/QuizSidebar';
 // StatusService moved to hook usage
 // import { StatusService } from '@/services/status.service';
 import {
-  initialJokes as libInitialJokes,
-  initialRiddles as libInitialRiddles,
-  initialImageRiddles as libInitialImageRiddles
+  initialJokes as libInitialJokes
 } from '@/lib/initial-data';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
-import type { StatusFilter, BulkActionType } from '@/types/status.types';
-import { parseCSVLine } from './utils';
+
 
 type Question = {
   id: number;
@@ -39,7 +53,8 @@ type Subject = {
   slug: string;
   name: string;
   emoji: string;
-  category: 'academic' | 'professional';
+  category: 'academic' | 'professional' | 'entertainment';
+  order?: number;
 };
 
 type MenuSection = 'dashboard' | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology' | 'jokes' | 'riddles' | 'image-riddles' | 'users' | 'settings';
@@ -61,15 +76,17 @@ type Joke = {
   updatedAt?: string;
 };
 
-/** Joke Category Type */
-type JokeCategory = {
-  id: number;
-  name: string;
-  emoji: string;
-  description?: string;
-};
+/** Joke Category Type - Available for future use */
+// type JokeCategory = {
+//   id: number;
+//   name: string;
+//   emoji: string;
+//   description?: string;
+// };
 
-/** Riddle Type - Enterprise Grade */
+/*
+ * Riddle Type - Enterprise Grade - Available for future use
+ * Commented out as it's not currently used
 type Riddle = {
   id: number;
   question: string;
@@ -83,24 +100,25 @@ type Riddle = {
   createdAt?: string;
   updatedAt?: string;
 };
+*/
 
-/** Image Riddle Type - Enterprise Grade */
-type ImageRiddle = {
-  id: string;
-  title: string;
-  imageUrl: string;
-  altText?: string;
-  answer: string;
-  hint: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  category: { name: string; emoji: string };
-  status: ContentStatus;
-  timerSeconds?: number | null;
-  showTimer: boolean;
-  isActive: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-};
+/** Image Riddle Type - Enterprise Grade - Available for future use */
+// type ImageRiddle = {
+//   id: string;
+//   title: string;
+//   imageUrl: string;
+//   altText?: string;
+//   answer: string;
+//   hint: string;
+//   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+//   category: { name: string; emoji: string };
+//   status: ContentStatus;
+//   timerSeconds?: number | null;
+//   showTimer: boolean;
+//   isActive: boolean;
+//   createdAt?: string;
+//   updatedAt?: string;
+// };
 
 
 
@@ -108,6 +126,7 @@ type ImageRiddle = {
 // ENTERPRISE-GRADE VALIDATION RESULTS
 // ============================================================================
 
+/*
 type ValidationResult<T> = {
   isValid: boolean;
   data: T | null;
@@ -121,11 +140,13 @@ type ImportResult<T> = {
   failed: { row: number; error: string; data: unknown }[];
   total: number;
 };
+*/
 
 // ============================================================================
 // ENTERPRISE-GRADE IMPORT/EXPORT CONFIG
 // ============================================================================
 
+/*
 type ImportExportConfig<T> = {
   entityName: string;
   filePrefix: string;
@@ -137,6 +158,7 @@ type ImportExportConfig<T> = {
     maxLength?: Record<string, number>;
   };
 };
+*/
 
 // Initial Data
 const initialQuestions: Record<string, Question[]> = {
@@ -153,13 +175,13 @@ const initialQuestions: Record<string, Question[]> = {
     { id: 10, question: 'What is the largest organ in the human body?', optionA: 'Heart', optionB: 'Liver', optionC: 'Skin', optionD: 'Brain', correctAnswer: 'C', level: 'easy', chapter: 'Human Anatomy' },
   ],
   math: [
-    { id: 1, question: 'What is 15 Ã— 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication' },
+    { id: 1, question: 'What is 15 x 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication' },
     { id: 2, question: 'What is the square root of 144?', optionA: '10', optionB: '11', optionC: '12', optionD: '13', correctAnswer: 'C', level: 'easy', chapter: 'Square Roots' },
-    { id: 3, question: 'What is the value of Ï€ (pi) to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants' },
+    { id: 3, question: 'What is the value of pi to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants' },
     { id: 4, question: 'Solve: 2x + 5 = 15', optionA: 'x = 3', optionB: 'x = 4', optionC: 'x = 5', optionD: 'x = 6', correctAnswer: 'C', level: 'medium', chapter: 'Algebra' },
     { id: 5, question: 'What is 25% of 200?', optionA: '25', optionB: '50', optionC: '75', optionD: '100', correctAnswer: 'B', level: 'easy', chapter: 'Percentages' },
-    { id: 6, question: 'What is the sum of angles in a triangle?', optionA: '90Â°', optionB: '180Â°', optionC: '270Â°', optionD: '360Â°', correctAnswer: 'B', level: 'easy', chapter: 'Geometry' },
-    { id: 7, question: 'What is 7Â² + 3Â²?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents' },
+    { id: 6, question: 'What is the sum of angles in a triangle?', optionA: '90 deg', optionB: '180 deg', optionC: '270 deg', optionD: '360 deg', correctAnswer: 'B', level: 'easy', chapter: 'Geometry' },
+    { id: 7, question: 'What is 7^2 + 3^2?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents' },
     { id: 8, question: 'Simplify: 3/4 + 1/4', optionA: '1/2', optionB: '3/8', optionC: '1', optionD: '4/8', correctAnswer: 'C', level: 'easy', chapter: 'Fractions' },
   ],
   history: [
@@ -196,27 +218,94 @@ const initialQuestions: Record<string, Question[]> = {
   ],
 };
 
+// Icon mapping for subjects
+const subjectIcons: Record<string, React.ReactNode> = {
+  science: <FlaskConical className="w-5 h-5" />,
+  math: <Calculator className="w-5 h-5" />,
+  history: <Scroll className="w-5 h-5" />,
+  geography: <Globe className="w-5 h-5" />,
+  english: <BookOpen className="w-5 h-5" />,
+  technology: <Laptop className="w-5 h-5" />,
+};
+
 const initialSubjects: Subject[] = [
-  { id: 1, slug: 'science', name: 'Science', emoji: 'ðŸ”¬', category: 'academic' },
-  { id: 2, slug: 'math', name: 'Math', emoji: 'ðŸ”¢', category: 'academic' },
-  { id: 3, slug: 'history', name: 'History', emoji: 'ðŸ“œ', category: 'academic' },
-  { id: 4, slug: 'geography', name: 'Geography', emoji: 'ðŸŒ', category: 'academic' },
-  { id: 5, slug: 'english', name: 'English', emoji: 'ðŸ“–', category: 'academic' },
-  { id: 6, slug: 'technology', name: 'Technology', emoji: 'ðŸ’»', category: 'professional' },
+  { id: 1, slug: 'science', name: 'Science', emoji: 'science', category: 'academic' },
+  { id: 2, slug: 'math', name: 'Math', emoji: 'math', category: 'academic' },
+  { id: 3, slug: 'history', name: 'History', emoji: 'history', category: 'academic' },
+  { id: 4, slug: 'geography', name: 'Geography', emoji: 'geography', category: 'academic' },
+  { id: 5, slug: 'english', name: 'English', emoji: 'english', category: 'academic' },
+  { id: 6, slug: 'technology', name: 'Technology', emoji: 'technology', category: 'professional' },
 ];
 
+// Storage key for persisting active section
+const ACTIVE_SECTION_KEY = 'aiquiz:active-section';
+
 export default function AdminPage(): JSX.Element {
+  // Initialize with default, then load from localStorage in useEffect
   const [activeSection, setActiveSection] = useState<MenuSection>('dashboard');
+  const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [quizModuleExpanded, setQuizModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
+  // Load active section from localStorage after hydration (to avoid SSR mismatch)
+  useEffect(() => {
+    const saved = localStorage.getItem(ACTIVE_SECTION_KEY);
+    if (saved) {
+      setActiveSection(saved as MenuSection);
+    }
+    setIsHydrated(true);
+  }, []);
+
+  // Persist active section to localStorage whenever it changes
+  useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem(ACTIVE_SECTION_KEY, activeSection);
+    }
+  }, [activeSection, isHydrated]);
+
+  // Helper to fix corrupted emojis in subjects from localStorage
+  const sanitizeSubjects = (storedSubjects: Subject[]): Subject[] => {
+    // Valid icon keys that we accept
+    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home'];
+    
+    return storedSubjects.map(subject => {
+      // If emoji is not a valid icon key, it's corrupted - replace with slug
+      if (!validIconKeys.includes(subject.emoji)) {
+        // Map subject slugs to appropriate icons
+        const slugToIcon: Record<string, string> = {
+          'science': 'science',
+          'math': 'math', 
+          'history': 'history',
+          'geography': 'geography',
+          'english': 'english',
+          'technology': 'technology',
+        };
+        return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
+      }
+      return subject;
+    });
+  };
+
   // Dynamic data state
-  const [subjects, setSubjects] = useState<Subject[]>(() => getItem(STORAGE_KEYS.SUBJECTS, initialSubjects));
+  const [subjects, setSubjects] = useState<Subject[]>(() => {
+    const stored = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
+    return sanitizeSubjects(stored);
+  });
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() => getItem(STORAGE_KEYS.QUESTIONS, initialQuestions));
 
   // Jokes state (shared with JokesSection component)
   const { allJokes, setAllJokes } = useGlobalJokes();
+
+  // One-time migration: Clear corrupted localStorage data on first load
+  useEffect(() => {
+    const MIGRATION_KEY = 'aiquiz:emoji-migration-v1';
+    if (typeof window !== 'undefined' && !localStorage.getItem(MIGRATION_KEY)) {
+      // Force reset subjects to fix corrupted emojis
+      setSubjects(initialSubjects);
+      localStorage.setItem(MIGRATION_KEY, 'done');
+    }
+  }, []);
 
   // Persistence effects
   useEffect(() => {
@@ -231,6 +320,7 @@ export default function AdminPage(): JSX.Element {
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
   const [showAddChapterModal, setShowAddChapterModal] = useState(false);
   const [selectedSubjectForChapter, setSelectedSubjectForChapter] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<'academic' | 'professional' | 'entertainment'>('academic');
 
   const getSubjectFromSection = (section: MenuSection): Subject | null => {
     return subjects.find(s => s.slug === section) ?? null;
@@ -273,6 +363,18 @@ export default function AdminPage(): JSX.Element {
     setShowAddChapterModal(false);
   };
 
+  // Show loading state until hydration is complete to avoid section flash
+  if (!isHydrated) {
+    return (
+      <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950 items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
       {/* Sidebar */}
@@ -280,12 +382,12 @@ export default function AdminPage(): JSX.Element {
         {/* Logo */}
         <div className="border-b border-gray-800 p-4">
           <div className="flex items-center justify-between">
-            {sidebarOpen && <h1 className="text-xl font-bold">ðŸŽ® Admin Panel</h1>}
+            {sidebarOpen && <h1 className="text-xl font-bold flex items-center gap-2"><Gamepad2 className="w-5 h-5" /> Admin Panel</h1>}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="rounded-lg p-2 hover:bg-gray-800"
             >
-              {sidebarOpen ? 'â—€' : 'â–¶'}
+              {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -294,39 +396,27 @@ export default function AdminPage(): JSX.Element {
         <nav className="flex-1 overflow-y-auto py-2">
           {/* Dashboard */}
           <MenuItem
-            emoji="ðŸ“Š"
+            icon={<LayoutDashboard className="w-5 h-5" />}
             label="Dashboard"
             active={activeSection === 'dashboard'}
             expanded={sidebarOpen}
             onClick={() => setActiveSection('dashboard')}
           />
 
-          {/* Quiz Module Header */}
-          <button
-            onClick={() => setQuizModuleExpanded(!quizModuleExpanded)}
-            className="w-full flex items-center justify-between px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:bg-gray-800 transition-colors"
-          >
-            {sidebarOpen ? (
-              <>
-                <span>ðŸ“š Quiz Module</span>
-                <span className={`transition-transform ${quizModuleExpanded ? 'rotate-180' : ''}`}>â–¼</span>
-              </>
-            ) : (
-              <span className="text-lg">ðŸ“š</span>
-            )}
-          </button>
-
-          {/* Subject List - Dynamic */}
-          {quizModuleExpanded && subjects.map((subject) => (
-            <MenuItem
-              key={subject.id}
-              emoji={subject.emoji}
-              label={subject.name}
-              active={activeSection === subject.slug as MenuSection}
-              expanded={sidebarOpen}
-              onClick={() => setActiveSection(subject.slug as MenuSection)}
-            />
-          ))}
+          {/* Quiz Module with Categories */}
+          <QuizSidebar
+            subjects={subjects}
+            activeSection={activeSection}
+            sidebarOpen={sidebarOpen}
+            quizModuleExpanded={quizModuleExpanded}
+            onToggleExpand={() => setQuizModuleExpanded(!quizModuleExpanded)}
+            onSelectSubject={(slug) => setActiveSection(slug as MenuSection)}
+            onAddSubject={(category) => {
+              setSelectedCategory(category);
+              setShowAddSubjectModal(true);
+            }}
+            onReorderSubjects={setSubjects}
+          />
 
           {/* Other Modules Header */}
           <button
@@ -335,11 +425,11 @@ export default function AdminPage(): JSX.Element {
           >
             {sidebarOpen ? (
               <>
-                <span>ðŸŽ® Other Modules</span>
-                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}>â–¼</span>
+                <span className="flex items-center gap-2"><Puzzle className="w-4 h-4" /> Other Modules</span>
+                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}><ChevronDown className="w-3 h-3" /></span>
               </>
             ) : (
-              <span className="text-lg">ðŸŽ®</span>
+              <span className="flex items-center justify-center w-5 h-5"><Puzzle className="w-4 h-4" /></span>
             )}
           </button>
 
@@ -347,21 +437,21 @@ export default function AdminPage(): JSX.Element {
           {otherModulesExpanded && (
             <>
               <MenuItem
-                emoji="ðŸ˜‚"
+                icon={<Smile className="w-5 h-5" />}
                 label="Dad Jokes"
                 active={activeSection === 'jokes'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('jokes')}
               />
               <MenuItem
-                emoji="ðŸŽ­"
+                icon={<Puzzle className="w-5 h-5" />}
                 label="Riddles"
                 active={activeSection === 'riddles'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('riddles')}
               />
               <MenuItem
-                emoji="ðŸ–¼ï¸"
+                icon={<ImageIcon className="w-5 h-5" />}
                 label="Image Riddles"
                 active={activeSection === 'image-riddles'}
                 expanded={sidebarOpen}
@@ -372,19 +462,19 @@ export default function AdminPage(): JSX.Element {
 
           {/* System */}
           {sidebarOpen && (
-            <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              âš™ï¸ System
+            <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <Settings className="w-3 h-3" /> System
             </div>
           )}
           <MenuItem
-            emoji="ðŸ‘¥"
+            icon={<Users className="w-5 h-5" />}
             label="Users"
             active={activeSection === 'users'}
             expanded={sidebarOpen}
             onClick={() => setActiveSection('users')}
           />
           <MenuItem
-            emoji="âš™ï¸"
+            icon={<Settings className="w-5 h-5" />}
             label="Settings"
             active={activeSection === 'settings'}
             expanded={sidebarOpen}
@@ -398,7 +488,7 @@ export default function AdminPage(): JSX.Element {
             href="/"
             className="flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 text-gray-300 transition-colors hover:bg-gray-700"
           >
-            <span>ðŸ </span>
+            <span><Home className="w-5 h-5" /></span>
             {sidebarOpen && <span>Back to Site</span>}
           </Link>
         </div>
@@ -409,15 +499,18 @@ export default function AdminPage(): JSX.Element {
         {/* Header */}
         <header className="bg-white shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
           <div className="flex items-center justify-between px-6 py-4">
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100">
-              {activeSection === 'dashboard' && 'ðŸ“Š Dashboard'}
-              {activeSection === 'jokes' && 'ðŸ˜‚ Dad Jokes Management'}
-              {activeSection === 'riddles' && 'ðŸŽ­ Riddles Management'}
-              {activeSection === 'image-riddles' && 'ðŸ–¼ï¸ Image Riddles Management'}
-              {activeSection === 'users' && 'ðŸ‘¥ User Management'}
-              {activeSection === 'settings' && 'âš™ï¸ Settings'}
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
+              {activeSection === 'dashboard' && <><LayoutDashboard className="w-6 h-6" /> Dashboard</>}
+              {activeSection === 'jokes' && <><Smile className="w-6 h-6" /> Dad Jokes Management</>}
+              {activeSection === 'riddles' && <><Puzzle className="w-6 h-6" /> Riddles Management</>}
+              {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
+              {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
+              {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
               {subjects.some(s => s.slug === activeSection) && (
-                `${subjects.find(s => s.slug === activeSection)?.emoji ?? ''} ${subjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management`
+                <>
+                  {subjectIcons[subjects.find(s => s.slug === activeSection)?.emoji || ''] || <BookOpen className="w-6 h-6" />}
+                  <span>{subjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
+                </>
               )}
             </h2>
             <div className="flex items-center gap-4">
@@ -455,6 +548,12 @@ export default function AdminPage(): JSX.Element {
                   [slug]: [...(prev[slug] ?? []), ...newQuestions],
                 }));
               }}
+              onQuestionsUpdate={(slug, updatedQuestions) => {
+                setAllQuestions(prev => ({
+                  ...prev,
+                  [slug]: updatedQuestions,
+                }));
+              }}
             />
           )}
           {activeSection === 'jokes' && <JokesSection allJokes={allJokes} setAllJokes={setAllJokes} />}
@@ -471,6 +570,7 @@ export default function AdminPage(): JSX.Element {
           onClose={() => setShowAddSubjectModal(false)}
           onAdd={handleAddSubject}
           existingSlugs={subjects.map(s => s.slug)}
+          defaultCategory={selectedCategory}
         />
       )}
 
@@ -487,8 +587,8 @@ export default function AdminPage(): JSX.Element {
 }
 
 // Menu Item Component
-function MenuItem({ emoji, label, active, expanded, onClick }: {
-  emoji: string;
+function MenuItem({ icon, label, active, expanded, onClick }: {
+  icon: React.ReactNode;
   label: string;
   active: boolean;
   expanded: boolean;
@@ -500,21 +600,40 @@ function MenuItem({ emoji, label, active, expanded, onClick }: {
       className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
         }`}
     >
-      <span className="text-xl">{emoji}</span>
+      <span className="flex items-center justify-center w-5 h-5">{icon}</span>
       {expanded && <span>{label}</span>}
     </button>
   );
 }
 
+// Available icon options for subjects
+const iconOptions = [
+  { key: 'science', label: 'Science', icon: FlaskConical },
+  { key: 'math', label: 'Math', icon: Calculator },
+  { key: 'history', label: 'History', icon: Scroll },
+  { key: 'geography', label: 'Geography', icon: Globe },
+  { key: 'english', label: 'English', icon: BookOpen },
+  { key: 'technology', label: 'Technology', icon: Laptop },
+  { key: 'puzzle', label: 'Puzzle', icon: Puzzle },
+  { key: 'smile', label: 'Smile', icon: Smile },
+  { key: 'image', label: 'Image', icon: ImageIcon },
+  { key: 'settings', label: 'Settings', icon: Settings },
+  { key: 'users', label: 'Users', icon: Users },
+  { key: 'home', label: 'Home', icon: Home },
+];
+
 // Add Subject Modal
-function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
+function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'academic' }: {
   onClose: () => void;
   onAdd: (subject: Subject) => void;
   existingSlugs: string[];
+  defaultCategory?: 'academic' | 'professional' | 'entertainment';
 }): JSX.Element {
   const [name, setName] = useState('');
-  const [emoji, setEmoji] = useState('ðŸ“š');
-  const [category, setCategory] = useState<'academic' | 'professional'>('academic');
+  const [selectedIcon, setSelectedIcon] = useState('puzzle');
+  const [customEmoji, setCustomEmoji] = useState('');
+  const [useCustomEmoji, setUseCustomEmoji] = useState(false);
+  const [category, setCategory] = useState<'academic' | 'professional' | 'entertainment'>(defaultCategory);
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -534,7 +653,7 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
       id: Date.now(),
       slug,
       name: name.trim(),
-      emoji,
+      emoji: useCustomEmoji && customEmoji ? customEmoji : selectedIcon,
       category,
     });
   };
@@ -556,26 +675,77 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs }: {
             />
           </div>
           <div>
-            <label htmlFor="subjectEmoji" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Emoji</label>
-            <input
-              id="subjectEmoji"
-              type="text"
-              value={emoji}
-              onChange={(e) => setEmoji(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
-              placeholder="e.g., âš›ï¸"
-            />
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Select Icon</label>
+            
+            {/* Custom Emoji Input */}
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  type="checkbox"
+                  id="useCustomEmoji"
+                  checked={useCustomEmoji}
+                  onChange={(e) => setUseCustomEmoji(e.target.checked)}
+                  className="rounded border-gray-300"
+                />
+                <label htmlFor="useCustomEmoji" className="text-sm text-gray-600 dark:text-secondary-400">
+                  Use custom emoji
+                </label>
+              </div>
+              
+              {useCustomEmoji ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={customEmoji}
+                    onChange={(e) => setCustomEmoji(e.target.value)}
+                    placeholder="Paste any emoji here 🎨"
+                    className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
+                    maxLength={2}
+                  />
+                  {customEmoji && (
+                    <span className="text-2xl">{customEmoji}</span>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {iconOptions.map((opt) => {
+                    const IconComponent = opt.icon;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setSelectedIcon(opt.key)}
+                        className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-colors ${
+                          selectedIcon === opt.key
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                            : 'border-gray-200 dark:border-secondary-600 hover:border-gray-300 dark:hover:border-secondary-500'
+                        }`}
+                        title={opt.label}
+                      >
+                        <IconComponent className={`w-6 h-6 ${
+                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-400'
+                        }`} />
+                        <span className={`text-xs ${
+                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-secondary-500'
+                        }`}>{opt.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <label htmlFor="subjectCategory" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Category</label>
             <select
               id="subjectCategory"
               value={category}
-              onChange={(e) => setCategory(e.target.value as 'academic' | 'professional')}
+              onChange={(e) => setCategory(e.target.value as 'academic' | 'professional' | 'entertainment')}
               className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
             >
               <option value="academic">Academic</option>
-              <option value="professional">Professional</option>
+              <option value="professional">Professional & Life</option>
+              <option value="entertainment">Entertainment & Culture</option>
             </select>
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -685,8 +855,8 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
             className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow text-left"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-2xl">
-                {subject.emoji}
+              <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-white">
+                {subjectIcons[subject.emoji] || <BookOpen className="w-6 h-6" />}
               </div>
               <div>
                 <p className="font-semibold text-gray-800">{subject.name}</p>
@@ -700,8 +870,9 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
   );
 }
 
-// Download file helper
-function downloadFile(content: string, filename: string, type: string): void {
+/*
+// Download file helper - Prefixed with underscore as it's not currently used
+function _downloadFile(content: string, filename: string, type: string): void {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -712,15 +883,16 @@ function downloadFile(content: string, filename: string, type: string): void {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+*/
 
 // ============================================================================
 // ENTERPRISE-GRADE IMPORT/EXPORT UTILITIES
 // ============================================================================
 
-/** 
+/*
  * Enterprise-Grade CSV Validator
  * Validates CSV content against expected headers and structure
- */
+ * Commented out as it's not currently used
 function validateCSVStructure(csvText: string, expectedHeaders: string[]): ValidationResult<string[]> {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -761,12 +933,13 @@ function validateCSVStructure(csvText: string, expectedHeaders: string[]): Valid
     warnings
   };
 }
+*/
 
-/** 
+/*
  * Enterprise-Grade JSON Validator
  * Validates JSON content structure
- */
-function validateJSONStructure<T>(jsonText: string, rootKey?: string): ValidationResult<T[]> {
+ * Prefixed with underscore as it's not currently used
+function _validateJSONStructure<T>(jsonText: string, rootKey?: string): ValidationResult<T[]> {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -797,11 +970,12 @@ function validateJSONStructure<T>(jsonText: string, rootKey?: string): Validatio
     return { isValid: false, data: null, errors, warnings };
   }
 }
+*/
 
-/**
+/*
  * Enterprise-Grade Entity Validator
  * Validates entity data against configuration rules
- */
+ * Commented out as it's not currently used
 function validateEntity<T extends Record<string, unknown>>(
   entity: Partial<T>,
   config: ImportExportConfig<T>,
@@ -844,10 +1018,11 @@ function validateEntity<T extends Record<string, unknown>>(
 
   return { isValid: errors.length === 0, errors };
 }
+*/
 
-/**
+/*
  * Enterprise-Grade Generic CSV Exporter
- */
+ * Commented out as it's not currently used - available in utils/index.ts
 function exportToCSV<T extends Record<string, unknown>>(
   items: T[],
   config: ImportExportConfig<T>,
@@ -880,11 +1055,12 @@ function exportToCSV<T extends Record<string, unknown>>(
   csvContent += [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
   return csvContent;
 }
+*/
 
-/**
+/*
  * Enterprise-Grade Generic JSON Exporter
- */
-function exportToJSON<T>(
+ * Prefixed with underscore as it's not currently used
+function _exportToJSON<T>(
   items: T[],
   config: ImportExportConfig<T>,
   metadata?: Record<string, unknown>
@@ -901,10 +1077,11 @@ function exportToJSON<T>(
 
   return JSON.stringify(data, null, 2);
 }
+*/
 
-/**
+/*
  * Enterprise-Grade Generic CSV Importer
- */
+ * Commented out as it's not currently used - available in utils/index.ts
 function importFromCSV<T extends Record<string, unknown>>(
   csvText: string,
   config: ImportExportConfig<T>,
@@ -961,12 +1138,15 @@ function importFromCSV<T extends Record<string, unknown>>(
     total: imported.length + failed.length
   };
 }
+*/
 
 // ============================================================================
 // ENTITY-SPECIFIC CONFIGURATIONS
 // ============================================================================
 
-/** Joke Import/Export Config */
+/*
+ * Joke Import/Export Config
+ * Commented out as it's not currently used
 const jokeConfig: ImportExportConfig<Joke> = {
   entityName: 'Joke',
   filePrefix: 'jokes',
@@ -977,8 +1157,11 @@ const jokeConfig: ImportExportConfig<Joke> = {
     maxLength: { joke: 2000, category: 100 },
   },
 };
+*/
 
-/** Riddle Import/Export Config */
+/*
+ * Riddle Import/Export Config
+ * Commented out as it's not currently used
 const riddleConfig: ImportExportConfig<Riddle> = {
   entityName: 'Riddle',
   filePrefix: 'riddles',
@@ -993,26 +1176,29 @@ const riddleConfig: ImportExportConfig<Riddle> = {
     maxLength: { question: 1000, answer: 500, chapter: 200, hint: 500 },
   },
 };
+*/
 
 // ============================================================================
 // ENTITY-SPECIFIC EXPORTERS
 // ============================================================================
 
-function jokesToCSV(jokes: Joke[]): string {
+/*
+function _jokesToCSV(jokes: Joke[]): string {
   return exportToCSV(jokes, jokeConfig, { count: jokes.length.toString() });
 }
 
-function jokesToJSON(jokes: Joke[]): string {
-  return exportToJSON(jokes, jokeConfig, { count: jokes.length });
+function _jokesToJSON(jokes: Joke[]): string {
+  return _exportToJSON(jokes, jokeConfig, { count: jokes.length });
 }
 
-function riddlesToCSV(riddles: Riddle[]): string {
+function _riddlesToCSV(riddles: Riddle[]): string {
   return exportToCSV(riddles, riddleConfig, { count: riddles.length.toString() });
 }
 
-function riddlesToJSON(riddles: Riddle[]): string {
-  return exportToJSON(riddles, riddleConfig, { count: riddles.length });
+function _riddlesToJSON(riddles: Riddle[]): string {
+  return _exportToJSON(riddles, riddleConfig, { count: riddles.length });
 }
+*/
 
 
 
@@ -1020,7 +1206,8 @@ function riddlesToJSON(riddles: Riddle[]): string {
 // ENTITY-SPECIFIC IMPORTERS
 // ============================================================================
 
-function parseJokeCSV(csvText: string): ImportResult<Joke> {
+/*
+function _parseJokeCSV(csvText: string): ImportResult<Joke> {
   return importFromCSV(csvText, jokeConfig, (values, headers) => {
     const getValue = (_index: number, headerName: string): string => {
       const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
@@ -1034,8 +1221,10 @@ function parseJokeCSV(csvText: string): ImportResult<Joke> {
     };
   });
 }
+*/
 
-function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
+/*
+function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
   return importFromCSV(csvText, riddleConfig, (values, headers) => {
     const getValue = (_index: number, headerName: string): string => {
       const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
@@ -1061,6 +1250,7 @@ function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
     };
   });
 }
+*/
 
 // ============================================================================
 // GLOBAL JOKES STATE (shared with JokesSection component)
@@ -1153,5 +1343,4 @@ function UsersSection(): JSX.Element {
     </div>
   );
 }
-
 

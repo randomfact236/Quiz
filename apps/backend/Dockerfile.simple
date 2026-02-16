@@ -1,0 +1,24 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY apps/backend/package*.json ./apps/backend/
+
+# Install dependencies
+RUN npm ci && npm cache clean --force
+
+# Copy source code
+COPY apps/backend ./apps/backend
+COPY libs ./libs/
+COPY tsconfig.json ./
+
+WORKDIR /app/apps/backend
+
+# Skip prestart script in Docker
+ENV DOCKER_ENV=true
+
+EXPOSE 4000
+
+CMD ["npm", "run", "start:dev"]

@@ -12,6 +12,16 @@ const PROJECT_NAME = 'AI Quiz Platform';
 const ENV_FILE = path.join(__dirname, '..', '.env');
 
 function validatePort() {
+  // Check if running in Docker (environment variables already set)
+  if (process.env.DOCKER_ENV === 'true' || process.env.CONTAINER_ENV === 'true') {
+    console.log(`✓ ${PROJECT_NAME} Backend validated (Docker mode)`);
+    console.log(`✓ API Port: ${process.env.PORT || 4000}`);
+    console.log(`✓ Database Port: ${process.env.DB_PORT || 5432}`);
+    console.log(`✓ Redis Port: ${process.env.REDIS_PORT || 6379}`);
+    console.log(`✓ Allowed Ports: ${ALLOWED_PORTS.join(', ')}\n`);
+    process.exit(0);
+  }
+  
   // Read .env file
   let envContent = '';
   try {

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { RiddlesService } from './riddles.service';
@@ -102,6 +103,7 @@ export class RiddlesController {
     @Param('level') level: string,
     @Query() pagination: PaginationDto,
   ): Promise<{ data: Riddle[]; total: number }> {
+    this.validateDifficulty(level);
     return this.riddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
@@ -124,8 +126,8 @@ export class RiddlesController {
   @ApiOperation({ summary: 'Bulk create classic riddles (Admin only)' })
   @ApiResponse({ status: 201, description: 'Riddles created successfully', type: BulkImportResultDto })
   async createClassicBulk(@Body() dto: CreateRiddleDto[]): Promise<BulkImportResultDto> {
-    const count = await this.riddlesService.createRiddlesBulk(dto);
-    return { success: count, failed: dto.length - count };
+    const result = await this.riddlesService.createRiddlesBulk(dto);
+    return { success: result.count, failed: result.errors.length, errors: result.errors };
   }
 
   @Put('classic/:id')
@@ -244,14 +246,17 @@ export class RiddlesController {
     @Param('level') level: string,
     @Query('count') count?: string,
   ): Promise<QuizRiddle[]> {
-    return this.riddlesService.findRandomQuizRiddles(level, count ? parseInt(count) : 10);
+    const parsedCount = this.validateCount(count, 10, 1, 50);
+    this.validateDifficulty(level);
+    return this.riddlesService.findRandomQuizRiddles(level, parsedCount);
   }
 
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed quiz riddles from all chapters' })
   @ApiResponse({ status: 200, description: 'Returns mixed riddles' })
   getMixedQuizRiddles(@Query('count') count?: string): Promise<QuizRiddle[]> {
-    return this.riddlesService.findMixedQuizRiddles(count ? parseInt(count) : DEFAULT_PAGE_SIZE);
+    const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
+    return this.riddlesService.findMixedQuizRiddles(parsedCount);
   }
 
   // ==================== QUIZ FORMAT - ADMIN ====================
@@ -332,9 +337,9 @@ export class RiddlesController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create quiz riddles (Admin only)' })
-  async createQuizRiddlesBulk(@Body() dto: CreateQuizRiddleDto[]): Promise<{ count: number }> {
-    const count = await this.riddlesService.createQuizRiddlesBulk(dto);
-    return { count };
+  async createQuizRiddlesBulk(@Body() dto: CreateQuizRiddleDto[]): Promise<{ count: number; errors: string[] }> {
+    const result = await this.riddlesService.createQuizRiddlesBulk(dto);
+    return { count: result.count, errors: result.errors };
   }
 
   @Put('quiz/:id')
@@ -373,5 +378,45 @@ export class RiddlesController {
     riddlesByDifficulty: Record<string, number>;
   }> {
     return this.riddlesService.getStats();
+  }
+
+  // ==================== VALIDATION HELPERS ====================
+
+  /**
+   * Validate and parse count parameter
+   */
+  private validateCount(
+    count: string | undefined,
+    defaultValue: number,
+    min: number,
+    max: number,
+  ): number {
+    if (count === undefined || count === '') {
+      return defaultValue;
+    }
+
+    const parsed = parseInt(count, 10);
+    if (isNaN(parsed)) {
+      throw new BadRequestException(`Invalid count parameter: ${count}`);
+    }
+    if (parsed < min) {
+      throw new BadRequestException(`Count must be at least ${min}`);
+    }
+    if (parsed > max) {
+      throw new BadRequestException(`Count must not exceed ${max}`);
+    }
+    return parsed;
+  }
+
+  /**
+   * Validate difficulty level
+   */
+  private validateDifficulty(level: string): void {
+    const validDifficulties = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+    if (!validDifficulties.includes(level)) {
+      throw new BadRequestException(
+        `Invalid difficulty level: ${level}. Valid values are: ${validDifficulties.join(', ')}`,
+      );
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { JokeCategory } from './joke-category.entity';
 import { ContentStatus } from '../../common/enums/content-status.enum';
 
@@ -22,6 +22,9 @@ export class DadJoke {
     default: ContentStatus.DRAFT,
   })
   status: ContentStatus;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

@@ -10,8 +10,9 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { DadJokesService } from './dad-jokes.service';
 import {
   CreateDadJokeDto,
@@ -109,8 +110,8 @@ export class DadJokesController {
   @ApiOperation({ summary: 'Bulk create classic dad jokes (Admin only)' })
   @ApiResponse({ status: 201, description: 'Jokes created successfully', type: BulkImportResultDto })
   async createClassicBulk(@Body() dto: CreateDadJokeDto[]): Promise<BulkImportResultDto> {
-    const count = await this.jokesService.createJokesBulk(dto);
-    return { success: count, failed: dto.length - count };
+    const result = await this.jokesService.createJokesBulk(dto);
+    return { success: result.count, failed: result.errors.length, errors: result.errors };
   }
 
   @Put('classic/:id')
@@ -120,8 +121,10 @@ export class DadJokesController {
   @ApiOperation({ summary: 'Update a classic dad joke (Admin only)' })
   @ApiResponse({ status: 200, description: 'Joke updated successfully' })
   @ApiResponse({ status: 404, description: 'Joke not found' })
-  updateClassic(@Param('id') id: string, @Body() dto: Partial<CreateDadJokeDto>): Promise<DadJoke> {
-    return this.jokesService.updateJoke(id, dto);
+  updateClassic(@Param('id') id: string, @Body() dto: UpdateJokeCategoryDto): Promise<DadJoke> {
+    // Using UpdateJokeCategoryDto as a safe update DTO (only allows specific fields)
+    // The service method handles field mapping
+    return this.jokesService.updateJoke(id, dto as Partial<CreateDadJokeDto>);
   }
 
   @Delete('classic/:id')

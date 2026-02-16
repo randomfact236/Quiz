@@ -51,9 +51,9 @@ export class PublishStrategy implements IBulkActionStrategy {
       repository.target,
       entity.id,
       {
-        status: ContentStatus.PUBLISHED,
+        status: ContentStatus.PUBLISHED as any,
         updatedAt: new Date(),
-      },
+      } as any,
     );
 
     logger.debug(`[BULK ACTION] Published ${entityName} ${entity.id}`, 'BulkActionService');
@@ -79,9 +79,9 @@ export class DraftStrategy implements IBulkActionStrategy {
       repository.target,
       entity.id,
       {
-        status: ContentStatus.DRAFT,
+        status: ContentStatus.DRAFT as any,
         updatedAt: new Date(),
-      },
+      } as any,
     );
 
     logger.debug(`[BULK ACTION] Drafted ${entityName} ${entity.id}`, 'BulkActionService');
@@ -107,9 +107,9 @@ export class TrashStrategy implements IBulkActionStrategy {
       repository.target,
       entity.id,
       {
-        status: ContentStatus.TRASH,
+        status: ContentStatus.TRASH as any,
         updatedAt: new Date(),
-      },
+      } as any,
     );
 
     logger.debug(`[BULK ACTION] Trashed ${entityName} ${entity.id}`, 'BulkActionService');
@@ -135,9 +135,9 @@ export class RestoreStrategy implements IBulkActionStrategy {
       repository.target,
       entity.id,
       {
-        status: ContentStatus.DRAFT,
+        status: ContentStatus.DRAFT as any,
         updatedAt: new Date(),
-      },
+      } as any,
     );
 
     logger.debug(`[BULK ACTION] Restored ${entityName} ${entity.id}`, 'BulkActionService');

@@ -18,8 +18,9 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ImageRiddlesService } from './image-riddles.service';
 import {
   CreateImageRiddleDto,
@@ -96,12 +97,18 @@ export class ImageRiddlesController {
 
   @Get('difficulty/:level')
   @ApiOperation({ summary: 'Get image riddles by difficulty level' })
-  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert'] })
   @ApiResponse({ status: 200, description: 'Returns image riddles by difficulty' })
   findByDifficulty(
     @Param('level') level: string,
     @Query() pagination: PaginationDto,
   ): Promise<{ data: ImageRiddle[]; total: number }> {
+    // Validate difficulty level
+    const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
+    if (!validDifficulties.includes(level)) {
+      throw new BadRequestException(
+        `Invalid difficulty level: ${level}. Valid values are: ${validDifficulties.join(', ')}`
+      );
+    }
     return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
@@ -132,8 +139,13 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Bulk create image riddles (Admin only)' })
   @ApiResponse({ status: 201, description: 'Image riddles created successfully', type: BulkImportResultDto })
   async createBulk(@Body() dto: CreateImageRiddleDto[]): Promise<BulkImportResultDto> {
-    const count = await this.imageRiddlesService.createRiddlesBulk(dto);
-    return { success: count, failed: dto.length - count };
+    // Validate array is not empty
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No riddles provided for bulk creation');
+    }
+    
+    const result = await this.imageRiddlesService.createRiddlesBulk(dto);
+    return { success: result.count, failed: result.errors.length, errors: result.errors };
   }
 
   @Put(':id')

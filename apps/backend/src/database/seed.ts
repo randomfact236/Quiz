@@ -3,6 +3,11 @@
  * Database Seed
  * ============================================================================
  * Main seed file that orchestrates database seeding using helper functions
+ * 
+ * SECURITY NOTES:
+ * - Only runs in non-production environments
+ * - Uses migrations instead of synchronize
+ * - Validates environment before execution
  * ============================================================================
  */
 
@@ -17,53 +22,80 @@ import {
   seedRiddles,
   seedAdminUser,
 } from './seed-helpers';
-import { DB_PORT } from '../common/constants/app.constants';
+import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 
-const _AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || String(DB_PORT), 10),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_DATABASE || 'ai_quiz',
-  synchronize: true,
-});
+// Validate environment before proceeding
+try {
+  validateDatabaseEnv();
+} catch (error) {
+  console.error('❌ Environment validation failed:', (error as Error).message);
+  process.exit(1);
+}
+
+// Create data source with seed-specific configuration
+const _AppDataSource = new DataSource(getSeedDatabaseConfig());
 
 /**
  * Main seed function - orchestrates all seeding operations
  * Complexity reduced by delegating to specialized helper functions
  */
 async function seed(): Promise<void> {
-  await _AppDataSource.initialize();
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  
+  console.log(`🌱 Starting database seed in ${nodeEnv} environment...`);
+  console.log('⚠️  This will insert sample data into the database.');
+  
+  // Double-check we're not in production
+  if (nodeEnv === 'production') {
+    console.error('❌ Seeding is not allowed in production!');
+    process.exit(1);
+  }
 
-  // Seed Subjects
-  const insertedSubjects = await seedSubjects(_AppDataSource);
+  try {
+    await _AppDataSource.initialize();
+    console.log('✅ Database connection established');
 
-  // Seed Chapters for each subject
-  const insertedChapters = await seedChapters(_AppDataSource, insertedSubjects);
+    // Seed Subjects
+    console.log('📚 Seeding subjects...');
+    const insertedSubjects = await seedSubjects(_AppDataSource);
 
-  // Seed Sample Questions
-  await seedQuestions(_AppDataSource, insertedChapters);
+    // Seed Chapters for each subject
+    console.log('📖 Seeding chapters...');
+    const insertedChapters = await seedChapters(_AppDataSource, insertedSubjects);
 
-  // Seed Joke Categories
-  const insertedJokeCategories = await seedJokeCategories(_AppDataSource);
+    // Seed Sample Questions
+    console.log('❓ Seeding questions...');
+    await seedQuestions(_AppDataSource, insertedChapters);
 
-  // Seed Dad Jokes
-  await seedDadJokes(_AppDataSource, insertedJokeCategories);
+    // Seed Joke Categories
+    console.log('😄 Seeding joke categories...');
+    const insertedJokeCategories = await seedJokeCategories(_AppDataSource);
 
-  // Seed Riddle Categories
-  const insertedRiddleCategories = await seedRiddleCategories(_AppDataSource);
+    // Seed Dad Jokes
+    console.log('🎭 Seeding dad jokes...');
+    await seedDadJokes(_AppDataSource, insertedJokeCategories);
 
-  // Seed Riddles
-  await seedRiddles(_AppDataSource, insertedRiddleCategories);
+    // Seed Riddle Categories
+    console.log('🧩 Seeding riddle categories...');
+    const insertedRiddleCategories = await seedRiddleCategories(_AppDataSource);
 
-  // Seed Admin User
-  await seedAdminUser(_AppDataSource);
+    // Seed Riddles
+    console.log('🎯 Seeding riddles...');
+    await seedRiddles(_AppDataSource, insertedRiddleCategories);
 
-  await _AppDataSource.destroy();
+    // Seed Admin User
+    console.log('👤 Seeding admin user...');
+    await seedAdminUser(_AppDataSource);
+
+    console.log('✅ Seeding completed successfully!');
+    await _AppDataSource.destroy();
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Seeding failed:', error);
+    await _AppDataSource.destroy().catch(() => {});
+    process.exit(1);
+  }
 }
 
-seed().catch((err: unknown) => {
-  console.error('❌ Seeding failed:', err);
-  process.exit(1);
-});
+// Run seed
+seed();

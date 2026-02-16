@@ -12,7 +12,7 @@ export class UsersService {
   ) {}
 
   async create(email: string, password: string, name: string): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 12);
     const user = this.userRepo.create({
       email,
       password: hashedPassword,
@@ -35,8 +35,16 @@ export class UsersService {
     return this.userRepo.find({ select: ['id', 'email', 'name', 'role', 'createdAt'] });
   }
 
-  async updateProfile(id: string, data: Partial<User>): Promise<User> {
-    await this.userRepo.update(id, data);
+  async updateProfile(id: string, data: { name?: string; avatar?: string }): Promise<User> {
+    // Only allow updating safe fields (name, avatar) - prevents mass assignment
+    const updateData: Partial<User> = {};
+    if (data.name !== undefined) {
+      updateData.name = data.name;
+    }
+    if (data.avatar !== undefined) {
+      updateData.avatar = data.avatar;
+    }
+    await this.userRepo.update(id, updateData);
     return this.findById(id);
   }
 

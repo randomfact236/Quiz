@@ -24,6 +24,7 @@ export interface DadJokesStats {
  * @param subjectRepo - Subject repository
  * @param chapterRepo - Chapter repository
  * @returns Statistics for dad jokes
+ * @throws Error if database query fails
  */
 export async function computeDadJokeStats(
   jokeRepo: Repository<DadJoke>,
@@ -32,19 +33,23 @@ export async function computeDadJokeStats(
   subjectRepo: Repository<JokeSubject>,
   chapterRepo: Repository<JokeChapter>,
 ): Promise<DadJokesStats> {
-  const [totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters] = await Promise.all([
-    jokeRepo.count(),
-    categoryRepo.count(),
-    quizJokeRepo.count(),
-    subjectRepo.count(),
-    chapterRepo.count(),
-  ]);
+  try {
+    const [totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters] = await Promise.all([
+      jokeRepo.count(),
+      categoryRepo.count(),
+      quizJokeRepo.count(),
+      subjectRepo.count(),
+      chapterRepo.count(),
+    ]);
 
-  return {
-    totalClassicJokes,
-    totalCategories,
-    totalQuizJokes,
-    totalSubjects,
-    totalChapters,
-  };
+    return {
+      totalClassicJokes,
+      totalCategories,
+      totalQuizJokes,
+      totalSubjects,
+      totalChapters,
+    };
+  } catch (error) {
+    throw new Error(`Failed to compute dad joke statistics: ${(error as Error).message}`);
+  }
 }

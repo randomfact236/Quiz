@@ -51,18 +51,34 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     // Database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get('DB_PORT', DB_PORT),
-        username: configService.get('DB_USERNAME', 'postgres'),
-        password: configService.get('DB_PASSWORD', 'postgres'),
-        database: configService.get('DB_DATABASE', 'ai_quiz'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production',
-        logging: configService.get('NODE_ENV') !== 'production',
-        poolSize: DB_POOL_SIZE,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const nodeEnv = configService.get('NODE_ENV') || 'development';
+        const isProduction = nodeEnv === 'production';
+        
+        // SECURITY: Require explicit environment variables - no defaults
+        const dbHost = configService.getOrThrow('DB_HOST');
+        const dbPort = configService.get('DB_PORT', DB_PORT);
+        const dbUsername = configService.getOrThrow('DB_USERNAME');
+        const dbPassword = configService.getOrThrow('DB_PASSWORD');
+        const dbDatabase = configService.getOrThrow('DB_DATABASE');
+
+        return {
+          type: 'postgres',
+          host: dbHost,
+          port: dbPort,
+          username: dbUsername,
+          password: dbPassword,
+          database: dbDatabase,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          // SECURITY: Never synchronize in production
+          synchronize: false,
+          // SECURITY: Only log in development, never in production
+          logging: !isProduction && configService.get('DB_LOGGING') === 'true',
+          poolSize: DB_POOL_SIZE,
+          // SSL configuration for production
+          ssl: isProduction ? { rejectUnauthorized: false } : false,
+        };
+      },
       inject: [ConfigService],
     }),
 

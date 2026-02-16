@@ -1,0 +1,85 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: quiz-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aiquiz
+      POSTGRES_PASSWORD: aiquiz_password
+      POSTGRES_DB: aiquiz
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiquiz -d aiquiz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: quiz-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile.simple
+    container_name: quiz-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DOCKER_ENV: "true"
+      PORT: 4000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: aiquiz
+      DB_PASSWORD: aiquiz_password
+      DB_DATABASE: aiquiz
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      JWT_EXPIRES_IN: 24h
+      CORS_ORIGIN: http://localhost:3010
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/backend/src:/app/apps/backend/src:ro
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile.simple
+    container_name: quiz-frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api
+    ports:
+      - "3010:3010"
+    depends_on:
+      - backend
+    volumes:
+      - ./apps/frontend/src:/app/apps/frontend/src:ro
+      - ./apps/frontend/public:/app/apps/frontend/public:ro
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+    name: quiz-postgres-data

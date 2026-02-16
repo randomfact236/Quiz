@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { DadJokesService } from './dad-jokes.service';
@@ -80,20 +81,21 @@ export class DadJokesQuizController {
 
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random quiz jokes by difficulty level' })
-  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
   @ApiResponse({ status: 200, description: 'Returns random jokes' })
   getRandomQuizJokes(
     @Param('level') level: string,
     @Query('count') count?: string,
   ): Promise<QuizJoke[]> {
-    return this.jokesService.findRandomQuizJokes(level, count ? parseInt(count) : DEFAULT_RANDOM_JOKES_COUNT);
+    const parsedCount = this.validateCount(count, DEFAULT_RANDOM_JOKES_COUNT, 1, 50);
+    return this.jokesService.findRandomQuizJokes(level, parsedCount);
   }
 
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed quiz jokes from all chapters' })
   @ApiResponse({ status: 200, description: 'Returns mixed jokes' })
   getMixedQuizJokes(@Query('count') count?: string): Promise<QuizJoke[]> {
-    return this.jokesService.findMixedQuizJokes(count ? parseInt(count) : DEFAULT_MIXED_JOKES_COUNT);
+    const parsedCount = this.validateCount(count, DEFAULT_MIXED_JOKES_COUNT, 1, 100);
+    return this.jokesService.findMixedQuizJokes(parsedCount);
   }
 
   // ==================== QUIZ FORMAT - ADMIN ====================
@@ -174,9 +176,9 @@ export class DadJokesQuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create quiz jokes (Admin only)' })
-  async createQuizJokesBulk(@Body() dto: CreateQuizJokeDto[]): Promise<{ count: number }> {
-    const count = await this.jokesService.createQuizJokesBulk(dto);
-    return { count };
+  async createQuizJokesBulk(@Body() dto: CreateQuizJokeDto[]): Promise<{ count: number; errors: string[] }> {
+    const result = await this.jokesService.createQuizJokesBulk(dto);
+    return { count: result.count, errors: result.errors };
   }
 
   @Put('quiz/:id')
@@ -199,5 +201,33 @@ export class DadJokesQuizController {
   @ApiOperation({ summary: 'Delete quiz joke (Admin only)' })
   async deleteQuizJoke(@Param('id') id: string): Promise<void> {
     await this.jokesService.deleteQuizJoke(id);
+  }
+
+  // ==================== VALIDATION HELPERS ====================
+
+  /**
+   * Validate and parse count parameter
+   */
+  private validateCount(
+    count: string | undefined,
+    defaultValue: number,
+    min: number,
+    max: number,
+  ): number {
+    if (count === undefined || count === '') {
+      return defaultValue;
+    }
+
+    const parsed = parseInt(count, 10);
+    if (isNaN(parsed)) {
+      throw new BadRequestException(`Invalid count parameter: ${count}`);
+    }
+    if (parsed < min) {
+      throw new BadRequestException(`Count must be at least ${min}`);
+    }
+    if (parsed > max) {
+      throw new BadRequestException(`Count must not exceed ${max}`);
+    }
+    return parsed;
   }
 }

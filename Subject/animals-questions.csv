@@ -1,0 +1,983 @@
+# Subject: Animals
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,Elephants are afraid of mice.,False,True,,,A,easy,Mammals
+2,Eagles can see prey from miles away.,True,False,,,B,easy,Birds
+3,Dolphins are fish.,False,True,,,A,easy,Marine Life
+4,Alligators and crocodiles are the same.,False,True,,,B,easy,Reptiles
+5,Bees die after stinging once.,True,False,,,B,easy,Insects
+6,Lions live in jungles.,False,True,,,A,easy,Mammals
+7,Penguins can fly.,False,True,,,B,easy,Birds
+8,Sharks have bones.,False,True,,,A,easy,Marine Life
+9,All snakes are venomous.,False,True,,,A,easy,Reptiles
+10,Bears hibernate in winter.,True,False,,,B,easy,Mammals
+11,What is an elephant's trunk used for?,Breathing only,Multiple purposes,,,B,medium,Mammals
+12,How far can eagles see?,1 mile,2-3 miles,,,B,medium,Birds
+13,Are dolphins intelligent?,Yes,very,No,,A,medium,Marine Life
+14,Can alligators live in saltwater?,Mostly freshwater,Yes,,,A,medium,Reptiles
+15,What do bees make?,Honey,Wax only,,,A,medium,Insects
+16,Who hunts in a lion pride?,Males,Females,,,B,medium,Mammals
+17,Where do penguins live?,North Pole,Antarctica,,,B,medium,Birds
+18,What is a shark's best sense?,Sight,Smell,,,B,medium,Marine Life
+19,How do frogs drink water?,Through mouth,Through skin,,,B,medium,Amphibians
+20,What do bears love to eat?,Meat only,Omnivorous diet,,,B,medium,Mammals
+21,How many teeth do elephants have for chewing?,8,4,16,,B,hard,Mammals
+22,How much weight can an eagle carry?,Equal to body weight,Half body weight,Twice body weight,,B,hard,Birds
+23,How do dolphins communicate?,Body language,Clicks and whistles,Silent,,B,hard,Marine Life
+24,How many teeth can a crocodile have?,40,60-80,100,,B,hard,Reptiles
+25,How do bees communicate flower locations?,Dancing,Buzzing,Pheromones only,,A,hard,Insects
+26,How long can a lion's roar be heard?,1 mile,5 miles,10 miles,,B,hard,Mammals
+27,How fast can penguins swim?,5 mph,15 mph,25 mph,,B,hard,Birds
+28,How are baby sharks born?,Eggs only,Live birth or eggs,Live birth only,,B,hard,Marine Life
+29,How high can frogs jump?,5x body length,20x body length,50x body length,,C,hard,Amphibians
+30,How long do bears hibernate?,2 months,5-7 months,1 year,,B,hard,Mammals
+31,How much water can an elephant drink daily?,20 gallons,50 gallons,100 gallons,200 gallons,B,expert,Mammals
+32,How many times better is eagle vision than humans?,2-3 times,4-8 times,10 times,20 times,B,expert,Birds
+33,How do dolphins hear?,External ears,Through jaw bone,Blowholes,Skin,B,expert,Marine Life
+34,What determines crocodile egg gender?,Genetics,Temperature,Location,Random,B,expert,Reptiles
+35,How many flowers do bees visit daily?,100,500-1,000,5,B,expert,Insects
+36,What is a lion's bite force?,400 PSI,650 PSI,1,000 PSI,B,expert,Mammals
+37,How long do emperor penguins incubate eggs?,30 days,64 days,90 days,120 days,B,expert,Birds
+38,How often do sharks replace teeth?,Monthly,Every 8 days,Yearly,Every 6 months,B,expert,Marine Life
+39,How fast is a frog's tongue strike?,0.07 seconds,0.5 seconds,1 second,2 seconds,A,expert,Amphibians
+40,How fast can a grizzly bear run?,20 mph,35 mph,45 mph,55 mph,B,expert,Mammals
+41,How many bones are in an elephant's trunk?,,,,,,extreme,Mammals
+42,What is an eagle's visual acuity compared to humans?,,,,,,extreme,Birds
+43,What frequency range can dolphins hear?,,,,,,extreme,Marine Life
+44,What is a saltwater crocodile's bite force?,,,,,,extreme,Reptiles
+45,How fast do bee wings beat per second?,,,,,,extreme,Insects
+46,How many lions are left in the wild?,,,,,,extreme,Mammals
+47,How deep can emperor penguins dive?,,,,,,extreme,Birds
+48,How deep can great white sharks dive?,,,,,,extreme,Marine Life
+49,How many eggs can a frog lay at once?,,,,,,extreme,Amphibians
+50,How much can a grizzly bear lift?,,,,,,extreme,Mammals
+51,Giraffes have the same number of neck bones as humans.,True,False,,,A,easy,Mammals
+52,Owls can turn their heads 360 degrees.,False,True,,,B,easy,Birds
+53,Octopuses have three hearts.,True,False,,,A,easy,Marine Life
+54,Lizards can regrow their tails.,True,False,,,B,easy,Reptiles
+55,Butterflies can taste with their feet.,True,False,,,B,easy,Insects
+56,Cheetahs can run faster than cars.,True,False,,,A,easy,Mammals
+57,Parrots can mimic human speech.,True,False,,,B,easy,Birds
+58,Sea turtles return to their birthplace to lay eggs.,True,False,,,A,easy,Marine Life
+59,Snakes can hear sounds.,False,True,,,A,easy,Reptiles
+60,Bats are blind.,False,True,,,B,easy,Mammals
+61,How much sleep do giraffes need daily?,8 hours,2 hours,,,B,medium,Mammals
+62,How do owls locate prey in darkness?,Sight only,Hearing,,,B,medium,Birds
+63,Where are most octopus neurons located?,Brain,Arms,,,B,medium,Marine Life
+64,Why do lizards drop their tails?,Growth,Defense mechanism,,,B,medium,Reptiles
+65,What do butterflies eat?,Leaves,Nectar,,,B,medium,Insects
+66,How long can cheetahs maintain top speed?,5 minutes,30 seconds,,,B,medium,Mammals
+67,How intelligent are parrots?,Basic,Very intelligent,,,B,medium,Birds
+68,How do sea turtles navigate?,Random,Magnetic fields,,,B,medium,Marine Life
+69,When are frogs most active?,Day,Night,,,B,medium,Amphibians
+70,How do bats navigate?,Sight,Echolocation,,,B,medium,Mammals
+71,How much does a giraffe's heart weigh?,5 lbs,25 lbs,50 lbs,,B,hard,Mammals
+72,How many degrees can owls rotate their heads?,180,270,360,,B,hard,Birds
+73,How many suckers does an octopus have?,500,2,000,5,B,hard,Marine Life
+74,How long does tail regeneration take in lizards?,1 week,2 months,1 year,,B,hard,Reptiles
+75,What is a butterfly's average lifespan?,1 week,2-4 weeks,6 months,,B,hard,Insects
+76,What is a cheetah's top speed?,50 mph,70 mph,90 mph,,B,hard,Mammals
+77,How long can parrots live?,10 years,30 years,80 years,,C,hard,Birds
+78,How long can sea turtles live?,30 years,50 years,100+ years,,C,hard,Marine Life
+79,What percentage of frogs are endangered?,10%,30%,50%,,B,hard,Amphibians
+80,What do most bats eat?,Blood,Insects and fruit,Fish,,B,hard,Mammals
+81,What is a giraffe's blood pressure?,120/80,280/180,150/90,200/120,B,expert,Mammals
+82,Why can owls rotate heads so far?,Flexible skull,No bones,Extra vertebrae,Magic,C,expert,Birds
+83,How fast can octopuses change color?,1 second,0.3 seconds,5 seconds,10 seconds,B,expert,Marine Life
+84,What cells enable tail regeneration?,Stem cells,Blood cells,Blastema cells,Nerve cells,C,expert,Reptiles
+85,How do butterflies see?,Simple eyes,Compound eyes,No eyes,One eye,B,expert,Insects
+86,What body feature helps cheetahs run fast?,Large lungs,Flexible spine,Long legs,All of these,D,expert,Mammals
+87,Can parrots understand context?,No,Basic only,Yes,some can,C,expert,Birds
+88,How do sea turtles find their birthplace?,Sight,Magnetic imprinting,Smell,Following others,B,expert,Marine Life
+89,What disease threatens frogs globally?,Flu,Chytrid fungus,Cancer,,B,expert,Amphibians
+90,How many pups do bats have per year?,1,2-3,5-10,20+,A,expert,Mammals
+91,How long is a giraffe's tongue?,,,,,,extreme,Mammals
+92,What frequency range can owls hear?,,,,,,extreme,Birds
+93,How many neurons does an octopus have?,,,,,,extreme,Marine Life
+94,How many times can a lizard regrow its tail?,,,,,,extreme,Reptiles
+95,How many butterfly species exist?,,,,,,extreme,Insects
+96,What is the cheetah's acceleration time to 60 mph?,,,,,,extreme,Mammals
+97,What is the vocabulary record for a parrot?,,,,,,extreme,Birds
+98,How deep can leatherback turtles dive?,,,,,,extreme,Marine Life
+99,How many frog species exist worldwide?,,,,,,extreme,Amphibians
+100,What is the echolocation frequency range of bats?,,,,,,extreme,Mammals
+101,Are octopuses colorblind?,Yes,No,,,A,easy,Marine Life
+102,Can snakes sense heat?,No,Yes,,,B,easy,Reptiles
+103,How many eyes does a bee have?,2,5,,,A,easy,Insects
+104,Do wolves hunt alone?,No,in packs,Yes,always,B,easy,Mammals
+105,Which bird lays the largest egg relative to body size?,Ostrich,Kiwi,,,B,easy,Birds
+106,What do seals primarily eat?,Plants,Fish,,,A,easy,Marine Life
+107,Do frogs drink water?,No,absorb through skin,Yes,drink it,B,easy,Amphibians
+108,Why do beavers build dams?,For shelter,For fun,,,A,easy,Mammals
+109,Do all turtles lay eggs?,Yes,No,,,A,easy,Reptiles
+110,Do eagles build nests on the ground?,No,Yes,,,B,easy,Birds
+111,What color is octopus blood?,Red,Blue,,,B,medium,Marine Life
+112,How do snakes detect heat?,Skin,Pit organs,,,B,medium,Reptiles
+113,What do bees collect from flowers?,Nectar and pollen,Water,,,A,medium,Insects
+114,What is a wolf pack structure?,Family unit,Random group,,,A,medium,Mammals
+115,Can parrots see colors?,Yes,No,,,A,medium,Birds
+116,Can seals sleep underwater?,No,Yes,,,B,medium,Marine Life
+117,Can frogs live in saltwater?,Most can't,All can,,,A,medium,Amphibians
+118,Do beaver teeth stop growing?,No,grow continuously,Yes,,A,medium,Mammals
+119,Where do sea turtles lay eggs?,In water,On beaches,,,B,medium,Reptiles
+120,How many eaglets usually survive?,All,Usually one,,,B,medium,Birds
+121,How intelligent are octopuses?,Low,Average,Highly intelligent,,C,hard,Marine Life
+122,What percentage of snakes are venomous?,10%,20%,50%,,B,hard,Reptiles
+123,How many bees live in a hive?,1,000,20,000-80,B,hard,Insects
+124,How far can a wolf howl be heard?,1 mile,6 miles,20 miles,,B,hard,Mammals
+125,Which parrot species is most talkative?,Macaw,African Grey,Cockatoo,,B,hard,Birds
+126,How long can seals hold their breath?,5 minutes,30 minutes,2 hours,,C,hard,Marine Life
+127,How many times its body length can a frog jump?,5 times,20 times,50 times,,C,hard,Amphibians
+128,How long is the longest beaver dam?,100 feet,850 feet,2,790 feet,C,hard,Mammals
+129,How long can sea turtles hold their breath?,30 minutes,4-7 hours,12 hours,,B,hard,Reptiles
+130,How long do eagle eggs take to hatch?,20 days,35 days,60 days,,B,hard,Birds
+131,How many arms can an octopus regrow?,,One,Multiple,All,D,expert,Marine Life
+132,How many snake species exist worldwide?,500,1,500,3,C,expert,Reptiles
+133,How long can a queen bee live?,1 year,3 years,5 years,7 years,C,expert,Insects
+134,What is a wolf's jaw pressure?,200 PSI,400 PSI,800 PSI,1,B,expert,Mammals
+135,What is a parrot's brain-to-body ratio?,Similar to dogs,Similar to primates,Similar to fish,Largest of all birds,B,expert,Birds
+136,How do seals regulate body temperature in cold water?,Shivering,Thick blubber,Metabolism,All of these,D,expert,Marine Life
+137,What protects frogs from bacteria?,Thick skin,Antimicrobial peptides,Immune cells,Nothing,B,expert,Amphibians
+138,How long can beavers stay underwater?,2 minutes,5 minutes,15 minutes,30 minutes,C,expert,Mammals
+139,How do baby sea turtles know to go to the ocean?,Following mother,Light cues,Instinct and gravity,Random,C,expert,Reptiles
+140,What percentage of an eagle's body is muscle?,20%,35%,50%,65%,C,expert,Birds
+141,How many suckers does an octopus have per arm?,,,,,,extreme,Marine Life
+142,What is the fastest snake strike speed?,,,,,,extreme,Reptiles
+143,How many flowers must bees visit for 1 pound of honey?,,,,,,extreme,Insects
+144,How much stronger is a wolf's sense of smell than humans?,,,,,,extreme,Mammals
+145,What is the smallest parrot species?,,,,,,extreme,Birds
+146,How much can an elephant seal weigh?,,,,,,extreme,Marine Life
+147,What is the smallest frog in the world?,,,,,,extreme,Amphibians
+148,How many trees can a beaver cut down per year?,,,,,,extreme,Mammals
+149,How many sea turtle species exist?,,,,,,extreme,Reptiles
+150,From what distance can an eagle spot a rabbit?,,,,,,extreme,Birds
+151,Monkeys and apes are the same.,False,True,,,A,easy,Mammals
+152,Ducks can sleep with one eye open.,True,False,,,B,easy,Birds
+153,Clownfish can change gender.,False,True,,,A,easy,Marine Life
+154,All turtles lay eggs on land.,True,False,,,B,easy,Reptiles
+155,Queen ants can live for decades.,True,False,,,B,easy,Insects
+156,Foxes are canines.,False,True,,,A,easy,Mammals
+157,Eagles build nests on the ground.,False,True,,,B,easy,Birds
+158,Crabs walk sideways.,True,False,,,A,easy,Marine Life
+159,Geckos can walk on ceilings.,True,False,,,A,easy,Reptiles
+160,Squirrels forget where they bury nuts.,True,False,,,A,easy,Mammals
+161,What distinguishes apes from monkeys?,Size,No tail,,,B,medium,Mammals
+162,Why do ducks sleep with one eye open?,Broken sleep,Watch for predators,,,B,medium,Birds
+163,Do all male clownfish become female?,Yes,when dominant female dies,No,,A,medium,Marine Life
+164,Why do turtles lay eggs on land?,Tradition,Need air to develop,,,B,medium,Reptiles
+165,What do worker ants do?,Reproduce,All colony tasks,,,B,medium,Insects
+166,How do foxes hunt?,Chasing,Pouncing,,,B,medium,Mammals
+167,Where do eagles prefer to nest?,Ground,High places,,,B,medium,Birds
+168,Why do crabs walk sideways?,Leg structure,Preference,,,A,medium,Marine Life
+169,Can all lizard species drop tails?,No,only some,Yes,all,A,medium,Amphibians
+170,How do squirrels find buried nuts?,Memory,Smell,,,B,medium,Mammals
+171,How many ape species exist?,5,15,30,,A,hard,Mammals
+172,What is this sleep pattern called?,Light sleep,Unihemispheric sleep,Napping,,B,hard,Birds
+173,How long does gender change take in clownfish?,Instant,Few weeks,6 months,,B,hard,Marine Life
+174,What determines turtle egg gender?,Genetics,Temperature,Location,,B,hard,Reptiles
+175,How much can ants lift?,5x weight,20x weight,50x weight,,C,hard,Insects
+176,What is a fox's top speed?,20 mph,30 mph,45 mph,,B,hard,Mammals
+177,How heavy can an eagle nest become?,100 lbs,1,000 lbs,2,C,hard,Birds
+178,How many eyes do crabs have?,2,6,8,,A,hard,Marine Life
+179,How long does tail regrowth take?,1 week,2 months,1 year,,B,hard,Amphibians
+180,What percent of nuts do squirrels find?,50%,75%,95%,,B,hard,Mammals
+181,What percent DNA do humans share with chimpanzees?,80%,90%,98.8%,99.9%,C,expert,Mammals
+182,Which brain hemisphere sleeps in ducks?,Both,Neither,Alternates,Left only,C,expert,Birds
+183,What do clownfish and anemones share?,Competition,Mutualism,Predation,Nothing,B,expert,Marine Life
+184,How many eggs does a sea turtle lay?,10-20,50-80,100-200,500+,C,expert,Reptiles
+185,What is the total ant population on Earth?,1 billion,1 trillion,20 quadrillion,Unknown,C,expert,Insects
+186,How do foxes use Earth's magnetic field?,Navigation,Hunting,Don't use it,Mating,B,expert,Mammals
+187,What is the term for baby eagles?,Chicks,Eaglets,Fledglings,Hatchlings,B,expert,Birds
+188,How many times do crabs molt in life?,Once,5-10 times,20+ times,Continuously,C,expert,Marine Life
+189,What enables lizard tail regeneration?,Stem cells,Blastema cells,Magic,Diet,B,expert,Amphibians
+190,How many hours do squirrels sleep daily?,8 hours,15 hours,20 hours,4 hours,B,expert,Mammals
+191,How many bones does a monkey have?,,,,,,extreme,Mammals
+192,How many duck species exist?,,,,,,extreme,Birds
+193,How many anemone tentacles protect clownfish?,,,,,,extreme,Marine Life
+194,How far can sea turtles migrate?,,,,,,extreme,Reptiles
+195,What is the combined weight of all ants on Earth?,,,,,,extreme,Insects
+196,How many teeth does a fox have?,,,,,,extreme,Mammals
+197,How many feathers does an eagle have?,,,,,,extreme,Birds
+198,How many eggs can a female crab produce?,,,,,,extreme,Marine Life
+199,What is the longest lizard species?,,,,,,extreme,Amphibians
+200,How fast do squirrel teeth grow per year?,,,,,,extreme,Mammals
+201,Tigers and lions can interbreed.,True,False,,,A,easy,Mammals
+202,Only male peacocks have colorful feathers.,False,True,,,B,easy,Birds
+203,Whales are fish.,False,True,,,A,easy,Marine Life
+204,Chameleons change color for camouflage only.,False,True,,,B,easy,Reptiles
+205,Mosquitoes are attracted to body heat.,True,False,,,B,easy,Insects
+206,Otters hold hands while sleeping.,True,False,,,A,easy,Mammals
+207,Penguins can live in hot climates.,False,True,,,B,easy,Birds
+208,Crabs have 10 legs.,True,False,,,A,easy,Marine Life
+209,Box turtles can close their shells completely.,False,True,,,A,easy,Reptiles
+210,Koalas are nocturnal.,False,True,,,B,easy,Mammals
+211,Can tigers swim?,No,Yes,very well,,B,medium,Mammals
+212,Why do male peacocks display feathers?,Warmth,Attract mates,,,B,medium,Birds
+213,How do whales breathe?,Gills,Blowholes,,,B,medium,Marine Life
+214,Why do chameleons change color?,Camouflage only,Communication and mood,,,B,medium,Reptiles
+215,Which mosquitoes bite humans?,Males,Females,,,B,medium,Insects
+216,What tools do otters use?,Sticks,Rocks,,,B,medium,Mammals
+217,Where do Galapagos penguins live?,Antarctica,Equator,,,B,medium,Birds
+218,Do crabs have homes?,No,Some do,,,B,medium,Marine Life
+219,Is a turtle's shell part of its skeleton?,Yes,No,,,A,medium,Amphibians
+220,What do koalas eat?,Bamboo,Eucalyptus,,,B,medium,Mammals
+221,What is a tiger's bite force?,500 PSI,1,000 PSI,1,B,hard,Mammals
+222,How many tail feathers does a peacock have?,50,150,200,,C,hard,Birds
+223,How much does a blue whale's tongue weigh?,1 ton,3 tons,6 tons,,B,hard,Marine Life
+224,How fast can chameleons change color?,1 minute,20 seconds,Instant,,B,hard,Reptiles
+225,How many people do mosquitoes kill annually?,10,000,100,000,C,hard,Insects
+226,How much do sea otters eat daily?,10% body weight,25% body weight,50% body weight,,B,hard,Mammals
+227,How long do emperor penguins fast while incubating?,1 month,2 months,4 months,,C,hard,Birds
+228,How strong is a coconut crab's claw?,50 lbs,300 lbs,700 lbs,,C,hard,Marine Life
+229,How long can box turtles live?,20 years,50 years,100+ years,,C,hard,Amphibians
+230,How many hours do koalas sleep daily?,8 hours,15 hours,22 hours,,C,hard,Mammals
+231,How far can tigers swim?,1 mile,6 miles,15 miles,30 miles,C,expert,Mammals
+232,How many eye-spots are on a peacock's train?,50,100,150-200,500,C,expert,Birds
+233,How much does a blue whale's heart weigh?,100 lbs,400 lbs,1,000 lbs,B,expert,Marine Life
+234,What cells allow color change?,Melanocytes,Chromatophores,Keratinocytes,Fibroblasts,B,expert,Reptiles
+235,What diseases can mosquitoes transmit?,,1-2,10+,Only malaria,C,expert,Insects
+236,How many hairs per square inch do sea otters have?,10,000,100,000,C,expert,Mammals
+237,How many eggs do penguins typically lay?,1-2,5-10,20+,50+,A,expert,Birds
+238,How many crab species exist?,500,1,500,6,C,expert,Marine Life
+239,How many vertebrae are fused in a turtle's shell?,10,30,50,100,C,expert,Amphibians
+240,What is unique about koala brains?,Very large,Very smooth,Two hemispheres,Most wrinkled,B,expert,Mammals
+241,What is a tiger's top running speed?,,,,,,extreme,Mammals
+242,How long can a peacock's train grow?,,,,,,extreme,Birds
+243,What is the length of the longest blue whale recorded?,,,,,,extreme,Marine Life
+244,How many degrees can a chameleon's eyes rotate?,,,,,,extreme,Reptiles
+245,How fast can a mosquito beat its wings?,,,,,,extreme,Insects
+246,How long can sea otters hold their breath?,,,,,,extreme,Mammals
+247,How long can emperor penguins stay underwater?,,,,,,extreme,Birds
+248,What is the leg span of the largest crab?,,,,,,extreme,Marine Life
+249,What is the oldest recorded age of a box turtle?,,,,,,extreme,Amphibians
+250,How many calories do koalas get from eucalyptus daily?,,,,,,extreme,Mammals
+251,Kangaroos can box.,True,False,,,A,easy,Mammals
+252,Flamingos are born pink.,False,True,,,B,easy,Birds
+253,Squids have ink sacs.,True,False,,,A,easy,Marine Life
+254,Snakes can sleep.,True,False,,,B,easy,Reptiles
+255,Spiders are insects.,False,True,,,B,easy,Insects
+256,Hedgehogs carry apples on their spines.,False,True,,,A,easy,Mammals
+257,Songbirds learn their songs.,True,False,,,B,easy,Birds
+258,Lobsters are naturally red.,False,True,,,A,easy,Marine Life
+259,Komodo dragons are the largest lizards.,True,False,,,A,easy,Reptiles
+260,Llamas are related to camels.,True,False,,,B,easy,Mammals
+261,Why do male kangaroos box?,Sport,Dominance,,,B,medium,Mammals
+262,What makes flamingos pink?,Genetics,Diet,,,B,medium,Birds
+263,Why do squids release ink?,Defense,Communication,,,A,medium,Marine Life
+264,Do snakes have eyelids?,No,Yes,,,A,medium,Reptiles
+265,How many legs do spiders have?,6,8,,,B,medium,Insects
+266,How do hedgehogs defend themselves?,Running,Curling into ball,,,B,medium,Mammals
+267,How do birds learn songs?,Instinct,From parents,,,B,medium,Birds
+268,What color are live lobsters?,Red,Brown-green,,,B,medium,Marine Life
+269,How do Komodo dragons track prey?,Sight,Smell,,,B,medium,Amphibians
+270,Do llamas spit?,Yes,No,,,A,medium,Mammals
+271,How much can a kangaroo's kick force reach?,300 PSI,850 PSI,1,500 PSI,B,hard,Mammals
+272,Why do flamingos stand on one leg?,Rest,Conserve body heat,Balance,,B,hard,Birds
+273,How large is a giant squid's eye?,5 inches,10 inches,15 inches,,B,hard,Marine Life
+274,What covers a snake's eye?,Nothing,Spectacle scale,Eyelid,,B,hard,Reptiles
+275,How strong is spider silk?,Weak,Stronger than steel,Like cotton,,B,hard,Insects
+276,How many quills does a hedgehog have?,1,000,5,000-7,B,hard,Mammals
+277,What age do birds learn songs?,Birth,Youth,Adulthood,,B,hard,Birds
+278,How long can lobsters live?,20 years,50 years,100+ years,,C,hard,Marine Life
+279,Are Komodo dragons venomous?,No,Yes,Only males,,B,hard,Amphibians
+280,How tall can llamas grow?,4 feet,6 feet,8 feet,,B,hard,Mammals
+281,What DNA percentage do humans share with orangutans?,85%,96.9%,99%,75%,B,expert,Mammals
+282,How many degrees can owls rotate heads?,180,270,360,90,B,expert,Birds
+283,How many shark species exist?,50,500+,5,000,B,expert,Marine Life
+284,How do lizards see UV light?,They can't,Fourth color receptor,Special lens,Through skin,B,expert,Reptiles
+285,How loud can cricket chirps be?,20 dB,50 dB,90 dB,120 dB,C,expert,Insects
+286,What is unique about raccoon paws?,Webbed,Four times more receptors than humans,Poisonous,Glow in dark,B,expert,Mammals
+287,How do penguins choose mates?,Random,Pebble gifting,Fighting,Dancing,B,expert,Birds
+288,How many color receptors do mantis shrimp have?,3,12,16,50,C,expert,Marine Life
+289,How many teeth can crocodiles grow in lifetime?,100,1,000,4,C,expert,Amphibians
+290,How many muscles control hedgehog quills?,50,500,5,000,B,expert,Mammals
+291,What is an orangutan's arm span?,,,,,,extreme,Mammals
+292,What is the smallest bird species?,,,,,,extreme,Birds
+293,At what dilution can sharks detect blood?,,,,,,extreme,Marine Life
+294,What is the fastest lizard species?,,,,,,extreme,Reptiles
+295,How many times per second do cricket wings rub?,,,,,,extreme,Insects
+296,How many neurons do raccoons have?,,,,,,extreme,Mammals
+297,How many species of penguins exist?,,,,,,extreme,Birds
+298,What is the mantis shrimp punch speed?,,,,,,extreme,Marine Life
+299,How long can crocodiles hold their breath?,,,,,,extreme,Amphibians
+300,How many quills does a hedgehog have?,,,,,,extreme,Mammals
+301,Pandas eat bamboo.,True,False,,,A,easy,Mammals
+302,Hummingbirds can fly backwards.,True,False,,,A,easy,Birds
+303,Blue whales are the largest animals ever.,True,False,,,B,easy,Marine Life
+304,Chameleons change color instantly.,False,True,,,A,easy,Reptiles
+305,Only female mosquitoes bite.,True,False,,,B,easy,Insects
+306,Kangaroos can't walk backwards.,True,False,,,B,easy,Mammals
+307,Eagles have excellent eyesight.,True,False,,,A,easy,Birds
+308,Squids have beaks.,True,False,,,B,easy,Marine Life
+309,All turtles can swim.,False,True,,,A,easy,Reptiles
+310,Beavers build dams.,True,False,,,A,easy,Mammals
+311,How much bamboo do pandas eat daily?,5 lbs,26-84 lbs,,,B,medium,Mammals
+312,Can hummingbirds hover in place?,No,Yes,,,B,medium,Birds
+313,How do blue whales communicate?,Clicks,Songs,,,B,medium,Marine Life
+314,How fast can chameleons change color?,Instant,20 seconds,,,B,medium,Reptiles
+315,Why do female mosquitoes need blood?,Food,Egg production,,,B,medium,Insects
+316,How do kangaroos move when not hopping?,Crawl,Walk using tail,,,B,medium,Mammals
+317,How far can eagles see prey?,500 feet,2 miles,,,B,medium,Birds
+318,How do squids escape predators?,Ink cloud,Speed only,,,A,medium,Marine Life
+319,Do sea turtles return to birthplace?,Yes,No,,,A,medium,Amphibians
+320,What do beavers use to build dams?,Rocks,Wood and mud,,,B,medium,Mammals
+321,How strong are gorillas compared to humans?,Same,3x stronger,10x stronger,,C,hard,Mammals
+322,How many feathers does a typical bird have?,100,1,000,25,C,hard,Birds
+323,How long can elephant seals hold breath?,15 minutes,1 hour,2 hours,,C,hard,Marine Life
+324,How many teeth can alligators have?,40,80,120,,B,hard,Reptiles
+325,How many wings do mosquitoes have?,2,4,6,,A,hard,Insects
+326,How powerful is wolf sense of smell?,10x humans,100x humans,1,000x humans,B,hard,Mammals
+327,How long can flamingos stand on one leg?,Minutes,Hours,Days,,B,hard,Birds
+328,How many tentacles does a squid have?,6,8,10,,C,hard,Marine Life
+329,How long can pythons grow?,10 feet,20 feet,30+ feet,,C,hard,Reptiles
+330,How far can a skunk spray?,5 feet,10 feet,15 feet,,B,hard,Mammals
+331,What DNA percentage do humans share with gorillas?,85%,92%,98.3%,99.9%,C,expert,Mammals
+332,What makes bird bones lightweight?,Small,Hollow with air sacs,Cartilage,Thin,B,expert,Birds
+333,How deep can elephant seals dive?,500 feet,2,000 feet,5,C,expert,Marine Life
+334,What determines alligator egg gender?,Genetics,Temperature,Location,Random,B,expert,Reptiles
+335,What is total ant biomass on Earth?,Equal to all humans,Half of humans,Twice humans,10x humans,A,expert,Insects
+336,How many hours do wolves sleep daily?,4 hours,8 hours,12 hours,16 hours,C,expert,Mammals
+337,How long do flamingos mate for?,Season,Year,Life,Never pair,C,expert,Birds
+338,What color is lobster blood?,Red,Blue,Green,Clear,B,expert,Marine Life
+339,How much pressure can pythons squeeze?,30 PSI,60 PSI,90 PSI,120 PSI,C,expert,Reptiles
+340,Can foxes use Earth's magnetic field?,No,For navigation,For hunting,Unknown,C,expert,Mammals
+341,How much can a silverback gorilla lift?,,,,,,extreme,Mammals
+342,What is a hummingbird's heart rate?,,,,,,extreme,Birds
+343,How many hearts does an octopus have?,,,,,,extreme,Marine Life
+344,What is an alligator's bite force?,,,,,,extreme,Reptiles
+345,What is the estimated ant population?,,,,,,extreme,Insects
+346,How many hours do wolves travel per day?,,,,,,extreme,Mammals
+347,How tall can flamingos grow?,,,,,,extreme,Birds
+348,What is the heaviest lobster caught?,,,,,,extreme,Marine Life
+349,What is the longest python recorded?,,,,,,extreme,Reptiles
+350,How many teeth do foxes have?,,,,,,extreme,Mammals
+351,Rhinos have horns made of hair.,True,False,,,A,easy,Mammals
+352,Parrots can mimic sounds.,True,False,,,B,easy,Birds
+353,Pufferfish can inflate themselves.,True,False,,,A,easy,Marine Life
+354,All lizards can regrow tails.,False,True,,,B,easy,Reptiles
+355,Butterflies have four wings.,True,False,,,B,easy,Insects
+356,Camels store fat in humps.,True,False,,,A,easy,Mammals
+357,Owls can turn heads 270 degrees.,True,False,,,B,easy,Birds
+358,Sharks have cartilage instead of bones.,True,False,,,A,easy,Marine Life
+359,All snakes lay eggs.,False,True,,,A,easy,Reptiles
+360,Skunks can spray accurately.,True,False,,,B,easy,Mammals
+361,What are rhino horns made of?,Bone,Keratin,,,B,medium,Mammals
+362,Can parrots understand meaning?,Some can,No,,,A,medium,Birds
+363,How do pufferfish inflate?,Air,Water,,,B,medium,Marine Life
+364,How many times can lizards regrow tails?,Once,Multiple times,,,B,medium,Reptiles
+365,How many wings do butterflies have?,2,4,,,B,medium,Insects
+366,How long can camels go without water?,1 week,2 months,,,B,medium,Mammals
+367,When do owls hunt?,Day,Night,,,B,medium,Birds
+368,Do pufferfish contain poison?,Yes,No,,,A,medium,Marine Life
+369,Do some snakes give live birth?,Yes,No,,,A,medium,Amphibians
+370,How accurate is skunk spray?,Very accurate up to 10 feet,Random,,,A,medium,Mammals
+371,How fast can rhinos run?,20 mph,35 mph,50 mph,,B,hard,Mammals
+372,How long can macaws live?,20 years,50 years,80 years,,B,hard,Birds
+373,How deadly is pufferfish toxin?,Mild,1,200x cyanide,Like bee sting,B,hard,Marine Life
+374,How long can lizards hold their breath?,10 minutes,30 minutes,1 hour,,B,hard,Reptiles
+375,How many species of butterflies exist?,1,000,10,000,C,hard,Insects
+376,What temperature can camels tolerate?,50°F,100°F,120°F,,C,hard,Mammals
+377,What is unique about owl ears?,Very large,Asymmetrical placement,External,,B,hard,Birds
+378,How many bones do sharks have?,0,100,300,,A,hard,Marine Life
+379,What percentage of snakes give live birth?,10%,20%,50%,,B,hard,Amphibians
+380,How many sprays can a skunk make?,1-2,5-6,Unlimited,,B,hard,Mammals
+381,How many rhino species exist?,2,5,10,20,B,expert,Mammals
+382,What is parrot intelligence compared to?,Dogs,5-year-old child,Cats,Fish,B,expert,Birds
+383,What do pufferfish use their teeth for?,Crushing shells,Fighting,Display,Nothing,A,expert,Marine Life
+384,How many chambers do snake hearts have?,2,3,4,5,B,expert,Reptiles
+385,How many lenses in butterfly compound eyes?,100,1,000,6,D,expert,Insects
+386,How much water can a camel drink at once?,10 gallons,30 gallons,60 gallons,100 gallons,B,expert,Mammals
+387,How many eyelids do owls have?,1,2,3,4,C,expert,Birds
+388,How long have sharks existed?,50 million years,200 million years,450 million years,1 billion years,C,expert,Marine Life
+389,What percentage of snake venom is protein?,20%,50%,90%,100%,C,expert,Amphibians
+390,What chemical makes skunk spray smell?,Ammonia,Thiols,Sulfuric acid,Methane,B,expert,Mammals
+391,How much can a white rhino weigh?,,,,,,extreme,Mammals
+392,What is the parrot vocabulary record?,,,,,,extreme,Birds
+393,How many people can one pufferfish kill?,,,,,,extreme,Marine Life
+394,How many lizard species exist?,,,,,,extreme,Reptiles
+395,How many flowers does a butterfly visit daily?,,,,,,extreme,Insects
+396,How much can a camel carry?,,,,,,extreme,Mammals
+397,How many degrees can owls rotate their necks?,,,,,,extreme,Birds
+398,How many teeth can a shark have in lifetime?,,,,,,extreme,Marine Life
+399,What is the longest snake species?,,,,,,extreme,Amphibians
+400,How far can skunk spray be detected?,,,,,,extreme,Mammals
+401,Bison are the largest land mammals in North America.,True,False,,,A,easy,Mammals
+402,Parrots can learn to talk.,True,False,,,B,easy,Birds
+403,Whales are the largest animals ever.,True,False,,,A,easy,Marine Life
+404,Komodo dragons only live in Indonesia.,True,False,,,B,easy,Reptiles
+405,Ladybugs eat aphids.,True,False,,,A,easy,Insects
+406,Sea otters hold hands while sleeping.,True,False,,,B,easy,Mammals
+407,Eagles can see fish underwater.,True,False,,,A,easy,Birds
+408,Hermit crabs use empty shells.,True,False,,,B,easy,Marine Life
+409,Pythons can unhinge their jaws.,False,True,,,A,easy,Reptiles
+410,Sloths sleep hanging upside down.,True,False,,,A,easy,Mammals
+411,How much can a bison weigh?,500 lbs,2,000 lbs,,B,medium,Mammals
+412,Can eagles see in color?,No,Yes,,,B,medium,Birds
+413,How much milk does a whale calf drink daily?,10 gallons,100+ gallons,,,B,medium,Marine Life
+414,How do Komodo dragons hunt?,Speed,Venom and tracking,,,B,medium,Reptiles
+415,What do ladybugs primarily eat?,Leaves,Aphids,,,B,medium,Insects
+416,Why do otters hold hands?,Affection,Avoid drifting apart,,,B,medium,Mammals
+417,From what height can eagles spot fish?,100 feet,1,000+ feet,,B,medium,Birds
+418,Why do hermit crabs need shells?,Fashion,Protection,,,B,medium,Marine Life
+419,How do pythons incubate eggs?,Leave them,Coil around them,,,B,medium,Amphibians
+420,How do kangaroos move when grazing?,Hop,Walk using tail,,,B,medium,Mammals
+421,How fast can bison run?,20 mph,35 mph,50 mph,,B,hard,Mammals
+422,What is the record for parrot vocabulary?,100 words,500 words,1,700+ words,C,hard,Birds
+423,How many species of whales exist?,20,50,90,,C,hard,Marine Life
+424,How many teeth do Komodo dragons have?,20,60,100,,B,hard,Reptiles
+425,How many mosquito species exist?,100,3,500+,10,B,hard,Insects
+426,How many bones do sea otters have?,100,200,300,,B,hard,Mammals
+427,How far away can eagles see prey?,1/2 mile,2 miles,10 miles,,B,hard,Birds
+428,How often do hermit crabs change shells?,Once,As they grow,Never,,B,hard,Marine Life
+429,What percentage of python species are venomous?,0%,50%,100%,,A,hard,Amphibians
+430,What is a kangaroo's top hopping speed?,15 mph,35 mph,50 mph,,B,hard,Mammals
+431,What role do bison play in ecosystems?,,Keystone species,Predator,Pest,B,expert,Mammals
+432,What family do parrots belong to?,Corvidae,Psittacidae,Accipitridae,Strigidae,B,expert,Birds
+433,How do baleen whales produce sound?,Vocal cords,Larynx,Unknown mechanism,Blowholes,C,expert,Marine Life
+434,What bacteria live in Komodo dragon saliva?,,50+ strains,Beneficial only,5 strains,B,expert,Reptiles
+435,What does mosquito saliva contain?,Nothing,Anticoagulants,Venom,Sugar,B,expert,Insects
+436,What is unique about sea otter fur?,Longest,Densest,Waterproof,Colorful,B,expert,Mammals
+437,How do parrots learn to talk?,Instinct,Mimicry,Training,Both B and C,D,expert,Birds
+438,What type of eyes do crabs have?,Simple,Compound,No eyes,Single lens,B,expert,Marine Life
+439,How do pythons generate heat for eggs?,Can't,Muscle contractions,Sun only,Metabolism,B,expert,Amphibians
+440,What enables kangaroo hopping efficiency?,Muscles,Elastic tendons,Light bones,Long legs,B,expert,Mammals
+441,How many bison existed before European colonization?,,,,,,extreme,Mammals
+442,How many words can an African Grey Parrot learn?,,,,,,extreme,Birds
+443,What is the longest blue whale ever recorded?,,,,,,extreme,Marine Life
+444,What is a Komodo dragon's running speed?,,,,,,extreme,Reptiles
+445,How many deaths do mosquitoes cause annually?,,,,,,extreme,Insects
+446,How many calories do sea otters eat daily?,,,,,,extreme,Mammals
+447,How far can an eagle fly in a day?,,,,,,extreme,Birds
+448,What is the leg span of the Japanese spider crab?,,,,,,extreme,Marine Life
+449,How much can a python squeeze?,,,,,,extreme,Amphibians
+450,How high can a kangaroo jump?,,,,,,extreme,Mammals
+451,Dogs have better smell than humans.,True,False,,,A,easy,Mammals
+452,Ducks have waterproof feathers.,True,False,,,B,easy,Birds
+453,Pufferfish are poisonous.,True,False,,,A,easy,Marine Life
+454,Crocodiles are older than dinosaurs.,False,True,,,B,easy,Reptiles
+455,Flies can walk on ceilings.,True,False,,,B,easy,Insects
+456,Leopards are excellent climbers.,True,False,,,A,easy,Mammals
+457,The dodo bird is extinct.,True,False,,,B,easy,Birds
+458,Octopuses can change texture.,True,False,,,A,easy,Marine Life
+459,Turtles can live over 100 years.,True,False,,,A,easy,Reptiles
+460,Camels store water in their humps.,False,True,,,B,easy,Mammals
+461,How much better is a dog's smell?,10x,10,000-100,000x,B,medium,Mammals
+462,What makes duck feathers waterproof?,Natural coating,Preen oil,,,B,medium,Birds
+463,What toxin do pufferfish contain?,Cyanide,Tetrodotoxin,,,B,medium,Marine Life
+464,When did crocodiles appear?,50 million years ago,200+ million years ago,,,B,medium,Reptiles
+465,How do flies stick to ceilings?,Suction,Sticky pads,,,B,medium,Insects
+466,Why do leopards drag prey into trees?,Fun,Keep from scavengers,,,B,medium,Mammals
+467,When did dodos go extinct?,1500s,1600s,,,B,medium,Birds
+468,How do octopuses change texture?,Skin muscles,Magic,,,A,medium,Marine Life
+469,What is the oldest turtle age recorded?,100 years,180+ years,,,B,medium,Amphibians
+470,What do camel humps store?,Water,Fat,,,B,medium,Mammals
+471,How many smell receptors do dogs have?,10 million,300 million,1 billion,,B,hard,Mammals
+472,How many feathers does a duck have?,1,000,14,000,B,hard,Birds
+473,How toxic is tetrodotoxin?,Mild,1,200x deadlier than cyanide,Like bee sting,B,hard,Marine Life
+474,How old can crocodiles live?,30 years,70+ years,150 years,,B,hard,Reptiles
+475,How fast can flies react?,Same as humans,7x faster,Slower,,B,hard,Insects
+476,How much weight can leopards carry up trees?,Equal to body,3x body weight,Half body,,B,hard,Mammals
+477,How tall were dodos?,1 foot,3 feet,6 feet,,B,hard,Birds
+478,How fast can octopuses change appearance?,1 minute,Under 1 second,10 seconds,,B,hard,Marine Life
+479,How fast can sea turtles swim?,5 mph,20 mph,35 mph,,C,hard,Amphibians
+480,How many hours do leopards sleep daily?,8 hours,12 hours,16 hours,,C,hard,Mammals
+481,What brain area processes dog smell?,Small area,40x larger than humans,Same as humans,Don't have one,B,expert,Mammals
+482,How long can ducks stay underwater?,10 seconds,1 minute,5 minutes,30 minutes,B,expert,Birds
+483,How many pufferfish species are poisonous?,All,Most,Few,,B,expert,Marine Life
+484,What makes crocodilians unique among reptiles?,Size,Four-chambered heart,Intelligence,Speed,B,expert,Reptiles
+485,How many images per second can flies see?,24,60,250,1,C,expert,Insects
+486,When do leopards prefer to hunt?,Dawn,Noon,Night,Dusk,C,expert,Mammals
+487,Where did dodos live?,Madagascar,Mauritius,Hawaii,Galapagos,B,expert,Birds
+488,What percentage of octopus neurons are in arms?,10%,33%,66%,90%,C,expert,Marine Life
+489,How do sea turtles navigate thousands of miles?,Stars,Magnetic fields,Smell,Following others,B,expert,Amphibians
+490,What temperature range can camels tolerate?,10°F,50°F,120°F,150°F,C,expert,Mammals
+491,How many olfactory receptors do dogs have?,,,,,,extreme,Mammals
+492,What is a duck's heart rate while flying?,,,,,,extreme,Birds
+493,How many people does one pufferfish have enough toxin to kill?,,,,,,extreme,Marine Life
+494,How many teeth can a crocodile have in its lifetime?,,,,,,extreme,Reptiles
+495,How fast do fly wings beat per second?,,,,,,extreme,Insects
+496,What is a leopard's bite force?,,,,,,extreme,Mammals
+497,How much did dodos weigh?,,,,,,extreme,Birds
+498,How toxic is pufferfish poison?,,,,,,extreme,Marine Life
+499,How long can crocodiles live?,,,,,,extreme,Amphibians
+500,How slow do sloths move?,,,,,,extreme,Mammals
+501,Seals can sleep underwater.,True,False,,,A,easy,Mammals
+502,Parrots come in many colors.,True,False,,,A,easy,Birds
+503,Lobsters can regenerate claws.,True,False,,,B,easy,Marine Life
+504,Iguanas are herbivores.,True,False,,,A,easy,Reptiles
+505,Ants never sleep.,True,False,,,B,easy,Insects
+506,Sloths are slow movers.,True,False,,,B,easy,Mammals
+507,Peacocks are male peafowl.,True,False,,,A,easy,Birds
+508,Octopuses are invertebrates.,True,False,,,B,easy,Marine Life
+509,Tortoises live on land.,True,False,,,A,easy,Reptiles
+510,Skunks spray when threatened.,True,False,,,A,easy,Mammals
+511,How do seals stay warm in cold water?,Thick skin,Blubber layer,,,B,medium,Mammals
+512,What determines parrot color?,Diet,Feather structure and pigments,,,B,medium,Birds
+513,How long does claw regeneration take?,Weeks,Years,,,B,medium,Marine Life
+514,What do iguanas eat?,Insects,Plants,,,B,medium,Reptiles
+515,Do ants take short naps?,No,Yes,hundreds daily,,B,medium,Insects
+516,How often do sloths defecate?,Daily,Once a week,,,B,medium,Mammals
+517,What are the eye-spots on peacock feathers for?,Vision,Attracting mates,,,B,medium,Birds
+518,Are octopuses intelligent?,No,Yes,highly,,B,medium,Marine Life
+519,Where do tortoises lay eggs?,In nests on land,In water,,,A,medium,Amphibians
+520,Do skunks warn before spraying?,Yes,with body language,No,,A,medium,Mammals
+521,How fast do beaver teeth grow per year?,1 inch,4 inches,8 inches,,B,hard,Mammals
+522,How many colors can parrots see?,3,4,7,,B,hard,Birds
+523,How long can lobsters live?,10 years,50+ years,200 years,,B,hard,Marine Life
+524,How long can green iguanas grow?,2 feet,5 feet,10 feet,,B,hard,Reptiles
+525,How long is each ant nap?,1 minute,8 minutes,1 hour,,A,hard,Insects
+526,What grows in sloth fur?,Nothing,Algae,Moss,,B,hard,Mammals
+527,How many tail feathers do peacocks display?,50,150,300,,B,hard,Birds
+528,How many suckers per arm does an octopus have?,50,240,1,000,B,hard,Marine Life
+529,How do tortoises regulate temperature?,Can't,Behavioral thermoregulation,Sweating,,B,hard,Amphibians
+530,How many times can a skunk spray in succession?,1-2,5-6,Unlimited,,B,hard,Mammals
+531,What ecosystem role do beavers play?,Pest,Keystone species,Predator,,B,expert,Mammals
+532,What pigment makes parrot feathers red?,Carotenoids,Psittacofulvins,Melanin,,B,expert,Birds
+533,How do lobsters grow?,Continuously,By molting,Stop at maturity,Seasonal,B,expert,Marine Life
+534,How many eyelids do iguanas have?,2,3,4,1,B,expert,Reptiles
+535,How long can a queen ant live?,1 year,5 years,15 years,30 years,D,expert,Insects
+536,How many hours do sloths sleep daily?,8 hours,15 hours,20 hours,22 hours,B,expert,Mammals
+537,How are peacock colors produced?,Pigments,Diet,Structural coloration,Minerals,C,expert,Birds
+538,How many arms can an octopus regenerate?,,One,Multiple,All,D,expert,Marine Life
+539,How many bones in a tortoise shell?,10,30,50+,100+,C,expert,Amphibians
+540,What compound makes skunk spray so potent?,Ammonia,Thiols,Sulfuric acid,Pheromones,B,expert,Mammals
+541,What is the longest beaver dam ever recorded?,,,,,,extreme,Mammals
+542,What is the vocabulary record for an African Grey parrot?,,,,,,extreme,Birds
+543,What is the heaviest lobster ever caught?,,,,,,extreme,Marine Life
+544,How deep can marine iguanas dive?,,,,,,extreme,Reptiles
+545,What is the estimated total ant population on Earth?,,,,,,extreme,Insects
+546,How long does it take a sloth to digest food?,,,,,,extreme,Mammals
+547,How many eye-spots on a peacock's tail?,,,,,,extreme,Birds
+548,How fast can an octopus change color?,,,,,,extreme,Marine Life
+549,What is the oldest tortoise age recorded?,,,,,,extreme,Amphibians
+550,How far can skunk smell be detected?,,,,,,extreme,Mammals
+551,Wolves are pack animals.,True,False,,,A,easy,Mammals
+552,Swans can be aggressive.,True,False,,,B,easy,Birds
+553,Seals can sleep underwater.,True,False,,,A,easy,Marine Life
+554,Some snakes can fly.,True,False,,,B,easy,Reptiles
+555,Butterflies migrate long distances.,True,False,,,B,easy,Insects
+556,Bears eat both plants and meat.,True,False,,,A,easy,Mammals
+557,Flamingos filter feed.,True,False,,,B,easy,Birds
+558,Dolphins are mammals.,True,False,,,A,easy,Marine Life
+559,Monitor lizards are carnivores.,True,False,,,A,easy,Reptiles
+560,Kangaroos are marsupials.,True,False,,,B,easy,Mammals
+561,How long can seals hold their breath?,10 minutes,2 hours,,,B,medium,Mammals
+562,Can swans break bones with their wings?,Yes,can,No,myth,B,medium,Birds
+563,How do seals sleep underwater?,Can't,Half brain at a time,,,B,medium,Marine Life
+564,How do flying snakes glide?,Wings,Flattening body,,,B,medium,Reptiles
+565,Which butterfly migrates the farthest?,Swallowtail,Monarch,,,B,medium,Insects
+566,What do bears eat most?,Meat,Plants and berries,,,B,medium,Mammals
+567,What do flamingos filter for?,Fish,Algae and shrimp,,,B,medium,Birds
+568,How are dolphin calves born?,Head first,Tail first,,,B,medium,Marine Life
+569,How do monitor lizards hunt?,Ambush,Active pursuit,,,B,medium,Amphibians
+570,Where do joeys develop?,In pouch,In womb,,,A,medium,Mammals
+571,How far can wolves communicate by howling?,1 mile,6-10 miles,20 miles,,B,hard,Mammals
+572,How many bones in a swan's neck?,7,14,25,,C,hard,Birds
+573,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+574,How far can flying snakes glide?,10 feet,50 feet,100+ feet,,C,hard,Reptiles
+575,How far do monarchs migrate?,500 miles,1,500 miles,3,C,hard,Insects
+576,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+577,Can all birds fly?,No,Yes,,,A,hard,Birds
+578,What frequency can dolphins hear?,20 kHz,150 kHz,300 kHz,,B,hard,Marine Life
+579,How long can Komodo monitors grow?,4 feet,7 feet,10 feet,,C,hard,Amphibians
+580,How long does a joey stay in pouch?,2 months,6-9 months,2 years,,B,hard,Mammals
+581,How powerful is a wolf's sense of smell?,10x humans,100x humans,1,000x humans,B,expert,Mammals
+582,How long do swans mate for?,Season,Year,Life,Never pair,C,expert,Birds
+583,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+584,What genus are flying snakes?,Python,Chrysopelea,Cobra,Viper,B,expert,Reptiles
+585,How do monarchs navigate?,Random,Sun compass and magnetic sense,Following others,Memory,B,expert,Insects
+586,What happens to bear heart rate during hibernation?,Stops,Slows to 8 bpm,Increases,Stays same,B,expert,Mammals
+587,How many eyelids do flamingos have?,1,2,3,4,C,expert,Birds
+588,What is unique about dolphin sleep?,Don't sleep,Unihemispheric,Sleep fully,Sleep-swim,B,expert,Marine Life
+589,What do Komodo dragons use to kill prey?,Crushing,Venom,Speed,Claws,B,expert,Amphibians
+590,What enables kangaroo hopping?,Strong muscles,Elastic tendons,Hollow bones,Long tail,B,expert,Mammals
+591,What makes a mammal unique?,,,,,,extreme,Mammals
+592,How many feathers does a swan have?,,,,,,extreme,Birds
+593,How do fish breathe?,,,,,,extreme,Marine Life
+594,What is a flying snake's glide speed?,,,,,,extreme,Reptiles
+595,How many generations does monarch migration take?,,,,,,extreme,Insects
+596,How many calories does a bear eat before hibernation?,,,,,,extreme,Mammals
+597,Can all birds fly?,No,Yes,,,A,extreme,Birds
+598,How many different whistle sounds can dolphins make?,,,,,,extreme,Marine Life
+599,How much can a Komodo dragon weigh?,,,,,,extreme,Amphibians
+600,How many quills does a porcupine have?,,,,,,extreme,Mammals
+601,Elephants have excellent memory.,True,False,,,A,easy,Mammals
+602,Ducks have webbed feet.,True,False,,,B,easy,Birds
+603,All sharks are dangerous.,False,True,,,A,easy,Marine Life
+604,Sea turtles cry salt tears.,True,False,,,B,easy,Reptiles
+605,Bees dance to communicate.,True,False,,,B,easy,Insects
+606,Giraffes have long necks.,True,False,,,A,easy,Mammals
+607,Owls can rotate heads very far.,True,False,,,B,easy,Birds
+608,Octopuses have beaks.,True,False,,,A,easy,Marine Life
+609,Crocodiles are reptiles.,True,False,,,A,easy,Reptiles
+610,Cheetahs are the fastest land animals.,True,False,,,B,easy,Mammals
+611,How long can elephants remember?,Days,Decades,,,B,medium,Mammals
+612,Why do ducks have webbed feet?,Fashion,Swimming efficiency,,,B,medium,Birds
+613,What do most sharks eat?,Humans,Fish and seals,,,B,medium,Marine Life
+614,Why do sea turtles excrete salt?,Waste,Regulate salt balance,,,B,medium,Reptiles
+615,What does the waggle dance tell bees?,Danger,Food location,,,B,medium,Insects
+616,How many neck bones do giraffes have?,14,7,,,B,medium,Mammals
+617,How far can owls rotate heads?,180°,270°,,,B,medium,Birds
+618,Where is an octopus's beak located?,Center of arms,Head,,,A,medium,Marine Life
+619,Can crocodiles see well at night?,Yes,No,,,A,medium,Amphibians
+620,How slowly do sloths digest food?,1 day,1 week,1 month,,C,medium,Mammals
+621,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+622,How fast can ducks fly?,30 mph,60 mph,90 mph,,B,hard,Birds
+623,How many pups can a shark have?,1-2,10-80,200+,,B,hard,Marine Life
+624,How deep can sea turtles dive?,100 feet,1,000 feet,4,C,hard,Reptiles
+625,How many flowers must bees visit for 1 lb honey?,10,000,2 million,10 million,B,hard,Insects
+626,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+627,Can all birds fly?,No,Yes,,,A,hard,Birds
+628,How strong is octopus suction per sucker?,1 lb,35 lbs,100 lbs,,B,hard,Marine Life
+629,How long can crocodiles stay underwater?,10 minutes,1 hour,2+ hours,,C,hard,Amphibians
+630,How many quills can a porcupine have?,1,000,10,000,C,hard,Mammals
+631,What is unique about elephant brains?,Small,Largest land animal brain,No wrinkles,Two brains,B,expert,Mammals
+632,What makes duck bones special?,Solid,Hollow for buoyancy,Very heavy,Made of cartilage,B,expert,Birds
+633,What is shark skeleton made of?,Bone,Cartilage,Chitin,Keratin,B,expert,Marine Life
+634,How do sea turtles excrete excess salt?,Kidneys,Gills,Salt glands near eyes,Skin,C,expert,Reptiles
+635,How many legs do insects have?,6,8,,,A,expert,Insects
+636,How many vertebrae in giraffe neck?,7,14,21,28,A,expert,Mammals
+637,Can all birds fly?,No,Yes,,,A,expert,Birds
+638,Why is octopus blood blue?,Cold water,Copper-based hemocyanin,Diet,Genetics,B,expert,Marine Life
+639,How do crocodiles regulate temperature?,Sweating,Panting,Behavioral thermoregulation,Shivering,C,expert,Amphibians
+640,What enables cheetah speed?,Large lungs,Flexible spine,Long legs,All of these,D,expert,Mammals
+641,How much does an elephant brain weigh?,,,,,,extreme,Mammals
+642,What is the fastest duck flight speed?,,,,,,extreme,Birds
+643,How many tentacles does a squid have?,,,,,,extreme,Marine Life
+644,What is the largest lizard species?,,,,,,extreme,Reptiles
+645,How many flowers for 1 pound of honey?,,,,,,extreme,Insects
+646,Are mammals warm-blooded?,Yes,No,,,A,extreme,Mammals
+647,Can all birds fly?,No,Yes,,,A,extreme,Birds
+648,Do fish sleep?,Yes,No,,,A,extreme,Marine Life
+649,Can amphibians live in water?,Yes,No,,,A,extreme,Amphibians
+650,Sample question about mammals?,Yes,No,,,A,extreme,Mammals
+651,Deer shed their antlers annually.,True,False,,,A,easy,Mammals
+652,Owls are birds of prey.,True,False,,,B,easy,Birds
+653,Octopuses can squeeze through small spaces.,True,False,,,A,easy,Marine Life
+654,Geckos can climb glass.,True,False,,,B,easy,Reptiles
+655,Bees communicate through dance.,True,False,,,B,easy,Insects
+656,Otters use tools.,True,False,,,A,easy,Mammals
+657,Penguins can hold their breath.,True,False,,,B,easy,Birds
+658,Sharks can sense electricity.,True,False,,,A,easy,Marine Life
+659,Snakes can dislocate jaws.,False,True,,,A,easy,Reptiles
+660,Bears can climb trees.,True,False,,,B,easy,Mammals
+661,Why do male deer shed antlers?,Hormonal cycle,Broken,,,A,medium,Mammals
+662,What do owls regurgitate?,Pellets,Seeds,,,A,medium,Birds
+663,Do octopuses have bones?,No,Yes,,,A,medium,Marine Life
+664,What helps geckos climb?,Tiny hairs,Suction,,,A,medium,Reptiles
+665,What dance do bees perform?,Waggle dance,Circle dance,,,A,medium,Insects
+666,What do otters use as tools?,Rocks,Sticks,,,A,medium,Mammals
+667,How long can penguins hold breath?,20 minutes,5 minutes,,,A,medium,Birds
+668,What can sharks sense in water?,Electric fields,Sound only,,,A,medium,Marine Life
+669,Do snakes unhinge their jaws?,No,ligaments stretch,Yes,,A,medium,Reptiles
+670,Which bears climb best?,Black bears,Grizzlies,,,A,medium,Mammals
+671,When do deer antlers fall off?,Winter,Spring,Summer,,A,hard,Mammals
+672,How many degrees can owls rotate heads?,270,180,360,,A,hard,Birds
+673,How many hearts do octopuses have?,3,2,4,,A,hard,Marine Life
+674,What are gecko toe pads called?,Lamellae,Setae,Spatulae,,A,hard,Reptiles
+675,What direction indicates food distance?,Dance angle,Speed,Duration,,A,hard,Insects
+676,What shellfish do otters eat?,Sea urchins,Crabs,Clams,,A,hard,Mammals
+677,What's the deepest penguin dive?,1,850 feet,500 feet,3,A,hard,Birds
+678,What are shark electroreceptors called?,Ampullae of Lorenzini,Lateral line,Barbels,,A,hard,Marine Life
+679,How do snakes detect chemicals?,Jacobson's organ,Nostrils,Skin,,A,hard,Reptiles
+680,What bear species climbs most?,Asian black bear,Sun bear,Sloth bear,,A,hard,Mammals
+681,What hormone triggers antler shedding?,Testosterone drop,Estrogen,Cortisol,Melatonin,A,expert,Mammals
+682,How many neck vertebrae do owls have?,14,7,20,10,A,expert,Birds
+683,Where are octopus neurons located?,2/3 in arms,All in brain,Half in arms,1/3 in arms,A,expert,Marine Life
+684,How many setae per gecko toe?,Millions,Thousands,Hundreds,Billions,A,expert,Reptiles
+685,Who discovered the waggle dance?,Karl von Frisch,Charles Darwin,E.O. Wilson,Jane Goodall,A,expert,Insects
+686,What's the scientific name for sea otter?,Enhydra lutris,Lutra lutra,Lontra canadensis,Aonyx capensis,A,expert,Mammals
+687,Which penguin dives deepest?,Emperor,King,Gentoo,Adelie,A,expert,Birds
+688,What phylum are sharks in?,Chordata,Arthropoda,Mollusca,Echinodermata,A,expert,Marine Life
+689,What class are snakes in?,Reptilia,Amphibia,Mammalia,Aves,A,expert,Reptiles
+690,What's a bear's climbing speed?,100 feet/minute,50 feet/minute,200 feet/minute,25 feet/minute,A,expert,Mammals
+691,What is the antler growth rate per day?,,,,,,extreme,Mammals
+692,What is the owl's asymmetric ear adaptation?,,,,,,extreme,Birds
+693,How many suckers does a giant Pacific octopus have?,,,,,,extreme,Marine Life
+694,What force do gecko setae use?,,,,,,extreme,Reptiles
+695,What is the waggle dance discovery year?,,,,,,extreme,Insects
+696,How many calories do sea otters eat daily?,,,,,,extreme,Mammals
+697,What is the Emperor penguin's scientific name?,,,,,,extreme,Birds
+698,What is a shark's sixth sense called?,,,,,,extreme,Marine Life
+699,What protein makes up snake scales?,,,,,,extreme,Reptiles
+700,What's the bear's taxonomic family?,,,,,,extreme,Mammals
+701,Polar bears have white fur.,False,True,,,A,easy,Mammals
+702,Eagles have sharp talons.,True,False,,,B,easy,Birds
+703,Sharks must keep swimming to breathe.,Some must,All must,,,A,easy,Marine Life
+704,Turtles can live without their shells.,False,True,,,B,easy,Reptiles
+705,Butterflies taste with their feet.,True,False,,,B,easy,Insects
+706,Kangaroos can hop backwards.,False,True,,,A,easy,Mammals
+707,Parrots are social birds.,True,False,,,B,easy,Birds
+708,Do fish sleep?,Yes,No,,,A,easy,Marine Life
+709,Chameleons change color.,True,False,,,A,easy,Reptiles
+710,All bats drink blood.,False,True,,,A,easy,Mammals
+711,What color is polar bear fur?,White,Transparent,,,B,medium,Mammals
+712,How strong is an eagle's grip?,50 PSI,400 PSI,,,B,medium,Birds
+713,How do some sharks sleep?,Can't sleep,Keep moving,,,B,medium,Marine Life
+714,Are reptiles cold-blooded?,Yes,No,,,A,medium,Reptiles
+715,How many legs do insects have?,6,8,,,A,medium,Insects
+716,How do kangaroos move slowly?,Hop slowly,Walk with tail,,,B,medium,Mammals
+717,Do parrots mate for life?,Usually yes,No,,,A,medium,Birds
+718,Do fish sleep?,Yes,No,,,A,medium,Marine Life
+719,Can amphibians live in water?,Yes,No,,,A,medium,Amphibians
+720,How far can polar bears swim?,10 miles,60 miles,400+ miles,,C,hard,Mammals
+721,Can all birds fly?,No,Yes,,,A,hard,Birds
+722,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+723,What is the oldest turtle age?,100 years,190 years,300 years,,B,hard,Reptiles
+724,How fast can butterflies fly?,5 mph,12 mph,30 mph,,C,hard,Insects
+725,What force can a kangaroo kick generate?,300 PSI,850 PSI,1,500 PSI,B,hard,Mammals
+726,How many parrot species exist?,100,400,800,,B,hard,Birds
+727,How many neurons in octopus arms?,10 million,100 million,300 million,,C,hard,Marine Life
+728,Can amphibians live in water?,Yes,No,,,A,hard,Amphibians
+729,How many vampire bat species exist?,1,3,10,,B,hard,Mammals
+730,How many teeth do polar bears have?,20,32,42,50,C,expert,Mammals
+731,What percentage of eagle body is skeleton?,25%,15%,5-6%,35%,C,expert,Birds
+732,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+733,How many bones in a turtle shell?,10,30,50+,100,C,expert,Reptiles
+734,How many eyes does a butterfly have?,2,6,12,000,C,expert,Insects
+735,What makes kangaroo hopping efficient?,Muscles,Elastic tendons,Bones,Tail,B,expert,Mammals
+736,Can parrots pass mirror test?,No,Some species,All species,Unknown,B,expert,Birds
+737,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+738,What cells enable chameleon color change?,Melanocytes,Chromatophores,Keratinocytes,Fibroblasts,B,expert,Amphibians
+739,How loud is a bat's echolocation?,20 dB,60 dB,140 dB,200 dB,C,expert,Mammals
+740,How much can a polar bear weigh?,,,,,,extreme,Mammals
+741,What is the fastest bird in level flight?,,,,,,extreme,Birds
+742,How many hearts does a cuttlefish have?,,,,,,extreme,Marine Life
+743,How long can an anaconda grow?,,,,,,extreme,Reptiles
+744,How many ants are there per human on Earth?,,,,,,extreme,Insects
+745,How fast can a polar bear swim?,,,,,,extreme,Mammals
+746,How many times per second does a hummingbird's heart beat?,,,,,,extreme,Birds
+747,What is the heaviest marine mammal?,,,,,,extreme,Marine Life
+748,How many degrees can chameleon eyes rotate?,,,,,,extreme,Amphibians
+749,How far can a hedgehog travel in one night?,,,,,,extreme,Mammals
+750,Gorillas are mostly peaceful.,True,False,,,A,easy,Mammals
+751,Birds have feathers.,True,False,,,B,easy,Birds
+752,Seals are mammals.,True,False,,,A,easy,Marine Life
+753,Alligators live in freshwater.,True,False,,,B,easy,Reptiles
+754,Ants are social insects.,True,False,,,B,easy,Insects
+755,Wolves howl to communicate.,True,False,,,A,easy,Mammals
+756,Flamingos are born gray.,True,False,,,B,easy,Birds
+757,Lobsters can live 100+ years.,True,False,,,A,easy,Marine Life
+758,Pythons are constrictors.,True,False,,,A,easy,Reptiles
+759,Foxes are members of the dog family.,True,False,,,B,easy,Mammals
+760,Are mammals warm-blooded?,Yes,No,,,A,medium,Mammals
+761,Why do birds have feathers?,Beauty,Flight and insulation,,,B,medium,Birds
+762,How do seals sleep?,Can't sleep,Half brain at a time,,,B,medium,Marine Life
+763,Are reptiles cold-blooded?,Yes,No,,,A,medium,Reptiles
+764,How many legs do insects have?,6,8,,,A,medium,Insects
+765,Why do wolves howl?,Fun,Communication,,,B,medium,Mammals
+766,Can all birds fly?,No,Yes,,,A,medium,Birds
+767,Do fish sleep?,Yes,No,,,A,medium,Marine Life
+768,How do pythons kill prey?,Venom,Constriction,,,B,medium,Reptiles
+769,Are foxes solitary or social?,Mostly solitary,Always pack,,,A,medium,Mammals
+770,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+771,Can all birds fly?,No,Yes,,,A,hard,Birds
+772,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+773,Are reptiles cold-blooded?,Yes,No,,,A,hard,Reptiles
+774,How many legs do insects have?,6,8,,,A,hard,Insects
+775,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+776,Can all birds fly?,No,Yes,,,A,hard,Birds
+777,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+778,Are reptiles cold-blooded?,Yes,No,,,A,hard,Reptiles
+779,Are mammals warm-blooded?,Yes,No,,,A,expert,Mammals
+780,Can all birds fly?,No,Yes,,,A,expert,Birds
+781,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+782,Are reptiles cold-blooded?,Yes,No,,,A,expert,Reptiles
+783,How many legs do insects have?,6,8,,,A,expert,Insects
+784,Are mammals warm-blooded?,Yes,No,,,A,expert,Mammals
+785,Can all birds fly?,No,Yes,,,A,expert,Birds
+786,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+787,Are reptiles cold-blooded?,Yes,No,,,A,expert,Reptiles
+788,What makes a mammal unique?,,,,,,extreme,Mammals
+789,What are bird feathers made of?,,,,,,extreme,Birds
+790,How do fish breathe?,,,,,,extreme,Marine Life
+791,Are reptiles cold-blooded?,Yes,No,,,A,extreme,Reptiles
+792,How many legs do insects have?,6,8,,,A,extreme,Insects
+793,Are mammals warm-blooded?,Yes,No,,,A,extreme,Mammals
+794,Can all birds fly?,No,Yes,,,A,extreme,Birds
+795,Do fish sleep?,Yes,No,,,A,extreme,Marine Life
+796,Are reptiles cold-blooded?,Yes,No,,,A,extreme,Reptiles
+797,Sample question about mammals?,Yes,No,,,A,extreme,Mammals
+798,Mice have excellent hearing.,True,False,,,A,easy,Mammals
+799,Parrots are intelligent birds.,True,False,,,B,easy,Birds
+800,Fish breathe through gills.,True,False,,,A,easy,Marine Life
+801,Komodo dragons are venomous.,True,False,,,B,easy,Reptiles
+802,Male crickets chirp to attract mates.,True,False,,,B,easy,Insects
+803,Squirrels bury nuts for winter.,True,False,,,A,easy,Mammals
+804,Can all birds fly?,No,Yes,,,A,easy,Birds
+805,Crabs can walk forward.,False,True,,,B,easy,Marine Life
+806,Tortoises are slow movers.,True,False,,,A,easy,Reptiles
+807,Badgers are nocturnal.,True,False,,,A,easy,Mammals
+808,What frequency can mice hear?,Up to 20 kHz,Up to 90 kHz,,,B,medium,Mammals
+809,Can parrots solve puzzles?,Yes,No,,,A,medium,Birds
+810,Do fish drink water?,Saltwater fish do,No,,,A,medium,Marine Life
+811,Where is Komodo dragon venom located?,Saliva glands,Lower jaw,,,B,medium,Reptiles
+812,What affects cricket chirp rate?,Mood,Temperature,,,B,medium,Insects
+813,Are mammals warm-blooded?,Yes,No,,,A,medium,Mammals
+814,Can all birds fly?,No,Yes,,,A,medium,Birds
+815,Do fish sleep?,Yes,No,,,A,medium,Marine Life
+816,What is a tortoise's top speed?,0.3 mph,5 mph,,,A,medium,Amphibians
+817,What are badger homes called?,Dens,Setts,,,B,medium,Mammals
+818,What is a mouse's heart rate?,100 bpm,300 bpm,600 bpm,,C,hard,Mammals
+819,Can all birds fly?,No,Yes,,,A,hard,Birds
+820,Can fish see in color?,No,Some can,All can,,C,hard,Marine Life
+821,Are reptiles cold-blooded?,Yes,No,,,A,hard,Reptiles
+822,How many legs do insects have?,6,8,,,A,hard,Insects
+823,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+824,How fast can ducks swim?,2 mph,5 mph,8 mph,,B,hard,Birds
+825,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+826,How long can tortoises live?,50 years,100 years,150+ years,,C,hard,Amphibians
+827,How strong is a badger's bite?,100 PSI,300 PSI,500 PSI,,B,hard,Mammals
+828,What DNA percentage do humans share with mice?,50%,70%,85%,98%,C,expert,Mammals
+829,What is unique about parrot bonding?,,Mate for life,Change yearly,No bonds,B,expert,Birds
+830,Do fish sleep?,No,Yes,with eyes open,Only at night,B,expert,Marine Life
+831,Are reptiles cold-blooded?,Yes,No,,,A,expert,Reptiles
+832,How many legs do insects have?,6,8,,,A,expert,Insects
+833,How fast do squirrel teeth grow yearly?,1 inch,3 inches,6 inches,12 inches,C,expert,Mammals
+834,What type of sleep do ducks have?,Normal,Unihemispheric,,Constant,B,expert,Birds
+835,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+836,Do tortoises have good memory?,No,Yes,excellent,Average,B,expert,Amphibians
+837,What family do badgers belong to?,Canidae,Felidae,Mustelidae,Ursidae,C,expert,Mammals
+838,What makes a mammal unique?,,,,,,extreme,Mammals
+839,What are bird feathers made of?,,,,,,extreme,Birds
+840,How many fish species exist?,,,,,,extreme,Marine Life
+841,Are reptiles cold-blooded?,Yes,No,,,A,extreme,Reptiles
+842,How many cricket species exist?,,,,,,extreme,Insects
+843,What is a squirrel's heart rate?,,,,,,extreme,Mammals
+844,Can all birds fly?,No,Yes,,,A,extreme,Birds
+845,What is the leg span of Japanese spider crab?,,,,,,extreme,Marine Life
+846,How much can a Galapagos tortoise weigh?,,,,,,extreme,Amphibians
+847,How fast can a badger run?,,,,,,extreme,Mammals
+848,Deer shed their antlers annually.,True,False,,,A,easy,Mammals
+849,Owls are birds of prey.,True,False,,,B,easy,Birds
+850,Octopuses can squeeze through small spaces.,True,False,,,A,easy,Marine Life
+851,Geckos can climb glass.,True,False,,,B,easy,Reptiles
+852,Bees communicate through dance.,True,False,,,B,easy,Insects
+853,Otters use rocks as tools.,True,False,,,A,easy,Mammals
+854,How many hours do pandas eat daily?,4 hours,12-16 hours,24 hours,,A,easy,Mammals
+855,What is unihemispheric sleep?,Light sleep,Half brain sleeps,No sleep,,B,easy,Birds
+856,Do fish sleep?,Yes,No,,,A,easy,Marine Life
+857,What cells enable color change?,Melanocytes,Chromatophores,Keratinocytes,,A,easy,Reptiles
+858,How many deaths do mosquitoes cause yearly?,10,000,100,000,A,easy,Insects
+859,Are mammals warm-blooded?,Yes,No,,,A,easy,Mammals
+860,What percentage is eagle skeleton of body?,25%,15%,5-6%,,B,easy,Birds
+861,Do fish sleep?,Yes,No,,,A,easy,Marine Life
+862,Can amphibians live in water?,Yes,No,,,A,easy,Amphibians
+863,How many trees can a beaver cut yearly?,50,200,500,,A,easy,Mammals
+864,What digestive system do pandas have?,Herbivore,Carnivore,Omnivore,,B,expert,Mammals
+865,Which hemisphere sleeps in ducks?,Both,Alternates,Left only,Right only,A,expert,Birds
+866,How far can blue whale calls travel?,10 miles,100 miles,1,000 miles,B,expert,Marine Life
+867,Can chameleons see in two directions?,No,Yes,independently,Only forward,B,expert,Reptiles
+868,What disease kills the most via mosquitoes?,Dengue,Malaria,Zika,Yellow fever,A,expert,Insects
+869,How big is a newborn joey?,1 inch,6 inches,1 foot,2 feet,B,expert,Mammals
+870,Can all birds fly?,No,Yes,,,A,expert,Birds
+871,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+872,Can amphibians live in water?,Yes,No,,,A,expert,Amphibians
+873,How long can beavers hold breath?,2 min,5 min,15 min,30 min,A,expert,Mammals
+874,How much does an adult panda weigh?,,,,,,extreme,Mammals
+875,What are bird feathers made of?,,,,,,extreme,Birds
+876,What is the longest blue whale recorded?,,,,,,extreme,Marine Life
+877,How long is a chameleon's tongue compared to body?,,,,,,extreme,Reptiles
+878,How many times per second do mosquito wings beat?,,,,,,extreme,Insects
+879,Are mammals warm-blooded?,Yes,No,,,A,extreme,Mammals
+880,Can all birds fly?,No,Yes,,,A,extreme,Birds
+881,What is the longest giant squid recorded?,,,,,,extreme,Marine Life
+882,What is the oldest sea turtle recorded?,,,,,,extreme,Amphibians
+883,What is the longest beaver dam?,,,,,,extreme,Mammals
+884,Tigers are the largest cats.,True,False,,,A,easy,Mammals
+885,Eagles build large nests.,True,False,,,B,easy,Birds
+886,Whales sing songs.,True,False,,,A,easy,Marine Life
+887,Crocodiles can live in both fresh and salt water.,True,False,,,B,easy,Reptiles
+888,Mosquitoes are attracted to carbon dioxide.,True,False,,,B,easy,Insects
+889,Lions live in groups called prides.,True,False,,,A,easy,Mammals
+890,Some parrots can live 80+ years.,True,False,,,B,easy,Birds
+891,Squids have the largest eyes in the animal kingdom.,True,False,,,A,easy,Marine Life
+892,Anacondas are the heaviest snakes.,True,False,,,A,easy,Reptiles
+893,Kangaroos are native to Australia.,True,False,,,B,easy,Mammals
+894,How much can a tiger weigh?,200 lbs,600 lbs,,,B,medium,Mammals
+895,How heavy can eagle nests become?,50 lbs,2,000 lbs,,B,medium,Birds
+896,Why do whales sing?,Fun,Communication and mating,,,B,medium,Marine Life
+897,Which crocodile lives in saltwater?,American,Saltwater crocodile,,,B,medium,Reptiles
+898,What else attracts mosquitoes?,Light,Body heat and odor,,,B,medium,Insects
+899,Who leads a lion pride?,Male,Female,,,B,medium,Mammals
+900,Can parrots recognize themselves in mirrors?,Some can,No,,,A,medium,Birds
+901,How large can giant squid eyes be?,5 inches,10 inches,,,B,medium,Marine Life
+902,Can anacondas swim?,Yes,very well,No,,A,medium,Amphibians
+903,How do kangaroos move efficiently?,Hopping,Running,,,A,medium,Mammals
+904,Are mammals warm-blooded?,Yes,No,,,A,hard,Mammals
+905,How wide can eagle nests be?,3 feet,6 feet,10 feet,,B,hard,Birds
+906,How far can whale songs travel?,10 miles,100 miles,1,000+ miles,C,hard,Marine Life
+907,Are reptiles cold-blooded?,Yes,No,,,A,hard,Reptiles
+908,How many people do mosquitoes kill yearly?,10,000,100,000,C,hard,Insects
+909,How far can a lion's roar be heard?,1 mile,5 miles,10 miles,,B,hard,Mammals
+910,Can all birds fly?,No,Yes,,,A,hard,Birds
+911,How long can giant squids grow?,20 feet,43 feet,80 feet,,B,hard,Marine Life
+912,How much can an anaconda weigh?,100 lbs,300 lbs,550 lbs,,C,hard,Amphibians
+913,Can tigers swim long distances?,No,Yes,up to 15 miles,Only short,B,expert,Mammals
+914,How many eaglets typically survive per nest?,All,Usually one,Two,,B,expert,Birds
+915,Do fish sleep?,Yes,No,,,A,expert,Marine Life
+916,How many bones in a crocodile's body?,100,200,300,400,C,expert,Reptiles
+917,What is the deadliest animal to humans?,Sharks,Mosquitoes,Snakes,Lions,B,expert,Insects
+918,Are mammals warm-blooded?,Yes,No,,,A,expert,Mammals
+919,What makes parrots so intelligent?,Large brain,Brain-to-body ratio similar to primates,Many neurons,Social behavior,B,expert,Birds
+920,What does a squid use its beak for?,Defense,Crushing prey,Grooming,Communication,B,expert,Marine Life
+921,What is the longest anaconda recorded?,15 feet,25 feet,33 feet,50 feet,C,expert,Amphibians
+922,What makes kangaroo hopping so efficient?,Strong muscles,Elastic tendons store energy,Light bones,Long tail,B,expert,Mammals
+923,What makes a mammal unique?,,,,,,extreme,Mammals
+924,What is the largest eagle nest ever recorded?,,,,,,extreme,Birds
+925,What is the longest blue whale ever measured?,,,,,,extreme,Marine Life
+926,Are reptiles cold-blooded?,Yes,No,,,A,extreme,Reptiles
+927,How many legs do insects have?,6,8,,,A,extreme,Insects
+928,Are mammals warm-blooded?,Yes,No,,,A,extreme,Mammals
+929,Can all birds fly?,No,Yes,,,A,extreme,Birds
+930,Do fish sleep?,Yes,No,,,A,extreme,Marine Life
+931,What is the heaviest anaconda recorded?,,,,,,extreme,Amphibians
+932,How long can pandas live?,,,,,,extreme,Mammals
+933,Pandas eat mainly bamboo.,True,False,,,A,easy,Mammals
+934,Flamingos get their color from their diet.,True,False,,,B,easy,Birds
+935,Clownfish live in sea anemones.,True,False,,,A,easy,Marine Life
+936,Iguanas can swim.,True,False,,,B,easy,Reptiles
+937,Butterflies only live a few weeks.,True,False,,,B,easy,Insects
+938,Hippos can hold their breath underwater.,True,False,,,A,easy,Mammals
+939,Ducks are waterfowl.,True,False,,,B,easy,Birds
+940,Crabs have hard shells.,True,False,,,A,easy,Marine Life
+941,Sea turtles migrate long distances.,True,False,,,A,easy,Reptiles
+942,Elephants are the largest land animals.,True,False,,,B,easy,Mammals
+943,Are mammals warm-blooded?,Yes,No,,,A,medium,Mammals
+944,What pigment makes flamingos pink?,Melanin,Carotenoids,,,B,medium,Birds
+945,How are clownfish protected from anemone stings?,Thick skin,Mucus coating,,,B,medium,Marine Life
+946,Which iguana species swims in the ocean?,Green iguana,Marine iguana,,,B,medium,Reptiles
+947,What do adult butterflies primarily eat?,Leaves,Nectar,,,B,medium,Insects
+948,How long can hippos hold their breath?,2 minutes,5 minutes,,,B,medium,Mammals
+949,What makes ducks buoyant?,Hollow bones,Air sacs and waterproof feathers,,,B,medium,Birds
+950,Why do crabs molt?,To reproduce,To grow,,,B,medium,Marine Life
+951,Can amphibians live in water?,Yes,No,,,A,medium,Amphibians
+952,How many muscles are in an elephant's trunk?,100,40,000+,,B,medium,Mammals
+953,How many hours do pandas spend eating?,4-6 hours,12-16 hours,20-24 hours,,B,hard,Mammals
+954,Can all birds fly?,No,Yes,,,A,hard,Birds
+955,Do fish sleep?,Yes,No,,,A,hard,Marine Life
+956,Are reptiles cold-blooded?,Yes,No,,,A,hard,Reptiles
+957,How far can monarch butterflies migrate?,500 miles,1,500 miles,3,C,hard,Insects
+958,How long are hippo canine teeth?,6 inches,12 inches,20 inches,,C,hard,Mammals
+959,How do ducks sleep safely on water?,Don't sleep,Unihemispheric sleep,Float unconsciously,,B,hard,Birds
+960,How many legs do crabs have?,6,8,10,,C,hard,Marine Life
+961,How many eggs can a sea turtle lay at once?,10-20,50-100,100-200,,C,hard,Amphibians
+962,How many pandas are left in the wild?,500,1,800,5,B,expert,Mammals
+963,How many flamingo species exist?,2,4,6,10,C,expert,Birds
+964,What type of symbiosis do clownfish and anemones have?,Parasitism,Mutualism,Commensalism,Competition,B,expert,Marine Life
+965,How do marine iguanas warm up after diving?,Shivering,Basking in sun,Group huddles,Internal heat,B,expert,Reptiles
+966,How many lenses in a butterfly's compound eye?,100,1,000,6,D,expert,Insects
+967,General animal question?,Yes,No,,,A,expert,Mammals
+968,Which brain hemisphere stays awake in ducks?,Left,Right,Alternates,Both partially,C,expert,Birds
+969,What color is crab blood?,Red,Blue,Green,Clear,B,expert,Marine Life
+970,What determines sea turtle egg gender?,Genetics,Incubation temperature,Location,Time of year,B,expert,Amphibians
+971,How much does an elephant's brain weigh?,2 lbs,5 lbs,11 lbs,20 lbs,C,expert,Mammals
+972,How much does an adult giant panda weigh?,,,,,,extreme,Mammals
+973,How many eye-spots does a peacock have on its train?,,,,,,extreme,Birds
+974,General animal question?,Yes,No,,,A,extreme,Marine Life
+975,How long can marine iguanas stop their heartbeat?,,,,,,extreme,Reptiles
+976,How many flowers does a butterfly visit per day?,,,,,,extreme,Insects
+977,How long can hippos stay underwater?,,,,,,extreme,Mammals
+978,How many feathers does a mallard duck have?,,,,,,extreme,Birds
+979,General animal question?,Yes,No,,,A,extreme,Marine Life
+980,How far do some sea turtles migrate?,,,,,,extreme,Amphibians
+981,How far can lions roar be heard?,,,,,,extreme,Mammals

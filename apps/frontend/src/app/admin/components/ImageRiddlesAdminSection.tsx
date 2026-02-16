@@ -259,7 +259,11 @@ function importFromCSV<T extends Record<string, unknown>>(
  * Convert image riddles to CSV format
  */
 function imageRiddlesToCSV(riddles: ImageRiddle[]): string {
-  return exportToCSV(riddles, imageRiddleConfig, { count: riddles.length.toString() });
+  return exportToCSV(
+    riddles as unknown as Record<string, unknown>[], 
+    imageRiddleConfig as unknown as ImportExportConfig<Record<string, unknown>>, 
+    { count: riddles.length.toString() }
+  );
 }
 
 /**
@@ -273,25 +277,29 @@ function imageRiddlesToJSON(riddles: ImageRiddle[]): string {
  * Parse image riddle CSV
  */
 function parseImageRiddleCSV(csvText: string): ImportResult<ImageRiddle> {
-  return importFromCSV(csvText, imageRiddleConfig, (values, headers) => {
-    const getValue = (_index: number, headerName: string): string => {
-      const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
-      return headerIndex !== -1 && headerIndex < values.length ? values[headerIndex] ?? '' : '';
-    };
+  const result = importFromCSV(
+    csvText, 
+    imageRiddleConfig as unknown as ImportExportConfig<Record<string, unknown>>, 
+    (values, headers) => {
+      const getValue = (_index: number, headerName: string): string => {
+        const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
+        return headerIndex !== -1 && headerIndex < values.length ? values[headerIndex] ?? '' : '';
+      };
 
-    return {
-      id: String(Date.now() + Math.floor(Math.random() * 1000)),
-      title: getValue(1, 'title'),
-      imageUrl: getValue(2, 'imageurl'),
-      answer: getValue(3, 'answer'),
-      hint: getValue(4, 'hint'),
-      difficulty: (getValue(5, 'difficulty') || 'medium') as ImageRiddle['difficulty'],
-      category: { name: getValue(6, 'category') || 'General', emoji: '🔍' },
-      timerSeconds: parseInt(getValue(7, 'timerseconds')) || 90,
-      showTimer: getValue(8, 'showtimer')?.toLowerCase() === 'true',
-      isActive: getValue(9, 'isactive')?.toLowerCase() !== 'false',
-    };
-  });
+      return {
+        id: String(Date.now() + Math.floor(Math.random() * 1000)),
+        title: getValue(1, 'title'),
+        imageUrl: getValue(2, 'imageurl'),
+        answer: getValue(3, 'answer'),
+        hint: getValue(4, 'hint'),
+        difficulty: (getValue(5, 'difficulty') || 'medium') as ImageRiddle['difficulty'],
+        category: { name: getValue(6, 'category') || 'General', emoji: '🔍' },
+        timerSeconds: parseInt(getValue(7, 'timerseconds')) || 90,
+        showTimer: getValue(8, 'showtimer')?.toLowerCase() === 'true',
+        isActive: getValue(9, 'isactive')?.toLowerCase() !== 'false',
+      };
+    });
+  return result as unknown as ImportResult<ImageRiddle>;
 }
 
 /** Default form state */
@@ -341,7 +349,12 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const [filterDifficulty, setFilterDifficulty] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState('1');
+  const itemsPerPage = 10;
 
   // Selection and bulk action states
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -391,6 +404,32 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
     return matchesDifficulty && matchesCategory && matchesSearch && matchesStatus;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredRiddles.length / itemsPerPage);
+  const paginatedRiddles = filteredRiddles.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Sync pageInput with currentPage
+  useEffect(() => {
+    setPageInput(String(currentPage));
+  }, [currentPage]);
+
+  // Page input handlers
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageInput(e.target.value);
+  };
+
+  const handlePageInputSubmit = () => {
+    const page = parseInt(pageInput, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    } else {
+      setPageInput(String(currentPage));
+    }
+  };
 
   // Selection handlers
   const toggleSelection = useCallback((id: string) => {
@@ -821,7 +860,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {filteredRiddles.map((riddle) => (
+            {paginatedRiddles.map((riddle) => (
               <tr key={`riddle-row-${riddle.id}`} className="hover:bg-gray-50">
                 <td className="px-4 py-4">
                   <input
@@ -836,7 +875,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={riddle.imageUrl}
-                    alt={riddle.altText || `Image riddle: ${riddle.title}`}
+                    alt={`Image riddle: ${riddle.title}`}
                     className="h-16 w-16 rounded-lg object-cover"
                   />
                 </td>
@@ -884,6 +923,43 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {filteredRiddles.length > 0 && (
+        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
+          <p className="text-sm text-gray-500">
+            Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredRiddles.length)} - {Math.min(currentPage * itemsPerPage, filteredRiddles.length)} of {filteredRiddles.length} items
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-gray-600 flex items-center gap-1">
+              Page
+              <input
+                type="text"
+                value={pageInput}
+                onChange={handlePageInputChange}
+                onBlur={handlePageInputSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
+                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+              />
+              of <span className="font-medium">{totalPages || 1}</span>
+            </span>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Import Modal */}
       {showImportModal && (

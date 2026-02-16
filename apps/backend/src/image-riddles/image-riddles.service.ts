@@ -6,9 +6,9 @@
  * ============================================================================
  */
 
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 import { ImageRiddle } from './entities/image-riddle.entity';
 import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
 import {
@@ -155,13 +155,25 @@ export class ImageRiddlesService {
   }
 
   async findRandomRiddle(): Promise<ImageRiddle> {
+    // More efficient random selection using offset with count
+    const count = await this.imageRiddleRepo.count({
+      where: { isActive: true, status: ContentStatus.PUBLISHED },
+    });
+    
+    if (count === 0) {
+      throw new NotFoundException('No image riddles found');
+    }
+
+    const randomOffset = Math.floor(Math.random() * count);
     const riddle = await this.imageRiddleRepo
       .createQueryBuilder('riddle')
       .leftJoinAndSelect('riddle.category', 'category')
       .where('riddle.isActive = :isActive', { isActive: true })
       .andWhere('riddle.status = :status', { status: ContentStatus.PUBLISHED })
-      .orderBy('RANDOM()')
+      .skip(randomOffset)
+      .take(1)
       .getOne();
+      
     if (riddle === null) {
       throw new NotFoundException('No image riddles found');
     }
@@ -211,8 +223,10 @@ export class ImageRiddlesService {
       .andWhere('riddle.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
+      // SECURITY: Sanitize search input to prevent SQL injection
+      const sanitizedSearch = searchDto.search.replace(/[%_]/g, '\\$&');
       queryBuilder.andWhere('(riddle.title ILIKE :search OR riddle.answer ILIKE :search)', {
-        search: `%${searchDto.search}%`,
+        search: `%${sanitizedSearch}%`,
       });
     }
 
@@ -286,36 +300,104 @@ export class ImageRiddlesService {
     return actionOptions;
   }
 
-  async createRiddlesBulk(dto: CreateImageRiddleDto[]): Promise<number> {
-    const riddles: ImageRiddle[] = [];
-    for (const r of dto) {
-      let category: ImageRiddleCategory | undefined;
+  async createRiddlesBulk(dto: CreateImageRiddleDto[]): Promise<{ count: number; errors: string[] }> {
+    const errors: string[] = [];
 
-      if (r.categoryId !== undefined && r.categoryId.length > 0) {
-        const foundCategory = await this.categoryRepo.findOne({ where: { id: r.categoryId } });
-        if (foundCategory !== null) {
+    // Validate input
+    if (!dto || dto.length === 0) {
+      throw new BadRequestException('No image riddles provided for bulk creation');
+    }
+
+    // Limit batch size
+    const MAX_BULK_SIZE = 100;
+    if (dto.length > MAX_BULK_SIZE) {
+      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} riddles`);
+    }
+
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Get all unique category IDs for batch fetch - fixes N+1 query
+      const categoryIds = [...new Set(dto.map(r => r.categoryId).filter((id): id is string => !!id))];
+      const categories = categoryIds.length > 0 
+        ? await transactionalEntityManager.find(ImageRiddleCategory, { where: { id: In(categoryIds) } })
+        : [];
+
+      // Create a map for quick lookup
+      const categoryMap = new Map(categories.map(c => [c.id, c]));
+
+      const riddles: ImageRiddle[] = [];
+      for (let i = 0; i < dto.length; i++) {
+        const r = dto[i];
+
+        // Validate imageUrl format
+        if (!this.isValidImageUrl(r.imageUrl)) {
+          errors.push(`Row ${i + 1}: Invalid image URL format`);
+          continue;
+        }
+
+        let category: ImageRiddleCategory | undefined;
+        if (r.categoryId !== undefined && r.categoryId.length > 0) {
+          const foundCategory = categoryMap.get(r.categoryId);
+          if (!foundCategory) {
+            errors.push(`Row ${i + 1}: Category not found (ID: ${r.categoryId})`);
+            continue;
+          }
           category = foundCategory;
         }
+
+        const riddle = transactionalEntityManager.create(ImageRiddle, {
+          title: r.title,
+          imageUrl: r.imageUrl,
+          answer: r.answer,
+          hint: r.hint,
+          difficulty: r.difficulty,
+          timerSeconds: r.timerSeconds ?? null,
+          showTimer: r.showTimer ?? true,
+          altText: r.altText,
+          category,
+          isActive: true,
+          status: ContentStatus.DRAFT,
+        });
+        riddles.push(riddle);
       }
 
-      const riddle = this.imageRiddleRepo.create({
-        title: r.title,
-        imageUrl: r.imageUrl,
-        answer: r.answer,
-        hint: r.hint,
-        difficulty: r.difficulty,
-        timerSeconds: r.timerSeconds ?? null,
-        showTimer: r.showTimer ?? true,
-        altText: r.altText,
-        category,
-        isActive: true,
-        status: ContentStatus.DRAFT,
-      });
-      riddles.push(riddle);
+      if (riddles.length === 0) {
+        throw new BadRequestException(`No valid riddles to create. Errors: ${errors.join('; ')}`);
+      }
+
+      const saved = await transactionalEntityManager.save(riddles);
+      
+      // Only invalidate cache if transaction succeeds
+      await this.cacheService.delPattern('image-riddles:*');
+      
+      return { count: saved.length, errors };
+    });
+  }
+
+  /**
+   * Validate image URL format
+   * @param url - URL to validate
+   * @returns boolean indicating if URL is valid
+   */
+  private isValidImageUrl(url: string): boolean {
+    if (!url || typeof url !== 'string') {
+      return false;
     }
-    const saved = await this.imageRiddleRepo.save(riddles);
-    await this.cacheService.delPattern('image-riddles:*');
-    return saved.length;
+    
+    // Allow http, https, and data URLs
+    const validProtocols = ['http://', 'https://', 'data:image/'];
+    const hasValidProtocol = validProtocols.some(protocol => url.startsWith(protocol));
+    
+    if (!hasValidProtocol) {
+      return false;
+    }
+
+    // Reject javascript: and other dangerous protocols
+    const dangerousProtocols = ['javascript:', 'vbscript:', 'data:text/html'];
+    if (dangerousProtocols.some(protocol => url.toLowerCase().startsWith(protocol))) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -406,29 +488,46 @@ export class ImageRiddlesService {
     riddlesByDifficulty: Record<string, number>;
     averageTimer: number;
   }> {
+    // Get basic counts in parallel
     const [totalRiddles, totalCategories] = await Promise.all([
       this.imageRiddleRepo.count({ where: { isActive: true } }),
       this.categoryRepo.count(),
     ]);
 
-    const riddlesByDifficulty: Record<string, number> = {
-      easy: await this.imageRiddleRepo.count({ where: { difficulty: 'easy', isActive: true } }),
-      medium: await this.imageRiddleRepo.count({ where: { difficulty: 'medium', isActive: true } }),
-      hard: await this.imageRiddleRepo.count({ where: { difficulty: 'hard', isActive: true } }),
-      expert: await this.imageRiddleRepo.count({ where: { difficulty: 'expert', isActive: true } }),
-    };
+    // Get difficulty counts using a single aggregation query - more efficient
+    const difficultyStats = await this.imageRiddleRepo
+      .createQueryBuilder('riddle')
+      .select('riddle.difficulty', 'difficulty')
+      .addSelect('COUNT(*)', 'count')
+      .where('riddle.isActive = :isActive', { isActive: true })
+      .groupBy('riddle.difficulty')
+      .getRawMany<{ difficulty: string; count: string }>();
 
-    // Calculate average timer using effective timer values
-    const riddles = await this.imageRiddleRepo.find({
-      where: { isActive: true },
-      select: ['timerSeconds', 'difficulty'],
-    });
+    // Convert to record format
+    const riddlesByDifficulty: Record<string, number> = {};
+    for (const stat of difficultyStats) {
+      riddlesByDifficulty[stat.difficulty] = parseInt(stat.count, 10);
+    }
 
-    const totalTimer = riddles.reduce((sum, r) => {
-      const timer = r.timerSeconds ?? this.getDefaultTimerForDifficulty(r.difficulty);
-      return sum + timer;
-    }, 0);
-    const averageTimer = riddles.length > 0 ? Math.round(totalTimer / riddles.length) : 0;
+    // Ensure all standard difficulties are present
+    const standardDifficulties = ['easy', 'medium', 'hard', 'expert'];
+    for (const difficulty of standardDifficulties) {
+      if (!(difficulty in riddlesByDifficulty)) {
+        riddlesByDifficulty[difficulty] = 0;
+      }
+    }
+
+    // Calculate average timer using a single query
+    const timerResult = await this.imageRiddleRepo
+      .createQueryBuilder('riddle')
+      .select('AVG(COALESCE(riddle.timerSeconds, :defaultTimer))', 'average')
+      .where('riddle.isActive = :isActive', { isActive: true })
+      .setParameter('defaultTimer', settings.imageRiddles.defaults.timerSeconds)
+      .getRawOne<{ average: string }>();
+
+    const averageTimer = timerResult?.average 
+      ? Math.round(parseFloat(timerResult.average)) 
+      : 0;
 
     return {
       totalRiddles,

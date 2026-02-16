@@ -1,26 +1,40 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { SystemSetting } from './entities/system-setting.entity';
 import { settings } from '../config/settings';
 import { AppSettings, SettingsValue } from './interfaces/settings.interface';
+import { isValidSettingKey, AllowedSettingKey } from './dto/update-settings.dto';
 
 /**
  * Type for nested settings object
  */
 type NestedSettings = Record<string, unknown>;
 
+/**
+ * Forbidden keys that could cause prototype pollution
+ */
+const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
+
 @Injectable()
 export class SettingsService implements OnModuleInit {
+    private readonly logger = new Logger(SettingsService.name);
     private effectiveSettings: AppSettings = {} as AppSettings;
 
     constructor(
         @InjectRepository(SystemSetting)
         private settingsRepository: Repository<SystemSetting>,
+        private dataSource: DataSource,
     ) { }
 
     async onModuleInit(): Promise<void> {
-        await this.refreshSettings();
+        try {
+            await this.refreshSettings();
+        } catch (error) {
+            // Table may not exist yet (migrations not run), use defaults
+            this.logger.warn('Settings table not found, using default settings. Run migrations to create tables.');
+            this.effectiveSettings = this.deepClone(settings) as AppSettings;
+        }
     }
 
     /**
@@ -29,8 +43,8 @@ export class SettingsService implements OnModuleInit {
     async refreshSettings(): Promise<void> {
         const overrides = await this.settingsRepository.find();
 
-        // Start with defaults
-        this.effectiveSettings = JSON.parse(JSON.stringify(settings)) as AppSettings;
+        // Start with defaults - use structuredClone for deep copy (safer than JSON.parse/stringify)
+        this.effectiveSettings = this.deepClone(settings) as AppSettings;
 
         // Apply overrides
         for (const setting of overrides) {
@@ -39,37 +53,108 @@ export class SettingsService implements OnModuleInit {
     }
 
     /**
+     * Safe deep clone using structuredClone or fallback
+     */
+    private deepClone<T>(obj: T): T {
+        if (typeof structuredClone === 'function') {
+            return structuredClone(obj);
+        }
+        // Fallback for older Node.js versions
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    /**
+     * Check if a key contains forbidden prototype pollution patterns
+     */
+    private isForbiddenKey(key: string): boolean {
+        return FORBIDDEN_KEYS.some(forbidden => 
+            key === forbidden || 
+            key.includes(`.${forbidden}.`) || 
+            key.startsWith(`${forbidden}.`) || 
+            key.endsWith(`.${forbidden}`)
+        );
+    }
+
+    /**
+     * Validate setting key against whitelist
+     */
+    private validateSettingKey(key: string): void {
+        if (this.isForbiddenKey(key)) {
+            throw new BadRequestException(`Setting key contains forbidden pattern: ${key}`);
+        }
+        
+        const topLevelKey = key.split('.')[0];
+        if (!isValidSettingKey(topLevelKey)) {
+            throw new BadRequestException(`Invalid setting key: ${key}. Allowed keys are: ${['global', 'dadJokes', 'imageRiddles', 'quiz', 'riddles'].join(', ')}`);
+        }
+    }
+
+    /**
      * Helper to set nested property by dot notation key
      */
     private applyOverride(obj: NestedSettings, key: string, value: SettingsValue): void {
+        // Security: Check for prototype pollution attempts
+        if (this.isForbiddenKey(key)) {
+            throw new BadRequestException(`Setting key contains forbidden pattern: ${key}`);
+        }
+
         const parts = key.split('.');
         let current: NestedSettings = obj;
 
         for (let i = 0; i < parts.length - 1; i++) {
             const part = parts[i];
+            
+            // Security: Check each part for forbidden keys
+            if (FORBIDDEN_KEYS.includes(part)) {
+                throw new BadRequestException(`Setting key part contains forbidden pattern: ${part}`);
+            }
+            
             if (!current[part]) current[part] = {};
             current = current[part] as NestedSettings;
         }
 
+        const finalPart = parts[parts.length - 1];
+        
+        // Security: Check final part for forbidden keys
+        if (FORBIDDEN_KEYS.includes(finalPart)) {
+            throw new BadRequestException(`Setting key part contains forbidden pattern: ${finalPart}`);
+        }
+
         // Deep merge instead of direct replacement
-        const target = current[parts[parts.length - 1]];
+        const target = current[finalPart];
         if (target && typeof target === 'object' && value && typeof value === 'object' && !Array.isArray(target)) {
             this.deepMerge(target as NestedSettings, value as NestedSettings);
         } else {
-            current[parts[parts.length - 1]] = value as NestedSettings[string];
+            current[finalPart] = value as NestedSettings[string];
         }
     }
 
     /**
-     * Recursive deep merge helper
+     * Recursive deep merge helper with prototype pollution protection
      */
     private deepMerge(target: NestedSettings, source: NestedSettings): NestedSettings {
         for (const key of Object.keys(source)) {
+            // Security: Skip forbidden keys to prevent prototype pollution
+            if (FORBIDDEN_KEYS.includes(key)) {
+                continue;
+            }
+            
             if (source[key] instanceof Object && key in target) {
-                Object.assign(source[key] as object, this.deepMerge(target[key] as NestedSettings, source[key] as NestedSettings));
+                const targetValue = target[key];
+                const sourceValue = source[key];
+                
+                // Ensure we're not merging into a prototype
+                if (targetValue && typeof targetValue === 'object' && 
+                    sourceValue && typeof sourceValue === 'object' &&
+                    !Array.isArray(sourceValue)) {
+                    this.deepMerge(targetValue as NestedSettings, sourceValue as NestedSettings);
+                } else {
+                    target[key] = sourceValue as NestedSettings[string];
+                }
+            } else {
+                target[key] = source[key] as NestedSettings[string];
             }
         }
-        Object.assign(target || {}, source);
         return target;
     }
 
@@ -100,6 +185,9 @@ export class SettingsService implements OnModuleInit {
      * Update a specific setting
      */
     async updateSetting(key: string, value: SettingsValue): Promise<AppSettings> {
+        // Validate key before processing
+        this.validateSettingKey(key);
+
         let setting = await this.settingsRepository.findOne({ where: { key } });
 
         if (!setting) {
@@ -117,16 +205,42 @@ export class SettingsService implements OnModuleInit {
     }
 
     /**
-     * Bulk update settings
+     * Bulk update settings with transaction support
+     * Fixes N+1 query problem by using a single transaction
      */
-    async updateSettings(updates: Record<string, SettingsValue>): Promise<AppSettings> {
-        // Process potentially complex object updates by flattening them or saving as section keys
-        // For simplicity, we'll save top-level keys as sections if passed
-
-        for (const [key, value] of Object.entries(updates)) {
-            await this.updateSetting(key, value);
+    async updateSettings(updates: Record<AllowedSettingKey, unknown>): Promise<AppSettings> {
+        // Validate all keys before processing
+        for (const key of Object.keys(updates)) {
+            this.validateSettingKey(key);
         }
 
+        // Use transaction for atomic updates - fixes N+1 query issue
+        await this.dataSource.transaction(async (transactionalEntityManager) => {
+            const settingsRepo = transactionalEntityManager.getRepository(SystemSetting);
+            
+            for (const [key, value] of Object.entries(updates)) {
+                // Skip forbidden keys
+                if (this.isForbiddenKey(key)) {
+                    throw new BadRequestException(`Setting key contains forbidden pattern: ${key}`);
+                }
+
+                let setting = await settingsRepo.findOne({ where: { key } });
+
+                if (!setting) {
+                    setting = settingsRepo.create({
+                        key,
+                        value: value as SettingsValue,
+                    });
+                } else {
+                    setting.value = value as SettingsValue;
+                }
+
+                await settingsRepo.save(setting);
+            }
+        });
+
+        // Refresh cache after transaction completes
+        await this.refreshSettings();
         return this.getSettings();
     }
 }
