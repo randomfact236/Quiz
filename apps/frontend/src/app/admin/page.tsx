@@ -318,9 +318,11 @@ export default function AdminPage(): JSX.Element {
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
+  const [showEditSubjectModal, setShowEditSubjectModal] = useState(false);
   const [showAddChapterModal, setShowAddChapterModal] = useState(false);
   const [selectedSubjectForChapter, setSelectedSubjectForChapter] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<'academic' | 'professional' | 'entertainment'>('academic');
+  const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
 
   const getSubjectFromSection = (section: MenuSection): Subject | null => {
     return subjects.find(s => s.slug === section) ?? null;
@@ -340,6 +342,27 @@ export default function AdminPage(): JSX.Element {
     setSubjects(prev => [...prev, newSubject]);
     setAllQuestions(prev => ({ ...prev, [newSubject.slug]: [] }));
     setShowAddSubjectModal(false);
+  };
+
+  // Edit subject
+  const handleEditSubject = (subject: Subject) => {
+    setEditingSubject(subject);
+    setShowEditSubjectModal(true);
+  };
+
+  // Update subject
+  const handleUpdateSubject = (updatedSubject: Subject) => {
+    setSubjects(prev => prev.map(s => s.id === updatedSubject.id ? updatedSubject : s));
+    // If slug changed, update questions key
+    if (editingSubject && editingSubject.slug !== updatedSubject.slug) {
+      setAllQuestions(prev => {
+        const questions = prev[editingSubject.slug] || [];
+        const { [editingSubject.slug]: _, ...rest } = prev;
+        return { ...rest, [updatedSubject.slug]: questions };
+      });
+    }
+    setShowEditSubjectModal(false);
+    setEditingSubject(null);
   };
 
   // Add new chapter (adds a sample question with the new chapter)
@@ -415,6 +438,7 @@ export default function AdminPage(): JSX.Element {
               setSelectedCategory(category);
               setShowAddSubjectModal(true);
             }}
+            onEditSubject={handleEditSubject}
             onReorderSubjects={setSubjects}
           />
 
@@ -571,6 +595,16 @@ export default function AdminPage(): JSX.Element {
           onAdd={handleAddSubject}
           existingSlugs={subjects.map(s => s.slug)}
           defaultCategory={selectedCategory}
+        />
+      )}
+
+      {/* Edit Subject Modal */}
+      {showEditSubjectModal && editingSubject && (
+        <EditSubjectModal
+          subject={editingSubject}
+          onClose={() => { setShowEditSubjectModal(false); setEditingSubject(null); }}
+          onUpdate={handleUpdateSubject}
+          existingSlugs={subjects.filter(s => s.id !== editingSubject.id).map(s => s.slug)}
         />
       )}
 
@@ -762,6 +796,149 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
               className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
             >
               Add Subject
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Edit Subject Modal
+function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
+  subject: Subject;
+  onClose: () => void;
+  onUpdate: (subject: Subject) => void;
+  existingSlugs: string[];
+}): JSX.Element {
+  const [name, setName] = useState(subject.name);
+  const [selectedIcon, setSelectedIcon] = useState(subject.emoji);
+  const [customEmoji, setCustomEmoji] = useState('');
+  const [useCustomEmoji, setUseCustomEmoji] = useState(!iconOptions.some(opt => opt.key === subject.emoji));
+  const [category, setCategory] = useState<'academic' | 'professional' | 'entertainment'>(subject.category);
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+    if (!name.trim()) {
+      setError('Subject name is required');
+      return;
+    }
+    if (slug !== subject.slug && existingSlugs.includes(slug)) {
+      setError('A subject with this name already exists');
+      return;
+    }
+
+    onUpdate({
+      ...subject,
+      slug,
+      name: name.trim(),
+      emoji: useCustomEmoji && customEmoji ? customEmoji : selectedIcon,
+      category,
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+        <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-secondary-100">Edit Subject</h3>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="editSubjectName" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Subject Name</label>
+            <input
+              id="editSubjectName"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
+              placeholder="e.g., Physics"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Select Icon</label>
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  type="checkbox"
+                  id="editUseCustomEmoji"
+                  checked={useCustomEmoji}
+                  onChange={(e) => setUseCustomEmoji(e.target.checked)}
+                  className="rounded border-gray-300"
+                />
+                <label htmlFor="editUseCustomEmoji" className="text-sm text-gray-600 dark:text-secondary-400">
+                  Use custom emoji
+                </label>
+              </div>
+              {useCustomEmoji ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={customEmoji}
+                    onChange={(e) => setCustomEmoji(e.target.value)}
+                    placeholder="Paste any emoji here"
+                    className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
+                    maxLength={2}
+                  />
+                  {customEmoji && <span className="text-2xl">{customEmoji}</span>}
+                </div>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {iconOptions.map((opt) => {
+                    const IconComponent = opt.icon;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setSelectedIcon(opt.key)}
+                        className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-colors ${
+                          selectedIcon === opt.key
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                            : 'border-gray-200 dark:border-secondary-600 hover:border-gray-300 dark:hover:border-secondary-500'
+                        }`}
+                        title={opt.label}
+                      >
+                        <IconComponent className={`w-6 h-6 ${
+                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-400'
+                        }`} />
+                        <span className={`text-xs ${
+                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-secondary-500'
+                        }`}>{opt.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+          <div>
+            <label htmlFor="editSubjectCategory" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Category</label>
+            <select
+              id="editSubjectCategory"
+              value={category}
+              onChange={(e) => setCategory(e.target.value as 'academic' | 'professional' | 'entertainment')}
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
+            >
+              <option value="academic">Academic</option>
+              <option value="professional">Professional & Life</option>
+              <option value="entertainment">Entertainment & Culture</option>
+            </select>
+          </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="flex gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            >
+              Save Changes
             </button>
           </div>
         </form>

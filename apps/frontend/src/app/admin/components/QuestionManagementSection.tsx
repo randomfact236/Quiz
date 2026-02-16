@@ -124,38 +124,21 @@ export function QuestionManagementSection({
     chapter: '',
   });
 
-  // Track previous questions to avoid unnecessary updates
-  const prevQuestionsRef = useRef(questions);
-  
-  // Sync local questions when props change (only if props are different from current local state)
+  // Sync local questions when props change (from parent/localStorage)
   useEffect(() => {
-    const questionsWithStatus = questions.map((q) => ({ ...q, status: q.status || 'published' }));
-    const isDifferentFromLocal = JSON.stringify(localQuestions) !== JSON.stringify(questionsWithStatus);
-    const isDifferentFromPrev = JSON.stringify(prevQuestionsRef.current) !== JSON.stringify(questions);
-    
-    // Only update if props changed from previous AND are different from local state
-    if (isDifferentFromPrev && isDifferentFromLocal) {
-      setLocalQuestions(questionsWithStatus);
-    }
-    prevQuestionsRef.current = questions;
+    setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
   }, [questions]);
 
-  // Persist local questions changes back to parent (for delete, edit, status changes)
-  const isUpdatingRef = useRef(false);
+  // Persist local questions changes back to parent
+  const prevLocalQuestionsRef = useRef(localQuestions);
   useEffect(() => {
-    if (isUpdatingRef.current) return; // Skip if we're in the middle of an update
-    
-    const questionsWithStatus = questions.map((q) => ({ ...q, status: q.status || 'published' }));
-    const isDifferent = JSON.stringify(localQuestions) !== JSON.stringify(questionsWithStatus);
-    
-    if (isDifferent && localQuestions.length > 0) {
-      isUpdatingRef.current = true;
+    // Only update parent if localQuestions actually changed from previous render
+    const isDifferent = JSON.stringify(prevLocalQuestionsRef.current) !== JSON.stringify(localQuestions);
+    if (isDifferent) {
+      prevLocalQuestionsRef.current = localQuestions;
       onQuestionsUpdate(subject.slug, localQuestions);
-      // Reset after a short delay to allow the update to propagate
-      setTimeout(() => { isUpdatingRef.current = false; }, 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localQuestions]); // Only depend on localQuestions, not on questions or subject.slug
+  }, [localQuestions, subject.slug, onQuestionsUpdate]);
 
   // Get unique chapters for this subject - memoized
   const chapters = useMemo(() => 
@@ -406,9 +389,10 @@ export function QuestionManagementSection({
         prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
       );
     }
+    // Close modal and clear selection immediately
     setShowDeleteModal(false);
     setSelectedQuestion(null);
-  }, [selectedQuestion]);
+  }, [selectedQuestion?.id, selectedQuestion?.status]);
 
   // Open edit modal with question data
   const openEditModal = useCallback((question: Question) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { BookOpen, ChevronDown, Plus, GripVertical } from 'lucide-react';
+import { BookOpen, ChevronDown, Plus, GripVertical, Pencil } from 'lucide-react';
 import type { Subject } from '../types';
 
 interface QuizSidebarProps {
@@ -12,6 +12,7 @@ interface QuizSidebarProps {
   onToggleExpand: () => void;
   onSelectSubject: (slug: string) => void;
   onAddSubject: (category: 'academic' | 'professional' | 'entertainment') => void;
+  onEditSubject: (subject: Subject) => void;
   onReorderSubjects: (subjects: Subject[]) => void;
 }
 
@@ -32,6 +33,7 @@ export function QuizSidebar({
   onToggleExpand,
   onSelectSubject,
   onAddSubject,
+  onEditSubject,
   onReorderSubjects,
 }: QuizSidebarProps): JSX.Element {
   const [draggedId, setDraggedId] = useState<number | null>(null);
@@ -176,6 +178,7 @@ export function QuizSidebar({
                 sidebarOpen={sidebarOpen}
                 category={category}
                 onSelect={onSelectSubject}
+                onEdit={onEditSubject}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
                 onDrop={handleDrop}
@@ -230,6 +233,7 @@ interface SubjectItemProps {
   sidebarOpen: boolean;
   category: 'academic' | 'professional' | 'entertainment';
   onSelect: (slug: string) => void;
+  onEdit: (subject: Subject) => void;
   onDragStart: (e: React.DragEvent, subject: Subject) => void;
   onDragEnd: () => void;
   onDrop: (e: React.DragEvent, targetCategory: string, targetIndex?: number) => void;
@@ -242,6 +246,7 @@ const SubjectItem = React.memo(function SubjectItem({
   sidebarOpen,
   category,
   onSelect,
+  onEdit,
   onDragStart,
   onDragEnd,
   onDrop,
@@ -255,6 +260,11 @@ const SubjectItem = React.memo(function SubjectItem({
     e.stopPropagation();
     onDrop(e, category);
   }, [category, onDrop]);
+
+  const handleEdit = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdit(subject);
+  }, [onEdit, subject]);
 
   return (
     <div
@@ -280,7 +290,18 @@ const SubjectItem = React.memo(function SubjectItem({
       <span className="flex items-center justify-center w-5 h-5 shrink-0 text-lg">
         {subjectIcons[subject.emoji] || subject.emoji || '📚'}
       </span>
-      {sidebarOpen && <span className="text-sm truncate">{subject.name}</span>}
+      {sidebarOpen && (
+        <>
+          <span className="text-sm truncate flex-1">{subject.name}</span>
+          <button
+            onClick={handleEdit}
+            className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-700 text-gray-400 hover:text-white transition-opacity"
+            title="Edit subject"
+          >
+            <Pencil className="w-3 h-3" />
+          </button>
+        </>
+      )}
     </div>
   );
 });

@@ -141,13 +141,13 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
     setJokeForm({ joke: '', category: '' });
   };
 
-  // Delete handler - currently unused but available for future delete confirmation modal
-  // const handleDeleteJoke = () => {
-  //   if (!selectedJoke) return;
-  //   setAllJokes(prev => prev.filter(j => j.id !== selectedJoke.id));
-  //   _setShowDeleteConfirm(false);
-  //   _setSelectedJoke(null);
-  // };
+  // Delete handler
+  const handleDeleteJoke = () => {
+    if (!selectedJoke) return;
+    setAllJokes(prev => prev.filter(j => j.id !== selectedJoke.id));
+    _setShowDeleteConfirm(false);
+    _setSelectedJoke(null);
+  };
 
   const openEditModal = (joke: Joke) => {
     _setSelectedJoke(joke);
@@ -470,6 +470,36 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                 className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
               >
                 {showAddModal ? 'Add Joke' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {_showDeleteConfirm && selectedJoke && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4 text-red-600">🗑️ Delete Joke</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this joke? This action cannot be undone.
+            </p>
+            <div className="bg-gray-50 p-3 rounded-lg mb-6">
+              <p className="font-medium text-gray-800">{selectedJoke.joke}</p>
+              <p className="text-sm text-gray-500 mt-1">Category: {selectedJoke.category}</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => { _setShowDeleteConfirm(false); _setSelectedJoke(null); }}
+                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteJoke}
+                className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+              >
+                Delete
               </button>
             </div>
           </div>
