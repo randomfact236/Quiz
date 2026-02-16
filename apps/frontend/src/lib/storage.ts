@@ -25,6 +25,13 @@ export const STORAGE_KEYS = {
     RIDDLE_ITEMS: `${PREFIX}riddle-items`,
     QUIZ_ITEMS: `${PREFIX}quiz-items`,
     IMAGE_RIDDLE_ITEMS: `${PREFIX}image-riddle-items`,
+    // Quiz session and progress
+    CURRENT_SESSION: `${PREFIX}current-session`,
+    QUIZ_HISTORY: `${PREFIX}quiz-history`,
+    CHAPTER_PROGRESS: `${PREFIX}chapter-progress`,
+    SUBJECT_PROGRESS: `${PREFIX}subject-progress`,
+    ACHIEVEMENTS: `${PREFIX}achievements`,
+    CHALLENGE_HIGH_SCORE: `${PREFIX}challenge-high-score`,
 } as const;
 
 // ─── Core API ────────────────────────────────────────────────────────────────

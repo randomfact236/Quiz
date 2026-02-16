@@ -1,0 +1,592 @@
+# Subject: Art & Culture
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,The Mona Lisa was painted by Leonardo da Vinci.,False,True,,,A,easy,Chapter 1
+2,A piano has 88 keys.,True,False,,,B,easy,Chapter 1
+3,The Pyramids of Giza are located in Egypt.,False,True,,,A,easy,Chapter 1
+4,Shakespeare wrote only comedies.,False,True,,,B,easy,Chapter 1
+5,What is Mexico's folkloric dance?,Jarabe Tapatío,Cumbia,,,B,easy,Chapter 1
+6,What artist created 'The Gates of Hell'?,Auguste Rodin,Donatello,,,A,easy,Chapter 1
+7,What is the highest-grossing film of all time?,Avatar,Avengers,,,B,easy,Chapter 1
+8,What musical features 'Don't Cry for Me Argentina'?,Evita,Cats,,,A,easy,Chapter 1
+9,What is the New Orleans jazz festival called?,Jazz Fest,Mardi Gras,,,A,easy,Chapter 1
+10,Where is the Palace Museum?,Shanghai,Beijing,,,B,easy,Chapter 1
+11,Which artist painted 'The Water Lily Pond'?,Claude Monet,Pierre-Auguste Renoir,Camille Pissarro,,A,hard,Chapter 1
+12,Which composer wrote 'Carmen'?,Georges Bizet,Giuseppe Verdi,Giacomo Puccini,,A,hard,Chapter 1
+13,Who designed the Marina Bay Sands?,Moshe Safdie,Norman Foster,Zaha Hadid,,A,hard,Chapter 1
+14,"Who wrote 'Weep Not, Child'?",Ngũgĩ wa Thiong,",
+                    ",",
+                    ",,A,hard,Chapter 1
+15,How many dancers traditionally perform Bharatanatyam?,Solo,Duo,Group,,A,hard,Chapter 1
+16,What is the tallest statue in the world?,Statue of Unity,Spring Temple Buddha,Statue of Liberty,,A,hard,Chapter 1
+17,Who directed '2001: A Space Odyssey'?,Stanley Kubrick,Ridley Scott,Steven Spielberg,,A,hard,Chapter 1
+18,What is the Spanish flamenco theater form?,Tablao,Zarzuela,Corrida,,A,hard,Chapter 1
+19,What Portuguese tiles are decorative?,Azulejos,Mosaicos,Ladrilhos,,A,hard,Chapter 1
+20,What is Chinese blue and white porcelain?,Ming porcelain,Jade,Cloisonné,,A,hard,Chapter 1
+21,Which movement did Kazimir Malevich found?,Suprematism,Constructivism,Rayonism,Futurism,A,expert,Chapter 1
+22,How many string quartets did Beethoven write?,16,14,18,20,A,expert,Chapter 1
+23,Who designed Brasília's buildings?,Oscar Niemeyer,Lúcio Costa,Paulo Mendes da Rocha,Vilanova Artigas,A,expert,Chapter 1
+24,Who wrote 'Disgrace'?,J.M. Coetzee,Nadine Gordimer,Athol Fugard,Breyten Breytenbach,A,expert,Chapter 1
+25,Who created the 'Unique Forms of Continuity in Space'?,Umberto Boccioni,Filippo Marinetti,Giacomo Balla,Carlo Carrà,A,expert,Chapter 1
+26,What is the Danish film movement of 1995?,Dogme 95,New Danish,Nordic Noir,Scandinavian Wave,A,expert,Chapter 1
+27,Who wrote 'Death of a Salesman'?,Arthur Miller,Tennessee Williams,Edward Albee,Clifford Odets,A,expert,Chapter 1
+28,What museum houses Monet's Water Lilies?,Orangerie,Louvre,Orsay,Rodin,A,expert,Chapter 1
+29,What is painting with wax-based paint?,Encaustic,,,,A,extreme,Chapter 1
+30,What is the term for a pause or hold?,Fermata,,,,A,extreme,Chapter 1
+31,What is the triangular space in a pediment?,Tympanum,,,,A,extreme,Chapter 1
+32,What is repetition of initial consonant sounds?,Alliteration,,,,A,extreme,Chapter 1
+33,What is a series of turns across the stage?,Chaînés or Piqué turns,,,,A,extreme,Chapter 1
+34,What is a three-dimensional artwork hanging in space?,Mobile,,,,A,extreme,Chapter 1
+35,What is uninterrupted shot from one position?,Static shot or Fixed shot,,,,A,extreme,Chapter 1
+36,What is traditional Balinese dance-drama?,Legong or Barong,,,,A,extreme,Chapter 1
+37,What is the Indian festival of lights?,Diwali or Deepavali,,,,A,extreme,Chapter 1
+38,What is decorative openwork embroidery?,Cutwork,,,,A,extreme,Chapter 1
+39,Pablo Picasso was a Spanish painter.,True,False,,,A,easy,Chapter 2
+40,Beethoven composed nine symphonies.,False,True,,,B,easy,Chapter 2
+41,The Taj Mahal is located in India.,True,False,,,A,easy,Chapter 2
+42,George Orwell wrote '1984'.,False,True,,,B,easy,Chapter 2
+43,Ballet originated in Italy.,True,False,,,A,easy,Chapter 2
+44,The Thinker was created by Rodin.,False,True,,,B,easy,Chapter 2
+45,The first feature-length film was silent.,True,False,,,A,easy,Chapter 2
+46,Shakespeare's Globe Theatre is in London.,True,False,,,B,easy,Chapter 2
+47,The Louvre is the world's largest art museum.,False,True,,,B,easy,Chapter 2
+48,Origami is the Japanese art of paper folding.,True,False,,,A,easy,Chapter 2
+49,Who painted 'The Scream'?,Edvard Munch,Vincent van Gogh,,,A,medium,Chapter 2
+50,What is Mozart's first name?,Wolfgang,Ludwig,,,A,medium,Chapter 2
+51,Who designed the Sydney Opera House?,Jørn Utzon,Frank Lloyd Wright,,,A,medium,Chapter 2
+52,Who wrote 'Pride and Prejudice'?,Jane Austen,Emily Brontë,,,A,medium,Chapter 2
+53,What country is the tango from?,Argentina,Spain,,,A,medium,Chapter 2
+54,What material is Michelangelo's David made of?,Marble,Bronze,,,A,medium,Chapter 2
+55,Who directed 'Citizen Kane'?,Orson Welles,Alfred Hitchcock,,,A,medium,Chapter 2
+56,What is the longest-running Broadway show?,The Phantom of the Opera,Cats,,,A,medium,Chapter 2
+57,Where is the Cannes Film Festival held?,France,Italy,,,A,medium,Chapter 2
+58,What century was Machu Picchu built?,15th century,14th century,,,A,medium,Chapter 2
+59,Which artist painted 'The Birth of Venus'?,Sandro Botticelli,Leonardo da Vinci,Raphael,,A,hard,Chapter 2
+60,Which composer wrote 'The Four Seasons'?,Antonio Vivaldi,Johann Sebastian Bach,Georg Handel,,A,hard,Chapter 2
+61,Who designed the dome of St. Peter's Basilica?,Michelangelo,Bramante,Bernini,,A,hard,Chapter 2
+62,Who wrote 'One Hundred Years of Solitude'?,Gabriel García Márquez,Jorge Luis Borges,Pablo Neruda,,A,hard,Chapter 2
+63,What is the classical Indian dance from Kerala?,Kathakali,Bharatanatyam,Odissi,,A,hard,Chapter 2
+64,Who sculpted 'The Kiss'?,Auguste Rodin,Constantin Brâncuși,Antonio Canova,,A,hard,Chapter 2
+65,Who won the first Best Director Oscar?,Frank Borzage,Charlie Chaplin,D.W. Griffith,,A,hard,Chapter 2
+66,Who wrote 'A Streetcar Named Desire'?,Tennessee Williams,Arthur Miller,Eugene O,,A,hard,Chapter 2
+67,Where is the Hermitage Museum located?,St. Petersburg,Moscow,Kiev,,A,hard,Chapter 2
+68,What is the art of decorating eggs called?,Pysanky,Decoupage,Batik,,A,hard,Chapter 2
+69,Which movement did Georges Seurat pioneer?,Pointillism,Impressionism,Post-Impressionism,Divisionism,A,expert,Chapter 2
+70,How many piano concertos did Rachmaninoff compose?,4,5,3,6,A,expert,Chapter 2
+71,Who designed the Guggenheim Museum in Bilbao?,Frank Gehry,Zaha Hadid,Norman Foster,Renzo Piano,A,expert,Chapter 2
+72,Who wrote 'The Brothers Karamazov'?,Fyodor Dostoevsky,Leo Tolstoy,Anton Chekhov,Nikolai Gogol,A,expert,Chapter 2
+73,Who choreographed 'The Rite of Spring'?,Vaslav Nijinsky,George Balanchine,Martha Graham,Merce Cunningham,A,expert,Chapter 2
+74,Who created the 'Bird in Space' series?,Constantin Brâncuși,Henry Moore,Alberto Giacometti,Barbara Hepworth,A,expert,Chapter 2
+75,Who directed 'The Seventh Seal'?,Ingmar Bergman,Federico Fellini,Akira Kurosawa,Andrei Tarkovsky,A,expert,Chapter 2
+76,Who wrote 'Waiting for Godot'?,Samuel Beckett,Harold Pinter,Tom Stoppard,Eugène Ionesco,A,expert,Chapter 2
+77,What year was Petra designated a UNESCO site?,1985,1982,1988,1990,A,expert,Chapter 2
+78,What is the Persian art of knotted pile carpets?,Persian rug weaving,Kilim,Suzani,Ikat,A,expert,Chapter 2
+79,What was the original title of Picasso's 'Les Demoiselles d'Avignon'?,Le Bordel d,,,,A,extreme,Chapter 2
+80,What is the name of Berg's unfinished opera?,Lulu,,,,A,extreme,Chapter 2
+81,What architectural style did Louis Sullivan pioneer?,Chicago School or Early Skyscraper,,,,A,extreme,Chapter 2
+82,What is James Joyce's final work?,Finnegans Wake,,,,A,extreme,Chapter 2
+83,What is the traditional Indonesian court dance?,Bedhaya,,,,A,extreme,Chapter 2
+84,What material did Louise Bourgeois use for 'Maman'?,Bronze and stainless steel,,,,A,extreme,Chapter 2
+85,What was the first film to use deep focus cinematography?,Citizen Kane,,,,A,extreme,Chapter 2
+86,What is Bertolt Brecht's epic theater technique called?,Verfremdungseffekt or Alienation effect,,,,A,extreme,Chapter 2
+87,What year did the Edinburgh Fringe Festival begin?,1947,,,,A,extreme,Chapter 2
+88,What is the Japanese art of gold repair called?,Kintsugi or Kintsukuroi,,,,A,extreme,Chapter 2
+89,Frida Kahlo was a Mexican artist.,False,True,,,B,easy,Chapter 3
+90,The Beatles were from Liverpool.,True,False,,,A,easy,Chapter 3
+91,The Eiffel Tower is in Paris.,False,True,,,B,easy,Chapter 3
+92,J.K. Rowling wrote the Harry Potter series.,True,False,,,A,easy,Chapter 3
+93,Flamenco is from Spain.,False,True,,,B,easy,Chapter 3
+94,The Statue of Liberty was a gift from France.,True,False,,,A,easy,Chapter 3
+95,Hollywood is in California.,True,False,,,B,easy,Chapter 3
+96,Broadway is in New York City.,False,True,,,B,easy,Chapter 3
+97,Opera originated in Italy.,True,False,,,A,easy,Chapter 3
+98,The Sistine Chapel ceiling was painted by Michelangelo.,False,True,,,B,easy,Chapter 3
+99,Who painted 'Girl with a Pearl Earring'?,Johannes Vermeer,Rembrandt,,,A,medium,Chapter 3
+100,What instrument did Louis Armstrong play?,Trumpet,Saxophone,,,A,medium,Chapter 3
+101,What style is the Alhambra palace?,Moorish,Gothic,,,A,medium,Chapter 3
+102,Who wrote 'To Kill a Mockingbird'?,Harper Lee,Truman Capote,,,A,medium,Chapter 3
+103,What dance style did Fred Astaire popularize?,Tap dancing,Jazz,,,A,medium,Chapter 3
+104,What is Michelangelo's Pietà made of?,Carrara marble,Limestone,,,A,medium,Chapter 3
+105,Who directed 'The Godfather'?,Francis Ford Coppola,Martin Scorsese,,,A,medium,Chapter 3
+106,What is the oldest theater in London?,Theatre Royal Drury Lane,The Old Vic,,,A,medium,Chapter 3
+107,Where is the Prado Museum?,Madrid,Barcelona,,,A,medium,Chapter 3
+108,Where is La Tomatina festival celebrated?,Spain,Italy,,,A,medium,Chapter 3
+109,Which artist founded the Cubist movement?,Pablo Picasso,Georges Braque,Juan Gris,,A,hard,Chapter 3
+110,Which composer wrote 'The Planets'?,Gustav Holst,Edward Elgar,Ralph Vaughan Williams,,A,hard,Chapter 3
+111,Who designed the Fallingwater house?,Frank Lloyd Wright,Le Corbusier,Mies van der Rohe,,A,hard,Chapter 3
+112,Who wrote 'Beloved'?,Toni Morrison,Alice Walker,Maya Angelou,,A,hard,Chapter 3
+113,What is the national dance of Brazil?,Samba,Bossa Nova,Capoeira,,A,hard,Chapter 3
+114,Who created 'The Age of Bronze'?,Auguste Rodin,Camille Claudel,Antoine Bourdelle,,A,hard,Chapter 3
+115,Who directed 'Rashomon'?,Akira Kurosawa,Yasujirō Ozu,Kenji Mizoguchi,,A,hard,Chapter 3
+116,Who wrote 'The Importance of Being Earnest'?,Oscar Wilde,George Bernard Shaw,Noël Coward,,A,hard,Chapter 3
+117,Where is Angkor Wat located?,Cambodia,Thailand,Vietnam,,A,hard,Chapter 3
+118,What is the art of Japanese flower arrangement?,Ikebana,Bonsai,Origami,,A,hard,Chapter 3
+119,Which artist painted 'The Garden of Earthly Delights'?,Hieronymus Bosch,Pieter Bruegel,Jan van Eyck,Rogier van der Weyden,A,expert,Chapter 3
+120,How many symphonies did Mahler complete?,9,10,8,11,A,expert,Chapter 3
+121,Who designed the Barcelona Pavilion?,Mies van der Rohe,Antoni Gaudí,Le Corbusier,Walter Gropius,A,expert,Chapter 3
+122,Who wrote 'Mrs Dalloway'?,Virginia Woolf,Katherine Mansfield,Vita Sackville-West,E.M. Forster,A,expert,Chapter 3
+123,Who founded the Ballets Russes?,Sergei Diaghilev,George Balanchine,Michel Fokine,Vaslav Nijinsky,A,expert,Chapter 3
+124,Who sculpted 'L'Homme qui marche'?,Alberto Giacometti,Henry Moore,Barbara Hepworth,Jean Arp,A,expert,Chapter 3
+125,Who directed 'Bicycle Thieves'?,Vittorio De Sica,Roberto Rossellini,Luchino Visconti,Federico Fellini,A,expert,Chapter 3
+126,Who wrote 'Long Day's Journey into Night'?,Eugene O,",
+                    ",",
+                    ",",
+                    ",A,expert,Chapter 3
+127,What year did the Guggenheim in New York open?,1959,1956,1962,1965,A,expert,Chapter 3
+128,What is the Turkish art of marbled paper?,Ebru,Batik,Ikat,Shibori,A,expert,Chapter 3
+129,What pigment did Yves Klein patent?,International Klein Blue or IKB,,,,A,extreme,Chapter 3
+130,What is Schoenberg's twelve-tone technique called?,Serialism or Dodecaphony,,,,A,extreme,Chapter 3
+131,What is Le Corbusier's real name?,Charles-Édouard Jeanneret,,,,A,extreme,Chapter 3
+132,What is Proust's seven-volume novel called?,In Search of Lost Time or Remembrance of Things Past,,,,A,extreme,Chapter 3
+133,What is Martha Graham's dance technique principle?,Contraction and release,,,,A,extreme,Chapter 3
+134,What movement did Naum Gabo co-found?,Constructivism,,,,A,extreme,Chapter 3
+135,What is Eisenstein's montage theory called?,Intellectual montage or montage of attractions,,,,A,extreme,Chapter 3
+136,What is Stanislavski's acting system foundation?,Emotional memory or affective memory,,,,A,extreme,Chapter 3
+137,What is the oldest UNESCO World Heritage site?,Galápagos Islands,,,,A,extreme,Chapter 3
+138,What is the Venetian masquerade ball called?,Carnevale di Venezia or Venice Carnival,,,,A,extreme,Chapter 3
+139,Jazz originated in New Orleans.,True,False,,,A,easy,Chapter 4
+140,The Great Wall of China is visible from space.,False,True,,,A,easy,Chapter 4
+141,Impressionism began in France.,False,True,,,B,easy,Chapter 4
+142,The Odyssey was written by Homer.,True,False,,,A,easy,Chapter 4
+143,Hip-hop dance originated in New York.,False,True,,,B,easy,Chapter 4
+144,The Oscars are awarded annually.,True,False,,,A,easy,Chapter 4
+145,The Sphinx is in Egypt.,True,False,,,B,easy,Chapter 4
+146,Kabuki is a Japanese theater form.,False,True,,,B,easy,Chapter 4
+147,Rock and roll began in the 1950s.,True,False,,,A,easy,Chapter 4
+148,Surrealism explored the unconscious mind.,False,True,,,B,easy,Chapter 4
+149,Who composed 'The Nutcracker'?,Tchaikovsky,Stravinsky,,,A,medium,Chapter 4
+150,What style is Notre-Dame Cathedral?,Gothic,Romanesque,,,A,medium,Chapter 4
+151,Who painted 'American Gothic'?,Grant Wood,Edward Hopper,,,A,medium,Chapter 4
+152,Who wrote 'The Great Gatsby'?,F. Scott Fitzgerald,Ernest Hemingway,,,A,medium,Chapter 4
+153,What is the Cuban dance with African roots?,Rumba,Mambo,,,A,medium,Chapter 4
+154,Who directed 'Psycho'?,Alfred Hitchcock,Billy Wilder,,,A,medium,Chapter 4
+155,What is the Terracotta Army made of?,Clay,Stone,,,A,medium,Chapter 4
+156,What theater hosts the Tony Awards?,Broadway,West End,,,A,medium,Chapter 4
+157,Where is the British Museum?,London,Edinburgh,,,A,medium,Chapter 4
+158,What is the art of making decorative knots?,Macramé,Crochet,,,A,medium,Chapter 4
+159,Which composer wrote 'Rhapsody in Blue'?,George Gershwin,Aaron Copland,Leonard Bernstein,,A,hard,Chapter 4
+160,Who designed the Sagrada Família?,Antoni Gaudí,Santiago Calatrava,Rafael Moneo,,A,hard,Chapter 4
+161,Which artist created the 'Campbell's Soup Cans'?,Andy Warhol,Roy Lichtenstein,Jasper Johns,,A,hard,Chapter 4
+162,Who wrote 'Invisible Man'?,Ralph Ellison,James Baldwin,Richard Wright,,A,hard,Chapter 4
+163,What is the traditional Hawaiian dance?,Hula,Kahiko,Auana,,A,hard,Chapter 4
+164,Who directed 'Spirited Away'?,Hayao Miyazaki,Isao Takahata,Mamoru Hosoda,,A,hard,Chapter 4
+165,Who created 'The Burghers of Calais'?,Auguste Rodin,Aristide Maillol,Camille Claudel,,A,hard,Chapter 4
+166,Who wrote 'The Cherry Orchard'?,Anton Chekhov,Maxim Gorky,Ivan Turgenev,,A,hard,Chapter 4
+167,Where is the ancient city of Pompeii?,Italy,Greece,Turkey,,A,hard,Chapter 4
+168,What is Brazil's famous carnival city?,Rio de Janeiro,São Paulo,Salvador,,A,hard,Chapter 4
+169,Which composer pioneered musique concrète?,Pierre Schaeffer,Karlheinz Stockhausen,Edgar Varèse,John Cage,A,expert,Chapter 4
+170,Who designed Villa Savoye?,Le Corbusier,Mies van der Rohe,Walter Gropius,Philip Johnson,A,expert,Chapter 4
+171,Which artist founded Orphism?,Robert Delaunay,Sonia Delaunay,Francis Picabia,Fernand Léger,A,expert,Chapter 4
+172,Who wrote 'The Sound and the Fury'?,William Faulkner,Thomas Wolfe,John Steinbeck,Sinclair Lewis,A,expert,Chapter 4
+173,Who choreographed 'Appalachian Spring'?,Martha Graham,Doris Humphrey,Katherine Dunham,Pearl Primus,A,expert,Chapter 4
+174,Who directed 'Persona'?,Ingmar Bergman,Lars von Trier,Carl Theodor Dreyer,Roy Andersson,A,expert,Chapter 4
+175,Who created 'Fountain' (the urinal)?,Marcel Duchamp,Man Ray,Francis Picabia,Hans Arp,A,expert,Chapter 4
+176,Who wrote 'The Iceman Cometh'?,Eugene O,",
+                    ",",
+                    ",",
+                    ",A,expert,Chapter 4
+177,What year did the Met Museum open?,1870,1865,1875,1880,A,expert,Chapter 4
+178,What is the Welsh art of love spoons called?,Welsh love spoons,Caru,Llwyau Caru,Cymraeg,C,expert,Chapter 4
+179,What is Messiaen's compositional technique using bird songs?,Ornithological transcription,,,,A,extreme,Chapter 4
+180,What is Kahn's concept of served and servant spaces?,Served and servant spaces,,,,A,extreme,Chapter 4
+181,What is the technique of dripping paint called?,Action painting or drip painting,,,,A,extreme,Chapter 4
+182,What is Joyce's stream of consciousness technique called?,Interior monologue,,,,A,extreme,Chapter 4
+183,What is Cunningham's use of chance operations called?,Chance procedures or aleatory choreography,,,,A,extreme,Chapter 4
+184,What is Godard's jump cut technique called in French?,Saut de l,,,,A,extreme,Chapter 4
+185,What is Calder's mobile sculpture technique?,Kinetic sculpture,,,,A,extreme,Chapter 4
+186,What is Artaud's theater of cruelty concept?,Theatre of Cruelty or Théâtre de la Cruauté,,,,A,extreme,Chapter 4
+187,What UNESCO program protects intangible heritage?,Intangible Cultural Heritage,,,,A,extreme,Chapter 4
+188,What is the Korean art of inlay called?,Najeonchilgi or mother-of-pearl inlay,,,,A,extreme,Chapter 4
+189,Charles Dickens was a British author.,False,True,,,B,easy,Chapter 5
+190,Silent films had no sound.,True,False,,,A,easy,Chapter 5
+191,A symphony orchestra has different instruments.,False,True,,,B,easy,Chapter 5
+192,Castles were built for defense.,True,False,,,A,easy,Chapter 5
+193,Watercolors use water as a medium.,False,True,,,B,easy,Chapter 5
+194,Waltz is a ballroom dance.,True,False,,,A,easy,Chapter 5
+195,Pantomime uses no words.,False,True,,,B,easy,Chapter 5
+196,Bronze is used for casting sculptures.,True,False,,,A,easy,Chapter 5
+197,Museums preserve cultural artifacts.,False,True,,,B,easy,Chapter 5
+198,Elvis Presley was called the King of Rock.,True,False,,,A,easy,Chapter 5
+199,Who wrote 'Moby-Dick'?,Herman Melville,Nathaniel Hawthorne,,,A,medium,Chapter 5
+200,What was the first full-length animated film?,Snow White,Fantasia,,,A,medium,Chapter 5
+201,Who wrote 'Für Elise'?,Beethoven,Mozart,,,A,medium,Chapter 5
+202,What is the tallest building type?,Skyscraper,Tower,,,A,medium,Chapter 5
+203,Who painted 'The Last Supper'?,Leonardo da Vinci,Michelangelo,,,A,medium,Chapter 5
+204,What is the Russian folk dance?,Troika,Polka,,,A,medium,Chapter 5
+205,What is the Greek theater mask called?,Persona,Thespis,,,A,medium,Chapter 5
+206,What is Rodin's most famous sculpture?,The Thinker,The Kiss,,,A,medium,Chapter 5
+207,Where is Oktoberfest celebrated?,Munich,Berlin,,,A,medium,Chapter 5
+208,What is the art of glassmaking?,Glassblowing,Glazing,,,A,medium,Chapter 5
+209,Who wrote 'Ulysses'?,James Joyce,Samuel Beckett,Oscar Wilde,,A,hard,Chapter 5
+210,Who directed 'Vertigo'?,Alfred Hitchcock,Billy Wilder,John Ford,,A,hard,Chapter 5
+211,Which composer wrote 'Boléro'?,Maurice Ravel,Claude Debussy,Erik Satie,,A,hard,Chapter 5
+212,Who designed the Chrysler Building?,William Van Alen,Raymond Hood,Cass Gilbert,,A,hard,Chapter 5
+213,Which artist painted 'The Persistence of Memory'?,Salvador Dalí,René Magritte,Max Ernst,,A,hard,Chapter 5
+214,What is the Spanish gypsy dance?,Flamenco,Paso Doble,Sevillanas,,A,hard,Chapter 5
+215,Who wrote 'The Glass Menagerie'?,Tennessee Williams,Arthur Miller,William Inge,,A,hard,Chapter 5
+216,Who created 'The Sphere Within Sphere'?,Arnaldo Pomodoro,Henry Moore,Anish Kapoor,,A,hard,Chapter 5
+217,Where is the Acropolis located?,Athens,Rome,Cairo,,A,hard,Chapter 5
+218,Where is the Uffizi Gallery?,Florence,Venice,Rome,,A,hard,Chapter 5
+219,Who wrote 'The Trial'?,Franz Kafka,Hermann Hesse,Thomas Mann,Robert Musil,A,expert,Chapter 5
+220,Who directed 'La Dolce Vita'?,Federico Fellini,Luchino Visconti,Michelangelo Antonioni,Pier Paolo Pasolini,A,expert,Chapter 5
+221,Which composer wrote 'The Firebird'?,Igor Stravinsky,Sergei Prokofiev,Dmitri Shostakovich,Aram Khachaturian,A,expert,Chapter 5
+222,Who designed the Einstein Tower?,Erich Mendelsohn,Bruno Taut,Hans Poelzig,Peter Behrens,A,expert,Chapter 5
+223,Which artist painted 'The Treachery of Images'?,René Magritte,Salvador Dalí,Paul Delvaux,Yves Tanguy,A,expert,Chapter 5
+224,Who choreographed 'Apollo'?,George Balanchine,Frederick Ashton,Kenneth MacMillan,Jerome Robbins,A,expert,Chapter 5
+225,Who wrote 'The Bald Soprano'?,Eugène Ionesco,Samuel Beckett,Jean Genet,Fernando Arrabal,A,expert,Chapter 5
+226,Who created 'Endless Column'?,Constantin Brâncuși,Jean Arp,Naum Gabo,Antoine Pevsner,A,expert,Chapter 5
+227,What year did MoMA open in New York?,1929,1932,1926,1935,A,expert,Chapter 5
+228,What is the Scandinavian art of rosemaling?,Decorative painting,Wood carving,Textile weaving,Glassblowing,A,expert,Chapter 5
+229,What is Borges' concept of infinite library?,Library of Babel,,,,A,extreme,Chapter 5
+230,What is Tarkovsky's philosophical concept of time in film?,Sculpting in time,,,,A,extreme,Chapter 5
+231,What is Cage's silent composition called?,4,,,,A,extreme,Chapter 5
+232,What is Wright's organic architecture principle?,Form follows function,,,,A,extreme,Chapter 5
+233,What is Rothko's color field painting technique?,Color field painting,,,,A,extreme,Chapter 5
+234,What is Pina Bausch's dance theater style called?,Tanztheater,,,,A,extreme,Chapter 5
+235,What is Grotowski's poor theater concept?,Poor Theatre or Theatre of 13 Rows,,,,A,extreme,Chapter 5
+236,What is Christo's large-scale wrapping called?,Environmental art or wrapping,,,,A,extreme,Chapter 5
+237,What is UNESCO's convention year for World Heritage?,1972,,,,A,extreme,Chapter 5
+238,What is the Venice Biennale's architecture event called?,Venice Architecture Biennale or La Biennale di Venezia,,,,A,extreme,Chapter 5
+239,Sunflowers are often associated with van Gogh.,False,True,,,A,easy,Chapter 6
+240,Drums are percussion instruments.,True,False,,,B,easy,Chapter 6
+241,The Colosseum is in Rome.,False,True,,,A,easy,Chapter 6
+242,Ernest Hemingway wrote 'The Old Man and the Sea'.,True,False,,,B,easy,Chapter 6
+243,Salsa originated in Cuba.,False,True,,,B,easy,Chapter 6
+244,The Venus de Milo is missing both arms.,True,False,,,A,easy,Chapter 6
+245,'The Lion King' is a Disney animated film.,False,True,,,B,easy,Chapter 6
+246,The audience sits in the auditorium.,True,False,,,A,easy,Chapter 6
+247,The Gateway of India is in Mumbai.,True,False,,,A,easy,Chapter 6
+248,The Rolling Stones are a rock band.,False,True,,,B,easy,Chapter 6
+249,Who painted 'Guernica'?,Pablo Picasso,Joan Miró,,,A,medium,Chapter 6
+250,What instrument has 47 strings?,Piano,Harp,,,B,medium,Chapter 6
+251,What gate is a symbol of Berlin?,Brandenburg Gate,Ishtar Gate,,,A,medium,Chapter 6
+252,Which art movement did Wassily Kandinsky pioneer?,Abstract Expressionism,Der Blaue Reiter,Suprematism,Constructivism,B,expert,Chapter 6
+253,How many Goldberg Variations did Bach write?,30,24,48,32,A,expert,Chapter 6
+254,Who designed the city of Chandigarh?,Le Corbusier,Louis Kahn,Frank Lloyd Wright,Mies van der Rohe,A,expert,Chapter 6
+255,What is painting with pigments suspended in water?,Watercolor or Aquarelle,,,,A,extreme,Chapter 6
+256,What is the term for gradually slowing down?,Ritardando or Rallentando,,,,A,extreme,Chapter 6
+257,What is the ornamental band on a building's exterior?,Frieze,,,,A,extreme,Chapter 6
+258,What is a contradiction that reveals truth?,Paradox,,,,A,extreme,Chapter 6
+259,What is the French term for a high kick in ballet?,Grand battement,,,,A,extreme,Chapter 6
+260,What is sculpture in the round viewable from all sides?,Freestanding or Sculpture in the round,,,,A,extreme,Chapter 6
+261,What editing technique shows simultaneous actions?,Cross-cutting or Parallel editing,,,,A,extreme,Chapter 6
+262,What is traditional Vietnamese water puppet theater?,Múa rối nước,,,,A,extreme,Chapter 6
+263,What is the famous Spanish tomato-throwing festival?,La Tomatina,,,,A,extreme,Chapter 6
+264,What is decorative stitching on the edge of fabric?,Edging or Border work,,,,A,extreme,Chapter 6
+265,Claude Monet was an Impressionist painter.,True,False,,,A,easy,Chapter 7
+266,Electric guitars need amplifiers.,True,False,,,B,easy,Chapter 7
+267,Westminster Abbey is in London.,False,True,,,A,easy,Chapter 7
+268,'Charlotte's Web' is about a spider.,True,False,,,B,easy,Chapter 7
+269,Breakdancing is part of hip-hop culture.,False,True,,,B,easy,Chapter 7
+270,The Liberty Bell is in Philadelphia.,True,False,,,A,easy,Chapter 7
+271,'Harry Potter' films are based on books.,True,False,,,B,easy,Chapter 7
+272,Comedy makes people laugh.,False,True,,,A,easy,Chapter 7
+273,The Sydney Harbour Bridge is steel.,True,False,,,A,easy,Chapter 7
+274,David Bowie was a British rock star.,False,True,,,B,easy,Chapter 7
+275,Which artist is famous for painting sunflowers?,Claude Monet,Vincent van Gogh,Salvador Dalí,,B,hard,Chapter 7
+276,How many symphonies did Beethoven compose?,9,12,7,,A,hard,Chapter 7
+277,What is the architectural style of the Taj Mahal?,Mughal,Persian,Ottoman,,A,hard,Chapter 7
+278,In which year was 'The Starry Night' painted?,1885,1889,1892,1880,B,expert,Chapter 7
+279,What is the musical term for 'very fast'?,Presto,Allegro,Vivace,Largo,A,expert,Chapter 7
+280,Who designed the Sydney Opera House?,Frank Lloyd Wright,Le Corbusier,Jørn Utzon,I.M. Pei,C,expert,Chapter 7
+281,Who won the first Nobel Prize in Literature?,Sully Prudhomme,Rabindranath Tagore,Rudyard Kipling,W.B. Yeats,A,expert,Chapter 7
+282,Which dance form originated in Cuba?,Samba,Rumba,Mambo,Salsa,C,expert,Chapter 7
+283,What artistic period is 'The Thinker' from?,Renaissance,Baroque,Modern,Classical,C,expert,Chapter 7
+284,Which film won the first Academy Award for Best Picture?,Wings,The Jazz Singer,Sunrise,The Circus,A,expert,Chapter 7
+285,What is the oldest surviving play?,Oedipus Rex,Medea,The Persians,Antigone,C,expert,Chapter 7
+286,How many years did it take to build the Colosseum?,8 years,15 years,12 years,20 years,A,expert,Chapter 7
+287,What year was the British Museum founded?,1753,1801,1725,1789,A,expert,Chapter 7
+288,Name the painting technique where pigments are mixed with egg yolk,Tempera or Egg tempera,,,,A,extreme,Chapter 7
+289,"What is the Italian term for a piece played with smooth, connected notes?",Legato,,,,A,extreme,Chapter 7
+290,What is the classical Greek architectural order with scroll-like ornaments?,Ionic or Ionic order,,,,A,extreme,Chapter 7
+291,What poetic form has 14 lines and follows specific rhyme schemes?,Sonnet,,,,A,extreme,Chapter 7
+292,What is the lead female dancer in a ballet company called?,Prima ballerina,,,,A,extreme,Chapter 7
+293,What sculpting technique involves carving away material?,Subtractive or Carving,,,,A,extreme,Chapter 7
+294,What is the term for a single uninterrupted shot in filmmaking?,Long take or Sequence shot,,,,A,extreme,Chapter 7
+295,What is the Japanese traditional theater form featuring masks and dance?,Noh or Noh theater,,,,A,extreme,Chapter 7
+296,What is the name of the masquerade festival in Venice?,Carnevale or Carnival of Venice,,,,A,extreme,Chapter 7
+297,What is the Japanese art of paper folding called?,Origami,,,,A,extreme,Chapter 7
+298,Frida Kahlo was a Mexican artist.,False,True,,,A,easy,Chapter 8
+299,A symphony orchestra has multiple instrument sections.,True,False,,,B,easy,Chapter 8
+300,The Sphinx has a human head and lion body.,True,False,,,A,easy,Chapter 8
+301,Lewis Carroll wrote 'Alice in Wonderland'.,False,True,,,B,easy,Chapter 8
+302,Kathak is an Indian classical dance.,True,False,,,B,easy,Chapter 8
+303,The Little Mermaid statue is in Copenhagen.,False,True,,,A,easy,Chapter 8
+304,'Star Wars' was released in 1977.,True,False,,,B,easy,Chapter 8
+305,An intermission is a break during a performance.,False,True,,,A,easy,Chapter 8
+306,Mount Fuji is a sacred mountain in Japan.,True,False,,,A,easy,Chapter 8
+307,Jimi Hendrix was a famous guitarist.,True,False,,,B,easy,Chapter 8
+308,Which artist founded the Orphism art movement?,Robert Delaunay,Sonia Delaunay,František Kupka,Fernand Léger,A,expert,Chapter 8
+309,How many mazurkas did Chopin compose?,59,45,67,51,A,expert,Chapter 8
+310,Who designed the Azadi Tower in Tehran?,Hossein Amanat,Kamran Diba,Nader Ardalan,Abdol-Aziz Farmanfarmaian,A,expert,Chapter 8
+311,What is painting on wooden panels called?,Panel painting,,,,A,extreme,Chapter 8
+312,What is the term for a sudden accent?,Sforzando,,,,A,extreme,Chapter 8
+313,What is the semicircular recess in a church?,Apse,,,,A,extreme,Chapter 8
+314,What is an indirect reference to another work?,Allusion,,,,A,extreme,Chapter 8
+315,What is a slow sustained movement in ballet?,Adagio,,,,A,extreme,Chapter 8
+316,What is the Italian term for unfinished sculpture?,Non finito,,,,A,extreme,Chapter 8
+317,What is a brief appearance by a celebrity?,Cameo,,,,A,extreme,Chapter 8
+318,What is traditional Turkish shadow puppet theater?,Karagöz,,,,A,extreme,Chapter 8
+319,What is the Japanese cherry blossom festival?,Hanami,,,,A,extreme,Chapter 8
+320,What is raised embroidery with padding?,Stumpwork,,,,A,extreme,Chapter 8
+321,Jackson Pollock created drip paintings.,True,False,,,A,easy,Chapter 9
+322,A bass guitar has four strings.,False,True,,,B,easy,Chapter 9
+323,The CN Tower is in Toronto.,True,False,,,A,easy,Chapter 9
+324,George R.R. Martin wrote 'Game of Thrones' books.,True,False,,,B,easy,Chapter 9
+325,The polonaise is a Polish dance.,False,True,,,B,easy,Chapter 9
+326,The Golden Gate Bridge is painted orange.,True,False,,,A,easy,Chapter 9
+327,'Godzilla' originated in Japan.,False,True,,,B,easy,Chapter 9
+328,A rehearsal happens before the performance.,True,False,,,A,easy,Chapter 9
+329,Angkor Wat is in Cambodia.,False,True,,,A,easy,Chapter 9
+330,Prince was a multi-instrumentalist.,True,False,,,B,easy,Chapter 9
+331,Which artist founded the Fauvist movement?,Henri Matisse,André Derain,Maurice de Vlaminck,Raoul Dufy,A,expert,Chapter 9
+332,How many nocturnes did Chopin compose?,21,27,18,24,A,expert,Chapter 9
+333,Who designed the Biblioteca Vasconcelos?,Alberto Kalach,Luis Barragán,Ricardo Legorreta,Pedro Ramírez Vázquez,A,expert,Chapter 9
+334,Who won the 2006 Nobel Prize for Literature?,Orhan Pamuk,Yaşar Kemal,Elif Şafak,Nâzım Hikmet,A,expert,Chapter 9
+335,What is painting with pigments in hot wax?,Encaustic,,,,A,extreme,Chapter 9
+336,What is the term for a trill ornament?,Mordent,,,,A,extreme,Chapter 9
+337,What is the uppermost part of a column?,Capital,,,,A,extreme,Chapter 9
+338,What is a poem of 17 syllables in three lines?,Haiku,,,,A,extreme,Chapter 9
+339,What is a ballet jump with straight legs?,Jeté or Grand jeté,,,,A,extreme,Chapter 9
+340,What is sculpture projecting from a background?,Relief,,,,A,extreme,Chapter 9
+341,What is a shot from a character's viewpoint?,Point of view or POV,,,,A,extreme,Chapter 9
+342,What is traditional Filipino shadow puppet play?,Carillo or Kikimut,,,,A,extreme,Chapter 9
+343,What is the Thai water festival?,Songkran,,,,A,extreme,Chapter 9
+344,What is fabric decoration with beads and sequins?,Beadwork,,,,A,extreme,Chapter 9
+345,Leonardo da Vinci was a Renaissance artist.,False,True,,,A,easy,Chapter 10
+346,Beethoven continued composing after becoming deaf.,True,False,,,B,easy,Chapter 10
+347,The Sistine Chapel is in Vatican City.,True,False,,,A,easy,Chapter 10
+348,Mary Shelley wrote 'Frankenstein'.,False,True,,,B,easy,Chapter 10
+349,Australia has indigenous dance traditions.,True,False,,,B,easy,Chapter 10
+350,The Parthenon Marbles are in the British Museum.,False,True,,,A,easy,Chapter 10
+351,Westerns are set in the American Old West.,True,False,,,B,easy,Chapter 10
+352,An understudy replaces the main actor when needed.,False,True,,,A,easy,Chapter 10
+353,Christ the Redeemer is in Rio de Janeiro.,True,False,,,A,easy,Chapter 10
+354,Elvis Presley was called the King of Rock and Roll.,True,False,,,B,easy,Chapter 10
+355,Which artist founded the Precisionism movement?,Charles Demuth,Georgia O,",
+                    ",",
+                    ",A,expert,Chapter 10
+356,How many Brandenburg Concertos did Bach compose?,6,4,8,12,A,expert,Chapter 10
+357,Who carved the ancient city of Petra?,Nabataeans,Romans,Byzantines,Persians,A,expert,Chapter 10
+358,What is painting technique using small dots of color?,Pointillism or Divisionism,,,,A,extreme,Chapter 10
+359,What is the term for a sudden loud accent?,Sforzando,,,,A,extreme,Chapter 10
+360,What is a circular window in Gothic architecture?,Rose window or Rosette,,,,A,extreme,Chapter 10
+361,What is repetition at the beginning of successive clauses?,Anaphora,,,,A,extreme,Chapter 10
+362,What is a spinning jump in ballet?,Tour en l,,,,A,extreme,Chapter 10
+363,What is sculpture technique using molten metal?,Casting or Lost-wax casting,,,,A,extreme,Chapter 10
+364,What is a shot following a moving subject?,Tracking shot or Dolly shot,,,,A,extreme,Chapter 10
+365,What is traditional Cambodian dance drama?,Lkhon or Khmer dance,,,,A,extreme,Chapter 10
+366,Hokusai created 'The Great Wave'.,True,False,,,A,easy,Chapter 11
+367,The saxophone is a woodwind instrument.,False,True,,,B,easy,Chapter 11
+368,The Shwedagon Pagoda is covered in gold.,True,False,,,A,easy,Chapter 11
+369,Rudyard Kipling wrote 'The Jungle Book'.,True,False,,,B,easy,Chapter 11
+370,The waltz originated in Austria.,False,True,,,B,easy,Chapter 11
+371,Easter Island statues are called Moai.,True,False,,,A,easy,Chapter 11
+372,'Spirited Away' is a Japanese animated film.,False,True,,,B,easy,Chapter 11
+373,The curtain call happens at the end of a show.,True,False,,,A,easy,Chapter 11
+374,The Arc de Triomphe is in Paris.,False,True,,,A,easy,Chapter 11
+375,The Rolling Stones formed in London.,True,False,,,B,easy,Chapter 11
+376,Which artist founded the Rayonism movement?,Mikhail Larionov,Natalia Goncharova,Kazimir Malevich,El Lissitzky,A,expert,Chapter 11
+377,How many cello suites did Bach compose?,6,4,8,12,A,expert,Chapter 11
+378,Who designed the Heydar Aliyev Center in Baku?,Zaha Hadid,Frank Gehry,Santiago Calatrava,Norman Foster,A,expert,Chapter 11
+379,What is the technique of scratching through paint layers?,Sgraffito,,,,A,extreme,Chapter 11
+380,What is the term for a grace note?,Appoggiatura or Acciaccatura,,,,A,extreme,Chapter 11
+381,What is a projecting corbelled structure?,Corbel or Cantilever,,,,A,extreme,Chapter 11
+382,What is a short witty saying?,Epigram,,,,A,extreme,Chapter 11
+383,What is a rapid turning movement on one foot?,Fouetté,,,,A,extreme,Chapter 11
+384,What is a kinetic sculpture?,Moving sculpture,,,,A,extreme,Chapter 11
+385,What is a jump cut in editing?,Abrupt transition in time,,,,A,extreme,Chapter 11
+386,What is Burmese classical marionette theater?,Yoke thé,,,,A,extreme,Chapter 11
+387,What is the Chinese Moon Festival also called?,Mid-Autumn Festival,,,,A,extreme,Chapter 11
+388,What is pulled thread embroidery?,Drawn thread work,,,,A,extreme,Chapter 11
+389,René Magritte was a Surrealist painter.,False,True,,,A,easy,Chapter 12
+390,A drum kit includes cymbals.,True,False,,,B,easy,Chapter 12
+391,Kathmandu has ancient temple architecture.,True,False,,,A,easy,Chapter 12
+392,'The Little Prince' features a fox.,False,True,,,B,easy,Chapter 12
+393,The hopak is a Ukrainian dance.,True,False,,,B,easy,Chapter 12
+394,The Lion of Lucerne is carved from rock.,False,True,,,A,easy,Chapter 12
+395,'Interstellar' is a science fiction film.,True,False,,,B,easy,Chapter 12
+396,Stage left is from the actor's perspective.,True,False,,,A,easy,Chapter 12
+397,The Tower of Pisa leans due to soft ground.,False,True,,,A,easy,Chapter 12
+398,Pink Floyd was a progressive rock band.,True,False,,,B,easy,Chapter 12
+399,Which artist founded the Vorticism movement?,Wyndham Lewis,David Bomberg,William Roberts,Edward Wadsworth,A,expert,Chapter 12
+400,How many operas did Verdi compose?,28,35,20,42,A,expert,Chapter 12
+401,Who designed the National Museum of Beirut?,Antoine Nahas,Bernard Khoury,Joseph Philippe Karam,Pierre el-Khoury,A,expert,Chapter 12
+402,Who wrote the Icelandic Sagas?,Various anonymous authors,Snorri Sturluson,Egill Skallagrímsson,Unknown single author,A,expert,Chapter 12
+403,What is painting on dry plaster called?,Secco or Fresco secco,,,,A,extreme,Chapter 12
+404,What is the term for a sudden silence?,Rest or Grand pause,,,,A,extreme,Chapter 12
+405,What is a pointed arch vault?,Ogive or Gothic vault,,,,A,extreme,Chapter 12
+406,What is a long narrative poem?,Epic,,,,A,extreme,Chapter 12
+407,What is a backward bend in ballet?,Cambré,,,,A,extreme,Chapter 12
+408,What is sculpture formed by pouring liquid material?,Casting,,,,A,extreme,Chapter 12
+409,What is voice recorded after filming?,Dubbing or ADR,,,,A,extreme,Chapter 12
+410,What is Taiwanese glove puppet theater?,Budaixi or Potehi,,,,A,extreme,Chapter 12
+411,What is the Indian harvest festival?,Pongal or Makar Sankranti,,,,A,extreme,Chapter 12
+412,What is whitework embroidery?,White thread on white fabric,,,,A,extreme,Chapter 12
+413,J.M.W. Turner painted seascapes.,True,False,,,A,easy,Chapter 13
+414,An acoustic guitar doesn't need electricity.,False,True,,,B,easy,Chapter 13
+415,Moroccan architecture features intricate tilework.,True,False,,,A,easy,Chapter 13
+416,Dr. Seuss wrote 'The Cat in the Hat'.,False,True,,,B,easy,Chapter 13
+417,The haka is a Maori war dance.,True,False,,,B,easy,Chapter 13
+418,Mount Rushmore features four presidents.,True,False,,,A,easy,Chapter 13
+419,Rembrandt was a Dutch Golden Age painter.,True,False,,,A,easy,Chapter 14
+420,An opera combines singing and theater.,False,True,,,B,easy,Chapter 14
+421,The Great Wall of China is visible from space.,False,True,,,A,easy,Chapter 14
+422,C.S. Lewis wrote 'The Chronicles of Narnia'.,True,False,,,B,easy,Chapter 14
+423,Flamenco originated in Spain.,False,True,,,B,easy,Chapter 14
+424,Ancient Greeks created marble sculptures.,True,False,,,A,easy,Chapter 14
+425,Silent films had no sound at all.,False,True,,,B,easy,Chapter 14
+426,Broadway is in New York City.,True,False,,,A,easy,Chapter 14
+427,Big Ben is a clock tower in London.,True,False,,,A,easy,Chapter 14
+428,Bob Dylan won a Nobel Prize in Literature.,False,True,,,B,easy,Chapter 14
+429,Which artist famously cut off his own ear?,Vincent van Gogh,Paul Gauguin,,,A,medium,Chapter 14
+430,What is the largest string instrument in an orchestra?,Cello,Double bass,,,B,medium,Chapter 14
+431,Which artist founded the Metaphysical painting movement?,Giorgio de Chirico,Carlo Carrà,Giorgio Morandi,Alberto Savinio,A,expert,Chapter 14
+432,How many piano concertos did Mozart compose?,27,21,32,18,A,expert,Chapter 14
+433,Who designed Montevideo's Palacio Salvo?,Mario Palanti,Julio Vilamajó,Rafael Lorente Escudero,Carlos Surraco,A,expert,Chapter 14
+434,What is the technique of applying thick paint?,Impasto,,,,A,extreme,Chapter 14
+435,What is a recurring musical theme called?,Leitmotif or Motif,,,,A,extreme,Chapter 14
+436,What is a projecting structure supporting a building?,Cantilever,,,,A,extreme,Chapter 14
+437,What is a dramatic reversal in a story?,Peripeteia or Reversal,,,,A,extreme,Chapter 14
+438,What is a pas de deux in ballet?,Dance for two,,,,A,extreme,Chapter 14
+439,What is additive sculpture technique?,Modeling or Building up,,,,A,extreme,Chapter 14
+440,What is a mise-en-scène?,Everything in frame,,,,A,extreme,Chapter 14
+441,What is Mongolian traditional throat singing?,Khoomei or Overtone singing,,,,A,extreme,Chapter 14
+442,What is the German October beer festival?,Oktoberfest,,,,A,extreme,Chapter 14
+443,What is ribbon embroidery?,Silk ribbon work,,,,A,extreme,Chapter 14
+444,Gustav Klimt painted 'The Kiss'.,False,True,,,A,easy,Chapter 15
+445,A violin has four strings.,True,False,,,B,easy,Chapter 15
+446,The Louvre is in Paris.,False,True,,,A,easy,Chapter 15
+447,J.R.R. Tolkien wrote 'The Hobbit'.,True,False,,,B,easy,Chapter 15
+448,Tango originated in Argentina.,True,False,,,B,easy,Chapter 15
+449,The Statue of Liberty holds a torch.,False,True,,,A,easy,Chapter 15
+450,Animation creates the illusion of movement.,True,False,,,B,easy,Chapter 15
+451,Shakespeare wrote in the 16th and 17th centuries.,True,False,,,A,easy,Chapter 15
+452,The Brandenburg Gate is in Berlin.,False,True,,,A,easy,Chapter 15
+453,Queen was a British rock band.,True,False,,,B,easy,Chapter 15
+454,Which artist founded the Synchromism movement?,Morgan Russell,Stanton Macdonald-Wright,Patrick Henry Bruce,Thomas Hart Benton,A,expert,Chapter 15
+455,How many operas did Puccini complete?,12,16,9,14,A,expert,Chapter 15
+456,Who rebuilt Warsaw's Old Town after WWII?,Jan Zachwatowicz,Bohdan Pniewski,Szymon Syrkus,Helena Syrkus,A,expert,Chapter 15
+457,What is painting on prepared canvas called?,Gesso or Primed canvas,,,,A,extreme,Chapter 15
+458,What is gradual increase in volume?,Crescendo,,,,A,extreme,Chapter 15
+459,What is a recessed triangular space?,Spandrel,,,,A,extreme,Chapter 15
+460,What is a sudden realization in a story?,Epiphany,,,,A,extreme,Chapter 15
+461,What is a ballet turn on one foot?,Pirouette,,,,A,extreme,Chapter 15
+462,What is earth art or land art?,Environmental sculpture,,,,A,extreme,Chapter 15
+463,What is editing technique alternating storylines?,Parallel editing or Cross-cutting,,,,A,extreme,Chapter 15
+464,What is Uzbek traditional silk road performance?,Katta Ashula or Epic singing,,,,A,extreme,Chapter 15
+465,What is the Korean harvest festival?,Chuseok,,,,A,extreme,Chapter 15
+466,What is blackwork embroidery?,Black thread on white fabric,,,,A,extreme,Chapter 15
+467,Wassily Kandinsky was a pioneer of abstract art.,True,False,,,A,easy,Chapter 16
+468,A cello is larger than a violin.,False,True,,,B,easy,Chapter 16
+469,The Philippines has Spanish colonial architecture.,True,False,,,A,easy,Chapter 16
+470,A.A. Milne created Winnie-the-Pooh.,True,False,,,B,easy,Chapter 16
+471,Bali has traditional dance forms.,False,True,,,B,easy,Chapter 16
+472,African masks are forms of sculpture.,True,False,,,A,easy,Chapter 16
+473,'The Avengers' is a superhero ensemble film.,False,True,,,B,easy,Chapter 16
+474,The wings are the sides of a stage.,True,False,,,A,easy,Chapter 16
+475,The Angel of Independence is in Mexico City.,False,True,,,A,easy,Chapter 16
+476,Radiohead is a British rock band.,True,False,,,B,easy,Chapter 16
+477,Which artist founded the Lyrical Abstraction movement?,Georges Mathieu,Hans Hartung,Pierre Soulages,Jean-Paul Riopelle,A,expert,Chapter 16
+478,How many string quartets did Haydn compose?,68,52,83,45,A,expert,Chapter 16
+479,Who designed the Bank of China Tower?,I.M. Pei,Norman Foster,Cesar Pelli,Kohn Pedersen Fox,A,expert,Chapter 16
+480,What is chiaroscuro technique?,Light and dark contrast,,,,A,extreme,Chapter 16
+481,What is the term for slowing down gradually?,Ritardando or Rallentando,,,,A,extreme,Chapter 16
+482,What is a fan vault ceiling?,Gothic vault with ribs,,,,A,extreme,Chapter 16
+483,What is a coming-of-age story?,Bildungsroman,,,,A,extreme,Chapter 16
+484,What is a ballet step with one leg lifted?,Attitude,,,,A,extreme,Chapter 16
+485,What is installation art?,Site-specific three-dimensional work,,,,A,extreme,Chapter 16
+486,What is diegetic sound?,Sound from the film world,,,,A,extreme,Chapter 16
+487,What is Kazakh traditional epic performance?,Zhyrau or Epic singing,,,,A,extreme,Chapter 16
+488,What is the Peruvian sun festival?,Inti Raymi,,,,A,extreme,Chapter 16
+489,What is crewel embroidery?,Wool embroidery on fabric,,,,A,extreme,Chapter 16
+490,Paul Klee was a Swiss-German artist.,False,True,,,A,easy,Chapter 17
+491,An accordion uses bellows to make sound.,True,False,,,B,easy,Chapter 17
+492,Uganda has traditional thatched huts.,True,False,,,A,easy,Chapter 17
+493,Beatrix Potter wrote 'Peter Rabbit'.,False,True,,,B,easy,Chapter 17
+494,Ecuador has traditional folk dances.,True,False,,,B,easy,Chapter 17
+495,Lion sculptures symbolize strength.,False,True,,,A,easy,Chapter 17
+496,'Avatar' used motion capture technology.,True,False,,,B,easy,Chapter 17
+497,A tech rehearsal tests lighting and sound.,True,False,,,A,easy,Chapter 17
+498,Bogotá has colonial monuments.,False,True,,,A,easy,Chapter 17
+499,AC/DC is an Australian rock band.,True,False,,,B,easy,Chapter 17
+500,Which artist founded the Cobra movement?,Karel Appel,Asger Jorn,Constant Nieuwenhuys,Pierre Alechinsky,A,expert,Chapter 17
+501,How many violin sonatas did Beethoven compose?,10,16,8,12,A,expert,Chapter 17
+502,Who designed Ljubljana's Triple Bridge?,Jože Plečnik,Edvard Ravnikar,Savin Sever,Max Fabiani,A,expert,Chapter 17
+503,What is tenebrism in painting?,Dramatic illumination contrast,,,,A,extreme,Chapter 17
+504,What is the term for a musical shake ornament?,Trill,,,,A,extreme,Chapter 17
+505,What is a flying buttress?,External arch support,,,,A,extreme,Chapter 17
+506,What is a stream of consciousness?,Narrative of thoughts,,,,A,extreme,Chapter 17
+507,What is a ballet lift called?,Portage or Port de bras,,,,A,extreme,Chapter 17
+508,What is found object sculpture?,Art from everyday objects,,,,A,extreme,Chapter 17
+509,What is non-diegetic sound?,Sound outside film world,,,,A,extreme,Chapter 17
+510,What is Turkmen traditional storytelling?,Bakhshi or Epic singing,,,,A,extreme,Chapter 17
+511,What is the Ethiopian Christmas?,Ganna or Timkat,,,,A,extreme,Chapter 17
+512,What is hardanger embroidery?,Norwegian cutwork,,,,A,extreme,Chapter 17
+513,The Group of Seven were Canadian landscape painters.,True,False,,,A,easy,Chapter 18
+514,A trombone has a sliding mechanism.,False,True,,,B,easy,Chapter 18
+515,Tanzania has Swahili coastal architecture.,True,False,,,A,easy,Chapter 18
+516,Aesop's fables include 'The Tortoise and the Hare'.,True,False,,,B,easy,Chapter 18
+517,Bolivia has Andean folk dances.,False,True,,,B,easy,Chapter 18
+518,Eagle sculptures represent freedom.,True,False,,,A,easy,Chapter 18
+519,'Parasite' is a South Korean film.,False,True,,,B,easy,Chapter 18
+520,A dress rehearsal is the final practice before opening.,True,False,,,A,easy,Chapter 18
+521,Machu Picchu is in Peru.,False,True,,,A,easy,Chapter 18
+522,Nirvana was a grunge band from Seattle.,True,False,,,B,easy,Chapter 18
+523,Which artist founded the Ashcan School?,Robert Henri,George Bellows,John Sloan,William Glackens,A,expert,Chapter 18
+524,How many piano sonatas did Beethoven compose?,32,27,41,24,A,expert,Chapter 18
+525,Who designed Buenos Aires' Teatro Colón?,Francesco Tamburini,Vittorio Meano,Julio Dormal,All three,D,expert,Chapter 18
+526,What is alla prima painting technique?,Wet-on-wet or Direct painting,,,,A,extreme,Chapter 18
+527,What is the term for majestic tempo?,Maestoso,,,,A,extreme,Chapter 18
+528,What is a dome on pendentives?,Byzantine dome or Pendentive dome,,,,A,extreme,Chapter 18
+529,What is a brief witty poem?,Epigram,,,,A,extreme,Chapter 18
+530,What is a rapid leg movement in ballet?,Battement,,,,A,extreme,Chapter 18
+531,What is carved negative space sculpture?,Pierced sculpture or Negative space,,,,A,extreme,Chapter 18
+532,What is a high-angle shot looking down?,Bird,,,,A,extreme,Chapter 18
+533,What is Armenian traditional epic performance?,Gusans or Epic singing,,,,A,extreme,Chapter 18
+534,What is the Moroccan Gnawa music festival?,Gnaoua Festival or Essaouira Festival,,,,A,extreme,Chapter 18
+535,What is ribbon lace making?,Tape lace or Renaissance lace,,,,A,extreme,Chapter 18
+536,Salvador Dalí was a Surrealist painter.,True,False,,,A,easy,Chapter 19
+537,Drums belong to the percussion family.,False,True,,,B,easy,Chapter 19
+538,Japanese temples often have curved roofs.,True,False,,,A,easy,Chapter 19
+539,J.K. Rowling wrote the Harry Potter series.,False,True,,,B,easy,Chapter 19
+540,The Bolshoi Ballet is in Moscow.,True,False,,,B,easy,Chapter 19
+541,Stone sculptures can last thousands of years.,False,True,,,A,easy,Chapter 19
+542,CGI stands for Computer Generated Imagery.,True,False,,,B,easy,Chapter 19
+543,The balcony is the upper seating area.,True,False,,,A,easy,Chapter 19
+544,The Sphinx has a lion's body.,False,True,,,A,easy,Chapter 19
+545,Led Zeppelin was a rock band.,True,False,,,B,easy,Chapter 19
+546,Which artist founded the Neoplasticism movement?,Piet Mondrian,Theo van Doesburg,Bart van der Leck,Vilmos Huszár,A,expert,Chapter 19
+547,How many preludes and fugues are in 'The Well-Tempered Clavier'?,48,24,32,96,A,expert,Chapter 19
+548,Who designed Moldova's Nativity Cathedral?,Abraham Melnikov,Bernardazzi,Mitrofan Elladi,Alexander Pomerantsev,A,expert,Chapter 19
+549,What is the optical mixing technique in painting?,Optical mixing or Broken color,,,,A,extreme,Chapter 19
+550,What is the term for gradual decrease in volume?,Diminuendo or Decrescendo,,,,A,extreme,Chapter 19
+551,What is the space between columns called?,Intercolumniation,,,,A,extreme,Chapter 19
+552,What is a character's inner thoughts narrative?,Interior monologue,,,,A,extreme,Chapter 19
+553,What is a ballet leap with split legs?,Grand jeté,,,,A,extreme,Chapter 19
+554,What is minimal sculpture with geometric forms?,Minimalism or Primary structures,,,,A,extreme,Chapter 19
+555,What is a continuous take without cuts?,One-shot or Oner,,,,A,extreme,Chapter 19
+556,What is Kyrgyz traditional epic performance?,Manas or Epic recitation,,,,A,extreme,Chapter 19
+557,What is the Bolivian carnival celebration?,Oruro Carnival,,,,A,extreme,Chapter 19
+558,What is gold thread embroidery?,Goldwork or Metal thread work,,,,A,extreme,Chapter 19
+559,Edvard Munch painted 'The Scream'.,False,True,,,A,easy,Chapter 20
+560,A trumpet is a brass instrument.,True,False,,,B,easy,Chapter 20
+561,The Parthenon is in Athens.,False,True,,,A,easy,Chapter 20
+562,Bram Stoker wrote 'Dracula'.,True,False,,,B,easy,Chapter 20
+563,The tarantella is an Italian dance.,True,False,,,B,easy,Chapter 20
+564,The Statue of Liberty was a gift from France.,False,True,,,A,easy,Chapter 20
+565,Black and white films came before color films.,True,False,,,B,easy,Chapter 20
+566,A monologue is spoken by one person.,False,True,,,A,easy,Chapter 20
+567,The Taj Mahal is made of white marble.,True,False,,,A,easy,Chapter 20
+568,Michael Jackson was called the King of Pop.,True,False,,,B,easy,Chapter 20
+569,Which artist founded the Tachisme movement?,Jean Fautrier,Jean Dubuffet,Wols,Hans Hartung,A,expert,Chapter 20
+570,How many waltzes did Chopin compose?,19,21,14,27,A,expert,Chapter 20
+571,Who designed Reykjavik's Hallgrímskirkja?,Guðjón Samúelsson,Sigurður Guðmundsson,Ágúst Pálsson,Gísli Halldórsson,A,expert,Chapter 20
+572,What is painting technique with multiple thin layers?,Glazing or Layering,,,,A,extreme,Chapter 20
+573,What is the term for walking tempo?,Andante,,,,A,extreme,Chapter 20
+574,What is a covered walkway with columns?,Colonnade or Portico,,,,A,extreme,Chapter 20
+575,What is an extended metaphor in a poem?,Conceit,,,,A,extreme,Chapter 20
+576,What is a ballet pose on one leg?,Arabesque,,,,A,extreme,Chapter 20
+577,What is performance art as sculpture?,Living sculpture or Body art,,,,A,extreme,Chapter 20
+578,What is a low-angle camera shot?,Worm,,,,A,extreme,Chapter 20
+579,What is Tajik traditional storytelling performance?,Maqom or Epic singing,,,,A,extreme,Chapter 20
+580,What is the Colombian flower festival?,Feria de las Flores,,,,A,extreme,Chapter 20
