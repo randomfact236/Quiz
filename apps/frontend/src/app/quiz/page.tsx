@@ -245,7 +245,81 @@ function SubjectSelection(): JSX.Element {
   );
 }
 
+interface Question {
+  id: number;
+  question: string;
+  optionA: string;
+  optionB: string;
+  optionC: string;
+  optionD: string;
+  correctAnswer: string;
+  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  chapter: string;
+  status?: 'published' | 'draft' | 'trash';
+}
+
+interface ChapterInfo {
+  name: string;
+  questionCount: number;
+  levels: Set<string>;
+}
+
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
+  const [chapters, setChapters] = useState<ChapterInfo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Load questions from localStorage for this subject
+    const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+    const subjectQuestions = allQuestions[subject] || [];
+    
+    // Group questions by chapter
+    const chapterMap = new Map<string, ChapterInfo>();
+    
+    subjectQuestions.forEach(q => {
+      // Skip questions in trash
+      if (q.status === 'trash') return;
+      
+      const chapterName = q.chapter || 'General';
+      
+      if (!chapterMap.has(chapterName)) {
+        chapterMap.set(chapterName, {
+          name: chapterName,
+          questionCount: 0,
+          levels: new Set(),
+        });
+      }
+      
+      const chapter = chapterMap.get(chapterName)!;
+      chapter.questionCount++;
+      chapter.levels.add(q.level);
+    });
+    
+    // Convert to array and sort by name
+    const chapterList = Array.from(chapterMap.values()).sort((a, b) => 
+      a.name.localeCompare(b.name)
+    );
+    
+    setChapters(chapterList);
+    setIsLoading(false);
+  }, [subject]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Link 
+          href="/quiz" 
+          className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+        >
+          ← Back to Subjects
+        </Link>
+        <div className="flex h-64 items-center justify-center">
+          <div className="text-2xl text-white">Loading chapters...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Link 
@@ -257,15 +331,34 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       <h1 className="mb-8 text-center text-3xl font-bold text-white">
         📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
       </h1>
-      <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
-        <p className="text-gray-600">Chapter selection coming soon...</p>
-        <Link 
-          href={`/quiz?subject=${subject}&chapter=1`}
-          className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
-        >
-          Start Chapter 1
-        </Link>
-      </div>
+      
+      {chapters.length === 0 ? (
+        <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
+          <p className="text-gray-600">No chapters available for this subject yet.</p>
+          <p className="mt-2 text-sm text-gray-500">Questions need to be added in the admin panel.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {chapters.map((chapter, index) => (
+            <Link
+              key={chapter.name}
+              href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
+              className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-xl font-bold text-indigo-600">
+                {index + 1}
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-gray-800">{chapter.name}</h3>
+                <p className="text-sm text-gray-500">
+                  {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
+                </p>
+              </div>
+              <span className="text-2xl text-gray-400">→</span>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
