@@ -14,15 +14,12 @@ interface QuizSidebarProps {
   onAddSubject: (category: 'academic' | 'professional' | 'entertainment') => void;
   onEditSubject: (subject: Subject) => void;
   onReorderSubjects: (subjects: Subject[]) => void;
+  questionCounts?: Record<string, number>;
 }
 
-const subjectIcons: Record<string, React.ReactNode> = {
-  science: '🧪',
-  math: '🔢',
-  history: '📜',
-  geography: '🌍',
-  english: '📚',
-  technology: '💻',
+// Helper to check if a string is an emoji
+const isEmoji = (str: string): boolean => {
+  return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(str);
 };
 
 export function QuizSidebar({
@@ -35,6 +32,7 @@ export function QuizSidebar({
   onAddSubject,
   onEditSubject,
   onReorderSubjects,
+  questionCounts = {},
 }: QuizSidebarProps): JSX.Element {
   const [draggedId, setDraggedId] = useState<number | null>(null);
   const [dropTargetCategory, setDropTargetCategory] = useState<string | null>(null);
@@ -204,6 +202,7 @@ export function QuizSidebar({
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
                 onDrop={handleDrop}
+                questionCount={questionCounts[subject.slug] || 0}
               />
             ))
           )}
@@ -260,6 +259,7 @@ interface SubjectItemProps {
   onDragStart: (e: React.DragEvent, subject: Subject) => void;
   onDragEnd: () => void;
   onDrop: (e: React.DragEvent, targetCategory: string, targetIndex?: number) => void;
+  questionCount?: number;
 }
 
 const SubjectItem = React.memo(function SubjectItem({
@@ -274,6 +274,7 @@ const SubjectItem = React.memo(function SubjectItem({
   onDragStart,
   onDragEnd,
   onDrop,
+  questionCount = 0,
 }: SubjectItemProps) {
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -325,11 +326,14 @@ const SubjectItem = React.memo(function SubjectItem({
         <GripVertical className="w-3 h-3" />
       </span>
       <span className="flex items-center justify-center w-5 h-5 shrink-0 text-lg">
-        {subjectIcons[subject.emoji] || subject.emoji || '📚'}
+        {isEmoji(subject.emoji) ? subject.emoji : '📚'}
       </span>
       {sidebarOpen && (
         <>
           <span className="text-sm truncate flex-1">{subject.name}</span>
+          <span className="text-xs text-gray-500 px-1.5 py-0.5 bg-gray-800 rounded-full">
+            {questionCount}
+          </span>
           <button
             onClick={handleEdit}
             className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-700 text-gray-400 hover:text-white transition-opacity"

@@ -38,12 +38,12 @@ function calculateScore(questions: Question[], answers: Record<number, string>):
   return score;
 }
 
-/** Load questions from localStorage */
+/** Load questions from localStorage (max 10) */
 function loadQuestions(subject: string, chapter: string, level: string): Question[] {
   const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
   const subjectQuestions = allQuestions[subject] || [];
   
-  return subjectQuestions.filter(q => {
+  const filtered = subjectQuestions.filter(q => {
     // Filter by chapter
     if (q.chapter !== chapter) return false;
     // Filter by level
@@ -52,6 +52,9 @@ function loadQuestions(subject: string, chapter: string, level: string): Questio
     if (q.status === 'trash' || q.status === 'draft') return false;
     return true;
   });
+  
+  // Limit to 10 questions
+  return filtered.slice(0, 10);
 }
 
 /** Save quiz session to history */
@@ -89,7 +92,8 @@ export function useQuiz(
   subject: string, 
   chapter: string, 
   level: string,
-  timeLimit?: number // in seconds, undefined = no limit
+  timeLimit?: number, // in seconds, undefined = no limit
+  timerMode: 'total' | 'per-question' = 'per-question' // 'total' = whole quiz, 'per-question' = per question
 ): UseQuizReturn {
   // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
@@ -152,15 +156,30 @@ export function useQuiz(
       setState(prev => {
         const newTimeRemaining = prev.timeRemaining - 1;
         if (newTimeRemaining <= 0) {
-          // Time's up - auto submit
-          return { ...prev, timeRemaining: 0, status: 'completed' };
+          // Time's up
+          if (timerMode === 'per-question') {
+            // Auto-move to next question or submit if last
+            const isLast = prev.currentQuestionIndex >= prev.questions.length - 1;
+            if (isLast) {
+              return { ...prev, timeRemaining: 0, status: 'completed' };
+            } else {
+              return { 
+                ...prev, 
+                timeRemaining: timeLimit, // Reset timer for next question
+                currentQuestionIndex: prev.currentQuestionIndex + 1 
+              };
+            }
+          } else {
+            // Total timer - submit quiz
+            return { ...prev, timeRemaining: 0, status: 'completed' };
+          }
         }
         return { ...prev, timeRemaining: newTimeRemaining };
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [state.status, timeLimit]);
+  }, [state.status, timeLimit, timerMode]);
 
   // Select answer
   const selectAnswer = useCallback((option: string) => {
@@ -191,16 +210,20 @@ export function useQuiz(
     setState(prev => ({
       ...prev,
       currentQuestionIndex: Math.max(0, prev.currentQuestionIndex - 1),
+      // Reset timer for per-question mode
+      timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
     }));
-  }, []);
+  }, [timerMode, timeLimit]);
 
   // Go to next question
   const goToNext = useCallback(() => {
     setState(prev => ({
       ...prev,
       currentQuestionIndex: Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1),
+      // Reset timer for per-question mode
+      timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
     }));
-  }, []);
+  }, [timerMode, timeLimit]);
 
   // Submit quiz
   const submitQuiz = useCallback(() => {

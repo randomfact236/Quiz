@@ -1,0 +1,160 @@
+/**
+ * Home Page Styles
+ * ==================================================
+ * Home page specific layouts and sections
+ */
+
+/* Home Page Styles */
+.home-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.home-section {
+    margin: 10px 0; /* Reduced from 30px - less gap when collapsed */
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    margin-bottom: 0; /* No margin when collapsed */
+    transition: transform 0.3s, margin 0.3s;
+}
+
+.section-header:hover {
+    transform: translateY(-2px);
+}
+
+.section-title {
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.toggle-icon {
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+/* Subject Grid */
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 0; /* No padding when collapsed - prevents gap */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.subject-grid.expanded {
+    max-height: 2000px;
+    opacity: 1;
+    padding: 20px 10px; /* Add padding only when expanded */
+}
+
+.subject-name {
+    font-size: 1em;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    flex-shrink: 0;
+}
+
+/* Sub-section Headers */
+.sub-section {
+    margin: 15px 0;
+    width: 100%;
+}
+
+.sub-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #667eea88 0%, #764ba288 100%);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: transform 0.3s, margin 0.3s;
+}
+
+.sub-section-header:hover {
+    transform: translateX(5px);
+}
+
+/* Nested subject grid within sub-section */
+.sub-section .subject-grid {
+    margin-top: 0;
+}
+
+.sub-section-title {
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.sub-toggle-icon {
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.sub-toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+/* Coming Soon Badge */
+.coming-soon-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #764ba2;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.subject-card.coming-soon {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.subject-card.coming-soon:hover {
+    transform: translateY(-5px);
+}
+
+/* Home Grid for Other Modes */
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}

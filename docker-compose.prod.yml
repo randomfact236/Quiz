@@ -1,0 +1,200 @@
+# =============================================================================
+# AI Quiz Platform - Production Docker Compose
+# =============================================================================
+# Usage:
+#   docker-compose -f docker-compose.prod.yml up -d
+#   docker-compose -f docker-compose.prod.yml down
+#
+# Environment Variables:
+#   Create a .env file in project root or set these in your shell:
+#   - POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+#   - JWT_SECRET (generate a strong secret)
+#   - CORS_ORIGIN (your domain)
+# =============================================================================
+
+version: '3.9'
+
+services:
+  # ===========================================================================
+  # PostgreSQL Database
+  # ===========================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: quiz-postgres-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aiquiz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_production}
+      POSTGRES_DB: ${POSTGRES_DB:-aiquiz}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"  # Bind to localhost only for security
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aiquiz} -d ${POSTGRES_DB:-aiquiz}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - quiz-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # ===========================================================================
+  # Redis Cache
+  # ===========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: quiz-redis-prod
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_prod_data:/data
+    ports:
+      - "127.0.0.1:6379:6379"  # Bind to localhost only for security
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - quiz-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # ===========================================================================
+  # Backend API (NestJS)
+  # ===========================================================================
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+      target: production
+    container_name: quiz-backend-prod
+    restart: unless-stopped
+    environment:
+      # Node Environment
+      NODE_ENV: production
+      PORT: 4000
+      
+      # Database
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${POSTGRES_USER:-aiquiz}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_production}
+      DB_DATABASE: ${POSTGRES_DB:-aiquiz}
+      
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      
+      # JWT Configuration
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      
+      # CORS
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3010}
+      
+      # Rate Limiting
+      RATE_LIMIT_TTL: 60
+      RATE_LIMIT_MAX: 100
+      
+      # Logging
+      LOG_LEVEL: info
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - quiz-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # ===========================================================================
+  # Frontend (Next.js)
+  # ===========================================================================
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      target: production
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-AI Quiz Platform}
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-1.0.0}
+    container_name: quiz-frontend-prod
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3010
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+    ports:
+      - "3010:3010"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3010/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - quiz-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  quiz-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  postgres_prod_data:
+    name: quiz-postgres-prod-data
+  redis_prod_data:
+    name: quiz-redis-prod-data

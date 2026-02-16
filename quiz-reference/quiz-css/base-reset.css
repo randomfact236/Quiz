@@ -1,0 +1,34 @@
+
+/**
+ * Base/Reset Styles
+ * ==================================================
+ * Base element resets and body styling
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Hide WordPress theme footer to avoid duplicate */
+body .site-footer,
+body footer:not(.quiz-footer),
+body #colophon,
+body .footer-container,
+body .wp-block-template-part footer {
+    display: none !important;
+}
+
+/* Ensure quiz custom footer shows */
+.quiz-footer {
+    display: block !important;
+}

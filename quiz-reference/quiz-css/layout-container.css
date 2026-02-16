@@ -1,0 +1,28 @@
+/**
+ * Layout Container Styles
+ * ==================================================
+ * Main container and page visibility controls
+ */
+
+.main-container {
+    width: 100%;
+    max-width: 100%;
+    background: white;
+    min-height: auto;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Page visibility control */
+.home-page, .chapter-selection, .level-selection, .quiz-container, .result-container,
+.timer-challenges-page, .timer-subject-level-selection, .practice-mode-page, .riddles-page, .dad-jokes-page {
+    display: none;
+    padding: 15px 10px 10px;
+    min-height: auto;
+}
+
+.home-page.active, .chapter-selection.active, .level-selection.active,
+.quiz-container.active, .result-container.active, .timer-challenges-page.active,
+.timer-subject-level-selection.active, .practice-mode-page.active, .riddles-page.active, .dad-jokes-page.active {
+    display: block;
+}

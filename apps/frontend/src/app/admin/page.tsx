@@ -3,12 +3,6 @@
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { 
-  FlaskConical, 
-  Calculator, 
-  Scroll, 
-  Globe, 
-  BookOpen, 
-  Laptop, 
   LayoutDashboard, 
   Gamepad2,
   ChevronLeft,
@@ -218,14 +212,9 @@ const initialQuestions: Record<string, Question[]> = {
   ],
 };
 
-// Icon mapping for subjects
-const subjectIcons: Record<string, React.ReactNode> = {
-  science: <FlaskConical className="w-5 h-5" />,
-  math: <Calculator className="w-5 h-5" />,
-  history: <Scroll className="w-5 h-5" />,
-  geography: <Globe className="w-5 h-5" />,
-  english: <BookOpen className="w-5 h-5" />,
-  technology: <Laptop className="w-5 h-5" />,
+// Helper to check if a string is an emoji
+const isEmoji = (str: string): boolean => {
+  return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(str);
 };
 
 const initialSubjects: Subject[] = [
@@ -369,24 +358,10 @@ export default function AdminPage(): JSX.Element {
     setEditingSubject(null);
   };
 
-  // Add new chapter (adds a sample question with the new chapter)
-  const handleAddChapter = (subjectSlug: string, chapterName: string) => {
-    const newQuestion: Question = {
-      id: Date.now(),
-      question: `Sample question for ${chapterName}`,
-      optionA: 'Option A',
-      optionB: 'Option B',
-      optionC: 'Option C',
-      optionD: 'Option D',
-      correctAnswer: 'A',
-      level: 'easy',
-      chapter: chapterName,
-    };
-
-    setAllQuestions(prev => ({
-      ...prev,
-      [subjectSlug]: [...(prev[subjectSlug] ?? []), newQuestion],
-    }));
+  // Add new chapter (creates empty chapter without sample questions)
+  const handleAddChapter = (_subjectSlug: string, _chapterName: string) => {
+    // Chapter is created empty - no sample questions added
+    // Questions can be added later via import or manual entry
     setShowAddChapterModal(false);
   };
 
@@ -444,6 +419,7 @@ export default function AdminPage(): JSX.Element {
             }}
             onEditSubject={handleEditSubject}
             onReorderSubjects={setSubjects}
+            questionCounts={Object.fromEntries(subjects.map(s => [s.slug, allQuestions[s.slug]?.length || 0]))}
           />
 
           {/* Other Modules Header */}
@@ -536,7 +512,7 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
               {subjects.some(s => s.slug === activeSection) && (
                 <>
-                  {subjectIcons[subjects.find(s => s.slug === activeSection)?.emoji || ''] || <BookOpen className="w-6 h-6" />}
+                  <span className="text-2xl">{isEmoji(subjects.find(s => s.slug === activeSection)?.emoji || '') ? subjects.find(s => s.slug === activeSection)?.emoji : '📚'}</span>
                   <span>{subjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
                 </>
               )}
@@ -564,7 +540,7 @@ export default function AdminPage(): JSX.Element {
             <QuestionManagementSection
               subject={getSubjectFromSection(activeSection) as Subject}
               questions={getQuestionsForSubject(activeSection)}
-              allSubjects={subjects}
+              allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddChapter={() => {
                 setSelectedSubjectForChapter(activeSection);
@@ -645,21 +621,6 @@ function MenuItem({ icon, label, active, expanded, onClick }: {
 }
 
 // Available icon options for subjects
-const iconOptions = [
-  { key: 'science', label: 'Science', icon: FlaskConical },
-  { key: 'math', label: 'Math', icon: Calculator },
-  { key: 'history', label: 'History', icon: Scroll },
-  { key: 'geography', label: 'Geography', icon: Globe },
-  { key: 'english', label: 'English', icon: BookOpen },
-  { key: 'technology', label: 'Technology', icon: Laptop },
-  { key: 'puzzle', label: 'Puzzle', icon: Puzzle },
-  { key: 'smile', label: 'Smile', icon: Smile },
-  { key: 'image', label: 'Image', icon: ImageIcon },
-  { key: 'settings', label: 'Settings', icon: Settings },
-  { key: 'users', label: 'Users', icon: Users },
-  { key: 'home', label: 'Home', icon: Home },
-];
-
 // Add Subject Modal
 function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'academic' }: {
   onClose: () => void;
@@ -668,9 +629,7 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
   defaultCategory?: 'academic' | 'professional' | 'entertainment';
 }): JSX.Element {
   const [name, setName] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState('puzzle');
-  const [customEmoji, setCustomEmoji] = useState('');
-  const [useCustomEmoji, setUseCustomEmoji] = useState(false);
+  const [customEmoji, setCustomEmoji] = useState('📚');
   const [category, setCategory] = useState<'academic' | 'professional' | 'entertainment'>(defaultCategory);
   const [error, setError] = useState('');
 
@@ -691,7 +650,7 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
       id: Date.now(),
       slug,
       name: name.trim(),
-      emoji: useCustomEmoji && customEmoji ? customEmoji : selectedIcon,
+      emoji: customEmoji || '📚',
       category,
     });
   };
@@ -713,65 +672,19 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Select Icon</label>
-            
-            {/* Custom Emoji Input */}
-            <div className="mb-3">
-              <div className="flex items-center gap-2 mb-2">
-                <input
-                  type="checkbox"
-                  id="useCustomEmoji"
-                  checked={useCustomEmoji}
-                  onChange={(e) => setUseCustomEmoji(e.target.checked)}
-                  className="rounded border-gray-300"
-                />
-                <label htmlFor="useCustomEmoji" className="text-sm text-gray-600 dark:text-secondary-400">
-                  Use custom emoji
-                </label>
-              </div>
-              
-              {useCustomEmoji ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={customEmoji}
-                    onChange={(e) => setCustomEmoji(e.target.value)}
-                    placeholder="Paste any emoji here 🎨"
-                    className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
-                    maxLength={2}
-                  />
-                  {customEmoji && (
-                    <span className="text-2xl">{customEmoji}</span>
-                  )}
-                </div>
-              ) : (
-                <div className="grid grid-cols-4 gap-2">
-                  {iconOptions.map((opt) => {
-                    const IconComponent = opt.icon;
-                    return (
-                      <button
-                        key={opt.key}
-                        type="button"
-                        onClick={() => setSelectedIcon(opt.key)}
-                        className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-colors ${
-                          selectedIcon === opt.key
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-200 dark:border-secondary-600 hover:border-gray-300 dark:hover:border-secondary-500'
-                        }`}
-                        title={opt.label}
-                      >
-                        <IconComponent className={`w-6 h-6 ${
-                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-400'
-                        }`} />
-                        <span className={`text-xs ${
-                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-secondary-500'
-                        }`}>{opt.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Subject Emoji</label>
+            <div className="flex items-center gap-3">
+              <input
+                type="text"
+                value={customEmoji}
+                onChange={(e) => setCustomEmoji(e.target.value)}
+                placeholder="Paste any emoji here 🎨"
+                className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
+                maxLength={2}
+              />
+              <span className="text-3xl">{customEmoji || '📚'}</span>
             </div>
+            <p className="text-xs text-gray-500 mt-1">Paste any emoji to represent this subject</p>
           </div>
           <div>
             <label htmlFor="subjectCategory" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Category</label>
@@ -816,9 +729,7 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
   existingSlugs: string[];
 }): JSX.Element {
   const [name, setName] = useState(subject.name);
-  const [selectedIcon, setSelectedIcon] = useState(subject.emoji);
-  const [customEmoji, setCustomEmoji] = useState('');
-  const [useCustomEmoji, setUseCustomEmoji] = useState(!iconOptions.some(opt => opt.key === subject.emoji));
+  const [customEmoji, setCustomEmoji] = useState(subject.emoji);
   const [category, setCategory] = useState<'academic' | 'professional' | 'entertainment'>(subject.category);
   const [error, setError] = useState('');
 
@@ -839,7 +750,7 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
       ...subject,
       slug,
       name: name.trim(),
-      emoji: useCustomEmoji && customEmoji ? customEmoji : selectedIcon,
+      emoji: customEmoji || '📚',
       category,
     });
   };
@@ -861,60 +772,19 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Select Icon</label>
-            <div className="mb-3">
-              <div className="flex items-center gap-2 mb-2">
-                <input
-                  type="checkbox"
-                  id="editUseCustomEmoji"
-                  checked={useCustomEmoji}
-                  onChange={(e) => setUseCustomEmoji(e.target.checked)}
-                  className="rounded border-gray-300"
-                />
-                <label htmlFor="editUseCustomEmoji" className="text-sm text-gray-600 dark:text-secondary-400">
-                  Use custom emoji
-                </label>
-              </div>
-              {useCustomEmoji ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={customEmoji}
-                    onChange={(e) => setCustomEmoji(e.target.value)}
-                    placeholder="Paste any emoji here"
-                    className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
-                    maxLength={2}
-                  />
-                  {customEmoji && <span className="text-2xl">{customEmoji}</span>}
-                </div>
-              ) : (
-                <div className="grid grid-cols-4 gap-2">
-                  {iconOptions.map((opt) => {
-                    const IconComponent = opt.icon;
-                    return (
-                      <button
-                        key={opt.key}
-                        type="button"
-                        onClick={() => setSelectedIcon(opt.key)}
-                        className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-colors ${
-                          selectedIcon === opt.key
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-200 dark:border-secondary-600 hover:border-gray-300 dark:hover:border-secondary-500'
-                        }`}
-                        title={opt.label}
-                      >
-                        <IconComponent className={`w-6 h-6 ${
-                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-400'
-                        }`} />
-                        <span className={`text-xs ${
-                          selectedIcon === opt.key ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-secondary-500'
-                        }`}>{opt.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-2">Subject Emoji</label>
+            <div className="flex items-center gap-3">
+              <input
+                type="text"
+                value={customEmoji}
+                onChange={(e) => setCustomEmoji(e.target.value)}
+                placeholder="Paste any emoji here 🎨"
+                className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100 text-2xl text-center"
+                maxLength={2}
+              />
+              <span className="text-3xl">{customEmoji || '📚'}</span>
             </div>
+            <p className="text-xs text-gray-500 mt-1">Paste any emoji to represent this subject</p>
           </div>
           <div>
             <label htmlFor="editSubjectCategory" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Category</label>
@@ -1037,7 +907,7 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
           >
             <div className="flex items-center gap-4">
               <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-white">
-                {subjectIcons[subject.emoji] || <BookOpen className="w-6 h-6" />}
+                <span className="text-2xl">{isEmoji(subject.emoji) ? subject.emoji : '📚'}</span>
               </div>
               <div>
                 <p className="font-semibold text-gray-800">{subject.name}</p>

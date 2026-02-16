@@ -1,0 +1,121 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+h1 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+.test-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+.test-section h2 {
+    margin-top: 0;
+    color: #444;
+}
+.result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+.icon {
+    font-size: 20px;
+    font-weight: bold;
+}
+.details {
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+.summary {
+    margin-top: 30px;
+    padding: 20px;
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    border-radius: 5px;
+}
+.summary h3 {
+    margin-top: 0;
+    color: #2196F3;
+}
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+.stat {
+    text-align: center;
+}
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #667eea;
+}
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+.fix-instructions {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+}
+.fix-instructions h4 {
+    margin-top: 0;
+    color: #856404;
+}
+.fix-instructions ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+.fix-instructions li {
+    margin: 5px 0;
+}
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px 5px;
+}
+button:hover {
+    background: #5568d3;
+}

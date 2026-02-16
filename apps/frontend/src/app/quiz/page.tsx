@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon, CheckCircle, Trophy } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { getChapterProgress } from '@/lib/progress';
 
@@ -394,7 +394,54 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   );
 }
 
-function LevelSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
+const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Extreme'];
+const levelEmojis: Record<string, string> = {
+  'Easy': '🌱',
+  'Medium': '🌿',
+  'Hard': '🌲',
+  'Expert': '🔥',
+  'Extreme': '💀'
+};
+const levelColors: Record<string, string> = {
+  'Easy': 'from-green-400 to-green-600',
+  'Medium': 'from-blue-400 to-blue-600',
+  'Hard': 'from-orange-400 to-orange-600',
+  'Expert': 'from-red-400 to-red-600',
+  'Extreme': 'from-purple-500 to-pink-600'
+};
+
+function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
+  // Both sections open by default
+  const [normalOpen, setNormalOpen] = useState(true);
+  const [timerOpen, setTimerOpen] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  // Get question counts by level - only after hydration
+  const questionCounts = useMemo(() => {
+    // Return empty counts during SSR to avoid hydration mismatch
+    if (!isHydrated) {
+      return {} as Record<string, number>;
+    }
+    
+    const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+    const subjectQuestions = allQuestions[subject] || [];
+    
+    const counts: Record<string, number> = {};
+    levels.forEach(level => {
+      counts[level] = subjectQuestions.filter(q => 
+        q.chapter === chapter && 
+        q.level === level.toLowerCase() &&
+        q.status === 'published'
+      ).length;
+    });
+    return counts;
+  }, [subject, chapter, isHydrated]);
+
+  // Mark as hydrated after mount
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   return (
     <div>
       <Link 
@@ -404,59 +451,139 @@ function LevelSelection({ subject, chapter }: { subject: string; chapter: string
         ← Back to Chapters
       </Link>
       <h1 className="mb-8 text-center text-3xl font-bold text-white">
-        🎯 Select Difficulty
+        🎮 Select Mode & Difficulty
       </h1>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {['Easy', 'Medium', 'Hard', 'Expert'].map((level) => (
+      
+      <div className="space-y-6">
+        {/* Normal Mode Section */}
+        <div className="rounded-2xl bg-white/95 shadow-lg overflow-hidden">
+          <button
+            onClick={() => setNormalOpen(!normalOpen)}
+            className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-4xl">🎯</span>
+              <div className="text-left">
+                <span className="text-xl font-bold block">Normal Mode</span>
+                <span className="text-sm opacity-90">Take your time, no pressure</span>
+              </div>
+            </div>
+            {normalOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+          </button>
+          
+          {normalOpen && (
+            <div className="p-6">
+              <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                {levels.map((level) => {
+                  const count = questionCounts[level] || 0;
+                  return (
+                    <Link
+                      key={`normal-${level}`}
+                      href={`/quiz/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=normal`}
+                      className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'opacity-50' : ''}`}
+                    >
+                      <span className="text-2xl mb-1">{levelEmojis[level]}</span>
+                      <span className="font-semibold text-sm">{level}</span>
+                      <span className="mt-1 text-xs opacity-90">
+                        {isHydrated ? `${count} questions` : 'Loading...'}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Timer Mode Section */}
+        <div className="rounded-2xl bg-white/95 shadow-lg overflow-hidden">
+          <button
+            onClick={() => setTimerOpen(!timerOpen)}
+            className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-orange-500 to-red-500 text-white"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-4xl">⏱️</span>
+              <div className="text-left">
+                <span className="text-xl font-bold block">Timer Mode</span>
+                <span className="text-sm opacity-90">30 seconds per question - Race against the clock!</span>
+              </div>
+            </div>
+            {timerOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+          </button>
+          
+          {timerOpen && (
+            <div className="p-6">
+              <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                {levels.map((level) => {
+                  const count = questionCounts[level] || 0;
+                  return (
+                    <Link
+                      key={`timer-${level}`}
+                      href={`/quiz/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=timer`}
+                      className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'opacity-50' : ''}`}
+                    >
+                      <span className="text-2xl mb-1">{levelEmojis[level]}</span>
+                      <span className="font-semibold text-sm">{level}</span>
+                      <span className="mt-1 text-xs opacity-90">
+                        {isHydrated ? `${count} questions` : 'Loading...'}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LevelSelection({ subject, chapter, mode }: { subject: string; chapter: string; mode: 'normal' | 'timer' }): JSX.Element {
+  const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Extreme'];
+  const levelEmojis: Record<string, string> = {
+    'Easy': '🌱',
+    'Medium': '🌿',
+    'Hard': '🌲',
+    'Expert': '🔥',
+    'Extreme': '💀'
+  };
+  
+  const levelColors: Record<string, string> = {
+    'Easy': 'from-green-400 to-green-600',
+    'Medium': 'from-blue-400 to-blue-600',
+    'Hard': 'from-orange-400 to-orange-600',
+    'Expert': 'from-red-400 to-red-600',
+    'Extreme': 'from-purple-500 to-pink-600'
+  };
+
+  return (
+    <div>
+      <Link 
+        href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
+        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+      >
+        ← Back to Mode
+      </Link>
+      <h1 className="mb-4 text-center text-3xl font-bold text-white">
+        {mode === 'timer' ? '⏱️ Timer Mode' : '🎯 Normal Mode'}
+      </h1>
+      <p className="mb-8 text-center text-white/80">
+        Select difficulty level
+      </p>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {levels.map((level) => (
           <Link
             key={level}
-            href={`/quiz/play?subject=${subject}&chapter=${chapter}&level=${level.toLowerCase()}`}
-            className="rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white"
+            href={`/quiz/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=${mode}`}
+            className={`flex flex-col items-center rounded-2xl bg-gradient-to-br ${levelColors[level]} p-6 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
           >
-            <span className="text-2xl">
-              {level === 'Easy' ? '🌱' : level === 'Medium' ? '🌿' : level === 'Hard' ? '🌲' : '🔥'}
-            </span>
-            <span className="mt-2 block font-bold text-gray-800">{level}</span>
+            <span className="text-3xl mb-2">{levelEmojis[level]}</span>
+            <span className="font-bold">{level}</span>
           </Link>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function TimerChallengesPage(): JSX.Element {
-  return (
-    <div>
-      <Link 
-        href="/" 
-        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-      >
-        ← Back to Home
-      </Link>
-      <h1 className="mb-8 text-center text-3xl font-bold text-white">
-        ⏱️ Timer Challenges
-      </h1>
-      <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
-        <p className="text-gray-600">Timer challenges coming soon...</p>
-      </div>
-    </div>
-  );
-}
-
-function PracticeModePage(): JSX.Element {
-  return (
-    <div>
-      <Link 
-        href="/" 
-        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-      >
-        ← Back to Home
-      </Link>
-      <h1 className="mb-8 text-center text-3xl font-bold text-white">
-        📝 Practice Mode
-      </h1>
-      <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
-        <p className="text-gray-600">Practice mode coming soon...</p>
       </div>
     </div>
   );
@@ -468,23 +595,19 @@ function QuizContent(): JSX.Element {
   const chapter = searchParams?.get('chapter') || '';
   const mode = searchParams?.get('mode') || '';
 
-  // If chapter is selected, show level selection
+  // If chapter + mode is selected, show level selection
+  if (subject && chapter && (mode === 'normal' || mode === 'timer')) {
+    return <LevelSelection subject={subject} chapter={chapter} mode={mode} />;
+  }
+
+  // If chapter is selected, show mode selection
   if (subject && chapter) {
-    return <LevelSelection subject={subject} chapter={chapter} />;
+    return <ModeSelection subject={subject} chapter={chapter} />;
   }
 
   // If subject is selected, show chapter selection
   if (subject) {
     return <ChapterSelection subject={subject} />;
-  }
-
-  // If mode is timer or practice, show mode page
-  if (mode === 'timer') {
-    return <TimerChallengesPage />;
-  }
-
-  if (mode === 'practice') {
-    return <PracticeModePage />;
   }
 
   // Default: show subject selection

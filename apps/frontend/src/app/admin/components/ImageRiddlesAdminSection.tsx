@@ -396,6 +396,20 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     trash: imageRiddles.filter(r => r.status === 'trash').length,
   };
 
+  // Calculate category counts
+  const categoryCounts = categories.reduce((acc, cat) => {
+    acc[cat.name] = imageRiddles.filter(r => r.category?.name === cat.name).length;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Calculate difficulty counts
+  const difficultyCounts = {
+    easy: imageRiddles.filter(r => r.difficulty === 'easy').length,
+    medium: imageRiddles.filter(r => r.difficulty === 'medium').length,
+    hard: imageRiddles.filter(r => r.difficulty === 'hard').length,
+    expert: imageRiddles.filter(r => r.difficulty === 'expert').length,
+  };
+
   // Filter riddles
   const filteredRiddles = imageRiddles.filter(riddle => {
     const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
@@ -774,7 +788,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             aria-label="Show all categories"
             aria-pressed={filterCategory === ''}
           >
-            All
+            All <span className="opacity-70">({imageRiddles.length})</span>
           </button>
           {categories.map(cat => (
             <button
@@ -787,7 +801,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
               aria-label={`Filter by ${cat.name}`}
               aria-pressed={filterCategory === cat.name}
             >
-              {cat.emoji} {cat.name}
+              {cat.emoji} {cat.name} <span className="opacity-70">({categoryCounts[cat.name] || 0})</span>
             </button>
           ))}
         </div>
@@ -806,7 +820,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             aria-label="Show all difficulties"
             aria-pressed={filterDifficulty === ''}
           >
-            All
+            All <span className="opacity-70">({imageRiddles.length})</span>
           </button>
           {['easy', 'medium', 'hard', 'expert'].map(diff => (
             <button
@@ -819,7 +833,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
               aria-label={`Filter by ${diff} difficulty`}
               aria-pressed={filterDifficulty === diff}
             >
-              {diff}
+              {diff} <span className="opacity-70">({difficultyCounts[diff as keyof typeof difficultyCounts] || 0})</span>
             </button>
           ))}
         </div>

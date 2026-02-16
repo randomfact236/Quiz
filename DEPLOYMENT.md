@@ -1,595 +1,407 @@
-# AI Quiz Platform - Docker Deployment Guide
+# AI Quiz Platform - Production Deployment Guide
 
-Complete guide for deploying the AI Quiz Platform using Docker.
+## Quick Start
+
+```bash
+# 1. Set up environment
+cp .env.production.example .env.production
+# Edit .env.production with your values
+
+# 2. Deploy (Linux/Mac)
+./deploy.sh
+
+# 3. Deploy (Windows PowerShell)
+.\deploy.ps1
+```
 
 ---
 
-## 📋 Table of Contents
+## Prerequisites
 
-- [Quick Start](#quick-start)
-- [System Requirements](#system-requirements)
-- [Architecture Overview](#architecture-overview)
-- [Configuration](#configuration)
-- [Deployment Options](#deployment-options)
-- [Maintenance](#maintenance)
-- [Troubleshooting](#troubleshooting)
-- [Security](#security)
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Docker Engine 20.10+
+- Docker 20.10+
 - Docker Compose 2.0+
-- Git (optional, for updates)
-
-### One-Command Deployment
-
-```bash
-# Clone repository (if not already done)
-git clone <repository-url>
-cd ai-quiz-platform
-
-# Run setup script (Linux/Mac)
-./scripts/docker-startup.sh setup
-
-# Or on Windows PowerShell
-.\scripts\docker-startup.ps1 Setup
-```
-
-The setup script will:
-1. Generate secure passwords
-2. Create `.env` file from template
-3. Build Docker images
-4. Start all services
-5. Run database migrations
-6. Create MinIO bucket
-
-### Access Your Application
-
-After deployment, access the platform at:
-
-| Service | URL | Description |
-|---------|-----|-------------|
-| Frontend | http://localhost:3010 | Main web application |
-| Backend API | http://localhost:4000/api | REST API endpoints |
-| API Docs | http://localhost:4000/api/docs | Swagger documentation |
-| Health Check | http://localhost:4000/api/health | Service health status |
-| MinIO Console | http://localhost:9001 | Object storage admin |
+- 4GB+ RAM available
+- Ports 3010, 4000, 5432, 6379 available (or configure alternatives)
 
 ---
 
-## 🖥️ System Requirements
+## Environment Configuration
 
-### Minimum Requirements
-
-```yaml
-CPU: 2 cores
-RAM: 4 GB
-Storage: 20 GB SSD
-OS: Linux, macOS, or Windows (with WSL2)
-Network: Internet access for Docker images (can run offline after initial pull)
-```
-
-### Recommended for Production
-
-```yaml
-CPU: 4+ cores
-RAM: 8 GB+
-Storage: 50 GB+ SSD
-Network: High-bandwidth for concurrent users
-```
-
-### Docker Resource Allocation
-
-Ensure Docker has sufficient resources:
+### 1. Create Environment File
 
 ```bash
-# Check Docker resources
-docker system info
-
-# Recommended Docker Desktop settings:
-# - CPUs: 4
-# - Memory: 8 GB
-# - Swap: 2 GB
-# - Disk image size: 64 GB
+cp .env.production.example .env.production
 ```
 
----
-
-## 🏗️ Architecture Overview
-
-### Services Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              Docker Network                                   │
-│                      (ai-quiz-network: 172.20.0.0/16)                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐                │
-│  │   Frontend   │────▶│    Nginx     │◀────│   Backend    │                │
-│  │  (Port 3010) │     │  (Port 80)   │     │  (Port 4000) │                │
-│  │  Next.js 15  │     │ Reverse Proxy│     │  NestJS 10   │                │
-│  └──────────────┘     └──────────────┘     └──────┬───────┘                │
-│                                                   │                         │
-│                              ┌────────────────────┼────────────────────┐   │
-│                              │                    │                    │   │
-│                              ▼                    ▼                    ▼   │
-│  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐            │   │
-│  │  PostgreSQL  │     │    Redis     │     │    MinIO     │            │   │
-│  │  (Port 5432) │     │  (Port 6379) │     │ (Port 9000)  │            │   │
-│  │   Database   │     │     Cache    │     │Object Storage│            │   │
-│  └──────────────┘     └──────────────┘     └──────────────┘            │   │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Data Flow
-
-1. **User Request** → Nginx (port 80)
-2. **Static Assets** → Frontend (Next.js)
-3. **API Requests** → Backend (NestJS)
-4. **Data Storage** → PostgreSQL (primary), Redis (cache), MinIO (files)
-
----
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-Create `.env` file from template:
-
-```bash
-cp .env.example .env
-```
-
-#### Required Variables
+### 2. Required Variables
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `JWT_SECRET` | Secret for JWT tokens | `your-256-bit-secret` |
-| `DB_PASSWORD` | PostgreSQL password | `secure-password-123` |
-| `REDIS_PASSWORD` | Redis password | `redis-password-456` |
-| `MINIO_ROOT_PASSWORD` | MinIO admin password | `minio-password-789` |
+| `POSTGRES_PASSWORD` | Database password | `StrongP@ssw0rd123` |
+| `JWT_SECRET` | JWT signing secret | `64-char-hex-string...` |
+| `CORS_ORIGIN` | Frontend URL | `https://quiz.yourdomain.com` |
+| `NEXT_PUBLIC_API_URL` | API URL for frontend | `https://api.yourdomain.com/api` |
 
-#### Port Configuration
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `FRONTEND_PORT` | 3010 | Next.js frontend port |
-| `BACKEND_PORT` | 4000 | NestJS backend port |
-| `DB_PORT` | 5432 | PostgreSQL port |
-| `REDIS_PORT` | 6379 | Redis port |
-| `MINIO_API_PORT` | 9000 | MinIO API port |
-| `MINIO_CONSOLE_PORT` | 9001 | MinIO console port |
-
-### Generate Secure Secrets
+### 3. Generate JWT Secret
 
 ```bash
-# Generate JWT secret (256-bit)
+# Linux/Mac
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
-# Generate random password
-openssl rand -base64 32
+# Windows PowerShell
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
 ---
 
-## 🚀 Deployment Options
+## Deployment Commands
 
-### Option 1: Development Mode
+### Linux/Mac (Bash)
 
 ```bash
-# Start all services
-docker-compose up -d
+# Full deployment
+./deploy.sh deploy
 
-# View logs
-docker-compose logs -f
-
-# Access:
-# - Frontend: http://localhost:3010
-# - Backend: http://localhost:4000/api
+# Individual commands
+./deploy.sh build      # Build images
+./deploy.sh start      # Start services
+./deploy.sh stop       # Stop services
+./deploy.sh restart    # Restart services
+./deploy.sh logs       # View logs
+./deploy.sh status     # Check health
+./deploy.sh backup     # Backup database
+./deploy.sh update     # Update & redeploy
 ```
 
-### Option 2: Production Mode (with Nginx)
+### Windows (PowerShell)
 
-```bash
-# Start with Nginx reverse proxy
-docker-compose --profile nginx up -d
+```powershell
+# Full deployment
+.\deploy.ps1 deploy
 
-# Or use the script
-./scripts/docker-startup.sh start --nginx
-
-# Access:
-# - Application: http://localhost (port 80)
-# - API: http://localhost/api
-```
-
-### Option 3: Production Mode (Full)
-
-```bash
-# Start with all production features
-docker-compose --profile production up -d
-
-# Or use the script
-./scripts/docker-startup.sh start --production
-```
-
-### Option 4: Custom Build
-
-```bash
-# Build images without starting
-docker-compose build
-
-# Build specific service
-docker-compose build backend
-
-# Start with custom config
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Individual commands
+.\deploy.ps1 build
+.\deploy.ps1 start
+.\deploy.ps1 stop
+.\deploy.ps1 restart
+.\deploy.ps1 logs
+.\deploy.ps1 status
+.\deploy.ps1 backup
+.\deploy.ps1 update
 ```
 
 ---
 
-## 🔧 Maintenance
+## Architecture
 
-### Daily Operations
-
-```bash
-# Check service status
-docker-compose ps
-
-# View logs
-docker-compose logs -f [service-name]
-
-# Restart a service
-docker-compose restart backend
-
-# Scale backend instances (if configured)
-docker-compose up -d --scale backend=3
 ```
-
-### Database Migrations
-
-```bash
-# Run migrations manually
-docker-compose --profile migrate run --rm migrate
-
-# Or use the script
-./scripts/docker-startup.sh migrate
-
-# Create new migration
-cd apps/backend
-npx typeorm-ts-node-commonjs migration:create src/database/migrations/MigrationName
-```
-
-### Backups
-
-#### Database Backup
-
-```bash
-# Create database backup
-docker exec ai-quiz-postgres pg_dump -U aiquiz aiquiz > backup_$(date +%Y%m%d).sql
-
-# Restore from backup
-docker exec -i ai-quiz-postgres psql -U aiquiz aiquiz < backup_20240101.sql
-```
-
-#### MinIO Backup
-
-```bash
-# Backup MinIO data
-docker run --rm -v ai-quiz-minio-data:/data -v $(pwd)/backup:/backup alpine tar czf /backup/minio_backup.tar.gz -C /data .
-
-# Restore MinIO data
-docker run --rm -v ai-quiz-minio-data:/data -v $(pwd)/backup:/backup alpine sh -c "cd /data && tar xzf /backup/minio_backup.tar.gz"
-```
-
-#### Full System Backup
-
-```bash
-#!/bin/bash
-# backup.sh
-
-BACKUP_DIR="./backups/$(date +%Y%m%d_%H%M%S)"
-mkdir -p $BACKUP_DIR
-
-# Backup database
-docker exec ai-quiz-postgres pg_dump -U aiquiz aiquiz > $BACKUP_DIR/database.sql
-
-# Backup environment
-cp .env $BACKUP_DIR/
-
-# Backup volumes
-docker run --rm -v ai-quiz-minio-data:/data -v $(pwd)/$BACKUP_DIR:/backup alpine tar czf /backup/minio.tar.gz -C /data .
-docker run --rm -v ai-quiz-redis-data:/data -v $(pwd)/$BACKUP_DIR:/backup alpine tar czf /backup/redis.tar.gz -C /data .
-
-# Compress everything
-tar czf backup_$(date +%Y%m%d).tar.gz $BACKUP_DIR
-
-echo "Backup complete: backup_$(date +%Y%m%d).tar.gz"
-```
-
-### Updates
-
-```bash
-# Pull latest images
-docker-compose pull
-
-# Rebuild with latest code
-docker-compose build --no-cache
-
-# Restart services
-docker-compose up -d
-
-# Or use the update script
-./scripts/docker-startup.sh update
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Nginx/SSL     │────▶│   Frontend      │────▶│    Backend      │
+│   (Optional)    │     │   Next.js 15    │     │   NestJS 10     │
+│   :443          │     │   :3010         │     │   :4000         │
+└─────────────────┘     └─────────────────┘     └────────┬────────┘
+                                                         │
+                              ┌─────────────────────────┘
+                              │
+                              ▼
+                    ┌─────────────────┐
+                    │    PostgreSQL   │
+                    │      :5432      │
+                    └─────────────────┘
+                              │
+                              ▼
+                    ┌─────────────────┐
+                    │     Redis       │
+                    │      :6379      │
+                    └─────────────────┘
 ```
 
 ---
 
-## 🔍 Troubleshooting
+## Services
 
-### Common Issues
+| Service | Image | Port | Purpose |
+|---------|-------|------|---------|
+| Frontend | Node 20 Alpine | 3010 | Next.js 15 App |
+| Backend | Node 20 Alpine | 4000 | NestJS API |
+| Database | Postgres 15 Alpine | 5432 | Data storage |
+| Cache | Redis 7 Alpine | 6379 | Session & cache |
 
-#### Services Won't Start
+---
 
-```bash
-# Check logs
-docker-compose logs [service-name]
+## Health Checks
 
-# Check port conflicts
-netstat -tulpn | grep :4000
+All services include automated health checks:
 
-# Restart with clean state
-docker-compose down
-docker-compose up -d
-```
+- **PostgreSQL**: `pg_isready` every 10s
+- **Redis**: `redis-cli ping` every 10s
+- **Backend**: HTTP GET `/api/health` every 30s
+- **Frontend**: HTTP GET `/` every 30s
 
-#### Database Connection Failed
-
-```bash
-# Check database is running
-docker-compose ps postgres
-
-# Check logs
-docker-compose logs postgres
-
-# Verify connection
-docker exec -it ai-quiz-postgres psql -U aiquiz -d aiquiz -c "SELECT 1;"
-```
-
-#### Migration Failures
+Check status manually:
 
 ```bash
-# Check migration status
-docker-compose --profile migrate run --rm migrate npm run migration:show
-
-# Revert last migration
-docker-compose --profile migrate run --rm migrate npm run migration:revert
-
-# Reset database (WARNING: data loss)
-docker-compose down -v
-docker-compose up -d postgres
-docker-compose --profile migrate run --rm migrate
-```
-
-#### Frontend Build Fails
-
-```bash
-# Clear Next.js cache
-docker-compose exec frontend rm -rf .next
-
-# Rebuild
-docker-compose build --no-cache frontend
-docker-compose up -d frontend
-```
-
-### Health Checks
-
-All services include health checks:
-
-```bash
-# Check all health statuses
-docker-compose ps
-
-# Manual health check
+# Backend
 curl http://localhost:4000/api/health
-curl http://localhost:3010/api/health
-```
 
-### Reset Everything
-
-```bash
-# ⚠️ WARNING: Destroys all data!
-docker-compose down -v
-docker volume prune -f
+# Frontend
+curl http://localhost:3010/
 ```
 
 ---
 
-## 🔒 Security
+## SSL/HTTPS Setup
 
-### Default Security Features
+### Option 1: Nginx Reverse Proxy (Recommended)
 
-- ✅ Non-root Docker containers
-- ✅ Secrets in environment variables
-- ✅ Internal Docker network isolation
-- ✅ Health checks on all services
-- ✅ Resource limits configured
-- ✅ Read-only filesystem where possible
-
-### Production Hardening
-
-#### 1. Enable HTTPS
+Create `nginx.conf`:
 
 ```nginx
-# infrastructure/docker/nginx/conf.d/ssl.conf
 server {
     listen 443 ssl http2;
+    server_name quiz.yourdomain.com;
     
-    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
     
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
+    location / {
+        proxy_pass http://localhost:3010;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
     
-    include /etc/nginx/conf.d/locations.conf;
+    location /api {
+        proxy_pass http://localhost:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
 }
 ```
 
-#### 2. Firewall Rules
+### Option 2: Let's Encrypt with Certbot
 
 ```bash
-# Allow only necessary ports
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw deny 3010/tcp
-sudo ufw deny 4000/tcp
-sudo ufw deny 5432/tcp
-sudo ufw deny 6379/tcp
-sudo ufw deny 9000/tcp
-sudo ufw deny 9001/tcp
+# Install certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Obtain certificate
+sudo certbot --nginx -d quiz.yourdomain.com -d api.yourdomain.com
 ```
 
-#### 3. Environment Security
+### Option 3: Cloudflare Tunnel
 
 ```bash
-# Set secure file permissions
-chmod 600 .env
+# Install cloudflared
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i cloudflared-linux-amd64.deb
 
-# Never commit .env
-echo ".env" >> .gitignore
-```
-
-#### 4. Database Security
-
-```sql
--- Create read-only user for reporting
-CREATE USER quiz_read WITH PASSWORD 'secure-password';
-GRANT CONNECT ON DATABASE aiquiz TO quiz_read;
-GRANT USAGE ON SCHEMA public TO quiz_read;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO quiz_read;
+# Create tunnel
+cloudflared tunnel create quiz-app
+cloudflared tunnel route dns quiz-app quiz.yourdomain.com
+cloudflared tunnel run quiz-app
 ```
 
 ---
 
-## 📊 Monitoring
+## Backup & Restore
+
+### Automatic Backups
+
+Backups are created automatically before updates. Location: `backups/`
+
+### Manual Backup
+
+```bash
+# Linux/Mac
+./deploy.sh backup
+
+# Windows
+.\deploy.ps1 backup
+```
+
+### Restore from Backup
+
+```bash
+# Stop services
+./deploy.sh stop
+
+# Restore database
+docker exec -i quiz-postgres-prod psql -U aiquiz -d aiquiz < backups/backup_20240115_120000.sql
+
+# Start services
+./deploy.sh start
+```
+
+---
+
+## Monitoring
+
+### View Logs
+
+```bash
+# All services
+./deploy.sh logs
+
+# Specific service
+docker logs -f quiz-backend-prod
+docker logs -f quiz-frontend-prod
+docker logs -f quiz-postgres-prod
+docker logs -f quiz-redis-prod
+```
 
 ### Resource Usage
 
 ```bash
-# Container stats
 docker stats
-
-# Disk usage
-docker system df
-
-# Volume usage
-docker volume ls -f dangling=false
 ```
 
-### Logs Management
+### Database Monitoring
 
 ```bash
-# View last 100 lines
-docker-compose logs --tail=100 backend
+# Connect to database
+docker exec -it quiz-postgres-prod psql -U aiquiz -d aiquiz
 
-# Follow logs with timestamps
-docker-compose logs -f --timestamps backend
+# Check tables
+\dt
 
-# Export logs
-docker-compose logs backend > backend_logs.txt
+# Check connections
+SELECT * FROM pg_stat_activity;
 ```
 
-### Performance Tuning
+---
+
+## Troubleshooting
+
+### Build Failures
+
+```bash
+# Clean build cache
+./deploy.sh clean
+./deploy.sh build
+```
+
+### Database Connection Issues
+
+```bash
+# Check postgres is running
+docker ps | grep postgres
+
+# Check logs
+docker logs quiz-postgres-prod
+
+# Verify credentials in .env.production
+cat .env.production | grep POSTGRES
+```
+
+### Port Conflicts
+
+Edit `docker-compose.prod.yml` to change ports:
 
 ```yaml
-# docker-compose.override.yml for performance
-services:
-  postgres:
-    shm_size: '2gb'
-    sysctls:
-      - net.core.somaxconn=1024
-  
-  backend:
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
+ports:
+  - "3001:3010"  # Frontend on 3001
+  - "4001:4000"  # Backend on 4001
 ```
 
----
-
-## 🌐 Advanced Configuration
-
-### Custom Domain
+### Container Won't Start
 
 ```bash
-# Update CORS_ORIGIN in .env
-CORS_ORIGIN=https://your-domain.com
+# Check logs
+docker logs quiz-backend-prod
+docker logs quiz-frontend-prod
 
-# Update nginx config
-# infrastructure/docker/nginx/conf.d/default.conf
-server_name your-domain.com;
+# Restart specific service
+docker restart quiz-backend-prod
 ```
 
-### External Database
+---
+
+## Updates
+
+### Update Application
 
 ```bash
-# Use external PostgreSQL
-DB_HOST=external-db-host.com
-DB_PORT=5432
-DB_USERNAME=aiquiz
-DB_PASSWORD=external-password
-DB_DATABASE=aiquiz
-
-# Skip local postgres in docker-compose.yml
-# Or use: docker-compose up -d --no-deps backend frontend
+# Pull latest code and redeploy
+./deploy.sh update
 ```
 
-### Load Balancing
+This will:
+1. Create database backup
+2. Pull latest code from git
+3. Rebuild Docker images
+4. Restart services
 
-```yaml
-# docker-compose.load-balancer.yml
-services:
-  backend-1:
-    extends: backend
-    ports:
-      - "4001:4000"
-  
-  backend-2:
-    extends: backend
-    ports:
-      - "4002:4000"
-  
-  nginx:
-    volumes:
-      - ./nginx/load-balancer.conf:/etc/nginx/conf.d/load-balancer.conf
+### Update Docker Images Only
+
+```bash
+./deploy.sh build
+./deploy.sh restart
 ```
 
 ---
 
-## 📞 Support
+## Security Checklist
 
-For issues and questions:
-
-1. Check logs: `docker-compose logs -f [service]`
-2. Review [Troubleshooting](#troubleshooting) section
-3. Check health endpoints
-4. Verify environment variables
-
----
-
-## 📄 License
-
-This deployment configuration is part of the AI Quiz Platform and follows the same license terms.
+- [ ] Changed default PostgreSQL password
+- [ ] Generated strong JWT secret
+- [ ] Set correct CORS origin
+- [ ] Database ports bound to localhost only
+- [ ] SSL/HTTPS configured
+- [ ] Firewall rules configured (ufw/cloud provider)
+- [ ] Regular backups scheduled
+- [ ] `.env.production` not in git
 
 ---
 
-**Last Updated:** February 2026  
-**Version:** 1.0.0
+## Environment-Specific Configurations
+
+### VPS (DigitalOcean, AWS, Linode)
+
+```bash
+# 1. Set up firewall
+sudo ufw allow 22
+sudo ufw allow 443
+sudo ufw allow 80
+sudo ufw enable
+
+# 2. Deploy
+./deploy.sh deploy
+
+# 3. Set up SSL with Let's Encrypt
+sudo certbot --nginx
+```
+
+### Railway/Render (Platform)
+
+Use the provided Docker Compose or individual Dockerfiles:
+
+- Backend: `apps/backend/Dockerfile`
+- Frontend: `apps/frontend/Dockerfile`
+
+### Docker Swarm
+
+```bash
+# Initialize swarm
+docker swarm init
+
+# Deploy stack
+docker stack deploy -c docker-compose.prod.yml quiz-app
+
+# Check services
+docker stack ps quiz-app
+docker service logs quiz-app_backend
+```
+
+---
+
+## Support
+
+For issues or questions:
+
+1. Check logs: `./deploy.sh logs`
+2. Check status: `./deploy.sh status`
+3. Review environment variables
+4. Verify ports are available

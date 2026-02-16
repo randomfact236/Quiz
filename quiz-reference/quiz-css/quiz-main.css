@@ -1,0 +1,42 @@
+/**
+ * Main Quiz CSS - Imports all modular CSS files
+ * ==================================================
+ * This is the master CSS file that imports all modular CSS components.
+ * Use this single file in your HTML to load all quiz styles.
+ *
+ * USAGE:
+ * <link rel="stylesheet" href="quiz-css/quiz-main.css">
+ *
+ * OR include individual CSS files if you only need specific components
+ */
+
+/* 1. Base Styles and Reset */
+@import 'base-reset.css';
+
+/* 2. Background Effects */
+@import 'bubble-animations.css';
+
+/* 3. Layout and Container */
+@import 'layout-container.css';
+
+/* 4. Page-Specific Styles */
+@import 'home-page.css';
+
+/* 5. Component Styles */
+@import 'cards.css';
+@import 'buttons.css';
+@import 'collapsible.css';
+@import 'topics-badges.css';
+
+/* 6. Quiz Functionality */
+@import 'quiz.css';
+@import 'progress-results.css';
+
+/* 7. Special Features (Dad Jokes & Riddles) */
+@import '../features-styles.css';
+
+/* 8. Animations and Effects */
+@import 'emojis-effects.css';
+
+/* 9. Responsive Styles (load last to override) */
+@import 'mobile-responsive.css';

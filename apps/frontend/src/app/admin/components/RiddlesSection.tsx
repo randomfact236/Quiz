@@ -109,6 +109,21 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
   // Get unique chapters from riddles
   const chapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
 
+  // Calculate chapter counts
+  const chapterCounts = chapters.reduce((acc, chapter) => {
+    acc[chapter] = allRiddles.filter(r => r.chapter === chapter).length;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Calculate difficulty counts
+  const difficultyCounts = {
+    easy: allRiddles.filter(r => r.difficulty === 'easy').length,
+    medium: allRiddles.filter(r => r.difficulty === 'medium').length,
+    hard: allRiddles.filter(r => r.difficulty === 'hard').length,
+    expert: allRiddles.filter(r => r.difficulty === 'expert').length,
+    extreme: allRiddles.filter(r => r.difficulty === 'extreme').length,
+  };
+
   // Calculate status counts
   const statusCounts = {
     total: allRiddles.length,
@@ -544,7 +559,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
             onClick={() => setRiddleFilterChapter('')}
             aria-pressed={riddleFilterChapter === ''}
           >
-            All Chapters
+            All Chapters <span className="opacity-70">({allRiddles.length})</span>
           </button>
           {chapters.map(chapter => (
             <button
@@ -557,7 +572,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
               onClick={() => setRiddleFilterChapter(chapter)}
               aria-pressed={riddleFilterChapter === chapter}
             >
-              {chapter}
+              {chapter} <span className="opacity-70">({chapterCounts[chapter] || 0})</span>
             </button>
           ))}
           <button className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-200">
@@ -577,7 +592,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
             onClick={() => setRiddleFilterLevel('')}
             aria-pressed={riddleFilterLevel === ''}
           >
-            All Levels
+            All Levels <span className="opacity-70">({allRiddles.length})</span>
           </button>
           {difficultyLevels.map(({ value, label }) => (
             <button
@@ -590,7 +605,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
               onClick={() => setRiddleFilterLevel(value)}
               aria-pressed={riddleFilterLevel === value}
             >
-              {label}
+              {label} <span className="opacity-70">({difficultyCounts[value as keyof typeof difficultyCounts] || 0})</span>
             </button>
           ))}
         </div>

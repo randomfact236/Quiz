@@ -6,7 +6,7 @@ import { Pencil, Trash2, FileQuestion } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
-import { downloadFile, parseCSVLine, parseQuestionCSV, exportQuestionsToCSV } from '../utils';
+import { downloadFile, parseQuestionCSV, exportQuestionsToCSV } from '../utils';
 
 /**
  * Props for the QuestionManagementSection component
@@ -124,6 +124,10 @@ export function QuestionManagementSection({
     chapter: '',
   });
 
+  // Chapter editing state
+  const [editingChapter, setEditingChapter] = useState<string | null>(null);
+  const [editingChapterName, setEditingChapterName] = useState('');
+
   // Sync local questions when props change (from parent/localStorage)
   useEffect(() => {
     setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
@@ -153,6 +157,24 @@ export function QuestionManagementSection({
     draft: localQuestions.filter((q) => q.status === 'draft').length,
     trash: localQuestions.filter((q) => q.status === 'trash').length,
   }), [localQuestions]);
+
+  // Calculate chapter question counts - memoized
+  const chapterCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    localQuestions.forEach((q) => {
+      counts[q.chapter] = (counts[q.chapter] || 0) + 1;
+    });
+    return counts;
+  }, [localQuestions]);
+
+  // Calculate level question counts - memoized
+  const levelCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: localQuestions.length };
+    localQuestions.forEach((q) => {
+      counts[q.level] = (counts[q.level] || 0) + 1;
+    });
+    return counts;
+  }, [localQuestions]);
 
   // Filter questions - memoized
   const filteredQuestions = useMemo(() => {
@@ -392,7 +414,7 @@ export function QuestionManagementSection({
     // Close modal and clear selection immediately
     setShowDeleteModal(false);
     setSelectedQuestion(null);
-  }, [selectedQuestion?.id, selectedQuestion?.status]);
+  }, [selectedQuestion]);
 
   // Open edit modal with question data
   const openEditModal = useCallback((question: Question) => {
@@ -421,35 +443,6 @@ export function QuestionManagementSection({
     const csv = exportQuestionsToCSV(filteredQuestions, subject.name);
     downloadFile(csv, `${subject.name.replace(/\s+/g, '_').toLowerCase()}_questions.csv`, 'text/csv');
   }, [filteredQuestions, subject.name]);
-
-  // Parse CSV content
-  const parseCSV = useCallback((csvText: string): Partial<Question>[] => {
-    const lines = csvText.trim().split('\n');
-    if (lines.length < 2) return [];
-
-    const result: Partial<Question>[] = [];
-
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i];
-      if (!line || line.trim() === '' || line.startsWith('#')) continue;
-
-      const values = parseCSVLine(line);
-      const getValue = (index: number): string => values[index] ?? '';
-
-      result.push({
-        question: getValue(1),
-        optionA: getValue(2),
-        optionB: getValue(3),
-        optionC: getValue(4),
-        optionD: getValue(5),
-        correctAnswer: (getValue(6) as Question['correctAnswer']) || 'A',
-        level: (getValue(7) as Question['level']) || 'easy',
-        chapter: getValue(8) || 'General',
-      });
-    }
-
-    return result;
-  }, []);
 
   // Export to JSON
   const handleExportJSON = useCallback(() => {
@@ -507,7 +500,7 @@ export function QuestionManagementSection({
 
       reader.readAsText(file);
     },
-    [parseCSV]
+    []
   );
 
   // Confirm import
@@ -542,6 +535,39 @@ export function QuestionManagementSection({
     setFilterChapter('all');
     setStatusFilter('all');
   }, []);
+
+  // Handle chapter rename
+  const handleStartEditChapter = useCallback((chapterName: string) => {
+    setEditingChapter(chapterName);
+    setEditingChapterName(chapterName);
+  }, []);
+
+  const handleCancelEditChapter = useCallback(() => {
+    setEditingChapter(null);
+    setEditingChapterName('');
+  }, []);
+
+  const handleSaveChapterName = useCallback(() => {
+    if (!editingChapter || !editingChapterName.trim() || editingChapterName.trim() === editingChapter) {
+      setEditingChapter(null);
+      return;
+    }
+
+    const newName = editingChapterName.trim();
+    
+    // Update all questions with the old chapter name
+    setLocalQuestions(prev => prev.map(q => 
+      q.chapter === editingChapter ? { ...q, chapter: newName } : q
+    ));
+    
+    // If the filter was set to the old chapter, update it
+    if (filterChapter === editingChapter) {
+      setFilterChapter(newName);
+    }
+    
+    setEditingChapter(null);
+    setEditingChapterName('');
+  }, [editingChapter, editingChapterName, filterChapter]);
 
   // Handle outside click for export dropdown
   useEffect(() => {
@@ -657,6 +683,7 @@ export function QuestionManagementSection({
                   }}
                   className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-t-lg text-sm"
                   role="option"
+                  aria-selected="false"
                 >
                   Export as CSV
                 </button>
@@ -667,6 +694,7 @@ export function QuestionManagementSection({
                   }}
                   className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-lg text-sm"
                   role="option"
+                  aria-selected="false"
                 >
                   Export as JSON
                 </button>
@@ -749,21 +777,61 @@ export function QuestionManagementSection({
             }`}
             aria-pressed={filterChapter === 'all'}
           >
-            All Chapters
+            All Chapters <span className="opacity-70">({localQuestions.length})</span>
           </button>
           {chapters.map((ch) => (
-            <button
-              key={ch}
-              onClick={() => setFilterChapter(ch)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                filterChapter === ch
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              aria-pressed={filterChapter === ch}
-            >
-              {ch}
-            </button>
+            <div key={ch} className="flex items-center gap-1">
+              {editingChapter === ch ? (
+                <>
+                  <input
+                    type="text"
+                    value={editingChapterName}
+                    onChange={(e) => setEditingChapterName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSaveChapterName();
+                      if (e.key === 'Escape') handleCancelEditChapter();
+                    }}
+                    className="px-2 py-1 text-sm border rounded-lg w-32"
+                    autoFocus
+                  />
+                  <button
+                    onClick={handleSaveChapterName}
+                    className="text-green-600 hover:text-green-800 px-1"
+                    title="Save"
+                  >
+                    ✓
+                  </button>
+                  <button
+                    onClick={handleCancelEditChapter}
+                    className="text-red-600 hover:text-red-800 px-1"
+                    title="Cancel"
+                  >
+                    ✕
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setFilterChapter(ch)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      filterChapter === ch
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    aria-pressed={filterChapter === ch}
+                  >
+                    {ch} <span className="opacity-70">({chapterCounts[ch] || 0})</span>
+                  </button>
+                  <button
+                    onClick={() => handleStartEditChapter(ch)}
+                    className="text-gray-400 hover:text-gray-600 px-1 opacity-0 hover:opacity-100 transition-opacity"
+                    title="Edit chapter name"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                </>
+              )}
+            </div>
           ))}
           <button
             onClick={onAddChapter}
@@ -789,7 +857,8 @@ export function QuestionManagementSection({
               }`}
               aria-pressed={filterLevel === level}
             >
-              {level === 'all' ? 'All Levels' : level}
+              {level === 'all' ? 'All Levels' : level}{' '}
+              <span className="opacity-70">({levelCounts[level] || 0})</span>
             </button>
           ))}
         </div>

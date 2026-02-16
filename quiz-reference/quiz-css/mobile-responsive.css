@@ -1,0 +1,155 @@
+/**
+ * Mobile Responsive Styles
+ * ==================================================
+ * All media queries and mobile-specific styling
+ */
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        background: #fff;
+        width: 100vw;
+        max-width: 100vw;
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .main-container {
+        background: #fff;
+        width: 100%;
+        max-width: 100vw;
+        min-height: auto;
+        padding: 0 0 10px 0;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .home-page.active {
+        width: 100%;
+        min-height: auto;
+        padding: 0 0 10px 0;
+    }
+
+    .home-content {
+        padding: 15px 10px 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .subject-grid, .chapter-grid, .level-grid, .home-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0px 0 0px 0;
+        gap: 10px;
+    }
+
+    .subject-card, .chapter-card, .level-card {
+        padding: 20px 10px;
+    }
+
+    .answers-container {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+    }
+
+    .title, .level-title, .result-title {
+        font-size: 1.5em;
+        padding: 10px;
+        background: rgba(102, 126, 234, 0.15);
+        border-radius: 10px;
+        color: #000;
+        font-weight: 900;
+        text-shadow: none;
+        margin: 10px;
+    }
+
+    .question-text {
+        font-size: 1.4em;
+        padding: 0 10px;
+        margin: 8px 0;
+        line-height: 1.4;
+    }
+
+    .answer-option {
+        font-size: 1.1em;
+        padding: 12px 15px;
+        line-height: 1.4;
+    }
+
+    .question-container {
+        padding: 0 10px;
+        margin: 8px 0;
+    }
+
+    .question-emoji {
+        margin: 8px 0;
+    }
+
+    .progress-info {
+        margin: 5px 0;
+    }
+
+    .progress-bar-container {
+        margin: 3px 0 0 0;
+    }
+
+    .answers-container {
+        margin: 0 0 10px 0;
+    }
+
+    .chapter-selection, .level-selection, .quiz-container, .result-container {
+        padding: 10px;
+        min-height: auto;
+    }
+
+    /* Button positioning - normal flow below questions on mobile */
+    .button-container {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        margin: 20px 0 10px 0;
+        gap: 0;
+        background: transparent;
+    }
+
+    .button-container .back-button,
+    .button-container .quiz-back-button {
+        margin: 0;
+    }
+
+    .button-container .next-button {
+        margin: 0;
+    }
+
+    /* Standalone back buttons stay centered on mobile */
+    .chapter-selection .back-button,
+    .level-selection .back-button,
+    .timer-challenges-page .back-button,
+    .timer-subject-level-selection .back-button,
+    .practice-mode-page .back-button,
+    .riddles-page .back-button,
+    .dad-jokes-page .back-button {
+        display: block;
+        margin: 20px auto;
+        width: fit-content;
+    }
+
+    /* Level card text should be white */
+    .level-card {
+        color: white;
+    }
+
+    /* Mode title should be dark for visibility */
+    .mode-title {
+        color: #333;
+        background: rgba(102, 126, 234, 0.15);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    /* Falling emoji mobile size */
+    .falling-emoji {
+        font-size: 1.2em;
+    }
+}

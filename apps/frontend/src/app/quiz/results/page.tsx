@@ -19,6 +19,7 @@ import type { QuizSession, QuizResult } from '@/types/quiz';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { ScoreCard } from '@/components/quiz/ScoreCard';
 import { QuestionReview } from '@/components/quiz/QuestionReview';
+import { ResultsCelebration } from '@/components/quiz/ResultsCelebration';
 
 /** Calculate grade from percentage */
 function calculateGrade(percentage: number): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
@@ -77,6 +78,7 @@ function ResultsContent(): JSX.Element {
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showReview, setShowReview] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Load session from history
   useEffect(() => {
@@ -90,6 +92,8 @@ function ResultsContent(): JSX.Element {
     }
 
     setResult(calculateResult(session));
+    // Trigger celebration after a short delay
+    setTimeout(() => setShowCelebration(true), 500);
   }, [sessionId, router]);
 
   // Share results
@@ -124,6 +128,13 @@ function ResultsContent(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-6">
+      {/* Results Celebration */}
+      <ResultsCelebration
+        trigger={showCelebration}
+        score={result?.session.score || 0}
+        maxScore={result?.session.maxScore || 10}
+      />
+      
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">

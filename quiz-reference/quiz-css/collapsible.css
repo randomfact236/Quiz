@@ -1,0 +1,46 @@
+/**
+ * Collapsible Sections
+ * ==================================================
+ * Collapsible containers and toggle controls
+ */
+
+/* Collapsible Sections */
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    margin: 10px 0;
+    transition: transform 0.3s;
+}
+
+.collapsible-header:hover {
+    transform: translateY(-2px);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.collapsible-content.expanded {
+    max-height: 2000px;
+    opacity: 1;
+    padding: 20px 0;
+}
+
+.toggle-arrow {
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.toggle-arrow.collapsed {
+    transform: rotate(-90deg);
+}

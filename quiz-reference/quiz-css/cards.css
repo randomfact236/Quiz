@@ -1,0 +1,121 @@
+/**
+ * Card Components
+ * ==================================================
+ * All card styles (subject, chapter, level, home cards)
+ */
+
+.subject-card {
+    padding: 20px 15px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; /* Remove underline for links */
+}
+
+/* Ensure link cards maintain styling */
+a.subject-card:visited {
+    color: white;
+}
+
+a.subject-card:active {
+    color: white;
+}
+
+.subject-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+/* Cursor fist effect on click */
+.subject-card:active,
+.chapter-card:active,
+.level-card:active,
+.card:active {
+    cursor: grabbing;
+    transform: scale(0.98) !important;
+}
+
+.subject-card:nth-of-type(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.subject-card:nth-of-type(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.subject-card:nth-of-type(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.subject-card:nth-of-type(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.subject-card:nth-of-type(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.subject-card:nth-of-type(6) { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+.subject-card:nth-of-type(7) { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.subject-card:nth-of-type(8) { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+.subject-card:nth-of-type(9) { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+.subject-card:nth-of-type(10) { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+.subject-card:nth-of-type(11) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.subject-card:nth-of-type(12) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.subject-card:nth-of-type(13) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.subject-card:nth-of-type(14) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.subject-card:nth-of-type(15) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
+.home-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px 20px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.home-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.card-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-subtitle {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+/* Chapter and Level Grids */
+.chapter-grid, .level-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.chapter-card, .level-card {
+    padding: 20px 15px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: white;
+}
+
+.chapter-card:hover, .level-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Level Colors */
+.level-easy { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.level-medium { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.level-hard { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.level-expert { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.level-extreme { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.level-mixed { background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%); }
