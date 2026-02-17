@@ -10,10 +10,10 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { AnswerOptions } from './AnswerOptions';
-import { BubbleEmojiEffect } from './BubbleEmojiEffect';
+import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
 import type { Question } from '@/types/quiz';
 
 interface QuestionCardProps {
@@ -122,6 +122,9 @@ export function QuestionCard({
   // Bubble effect trigger
   const [bubbleTrigger, setBubbleTrigger] = useState(false);
   const [bubbleType, setBubbleType] = useState<'correct' | 'wrong'>('correct');
+  
+  // Ref to control bubble effect
+  const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
 
   // Update feedback when answer is selected
   useEffect(() => {
@@ -141,18 +144,32 @@ export function QuestionCard({
     }
   }, [selectedAnswer, showFeedback, isCorrect, isWrong]);
 
+  // Clear bubbles when question changes
+  useEffect(() => {
+    bubbleRef.current?.clear();
+  }, [questionNumber]);
+
   // Reset bubble trigger after effect completes
   const handleBubbleComplete = useCallback(() => {
     setBubbleTrigger(false);
   }, []);
+  
+  // Handle answer selection with bubble clear
+  const handleSelectAnswer = useCallback((option: string) => {
+    // Clear any existing bubbles first
+    bubbleRef.current?.clear();
+    // Call the original handler
+    onSelectAnswer(option);
+  }, [onSelectAnswer]);
 
   return (
     <>
       {/* Bubble Emoji Effect */}
       <BubbleEmojiEffect
+        ref={bubbleRef}
         trigger={bubbleTrigger}
         type={bubbleType}
-        count={15}
+        count={20}
         onComplete={handleBubbleComplete}
       />
 
@@ -245,7 +262,7 @@ export function QuestionCard({
           options={options}
           selectedKey={selectedAnswer}
           correctKey={showFeedback ? question.correctAnswer : ''}
-          onSelect={onSelectAnswer}
+          onSelect={handleSelectAnswer}
           disabled={disabled || timeUp}
           showFeedback={showFeedback || false}
           level={question.level}
