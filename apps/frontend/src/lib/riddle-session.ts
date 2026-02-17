@@ -125,7 +125,8 @@ export function addToRiddleHistory(result: RiddleResult): void {
     const entry: RiddleHistoryEntry = {
         sessionId: result.session.id,
         mode: result.session.mode,
-        chapter: result.session.chapter,
+        chapterId: result.session.chapterId,
+        chapterName: result.session.chapterName,
         difficulty: result.session.difficulty,
         totalRiddles: result.session.riddles.length,
         correctCount: result.correctCount,
@@ -163,7 +164,8 @@ export function clearRiddleHistory(): void {
  */
 export function createRiddleSession(
     mode: 'timer' | 'practice',
-    chapter: string | 'all',
+    chapterId: string | 'all',
+    chapterName: string,
     difficulty: 'all' | 'easy' | 'medium' | 'hard' | 'expert',
     riddles: RiddleSession['riddles'],
     timeLimit?: number,
@@ -173,7 +175,8 @@ export function createRiddleSession(
     return {
         id: generateSessionId(),
         mode,
-        chapter,
+        chapterId,
+        chapterName,
         difficulty,
         riddles,
         answers: {},
