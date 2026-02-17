@@ -561,35 +561,38 @@ function validateCSVStructure(
 // ============================================================================
 
 /**
- * Convert riddles to CSV format with proper options mapping
+ * Convert riddles to CSV format matching quiz export format
+ * Headers: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
  */
 export function riddlesToCSV(riddles: Riddle[]): string {
-  const headers = ['ID', 'Question', 'Answer', 'OptionA', 'OptionB', 'OptionC', 'OptionD', 'CorrectOption', 'Difficulty', 'Chapter', 'Hint'];
+  const lines: string[] = [];
   
-  const rows = riddles.map(riddle => {
+  // Add count comment
+  lines.push(`# Count: ${riddles.length}`);
+  
+  // Add headers matching quiz format
+  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
+  
+  // Add data rows
+  riddles.forEach(riddle => {
     const options = riddle.options || [];
-    return [
+    
+    const row = [
       riddle.id,
       escapeCSV(riddle.question),
-      escapeCSV(riddle.answer || ''),
       escapeCSV(options[0] || ''),
       escapeCSV(options[1] || ''),
       escapeCSV(options[2] || ''),
       escapeCSV(options[3] || ''),
-      riddle.correctOption,
+      riddle.correctOption || 'A',
       riddle.difficulty,
       escapeCSV(riddle.chapter),
-      escapeCSV(riddle.hint || ''),
     ];
+    
+    lines.push(row.join(','));
   });
   
-  const csvContent = [
-    '# Count: ' + riddles.length,
-    headers.join(','),
-    ...rows.map(row => row.join(','))
-  ].join('\n');
-  
-  return csvContent;
+  return lines.join('\n');
 }
 
 /**
