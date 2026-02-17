@@ -108,19 +108,18 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
               opacity: 0,
             }}
             animate={{ 
-              scale: [0, bubble.scale * 1.2, bubble.scale, 0],
-              opacity: [0, 1, 1, 0],
+              scale: bubble.scale,
+              opacity: 1,
             }}
             exit={{ 
               scale: 0, 
               opacity: 0,
-              transition: { duration: 0.1 }
+              transition: { duration: 0.2 }
             }}
             transition={{
-              duration: 1.5,
+              duration: 0.5,
               delay: bubble.delay,
               ease: 'easeOut',
-              times: [0, 0.2, 0.6, 1],
             }}
             className="fixed z-50 text-xl pointer-events-none"
             style={{
