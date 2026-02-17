@@ -24,8 +24,8 @@ function ModeCard({ href, emoji, title, subtitle }: ModeCardProps): JSX.Element 
 
 export function ModeCards(): JSX.Element {
   const modes = [
-    { href: '/quiz?mode=timer', emoji: '⏱️', title: 'Timer Challenges', subtitle: 'Mix - All Subjects' },
-    { href: '/quiz?mode=practice', emoji: '🎯', title: 'Practice Mode', subtitle: 'Mix - No Timer' },
+    { href: '/quiz/timer-challenge', emoji: '⏱️', title: 'Timer Challenges', subtitle: 'Mix - All Subjects' },
+    { href: '/quiz/practice-mode', emoji: '🎯', title: 'Practice Mode', subtitle: 'Mix - No Timer' },
     { href: '/riddles', emoji: '🎭', title: 'Riddles', subtitle: 'Brain Teasers' },
     { href: '/image-riddles', emoji: '🖼️', title: 'Image Riddles', subtitle: 'Visual Puzzles' },
     { href: '/jokes', emoji: '😂', title: 'Dad Jokes', subtitle: 'Fun Time' },
