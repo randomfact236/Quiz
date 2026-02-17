@@ -228,7 +228,19 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
 
   // Export Functions
   const handleExportCSV = () => {
+    // Debug: Log first riddle to see data structure
+    console.log('Exporting riddles:', filteredRiddles.length);
+    const firstRiddle = filteredRiddles[0];
+    if (firstRiddle) {
+      console.log('First riddle:', firstRiddle);
+      console.log('Options:', firstRiddle.options);
+    }
+    
     const csv = riddlesToCSV(filteredRiddles);
+    
+    // Debug: Log generated CSV
+    console.log('Generated CSV (first 500 chars):', csv.substring(0, 500));
+    
     downloadFile(csv, `riddles_export_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
   };
 
