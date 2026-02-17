@@ -9,11 +9,11 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Target, Layers, Grid3X3, ChevronDown, ChevronUp, GraduationCap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, GraduationCap, Target, Layers, Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import type { Question } from '@/types/quiz';
@@ -50,7 +50,16 @@ interface LevelCount {
   completeMix: number;
 }
 
-function PracticeModeContent(): JSX.Element {
+// Group array into chunks of size n
+function chunkArray<T>(arr: T[], n: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += n) {
+    chunks.push(arr.slice(i, i + n));
+  }
+  return chunks;
+}
+
+export default function PracticeModePage(): JSX.Element {
   const router = useRouter();
   const [subjects, setSubjects] = useState<SubjectInfo[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -60,8 +69,8 @@ function PracticeModeContent(): JSX.Element {
   const [allSubjectOpen, setAllSubjectOpen] = useState(true);
   const [completeMixOpen, setCompleteMixOpen] = useState(true);
   
-  // Selected subject for subject-wise mode
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  // Expanded subject for showing levels
+  const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
   
   // Question counts
   const [levelCounts, setLevelCounts] = useState<LevelCount>({
@@ -87,10 +96,6 @@ function PracticeModeContent(): JSX.Element {
     ];
     const subjectList = storedSubjects.length > 0 ? storedSubjects : defaultSubjects;
     setSubjects(subjectList);
-    
-    if (subjectList.length > 0 && subjectList[0]) {
-      setSelectedSubject(subjectList[0].slug);
-    }
     
     // Calculate question counts
     const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
@@ -136,9 +141,11 @@ function PracticeModeContent(): JSX.Element {
     setLevelCounts(counts);
   }, []);
 
-  const handleStartSubjectWise = (level: Level) => {
-    if (!selectedSubject) return;
-    router.push(`/quiz/play?subject=${selectedSubject}&chapter=all&level=${level.toLowerCase()}&mode=practice&type=challenge`);
+  // Group subjects into rows of 4 for desktop
+  const subjectRows = useMemo(() => chunkArray(subjects, 4), [subjects]);
+
+  const handleStartSubjectWise = (subject: string, level: Level) => {
+    router.push(`/quiz/play?subject=${subject}&chapter=all&level=${level.toLowerCase()}&mode=practice&type=challenge`);
   };
 
   const handleStartAllSubjectLevelWise = (level: Level) => {
@@ -155,6 +162,15 @@ function PracticeModeContent(): JSX.Element {
 
   const getAllSubjectCount = (level: Level): number => {
     return levelCounts.allSubject[level.toLowerCase()] || 0;
+  };
+
+  const getTotalQuestionsForSubject = (subject: string): number => {
+    const subjectCounts = levelCounts.subjectWise[subject] || {};
+    return Object.values(subjectCounts).reduce((sum, count) => sum + count, 0);
+  };
+
+  const toggleSubject = (slug: string) => {
+    setExpandedSubject(expandedSubject === slug ? null : slug);
   };
 
   return (
@@ -193,7 +209,7 @@ function PracticeModeContent(): JSX.Element {
                 <Target className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">Subject Wise Mix</span>
-                  <span className="text-sm opacity-90">Select a subject and difficulty level</span>
+                  <span className="text-sm opacity-90">Click a subject to select difficulty level</span>
                 </div>
               </div>
               {subjectWiseOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
@@ -201,41 +217,80 @@ function PracticeModeContent(): JSX.Element {
             
             {subjectWiseOpen && (
               <div className="p-6">
-                {/* Subject Selector */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Select Subject</label>
-                  <select
-                    value={selectedSubject}
-                    onChange={(e) => setSelectedSubject(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  >
-                    {subjects.map((subject) => (
-                      <option key={subject.slug} value={subject.slug}>
-                        {subject.emoji} {subject.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                  {levels.map((level) => {
-                    const count = isHydrated ? getSubjectWiseCount(selectedSubject, level) : 0;
-                    return (
-                      <button
-                        key={`practice-subject-wise-${level}`}
-                        onClick={() => handleStartSubjectWise(level)}
-                        disabled={!selectedSubject || count === 0}
-                        className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
-                      >
-                        <span className="text-2xl mb-1">{levelEmojis[level]}</span>
-                        <span className="font-semibold text-sm">{level}</span>
-                        <span className="mt-1 text-xs opacity-90">
-                          {isHydrated ? `${count} Qs` : '...'}
-                        </span>
-                      </button>
-                    );
-                  })}
+                {/* Subjects Grid with Full Width Levels */}
+                <div className="flex flex-col gap-3">
+                  {subjectRows.map((row, rowIndex) => (
+                    <div key={rowIndex} className="contents">
+                      {/* Subjects Row */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {row.map((subject) => {
+                          const totalQuestions = getTotalQuestionsForSubject(subject.slug);
+                          const isExpanded = expandedSubject === subject.slug;
+                          
+                          return (
+                            <button
+                              key={subject.slug}
+                              onClick={() => toggleSubject(subject.slug)}
+                              disabled={totalQuestions === 0}
+                              className={`flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
+                                isExpanded 
+                                  ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300' 
+                                  : 'bg-white border-2 border-gray-100 hover:border-blue-200'
+                              }`}
+                            >
+                              <span className="text-3xl mb-1">{subject.emoji}</span>
+                              <span className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800'}`}>
+                                {subject.name}
+                              </span>
+                              <span className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : 'text-gray-500'}`}>
+                                {isHydrated ? `${totalQuestions} Qs` : '...'}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      
+                      {/* Full Width Levels - shown if any subject in this row is expanded */}
+                      <AnimatePresence>
+                        {row.some(s => s.slug === expandedSubject) && expandedSubject && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
+                              <p className="text-center text-sm text-gray-600 mb-3">
+                                Select difficulty level for <span className="font-semibold text-blue-600">
+                                  {subjects.find(s => s.slug === expandedSubject)?.name}
+                                </span>
+                              </p>
+                              <div className="grid grid-cols-5 gap-3">
+                                {levels.map((level) => {
+                                  const count = getSubjectWiseCount(expandedSubject, level);
+                                  return (
+                                    <button
+                                      key={`${expandedSubject}-${level}`}
+                                      onClick={() => handleStartSubjectWise(expandedSubject, level)}
+                                      disabled={count === 0}
+                                      title={`${level}: ${count} questions`}
+                                      className={`flex flex-col items-center justify-center rounded-xl p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed ${
+                                        count > 0 ? `bg-gradient-to-br ${levelColors[level]}` : 'bg-gray-300'
+                                      }`}
+                                    >
+                                      <span className="text-2xl mb-1">{levelEmojis[level]}</span>
+                                      <span className="font-semibold text-sm">{level}</span>
+                                      <span className="text-xs mt-1 opacity-90">{count} Qs</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -270,7 +325,7 @@ function PracticeModeContent(): JSX.Element {
                     const count = isHydrated ? getAllSubjectCount(level) : 0;
                     return (
                       <button
-                        key={`practice-all-subject-${level}`}
+                        key={`all-subject-${level}`}
                         onClick={() => handleStartAllSubjectLevelWise(level)}
                         disabled={count === 0}
                         className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -336,11 +391,5 @@ function PracticeModeContent(): JSX.Element {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function PracticeModePage(): JSX.Element {
-  return (
-    <PracticeModeContent />
   );
 }
