@@ -57,6 +57,33 @@ function loadQuestions(subject: string, chapter: string, level: string): Questio
   return filtered.slice(0, 10);
 }
 
+/** Load additional questions excluding already shown ones */
+function loadAdditionalQuestions(
+  subject: string, 
+  chapter: string, 
+  level: string, 
+  excludeIds: number[],
+  count: number
+): Question[] {
+  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+  const subjectQuestions = allQuestions[subject] || [];
+  
+  const filtered = subjectQuestions.filter(q => {
+    // Filter by chapter
+    if (q.chapter !== chapter) return false;
+    // Filter by level
+    if (q.level !== level) return false;
+    // Filter by status (only published)
+    if (q.status === 'trash' || q.status === 'draft') return false;
+    // Exclude already shown questions
+    if (excludeIds.includes(q.id)) return false;
+    return true;
+  });
+  
+  // Limit to requested count
+  return filtered.slice(0, count);
+}
+
 /** Save quiz session to history */
 function saveToHistory(session: QuizSession): void {
   const history = getItem<QuizSession[]>(STORAGE_KEYS.QUIZ_HISTORY, []);
@@ -249,6 +276,43 @@ export function useQuiz(
     });
   }, []);
 
+  // Extend quiz with additional questions
+  const extendQuiz = useCallback((additionalCount: number) => {
+    setState(prev => {
+      // Get IDs of already shown questions
+      const shownIds = prev.questions.map(q => q.id);
+      
+      // Load additional questions
+      const additionalQuestions = loadAdditionalQuestions(
+        subject, 
+        chapter, 
+        level, 
+        shownIds, 
+        additionalCount
+      );
+      
+      if (additionalQuestions.length === 0) {
+        // No more questions available
+        return prev;
+      }
+      
+      // Combine questions
+      const newQuestions = [...prev.questions, ...additionalQuestions];
+      
+      // Update session
+      if (sessionRef.current) {
+        sessionRef.current.questions = newQuestions;
+        sessionRef.current.maxScore = newQuestions.length;
+        saveCurrentSession(sessionRef.current);
+      }
+      
+      return {
+        ...prev,
+        questions: newQuestions,
+      };
+    });
+  }, [subject, chapter, level]);
+
   // Pause quiz
   const pauseQuiz = useCallback(() => {
     setState(prev => ({ ...prev, status: 'paused' }));
@@ -290,5 +354,6 @@ export function useQuiz(
     submitQuiz,
     pauseQuiz,
     resumeQuiz,
+    extendQuiz,
   };
 }

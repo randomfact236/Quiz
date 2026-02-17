@@ -70,6 +70,7 @@ export interface QuizActions {
   submitQuiz: () => void;
   pauseQuiz: () => void;
   resumeQuiz: () => void;
+  extendQuiz: (additionalCount: number) => void;
 }
 
 /** Quiz Computed Values */
