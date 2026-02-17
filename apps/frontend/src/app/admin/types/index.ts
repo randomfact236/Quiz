@@ -47,11 +47,14 @@ export type MenuSection =
 /** Joke Type - Enterprise Grade */
 export interface Joke {
   id: number;
-  joke: string;
+  question: string;
+  answer: string;
   category: string;
   status: ContentStatus;
   createdAt?: string;
   updatedAt?: string;
+  /** @deprecated Use question field instead */
+  joke?: string;
 }
 
 /** Joke Category Type */

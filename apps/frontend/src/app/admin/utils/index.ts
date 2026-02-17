@@ -45,7 +45,9 @@ export function useJokeFilters(
 ): { filteredJokes: Joke[]; statusCounts: { total: number; published: number; draft: number; trash: number } } {
   const filteredJokes = allJokes.filter(joke => {
     const matchesCategory = !filterCategory || joke.category === filterCategory;
-    const matchesSearch = !search || joke.joke.toLowerCase().includes(search.toLowerCase());
+    const searchText = (joke.question || joke.joke || '').toLowerCase();
+    const answerText = (joke.answer || '').toLowerCase();
+    const matchesSearch = !search || searchText.includes(search.toLowerCase()) || answerText.includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || joke.status === statusFilter;
     return matchesCategory && matchesSearch && matchesStatus;
   });
@@ -64,10 +66,11 @@ export function useJokeFilters(
  * Convert jokes to CSV format
  */
 export function jokesToCSV(jokes: Joke[]): string {
-  const headers = ['ID', 'Joke', 'Category', 'Status'];
+  const headers = ['ID', 'Question', 'Answer', 'Category', 'Status'];
   const rows = jokes.map(j => [
     j.id,
-    `"${j.joke.replace(/"/g, '""')}"`,
+    `"${(j.question || j.joke || '').replace(/"/g, '""')}"`,
+    `"${(j.answer || '').replace(/"/g, '""')}"`,
     j.category,
     j.status,
   ]);
@@ -97,18 +100,36 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
     const line = lines[i];
     if (!line) continue;
 
-    const values = line.split(',');
+    const values = parseCSVLine(line);
+    
+    // Check for new format (question, answer) or old format (joke)
+    const hasQuestionColumn = values.length >= 3 && values[2] && values[2].length > 0 && values[2].length < 100;
+    
     if (values.length < 2) {
       failed.push({ row: i, error: 'Invalid format', data: line });
       continue;
     }
 
-    imported.push({
-      id: Date.now() + i,
-      joke: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
-      category: values[2] || 'General',
-      status: 'draft',
-    });
+    if (hasQuestionColumn) {
+      // New format: ID, Question, Answer, Category, Status
+      imported.push({
+        id: Date.now() + i,
+        question: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
+        answer: values[2]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
+        category: values[3] || 'General',
+        status: (values[4] as ContentStatus) || 'draft',
+      });
+    } else {
+      // Old format: ID, Joke, Category, Status - convert to new format
+      const jokeText = values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '';
+      imported.push({
+        id: Date.now() + i,
+        question: jokeText,
+        answer: '', // No answer in old format
+        category: values[2] || 'General',
+        status: (values[3] as ContentStatus) || 'draft',
+      });
+    }
   }
 
   return { success: failed.length === 0, imported, failed, total: lines.length - 1 };

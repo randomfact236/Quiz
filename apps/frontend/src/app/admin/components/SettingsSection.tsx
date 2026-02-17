@@ -301,37 +301,157 @@ export function SettingsSection(): JSX.Element {
             <h4 className="text-lg font-semibold dark:text-gray-200">
               Quiz Configuration
             </h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-quiz-cache-ttl"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Subjects Cache TTL (seconds)
-                </label>
-                <input
-                  id="settings-quiz-cache-ttl"
-                  type="number"
-                  value={formData.quiz?.cache?.subjectsTtl ?? 3600}
-                  onChange={(e) => updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  min={0}
-                />
+            
+            {/* Timer Settings */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
+                Timer Settings
+              </h5>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="settings-quiz-default-timer"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Default Timer (seconds)
+                  </label>
+                  <input
+                    id="settings-quiz-default-timer"
+                    type="number"
+                    value={formData.quiz?.defaults?.timeLimit ?? 30}
+                    onChange={(e) => updateField('quiz.defaults.timeLimit', parseInt(e.target.value))}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    min={5}
+                    max={300}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Default time limit per question in timer mode
+                  </p>
+                </div>
+                <div>
+                  <label
+                    htmlFor="settings-quiz-questions-per-quiz"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Questions Per Quiz
+                  </label>
+                  <input
+                    id="settings-quiz-questions-per-quiz"
+                    type="number"
+                    value={formData.quiz?.defaults?.questionsPerQuiz ?? 10}
+                    onChange={(e) => updateField('quiz.defaults.questionsPerQuiz', parseInt(e.target.value))}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    min={1}
+                    max={50}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Number of questions per quiz session
+                  </p>
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="settings-quiz-cache-key"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Cache Key (All Subjects)
-                </label>
-                <input
-                  id="settings-quiz-cache-key"
-                  type="text"
-                  value={formData.quiz?.cache?.allSubjectsKey ?? 'subjects:all'}
-                  onChange={(e) => updateField('quiz.cache.allSubjectsKey', e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
+              
+              {/* Quiz Defaults Checkboxes */}
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="settings-quiz-show-results"
+                    checked={formData.quiz?.defaults?.showResults ?? true}
+                    onChange={(e) => updateField('quiz.defaults.showResults', e.target.checked)}
+                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="settings-quiz-show-results"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Show Results Immediately
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="settings-quiz-allow-retries"
+                    checked={formData.quiz?.defaults?.allowRetries ?? true}
+                    onChange={(e) => updateField('quiz.defaults.allowRetries', e.target.checked)}
+                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="settings-quiz-allow-retries"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Allow Retries
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="settings-quiz-shuffle-questions"
+                    checked={formData.quiz?.defaults?.shuffleQuestions ?? false}
+                    onChange={(e) => updateField('quiz.defaults.shuffleQuestions', e.target.checked)}
+                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="settings-quiz-shuffle-questions"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Shuffle Questions
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="settings-quiz-show-explanations"
+                    checked={formData.quiz?.defaults?.showExplanations ?? true}
+                    onChange={(e) => updateField('quiz.defaults.showExplanations', e.target.checked)}
+                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="settings-quiz-show-explanations"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Show Explanations
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            {/* Cache Settings */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
+                Cache Settings
+              </h5>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="settings-quiz-cache-ttl"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Subjects Cache TTL (seconds)
+                  </label>
+                  <input
+                    id="settings-quiz-cache-ttl"
+                    type="number"
+                    value={formData.quiz?.cache?.subjectsTtl ?? 3600}
+                    onChange={(e) => updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    min={0}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="settings-quiz-cache-key"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Cache Key (All Subjects)
+                  </label>
+                  <input
+                    id="settings-quiz-cache-key"
+                    type="text"
+                    value={formData.quiz?.cache?.allSubjectsKey ?? 'subjects:all'}
+                    onChange={(e) => updateField('quiz.cache.allSubjectsKey', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -1,10 +1,14 @@
 export const initialJokes = [
-    { id: 1, joke: "Why don't scientists trust atoms? Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 2, joke: "Why did the scarecrow win an award? He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 3, joke: "Why do programmers prefer dark mode? Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
-    { id: 4, joke: "What do you call a fake noodle? An impasta!", category: "Classic Dad Jokes", status: "draft" as const },
-    { id: 5, joke: "Why did the bicycle fall over? It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 6, joke: "How do you organize a space party? You planet!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: 1, question: "Why don't scientists trust atoms?", answer: "Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 2, question: "Why did the scarecrow win an award?", answer: "He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 3, question: "Why do programmers prefer dark mode?", answer: "Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
+    { id: 4, question: "What do you call a fake noodle?", answer: "An impasta!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: 5, question: "Why did the bicycle fall over?", answer: "It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 6, question: "How do you organize a space party?", answer: "You planet!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: 7, question: "What do you call a bear with no teeth?", answer: "A gummy bear!", category: "Kids Jokes", status: "published" as const },
+    { id: 8, question: "Why did the golfer bring two pairs of pants?", answer: "In case he got a hole in one!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 9, question: "What do you call a sleeping dinosaur?", answer: "A dino-snore!", category: "Kids Jokes", status: "published" as const },
+    { id: 10, question: "Why don't eggs tell jokes?", answer: "They'd crack each other up!", category: "Classic Dad Jokes", status: "published" as const },
 ];
 
 export const initialRiddles = [

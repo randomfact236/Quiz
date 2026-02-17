@@ -19,11 +19,12 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { SettingsService } from '@/services/settings.service';
 
-// Time limits based on mode (in seconds)
-const TIME_LIMITS = {
+// Default time limits (will be overridden by settings)
+const DEFAULT_TIME_LIMITS = {
   normal: undefined, // No time limit
-  timer: 30, // 30 seconds per question
+  timer: 30, // 30 seconds per question default
 };
 
 function QuizContent(): JSX.Element {
@@ -32,6 +33,8 @@ function QuizContent(): JSX.Element {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [showExtendQuiz, setShowExtendQuiz] = useState(false);
   const [additionalQuestions, setAdditionalQuestions] = useState(5);
+  const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
@@ -44,6 +47,34 @@ function QuizContent(): JSX.Element {
   const chapter = searchParams?.get('chapter') || '';
   const level = searchParams?.get('level') || '';
   const mode = searchParams?.get('mode') || 'normal';
+  const type = searchParams?.get('type') || ''; // 'challenge' for challenge modes
+
+  // Check if this is a challenge mode
+  const isChallengeMode = type === 'challenge' || subject === 'all';
+
+  // Load timer settings from settings
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const settings = await SettingsService.getSettings();
+        const defaultTimer = settings.quiz?.defaults?.timeLimit || 30;
+        
+        if (mode === 'timer') {
+          setTimeLimit(defaultTimer);
+        } else {
+          setTimeLimit(undefined);
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+        // Fall back to default
+        setTimeLimit(mode === 'timer' ? DEFAULT_TIME_LIMITS.timer : undefined);
+      } finally {
+        setIsLoadingSettings(false);
+      }
+    };
+    
+    loadSettings();
+  }, [mode]);
 
   // Validate params
   useEffect(() => {
@@ -52,19 +83,27 @@ function QuizContent(): JSX.Element {
     }
   }, [subject, chapter, level, router]);
 
-  // Determine time limit and timer mode
+  // Determine timer mode
   const isTimerMode = mode === 'timer';
-  const timeLimit = isTimerMode ? TIME_LIMITS.timer : TIME_LIMITS.normal;
   const timerMode = isTimerMode ? 'per-question' : undefined;
 
   // Get subject name and emoji
   const subjects = getItem<{ slug: string; name: string; emoji: string }[]>(STORAGE_KEYS.SUBJECTS, []);
   const subjectData = subjects.find(s => s.slug === subject);
-  const subjectName = subjectData?.name || subject;
+  const subjectName = isChallengeMode 
+    ? 'Challenge Mode' 
+    : (subjectData?.name || subject);
   const subjectEmoji = subjectData?.emoji || '📚';
 
-  // Use quiz hook
-  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);
+  // Use quiz hook - only initialize after settings are loaded
+  const quiz = useQuiz(
+    subject, 
+    chapter, 
+    level, 
+    timeLimit, 
+    timerMode,
+    isChallengeMode
+  );
 
   // Redirect to results when completed
   useEffect(() => {
@@ -78,7 +117,7 @@ function QuizContent(): JSX.Element {
   }, [quiz.status, router]);
 
   // Loading state
-  if (quiz.status === 'loading') {
+  if (quiz.status === 'loading' || isLoadingSettings) {
     return (
       <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <div className="text-center">
@@ -108,13 +147,13 @@ function QuizContent(): JSX.Element {
               No Questions Available
             </h1>
             <p className="mb-4 text-gray-600">
-              There are no published questions for this chapter and difficulty level.
+              There are no published questions for this selection.
             </p>
             <Link
-              href={`/quiz?subject=${subject}`}
+              href={isChallengeMode ? '/quiz' : `/quiz?subject=${subject}`}
               className="inline-block rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
             >
-              Choose Another Chapter
+              {isChallengeMode ? 'Back to Quiz' : 'Choose Another Chapter'}
             </Link>
           </div>
         </div>
@@ -138,7 +177,7 @@ function QuizContent(): JSX.Element {
             {/* Exit Button */}
             <div className="mb-1">
               <Link
-                href={`/quiz?subject=${subject}`}
+                href={isChallengeMode ? '/quiz' : `/quiz?subject=${subject}`}
                 className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -151,7 +190,14 @@ function QuizContent(): JSX.Element {
               <span className="rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
                 {subjectName}
               </span>
-              <span className="text-base text-white/90">{chapter}</span>
+              <span className="text-base text-white/90">
+                {isChallengeMode ? `${level === 'all' ? 'All Levels' : level}` : chapter}
+              </span>
+              {isTimerMode && (
+                <span className="rounded-full bg-orange-500 px-2 py-0.5 text-xs font-semibold text-white">
+                  ⏱️ {quiz.timeRemaining}s
+                </span>
+              )}
             </div>
           </div>
 
@@ -250,20 +296,17 @@ function QuizContent(): JSX.Element {
 
             <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowConfirmSubmit(false);
-                  setShowExtendQuiz(true);
-                }}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
+                onClick={() => setShowConfirmSubmit(false)}
+                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300"
               >
-                Continue Quiz
+                Continue
               </button>
               <button
                 onClick={() => {
-                  quiz.submitQuiz();
                   setShowConfirmSubmit(false);
+                  quiz.submitQuiz();
                 }}
-                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
+                className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700"
               >
                 Submit
               </button>
@@ -281,77 +324,46 @@ function QuizContent(): JSX.Element {
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
             <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Extend Quiz
+              Continue Quiz?
             </h2>
+            <p className="mb-4 text-gray-600">
+              Would you like to add more questions to your quiz?
+            </p>
             
-            <div className="mb-4 space-y-3">
-              <p className="text-gray-600">
-                You&apos;ve answered <strong>{quiz.answeredCount}</strong> of <strong>{quiz.totalQuestions}</strong> questions.
-              </p>
-              
-              <div className="rounded-lg bg-blue-50 p-3">
-                <p className="text-sm text-blue-800">
-                  <strong>{quiz.availableQuestions}</strong> more questions available in this level
-                </p>
-              </div>
-              
-              <p className="text-sm text-gray-500">
-                How many additional questions would you like to add?
-              </p>
-              
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setAdditionalQuestions(Math.max(1, additionalQuestions - 1))}
-                  disabled={additionalQuestions <= 1}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  max={Math.min(20, quiz.availableQuestions)}
-                  value={additionalQuestions}
-                  onChange={(e) => setAdditionalQuestions(Math.max(1, Math.min(Math.min(20, quiz.availableQuestions), parseInt(e.target.value) || 1)))}
-                  className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
-                />
-                <button
-                  onClick={() => setAdditionalQuestions(Math.min(Math.min(20, quiz.availableQuestions), additionalQuestions + 1))}
-                  disabled={additionalQuestions >= Math.min(20, quiz.availableQuestions)}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  +
-                </button>
-              </div>
-              
-              <p className="text-xs text-gray-400">
-                New questions will be added without repeating any you&apos;ve already seen.
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Additional Questions (1-20)
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={Math.min(20, quiz.availableQuestions)}
+                value={additionalQuestions}
+                onChange={(e) => setAdditionalQuestions(parseInt(e.target.value) || 1)}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                {quiz.availableQuestions} more questions available
               </p>
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={() => setShowExtendQuiz(false)}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
+                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300"
               >
-                {quiz.availableQuestions > 0 ? 'Cancel' : 'Close'}
+                No, Submit
               </button>
-              {quiz.availableQuestions > 0 && (
-                <button
-                  onClick={() => {
-                    quiz.extendQuiz(additionalQuestions);
-                    setShowExtendQuiz(false);
-                    // Go to next question (first new one)
-                    if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
-                      quiz.goToNext();
-                    }
-                  }}
-                  disabled={additionalQuestions > quiz.availableQuestions}
-                  className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-                >
-                  Add & Continue
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  quiz.extendQuiz(additionalQuestions);
+                  setShowExtendQuiz(false);
+                }}
+                disabled={additionalQuestions < 1 || additionalQuestions > quiz.availableQuestions}
+                className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+              >
+                Add & Continue
+              </button>
             </div>
           </motion.div>
         </div>
@@ -360,16 +372,18 @@ function QuizContent(): JSX.Element {
   );
 }
 
-export default function QuizPage(): JSX.Element {
+export default function QuizPlayPage(): JSX.Element {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
-          <p className="text-xl font-semibold text-white">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+            <p className="text-xl font-semibold text-white">Loading quiz...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <QuizContent />
     </Suspense>
   );
