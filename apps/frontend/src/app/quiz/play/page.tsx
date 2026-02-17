@@ -72,7 +72,7 @@ function QuizContent(): JSX.Element {
   // Loading state
   if (quiz.status === 'loading') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
           <p className="text-xl font-semibold text-white">Loading quiz...</p>
@@ -84,7 +84,7 @@ function QuizContent(): JSX.Element {
   // No questions found
   if (quiz.totalQuestions === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <Link
             href={`/quiz?subject=${subject}`}
@@ -118,13 +118,13 @@ function QuizContent(): JSX.Element {
   const isTimeUp = isTimerMode && quiz.timeRemaining === 0 && quiz.status === 'playing';
 
   return (
-    <div className="relative bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       {/* Floating Background Emojis */}
       <FloatingBackground count={20} />
       
-      {/* Main Content - Tight, compact layout */}
-      <div className="relative z-10 px-4 py-2">
-        <div className="mx-auto w-full max-w-5xl">
+      {/* Main Content - Fill available space */}
+      <div className="relative z-10 flex flex-col flex-1 px-4 py-2">
+        <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 justify-center">
           {/* Header Section - Minimal spacing */}
           <div className="mb-2">
             {/* Exit Button */}
@@ -164,14 +164,7 @@ function QuizContent(): JSX.Element {
                   selectedAnswer={quiz.answers[quiz.currentQuestion.id] || null}
                   onSelectAnswer={(answer) => {
                     quiz.selectAnswer(answer);
-                    // Auto advance after 1.5 seconds for instant feedback
-                    setTimeout(() => {
-                      if (quiz.currentQuestionIndex < Math.min(quiz.totalQuestions, 10) - 1) {
-                        quiz.goToNext();
-                      } else {
-                        setShowConfirmSubmit(true);
-                      }
-                    }, 1500);
+                    // Manual navigation - user clicks Next to advance
                   }}
                   showFeedback={true}
                   disabled={quiz.status !== 'playing'}
@@ -185,7 +178,7 @@ function QuizContent(): JSX.Element {
           </AnimatePresence>
           
           {/* Back and Next Navigation Buttons */}
-          <div className="mt-2 flex items-center justify-between gap-4">
+          <div className="mt-4 flex items-center justify-between gap-4 pb-4">
             <button
               onClick={() => quiz.goToPrevious()}
               disabled={quiz.currentQuestionIndex === 0}
@@ -200,11 +193,16 @@ function QuizContent(): JSX.Element {
             </span>
             
             <button
-              onClick={() => quiz.goToNext()}
-              disabled={quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
+              onClick={() => {
+                if (quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1) {
+                  setShowConfirmSubmit(true);
+                } else {
+                  quiz.goToNext();
+                }
+              }}
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
             >
-              Next
+              {quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1 ? 'Submit' : 'Next'}
               <ArrowLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
@@ -263,7 +261,7 @@ function QuizContent(): JSX.Element {
 export default function QuizPage(): JSX.Element {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
           <p className="text-xl font-semibold text-white">Loading...</p>
