@@ -84,6 +84,27 @@ function loadAdditionalQuestions(
   return filtered.slice(0, count);
 }
 
+/** Count available questions excluding already shown ones */
+function countAvailableQuestions(
+  subject: string, 
+  chapter: string, 
+  level: string, 
+  excludeIds: number[]
+): number {
+  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+  const subjectQuestions = allQuestions[subject] || [];
+  
+  const filtered = subjectQuestions.filter(q => {
+    if (q.chapter !== chapter) return false;
+    if (q.level !== level) return false;
+    if (q.status === 'trash' || q.status === 'draft') return false;
+    if (excludeIds.includes(q.id)) return false;
+    return true;
+  });
+  
+  return filtered.length;
+}
+
 /** Save quiz session to history */
 function saveToHistory(session: QuizSession): void {
   const history = getItem<QuizSession[]>(STORAGE_KEYS.QUIZ_HISTORY, []);
@@ -333,6 +354,10 @@ export function useQuiz(
     const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
     const hasAnsweredCurrent = currentQuestion ? !!state.answers[currentQuestion.id] : false;
     const answeredCount = Object.keys(state.answers).length;
+    
+    // Count available questions for extending
+    const shownIds = state.questions.map(q => q.id);
+    const availableQuestions = countAvailableQuestions(subject, chapter, level, shownIds);
 
     return {
       currentQuestion,
@@ -342,8 +367,9 @@ export function useQuiz(
       hasAnsweredCurrent,
       totalQuestions: state.questions.length,
       answeredCount,
+      availableQuestions,
     };
-  }, [state.questions, state.currentQuestionIndex, state.answers]);
+  }, [state.questions, state.currentQuestionIndex, state.answers, subject, chapter, level]);
 
   return {
     ...state,

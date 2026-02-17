@@ -82,6 +82,7 @@ export interface QuizComputed {
   hasAnsweredCurrent: boolean;
   totalQuestions: number;
   answeredCount: number;
+  availableQuestions: number; // Questions available for extending
 }
 
 /** Combined Quiz Hook Return */

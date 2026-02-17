@@ -276,6 +276,13 @@ function QuizContent(): JSX.Element {
               <p className="text-gray-600">
                 You&apos;ve answered <strong>{quiz.answeredCount}</strong> of <strong>{quiz.totalQuestions}</strong> questions.
               </p>
+              
+              <div className="rounded-lg bg-blue-50 p-3">
+                <p className="text-sm text-blue-800">
+                  <strong>{quiz.availableQuestions}</strong> more questions available in this level
+                </p>
+              </div>
+              
               <p className="text-sm text-gray-500">
                 How many additional questions would you like to add?
               </p>
@@ -283,21 +290,23 @@ function QuizContent(): JSX.Element {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setAdditionalQuestions(Math.max(1, additionalQuestions - 1))}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200"
+                  disabled={additionalQuestions <= 1}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                 >
                   -
                 </button>
                 <input
                   type="number"
                   min={1}
-                  max={20}
+                  max={Math.min(20, quiz.availableQuestions)}
                   value={additionalQuestions}
-                  onChange={(e) => setAdditionalQuestions(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
+                  onChange={(e) => setAdditionalQuestions(Math.max(1, Math.min(Math.min(20, quiz.availableQuestions), parseInt(e.target.value) || 1)))}
                   className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
                 />
                 <button
-                  onClick={() => setAdditionalQuestions(Math.min(20, additionalQuestions + 1))}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200"
+                  onClick={() => setAdditionalQuestions(Math.min(Math.min(20, quiz.availableQuestions), additionalQuestions + 1))}
+                  disabled={additionalQuestions >= Math.min(20, quiz.availableQuestions)}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                 >
                   +
                 </button>
@@ -313,21 +322,24 @@ function QuizContent(): JSX.Element {
                 onClick={() => setShowExtendQuiz(false)}
                 className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
               >
-                Cancel
+                {quiz.availableQuestions > 0 ? 'Cancel' : 'Close'}
               </button>
-              <button
-                onClick={() => {
-                  quiz.extendQuiz(additionalQuestions);
-                  setShowExtendQuiz(false);
-                  // Go to next question (first new one)
-                  if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
-                    quiz.goToNext();
-                  }
-                }}
-                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
-              >
-                Add & Continue
-              </button>
+              {quiz.availableQuestions > 0 && (
+                <button
+                  onClick={() => {
+                    quiz.extendQuiz(additionalQuestions);
+                    setShowExtendQuiz(false);
+                    // Go to next question (first new one)
+                    if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+                      quiz.goToNext();
+                    }
+                  }}
+                  disabled={additionalQuestions > quiz.availableQuestions}
+                  className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+                >
+                  Add & Continue
+                </button>
+              )}
             </div>
           </motion.div>
         </div>
