@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion } from 'framer-motion';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
@@ -39,6 +39,10 @@ interface QuestionCardProps {
   maxScore?: number;
   /** Time up indicator */
   timeUp?: boolean;
+}
+
+export interface QuestionCardRef {
+  clearBubbles: () => void;
 }
 
 /** Get related emojis based on subject/chapter */
@@ -85,10 +89,10 @@ const FEEDBACK_MESSAGES = {
 function getRandomFeedback(type: 'correct' | 'wrong'): { text: string; emoji: string } {
   const messages = FEEDBACK_MESSAGES[type];
   const index = Math.floor(Math.random() * messages.length);
-  return messages[index]!; // Non-null assertion since we know array has items
+  return messages[index]!;
 }
 
-export function QuestionCard({
+export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(function QuestionCard({
   question,
   questionNumber,
   totalQuestions,
@@ -100,7 +104,7 @@ export function QuestionCard({
   score,
   maxScore,
   timeUp = false,
-}: QuestionCardProps): JSX.Element {
+}, ref): JSX.Element {
   // Map question options to the format AnswerOptions expects
   const options = [
     { key: 'A', text: question.optionA },
@@ -126,6 +130,13 @@ export function QuestionCard({
   // Ref to control bubble effect
   const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
 
+  // Expose clearBubbles function via ref
+  useImperativeHandle(ref, () => ({
+    clearBubbles: () => {
+      bubbleRef.current?.clear();
+    },
+  }));
+
   // Update feedback when answer is selected
   useEffect(() => {
     if (selectedAnswer && showFeedback) {
@@ -144,21 +155,14 @@ export function QuestionCard({
     }
   }, [selectedAnswer, showFeedback, isCorrect, isWrong]);
 
-  // Clear bubbles when question changes
-  useEffect(() => {
-    bubbleRef.current?.clear();
-  }, [questionNumber]);
-
   // Reset bubble trigger after effect completes
   const handleBubbleComplete = useCallback(() => {
     setBubbleTrigger(false);
   }, []);
   
-  // Handle answer selection with bubble clear
+  // Handle answer selection - DON'T clear bubbles
   const handleSelectAnswer = useCallback((option: string) => {
-    // Clear any existing bubbles first
-    bubbleRef.current?.clear();
-    // Call the original handler
+    // Bubbles stay visible until navigation buttons clicked
     onSelectAnswer(option);
   }, [onSelectAnswer]);
 
@@ -270,4 +274,4 @@ export function QuestionCard({
       </motion.div>
     </>
   );
-}
+});

@@ -9,14 +9,14 @@
 
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
-import { QuestionCard } from '@/components/quiz/QuestionCard';
+import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 
@@ -32,6 +32,9 @@ function QuizContent(): JSX.Element {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [showExtendQuiz, setShowExtendQuiz] = useState(false);
   const [additionalQuestions, setAdditionalQuestions] = useState(5);
+  
+  // Ref to control QuestionCard bubble effects
+  const questionCardRef = useRef<QuestionCardRef>(null);
 
   // Get URL params
   const subject = searchParams?.get('subject') || '';
@@ -160,6 +163,7 @@ function QuizContent(): JSX.Element {
                 transition={{ duration: 0.3 }}
               >
                 <QuestionCard
+                  ref={questionCardRef}
                   question={quiz.currentQuestion}
                   questionNumber={quiz.currentQuestionIndex + 1}
                   totalQuestions={Math.min(quiz.totalQuestions, 10)}
@@ -182,7 +186,10 @@ function QuizContent(): JSX.Element {
           {/* Back and Next Navigation Buttons */}
           <div className="mt-4 flex items-center justify-between gap-4 pb-4">
             <button
-              onClick={() => quiz.goToPrevious()}
+              onClick={() => {
+                questionCardRef.current?.clearBubbles();
+                quiz.goToPrevious();
+              }}
               disabled={quiz.currentQuestionIndex === 0}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
@@ -196,6 +203,7 @@ function QuizContent(): JSX.Element {
             
             <button
               onClick={() => {
+                questionCardRef.current?.clearBubbles();
                 if (quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1) {
                   setShowConfirmSubmit(true);
                 } else {

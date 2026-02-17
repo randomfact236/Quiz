@@ -43,7 +43,7 @@ const EMOJI_SETS = {
 };
 
 export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEffectProps>(
-  function BubbleEmojiEffect({ trigger, type, count = 20, onComplete }, ref): JSX.Element {
+  function BubbleEmojiEffect({ trigger, type, count = 20 }, ref): JSX.Element {
     const [bubbles, setBubbles] = useState<BubbleEmoji[]>([]);
     const [isActive, setIsActive] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -65,28 +65,22 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
 
     const createBubbles = useCallback(() => {
       const emojis = EMOJI_SETS[type];
-      // Dense cluster: small area on left side, vertically centered
+      // Dense cluster: small area on left side, larger vertical spread
       const newBubbles: BubbleEmoji[] = Array.from({ length: count }, (_, i) => ({
         id: Date.now() + i,
         emoji: emojis[Math.floor(Math.random() * emojis.length)] || '⭐',
-        // Very narrow horizontal range (2-8% from left)
-        x: 2 + Math.random() * 6,
-        // Dense vertical cluster (35-55% - middle of screen)
-        y: 35 + Math.random() * 20,
+        // Very narrow horizontal range (2-10% from left)
+        x: 2 + Math.random() * 8,
+        // Larger vertical cluster (20-70% - expanded area)
+        y: 20 + Math.random() * 50,
         scale: 0.9 + Math.random() * 0.6, // 0.9-1.5x scale
         delay: Math.random() * 0.3, // Quick stagger 0-0.3s
       }));
       
       setBubbles(newBubbles);
       setIsActive(true);
-
-      // Clear after animation completes
-      timeoutRef.current = setTimeout(() => {
-        setBubbles([]);
-        setIsActive(false);
-        onComplete?.();
-      }, 2000);
-    }, [type, count, onComplete]);
+      // Bubbles stay visible until explicitly cleared
+    }, [type, count]);
 
     useEffect(() => {
       if (trigger && !isActive) {
