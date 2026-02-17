@@ -39,6 +39,8 @@ interface QuestionCardProps {
   maxScore?: number;
   /** Time up indicator */
   timeUp?: boolean;
+  /** Ref to track which questions have shown bubbles */
+  shownBubblesRef?: React.MutableRefObject<Set<number>>;
 }
 
 export interface QuestionCardRef {
@@ -104,6 +106,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   score,
   maxScore,
   timeUp = false,
+  shownBubblesRef,
 }, ref): JSX.Element {
   // Map question options to the format AnswerOptions expects
   const options = [
@@ -129,36 +132,52 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   
   // Ref to control bubble effect
   const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
+  
+  // Use the passed ref or create a local one if not provided
+  const localShownBubblesRef = useRef<Set<number>>(new Set());
+  const activeShownBubblesRef = shownBubblesRef || localShownBubblesRef;
+  const prevQuestionIdRef = useRef<number>(question.id);
 
   // Expose clearBubbles function via ref
   useImperativeHandle(ref, () => ({
     clearBubbles: () => {
       bubbleRef.current?.clear();
+      setBubbleTrigger(false); // Reset trigger so bubbles disappear
     },
   }));
+  
+  // Handle question navigation - clear bubbles when question changes
+  useEffect(() => {
+    if (question.id !== prevQuestionIdRef.current) {
+      // Question changed - clear bubbles immediately
+      bubbleRef.current?.clear();
+      setBubbleTrigger(false);
+      prevQuestionIdRef.current = question.id;
+    }
+  }, [question.id]);
 
-  // Update feedback when answer is selected
+  // Trigger bubbles when answer is selected - only once per question
   useEffect(() => {
     if (selectedAnswer && showFeedback) {
-      if (isCorrect) {
-        setFeedback(getRandomFeedback('correct'));
-        setBubbleType('correct');
-        setBubbleTrigger(true);
-      } else if (isWrong) {
-        setFeedback(getRandomFeedback('wrong'));
-        setBubbleType('wrong');
-        setBubbleTrigger(true);
+      // Only trigger if not already shown for this question
+      if (!activeShownBubblesRef.current.has(question.id)) {
+        activeShownBubblesRef.current.add(question.id);
+        if (isCorrect) {
+          setFeedback(getRandomFeedback('correct'));
+          setBubbleType('correct');
+          setBubbleTrigger(true);
+        } else if (isWrong) {
+          setFeedback(getRandomFeedback('wrong'));
+          setBubbleType('wrong');
+          setBubbleTrigger(true);
+        }
       }
-    } else {
+    } else if (!selectedAnswer) {
+      // Reset feedback when no answer
       setFeedback(null);
-      setBubbleTrigger(false);
     }
-  }, [selectedAnswer, showFeedback, isCorrect, isWrong]);
+  }, [selectedAnswer, showFeedback, isCorrect, isWrong, question.id]);
 
-  // Reset bubble trigger after effect completes
-  const handleBubbleComplete = useCallback(() => {
-    setBubbleTrigger(false);
-  }, []);
   
   // Handle answer selection - DON'T clear bubbles
   const handleSelectAnswer = useCallback((option: string) => {
@@ -173,8 +192,8 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         ref={bubbleRef}
         trigger={bubbleTrigger}
         type={bubbleType}
-        count={20}
-        onComplete={handleBubbleComplete}
+        count={60}
+
       />
 
       <motion.div

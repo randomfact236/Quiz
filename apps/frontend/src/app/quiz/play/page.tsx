@@ -35,6 +35,9 @@ function QuizContent(): JSX.Element {
   
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
+  
+  // Track which questions have shown bubbles (persists across navigation)
+  const shownBubblesRef = useRef<Set<number>>(new Set());
 
   // Get URL params
   const subject = searchParams?.get('subject') || '';
@@ -164,6 +167,7 @@ function QuizContent(): JSX.Element {
               >
                 <QuestionCard
                   ref={questionCardRef}
+                  shownBubblesRef={shownBubblesRef}
                   question={quiz.currentQuestion}
                   questionNumber={quiz.currentQuestionIndex + 1}
                   totalQuestions={Math.min(quiz.totalQuestions, 10)}
