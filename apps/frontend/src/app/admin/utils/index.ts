@@ -561,10 +561,48 @@ function validateCSVStructure(
 // ============================================================================
 
 /**
- * Convert riddles to CSV format
+ * Convert riddles to CSV format with proper options mapping
  */
 export function riddlesToCSV(riddles: Riddle[]): string {
-  return exportToCSV(riddles, riddleConfig, { count: riddles.length.toString() });
+  const headers = ['ID', 'Question', 'Answer', 'OptionA', 'OptionB', 'OptionC', 'OptionD', 'CorrectOption', 'Difficulty', 'Chapter', 'Hint'];
+  
+  const rows = riddles.map(riddle => {
+    const options = riddle.options || [];
+    return [
+      riddle.id,
+      escapeCSV(riddle.question),
+      escapeCSV(riddle.answer || ''),
+      escapeCSV(options[0] || ''),
+      escapeCSV(options[1] || ''),
+      escapeCSV(options[2] || ''),
+      escapeCSV(options[3] || ''),
+      riddle.correctOption,
+      riddle.difficulty,
+      escapeCSV(riddle.chapter),
+      escapeCSV(riddle.hint || ''),
+    ];
+  });
+  
+  const csvContent = [
+    '# Count: ' + riddles.length,
+    headers.join(','),
+    ...rows.map(row => row.join(','))
+  ].join('\n');
+  
+  return csvContent;
+}
+
+/**
+ * Escape CSV value - handles commas, newlines, and quotes
+ */
+function escapeCSV(value: string | number): string {
+  if (value === null || value === undefined) return '';
+  const str = String(value);
+  // If contains comma, newline, or quote, wrap in quotes and escape inner quotes
+  if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
 }
 
 /**
