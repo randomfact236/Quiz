@@ -69,7 +69,7 @@ export interface Riddle {
   answer?: string;
   options: string[];
   correctOption: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   chapter: string;
   status: ContentStatus;
   hint?: string;

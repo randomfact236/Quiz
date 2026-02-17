@@ -121,7 +121,6 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
     medium: allRiddles.filter(r => r.difficulty === 'medium').length,
     hard: allRiddles.filter(r => r.difficulty === 'hard').length,
     expert: allRiddles.filter(r => r.difficulty === 'expert').length,
-    extreme: allRiddles.filter(r => r.difficulty === 'extreme').length,
   };
 
   // Calculate status counts
@@ -132,6 +131,14 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
     trash: allRiddles.filter(r => r.status === 'trash').length,
   };
 
+  // Migrate riddles without status to 'published'
+  useEffect(() => {
+    const needsMigration = allRiddles.some(r => !r.status);
+    if (needsMigration) {
+      setAllRiddles(prev => prev.map(r => r.status ? r : { ...r, status: 'published' as const }));
+    }
+  }, [allRiddles]);
+
   // Filter riddles based on all criteria
   const filteredRiddles = allRiddles.filter(riddle => {
     const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
@@ -140,7 +147,8 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
       riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
       riddle.options[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
       riddle.options[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
+    const riddleStatus = riddle.status || 'published';
+    const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
     return matchesDifficulty && matchesChapter && matchesSearch && matchesStatus;
   });
 
@@ -251,6 +259,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
             imported: validation.data.map(r => ({
               ...r,
               id: Date.now() + Math.floor(Math.random() * 1000),
+              status: r.status || 'published',
             })),
             failed: [],
             total: validation.data.length,
@@ -465,7 +474,6 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
     { value: 'medium', label: 'Medium' },
     { value: 'hard', label: 'Hard' },
     { value: 'expert', label: 'Expert' },
-    { value: 'extreme', label: 'Extreme' },
   ];
 
   return (
@@ -1049,7 +1057,6 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                     <option value="expert">Expert</option>
-                    <option value="extreme">Extreme</option>
                   </select>
                 </div>
                 <div>

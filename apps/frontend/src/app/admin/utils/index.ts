@@ -350,7 +350,7 @@ export const riddleConfig: ImportExportConfig<Riddle> = {
   validators: {
     required: ['question', 'answer', 'options', 'correctOption', 'difficulty', 'chapter'],
     enumFields: {
-      difficulty: ['easy', 'medium', 'hard', 'expert', 'extreme'],
+      difficulty: ['easy', 'medium', 'hard', 'expert'],
       correctOption: ['A', 'B', 'C', 'D'],
     },
     maxLength: { question: 1000, answer: 500, chapter: 200, hint: 500 },
@@ -606,6 +606,7 @@ export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
       difficulty: (getValue(8, 'difficulty') || 'medium') as Riddle['difficulty'],
       chapter: getValue(9, 'chapter') || 'General',
       hint: getValue(10, 'hint'),
+      status: 'published' as const,
     };
   });
 }
