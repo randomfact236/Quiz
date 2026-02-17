@@ -297,6 +297,23 @@ export function useQuiz(
     });
   }, []);
 
+  // Auto-save session when timer expires (status becomes 'completed')
+  useEffect(() => {
+    if (state.status === 'completed' && sessionRef.current && sessionRef.current.status !== 'completed') {
+      const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
+      
+      sessionRef.current.status = 'completed';
+      sessionRef.current.completedAt = new Date().toISOString();
+      sessionRef.current.timeTaken = timeTaken;
+      sessionRef.current.score = state.score;
+      sessionRef.current.answers = state.answers;
+      
+      // Save to history and clear current
+      saveToHistory(sessionRef.current);
+      clearCurrentSession();
+    }
+  }, [state.status, state.startTime, state.score, state.answers]);
+
   // Extend quiz with additional questions
   const extendQuiz = useCallback((additionalCount: number) => {
     setState(prev => {
