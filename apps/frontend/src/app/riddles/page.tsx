@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, AlertTriangle, Loader2, Play } from 'lucide-react';
+import { X, AlertTriangle, Loader2, Play, RefreshCw } from 'lucide-react';
 
 import { getItem, setItem } from '@/lib/storage';
 import { 
   getSubjects, 
-  getChaptersBySubject
+  getChaptersBySubject,
+  getStats
 } from '@/lib/riddles-api';
 import { adaptChapter, DIFFICULTY_LEVELS, type ChapterDisplay } from '@/types/riddles';
 
@@ -24,6 +25,7 @@ export default function RiddlesPage(): JSX.Element {
   const [chapters, setChapters] = useState<ChapterWithRiddles[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string>('');
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
   const [showDataLossWarning, setShowDataLossWarning] = useState(false);
 
@@ -33,16 +35,33 @@ export default function RiddlesPage(): JSX.Element {
       try {
         setLoading(true);
         setError(null);
+        setDebugInfo('Fetching subjects...');
+        
+        // First check stats
+        try {
+          const stats = await getStats();
+          console.log('Riddles stats:', stats);
+          setDebugInfo(prev => `${prev}\nStats: ${stats.totalSubjects} subjects, ${stats.totalChapters} chapters, ${stats.totalQuizRiddles} riddles`);
+        } catch (statsErr) {
+          console.error('Failed to get stats:', statsErr);
+          setDebugInfo(prev => `${prev}\nStats error: ${statsErr instanceof Error ? statsErr.message : 'Unknown'}`);
+        }
         
         // Get all subjects with their chapters
         const subjects = await getSubjects();
+        console.log('Fetched subjects:', subjects);
+        setDebugInfo(prev => `${prev}\nFetched ${subjects.length} subjects`);
+        
         const allChapters: ChapterWithRiddles[] = [];
         
         for (const subject of subjects) {
           if (!subject.id) continue;
           
           try {
+            setDebugInfo(prev => `${prev}\nFetching chapters for ${subject.name}...`);
             const subjectChapters = await getChaptersBySubject(subject.id);
+            console.log(`Chapters for ${subject.name}:`, subjectChapters);
+            setDebugInfo(prev => `${prev} (${subjectChapters.length} chapters)`);
             
             for (const chapter of subjectChapters) {
               allChapters.push({
@@ -53,8 +72,12 @@ export default function RiddlesPage(): JSX.Element {
             }
           } catch (err) {
             console.warn(`Failed to fetch chapters for subject ${subject.name}:`, err);
+            setDebugInfo(prev => `${prev}\nError for ${subject.name}: ${err instanceof Error ? err.message : 'Unknown'}`);
           }
         }
+        
+        console.log('All chapters:', allChapters);
+        setDebugInfo(prev => `${prev}\nTotal chapters: ${allChapters.length}`);
         
         // Sort by subject order, then chapter number
         allChapters.sort((a, b) => {
@@ -67,7 +90,8 @@ export default function RiddlesPage(): JSX.Element {
         setChapters(allChapters);
       } catch (err) {
         console.error('Failed to fetch chapters:', err);
-        setError('Failed to load chapters. Please try again later.');
+        setError(err instanceof Error ? err.message : 'Failed to load chapters. Please try again later.');
+        setDebugInfo(prev => `${prev}\nFatal error: ${err instanceof Error ? err.message : 'Unknown'}`);
       } finally {
         setLoading(false);
       }
@@ -107,7 +131,8 @@ export default function RiddlesPage(): JSX.Element {
         <div className="mx-auto max-w-6xl flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading chapters...</p>
+            <p className="text-gray-600">Loading chapters from backend...</p>
+            <p className="text-xs text-gray-400 mt-2">API: {process.env['NEXT_PUBLIC_API_URL']}</p>
           </div>
         </div>
       </main>
@@ -122,16 +147,29 @@ export default function RiddlesPage(): JSX.Element {
             ← Back to Home
           </Link>
           
-          <div className="text-center py-20 bg-white/50 rounded-2xl">
-            <AlertTriangle className="h-16 w-16 text-amber-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Something went wrong</h2>
-            <p className="text-gray-600 mb-6">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
-            >
-              Try Again
-            </button>
+          <div className="text-center py-12 bg-white/50 rounded-2xl">
+            <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <p className="text-sm text-gray-500 mb-6">API URL: {process.env['NEXT_PUBLIC_API_URL']}</p>
+            
+            {/* Debug Info */}
+            {debugInfo && (
+              <div className="text-left max-w-2xl mx-auto mb-6 p-4 bg-gray-100 rounded-lg">
+                <p className="text-xs font-semibold text-gray-500 mb-2">Debug Info:</p>
+                <pre className="text-xs text-gray-600 whitespace-pre-wrap">{debugInfo}</pre>
+              </div>
+            )}
+            
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Try Again
+              </button>
+            </div>
           </div>
         </div>
       </main>
@@ -228,11 +266,26 @@ export default function RiddlesPage(): JSX.Element {
           </h2>
         </div>
 
+        {/* Debug Toggle */}
+        <details className="mb-6 text-center">
+          <summary className="text-sm text-gray-500 cursor-pointer hover:text-gray-700">Show Debug Info</summary>
+          <div className="mt-2 text-left max-w-2xl mx-auto p-4 bg-gray-100 rounded-lg text-xs font-mono">
+            <p>API URL: {process.env['NEXT_PUBLIC_API_URL']}</p>
+            <p>Total Chapters: {chapters.length}</p>
+            <p>Chapters with Riddles: {chaptersWithRiddles.length}</p>
+            <pre className="mt-2 whitespace-pre-wrap">{debugInfo}</pre>
+          </div>
+        </details>
+
         {/* No Chapters State */}
         {chaptersWithRiddles.length === 0 && (
           <div className="text-center py-12 bg-white/50 rounded-xl">
             <p className="text-gray-500 text-lg">No chapters available yet.</p>
             <p className="text-gray-400 text-sm mt-2">Check back soon!</p>
+            <p className="text-xs text-gray-400 mt-4">
+              API: {process.env['NEXT_PUBLIC_API_URL']}<br/>
+              Total fetched: {chapters.length} chapters
+            </p>
           </div>
         )}
 
