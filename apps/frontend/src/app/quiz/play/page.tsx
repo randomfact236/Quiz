@@ -19,11 +19,15 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { SettingsService } from '@/services/settings.service';
 
-// Time limits based on mode (in seconds)
-const TIME_LIMITS = {
-  normal: undefined, // No time limit
-  timer: 30, // 30 seconds per question
+// Default time limits per level (in seconds) - fallback if settings not available
+const DEFAULT_TIME_LIMITS: Record<string, number> = {
+  easy: 30,
+  medium: 45,
+  hard: 60,
+  expert: 90,
+  extreme: 120,
 };
 
 function QuizContent(): JSX.Element {
@@ -32,6 +36,8 @@ function QuizContent(): JSX.Element {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [showExtendQuiz, setShowExtendQuiz] = useState(false);
   const [additionalQuestions, setAdditionalQuestions] = useState(5);
+  const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
@@ -45,6 +51,37 @@ function QuizContent(): JSX.Element {
   const level = searchParams?.get('level') || '';
   const mode = searchParams?.get('mode') || 'normal';
 
+  // Load timer settings from settings
+  useEffect(() => {
+    const loadTimerSettings = async () => {
+      try {
+        const settings = await SettingsService.getSettings();
+        const levelTimers = settings.quiz?.defaults?.levelTimers;
+        
+        if (mode === 'timer' && level) {
+          // Use level-specific timer if available, otherwise fallback to default
+          const levelKey = level.toLowerCase();
+          const timerValue = levelTimers?.[levelKey as keyof typeof levelTimers] ?? DEFAULT_TIME_LIMITS[levelKey] ?? 30;
+          setTimeLimit(timerValue);
+        } else {
+          setTimeLimit(undefined);
+        }
+      } catch (error) {
+        console.error('Failed to load timer settings:', error);
+        // Fallback to default time limits
+        if (mode === 'timer' && level) {
+          setTimeLimit(DEFAULT_TIME_LIMITS[level.toLowerCase()] ?? 30);
+        } else {
+          setTimeLimit(undefined);
+        }
+      } finally {
+        setIsLoadingSettings(false);
+      }
+    };
+    
+    loadTimerSettings();
+  }, [mode, level]);
+
   // Validate params
   useEffect(() => {
     if (!subject || !chapter || !level) {
@@ -52,9 +89,8 @@ function QuizContent(): JSX.Element {
     }
   }, [subject, chapter, level, router]);
 
-  // Determine time limit and timer mode
+  // Determine timer mode
   const isTimerMode = mode === 'timer';
-  const timeLimit = isTimerMode ? TIME_LIMITS.timer : TIME_LIMITS.normal;
   const timerMode = isTimerMode ? 'per-question' : undefined;
 
   // Get subject name and emoji
@@ -78,7 +114,7 @@ function QuizContent(): JSX.Element {
   }, [quiz.status, router]);
 
   // Loading state
-  if (quiz.status === 'loading') {
+  if (quiz.status === 'loading' || isLoadingSettings) {
     return (
       <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <div className="text-center">

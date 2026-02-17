@@ -7,11 +7,29 @@
  */
 
 /**
+ * Quiz timer settings per difficulty level (in seconds)
+ */
+export interface QuizLevelTimers {
+  /** Timer for easy level */
+  easy: number;
+  /** Timer for medium level */
+  medium: number;
+  /** Timer for hard level */
+  hard: number;
+  /** Timer for expert level */
+  expert: number;
+  /** Timer for extreme level */
+  extreme: number;
+}
+
+/**
  * Quiz default configuration properties
  */
 export interface QuizDefaults {
-  /** Default time limit for quizzes in minutes */
+  /** Default time limit for quizzes in seconds (fallback if level-specific not set) */
   timeLimit?: number;
+  /** Per-level timer settings */
+  levelTimers?: QuizLevelTimers;
   /** Default passing score percentage */
   passingScore?: number;
   /** Whether to show results immediately */

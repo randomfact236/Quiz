@@ -46,7 +46,7 @@ const DIFFICULTY_LEVELS = [
 ] as const;
 
 /**
- * Get default timer value for a difficulty level
+ * Get default timer value for image riddle difficulty level
  */
 function getDefaultTimerValue(level: string): number {
   switch (level) {
@@ -55,6 +55,20 @@ function getDefaultTimerValue(level: string): number {
     case 'hard': return 90;
     case 'expert': return 120;
     default: return 60;
+  }
+}
+
+/**
+ * Get default timer value for quiz difficulty level (in seconds)
+ */
+function getDefaultTimerForLevel(level: string): number {
+  switch (level) {
+    case 'easy': return 30;
+    case 'medium': return 45;
+    case 'hard': return 60;
+    case 'expert': return 90;
+    case 'extreme': return 120;
+    default: return 30;
   }
 }
 
@@ -301,37 +315,78 @@ export function SettingsSection(): JSX.Element {
             <h4 className="text-lg font-semibold dark:text-gray-200">
               Quiz Configuration
             </h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-quiz-cache-ttl"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Subjects Cache TTL (seconds)
-                </label>
-                <input
-                  id="settings-quiz-cache-ttl"
-                  type="number"
-                  value={formData.quiz?.cache?.subjectsTtl ?? 3600}
-                  onChange={(e) => updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  min={0}
-                />
+            
+            {/* Level-based Timer Settings */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
+                ⏱️ Timer Settings Per Difficulty Level (seconds)
+              </h5>
+              <p className="text-sm text-gray-500 mb-4">
+                Set the default timer duration for each difficulty level in timer mode.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+                {(['easy', 'medium', 'hard', 'expert', 'extreme'] as const).map((level) => (
+                  <div key={level}>
+                    <label
+                      htmlFor={`settings-timer-${level}`}
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 capitalize"
+                    >
+                      {level}
+                    </label>
+                    <input
+                      id={`settings-timer-${level}`}
+                      type="number"
+                      value={formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)}
+                      onChange={(e) => updateField(`quiz.defaults.levelTimers.${level}`, parseInt(e.target.value) || 30)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      min={5}
+                      max={600}
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      {Math.floor((formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)) / 60)}m {(formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)) % 60}s
+                    </p>
+                  </div>
+                ))}
               </div>
-              <div>
-                <label
-                  htmlFor="settings-quiz-cache-key"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Cache Key (All Subjects)
-                </label>
-                <input
-                  id="settings-quiz-cache-key"
-                  type="text"
-                  value={formData.quiz?.cache?.allSubjectsKey ?? 'subjects:all'}
-                  onChange={(e) => updateField('quiz.cache.allSubjectsKey', e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
+            </div>
+
+            {/* Cache Settings */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
+                Cache Settings
+              </h5>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="settings-quiz-cache-ttl"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Subjects Cache TTL (seconds)
+                  </label>
+                  <input
+                    id="settings-quiz-cache-ttl"
+                    type="number"
+                    value={formData.quiz?.cache?.subjectsTtl ?? 3600}
+                    onChange={(e) => updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    min={0}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="settings-quiz-cache-key"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Cache Key (All Subjects)
+                  </label>
+                  <input
+                    id="settings-quiz-cache-key"
+                    type="text"
+                    value={formData.quiz?.cache?.allSubjectsKey ?? 'subjects:all'}
+                    onChange={(e) => updateField('quiz.cache.allSubjectsKey', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                </div>
               </div>
             </div>
           </div>
