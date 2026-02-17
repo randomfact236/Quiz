@@ -202,6 +202,9 @@ export function useQuiz(
 
     const timer = setInterval(() => {
       setState(prev => {
+        // Don't count down if paused
+        if (prev.status === 'paused') return prev;
+        
         const newTimeRemaining = prev.timeRemaining - 1;
         if (newTimeRemaining <= 0) {
           // Time's up

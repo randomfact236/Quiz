@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Timer, Pause, Play } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
@@ -182,12 +182,43 @@ function QuizContent(): JSX.Element {
               </Link>
             </div>
 
-            {/* Subject & Chapter Info */}
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                {subjectName}
-              </span>
-              <span className="text-base text-white/90">{chapter}</span>
+            {/* Subject & Chapter Info with Timer */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                  {subjectName}
+                </span>
+                <span className="text-base text-white/90">{chapter}</span>
+              </div>
+              
+              {/* Timer Display */}
+              {isTimerMode && (quiz.status === 'playing' || quiz.status === 'paused') && (
+                <div className="flex items-center gap-2">
+                  {/* Timer Clock */}
+                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
+                    quiz.status === 'paused'
+                      ? 'bg-yellow-500 text-white'
+                      : quiz.timeRemaining <= 10 
+                        ? 'bg-red-500 text-white animate-pulse' 
+                        : quiz.timeRemaining <= 20 
+                          ? 'bg-orange-500 text-white' 
+                          : 'bg-white/90 text-gray-800'
+                  }`}>
+                    <Timer className="h-4 w-4" />
+                    <span>{Math.floor(quiz.timeRemaining / 60)}:{(quiz.timeRemaining % 60).toString().padStart(2, '0')}</span>
+                    {quiz.status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
+                  </div>
+                  
+                  {/* Pause/Resume Button */}
+                  <button
+                    onClick={() => quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz()}
+                    className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
+                    title={quiz.status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
+                  >
+                    {quiz.status === 'paused' ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
