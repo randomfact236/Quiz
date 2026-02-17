@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Image as ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { getChapterProgress } from '@/lib/progress';
 
@@ -194,21 +194,13 @@ function SubjectSelection(): JSX.Element {
   return (
     <div>
       {/* Special Quiz Modes */}
-      <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
         <Link
           href="/quiz/random"
           className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
         >
           <Sparkles className="mb-2 h-8 w-8" />
           <span className="font-bold">Random Quiz</span>
-        </Link>
-        
-        <Link
-          href="/quiz/challenge"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <Puzzle className="mb-2 h-8 w-8" />
-          <span className="font-bold">Challenge</span>
         </Link>
         
         <Link
