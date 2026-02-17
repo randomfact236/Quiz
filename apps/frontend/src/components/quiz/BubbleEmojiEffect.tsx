@@ -108,8 +108,8 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
               opacity: 0,
             }}
             animate={{ 
-              scale: bubble.scale,
-              opacity: 1,
+              scale: [0, bubble.scale * 1.3, bubble.scale, bubble.scale * 0.8, 0],
+              opacity: [0, 1, 1, 0.8, 0],
             }}
             exit={{ 
               scale: 0, 
@@ -117,9 +117,12 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
               transition: { duration: 0.2 }
             }}
             transition={{
-              duration: 0.5,
+              duration: 2,
               delay: bubble.delay,
-              ease: 'easeOut',
+              ease: 'easeInOut',
+              times: [0, 0.2, 0.5, 0.8, 1],
+              repeat: Infinity,
+              repeatDelay: 0.5,
             }}
             className="fixed z-50 text-xl pointer-events-none"
             style={{
