@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
@@ -25,13 +25,12 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
   const [jokeCategories] = useState<JokeCategory[]>(defaultJokeCategories);
   const [jokeFilterCategory, _setJokeFilterCategory] = useState<string>('');
   const [jokeSearch, _setJokeSearch] = useState<string>('');
-
+  const [jokePage, setJokePage] = useState(1);
+  const [pageInput, setPageInput] = useState('1');
   const [statusFilter, _setStatusFilter] = useState<StatusFilter>('published');
   const [selectedIds, _setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, _setBulkActionLoading] = useState(false);
-
-  // Track expanded categories
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const jokesPerPage = 10;
 
   // Modal States
   const [showAddModal, setShowAddModal] = useState(false);
@@ -42,8 +41,8 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
   const [importError, _setImportError] = useState('');
   const [uploadKey, _setUploadKey] = useState(0);
 
-  // Form State - now with question and answer
-  const [jokeForm, setJokeForm] = useState({ question: '', answer: '', category: '' });
+  // Form State
+  const [jokeForm, setJokeForm] = useState({ joke: '', category: '' });
 
   // Export dropdown state
   const [showExportDropdown, setShowExportDropdown] = useState(false);
@@ -57,30 +56,28 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
     statusFilter
   );
 
-  // Group jokes by category
-  const groupedJokes = useMemo(() => {
-    const groups: Record<string, Joke[]> = {};
-    filteredJokes.forEach(joke => {
-      const cat = joke.category || 'Uncategorized';
-      if (!groups[cat]) groups[cat] = [];
-      groups[cat].push(joke);
-    });
-    return groups;
-  }, [filteredJokes]);
+  // Pagination
+  const totalJokePages = Math.ceil(filteredJokes.length / jokesPerPage);
+  const paginatedJokes = filteredJokes.slice((jokePage - 1) * jokesPerPage, jokePage * jokesPerPage);
 
-  const toggleCategory = (category: string) => {
-    setExpandedCategories(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(category)) {
-        newSet.delete(category);
-      } else {
-        newSet.add(category);
-      }
-      return newSet;
-    });
+  // Sync pageInput with jokePage
+  useEffect(() => {
+    setPageInput(String(jokePage));
+  }, [jokePage]);
+
+  // Page input handlers
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageInput(e.target.value);
   };
 
-
+  const handlePageInputSubmit = () => {
+    const page = parseInt(pageInput, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalJokePages) {
+      setJokePage(page);
+    } else {
+      setPageInput(String(jokePage));
+    }
+  };
 
   // Selection handlers
   const toggleSelection = (id: string) => {
@@ -117,32 +114,31 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
 
   // CRUD Functions
   const handleAddJoke = () => {
-    if (!jokeForm.question.trim() || !jokeForm.answer.trim() || !jokeForm.category.trim()) return;
+    if (!jokeForm.joke.trim() || !jokeForm.category.trim()) return;
 
     const newJoke: Joke = {
       id: Date.now(),
-      question: jokeForm.question.trim(),
-      answer: jokeForm.answer.trim(),
+      joke: jokeForm.joke.trim(),
       category: jokeForm.category.trim(),
       status: 'draft',
     };
 
     setAllJokes(prev => [...prev, newJoke]);
     setShowAddModal(false);
-    setJokeForm({ question: '', answer: '', category: '' });
+    setJokeForm({ joke: '', category: '' });
   };
 
   const handleEditJoke = () => {
-    if (!selectedJoke || !jokeForm.question.trim() || !jokeForm.answer.trim() || !jokeForm.category.trim()) return;
+    if (!selectedJoke || !jokeForm.joke.trim() || !jokeForm.category.trim()) return;
 
     setAllJokes(prev => prev.map(j =>
       j.id === selectedJoke.id
-        ? { ...j, question: jokeForm.question.trim(), answer: jokeForm.answer.trim(), category: jokeForm.category.trim() }
+        ? { ...j, joke: jokeForm.joke.trim(), category: jokeForm.category.trim() }
         : j
     ));
     setShowEditModal(false);
     _setSelectedJoke(null);
-    setJokeForm({ question: '', answer: '', category: '' });
+    setJokeForm({ joke: '', category: '' });
   };
 
   // Delete handler
@@ -155,11 +151,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
 
   const openEditModal = (joke: Joke) => {
     _setSelectedJoke(joke);
-    setJokeForm({ 
-      question: joke.question || joke.joke || '', 
-      answer: joke.answer || '', 
-      category: joke.category 
-    });
+    setJokeForm({ joke: joke.joke, category: joke.category });
     setShowEditModal(true);
   };
 
@@ -324,100 +316,112 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
         loading={bulkActionLoading}
       />
 
-      {/* Grouped by Category View */}
-      <div className="space-y-4">
-          {Object.entries(groupedJokes).map(([category, jokes]) => (
-            <div key={category} className="rounded-xl bg-white shadow-md overflow-hidden">
-              <button
-                onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-gray-800">{category}</span>
-                  <span className="text-sm text-gray-500">({jokes.length} jokes)</span>
-                </div>
-                {expandedCategories.has(category) ? <ChevronUp className="h-5 w-5 text-gray-500" /> : <ChevronDown className="h-5 w-5 text-gray-500" />}
-              </button>
-              
-              {expandedCategories.has(category) && (
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-t border-gray-100">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 w-10">
-                        <input
-                          type="checkbox"
-                          checked={jokes.every(j => selectedIds.includes(String(j.id)))}
-                          onChange={() => {
-                            const jokeIds = jokes.map(j => String(j.id));
-                            if (jokes.every(j => selectedIds.includes(String(j.id)))) {
-                              _setSelectedIds(prev => prev.filter(id => !jokeIds.includes(id)));
-                            } else {
-                              _setSelectedIds(prev => [...new Set([...prev, ...jokeIds])]);
-                            }
-                          }}
-                          className="rounded border-gray-300"
-                        />
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 w-1/2">Question</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 w-1/3">Answer</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {jokes.map((joke) => (
-                      <tr key={joke.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedIds.includes(String(joke.id))}
-                            onChange={() => toggleSelection(String(joke.id))}
-                            className="rounded border-gray-300"
-                          />
-                        </td>
-                        <td className="px-4 py-3">
-                          <p className="text-sm text-gray-800 font-medium">{joke.question || joke.joke}</p>
-                          <div className="mt-2 flex gap-2">
-                            <button
-                              onClick={() => openEditModal(joke)}
-                              className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
-                            >
-                              <Pencil className="w-3 h-3" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => { _setSelectedJoke(joke); _setShowDeleteConfirm(true); }}
-                              className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <p className="text-sm text-gray-600 italic">{joke.answer || 'No answer set'}</p>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(joke.status)}`}>
-                            {joke.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          ))}
-        </div>
-      
-      {/* No results message */}
-      {filteredJokes.length === 0 && (
-        <div className="rounded-xl bg-white p-8 text-center shadow-md">
-          <p className="text-gray-500">No jokes found matching your criteria.</p>
+      {/* Table */}
+      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 w-10">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.length > 0 && selectedIds.length === filteredJokes.length}
+                  onChange={() => selectedIds.length === filteredJokes.length ? deselectAll() : selectAll()}
+                  className="rounded border-gray-300"
+                  aria-label="Select all jokes"
+                />
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Joke</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {paginatedJokes.map((joke) => (
+              <tr key={joke.id} className="hover:bg-gray-50">
+                <td className="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(String(joke.id))}
+                    onChange={() => toggleSelection(String(joke.id))}
+                    className="rounded border-gray-300"
+                    aria-label={`Select joke ${joke.id}`}
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <p className="text-sm text-gray-800">{joke.joke}</p>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={() => openEditModal(joke)}
+                      className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
+                      aria-label={`Edit joke ${joke.id}`}
+                    >
+                      <Pencil className="w-3 h-3" />
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => { _setSelectedJoke(joke); _setShowDeleteConfirm(true); }}
+                      className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
+                      aria-label={`Delete joke ${joke.id}`}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      Delete
+                    </button>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
+                    {joke.category}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(joke.status)}`}>
+                    {joke.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      {filteredJokes.length > 0 && (
+        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
+          <p className="text-sm text-gray-500">
+            Showing {Math.min((jokePage - 1) * jokesPerPage + 1, filteredJokes.length)} - {Math.min(jokePage * jokesPerPage, filteredJokes.length)} of {filteredJokes.length} items
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setJokePage(p => Math.max(1, p - 1))}
+              disabled={jokePage === 1}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-gray-600 flex items-center gap-1">
+              Page
+              <input
+                type="text"
+                value={pageInput}
+                onChange={handlePageInputChange}
+                onBlur={handlePageInputSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
+                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+              />
+              of <span className="font-medium">{totalJokePages || 1}</span>
+            </span>
+            <button
+              onClick={() => setJokePage(p => Math.min(totalJokePages, p + 1))}
+              disabled={jokePage >= totalJokePages}
+              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Add/Edit Modal with Question and Answer */}
+      {/* Simple Add/Edit Modal */}
       {(showAddModal || showEditModal) && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-xl">
@@ -426,26 +430,14 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
             </h3>
             <div className="space-y-4">
               <div>
-                <label htmlFor="joke-question" className="block text-sm font-medium text-gray-700 mb-1">Question *</label>
+                <label htmlFor="joke-text" className="block text-sm font-medium text-gray-700 mb-1">Joke *</label>
                 <textarea
-                  id="joke-question"
-                  value={jokeForm.question}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, question: e.target.value }))}
+                  id="joke-text"
+                  value={jokeForm.joke}
+                  onChange={(e) => setJokeForm(prev => ({ ...prev, joke: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  rows={3}
-                  placeholder="Enter the joke question..."
-                  aria-required="true"
-                />
-              </div>
-              <div>
-                <label htmlFor="joke-answer" className="block text-sm font-medium text-gray-700 mb-1">Answer *</label>
-                <input
-                  id="joke-answer"
-                  type="text"
-                  value={jokeForm.answer}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, answer: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  placeholder="Enter the punchline/answer..."
+                  rows={4}
+                  placeholder="Enter the joke..."
                   aria-required="true"
                 />
               </div>
@@ -467,14 +459,14 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
             </div>
             <div className="flex gap-2 pt-4">
               <button
-                onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ question: '', answer: '', category: '' }); }}
+                onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ joke: '', category: '' }); }}
                 className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
               >
                 Cancel
               </button>
               <button
                 onClick={showAddModal ? handleAddJoke : handleEditJoke}
-                disabled={!jokeForm.question.trim() || !jokeForm.answer.trim() || !jokeForm.category.trim()}
+                disabled={!jokeForm.joke.trim() || !jokeForm.category.trim()}
                 className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
               >
                 {showAddModal ? 'Add Joke' : 'Save Changes'}
@@ -493,8 +485,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
               Are you sure you want to delete this joke? This action cannot be undone.
             </p>
             <div className="bg-gray-50 p-3 rounded-lg mb-6">
-              <p className="font-medium text-gray-800">{selectedJoke.question || selectedJoke.joke}</p>
-              <p className="text-sm text-gray-600 italic mt-1">{selectedJoke.answer}</p>
+              <p className="font-medium text-gray-800">{selectedJoke.joke}</p>
               <p className="text-sm text-gray-500 mt-1">Category: {selectedJoke.category}</p>
             </div>
             <div className="flex gap-2">
@@ -533,11 +524,11 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
               <div className="bg-gray-50 p-4 rounded-lg text-sm">
                 <p className="font-medium mb-2">CSV Format (with headers):</p>
                 <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                  question,answer,category,status
+                  joke,category,status
                 </code>
                 <p className="font-medium mt-3 mb-2">JSON Format:</p>
                 <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                  {`{"jokes": [{"question": "...", "answer": "...", "category": "...", "status": "draft"}]}`}
+                  {`{"jokes": [{"joke": "...", "category": "...", "status": "draft"}]}`}
                 </code>
               </div>
 

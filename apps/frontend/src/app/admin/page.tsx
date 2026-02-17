@@ -63,14 +63,11 @@ type ContentStatus = 'published' | 'draft' | 'trash';
 /** Joke Type - Enterprise Grade */
 type Joke = {
   id: number;
-  question: string;
-  answer: string;
+  joke: string;
   category: string;
   status: ContentStatus;
   createdAt?: string;
   updatedAt?: string;
-  /** @deprecated Use question field instead */
-  joke?: string;
 };
 
 /** Joke Category Type - Available for future use */

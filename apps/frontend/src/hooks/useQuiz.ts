@@ -57,41 +57,6 @@ function loadQuestions(subject: string, chapter: string, level: string): Questio
   return filtered.slice(0, 10);
 }
 
-/** Load questions for challenge modes (all subjects, mixed levels) */
-function loadChallengeQuestions(
-  subject: string, 
-  level: string, 
-  maxQuestions: number = 10
-): Question[] {
-  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-  
-  let questions: Question[] = [];
-  
-  if (subject === 'all') {
-    // Load from all subjects
-    Object.values(allQuestions).forEach((subjectQuestions) => {
-      questions = questions.concat(
-        subjectQuestions.filter((q) => {
-          if (q.status === 'trash' || q.status === 'draft') return false;
-          if (level !== 'all' && q.level !== level) return false;
-          return true;
-        })
-      );
-    });
-  } else {
-    // Load from specific subject
-    const subjectQuestions = allQuestions[subject] || [];
-    questions = subjectQuestions.filter((q) => {
-      if (q.status === 'trash' || q.status === 'draft') return false;
-      if (level !== 'all' && q.level !== level) return false;
-      return true;
-    });
-  }
-  
-  // Shuffle and limit
-  return questions.sort(() => Math.random() - 0.5).slice(0, maxQuestions);
-}
-
 /** Load additional questions excluding already shown ones */
 function loadAdditionalQuestions(
   subject: string, 
@@ -176,8 +141,7 @@ export function useQuiz(
   chapter: string, 
   level: string,
   timeLimit?: number, // in seconds, undefined = no limit
-  timerMode: 'total' | 'per-question' = 'per-question', // 'total' = whole quiz, 'per-question' = per question
-  isChallenge: boolean = false // Whether this is a challenge mode (all subjects)
+  timerMode: 'total' | 'per-question' = 'per-question' // 'total' = whole quiz, 'per-question' = per question
 ): UseQuizReturn {
   // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
@@ -195,15 +159,7 @@ export function useQuiz(
 
   // Load questions on mount
   useEffect(() => {
-    let questions: Question[] = [];
-    
-    if (isChallenge || subject === 'all') {
-      // Challenge mode - load from all subjects or specific subject with mixed levels
-      questions = loadChallengeQuestions(subject, level, 10);
-    } else {
-      // Normal mode - load specific subject, chapter, level
-      questions = loadQuestions(subject, chapter, level);
-    }
+    const questions = loadQuestions(subject, chapter, level);
     
     if (questions.length === 0) {
       setState(prev => ({ ...prev, status: 'completed' }));
@@ -213,10 +169,10 @@ export function useQuiz(
     // Create new session
     sessionRef.current = {
       id: generateUUID(),
-      subject: subject === 'all' ? 'challenge' : subject,
-      subjectName: subject === 'all' ? 'Challenge Mode' : getSubjectName(subject),
-      chapter: chapter === 'all' ? 'Mixed' : chapter,
-      level: level === 'all' ? 'mixed' : level,
+      subject,
+      subjectName: getSubjectName(subject),
+      chapter,
+      level,
       questions,
       answers: {},
       score: 0,
@@ -238,7 +194,7 @@ export function useQuiz(
 
     // Save session for potential resume
     saveCurrentSession(sessionRef.current);
-  }, [subject, chapter, level, timeLimit, isChallenge]);
+  }, [subject, chapter, level, timeLimit]);
 
   // Timer effect
   useEffect(() => {
@@ -401,9 +357,7 @@ export function useQuiz(
     
     // Count available questions for extending
     const shownIds = state.questions.map(q => q.id);
-    const availableQuestions = isChallenge || subject === 'all' 
-      ? 0 // No extending in challenge mode
-      : countAvailableQuestions(subject, chapter, level, shownIds);
+    const availableQuestions = countAvailableQuestions(subject, chapter, level, shownIds);
 
     return {
       currentQuestion,
@@ -415,7 +369,7 @@ export function useQuiz(
       answeredCount,
       availableQuestions,
     };
-  }, [state.questions, state.currentQuestionIndex, state.answers, subject, chapter, level, isChallenge]);
+  }, [state.questions, state.currentQuestionIndex, state.answers, subject, chapter, level]);
 
   return {
     ...state,
