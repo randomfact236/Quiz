@@ -17,84 +17,25 @@ import {
 } from 'lucide-react';
 
 // Types
+import type {
+  Riddle,
+  Subject,
+  Joke,
+  ContentStatus,
+  Question,
+  MenuSection
+} from './types';
 
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
-// StatusService moved to hook usage
-// import { StatusService } from '@/services/status.service';
+
 import {
   initialJokes as libInitialJokes,
   initialRiddles as libInitialRiddles
 } from '@/lib/initial-data';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
-
-
-type Question = {
-  id: number;
-  question: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-  chapter: string;
-  status?: ContentStatus;
-};
-
-type Subject = {
-  id: number;
-  slug: string;
-  name: string;
-  emoji: string;
-  category: 'academic' | 'professional' | 'entertainment';
-  order?: number;
-};
-
-type MenuSection = 'dashboard' | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology' | 'jokes' | 'riddles' | 'image-riddles' | 'users' | 'settings';
-
-// ============================================================================
-// ENTERPRISE-GRADE CONTENT TYPES
-// ============================================================================
-
-/** Content Status Type */
-type ContentStatus = 'published' | 'draft' | 'trash';
-
-/** Joke Type - Enterprise Grade */
-type Joke = {
-  id: number;
-  joke: string;
-  category: string;
-  status: ContentStatus;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-/** Joke Category Type - Available for future use */
-// type JokeCategory = {
-//   id: number;
-//   name: string;
-//   emoji: string;
-//   description?: string;
-// };
-
-/**
- * Riddle Type - Enterprise Grade
- */
-type Riddle = {
-  id: string;
-  question: string;
-  answer?: string;
-  options: string[];
-  correctOption: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  chapter: string;
-  status: ContentStatus;
-  createdAt: string;
-  updatedAt: string;
-};
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
 // type ImageRiddle = {
@@ -235,6 +176,7 @@ export default function AdminPage(): JSX.Element {
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [quizModuleExpanded, setQuizModuleExpanded] = useState(true);
+  const [riddleModuleExpanded, setRiddleModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
   // Load active section from localStorage after hydration (to avoid SSR mismatch)
@@ -507,8 +449,9 @@ export default function AdminPage(): JSX.Element {
                 activeSection={activeSection}
                 activeChapter={riddleFilterChapter}
                 sidebarOpen={sidebarOpen}
-                moduleExpanded={otherModulesExpanded}
+                moduleExpanded={riddleModuleExpanded}
                 onToggleExpand={() => {
+                  setRiddleModuleExpanded(!riddleModuleExpanded);
                   setActiveSection('riddles');
                   setRiddleFilterChapter('');
                 }}
