@@ -117,14 +117,14 @@ export async function getAllChapters(): Promise<RiddleChapter[]> {
   // Get all subjects first, then fetch chapters for each
   const subjects = await getSubjects();
   const allChapters: RiddleChapter[] = [];
-  
+
   for (const subject of subjects) {
     if (subject.id) {
       const chapters = await getChaptersBySubject(subject.id);
       allChapters.push(...chapters.map(ch => ({ ...ch, subject })));
     }
   }
-  
+
   return allChapters;
 }
 
@@ -263,6 +263,7 @@ export interface RiddlesStats {
   totalSubjects: number;
   totalChapters: number;
   riddlesByDifficulty: Record<string, number>;
+  quizRiddlesByDifficulty: Record<string, number>;
 }
 
 /**
@@ -298,7 +299,7 @@ export async function getChaptersWithCounts(): Promise<
   Array<{ id: string; title: string; icon: string; count: number }>
 > {
   const chapters = await getAllChapters();
-  
+
   return chapters.map(ch => ({
     id: ch.id,
     title: ch.name,

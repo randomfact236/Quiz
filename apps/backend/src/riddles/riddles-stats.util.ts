@@ -16,6 +16,7 @@ export interface RiddlesStats {
   totalSubjects: number;
   totalChapters: number;
   riddlesByDifficulty: Record<string, number>;
+  quizRiddlesByDifficulty: Record<string, number>;
 }
 
 /**
@@ -52,6 +53,7 @@ export async function computeRiddleStats(
       totalSubjects,
       totalChapters,
       difficultyRows,
+      quizDifficultyRows,
     ] = await Promise.all([
       // H-4 fix: restrict to PUBLISHED only — DRAFT and TRASH must not be counted
       riddleRepo.count({ where: { status: ContentStatus.PUBLISHED } }),
@@ -68,12 +70,24 @@ export async function computeRiddleStats(
         .where('riddle.status = :status', { status: ContentStatus.PUBLISHED })
         .groupBy('riddle.difficulty')
         .getRawMany<{ difficulty: string; count: string }>(),
+      // Quiz Riddle difficulty distribution
+      quizRiddleRepo
+        .createQueryBuilder('quiz_riddle')
+        .select('quiz_riddle.level', 'level')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('quiz_riddle.level')
+        .getRawMany<{ level: string; count: string }>(),
     ]);
 
     // Convert raw rows to a typed map, parsing the count string to number
     const riddlesByDifficulty: Record<string, number> = {};
     for (const row of difficultyRows) {
       riddlesByDifficulty[row.difficulty] = parseInt(row.count, 10);
+    }
+
+    const quizRiddlesByDifficulty: Record<string, number> = {};
+    for (const row of quizDifficultyRows) {
+      quizRiddlesByDifficulty[row.level] = parseInt(row.count, 10);
     }
 
     return {
@@ -83,6 +97,7 @@ export async function computeRiddleStats(
       totalSubjects,
       totalChapters,
       riddlesByDifficulty,
+      quizRiddlesByDifficulty,
     };
   } catch (error) {
     throw new Error(`Failed to compute riddle statistics: ${(error as Error).message}`);
