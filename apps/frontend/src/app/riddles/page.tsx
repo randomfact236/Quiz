@@ -3,14 +3,11 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 
 import { getStats } from '@/lib/riddles-api';
 import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 
-
-
-import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 export default function RiddlesPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
