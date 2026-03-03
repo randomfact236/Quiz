@@ -458,7 +458,7 @@ export class RiddlesService {
     return this.chapterRepo.find({
       where: { subject: { id: subjectId } },
       order: { chapterNumber: 'ASC' },
-      relations: ['subject'],
+      relations: ['subject', 'riddles'],
     });
   }
 

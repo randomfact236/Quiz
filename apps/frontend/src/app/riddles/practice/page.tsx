@@ -144,7 +144,8 @@ export default function RiddlePracticePage(): JSX.Element {
       counts.chapterWise[chapterName] = {};
 
       for (const riddle of chapter.riddles) {
-        const level = riddle.level?.toLowerCase() || 'medium';
+        let level = riddle.level?.toLowerCase() || 'medium';
+        if (level === 'extreme') level = 'expert';
 
         // Skip if not a valid level
         if (!level || !(level in counts.allChapter)) continue;
