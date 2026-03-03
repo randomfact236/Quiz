@@ -16,8 +16,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, GraduationCap, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 
 import { getSubjects, getChaptersBySubject, getStats, type RiddlesStats } from '@/lib/riddles-api';
-import type { RiddleSubject, RiddleChapter } from '@/types/riddles';
+import type { RiddleChapter } from '@/types/riddles';
 import { DEFAULT_CHAPTER_ICONS } from '@/types/riddles';
+import { RiddleStatsBanner } from '../components/RiddleStatsBanner';
 
 // Riddle difficulty levels
 const levels = ['Easy', 'Medium', 'Hard', 'Expert'] as const;
@@ -50,51 +51,41 @@ interface LevelCount {
   completeMix: number;
 }
 
-// Group array into chunks of size n
-function chunkArray<T>(arr: T[], n: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < arr.length; i += n) {
-    chunks.push(arr.slice(i, i + n));
-  }
-  return chunks;
-}
 
 export default function RiddlePracticePage(): JSX.Element {
   const router = useRouter();
-  
+
   // Loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Data states
-  const [subjects, setSubjects] = useState<RiddleSubject[]>([]);
   const [chapters, setChapters] = useState<ChapterWithSubject[]>([]);
   const [stats, setStats] = useState<RiddlesStats | null>(null);
-  
+
   // Foldable sections state - default expanded
   const [chapterWiseOpen, setChapterWiseOpen] = useState(true);
   const [allChapterOpen, setAllChapterOpen] = useState(true);
   const [completeMixOpen, setCompleteMixOpen] = useState(true);
-  
+
   // Expanded chapter for showing levels
   const [expandedChapterId, setExpandedChapterId] = useState<string | null>(null);
-  
+
   // Fetch data from backend
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
         setError(null);
-        
+
         // Fetch stats, subjects and chapters from backend
         const [statsData, subjectsData] = await Promise.all([
           getStats(),
           getSubjects()
         ]);
-        
+
         setStats(statsData);
-        setSubjects(subjectsData);
-        
+
         // Fetch chapters for each subject
         const allChapters: ChapterWithSubject[] = [];
         for (const subject of subjectsData) {
@@ -114,7 +105,7 @@ export default function RiddlePracticePage(): JSX.Element {
             }
           }
         }
-        
+
         setChapters(allChapters);
       } catch (err) {
         console.error('Failed to fetch data:', err);
@@ -123,10 +114,10 @@ export default function RiddlePracticePage(): JSX.Element {
         setLoading(false);
       }
     }
-    
+
     fetchData();
   }, []);
-  
+
   // Calculate level counts from backend data
   const levelCounts: LevelCount = useMemo(() => {
     const counts: LevelCount = {
@@ -134,34 +125,34 @@ export default function RiddlePracticePage(): JSX.Element {
       allChapter: { easy: 0, medium: 0, hard: 0, expert: 0 },
       completeMix: stats?.totalQuizRiddles || 0
     };
-    
+
     // Calculate per-chapter and total counts by difficulty
     for (const chapter of chapters) {
       if (!chapter.riddles) continue;
-      
+
       const chapterName = chapter.name;
       counts.chapterWise[chapterName] = {};
-      
+
       for (const riddle of chapter.riddles) {
         const level = riddle.level?.toLowerCase() || 'medium';
-        
+
         // Skip if not a valid level
-        if (!counts.allChapter[level]) continue;
-        
+        if (!level || !counts.allChapter[level]) continue;
+
         // Count per chapter
         if (!counts.chapterWise[chapterName][level]) {
           counts.chapterWise[chapterName][level] = 0;
         }
         counts.chapterWise[chapterName][level]++;
-        
+
         // Count total per level
         counts.allChapter[level]++;
       }
     }
-    
+
     return counts;
   }, [chapters, stats]);
-  
+
   // Group chapters by subject for display
   const chaptersBySubject = useMemo(() => {
     const grouped: Record<string, ChapterWithSubject[]> = {};
@@ -173,11 +164,11 @@ export default function RiddlePracticePage(): JSX.Element {
     }
     return grouped;
   }, [chapters]);
-  
+
   // Convert to rows for display
   const subjectEntries = useMemo(() => Object.entries(chaptersBySubject), [chaptersBySubject]);
-  
-  const handleStartChapterWise = (chapterId: string, chapterName: string, level: Level) => {
+
+  const handleStartChapterWise = (chapterId: string, _chapterName: string, level: Level) => {
     router.push(`/riddles/play?chapterId=${encodeURIComponent(chapterId)}&level=${level.toLowerCase()}&mode=practice`);
   };
 
@@ -225,14 +216,14 @@ export default function RiddlePracticePage(): JSX.Element {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
         <div className="mx-auto max-w-4xl">
-          <Link 
-            href="/riddles" 
+          <Link
+            href="/riddles"
             className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Riddles
           </Link>
-          
+
           <div className="text-center py-20 bg-white/50 rounded-2xl">
             <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
@@ -252,54 +243,33 @@ export default function RiddlePracticePage(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
       <div className="mx-auto max-w-4xl">
-        <Link 
-          href="/riddles" 
+        <Link
+          href="/riddles"
           className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Riddles
         </Link>
-        
-        <motion.h1 
+
+        <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 text-center text-3xl font-bold text-gray-800"
+          className="mb-8 text-center text-4xl font-extrabold text-gray-800 tracking-tight"
         >
-          <span className="mr-2">📚</span>
-          Riddle Practice Mode
+          <span className="mr-3 opacity-80">📚</span>
+          Practice Mode
         </motion.h1>
-        
-        {/* Stats Banner */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 grid grid-cols-2 sm:grid-cols-4 gap-4"
-        >
-          <div className="rounded-xl bg-white/70 p-4 text-center shadow-md backdrop-blur">
-            <span className="text-2xl">🧩</span>
-            <p className="text-2xl font-bold text-gray-800">{stats?.totalQuizRiddles || 0}</p>
-            <p className="text-sm text-gray-600">Total Riddles</p>
-          </div>
-          <div className="rounded-xl bg-white/70 p-4 text-center shadow-md backdrop-blur">
-            <span className="text-2xl">📚</span>
-            <p className="text-2xl font-bold text-gray-800">{stats?.totalSubjects || 0}</p>
-            <p className="text-sm text-gray-600">Subjects</p>
-          </div>
-          <div className="rounded-xl bg-white/70 p-4 text-center shadow-md backdrop-blur">
-            <span className="text-2xl">📖</span>
-            <p className="text-2xl font-bold text-gray-800">{stats?.totalChapters || 0}</p>
-            <p className="text-sm text-gray-600">Chapters</p>
-          </div>
-          <div className="rounded-xl bg-white/70 p-4 text-center shadow-md backdrop-blur">
-            <span className="text-2xl">🎯</span>
-            <p className="text-2xl font-bold text-gray-800">4</p>
-            <p className="text-sm text-gray-600">Difficulty Levels</p>
-          </div>
-        </motion.div>
-        
+
+        <RiddleStatsBanner
+          totalRiddles={stats?.totalQuizRiddles || 0}
+          totalSubjects={stats?.totalSubjects || 0}
+          totalChapters={stats?.totalChapters || 0}
+          perRiddleTime="No Limit"
+        />
+
         <div className="space-y-6">
           {/* Chapter Wise Mix */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -318,7 +288,7 @@ export default function RiddlePracticePage(): JSX.Element {
               </div>
               {chapterWiseOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
             </button>
-            
+
             {chapterWiseOpen && (
               <div className="p-6">
                 {/* Chapters grouped by subject */}
@@ -329,23 +299,22 @@ export default function RiddlePracticePage(): JSX.Element {
                         <span>{subjectChapters[0]?.subjectEmoji || '📚'}</span>
                         {subjectName}
                       </h3>
-                      
+
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                         {subjectChapters.map((chapter) => {
                           const totalRiddles = getTotalRiddlesForChapter(chapter.name);
                           const isExpanded = expandedChapterId === chapter.id;
                           const chapterIcon = DEFAULT_CHAPTER_ICONS[chapter.name] || '📖';
-                          
+
                           return (
                             <div key={chapter.id}>
                               <button
                                 onClick={() => toggleChapter(chapter.id)}
                                 disabled={totalRiddles === 0}
-                                className={`w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-                                  isExpanded 
-                                    ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300' 
-                                    : 'bg-white border-2 border-gray-200 hover:border-blue-200'
-                                }`}
+                                className={`w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isExpanded
+                                  ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300'
+                                  : 'bg-white border-2 border-gray-200 hover:border-blue-200'
+                                  }`}
                               >
                                 <span className="text-3xl mb-1">{chapterIcon}</span>
                                 <span className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800'}`}>
@@ -355,7 +324,7 @@ export default function RiddlePracticePage(): JSX.Element {
                                   {totalRiddles} riddles
                                 </span>
                               </button>
-                              
+
                               {/* Level selection - shown when expanded */}
                               <AnimatePresence>
                                 {isExpanded && (
@@ -378,9 +347,8 @@ export default function RiddlePracticePage(): JSX.Element {
                                               onClick={() => handleStartChapterWise(chapter.id, chapter.name, level)}
                                               disabled={count === 0}
                                               title={`${level}: ${count} riddles`}
-                                              className={`flex items-center justify-center gap-1 rounded-lg p-2 text-xs font-medium text-white shadow-sm transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed ${
-                                                count > 0 ? `bg-gradient-to-br ${levelColors[level]}` : 'bg-gray-300'
-                                              }`}
+                                              className={`flex items-center justify-center gap-1 rounded-lg p-2 text-xs font-medium text-white shadow-sm transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed ${count > 0 ? `bg-gradient-to-br ${levelColors[level]}` : 'bg-gray-300'
+                                                }`}
                                             >
                                               <span>{levelEmojis[level]}</span>
                                               <span>{level}</span>
@@ -400,7 +368,7 @@ export default function RiddlePracticePage(): JSX.Element {
                     </div>
                   ))}
                 </div>
-                
+
                 {chapters.length === 0 && (
                   <div className="text-center py-8">
                     <p className="text-gray-500">No chapters available. Please check back later!</p>
@@ -411,7 +379,7 @@ export default function RiddlePracticePage(): JSX.Element {
           </motion.div>
 
           {/* All Chapter Level Wise Mix */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -430,7 +398,7 @@ export default function RiddlePracticePage(): JSX.Element {
               </div>
               {allChapterOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
             </button>
-            
+
             {allChapterOpen && (
               <div className="p-6">
                 <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
@@ -458,7 +426,7 @@ export default function RiddlePracticePage(): JSX.Element {
           </motion.div>
 
           {/* Complete Mix */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -477,7 +445,7 @@ export default function RiddlePracticePage(): JSX.Element {
               </div>
               {completeMixOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
             </button>
-            
+
             {completeMixOpen && (
               <div className="p-6 text-center">
                 <p className="mb-4 text-gray-600">

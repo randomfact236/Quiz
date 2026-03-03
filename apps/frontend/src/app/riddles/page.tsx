@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertTriangle, Loader2, Play, RefreshCw } from 'lucide-react';
 
 import { getItem, setItem } from '@/lib/storage';
-import { 
-  getSubjects, 
+import {
+  getSubjects,
   getChaptersBySubject,
   getStats
 } from '@/lib/riddles-api';
@@ -21,6 +21,8 @@ interface ChapterWithRiddles extends ChapterDisplay {
   subjectEmoji?: string;
 }
 
+import { RiddleStatsBanner } from './components/RiddleStatsBanner';
+
 export default function RiddlesPage(): JSX.Element {
   const [chapters, setChapters] = useState<ChapterWithRiddles[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,41 +30,40 @@ export default function RiddlesPage(): JSX.Element {
   const [debugInfo, setDebugInfo] = useState<string>('');
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
   const [showDataLossWarning, setShowDataLossWarning] = useState(false);
+  const [stats, setStats] = useState<{ totalSubjects: number, totalChapters: number, totalQuizRiddles: number } | null>(null);
 
   // Fetch chapters from backend
   useEffect(() => {
-    async function fetchChapters() {
+    async function fetchData() {
       try {
         setLoading(true);
         setError(null);
-        setDebugInfo('Fetching subjects...');
-        
-        // First check stats
-        try {
-          const stats = await getStats();
-          console.log('Riddles stats:', stats);
-          setDebugInfo(prev => `${prev}\nStats: ${stats.totalSubjects} subjects, ${stats.totalChapters} chapters, ${stats.totalQuizRiddles} riddles`);
-        } catch (statsErr) {
-          console.error('Failed to get stats:', statsErr);
-          setDebugInfo(prev => `${prev}\nStats error: ${statsErr instanceof Error ? statsErr.message : 'Unknown'}`);
+        setDebugInfo('Fetching data...');
+
+        // Fetch stats and subjects in parallel
+        const [statsData, subjectsData] = await Promise.all([
+          getStats().catch(err => {
+            console.error('Failed to get stats:', err);
+            return null;
+          }),
+          getSubjects()
+        ]);
+
+        if (statsData) {
+          setStats(statsData);
+          setDebugInfo(prev => `${prev}\nStats: ${statsData.totalSubjects} subjects, ${statsData.totalChapters} chapters, ${statsData.totalQuizRiddles} riddles`);
         }
-        
-        // Get all subjects with their chapters
-        const subjects = await getSubjects();
-        console.log('Fetched subjects:', subjects);
-        setDebugInfo(prev => `${prev}\nFetched ${subjects.length} subjects`);
-        
+
+        console.log('Fetched subjects:', subjectsData);
+        setDebugInfo(prev => `${prev}\nFetched ${subjectsData.length} subjects`);
+
         const allChapters: ChapterWithRiddles[] = [];
-        
-        for (const subject of subjects) {
+
+        for (const subject of subjectsData) {
           if (!subject.id) continue;
-          
+
           try {
-            setDebugInfo(prev => `${prev}\nFetching chapters for ${subject.name}...`);
             const subjectChapters = await getChaptersBySubject(subject.id);
-            console.log(`Chapters for ${subject.name}:`, subjectChapters);
-            setDebugInfo(prev => `${prev} (${subjectChapters.length} chapters)`);
-            
             for (const chapter of subjectChapters) {
               allChapters.push({
                 ...adaptChapter(chapter),
@@ -72,13 +73,9 @@ export default function RiddlesPage(): JSX.Element {
             }
           } catch (err) {
             console.warn(`Failed to fetch chapters for subject ${subject.name}:`, err);
-            setDebugInfo(prev => `${prev}\nError for ${subject.name}: ${err instanceof Error ? err.message : 'Unknown'}`);
           }
         }
-        
-        console.log('All chapters:', allChapters);
-        setDebugInfo(prev => `${prev}\nTotal chapters: ${allChapters.length}`);
-        
+
         // Sort by subject order, then chapter number
         allChapters.sort((a, b) => {
           if (a.subjectId !== b.subjectId) {
@@ -86,18 +83,17 @@ export default function RiddlesPage(): JSX.Element {
           }
           return a.chapterNumber - b.chapterNumber;
         });
-        
+
         setChapters(allChapters);
       } catch (err) {
-        console.error('Failed to fetch chapters:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load chapters. Please try again later.');
-        setDebugInfo(prev => `${prev}\nFatal error: ${err instanceof Error ? err.message : 'Unknown'}`);
+        console.error('Failed to fetch data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load data. Please try again later.');
       } finally {
         setLoading(false);
       }
     }
-    
-    fetchChapters();
+
+    fetchData();
   }, []);
 
   // Load data loss warning state
@@ -113,7 +109,7 @@ export default function RiddlesPage(): JSX.Element {
 
   // Filter chapters with riddles vs empty
   const chaptersWithRiddles = chapters.filter(c => c.riddleCount > 0);
-  const totalRiddles = chapters.reduce((sum, c) => sum + c.riddleCount, 0);
+  const totalRiddles = stats?.totalQuizRiddles || chapters.reduce((sum, c) => sum + c.riddleCount, 0);
 
   // Group chapters by subject for display
   const chaptersBySubject = chaptersWithRiddles.reduce((acc, chapter) => {
@@ -146,13 +142,13 @@ export default function RiddlesPage(): JSX.Element {
           <Link href="/" className="mb-6 inline-block rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60">
             ← Back to Home
           </Link>
-          
+
           <div className="text-center py-12 bg-white/50 rounded-2xl">
             <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
             <p className="text-gray-600 mb-4">{error}</p>
             <p className="text-sm text-gray-500 mb-6">API URL: {process.env['NEXT_PUBLIC_API_URL']}</p>
-            
+
             {/* Debug Info */}
             {debugInfo && (
               <div className="text-left max-w-2xl mx-auto mb-6 p-4 bg-gray-100 rounded-lg">
@@ -160,7 +156,7 @@ export default function RiddlesPage(): JSX.Element {
                 <pre className="text-xs text-gray-600 whitespace-pre-wrap">{debugInfo}</pre>
               </div>
             )}
-            
+
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => window.location.reload()}
@@ -180,8 +176,8 @@ export default function RiddlesPage(): JSX.Element {
     <main className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
       <div className="mx-auto max-w-6xl">
         {/* Back Button */}
-        <Link href="/" className="mb-6 inline-block rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md">
-          ← Back to Home
+        <Link href="/" className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md">
+          <span className="text-lg">←</span> Back to Home
         </Link>
 
         {/* Data Loss Warning Banner */}
@@ -191,12 +187,12 @@ export default function RiddlesPage(): JSX.Element {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="mb-6 rounded-xl bg-amber-50 border-2 border-amber-200 p-4 flex items-start gap-3"
+              className="mb-8 rounded-xl bg-amber-50 border-2 border-amber-200 p-4 flex items-start gap-3"
             >
               <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-amber-800">
-                  <strong>Important:</strong> Your riddle progress is saved on this device only. 
+                <p className="text-sm text-amber-800 leading-relaxed">
+                  <strong>Important:</strong> Your riddle progress is saved on this device only.
                   Clearing browser data will erase your history.
                 </p>
               </div>
@@ -211,21 +207,21 @@ export default function RiddlesPage(): JSX.Element {
         </AnimatePresence>
 
         {/* Header */}
-        <div className="mb-10 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-800">
-            <span className="mx-2">🎭</span>
+        <div className="mb-12 text-center">
+          <h1 className="mb-3 text-5xl font-extrabold text-gray-800 tracking-tight">
+            <span className="mx-3 opacity-80 filter grayscale-[0.2]">🎭</span>
             Riddles
-            <span className="mx-2">🎭</span>
+            <span className="mx-3 opacity-80 filter grayscale-[0.2]">🎭</span>
           </h1>
-          <p className="text-lg text-gray-600">Challenge your brain!</p>
-          
-          {totalRiddles > 0 && (
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-sm text-gray-700">
-              <span className="font-semibold text-indigo-600">{totalRiddles}</span> riddles across{' '}
-              <span className="font-semibold text-indigo-600">{chaptersWithRiddles.length}</span> chapters
-            </div>
-          )}
+          <p className="text-xl text-gray-500 font-medium">Challenge your brain with clever puzzles!</p>
         </div>
+
+        {/* Stats Banner */}
+        <RiddleStatsBanner
+          totalRiddles={totalRiddles}
+          totalSubjects={stats?.totalSubjects || 0}
+          totalChapters={stats?.totalChapters || chaptersWithRiddles.length}
+        />
 
         {/* Mode Selection Cards */}
         <div className="mb-12 grid gap-6 sm:grid-cols-2" role="group" aria-label="Game mode selection">
@@ -283,7 +279,7 @@ export default function RiddlesPage(): JSX.Element {
             <p className="text-gray-500 text-lg">No chapters available yet.</p>
             <p className="text-gray-400 text-sm mt-2">Check back soon!</p>
             <p className="text-xs text-gray-400 mt-4">
-              API: {process.env['NEXT_PUBLIC_API_URL']}<br/>
+              API: {process.env['NEXT_PUBLIC_API_URL']}<br />
               Total fetched: {chapters.length} chapters
             </p>
           </div>
@@ -297,11 +293,11 @@ export default function RiddlesPage(): JSX.Element {
                 <span>{subjectChapters[0]?.subjectEmoji || '📚'}</span>
                 {subjectName}
               </h3>
-              
+
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {subjectChapters.map((chapter) => {
                   const isSelected = selectedChapter === chapter.id;
-                  
+
                   return (
                     <div
                       key={chapter.id}
@@ -310,25 +306,24 @@ export default function RiddlesPage(): JSX.Element {
                       `}
                     >
                       {/* Main click area for selection */}
-                      <div 
+                      <div
                         onClick={() => setSelectedChapter(isSelected ? null : chapter.id)}
                         className="absolute inset-0 z-10"
                       />
-                      
+
                       <div className="mb-3 flex justify-center">
                         <span className="text-3xl" aria-hidden="true">{chapter.icon}</span>
                       </div>
                       <h4 className="mb-1 text-sm font-bold text-gray-800">{chapter.title}</h4>
                       <p className="text-xs text-gray-500">{chapter.riddleCount} Riddles</p>
-                      
+
                       {/* Difficulty Indicators */}
                       <div className="mt-3 flex justify-center gap-1">
                         {DIFFICULTY_LEVELS.slice(0, 3).map((diff) => (
                           <div
                             key={diff.key}
-                            className={`w-2 h-2 rounded-full ${
-                              chapter.riddleCount > 0 ? 'bg-gray-300' : 'bg-gray-100'
-                            }`}
+                            className={`w-2 h-2 rounded-full ${chapter.riddleCount > 0 ? 'bg-gray-300' : 'bg-gray-100'
+                              }`}
                             title={diff.label}
                           />
                         ))}
@@ -336,7 +331,7 @@ export default function RiddlesPage(): JSX.Element {
 
                       {/* Play Button - appears on hover or when selected */}
                       <div className={`mt-4 transition-all duration-200 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                        <Link 
+                        <Link
                           href={`/riddles/play?chapterId=${chapter.id}&mode=practice`}
                           onClick={(e) => e.stopPropagation()}
                           className="relative z-20 inline-flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
