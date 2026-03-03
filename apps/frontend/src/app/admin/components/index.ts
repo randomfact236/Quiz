@@ -4,3 +4,4 @@ export { QuestionManagementSection } from './QuestionManagementSection';
 export { RiddlesSection } from './RiddlesSection';
 export { SettingsSection } from './SettingsSection';
 export { QuizSidebar } from './QuizSidebar';
+export { RiddleSidebar } from './RiddleSidebar';

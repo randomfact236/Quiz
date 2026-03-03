@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  LayoutDashboard, 
+import {
+  LayoutDashboard,
   Gamepad2,
   ChevronLeft,
   ChevronRight,
@@ -21,10 +21,12 @@ import {
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
+import { RiddleSidebar } from './components/RiddleSidebar';
 // StatusService moved to hook usage
 // import { StatusService } from '@/services/status.service';
 import {
-  initialJokes as libInitialJokes
+  initialJokes as libInitialJokes,
+  initialRiddles as libInitialRiddles
 } from '@/lib/initial-data';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 
@@ -78,23 +80,21 @@ type Joke = {
 //   description?: string;
 // };
 
-/*
- * Riddle Type - Enterprise Grade - Available for future use
- * Commented out as it's not currently used
+/**
+ * Riddle Type - Enterprise Grade
+ */
 type Riddle = {
-  id: number;
+  id: string;
   question: string;
   answer?: string;
   options: string[];
   correctOption: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   chapter: string;
   status: ContentStatus;
-  hint?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 };
-*/
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
 // type ImageRiddle = {
@@ -257,20 +257,20 @@ export default function AdminPage(): JSX.Element {
   const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
     // Valid icon keys that we accept (Lucide icon names)
     const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home', 'book-open', 'help-circle', 'graduation-cap', 'briefcase', 'gamepad-2'];
-    
+
     return storedSubjects.map(subject => {
       // Check if emoji is a valid icon key OR a custom emoji (contains emoji characters)
       const isCustomEmoji = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(subject.emoji);
-      
+
       // If it's a valid icon key or custom emoji, keep it
       if (validIconKeys.includes(subject.emoji) || isCustomEmoji) {
         return subject;
       }
-      
+
       // Otherwise, map subject slug to appropriate icon
       const slugToIcon: Record<string, string> = {
         'science': 'science',
-        'math': 'math', 
+        'math': 'math',
         'history': 'history',
         'geography': 'geography',
         'english': 'english',
@@ -290,6 +290,21 @@ export default function AdminPage(): JSX.Element {
   // Jokes state (shared with JokesSection component)
   const { allJokes, setAllJokes } = useGlobalJokes();
 
+  // Hoisted Riddles State
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() => {
+    if (typeof window !== 'undefined') {
+      return getItem(STORAGE_KEYS.RIDDLES, libInitialRiddles as Riddle[]);
+    }
+    return libInitialRiddles as Riddle[];
+  });
+  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
+  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      return getItem('aiquiz:riddle-chapter-order', []);
+    }
+    return [];
+  });
+
   // Migration: Fix any corrupted emojis in existing subjects (runs once)
   useEffect(() => {
     const MIGRATION_KEY = 'aiquiz:emoji-migration-v2';
@@ -308,6 +323,10 @@ export default function AdminPage(): JSX.Element {
   useEffect(() => {
     setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
   }, [allQuestions]);
+
+  useEffect(() => {
+    setItem(STORAGE_KEYS.RIDDLES, allRiddles);
+  }, [allRiddles]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -376,6 +395,37 @@ export default function AdminPage(): JSX.Element {
       </div>
     );
   }
+
+  // Compute Riddle Chapters and Counts for the Sidebar
+  const uniqueRiddleChapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
+  // Include currently filtered chapter even if empty
+  if (riddleFilterChapter && riddleFilterChapter !== '') {
+    if (!uniqueRiddleChapters.includes(riddleFilterChapter)) {
+      uniqueRiddleChapters.push(riddleFilterChapter);
+    }
+  }
+
+  // Calculate sorted order using persisted riddleChapterOrder
+  const orderedRiddleChapters = [...uniqueRiddleChapters].sort((a, b) => {
+    const indexA = riddleChapterOrder.indexOf(a);
+    const indexB = riddleChapterOrder.indexOf(b);
+
+    // If both exist in order, sort by order
+    if (indexA !== -1 && indexB !== -1) {
+      return indexA - indexB;
+    }
+    // If only A exists, A comes first
+    if (indexA !== -1) return -1;
+    // If only B exists, B comes first
+    if (indexB !== -1) return 1;
+    // If neither exists, sort alphabetically
+    return a.localeCompare(b);
+  });
+
+  const riddleChapterCounts = uniqueRiddleChapters.reduce((acc, chapter) => {
+    acc[chapter] = allRiddles.filter(r => r.chapter === chapter).length;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
@@ -453,6 +503,25 @@ export default function AdminPage(): JSX.Element {
                 active={activeSection === 'riddles'}
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('riddles')}
+              />
+              <RiddleSidebar
+                chapters={orderedRiddleChapters}
+                activeSection={activeSection}
+                activeChapter={riddleFilterChapter}
+                sidebarOpen={sidebarOpen}
+                moduleExpanded={true} // For now, we'll keep it always expanded when the "Other Modules" is open. Or we can link it to another state if needed.
+                onToggleExpand={() => setActiveSection('riddles')}
+                onSelectChapter={(chapter) => {
+                  setActiveSection('riddles');
+                  setRiddleFilterChapter(chapter);
+                }}
+                onReorderChapters={(newOrder) => {
+                  setRiddleChapterOrder(newOrder);
+                  if (typeof window !== 'undefined') {
+                    setItem('aiquiz:riddle-chapter-order', newOrder);
+                  }
+                }}
+                chapterCounts={riddleChapterCounts}
               />
               <MenuItem
                 icon={<ImageIcon className="w-5 h-5" />}
@@ -561,7 +630,14 @@ export default function AdminPage(): JSX.Element {
             />
           )}
           {activeSection === 'jokes' && <JokesSection allJokes={allJokes} setAllJokes={setAllJokes} />}
-          {activeSection === 'riddles' && <RiddlesSection />}
+          {activeSection === 'riddles' && (
+            <RiddlesSection
+              allRiddles={allRiddles}
+              setAllRiddles={setAllRiddles}
+              riddleFilterChapter={riddleFilterChapter}
+              setRiddleFilterChapter={setRiddleFilterChapter}
+            />
+          )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <UsersSection />}
           {activeSection === 'settings' && <SettingsSection />}

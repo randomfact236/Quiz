@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
-import { initialRiddles as libInitialRiddles } from '@/lib/initial-data';
-import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 import type { Riddle, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import {
   getStatusBadgeColor,
@@ -23,6 +21,14 @@ import {
 interface RiddlesSectionProps {
   /** Optional initial riddles data */
   initialRiddles?: Riddle[];
+  /** Controlled state for all riddles from parent */
+  allRiddles: Riddle[];
+  /** State setter for all riddles from parent */
+  setAllRiddles: React.Dispatch<React.SetStateAction<Riddle[]>>;
+  /** Controlled state for the active chapter filter from parent */
+  riddleFilterChapter: string;
+  /** State setter for the active chapter filter from parent */
+  setRiddleFilterChapter: React.Dispatch<React.SetStateAction<string>>;
 }
 
 /**
@@ -55,19 +61,14 @@ interface RiddleFormState {
  * <RiddlesSection />
  * ```
  */
-export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Element {
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() =>
-    initialRiddles ?? getItem(STORAGE_KEYS.RIDDLES, libInitialRiddles)
-  );
-
-  // Persistence
-  useEffect(() => {
-    setItem(STORAGE_KEYS.RIDDLES, allRiddles);
-  }, [allRiddles]);
-
+export function RiddlesSection({
+  allRiddles,
+  setAllRiddles,
+  riddleFilterChapter,
+  setRiddleFilterChapter,
+}: RiddlesSectionProps): JSX.Element {
   // Filter States
   const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
-  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleSearch, setRiddleSearch] = useState<string>('');
   const [riddlePage, setRiddlePage] = useState(1);
   const [pageInput, setPageInput] = useState('1');
