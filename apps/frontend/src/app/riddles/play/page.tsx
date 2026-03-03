@@ -3,7 +3,7 @@
  * Riddle Play Page (Backend Connected)
  * ============================================================================
  * Main gameplay page for riddles - fetches from backend API
- * URL: /riddles/play?chapterId=&mode=
+ * URL: /riddles/play?chapterId=&level=&mode=
  * ============================================================================
  */
 
@@ -32,7 +32,7 @@ import {
   createRiddleSession,
   setupNavigationWarning
 } from '@/lib/riddle-session';
-import { getRiddlesByChapter, getMixedRiddles } from '@/lib/riddles-api';
+import { getRiddlesByChapter, getMixedRiddles, getRandomRiddles } from '@/lib/riddles-api';
 import { adaptQuizRiddle, type Riddle, type RiddleSession, type RiddleResult } from '@/types/riddles';
 
 // Auto-save interval in milliseconds
@@ -67,6 +67,7 @@ function RiddlePlayPageContent(): JSX.Element {
   
   // URL params
   const chapterId = searchParams.get('chapterId') || 'all';
+  const level = searchParams.get('level') || 'all';
   const mode = (searchParams.get('mode') || 'practice') as 'timer' | 'practice';
   
   // State
@@ -93,15 +94,33 @@ function RiddlePlayPageContent(): JSX.Element {
         
         if (chapterId === 'all') {
           // Get mixed riddles from all chapters
-          const mixed = await getMixedRiddles(20);
+          let mixed: { level?: string; id: string; question: string; options: string[]; correctAnswer: string; chapter?: { name?: string }; chapterId: string; explanation?: string; hint?: string }[] = [];
+          
+          if (level && level !== 'all') {
+            // Fetch riddles filtered by level using random endpoint
+            const response = await getRandomRiddles(level, 20);
+            mixed = response.map(r => ({ ...r, level: r.level || level }));
+          } else {
+            // Get mixed riddles from all levels
+            mixed = await getMixedRiddles(20);
+          }
+          
           fetchedRiddles = mixed.map(adaptQuizRiddle);
-          setChapterName('Mixed Chapters');
+          setChapterName(level === 'all' ? 'Mixed Chapters' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
         } else {
           // Get riddles for specific chapter
           const response = await getRiddlesByChapter(chapterId, 1, 50);
-          fetchedRiddles = response.data.map(adaptQuizRiddle);
+          
+          // Filter by level if specified
+          let filteredData = response.data;
+          if (level && level !== 'all') {
+            filteredData = filteredData.filter(r => r.level?.toLowerCase() === level.toLowerCase());
+          }
+          
+          fetchedRiddles = filteredData.map(adaptQuizRiddle);
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
-            setChapterName(fetchedRiddles[0].chapter);
+            const baseName = fetchedRiddles[0].chapter;
+            setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
           }
         }
         
@@ -126,7 +145,7 @@ function RiddlePlayPageContent(): JSX.Element {
     }
     
     fetchRiddles();
-  }, [chapterId]);
+  }, [chapterId, level]);
   
   // Start new session helper
   const startNewSession = useCallback((riddleList: Riddle[]) => {
@@ -136,7 +155,7 @@ function RiddlePlayPageContent(): JSX.Element {
       mode,
       chapterId,
       chapterName,
-      'all',
+      (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
       riddleList,
       timeLimit
     );
@@ -146,7 +165,7 @@ function RiddlePlayPageContent(): JSX.Element {
     setTimeRemaining(timeLimit);
     setStatus('playing');
     setShowResumeDialog(false);
-  }, [mode, chapterId, chapterName]);
+  }, [mode, chapterId, chapterName, level]);
   
   // Resume existing session
   const resumeSession = useCallback(() => {

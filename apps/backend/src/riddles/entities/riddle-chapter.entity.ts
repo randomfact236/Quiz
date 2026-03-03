@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+} from 'typeorm';
 import { RiddleSubject } from './riddle-subject.entity';
 import { QuizRiddle } from './quiz-riddle.entity';
 
@@ -13,12 +22,19 @@ export class RiddleChapter {
   @Column({ type: 'int' })
   chapterNumber: number;
 
-  @ManyToOne(() => RiddleSubject, subject => subject.chapters)
+  @ManyToOne(() => RiddleSubject, (subject) => subject.chapters)
+  @JoinColumn({ name: 'subjectId' })
   subject: RiddleSubject;
 
   @Column()
   subjectId: string;
 
-  @OneToMany(() => QuizRiddle, riddle => riddle.chapter)
+  @OneToMany(() => QuizRiddle, (riddle) => riddle.chapter)
   riddles: QuizRiddle[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

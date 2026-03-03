@@ -13,6 +13,23 @@ import { BulkActionType } from '../enums/bulk-action.enum';
 import { MAX_BULK_ITEMS } from '../constants/app.constants';
 
 /**
+ * DTO for bulk import results (create-many endpoints).
+ * Moved here from base.dto.ts so all bulk-operation DTOs are co-located.
+ */
+export class BulkImportResultDto {
+  @ApiProperty({ description: 'Number of items successfully imported' })
+  success: number;
+
+  @ApiProperty({ description: 'Number of items that failed to import' })
+  failed: number;
+
+  @ApiPropertyOptional({ description: 'Error messages for failed items', type: [String] })
+  errors?: string[];
+}
+
+
+
+/**
  * DTO for bulk action requests
  */
 export class BulkActionDto {

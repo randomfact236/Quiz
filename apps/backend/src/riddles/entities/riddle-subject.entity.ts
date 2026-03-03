@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { RiddleChapter } from './riddle-chapter.entity';
 
 @Entity('riddle_subjects')
@@ -24,6 +31,12 @@ export class RiddleSubject {
   @Column({ type: 'int', default: 0 })
   order: number;
 
-  @OneToMany(() => RiddleChapter, chapter => chapter.subject)
+  @OneToMany(() => RiddleChapter, (chapter) => chapter.subject)
   chapters: RiddleChapter[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

@@ -4,6 +4,7 @@ import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
 import { QuizRiddle } from './entities/quiz-riddle.entity';
+import { ContentStatus } from '../common/enums/content-status.enum';
 
 /**
  * Statistics result for riddles
@@ -18,19 +19,22 @@ export interface RiddlesStats {
 }
 
 /**
- * Valid difficulty levels for classic riddles
- */
-const CLASSIC_DIFFICULTIES = ['easy', 'medium', 'hard'];
-
-/**
- * Compute riddles statistics
- * @param riddleRepo - Riddle repository
- * @param categoryRepo - Category repository
+ * Compute riddles statistics.
+ *
+ * H-4 fix: All riddle counts are restricted to ContentStatus.PUBLISHED.
+ * Previous version counted ALL statuses including DRAFT and TRASH, leaking
+ * internal content volume to public callers.
+ *
+ * Uses a single GROUP BY query for difficulty counts instead of N sequentially
+ * awaited count() calls, reducing database round-trips from N+M to 1.
+ *
+ * @param riddleRepo    - Riddle repository
+ * @param categoryRepo  - Category repository
  * @param quizRiddleRepo - Quiz riddle repository
- * @param subjectRepo - Subject repository
- * @param chapterRepo - Chapter repository
- * @returns Statistics for riddles
- * @throws Error if database query fails
+ * @param subjectRepo   - Subject repository
+ * @param chapterRepo   - Chapter repository
+ * @returns Aggregated statistics for all riddle types
+ * @throws Error if any database query fails
  */
 export async function computeRiddleStats(
   riddleRepo: Repository<Riddle>,
@@ -40,38 +44,36 @@ export async function computeRiddleStats(
   chapterRepo: Repository<RiddleChapter>,
 ): Promise<RiddlesStats> {
   try {
-    // Get basic counts in parallel
-    const [totalClassicRiddles, totalCategories, totalQuizRiddles, totalSubjects, totalChapters] = await Promise.all([
-      riddleRepo.count(),
+    // All aggregate counts run in parallel — single DB round per query
+    const [
+      totalClassicRiddles,
+      totalCategories,
+      totalQuizRiddles,
+      totalSubjects,
+      totalChapters,
+      difficultyRows,
+    ] = await Promise.all([
+      // H-4 fix: restrict to PUBLISHED only — DRAFT and TRASH must not be counted
+      riddleRepo.count({ where: { status: ContentStatus.PUBLISHED } }),
       categoryRepo.count(),
       quizRiddleRepo.count(),
-      subjectRepo.count(),
+      subjectRepo.count({ where: { isActive: true } }),
       chapterRepo.count(),
+      // Single GROUP BY replaces the previous N + M sequential count() loop.
+      // H-4 fix: WHERE clause added to restrict counts to PUBLISHED riddles only.
+      riddleRepo
+        .createQueryBuilder('riddle')
+        .select('riddle.difficulty', 'difficulty')
+        .addSelect('COUNT(*)', 'count')
+        .where('riddle.status = :status', { status: ContentStatus.PUBLISHED })
+        .groupBy('riddle.difficulty')
+        .getRawMany<{ difficulty: string; count: string }>(),
     ]);
 
-    // Get counts by difficulty dynamically
+    // Convert raw rows to a typed map, parsing the count string to number
     const riddlesByDifficulty: Record<string, number> = {};
-    
-    // Query for each difficulty level
-    for (const difficulty of CLASSIC_DIFFICULTIES) {
-      riddlesByDifficulty[difficulty] = await riddleRepo.count({ 
-        where: { difficulty } 
-      });
-    }
-
-    // Also check for any other difficulty values in the database
-    const distinctDifficulties = await riddleRepo
-      .createQueryBuilder('riddle')
-      .select('DISTINCT riddle.difficulty', 'difficulty')
-      .getRawMany<{ difficulty: string }>();
-
-    // Add any additional difficulty levels found
-    for (const { difficulty } of distinctDifficulties) {
-      if (!CLASSIC_DIFFICULTIES.includes(difficulty)) {
-        riddlesByDifficulty[difficulty] = await riddleRepo.count({ 
-          where: { difficulty } 
-        });
-      }
+    for (const row of difficultyRows) {
+      riddlesByDifficulty[row.difficulty] = parseInt(row.count, 10);
     }
 
     return {

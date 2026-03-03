@@ -1,0 +1,13 @@
+query: SELECT version()
+query: SELECT * FROM current_schema()
+query: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+query: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'migrations'
+query: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
+Error during migration run:
+Error: Duplicate migrations: CreateRiddleTables1700000000000
+    at MigrationExecutor.checkForDuplicateMigrations (/app/node_modules/src/migration/MigrationExecutor.ts:616:19)
+    at MigrationExecutor.getMigrations (/app/node_modules/src/migration/MigrationExecutor.ts:599:14)
+    at MigrationExecutor.executePendingMigrations (/app/node_modules/src/migration/MigrationExecutor.ts:213:36)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DataSource.runMigrations (/app/node_modules/src/data-source/DataSource.ts:404:13)
+    at async Object.handler (/app/node_modules/src/commands/MigrationRunCommand.ts:76:13)

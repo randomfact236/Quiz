@@ -22,6 +22,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { SettingsModule } from './settings/settings.module';
+import { AutoSeedModule } from './database/auto-seed.module';
 
 // Common
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
@@ -54,7 +55,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
       useFactory: (configService: ConfigService) => {
         const nodeEnv = configService.get('NODE_ENV') || 'development';
         const isProduction = nodeEnv === 'production';
-        
+
         // SECURITY: Require explicit environment variables - no defaults
         const dbHost = configService.getOrThrow('DB_HOST');
         const dbPort = configService.get('DB_PORT', DB_PORT);
@@ -70,7 +71,8 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
           password: dbPassword,
           database: dbDatabase,
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          // SECURITY: Never synchronize in production
+          // synchronize: false — schema changes MUST go through migrations.
+          // Never enable auto-sync; it can drop or alter columns unexpectedly.
           synchronize: false,
           // SECURITY: Only log in development, never in production
           logging: !isProduction && configService.get('DB_LOGGING') === 'true',
@@ -100,6 +102,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     AuthModule,
     HealthModule,
     SettingsModule,
+    AutoSeedModule,
   ],
   providers: [
     // Global Exception Filter

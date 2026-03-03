@@ -15,7 +15,9 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { RiddlesService } from './riddles.service';
 import {
+  // Riddle DTOs
   CreateRiddleDto,
+  UpdateRiddleDto,
   CreateRiddleCategoryDto,
   UpdateRiddleCategoryDto,
   CreateRiddleSubjectDto,
@@ -24,10 +26,15 @@ import {
   UpdateRiddleChapterDto,
   CreateQuizRiddleDto,
   UpdateQuizRiddleDto,
-  PaginationDto,
   SearchRiddlesDto,
+  // Bulk DTOs
   BulkImportResultDto,
-} from '../common/dto/base.dto';
+  BulkActionDto,
+  BulkActionResponseDto,
+  StatusCountResponseDto,
+  StatusFilterDto,
+} from '../common';
+import { PaginationDto } from '../common/dto/base.dto';
 import { Riddle } from './entities/riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
@@ -36,24 +43,24 @@ import { QuizRiddle } from './entities/quiz-riddle.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
+
 
 @ApiTags('Riddles')
 @Controller('riddles')
 export class RiddlesController {
-  constructor(private readonly riddlesService: RiddlesService) {}
+  constructor(private readonly riddlesService: RiddlesService) { }
 
-  // ==================== CLASSIC FORMAT - PUBLIC ====================
+  // ==================== CLASSIC FORMAT - PUBLIC (static routes FIRST) ====================
 
   @Get('classic')
-  @ApiOperation({ summary: 'Get all classic riddles with pagination' })
-  @ApiResponse({ status: 200, description: 'Returns paginated riddles' })
+  @ApiOperation({ summary: 'Get all published classic riddles with pagination (public)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated published riddles' })
   findAllClassic(
     @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto,
   ): Promise<{ data: Riddle[]; total: number }> {
-    return this.riddlesService.findAllRiddles(pagination, filter.status);
+    // Always returns only PUBLISHED riddles — status cannot be overridden by public callers
+    return this.riddlesService.findAllRiddles(pagination);
   }
 
   @Get('classic/random')
@@ -78,36 +85,30 @@ export class RiddlesController {
     return this.riddlesService.findAllCategories();
   }
 
-  @Get('classic/categories/:id')
-  @ApiOperation({ summary: 'Get category by ID with riddles' })
-  @ApiResponse({ status: 200, description: 'Returns category' })
-  @ApiResponse({ status: 404, description: 'Category not found' })
-  findCategoryById(@Param('id') id: string): Promise<RiddleCategory> {
-    return this.riddlesService.findCategoryById(id);
-  }
+  // ==================== CLASSIC FORMAT - ADMIN STATIC (before parameterized routes) ====================
 
-  @Get('classic/category/:id')
-  @ApiOperation({ summary: 'Get riddles by category' })
-  @ApiResponse({ status: 200, description: 'Returns riddles in category' })
-  findByCategory(
-    @Param('id') id: string,
+  @Get('classic/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all classic riddles by status (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated riddles filtered by status' })
+  findAllClassicAdmin(
     @Query() pagination: PaginationDto,
+    @Query() filter: StatusFilterDto,
   ): Promise<{ data: Riddle[]; total: number }> {
-    return this.riddlesService.findRiddlesByCategory(id, pagination);
+    return this.riddlesService.findAllRiddles(pagination, filter.status);
   }
 
-  @Get('classic/difficulty/:level')
-  @ApiOperation({ summary: 'Get riddles by difficulty level' })
-  @ApiResponse({ status: 200, description: 'Returns riddles by difficulty' })
-  findByDifficulty(
-    @Param('level') level: string,
-    @Query() pagination: PaginationDto,
-  ): Promise<{ data: Riddle[]; total: number }> {
-    this.validateDifficulty(level);
-    return this.riddlesService.findRiddlesByDifficulty(level, pagination);
+  @Get('classic/status-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get classic riddle counts by status (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
+  async getStatusCounts(): Promise<StatusCountResponseDto> {
+    return this.riddlesService.getStatusCounts();
   }
-
-  // ==================== CLASSIC FORMAT - ADMIN ====================
 
   @Post('classic')
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -130,30 +131,6 @@ export class RiddlesController {
     return { success: result.count, failed: result.errors.length, errors: result.errors };
   }
 
-  @Put('classic/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update a classic riddle (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Riddle updated successfully' })
-  @ApiResponse({ status: 404, description: 'Riddle not found' })
-  updateClassic(@Param('id') id: string, @Body() dto: Partial<CreateRiddleDto>): Promise<Riddle> {
-    return this.riddlesService.updateRiddle(id, dto);
-  }
-
-  @Delete('classic/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete a classic riddle (Admin only)' })
-  @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
-  async removeClassic(@Param('id') id: string): Promise<void> {
-    await this.riddlesService.deleteRiddle(id);
-  }
-
-  // ==================== BULK ACTIONS - CLASSIC RIDDLES ====================
-
   @Post('classic/bulk-action')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -165,16 +142,6 @@ export class RiddlesController {
     return this.riddlesService.bulkActionClassic(dto.ids, dto.action);
   }
 
-  @Get('classic/status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get classic riddle counts by status (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
-  async getStatusCounts(): Promise<StatusCountResponseDto> {
-    return this.riddlesService.getStatusCounts();
-  }
-
   @Post('classic/categories')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -182,6 +149,61 @@ export class RiddlesController {
   @ApiOperation({ summary: 'Create a new riddle category (Admin only)' })
   createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
     return this.riddlesService.createCategory(dto);
+  }
+
+  // ==================== CLASSIC FORMAT - PARAMETERISED ROUTES (MUST COME LAST) ====================
+  // IMPORTANT: All static routes above MUST be declared before these parameterised routes.
+  // NestJS resolves routes top-to-bottom; a parameterised segment like :id would otherwise
+  // match static paths such as /random, /search, /status-counts before they are evaluated.
+
+  @Get('classic/categories/:id')
+  @ApiOperation({ summary: 'Get category by ID with riddles' })
+  @ApiResponse({ status: 200, description: 'Returns category' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  findCategoryById(@Param('id') id: string): Promise<RiddleCategory> {
+    return this.riddlesService.findCategoryById(id);
+  }
+
+  @Get('classic/category/:id')
+  @ApiOperation({ summary: 'Get riddles by category' })
+  @ApiResponse({ status: 200, description: 'Returns riddles in category' })
+  findByCategory(
+    @Param('id') id: string,
+    @Query() pagination: PaginationDto,
+  ): Promise<{ data: Riddle[]; total: number }> {
+    return this.riddlesService.findRiddlesByCategory(id, pagination);
+  }
+
+  @Get('classic/difficulty/:level')
+  @ApiOperation({ summary: 'Get riddles by difficulty level (easy | medium | hard)' })
+  @ApiResponse({ status: 200, description: 'Returns riddles by difficulty' })
+  findByDifficulty(
+    @Param('level') level: string,
+    @Query() pagination: PaginationDto,
+  ): Promise<{ data: Riddle[]; total: number }> {
+    this.validateClassicDifficulty(level);
+    return this.riddlesService.findRiddlesByDifficulty(level, pagination);
+  }
+
+  @Get('classic/:id')
+  @ApiOperation({ summary: 'Get a published classic riddle by ID (public)' })
+  @ApiParam({ name: 'id', description: 'UUID of the riddle' })
+  @ApiResponse({ status: 200, description: 'Returns the riddle' })
+  @ApiResponse({ status: 404, description: 'Riddle not found or not published' })
+  findClassicById(@Param('id') id: string): Promise<Riddle> {
+    return this.riddlesService.findRiddleById(id, false);
+  }
+
+  @Get('classic/:id/admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get any classic riddle by ID regardless of status (Admin only)' })
+  @ApiParam({ name: 'id', description: 'UUID of the riddle' })
+  @ApiResponse({ status: 200, description: 'Returns the riddle' })
+  @ApiResponse({ status: 404, description: 'Riddle not found' })
+  findClassicByIdAdmin(@Param('id') id: string): Promise<Riddle> {
+    return this.riddlesService.findRiddleById(id, true);
   }
 
   @Put('classic/categories/:id')
@@ -203,13 +225,46 @@ export class RiddlesController {
     await this.riddlesService.deleteCategory(id);
   }
 
+  @Put('classic/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a classic riddle (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Riddle updated successfully' })
+  @ApiResponse({ status: 404, description: 'Riddle not found' })
+  updateClassic(@Param('id') id: string, @Body() dto: UpdateRiddleDto): Promise<Riddle> {
+    return this.riddlesService.updateRiddle(id, dto);
+  }
+
+  @Delete('classic/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a classic riddle (Admin only)' })
+  @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
+  async removeClassic(@Param('id') id: string): Promise<void> {
+    await this.riddlesService.deleteRiddle(id);
+  }
+
   // ==================== QUIZ FORMAT - PUBLIC ====================
 
   @Get('subjects')
-  @ApiOperation({ summary: 'Get all riddle subjects (Quiz format)' })
-  @ApiResponse({ status: 200, description: 'Returns all subjects' })
+  @ApiOperation({ summary: 'Get all active riddle subjects (Quiz format)' })
+  @ApiResponse({ status: 200, description: 'Returns all active subjects' })
   findAllSubjects(): Promise<RiddleSubject[]> {
-    return this.riddlesService.findAllSubjects();
+    return this.riddlesService.findAllSubjects(false);
+  }
+
+  @Get('subjects/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all subjects including inactive ones (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns all subjects' })
+  findAllSubjectsAdmin(): Promise<RiddleSubject[]> {
+    // L-1 fix: allows admins to see inactive subjects so they can manage/re-activate them
+    return this.riddlesService.findAllSubjects(true);
   }
 
   @Get('subjects/:slug')
@@ -247,7 +302,7 @@ export class RiddlesController {
     @Query('count') count?: string,
   ): Promise<QuizRiddle[]> {
     const parsedCount = this.validateCount(count, 10, 1, 50);
-    this.validateDifficulty(level);
+    this.validateQuizDifficulty(level);
     return this.riddlesService.findRandomQuizRiddles(level, parsedCount);
   }
 
@@ -409,14 +464,31 @@ export class RiddlesController {
   }
 
   /**
-   * Validate difficulty level
+  /**
+   * Validate difficulty level for CLASSIC riddles.
+   * Classic riddle DB enum only allows: easy | medium | hard.
+   * Prevents values like 'expert' or 'extreme' that only belong to quiz riddles.
    */
-  private validateDifficulty(level: string): void {
+  private validateClassicDifficulty(level: string): void {
+    const validDifficulties = ['easy', 'medium', 'hard'];
+    if (!validDifficulties.includes(level)) {
+      throw new BadRequestException(
+        `Invalid difficulty level: "${level}". Valid values for classic riddles are: ${validDifficulties.join(', ')}`,
+      );
+    }
+  }
+
+  /**
+   * Validate difficulty level for QUIZ riddles.
+   * Quiz riddle DB enum allows: easy | medium | hard | expert | extreme.
+   */
+  private validateQuizDifficulty(level: string): void {
     const validDifficulties = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validDifficulties.includes(level)) {
       throw new BadRequestException(
-        `Invalid difficulty level: ${level}. Valid values are: ${validDifficulties.join(', ')}`,
+        `Invalid difficulty level: "${level}". Valid values for quiz riddles are: ${validDifficulties.join(', ')}`,
       );
     }
   }
 }
+

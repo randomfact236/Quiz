@@ -1,13 +1,15 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 import { Riddle } from './entities/riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
 import { QuizRiddle } from './entities/quiz-riddle.entity';
 import {
+  // Riddle DTOs
   CreateRiddleDto,
+  UpdateRiddleDto,
   CreateRiddleCategoryDto,
   UpdateRiddleCategoryDto,
   CreateRiddleSubjectDto,
@@ -16,17 +18,23 @@ import {
   UpdateRiddleChapterDto,
   CreateQuizRiddleDto,
   UpdateQuizRiddleDto,
-  PaginationDto,
   SearchRiddlesDto,
-} from '../common/dto/base.dto';
+  // Domain enums
+  RiddleDifficulty,
+  QuizRiddleLevel,
+  // Common enums
+  ContentStatus,
+  BulkActionType,
+} from '../common';
+import { PaginationDto } from '../common/dto/base.dto';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
 import { CacheService } from '../common/cache/cache.service';
 import { settings } from '../config/settings';
 import { BulkActionService } from '../common/services/bulk-action.service';
-import { BulkActionType } from '../common/enums/bulk-action.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
-import { ContentStatus } from '../common/enums/content-status.enum';
-import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
 import { computeRiddleStats, RiddlesStats } from './riddles-stats.util';
+
+
 
 @Injectable()
 export class RiddlesService {
@@ -50,20 +58,22 @@ export class RiddlesService {
 
   // ==================== CLASSIC RIDDLES ====================
 
+  /**
+   * Find all classic riddles with pagination.
+   * Public callers always receive only PUBLISHED riddles.
+   * Admin callers may pass an explicit status to filter differently.
+   * When no status is supplied, defaults to PUBLISHED to prevent
+   * leaking draft or trashed content to unauthenticated users.
+   */
   async findAllRiddles(
     pagination: PaginationDto,
-    status?: ContentStatus,
+    status: ContentStatus = ContentStatus.PUBLISHED,
   ): Promise<{ data: Riddle[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
-    
-    const where: FindOptionsWhere<Riddle> = {};
-    if (status) {
-      where.status = status;
-    }
 
     const [data, total] = await this.riddleRepo.findAndCount({
-      where,
+      where: { status },
       relations: ['category'],
       skip: (page - 1) * limit,
       take: limit,
@@ -73,26 +83,39 @@ export class RiddlesService {
   }
 
   async findRandomRiddle(): Promise<Riddle> {
-    // More efficient random selection using offset with count
-    const count = await this.riddleRepo.count({
-      where: { status: ContentStatus.PUBLISHED },
-    });
-    
-    if (count === 0) {
-      throw new NotFoundException('No riddles found');
-    }
-
-    const randomOffset = Math.floor(Math.random() * count);
+    // Single atomic query — avoids the race condition between COUNT and SKIP
+    // that existed when a riddle was deleted between the two separate DB calls.
     const riddle = await this.riddleRepo
       .createQueryBuilder('riddle')
       .leftJoinAndSelect('riddle.category', 'category')
       .where('riddle.status = :status', { status: ContentStatus.PUBLISHED })
-      .skip(randomOffset)
+      .orderBy('RANDOM()')   // PostgreSQL — change to RAND() for MySQL
       .take(1)
       .getOne();
-      
+
     if (riddle === null) {
-      throw new NotFoundException('No riddles found');
+      throw new NotFoundException('No published riddles found');
+    }
+    return riddle;
+  }
+
+  /**
+   * Find a single classic riddle by its UUID.
+   * Public callers (isAdmin = false) only see PUBLISHED riddles — a DRAFT UUID
+   * returns 404 rather than leaking unreleased content (M-2 fix).
+   * Admin callers (isAdmin = true) bypass the status filter.
+   */
+  async findRiddleById(id: string, isAdmin = false): Promise<Riddle> {
+    const riddle = await this.riddleRepo.findOne({
+      where: isAdmin ? { id } : { id, status: ContentStatus.PUBLISHED },
+      relations: ['category'],
+    });
+    if (riddle === null) {
+      throw new NotFoundException(
+        isAdmin
+          ? `Riddle with id "${id}" not found`
+          : `Riddle with id "${id}" not found or not published`,
+      );
     }
     return riddle;
   }
@@ -137,9 +160,10 @@ export class RiddlesService {
       .where('riddle.status = :status', { status: ContentStatus.PUBLISHED });
 
     if (searchDto.search !== undefined && searchDto.search.length > 0) {
-      queryBuilder.andWhere('(riddle.question ILIKE :search OR riddle.answer ILIKE :search)', {
-        search: `%${searchDto.search}%`,
-      });
+      queryBuilder.andWhere(
+        '(LOWER(riddle.question) LIKE LOWER(:search) OR LOWER(riddle.answer) LIKE LOWER(:search))',
+        { search: `%${searchDto.search}%` },  // M-3 fix: LOWER() is portable; ILIKE is PostgreSQL-only
+      );
     }
 
     if (searchDto.categoryId !== undefined && searchDto.categoryId.length > 0) {
@@ -190,7 +214,7 @@ export class RiddlesService {
       throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} riddles`);
     }
 
-    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+    const result = await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique category IDs for batch fetch - fixes N+1 query
       const categoryIds = [...new Set(dto.map(r => r.categoryId))];
       const categories = await transactionalEntityManager.find(RiddleCategory, {
@@ -204,7 +228,7 @@ export class RiddlesService {
       for (let i = 0; i < dto.length; i++) {
         const r = dto[i];
         const category = categoryMap.get(r.categoryId);
-        
+
         if (!category) {
           errors.push(`Row ${i + 1}: Category not found (ID: ${r.categoryId})`);
           continue;
@@ -225,27 +249,36 @@ export class RiddlesService {
       }
 
       const saved = await transactionalEntityManager.save(riddles);
-      
-      // Only invalidate cache if transaction succeeds
-      await this.cacheService.delPattern('riddles:*');
-      
+      // Return the count — cache invalidation happens OUTSIDE the transaction
       return { count: saved.length, errors };
     });
+
+    // Invalidate cache only after the transaction has been committed to the DB
+    await this.cacheService.delPattern('riddles:*');
+    return result;
   }
 
-  async updateRiddle(id: string, dto: Partial<CreateRiddleDto>): Promise<Riddle> {
+  /**
+   * Update a classic riddle.
+   * Only provided fields are applied — undefined fields leave the riddle unchanged.
+   * If categoryId is provided, the category is validated before being applied.
+   */
+  async updateRiddle(id: string, dto: UpdateRiddleDto): Promise<Riddle> {
     const riddle = await this.riddleRepo.findOne({ where: { id }, relations: ['category'] });
     if (riddle === null) throw new NotFoundException('Riddle not found');
-    const fields: (keyof CreateRiddleDto)[] = ['question', 'answer', 'difficulty'];
-    fields.forEach(field => {
-      const value = dto[field];
-      if (value?.length) (riddle[field] as string) = value;
-    });
-    if (dto.categoryId?.length) {
+
+    // Apply scalar fields safely — only overwrite when explicitly provided
+    if (dto.question !== undefined) riddle.question = dto.question;
+    if (dto.answer !== undefined) riddle.answer = dto.answer;
+    if (dto.difficulty !== undefined) riddle.difficulty = dto.difficulty;
+
+    // Update category if a new categoryId is provided
+    if (dto.categoryId !== undefined) {
       const category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
-      if (category === null) throw new NotFoundException('Category not found');
+      if (category === null) throw new NotFoundException(`Category with id "${dto.categoryId}" not found`);
       riddle.category = category;
     }
+
     const saved = await this.riddleRepo.save(riddle);
     await this.cacheService.delPattern('riddles:*');
     return saved;
@@ -309,7 +342,8 @@ export class RiddlesService {
   async updateCategory(id: string, dto: UpdateRiddleCategoryDto): Promise<RiddleCategory> {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (category === null) throw new NotFoundException('Category not found');
-    if (dto.name?.length) category.name = dto.name;
+    // H-1 fix: use !== undefined so empty strings can explicitly clear the field
+    if (dto.name !== undefined) category.name = dto.name;
     if (dto.emoji !== undefined) category.emoji = dto.emoji;
     const saved = await this.categoryRepo.save(category);
     await this.cacheService.del('riddles:categories');
@@ -330,17 +364,20 @@ export class RiddlesService {
     }
 
     await this.categoryRepo.remove(category);
-    await this.cacheService.del('riddles:categories');
+    // H-3 fix: invalidate the full riddles:* pattern — paginated riddle lists
+    // cache category relations and will serve stale data if only the narrow
+    // 'riddles:categories' key is busted.
+    await this.cacheService.delPattern('riddles:*');
   }
 
   // ==================== QUIZ FORMAT - SUBJECTS ====================
 
-  async findAllSubjects(): Promise<RiddleSubject[]> {
+  async findAllSubjects(includeInactive = false): Promise<RiddleSubject[]> {
     return this.cacheService.getOrSet(
-      'riddles:subjects',
+      `riddles:subjects:${includeInactive ? 'all' : 'active'}`,
       async () => {
         return this.subjectRepo.find({
-          where: { isActive: true },
+          where: includeInactive ? {} : { isActive: true },
           order: { order: 'ASC', name: 'ASC' },
           relations: ['chapters'],
         });
@@ -366,7 +403,8 @@ export class RiddlesService {
       isActive: true,
     });
     const saved = await this.subjectRepo.save(subject);
-    await this.cacheService.del('riddles:subjects');
+    await this.cacheService.del('riddles:subjects:active');
+    await this.cacheService.del('riddles:subjects:all');
     return saved;
   }
 
@@ -375,21 +413,48 @@ export class RiddlesService {
     if (subject === null) throw new NotFoundException('Subject not found');
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
-    await this.cacheService.del('riddles:subjects');
+    await this.cacheService.del('riddles:subjects:active');
+    await this.cacheService.del('riddles:subjects:all');
     return saved;
   }
 
+
+  /**
+   * Delete a subject and ALL its child chapters and quiz riddles.
+   * Deletion is performed in dependency order to respect FK constraints:
+   * quiz_riddles → riddle_chapters → riddle_subjects.
+   */
   async deleteSubject(id: string): Promise<void> {
-    const result = await this.subjectRepo.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Subject not found');
+    const subject = await this.subjectRepo.findOne({
+      where: { id },
+      relations: ['chapters', 'chapters.riddles'],
+    });
+    if (subject === null) {
+      throw new NotFoundException(`Subject with id "${id}" not found`);
     }
-    await this.cacheService.del('riddles:subjects');
+
+    // Remove quiz riddles first, then chapters, then the subject
+    for (const chapter of subject.chapters ?? []) {
+      if (chapter.riddles?.length) {
+        await this.quizRiddleRepo.remove(chapter.riddles);
+      }
+    }
+    if (subject.chapters?.length) {
+      await this.chapterRepo.remove(subject.chapters);
+    }
+    await this.subjectRepo.remove(subject);
+    await this.cacheService.del('riddles:subjects:active');
+    await this.cacheService.del('riddles:subjects:all');
   }
 
   // ==================== QUIZ FORMAT - CHAPTERS ====================
 
   async findChaptersBySubject(subjectId: string): Promise<RiddleChapter[]> {
+    // Verify subject exists before querying chapters
+    const subjectExists = await this.subjectRepo.count({ where: { id: subjectId } });
+    if (subjectExists === 0) {
+      throw new NotFoundException(`Subject with id "${subjectId}" not found`);
+    }
     return this.chapterRepo.find({
       where: { subject: { id: subjectId } },
       order: { chapterNumber: 'ASC' },
@@ -400,29 +465,51 @@ export class RiddlesService {
   async createChapter(dto: CreateRiddleChapterDto): Promise<RiddleChapter> {
     const subject = await this.subjectRepo.findOne({ where: { id: dto.subjectId } });
     if (subject === null) {
-      throw new NotFoundException('Subject not found');
+      throw new NotFoundException(`Subject with id "${dto.subjectId}" not found`);
     }
     const chapter = this.chapterRepo.create({
       name: dto.name,
       chapterNumber: dto.chapterNumber,
       subject,
     });
-    return this.chapterRepo.save(chapter);
+    const saved = await this.chapterRepo.save(chapter);
+    await this.cacheService.del('riddles:subjects:active'); // Chapter added — invalidate subject caches
+    await this.cacheService.del('riddles:subjects:all');
+    return saved;
   }
 
   async updateChapter(id: string, dto: UpdateRiddleChapterDto): Promise<RiddleChapter> {
     const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (chapter === null) throw new NotFoundException('Chapter not found');
-    if (dto.name?.length) chapter.name = dto.name;
+    if (chapter === null) throw new NotFoundException(`Chapter with id "${id}" not found`);
+    if (dto.name !== undefined) chapter.name = dto.name;
     if (dto.chapterNumber !== undefined) chapter.chapterNumber = dto.chapterNumber;
-    return this.chapterRepo.save(chapter);
+    const saved = await this.chapterRepo.save(chapter);
+    await this.cacheService.del('riddles:subjects:active'); // Chapter updated — invalidate subject caches
+    await this.cacheService.del('riddles:subjects:all');
+    return saved;
   }
 
+  /**
+   * Delete a chapter and ALL its child quiz riddles.
+   * Quiz riddles are removed first to satisfy FK constraints.
+   */
   async deleteChapter(id: string): Promise<void> {
-    const result = await this.chapterRepo.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Chapter not found');
+    const chapter = await this.chapterRepo.findOne({
+      where: { id },
+      relations: ['riddles'],
+    });
+    if (chapter === null) {
+      throw new NotFoundException(`Chapter with id "${id}" not found`);
     }
+
+    if (chapter.riddles?.length) {
+      await this.quizRiddleRepo.remove(chapter.riddles);
+    }
+    await this.chapterRepo.remove(chapter);
+    // C-2 fix: invalidate subjects cache after chapter deletion — the cached
+    // subjects response embeds chapter data and must be refreshed.
+    await this.cacheService.del('riddles:subjects:active');
+    await this.cacheService.del('riddles:subjects:all');
   }
 
   // ==================== QUIZ FORMAT - RIDDLES ====================
@@ -431,6 +518,11 @@ export class RiddlesService {
     chapterId: string,
     pagination: PaginationDto,
   ): Promise<{ data: QuizRiddle[]; total: number }> {
+    // Verify chapter exists before querying to return a meaningful 404
+    const chapterExists = await this.chapterRepo.count({ where: { id: chapterId } });
+    if (chapterExists === 0) {
+      throw new NotFoundException(`Chapter with id "${chapterId}" not found`);
+    }
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
     const [data, total] = await this.quizRiddleRepo.findAndCount({
@@ -450,28 +542,24 @@ export class RiddlesService {
       throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
     }
 
-    // More efficient random selection using offset-based approach
     const totalCount = await this.quizRiddleRepo.count({ where: { level } });
-    
     if (totalCount === 0) {
       return [];
     }
 
     // If requesting more than available, return all
     if (count >= totalCount) {
-      return this.quizRiddleRepo.find({ where: { level } });
+      return this.quizRiddleRepo.find({ where: { level }, relations: ['chapter'] });
     }
 
-    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
+    // Fetch only IDs, apply proper Fisher-Yates shuffle, then load selected records
     const allIds = await this.quizRiddleRepo
       .createQueryBuilder('riddle')
       .select('riddle.id')
       .where('riddle.level = :level', { level })
       .getMany();
-    
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map(r => r.id);
+
+    const selectedIds = this.fisherYatesSample(allIds.map(r => r.id), count);
 
     return this.quizRiddleRepo.find({
       where: { id: In(selectedIds) },
@@ -480,9 +568,7 @@ export class RiddlesService {
   }
 
   async findMixedQuizRiddles(count: number): Promise<QuizRiddle[]> {
-    // More efficient random selection
     const totalCount = await this.quizRiddleRepo.count();
-    
     if (totalCount === 0) {
       return [];
     }
@@ -492,15 +578,13 @@ export class RiddlesService {
       return this.quizRiddleRepo.find({ relations: ['chapter'] });
     }
 
-    // Get all IDs, shuffle, then fetch selected
+    // Fetch only IDs, apply Fisher-Yates sample, then load selected records
     const allIds = await this.quizRiddleRepo
       .createQueryBuilder('riddle')
       .select('riddle.id')
       .getMany();
-    
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map(r => r.id);
+
+    const selectedIds = this.fisherYatesSample(allIds.map(r => r.id), count);
 
     return this.quizRiddleRepo.find({
       where: { id: In(selectedIds) },
@@ -508,10 +592,25 @@ export class RiddlesService {
     });
   }
 
+  /**
+   * Fisher-Yates in-place shuffle — statistically uniform distribution.
+   * Mutates the input array and returns the first `count` items.
+   * @param arr   Array of items to sample from
+   * @param count Number of items to select
+   */
+  private fisherYatesSample<T>(arr: T[], count: number): T[] {
+    const pool = [...arr];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, count);
+  }
+
   async createQuizRiddle(dto: CreateQuizRiddleDto): Promise<QuizRiddle> {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
     if (chapter === null) {
-      throw new NotFoundException('Chapter not found');
+      throw new NotFoundException(`Chapter with id "${dto.chapterId}" not found`);
     }
     const riddle = this.quizRiddleRepo.create({
       question: dto.question,
@@ -522,7 +621,9 @@ export class RiddlesService {
       hint: dto.hint,
       chapter,
     });
-    return this.quizRiddleRepo.save(riddle);
+    const saved = await this.quizRiddleRepo.save(riddle);
+    await this.cacheService.delPattern('riddles:*'); // Invalidate after create
+    return saved;
   }
 
   async createQuizRiddlesBulk(dto: CreateQuizRiddleDto[]): Promise<{ count: number; errors: string[] }> {
@@ -539,7 +640,7 @@ export class RiddlesService {
       throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} riddles`);
     }
 
-    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+    const quizBulkResult = await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique chapter IDs for batch fetch - fixes N+1 query
       const chapterIds = [...new Set(dto.map(r => r.chapterId))];
       const chapters = await transactionalEntityManager.find(RiddleChapter, {
@@ -553,7 +654,7 @@ export class RiddlesService {
       for (let i = 0; i < dto.length; i++) {
         const r = dto[i];
         const chapter = chapterMap.get(r.chapterId);
-        
+
         if (!chapter) {
           errors.push(`Row ${i + 1}: Chapter not found (ID: ${r.chapterId})`);
           continue;
@@ -578,32 +679,49 @@ export class RiddlesService {
       const saved = await transactionalEntityManager.save(riddles);
       return { count: saved.length, errors };
     });
+
+    // Invalidate cache after transaction commits to DB
+    await this.cacheService.delPattern('riddles:*');
+    return quizBulkResult;
   }
 
-  async updateQuizRiddle(id: string, dto: Partial<CreateQuizRiddleDto>): Promise<QuizRiddle> {
-    const riddle = await this.quizRiddleRepo.findOne({ where: { id } });
+  /**
+   * Update a quiz riddle.
+   * Uses explicit per-field assignment to allow clearing optional fields (null/empty).
+   * Invalidates the riddles cache after a successful save.
+   */
+  async updateQuizRiddle(id: string, dto: UpdateQuizRiddleDto): Promise<QuizRiddle> {
+    const riddle = await this.quizRiddleRepo.findOne({ where: { id }, relations: ['chapter'] });
     if (riddle === null) throw new NotFoundException('Quiz riddle not found');
-    const stringFields = ['question', 'correctAnswer', 'level', 'explanation', 'hint'] as const;
-    stringFields.forEach(field => {
-      const value = dto[field];
-      if (value !== undefined && (field === 'explanation' || field === 'hint' || value.length > 0)) {
-        (riddle[field] as string | undefined) = value;
-      }
-    });
+
+    if (dto.question !== undefined) riddle.question = dto.question;
+    if (dto.correctAnswer !== undefined) riddle.correctAnswer = dto.correctAnswer;
+    if (dto.level !== undefined) riddle.level = dto.level;
+    if (dto.explanation !== undefined) riddle.explanation = dto.explanation ?? '';
+    if (dto.hint !== undefined) riddle.hint = dto.hint ?? '';
     if (dto.options !== undefined) riddle.options = dto.options;
-    if (dto.chapterId?.length) {
+
+    if (dto.chapterId !== undefined) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (chapter === null) throw new NotFoundException('Chapter not found');
+      if (chapter === null) throw new NotFoundException(`Chapter with id "${dto.chapterId}" not found`);
       riddle.chapter = chapter;
     }
-    return this.quizRiddleRepo.save(riddle);
+
+    const saved = await this.quizRiddleRepo.save(riddle);
+    await this.cacheService.delPattern('riddles:*');  // Invalidate cache after mutation
+    return saved;
   }
 
+  /**
+   * Delete a quiz riddle by ID.
+   * Invalidates cache after successful deletion.
+   */
   async deleteQuizRiddle(id: string): Promise<void> {
     const result = await this.quizRiddleRepo.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException('Quiz riddle not found');
     }
+    await this.cacheService.delPattern('riddles:*');  // Invalidate cache after mutation
   }
 
   // ==================== BULK ACTIONS ====================
