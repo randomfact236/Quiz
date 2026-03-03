@@ -80,7 +80,10 @@ export default function RiddleChallengePage(): JSX.Element {
 
         // Fetch stats, subjects and chapters from backend
         const [statsData, subjectsData] = await Promise.all([
-          getStats(),
+          getStats().catch(err => {
+            console.error('Failed to get stats:', err);
+            return null;
+          }),
           getSubjects()
         ]);
 
@@ -105,6 +108,9 @@ export default function RiddleChallengePage(): JSX.Element {
             }
           }
         }
+
+        // Sort by chapter number
+        allChapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
 
         setChapters(allChapters);
       } catch (err) {
@@ -137,7 +143,7 @@ export default function RiddleChallengePage(): JSX.Element {
         const level = riddle.level?.toLowerCase() || 'medium';
 
         // Skip if not a valid level
-        if (!level || !counts.allChapter[level]) continue;
+        if (!level || !(level in counts.allChapter)) continue;
 
         // Count per chapter
         if (!counts.chapterWise[chapterName][level]) {

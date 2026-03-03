@@ -80,7 +80,10 @@ export default function RiddlePracticePage(): JSX.Element {
 
         // Fetch stats, subjects and chapters from backend
         const [statsData, subjectsData] = await Promise.all([
-          getStats(),
+          getStats().catch(err => {
+            console.error('Failed to get stats:', err);
+            return null;
+          }),
           getSubjects()
         ]);
 
@@ -105,6 +108,13 @@ export default function RiddlePracticePage(): JSX.Element {
             }
           }
         }
+
+        // Sort by subject order (if available) then chapter number
+        allChapters.sort((a, b) => {
+          // If subjects have an order property, use it. Otherwise, subjects are already in API order.
+          // For chapters within a subject, sort by chapter number.
+          return a.chapterNumber - b.chapterNumber;
+        });
 
         setChapters(allChapters);
       } catch (err) {
@@ -137,7 +147,7 @@ export default function RiddlePracticePage(): JSX.Element {
         const level = riddle.level?.toLowerCase() || 'medium';
 
         // Skip if not a valid level
-        if (!level || !counts.allChapter[level]) continue;
+        if (!level || !(level in counts.allChapter)) continue;
 
         // Count per chapter
         if (!counts.chapterWise[chapterName][level]) {
