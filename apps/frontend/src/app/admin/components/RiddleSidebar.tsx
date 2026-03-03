@@ -85,26 +85,26 @@ export function RiddleSidebar({
         setDropTargetIndex(null);
     }, []);
 
+    const isRiddlesActive = activeSection === 'riddles';
+
     return (
-        <div className="mt-2">
-            {/* Module Header */}
+        <div>
+            {/* Main Riddles header — styled like other MenuItems */}
             <button
                 onClick={onToggleExpand}
-                className="w-full flex items-center justify-between px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:bg-gray-800 transition-colors"
+                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-sm font-medium ${isRiddlesActive && !activeChapter
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-300 hover:bg-gray-800'
+                    }`}
             >
-                {sidebarOpen ? (
+                <Puzzle className="w-5 h-5 shrink-0" />
+                {sidebarOpen && (
                     <>
-                        <span className="flex items-center gap-2">
-                            <Puzzle className="w-4 h-4" /> Riddles
-                        </span>
-                        <span className={`transition-transform ${moduleExpanded ? 'rotate-180' : ''}`}>
-                            <ChevronDown className="w-3 h-3" />
-                        </span>
+                        <span className="flex-1 text-left">Riddles</span>
+                        <ChevronDown
+                            className={`w-4 h-4 shrink-0 transition-transform duration-200 ${moduleExpanded ? 'rotate-180' : ''}`}
+                        />
                     </>
-                ) : (
-                    <span className="flex items-center justify-center w-5 h-5">
-                        <Puzzle className="w-4 h-4" />
-                    </span>
                 )}
             </button>
 
@@ -134,10 +134,10 @@ export function RiddleSidebar({
                                         onDrop={(e) => handleDrop(e, index)}
                                         onClick={() => onSelectChapter(chapter)}
                                         className={`group flex items-center gap-2 px-3 py-2 cursor-pointer will-change-transform border-t-2 border-b-2 rounded ${isActive
-                                                ? 'bg-purple-600 text-white border-transparent'
-                                                : isDragOver
-                                                    ? 'bg-purple-500/20 border-purple-500'
-                                                    : 'text-gray-300 hover:bg-gray-800 border-transparent text-sm'
+                                            ? 'bg-purple-600 text-white border-transparent'
+                                            : isDragOver
+                                                ? 'bg-purple-500/20 border-purple-500'
+                                                : 'text-gray-300 hover:bg-gray-800 border-transparent text-sm'
                                             } ${isDragging ? 'opacity-50' : ''}`}
                                         style={{ transition: 'background-color 0.15s ease, opacity 0.15s ease, border-color 0.15s ease' }}
                                     >

@@ -497,20 +497,16 @@ export default function AdminPage(): JSX.Element {
                 expanded={sidebarOpen}
                 onClick={() => setActiveSection('jokes')}
               />
-              <MenuItem
-                icon={<Puzzle className="w-5 h-5" />}
-                label="Riddles"
-                active={activeSection === 'riddles'}
-                expanded={sidebarOpen}
-                onClick={() => setActiveSection('riddles')}
-              />
               <RiddleSidebar
                 chapters={orderedRiddleChapters}
                 activeSection={activeSection}
                 activeChapter={riddleFilterChapter}
                 sidebarOpen={sidebarOpen}
-                moduleExpanded={true} // For now, we'll keep it always expanded when the "Other Modules" is open. Or we can link it to another state if needed.
-                onToggleExpand={() => setActiveSection('riddles')}
+                moduleExpanded={otherModulesExpanded}
+                onToggleExpand={() => {
+                  setActiveSection('riddles');
+                  setRiddleFilterChapter('');
+                }}
                 onSelectChapter={(chapter) => {
                   setActiveSection('riddles');
                   setRiddleFilterChapter(chapter);
