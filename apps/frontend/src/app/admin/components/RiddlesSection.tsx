@@ -29,6 +29,10 @@ interface RiddlesSectionProps {
   riddleFilterChapter: string;
   /** State setter for the active chapter filter from parent */
   setRiddleFilterChapter: React.Dispatch<React.SetStateAction<string>>;
+  /** Controlled state for chapter order from parent */
+  riddleChapterOrder: string[];
+  /** State setter for chapter order from parent */
+  setRiddleChapterOrder: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 /**
@@ -66,6 +70,8 @@ export function RiddlesSection({
   setAllRiddles,
   riddleFilterChapter,
   setRiddleFilterChapter,
+  riddleChapterOrder,
+  setRiddleChapterOrder,
 }: RiddlesSectionProps): JSX.Element {
   // Filter States
   const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
@@ -110,7 +116,8 @@ export function RiddlesSection({
   });
 
   // Get unique chapters from riddles and always include the currently filtered one
-  const chapterSet = new Set(allRiddles.map(r => r.chapter));
+  // and all chapters from the persisted order
+  const chapterSet = new Set([...riddleChapterOrder, ...allRiddles.map(r => r.chapter)]);
   if (riddleFilterChapter && riddleFilterChapter !== '') {
     chapterSet.add(riddleFilterChapter);
   }
@@ -1179,9 +1186,11 @@ export function RiddlesSection({
                     const cleanName = newChapterName.trim();
                     if (cleanName) {
                       setRiddleFilterChapter(cleanName);
-                      if (!chapters.includes(cleanName)) {
-                        setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
+                      // Persist new chapter in the order state
+                      if (!riddleChapterOrder.includes(cleanName)) {
+                        setRiddleChapterOrder(prev => [...prev, cleanName]);
                       }
+                      setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
                       setShowAddChapterModal(false);
                     }
                   } else if (e.key === 'Escape') {
@@ -1202,9 +1211,11 @@ export function RiddlesSection({
                   const cleanName = newChapterName.trim();
                   if (cleanName) {
                     setRiddleFilterChapter(cleanName);
-                    if (!chapters.includes(cleanName)) {
-                      setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
+                    // Persist new chapter in the order state
+                    if (!riddleChapterOrder.includes(cleanName)) {
+                      setRiddleChapterOrder(prev => [...prev, cleanName]);
                     }
+                    setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
                     setShowAddChapterModal(false);
                   }
                 }}

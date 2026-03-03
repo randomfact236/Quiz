@@ -328,6 +328,10 @@ export default function AdminPage(): JSX.Element {
     setItem(STORAGE_KEYS.RIDDLES, allRiddles);
   }, [allRiddles]);
 
+  useEffect(() => {
+    setItem('aiquiz:riddle-chapter-order', riddleChapterOrder);
+  }, [riddleChapterOrder]);
+
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
   const [showEditSubjectModal, setShowEditSubjectModal] = useState(false);
@@ -397,13 +401,14 @@ export default function AdminPage(): JSX.Element {
   }
 
   // Compute Riddle Chapters and Counts for the Sidebar
-  const uniqueRiddleChapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
+  // Include chapters from persisted order AND from existing riddles
+  const uniqueRiddleChaptersSet = new Set([...riddleChapterOrder, ...allRiddles.map(r => r.chapter)]);
+
   // Include currently filtered chapter even if empty
   if (riddleFilterChapter && riddleFilterChapter !== '') {
-    if (!uniqueRiddleChapters.includes(riddleFilterChapter)) {
-      uniqueRiddleChapters.push(riddleFilterChapter);
-    }
+    uniqueRiddleChaptersSet.add(riddleFilterChapter);
   }
+  const uniqueRiddleChapters = Array.from(uniqueRiddleChaptersSet);
 
   // Calculate sorted order using persisted riddleChapterOrder
   const orderedRiddleChapters = [...uniqueRiddleChapters].sort((a, b) => {
@@ -632,6 +637,8 @@ export default function AdminPage(): JSX.Element {
               setAllRiddles={setAllRiddles}
               riddleFilterChapter={riddleFilterChapter}
               setRiddleFilterChapter={setRiddleFilterChapter}
+              riddleChapterOrder={riddleChapterOrder}
+              setRiddleChapterOrder={setRiddleChapterOrder}
             />
           )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
