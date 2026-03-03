@@ -160,13 +160,13 @@ export const questionCSVConfig = {
 export function parseQuestionCSV(csvText: string): { success: boolean; imported: Question[]; failed: { row: number; error: string; data: unknown }[]; total: number } {
   const imported: Question[] = [];
   const failed: { row: number; error: string; data: unknown }[] = [];
-  
+
   const lines = csvText.trim().split('\n');
-  
+
   // Skip comment lines (starting with #) and find header
   let headerIndex = 0;
   let subjectName = '';
-  
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]?.trim() ?? '';
     if (line.startsWith('#')) {
@@ -181,15 +181,15 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
       break;
     }
   }
-  
+
   const headerLine = lines[headerIndex];
   if (headerIndex >= lines.length || !headerLine) {
     return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0 };
   }
-  
+
   // Parse headers
   const headers = parseCSVLine(headerLine);
-  
+
   // Find column indices (flexible matching)
   const getColumnIndex = (...names: string[]) => {
     for (const name of names) {
@@ -198,7 +198,7 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
     }
     return -1;
   };
-  
+
   const colIndex = {
     id: getColumnIndex('id'),
     question: getColumnIndex('question'),
@@ -210,32 +210,32 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
     level: getColumnIndex('level'),
     chapter: getColumnIndex('chapter'),
   };
-  
+
   // Validate required columns
   const requiredCols = ['question', 'optionA', 'optionB', 'correctAnswer', 'level'];
   const missingCols = requiredCols.filter(col => colIndex[col as keyof typeof colIndex] === -1);
-  
+
   if (missingCols.length > 0) {
-    return { 
-      success: false, 
-      imported: [], 
-      failed: [{ row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers }], 
-      total: 0 
+    return {
+      success: false,
+      imported: [],
+      failed: [{ row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers }],
+      total: 0
     };
   }
-  
+
   // Parse data rows
   for (let i = headerIndex + 1; i < lines.length; i++) {
     const rawLine = lines[i];
     if (!rawLine) continue;
     const line = rawLine.trim();
     if (!line) continue; // Skip empty lines
-    
+
     const values = parseCSVLine(line);
-    
+
     try {
       const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
-      
+
       const questionText = getValue(colIndex.question);
       const optionA = getValue(colIndex.optionA);
       const optionB = getValue(colIndex.optionB);
@@ -244,18 +244,18 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
       const correctAnswer = getValue(colIndex.correctAnswer) || 'A';
       const level = (getValue(colIndex.level) || 'easy').toLowerCase() as Question['level'];
       const chapter = getValue(colIndex.chapter) || subjectName || 'General';
-      
+
       // Validate
       if (!questionText) {
         failed.push({ row: i, error: 'Missing question text', data: line });
         continue;
       }
-      
+
       if (!optionA || !optionB) {
         failed.push({ row: i, error: 'Missing required options (A and B)', data: line });
         continue;
       }
-      
+
       // Map correct answer letter to option text
       imported.push({
         id: Date.now() + i,
@@ -273,7 +273,7 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
       failed.push({ row: i, error: (err as Error).message, data: line });
     }
   }
-  
+
   return {
     success: failed.length === 0,
     imported,
@@ -287,13 +287,13 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
  */
 export function exportQuestionsToCSV(questions: Question[], subjectName: string = 'General'): string {
   const lines: string[] = [];
-  
+
   // Add subject comment
   lines.push(`# Subject: ${subjectName}`);
-  
+
   // Add headers
   lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
-  
+
   // Add data rows
   questions.forEach((q, idx) => {
     const escapeCSV = (value: string) => {
@@ -303,7 +303,7 @@ export function exportQuestionsToCSV(questions: Question[], subjectName: string 
       }
       return value;
     };
-    
+
     const row = [
       idx + 1,
       escapeCSV(q.question),
@@ -315,10 +315,10 @@ export function exportQuestionsToCSV(questions: Question[], subjectName: string 
       q.level,
       escapeCSV(q.chapter),
     ];
-    
+
     lines.push(row.join(','));
   });
-  
+
   return lines.join('\n');
 }
 
@@ -345,10 +345,10 @@ export function downloadFile(content: string, filename: string, type: string): v
 export const riddleConfig: ImportExportConfig<Riddle> = {
   entityName: 'Riddle',
   filePrefix: 'riddles',
-  csvHeaders: ['ID', 'Question', 'Answer', 'OptionA', 'OptionB', 'OptionC', 'OptionD', 'CorrectOption', 'Difficulty', 'Chapter', 'Hint'],
+  csvHeaders: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
   jsonRootKey: 'riddles',
   validators: {
-    required: ['question', 'answer', 'options', 'correctOption', 'difficulty', 'chapter'],
+    required: ['question', 'options', 'correctOption', 'difficulty', 'chapter'],
     enumFields: {
       difficulty: ['easy', 'medium', 'hard', 'expert'],
       correctOption: ['A', 'B', 'C', 'D'],
@@ -498,13 +498,13 @@ export function importFromCSV<T>(
     const values = parseCSVLine(line);
     try {
       const partialData = mapper(values, headers);
-      
+
       // Simple validation - check required fields
       const missingFields = config.validators.required.filter(field => {
         const value = partialData[field];
         return value === undefined || value === null || value === '';
       });
-      
+
       if (missingFields.length === 0) {
         imported.push(partialData as T);
       } else {
@@ -538,8 +538,18 @@ function validateCSVStructure(
     return { isValid: false, data: null, errors };
   }
 
+  // Skip comment lines to find the actual header row
+  const firstDataLineIndex = lines.findIndex(line => line.trim() !== '' && !line.trim().startsWith('#'));
+
+  if (firstDataLineIndex === -1) {
+    errors.push('CSV file has no header row or data');
+    return { isValid: false, data: null, errors };
+  }
+
+  const validLines = lines.slice(firstDataLineIndex);
+
   if (expectedHeaders && expectedHeaders.length > 0) {
-    const firstLine = lines[0];
+    const firstLine = validLines[0];
     if (!firstLine) {
       errors.push('CSV file has no header row');
       return { isValid: false, data: null, errors };
@@ -553,7 +563,7 @@ function validateCSVStructure(
     }
   }
 
-  return { isValid: errors.length === 0, data: lines, errors };
+  return { isValid: errors.length === 0, data: validLines, errors };
 }
 
 // ============================================================================
@@ -566,17 +576,17 @@ function validateCSVStructure(
  */
 export function riddlesToCSV(riddles: Riddle[]): string {
   const lines: string[] = [];
-  
+
   // Add count comment
   lines.push(`# Count: ${riddles.length}`);
-  
+
   // Add headers matching quiz format
   lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
-  
+
   // Add data rows
   riddles.forEach(riddle => {
     const options = riddle.options || [];
-    
+
     const row = [
       riddle.id,
       escapeCSV(riddle.question),
@@ -588,10 +598,10 @@ export function riddlesToCSV(riddles: Riddle[]): string {
       riddle.difficulty,
       escapeCSV(riddle.chapter),
     ];
-    
+
     lines.push(row.join(','));
   });
-  
+
   return lines.join('\n');
 }
 
@@ -620,15 +630,23 @@ export function riddlesToJSON(riddles: Riddle[]): string {
  */
 export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
   return importFromCSV(csvText, riddleConfig, (values, headers) => {
-    const getValue = (_index: number, headerName: string): string => {
-      const headerIndex = headers.findIndex(h => h.toLowerCase().includes(headerName.toLowerCase()));
-      return headerIndex !== -1 && headerIndex < values.length ? values[headerIndex] ?? '' : '';
+    const getValue = (_index: number, ...headerNames: string[]): string => {
+      // Ignore spaces for matching headers like "Option A" to "optiona"
+      const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/\s+/g, ''));
+      for (const headerName of headerNames) {
+        const normalizedHeaderName = headerName.toLowerCase().replace(/\s+/g, '');
+        const headerIndex = normalizedHeaders.findIndex(h => h.includes(normalizedHeaderName));
+        if (headerIndex !== -1 && headerIndex < values.length) {
+          return values[headerIndex] ?? '';
+        }
+      }
+      return '';
     };
 
-    const optA = getValue(3, 'optiona') || getValue(2, 'answer');
-    const optB = getValue(4, 'optionb');
-    const optC = getValue(5, 'optionc');
-    const optD = getValue(6, 'optiond');
+    const optA = getValue(2, 'optiona', 'answer');
+    const optB = getValue(3, 'optionb');
+    const optC = getValue(4, 'optionc');
+    const optD = getValue(5, 'optiond');
 
     const options: string[] = [];
     if (optA) options.push(optA);
@@ -641,11 +659,11 @@ export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
     return {
       id: Date.now() + Math.floor(Math.random() * 1000),
       question: getValue(1, 'question'),
-      answer: getValue(2, 'answer'),
+      answer: getValue(2, 'answer', 'optiona'), // Provide a fallback if needed
       options: finalOptions,
-      correctOption: getValue(7, 'correctoption') || 'A',
-      difficulty: (getValue(8, 'difficulty') || 'medium') as Riddle['difficulty'],
-      chapter: getValue(9, 'chapter') || 'General',
+      correctOption: getValue(6, 'correctanswer', 'correctoption') || 'A',
+      difficulty: (getValue(7, 'level', 'difficulty') || 'medium') as Riddle['difficulty'],
+      chapter: getValue(8, 'chapter') || 'General',
       hint: getValue(10, 'hint'),
       status: 'published' as const,
     };

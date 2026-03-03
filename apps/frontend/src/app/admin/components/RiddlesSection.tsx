@@ -82,6 +82,8 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedRiddle, setSelectedRiddle] = useState<Riddle | null>(null);
+  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+  const [newChapterName, setNewChapterName] = useState('');
 
   // Import State
   const [importError, setImportError] = useState('');
@@ -106,8 +108,12 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
     chapter: '',
   });
 
-  // Get unique chapters from riddles
-  const chapters = Array.from(new Set(allRiddles.map(r => r.chapter)));
+  // Get unique chapters from riddles and always include the currently filtered one
+  const chapterSet = new Set(allRiddles.map(r => r.chapter));
+  if (riddleFilterChapter && riddleFilterChapter !== '') {
+    chapterSet.add(riddleFilterChapter);
+  }
+  const chapters = Array.from(chapterSet);
 
   // Calculate chapter counts
   const chapterCounts = chapters.reduce((acc, chapter) => {
@@ -235,12 +241,12 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
       console.log('First riddle:', firstRiddle);
       console.log('Options:', firstRiddle.options);
     }
-    
+
     const csv = riddlesToCSV(filteredRiddles);
-    
+
     // Debug: Log generated CSV
     console.log('Generated CSV (first 500 chars):', csv.substring(0, 500));
-    
+
     downloadFile(csv, `riddles_export_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
   };
 
@@ -431,18 +437,18 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
       prev.map(r =>
         r.id === selectedRiddle.id
           ? {
-              ...r,
-              question: riddleForm.question.trim(),
-              options: [
-                riddleForm.optionA.trim(),
-                riddleForm.optionB.trim(),
-                riddleForm.optionC.trim(),
-                riddleForm.optionD.trim(),
-              ],
-              correctOption: riddleForm.correctOption,
-              difficulty: riddleForm.difficulty,
-              chapter: riddleForm.chapter.trim(),
-            }
+            ...r,
+            question: riddleForm.question.trim(),
+            options: [
+              riddleForm.optionA.trim(),
+              riddleForm.optionB.trim(),
+              riddleForm.optionC.trim(),
+              riddleForm.optionD.trim(),
+            ],
+            correctOption: riddleForm.correctOption,
+            difficulty: riddleForm.difficulty,
+            chapter: riddleForm.chapter.trim(),
+          }
           : r
       )
     );
@@ -571,11 +577,10 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-sm text-gray-600">Chapter:</span>
           <button
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              riddleFilterChapter === ''
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterChapter === ''
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             onClick={() => setRiddleFilterChapter('')}
             aria-pressed={riddleFilterChapter === ''}
           >
@@ -584,18 +589,23 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
           {chapters.map(chapter => (
             <button
               key={`chapter-${chapter}`}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                riddleFilterChapter === chapter
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterChapter === chapter
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               onClick={() => setRiddleFilterChapter(chapter)}
               aria-pressed={riddleFilterChapter === chapter}
             >
               {chapter} <span className="opacity-70">({chapterCounts[chapter] || 0})</span>
             </button>
           ))}
-          <button className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-200">
+          <button
+            onClick={() => {
+              setNewChapterName('');
+              setShowAddChapterModal(true);
+            }}
+            className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-200"
+          >
             + Add Chapter
           </button>
         </div>
@@ -604,11 +614,10 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-sm text-gray-600">Level:</span>
           <button
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              riddleFilterLevel === ''
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterLevel === ''
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             onClick={() => setRiddleFilterLevel('')}
             aria-pressed={riddleFilterLevel === ''}
           >
@@ -617,11 +626,10 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
           {difficultyLevels.map(({ value, label }) => (
             <button
               key={`level-${value}`}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                riddleFilterLevel === value
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterLevel === value
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               onClick={() => setRiddleFilterLevel(value)}
               aria-pressed={riddleFilterLevel === value}
             >
@@ -840,7 +848,7 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
                 <div className="rounded-lg bg-gray-50 p-4 text-sm">
                   <p className="mb-2 font-medium">CSV Format:</p>
                   <code className="block overflow-x-auto rounded bg-gray-200 px-2 py-1 text-xs">
-                    Question,Answer,OptionA,OptionB,OptionC,OptionD,CorrectOption,Difficulty,Chapter,Hint
+                    ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
                   </code>
                   <p className="mb-2 mt-3 font-medium">JSON Format:</p>
                   <code className="block overflow-x-auto rounded bg-gray-200 px-2 py-1 text-xs">
@@ -1123,30 +1131,86 @@ export function RiddlesSection({ initialRiddles }: RiddlesSectionProps): JSX.Ele
       )}
 
       {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && selectedRiddle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6">
-            <h3 className="mb-2 text-xl font-bold">🗑️ Confirm Delete</h3>
-            <p className="mb-4 text-gray-600">Are you sure you want to delete this riddle?</p>
-            <div className="mb-4 rounded-lg bg-gray-50 p-3">
-              <p className="line-clamp-2 text-sm text-gray-800">{selectedRiddle.question}</p>
-            </div>
-
-            <div className="flex gap-2">
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+            <h3 className="mb-2 text-lg font-bold text-gray-900">Delete Riddle</h3>
+            <p className="mb-6 text-gray-600">
+              Are you sure you want to delete this riddle? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
               <button
-                onClick={() => {
-                  setShowDeleteConfirm(false);
-                  setSelectedRiddle(null);
-                }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                onClick={() => setShowDeleteConfirm(false)}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteRiddle}
-                className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Chapter Modal */}
+      {showAddChapterModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-md transform rounded-xl border border-gray-100 bg-white p-6 text-left align-middle shadow-2xl transition-all">
+            <h3 className="mb-4 text-xl font-bold leading-6 text-gray-900">Add New Chapter</h3>
+            <div className="mb-6">
+              <label htmlFor="new-chapter-name" className="mb-2 block text-sm font-medium text-gray-700">
+                Chapter Name
+              </label>
+              <input
+                id="new-chapter-name"
+                type="text"
+                autoFocus
+                value={newChapterName}
+                onChange={(e) => setNewChapterName(e.target.value)}
+                placeholder="e.g., Logic Puzzles, Math Riddles, Wordplay"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition-all placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const cleanName = newChapterName.trim();
+                    if (cleanName) {
+                      setRiddleFilterChapter(cleanName);
+                      if (!chapters.includes(cleanName)) {
+                        setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
+                      }
+                      setShowAddChapterModal(false);
+                    }
+                  } else if (e.key === 'Escape') {
+                    setShowAddChapterModal(false);
+                  }
+                }}
+              />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowAddChapterModal(false)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  const cleanName = newChapterName.trim();
+                  if (cleanName) {
+                    setRiddleFilterChapter(cleanName);
+                    if (!chapters.includes(cleanName)) {
+                      setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
+                    }
+                    setShowAddChapterModal(false);
+                  }
+                }}
+                disabled={!newChapterName.trim()}
+                className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-green-300"
+              >
+                Create Chapter
               </button>
             </div>
           </div>
