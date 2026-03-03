@@ -37,7 +37,7 @@ import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFil
 @ApiTags('Dad Jokes')
 @Controller('jokes')
 export class DadJokesController {
-  constructor(private readonly jokesService: DadJokesService) {}
+  constructor(private readonly jokesService: DadJokesService) { }
 
   // ==================== CLASSIC FORMAT - PUBLIC ====================
 
@@ -69,8 +69,10 @@ export class DadJokesController {
   @Get('classic/categories')
   @ApiOperation({ summary: 'Get all classic joke categories' })
   @ApiResponse({ status: 200, description: 'Returns all categories' })
-  findCategories(): Promise<JokeCategory[]> {
-    return this.jokesService.findAllCategories();
+  findCategories(
+    @Query('hasContent') hasContent?: string
+  ): Promise<JokeCategory[]> {
+    return this.jokesService.findAllCategories(hasContent === 'true');
   }
 
   @Get('classic/categories/:id')

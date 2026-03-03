@@ -16,12 +16,10 @@ import {
   Home
 } from 'lucide-react';
 
-// Types
 import type {
   Riddle,
   Subject,
   Joke,
-  ContentStatus,
   Question,
   MenuSection
 } from './types';
@@ -32,8 +30,7 @@ import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
 import {
-  initialJokes as libInitialJokes,
-  initialRiddles as libInitialRiddles
+  initialJokes as libInitialJokes
 } from '@/lib/initial-data';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 
@@ -233,12 +230,29 @@ export default function AdminPage(): JSX.Element {
   const { allJokes, setAllJokes } = useGlobalJokes();
 
   // Hoisted Riddles State
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() => {
-    if (typeof window !== 'undefined') {
-      return getItem(STORAGE_KEYS.RIDDLES, libInitialRiddles as Riddle[]);
-    }
-    return libInitialRiddles as Riddle[];
-  });
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
+
+  // Fetch riddles from backend API
+  useEffect(() => {
+    import('@/lib/riddles-api').then(({ getAllQuizRiddlesAdmin }) => {
+      getAllQuizRiddlesAdmin()
+        .then(quizRiddles => {
+          const mappedRiddles = quizRiddles.map(qr => ({
+            id: qr.id as unknown as number,
+            question: qr.question,
+            options: qr.options || [],
+            correctOption: qr.correctAnswer || 'A',
+            difficulty: (qr.level as Riddle['difficulty']) || 'medium',
+            chapter: qr.chapter?.name || 'General',
+            status: 'published' as const,
+            ...(qr.hint ? { hint: qr.hint } : {}),
+          }));
+          setAllRiddles(mappedRiddles);
+        })
+        .catch((err: any) => console.error('Failed to load quiz riddles:', err));
+    });
+  }, []);
+
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
@@ -266,9 +280,7 @@ export default function AdminPage(): JSX.Element {
     setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
   }, [allQuestions]);
 
-  useEffect(() => {
-    setItem(STORAGE_KEYS.RIDDLES, allRiddles);
-  }, [allRiddles]);
+
 
   useEffect(() => {
     setItem('aiquiz:riddle-chapter-order', riddleChapterOrder);
@@ -538,6 +550,8 @@ export default function AdminPage(): JSX.Element {
             </div>
           </div>
         </header>
+
+
 
         {/* Content Area */}
         <div className="p-6">

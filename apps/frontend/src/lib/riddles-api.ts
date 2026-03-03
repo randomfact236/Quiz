@@ -62,8 +62,8 @@ export interface ReorderChaptersDto {
 /**
  * Get all riddle subjects (Quiz format)
  */
-export async function getSubjects(): Promise<RiddleSubject[]> {
-  const response = await api.get<RiddleSubject[]>('/riddles/subjects');
+export async function getSubjects(hasContent: boolean = false): Promise<RiddleSubject[]> {
+  const response = await api.get<RiddleSubject[]>(`/riddles/subjects${hasContent ? '?hasContent=true' : ''}`);
   return response.data;
 }
 
@@ -105,15 +105,25 @@ export async function deleteSubject(id: string): Promise<void> {
 /**
  * Get chapters by subject ID
  */
-export async function getChaptersBySubject(subjectId: string): Promise<RiddleChapter[]> {
-  const response = await api.get<RiddleChapter[]>(`/riddles/chapters/${subjectId}`);
+export async function getChaptersBySubject(
+  subjectId: string,
+  hasContent: boolean = false
+): Promise<RiddleChapter[]> {
+  const response = await api.get<RiddleChapter[]>(
+    `/riddles/chapters/${subjectId}${hasContent ? '?hasContent=true' : ''}`
+  );
   return response.data;
 }
 
 /**
  * Get all chapters across all subjects
  */
-export async function getAllChapters(): Promise<RiddleChapter[]> {
+export async function getAllChapters(hasContent: boolean = false): Promise<RiddleChapter[]> {
+  if (hasContent) {
+    const response = await api.get<RiddleChapter[]>('/riddles/chapters/active/all');
+    return response.data;
+  }
+
   // Get all subjects first, then fetch chapters for each
   const subjects = await getSubjects();
   const allChapters: RiddleChapter[] = [];
@@ -197,10 +207,39 @@ export async function getMixedRiddles(count: number = 50): Promise<QuizRiddle[]>
 }
 
 /**
+ * Get all quiz riddles for Admin panel
+ */
+export async function getAllQuizRiddlesAdmin(): Promise<QuizRiddle[]> {
+  const response = await api.get<QuizRiddle[]>('/riddles/quiz/all');
+  return response.data;
+}
+
+/**
+ * Execute bulk action on quiz riddles
+ */
+export async function bulkActionRiddles(
+  ids: string[],
+  action: 'publish' | 'draft' | 'trash' | 'delete'
+): Promise<{ success: boolean; processed: number; succeeded: number; failed: number; message: string }> {
+  const response = await api.post('/riddles/quiz/bulk-action', { ids, action });
+  return response.data as { success: boolean; processed: number; succeeded: number; failed: number; message: string };
+}
+
+/**
  * Create a new quiz riddle (Admin only)
  */
 export async function createRiddle(dto: CreateRiddleDto): Promise<Riddle> {
   const response = await api.post<Riddle>('/riddles/quiz', dto);
+  return response.data;
+}
+
+/**
+ * Bulk create quiz riddles (Admin only)
+ */
+export async function bulkCreateRiddles(
+  dtos: CreateRiddleDto[]
+): Promise<{ count: number; errors: string[] }> {
+  const response = await api.post<{ count: number; errors: string[] }>('/riddles/quiz/bulk', dtos);
   return response.data;
 }
 
@@ -263,7 +302,6 @@ export interface RiddlesStats {
   totalSubjects: number;
   totalChapters: number;
   riddlesByDifficulty: Record<string, number>;
-  quizRiddlesByDifficulty: Record<string, number>;
 }
 
 /**

@@ -56,7 +56,7 @@ export class DadJokesService {
   ): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
-    
+
     const where: FindOptionsWhere<DadJoke> = {};
     if (status) {
       where.status = status;
@@ -77,7 +77,7 @@ export class DadJokesService {
     const count = await this.jokeRepo.count({
       where: { status: ContentStatus.PUBLISHED },
     });
-    
+
     if (count === 0) {
       throw new NotFoundException('No jokes found');
     }
@@ -90,7 +90,7 @@ export class DadJokesService {
       .skip(randomOffset)
       .take(1)
       .getOne();
-      
+
     if (joke === null) {
       throw new NotFoundException('No jokes found');
     }
@@ -181,7 +181,7 @@ export class DadJokesService {
       for (let i = 0; i < dto.length; i++) {
         const j = dto[i];
         const category = categoryMap.get(j.categoryId);
-        
+
         if (!category) {
           errors.push(`Row ${i + 1}: Category not found (ID: ${j.categoryId})`);
           continue;
@@ -200,10 +200,10 @@ export class DadJokesService {
       }
 
       const saved = await transactionalEntityManager.save(jokes);
-      
+
       // Only invalidate cache if transaction succeeds
       await this.cacheService.delPattern('jokes:*');
-      
+
       return { count: saved.length, errors };
     });
   }
@@ -249,14 +249,18 @@ export class DadJokesService {
 
   // ==================== CLASSIC CATEGORIES ====================
 
-  async findAllCategories(): Promise<JokeCategory[]> {
+  async findAllCategories(hasContentOnly: boolean = false): Promise<JokeCategory[]> {
     return this.cacheService.getOrSet(
-      'jokes:categories',
+      `jokes:categories:hasContent:${hasContentOnly}`,
       async () => {
-        return this.categoryRepo.find({
-          order: { name: 'ASC' },
-          relations: ['jokes'],
-        });
+        const query = this.categoryRepo.createQueryBuilder('category')
+          .orderBy('category.name', 'ASC');
+
+        if (hasContentOnly) {
+          query.innerJoin('category.jokes', 'joke');
+        }
+
+        return query.getMany();
       },
       DEFAULT_CACHE_TTL_S,
     );
@@ -443,7 +447,7 @@ export class DadJokesService {
 
     // More efficient random selection
     const totalCount = await this.quizJokeRepo.count({ where: { level } });
-    
+
     if (totalCount === 0) {
       return [];
     }
@@ -459,7 +463,7 @@ export class DadJokesService {
       .select('joke.id')
       .where('joke.level = :level', { level })
       .getMany();
-    
+
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
     const selectedIds = shuffled.map(j => j.id);
@@ -473,7 +477,7 @@ export class DadJokesService {
   async findMixedQuizJokes(count: number): Promise<QuizJoke[]> {
     // More efficient random selection
     const totalCount = await this.quizJokeRepo.count();
-    
+
     if (totalCount === 0) {
       return [];
     }
@@ -488,7 +492,7 @@ export class DadJokesService {
       .createQueryBuilder('joke')
       .select('joke.id')
       .getMany();
-    
+
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
     const selectedIds = shuffled.map(j => j.id);
@@ -544,7 +548,7 @@ export class DadJokesService {
       for (let i = 0; i < dto.length; i++) {
         const j = dto[i];
         const chapter = chapterMap.get(j.chapterId);
-        
+
         if (!chapter) {
           errors.push(`Row ${i + 1}: Chapter not found (ID: ${j.chapterId})`);
           continue;

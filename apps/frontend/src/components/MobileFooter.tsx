@@ -1,9 +1,13 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Laugh, FileImage, X, BookOpen, Brain } from 'lucide-react';
+import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { getAllChapters } from '@/lib/riddles-api';
+import { getSubjects, QuizSubject } from '@/lib/quiz-api';
+import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
+import type { RiddleChapter } from '@/types/riddles';
 
 // Drawer Types
 type DrawerType = 'quiz' | 'jokes' | 'riddles' | 'image-riddles' | null;
@@ -15,31 +19,7 @@ const DRAWER_TYPES = {
     IMAGE_RIDDLES: 'image-riddles',
 } as const;
 
-// Content Data
-const QUIZ_SUBJECTS = [
-    { id: 'science', label: 'Science', icon: '🔬' },
-    { id: 'math', label: 'Math', icon: '🔢' },
-    { id: 'history', label: 'History', icon: '📜' },
-    { id: 'geography', label: 'Geography', icon: '🌍' },
-    { id: 'english', label: 'English', icon: '📖' },
-    { id: 'environment', label: 'Environment', icon: '🌱' },
-    { id: 'technology', label: 'Technology', icon: '💻' },
-    { id: 'business', label: 'Business', icon: '💼' },
-    { id: 'health', label: 'Health', icon: '💪' },
-    { id: 'parenting', label: 'Parenting', icon: '👶' },
-];
-
-const JOKE_CATEGORIES = [
-    { title: 'Classic Dad Jokes', icon: '😄' },
-    { title: 'Tech Geek Dad Jokes', icon: '💻' },
-    { title: 'Parenting Dad Jokes', icon: '👶' },
-    { title: 'Work Office Dad Jokes', icon: '💼' },
-];
-
-const RIDDLE_CHAPTERS = Array.from({ length: 20 }, (_, i) => ({
-    num: i + 1,
-    title: `Chapter ${i + 1}`,
-}));
+// Hardcoded lists removed - using dynamic fetching
 
 const IMAGE_RIDDLE_LEVELS = [
     { id: 'easy', label: 'Easy', icon: '🌱' },
@@ -68,10 +48,68 @@ export default function MobileFooter() {
     const [isClient, setIsClient] = useState(false);
     const [currentPath, setCurrentPath] = useState('/');
 
+    const [riddleChapters, setRiddleChapters] = useState<RiddleChapter[]>([]);
+    const [quizSubjects, setQuizSubjects] = useState<QuizSubject[]>([]);
+    const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
+
+    // Loading states
+    const [loadingRiddles, setLoadingRiddles] = useState(false);
+    const [loadingQuiz, setLoadingQuiz] = useState(false);
+    const [loadingJokes, setLoadingJokes] = useState(false);
+
     useEffect(() => {
         setIsClient(true);
         setCurrentPath(window.location.pathname);
     }, []);
+
+    // Fetch and check content availability for drawers
+    useEffect(() => {
+        const fetchRiddles = async () => {
+            if (activeDrawer === DRAWER_TYPES.RIDDLES && riddleChapters.length === 0) {
+                setLoadingRiddles(true);
+                try {
+                    const data = await getAllChapters(true); // true = hasContentOnly
+                    setRiddleChapters(data);
+                } catch (error) {
+                    console.error('Failed to fetch riddle chapters:', error);
+                } finally {
+                    setLoadingRiddles(false);
+                }
+            }
+        };
+
+        const fetchQuiz = async () => {
+            if (activeDrawer === DRAWER_TYPES.QUIZ && quizSubjects.length === 0) {
+                setLoadingQuiz(true);
+                try {
+                    const data = await getSubjects(true);
+                    setQuizSubjects(data);
+                } catch (error) {
+                    console.error('Failed to fetch quiz subjects:', error);
+                } finally {
+                    setLoadingQuiz(false);
+                }
+            }
+        };
+
+        const fetchJokes = async () => {
+            if (activeDrawer === DRAWER_TYPES.JOKES && jokeCategories.length === 0) {
+                setLoadingJokes(true);
+                try {
+                    const data = await getJokeCategories(true);
+                    setJokeCategories(data);
+                } catch (error) {
+                    console.error('Failed to fetch joke categories:', error);
+                } finally {
+                    setLoadingJokes(false);
+                }
+            }
+        };
+
+        fetchRiddles();
+        fetchQuiz();
+        fetchJokes();
+    }, [activeDrawer, riddleChapters.length, quizSubjects.length, jokeCategories.length]);
 
     const toggleDrawer = (drawer: DrawerType) => {
         if (activeDrawer === drawer) {
@@ -128,51 +166,90 @@ export default function MobileFooter() {
 
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                             {/* Quiz content */}
-                            {activeDrawer === DRAWER_TYPES.QUIZ &&
-                                QUIZ_SUBJECTS.map((subject) => (
-                                    <Link
-                                        key={subject.id}
-                                        href={`/quiz?subject=${subject.id}`}
-                                        onClick={closeDrawer}
-                                        className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-gray-600"
-                                    >
-                                        <span className="mb-2 text-2xl">{subject.icon}</span>
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                            {subject.label}
-                                        </span>
-                                    </Link>
-                                ))}
+                            {activeDrawer === DRAWER_TYPES.QUIZ && (
+                                loadingQuiz ? (
+                                    <div className="col-span-full flex h-32 flex-col items-center justify-center space-y-2 py-8">
+                                        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                                        <p className="text-sm text-gray-500">Loading subjects...</p>
+                                    </div>
+                                ) : quizSubjects.length > 0 ? (
+                                    quizSubjects.map((subject) => (
+                                        <Link
+                                            key={subject.id}
+                                            href={`/quiz?subject=${subject.id}`}
+                                            onClick={closeDrawer}
+                                            className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                        >
+                                            <span className="mb-2 text-2xl">{subject.emoji}</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                {subject.name}
+                                            </span>
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 rounded-xl dark:bg-gray-800/50">
+                                        <p className="text-sm font-medium text-gray-500">No subjects found</p>
+                                        <p className="text-xs text-gray-400">Content will be added soon.</p>
+                                    </div>
+                                )
+                            )}
 
                             {/* Jokes content */}
-                            {activeDrawer === DRAWER_TYPES.JOKES &&
-                                JOKE_CATEGORIES.map((cat) => (
-                                    <Link
-                                        key={cat.title}
-                                        href="/jokes" // Jokes page doesn't have query params yet, defaulting to root
-                                        onClick={closeDrawer}
-                                        className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-orange-50 dark:bg-gray-700 dark:hover:bg-gray-600"
-                                    >
-                                        <span className="mb-2 text-2xl">{cat.icon}</span>
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                            {cat.title}
-                                        </span>
-                                    </Link>
-                                ))}
+                            {activeDrawer === DRAWER_TYPES.JOKES && (
+                                loadingJokes ? (
+                                    <div className="col-span-full flex h-32 flex-col items-center justify-center space-y-2 py-8">
+                                        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+                                        <p className="text-sm text-gray-500">Loading categories...</p>
+                                    </div>
+                                ) : jokeCategories.length > 0 ? (
+                                    jokeCategories.map((cat) => (
+                                        <Link
+                                            key={cat.id}
+                                            href={`/jokes?category=${cat.id}`}
+                                            onClick={closeDrawer}
+                                            className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-orange-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                        >
+                                            <span className="mb-2 text-2xl">{cat.emoji}</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                {cat.name}
+                                            </span>
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 rounded-xl dark:bg-gray-800/50">
+                                        <p className="text-sm font-medium text-gray-500">No categories found</p>
+                                        <p className="text-xs text-gray-400">Content will be added soon.</p>
+                                    </div>
+                                )
+                            )}
 
                             {/* Riddles content */}
-                            {activeDrawer === DRAWER_TYPES.RIDDLES &&
-                                RIDDLE_CHAPTERS.map((chapter) => (
-                                    <Link
-                                        key={chapter.num}
-                                        href="/riddles"
-                                        onClick={closeDrawer}
-                                        className="flex flex-col items-center rounded-xl bg-gray-50 p-3 text-center transition-colors hover:bg-purple-50 dark:bg-gray-700 dark:hover:bg-gray-600"
-                                    >
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                            Chapter {chapter.num}
-                                        </span>
-                                    </Link>
-                                ))}
+                            {activeDrawer === DRAWER_TYPES.RIDDLES && (
+                                loadingRiddles ? (
+                                    <div className="col-span-full py-8 flex flex-col items-center gap-2">
+                                        <Loader2 className="animate-spin text-purple-600" />
+                                        <span className="text-sm text-gray-500">Loading chapters...</span>
+                                    </div>
+                                ) : riddleChapters.length > 0 ? (
+                                    riddleChapters.map((chapter) => (
+                                        <Link
+                                            key={chapter.id}
+                                            href={`/riddles/play?chapterId=${chapter.id}&mode=practice`}
+                                            onClick={closeDrawer}
+                                            className="flex flex-col items-center rounded-xl bg-gray-50 p-3 text-center transition-colors hover:bg-purple-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                        >
+                                            <span className="mb-1 text-xl">{chapter.subject?.emoji || '🧩'}</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                {chapter.name}
+                                            </span>
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full py-8 text-center text-gray-500">
+                                        No active chapters found.
+                                    </div>
+                                )
+                            )}
 
                             {/* Image Riddles content */}
                             {activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES &&

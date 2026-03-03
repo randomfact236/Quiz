@@ -171,6 +171,20 @@ export interface QuizSettings {
 }
 
 /**
+ * Riddle timer settings per difficulty level (in seconds)
+ */
+export interface RiddleLevelTimers {
+  /** Timer for easy riddles */
+  easy: number;
+  /** Timer for medium riddles */
+  medium: number;
+  /** Timer for hard riddles */
+  hard: number;
+  /** Timer for expert riddles */
+  expert: number;
+}
+
+/**
  * Riddles default settings
  */
 export interface RiddlesDefaults {
@@ -178,6 +192,8 @@ export interface RiddlesDefaults {
   categoryEmoji: string;
   /** Default difficulty level */
   difficulty: string;
+  /** Per-level timer settings */
+  levelTimers?: RiddleLevelTimers;
 }
 
 /**

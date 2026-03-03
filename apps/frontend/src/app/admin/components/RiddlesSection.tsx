@@ -96,6 +96,7 @@ export function RiddlesSection({
   const [importError, setImportError] = useState('');
   const [importPreview, setImportPreview] = useState<Riddle[]>([]);
   const [importWarnings, setImportWarnings] = useState<string[]>([]);
+  const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const importModalRef = useRef<HTMLDivElement>(null);
   const addModalRef = useRef<HTMLDivElement>(null);
@@ -114,6 +115,27 @@ export function RiddlesSection({
     difficulty: 'easy',
     chapter: '',
   });
+
+  const [chapterNameToId, setChapterNameToId] = useState<Record<string, string>>({});
+  const defaultSubjectIdRef = useRef<string>('');
+
+  useEffect(() => {
+    import('@/lib/riddles-api').then(({ getAllChapters }) => {
+      getAllChapters()
+        .then(apiChapters => {
+          const mapping: Record<string, string> = {};
+          apiChapters.forEach((c: any) => {
+            mapping[c.name] = c.id;
+            // Store the first subjectId we encounter as the default
+            if (!defaultSubjectIdRef.current && c.subject?.id) {
+              defaultSubjectIdRef.current = c.subject.id;
+            }
+          });
+          setChapterNameToId(mapping);
+        })
+        .catch(err => console.error('Failed to load chapters for RiddlesSection:', err));
+    });
+  }, []);
 
   // Get unique chapters from riddles and always include the currently filtered one
   // and all chapters from the persisted order
@@ -204,36 +226,34 @@ export function RiddlesSection({
 
   // Bulk action handler
   const handleBulkAction = async (action: BulkActionType) => {
+    if (selectedIds.length === 0) return;
     setBulkActionLoading(true);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+      const { bulkActionRiddles } = await import('@/lib/riddles-api');
+      await bulkActionRiddles(selectedIds, action === 'restore' ? 'draft' : action);
 
-    setAllRiddles(prev =>
-      prev
-        .map(riddle => {
-          if (selectedIds.includes(String(riddle.id))) {
-            switch (action) {
-              case 'publish':
-                return { ...riddle, status: 'published' as ContentStatus };
-              case 'draft':
-                return { ...riddle, status: 'draft' as ContentStatus };
-              case 'trash':
-                return { ...riddle, status: 'trash' as ContentStatus };
-              case 'delete':
-                return null;
-              case 'restore':
-                return { ...riddle, status: 'draft' as ContentStatus };
-              default:
-                return riddle;
+      if (action === 'delete') {
+        setAllRiddles(prev => prev.filter(r => !selectedIds.includes(String(r.id))));
+      } else {
+        // We mock status changes for UI optimism
+        setAllRiddles(prev =>
+          prev.map(r => {
+            if (selectedIds.includes(String(r.id))) {
+              if (action === 'publish') return { ...r, status: 'published' as ContentStatus };
+              if (action === 'draft' || action === 'restore') return { ...r, status: 'draft' as ContentStatus };
+              if (action === 'trash') return { ...r, status: 'trash' as ContentStatus };
             }
-          }
-          return riddle;
-        })
-        .filter(Boolean) as Riddle[]
-    );
-
-    setSelectedIds([]);
-    setBulkActionLoading(false);
+            return r;
+          })
+        );
+      }
+      setSelectedIds([]);
+    } catch (err: any) {
+      alert('Bulk action failed: ' + err.message);
+    } finally {
+      setBulkActionLoading(false);
+    }
   };
 
   // Check if an option is the correct answer
@@ -311,13 +331,110 @@ export function RiddlesSection({
     reader.readAsText(file);
   };
 
-  const handleConfirmImport = () => {
-    setAllRiddles(prev => [...prev, ...importPreview]);
-    setShowImportModal(false);
-    setImportPreview([]);
-    setImportWarnings([]);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+  const handleConfirmImport = async () => {
+    setIsImporting(true);
+    setImportError('');
+    try {
+      const {
+        bulkCreateRiddles,
+        getAllQuizRiddlesAdmin,
+        createChapter,
+        getAllChapters,
+        getSubjects,
+      } = await import('@/lib/riddles-api');
+
+      // Build up-to-date chapter map (re-fetch to include any recently created chapters)
+      const apiChapters = await getAllChapters();
+      const latestMap: Record<string, string> = {};
+      let subjectId = defaultSubjectIdRef.current;
+      apiChapters.forEach((c: any) => {
+        latestMap[c.name] = c.id;
+        if (!subjectId && c.subject?.id) subjectId = c.subject.id;
+      });
+
+      // If we still have no subject, fetch subjects list and pick the first
+      if (!subjectId) {
+        try {
+          const subjects = await getSubjects();
+          subjectId = subjects[0]?.id || '';
+        } catch { }
+      }
+
+      if (!subjectId) {
+        setImportError('No subjects found in the database. Please create a subject and chapter first.');
+        return;
+      }
+
+      // Collect unique chapter names from the import file
+      const uniqueChapterNames = [...new Set(
+        importPreview.map(r => r.chapter?.trim()).filter(Boolean)
+      )] as string[];
+
+      // Auto-create any chapters that don't exist yet
+      for (const chapterName of uniqueChapterNames) {
+        if (!latestMap[chapterName]) {
+          try {
+            // Determine next chapter number
+            const nextNum = Object.keys(latestMap).length + 1;
+            const created = await createChapter({
+              name: chapterName,
+              chapterNumber: nextNum,
+              subjectId,
+            });
+            latestMap[chapterName] = created.id;
+          } catch (err: any) {
+            console.warn(`Could not create chapter "${chapterName}":`, err.message);
+          }
+        }
+      }
+
+      // Update state so other parts of the UI also see new chapters
+      setChapterNameToId({ ...latestMap });
+
+      // Build riddle DTOs using the correct chapter IDs
+      const dtos = importPreview.map(r => {
+        const chapterKey = r.chapter?.trim() || '';
+        const cId = latestMap[chapterKey] || Object.values(latestMap)[0];
+        const letterIndex = ['A', 'B', 'C', 'D'].indexOf(r.correctOption?.toUpperCase() || 'A');
+        const correctAnswer = (r.options && r.options[letterIndex] != null)
+          ? r.options[letterIndex]
+          : (r.options?.[0] || r.correctOption || 'A');
+        return {
+          question: r.question,
+          options: r.options || [],
+          correctAnswer,
+          level: r.difficulty || 'medium',
+          chapterId: cId,
+        };
+      });
+
+      if (dtos.length > 0) {
+        await bulkCreateRiddles(dtos as any);
+
+        const updated = await getAllQuizRiddlesAdmin();
+        const mapped = updated.map(qr => ({
+          id: qr.id as unknown as number,
+          question: qr.question,
+          options: qr.options || [],
+          correctOption: qr.correctAnswer || 'A',
+          difficulty: (qr.level as Riddle['difficulty']) || 'medium',
+          chapter: qr.chapter?.name || 'General',
+          status: 'published' as const,
+        }));
+        setAllRiddles(mapped);
+      }
+
+      setShowImportModal(false);
+      setImportPreview([]);
+      setImportWarnings([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (err: any) {
+      console.error('Import failed', err);
+      setImportError('Failed to import riddles: ' + err.message);
+    } finally {
+      setIsImporting(false);
     }
   };
 
@@ -400,7 +517,7 @@ export function RiddlesSection({
   }, [showEditModal]);
 
   // CRUD Functions
-  const handleAddRiddle = () => {
+  const handleAddRiddle = async () => {
     if (
       !riddleForm.question.trim() ||
       !riddleForm.optionA.trim() ||
@@ -410,27 +527,46 @@ export function RiddlesSection({
       return;
     }
 
-    const newRiddle: Riddle = {
-      id: Date.now(),
-      question: riddleForm.question.trim(),
-      options: [
-        riddleForm.optionA.trim(),
-        riddleForm.optionB.trim(),
-        riddleForm.optionC.trim(),
-        riddleForm.optionD.trim(),
-      ],
-      correctOption: riddleForm.correctOption,
-      difficulty: riddleForm.difficulty,
-      chapter: riddleForm.chapter.trim(),
-      status: 'draft',
-    };
+    const chapterId = chapterNameToId[riddleForm.chapter.trim()];
+    if (!chapterId) {
+      alert(`Chapter "${riddleForm.chapter}" not found on backend. Please ensure it exists.`);
+      return;
+    }
 
-    setAllRiddles(prev => [...prev, newRiddle]);
-    setShowAddModal(false);
-    resetRiddleForm();
+    try {
+      const { createRiddle } = await import('@/lib/riddles-api');
+      const created = (await createRiddle({
+        question: riddleForm.question.trim(),
+        options: [
+          riddleForm.optionA.trim(),
+          riddleForm.optionB.trim(),
+          riddleForm.optionC.trim(),
+          riddleForm.optionD.trim(),
+        ].filter(Boolean),
+        correctOption: riddleForm.correctOption,
+        difficulty: riddleForm.difficulty as any,
+        chapterId: chapterId,
+      })) as any; // Type override since backend returns QuizRiddle string id
+
+      const newRiddle: Riddle = {
+        id: created.id,
+        question: created.question,
+        options: created.options || [],
+        correctOption: created.correctAnswer || riddleForm.correctOption,
+        difficulty: created.level as any,
+        chapter: riddleForm.chapter.trim(),
+        status: 'published' as const,
+      };
+
+      setAllRiddles(prev => [newRiddle, ...prev]);
+      setShowAddModal(false);
+      resetRiddleForm();
+    } catch (err: any) {
+      alert('Failed to add riddle: ' + err.message);
+    }
   };
 
-  const handleEditRiddle = () => {
+  const handleEditRiddle = async () => {
     if (
       !selectedRiddle ||
       !riddleForm.question.trim() ||
@@ -441,37 +577,69 @@ export function RiddlesSection({
       return;
     }
 
-    setAllRiddles(prev =>
-      prev.map(r =>
-        r.id === selectedRiddle.id
-          ? {
-            ...r,
-            question: riddleForm.question.trim(),
-            options: [
-              riddleForm.optionA.trim(),
-              riddleForm.optionB.trim(),
-              riddleForm.optionC.trim(),
-              riddleForm.optionD.trim(),
-            ],
-            correctOption: riddleForm.correctOption,
-            difficulty: riddleForm.difficulty,
-            chapter: riddleForm.chapter.trim(),
-          }
-          : r
-      )
-    );
-    setShowEditModal(false);
-    setSelectedRiddle(null);
-    resetRiddleForm();
+    const chapterId = chapterNameToId[riddleForm.chapter.trim()];
+    if (!chapterId) {
+      alert(`Chapter "${riddleForm.chapter}" not found on backend. Please ensure it exists.`);
+      return;
+    }
+
+    try {
+      const { updateRiddle } = await import('@/lib/riddles-api');
+      await updateRiddle(String(selectedRiddle.id), {
+        question: riddleForm.question.trim(),
+        options: [
+          riddleForm.optionA.trim(),
+          riddleForm.optionB.trim(),
+          riddleForm.optionC.trim(),
+          riddleForm.optionD.trim(),
+        ].filter(Boolean),
+        correctOption: riddleForm.correctOption,
+        difficulty: riddleForm.difficulty as any,
+        chapterId: chapterId,
+      });
+
+      setAllRiddles(prev =>
+        prev.map(r =>
+          r.id === selectedRiddle.id
+            ? {
+              ...r,
+              question: riddleForm.question.trim(),
+              options: [
+                riddleForm.optionA.trim(),
+                riddleForm.optionB.trim(),
+                riddleForm.optionC.trim(),
+                riddleForm.optionD.trim(),
+              ].filter(Boolean),
+              correctOption: riddleForm.correctOption,
+              difficulty: riddleForm.difficulty,
+              chapter: riddleForm.chapter.trim(),
+            }
+            : r
+        )
+      );
+      setShowEditModal(false);
+      setSelectedRiddle(null);
+      resetRiddleForm();
+    } catch (err: any) {
+      alert('Failed to update riddle: ' + err.message);
+    }
   };
 
-  const handleDeleteRiddle = () => {
+  const handleDeleteRiddle = async () => {
     if (!selectedRiddle) {
       return;
     }
-    setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
-    setShowDeleteConfirm(false);
-    setSelectedRiddle(null);
+
+    try {
+      const { bulkActionRiddles } = await import('@/lib/riddles-api');
+      await bulkActionRiddles([String(selectedRiddle.id)], 'delete');
+
+      setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
+      setShowDeleteConfirm(false);
+      setSelectedRiddle(null);
+    } catch (err: any) {
+      alert('Failed to delete riddle: ' + err.message);
+    }
   };
 
   const openEditModal = (riddle: Riddle) => {
@@ -949,9 +1117,10 @@ export function RiddlesSection({
                   </button>
                   <button
                     onClick={handleConfirmImport}
-                    className="flex-1 rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                    disabled={isImporting}
+                    className="flex-1 rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 disabled:opacity-50"
                   >
-                    Import {importPreview.length} Riddles
+                    {isImporting ? 'Importing...' : `Import ${importPreview.length} Riddles`}
                   </button>
                 </div>
               </div>

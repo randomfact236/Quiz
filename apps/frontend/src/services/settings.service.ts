@@ -1,12 +1,12 @@
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 import {
-  ONE_HOUR_S,
-  ONE_DAY_S,
-  RIDDLE_TIMERS,
-  DEFAULT_QUIZ_TIME_LIMIT,
-  DEFAULT_PASSING_SCORE,
-  DEFAULT_QUESTIONS_PER_QUIZ,
-  MOCK_API_DELAY_MS,
+    ONE_HOUR_S,
+    ONE_DAY_S,
+    RIDDLE_TIMERS,
+    DEFAULT_QUIZ_TIME_LIMIT,
+    DEFAULT_PASSING_SCORE,
+    DEFAULT_QUESTIONS_PER_QUIZ,
+    MOCK_API_DELAY_MS,
 } from '@/lib/constants';
 import type {
     SystemSettings,
@@ -52,8 +52,17 @@ const DEFAULT_MOCK_SETTINGS: SystemSettings = {
         cache: { subjectsTtl: ONE_DAY_S, allSubjectsKey: 'quiz:subjects' }
     },
     riddles: {
-        defaults: { categoryEmoji: '🧩', difficulty: 'medium' },
-        difficulties: ['easy', 'medium', 'hard'],
+        defaults: {
+            categoryEmoji: '🧩',
+            difficulty: 'medium',
+            levelTimers: {
+                easy: RIDDLE_TIMERS.EASY,
+                medium: RIDDLE_TIMERS.MEDIUM,
+                hard: RIDDLE_TIMERS.HARD,
+                expert: RIDDLE_TIMERS.EXPERT
+            }
+        },
+        difficulties: ['easy', 'medium', 'hard', 'expert'],
         cache: { categoriesTtl: ONE_DAY_S, subjectsTtl: ONE_DAY_S, pattern: 'riddles:*' }
     }
 };

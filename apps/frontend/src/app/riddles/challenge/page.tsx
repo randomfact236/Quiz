@@ -12,13 +12,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 
 import { getSubjects, getChaptersBySubject, getStats, type RiddlesStats } from '@/lib/riddles-api';
 import type { RiddleChapter } from '@/types/riddles';
-import { DEFAULT_CHAPTER_ICONS } from '@/types/riddles';
-import { RiddleStatsBanner } from '../components/RiddleStatsBanner';
 
 // Riddle difficulty levels
 const levels = ['Easy', 'Medium', 'Hard', 'Expert'] as const;
@@ -69,7 +67,7 @@ export default function RiddleChallengePage(): JSX.Element {
   const [completeMixOpen, setCompleteMixOpen] = useState(true);
 
   // Expanded chapter for showing levels
-  const [expandedChapterId, setExpandedChapterId] = useState<string | null>(null);
+  // (no longer used - clicking a chapter goes directly to play)
 
   // Fetch data from backend
   useEffect(() => {
@@ -78,28 +76,28 @@ export default function RiddleChallengePage(): JSX.Element {
         setLoading(true);
         setError(null);
 
-        // Fetch stats, subjects and chapters from backend
+        // Fetch stats, subjects and chapters from backend (only those with content)
         const [statsData, subjectsData] = await Promise.all([
           getStats().catch(err => {
             console.error('Failed to get stats:', err);
             return null;
           }),
-          getSubjects()
+          getSubjects(true) // hasContent = true
         ]);
 
         setStats(statsData);
 
-        // Fetch chapters for each subject
+        // Fetch chapters for each subject (only those with content)
         const allChapters: ChapterWithSubject[] = [];
         for (const subject of subjectsData) {
           if (subject.id) {
             try {
-              const subjectChapters = await getChaptersBySubject(subject.id);
+              const subjectChapters = await getChaptersBySubject(subject.id, true); // hasContent = true
               for (const chapter of subjectChapters) {
                 allChapters.push({
                   ...chapter,
                   subjectName: subject.name,
-                  subjectEmoji: subject.emoji,
+                  subjectEmoji: subject.emoji || '📚',
                   subjectId: subject.id
                 });
               }
@@ -147,49 +145,25 @@ export default function RiddleChallengePage(): JSX.Element {
         if (!level || !(level in counts.allChapter)) continue;
 
         // Count per chapter
-        if (!counts.chapterWise[chapterName][level]) {
-          counts.chapterWise[chapterName][level] = 0;
+        if (counts.chapterWise[chapterName]) {
+          const l = level as keyof typeof counts.chapterWise[string];
+          if (counts.chapterWise[chapterName]![l] === undefined) {
+            counts.chapterWise[chapterName]![l] = 0;
+          }
+          counts.chapterWise[chapterName]![l]!++;
         }
-        counts.chapterWise[chapterName][level]++;
 
         // Count total per level
-        counts.allChapter[level]++;
+        if (level in counts.allChapter) {
+          const levelKey = level as keyof typeof counts.allChapter;
+          counts.allChapter[levelKey] = (counts.allChapter[levelKey] ?? 0) + 1;
+        }
       }
     }
 
     return counts;
   }, [chapters, stats]);
 
-  // Group chapters by subject for display
-  const chaptersBySubject = useMemo(() => {
-    const grouped: Record<string, ChapterWithSubject[]> = {};
-    for (const chapter of chapters) {
-      if (!grouped[chapter.subjectName]) {
-        grouped[chapter.subjectName] = [];
-      }
-      grouped[chapter.subjectName].push(chapter);
-    }
-    return grouped;
-  }, [chapters]);
-
-  // Convert to rows for display
-  const subjectEntries = useMemo(() => Object.entries(chaptersBySubject), [chaptersBySubject]);
-
-  const handleStartChapterWise = (chapterId: string, _chapterName: string, level: Level) => {
-    router.push(`/riddles/play?chapterId=${encodeURIComponent(chapterId)}&level=${level.toLowerCase()}&mode=timer`);
-  };
-
-  const handleStartAllChapterLevelWise = (level: Level) => {
-    router.push(`/riddles/play?chapterId=all&level=${level.toLowerCase()}&mode=timer`);
-  };
-
-  const handleStartCompleteMix = () => {
-    router.push(`/riddles/play?chapterId=all&level=all&mode=timer`);
-  };
-
-  const getChapterWiseCount = (chapterName: string, level: Level): number => {
-    return levelCounts.chapterWise[chapterName]?.[level.toLowerCase()] || 0;
-  };
 
   const getAllChapterCount = (level: Level): number => {
     return levelCounts.allChapter[level.toLowerCase()] || 0;
@@ -200,9 +174,19 @@ export default function RiddleChallengePage(): JSX.Element {
     return Object.values(chapterCounts).reduce((sum, count) => sum + count, 0);
   };
 
-  const toggleChapter = (chapterId: string) => {
-    setExpandedChapterId(expandedChapterId === chapterId ? null : chapterId);
+
+  const handleStartMixForChapter = (chapterId: string) => {
+    router.push(`/riddles/play?chapterId=${encodeURIComponent(chapterId)}&level=all&mode=timer`);
   };
+
+  const handleStartAllChapterLevelWise = (level: Level) => {
+    router.push(`/riddles/play?chapterId=all&level=${level.toLowerCase()}&mode=timer`);
+  };
+
+  const handleStartCompleteMix = () => {
+    router.push(`/riddles/play?chapterId=all&level=all&mode=timer`);
+  };
+
 
   // Loading state
   if (loading) {
@@ -267,12 +251,6 @@ export default function RiddleChallengePage(): JSX.Element {
           Timer Challenge
         </motion.h1>
 
-        <RiddleStatsBanner
-          totalRiddles={stats?.totalQuizRiddles || 0}
-          totalSubjects={stats?.totalSubjects || 0}
-          totalChapters={stats?.totalChapters || 0}
-        />
-
         <div className="space-y-6">
           {/* Chapter Wise Mix */}
           <motion.div
@@ -297,82 +275,26 @@ export default function RiddleChallengePage(): JSX.Element {
 
             {chapterWiseOpen && (
               <div className="p-6">
-                {/* Chapters grouped by subject */}
-                <div className="flex flex-col gap-6">
-                  {subjectEntries.map(([subjectName, subjectChapters]) => (
-                    <div key={subjectName} className="bg-gray-50 rounded-xl p-4">
-                      <h3 className="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <span>{subjectChapters[0]?.subjectEmoji || '📚'}</span>
-                        {subjectName}
-                      </h3>
+                {/* Chapters as a flat grid - click to play mix directly */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {chapters.map((chapter) => {
+                    const totalRiddles = getTotalRiddlesForChapter(chapter.name);
+                    if (totalRiddles === 0) return null;
+                    const chapterIcon = chapter.subjectEmoji || '📖';
 
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                        {subjectChapters.map((chapter) => {
-                          const totalRiddles = getTotalRiddlesForChapter(chapter.name);
-                          const isExpanded = expandedChapterId === chapter.id;
-                          const chapterIcon = DEFAULT_CHAPTER_ICONS[chapter.name] || '📖';
-
-                          return (
-                            <div key={chapter.id}>
-                              <button
-                                onClick={() => toggleChapter(chapter.id)}
-                                disabled={totalRiddles === 0}
-                                className={`w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isExpanded
-                                  ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white ring-2 ring-indigo-300'
-                                  : 'bg-white border-2 border-gray-200 hover:border-indigo-200'
-                                  }`}
-                              >
-                                <span className="text-3xl mb-1">{chapterIcon}</span>
-                                <span className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800'}`}>
-                                  {chapter.name}
-                                </span>
-                                <span className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : 'text-gray-500'}`}>
-                                  {totalRiddles} riddles
-                                </span>
-                              </button>
-
-                              {/* Level selection - shown when expanded */}
-                              <AnimatePresence>
-                                {isExpanded && (
-                                  <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    className="overflow-hidden mt-3"
-                                  >
-                                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border-2 border-indigo-200">
-                                      <p className="text-center text-xs text-gray-600 mb-2">
-                                        Select difficulty for <span className="font-semibold text-indigo-600">{chapter.name}</span>
-                                      </p>
-                                      <div className="grid grid-cols-2 gap-2">
-                                        {levels.map((level) => {
-                                          const count = getChapterWiseCount(chapter.name, level);
-                                          return (
-                                            <button
-                                              key={`${chapter.id}-${level}`}
-                                              onClick={() => handleStartChapterWise(chapter.id, chapter.name, level)}
-                                              disabled={count === 0}
-                                              title={`${level}: ${count} riddles`}
-                                              className={`flex items-center justify-center gap-1 rounded-lg p-2 text-xs font-medium text-white shadow-sm transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed ${count > 0 ? `bg-gradient-to-br ${levelColors[level]}` : 'bg-gray-300'
-                                                }`}
-                                            >
-                                              <span>{levelEmojis[level]}</span>
-                                              <span>{level}</span>
-                                              <span className="opacity-75">({count})</span>
-                                            </button>
-                                          );
-                                        })}
-                                      </div>
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                    return (
+                      <button
+                        key={chapter.id}
+                        onClick={() => handleStartMixForChapter(chapter.id)}
+                        disabled={totalRiddles === 0}
+                        className="w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg bg-white border-2 border-gray-200 hover:border-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <span className="text-3xl mb-1">{chapterIcon}</span>
+                        <span className="font-semibold text-sm text-gray-800">{chapter.name}</span>
+                        <span className="text-xs mt-1 text-gray-500">{totalRiddles} riddles</span>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {chapters.length === 0 && (

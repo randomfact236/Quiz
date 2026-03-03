@@ -30,21 +30,28 @@ export class QuizService {
 
   // ==================== SUBJECTS ====================
 
-  async findAllSubjects(pagination?: PaginationDto): Promise<{ data: Subject[]; total: number }> {
-    const cacheKey = pagination 
-      ? `${settings.quiz.cache.allSubjectsKey}:page:${pagination.page}:limit:${pagination.limit}`
-      : settings.quiz.cache.allSubjectsKey;
-      
+  async findAllSubjects(pagination?: PaginationDto, hasContentOnly: boolean = false): Promise<{ data: Subject[]; total: number }> {
+    const cacheKey = pagination
+      ? `${settings.quiz.cache.allSubjectsKey}:page:${pagination.page}:limit:${pagination.limit}:hasContent:${hasContentOnly}`
+      : `${settings.quiz.cache.allSubjectsKey}:hasContent:${hasContentOnly}`;
+
     return this.cacheService.getOrSet(cacheKey, async () => {
       const page = pagination?.page ?? 1;
-      const limit = pagination?.limit ?? 100; // Default to 100 for backward compatibility
-      
-      const [data, total] = await this.subjectRepo.findAndCount({
-        order: { name: 'ASC' },
-        skip: (page - 1) * limit,
-        take: limit,
-      });
-      
+      const limit = pagination?.limit ?? 100;
+
+      const query = this.subjectRepo.createQueryBuilder('subject')
+        .orderBy('subject.name', 'ASC')
+        .skip((page - 1) * limit)
+        .take(limit);
+
+      if (hasContentOnly) {
+        // Filter subjects that have at least one chapter with at least one question
+        query.innerJoin('subject.chapters', 'chapter')
+          .innerJoin('chapter.questions', 'question');
+      }
+
+      const [data, total] = await query.getManyAndCount();
+
       return { data, total };
     }, settings.quiz.cache.subjectsTtl);
   }
@@ -130,7 +137,7 @@ export class QuizService {
   ): Promise<{ data: Question[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
-    
+
     const where: FindOptionsWhere<Question> = {};
     if (status) {
       where.status = status;
@@ -153,18 +160,18 @@ export class QuizService {
     }
 
     // More efficient random selection using offset-based approach
-    const totalCount = await this.questionRepo.count({ 
-      where: { level, status: ContentStatus.PUBLISHED } 
+    const totalCount = await this.questionRepo.count({
+      where: { level, status: ContentStatus.PUBLISHED }
     });
-    
+
     if (totalCount === 0) {
       return [];
     }
 
     // If requesting more than available, return all
     if (count >= totalCount) {
-      return this.questionRepo.find({ 
-        where: { level, status: ContentStatus.PUBLISHED } 
+      return this.questionRepo.find({
+        where: { level, status: ContentStatus.PUBLISHED }
       });
     }
 
@@ -175,7 +182,7 @@ export class QuizService {
       .where('question.level = :level', { level })
       .andWhere('question.status = :status', { status: ContentStatus.PUBLISHED })
       .getMany();
-    
+
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
     const selectedIds = shuffled.map(q => q.id);
@@ -188,17 +195,17 @@ export class QuizService {
 
   async findMixedQuestions(count: number): Promise<Question[]> {
     // More efficient random selection
-    const totalCount = await this.questionRepo.count({ 
-      where: { status: ContentStatus.PUBLISHED } 
+    const totalCount = await this.questionRepo.count({
+      where: { status: ContentStatus.PUBLISHED }
     });
-    
+
     if (totalCount === 0) {
       return [];
     }
 
     // If requesting more than available, return all
     if (count >= totalCount) {
-      return this.questionRepo.find({ 
+      return this.questionRepo.find({
         where: { status: ContentStatus.PUBLISHED },
         relations: ['chapter'],
       });
@@ -210,7 +217,7 @@ export class QuizService {
       .select('question.id')
       .where('question.status = :status', { status: ContentStatus.PUBLISHED })
       .getMany();
-    
+
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
     const selectedIds = shuffled.map(q => q.id);
@@ -264,7 +271,7 @@ export class QuizService {
       for (let i = 0; i < dto.length; i++) {
         const q = dto[i];
         const chapter = chapterMap.get(q.chapterId);
-        
+
         if (!chapter) {
           errors.push(`Row ${i + 1}: Chapter not found (ID: ${q.chapterId})`);
           continue;
@@ -301,7 +308,7 @@ export class QuizService {
   async updateQuestion(id: string, dto: Partial<CreateQuestionDto>): Promise<Question> {
     const question = await this.questionRepo.findOne({ where: { id } });
     if (!question) throw new NotFoundException('Question not found');
-    
+
     // Update fields with proper empty string handling
     if (dto.question !== undefined) {
       question.question = dto.question;
@@ -323,7 +330,7 @@ export class QuizService {
     if (dto.explanation !== undefined) {
       question.explanation = dto.explanation;
     }
-    
+
     return this.questionRepo.save(question);
   }
 
@@ -349,7 +356,7 @@ export class QuizService {
    */
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
     this.logger.log(`[QuizService] Executing bulk ${action} on ${ids.length} questions`);
-    
+
     const result = await this.bulkActionService.executeBulkAction(
       this.questionRepo,
       'question',

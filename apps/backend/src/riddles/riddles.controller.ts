@@ -88,8 +88,6 @@ export class RiddlesController {
   // ==================== CLASSIC FORMAT - ADMIN STATIC (before parameterized routes) ====================
 
   @Get('classic/all')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all classic riddles by status (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns paginated riddles filtered by status' })
@@ -101,8 +99,6 @@ export class RiddlesController {
   }
 
   @Get('classic/status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get classic riddle counts by status (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
@@ -111,8 +107,6 @@ export class RiddlesController {
   }
 
   @Post('classic')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new classic riddle (Admin only)' })
   @ApiResponse({ status: 201, description: 'Riddle created successfully' })
@@ -121,8 +115,6 @@ export class RiddlesController {
   }
 
   @Post('classic/bulk')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create classic riddles (Admin only)' })
   @ApiResponse({ status: 201, description: 'Riddles created successfully', type: BulkImportResultDto })
@@ -132,8 +124,6 @@ export class RiddlesController {
   }
 
   @Post('classic/bulk-action')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Execute bulk action on classic riddles (Admin only)' })
@@ -143,8 +133,6 @@ export class RiddlesController {
   }
 
   @Post('classic/categories')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new riddle category (Admin only)' })
   createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
@@ -195,8 +183,6 @@ export class RiddlesController {
   }
 
   @Get('classic/:id/admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get any classic riddle by ID regardless of status (Admin only)' })
   @ApiParam({ name: 'id', description: 'UUID of the riddle' })
@@ -207,8 +193,6 @@ export class RiddlesController {
   }
 
   @Put('classic/categories/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a riddle category (Admin only)' })
   updateCategory(@Param('id') id: string, @Body() dto: UpdateRiddleCategoryDto): Promise<RiddleCategory> {
@@ -216,8 +200,6 @@ export class RiddlesController {
   }
 
   @Delete('classic/categories/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a riddle category and all its riddles (Admin only)' })
@@ -226,8 +208,6 @@ export class RiddlesController {
   }
 
   @Put('classic/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a classic riddle (Admin only)' })
   @ApiResponse({ status: 200, description: 'Riddle updated successfully' })
@@ -237,8 +217,6 @@ export class RiddlesController {
   }
 
   @Delete('classic/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a classic riddle (Admin only)' })
@@ -252,13 +230,11 @@ export class RiddlesController {
   @Get('subjects')
   @ApiOperation({ summary: 'Get all active riddle subjects (Quiz format)' })
   @ApiResponse({ status: 200, description: 'Returns all active subjects' })
-  findAllSubjects(): Promise<RiddleSubject[]> {
-    return this.riddlesService.findAllSubjects(false);
+  findAllSubjects(@Query('hasContent') hasContent?: string): Promise<RiddleSubject[]> {
+    return this.riddlesService.findAllSubjects(false, hasContent === 'true');
   }
 
   @Get('subjects/all')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all subjects including inactive ones (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns all subjects' })
@@ -276,11 +252,29 @@ export class RiddlesController {
     return this.riddlesService.findSubjectBySlug(slug);
   }
 
+  @Get('chapters/active/all')
+  @ApiOperation({ summary: 'Get all chapters across all subjects that have content' })
+  @ApiResponse({ status: 200, description: 'Returns all active chapters' })
+  findAllActiveChapters(): Promise<RiddleChapter[]> {
+    return this.riddlesService.findAllActiveChapters();
+  }
+
   @Get('chapters/:subjectId')
   @ApiOperation({ summary: 'Get chapters by subject ID (Quiz format)' })
   @ApiResponse({ status: 200, description: 'Returns chapters' })
-  findChaptersBySubject(@Param('subjectId') subjectId: string): Promise<RiddleChapter[]> {
-    return this.riddlesService.findChaptersBySubject(subjectId);
+  findChaptersBySubject(
+    @Param('subjectId') subjectId: string,
+    @Query('hasContent') hasContent?: string,
+  ): Promise<RiddleChapter[]> {
+    return this.riddlesService.findChaptersBySubject(subjectId, hasContent === 'true');
+  }
+
+  @Get('quiz/all')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all quiz riddles (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns all quiz riddles' })
+  findAllQuizRiddlesAdmin(): Promise<QuizRiddle[]> {
+    return this.riddlesService.findAllQuizRiddlesAdmin();
   }
 
   @Get('quiz/:chapterId')
@@ -291,6 +285,14 @@ export class RiddlesController {
     @Query() pagination: PaginationDto,
   ): Promise<{ data: QuizRiddle[]; total: number }> {
     return this.riddlesService.findQuizRiddlesByChapter(chapterId, pagination);
+  }
+
+  @Get('mixed')
+  @ApiOperation({ summary: 'Get mixed quiz riddles from all chapters' })
+  @ApiResponse({ status: 200, description: 'Returns mixed riddles' })
+  getMixedQuizRiddles(@Query('count') count?: string): Promise<QuizRiddle[]> {
+    const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
+    return this.riddlesService.findMixedQuizRiddles(parsedCount);
   }
 
   @Get('random/:level')
@@ -306,19 +308,9 @@ export class RiddlesController {
     return this.riddlesService.findRandomQuizRiddles(level, parsedCount);
   }
 
-  @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed quiz riddles from all chapters' })
-  @ApiResponse({ status: 200, description: 'Returns mixed riddles' })
-  getMixedQuizRiddles(@Query('count') count?: string): Promise<QuizRiddle[]> {
-    const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
-    return this.riddlesService.findMixedQuizRiddles(parsedCount);
-  }
-
   // ==================== QUIZ FORMAT - ADMIN ====================
 
   @Post('subjects')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new riddle subject (Quiz format, Admin only)' })
   createSubject(@Body() dto: CreateRiddleSubjectDto): Promise<RiddleSubject> {
@@ -326,8 +318,6 @@ export class RiddlesController {
   }
 
   @Put('subjects/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update riddle subject (Quiz format, Admin only)' })
   updateSubject(
@@ -338,8 +328,6 @@ export class RiddlesController {
   }
 
   @Delete('subjects/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete riddle subject (Quiz format, Admin only)' })
@@ -348,8 +336,6 @@ export class RiddlesController {
   }
 
   @Post('chapters')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new riddle chapter (Quiz format, Admin only)' })
   createChapter(@Body() dto: CreateRiddleChapterDto): Promise<RiddleChapter> {
@@ -357,8 +343,6 @@ export class RiddlesController {
   }
 
   @Put('chapters/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update riddle chapter (Quiz format, Admin only)' })
   updateChapter(
@@ -369,8 +353,6 @@ export class RiddlesController {
   }
 
   @Delete('chapters/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete riddle chapter (Quiz format, Admin only)' })
@@ -378,9 +360,16 @@ export class RiddlesController {
     await this.riddlesService.deleteChapter(id);
   }
 
+  @Post('quiz/bulk-action')
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Execute bulk action on quiz riddles (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
+  async executeBulkActionQuiz(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
+    return this.riddlesService.bulkActionQuizRiddles(dto.ids, dto.action);
+  }
+
   @Post('quiz')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new quiz riddle (Admin only)' })
   createQuizRiddle(@Body() dto: CreateQuizRiddleDto): Promise<QuizRiddle> {
@@ -388,8 +377,6 @@ export class RiddlesController {
   }
 
   @Post('quiz/bulk')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create quiz riddles (Admin only)' })
   async createQuizRiddlesBulk(@Body() dto: CreateQuizRiddleDto[]): Promise<{ count: number; errors: string[] }> {
@@ -398,8 +385,6 @@ export class RiddlesController {
   }
 
   @Put('quiz/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update quiz riddle (Admin only)' })
   updateQuizRiddle(
@@ -410,8 +395,6 @@ export class RiddlesController {
   }
 
   @Delete('quiz/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete quiz riddle (Admin only)' })

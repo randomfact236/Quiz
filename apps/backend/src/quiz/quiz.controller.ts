@@ -32,14 +32,16 @@ import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 @ApiTags('Quiz')
 @Controller('quiz')
 export class QuizController {
-  constructor(private readonly quizService: QuizService) {}
+  constructor(private readonly quizService: QuizService) { }
 
   // ==================== SUBJECTS ====================
 
   @Get('subjects')
   @ApiOperation({ summary: 'Get all subjects' })
-  async getAllSubjects(): Promise<{ data: Subject[]; total: number }> {
-    return this.quizService.findAllSubjects();
+  async getAllSubjects(
+    @Query('hasContent') hasContent?: string
+  ): Promise<{ data: Subject[]; total: number }> {
+    return this.quizService.findAllSubjects(undefined, hasContent === 'true');
   }
 
   @Get('subjects/:slug')
@@ -159,6 +161,13 @@ export class QuizController {
     return parsed;
   }
 
+  @Get('mixed')
+  @ApiOperation({ summary: 'Get mixed questions from all subjects' })
+  async getMixedQuestions(@Query('count') count?: string): Promise<Question[]> {
+    const validCount = this.validateCount(count, DEFAULT_PAGE_SIZE);
+    return this.quizService.findMixedQuestions(validCount);
+  }
+
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
@@ -167,13 +176,6 @@ export class QuizController {
   ): Promise<Question[]> {
     const validCount = this.validateCount(count, 10);
     return this.quizService.findRandomQuestions(level, validCount);
-  }
-
-  @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed questions from all subjects' })
-  async getMixedQuestions(@Query('count') count?: string): Promise<Question[]> {
-    const validCount = this.validateCount(count, DEFAULT_PAGE_SIZE);
-    return this.quizService.findMixedQuestions(validCount);
   }
 
   @Post('questions')

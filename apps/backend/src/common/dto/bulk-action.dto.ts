@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import { IsEnum, IsArray, IsUUID, ArrayMinSize, MaxLength, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsArray, IsUUID, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ContentStatus } from '../enums/content-status.enum';
 import { BulkActionType } from '../enums/bulk-action.enum';
@@ -49,7 +49,7 @@ export class BulkActionDto {
   @IsArray()
   @IsUUID('4', { each: true })
   @ArrayMinSize(1)
-  @MaxLength(MAX_BULK_ITEMS, { message: `Cannot process more than ${MAX_BULK_ITEMS} items at once` })
+  @ArrayMaxSize(MAX_BULK_ITEMS, { message: `Cannot process more than ${MAX_BULK_ITEMS} items at once` })
   ids: string[];
 
   @ApiPropertyOptional({

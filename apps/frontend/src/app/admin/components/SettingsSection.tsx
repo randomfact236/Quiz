@@ -20,8 +20,8 @@ import type { SystemSettings, SettingsTab, SettingsValue } from '@/types/setting
  */
 type NestedSettingsObject = {
   [K in keyof Partial<SystemSettings>]: Partial<SystemSettings>[K] extends object
-    ? Record<string, SettingsValue>
-    : Partial<SystemSettings>[K];
+  ? Record<string, SettingsValue>
+  : Partial<SystemSettings>[K];
 } & Record<string, SettingsValue>;
 
 /**
@@ -69,6 +69,19 @@ function getDefaultTimerForLevel(level: string): number {
     case 'expert': return 90;
     case 'extreme': return 120;
     default: return 30;
+  }
+}
+
+/**
+ * Get default timer value for riddle difficulty level (in seconds)
+ */
+function getDefaultRiddleTimerForLevel(level: string): number {
+  switch (level) {
+    case 'easy': return 30;
+    case 'medium': return 60;
+    case 'hard': return 90;
+    case 'expert': return 120;
+    default: return 60;
   }
 }
 
@@ -213,11 +226,10 @@ export function SettingsSection(): JSX.Element {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === tab.id
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-            }`}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+              }`}
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls={`settings-panel-${tab.id}`}
@@ -315,7 +327,7 @@ export function SettingsSection(): JSX.Element {
             <h4 className="text-lg font-semibold dark:text-gray-200">
               Quiz Configuration
             </h4>
-            
+
             {/* Level-based Timer Settings */}
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
               <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
@@ -438,43 +450,38 @@ export function SettingsSection(): JSX.Element {
         {/* Riddles Settings */}
         {activeTab === 'riddles' && (
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">
-              Riddles Configuration
-            </h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-riddles-emoji"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Category Emoji
-                </label>
-                <input
-                  id="settings-riddles-emoji"
-                  type="text"
-                  value={formData.riddles?.defaults?.categoryEmoji ?? '🧩'}
-                  onChange={(e) => updateField('riddles.defaults.categoryEmoji', e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  maxLength={10}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-riddles-difficulty"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Default Difficulty
-                </label>
-                <select
-                  id="settings-riddles-difficulty"
-                  value={formData.riddles?.defaults?.difficulty ?? 'medium'}
-                  onChange={(e) => updateField('riddles.defaults.difficulty', e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                >
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
+
+            {/* Riddle Level-based Timer Settings */}
+            <div>
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
+                ⏱️ Timer Settings Per Difficulty Level (seconds)
+              </h5>
+              <p className="text-sm text-gray-500 mb-4">
+                Set the default timer duration for each difficulty level in riddle challenge mode.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {(['easy', 'medium', 'hard', 'expert'] as const).map((level) => (
+                  <div key={level}>
+                    <label
+                      htmlFor={`settings-riddle-timer-${level}`}
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 capitalize"
+                    >
+                      {level}
+                    </label>
+                    <input
+                      id={`settings-riddle-timer-${level}`}
+                      type="number"
+                      value={formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)}
+                      onChange={(e) => updateField(`riddles.defaults.levelTimers.${level}`, parseInt(e.target.value) || 30)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      min={5}
+                      max={600}
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      {Math.floor((formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)) / 60)}m {(formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)) % 60}s
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

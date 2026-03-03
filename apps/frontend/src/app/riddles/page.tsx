@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 
 import { getStats } from '@/lib/riddles-api';
