@@ -156,6 +156,21 @@ export default function ImageRiddlesPage(): JSX.Element {
   const [showHint, setShowHint] = useState(false);
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
 
+  // Modal Timer State
+  const [modalTimeLeft, setModalTimeLeft] = useState(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+
+  // Timer Effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isTimerActive && modalTimeLeft > 0 && !showAnswer) {
+      interval = setInterval(() => {
+        setModalTimeLeft((prev) => Math.max(0, prev - 1));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerActive, modalTimeLeft, showAnswer]);
+
   // Handlers with Pagination Reset
   const handleCategoryChange = (cat: string | null) => { setActiveCategory(cat); setCurrentPage(1); };
   const handleDifficultyChange = (d: string) => { setDifficulty(d); setCurrentPage(1); };
@@ -172,6 +187,9 @@ export default function ImageRiddlesPage(): JSX.Element {
   const handleRiddleClick = useCallback((riddle: ImageRiddle) => {
     setSelectedRiddle(riddle);
     resetRiddleState();
+    const totalSeconds = riddle.timerSeconds ?? defaultTimers[riddle.difficulty as keyof typeof defaultTimers] ?? 90;
+    setModalTimeLeft(totalSeconds);
+    setIsTimerActive(false);
   }, [resetRiddleState]);
 
   const toggleRevealAnswer = (id: string, e?: React.MouseEvent) => {
@@ -450,10 +468,17 @@ export default function ImageRiddlesPage(): JSX.Element {
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="relative h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
               {/* Modal Header */}
-              <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-                <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} bg-white shadow-sm`}>
-                  {difficultyLabels[selectedRiddle.difficulty]}
-                </span>
+              <div className="flex shrink-0 items-center justify-between px-6 py-4 bg-slate-50/50">
+                <div className="flex items-center gap-3">
+                  <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} bg-white shadow-sm`}>
+                    {difficultyLabels[selectedRiddle.difficulty]}
+                  </span>
+                  {selectedRiddle && (
+                    <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm transition-all ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 text-red-600 animate-pulse' : 'bg-indigo-50 text-indigo-600') : 'bg-white text-slate-400'}`}>
+                      ⏱️ {Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={() => setSelectedRiddle(null)}
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200/50 text-sm font-bold text-slate-500 hover:bg-red-100 hover:text-red-600 transition-colors"
@@ -463,18 +488,26 @@ export default function ImageRiddlesPage(): JSX.Element {
               </div>
 
               {/* Non-Scrollable Dynamic Content */}
-              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-8">
+              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-8 pt-2">
                 <h2 className="shrink-0 mb-4 text-2xl font-black text-slate-800 tracking-tight leading-snug">{selectedRiddle.title}</h2>
 
-                <div className="relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
+                <div
+                  onClick={() => !isTimerActive && !showAnswer && setIsTimerActive(true)}
+                  className={`relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 shadow-inner group transition-all ${!isTimerActive && !showAnswer ? 'cursor-pointer border-indigo-200 hover:border-indigo-400 bg-indigo-50/30' : 'border-slate-100 bg-slate-50'}`}
+                >
                   <img
                     src={selectedRiddle.imageUrl}
                     alt={selectedRiddle.altText || selectedRiddle.title}
                     className="absolute inset-0 h-full w-full object-contain p-2"
                   />
-                  <div className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-slate-900/60 shadow-sm px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    ⏱️ {formatTime(selectedRiddle.timerSeconds, selectedRiddle.difficulty)}
-                  </div>
+                  {!isTimerActive && !showAnswer && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-600/5 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all">
+                      <div className="rounded-full bg-indigo-600 p-4 text-white shadow-xl scale-90 group-hover:scale-100 transition-transform">
+                        <span className="text-2xl">▶️</span>
+                      </div>
+                      <p className="mt-3 text-[10px] font-black uppercase tracking-widest text-indigo-600">Click to Start Timer</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Game Logic */}
@@ -501,10 +534,10 @@ export default function ImageRiddlesPage(): JSX.Element {
                       gameState={{
                         isTimerRunning: false,
                         isTimerPaused: false,
-                        isTimeUp: false,
+                        isTimeUp: modalTimeLeft === 0,
                         isAnswerRevealed: showAnswer,
                         hasUserAnswer: userAnswer.length > 0,
-                        timeLeft: 0,
+                        timeLeft: modalTimeLeft,
                       }}
                       position="below_question"
                       onAction={(action) => handleAction(action, selectedRiddle)}
