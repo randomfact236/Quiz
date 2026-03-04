@@ -189,7 +189,7 @@ export default function ImageRiddlesPage(): JSX.Element {
     resetRiddleState();
     const totalSeconds = riddle.timerSeconds ?? defaultTimers[riddle.difficulty as keyof typeof defaultTimers] ?? 90;
     setModalTimeLeft(totalSeconds);
-    setIsTimerActive(false);
+    setIsTimerActive(true);
   }, [resetRiddleState]);
 
   const toggleRevealAnswer = (id: string, e?: React.MouseEvent) => {
@@ -485,35 +485,22 @@ export default function ImageRiddlesPage(): JSX.Element {
                   </span>
                 </div>
 
-                <h2 className="shrink-0 mb-6 text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-snug">
-                  {selectedRiddle.title}
-                </h2>
-
-                {/* Timer Row: Dedicated space above image */}
-                <div className="mb-3 flex justify-end">
-                  <div className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
+                <div className="flex items-start justify-between gap-6 mb-6">
+                  <h2 className="shrink flex-1 text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-loose pt-1">
+                    {selectedRiddle.title}
+                  </h2>
+                  <div className={`shrink-0 flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
                     <span className="text-sm">⏱️</span>
                     <span>{Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}</span>
                   </div>
                 </div>
 
-                <div
-                  onClick={() => !isTimerActive && !showAnswer && setIsTimerActive(true)}
-                  className={`relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 shadow-inner group transition-all ${!isTimerActive && !showAnswer ? 'cursor-pointer border-indigo-200 hover:border-indigo-400 bg-indigo-50/30' : 'border-slate-100 bg-slate-50'}`}
-                >
+                <div className="relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
                   <img
                     src={selectedRiddle.imageUrl}
                     alt={selectedRiddle.altText || selectedRiddle.title}
                     className="absolute inset-0 h-full w-full object-contain p-2"
                   />
-                  {!isTimerActive && !showAnswer && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-600/5 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all">
-                      <div className="rounded-full bg-indigo-600 p-4 text-white shadow-xl scale-90 group-hover:scale-100 transition-transform">
-                        <span className="text-2xl">▶️</span>
-                      </div>
-                      <p className="mt-3 text-[10px] font-black uppercase tracking-widest text-indigo-600">Click to Start Timer</p>
-                    </div>
-                  )}
                 </div>
 
                 {/* Game Logic */}
