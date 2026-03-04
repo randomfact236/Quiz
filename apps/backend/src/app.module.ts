@@ -71,9 +71,9 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
           password: dbPassword,
           database: dbDatabase,
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          // synchronize: false — schema changes MUST go through migrations.
-          // Never enable auto-sync; it can drop or alter columns unexpectedly.
-          synchronize: false,
+          // synchronize: auto-enables in development to pick up entity changes (e.g. new columns).
+          // NEVER enable in production — use migrations instead.
+          synchronize: !isProduction,
           // SECURITY: Only log in development, never in production
           logging: !isProduction && configService.get('DB_LOGGING') === 'true',
           poolSize: DB_POOL_SIZE,

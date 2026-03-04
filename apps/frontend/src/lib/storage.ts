@@ -18,6 +18,9 @@ export const STORAGE_KEYS = {
     SUBJECTS: `${PREFIX}subjects`,
     QUESTIONS: `${PREFIX}questions`,
     JOKES: `${PREFIX}jokes`,
+    JOKE_CATEGORIES: `${PREFIX}joke-categories`,
+    VOTED_JOKES: `${PREFIX}voted-jokes`,
+    JOKE_VOTE_COUNTS: `${PREFIX}joke-vote-counts`,
     RIDDLES: `${PREFIX}riddles`,
     IMAGE_RIDDLES: `${PREFIX}image-riddles`,
     IMAGE_RIDDLE_CATEGORIES: `${PREFIX}image-riddle-categories`,
@@ -48,10 +51,10 @@ export const STORAGE_KEYS = {
  * Returns `defaultValue` if key doesn't exist or parsing fails.
  */
 export function getItem<T>(key: string, defaultValue: T): T {
-    if (typeof window === 'undefined') {return defaultValue;}
+    if (typeof window === 'undefined') { return defaultValue; }
     try {
         const raw = localStorage.getItem(key);
-        if (raw === null) {return defaultValue;}
+        if (raw === null) { return defaultValue; }
         return JSON.parse(raw) as T;
     } catch {
         return defaultValue;
@@ -62,7 +65,7 @@ export function getItem<T>(key: string, defaultValue: T): T {
  * Save a typed item to localStorage (JSON-serialised).
  */
 export function setItem<T>(key: string, value: T): void {
-    if (typeof window === 'undefined') {return;}
+    if (typeof window === 'undefined') { return; }
     try {
         localStorage.setItem(key, JSON.stringify(value));
     } catch (err) {
@@ -74,7 +77,7 @@ export function setItem<T>(key: string, value: T): void {
  * Remove an item from localStorage.
  */
 export function removeItem(key: string): void {
-    if (typeof window === 'undefined') {return;}
+    if (typeof window === 'undefined') { return; }
     localStorage.removeItem(key);
 }
 
@@ -82,11 +85,11 @@ export function removeItem(key: string): void {
  * Clear all app data (keys starting with PREFIX).
  */
 export function clearAll(): void {
-    if (typeof window === 'undefined') {return;}
+    if (typeof window === 'undefined') { return; }
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k?.startsWith(PREFIX)) {keysToRemove.push(k);}
+        if (k?.startsWith(PREFIX)) { keysToRemove.push(k); }
     }
     keysToRemove.forEach((k) => localStorage.removeItem(k));
 }
@@ -107,7 +110,7 @@ export function setItemDebounced<T>(
     delayMs = STORAGE_DEBOUNCE_MS,
 ): void {
     const existing = timers.get(key);
-    if (existing) {clearTimeout(existing);}
+    if (existing) { clearTimeout(existing); }
     timers.set(
         key,
         setTimeout(() => {

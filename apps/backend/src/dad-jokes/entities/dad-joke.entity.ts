@@ -23,6 +23,12 @@ export class DadJoke {
   })
   status: ContentStatus;
 
+  @Column({ type: 'int', default: 0 })
+  likes: number;
+
+  @Column({ type: 'int', default: 0 })
+  dislikes: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 

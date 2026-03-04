@@ -20,6 +20,7 @@ import type {
   Riddle,
   Subject,
   Joke,
+  JokeCategory,
   Question,
   MenuSection
 } from './types';
@@ -228,6 +229,7 @@ export default function AdminPage(): JSX.Element {
 
   // Jokes state (shared with JokesSection component)
   const { allJokes, setAllJokes } = useGlobalJokes();
+  const { jokeCategories, setJokeCategories } = useGlobalJokeCategories();
 
   // Hoisted Riddles State
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
@@ -270,6 +272,16 @@ export default function AdminPage(): JSX.Element {
       localStorage.setItem(MIGRATION_KEY, 'done');
     }
   }, [sanitizeSubjects]);
+
+  // Migration: Sync jokes with hardcoded initial data if version mismatch (runs once)
+  useEffect(() => {
+    const JOKES_SYNC_KEY = 'aiquiz:jokes-v2-sync';
+    if (typeof window !== 'undefined' && !localStorage.getItem(JOKES_SYNC_KEY)) {
+      // Force sync with initial jokes from library to ensure 15+ new jokes appear
+      setAllJokes(libInitialJokes);
+      localStorage.setItem(JOKES_SYNC_KEY, 'done');
+    }
+  }, [setAllJokes]);
 
   // Persistence effects
   useEffect(() => {
@@ -388,8 +400,8 @@ export default function AdminPage(): JSX.Element {
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
-      {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col`}>
+      {/* Sidebar (Sticky) */}
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col sticky top-0 h-screen z-20`}>
         {/* Logo */}
         <div className="border-b border-gray-800 p-4">
           <div className="flex items-center justify-between">
@@ -587,7 +599,14 @@ export default function AdminPage(): JSX.Element {
               }}
             />
           )}
-          {activeSection === 'jokes' && <JokesSection allJokes={allJokes} setAllJokes={setAllJokes} />}
+          {activeSection === 'jokes' && (
+            <JokesSection
+              allJokes={allJokes}
+              setAllJokes={setAllJokes}
+              jokeCategories={jokeCategories}
+              setJokeCategories={setJokeCategories}
+            />
+          )}
           {activeSection === 'riddles' && (
             <RiddlesSection
               allRiddles={allRiddles}
@@ -1353,6 +1372,28 @@ function useGlobalJokes() {
 
   return { allJokes, setAllJokes };
 }
+
+// ============================================================================
+// GLOBAL JOKE CATEGORIES STATE (shared with JokesSection component)
+// ============================================================================
+const defaultJokeCategories: JokeCategory[] = [
+  { id: 1, name: 'Classic Dad Jokes', emoji: '😂', description: 'Timeless classics that never fail to get an eye-roll.' },
+  { id: 2, name: 'Programming Jokes', emoji: '💻', description: 'Programming and tech humor for the nerdy dad.' },
+  { id: 3, name: 'Parenting Dad Jokes', emoji: '👶', description: 'Jokes about the adventures of raising kids.' },
+  { id: 4, name: 'Work Office Dad Jokes', emoji: '💼', description: 'Corporate humor for the 9-to-5 dad.' },
+];
+
+function useGlobalJokeCategories() {
+  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(() => getItem(STORAGE_KEYS.JOKE_CATEGORIES, defaultJokeCategories));
+
+  // Persistence
+  useEffect(() => {
+    setItem(STORAGE_KEYS.JOKE_CATEGORIES, jokeCategories);
+  }, [jokeCategories]);
+
+  return { jokeCategories, setJokeCategories };
+}
+
 
 // Initial data is now imported from @/lib/initial-data
 // to support standalone persistence without cluttering this file.

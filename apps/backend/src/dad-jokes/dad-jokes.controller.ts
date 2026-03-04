@@ -1,3 +1,4 @@
+// Watcher trigger
 import {
   Controller,
   Get,
@@ -91,6 +92,21 @@ export class DadJokesController {
     @Query() pagination: PaginationDto,
   ): Promise<{ data: DadJoke[]; total: number }> {
     return this.jokesService.findJokesByCategory(id, pagination);
+  }
+
+  @Post('classic/:id/vote')
+  @ApiOperation({ summary: 'Vote on a classic dad joke (Public, no auth)' })
+  @ApiResponse({ status: 200, description: 'Vote recorded successfully' })
+  @ApiResponse({ status: 404, description: 'Joke not found' })
+  @ApiResponse({ status: 400, description: 'Invalid vote type' })
+  voteClassic(
+    @Param('id') id: string,
+    @Body() body: { voteType: 'like' | 'dislike' }
+  ): Promise<DadJoke> {
+    if (!body || !body.voteType) {
+      throw new BadRequestException('voteType is required');
+    }
+    return this.jokesService.voteForJoke(id, body.voteType);
   }
 
   // ==================== CLASSIC FORMAT - ADMIN ====================

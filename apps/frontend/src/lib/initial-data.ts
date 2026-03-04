@@ -1,10 +1,25 @@
 export const initialJokes = [
-    { id: 1, setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 2, setup: "Why did the scarecrow win an award?", punchline: "He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 3, setup: "Why do programmers prefer dark mode?", punchline: "Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
-    { id: 4, setup: "What do you call a fake noodle?", punchline: "An impasta!", category: "Classic Dad Jokes", status: "draft" as const },
-    { id: 5, setup: "Why did the bicycle fall over?", punchline: "It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 6, setup: "How do you organize a space party?", punchline: "You planet!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: '1', setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '2', setup: "Why did the scarecrow win an award?", punchline: "He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '3', setup: "Why do programmers prefer dark mode?", punchline: "Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
+    { id: '4', setup: "What do you call a fake noodle?", punchline: "An impasta!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '5', setup: "Why did the bicycle fall over?", punchline: "It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '6', setup: "How do you organize a space party?", punchline: "You planet!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '7', setup: "Why did the math book look sad?", punchline: "Because it had too many problems.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '8', setup: "What do you call a belt made out of watches?", punchline: "A waist of time!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '9', setup: "How does a penguin build its house?", punchline: "Igloos it together!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '10', setup: "Why did the stadium get so hot after the game?", punchline: "All of the fans left!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '11', setup: "What do you call a mushroom who is the life of the party?", punchline: "A fungi!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '12', setup: "Why did the cookie go to the doctor?", punchline: "Because he was feeling crumbly.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '13', setup: "A guy is sitting in a bar when he hears a voice say: 'Nice tie!'", punchline: "It was the peanuts—they were complementary.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '14', setup: "Why don't skeletons fight each other?", punchline: "They don't have the guts.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '15', setup: "What do you call a grizzly bear with no teeth?", punchline: "A gummy bear!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '16', setup: "Why did the golfer bring two pairs of pants?", punchline: "In case he got a hole in one!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '17', setup: "What's the best thing about Switzerland?", punchline: "I don't know, but the flag is a big plus.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '18', setup: "I'm afraid for the calendar.", punchline: "Its days are numbered.", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '19', setup: "What do you call a fish with no eyes?", punchline: "A fsh!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '20', setup: "Why did the gym close down?", punchline: "It just didn't work out!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: '21', setup: "What do you call a can opener that doesn't work?", punchline: "A can't opener!", category: "Classic Dad Jokes", status: "published" as const },
 ];
 
 export const initialRiddles = [
@@ -95,3 +110,5 @@ export const initialImageRiddleCategories = [
     { id: '3', name: 'Pattern Recognition', emoji: '🔲', description: 'Identify patterns and sequences' },
     { id: '4', name: 'Perspective Puzzles', emoji: '📐', description: 'Challenge your spatial reasoning' },
 ];
+
+

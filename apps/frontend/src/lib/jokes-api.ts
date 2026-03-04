@@ -14,3 +14,10 @@ export async function getJokeCategories(hasContent: boolean = false): Promise<Jo
     );
     return response.data;
 }
+
+export async function voteJoke(id: string, type: 'like' | 'dislike'): Promise<any> {
+    const response = await api.post(`/jokes/classic/${id}/vote`, {
+        voteType: type
+    });
+    return response.data;
+}

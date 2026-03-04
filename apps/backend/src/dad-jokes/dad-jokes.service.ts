@@ -247,6 +247,28 @@ export class DadJokesService {
     await this.cacheService.delPattern('jokes:*');
   }
 
+  async voteForJoke(id: string, type: 'like' | 'dislike'): Promise<DadJoke> {
+    const joke = await this.jokeRepo.findOne({ where: { id } });
+    if (!joke) {
+      throw new NotFoundException('Joke not found');
+    }
+
+    if (type === 'like') {
+      joke.likes = (joke.likes || 0) + 1;
+    } else if (type === 'dislike') {
+      joke.dislikes = (joke.dislikes || 0) + 1;
+    } else {
+      throw new BadRequestException('Invalid vote type. Must be "like" or "dislike".');
+    }
+
+    const saved = await this.jokeRepo.save(joke);
+
+    // Invalidate cache since the joke data changed
+    await this.cacheService.delPattern('jokes:*');
+
+    return saved;
+  }
+
   // ==================== CLASSIC CATEGORIES ====================
 
   async findAllCategories(hasContentOnly: boolean = false): Promise<JokeCategory[]> {
