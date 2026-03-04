@@ -335,7 +335,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                   aria-label="Select all jokes"
                 />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">ID</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">#</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Question (Setup)</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Answer (Punchline)</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
@@ -343,7 +343,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {paginatedJokes.map((joke) => (
+            {paginatedJokes.map((joke, index) => (
               <tr key={joke.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <input
@@ -355,7 +355,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                   />
                 </td>
                 <td className="px-4 py-3 text-xs text-gray-400 font-mono">
-                  #{joke.id}
+                  {(jokePage - 1) * jokesPerPage + index + 1}
                 </td>
                 <td className="px-4 py-3">
                   <p className="text-sm text-gray-800 font-medium">{joke.setup || joke.joke}</p>

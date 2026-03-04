@@ -136,10 +136,10 @@ export default function JokesPage(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {jokes.map((joke) => (
+                  {jokes.map((joke, index) => (
                     <tr key={joke.id} className="transition-colors hover:bg-yellow-50/30">
                       <td className="px-6 py-4 text-sm font-medium text-gray-400">
-                        #{joke.id}
+                        {index + 1}
                       </td>
                       <td className="px-6 py-4">
                         <p className="text-base font-semibold text-gray-800">{joke.setup}</p>
