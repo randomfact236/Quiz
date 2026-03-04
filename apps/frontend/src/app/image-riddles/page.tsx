@@ -467,29 +467,35 @@ export default function ImageRiddlesPage(): JSX.Element {
         {selectedRiddle && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="relative h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
-              {/* Modal Header */}
-              <div className="flex shrink-0 items-center justify-between px-6 py-4 bg-slate-50/50">
-                <div className="flex items-center gap-3">
-                  <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} bg-white shadow-sm`}>
-                    {difficultyLabels[selectedRiddle.difficulty]}
-                  </span>
-                  {selectedRiddle && (
-                    <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm transition-all ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 text-red-600 animate-pulse' : 'bg-indigo-50 text-indigo-600') : 'bg-white text-slate-400'}`}>
-                      ⏱️ {Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}
-                    </div>
-                  )}
-                </div>
-                <button
-                  onClick={() => setSelectedRiddle(null)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200/50 text-sm font-bold text-slate-500 hover:bg-red-100 hover:text-red-600 transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
+              {/* Close Button - Absolute Positioned */}
+              <button
+                onClick={() => setSelectedRiddle(null)}
+                className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
+                aria-label="Close modal"
+              >
+                ✕
+              </button>
 
               {/* Non-Scrollable Dynamic Content */}
-              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-8 pt-2">
-                <h2 className="shrink-0 mb-4 text-2xl font-black text-slate-800 tracking-tight leading-snug">{selectedRiddle.title}</h2>
+              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-10">
+                {/* Top Info Row: Difficulty */}
+                <div className="mb-2">
+                  <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} border-none bg-slate-100/50 shadow-sm`}>
+                    {difficultyLabels[selectedRiddle.difficulty]}
+                  </span>
+                </div>
+
+                <h2 className="shrink-0 mb-6 text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-snug">
+                  {selectedRiddle.title}
+                </h2>
+
+                {/* Timer Row: Dedicated space above image */}
+                <div className="mb-3 flex justify-end">
+                  <div className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
+                    <span className="text-sm">⏱️</span>
+                    <span>{Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}</span>
+                  </div>
+                </div>
 
                 <div
                   onClick={() => !isTimerActive && !showAnswer && setIsTimerActive(true)}
