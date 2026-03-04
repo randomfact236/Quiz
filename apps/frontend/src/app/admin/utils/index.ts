@@ -112,7 +112,7 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
       setup: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
       punchline: values[2]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
       category: values[3] || 'General',
-      status: 'draft',
+      status: 'published',
     });
   }
 
