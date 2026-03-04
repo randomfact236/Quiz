@@ -38,27 +38,27 @@ export function saveRiddleSession(session: RiddleSession): void {
  */
 export function loadRiddleSession(): RiddleSession | null {
     const session = getItem<RiddleSession | null>(STORAGE_KEYS.RIDDLE_SESSION, null);
-    
+
     if (!session) {
         return null;
     }
-    
+
     // Check if session has expired
     const lastSaved = new Date(session.lastSavedAt).getTime();
     const now = Date.now();
-    
+
     if (now - lastSaved > SESSION_EXPIRY_MS) {
         // Session is stale, clear it
         clearRiddleSession();
         return null;
     }
-    
+
     // Check if session is already completed or abandoned
     if (session.status === 'completed' || session.status === 'abandoned') {
         clearRiddleSession();
         return null;
     }
-    
+
     return session;
 }
 
@@ -68,6 +68,19 @@ export function loadRiddleSession(): RiddleSession | null {
  */
 export function clearRiddleSession(): void {
     removeItem(STORAGE_KEYS.RIDDLE_SESSION);
+}
+
+/**
+ * Get a specific riddle session by ID (useful for results page)
+ * Note: Currently we only store the *latest* session in local storage due to space constraints.
+ * If there's a need for full history, we may want to persist sessions somewhere else.
+ */
+export function getRiddleSessionById(id: string): RiddleSession | null {
+    const session = getItem<RiddleSession | null>(STORAGE_KEYS.RIDDLE_SESSION, null);
+    if (session && session.id === id) {
+        return session;
+    }
+    return null;
 }
 
 /**
@@ -106,7 +119,7 @@ export function createAutoSaveInterval(
             onSave?.(session);
         }
     }, AUTO_SAVE_INTERVAL_MS);
-    
+
     return () => clearInterval(intervalId);
 }
 
@@ -121,7 +134,7 @@ const MAX_HISTORY_ENTRIES = 50; // Keep last 50 sessions
  */
 export function addToRiddleHistory(result: RiddleResult): void {
     const history = getItem<RiddleHistoryEntry[]>(STORAGE_KEYS.RIDDLE_HISTORY, []);
-    
+
     const entry: RiddleHistoryEntry = {
         sessionId: result.session.id,
         mode: result.session.mode,
@@ -135,7 +148,7 @@ export function addToRiddleHistory(result: RiddleResult): void {
         timeTaken: result.session.timeTaken,
         completedAt: result.session.completedAt || new Date().toISOString(),
     };
-    
+
     // Add to beginning (most recent first)
     const updatedHistory = [entry, ...history].slice(0, MAX_HISTORY_ENTRIES);
     setItem(STORAGE_KEYS.RIDDLE_HISTORY, updatedHistory);
@@ -147,6 +160,8 @@ export function addToRiddleHistory(result: RiddleResult): void {
 export function getRiddleHistory(): RiddleHistoryEntry[] {
     return getItem<RiddleHistoryEntry[]>(STORAGE_KEYS.RIDDLE_HISTORY, []);
 }
+
+export const loadRiddleHistory = getRiddleHistory;
 
 /**
  * Clear riddle history
@@ -171,7 +186,7 @@ export function createRiddleSession(
     timeLimit?: number,
 ): RiddleSession {
     const now = new Date().toISOString();
-    
+
     return {
         id: generateSessionId(),
         mode,
@@ -213,7 +228,7 @@ export function hasUnsavedProgress(session?: RiddleSession | null): boolean {
     if (!session) {
         return hasActiveSession();
     }
-    
+
     return session.status === 'in-progress' && Object.keys(session.answers).length > 0;
 }
 
@@ -233,9 +248,9 @@ export function setupNavigationWarning(sessionGetter: () => RiddleSession | null
             e.returnValue = '';
         }
     };
-    
+
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
     return () => {
         window.removeEventListener('beforeunload', handleBeforeUnload);
     };

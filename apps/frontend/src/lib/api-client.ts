@@ -28,7 +28,7 @@ export async function apiRequest<T>(
   options: ApiOptions = {}
 ): Promise<ApiResponse<T>> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   const config: RequestInit = {
     method: options.method || 'GET',
     headers: {
@@ -36,25 +36,36 @@ export async function apiRequest<T>(
       ...options.headers,
     },
   };
-  
+
   if (options.body) {
     config.body = JSON.stringify(options.body);
   }
-  
-  const response = await fetch(url, config);
-  
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-    throw new ApiError(response.status, error.message || `HTTP ${response.status}`);
+
+  // Abort after 10 seconds — prevents infinite loading spinners
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  try {
+    const response = await fetch(url, { ...config, signal: controller.signal });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+      throw new ApiError(response.status, error.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      data,
+      status: response.status,
+      ok: response.ok,
+    };
+  } catch (err) {
+    clearTimeout(timeout);
+    if (err instanceof ApiError) throw err;
+    throw new ApiError(0, err instanceof Error ? err.message : 'Network error');
   }
-  
-  const data = await response.json();
-  
-  return {
-    data,
-    status: response.status,
-    ok: response.ok,
-  };
 }
 
 /**

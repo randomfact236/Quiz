@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, GraduationCap, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 
-import { getSubjects, getChaptersBySubject, getStats, type RiddlesStats } from '@/lib/riddles-api';
+import { getStats, getAllChapters, type RiddlesStats } from '@/lib/riddles-api';
 import type { RiddleChapter } from '@/types/riddles';
 
 // Riddle difficulty levels
@@ -76,35 +76,25 @@ export default function RiddlePracticePage(): JSX.Element {
         setLoading(true);
         setError(null);
 
-        // Fetch stats, subjects and chapters from backend (only those with content)
-        const [statsData, subjectsData] = await Promise.all([
+        // Fetch stats and active chapters from backend (only those with content)
+        const [statsData, activeChapters] = await Promise.all([
           getStats().catch(err => {
             console.error('Failed to get stats:', err);
             return null;
           }),
-          getSubjects(true) // hasContent = true
+          getAllChapters(true) // hasContent = true
         ]);
 
         setStats(statsData);
 
-        // Fetch chapters for each subject (only those with content)
         const allChapters: ChapterWithSubject[] = [];
-        for (const subject of subjectsData) {
-          if (subject.id) {
-            try {
-              const subjectChapters = await getChaptersBySubject(subject.id, true); // hasContent = true
-              for (const chapter of subjectChapters) {
-                allChapters.push({
-                  ...chapter,
-                  subjectName: subject.name,
-                  subjectEmoji: subject.emoji || '📚',
-                  subjectId: subject.id
-                });
-              }
-            } catch (err) {
-              console.warn(`Failed to fetch chapters for subject ${subject.name}:`, err);
-            }
-          }
+        for (const chapter of activeChapters) {
+          allChapters.push({
+            ...chapter,
+            subjectName: chapter.subject?.name || 'Unknown',
+            subjectEmoji: chapter.subject?.emoji || '📚',
+            subjectId: chapter.subject?.id || ''
+          });
         }
 
         // Sort by subject order (if available) then chapter number
