@@ -882,7 +882,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                       setSelectedCategory(cat);
                       setShowDeleteCategoryConfirm(true);
                     }}
-                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 text-gray-500 hover:bg-red-50 hover:text-red-500'}`}
+                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 text-red-500 hover:bg-red-100 hover:text-red-600'}`}
                     title="Delete category"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -1425,31 +1425,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
         </div>
       )}
 
-      {/* Categories Section */}
-      <div className="rounded-xl bg-white p-6 shadow-md">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
-          <button
-            className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600"
-            aria-label="Add new category"
-          >
-            + Add Category
-          </button>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((cat) => (
-            <div key={`category-card-${cat.id}`} className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl" aria-hidden="true">{cat.emoji}</span>
-                <div>
-                  <p className="font-medium text-gray-900">{cat.name}</p>
-                  <p className="text-sm text-gray-500">{cat.count} riddles</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
       {/* Add/Edit Category Modal */}
       {(showAddCategoryModal || showEditCategoryModal) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
