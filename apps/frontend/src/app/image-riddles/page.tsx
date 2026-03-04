@@ -14,7 +14,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import ActionOptions, { IActionOption } from '@/components/image-riddles/ActionOptions';
 import { initialImageRiddles, initialImageRiddleCategories } from '@/lib/initial-data';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
@@ -129,8 +129,18 @@ function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
 
 export default function ImageRiddlesPage(): JSX.Element {
   // Data State
-  const [riddles] = useState<ImageRiddle[]>(() => getItem(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles));
+  const [riddles, setRiddles] = useState<ImageRiddle[]>(initialImageRiddles);
   const [categories] = useState<ImageRiddleCategory[]>(initialImageRiddleCategories);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load from storage after mount
+  useEffect(() => {
+    const savedRiddles = getItem(STORAGE_KEYS.IMAGE_RIDDLES, null);
+    if (savedRiddles) {
+      setRiddles(savedRiddles);
+    }
+    setIsMounted(true);
+  }, []);
 
   // Filter, Sort, & Pagination State
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -187,8 +197,8 @@ export default function ImageRiddlesPage(): JSX.Element {
       );
     }
 
-    // Apply Sort
-    if (sortOrder === 'random') {
+    // Apply Sort (Only if mounted to avoid hydration mismatch if sort is changed)
+    if (isMounted && sortOrder === 'random') {
       for (let i = result.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [result[i], result[j]] = [result[j] as ImageRiddle, result[i] as ImageRiddle];
