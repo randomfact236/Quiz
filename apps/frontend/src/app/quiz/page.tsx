@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2, Home, ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, Home, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { getChapterProgress } from '@/lib/progress';
 
@@ -220,13 +220,6 @@ function SubjectSelection(): JSX.Element {
         </Link>
 
 
-        <Link
-          href="/image-riddles"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <ImageIcon className="mb-2 h-8 w-8" />
-          <span className="font-bold">Image Riddles</span>
-        </Link>
       </div>
 
       {/* Subjects by Category */}
