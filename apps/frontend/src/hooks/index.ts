@@ -11,3 +11,5 @@ export type { UseBulkActionsReturn } from './useBulkActions';
 
 export { useStatusCounts } from './useStatusCounts';
 export type { UseStatusCountsReturn } from './useStatusCounts';
+
+export { useClickOutside } from './useClickOutside';

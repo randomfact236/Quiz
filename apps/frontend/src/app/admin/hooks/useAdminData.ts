@@ -57,20 +57,20 @@ export interface UseAdminDataReturn {
 }
 
 export function useAdminData(): UseAdminDataReturn {
-  const [subjects, setSubjects] = useState<Subject[]>(() => 
-    getItem(STORAGE_KEYS.SUBJECTS, initialSubjects)
+  const [subjects, setSubjects] = useState<Subject[]>(() =>
+    getItem<Subject[]>(STORAGE_KEYS.SUBJECTS, initialSubjects as Subject[])
   );
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() => 
-    getItem(STORAGE_KEYS.QUESTIONS, initialQuestions)
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() =>
+    getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, initialQuestions as Record<string, Question[]>)
   );
-  const [allJokes, setAllJokes] = useState<Joke[]>(() => 
-    getItem(STORAGE_KEYS.JOKES, initialJokes)
+  const [allJokes, setAllJokes] = useState<Joke[]>(() =>
+    getItem<Joke[]>(STORAGE_KEYS.JOKES, initialJokes as unknown as Joke[])
   );
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() => 
-    getItem(STORAGE_KEYS.RIDDLES, initialRiddles)
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() =>
+    getItem<Riddle[]>(STORAGE_KEYS.RIDDLES, initialRiddles as Riddle[])
   );
-  const [allImageRiddles, setAllImageRiddles] = useState<ImageRiddle[]>(() => 
-    getItem(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles)
+  const [allImageRiddles, setAllImageRiddles] = useState<ImageRiddle[]>(() =>
+    getItem<ImageRiddle[]>(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles as unknown as ImageRiddle[])
   );
 
   // Persist subjects

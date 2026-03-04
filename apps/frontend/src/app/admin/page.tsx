@@ -278,7 +278,7 @@ export default function AdminPage(): JSX.Element {
     const JOKES_SYNC_KEY = 'aiquiz:jokes-v2-sync';
     if (typeof window !== 'undefined' && !localStorage.getItem(JOKES_SYNC_KEY)) {
       // Force sync with initial jokes from library to ensure 15+ new jokes appear
-      setAllJokes(libInitialJokes);
+      setAllJokes(libInitialJokes as unknown as Joke[]);
       localStorage.setItem(JOKES_SYNC_KEY, 'done');
     }
   }, [setAllJokes]);
@@ -1363,7 +1363,7 @@ function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
 // ============================================================================
 
 function useGlobalJokes() {
-  const [allJokes, setAllJokes] = useState<Joke[]>(() => getItem(STORAGE_KEYS.JOKES, libInitialJokes));
+  const [allJokes, setAllJokes] = useState<Joke[]>(() => getItem<Joke[]>(STORAGE_KEYS.JOKES, libInitialJokes as unknown as Joke[]));
 
   // Persistence
   useEffect(() => {

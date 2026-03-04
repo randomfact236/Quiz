@@ -39,7 +39,9 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
     // LCG pseudo-random: produces a different value each iteration
     s = (s * 1664525 + 1013904223) & 0x7fffffff;
     const j = s % (i + 1);
-    [a[i], a[j]] = [a[j], a[i]];
+    const temp = a[i] as T;
+    a[i] = a[j] as T;
+    a[j] = temp;
   }
   return a;
 }

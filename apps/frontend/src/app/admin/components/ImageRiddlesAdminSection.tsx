@@ -1,13 +1,18 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { Pencil, Trash2, Plus, X } from 'lucide-react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import { Pencil, Trash2, Plus, X, ArrowUpDown } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
+import { toast } from '@/lib/toast';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { initialImageRiddles as libInitialImageRiddles } from '@/lib/initial-data';
 import type { ImageRiddle, ContentStatus, StatusFilter, BulkActionType } from '../types';
 import { getStatusBadgeColor, getDifficultyColor, downloadFile } from '../utils';
+
+/** Items per page constant */
+const ITEMS_PER_PAGE = 10;
 
 /** Category type for image riddles */
 interface ImageRiddleCategory {
@@ -58,6 +63,7 @@ interface RiddleFormState {
   isActive: boolean;
   categoryName: string;
   categoryEmoji: string;
+  status?: ContentStatus;
 }
 
 /** Status counts type */
@@ -233,7 +239,22 @@ function importFromCSV<T extends Record<string, unknown>>(
     if (!line || line.trim() === '') continue;
 
     try {
-      const values = line.split(',');
+      // RFC 4180 compliant CSV tokenizer — handles quoted fields with commas
+      const values: string[] = [];
+      let current = '';
+      let inQuotes = false;
+      for (let ci = 0; ci < line.length; ci++) {
+        const ch = line[ci];
+        if (ch === '"') {
+          if (inQuotes && line[ci + 1] === '"') { current += '"'; ci++; }
+          else { inQuotes = !inQuotes; }
+        } else if (ch === ',' && !inQuotes) {
+          values.push(current); current = '';
+        } else {
+          current += ch;
+        }
+      }
+      values.push(current);
       const mapped = mapper(values, headers);
 
       if (mapped && Object.keys(mapped).length > 0) {
@@ -288,7 +309,7 @@ function parseImageRiddleCSV(csvText: string): ImportResult<ImageRiddle> {
       };
 
       return {
-        id: String(Date.now() + Math.floor(Math.random() * 1000)),
+        id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.floor(Math.random() * 1000)),
         title: getValue(1, 'title'),
         imageUrl: getValue(2, 'imageurl'),
         answer: getValue(3, 'answer'),
@@ -315,6 +336,7 @@ const defaultFormState: RiddleFormState = {
   isActive: true,
   categoryName: '',
   categoryEmoji: '',
+  status: 'draft',
 };
 
 /** Default categories */
@@ -344,8 +366,10 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     getItem(STORAGE_KEYS.IMAGE_RIDDLES, libInitialImageRiddles)
   );
 
-  // Categories state
-  const [categories, setCategories] = useState<ImageRiddleCategory[]>(defaultCategories);
+  // Categories state - persisted in localStorage
+  const [categories, setCategories] = useState<ImageRiddleCategory[]>(() =>
+    getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, defaultCategories)
+  );
 
   // Category Modal States
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
@@ -374,7 +398,16 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [showSyncConfirmModal, setShowSyncConfirmModal] = useState<boolean>(false);
   const [selectedRiddle, setSelectedRiddle] = useState<ImageRiddle | null>(null);
+
+  // Undo delete reference
+  const lastDeletedRef = useRef<ImageRiddle | null>(null);
+  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  type SortField = 'title' | 'difficulty' | 'status' | 'category';
+  type SortConfig = { field: SortField; direction: 'asc' | 'desc' } | null;
+  const [sortConfig, setSortConfig] = useState<SortConfig>(null);
 
   // Import states
   const [importError, setImportError] = useState<string>('');
@@ -392,28 +425,29 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const editModalRef = useRef<HTMLDivElement>(null);
   const exportDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Persistence effect
+  // Persistence effect for riddles
   useEffect(() => {
     setItem(STORAGE_KEYS.IMAGE_RIDDLES, imageRiddles);
   }, [imageRiddles]);
 
-  // Calculate status counts
-  const statusCounts: StatusCounts = {
+  // Persistence effect for categories
+  useEffect(() => {
+    setItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, categories);
+  }, [categories]);
+
+  // Calculate status counts (memoized)
+  const statusCounts = useMemo<StatusCounts>(() => ({
     total: imageRiddles.length,
     published: imageRiddles.filter(r => r.status === 'published').length,
     draft: imageRiddles.filter(r => r.status === 'draft').length,
     trash: imageRiddles.filter(r => r.status === 'trash').length,
-  };
-
-
-
-
+  }), [imageRiddles]);
 
   // Category Handlers
   const handleAddCategory = () => {
     if (!categoryForm.name.trim()) return;
     const newCategory: ImageRiddleCategory = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11),
       name: categoryForm.name.trim(),
       emoji: categoryForm.emoji || '🔍',
       count: 0
@@ -469,43 +503,87 @@ export function ImageRiddlesAdminSection(): JSX.Element {
 
   /** Sync with default data from source */
   const handleSyncDefaults = useCallback(() => {
-    if (confirm('This will refresh your list with the latest default riddles from the source file. Your current changes will be preserved but missing defaults will be added and existing ones synchronized. Proceed?')) {
-      // For simplicity in this case, we'll replace the current list with the full libInitialImageRiddles 
-      // but you could also do a smart merge if needed.
-      setImageRiddles(libInitialImageRiddles);
-
-      // Also reset categories to ensure new ones appear
-      setCategories(defaultCategories);
-
-      alert('Successfully synchronized with source defaults!');
-    }
+    setShowSyncConfirmModal(true);
   }, []);
 
-  // Filter riddles
-  const filteredRiddles = imageRiddles.filter(riddle => {
-    const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
-    const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
-    const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
-    return matchesDifficulty && matchesCategory && matchesSearch && matchesStatus;
-  });
+  const confirmSyncDefaults = useCallback(() => {
+    setImageRiddles(libInitialImageRiddles);
+    setCategories(defaultCategories);
+    setShowSyncConfirmModal(false);
+    toast.success('🔄 Synced with source defaults — 20 riddles loaded!');
+  }, []);
+
+  // Filter and Sort riddles (memoized)
+  const filteredRiddles = useMemo(() => {
+    let result = imageRiddles.filter(riddle => {
+      const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
+      const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
+      const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
+      return matchesDifficulty && matchesCategory && matchesSearch && matchesStatus;
+    });
+
+    if (sortConfig) {
+      result.sort((a, b) => {
+        let valueA: string = '';
+        let valueB: string = '';
+
+        if (sortConfig.field === 'title') {
+          valueA = a.title.toLowerCase();
+          valueB = b.title.toLowerCase();
+        } else if (sortConfig.field === 'difficulty') {
+          const diffMap: Record<string, number> = { easy: 1, medium: 2, hard: 3, expert: 4 };
+          valueA = String(diffMap[a.difficulty] || 0);
+          valueB = String(diffMap[b.difficulty] || 0);
+        } else if (sortConfig.field === 'status') {
+          valueA = a.status;
+          valueB = b.status;
+        } else if (sortConfig.field === 'category') {
+          valueA = (a.category?.name || '').toLowerCase();
+          valueB = (b.category?.name || '').toLowerCase();
+        }
+
+        if (valueA < valueB) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (valueA > valueB) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return result;
+  }, [imageRiddles, filterDifficulty, filterCategory, searchTerm, statusFilter, sortConfig]);
+
+  const handleSort = (field: SortField) => {
+    setSortConfig(current => {
+      if (current?.field === field) {
+        return current.direction === 'asc' ? { field, direction: 'desc' } : null;
+      }
+      return { field, direction: 'asc' };
+    });
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sortConfig?.field !== field) return <ArrowUpDown className="inline w-3 h-3 ml-1 opacity-40 group-hover:opacity-100" />;
+    return sortConfig.direction === 'asc'
+      ? <span className="inline-block ml-1 text-indigo-500 font-black">↑</span>
+      : <span className="inline-block ml-1 text-indigo-500 font-black">↓</span>;
+  };
 
   // Pagination
-  const totalPages = Math.ceil(filteredRiddles.length / itemsPerPage);
-  const paginatedRiddles = filteredRiddles.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const totalPages = Math.ceil(filteredRiddles.length / ITEMS_PER_PAGE);
+  const paginatedRiddles = useMemo(() => filteredRiddles.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  ), [filteredRiddles, currentPage]);
 
-  // Sync pageInput with currentPage
-  useEffect(() => {
-    setPageInput(String(currentPage));
-  }, [currentPage]);
+  // Sync pageInput with currentPage; reset page when filters change
+  useEffect(() => { setPageInput(String(currentPage)); }, [currentPage]);
+  useEffect(() => { setCurrentPage(1); setPageInput('1'); }, [filterDifficulty, filterCategory, searchTerm, statusFilter]);
 
-  // Page input handlers
-  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageInput(e.target.value);
-  };
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { setPageInput(e.target.value); };
 
   const handlePageInputSubmit = () => {
     const page = parseInt(pageInput, 10);
@@ -624,54 +702,24 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     if (fileInputRef.current) { fileInputRef.current.value = ''; }
   }, [importPreview]);
 
-  // Click outside handlers
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (exportDropdownRef.current && !exportDropdownRef.current.contains(event.target as Node)) {
-        setShowExportDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(exportDropdownRef, () => setShowExportDropdown(false), showExportDropdown);
 
-  useEffect(() => {
-    if (!showImportModal) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (importModalRef.current && !importModalRef.current.contains(event.target as Node)) {
-        setShowImportModal(false);
-        setImportError('');
-        setImportPreview([]);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showImportModal]);
+  useClickOutside(importModalRef, () => {
+    setShowImportModal(false);
+    setImportError('');
+    setImportPreview([]);
+  }, showImportModal);
 
-  useEffect(() => {
-    if (!showAddModal) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (addModalRef.current && !addModalRef.current.contains(event.target as Node)) {
-        setShowAddModal(false);
-        setRiddleForm(defaultFormState);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showAddModal]);
+  useClickOutside(addModalRef, () => {
+    setShowAddModal(false);
+    setRiddleForm(defaultFormState);
+  }, showAddModal);
 
-  useEffect(() => {
-    if (!showEditModal) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (editModalRef.current && !editModalRef.current.contains(event.target as Node)) {
-        setShowEditModal(false);
-        setSelectedRiddle(null);
-        setRiddleForm(defaultFormState);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showEditModal]);
+  useClickOutside(editModalRef, () => {
+    setShowEditModal(false);
+    setSelectedRiddle(null);
+    setRiddleForm(defaultFormState);
+  }, showEditModal);
 
   // CRUD Functions
   const handleAddRiddle = useCallback(() => {
@@ -687,19 +735,19 @@ export function ImageRiddlesAdminSection(): JSX.Element {
       answer: riddleForm.answer.trim(),
       hint: riddleForm.hint.trim(),
       difficulty: riddleForm.difficulty,
-      status: 'draft',
+      status: riddleForm.status || 'draft',
       timerSeconds: riddleForm.timerSeconds ? parseInt(riddleForm.timerSeconds) : null,
       showTimer: riddleForm.showTimer,
       isActive: riddleForm.isActive,
-      category: {
-        name: riddleForm.categoryName,
-        emoji: riddleForm.categoryEmoji || '❓'
-      },
+      category: { name: riddleForm.categoryName, emoji: riddleForm.categoryEmoji || '❓' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     setImageRiddles(prev => [...prev, newRiddle]);
     setShowAddModal(false);
     setRiddleForm(defaultFormState);
+    toast.success('✨ Riddle added successfully!');
   }, [riddleForm]);
 
   const handleEditRiddle = useCallback(() => {
@@ -717,27 +765,64 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           answer: riddleForm.answer.trim(),
           hint: riddleForm.hint.trim(),
           difficulty: riddleForm.difficulty,
+          status: riddleForm.status || r.status,
           timerSeconds: riddleForm.timerSeconds ? parseInt(riddleForm.timerSeconds) : null,
           showTimer: riddleForm.showTimer,
           isActive: riddleForm.isActive,
-          category: {
-            name: riddleForm.categoryName,
-            emoji: riddleForm.categoryEmoji || '❓'
-          },
+          category: { name: riddleForm.categoryName, emoji: riddleForm.categoryEmoji || '❓' },
+          updatedAt: new Date().toISOString(),
         }
         : r
     ));
     setShowEditModal(false);
     setSelectedRiddle(null);
     setRiddleForm(defaultFormState);
+    toast.success('✏️ Riddle updated successfully!');
   }, [selectedRiddle, riddleForm]);
 
   const handleDeleteRiddle = useCallback(() => {
     if (!selectedRiddle) { return; }
+
+    // Store for undo
+    lastDeletedRef.current = selectedRiddle;
+
     setImageRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
     setShowDeleteConfirm(false);
     setSelectedRiddle(null);
+
+    toast.success('Riddle deleted. (Undo available)', 5000);
+
+    // Clear the undo buffer after 5 seconds to prevent memory leaks if many deletes happen
+    if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+    undoTimeoutRef.current = setTimeout(() => {
+      lastDeletedRef.current = null;
+    }, 5500);
+
   }, [selectedRiddle]);
+
+  const handleUndoDelete = useCallback(() => {
+    if (lastDeletedRef.current) {
+      const restored = lastDeletedRef.current;
+      setImageRiddles(prev => [...prev, restored]);
+      lastDeletedRef.current = null;
+      toast.success('Riddle restored!');
+    } else {
+      toast.error('Nothing to undo.');
+    }
+  }, []);
+
+  const handleDuplicateRiddle = useCallback((riddle: ImageRiddle) => {
+    const duplicated: ImageRiddle = {
+      ...riddle,
+      id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+      title: `${riddle.title} (Copy)`,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setImageRiddles(prev => [...prev, duplicated]);
+    toast.success('Riddle duplicated as draft!');
+  }, []);
 
   const openEditModal = useCallback((riddle: ImageRiddle) => {
     setSelectedRiddle(riddle);
@@ -747,6 +832,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
       answer: riddle.answer,
       hint: riddle.hint || '',
       difficulty: riddle.difficulty,
+      status: riddle.status,
       timerSeconds: riddle.timerSeconds?.toString() || '',
       showTimer: riddle.showTimer,
       isActive: riddle.isActive,
@@ -842,6 +928,15 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             aria-label="Sync with defaults"
           >
             🔄 Sync Source
+          </button>
+          <button
+            onClick={handleUndoDelete}
+            disabled={!lastDeletedRef.current}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${lastDeletedRef.current ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+            aria-label="Undo last delete"
+            title="Undo last delete"
+          >
+            ⟲ Undo
           </button>
           <button
             onClick={() => setShowAddModal(true)}
@@ -986,11 +1081,31 @@ export function ImageRiddlesAdminSection(): JSX.Element {
               </th>
               <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 w-12 text-center">#</th>
               <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Image</th>
-              <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Riddle Details</th>
+              <th
+                className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('title')}
+              >
+                Riddle Details {getSortIcon('title')}
+              </th>
               <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Answer</th>
-              <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Category</th>
-              <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Difficulty</th>
-              <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 text-center">Status</th>
+              <th
+                className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('category')}
+              >
+                Category {getSortIcon('category')}
+              </th>
+              <th
+                className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('difficulty')}
+              >
+                Difficulty {getSortIcon('difficulty')}
+              </th>
+              <th
+                className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 text-center cursor-pointer group hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('status')}
+              >
+                Status {getSortIcon('status')}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
@@ -1020,17 +1135,25 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="font-bold text-gray-900 line-clamp-1 mb-2 group-hover:text-blue-600 transition-colors">{riddle.title}</p>
-                    <div className="flex items-center gap-3">
+                    <p className="font-bold text-gray-900 line-clamp-1 mb-2 group-hover:text-blue-600 transition-colors" title={`Created: ${riddle.createdAt ? new Date(riddle.createdAt).toLocaleString() : 'N/A'}\nUpdated: ${riddle.updatedAt ? new Date(riddle.updatedAt).toLocaleString() : 'N/A'}`}>
+                      {riddle.title}
+                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
                       <button
                         onClick={() => openEditModal(riddle)}
-                        className="text-[11px] font-black uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50/50 px-2 py-0.5 rounded"
+                        className="text-[10px] font-black uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 px-2 py-0.5 rounded shadow-sm"
                       >
                         Edit
                       </button>
                       <button
+                        onClick={() => handleDuplicateRiddle(riddle)}
+                        className="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-800 transition-colors bg-emerald-50 px-2 py-0.5 rounded shadow-sm"
+                      >
+                        Copy
+                      </button>
+                      <button
                         onClick={() => openDeleteConfirm(riddle)}
-                        className="text-[11px] font-black uppercase tracking-wider text-red-600 hover:text-red-800 transition-colors bg-red-50/50 px-2 py-0.5 rounded"
+                        className="text-[10px] font-black uppercase tracking-wider text-red-600 hover:text-red-800 transition-colors bg-red-50 px-2 py-0.5 rounded shadow-sm"
                       >
                         Delete
                       </button>
@@ -1052,9 +1175,13 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                       {riddle.difficulty}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm ${getStatusBadgeColor(riddle.status)} bg-white border border-current`}>
-                      {riddle.status}
+                  <td className="px-6 py-4 text-center group/status cursor-pointer" onClick={() => {
+                    const nextStatus = riddle.status === 'published' ? 'draft' : riddle.status === 'draft' ? 'trash' : 'published';
+                    setImageRiddles(prev => prev.map(r => r.id === riddle.id ? { ...r, status: nextStatus, updatedAt: new Date().toISOString() } : r));
+                    toast.success(`👁️ Status changed to ${nextStatus.toUpperCase()}`);
+                  }}>
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm ${getStatusBadgeColor(riddle.status)} bg-white border border-current transition-transform group-hover/status:scale-105`}>
+                      {riddle.status} <span className="ml-1 opacity-0 group-hover/status:opacity-100 transition-opacity">⟳</span>
                     </span>
                   </td>
                 </tr>
@@ -1264,6 +1391,11 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                   placeholder="https://example.com/image.jpg"
                   aria-required="true"
                 />
+                {riddleForm.imageUrl && (
+                  <div className="mt-2 text-center rounded-lg border border-slate-200 bg-slate-50 p-2 overflow-hidden max-h-40 flex items-center justify-center">
+                    <img src={riddleForm.imageUrl} alt="Preview" className="max-h-36 object-contain rounded" onError={(e) => { (e.target as HTMLImageElement).src = ''; (e.target as HTMLImageElement).alt = '❌ Invalid Image URL'; }} />
+                  </div>
+                )}
               </div>
 
               <div>
@@ -1340,7 +1472,11 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                   <select
                     id="image-riddle-category"
                     value={riddleForm.categoryName}
-                    onChange={(e) => setRiddleForm(prev => ({ ...prev, categoryName: e.target.value }))}
+                    onChange={(e) => {
+                      const selectedName = e.target.value;
+                      const cat = categories.find(c => c.name === selectedName);
+                      setRiddleForm(prev => ({ ...prev, categoryName: selectedName, categoryEmoji: cat ? cat.emoji : prev.categoryEmoji }));
+                    }}
                     className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     aria-required="true"
                   >
@@ -1367,24 +1503,40 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2">
+              <div className="flex items-center gap-4 border-t border-slate-100 pt-4 mt-4">
+                <div className="flex-1">
+                  <label htmlFor="image-riddle-status" className="mb-1 block text-sm font-medium text-gray-700">
+                    Status
+                  </label>
+                  <select
+                    id="image-riddle-status"
+                    value={riddleForm.status || 'draft'}
+                    onChange={(e) => setRiddleForm(prev => ({ ...prev, status: e.target.value as ContentStatus }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-slate-50 font-bold"
+                  >
+                    <option value="draft">Draft (Hidden)</option>
+                    <option value="published">Published (Live)</option>
+                    <option value="trash">Trash (Hidden)</option>
+                  </select>
+                </div>
+
+                <label className="flex items-center gap-2 mt-6 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={riddleForm.showTimer}
                     onChange={(e) => setRiddleForm(prev => ({ ...prev, showTimer: e.target.checked }))}
-                    className="rounded border-gray-300"
+                    className="rounded border-gray-300 w-4 h-4 text-blue-600"
                   />
-                  <span className="text-sm text-gray-700">Show Timer</span>
+                  <span className="text-sm text-gray-700 font-medium select-none">Show Timer</span>
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 mt-6 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={riddleForm.isActive}
                     onChange={(e) => setRiddleForm(prev => ({ ...prev, isActive: e.target.checked }))}
-                    className="rounded border-gray-300"
+                    className="rounded border-gray-300 w-4 h-4 text-blue-600"
                   />
-                  <span className="text-sm text-gray-700">Active</span>
+                  <span className="text-sm text-gray-700 font-medium select-none">Active</span>
                 </label>
               </div>
 
@@ -1538,8 +1690,39 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           </div>
         </div>
       )}
+
+      {/* Sync Source Confirm Modal */}
+      {showSyncConfirmModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+              <span className="text-2xl">🔄</span>
+            </div>
+            <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Sync with Defaults?</h3>
+            <p className="mb-6 text-sm text-gray-600">
+              This will refresh your list with the latest default riddles from the source file. Your current changes will be preserved but missing defaults will be added.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowSyncConfirmModal(false)}
+                className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSyncDefaults}
+                className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-500/25 transition-all"
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default ImageRiddlesAdminSection;
+export function ImageRiddlesAdminSectionFallback(): JSX.Element {
+  return <ImageRiddlesAdminSection />;
+}

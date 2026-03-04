@@ -128,17 +128,17 @@ function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
 // -----------------------------------------------------------------------------
 
 export default function ImageRiddlesPage(): JSX.Element {
-  // Data State
-  const [riddles, setRiddles] = useState<ImageRiddle[]>(initialImageRiddles);
-  const [categories] = useState<ImageRiddleCategory[]>(initialImageRiddleCategories);
+  // Data State - Lazy initialized from localStorage
+  const [riddles] = useState<ImageRiddle[]>(() =>
+    getItem(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles)
+  );
+  const [categories] = useState<ImageRiddleCategory[]>(() =>
+    getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, initialImageRiddleCategories)
+  );
+
   const [isMounted, setIsMounted] = useState(false);
 
-  // Load from storage after mount
   useEffect(() => {
-    const savedRiddles = getItem(STORAGE_KEYS.IMAGE_RIDDLES, null);
-    if (savedRiddles) {
-      setRiddles(savedRiddles);
-    }
     setIsMounted(true);
   }, []);
 
@@ -155,6 +155,8 @@ export default function ImageRiddlesPage(): JSX.Element {
   const [showAnswer, setShowAnswer] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
+  const [shake, setShake] = useState(false);
+  const [attempts, setAttempts] = useState<Record<string, number>>({});
 
   // Modal Timer State
   const [modalTimeLeft, setModalTimeLeft] = useState(0);
@@ -224,7 +226,7 @@ export default function ImageRiddlesPage(): JSX.Element {
     }
 
     return result;
-  }, [riddles, difficulty, sortOrder, searchQuery]);
+  }, [riddles, difficulty, sortOrder, searchQuery, isMounted]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredRiddles.length / ITEMS_PER_PAGE);
@@ -233,14 +235,48 @@ export default function ImageRiddlesPage(): JSX.Element {
     return filteredRiddles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredRiddles, currentPage]);
 
+  const navigateRiddle = useCallback((direction: 'next' | 'prev') => {
+    if (!selectedRiddle) return;
+    const currentIndex = filteredRiddles.findIndex(r => r.id === selectedRiddle.id);
+    if (currentIndex === -1) return;
+
+    let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+    if (newIndex >= filteredRiddles.length) newIndex = 0;
+    if (newIndex < 0) newIndex = filteredRiddles.length - 1;
+
+    const nextRiddle = filteredRiddles[newIndex];
+    if (nextRiddle) {
+      handleRiddleClick(nextRiddle);
+    }
+  }, [selectedRiddle, filteredRiddles, handleRiddleClick]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (!selectedRiddle) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedRiddle(null);
+      // Only trigger arrow keys if not typing in the input
+      if (document.activeElement?.tagName !== 'INPUT') {
+        if (e.key === 'ArrowRight') navigateRiddle('next');
+        if (e.key === 'ArrowLeft') navigateRiddle('prev');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedRiddle, navigateRiddle]);
+
   const handleAction = useCallback((action: IActionOption, riddle: ImageRiddle) => {
     switch (action.id) {
       case 'check-answer':
+        setAttempts(prev => ({ ...prev, [riddle.id]: (prev[riddle.id] || 0) + 1 }));
         if (userAnswer.trim().toLowerCase() === riddle.answer.toLowerCase()) {
           setShowAnswer(true);
           setRevealedAnswers(prev => ({ ...prev, [riddle.id]: true }));
         } else {
-          alert('Not quite right. Try again!');
+          setShake(true);
+          setTimeout(() => setShake(false), 500);
         }
         break;
       case 'show-hint':
@@ -254,6 +290,23 @@ export default function ImageRiddlesPage(): JSX.Element {
         break;
     }
   }, [userAnswer]);
+
+  // Handle timer auto-expiry
+  useEffect(() => {
+    if (selectedRiddle && isTimerActive && modalTimeLeft === 0 && !showAnswer) {
+      setShowAnswer(true);
+      setRevealedAnswers(prev => ({ ...prev, [selectedRiddle.id]: true }));
+    }
+  }, [modalTimeLeft, isTimerActive, showAnswer, selectedRiddle]);
+
+  // Score Tracking Header stats
+  const score = useMemo(() => {
+    const revealedCount = Object.keys(revealedAnswers).length;
+    return {
+      played: revealedCount,
+      total: riddles.length
+    };
+  }, [revealedAnswers, riddles]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] px-4 py-8">
@@ -272,13 +325,17 @@ export default function ImageRiddlesPage(): JSX.Element {
         </div>
         {/* Sticky Content Header (Full Width, Above Grid) */}
         <div className="sticky top-4 z-30 mb-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
-          <div className="flex items-center gap-4 w-full sm:w-auto px-1">
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto px-1">
             <h2 className="text-xl font-black text-slate-800 tracking-tight whitespace-nowrap">
               {activeCategory || 'All Riddles'}
               <span className="ml-2 inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-black text-slate-500 border border-slate-200">
                 {filteredRiddles.length}
               </span>
             </h2>
+            <div className="hidden sm:block h-6 w-px bg-slate-200"></div>
+            <div className="flex gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+              <span>Score: <span className="text-indigo-600 ml-1">{score.played}</span> / {score.total}</span>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto justify-end">
@@ -467,7 +524,6 @@ export default function ImageRiddlesPage(): JSX.Element {
         {selectedRiddle && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="relative h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
-              {/* Close Button - Absolute Positioned */}
               <button
                 onClick={() => setSelectedRiddle(null)}
                 className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
@@ -476,8 +532,20 @@ export default function ImageRiddlesPage(): JSX.Element {
                 ✕
               </button>
 
+              {/* Navigation Buttons */}
+              {filteredRiddles.length > 1 && (
+                <>
+                  <button onClick={(e) => { e.stopPropagation(); navigateRiddle('prev'); }} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95" aria-label="Previous Riddle">
+                    <span className="text-2xl font-black">‹</span>
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); navigateRiddle('next'); }} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95" aria-label="Next Riddle">
+                    <span className="text-2xl font-black">›</span>
+                  </button>
+                </>
+              )}
+
               {/* Non-Scrollable Dynamic Content */}
-              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-10">
+              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-10 mx-8">
                 {/* Top Info Row: Difficulty */}
                 <div className="mb-2">
                   <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} border-none bg-slate-100/50 shadow-sm`}>
@@ -489,9 +557,18 @@ export default function ImageRiddlesPage(): JSX.Element {
                   <h2 className="shrink flex-1 text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-loose pt-1">
                     {selectedRiddle.title}
                   </h2>
-                  <div className={`shrink-0 flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
-                    <span className="text-sm">⏱️</span>
-                    <span>{Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}</span>
+                  <div className="shrink-0 flex flex-col items-end gap-1">
+                    <div className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
+                      <span className="text-sm">⏱️</span>
+                      <span>{Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}</span>
+                    </div>
+                    {/* Visual Progress Bar */}
+                    <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-1000 linear ${modalTimeLeft <= 10 ? 'bg-red-500' : 'bg-indigo-500'}`}
+                        style={{ width: `${(modalTimeLeft / (selectedRiddle.timerSeconds ?? defaultTimers[selectedRiddle.difficulty as keyof typeof defaultTimers] ?? 90)) * 100}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
 
@@ -501,6 +578,12 @@ export default function ImageRiddlesPage(): JSX.Element {
                     alt={selectedRiddle.altText || selectedRiddle.title}
                     className="absolute inset-0 h-full w-full object-contain p-2"
                   />
+                  {/* Timer Expiry Pulse Overlay */}
+                  {modalTimeLeft === 0 && !showAnswer && (
+                    <div className="absolute inset-0 bg-red-500/20 backdrop-blur-[2px] animate-pulse flex items-center justify-center z-10">
+                      <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">TIME'S UP!</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Game Logic */}
@@ -515,9 +598,9 @@ export default function ImageRiddlesPage(): JSX.Element {
                         type="text"
                         value={userAnswer}
                         onChange={(e) => setUserAnswer(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') handleAction({ id: 'check-answer' } as any, selectedRiddle); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleAction({ id: 'check-answer' } as IActionOption, selectedRiddle); }}
                         placeholder="Type your answer..."
-                        className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 px-6 py-4 text-lg font-bold text-slate-800 placeholder:text-slate-300 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all shadow-inner"
+                        className={`w-full rounded-2xl border-2 bg-slate-50 px-6 py-4 text-lg font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:outline-none transition-all shadow-inner ${shake ? 'border-red-500 ring-4 ring-red-100 animate-[shake_0.5s_ease-in-out]' : 'border-slate-100 focus:border-indigo-500'}`}
                         autoFocus
                       />
                     </div>
@@ -551,13 +634,16 @@ export default function ImageRiddlesPage(): JSX.Element {
                     <div className="rounded-[2.5rem] bg-indigo-600 p-6 sm:p-8 text-center text-white shadow-xl relative overflow-hidden">
                       <div className="absolute -top-10 -right-10 text-9xl opacity-10">✨</div>
                       <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-indigo-200">The Answer is:</p>
-                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight">{selectedRiddle.answer}</h3>
+                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">{selectedRiddle.answer}</h3>
+                      <div className="inline-flex items-center gap-2 bg-indigo-500/50 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-indigo-100">
+                        <span>Guesses made: <span className="text-white ml-1">{attempts[selectedRiddle.id] || 0}</span></span>
+                      </div>
                     </div>
                     <button
-                      onClick={() => setSelectedRiddle(null)}
+                      onClick={() => navigateRiddle('next')}
                       className="w-full rounded-2xl bg-slate-800 py-3 sm:py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-slate-700 hover:scale-[1.02] active:scale-95"
                     >
-                      Close Preview
+                      Next Riddle →
                     </button>
                   </div>
                 )}
