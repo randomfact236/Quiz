@@ -7,7 +7,7 @@
  * - 2-Column Sticky Category Sidebar
  * - Full-Width Sticky Unified Header
  * - Pagination (12 Items per Page)
- * - Compact Stats Profile
+ * - Pagination (12 Items per Page)
  * ============================================================================
  */
 
@@ -243,64 +243,64 @@ export default function ImageRiddlesPage(): JSX.Element {
           <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Challenge your perception</p>
         </div>
 
-        {/* Compact Stats Summary */}
-        <div className="mb-6 grid grid-cols-2 gap-4 max-w-[320px] mx-auto">
-          <div className="rounded-2xl bg-white px-4 py-3 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-            <p className="text-2xl font-black text-indigo-600 leading-none mb-1">{riddles.length}</p>
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Total</p>
-          </div>
-          <div className="rounded-2xl bg-white px-4 py-3 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-            <p className="text-2xl font-black text-indigo-600 leading-none mb-1">{categories.length}</p>
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Topics</p>
-          </div>
-        </div>
+
 
         {/* Sticky Content Header (Full Width, Above Grid) */}
-        <div className="sticky top-20 z-30 mb-8 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 w-full sm:w-auto">
-            <h2 className="text-lg font-black text-slate-800 tracking-tight whitespace-nowrap">
-              {activeCategory || 'All Riddles'} <span className="text-slate-400 font-bold ml-1">({filteredRiddles.length})</span>
+        <div className="sticky top-20 z-30 mb-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
+          <div className="flex items-center gap-4 w-full sm:w-auto px-1">
+            <h2 className="text-xl font-black text-slate-800 tracking-tight whitespace-nowrap">
+              {activeCategory || 'All Riddles'}
+              <span className="ml-2 inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-black text-slate-500 border border-slate-200">
+                {filteredRiddles.length}
+              </span>
             </h2>
-            <div className="h-6 w-[2px] bg-slate-100 hidden sm:block"></div>
-            <div className="relative flex-1 sm:flex-none">
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto justify-end">
+            {/* 1. Search (Visible and on the right) */}
+            <div className="relative flex-1 sm:flex-none min-w-[200px]">
               <input
                 type="search"
                 placeholder="Search riddles..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full sm:w-64 rounded-full border-2 border-slate-100 bg-slate-50 py-2 pl-4 pr-10 text-sm font-bold text-slate-700 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all"
+                className="w-full sm:w-64 rounded-full border-2 border-slate-200 bg-white py-2.5 pl-5 pr-12 text-sm font-black text-slate-700 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 focus:outline-none transition-all placeholder:text-slate-400"
               />
-              <span className="absolute right-3 top-2.5 text-slate-300">🔍</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">🔍</span>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            {/* 2. Sort Options (Recent/Mix) */}
+            <div className="flex items-center bg-slate-100/80 p-1 rounded-xl border border-slate-200/60">
               <button
                 onClick={() => handleSortChange('recent')}
-                className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${sortOrder === 'recent' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-700'}`}
+                className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${sortOrder === 'recent' ? 'bg-white text-indigo-600 shadow-md ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
               >
                 Recent
               </button>
               <button
                 onClick={() => handleSortChange('random')}
-                className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-700'}`}
+                className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white text-indigo-600 shadow-md ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
               >
                 Mix
               </button>
             </div>
-            <select
-              value={difficulty}
-              onChange={(e) => handleDifficultyChange(e.target.value)}
-              className="rounded-xl border-2 border-slate-100 bg-slate-50 px-3 py-2 text-xs font-black text-slate-600 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all cursor-pointer"
-              aria-label="Filter by difficulty"
-            >
-              <option value="all">All Levels</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-              <option value="expert">Expert</option>
-            </select>
+
+            {/* 3. Difficulty Filter */}
+            <div className="relative group">
+              <select
+                value={difficulty}
+                onChange={(e) => handleDifficultyChange(e.target.value)}
+                className="appearance-none rounded-xl border-2 border-slate-200 bg-white px-5 py-2.5 pr-10 text-xs font-black text-slate-700 shadow-sm hover:border-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all cursor-pointer"
+                aria-label="Filter by difficulty"
+              >
+                <option value="all">All Levels</option>
+                <option value="easy">🌱 Easy</option>
+                <option value="medium">⭐ Medium</option>
+                <option value="hard">🔥 Hard</option>
+                <option value="expert">💎 Expert</option>
+              </select>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">▼</span>
+            </div>
           </div>
         </div>
 
