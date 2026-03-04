@@ -45,7 +45,9 @@ export function useJokeFilters(
 ): { filteredJokes: Joke[]; statusCounts: { total: number; published: number; draft: number; trash: number } } {
   const filteredJokes = allJokes.filter(joke => {
     const matchesCategory = !filterCategory || joke.category === filterCategory;
-    const matchesSearch = !search || joke.joke.toLowerCase().includes(search.toLowerCase());
+    const searchText = search.toLowerCase();
+    const jokeContent = (joke.setup || '') + ' ' + (joke.punchline || '') + ' ' + (joke.joke || '');
+    const matchesSearch = !search || jokeContent.toLowerCase().includes(searchText);
     const matchesStatus = statusFilter === 'all' || joke.status === statusFilter;
     return matchesCategory && matchesSearch && matchesStatus;
   });
@@ -64,10 +66,11 @@ export function useJokeFilters(
  * Convert jokes to CSV format
  */
 export function jokesToCSV(jokes: Joke[]): string {
-  const headers = ['ID', 'Joke', 'Category', 'Status'];
+  const headers = ['ID', 'Setup', 'Punchline', 'Category', 'Status'];
   const rows = jokes.map(j => [
     j.id,
-    `"${j.joke.replace(/"/g, '""')}"`,
+    `"${(j.setup || '').replace(/"/g, '""')}"`,
+    `"${(j.punchline || '').replace(/"/g, '""')}"`,
     j.category,
     j.status,
   ]);
@@ -97,16 +100,18 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
     const line = lines[i];
     if (!line) continue;
 
-    const values = line.split(',');
-    if (values.length < 2) {
+    const values = parseCSVLine(line);
+    // Flexible parsing: ID, Setup/Joke, Punchline, Category, Status
+    if (values.length < 3) {
       failed.push({ row: i, error: 'Invalid format', data: line });
       continue;
     }
 
     imported.push({
-      id: Date.now() + i,
-      joke: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
-      category: values[2] || 'General',
+      id: parseInt(values[0] || '0') || Date.now() + i,
+      setup: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
+      punchline: values[2]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
+      category: values[3] || 'General',
       status: 'draft',
     });
   }

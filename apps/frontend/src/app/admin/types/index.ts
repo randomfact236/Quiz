@@ -38,16 +38,18 @@ export interface Subject {
 }
 
 /** Menu Section Type */
-export type MenuSection = 
-  | 'dashboard' 
+export type MenuSection =
+  | 'dashboard'
   | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology'
-  | 'jokes' | 'riddles' | 'image-riddles' 
+  | 'jokes' | 'riddles' | 'image-riddles'
   | 'users' | 'settings';
 
 /** Joke Type - Enterprise Grade */
 export interface Joke {
   id: number;
-  joke: string;
+  setup: string;
+  punchline: string;
+  joke?: string; // Keep for backward compatibility
   category: string;
   status: ContentStatus;
   createdAt?: string;

@@ -1,10 +1,10 @@
 export const initialJokes = [
-    { id: 1, joke: "Why don't scientists trust atoms? Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 2, joke: "Why did the scarecrow win an award? He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 3, joke: "Why do programmers prefer dark mode? Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
-    { id: 4, joke: "What do you call a fake noodle? An impasta!", category: "Classic Dad Jokes", status: "draft" as const },
-    { id: 5, joke: "Why did the bicycle fall over? It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
-    { id: 6, joke: "How do you organize a space party? You planet!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: 1, setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 2, setup: "Why did the scarecrow win an award?", punchline: "He was outstanding in his field!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 3, setup: "Why do programmers prefer dark mode?", punchline: "Because light attracts bugs!", category: "Programming Jokes", status: "published" as const },
+    { id: 4, setup: "What do you call a fake noodle?", punchline: "An impasta!", category: "Classic Dad Jokes", status: "draft" as const },
+    { id: 5, setup: "Why did the bicycle fall over?", punchline: "It was two tired!", category: "Classic Dad Jokes", status: "published" as const },
+    { id: 6, setup: "How do you organize a space party?", punchline: "You planet!", category: "Classic Dad Jokes", status: "draft" as const },
 ];
 
 export const initialRiddles = [

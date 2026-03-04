@@ -42,7 +42,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
   const [uploadKey, _setUploadKey] = useState(0);
 
   // Form State
-  const [jokeForm, setJokeForm] = useState({ joke: '', category: '' });
+  const [jokeForm, setJokeForm] = useState({ setup: '', punchline: '', category: '' });
 
   // Export dropdown state
   const [showExportDropdown, setShowExportDropdown] = useState(false);
@@ -114,31 +114,32 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
 
   // CRUD Functions
   const handleAddJoke = () => {
-    if (!jokeForm.joke.trim() || !jokeForm.category.trim()) return;
+    if (!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()) return;
 
     const newJoke: Joke = {
       id: Date.now(),
-      joke: jokeForm.joke.trim(),
+      setup: jokeForm.setup.trim(),
+      punchline: jokeForm.punchline.trim(),
       category: jokeForm.category.trim(),
       status: 'draft',
     };
 
     setAllJokes(prev => [...prev, newJoke]);
     setShowAddModal(false);
-    setJokeForm({ joke: '', category: '' });
+    setJokeForm({ setup: '', punchline: '', category: '' });
   };
 
   const handleEditJoke = () => {
-    if (!selectedJoke || !jokeForm.joke.trim() || !jokeForm.category.trim()) return;
+    if (!selectedJoke || !jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()) return;
 
     setAllJokes(prev => prev.map(j =>
       j.id === selectedJoke.id
-        ? { ...j, joke: jokeForm.joke.trim(), category: jokeForm.category.trim() }
+        ? { ...j, setup: jokeForm.setup.trim(), punchline: jokeForm.punchline.trim(), category: jokeForm.category.trim() }
         : j
     ));
     setShowEditModal(false);
     _setSelectedJoke(null);
-    setJokeForm({ joke: '', category: '' });
+    setJokeForm({ setup: '', punchline: '', category: '' });
   };
 
   // Delete handler
@@ -151,7 +152,11 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
 
   const openEditModal = (joke: Joke) => {
     _setSelectedJoke(joke);
-    setJokeForm({ joke: joke.joke, category: joke.category });
+    setJokeForm({
+      setup: joke.setup || (joke.joke?.split('?')[0] ? joke.joke.split('?')[0] + '?' : joke.joke || ''),
+      punchline: joke.punchline || (joke.joke?.split('?')[1] || ''),
+      category: joke.category
+    });
     setShowEditModal(true);
   };
 
@@ -174,26 +179,26 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
       try {
         const content = event.target?.result as string;
         let importedJokes: Joke[] = [];
-        
+
         if (file.name.endsWith('.json')) {
           const data = JSON.parse(content);
-          importedJokes = Array.isArray(data.jokes) 
-            ? data.jokes 
-            : Array.isArray(data) 
-              ? data 
+          importedJokes = Array.isArray(data.jokes)
+            ? data.jokes
+            : Array.isArray(data)
+              ? data
               : [];
         } else {
           const result = parseJokeCSV(content);
           importedJokes = result.imported;
         }
-        
+
         if (importedJokes.length === 0) {
           _setImportError('No valid jokes found in file');
           return;
         }
-        
-        setAllJokes(prev => [...prev, ...importedJokes.map(j => ({ 
-          ...j, 
+
+        setAllJokes(prev => [...prev, ...importedJokes.map(j => ({
+          ...j,
           id: Date.now() + Math.floor(Math.random() * 1000),
           status: j.status || 'draft'
         }))]);
@@ -330,7 +335,9 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                   aria-label="Select all jokes"
                 />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Joke</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">ID</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Question (Setup)</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Answer (Punchline)</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
             </tr>
@@ -347,8 +354,11 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                     aria-label={`Select joke ${joke.id}`}
                   />
                 </td>
+                <td className="px-4 py-3 text-xs text-gray-400 font-mono">
+                  #{joke.id}
+                </td>
                 <td className="px-4 py-3">
-                  <p className="text-sm text-gray-800">{joke.joke}</p>
+                  <p className="text-sm text-gray-800 font-medium">{joke.setup || joke.joke}</p>
                   <div className="mt-2 flex gap-2">
                     <button
                       onClick={() => openEditModal(joke)}
@@ -367,6 +377,9 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
                       Delete
                     </button>
                   </div>
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-600">
+                  {joke.punchline}
                 </td>
                 <td className="px-4 py-3">
                   <span className="inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
@@ -430,14 +443,26 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
             </h3>
             <div className="space-y-4">
               <div>
-                <label htmlFor="joke-text" className="block text-sm font-medium text-gray-700 mb-1">Joke *</label>
+                <label htmlFor="joke-setup" className="block text-sm font-medium text-gray-700 mb-1">Question (Setup) *</label>
                 <textarea
-                  id="joke-text"
-                  value={jokeForm.joke}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, joke: e.target.value }))}
+                  id="joke-setup"
+                  value={jokeForm.setup}
+                  onChange={(e) => setJokeForm(prev => ({ ...prev, setup: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  rows={4}
-                  placeholder="Enter the joke..."
+                  rows={2}
+                  placeholder="Enter the joke question..."
+                  aria-required="true"
+                />
+              </div>
+              <div>
+                <label htmlFor="joke-punchline" className="block text-sm font-medium text-gray-700 mb-1">Answer (Punchline) *</label>
+                <textarea
+                  id="joke-punchline"
+                  value={jokeForm.punchline}
+                  onChange={(e) => setJokeForm(prev => ({ ...prev, punchline: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  rows={2}
+                  placeholder="Enter the joke answer..."
                   aria-required="true"
                 />
               </div>
@@ -459,14 +484,14 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
             </div>
             <div className="flex gap-2 pt-4">
               <button
-                onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ joke: '', category: '' }); }}
+                onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ setup: '', punchline: '', category: '' }); }}
                 className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
               >
                 Cancel
               </button>
               <button
                 onClick={showAddModal ? handleAddJoke : handleEditJoke}
-                disabled={!jokeForm.joke.trim() || !jokeForm.category.trim()}
+                disabled={!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()}
                 className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
               >
                 {showAddModal ? 'Add Joke' : 'Save Changes'}
@@ -511,7 +536,7 @@ export function JokesSection({ allJokes, setAllJokes }: JokesSectionProps): JSX.
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
           <div ref={importModalRef} className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
             <h3 className="text-xl font-bold mb-4">Import Jokes</h3>
-            
+
             <div className="space-y-4">
               <FileUploader
                 key={uploadKey}
