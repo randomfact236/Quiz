@@ -844,53 +844,51 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             All Categories <span className="opacity-70">({imageRiddles.length})</span>
           </button>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {categories.map(cat => {
-              const count = imageRiddles.filter(r => r.category?.name === cat.name).length;
-              const isActive = filterCategory === cat.name;
-              return (
-                <div
-                  key={`category-group-${cat.id}`}
-                  className="flex items-center overflow-hidden rounded-lg shadow-sm border border-gray-100"
+          {categories.map(cat => {
+            const count = imageRiddles.filter(r => r.category?.name === cat.name).length;
+            const isActive = filterCategory === cat.name;
+            return (
+              <div
+                key={`category-group-${cat.id}`}
+                className="flex items-center overflow-hidden rounded-lg shadow-sm border border-gray-100"
+              >
+                <button
+                  onClick={() => setFilterCategory(isActive ? '' : cat.name)}
+                  className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all ${isActive
+                    ? 'bg-gray-800 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                 >
-                  <button
-                    onClick={() => setFilterCategory(isActive ? '' : cat.name)}
-                    className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all ${isActive
-                      ? 'bg-gray-800 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                  >
-                    <span>{cat.emoji}</span>
-                    <span>{cat.name}</span>
-                    <span className="opacity-70 text-[10px]">({count})</span>
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedCategory(cat);
-                      setCategoryForm({ name: cat.name, emoji: cat.emoji });
-                      setShowEditCategoryModal(true);
-                    }}
-                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-indigo-500' : 'bg-gray-200 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
-                    title="Edit category"
-                  >
-                    <Pencil className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedCategory(cat);
-                      setShowDeleteCategoryConfirm(true);
-                    }}
-                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 text-red-500 hover:bg-red-100 hover:text-red-600'}`}
-                    title="Delete category"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+                  <span>{cat.emoji}</span>
+                  <span>{cat.name}</span>
+                  <span className="opacity-70 text-[10px]">({count})</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCategory(cat);
+                    setCategoryForm({ name: cat.name, emoji: cat.emoji });
+                    setShowEditCategoryModal(true);
+                  }}
+                  className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-indigo-500' : 'bg-gray-200 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
+                  title="Edit category"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCategory(cat);
+                    setShowDeleteCategoryConfirm(true);
+                  }}
+                  className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 text-red-500 hover:bg-red-100 hover:text-red-600'}`}
+                  title="Delete category"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            );
+          })}
 
           <button
             onClick={() => {
