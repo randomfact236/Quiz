@@ -87,7 +87,7 @@ export interface ImageRiddle {
   answer: string;
   hint: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  category: { name: string; emoji: string };
+  category?: { name: string; emoji: string } | undefined;
   status: ContentStatus;
   timerSeconds?: number | null;
   showTimer: boolean;

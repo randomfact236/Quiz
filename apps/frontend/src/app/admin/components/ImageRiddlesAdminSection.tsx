@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { Pencil, Trash2, Plus, X } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
@@ -343,7 +344,14 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   );
 
   // Categories state
-  const [categories] = useState<ImageRiddleCategory[]>(defaultCategories);
+  const [categories, setCategories] = useState<ImageRiddleCategory[]>(defaultCategories);
+
+  // Category Modal States
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
+  const [showDeleteCategoryConfirm, setShowDeleteCategoryConfirm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<ImageRiddleCategory | null>(null);
+  const [categoryForm, setCategoryForm] = useState({ name: '', emoji: '🔍' });
 
   // Filter states
   const [filterDifficulty, setFilterDifficulty] = useState<string>('');
@@ -399,6 +407,63 @@ export function ImageRiddlesAdminSection(): JSX.Element {
 
 
 
+
+  // Category Handlers
+  const handleAddCategory = () => {
+    if (!categoryForm.name.trim()) return;
+    const newCategory: ImageRiddleCategory = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: categoryForm.name.trim(),
+      emoji: categoryForm.emoji || '🔍',
+      count: 0
+    };
+    setCategories(prev => [...prev, newCategory]);
+    setShowAddCategoryModal(false);
+    setCategoryForm({ name: '', emoji: '🔍' });
+  };
+
+  const handleEditCategory = () => {
+    if (!selectedCategory || !categoryForm.name.trim()) return;
+    const oldName = selectedCategory.name;
+    const newName = categoryForm.name.trim();
+    const newEmoji = categoryForm.emoji;
+
+    setCategories(prev => prev.map(cat =>
+      cat.id === selectedCategory.id
+        ? { ...cat, name: newName, emoji: newEmoji }
+        : cat
+    ));
+
+    // Propagate changes to riddles
+    setImageRiddles(prev => prev.map(r =>
+      r.category?.name === oldName
+        ? { ...r, category: { ...r.category!, name: newName, emoji: newEmoji } }
+        : r
+    ));
+
+    if (filterCategory === oldName) setFilterCategory(newName);
+
+    setShowEditCategoryModal(false);
+    setSelectedCategory(null);
+  };
+
+  const handleDeleteCategory = () => {
+    if (!selectedCategory) return;
+    const catName = selectedCategory.name;
+
+    setCategories(prev => prev.filter(cat => cat.id !== selectedCategory.id));
+
+    // Unlink riddles from deleted category
+    setImageRiddles(prev => prev.map(r =>
+      r.category?.name === catName
+        ? { ...r, category: undefined }
+        : r
+    ));
+
+    if (filterCategory === catName) setFilterCategory('');
+    setShowDeleteCategoryConfirm(false);
+    setSelectedCategory(null);
+  };
 
   // Filter riddles
   const filteredRiddles = imageRiddles.filter(riddle => {
@@ -772,30 +837,71 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           <button
             onClick={() => setFilterCategory('')}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterCategory === ''
-              ? 'bg-blue-500 text-white shadow-sm'
+              ? 'bg-green-500 text-white shadow-sm'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
           >
             All Categories <span className="opacity-70">({imageRiddles.length})</span>
           </button>
-          {categories.map(cat => {
-            const count = imageRiddles.filter(r => r.category?.name === cat.name).length;
-            const isActive = filterCategory === cat.name;
-            return (
-              <button
-                key={`category-chip-${cat.id}`}
-                onClick={() => setFilterCategory(isActive ? '' : cat.name)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${isActive
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-              >
-                <span>{cat.emoji}</span>
-                <span>{cat.name}</span>
-                <span className="opacity-70">({count})</span>
-              </button>
-            );
-          })}
+
+          <div className="flex flex-wrap items-center gap-2">
+            {categories.map(cat => {
+              const count = imageRiddles.filter(r => r.category?.name === cat.name).length;
+              const isActive = filterCategory === cat.name;
+              return (
+                <div
+                  key={`category-group-${cat.id}`}
+                  className="flex items-center overflow-hidden rounded-lg shadow-sm border border-gray-100"
+                >
+                  <button
+                    onClick={() => setFilterCategory(isActive ? '' : cat.name)}
+                    className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all ${isActive
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                  >
+                    <span>{cat.emoji}</span>
+                    <span>{cat.name}</span>
+                    <span className="opacity-70 text-[10px]">({count})</span>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCategory(cat);
+                      setCategoryForm({ name: cat.name, emoji: cat.emoji });
+                      setShowEditCategoryModal(true);
+                    }}
+                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-indigo-500' : 'bg-gray-200 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
+                    title="Edit category"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCategory(cat);
+                      setShowDeleteCategoryConfirm(true);
+                    }}
+                    className={`px-2 py-1.5 transition-colors border-l border-gray-200/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 text-gray-500 hover:bg-red-50 hover:text-red-500'}`}
+                    title="Delete category"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => {
+              setCategoryForm({ name: '', emoji: '🔍' });
+              setShowAddCategoryModal(true);
+            }}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-200 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-all flex items-center gap-1.5"
+          >
+            <Plus className="w-4 h-4" />
+            Add Category
+          </button>
         </div>
       </div>
 
@@ -1344,6 +1450,97 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           ))}
         </div>
       </div>
+      {/* Add/Edit Category Modal */}
+      {(showAddCategoryModal || showEditCategoryModal) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-900">
+                {showAddCategoryModal ? 'Add New Category' : 'Edit Category'}
+              </h3>
+              <button
+                onClick={() => { setShowAddCategoryModal(false); setShowEditCategoryModal(false); }}
+                className="rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category Name</label>
+                <input
+                  type="text"
+                  value={categoryForm.name}
+                  onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none"
+                  placeholder="e.g. Brain Teasers"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Emoji Icon</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={categoryForm.emoji}
+                    onChange={(e) => setCategoryForm(prev => ({ ...prev, emoji: e.target.value }))}
+                    className="w-20 rounded-xl border border-gray-200 px-4 py-2.5 text-center text-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none"
+                  />
+                  <div className="flex-1 rounded-xl bg-gray-50 px-4 py-2.5 text-xs text-gray-500 flex items-center">
+                    Enter any emoji to represent this category.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 flex gap-3">
+              <button
+                onClick={() => { setShowAddCategoryModal(false); setShowEditCategoryModal(false); }}
+                className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={showAddCategoryModal ? handleAddCategory : handleEditCategory}
+                disabled={!categoryForm.name.trim()}
+                className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25 transition-all"
+              >
+                {showAddCategoryModal ? 'Create Category' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Category Confirmation */}
+      {showDeleteCategoryConfirm && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+              <Trash2 className="h-6 w-6" />
+            </div>
+            <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Delete Category?</h3>
+            <p className="mb-6 text-sm text-gray-600">
+              Are you sure you want to delete <span className="font-bold text-gray-900">"{selectedCategory?.name}"</span>? This will not delete the riddles in this category, but they will be marked as "Uncategorized".
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteCategoryConfirm(false)}
+                className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                Keep it
+              </button>
+              <button
+                onClick={handleDeleteCategory}
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 shadow-lg shadow-red-500/25 transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
