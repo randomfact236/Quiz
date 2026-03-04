@@ -30,6 +30,7 @@ interface ImageRiddle {
   answer: string;
   hint: string | null;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  status: 'published' | 'draft' | 'trash';
   timerSeconds?: number | null; // Added back for display purposes
   altText: string | null;
   createdAt?: string;
@@ -201,7 +202,8 @@ export default function ImageRiddlesPage(): JSX.Element {
 
   // Filter and Sort Logic
   const filteredRiddles = useMemo(() => {
-    let result = [...riddles];
+    // Only show published riddles
+    let result = riddles.filter(r => r.status === 'published');
 
     // Filter by difficulty
     if (difficulty !== 'all') {
@@ -302,9 +304,10 @@ export default function ImageRiddlesPage(): JSX.Element {
   // Score Tracking Header stats
   const score = useMemo(() => {
     const revealedCount = Object.keys(revealedAnswers).length;
+    const publishedRiddles = riddles.filter(r => r.status === 'published');
     return {
       played: revealedCount,
-      total: riddles.length
+      total: publishedRiddles.length
     };
   }, [revealedAnswers, riddles]);
 
