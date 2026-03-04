@@ -40,6 +40,10 @@ interface RiddleCardProps {
     timeUp?: boolean;
     /** Ref to track which riddles have shown bubbles */
     shownBubblesRef?: React.MutableRefObject<Set<string>>;
+    /** Per-riddle time remaining (seconds) — shows countdown ring when provided */
+    questionTimeRemaining?: number;
+    /** Per-riddle time limit (seconds) — used to calculate ring progress */
+    questionTimeLimit?: number;
 }
 
 export interface RiddleCardRef {
@@ -70,6 +74,38 @@ function getRandomFeedback(type: 'correct' | 'wrong'): { text: string; emoji: st
     return messages[index]!;
 }
 
+/** Circular countdown ring — shown inside the card per riddle */
+function RiddleTimerRing({ timeRemaining, timeLimit }: { timeRemaining: number; timeLimit: number }): JSX.Element {
+    const radius = 22;
+    const circumference = 2 * Math.PI * radius;
+    const progress = Math.max(0, Math.min(1, timeRemaining / timeLimit));
+    const strokeDashoffset = circumference * (1 - progress);
+    const isWarning = timeRemaining <= 10;
+    const isCritical = timeRemaining <= 5;
+    const color = isCritical ? '#ef4444' : isWarning ? '#f97316' : '#6366f1';
+
+    return (
+        <div className={`relative flex items-center justify-center ${isCritical ? 'animate-pulse' : ''}`}>
+            <svg width={56} height={56} className="-rotate-90">
+                <circle cx={28} cy={28} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={4} />
+                <circle
+                    cx={28} cy={28} r={radius}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth={4}
+                    strokeDasharray={circumference}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }}
+                />
+            </svg>
+            <span className="absolute text-sm font-bold" style={{ color }}>
+                {timeRemaining}
+            </span>
+        </div>
+    );
+}
+
 /** Get floaty emojis based on riddle difficulty */
 function getFloatingEmojis(difficulty?: string): string[] {
     const map: Record<string, string[]> = {
@@ -93,6 +129,8 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     maxScore,
     timeUp = false,
     shownBubblesRef,
+    questionTimeRemaining,
+    questionTimeLimit,
 }, ref): JSX.Element {
 
     // Check if answer is correct for feedback display
@@ -194,6 +232,16 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
                     >
                         <span className="text-xl font-bold text-red-600">⏰ TIME UP!</span>
                     </motion.div>
+                )}
+
+                {/* Per-Riddle Countdown Ring */}
+                {questionTimeRemaining !== undefined && questionTimeLimit !== undefined && !timeUp && (
+                    <div className="mb-3 flex justify-center">
+                        <RiddleTimerRing
+                            timeRemaining={questionTimeRemaining}
+                            timeLimit={questionTimeLimit}
+                        />
+                    </div>
                 )}
 
                 {/* Riddle Question Text */}

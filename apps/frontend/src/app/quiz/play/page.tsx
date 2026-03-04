@@ -38,10 +38,14 @@ function QuizContent(): JSX.Element {
   const [additionalQuestions, setAdditionalQuestions] = useState(5);
   const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
-  
+
+  // Per-question timer for practice mode (visual only — doesn't auto-advance)
+  const [practiceQuestionTime, setPracticeQuestionTime] = useState(60);
+  const PRACTICE_QUESTION_LIMIT = 60; // seconds shown on ring in practice mode
+
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
-  
+
   // Track which questions have shown bubbles (persists across navigation)
   const shownBubblesRef = useRef<Set<number>>(new Set());
 
@@ -57,7 +61,7 @@ function QuizContent(): JSX.Element {
       try {
         const settings = await SettingsService.getSettings();
         const levelTimers = settings.quiz?.defaults?.levelTimers;
-        
+
         if (mode === 'timer' && level) {
           // Use level-specific timer if available, otherwise fallback to default
           const levelKey = level.toLowerCase();
@@ -78,7 +82,7 @@ function QuizContent(): JSX.Element {
         setIsLoadingSettings(false);
       }
     };
-    
+
     loadTimerSettings();
   }, [mode, level]);
 
@@ -101,6 +105,20 @@ function QuizContent(): JSX.Element {
 
   // Use quiz hook
   const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);
+
+  // Practice mode: per-question countdown (visual only, resets on navigation)
+  useEffect(() => {
+    if (isTimerMode) return; // timer mode uses quiz.timeRemaining
+    setPracticeQuestionTime(PRACTICE_QUESTION_LIMIT);
+  }, [quiz.currentQuestionIndex, isTimerMode]);
+
+  useEffect(() => {
+    if (isTimerMode || quiz.status !== 'playing') return;
+    const t = setInterval(() => {
+      setPracticeQuestionTime(prev => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(t);
+  }, [quiz.currentQuestionIndex, quiz.status, isTimerMode]);
 
   // Redirect to results when completed
   useEffect(() => {
@@ -165,7 +183,7 @@ function QuizContent(): JSX.Element {
     <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       {/* Floating Background Emojis */}
       <FloatingBackground count={20} />
-      
+
       {/* Main Content - Fill available space */}
       <div className="relative z-10 flex flex-col flex-1 px-4 py-2">
         <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 justify-center">
@@ -190,25 +208,24 @@ function QuizContent(): JSX.Element {
                 </span>
                 <span className="text-base text-white/90">{chapter}</span>
               </div>
-              
+
               {/* Timer Display */}
               {isTimerMode && (quiz.status === 'playing' || quiz.status === 'paused') && (
                 <div className="flex items-center gap-2">
                   {/* Timer Clock */}
-                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
-                    quiz.status === 'paused'
+                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${quiz.status === 'paused'
                       ? 'bg-yellow-500 text-white'
-                      : quiz.timeRemaining <= 10 
-                        ? 'bg-red-500 text-white animate-pulse' 
-                        : quiz.timeRemaining <= 20 
-                          ? 'bg-orange-500 text-white' 
+                      : quiz.timeRemaining <= 10
+                        ? 'bg-red-500 text-white animate-pulse'
+                        : quiz.timeRemaining <= 20
+                          ? 'bg-orange-500 text-white'
                           : 'bg-white/90 text-gray-800'
-                  }`}>
+                    }`}>
                     <Timer className="h-4 w-4" />
                     <span>{Math.floor(quiz.timeRemaining / 60)}:{(quiz.timeRemaining % 60).toString().padStart(2, '0')}</span>
                     {quiz.status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
                   </div>
-                  
+
                   {/* Pause/Resume Button */}
                   <button
                     onClick={() => quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz()}
@@ -241,7 +258,6 @@ function QuizContent(): JSX.Element {
                   selectedAnswer={quiz.answers[quiz.currentQuestion.id] || null}
                   onSelectAnswer={(answer) => {
                     quiz.selectAnswer(answer);
-                    // Manual navigation - user clicks Next to advance
                   }}
                   showFeedback={true}
                   disabled={quiz.status !== 'playing'}
@@ -249,11 +265,13 @@ function QuizContent(): JSX.Element {
                   score={quiz.score}
                   maxScore={Math.min(quiz.totalQuestions, 10)}
                   timeUp={isTimeUp}
+                  questionTimeRemaining={isTimerMode ? quiz.timeRemaining : practiceQuestionTime}
+                  questionTimeLimit={isTimerMode ? (timeLimit ?? PRACTICE_QUESTION_LIMIT) : PRACTICE_QUESTION_LIMIT}
                 />
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           {/* Back and Next Navigation Buttons */}
           <div className="mt-4 flex items-center justify-between gap-4 pb-4">
             <button
@@ -267,11 +285,11 @@ function QuizContent(): JSX.Element {
               <ArrowLeft className="h-4 w-4" />
               Back
             </button>
-            
+
             <span className="text-sm text-white/70">
               {quiz.currentQuestionIndex + 1} / {Math.min(quiz.totalQuestions, 10)}
             </span>
-            
+
             <button
               onClick={() => {
                 questionCardRef.current?.clearBubbles();
@@ -301,7 +319,7 @@ function QuizContent(): JSX.Element {
             <h2 className="mb-2 text-xl font-bold text-gray-800">
               Submit Quiz?
             </h2>
-            
+
             {quiz.answeredCount < Math.min(quiz.totalQuestions, 10) ? (
               <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
                 <p className="font-medium">⚠️ Not all questions answered!</p>
@@ -350,22 +368,22 @@ function QuizContent(): JSX.Element {
             <h2 className="mb-2 text-xl font-bold text-gray-800">
               Extend Quiz
             </h2>
-            
+
             <div className="mb-4 space-y-3">
               <p className="text-gray-600">
                 You&apos;ve answered <strong>{quiz.answeredCount}</strong> of <strong>{quiz.totalQuestions}</strong> questions.
               </p>
-              
+
               <div className="rounded-lg bg-blue-50 p-3">
                 <p className="text-sm text-blue-800">
                   <strong>{quiz.availableQuestions}</strong> more questions available in this level
                 </p>
               </div>
-              
+
               <p className="text-sm text-gray-500">
                 How many additional questions would you like to add?
               </p>
-              
+
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setAdditionalQuestions(Math.max(1, additionalQuestions - 1))}
@@ -390,7 +408,7 @@ function QuizContent(): JSX.Element {
                   +
                 </button>
               </div>
-              
+
               <p className="text-xs text-gray-400">
                 New questions will be added without repeating any you&apos;ve already seen.
               </p>

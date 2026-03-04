@@ -99,6 +99,10 @@ function RiddlePlayPageContent(): JSX.Element {
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
+  // Per-riddle timer for practice mode (visual only — doesn't auto-advance)
+  const PRACTICE_RIDDLE_LIMIT = 60;
+  const [practiceRiddleTime, setPracticeRiddleTime] = useState(PRACTICE_RIDDLE_LIMIT);
+
   // Refs for RiddleCard animations — mirrors quiz page
   const riddleCardRef = useRef<RiddleCardRef>(null);
   const shownBubblesRef = useRef<Set<string>>(new Set());
@@ -276,6 +280,20 @@ function RiddlePlayPageContent(): JSX.Element {
     if (!session) return 0;
     return Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 1000);
   }, [session]);
+
+  // Practice mode per-riddle countdown — resets when navigating to a new riddle
+  useEffect(() => {
+    if (mode === 'timer') return;
+    setPracticeRiddleTime(PRACTICE_RIDDLE_LIMIT);
+  }, [currentIndex, mode]);
+
+  useEffect(() => {
+    if (mode === 'timer' || status !== 'playing') return;
+    const t = setInterval(() => {
+      setPracticeRiddleTime(prev => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(t);
+  }, [currentIndex, status, mode]);
 
   const handleAnswerSelect = useCallback((optionLetter: string) => {
     if (!session || status !== 'playing') return;
@@ -510,12 +528,12 @@ function RiddlePlayPageContent(): JSX.Element {
               {isTimerMode && (status === 'playing' || status === 'paused') && (
                 <div className="flex items-center gap-2">
                   <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${status === 'paused'
-                      ? 'bg-yellow-500 text-white'
-                      : timeRemaining <= 10
-                        ? 'bg-red-500 text-white animate-pulse'
-                        : timeRemaining <= 20
-                          ? 'bg-orange-500 text-white'
-                          : 'bg-white/90 text-gray-800'
+                    ? 'bg-yellow-500 text-white'
+                    : timeRemaining <= 10
+                      ? 'bg-red-500 text-white animate-pulse'
+                      : timeRemaining <= 20
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-white/90 text-gray-800'
                     }`}>
                     <Timer className="h-4 w-4" />
                     <span>{formatTime(timeRemaining)}</span>
@@ -571,6 +589,8 @@ function RiddlePlayPageContent(): JSX.Element {
                   }, 0)}
                   maxScore={riddles.length}
                   timeUp={isTimeUp}
+                  questionTimeRemaining={mode === 'timer' ? timeRemaining : practiceRiddleTime}
+                  questionTimeLimit={mode === 'timer' ? Math.max(1, Math.round(timeRemaining / Math.max(1, riddles.length - currentIndex))) : PRACTICE_RIDDLE_LIMIT}
                 />
               </motion.div>
             )}

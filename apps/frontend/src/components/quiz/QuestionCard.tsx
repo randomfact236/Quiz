@@ -41,6 +41,10 @@ interface QuestionCardProps {
   timeUp?: boolean;
   /** Ref to track which questions have shown bubbles */
   shownBubblesRef?: React.MutableRefObject<Set<number>>;
+  /** Per-question time remaining (seconds) — shows countdown ring when provided */
+  questionTimeRemaining?: number;
+  /** Per-question time limit (seconds) — used to calculate ring progress */
+  questionTimeLimit?: number;
 }
 
 export interface QuestionCardRef {
@@ -66,7 +70,7 @@ function getRelatedEmojis(subjectEmoji?: string): string[] {
     '🐱': ['🐈', '🐟'],
     '🐦': ['🦅', '🪶'],
   };
-  
+
   return emojiMap[subjectEmoji || ''] || ['❓', '❔'];
 }
 
@@ -94,6 +98,41 @@ function getRandomFeedback(type: 'correct' | 'wrong'): { text: string; emoji: st
   return messages[index]!;
 }
 
+/** Circular countdown ring — shown inside the card per question */
+function QuestionTimerRing({ timeRemaining, timeLimit }: { timeRemaining: number; timeLimit: number }): JSX.Element {
+  const radius = 22;
+  const circumference = 2 * Math.PI * radius;
+  const progress = Math.max(0, Math.min(1, timeRemaining / timeLimit));
+  const strokeDashoffset = circumference * (1 - progress);
+  const isWarning = timeRemaining <= 10;
+  const isCritical = timeRemaining <= 5;
+  const color = isCritical ? '#ef4444' : isWarning ? '#f97316' : '#6366f1';
+
+  return (
+    <div className={`relative flex items-center justify-center ${isCritical ? 'animate-pulse' : ''}`}>
+      <svg width={56} height={56} className="-rotate-90">
+        <circle cx={28} cy={28} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={4} />
+        <circle
+          cx={28} cy={28} r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={4}
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }}
+        />
+      </svg>
+      <span
+        className="absolute text-sm font-bold"
+        style={{ color }}
+      >
+        {timeRemaining}
+      </span>
+    </div>
+  );
+}
+
 export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(function QuestionCard({
   question,
   questionNumber,
@@ -107,6 +146,8 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   maxScore,
   timeUp = false,
   shownBubblesRef,
+  questionTimeRemaining,
+  questionTimeLimit,
 }, ref): JSX.Element {
   // Map question options to the format AnswerOptions expects
   const options = [
@@ -125,14 +166,14 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
 
   // Randomized feedback state
   const [feedback, setFeedback] = useState<{ text: string; emoji: string } | null>(null);
-  
+
   // Bubble effect trigger
   const [bubbleTrigger, setBubbleTrigger] = useState(false);
   const [bubbleType, setBubbleType] = useState<'correct' | 'wrong'>('correct');
-  
+
   // Ref to control bubble effect
   const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
-  
+
   // Use the passed ref or create a local one if not provided
   const localShownBubblesRef = useRef<Set<number>>(new Set());
   const activeShownBubblesRef = shownBubblesRef || localShownBubblesRef;
@@ -145,7 +186,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
       setBubbleTrigger(false); // Reset trigger so bubbles disappear
     },
   }));
-  
+
   // Handle question navigation - clear bubbles when question changes
   useEffect(() => {
     if (question.id !== prevQuestionIdRef.current) {
@@ -178,7 +219,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
     }
   }, [selectedAnswer, showFeedback, isCorrect, isWrong, question.id]);
 
-  
+
   // Handle answer selection - DON'T clear bubbles
   const handleSelectAnswer = useCallback((option: string) => {
     // Bubbles stay visible until navigation buttons clicked
@@ -212,6 +253,16 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           >
             <span className="text-xl font-bold text-red-600">⏰ TIME UP!</span>
           </motion.div>
+        )}
+
+        {/* Per-Question Countdown Ring */}
+        {questionTimeRemaining !== undefined && questionTimeLimit !== undefined && !timeUp && (
+          <div className="mb-3 flex justify-center">
+            <QuestionTimerRing
+              timeRemaining={questionTimeRemaining}
+              timeLimit={questionTimeLimit}
+            />
+          </div>
         )}
 
         {/* Question Text - Top */}
