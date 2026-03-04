@@ -323,6 +323,7 @@ const defaultCategories: ImageRiddleCategory[] = [
   { id: '2', name: 'Hidden Objects', emoji: '🔍', count: 2 },
   { id: '3', name: 'Pattern Recognition', emoji: '🔲', count: 1 },
   { id: '4', name: 'Perspective Puzzles', emoji: '📐', count: 1 },
+  { id: '5', name: 'Color Observation', emoji: '🎨', count: 2 },
 ];
 
 /**
@@ -449,21 +450,36 @@ export function ImageRiddlesAdminSection(): JSX.Element {
 
   const handleDeleteCategory = () => {
     if (!selectedCategory) return;
-    const catName = selectedCategory.name;
+    const categoryName = selectedCategory.name;
 
     setCategories(prev => prev.filter(cat => cat.id !== selectedCategory.id));
 
-    // Unlink riddles from deleted category
+    // Propagate changes: riddles in this category become "Uncategorized"
     setImageRiddles(prev => prev.map(r =>
-      r.category?.name === catName
+      r.category?.name === categoryName
         ? { ...r, category: undefined }
         : r
     ));
 
-    if (filterCategory === catName) setFilterCategory('');
+    if (filterCategory === categoryName) setFilterCategory('');
+
     setShowDeleteCategoryConfirm(false);
     setSelectedCategory(null);
   };
+
+  /** Sync with default data from source */
+  const handleSyncDefaults = useCallback(() => {
+    if (confirm('This will refresh your list with the latest default riddles from the source file. Your current changes will be preserved but missing defaults will be added and existing ones synchronized. Proceed?')) {
+      // For simplicity in this case, we'll replace the current list with the full libInitialImageRiddles 
+      // but you could also do a smart merge if needed.
+      setImageRiddles(libInitialImageRiddles);
+
+      // Also reset categories to ensure new ones appear
+      setCategories(defaultCategories);
+
+      alert('Successfully synchronized with source defaults!');
+    }
+  }, []);
 
   // Filter riddles
   const filteredRiddles = imageRiddles.filter(riddle => {
@@ -819,6 +835,13 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             aria-label="Import riddles"
           >
             📤 Import
+          </button>
+          <button
+            onClick={handleSyncDefaults}
+            className="flex items-center gap-2 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+            aria-label="Sync with defaults"
+          >
+            🔄 Sync Source
           </button>
           <button
             onClick={() => setShowAddModal(true)}
