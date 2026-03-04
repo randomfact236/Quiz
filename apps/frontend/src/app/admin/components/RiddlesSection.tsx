@@ -908,9 +908,9 @@ export function RiddlesSection({
                     <button
                       onClick={() => openDeleteConfirm(riddle)}
                       className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
-                      aria-label={`Delete riddle ${riddle.id}`}
+                      aria-label={`Trash riddle ${riddle.id}`}
                     >
-                      🗑️ Delete
+                      🗑️ Trash
                     </button>
                   </div>
                 </td>

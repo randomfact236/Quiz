@@ -1155,7 +1155,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                         onClick={() => openDeleteConfirm(riddle)}
                         className="text-[10px] font-black uppercase tracking-wider text-red-600 hover:text-red-800 transition-colors bg-red-50 px-2 py-0.5 rounded shadow-sm"
                       >
-                        Delete
+                        Trash
                       </button>
                     </div>
                   </td>

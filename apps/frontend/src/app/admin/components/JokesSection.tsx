@@ -473,10 +473,10 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                     <button
                       onClick={() => { _setSelectedJoke(joke); _setShowDeleteConfirm(true); }}
                       className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
-                      aria-label={`Delete joke ${joke.id}`}
+                      aria-label={`Trash joke ${joke.id}`}
                     >
                       <Trash2 className="w-3 h-3" />
-                      Delete
+                      Trash
                     </button>
                   </div>
                 </td>

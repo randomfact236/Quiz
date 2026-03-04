@@ -145,7 +145,7 @@ export function QuestionManagementSection({
   }, [localQuestions, subject.slug, onQuestionsUpdate]);
 
   // Get unique chapters for this subject - memoized
-  const chapters = useMemo(() => 
+  const chapters = useMemo(() =>
     [...new Set(localQuestions.map((q) => q.chapter))],
     [localQuestions]
   );
@@ -190,7 +190,7 @@ export function QuestionManagementSection({
   // Pagination calculations - memoized
   const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
   const startIndex = (currentPage - 1) * questionsPerPage;
-  const paginatedQuestions = useMemo(() => 
+  const paginatedQuestions = useMemo(() =>
     filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
     [filteredQuestions, startIndex, questionsPerPage]
   );
@@ -368,7 +368,7 @@ export function QuestionManagementSection({
   // Handle edit question
   const handleEditQuestion = useCallback(() => {
     if (!selectedQuestion) return;
-    
+
     if (
       !questionForm.question.trim() ||
       !questionForm.optionA.trim() ||
@@ -390,7 +390,7 @@ export function QuestionManagementSection({
       chapter: questionForm.chapter.trim(),
     };
 
-    setLocalQuestions(prev => 
+    setLocalQuestions(prev =>
       prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
     );
     setShowEditModal(false);
@@ -407,7 +407,7 @@ export function QuestionManagementSection({
       setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
     } else {
       // Move to trash otherwise
-      setLocalQuestions(prev => 
+      setLocalQuestions(prev =>
         prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
       );
     }
@@ -554,17 +554,17 @@ export function QuestionManagementSection({
     }
 
     const newName = editingChapterName.trim();
-    
+
     // Update all questions with the old chapter name
-    setLocalQuestions(prev => prev.map(q => 
+    setLocalQuestions(prev => prev.map(q =>
       q.chapter === editingChapter ? { ...q, chapter: newName } : q
     ));
-    
+
     // If the filter was set to the old chapter, update it
     if (filterChapter === editingChapter) {
       setFilterChapter(newName);
     }
-    
+
     setEditingChapter(null);
     setEditingChapterName('');
   }, [editingChapter, editingChapterName, filterChapter]);
@@ -750,11 +750,10 @@ export function QuestionManagementSection({
             <button
               key={s.slug}
               onClick={() => onSubjectSelect(s.slug)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                subject.slug === s.slug
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${subject.slug === s.slug
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
               aria-pressed={subject.slug === s.slug}
             >
               <span role="img" aria-hidden="true">
@@ -770,11 +769,10 @@ export function QuestionManagementSection({
           <span className="text-sm font-medium text-gray-600 mr-2">Chapter:</span>
           <button
             onClick={() => setFilterChapter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              filterChapter === 'all'
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === 'all'
                 ? 'bg-green-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+              }`}
             aria-pressed={filterChapter === 'all'}
           >
             All Chapters <span className="opacity-70">({localQuestions.length})</span>
@@ -813,11 +811,10 @@ export function QuestionManagementSection({
                 <>
                   <button
                     onClick={() => setFilterChapter(ch)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      filterChapter === ch
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === ch
                         ? 'bg-green-500 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                     aria-pressed={filterChapter === ch}
                   >
                     {ch} <span className="opacity-70">({chapterCounts[ch] || 0})</span>
@@ -848,13 +845,12 @@ export function QuestionManagementSection({
             <button
               key={level}
               onClick={() => setFilterLevel(level)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${
-                filterLevel === level
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${filterLevel === level
                   ? level === 'all'
                     ? 'bg-purple-500 text-white'
                     : getLevelButtonColor(level)
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
               aria-pressed={filterLevel === level}
             >
               {level === 'all' ? 'All Levels' : level}{' '}
@@ -1387,9 +1383,9 @@ export function QuestionManagementSection({
             <h3 id="delete-modal-title" className="text-xl font-bold mb-4 text-red-600">
               🗑️ {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
             </h3>
-            
+
             <p className="text-gray-600 mb-6">
-              {selectedQuestion.status === 'trash' 
+              {selectedQuestion.status === 'trash'
                 ? `Are you sure you want to permanently delete this question? This action cannot be undone.`
                 : `Are you sure you want to move this question to trash? You can restore it later from the Trash section.`}
             </p>
@@ -1411,11 +1407,10 @@ export function QuestionManagementSection({
               </button>
               <button
                 onClick={handleDeleteQuestion}
-                className={`flex-1 rounded-lg px-4 py-2 text-white ${
-                  selectedQuestion.status === 'trash' 
-                    ? 'bg-red-600 hover:bg-red-700' 
+                className={`flex-1 rounded-lg px-4 py-2 text-white ${selectedQuestion.status === 'trash'
+                    ? 'bg-red-600 hover:bg-red-700'
                     : 'bg-yellow-500 hover:bg-yellow-600'
-                }`}
+                  }`}
               >
                 {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
               </button>
@@ -1502,7 +1497,7 @@ export function QuestionManagementSection({
             <span className="font-medium">{filteredQuestions.length}</span> questions
           </p>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1521,7 +1516,7 @@ export function QuestionManagementSection({
               />
               of <span className="font-medium">{totalPages || 1}</span>
             </span>
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage >= totalPages}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1599,10 +1594,10 @@ const QuestionRow = React.memo(function QuestionRow({
           <button
             onClick={handleDelete}
             className="inline-flex items-center gap-1 rounded bg-red-100 px-2 py-1 text-xs text-red-600 hover:bg-red-200"
-            title="Delete question"
+            title="Trash question"
           >
             <Trash2 className="w-3 h-3" />
-            Delete
+            Trash
           </button>
         </div>
       </td>
