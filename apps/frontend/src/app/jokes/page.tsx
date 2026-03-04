@@ -44,6 +44,13 @@ const jokeCategories = [
 
 export default function JokesPage(): JSX.Element {
   const [jokes, setJokes] = useState<Joke[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [jokeOfTheDay, setJokeOfTheDay] = useState<Joke | null>(null);
+  const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
+
+  const toggleFlip = (id: number) => {
+    setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     // Load jokes from local storage
@@ -75,7 +82,21 @@ export default function JokesPage(): JSX.Element {
       });
 
     setJokes(processedJokes);
+
+    // Deterministic Joke of the Day based on date
+    if (processedJokes.length > 0) {
+      const today = new Date();
+      // Use year, month, day to get a steady seed for the day
+      const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+      // Ensure we always pick the same index for a given day
+      const dayIndex = seed % processedJokes.length;
+      setJokeOfTheDay(processedJokes[dayIndex] ?? processedJokes[0] ?? null);
+    }
   }, []);
+
+  const displayedJokes = activeCategory
+    ? jokes.filter(j => j.category === activeCategory || j.category === jokeCategories.find(c => c.title === activeCategory)?.title)
+    : jokes;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50 px-4 py-8">
@@ -92,79 +113,133 @@ export default function JokesPage(): JSX.Element {
           Get ready for some serious eye-rolling with our collection of dad jokes!
         </p>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4" role="list" aria-label="Joke categories">
-          {jokeCategories.map((category) => (
-            <div
-              key={category.title}
-              className="cursor-pointer rounded-xl bg-white p-6 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
-              role="listitem"
-              tabIndex={0}
-              aria-label={`${category.title}: ${category.description}`}
-            >
-              <span className="text-4xl mb-4 block" aria-hidden="true">{category.icon}</span>
-              <h2 className="mb-2 text-xl font-semibold text-gray-800">
-                {category.title}
-              </h2>
-              <p className="text-sm text-gray-600">{category.description}</p>
-            </div>
-          ))}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12" role="list" aria-label="Joke categories">
+          {jokeCategories.map((category) => {
+            const isActive = activeCategory === category.title;
+            return (
+              <div
+                key={category.title}
+                onClick={() => setActiveCategory(isActive ? null : category.title)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActiveCategory(isActive ? null : category.title);
+                  }
+                }}
+                className={`cursor-pointer rounded-xl bg-white p-6 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg border-2 ${isActive ? 'border-orange-500 ring-2 ring-orange-200 ring-offset-2' : 'border-transparent'
+                  }`}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isActive}
+                aria-label={`Filter by ${category.title}`}
+              >
+                <span className="text-4xl mb-4 block" aria-hidden="true">{category.icon}</span>
+                <h2 className="mb-2 text-xl font-semibold text-gray-800">
+                  {category.title}
+                </h2>
+                <p className="text-sm text-gray-600">{category.description}</p>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="mt-12 rounded-xl bg-white p-8 shadow-lg" aria-live="polite" aria-atomic="true">
-          <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
-            Joke of the Day
-          </h2>
-          <blockquote className="text-center text-xl text-gray-700 italic" aria-label="Joke content">
-            &ldquo;Why don&apos;t scientists trust atoms? Because they make up everything!&rdquo;
-          </blockquote>
-          <p className="mt-4 text-center text-gray-500">😂 Classic Dad Joke</p>
-        </div>
-
-        {/* Jokes List Table */}
-        <div className="mt-12" aria-live="polite" aria-atomic="true">
-          <h2 className="mb-6 text-2xl font-bold text-gray-800">All Jokes</h2>
-
-          <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 w-16">ID</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Question</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Answer</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 w-32">Category</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {jokes.map((joke, index) => (
-                    <tr key={joke.id} className="transition-colors hover:bg-yellow-50/30">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-400">
-                        {index + 1}
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="text-base font-semibold text-gray-800">{joke.setup}</p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="text-base text-gray-700">{joke.punchline}</p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800 whitespace-nowrap">
-                          {joke.category}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  {jokes.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
-                        No jokes found. Check back later!
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+        {/* Dynamic Joke of the Day */}
+        {jokeOfTheDay && (
+          <div className="mb-12 rounded-xl bg-white p-8 shadow-lg ring-1 ring-orange-100" aria-live="polite" aria-atomic="true">
+            <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 flex items-center justify-center gap-2">
+              <span className="text-3xl">🌟</span> Joke of the Day
+            </h2>
+            <blockquote className="text-center text-2xl font-medium text-gray-800 mb-4" aria-label="Joke setup">
+              &ldquo;{jokeOfTheDay.setup}&rdquo;
+            </blockquote>
+            <p className="text-center text-xl text-orange-600 font-bold italic" aria-label="Joke punchline">
+              {jokeOfTheDay.punchline}
+            </p>
+            <div className="mt-6 flex justify-center">
+              <span className="inline-block rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-800">
+                {jokeOfTheDay.category}
+              </span>
             </div>
           </div>
+        )}
+
+        {/* Flashcards Grid */}
+        <div className="mt-12" aria-live="polite" aria-atomic="true">
+          <div className="mb-8 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-gray-800">
+              {activeCategory ? `${activeCategory} (${displayedJokes.length})` : `All Jokes (${jokes.length})`}
+            </h2>
+            {activeCategory && (
+              <button
+                onClick={() => setActiveCategory(null)}
+                className="text-sm font-medium text-orange-600 hover:text-orange-700 hover:underline"
+              >
+                Clear Filter
+              </button>
+            )}
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {displayedJokes.map((joke) => (
+              <div
+                key={joke.id}
+                className="group relative h-64 w-full perspective-1000 cursor-pointer"
+                onClick={() => toggleFlip(joke.id)}
+                role="button"
+                tabIndex={0}
+                aria-pressed={flippedCards[joke.id]}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleFlip(joke.id);
+                  }
+                }}
+              >
+                <div
+                  className={`relative h-full w-full rounded-2xl transition-all duration-500 transform-style-3d shadow-md hover:shadow-xl ${flippedCards[joke.id] ? 'rotate-y-180' : ''
+                    }`}
+                >
+                  {/* Front of card (Setup) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-2xl bg-white p-8 text-center backface-hidden border-2 border-transparent group-hover:border-orange-100">
+                    <span className="absolute top-4 right-4 text-gray-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
+                    </span>
+                    <p className="text-xl font-bold text-gray-800 balance-text">
+                      {joke.setup}
+                    </p>
+                    <p className="absolute bottom-4 text-xs font-semibold uppercase tracking-wider text-orange-400">
+                      Click to flip
+                    </p>
+                  </div>
+
+                  {/* Back of card (Punchline) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-8 text-center text-white backface-hidden rotate-y-180">
+                    <p className="text-2xl font-bold italic drop-shadow-sm balance-text">
+                      {joke.punchline}
+                    </p>
+                    <div className="absolute bottom-4 flex w-full justify-center">
+                      <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                        {joke.category}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {displayedJokes.length === 0 && (
+            <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-white/50 py-16 text-center">
+              <span className="text-4xl mb-4 block">🏜️</span>
+              <p className="text-xl font-medium text-gray-600">No jokes found for this category.</p>
+              <button
+                onClick={() => setActiveCategory(null)}
+                className="mt-4 rounded-lg bg-orange-500 px-6 py-2 font-medium text-white hover:bg-orange-600 transition-colors"
+              >
+                Show All Jokes
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>
