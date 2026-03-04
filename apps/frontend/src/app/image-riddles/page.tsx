@@ -3,7 +3,7 @@
  * image-riddles/page.tsx - Enterprise Grade
  * ============================================================================
  * Redesigned with:
- * - Table Layout (Numbering, Title/Image, Difficulty, Answer)
+ * - 3-Column Card Layout (Numbering, Image, Difficulty, Title, Reveal)
  * - Sticky Category Sidebar (Dad Jokes Style)
  * - Removed Timer Logic
  * ============================================================================
@@ -149,16 +149,6 @@ export default function ImageRiddlesPage(): JSX.Element {
   const filteredRiddles = useMemo(() => {
     let result = [...riddles];
 
-    // Filter by category (if active)
-    if (activeCategory) {
-      // Assuming initial data categories names match riddle category mapping if we had it,
-      // but current riddle interface doesn't have a direct 'category' field.
-      // Let's assume categories filter by a prefix in ID or something similar if needed,
-      // or if we add a category field to ImageRiddle later. For now, since ImageRiddle
-      // doesn't have a category field in its interface, we'll keep it simple.
-      // Wait, let's check initial-data.
-    }
-
     // Filter by difficulty
     if (difficulty !== 'all') {
       result = result.filter(r => r.difficulty === difficulty);
@@ -182,7 +172,7 @@ export default function ImageRiddlesPage(): JSX.Element {
     }
 
     return result;
-  }, [riddles, difficulty, sortOrder, searchQuery, activeCategory]);
+  }, [riddles, difficulty, sortOrder, searchQuery]);
 
   const handleAction = useCallback((action: IActionOption, riddle: ImageRiddle) => {
     switch (action.id) {
@@ -219,7 +209,7 @@ export default function ImageRiddlesPage(): JSX.Element {
           <h1 className="mb-2 text-4xl font-black tracking-tight text-slate-800">
             🖼️ Image Riddles
           </h1>
-          <p className="text-lg text-slate-500 font-medium">Challenge your visual perception with a structured view.</p>
+          <p className="text-lg text-slate-500 font-medium">Challenge your visual perception with our immersive collection.</p>
         </div>
 
         {/* Stats Summary */}
@@ -273,7 +263,7 @@ export default function ImageRiddlesPage(): JSX.Element {
             </div>
           </div>
 
-          {/* Main Area: Table & Controls */}
+          {/* Main Area: Grid & Controls */}
           <div className="lg:col-span-3 space-y-6">
 
             {/* Sticky Content Header */}
@@ -325,78 +315,66 @@ export default function ImageRiddlesPage(): JSX.Element {
               </div>
             </div>
 
-            {/* Riddle Table */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-wider text-slate-500 w-16">#</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-wider text-slate-500">Image & Title</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-wider text-slate-500 w-32">Difficulty</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-wider text-slate-500 w-48">Answer</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {filteredRiddles.map((riddle, index) => (
-                      <tr
-                        key={riddle.id}
-                        onClick={() => handleRiddleClick(riddle)}
-                        className="group cursor-pointer hover:bg-indigo-50/30 transition-colors"
-                      >
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-bold text-slate-400">{(index + 1).toString().padStart(2, '0')}</span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-4">
-                            <div className="h-12 w-20 overflow-hidden rounded-lg bg-slate-100 border border-slate-200 shadow-sm flex-shrink-0">
-                              <img
-                                src={riddle.imageUrl}
-                                alt={riddle.title}
-                                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                              />
-                            </div>
-                            <h3 className="font-bold text-slate-800 line-clamp-1">{riddle.title}</h3>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-tight ${difficultyColors[riddle.difficulty]}`}>
-                            {difficultyLabels[riddle.difficulty]}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-between gap-3">
-                            <div className={`text-sm font-bold transition-all duration-300 ${revealedAnswers[riddle.id] ? 'text-indigo-600 blur-0' : 'text-slate-300 blur-sm select-none'}`}>
-                              {riddle.answer}
-                            </div>
-                            <button
-                              onClick={(e) => toggleRevealAnswer(riddle.id, e)}
-                              className={`flex-shrink-0 rounded-lg p-1.5 transition-all ${revealedAnswers[riddle.id] ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
-                              title={revealedAnswers[riddle.id] ? 'Hide Answer' : 'Reveal Answer'}
-                            >
-                              {revealedAnswers[riddle.id] ? '👁️' : '🕶️'}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            {/* Riddle Grid (3 columns) */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredRiddles.map((riddle, index) => (
+                <div
+                  key={riddle.id}
+                  onClick={() => handleRiddleClick(riddle)}
+                  className="group cursor-pointer flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-slate-200 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-100"
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-video overflow-hidden bg-slate-100">
+                    <img
+                      src={riddle.imageUrl}
+                      alt={riddle.altText || riddle.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {/* Numbering Badge */}
+                    <div className="absolute top-3 left-3 flex items-center justify-center rounded-lg bg-slate-900/40 px-2 py-1 text-[10px] font-black text-white backdrop-blur-md">
+                      #{(index + 1).toString().padStart(2, '0')}
+                    </div>
+                    {/* Difficulty Badge */}
+                    <div className={`absolute top-3 right-3 rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter ${difficultyColors[riddle.difficulty]}`}>
+                      {difficultyLabels[riddle.difficulty]}
+                    </div>
+                  </div>
 
-              {filteredRiddles.length === 0 && (
-                <div className="py-20 text-center">
-                  <span className="text-6xl mb-4 block">🏝️</span>
-                  <h3 className="text-xl font-bold text-slate-400 italic">No riddles found here...</h3>
-                  <button
-                    onClick={() => { setActiveCategory(null); setDifficulty('all'); setSearchQuery(''); }}
-                    className="mt-4 text-indigo-600 font-bold hover:underline"
-                  >
-                    Clear all filters
-                  </button>
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 p-5">
+                    <h3 className="mb-4 line-clamp-2 text-base font-bold text-slate-800 leading-tight">
+                      {riddle.title}
+                    </h3>
+
+                    {/* Answer Reveal Section */}
+                    <div className="mt-auto border-t border-slate-50 pt-4 flex items-center justify-between gap-3">
+                      <div className={`text-sm font-bold transition-all duration-300 ${revealedAnswers[riddle.id] ? 'text-indigo-600 blur-0' : 'text-slate-300 blur-sm select-none'}`}>
+                        {revealedAnswers[riddle.id] ? riddle.answer : 'Answer Hidden'}
+                      </div>
+                      <button
+                        onClick={(e) => toggleRevealAnswer(riddle.id, e)}
+                        className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${revealedAnswers[riddle.id] ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                      >
+                        {revealedAnswers[riddle.id] ? '👁️ Hidden' : '🕶️ Reveal'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
+
+            {filteredRiddles.length === 0 && (
+              <div className="py-20 text-center rounded-3xl bg-slate-100/50 border border-dashed border-slate-300">
+                <span className="text-6xl mb-4 block">🏝️</span>
+                <h3 className="text-xl font-bold text-slate-400 italic">No riddles found matching your criteria...</h3>
+                <button
+                  onClick={() => { setActiveCategory(null); setDifficulty('all'); setSearchQuery(''); }}
+                  className="mt-4 rounded-full bg-white px-6 py-2 text-sm font-bold text-indigo-600 shadow-sm border border-slate-200 hover:shadow-md transition-all"
+                >
+                  Reset all filters
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
