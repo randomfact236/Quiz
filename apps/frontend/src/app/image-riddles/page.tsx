@@ -191,7 +191,7 @@ export default function ImageRiddlesPage(): JSX.Element {
     if (sortOrder === 'random') {
       for (let i = result.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [result[i], result[j]] = [result[j], result[i]];
+        [result[i], result[j]] = [result[j] as ImageRiddle, result[i] as ImageRiddle];
       }
     }
 
@@ -441,9 +441,9 @@ export default function ImageRiddlesPage(): JSX.Element {
         {/* Modal: Riddle Preview & Interaction */}
         {selectedRiddle && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="relative max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="relative h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
               {/* Modal Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
+              <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
                 <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} bg-white shadow-sm`}>
                   {difficultyLabels[selectedRiddle.difficulty]}
                 </span>
@@ -455,15 +455,15 @@ export default function ImageRiddlesPage(): JSX.Element {
                 </button>
               </div>
 
-              {/* Scrollable Content */}
-              <div className="max-h-[calc(90vh-120px)] overflow-y-auto p-8 custom-scrollbar">
-                <h2 className="mb-6 text-2xl font-black text-slate-800 tracking-tight leading-snug">{selectedRiddle.title}</h2>
+              {/* Non-Scrollable Dynamic Content */}
+              <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-8">
+                <h2 className="shrink-0 mb-4 text-2xl font-black text-slate-800 tracking-tight leading-snug">{selectedRiddle.title}</h2>
 
-                <div className="relative mb-8 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group">
+                <div className="relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
                   <img
                     src={selectedRiddle.imageUrl}
                     alt={selectedRiddle.altText || selectedRiddle.title}
-                    className="w-full object-contain bg-slate-50"
+                    className="absolute inset-0 h-full w-full object-contain p-2"
                   />
                   <div className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-slate-900/60 shadow-sm px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
                     ⏱️ {formatTime(selectedRiddle.timerSeconds, selectedRiddle.difficulty)}
@@ -472,7 +472,7 @@ export default function ImageRiddlesPage(): JSX.Element {
 
                 {/* Game Logic */}
                 {!showAnswer ? (
-                  <div className="space-y-6">
+                  <div className="shrink-0 space-y-4">
                     <div>
                       <label htmlFor="riddle-answer" className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-400">
                         Your Guess:
@@ -514,15 +514,15 @@ export default function ImageRiddlesPage(): JSX.Element {
                     )}
                   </div>
                 ) : (
-                  <div className="animate-in zoom-in-95 duration-300 space-y-6">
-                    <div className="rounded-[2.5rem] bg-indigo-600 p-10 text-center text-white shadow-xl relative overflow-hidden">
+                  <div className="shrink-0 animate-in zoom-in-95 duration-300 space-y-4">
+                    <div className="rounded-[2.5rem] bg-indigo-600 p-6 sm:p-8 text-center text-white shadow-xl relative overflow-hidden">
                       <div className="absolute -top-10 -right-10 text-9xl opacity-10">✨</div>
-                      <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-indigo-200">The Answer is:</p>
-                      <h3 className="text-4xl font-black tracking-tight">{selectedRiddle.answer}</h3>
+                      <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-indigo-200">The Answer is:</p>
+                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight">{selectedRiddle.answer}</h3>
                     </div>
                     <button
                       onClick={() => setSelectedRiddle(null)}
-                      className="w-full rounded-2xl bg-slate-800 py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-slate-700 hover:scale-[1.02] active:scale-95"
+                      className="w-full rounded-2xl bg-slate-800 py-3 sm:py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-slate-700 hover:scale-[1.02] active:scale-95"
                     >
                       Close Preview
                     </button>
