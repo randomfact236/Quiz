@@ -137,20 +137,44 @@ export default function JokesPage(): JSX.Element {
           <div className="space-y-8 lg:col-span-1">
             {/* Dynamic Joke of the Day */}
             {jokeOfTheDay && (
-              <div className="rounded-xl bg-white p-6 shadow-lg ring-1 ring-orange-100" aria-live="polite" aria-atomic="true">
-                <h2 className="mb-4 text-center text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
-                  <span className="text-2xl">🌟</span> Joke of the Day
-                </h2>
-                <blockquote className="text-center text-lg font-medium text-gray-800 mb-3" aria-label="Joke setup">
-                  &ldquo;{jokeOfTheDay.setup}&rdquo;
-                </blockquote>
-                <p className="text-center text-md text-orange-600 font-bold italic" aria-label="Joke punchline">
-                  {jokeOfTheDay.punchline}
-                </p>
-                <div className="mt-4 flex justify-center">
-                  <span className="inline-block rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800">
-                    {jokeOfTheDay.category}
-                  </span>
+              <div
+                className="group relative h-64 w-full perspective-1000 cursor-pointer"
+                onClick={() => toggleFlip(jokeOfTheDay.id)}
+                role="button"
+                tabIndex={0}
+                aria-pressed={flippedCards[jokeOfTheDay.id]}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleFlip(jokeOfTheDay.id);
+                  }
+                }}
+              >
+                <div className={`relative h-full w-full rounded-2xl transition-all duration-500 transform-style-3d shadow-lg hover:shadow-xl ${flippedCards[jokeOfTheDay.id] ? 'rotate-y-180' : ''}`}>
+                  {/* Front of card (Setup) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-xl bg-white p-6 text-center backface-hidden ring-1 ring-orange-100">
+                    <h2 className="absolute top-4 w-full text-center text-lg font-bold text-gray-800 flex items-center justify-center gap-2">
+                      <span className="text-xl">🌟</span> Joke of the Day
+                    </h2>
+                    <blockquote className="mt-8 text-center text-xl font-medium text-gray-800 balance-text" aria-label="Joke setup">
+                      &ldquo;{jokeOfTheDay.setup}&rdquo;
+                    </blockquote>
+                    <p className="absolute bottom-4 text-xs font-semibold uppercase tracking-wider text-orange-400">
+                      Click to flip
+                    </p>
+                  </div>
+
+                  {/* Back of card (Punchline) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-lg">
+                    <p className="text-xl font-bold italic drop-shadow-sm balance-text">
+                      {jokeOfTheDay.punchline}
+                    </p>
+                    <div className="absolute bottom-4 flex w-full justify-center">
+                      <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                        {jokeOfTheDay.category}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
