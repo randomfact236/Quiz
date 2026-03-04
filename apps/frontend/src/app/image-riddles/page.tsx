@@ -242,11 +242,8 @@ export default function ImageRiddlesPage(): JSX.Element {
           </h1>
           <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Challenge your perception</p>
         </div>
-
-
-
         {/* Sticky Content Header (Full Width, Above Grid) */}
-        <div className="sticky top-20 z-30 mb-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
+        <div className="sticky top-4 z-30 mb-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
           <div className="flex items-center gap-4 w-full sm:w-auto px-1">
             <h2 className="text-xl font-black text-slate-800 tracking-tight whitespace-nowrap">
               {activeCategory || 'All Riddles'}
@@ -308,7 +305,7 @@ export default function ImageRiddlesPage(): JSX.Element {
         <div className="grid gap-10 lg:grid-cols-4 items-start">
 
           {/* Sticky Sidebar: Categories (2 Column Grid) */}
-          <div className="lg:col-span-1 sticky top-[168px] z-20">
+          <div className="lg:col-span-1 sticky top-[104px] z-20">
             <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 px-1 flex items-center gap-2">
               <span className="text-indigo-400">📁</span> Topics
             </h2>
