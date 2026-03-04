@@ -2,7 +2,8 @@
  * ============================================================================
  * Riddle Card Component
  * ============================================================================
- * Displays a single riddle with answer options and instant feedback
+ * Displays a single riddle with answer options and instant feedback.
+ * Mirrors QuestionCard structure — uses shared AnswerOptions component.
  * Layout: Question → Floating Emojis → Score + Progress → Answers
  * Features: Randomized feedback, bubble emoji effects
  * ============================================================================
@@ -12,6 +13,7 @@
 
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion } from 'framer-motion';
+import { AnswerOptions } from '@/components/quiz/AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from '@/components/quiz/BubbleEmojiEffect';
 import type { Riddle } from '@/types/riddles';
 
@@ -112,8 +114,17 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     const activeShownBubblesRef = shownBubblesRef || localShownBubblesRef;
     const prevRiddleIdRef = useRef<string>(riddle.id);
 
-    // Floating emojis
+    // Floating emojis based on difficulty
     const floatingEmojis = getFloatingEmojis(riddle.difficulty);
+
+    // Build options array from riddle data
+    const options = riddle.options.map((text, index) => ({
+        key: String.fromCharCode(65 + index),
+        text,
+    }));
+
+    // Map riddle difficulty to AnswerOptions level prop
+    const level = (riddle.difficulty as 'easy' | 'medium' | 'hard' | 'expert') || 'expert';
 
     // Expose clearBubbles function via ref
     useImperativeHandle(ref, () => ({
@@ -154,44 +165,8 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
 
     // Handle answer selection
     const handleSelectAnswer = useCallback((optionLetter: string) => {
-        if (!disabled && !selectedAnswer) {
-            onSelectAnswer(optionLetter);
-        }
-    }, [onSelectAnswer, disabled, selectedAnswer]);
-
-    // Build options array from riddle
-    const options = riddle.options.map((text, index) => ({
-        key: String.fromCharCode(65 + index),
-        text,
-    }));
-
-    // Get option style — mirrors AnswerOptions component logic
-    const getOptionStyle = (key: string): string => {
-        const base = 'relative flex items-center justify-center rounded-xl border-2 py-3 px-4 text-center text-base font-medium transition-all duration-200 w-full ';
-
-        if (selectedAnswer && showFeedback) {
-            if (key === riddle.correctOption) {
-                return base + 'border-green-500 bg-green-50 text-green-800';
-            }
-            if (key === selectedAnswer && key !== riddle.correctOption) {
-                return base + 'border-red-500 bg-red-50 text-red-800';
-            }
-            return base + 'border-gray-200 bg-gray-50 text-gray-400 opacity-60';
-        }
-
-        if (selectedAnswer === key) {
-            return base + 'border-indigo-400 bg-indigo-50 text-indigo-900 shadow-md';
-        }
-
-        return base + 'border-gray-200 bg-gray-50 text-gray-600 hover:border-indigo-300 hover:bg-indigo-50';
-    };
-
-    // Grid layout: 2 cols for 2 options, 2 cols for 4 options, 3 cols for 3
-    const gridClass = options.length === 2
-        ? 'grid-cols-1 sm:grid-cols-2'
-        : options.length === 3
-            ? 'grid-cols-1 sm:grid-cols-3'
-            : 'grid-cols-1 sm:grid-cols-2';
+        onSelectAnswer(optionLetter);
+    }, [onSelectAnswer]);
 
     return (
         <>
@@ -228,7 +203,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
                     </h2>
                 </div>
 
-                {/* Floating Emojis — Below Question, like QuestionCard */}
+                {/* Floating Emojis — Below Question */}
                 <div className="mb-4 flex items-center justify-center gap-4">
                     {floatingEmojis.map((emoji, index) => (
                         <motion.span
@@ -285,36 +260,16 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
                     </motion.div>
                 )}
 
-                {/* Answer Options — Grid layout matching AnswerOptions component */}
-                <div className={`grid gap-4 ${gridClass}`}>
-                    {options.map((option) => {
-                        const isSelected = selectedAnswer === option.key;
-                        const isOptionCorrect = showFeedback && riddle.correctOption === option.key;
-                        const isOptionWrong = showFeedback && isSelected && riddle.correctOption !== option.key;
-
-                        return (
-                            <motion.button
-                                key={option.key}
-                                onClick={() => handleSelectAnswer(option.key)}
-                                whileHover={!disabled && !selectedAnswer ? { scale: 1.02 } : {}}
-                                whileTap={!disabled && !selectedAnswer ? { scale: 0.98 } : {}}
-                                disabled={disabled || selectedAnswer !== null}
-                                className={getOptionStyle(option.key)}
-                            >
-                                {/* Option Text */}
-                                <span className="text-lg font-medium">{option.text}</span>
-
-                                {/* Status Icon */}
-                                {showFeedback && selectedAnswer && (
-                                    <span className="absolute right-4 top-1/2 -translate-y-1/2">
-                                        {isOptionCorrect && <span className="text-2xl text-green-600">✓</span>}
-                                        {isOptionWrong && <span className="text-2xl text-red-500">✕</span>}
-                                    </span>
-                                )}
-                            </motion.button>
-                        );
-                    })}
-                </div>
+                {/* Answer Options — Using shared AnswerOptions for level-aware option count */}
+                <AnswerOptions
+                    options={options}
+                    selectedKey={selectedAnswer}
+                    correctKey={showFeedback ? riddle.correctOption : ''}
+                    onSelect={handleSelectAnswer}
+                    disabled={disabled || timeUp}
+                    showFeedback={showFeedback || false}
+                    level={level}
+                />
             </motion.div>
         </>
     );

@@ -2,7 +2,8 @@
  * ============================================================================
  * Riddle Play Page (Backend Connected)
  * ============================================================================
- * Main gameplay page for riddles - fetches from backend API
+ * Main gameplay page for riddles - fetches from backend API.
+ * Layout mirrors quiz/play/page.tsx exactly.
  * URL: /riddles/play?chapterId=&level=&mode=
  * ============================================================================
  */
@@ -15,11 +16,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
-  Clock,
+  Timer,
   AlertCircle,
   RotateCcw,
   Save,
-  Loader2,
   Pause,
   Play
 } from 'lucide-react';
@@ -44,13 +44,13 @@ const AUTO_SAVE_INTERVAL = 10000;
 // Default time limit for timer mode (seconds per riddle)
 const DEFAULT_TIME_PER_RIDDLE = 30;
 
-// Loading component for Suspense
+// Loading component — mirrors quiz/play/page.tsx loading state exactly
 function PlayPageLoading(): JSX.Element {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] flex items-center justify-center">
+    <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       <div className="text-center">
-        <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto mb-4" />
-        <p className="text-gray-600">Loading riddles...</p>
+        <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+        <p className="text-xl font-semibold text-white">Loading riddles...</p>
       </div>
     </div>
   );
@@ -59,7 +59,14 @@ function PlayPageLoading(): JSX.Element {
 // Main page component with Suspense
 export default function RiddlePlayPage(): JSX.Element {
   return (
-    <Suspense fallback={<PlayPageLoading />}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+          <p className="text-xl font-semibold text-white">Loading...</p>
+        </div>
+      </div>
+    }>
       <RiddlePlayPageContent />
     </Suspense>
   );
@@ -73,10 +80,11 @@ function RiddlePlayPageContent(): JSX.Element {
   const chapterId = searchParams.get('chapterId') || 'all';
   const level = searchParams.get('level') || 'all';
   const mode = (searchParams.get('mode') || 'practice') as 'timer' | 'practice';
+  const chapterNameParam = searchParams.get('chapterName') || '';
 
-  // State
+  // State — mirrors quiz page structure
   const [riddles, setRiddles] = useState<Riddle[]>([]);
-  const [chapterName, setChapterName] = useState<string>('Mixed Chapters');
+  const [chapterName, setChapterName] = useState<string>(chapterNameParam || 'Mixed Chapters');
   const [session, setSession] = useState<RiddleSession | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -91,16 +99,16 @@ function RiddlePlayPageContent(): JSX.Element {
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Refs for RiddleCard animations
+  // Refs for RiddleCard animations — mirrors quiz page
   const riddleCardRef = useRef<RiddleCardRef>(null);
   const shownBubblesRef = useRef<Set<string>>(new Set());
 
-  // Ensure component is mounted before fetching to prevent hydration mismatch/suspense hangs
+  // Mount guard to prevent hydration mismatch
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Fetch riddles from backend
+  // Fetch riddles from backend — mirrors quiz page's loadTimerSettings + fetch pattern
   useEffect(() => {
     if (!isMounted) return;
 
@@ -109,7 +117,7 @@ function RiddlePlayPageContent(): JSX.Element {
         setStatus('loading');
         setError(null);
 
-        // Fetch settings (with timeout to avoid blocking if backend is slow)
+        // Load settings (with timeout, same as before)
         try {
           const settingsPromise = SettingsService.getSettings();
           const timeoutPromise = new Promise((_, reject) =>
@@ -124,49 +132,40 @@ function RiddlePlayPageContent(): JSX.Element {
         let fetchedRiddles: Riddle[] = [];
 
         if (chapterId === 'all') {
-          // Get mixed riddles from all chapters
           let mixed: { level?: string; id: string; question: string; options: string[]; correctAnswer: string; chapter?: { name?: string }; chapterId: string; explanation?: string; hint?: string }[] = [];
 
           if (level && level !== 'all') {
-            // Fetch riddles filtered by level using random endpoint
             const response = await getRandomRiddles(level, 20);
             mixed = response.map(r => ({ ...r, level: r.level || level }));
           } else {
-            // Get mixed riddles from all levels
             mixed = await getMixedRiddles(20);
           }
 
           fetchedRiddles = mixed.map(r => adaptQuizRiddle(r as any));
           setChapterName(level === 'all' ? 'Mixed Chapters' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
         } else {
-          // Get riddles for specific chapter
           const response = await getRiddlesByChapter(chapterId, 1, 50);
-
-          // Filter by level if specified
           let filteredData = response.data;
           if (level && level !== 'all') {
             filteredData = filteredData.filter(r => r.level?.toLowerCase() === level.toLowerCase());
           }
-
           fetchedRiddles = filteredData.map(adaptQuizRiddle);
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
-            const baseName = fetchedRiddles[0].chapter;
+            const baseName = chapterNameParam || fetchedRiddles[0].chapter;
             setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
           }
         }
 
-        // Shuffle riddles for variety
+        // Shuffle for variety
         fetchedRiddles = [...fetchedRiddles].sort(() => Math.random() - 0.5);
-
         setRiddles(fetchedRiddles);
 
         // Check for existing session
         const existingSession = loadRiddleSession();
         if (existingSession && existingSession.status === 'in-progress' && existingSession.chapterId === chapterId) {
           setShowResumeDialog(true);
-          setStatus('paused'); // Exit loading state so the dialog can render
+          setStatus('paused'); // Exit loading so dialog renders
         } else {
-          // Create new session
           startNewSession(fetchedRiddles);
         }
       } catch (err) {
@@ -179,17 +178,15 @@ function RiddlePlayPageContent(): JSX.Element {
     fetchRiddles();
   }, [chapterId, level, isMounted]);
 
-  // Start new session helper
+  // Start new session
   const startNewSession = useCallback((riddleList: Riddle[]) => {
     clearRiddleSession();
 
-    // Calculate total time limit based on per-difficulty settings
     let totalTimeLimit = 0;
     if (mode === 'timer') {
       const timers = settings?.riddles?.defaults?.levelTimers;
       riddleList.forEach(riddle => {
         const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
-        // Use configured timer or fallback to default
         const perRiddleTime = timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
         totalTimeLimit += perRiddleTime;
       });
@@ -226,7 +223,7 @@ function RiddlePlayPageContent(): JSX.Element {
     setShowResumeDialog(false);
   }, []);
 
-  // Timer effect for timer mode
+  // Timer countdown
   useEffect(() => {
     if (status !== 'playing' || mode !== 'timer') return;
 
@@ -243,11 +240,12 @@ function RiddlePlayPageContent(): JSX.Element {
     return () => clearInterval(timer);
   }, [status, mode]);
 
+  // Toggle pause — mirrors quiz page pauseQuiz/resumeQuiz
   const togglePause = useCallback(() => {
     setStatus(prev => prev === 'playing' ? 'paused' : 'playing');
   }, []);
 
-  // Auto-save effect
+  // Auto-save
   useEffect(() => {
     if (status !== 'playing' || !session) return;
 
@@ -265,46 +263,33 @@ function RiddlePlayPageContent(): JSX.Element {
     return () => clearInterval(interval);
   }, [status, session, answers, timeRemaining, mode]);
 
-  // Navigation warning for unsaved progress
+  // Navigation warning
   useEffect(() => {
     if (status !== 'playing') return;
-
     return setupNavigationWarning(() => {
       if (!session) return null;
-      return {
-        ...session,
-        answers,
-        timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken(),
-      };
+      return { ...session, answers, timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken() };
     });
   }, [status, session, answers, timeRemaining, mode]);
 
   const calculateTimeTaken = useCallback(() => {
     if (!session) return 0;
-    const startTime = new Date(session.startedAt).getTime();
-    return Math.floor((Date.now() - startTime) / 1000);
+    return Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 1000);
   }, [session]);
 
-  const handleAnswerSelect = useCallback((optionIndex: number) => {
+  const handleAnswerSelect = useCallback((optionLetter: string) => {
     if (!session || status !== 'playing') return;
-
     const currentRiddle = riddles[currentIndex];
     if (!currentRiddle) return;
-
-    const optionLetter = String.fromCharCode(65 + optionIndex);
-
-    setAnswers(prev => ({
-      ...prev,
-      [currentRiddle.id]: optionLetter
-    }));
+    setAnswers(prev => ({ ...prev, [currentRiddle.id]: optionLetter }));
   }, [session, status, riddles, currentIndex]);
 
+  // Navigation handlers — mirrors quiz goToNext/goToPrevious
   const handleNext = useCallback(() => {
     riddleCardRef.current?.clearBubbles();
     if (currentIndex < riddles.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      // Reached the end, show confirm submit
       setShowConfirmSubmit(true);
     }
   }, [currentIndex, riddles.length]);
@@ -319,16 +304,9 @@ function RiddlePlayPageContent(): JSX.Element {
   const handleSubmit = useCallback(() => {
     if (!session) return;
 
-    setStatus('loading');
-
-    // Calculate final correct count strictly for the completed session object
     let correctCount = 0;
-    riddles.forEach((r) => {
-      // Find the answer if available natively or fallback to A/B/C/D mapping
-      const mappedAns = answers[r.id];
-      if (mappedAns === r.correctOption) {
-        correctCount++;
-      }
+    riddles.forEach(r => {
+      if (answers[r.id] === r.correctOption) correctCount++;
     });
 
     const completedSession: RiddleSession = {
@@ -342,13 +320,8 @@ function RiddlePlayPageContent(): JSX.Element {
     };
 
     setStatus('completed');
-
-    // Save final status before redirecting to ensure History loads it properly
     saveRiddleSession(completedSession);
-
     setShowConfirmSubmit(false);
-
-    // Redirect to results page
     router.push(`/riddles/results?session=${session.id}`);
   }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
 
@@ -377,39 +350,33 @@ function RiddlePlayPageContent(): JSX.Element {
         newRiddles = filteredData.map(adaptQuizRiddle);
       }
 
-      // Filter out riddles we already have
-      const uniqueNewRiddles = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);
+      const uniqueNew = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);
 
-      if (uniqueNewRiddles.length === 0) {
+      if (uniqueNew.length === 0) {
         alert('No more unique riddles available for this selection.');
         setStatus('playing');
         return;
       }
 
-      // Add time for new riddles if timer mode
       if (mode === 'timer') {
         let extraTime = 0;
         const timers = settings?.riddles?.defaults?.levelTimers;
-        uniqueNewRiddles.forEach(riddle => {
+        uniqueNew.forEach(riddle => {
           const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
           extraTime += timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
         });
         setTimeRemaining(prev => prev + extraTime);
       }
 
-      setRiddles(prev => [...prev, ...uniqueNewRiddles]);
+      setRiddles(prev => [...prev, ...uniqueNew]);
 
-      // Update session in storage
       if (session) {
-        const updatedSession = {
-          ...session,
-          riddles: [...session.riddles, ...uniqueNewRiddles]
-        };
+        const updatedSession = { ...session, riddles: [...session.riddles, ...uniqueNew] };
         setSession(updatedSession);
         saveRiddleSession(updatedSession);
       }
 
-      setCurrentIndex(riddles.length); // Move to the first new riddle
+      setCurrentIndex(riddles.length);
       setStatus('playing');
     } catch (err) {
       console.error('Failed to extend session:', err);
@@ -418,41 +385,42 @@ function RiddlePlayPageContent(): JSX.Element {
     }
   }, [riddles, chapterId, level, additionalRiddles, mode, settings, session]);
 
-  // Determine back path based on mode
+  // Determine back path
   const backPath = mode === 'timer' ? '/riddles/challenge' : '/riddles/practice';
 
-  // Format time as MM:SS
+  // Format time MM:SS — same as quiz page
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const currentRiddle = riddles[currentIndex];
-  const progress = riddles.length > 0 ? ((currentIndex + 1) / riddles.length) * 100 : 0;
   const answeredCount = Object.keys(answers).length;
+  const isTimerMode = mode === 'timer';
+  const isTimeUp = isTimerMode && timeRemaining === 0 && status === 'playing';
 
+  // Guard: not mounted yet
   if (!isMounted) {
     return <PlayPageLoading />;
   }
 
-  // Prioritize error state over loading state so the spinner doesn't persist
+  // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
         <div className="mx-auto max-w-2xl">
-          <Link href={backPath} className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700">
+          <Link href={backPath} className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white hover:bg-white/30">
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-
-          <div className="text-center py-20 bg-white/50 rounded-2xl">
-            <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Error</h2>
-            <p className="text-gray-600 mb-6">{error}</p>
+          <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
+            <AlertCircle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
+            <h1 className="mb-2 text-2xl font-bold text-gray-800">Failed to Load</h1>
+            <p className="mb-4 text-gray-600">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+              className="inline-block rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
             >
               Try Again
             </button>
@@ -462,14 +430,15 @@ function RiddlePlayPageContent(): JSX.Element {
     );
   }
 
+  // Loading state
   if (status === 'loading') {
     return <PlayPageLoading />;
   }
 
-  // Resume Dialog has precedence over loading state if we want to show it
+  // Resume dialog
   if (showResumeDialog) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] flex items-center justify-center px-4">
+      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -484,7 +453,6 @@ function RiddlePlayPageContent(): JSX.Element {
               You have an unfinished riddle session. Would you like to continue where you left off?
             </p>
           </div>
-
           <div className="space-y-3">
             <button
               onClick={resumeSession}
@@ -504,150 +472,148 @@ function RiddlePlayPageContent(): JSX.Element {
     );
   }
 
-
-  // Playing Screen
+  // Main playing screen — mirrors quiz/play/page.tsx layout exactly
   return (
-    <div className="relative min-h-screen flex flex-col bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       {/* Floating Background Emojis */}
       <FloatingBackground count={20} />
 
-      <div className="relative z-10 mx-auto max-w-4xl w-full px-4 py-8 flex flex-col flex-1">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Link href={backPath} className="inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 hover:bg-white/60">
-            <ArrowLeft className="h-4 w-4" />
-            Exit
-          </Link>
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col flex-1 px-4 py-2">
+        <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 justify-center">
 
+          {/* Header — compact, mirrors quiz page */}
+          <div className="mb-2">
+            {/* Exit Button */}
+            <div className="mb-1">
+              <Link
+                href={backPath}
+                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Exit Riddles
+              </Link>
+            </div>
 
-          <div className="flex items-center gap-4">
-            {mode === 'timer' && (
+            {/* Chapter info row + Timer — mirrors quiz subject + chapter + timer row */}
+            <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full font-mono font-bold shadow-sm transition-colors duration-300 ${status === 'paused' ? 'bg-yellow-500 text-white' :
-                  timeRemaining <= 10 ? 'bg-red-500 text-white animate-pulse' :
-                    timeRemaining <= 20 ? 'bg-orange-500 text-white' :
-                      'bg-white/80 text-gray-800'
-                  }`}>
-                  <Clock className="h-4 w-4" />
-                  {formatTime(timeRemaining)}
-                  {status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
-                </div>
+                <span className="rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                  {chapterName}
+                </span>
+                {level && level !== 'all' && (
+                  <span className="text-base text-white/90 capitalize">{level}</span>
+                )}
+              </div>
 
-                {/* Pause/Resume Button */}
-                {(status === 'playing' || status === 'paused') && (
+              {/* Timer Display */}
+              {isTimerMode && (status === 'playing' || status === 'paused') && (
+                <div className="flex items-center gap-2">
+                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${status === 'paused'
+                      ? 'bg-yellow-500 text-white'
+                      : timeRemaining <= 10
+                        ? 'bg-red-500 text-white animate-pulse'
+                        : timeRemaining <= 20
+                          ? 'bg-orange-500 text-white'
+                          : 'bg-white/90 text-gray-800'
+                    }`}>
+                    <Timer className="h-4 w-4" />
+                    <span>{formatTime(timeRemaining)}</span>
+                    {status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
+                  </div>
+
+                  {/* Pause/Resume Button */}
                   <button
                     onClick={togglePause}
-                    className="rounded-full bg-white/40 p-2 text-gray-800 transition-colors hover:bg-white/60 shadow-sm"
+                    className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
                     title={status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
                   >
                     {status === 'paused' ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Auto-save indicator — only shown non-timer when saved */}
+              {!isTimerMode && lastSaved && (
+                <div className="hidden sm:flex items-center gap-1 text-xs text-white/60">
+                  <Save className="h-3 w-3" />
+                  Saved
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Riddle Card */}
+          <AnimatePresence mode="wait">
+            {currentRiddle && (
+              <motion.div
+                key={currentRiddle.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <RiddleCard
+                  ref={riddleCardRef}
+                  shownBubblesRef={shownBubblesRef}
+                  riddle={currentRiddle}
+                  riddleNumber={currentIndex + 1}
+                  totalRiddles={riddles.length}
+                  selectedAnswer={answers[currentRiddle.id] || null}
+                  onSelectAnswer={(answer) => {
+                    handleAnswerSelect(answer);
+                  }}
+                  showFeedback={true}
+                  disabled={status !== 'playing'}
+                  score={Object.entries(answers).reduce((acc, [id, ans]) => {
+                    const riddle = riddles.find(r => r.id === id);
+                    return acc + (riddle && ans === riddle.correctOption ? 1 : 0);
+                  }, 0)}
+                  maxScore={riddles.length}
+                  timeUp={isTimeUp}
+                />
+              </motion.div>
             )}
+          </AnimatePresence>
 
-            {lastSaved && (
-              <div className="hidden sm:flex items-center gap-1 text-xs text-gray-500">
-                <Save className="h-3 w-3" />
-                Auto-saved
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
-            <span>Riddle {currentIndex + 1} of {riddles.length}</span>
-            <span>{Math.round(progress)}% complete</span>
-          </div>
-          <div className="h-2 bg-white/40 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-indigo-600 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-        </div>
-
-        {/* Riddle Card with Animations */}
-        <AnimatePresence mode="wait">
-          {currentRiddle && (
-            <motion.div
-              key={currentRiddle.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="mb-8"
+          {/* Back + N / Total + Next Navigation — mirrors quiz page exactly */}
+          <div className="mt-4 flex items-center justify-between gap-4 pb-4">
+            <button
+              onClick={() => {
+                riddleCardRef.current?.clearBubbles();
+                handlePrevious();
+              }}
+              disabled={currentIndex === 0}
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <RiddleCard
-                ref={riddleCardRef}
-                shownBubblesRef={shownBubblesRef}
-                riddle={currentRiddle}
-                riddleNumber={currentIndex + 1}
-                totalRiddles={riddles.length}
-                selectedAnswer={answers[currentRiddle.id] || null}
-                onSelectAnswer={(answer) => {
-                  handleAnswerSelect(answer.charCodeAt(0) - 65);
-                }}
-                showFeedback={true}
-                disabled={status !== 'playing'}
-                score={Object.values(answers).reduce((acc, ans, idx) => acc + (ans === riddles[idx]?.correctOption ? 1 : 0), 0)}
-                maxScore={riddles.length}
-                timeUp={mode === 'timer' && timeRemaining === 0}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
 
+            <span className="text-sm text-white/70">
+              {currentIndex + 1} / {riddles.length}
+            </span>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={handlePrevious}
-            disabled={currentIndex === 0}
-            className="px-6 py-3 rounded-xl bg-white/60 text-gray-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/80"
-          >
-            Previous
-          </button>
-
-          <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center max-w-[50%]">
-            {riddles.map((riddle, idx) => (
-              <button
-                key={riddle.id}
-                onClick={() => setCurrentIndex(idx)}
-                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all ${idx === currentIndex
-                  ? 'bg-indigo-600 w-6 sm:w-8'
-                  : answers[riddle.id] ? 'bg-green-400' : 'bg-gray-300'
-                  }`}
-              />
-            ))}
+            <button
+              onClick={() => {
+                riddleCardRef.current?.clearBubbles();
+                if (currentIndex >= riddles.length - 1) {
+                  setShowConfirmSubmit(true);
+                } else {
+                  handleNext();
+                }
+              }}
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
+            >
+              {currentIndex >= riddles.length - 1 ? 'Submit' : 'Next'}
+              <ArrowLeft className="h-4 w-4 rotate-180" />
+            </button>
           </div>
 
-          <button
-            onClick={() => {
-              if (currentIndex >= riddles.length - 1) {
-                setShowConfirmSubmit(true);
-              } else {
-                handleNext();
-              }
-            }}
-            className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700"
-          >
-            {currentIndex >= riddles.length - 1 ? 'Submit' : 'Next'}
-          </button>
-        </div>
-
-        {/* Answered Progress */}
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <AlertCircle className="h-4 w-4 inline mr-1" />
-          {answeredCount} of {riddles.length} riddles answered
         </div>
       </div>
 
-      {/* Confirm Submit Modal */}
+      {/* Confirm Submit Modal — mirrors quiz page (2 buttons: Continue + Submit) */}
       {showConfirmSubmit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <motion.div
@@ -656,13 +622,13 @@ function RiddlePlayPageContent(): JSX.Element {
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
             <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Submit Challenge?
+              Submit Riddles?
             </h2>
 
             {answeredCount < riddles.length ? (
-              <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800 border border-yellow-200">
-                <p className="font-bold flex items-center gap-2"><AlertCircle className="h-4 w-4" /> Not all riddles answered!</p>
-                <p className="text-sm mt-1">
+              <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
+                <p className="font-medium">⚠️ Not all riddles answered!</p>
+                <p className="text-sm">
                   You&apos;ve answered {answeredCount} of {riddles.length} riddles.
                 </p>
               </div>
@@ -672,25 +638,22 @@ function RiddlePlayPageContent(): JSX.Element {
               </p>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+            <div className="flex gap-3">
               <button
                 onClick={() => {
                   setShowConfirmSubmit(false);
                   setShowExtendSession(true);
                 }}
-                className="flex-1 rounded-xl bg-purple-100 py-3 font-semibold text-purple-700 transition-colors hover:bg-purple-200"
+                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
               >
-                Extend Session
+                Continue
               </button>
               <button
-                onClick={() => setShowConfirmSubmit(false)}
-                className="flex-1 rounded-xl bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="flex-1 rounded-xl bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
+                onClick={() => {
+                  handleSubmit();
+                  setShowConfirmSubmit(false);
+                }}
+                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
               >
                 Submit
               </button>
@@ -699,7 +662,7 @@ function RiddlePlayPageContent(): JSX.Element {
         </div>
       )}
 
-      {/* Extend Session Modal */}
+      {/* Extend Session Modal — mirrors quiz Extend Quiz modal */}
       {showExtendSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <motion.div
@@ -708,63 +671,66 @@ function RiddlePlayPageContent(): JSX.Element {
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
             <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Extend Riddle Session
+              Extend Session
             </h2>
 
-            <div className="mb-6 space-y-4">
-              <div className="rounded-lg bg-indigo-50 p-4 border border-indigo-100">
-                <p className="text-sm text-indigo-800">
-                  Want to keep going? You can add more random riddles to your current session.
+            <div className="mb-4 space-y-3">
+              <p className="text-gray-600">
+                You&apos;ve answered <strong>{answeredCount}</strong> of <strong>{riddles.length}</strong> riddles.
+              </p>
+
+              <div className="rounded-lg bg-blue-50 p-3">
+                <p className="text-sm text-blue-800">
+                  Add more riddles to keep the session going!
                 </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  How many more riddles?
-                </label>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setAdditionalRiddles(Math.max(1, additionalRiddles - 1))}
-                    disabled={additionalRiddles <= 1}
-                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50 text-xl"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={additionalRiddles}
-                    onChange={(e) => setAdditionalRiddles(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
-                    className="h-12 flex-1 rounded-xl border border-gray-300 text-center font-bold text-lg"
-                  />
-                  <button
-                    onClick={() => setAdditionalRiddles(Math.min(20, additionalRiddles + 1))}
-                    disabled={additionalRiddles >= 20}
-                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50 text-xl"
-                  >
-                    +
-                  </button>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">New riddles will match your current chapter and difficulty settings.</p>
+              <p className="text-sm text-gray-500">
+                How many additional riddles would you like to add?
+              </p>
+
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setAdditionalRiddles(Math.max(1, additionalRiddles - 1))}
+                  disabled={additionalRiddles <= 1}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={additionalRiddles}
+                  onChange={(e) => setAdditionalRiddles(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
+                  className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
+                />
+                <button
+                  onClick={() => setAdditionalRiddles(Math.min(20, additionalRiddles + 1))}
+                  disabled={additionalRiddles >= 20}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  +
+                </button>
               </div>
+
+              <p className="text-xs text-gray-400">
+                New riddles will be added without repeating any you&apos;ve already seen.
+              </p>
             </div>
 
             <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowExtendSession(false);
-                  setShowConfirmSubmit(true);
-                }}
-                className="flex-1 rounded-xl bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
+                onClick={() => setShowExtendSession(false)}
+                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
               >
-                Back
+                Cancel
               </button>
               <button
                 onClick={handleExtendSession}
-                className="flex-[2] rounded-xl bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
+                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
               >
-                Add Riddles
+                Add &amp; Continue
               </button>
             </div>
           </motion.div>
