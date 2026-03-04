@@ -177,21 +177,23 @@ export default function AdminPage(): JSX.Element {
   const [riddleModuleExpanded, setRiddleModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
-  // Load active section from localStorage after hydration (to avoid SSR mismatch)
+  // Load all state from localStorage after hydration (to avoid SSR mismatch)
   useEffect(() => {
-    const saved = localStorage.getItem(ACTIVE_SECTION_KEY);
-    if (saved) {
-      setActiveSection(saved as MenuSection);
-    }
-    setIsHydrated(true);
-  }, []);
+    // 1. Load data
+    const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
+    const savedQuestions = getItem(STORAGE_KEYS.QUESTIONS, initialQuestions);
+    const savedSection = localStorage.getItem(ACTIVE_SECTION_KEY);
+    const savedRiddleOrder = getItem('aiquiz:riddle-chapter-order', []);
 
-  // Persist active section to localStorage whenever it changes
-  useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem(ACTIVE_SECTION_KEY, activeSection);
-    }
-  }, [activeSection, isHydrated]);
+    // 2. Update state before marking as hydrated
+    setSubjects(sanitizeSubjects(savedSubjects));
+    setAllQuestions(savedQuestions);
+    if (savedSection) setActiveSection(savedSection as MenuSection);
+    setRiddleChapterOrder(savedRiddleOrder);
+
+    // 3. Complete hydration
+    setIsHydrated(true);
+  }, [sanitizeSubjects]);
 
   // Helper to normalize subject emojis - preserves custom emojis
   const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
@@ -220,12 +222,9 @@ export default function AdminPage(): JSX.Element {
     });
   }, []);
 
-  // Dynamic data state
-  const [subjects, setSubjects] = useState<Subject[]>(() => {
-    const stored = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
-    return sanitizeSubjects(stored);
-  });
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() => getItem(STORAGE_KEYS.QUESTIONS, initialQuestions));
+  // Dynamic data state initialized with defaults for SSR compatibility
+  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions);
 
   // Jokes state (shared with JokesSection component)
   const { allJokes, setAllJokes } = useGlobalJokes();
@@ -256,12 +255,7 @@ export default function AdminPage(): JSX.Element {
   }, []);
 
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
-  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      return getItem('aiquiz:riddle-chapter-order', []);
-    }
-    return [];
-  });
+  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
 
   // Migration: Fix any corrupted emojis in existing subjects (runs once)
   useEffect(() => {
@@ -283,20 +277,26 @@ export default function AdminPage(): JSX.Element {
     }
   }, [setAllJokes]);
 
-  // Persistence effects
+  // Persistence effects - Guarded by isHydrated to prevent overwriting with defaults
   useEffect(() => {
-    setItem(STORAGE_KEYS.SUBJECTS, subjects);
-  }, [subjects]);
-
-  useEffect(() => {
-    setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
-  }, [allQuestions]);
-
-
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.SUBJECTS, subjects);
+    }
+  }, [subjects, isHydrated]);
 
   useEffect(() => {
-    setItem('aiquiz:riddle-chapter-order', riddleChapterOrder);
-  }, [riddleChapterOrder]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
+    }
+  }, [allQuestions, isHydrated]);
+
+
+
+  useEffect(() => {
+    if (isHydrated) {
+      setItem('aiquiz:riddle-chapter-order', riddleChapterOrder);
+    }
+  }, [riddleChapterOrder, isHydrated]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -1363,12 +1363,22 @@ function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
 // ============================================================================
 
 function useGlobalJokes() {
-  const [allJokes, setAllJokes] = useState<Joke[]>(() => getItem<Joke[]>(STORAGE_KEYS.JOKES, libInitialJokes as unknown as Joke[]));
+  const [allJokes, setAllJokes] = useState<Joke[]>(libInitialJokes as unknown as Joke[]);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Persistence
   useEffect(() => {
-    setItem(STORAGE_KEYS.JOKES, allJokes);
-  }, [allJokes]);
+    // Initial load from storage
+    const saved = getItem<Joke[]>(STORAGE_KEYS.JOKES, libInitialJokes as unknown as Joke[]);
+    setAllJokes(saved);
+    setIsHydrated(true);
+  }, []);
+
+  // Persistence (Guarded)
+  useEffect(() => {
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.JOKES, allJokes);
+    }
+  }, [allJokes, isHydrated]);
 
   return { allJokes, setAllJokes };
 }
@@ -1384,12 +1394,21 @@ const defaultJokeCategories: JokeCategory[] = [
 ];
 
 function useGlobalJokeCategories() {
-  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(() => getItem(STORAGE_KEYS.JOKE_CATEGORIES, defaultJokeCategories));
+  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(defaultJokeCategories);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Persistence
   useEffect(() => {
-    setItem(STORAGE_KEYS.JOKE_CATEGORIES, jokeCategories);
-  }, [jokeCategories]);
+    const saved = getItem<JokeCategory[]>(STORAGE_KEYS.JOKE_CATEGORIES, defaultJokeCategories);
+    setJokeCategories(saved);
+    setIsHydrated(true);
+  }, []);
+
+  // Persistence (Guarded)
+  useEffect(() => {
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.JOKE_CATEGORIES, jokeCategories);
+    }
+  }, [jokeCategories, isHydrated]);
 
   return { jokeCategories, setJokeCategories };
 }

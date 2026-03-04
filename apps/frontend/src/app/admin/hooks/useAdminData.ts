@@ -57,46 +57,57 @@ export interface UseAdminDataReturn {
 }
 
 export function useAdminData(): UseAdminDataReturn {
-  const [subjects, setSubjects] = useState<Subject[]>(() =>
-    getItem<Subject[]>(STORAGE_KEYS.SUBJECTS, initialSubjects as Subject[])
-  );
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(() =>
-    getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, initialQuestions as Record<string, Question[]>)
-  );
-  const [allJokes, setAllJokes] = useState<Joke[]>(() =>
-    getItem<Joke[]>(STORAGE_KEYS.JOKES, initialJokes as unknown as Joke[])
-  );
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>(() =>
-    getItem<Riddle[]>(STORAGE_KEYS.RIDDLES, initialRiddles as Riddle[])
-  );
-  const [allImageRiddles, setAllImageRiddles] = useState<ImageRiddle[]>(() =>
-    getItem<ImageRiddle[]>(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles as unknown as ImageRiddle[])
-  );
+  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects as Subject[]);
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions as Record<string, Question[]>);
+  const [allJokes, setAllJokes] = useState<Joke[]>(initialJokes as unknown as Joke[]);
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>(initialRiddles as Riddle[]);
+  const [allImageRiddles, setAllImageRiddles] = useState<ImageRiddle[]>(initialImageRiddles as unknown as ImageRiddle[]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    setSubjects(getItem<Subject[]>(STORAGE_KEYS.SUBJECTS, initialSubjects as Subject[]));
+    setAllQuestions(getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, initialQuestions as Record<string, Question[]>));
+    setAllJokes(getItem<Joke[]>(STORAGE_KEYS.JOKES, initialJokes as unknown as Joke[]));
+    setAllRiddles(getItem<Riddle[]>(STORAGE_KEYS.RIDDLES, initialRiddles as Riddle[]));
+    setAllImageRiddles(getItem<ImageRiddle[]>(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles as unknown as ImageRiddle[]));
+    setIsHydrated(true);
+  }, []);
 
   // Persist subjects
   useEffect(() => {
-    setItem(STORAGE_KEYS.SUBJECTS, subjects);
-  }, [subjects]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.SUBJECTS, subjects);
+    }
+  }, [subjects, isHydrated]);
 
   // Persist questions
   useEffect(() => {
-    setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
-  }, [allQuestions]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
+    }
+  }, [allQuestions, isHydrated]);
 
   // Persist jokes
   useEffect(() => {
-    setItem(STORAGE_KEYS.JOKES, allJokes);
-  }, [allJokes]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.JOKES, allJokes);
+    }
+  }, [allJokes, isHydrated]);
 
   // Persist riddles
   useEffect(() => {
-    setItem(STORAGE_KEYS.RIDDLES, allRiddles);
-  }, [allRiddles]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.RIDDLES, allRiddles);
+    }
+  }, [allRiddles, isHydrated]);
 
   // Persist image riddles
   useEffect(() => {
-    setItem(STORAGE_KEYS.IMAGE_RIDDLES, allImageRiddles);
-  }, [allImageRiddles]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.IMAGE_RIDDLES, allImageRiddles);
+    }
+  }, [allImageRiddles, isHydrated]);
 
   return {
     subjects,

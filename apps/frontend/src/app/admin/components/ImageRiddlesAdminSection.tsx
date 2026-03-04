@@ -361,15 +361,17 @@ const defaultCategories: ImageRiddleCategory[] = [
  * @returns JSX.Element - The rendered component
  */
 export function ImageRiddlesAdminSection(): JSX.Element {
-  // State for image riddles with persistence
-  const [imageRiddles, setImageRiddles] = useState<ImageRiddle[]>(() =>
-    getItem(STORAGE_KEYS.IMAGE_RIDDLES, libInitialImageRiddles)
-  );
+  // State for image riddles initialized with defaults for SSR
+  const [imageRiddles, setImageRiddles] = useState<ImageRiddle[]>(libInitialImageRiddles as unknown as ImageRiddle[]);
+  const [categories, setCategories] = useState<ImageRiddleCategory[]>(defaultCategories);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Categories state - persisted in localStorage
-  const [categories, setCategories] = useState<ImageRiddleCategory[]>(() =>
-    getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, defaultCategories)
-  );
+  // Load from localStorage on mount
+  useEffect(() => {
+    setImageRiddles(getItem(STORAGE_KEYS.IMAGE_RIDDLES, libInitialImageRiddles as unknown as ImageRiddle[]));
+    setCategories(getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, defaultCategories));
+    setIsHydrated(true);
+  }, []);
 
   // Category Modal States
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
@@ -425,15 +427,19 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const editModalRef = useRef<HTMLDivElement>(null);
   const exportDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Persistence effect for riddles
+  // Persistence effect for riddles (Guarded)
   useEffect(() => {
-    setItem(STORAGE_KEYS.IMAGE_RIDDLES, imageRiddles);
-  }, [imageRiddles]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.IMAGE_RIDDLES, imageRiddles);
+    }
+  }, [imageRiddles, isHydrated]);
 
-  // Persistence effect for categories
+  // Persistence effect for categories (Guarded)
   useEffect(() => {
-    setItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, categories);
-  }, [categories]);
+    if (isHydrated) {
+      setItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, categories);
+    }
+  }, [categories, isHydrated]);
 
   // Calculate status counts (memoized)
   const statusCounts = useMemo<StatusCounts>(() => ({
