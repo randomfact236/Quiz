@@ -192,7 +192,7 @@ function QuizContent(): JSX.Element {
             {/* Exit Button */}
             <div className="mb-1">
               <Link
-                href={`/quiz?subject=${subject}`}
+                href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
                 className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -214,12 +214,12 @@ function QuizContent(): JSX.Element {
                 <div className="flex items-center gap-2">
                   {/* Timer Clock */}
                   <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${quiz.status === 'paused'
-                      ? 'bg-yellow-500 text-white'
-                      : quiz.timeRemaining <= 10
-                        ? 'bg-red-500 text-white animate-pulse'
-                        : quiz.timeRemaining <= 20
-                          ? 'bg-orange-500 text-white'
-                          : 'bg-white/90 text-gray-800'
+                    ? 'bg-yellow-500 text-white'
+                    : quiz.timeRemaining <= 10
+                      ? 'bg-red-500 text-white animate-pulse'
+                      : quiz.timeRemaining <= 20
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-white/90 text-gray-800'
                     }`}>
                     <Timer className="h-4 w-4" />
                     <span>{Math.floor(quiz.timeRemaining / 60)}:{(quiz.timeRemaining % 60).toString().padStart(2, '0')}</span>

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2, Sparkles, HelpCircle, Puzzle, Image as ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, Home, ImageIcon, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { getChapterProgress } from '@/lib/progress';
 
@@ -77,7 +77,7 @@ function getSubjectDisplay(emoji: string): string {
 
 function SubjectCard({ slug, emoji, name }: { slug: string; emoji: string; name: string }): JSX.Element {
   const display = getSubjectDisplay(emoji);
-  
+
   return (
     <Link
       href={`/quiz?subject=${slug}`}
@@ -90,12 +90,12 @@ function SubjectCard({ slug, emoji, name }: { slug: string; emoji: string; name:
   );
 }
 
-function CategorySection({ 
-  category, 
-  subjects, 
-}: { 
-  category: CategorySection; 
-  subjects: Subject[]; 
+function CategorySection({
+  category,
+  subjects,
+}: {
+  category: CategorySection;
+  subjects: Subject[];
 }): JSX.Element | null {
   if (subjects.length === 0) return null;
 
@@ -107,8 +107,8 @@ function CategorySection({
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
         {subjects.map((subject) => (
-          <SubjectCard 
-            key={subject.id} 
+          <SubjectCard
+            key={subject.id}
             slug={subject.slug}
             emoji={subject.emoji}
             name={subject.name}
@@ -153,14 +153,14 @@ function SubjectSelection(): JSX.Element {
       professional: [],
       entertainment: [],
     };
-    
+
     subjects.forEach((subject) => {
       const category = subject.category;
       if (category === 'academic' || category === 'professional' || category === 'entertainment') {
         grouped[category].push(subject);
       }
     });
-    
+
     return grouped;
   }, [subjects]);
 
@@ -196,13 +196,13 @@ function SubjectSelection(): JSX.Element {
       {/* Special Quiz Modes */}
       <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <Link
-          href="/quiz/random"
+          href="/"
           className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
         >
-          <Sparkles className="mb-2 h-8 w-8" />
-          <span className="font-bold">Random Quiz</span>
+          <Home className="mb-2 h-8 w-8" />
+          <span className="font-bold">Back to Home</span>
         </Link>
-        
+
         <Link
           href="/quiz/timer-challenge"
           className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
@@ -210,7 +210,7 @@ function SubjectSelection(): JSX.Element {
           <Puzzle className="mb-2 h-8 w-8" />
           <span className="font-bold">Timer Challenge</span>
         </Link>
-        
+
         <Link
           href="/quiz/practice-mode"
           className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
@@ -218,15 +218,8 @@ function SubjectSelection(): JSX.Element {
           <BookOpen className="mb-2 h-8 w-8" />
           <span className="font-bold">Practice Mode</span>
         </Link>
-        
-        <Link
-          href="/riddles"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <HelpCircle className="mb-2 h-8 w-8" />
-          <span className="font-bold">Riddles</span>
-        </Link>
-        
+
+
         <Link
           href="/image-riddles"
           className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
@@ -240,7 +233,7 @@ function SubjectSelection(): JSX.Element {
       <h1 className="mb-6 text-center text-3xl font-bold text-white">
         📚 Choose a Subject
       </h1>
-      
+
       <div>
         {categories.map((category) => (
           <CategorySection
@@ -284,20 +277,20 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
     // Load questions from localStorage for this subject
     const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
     const subjectQuestions = allQuestions[subject] || [];
-    
+
     // Group questions by chapter
     const chapterMap = new Map<string, ChapterInfo>();
-    
+
     subjectQuestions.forEach(q => {
       // Skip questions in trash
       if (q.status === 'trash') return;
-      
+
       const chapterName = q.chapter || 'General';
-      
+
       if (!chapterMap.has(chapterName)) {
         // Get progress for this chapter
         const progress = getChapterProgress(subject, chapterName);
-        
+
         chapterMap.set(chapterName, {
           name: chapterName,
           questionCount: 0,
@@ -307,17 +300,17 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
           attempts: progress?.attempts ?? 0,
         });
       }
-      
+
       const chapter = chapterMap.get(chapterName)!;
       chapter.questionCount++;
       chapter.levels.add(q.level);
     });
-    
+
     // Convert to array and sort by name
-    const chapterList = Array.from(chapterMap.values()).sort((a, b) => 
+    const chapterList = Array.from(chapterMap.values()).sort((a, b) =>
       a.name.localeCompare(b.name)
     );
-    
+
     setChapters(chapterList);
     setIsLoading(false);
   }, [subject]);
@@ -325,8 +318,8 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   if (isLoading) {
     return (
       <div>
-        <Link 
-          href="/quiz" 
+        <Link
+          href="/quiz"
           className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
         >
           ← Back to Subjects
@@ -340,8 +333,8 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 
   return (
     <div>
-      <Link 
-        href="/quiz" 
+      <Link
+        href="/quiz"
         className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
       >
         ← Back to Subjects
@@ -349,7 +342,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       <h1 className="mb-8 text-center text-3xl font-bold text-white">
         📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
       </h1>
-      
+
       {chapters.length === 0 ? (
         <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
           <p className="text-gray-600">No chapters available for this subject yet.</p>
@@ -363,13 +356,12 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
               href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
               className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
             >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${
-                chapter.isCompleted 
-                  ? 'bg-green-100 text-green-600' 
-                  : chapter.attempts > 0 
-                    ? 'bg-yellow-100 text-yellow-600'
-                    : 'bg-indigo-100 text-indigo-600'
-              }`}>
+              <div className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted
+                ? 'bg-green-100 text-green-600'
+                : chapter.attempts > 0
+                  ? 'bg-yellow-100 text-yellow-600'
+                  : 'bg-indigo-100 text-indigo-600'
+                }`}>
                 {chapter.isCompleted ? (
                   <CheckCircle className="h-6 w-6" />
                 ) : (
@@ -423,21 +415,21 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   const [normalOpen, setNormalOpen] = useState(true);
   const [timerOpen, setTimerOpen] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
-  
+
   // Get question counts by level - only after hydration
   const questionCounts = useMemo(() => {
     // Return empty counts during SSR to avoid hydration mismatch
     if (!isHydrated) {
       return {} as Record<string, number>;
     }
-    
+
     const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
     const subjectQuestions = allQuestions[subject] || [];
-    
+
     const counts: Record<string, number> = {};
     levels.forEach(level => {
-      counts[level] = subjectQuestions.filter(q => 
-        q.chapter === chapter && 
+      counts[level] = subjectQuestions.filter(q =>
+        q.chapter === chapter &&
         q.level === level.toLowerCase() &&
         q.status === 'published'
       ).length;
@@ -452,8 +444,8 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
   return (
     <div>
-      <Link 
-        href={`/quiz?subject=${subject}`} 
+      <Link
+        href={`/quiz?subject=${subject}`}
         className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
       >
         ← Back to Chapters
@@ -461,7 +453,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
       <h1 className="mb-8 text-center text-3xl font-bold text-white">
         🎮 Select Mode & Difficulty
       </h1>
-      
+
       <div className="space-y-6">
         {/* Normal Mode Section */}
         <div className="rounded-2xl bg-white/95 shadow-lg overflow-hidden">
@@ -478,7 +470,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
             </div>
             {normalOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
           </button>
-          
+
           {normalOpen && (
             <div className="p-6">
               <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
@@ -519,7 +511,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
             </div>
             {timerOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
           </button>
-          
+
           {timerOpen && (
             <div className="p-6">
               <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
@@ -558,7 +550,7 @@ function LevelSelection({ subject, chapter, mode }: { subject: string; chapter: 
     'Expert': '🔥',
     'Extreme': '💀'
   };
-  
+
   const levelColors: Record<string, string> = {
     'Easy': 'from-green-400 to-green-600',
     'Medium': 'from-blue-400 to-blue-600',
@@ -569,7 +561,7 @@ function LevelSelection({ subject, chapter, mode }: { subject: string; chapter: 
 
   return (
     <div>
-      <Link 
+      <Link
         href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
         className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
       >
