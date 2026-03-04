@@ -45,6 +45,8 @@ const jokeCategories = [
 export default function JokesPage(): JSX.Element {
   const [jokes, setJokes] = useState<Joke[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<'newest' | 'random'>('newest');
+  const [randomSeed, setRandomSeed] = useState<number>(0);
   const [jokeOfTheDay, setJokeOfTheDay] = useState<Joke | null>(null);
   const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
 
@@ -94,9 +96,26 @@ export default function JokesPage(): JSX.Element {
     }
   }, []);
 
+  const handleShuffle = () => {
+    setSortOrder('random');
+    setRandomSeed(Math.random());
+  };
+
   const displayedJokes = activeCategory
     ? jokes.filter(j => j.category === activeCategory || j.category === jokeCategories.find(c => c.title === activeCategory)?.title)
-    : jokes;
+    : [...jokes]; // Clone to safely sort
+
+  // Apply sorting
+  if (sortOrder === 'newest') {
+    displayedJokes.sort((a, b) => b.id - a.id);
+  } else if (sortOrder === 'random') {
+    // Basic seeded shuffle for the current render loop
+    displayedJokes.sort((a, b) => {
+      const hashA = (a.id * randomSeed) % 1;
+      const hashB = (b.id * randomSeed) % 1;
+      return hashA - hashB;
+    });
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50 px-4 py-8">
@@ -175,18 +194,42 @@ export default function JokesPage(): JSX.Element {
 
           {/* Main Content: Flashcards Grid */}
           <div className="lg:col-span-2" aria-live="polite" aria-atomic="true">
-            <div className="mb-6 flex items-center justify-between border-b border-gray-200 pb-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {activeCategory ? `${activeCategory} (${displayedJokes.length})` : `All Jokes (${jokes.length})`}
-              </h2>
-              {activeCategory && (
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-4 gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {activeCategory ? `${activeCategory} (${displayedJokes.length})` : `All Jokes (${jokes.length})`}
+                </h2>
+                {activeCategory && (
+                  <button
+                    onClick={() => setActiveCategory(null)}
+                    className="rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-700 hover:bg-orange-200 transition-colors whitespace-nowrap"
+                  >
+                    Clear ✕
+                  </button>
+                )}
+              </div>
+
+              <div className="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto">
                 <button
-                  onClick={() => setActiveCategory(null)}
-                  className="rounded-full bg-orange-100 px-4 py-1.5 text-sm font-medium text-orange-700 hover:bg-orange-200 transition-colors"
+                  onClick={() => setSortOrder('newest')}
+                  className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${sortOrder === 'newest'
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
                 >
-                  Clear Filter ✕
+                  Newest
                 </button>
-              )}
+                <button
+                  onClick={handleShuffle}
+                  className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-4 py-1.5 text-sm font-medium rounded-md transition-all ${sortOrder === 'random'
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                  Shuffle
+                </button>
+              </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
