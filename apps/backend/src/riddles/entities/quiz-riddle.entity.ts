@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { RiddleChapter } from './riddle-chapter.entity';
+
 import { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';
+
+import { RiddleChapter } from './riddle-chapter.entity';
 
 // Re-export for modules that import the enum alongside the entity
 export { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';

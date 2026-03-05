@@ -5,10 +5,10 @@ import {
   CallHandler,
   Logger,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { Request, Response } from 'express';
 
 /**
  * Extended request interface with requestId property

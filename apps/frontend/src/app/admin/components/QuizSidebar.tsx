@@ -34,20 +34,20 @@ export function QuizSidebar({
   onReorderSubjects,
   questionCounts = {},
 }: QuizSidebarProps): JSX.Element {
-  const [draggedId, setDraggedId] = useState<number | null>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTargetCategory, setDropTargetCategory] = useState<string | null>(null);
   const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
   // Group subjects by category - memoized to prevent recalculation
-  const academicSubjects = useMemo(() => 
+  const academicSubjects = useMemo(() =>
     subjects.filter(s => s.category === 'academic').sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     [subjects]
   );
-  const professionalSubjects = useMemo(() => 
+  const professionalSubjects = useMemo(() =>
     subjects.filter(s => s.category === 'professional').sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     [subjects]
   );
-  const entertainmentSubjects = useMemo(() => 
+  const entertainmentSubjects = useMemo(() =>
     subjects.filter(s => s.category === 'entertainment').sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     [subjects]
   );
@@ -63,7 +63,7 @@ export function QuizSidebar({
     e.preventDefault();
     e.stopPropagation();
     e.dataTransfer.dropEffect = 'move';
-    
+
     setDropTargetCategory(category);
     if (index !== undefined) {
       setDropTargetIndex(index);
@@ -79,19 +79,18 @@ export function QuizSidebar({
   const handleDrop = useCallback((e: React.DragEvent, targetCategory: string, targetIndex?: number) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const draggedIdStr = e.dataTransfer.getData('text/plain');
-    const draggedIdNum = parseInt(draggedIdStr, 10);
-    
+
     setDropTargetCategory(null);
     setDropTargetIndex(null);
 
-    if (!draggedIdStr || isNaN(draggedIdNum)) {
+    if (!draggedIdStr) {
       setDraggedId(null);
       return;
     }
 
-    const draggedSubject = subjects.find(s => s.id === draggedIdNum);
+    const draggedSubject = subjects.find(s => s.id === draggedIdStr);
     if (!draggedSubject) {
       setDraggedId(null);
       return;
@@ -100,7 +99,7 @@ export function QuizSidebar({
     // If dropping in same category at same position, do nothing
     if (draggedSubject.category === targetCategory && targetIndex !== undefined) {
       const categorySubjects = subjects.filter(s => s.category === targetCategory).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-      const currentIndex = categorySubjects.findIndex(s => s.id === draggedIdNum);
+      const currentIndex = categorySubjects.findIndex(s => s.id === draggedIdStr);
       if (currentIndex === targetIndex || currentIndex === targetIndex - 1) {
         setDraggedId(null);
         return;
@@ -109,7 +108,7 @@ export function QuizSidebar({
 
     // Create new subjects array with updated category
     let newSubjects = subjects.map(s => {
-      if (s.id === draggedIdNum) {
+      if (s.id === draggedIdStr) {
         return { ...s, category: targetCategory as 'academic' | 'professional' | 'entertainment' };
       }
       return s;
@@ -118,15 +117,15 @@ export function QuizSidebar({
     // Get subjects in target category
     const categorySubjects = newSubjects.filter(s => s.category === targetCategory).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     const otherSubjects = newSubjects.filter(s => s.category !== targetCategory);
-    
+
     // Remove dragged subject from current position
-    const movedSubject = categorySubjects.find(s => s.id === draggedIdNum)!;
-    let reorderedCategorySubjects = categorySubjects.filter(s => s.id !== draggedIdNum);
-    
+    const movedSubject = categorySubjects.find(s => s.id === draggedIdStr)!;
+    let reorderedCategorySubjects = categorySubjects.filter(s => s.id !== draggedIdStr);
+
     // Insert at new position
     const insertIndex = targetIndex !== undefined ? targetIndex : reorderedCategorySubjects.length;
     reorderedCategorySubjects.splice(insertIndex, 0, movedSubject);
-    
+
     // Update order for all subjects in category
     reorderedCategorySubjects = reorderedCategorySubjects.map((s, idx) => ({
       ...s,
@@ -152,9 +151,8 @@ export function QuizSidebar({
 
     return (
       <div
-        className={`mb-4 rounded-lg border-2 will-change-transform ${
-          isDropTarget ? 'border-blue-500 bg-blue-500/10' : 'border-transparent'
-        }`}
+        className={`mb-4 rounded-lg border-2 will-change-transform ${isDropTarget ? 'border-blue-500 bg-blue-500/10' : 'border-transparent'
+          }`}
         style={{ transition: 'background-color 0.15s ease, border-color 0.15s ease' }}
         onDragOver={(e) => handleDragOver(e, category)}
         onDragLeave={handleDragLeave}
@@ -309,13 +307,12 @@ const SubjectItem = React.memo(function SubjectItem({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`group flex items-center gap-2 px-3 py-2 cursor-pointer will-change-transform border-t-2 border-b-2 ${
-        isActive
+      className={`group flex items-center gap-2 px-3 py-2 cursor-pointer will-change-transform border-t-2 border-b-2 ${isActive
           ? 'bg-blue-600 text-white'
           : isDragOver
             ? 'bg-blue-500/20 border-blue-500'
             : 'text-gray-300 hover:bg-gray-800 border-transparent'
-      } ${isDragging ? 'opacity-50' : ''}`}
+        } ${isDragging ? 'opacity-50' : ''}`}
       style={{ transition: 'background-color 0.15s ease, opacity 0.15s ease, border-color 0.15s ease' }}
       onClick={() => onSelect(subject.slug)}
     >

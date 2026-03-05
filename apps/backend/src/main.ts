@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger, INestApplication } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe, Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
-import { AppModule } from './app.module';
 
+import { AppModule } from './app.module';
 import {
   SERVER_PORT,
   FRONTEND_PORT,
@@ -45,6 +45,12 @@ function setupMiddleware(app: INestApplication): void {
 
   // API prefix
   app.setGlobalPrefix('api');
+
+  // API versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
 }
 
 /**

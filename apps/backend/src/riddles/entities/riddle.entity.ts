@@ -7,9 +7,11 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { RiddleCategory } from './riddle-category.entity';
+
 import { ContentStatus } from '../../common/enums/content-status.enum';
 import { RiddleDifficulty } from '../../common/enums/riddle-difficulty.enum';
+
+import { RiddleCategory } from './riddle-category.entity';
 
 // Re-export for modules that import the enum alongside the entity
 export { RiddleDifficulty } from '../../common/enums/riddle-difficulty.enum';

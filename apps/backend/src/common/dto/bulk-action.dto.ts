@@ -6,11 +6,12 @@
  * ============================================================================
  */
 
-import { IsEnum, IsArray, IsUUID, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ContentStatus } from '../enums/content-status.enum';
-import { BulkActionType } from '../enums/bulk-action.enum';
+import { IsEnum, IsArray, IsUUID, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
+
 import { MAX_BULK_ITEMS } from '../constants/app.constants';
+import { BulkActionType } from '../enums/bulk-action.enum';
+import { ContentStatus } from '../enums/content-status.enum';
 
 /**
  * DTO for bulk import results (create-many endpoints).
@@ -144,6 +145,14 @@ export class StatusFilterDto {
   @IsOptional()
   @IsEnum(ContentStatus)
   status?: ContentStatus;
+
+  @ApiPropertyOptional({
+    description: 'Filter by subject slug',
+    example: 'science',
+  })
+  @IsOptional()
+  @IsString()
+  subject?: string;
 
   @ApiPropertyOptional({
     description: 'Include trashed items',

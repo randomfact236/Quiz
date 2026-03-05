@@ -1,11 +1,9 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
-import { DadJoke } from './entities/dad-joke.entity';
-import { JokeCategory } from './entities/joke-category.entity';
-import { JokeSubject } from './entities/joke-subject.entity';
-import { JokeChapter } from './entities/joke-chapter.entity';
-import { QuizJoke } from './entities/quiz-joke.entity';
+
+import { CacheService } from '../common/cache/cache.service';
+import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
 import {
   CreateDadJokeDto,
   CreateJokeCategoryDto,
@@ -19,14 +17,19 @@ import {
   PaginationDto,
   SearchJokesDto,
 } from '../common/dto/base.dto';
-import { CacheService } from '../common/cache/cache.service';
-import { settings } from '../config/settings';
-import { BulkActionService } from '../common/services/bulk-action.service';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionService } from '../common/services/bulk-action.service';
+import { settings } from '../config/settings';
+
 import { computeDadJokeStats, DadJokesStats } from './dad-jokes-stats.util';
+import { DadJoke } from './entities/dad-joke.entity';
+import { JokeCategory } from './entities/joke-category.entity';
+import { JokeChapter } from './entities/joke-chapter.entity';
+import { JokeSubject } from './entities/joke-subject.entity';
+import { QuizJoke } from './entities/quiz-joke.entity';
+
 
 @Injectable()
 export class DadJokesService {
@@ -58,7 +61,7 @@ export class DadJokesService {
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
 
     const where: FindOptionsWhere<DadJoke> = {};
-    if (status) {
+    if (status != null) {
       where.status = status;
     }
 
@@ -616,10 +619,10 @@ export class DadJokesService {
         (joke[field] as string | undefined) = value;
       }
     });
-    if (dto.options !== undefined) joke.options = dto.options;
+    if (dto.options !== undefined) {joke.options = dto.options;}
     if (dto.chapterId?.length) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (chapter === null) throw new NotFoundException('Chapter not found');
+      if (chapter === null) {throw new NotFoundException('Chapter not found');}
       joke.chapter = chapter;
     }
     return this.quizJokeRepo.save(joke);

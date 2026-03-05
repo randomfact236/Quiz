@@ -9,18 +9,18 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import type { 
-  Question, 
-  QuizSession, 
+import type {
+  Question,
+  QuizSession,
   QuizState,
   QuizComputed,
-  UseQuizReturn 
+  UseQuizReturn
 } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
 
 /** Generate UUID for session */
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = Math.random() * 16 | 0;
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
@@ -42,7 +42,7 @@ function calculateScore(questions: Question[], answers: Record<number, string>):
 function loadQuestions(subject: string, chapter: string, level: string): Question[] {
   const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
   const subjectQuestions = allQuestions[subject] || [];
-  
+
   const filtered = subjectQuestions.filter(q => {
     // Filter by chapter
     if (q.chapter !== chapter) return false;
@@ -52,22 +52,22 @@ function loadQuestions(subject: string, chapter: string, level: string): Questio
     if (q.status === 'trash' || q.status === 'draft') return false;
     return true;
   });
-  
-  // Limit to 10 questions
+
+  // Limit to MAX_QUESTIONS
   return filtered.slice(0, 10);
 }
 
 /** Load additional questions excluding already shown ones */
 function loadAdditionalQuestions(
-  subject: string, 
-  chapter: string, 
-  level: string, 
+  subject: string,
+  chapter: string,
+  level: string,
   excludeIds: number[],
   count: number
 ): Question[] {
   const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
   const subjectQuestions = allQuestions[subject] || [];
-  
+
   const filtered = subjectQuestions.filter(q => {
     // Filter by chapter
     if (q.chapter !== chapter) return false;
@@ -79,21 +79,21 @@ function loadAdditionalQuestions(
     if (excludeIds.includes(q.id)) return false;
     return true;
   });
-  
+
   // Limit to requested count
   return filtered.slice(0, count);
 }
 
 /** Count available questions excluding already shown ones */
 function countAvailableQuestions(
-  subject: string, 
-  chapter: string, 
-  level: string, 
+  subject: string,
+  chapter: string,
+  level: string,
   excludeIds: number[]
 ): number {
   const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
   const subjectQuestions = allQuestions[subject] || [];
-  
+
   const filtered = subjectQuestions.filter(q => {
     if (q.chapter !== chapter) return false;
     if (q.level !== level) return false;
@@ -101,7 +101,7 @@ function countAvailableQuestions(
     if (excludeIds.includes(q.id)) return false;
     return true;
   });
-  
+
   return filtered.length;
 }
 
@@ -137,15 +137,15 @@ function getSubjectName(slug: string): string {
 }
 
 export function useQuiz(
-  subject: string, 
-  chapter: string, 
+  subject: string,
+  chapter: string,
   level: string,
   timeLimit?: number, // in seconds, undefined = no limit
   timerMode: 'total' | 'per-question' = 'per-question' // 'total' = whole quiz, 'per-question' = per question
 ): UseQuizReturn {
   // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
-  
+
   // State
   const [state, setState] = useState<QuizState>({
     questions: [],
@@ -155,12 +155,13 @@ export function useQuiz(
     timeRemaining: timeLimit || 0,
     status: 'loading',
     startTime: Date.now(),
+    sessionId: '',
   });
 
   // Load questions on mount
   useEffect(() => {
     const questions = loadQuestions(subject, chapter, level);
-    
+
     if (questions.length === 0) {
       setState(prev => ({ ...prev, status: 'completed' }));
       return;
@@ -182,6 +183,8 @@ export function useQuiz(
       status: 'in-progress',
     };
 
+    const sid = sessionRef.current.id;
+
     setState({
       questions,
       currentQuestionIndex: 0,
@@ -190,6 +193,7 @@ export function useQuiz(
       timeRemaining: timeLimit || 0,
       status: 'playing',
       startTime: Date.now(),
+      sessionId: sid,
     });
 
     // Save session for potential resume
@@ -204,7 +208,7 @@ export function useQuiz(
       setState(prev => {
         // Don't count down if paused
         if (prev.status === 'paused') return prev;
-        
+
         const newTimeRemaining = prev.timeRemaining - 1;
         if (newTimeRemaining <= 0) {
           // Time's up
@@ -214,10 +218,10 @@ export function useQuiz(
             if (isLast) {
               return { ...prev, timeRemaining: 0, status: 'completed' };
             } else {
-              return { 
-                ...prev, 
+              return {
+                ...prev,
                 timeRemaining: timeLimit, // Reset timer for next question
-                currentQuestionIndex: prev.currentQuestionIndex + 1 
+                currentQuestionIndex: prev.currentQuestionIndex + 1
               };
             }
           } else {
@@ -280,14 +284,14 @@ export function useQuiz(
   const submitQuiz = useCallback(() => {
     setState(prev => {
       const timeTaken = Math.floor((Date.now() - prev.startTime) / 1000);
-      
+
       if (sessionRef.current) {
         sessionRef.current.status = 'completed';
         sessionRef.current.completedAt = new Date().toISOString();
         sessionRef.current.timeTaken = timeTaken;
         sessionRef.current.score = prev.score;
         sessionRef.current.answers = prev.answers;
-        
+
         // Save to history and clear current
         saveToHistory(sessionRef.current);
         clearCurrentSession();
@@ -304,13 +308,13 @@ export function useQuiz(
   useEffect(() => {
     if (state.status === 'completed' && sessionRef.current && sessionRef.current.status !== 'completed') {
       const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
-      
+
       sessionRef.current.status = 'completed';
       sessionRef.current.completedAt = new Date().toISOString();
       sessionRef.current.timeTaken = timeTaken;
       sessionRef.current.score = state.score;
       sessionRef.current.answers = state.answers;
-      
+
       // Save to history and clear current
       saveToHistory(sessionRef.current);
       clearCurrentSession();
@@ -322,31 +326,31 @@ export function useQuiz(
     setState(prev => {
       // Get IDs of already shown questions
       const shownIds = prev.questions.map(q => q.id);
-      
+
       // Load additional questions
       const additionalQuestions = loadAdditionalQuestions(
-        subject, 
-        chapter, 
-        level, 
-        shownIds, 
+        subject,
+        chapter,
+        level,
+        shownIds,
         additionalCount
       );
-      
+
       if (additionalQuestions.length === 0) {
         // No more questions available
         return prev;
       }
-      
+
       // Combine questions
       const newQuestions = [...prev.questions, ...additionalQuestions];
-      
+
       // Update session
       if (sessionRef.current) {
         sessionRef.current.questions = newQuestions;
         sessionRef.current.maxScore = newQuestions.length;
         saveCurrentSession(sessionRef.current);
       }
-      
+
       return {
         ...prev,
         questions: newQuestions,
@@ -367,14 +371,14 @@ export function useQuiz(
   // Computed values
   const computed: QuizComputed = useMemo(() => {
     const currentQuestion = state.questions[state.currentQuestionIndex] || null;
-    const progress = state.questions.length > 0 
-      ? ((state.currentQuestionIndex + 1) / state.questions.length) * 100 
+    const progress = state.questions.length > 0
+      ? ((state.currentQuestionIndex + 1) / state.questions.length) * 100
       : 0;
     const isFirstQuestion = state.currentQuestionIndex === 0;
     const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
     const hasAnsweredCurrent = currentQuestion ? !!state.answers[currentQuestion.id] : false;
     const answeredCount = Object.keys(state.answers).length;
-    
+
     // Count available questions for extending
     const shownIds = state.questions.map(q => q.id);
     const availableQuestions = countAvailableQuestions(subject, chapter, level, shownIds);

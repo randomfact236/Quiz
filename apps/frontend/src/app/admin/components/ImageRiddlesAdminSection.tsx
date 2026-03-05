@@ -361,15 +361,22 @@ const defaultCategories: ImageRiddleCategory[] = [
  * @returns JSX.Element - The rendered component
  */
 export function ImageRiddlesAdminSection(): JSX.Element {
-  // State for image riddles initialized with defaults for SSR
-  const [imageRiddles, setImageRiddles] = useState<ImageRiddle[]>(libInitialImageRiddles as unknown as ImageRiddle[]);
+  // State for image riddles with persistence
+  const [imageRiddles, setImageRiddles] = useState<ImageRiddle[]>(libInitialImageRiddles);
+
+  // Categories state - persisted in localStorage
   const [categories, setCategories] = useState<ImageRiddleCategory[]>(defaultCategories);
+
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load from localStorage on mount
+  // Initial load from localStorage after hydration
   useEffect(() => {
-    setImageRiddles(getItem(STORAGE_KEYS.IMAGE_RIDDLES, libInitialImageRiddles as unknown as ImageRiddle[]));
-    setCategories(getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, defaultCategories));
+    const savedRiddles = getItem(STORAGE_KEYS.IMAGE_RIDDLES, null);
+    if (savedRiddles) setImageRiddles(savedRiddles);
+
+    const savedCategories = getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, null);
+    if (savedCategories) setCategories(savedCategories);
+
     setIsHydrated(true);
   }, []);
 
@@ -399,7 +406,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const [showImportModal, setShowImportModal] = useState<boolean>(false);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [showTrashConfirm, setShowTrashConfirm] = useState<boolean>(false);
   const [showSyncConfirmModal, setShowSyncConfirmModal] = useState<boolean>(false);
   const [selectedRiddle, setSelectedRiddle] = useState<ImageRiddle | null>(null);
 
@@ -427,14 +434,14 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const editModalRef = useRef<HTMLDivElement>(null);
   const exportDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Persistence effect for riddles (Guarded)
+  // Persistence effect for riddles
   useEffect(() => {
     if (isHydrated) {
       setItem(STORAGE_KEYS.IMAGE_RIDDLES, imageRiddles);
     }
   }, [imageRiddles, isHydrated]);
 
-  // Persistence effect for categories (Guarded)
+  // Persistence effect for categories
   useEffect(() => {
     if (isHydrated) {
       setItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, categories);
@@ -786,24 +793,32 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     toast.success('✏️ Riddle updated successfully!');
   }, [selectedRiddle, riddleForm]);
 
-  const handleDeleteRiddle = useCallback(() => {
+  const handleTrashImageRiddle = useCallback(() => {
     if (!selectedRiddle) { return; }
 
-    // Store for undo
-    lastDeletedRef.current = selectedRiddle;
+    if (selectedRiddle.status === 'trash') {
+      // Permanent delete if already in trash
+      setImageRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
+      toast.success('Riddle permanently deleted.');
+    } else {
+      // Move to trash
+      // Store for undo
+      lastDeletedRef.current = selectedRiddle;
 
-    setImageRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
-    setShowDeleteConfirm(false);
+      setImageRiddles(prev => prev.map(r =>
+        r.id === selectedRiddle.id ? { ...r, status: 'trash' as ContentStatus, updatedAt: new Date().toISOString() } : r
+      ));
+      toast.success('Riddle moved to trash. (Undo available)', 5000);
+
+      // Clear the undo buffer after 5 seconds
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      undoTimeoutRef.current = setTimeout(() => {
+        lastDeletedRef.current = null;
+      }, 5500);
+    }
+
+    setShowTrashConfirm(false);
     setSelectedRiddle(null);
-
-    toast.success('Riddle deleted. (Undo available)', 5000);
-
-    // Clear the undo buffer after 5 seconds to prevent memory leaks if many deletes happen
-    if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
-    undoTimeoutRef.current = setTimeout(() => {
-      lastDeletedRef.current = null;
-    }, 5500);
-
   }, [selectedRiddle]);
 
   const handleUndoDelete = useCallback(() => {
@@ -848,9 +863,9 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     setShowEditModal(true);
   }, []);
 
-  const openDeleteConfirm = useCallback((riddle: ImageRiddle) => {
+  const openTrashConfirm = useCallback((riddle: ImageRiddle) => {
     setSelectedRiddle(riddle);
-    setShowDeleteConfirm(true);
+    setShowTrashConfirm(true);
   }, []);
 
   const clearFilters = useCallback(() => {
@@ -1158,7 +1173,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
                         Copy
                       </button>
                       <button
-                        onClick={() => openDeleteConfirm(riddle)}
+                        onClick={() => openTrashConfirm(riddle)}
                         className="text-[10px] font-black uppercase tracking-wider text-red-600 hover:text-red-800 transition-colors bg-red-50 px-2 py-0.5 rounded shadow-sm"
                       >
                         Trash
@@ -1571,33 +1586,38 @@ export function ImageRiddlesAdminSection(): JSX.Element {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && selectedRiddle && (
+      {/* Trash Confirmation Modal */}
+      {showTrashConfirm && selectedRiddle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6">
-            <h3 className="mb-2 text-xl font-bold">🗑️ Confirm Delete</h3>
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+            <h3 className="mb-2 text-xl font-bold flex items-center gap-2">
+              <Trash2 className="w-5 h-5 text-red-500" />
+              {selectedRiddle.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
+            </h3>
             <p className="mb-4 text-gray-600">
-              Are you sure you want to delete this image riddle?
+              {selectedRiddle.status === 'trash'
+                ? 'Are you sure you want to permanently delete this image riddle? This action cannot be undone.'
+                : 'Are you sure you want to move this image riddle to trash? You can still restore it later from the Trash tab.'}
             </p>
-            <div className="mb-4 rounded-lg bg-gray-50 p-3">
-              <p className="line-clamp-2 text-sm text-gray-800">{selectedRiddle.title}</p>
+            <div className="mb-6 rounded-lg bg-gray-50 p-3 border border-gray-100">
+              <p className="line-clamp-2 text-sm font-medium text-gray-800">{selectedRiddle.title}</p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => {
-                  setShowDeleteConfirm(false);
+                  setShowTrashConfirm(false);
                   setSelectedRiddle(null);
                 }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                className="flex-1 rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
               >
                 Cancel
               </button>
               <button
-                onClick={handleDeleteRiddle}
-                className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                onClick={handleTrashImageRiddle}
+                className="flex-1 rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 transition-shadow hover:shadow-lg active:scale-95 transition-transform"
               >
-                Delete
+                {selectedRiddle.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
               </button>
             </div>
           </div>
@@ -1677,7 +1697,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
             </div>
             <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Delete Category?</h3>
             <p className="mb-6 text-sm text-gray-600">
-              Are you sure you want to delete <span className="font-bold text-gray-900">"{selectedCategory?.name}"</span>? This will not delete the riddles in this category, but they will be marked as "Uncategorized".
+              Are you sure you want to delete <span className="font-bold text-gray-900">&quot;{selectedCategory?.name}&quot;</span>? This will not delete the riddles in this category, but they will be marked as &quot;Uncategorized&quot;.
             </p>
             <div className="flex gap-3">
               <button

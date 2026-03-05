@@ -7,6 +7,7 @@
  */
 
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
 import { ImageRiddle } from './image-riddle.entity';
 
 @Entity('image_riddle_categories')

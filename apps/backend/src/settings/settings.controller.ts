@@ -1,11 +1,13 @@
 import { Controller, Get, Patch, Body, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
-import { SettingsService } from './settings.service';
-import { AppSettings } from './interfaces/settings.interface';
-import { UpdateSettingsDto } from './dto/update-settings.dto';
+
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+
+import { UpdateSettingsDto } from './dto/update-settings.dto';
+import { AppSettings } from './interfaces/settings.interface';
+import { SettingsService } from './settings.service';
 
 @Controller('settings')
 @UseGuards(JwtAuthGuard, RolesGuard)

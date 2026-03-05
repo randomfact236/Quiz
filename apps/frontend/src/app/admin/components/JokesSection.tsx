@@ -23,12 +23,14 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
   const [statusFilter, _setStatusFilter] = useState<StatusFilter>('published');
   const [selectedIds, _setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, _setBulkActionLoading] = useState(false);
+  const [sortField, setSortField] = useState<string>('id');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const jokesPerPage = 15;
 
   // Modal States
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [_showDeleteConfirm, _setShowDeleteConfirm] = useState(false);
+  const [_showTrashConfirm, _setShowTrashConfirm] = useState(false);
   const [showImportModal, _setShowImportModal] = useState(false);
 
   // Category Modal States
@@ -64,9 +66,39 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
     statusFilter
   );
 
+  // Sorting
+  const sortedJokes = [...filteredJokes].sort((a, b) => {
+    let aValue: any = a[sortField as keyof Joke];
+    let bValue: any = b[sortField as keyof Joke];
+
+    // Special handling for engagement if needed, though they are just numbers
+    if (sortField === 'engagement') {
+      aValue = (a.likes || 0) - (a.dislikes || 0);
+      bValue = (b.likes || 0) - (b.dislikes || 0);
+    }
+
+    if (aValue === bValue) return 0;
+    const factor = sortDirection === 'asc' ? 1 : -1;
+    return aValue > bValue ? factor : -factor;
+  });
+
   // Pagination
-  const totalJokePages = Math.ceil(filteredJokes.length / jokesPerPage);
-  const paginatedJokes = filteredJokes.slice((jokePage - 1) * jokesPerPage, jokePage * jokesPerPage);
+  const totalJokePages = Math.ceil(sortedJokes.length / jokesPerPage);
+  const paginatedJokes = sortedJokes.slice((jokePage - 1) * jokesPerPage, jokePage * jokesPerPage);
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortIcon = (field: string) => {
+    if (sortField !== field) return '↕️';
+    return sortDirection === 'asc' ? '🔼' : '🔽';
+  };
 
   // Sync pageInput with jokePage
   useEffect(() => {
@@ -125,7 +157,7 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
     if (!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()) return;
 
     const newJoke: Joke = {
-      id: Date.now(),
+      id: String(Date.now()),
       setup: jokeForm.setup.trim(),
       punchline: jokeForm.punchline.trim(),
       category: jokeForm.category.trim(),
@@ -150,11 +182,20 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
     setJokeForm({ setup: '', punchline: '', category: '' });
   };
 
-  // Delete handler
-  const handleDeleteJoke = () => {
+  // Trash handler
+  const handleTrashJoke = () => {
     if (!selectedJoke) return;
-    setAllJokes(prev => prev.filter(j => j.id !== selectedJoke.id));
-    _setShowDeleteConfirm(false);
+
+    if (selectedJoke.status === 'trash') {
+      // Permanent delete if already in trash
+      setAllJokes(prev => prev.filter(j => j.id !== selectedJoke.id));
+    } else {
+      // Move to trash
+      setAllJokes(prev => prev.map(j =>
+        j.id === selectedJoke.id ? { ...j, status: 'trash' as ContentStatus } : j
+      ));
+    }
+    _setShowTrashConfirm(false);
     _setSelectedJoke(null);
   };
 
@@ -207,7 +248,7 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
 
         setAllJokes(prev => [...prev, ...importedJokes.map(j => ({
           ...j,
-          id: Date.now() + Math.floor(Math.random() * 1000),
+          id: String(Date.now() + Math.floor(Math.random() * 1000)),
           status: j.status || 'draft'
         }))]);
         _setShowImportModal(false);
@@ -437,11 +478,37 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                   aria-label="Select all jokes"
                 />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">#</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Question (Setup)</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('id')}
+              >
+                # {getSortIcon('id')}
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('setup')}
+              >
+                Question (Setup) {getSortIcon('setup')}
+              </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Answer (Punchline)</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Category</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('category')}
+              >
+                Category {getSortIcon('category')}
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('engagement')}
+              >
+                Engagement {getSortIcon('engagement')}
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleSort('status')}
+              >
+                Status {getSortIcon('status')}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -471,7 +538,7 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                       Edit
                     </button>
                     <button
-                      onClick={() => { _setSelectedJoke(joke); _setShowDeleteConfirm(true); }}
+                      onClick={() => { _setSelectedJoke(joke); _setShowTrashConfirm(true); }}
                       className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
                       aria-label={`Trash joke ${joke.id}`}
                     >
@@ -489,6 +556,16 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                   </span>
                 </td>
                 <td className="px-4 py-3">
+                  <div className="flex items-center gap-3 text-xs font-bold">
+                    <span className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded" title="Likes">
+                      👍 {joke.likes || 0}
+                    </span>
+                    <span className="flex items-center gap-1 text-rose-600 bg-rose-50 px-2 py-0.5 rounded" title="Dislikes">
+                      👎 {joke.dislikes || 0}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
                   <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(joke.status)}`}>
                     {joke.status}
                   </span>
@@ -500,455 +577,473 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
       </div>
 
       {/* Pagination */}
-      {filteredJokes.length > 0 && (
-        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
-          <p className="text-sm text-gray-500">
-            Showing {Math.min((jokePage - 1) * jokesPerPage + 1, filteredJokes.length)} - {Math.min(jokePage * jokesPerPage, filteredJokes.length)} of {filteredJokes.length} items
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setJokePage(p => Math.max(1, p - 1))}
-              disabled={jokePage === 1}
-              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-sm text-gray-600 flex items-center gap-1">
-              Page
-              <input
-                type="text"
-                value={pageInput}
-                onChange={handlePageInputChange}
-                onBlur={handlePageInputSubmit}
-                onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
-                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
-              />
-              of <span className="font-medium">{totalJokePages || 1}</span>
-            </span>
-            <button
-              onClick={() => setJokePage(p => Math.min(totalJokePages, p + 1))}
-              disabled={jokePage >= totalJokePages}
-              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
-            >
-              Next
-            </button>
+      {
+        sortedJokes.length > 0 && (
+          <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
+            <p className="text-sm text-gray-500">
+              Showing {Math.min((jokePage - 1) * jokesPerPage + 1, sortedJokes.length)} - {Math.min(jokePage * jokesPerPage, sortedJokes.length)} of {sortedJokes.length} items
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setJokePage(p => Math.max(1, p - 1))}
+                disabled={jokePage === 1}
+                className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="text-sm text-gray-600 flex items-center gap-1">
+                Page
+                <input
+                  type="text"
+                  value={pageInput}
+                  onChange={handlePageInputChange}
+                  onBlur={handlePageInputSubmit}
+                  onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
+                  className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+                />
+                of <span className="font-medium">{totalJokePages || 1}</span>
+              </span>
+              <button
+                onClick={() => setJokePage(p => Math.min(totalJokePages, p + 1))}
+                disabled={jokePage >= totalJokePages}
+                className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Simple Add/Edit Modal */}
-      {(showAddModal || showEditModal) && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-xl">
-            <h3 className="text-xl font-bold mb-4">
-              {showAddModal ? 'Add New Joke' : 'Edit Joke'}
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="joke-setup" className="block text-sm font-medium text-gray-700 mb-1">Question (Setup) *</label>
-                <textarea
-                  id="joke-setup"
-                  value={jokeForm.setup}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, setup: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  rows={2}
-                  placeholder="Enter the joke question..."
-                  aria-required="true"
-                />
+      {
+        (showAddModal || showEditModal) && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-xl">
+              <h3 className="text-xl font-bold mb-4">
+                {showAddModal ? 'Add New Joke' : 'Edit Joke'}
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="joke-setup" className="block text-sm font-medium text-gray-700 mb-1">Question (Setup) *</label>
+                  <textarea
+                    id="joke-setup"
+                    value={jokeForm.setup}
+                    onChange={(e) => setJokeForm(prev => ({ ...prev, setup: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                    rows={2}
+                    placeholder="Enter the joke question..."
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="joke-punchline" className="block text-sm font-medium text-gray-700 mb-1">Answer (Punchline) *</label>
+                  <textarea
+                    id="joke-punchline"
+                    value={jokeForm.punchline}
+                    onChange={(e) => setJokeForm(prev => ({ ...prev, punchline: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                    rows={2}
+                    placeholder="Enter the joke answer..."
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <select
+                    value={jokeForm.category}
+                    onChange={(e) => setJokeForm(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  >
+                    <option value="">Select a category</option>
+                    {jokeCategories.map(cat => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.emoji} {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div>
-                <label htmlFor="joke-punchline" className="block text-sm font-medium text-gray-700 mb-1">Answer (Punchline) *</label>
-                <textarea
-                  id="joke-punchline"
-                  value={jokeForm.punchline}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, punchline: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  rows={2}
-                  placeholder="Enter the joke answer..."
-                  aria-required="true"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                <select
-                  value={jokeForm.category}
-                  onChange={(e) => setJokeForm(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                >
-                  <option value="">Select a category</option>
-                  {jokeCategories.map(cat => (
-                    <option key={cat.id} value={cat.name}>
-                      {cat.emoji} {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex gap-2 pt-4">
-              <button
-                onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ setup: '', punchline: '', category: '' }); }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={showAddModal ? handleAddJoke : handleEditJoke}
-                disabled={!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()}
-                className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
-              >
-                {showAddModal ? 'Add Joke' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {_showDeleteConfirm && selectedJoke && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-red-600">🗑️ Delete Joke</h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this joke? This action cannot be undone.
-            </p>
-            <div className="bg-gray-50 p-3 rounded-lg mb-6">
-              <p className="font-medium text-gray-800">{selectedJoke.joke}</p>
-              <p className="text-sm text-gray-500 mt-1">Category: {selectedJoke.category}</p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => { _setShowDeleteConfirm(false); _setSelectedJoke(null); }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteJoke}
-                className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Import Modal */}
-      {showImportModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-          <div ref={importModalRef} className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
-            <h3 className="text-xl font-bold mb-4">Import Jokes</h3>
-
-            <div className="space-y-4">
-              <FileUploader
-                key={uploadKey}
-                onFileSelect={handleFileUpload}
-                accept=".csv,.json"
-                label="Select CSV or JSON File"
-                description="Drag and drop your CSV or JSON file here, or click to browse"
-              />
-
-              <div className="bg-gray-50 p-4 rounded-lg text-sm">
-                <p className="font-medium mb-2">CSV Format (with headers):</p>
-                <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                  joke,category,status
-                </code>
-                <p className="font-medium mt-3 mb-2">JSON Format:</p>
-                <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                  {`{"jokes": [{"joke": "...", "category": "...", "status": "draft"}]}`}
-                </code>
-              </div>
-
-              {importError && (
-                <p className="text-red-500 text-sm" role="alert">
-                  {importError}
-                </p>
-              )}
-
-              <div className="flex gap-2 pt-2">
+              <div className="flex gap-2 pt-4">
                 <button
-                  onClick={() => {
-                    _setShowImportModal(false);
-                    _setImportError('');
-                  }}
+                  onClick={() => { setShowAddModal(false); setShowEditModal(false); setJokeForm({ setup: '', punchline: '', category: '' }); }}
+                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={showAddModal ? handleAddJoke : handleEditJoke}
+                  disabled={!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()}
+                  className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
+                >
+                  {showAddModal ? 'Add Joke' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+      {/* Trash Confirmation Modal */}
+      {
+        _showTrashConfirm && selectedJoke && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md">
+              <h3 className="text-xl font-bold mb-4 text-red-600">🗑️ {selectedJoke.status === 'trash' ? 'Permanently Delete Joke' : 'Move Joke to Trash'}</h3>
+              <p className="text-gray-600 mb-6">
+                {selectedJoke.status === 'trash'
+                  ? 'Are you sure you want to permanently delete this joke? This action cannot be undone.'
+                  : 'Are you sure you want to move this joke to trash? You can still restore it later from the Trash tab.'}
+              </p>
+              <div className="bg-gray-50 p-3 rounded-lg mb-6">
+                <p className="font-medium text-gray-800">{selectedJoke.setup || selectedJoke.joke}</p>
+                <p className="text-sm text-gray-500 mt-1">Category: {selectedJoke.category}</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { _setShowTrashConfirm(false); _setSelectedJoke(null); }}
                   className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
                 >
                   Cancel
                 </button>
+                <button
+                  onClick={handleTrashJoke}
+                  className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                >
+                  {selectedJoke.status === 'trash' ? 'Permanently Delete' : 'Trash'}
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
+
+      {/* Import Modal */}
+      {
+        showImportModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
+            <div ref={importModalRef} className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
+              <h3 className="text-xl font-bold mb-4">Import Jokes</h3>
+
+              <div className="space-y-4">
+                <FileUploader
+                  key={uploadKey}
+                  onFileSelect={handleFileUpload}
+                  accept=".csv,.json"
+                  label="Select CSV or JSON File"
+                  description="Drag and drop your CSV or JSON file here, or click to browse"
+                />
+
+                <div className="bg-gray-50 p-4 rounded-lg text-sm">
+                  <p className="font-medium mb-2">CSV Format (with headers):</p>
+                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                    joke,category,status
+                  </code>
+                  <p className="font-medium mt-3 mb-2">JSON Format:</p>
+                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                    {`{"jokes": [{"joke": "...", "category": "...", "status": "draft"}]}`}
+                  </code>
+                </div>
+
+                {importError && (
+                  <p className="text-red-500 text-sm" role="alert">
+                    {importError}
+                  </p>
+                )}
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      _setShowImportModal(false);
+                      _setImportError('');
+                    }}
+                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
 
       {/* Category Management Modal */}
-      {showCategoryManager && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Manage Joke Categories</h3>
-              <button
-                onClick={() => setShowAddCategoryModal(true)}
-                className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
-              >
-                + Add Category
-              </button>
-            </div>
+      {
+        showCategoryManager && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Manage Joke Categories</h3>
+                <button
+                  onClick={() => setShowAddCategoryModal(true)}
+                  className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
+                >
+                  + Add Category
+                </button>
+              </div>
 
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Emoji</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Jokes</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {jokeCategories.map(cat => {
-                    const jokeCount = allJokes.filter(j => j.category === cat.name).length;
-                    return (
-                      <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="whitespace-nowrap px-6 py-4 text-2xl">{cat.emoji}</td>
-                        <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">{cat.name}</td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                          <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                            {jokeCount}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                          <button
-                            onClick={() => {
-                              setSelectedCategoryForEdit(cat);
-                              setCategoryForm({ name: cat.name, emoji: cat.emoji, description: cat.description || '' });
-                              setShowEditCategoryModal(true);
-                            }}
-                            className="mr-3 text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-2 py-1 rounded"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (window.confirm(`Are you sure you want to delete the category "${cat.name}"?`)) {
-                                setJokeCategories(prev => prev.filter(c => c.id !== cat.id));
-                              }
-                            }}
-                            className="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded"
-                          >
-                            Delete
-                          </button>
+              <div className="overflow-hidden rounded-xl border border-gray-200">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Emoji</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Jokes</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {jokeCategories.map(cat => {
+                      const jokeCount = allJokes.filter(j => j.category === cat.name).length;
+                      return (
+                        <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="whitespace-nowrap px-6 py-4 text-2xl">{cat.emoji}</td>
+                          <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">{cat.name}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                            <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                              {jokeCount}
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                            <button
+                              onClick={() => {
+                                setSelectedCategoryForEdit(cat);
+                                setCategoryForm({ name: cat.name, emoji: cat.emoji, description: cat.description || '' });
+                                setShowEditCategoryModal(true);
+                              }}
+                              className="mr-3 text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-2 py-1 rounded"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete the category "${cat.name}"?`)) {
+                                  setJokeCategories(prev => prev.filter(c => c.id !== cat.id));
+                                }
+                              }}
+                              className="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {jokeCategories.length === 0 && (
+                      <tr>
+                        <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
+                          No categories found. Click &apos;Add Category&apos; to create one.
                         </td>
                       </tr>
-                    );
-                  })}
-                  {jokeCategories.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
-                        No categories found. Click &apos;Add Category&apos; to create one.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setShowCategoryManager(false)}
-                className="rounded-lg bg-gray-200 px-6 py-2 font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Close
-              </button>
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setShowCategoryManager(false)}
+                  className="rounded-lg bg-gray-200 px-6 py-2 font-medium text-gray-700 hover:bg-gray-300"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Add Category Modal */}
-      {showAddCategoryModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
-            <h3 className="text-xl font-bold mb-4">Add Joke Category</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
-                <input
-                  type="text"
-                  value={categoryForm.name}
-                  onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  placeholder="e.g. Science Jokes"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
-                <div className="flex gap-3 items-center">
+      {
+        showAddCategoryModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
+              <h3 className="text-xl font-bold mb-4">Add Joke Category</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
                   <input
                     type="text"
-                    value={categoryForm.emoji}
-                    onChange={(e) => setCategoryForm(prev => ({ ...prev, emoji: e.target.value }))}
-                    className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                    maxLength={2}
+                    value={categoryForm.name}
+                    onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    placeholder="e.g. Science Jokes"
                   />
-                  <span className="text-sm text-gray-500">Paste an emoji here to represent the category.</span>
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
-                <textarea
-                  value={categoryForm.description}
-                  onChange={(e) => setCategoryForm(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  rows={2}
-                  placeholder="A brief description of this category..."
-                />
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => {
-                    setShowAddCategoryModal(false);
-                    setCategoryForm({ name: '', emoji: '📚', description: '' });
-                  }}
-                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    if (!categoryForm.name.trim()) return;
-                    setJokeCategories(prev => [
-                      ...prev,
-                      {
-                        id: Date.now(),
-                        name: categoryForm.name.trim(),
-                        emoji: categoryForm.emoji || '📚',
-                        description: categoryForm.description.trim()
-                      }
-                    ]);
-                    setShowAddCategoryModal(false);
-                    setCategoryForm({ name: '', emoji: '📚', description: '' });
-                  }}
-                  className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 font-medium"
-                >
-                  Save Category
-                </button>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="text"
+                      value={categoryForm.emoji}
+                      onChange={(e) => setCategoryForm(prev => ({ ...prev, emoji: e.target.value }))}
+                      className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      maxLength={2}
+                    />
+                    <span className="text-sm text-gray-500">Paste an emoji here to represent the category.</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                  <textarea
+                    value={categoryForm.description}
+                    onChange={(e) => setCategoryForm(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    rows={2}
+                    placeholder="A brief description of this category..."
+                  />
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => {
+                      setShowAddCategoryModal(false);
+                      setCategoryForm({ name: '', emoji: '📚', description: '' });
+                    }}
+                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!categoryForm.name.trim()) return;
+                      setJokeCategories(prev => [
+                        ...prev,
+                        {
+                          id: String(Date.now()),
+                          name: categoryForm.name.trim(),
+                          emoji: categoryForm.emoji || '📚',
+                          description: categoryForm.description.trim()
+                        }
+                      ]);
+                      setShowAddCategoryModal(false);
+                      setCategoryForm({ name: '', emoji: '📚', description: '' });
+                    }}
+                    className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 font-medium"
+                  >
+                    Save Category
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Edit Category Modal */}
-      {showEditCategoryModal && selectedCategoryForEdit && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
-            <h3 className="text-xl font-bold mb-4">Edit Category</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
-                <input
-                  type="text"
-                  value={categoryForm.name}
-                  onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
-                <div className="flex gap-3 items-center">
+      {
+        showEditCategoryModal && selectedCategoryForEdit && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
+              <h3 className="text-xl font-bold mb-4">Edit Category</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
                   <input
                     type="text"
-                    value={categoryForm.emoji}
-                    onChange={(e) => setCategoryForm(prev => ({ ...prev, emoji: e.target.value }))}
-                    className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                    maxLength={2}
+                    value={categoryForm.name}
+                    onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
-                <textarea
-                  value={categoryForm.description}
-                  onChange={(e) => setCategoryForm(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  rows={2}
-                />
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => {
-                    setShowEditCategoryModal(false);
-                    setSelectedCategoryForEdit(null);
-                  }}
-                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    if (!categoryForm.name.trim() || !selectedCategoryForEdit) return;
-                    setJokeCategories(prev => prev.map(cat =>
-                      cat.id === selectedCategoryForEdit.id
-                        ? { ...cat, name: categoryForm.name.trim(), emoji: categoryForm.emoji || '📚', description: categoryForm.description.trim() }
-                        : cat
-                    ));
-                    setShowEditCategoryModal(false);
-                    setSelectedCategoryForEdit(null);
-                  }}
-                  className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 font-medium"
-                >
-                  Update Category
-                </button>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="text"
+                      value={categoryForm.emoji}
+                      onChange={(e) => setCategoryForm(prev => ({ ...prev, emoji: e.target.value }))}
+                      className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      maxLength={2}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                  <textarea
+                    value={categoryForm.description}
+                    onChange={(e) => setCategoryForm(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    rows={2}
+                  />
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => {
+                      setShowEditCategoryModal(false);
+                      setSelectedCategoryForEdit(null);
+                    }}
+                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!categoryForm.name.trim() || !selectedCategoryForEdit) return;
+                      setJokeCategories(prev => prev.map(cat =>
+                        cat.id === selectedCategoryForEdit.id
+                          ? { ...cat, name: categoryForm.name.trim(), emoji: categoryForm.emoji || '📚', description: categoryForm.description.trim() }
+                          : cat
+                      ));
+                      setShowEditCategoryModal(false);
+                      setSelectedCategoryForEdit(null);
+                    }}
+                    className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 font-medium"
+                  >
+                    Update Category
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Category Delete Confirmation Banner */}
-      {pendingCategoryDelete && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 bg-white px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
-          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100">
-            <Trash2 className="h-4 w-4 text-red-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900">
-              Delete &ldquo;{pendingCategoryDelete.category.emoji} {pendingCategoryDelete.category.name}&rdquo;?
-            </p>
-            <p className="mt-1 text-xs text-gray-500">
-              {Object.keys(pendingCategoryDelete.originalStatuses).length} joke(s) moved to <strong>Draft</strong> and hidden from public view.
-              Category will <strong>not</strong> be deleted until you confirm below.
-            </p>
-            <div className="mt-3 flex items-center gap-2">
-              <button
-                onClick={() => {
-                  // Restore the original statuses of the drafted jokes
-                  setAllJokes(prev => prev.map(j => {
-                    const originalStatus = pendingCategoryDelete.originalStatuses[j.id];
-                    return originalStatus !== undefined
-                      ? { ...j, status: originalStatus as ContentStatus }
-                      : j;
-                  }));
-                  setPendingCategoryDelete(null);
-                }}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Cancel — Restore Jokes
-              </button>
-              <button
-                onClick={() => {
-                  setJokeCategories(prev => prev.filter(c => c.id !== pendingCategoryDelete.category.id));
-                  setPendingCategoryDelete(null);
-                }}
-                className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-600 transition-colors"
-              >
-                Permanently Delete
-              </button>
+      {
+        pendingCategoryDelete && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 bg-white px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
+            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100">
+              <Trash2 className="h-4 w-4 text-red-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900">
+                Delete &ldquo;{pendingCategoryDelete.category.emoji} {pendingCategoryDelete.category.name}&rdquo;?
+              </p>
+              <p className="mt-1 text-xs text-gray-500">
+                {Object.keys(pendingCategoryDelete.originalStatuses).length} joke(s) moved to <strong>Draft</strong> and hidden from public view.
+                Category will <strong>not</strong> be deleted until you confirm below.
+              </p>
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    // Restore the original statuses of the drafted jokes
+                    setAllJokes(prev => prev.map(j => {
+                      const originalStatus = pendingCategoryDelete.originalStatuses[j.id];
+                      return originalStatus !== undefined
+                        ? { ...j, status: originalStatus as ContentStatus }
+                        : j;
+                    }));
+                    setPendingCategoryDelete(null);
+                  }}
+                  className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel — Restore Jokes
+                </button>
+                <button
+                  onClick={() => {
+                    setJokeCategories(prev => prev.filter(c => c.id !== pendingCategoryDelete.category.id));
+                    setPendingCategoryDelete(null);
+                  }}
+                  className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-600 transition-colors"
+                >
+                  Permanently Delete
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </div>
   );
 }

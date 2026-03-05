@@ -7,10 +7,12 @@
  */
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BeforeInsert, BeforeUpdate, UpdateDateColumn } from 'typeorm';
-import { ImageRiddleCategory } from './image-riddle-category.entity';
-import { IActionOption, applyActionDefaults, validateActionOption, DEFAULT_ACTION_PRESETS } from './image-riddle-action.entity';
+
 import { ContentStatus } from '../../common/enums/content-status.enum';
 import { settings } from '../../config/settings';
+
+import { IActionOption, applyActionDefaults, validateActionOption, DEFAULT_ACTION_PRESETS } from './image-riddle-action.entity';
+import { ImageRiddleCategory } from './image-riddle-category.entity';
 
 /**
  * ImageRiddle Entity - Enterprise Grade

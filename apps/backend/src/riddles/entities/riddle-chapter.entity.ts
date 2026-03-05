@@ -8,8 +8,9 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { RiddleSubject } from './riddle-subject.entity';
+
 import { QuizRiddle } from './quiz-riddle.entity';
+import { RiddleSubject } from './riddle-subject.entity';
 
 @Entity('riddle_chapters')
 export class RiddleChapter {

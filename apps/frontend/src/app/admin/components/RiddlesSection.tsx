@@ -87,7 +87,7 @@ export function RiddlesSection({
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showTrashConfirm, setShowTrashConfirm] = useState(false);
   const [selectedRiddle, setSelectedRiddle] = useState<Riddle | null>(null);
   const [showAddChapterModal, setShowAddChapterModal] = useState(false);
   const [newChapterName, setNewChapterName] = useState('');
@@ -304,7 +304,7 @@ export function RiddlesSection({
             success: true,
             imported: validation.data.map(r => ({
               ...r,
-              id: Date.now() + Math.floor(Math.random() * 1000),
+              id: String(Date.now() + Math.floor(Math.random() * 1000)),
               status: r.status || 'published',
             })),
             failed: [],
@@ -413,7 +413,7 @@ export function RiddlesSection({
 
         const updated = await getAllQuizRiddlesAdmin();
         const mapped = updated.map(qr => ({
-          id: qr.id as unknown as number,
+          id: String(qr.id),
           question: qr.question,
           options: qr.options || [],
           correctOption: qr.correctAnswer || 'A',
@@ -549,7 +549,7 @@ export function RiddlesSection({
       })) as any; // Type override since backend returns QuizRiddle string id
 
       const newRiddle: Riddle = {
-        id: created.id,
+        id: String(Date.now()),
         question: created.question,
         options: created.options || [],
         correctOption: created.correctAnswer || riddleForm.correctOption,
@@ -625,21 +625,35 @@ export function RiddlesSection({
     }
   };
 
-  const handleDeleteRiddle = async () => {
+  const handleTrashRiddle = async () => {
     if (!selectedRiddle) {
       return;
     }
 
     try {
-      const { bulkActionRiddles } = await import('@/lib/riddles-api');
-      await bulkActionRiddles([String(selectedRiddle.id)], 'delete');
-
-      setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
-      setShowDeleteConfirm(false);
+      if (selectedRiddle.status === 'trash') {
+        // Permanent delete if already in trash
+        const { bulkActionRiddles } = await import('@/lib/riddles-api');
+        await bulkActionRiddles([String(selectedRiddle.id)], 'delete');
+        setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
+      } else {
+        // Move to trash
+        const { bulkActionRiddles } = await import('@/lib/riddles-api');
+        await bulkActionRiddles([String(selectedRiddle.id)], 'trash');
+        setAllRiddles(prev => prev.map(r =>
+          r.id === selectedRiddle.id ? { ...r, status: 'trash' as ContentStatus } : r
+        ));
+      }
+      setShowTrashConfirm(false);
       setSelectedRiddle(null);
     } catch (err: any) {
-      alert('Failed to delete riddle: ' + err.message);
+      alert('Failed to trash riddle: ' + err.message);
     }
+  };
+
+  const openTrashConfirm = (riddle: Riddle) => {
+    setSelectedRiddle(riddle);
+    setShowTrashConfirm(true);
   };
 
   const openEditModal = (riddle: Riddle) => {
@@ -657,10 +671,7 @@ export function RiddlesSection({
     setShowEditModal(true);
   };
 
-  const openDeleteConfirm = (riddle: Riddle) => {
-    setSelectedRiddle(riddle);
-    setShowDeleteConfirm(true);
-  };
+
 
   // Difficulty level options
   const difficultyLevels = [
@@ -906,7 +917,7 @@ export function RiddlesSection({
                       ✏️ Edit
                     </button>
                     <button
-                      onClick={() => openDeleteConfirm(riddle)}
+                      onClick={() => openTrashConfirm(riddle)}
                       className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
                       aria-label={`Trash riddle ${riddle.id}`}
                     >
@@ -1307,26 +1318,30 @@ export function RiddlesSection({
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
+      {/* Trash Confirmation Modal */}
+      {showTrashConfirm && selectedRiddle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
-            <h3 className="mb-2 text-lg font-bold text-gray-900">Delete Riddle</h3>
+            <h3 className="mb-2 text-lg font-bold text-gray-900">
+              {selectedRiddle.status === 'trash' ? 'Permanently Delete Riddle' : 'Move Riddle to Trash'}
+            </h3>
             <p className="mb-6 text-gray-600">
-              Are you sure you want to delete this riddle? This action cannot be undone.
+              {selectedRiddle.status === 'trash'
+                ? 'Are you sure you want to permanently delete this riddle? This action cannot be undone.'
+                : 'Are you sure you want to move this riddle to trash? You can still restore it later from the Trash section.'}
             </p>
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setShowDeleteConfirm(false)}
+                onClick={() => { setShowTrashConfirm(false); setSelectedRiddle(null); }}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
-                onClick={handleDeleteRiddle}
+                onClick={handleTrashRiddle}
                 className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
               >
-                Delete
+                {selectedRiddle.status === 'trash' ? 'Permanently Delete' : 'Trash'}
               </button>
             </div>
           </div>

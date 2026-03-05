@@ -14,6 +14,8 @@ const PREFIX = 'aiquiz:';
 // ─── Storage Keys ────────────────────────────────────────────────────────────
 
 export const STORAGE_KEYS = {
+    AUTH_TOKEN: `${PREFIX}auth-token`,
+    REFRESH_TOKEN: `${PREFIX}refresh-token`,
     SETTINGS: `${PREFIX}settings`,
     SUBJECTS: `${PREFIX}subjects`,
     QUESTIONS: `${PREFIX}questions`,

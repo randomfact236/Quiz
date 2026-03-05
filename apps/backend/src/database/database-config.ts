@@ -9,8 +9,9 @@
  * ============================================================================
  */
 
-import { DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { DataSourceOptions } from 'typeorm';
+
 import { DB_PORT, DB_POOL_SIZE } from '../common/constants/app.constants';
 
 // Load environment variables

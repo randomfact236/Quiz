@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SettingsService } from './settings.service';
-import { SettingsController } from './settings.controller';
+
 import { SystemSetting } from './entities/system-setting.entity';
+import { SettingsController } from './settings.controller';
+import { SettingsService } from './settings.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([SystemSetting])],

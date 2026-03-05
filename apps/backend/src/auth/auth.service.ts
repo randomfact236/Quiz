@@ -1,7 +1,10 @@
+import * as crypto from 'crypto';
+
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 
 /**
  * Authentication service handling user registration, login, and validation
@@ -28,7 +31,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   /**
    * Register a new user with email, password, and name
@@ -46,19 +49,24 @@ export class AuthService {
    * const result = await authService.register('user@example.com', 'password123', 'John Doe');
    * // Returns: { user: { id: 'uuid', email: 'user@example.com', name: 'John Doe' }, token: 'jwt-token' }
    */
-  async register(email: string, password: string, name: string): Promise<{ user: { id: string; email: string; name: string }; token: string }> {
+  private async generateTokens(user: Partial<User>) {
+    const payload = { id: user.id, email: user.email, role: user.role };
+    const token = this.jwtService.sign(payload);
+    const refreshToken = crypto.randomBytes(32).toString('hex');
+    await this.usersService.updateRefreshToken(user.id as string, refreshToken);
+    return { token, refreshToken };
+  }
+
+  async register(email: string, password: string, name: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
-    
+
     const user = await this.usersService.create(email, password, name);
-    const token = this.jwtService.sign(
-      { id: user.id, email: user.email, role: user.role },
-      { expiresIn: '24h' }
-    );
-    
-    return { user: { id: user.id, email: user.email, name: user.name }, token };
+    const tokens = await this.generateTokens(user);
+
+    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
   }
 
   /**
@@ -75,22 +83,28 @@ export class AuthService {
    * const result = await authService.login('user@example.com', 'password123');
    * // Returns: { user: { id: 'uuid', email: 'user@example.com', name: 'John Doe' }, token: 'jwt-token' }
    */
-  async login(email: string, password: string): Promise<{ user: { id: string; email: string; name: string }; token: string }> {
+  async login(email: string, password: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    
+
     const isValid = await this.usersService.validatePassword(password, user.password);
     if (!isValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    
-    const token = this.jwtService.sign(
-      { id: user.id, email: user.email, role: user.role },
-      { expiresIn: '24h' }
-    );
-    return { user: { id: user.id, email: user.email, name: user.name }, token };
+
+    const tokens = await this.generateTokens(user);
+    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+  }
+
+  async refresh(refreshToken: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+    const user = await this.usersService.findByRefreshToken(refreshToken);
+    if (!user) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    const tokens = await this.generateTokens(user);
+    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
   }
 
   /**

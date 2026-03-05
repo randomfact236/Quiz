@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import type { ContentStatus, Joke, Riddle, ImportResult, ImportExportConfig, ValidationResult } from '../types';
+import type { ContentStatus, Joke, Riddle, Question, ImportResult, ImportExportConfig, ValidationResult } from '../types';
 
 /**
  * Get status badge color class
@@ -108,7 +108,7 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
     }
 
     imported.push({
-      id: parseInt(values[0] || '0') || Date.now() + i,
+      id: String(Date.now()),
       setup: values[1]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
       punchline: values[2]?.replace(/""/g, '"').replace(/^"|"$/g, '') || '',
       category: values[3] || 'General',
@@ -148,183 +148,93 @@ export function parseCSVLine(line: string): string[] {
 }
 
 // ============================================================================
-// QUESTION IMPORT/EXPORT CONFIGURATION (Matches animals-questions.csv format)
+// QUESTION IMPORT/EXPORT CONFIGURATION
 // ============================================================================
 
-import type { Question } from '../types';
-
-/** Question CSV Config for format: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter */
-export const questionCSVConfig = {
-  headers: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
+/** Question Import/Export Config */
+export const questionConfig: ImportExportConfig<Question> = {
+  entityName: 'Question',
+  filePrefix: 'questions',
+  // Full headers used for exporting. Import validation only requires the minimal set below.
+  csvHeaders: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
+  jsonRootKey: 'questions',
+  validators: {
+    // Only these four are truly required for a valid import row.
+    // Option A-D are OPTIONAL — handled gracefully in handleConfirmImport.
+    required: ['question', 'correctAnswer', 'level', 'chapter'],
+    enumFields: {
+      level: ['easy', 'medium', 'hard', 'expert', 'extreme'],
+      correctAnswer: ['A', 'B', 'C', 'D'],
+    },
+    maxLength: { question: 1000, chapter: 200 },
+  },
 };
 
 /**
  * Parse Question CSV in animals-questions.csv format
  * Handles: comment lines (# Subject: xxx), empty option fields, quoted values
  */
-export function parseQuestionCSV(csvText: string): { success: boolean; imported: Question[]; failed: { row: number; error: string; data: unknown }[]; total: number } {
-  const imported: Question[] = [];
-  const failed: { row: number; error: string; data: unknown }[] = [];
+/**
+ * Parse Question CSV using standardized importer
+ */
+export function parseQuestionCSV(csvText: string): ImportResult<Question> {
+  return importFromCSV(csvText, questionConfig, (values, headers) => {
+    // Standardize header matching
+    const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/\s+/g, ''));
 
-  const lines = csvText.trim().split('\n');
+    console.log('=== CSV PARSE DEBUG ===');
+    console.log('Headers:', headers);
+    console.log('Normalized:', normalizedHeaders);
+    console.log('First row values:', values);
 
-  // Skip comment lines (starting with #) and find header
-  let headerIndex = 0;
-  let subjectName = '';
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]?.trim() ?? '';
-    if (line.startsWith('#')) {
-      // Extract subject name from comment like "# Subject: Animals"
-      const match = line.match(/#\s*Subject:\s*(.+)/i);
-      if (match?.[1]) {
-        subjectName = match[1].trim();
+    const getValue = (...headerNames: string[]): string => {
+      for (const name of headerNames) {
+        const normalizedName = name.toLowerCase().replace(/\s+/g, '');
+        const idx = normalizedHeaders.findIndex(h => h.includes(normalizedName));
+        console.log(`Looking for '${name}' (${normalizedName}) -> found at index ${idx}`);
+        if (idx !== -1 && idx < values.length) {
+          const val = values[idx] ?? '';
+          return val.trim();
+        }
       }
-      headerIndex = i + 1;
-    } else if (line.includes('Question') && line.includes('Option')) {
-      headerIndex = i;
-      break;
-    }
-  }
-
-  const headerLine = lines[headerIndex];
-  if (headerIndex >= lines.length || !headerLine) {
-    return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0 };
-  }
-
-  // Parse headers
-  const headers = parseCSVLine(headerLine);
-
-  // Find column indices (flexible matching)
-  const getColumnIndex = (...names: string[]) => {
-    for (const name of names) {
-      const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
-      if (idx !== -1) return idx;
-    }
-    return -1;
-  };
-
-  const colIndex = {
-    id: getColumnIndex('id'),
-    question: getColumnIndex('question'),
-    optionA: getColumnIndex('option a'),
-    optionB: getColumnIndex('option b'),
-    optionC: getColumnIndex('option c'),
-    optionD: getColumnIndex('option d'),
-    correctAnswer: getColumnIndex('correct answer'),
-    level: getColumnIndex('level'),
-    chapter: getColumnIndex('chapter'),
-  };
-
-  // Validate required columns
-  const requiredCols = ['question', 'optionA', 'optionB', 'correctAnswer', 'level'];
-  const missingCols = requiredCols.filter(col => colIndex[col as keyof typeof colIndex] === -1);
-
-  if (missingCols.length > 0) {
-    return {
-      success: false,
-      imported: [],
-      failed: [{ row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers }],
-      total: 0
+      return '';
     };
-  }
 
-  // Parse data rows
-  for (let i = headerIndex + 1; i < lines.length; i++) {
-    const rawLine = lines[i];
-    if (!rawLine) continue;
-    const line = rawLine.trim();
-    if (!line) continue; // Skip empty lines
+    const result = {
+      id: String(Date.now() + Math.random()),
+      question: getValue('question'),
+      optionA: getValue('optiona', 'option1', 'answera', 'answer1', 'choicea', 'choice1'),
+      optionB: getValue('optionb', 'option2', 'answerb', 'answer2', 'choiceb', 'choice2'),
+      optionC: getValue('optionc', 'option3', 'answerc', 'answer3', 'choicec', 'choice3'),
+      optionD: getValue('optiond', 'option4', 'answerd', 'answer4', 'choiced', 'choice4'),
+      correctAnswer: getValue('correctanswer', 'correct', 'answer') || 'A',
+      level: (getValue('level', 'difficulty') || 'easy').toLowerCase() as Question['level'],
+      chapter: getValue('chapter', 'topic', 'category') || 'General',
+      status: 'published' as const,
+    };
 
-    const values = parseCSVLine(line);
+    console.log('Parsed result:', result);
+    console.log('======================');
 
-    try {
-      const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
-
-      const questionText = getValue(colIndex.question);
-      const optionA = getValue(colIndex.optionA);
-      const optionB = getValue(colIndex.optionB);
-      const optionC = colIndex.optionC !== -1 ? getValue(colIndex.optionC) : '';
-      const optionD = colIndex.optionD !== -1 ? getValue(colIndex.optionD) : '';
-      const correctAnswer = getValue(colIndex.correctAnswer) || 'A';
-      const level = (getValue(colIndex.level) || 'easy').toLowerCase() as Question['level'];
-      const chapter = getValue(colIndex.chapter) || subjectName || 'General';
-
-      // Validate
-      if (!questionText) {
-        failed.push({ row: i, error: 'Missing question text', data: line });
-        continue;
-      }
-
-      if (!optionA || !optionB) {
-        failed.push({ row: i, error: 'Missing required options (A and B)', data: line });
-        continue;
-      }
-
-      // Map correct answer letter to option text
-      imported.push({
-        id: Date.now() + i,
-        question: questionText,
-        optionA,
-        optionB,
-        optionC: optionC || '',
-        optionD: optionD || '',
-        correctAnswer: correctAnswer.toUpperCase(),
-        level,
-        chapter,
-        status: 'published',
-      });
-    } catch (err) {
-      failed.push({ row: i, error: (err as Error).message, data: line });
-    }
-  }
-
-  return {
-    success: failed.length === 0,
-    imported,
-    failed,
-    total: imported.length + failed.length,
-  };
+    return result;
+  });
 }
 
 /**
  * Export questions to CSV format matching animals-questions.csv
  */
+/**
+ * Export questions to CSV format
+ */
 export function exportQuestionsToCSV(questions: Question[], subjectName: string = 'General'): string {
-  const lines: string[] = [];
+  return exportToCSV(questions, questionConfig, { subject: subjectName });
+}
 
-  // Add subject comment
-  lines.push(`# Subject: ${subjectName}`);
-
-  // Add headers
-  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
-
-  // Add data rows
-  questions.forEach((q, idx) => {
-    const escapeCSV = (value: string) => {
-      if (!value) return '';
-      if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-        return `"${value.replace(/"/g, '""')}"`;
-      }
-      return value;
-    };
-
-    const row = [
-      idx + 1,
-      escapeCSV(q.question),
-      escapeCSV(q.optionA),
-      escapeCSV(q.optionB),
-      escapeCSV(q.optionC || ''),
-      escapeCSV(q.optionD || ''),
-      q.correctAnswer || 'A',
-      q.level,
-      escapeCSV(q.chapter),
-    ];
-
-    lines.push(row.join(','));
-  });
-
-  return lines.join('\n');
+/**
+ * Export questions to JSON format
+ */
+export function exportQuestionsToJSON(questions: Question[], subjectName: string = 'General'): string {
+  return exportToJSON(questions, questionConfig, { subject: subjectName });
 }
 
 /**
@@ -662,7 +572,7 @@ export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
     const finalOptions = options.length >= 2 ? options : ['Option A', 'Option B', 'Option C', 'Option D'];
 
     return {
-      id: Date.now() + Math.floor(Math.random() * 1000),
+      id: String(Date.now() + Math.floor(Math.random() * 1000)),
       question: getValue(1, 'question'),
       answer: getValue(2, 'answer', 'optiona'), // Provide a fallback if needed
       options: finalOptions,

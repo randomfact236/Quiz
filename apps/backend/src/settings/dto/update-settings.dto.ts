@@ -1,5 +1,5 @@
-import { IsOptional, ValidateNested, IsNumber, IsString, IsBoolean, IsArray, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsOptional, ValidateNested, IsNumber, IsString, IsBoolean, IsArray, IsIn } from 'class-validator';
 
 /**
  * Pagination configuration DTO

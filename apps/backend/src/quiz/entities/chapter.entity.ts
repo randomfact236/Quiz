@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Subject } from './subject.entity';
+
 import { Question } from './question.entity';
+import { Subject } from './subject.entity';
 
 @Entity('chapters')
 export class Chapter {

@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
+
+import { ContentStatus } from '../enums/content-status.enum';
 
 import {
   MIN_PAGE_NUMBER,
@@ -607,6 +609,11 @@ export class CreateQuestionDto {
   @IsOptional()
   @IsString()
   explanation?: string;
+
+  @ApiPropertyOptional({ example: 'published', enum: ContentStatus, description: 'Question status' })
+  @IsOptional()
+  @IsEnum(ContentStatus)
+  status?: ContentStatus;
 }
 
 export class UpdateQuestionDto {

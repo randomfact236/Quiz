@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+
 import { JokeSubject } from './joke-subject.entity';
 import { QuizJoke } from './quiz-joke.entity';
 

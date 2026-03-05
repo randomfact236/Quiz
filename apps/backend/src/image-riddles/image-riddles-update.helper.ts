@@ -8,14 +8,16 @@
 
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { ImageRiddle } from './entities/image-riddle.entity';
-import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
+
 import { UpdateImageRiddleDto } from '../common/dto/base.dto';
+
 import {
   IActionOption,
   applyActionDefaults,
   validateActionOption
 } from './entities/image-riddle-action.entity';
+import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
+import { ImageRiddle } from './entities/image-riddle.entity';
 
 /**
  * Update basic riddle fields from DTO

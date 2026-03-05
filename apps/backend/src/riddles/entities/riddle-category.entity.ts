@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { Riddle } from './riddle.entity';
 
 @Entity('riddle_categories')

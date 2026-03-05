@@ -14,7 +14,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { DadJokesService } from './dad-jokes.service';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateDadJokeDto,
   CreateJokeCategoryDto,
@@ -23,12 +25,13 @@ import {
   SearchJokesDto,
   BulkImportResultDto,
 } from '../common/dto/base.dto';
+import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { RolesGuard } from '../common/guards/roles.guard';
+
+import { DadJokesService } from './dad-jokes.service';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+
 
 /**
  * Controller for managing classic dad jokes
@@ -103,7 +106,7 @@ export class DadJokesController {
     @Param('id') id: string,
     @Body() body: { voteType: 'like' | 'dislike' }
   ): Promise<DadJoke> {
-    if (!body || !body.voteType) {
+    if (!body?.voteType) {
       throw new BadRequestException('voteType is required');
     }
     return this.jokesService.voteForJoke(id, body.voteType);

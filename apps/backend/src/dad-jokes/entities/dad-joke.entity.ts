@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { JokeCategory } from './joke-category.entity';
+
 import { ContentStatus } from '../../common/enums/content-status.enum';
+
+import { JokeCategory } from './joke-category.entity';
 
 @Entity('dad_jokes')
 export class DadJoke {

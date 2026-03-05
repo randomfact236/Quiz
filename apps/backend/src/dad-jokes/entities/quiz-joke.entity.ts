@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
 import { JokeChapter } from './joke-chapter.entity';
 
 @Entity('quiz_jokes')

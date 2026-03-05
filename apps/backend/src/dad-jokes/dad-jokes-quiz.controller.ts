@@ -13,11 +13,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
-import { DadJokesService } from './dad-jokes.service';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   DEFAULT_RANDOM_JOKES_COUNT,
   DEFAULT_MIXED_JOKES_COUNT,
 } from '../common/constants/app.constants';
+import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateJokeSubjectDto,
   UpdateJokeSubjectDto,
@@ -27,12 +29,13 @@ import {
   UpdateQuizJokeDto,
   PaginationDto,
 } from '../common/dto/base.dto';
-import { JokeSubject } from './entities/joke-subject.entity';
-import { JokeChapter } from './entities/joke-chapter.entity';
-import { QuizJoke } from './entities/quiz-joke.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
+
+import { DadJokesService } from './dad-jokes.service';
+import { JokeChapter } from './entities/joke-chapter.entity';
+import { JokeSubject } from './entities/joke-subject.entity';
+import { QuizJoke } from './entities/quiz-joke.entity';
+
 
 /**
  * Controller for managing quiz format dad jokes

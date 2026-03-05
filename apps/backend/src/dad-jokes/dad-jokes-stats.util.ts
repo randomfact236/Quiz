@@ -1,8 +1,9 @@
 import { Repository } from 'typeorm';
+
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
-import { JokeSubject } from './entities/joke-subject.entity';
 import { JokeChapter } from './entities/joke-chapter.entity';
+import { JokeSubject } from './entities/joke-subject.entity';
 import { QuizJoke } from './entities/quiz-joke.entity';
 
 /**

@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
 import { DadJoke } from './dad-joke.entity';
 
 @Entity('joke_categories')

@@ -26,7 +26,7 @@ import type {
 } from './types';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection } from './components';
+import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
@@ -96,58 +96,58 @@ type ImportExportConfig<T> = {
 // Initial Data
 const initialQuestions: Record<string, Question[]> = {
   science: [
-    { id: 1, question: 'What is the chemical symbol for water?', optionA: 'H2O', optionB: 'CO2', optionC: 'NaCl', optionD: 'O2', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
-    { id: 2, question: 'What planet is known as the Red Planet?', optionA: 'Venus', optionB: 'Mars', optionC: 'Jupiter', optionD: 'Saturn', correctAnswer: 'B', level: 'easy', chapter: 'Solar System' },
-    { id: 3, question: 'What is the speed of light?', optionA: '300,000 km/s', optionB: '150,000 km/s', optionC: '500,000 km/s', optionD: '200,000 km/s', correctAnswer: 'A', level: 'medium', chapter: 'Physics Basics' },
-    { id: 4, question: 'What is the powerhouse of the cell?', optionA: 'Nucleus', optionB: 'Ribosome', optionC: 'Mitochondria', optionD: 'Golgi Body', correctAnswer: 'C', level: 'easy', chapter: 'Cell Biology' },
-    { id: 5, question: 'What gas do plants absorb from the atmosphere?', optionA: 'Oxygen', optionB: 'Nitrogen', optionC: 'Carbon Dioxide', optionD: 'Hydrogen', correctAnswer: 'C', level: 'easy', chapter: 'Plant Biology' },
-    { id: 6, question: 'What is the atomic number of Carbon?', optionA: '4', optionB: '6', optionC: '8', optionD: '12', correctAnswer: 'B', level: 'medium', chapter: 'Chemistry Basics' },
-    { id: 7, question: 'Which force keeps planets in orbit around the Sun?', optionA: 'Electromagnetic', optionB: 'Nuclear', optionC: 'Gravitational', optionD: 'Friction', correctAnswer: 'C', level: 'easy', chapter: 'Physics Basics' },
-    { id: 8, question: 'What is the chemical formula for table salt?', optionA: 'NaCl', optionB: 'KCl', optionC: 'CaCO3', optionD: 'MgO', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
-    { id: 9, question: 'How many bones are in the adult human body?', optionA: '186', optionB: '206', optionC: '226', optionD: '256', correctAnswer: 'B', level: 'medium', chapter: 'Human Anatomy' },
-    { id: 10, question: 'What is the largest organ in the human body?', optionA: 'Heart', optionB: 'Liver', optionC: 'Skin', optionD: 'Brain', correctAnswer: 'C', level: 'easy', chapter: 'Human Anatomy' },
+    { id: '1', question: 'What is the chemical symbol for water?', optionA: 'H2O', optionB: 'CO2', optionC: 'NaCl', optionD: 'O2', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
+    { id: '2', question: 'What planet is known as the Red Planet?', optionA: 'Venus', optionB: 'Mars', optionC: 'Jupiter', optionD: 'Saturn', correctAnswer: 'B', level: 'easy', chapter: 'Solar System' },
+    { id: '3', question: 'What is the speed of light?', optionA: '300,000 km/s', optionB: '150,000 km/s', optionC: '500,000 km/s', optionD: '200,000 km/s', correctAnswer: 'A', level: 'medium', chapter: 'Physics Basics' },
+    { id: '4', question: 'What is the powerhouse of the cell?', optionA: 'Nucleus', optionB: 'Ribosome', optionC: 'Mitochondria', optionD: 'Golgi Body', correctAnswer: 'C', level: 'easy', chapter: 'Cell Biology' },
+    { id: '5', question: 'What gas do plants absorb from the atmosphere?', optionA: 'Oxygen', optionB: 'Nitrogen', optionC: 'Carbon Dioxide', optionD: 'Hydrogen', correctAnswer: 'C', level: 'easy', chapter: 'Plant Biology' },
+    { id: '6', question: 'What is the atomic number of Carbon?', optionA: '4', optionB: '6', optionC: '8', optionD: '12', correctAnswer: 'B', level: 'medium', chapter: 'Chemistry Basics' },
+    { id: '7', question: 'Which force keeps planets in orbit around the Sun?', optionA: 'Electromagnetic', optionB: 'Nuclear', optionC: 'Gravitational', optionD: 'Friction', correctAnswer: 'C', level: 'easy', chapter: 'Physics Basics' },
+    { id: '8', question: 'What is the chemical formula for table salt?', optionA: 'NaCl', optionB: 'KCl', optionC: 'CaCO3', optionD: 'MgO', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
+    { id: '9', question: 'How many bones are in the adult human body?', optionA: '186', optionB: '206', optionC: '226', optionD: '256', correctAnswer: 'B', level: 'medium', chapter: 'Human Anatomy' },
+    { id: '10', question: 'What is the largest organ in the human body?', optionA: 'Heart', optionB: 'Liver', optionC: 'Skin', optionD: 'Brain', correctAnswer: 'C', level: 'easy', chapter: 'Human Anatomy' },
   ],
   math: [
-    { id: 1, question: 'What is 15 x 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication' },
-    { id: 2, question: 'What is the square root of 144?', optionA: '10', optionB: '11', optionC: '12', optionD: '13', correctAnswer: 'C', level: 'easy', chapter: 'Square Roots' },
-    { id: 3, question: 'What is the value of pi to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants' },
-    { id: 4, question: 'Solve: 2x + 5 = 15', optionA: 'x = 3', optionB: 'x = 4', optionC: 'x = 5', optionD: 'x = 6', correctAnswer: 'C', level: 'medium', chapter: 'Algebra' },
-    { id: 5, question: 'What is 25% of 200?', optionA: '25', optionB: '50', optionC: '75', optionD: '100', correctAnswer: 'B', level: 'easy', chapter: 'Percentages' },
-    { id: 6, question: 'What is the sum of angles in a triangle?', optionA: '90 deg', optionB: '180 deg', optionC: '270 deg', optionD: '360 deg', correctAnswer: 'B', level: 'easy', chapter: 'Geometry' },
-    { id: 7, question: 'What is 7^2 + 3^2?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents' },
-    { id: 8, question: 'Simplify: 3/4 + 1/4', optionA: '1/2', optionB: '3/8', optionC: '1', optionD: '4/8', correctAnswer: 'C', level: 'easy', chapter: 'Fractions' },
+    { id: '11', question: 'What is 15 x 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication', status: 'published' as const },
+    { id: '12', question: 'What is the square root of 144?', optionA: '10', optionB: '11', optionC: '12', optionD: '13', correctAnswer: 'C', level: 'easy', chapter: 'Square Roots', status: 'published' as const },
+    { id: '13', question: 'What is the value of pi to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants', status: 'published' as const },
+    { id: '14', question: 'Solve: 2x + 5 = 15', optionA: 'x = 3', optionB: 'x = 4', optionC: 'x = 5', optionD: 'x = 6', correctAnswer: 'C', level: 'medium', chapter: 'Algebra', status: 'published' as const },
+    { id: '15', question: 'What is 25% of 200?', optionA: '25', optionB: '50', optionC: '75', optionD: '100', correctAnswer: 'B', level: 'easy', chapter: 'Percentages', status: 'published' as const },
+    { id: '16', question: 'What is the sum of angles in a triangle?', optionA: '90 deg', optionB: '180 deg', optionC: '270 deg', optionD: '360 deg', correctAnswer: 'B', level: 'easy', chapter: 'Geometry', status: 'published' as const },
+    { id: '17', question: 'What is 7^2 + 3^2?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents', status: 'published' as const },
+    { id: '18', question: 'Simplify: 3/4 + 1/4', optionA: '1/2', optionB: '3/8', optionC: '1', optionD: '4/8', correctAnswer: 'C', level: 'easy', chapter: 'Fractions', status: 'published' as const },
   ],
   history: [
-    { id: 1, question: 'In which year did World War II end?', optionA: '1943', optionB: '1944', optionC: '1945', optionD: '1946', correctAnswer: 'C', level: 'easy', chapter: 'World War II' },
-    { id: 2, question: 'Who was the first President of the United States?', optionA: 'Thomas Jefferson', optionB: 'John Adams', optionC: 'George Washington', optionD: 'Benjamin Franklin', correctAnswer: 'C', level: 'easy', chapter: 'US Presidents' },
-    { id: 3, question: 'Which ancient civilization built the pyramids?', optionA: 'Romans', optionB: 'Greeks', optionC: 'Egyptians', optionD: 'Mayans', correctAnswer: 'C', level: 'easy', chapter: 'Ancient Civilizations' },
-    { id: 4, question: 'In what year did the Titanic sink?', optionA: '1910', optionB: '1911', optionC: '1912', optionD: '1913', correctAnswer: 'C', level: 'medium', chapter: 'Maritime History' },
-    { id: 5, question: 'Who painted the Mona Lisa?', optionA: 'Michelangelo', optionB: 'Leonardo da Vinci', optionC: 'Raphael', optionD: 'Donatello', correctAnswer: 'B', level: 'easy', chapter: 'Renaissance' },
-    { id: 6, question: 'Which empire was ruled by Genghis Khan?', optionA: 'Roman Empire', optionB: 'Ottoman Empire', optionC: 'Mongol Empire', optionD: 'Persian Empire', correctAnswer: 'C', level: 'medium', chapter: 'Medieval Period' },
+    { id: '19', question: 'In which year did World War II end?', optionA: '1943', optionB: '1944', optionC: '1945', optionD: '1946', correctAnswer: 'C', level: 'easy', chapter: 'World War II' },
+    { id: '20', question: 'Who was the first President of the United States?', optionA: 'Thomas Jefferson', optionB: 'John Adams', optionC: 'George Washington', optionD: 'Benjamin Franklin', correctAnswer: 'C', level: 'easy', chapter: 'US Presidents' },
+    { id: '21', question: 'Which ancient civilization built the pyramids?', optionA: 'Romans', optionB: 'Greeks', optionC: 'Egyptians', optionD: 'Mayans', correctAnswer: 'C', level: 'easy', chapter: 'Ancient Civilizations' },
+    { id: '22', question: 'In what year did the Titanic sink?', optionA: '1910', optionB: '1911', optionC: '1912', optionD: '1913', correctAnswer: 'C', level: 'medium', chapter: 'Maritime History' },
+    { id: '23', question: 'Who painted the Mona Lisa?', optionA: 'Michelangelo', optionB: 'Leonardo da Vinci', optionC: 'Raphael', optionD: 'Donatello', correctAnswer: 'B', level: 'easy', chapter: 'Renaissance' },
+    { id: '24', question: 'Which empire was ruled by Genghis Khan?', optionA: 'Roman Empire', optionB: 'Ottoman Empire', optionC: 'Mongol Empire', optionD: 'Persian Empire', correctAnswer: 'C', level: 'medium', chapter: 'Medieval Period' },
   ],
   geography: [
-    { id: 1, question: 'What is the capital of France?', optionA: 'London', optionB: 'Paris', optionC: 'Berlin', optionD: 'Rome', correctAnswer: 'B', level: 'easy', chapter: 'European Capitals' },
-    { id: 2, question: 'Which is the largest ocean on Earth?', optionA: 'Atlantic', optionB: 'Indian', optionC: 'Arctic', optionD: 'Pacific', correctAnswer: 'D', level: 'easy', chapter: 'Oceans' },
-    { id: 3, question: 'What is the longest river in the world?', optionA: 'Amazon', optionB: 'Nile', optionC: 'Mississippi', optionD: 'Yangtze', correctAnswer: 'B', level: 'medium', chapter: 'Rivers' },
-    { id: 4, question: 'Which continent has the most countries?', optionA: 'Asia', optionB: 'Europe', optionC: 'Africa', optionD: 'South America', correctAnswer: 'C', level: 'medium', chapter: 'Continents' },
-    { id: 5, question: 'What is the smallest country in the world?', optionA: 'Monaco', optionB: 'San Marino', optionC: 'Vatican City', optionD: 'Liechtenstein', correctAnswer: 'C', level: 'easy', chapter: 'Countries' },
-    { id: 6, question: 'Which mountain range contains Mount Everest?', optionA: 'Alps', optionB: 'Andes', optionC: 'Rocky Mountains', optionD: 'Himalayas', correctAnswer: 'D', level: 'easy', chapter: 'Mountains' },
+    { id: '25', question: 'What is the capital of France?', optionA: 'London', optionB: 'Paris', optionC: 'Berlin', optionD: 'Rome', correctAnswer: 'B', level: 'easy', chapter: 'European Capitals' },
+    { id: '26', question: 'Which is the largest ocean on Earth?', optionA: 'Atlantic', optionB: 'Indian', optionC: 'Arctic', optionD: 'Pacific', correctAnswer: 'D', level: 'easy', chapter: 'Oceans' },
+    { id: '27', question: 'What is the longest river in the world?', optionA: 'Amazon', optionB: 'Nile', optionC: 'Mississippi', optionD: 'Yangtze', correctAnswer: 'B', level: 'medium', chapter: 'Rivers' },
+    { id: '28', question: 'Which continent has the most countries?', optionA: 'Asia', optionB: 'Europe', optionC: 'Africa', optionD: 'South America', correctAnswer: 'C', level: 'medium', chapter: 'Continents' },
+    { id: '29', question: 'What is the smallest country in the world?', optionA: 'Monaco', optionB: 'San Marino', optionC: 'Vatican City', optionD: 'Liechtenstein', correctAnswer: 'C', level: 'easy', chapter: 'Countries' },
+    { id: '30', question: 'Which mountain range contains Mount Everest?', optionA: 'Alps', optionB: 'Andes', optionC: 'Rocky Mountains', optionD: 'Himalayas', correctAnswer: 'D', level: 'easy', chapter: 'Mountains' },
   ],
   english: [
-    { id: 1, question: 'What is the past tense of "run"?', optionA: 'Runned', optionB: 'Ran', optionC: 'Running', optionD: 'Runs', correctAnswer: 'B', level: 'easy', chapter: 'Verbs' },
-    { id: 2, question: 'Which word is a synonym of "happy"?', optionA: 'Sad', optionB: 'Angry', optionC: 'Joyful', optionD: 'Tired', correctAnswer: 'C', level: 'easy', chapter: 'Synonyms' },
-    { id: 3, question: 'What type of word is "beautiful"?', optionA: 'Noun', optionB: 'Verb', optionC: 'Adjective', optionD: 'Adverb', correctAnswer: 'C', level: 'easy', chapter: 'Parts of Speech' },
-    { id: 4, question: 'Which sentence is grammatically correct?', optionA: 'She don\'t like apples', optionB: 'She doesn\'t likes apples', optionC: 'She doesn\'t like apples', optionD: 'She not like apples', correctAnswer: 'C', level: 'medium', chapter: 'Grammar' },
-    { id: 5, question: 'What is the plural of "child"?', optionA: 'Childs', optionB: 'Children', optionC: 'Childes', optionD: 'Childrens', correctAnswer: 'B', level: 'easy', chapter: 'Plurals' },
-    { id: 6, question: 'Which is an example of alliteration?', optionA: 'The sun smiled', optionB: 'Peter Piper picked', optionC: 'As busy as a bee', optionD: 'Boom! Crash!', correctAnswer: 'B', level: 'medium', chapter: 'Literary Devices' },
+    { id: '31', question: 'What is the past tense of "run"?', optionA: 'Runned', optionB: 'Ran', optionC: 'Running', optionD: 'Runs', correctAnswer: 'B', level: 'easy', chapter: 'Verbs' },
+    { id: '32', question: 'Which word is a synonym of "happy"?', optionA: 'Sad', optionB: 'Angry', optionC: 'Joyful', optionD: 'Tired', correctAnswer: 'C', level: 'easy', chapter: 'Synonyms' },
+    { id: '33', question: 'What type of word is "beautiful"?', optionA: 'Noun', optionB: 'Verb', optionC: 'Adjective', optionD: 'Adverb', correctAnswer: 'C', level: 'easy', chapter: 'Parts of Speech' },
+    { id: '34', question: 'Which sentence is grammatically correct?', optionA: 'She don\'t like apples', optionB: 'She doesn\'t likes apples', optionC: 'She doesn\'t like apples', optionD: 'She not like apples', correctAnswer: 'C', level: 'medium', chapter: 'Grammar' },
+    { id: '35', question: 'What is the plural of "child"?', optionA: 'Childs', optionB: 'Children', optionC: 'Childes', optionD: 'Childrens', correctAnswer: 'B', level: 'easy', chapter: 'Plurals' },
+    { id: '36', question: 'Which is an example of alliteration?', optionA: 'The sun smiled', optionB: 'Peter Piper picked', optionC: 'As busy as a bee', optionD: 'Boom! Crash!', correctAnswer: 'B', level: 'medium', chapter: 'Literary Devices' },
   ],
   technology: [
-    { id: 1, question: 'What does CPU stand for?', optionA: 'Central Processing Unit', optionB: 'Computer Personal Unit', optionC: 'Central Program Utility', optionD: 'Computer Processing Unit', correctAnswer: 'A', level: 'easy', chapter: 'Hardware' },
-    { id: 2, question: 'Which company developed the iPhone?', optionA: 'Google', optionB: 'Samsung', optionC: 'Apple', optionD: 'Microsoft', correctAnswer: 'C', level: 'easy', chapter: 'Mobile Technology' },
-    { id: 3, question: 'What does HTML stand for?', optionA: 'Hyper Text Markup Language', optionB: 'High Tech Modern Language', optionC: 'Hyper Transfer Markup Language', optionD: 'Home Tool Markup Language', correctAnswer: 'A', level: 'easy', chapter: 'Web Development' },
-    { id: 4, question: 'What is the main function of RAM?', optionA: 'Long-term storage', optionB: 'Temporary memory', optionC: 'Processing calculations', optionD: 'Graphics rendering', correctAnswer: 'B', level: 'medium', chapter: 'Hardware' },
-    { id: 5, question: 'Which protocol is used for secure web browsing?', optionA: 'HTTP', optionB: 'FTP', optionC: 'HTTPS', optionD: 'SMTP', correctAnswer: 'C', level: 'easy', chapter: 'Networking' },
-    { id: 6, question: 'What does "bug" mean in programming?', optionA: 'A feature', optionB: 'An error', optionC: 'A virus', optionD: 'A shortcut', correctAnswer: 'B', level: 'easy', chapter: 'Programming' },
+    { id: '37', question: 'What does CPU stand for?', optionA: 'Central Processing Unit', optionB: 'Computer Personal Unit', optionC: 'Central Program Utility', optionD: 'Computer Processing Unit', correctAnswer: 'A', level: 'easy', chapter: 'Hardware' },
+    { id: '38', question: 'Which company developed the iPhone?', optionA: 'Google', optionB: 'Samsung', optionC: 'Apple', optionD: 'Microsoft', correctAnswer: 'C', level: 'easy', chapter: 'Mobile Technology' },
+    { id: '39', question: 'What does HTML stand for?', optionA: 'Hyper Text Markup Language', optionB: 'High Tech Modern Language', optionC: 'Hyper Transfer Markup Language', optionD: 'Home Tool Markup Language', correctAnswer: 'A', level: 'easy', chapter: 'Web Development' },
+    { id: '40', question: 'What is the main function of RAM?', optionA: 'Long-term storage', optionB: 'Temporary memory', optionC: 'Processing calculations', optionD: 'Graphics rendering', correctAnswer: 'B', level: 'medium', chapter: 'Hardware' },
+    { id: '41', question: 'Which protocol is used for secure web browsing?', optionA: 'HTTP', optionB: 'FTP', optionC: 'HTTPS', optionD: 'SMTP', correctAnswer: 'C', level: 'easy', chapter: 'Networking' },
+    { id: '42', question: 'What does "bug" mean in programming?', optionA: 'A feature', optionB: 'An error', optionC: 'A virus', optionD: 'A shortcut', correctAnswer: 'B', level: 'easy', chapter: 'Programming' },
   ],
 };
 
@@ -157,12 +157,12 @@ const isEmoji = (str: string): boolean => {
 };
 
 const initialSubjects: Subject[] = [
-  { id: 1, slug: 'science', name: 'Science', emoji: 'science', category: 'academic' },
-  { id: 2, slug: 'math', name: 'Math', emoji: 'math', category: 'academic' },
-  { id: 3, slug: 'history', name: 'History', emoji: 'history', category: 'academic' },
-  { id: 4, slug: 'geography', name: 'Geography', emoji: 'geography', category: 'academic' },
-  { id: 5, slug: 'english', name: 'English', emoji: 'english', category: 'academic' },
-  { id: 6, slug: 'technology', name: 'Technology', emoji: 'technology', category: 'professional' },
+  { id: '1', slug: 'science', name: 'Science', emoji: 'science', category: 'academic' },
+  { id: '2', slug: 'math', name: 'Math', emoji: 'math', category: 'academic' },
+  { id: '3', slug: 'history', name: 'History', emoji: 'history', category: 'academic' },
+  { id: '4', slug: 'geography', name: 'Geography', emoji: 'geography', category: 'academic' },
+  { id: '5', slug: 'english', name: 'English', emoji: 'english', category: 'academic' },
+  { id: '6', slug: 'technology', name: 'Technology', emoji: 'technology', category: 'professional' },
 ];
 
 // Storage key for persisting active section
@@ -177,23 +177,18 @@ export default function AdminPage(): JSX.Element {
   const [riddleModuleExpanded, setRiddleModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
-  // Load all state from localStorage after hydration (to avoid SSR mismatch)
-  useEffect(() => {
-    // 1. Load data
-    const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
-    const savedQuestions = getItem(STORAGE_KEYS.QUESTIONS, initialQuestions);
-    const savedSection = localStorage.getItem(ACTIVE_SECTION_KEY);
-    const savedRiddleOrder = getItem('aiquiz:riddle-chapter-order', []);
+  // Dynamic data state
+  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions);
+  // Real question counts fetched from the backend (used for sidebar badges)
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
+  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
+  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
 
-    // 2. Update state before marking as hydrated
-    setSubjects(sanitizeSubjects(savedSubjects));
-    setAllQuestions(savedQuestions);
-    if (savedSection) setActiveSection(savedSection as MenuSection);
-    setRiddleChapterOrder(savedRiddleOrder);
-
-    // 3. Complete hydration
-    setIsHydrated(true);
-  }, [sanitizeSubjects]);
+  // Jokes state
+  const { allJokes, setAllJokes } = useGlobalJokes();
+  const { jokeCategories, setJokeCategories } = useGlobalJokeCategories();
 
   // Helper to normalize subject emojis - preserves custom emojis
   const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
@@ -222,16 +217,62 @@ export default function AdminPage(): JSX.Element {
     });
   }, []);
 
-  // Dynamic data state initialized with defaults for SSR compatibility
-  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions);
+  // Load all state from localStorage after hydration (to avoid SSR mismatch)
+  useEffect(() => {
+    // 1. Load data
+    const savedQuestions = getItem(STORAGE_KEYS.QUESTIONS, initialQuestions);
+    const savedSection = localStorage.getItem(ACTIVE_SECTION_KEY);
+    const savedRiddleOrder = getItem('aiquiz:riddle-chapter-order', []);
 
-  // Jokes state (shared with JokesSection component)
-  const { allJokes, setAllJokes } = useGlobalJokes();
-  const { jokeCategories, setJokeCategories } = useGlobalJokeCategories();
+    // Load subjects from API (Source of Truth) + fetch real question counts
+    import('@/lib/api-client').then(({ api }) => {
+      api.get<{ data: Subject[]; total: number }>('/quiz/subjects')
+        .then(async response => {
+          let loadedSubjects: Subject[];
+          if (response.ok && response.data.data.length > 0) {
+            loadedSubjects = sanitizeSubjects(response.data.data);
+            setSubjects(loadedSubjects);
+          } else {
+            // Fallback to localStorage then initial data
+            const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
+            loadedSubjects = sanitizeSubjects(savedSubjects);
+            setSubjects(loadedSubjects);
+          }
 
-  // Hoisted Riddles State
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
+          // Fetch real question counts from backend for each subject (for sidebar badges)
+          try {
+            const counts: Record<string, number> = {};
+            await Promise.all(
+              loadedSubjects.map(async (s) => {
+                // Only fetch for real DB subjects (UUID ids, not fallback '1','2' etc.)
+                if (!s.id || !s.id.includes('-')) return;
+                const qRes = await api.get<{ data: unknown[]; total: number }>(`/quiz/questions?subject=${s.slug}&limit=1`);
+                if (qRes.ok) {
+                  counts[s.slug] = qRes.data.total ?? 0;
+                }
+              })
+            );
+            setQuestionCounts(counts);
+          } catch (e) {
+            console.error('Failed to fetch question counts:', e);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to fetch subjects:', err);
+          const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
+          setSubjects(sanitizeSubjects(savedSubjects));
+        });
+    });
+
+    // 2. Update state
+    setAllQuestions(savedQuestions);
+    if (savedSection) setActiveSection(savedSection as MenuSection);
+    setRiddleChapterOrder(savedRiddleOrder);
+
+    // 3. Complete hydration
+    setIsHydrated(true);
+  }, [sanitizeSubjects]);
+
 
   // Fetch riddles from backend API
   useEffect(() => {
@@ -239,7 +280,7 @@ export default function AdminPage(): JSX.Element {
       getAllQuizRiddlesAdmin()
         .then(quizRiddles => {
           const mappedRiddles = quizRiddles.map(qr => ({
-            id: qr.id as unknown as number,
+            id: qr.id as string,
             question: qr.question,
             options: qr.options || [],
             correctOption: qr.correctAnswer || 'A',
@@ -254,8 +295,6 @@ export default function AdminPage(): JSX.Element {
     });
   }, []);
 
-  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
-  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
 
   // Migration: Fix any corrupted emojis in existing subjects (runs once)
   useEffect(() => {
@@ -440,7 +479,7 @@ export default function AdminPage(): JSX.Element {
             }}
             onEditSubject={handleEditSubject}
             onReorderSubjects={setSubjects}
-            questionCounts={Object.fromEntries(subjects.map(s => [s.slug, allQuestions[s.slug]?.length || 0]))}
+            questionCounts={questionCounts}
           />
 
           {/* Other Modules Header */}
@@ -585,18 +624,9 @@ export default function AdminPage(): JSX.Element {
                 setSelectedSubjectForChapter(activeSection);
                 setShowAddChapterModal(true);
               }}
-              onQuestionsImport={(slug, newQuestions) => {
-                setAllQuestions(prev => ({
-                  ...prev,
-                  [slug]: [...(prev[slug] ?? []), ...newQuestions],
-                }));
-              }}
-              onQuestionsUpdate={(slug, updatedQuestions) => {
-                setAllQuestions(prev => ({
-                  ...prev,
-                  [slug]: updatedQuestions,
-                }));
-              }}
+              onCountChange={(slug, count) =>
+                setQuestionCounts(prev => ({ ...prev, [slug]: count }))
+              }
             />
           )}
           {activeSection === 'jokes' && (
@@ -651,6 +681,8 @@ export default function AdminPage(): JSX.Element {
           subjectName={subjects.find(s => s.slug === selectedSubjectForChapter)?.name ?? ''}
         />
       )}
+
+      <AdminGuard />
     </div>
   );
 }
@@ -702,7 +734,7 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
     }
 
     onAdd({
-      id: Date.now(),
+      id: String(Date.now()),
       slug,
       name: name.trim(),
       emoji: customEmoji || '📚',
@@ -1387,10 +1419,10 @@ function useGlobalJokes() {
 // GLOBAL JOKE CATEGORIES STATE (shared with JokesSection component)
 // ============================================================================
 const defaultJokeCategories: JokeCategory[] = [
-  { id: 1, name: 'Classic Dad Jokes', emoji: '😂', description: 'Timeless classics that never fail to get an eye-roll.' },
-  { id: 2, name: 'Programming Jokes', emoji: '💻', description: 'Programming and tech humor for the nerdy dad.' },
-  { id: 3, name: 'Parenting Dad Jokes', emoji: '👶', description: 'Jokes about the adventures of raising kids.' },
-  { id: 4, name: 'Work Office Dad Jokes', emoji: '💼', description: 'Corporate humor for the 9-to-5 dad.' },
+  { id: '1', name: 'Classic Dad Jokes', emoji: '😂', description: 'Timeless classics that never fail to get an eye-roll.' },
+  { id: '2', name: 'Programming Jokes', emoji: '💻', description: 'Programming and tech humor for the nerdy dad.' },
+  { id: '3', name: 'Parenting Dad Jokes', emoji: '👶', description: 'Jokes about the adventures of raising kids.' },
+  { id: '4', name: 'Work Office Dad Jokes', emoji: '💼', description: 'Corporate humor for the 9-to-5 dad.' },
 ];
 
 function useGlobalJokeCategories() {
@@ -1412,6 +1444,8 @@ function useGlobalJokeCategories() {
 
   return { jokeCategories, setJokeCategories };
 }
+
+/** Admin Guard component to be used at the end of the page */
 
 
 // Initial data is now imported from @/lib/initial-data

@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn } from 'typeorm';
-import { Chapter } from './chapter.entity';
+
 import { ContentStatus } from '../../common/enums/content-status.enum';
+
+import { Chapter } from './chapter.entity';
 
 @Entity('questions')
 export class Question {

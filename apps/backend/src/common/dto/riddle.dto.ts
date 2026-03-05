@@ -8,6 +8,7 @@
  */
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
     IsString,
     IsNotEmpty,
@@ -18,15 +19,15 @@ import {
     IsBoolean,
     IsArray,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { ContentStatus } from '../enums/content-status.enum';
-import { RiddleDifficulty } from '../enums/riddle-difficulty.enum';
-import { QuizRiddleLevel } from '../enums/quiz-riddle-level.enum';
+
 import {
     MIN_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
     MAX_PAGE_SIZE,
 } from '../constants/app.constants';
+import { ContentStatus } from '../enums/content-status.enum';
+import { QuizRiddleLevel } from '../enums/quiz-riddle-level.enum';
+import { RiddleDifficulty } from '../enums/riddle-difficulty.enum';
 
 // Re-export enums so consumers can import from a single riddle DTO path if needed
 export { RiddleDifficulty } from '../enums/riddle-difficulty.enum';

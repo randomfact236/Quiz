@@ -21,7 +21,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { ImageRiddlesService } from './image-riddles.service';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateImageRiddleDto,
   UpdateImageRiddleDto,
@@ -31,12 +33,12 @@ import {
   SearchImageRiddlesDto,
   BulkImportResultDto,
 } from '../common/dto/base.dto';
-import { ImageRiddle } from './entities/image-riddle.entity';
-import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
 import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { RolesGuard } from '../common/guards/roles.guard';
+
+import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
+import { ImageRiddle } from './entities/image-riddle.entity';
+import { ImageRiddlesService } from './image-riddles.service';
 
 @ApiTags('Image Riddles')
 @Controller('image-riddles')

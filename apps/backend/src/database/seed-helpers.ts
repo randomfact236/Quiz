@@ -6,8 +6,8 @@
  * ============================================================================
  */
 
-import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { DataSource } from 'typeorm';
 
 /**
  * Interface for subject seed data
@@ -200,7 +200,7 @@ export async function seedDadJokes(
   dataSource: DataSource,
   jokeCategories: InsertedJokeCategory[]
 ): Promise<void> {
-  if (jokeCategories.length === 0) return;
+  if (jokeCategories.length === 0) {return;}
 
   const dadJokes = [
     { joke: "Why don't scientists trust atoms? Because they make up everything!", categoryId: jokeCategories[0].id },
@@ -252,7 +252,7 @@ export async function seedRiddles(
   dataSource: DataSource,
   riddleCategories: InsertedRiddleCategory[]
 ): Promise<void> {
-  if (riddleCategories.length === 0) return;
+  if (riddleCategories.length === 0) {return;}
 
   const riddles = [
     { question: 'What has keys but no locks?', answer: 'A piano', difficulty: 'easy', categoryId: riddleCategories[1]?.id || riddleCategories[0].id },

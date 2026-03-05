@@ -1,9 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
-import { AuthService } from './auth.service';
+
 import { User } from '../users/entities/user.entity';
+
+import { AuthService } from './auth.service';
+
 
 /**
  * JWT payload interface representing decoded token data

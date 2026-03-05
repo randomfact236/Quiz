@@ -584,7 +584,7 @@ export default function ImageRiddlesPage(): JSX.Element {
                   {/* Timer Expiry Pulse Overlay */}
                   {modalTimeLeft === 0 && !showAnswer && (
                     <div className="absolute inset-0 bg-red-500/20 backdrop-blur-[2px] animate-pulse flex items-center justify-center z-10">
-                      <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">TIME'S UP!</span>
+                      <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">TIME&apos;S UP!</span>
                     </div>
                   )}
                 </div>

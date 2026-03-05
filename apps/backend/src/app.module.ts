@@ -1,10 +1,11 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import helmet from 'helmet';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
+import { AuthModule } from './auth/auth.module';
 import {
   DB_PORT,
   DB_POOL_SIZE,
@@ -13,20 +14,18 @@ import {
 } from './common/constants/app.constants';
 
 // Modules
-import { QuizModule } from './quiz/quiz.module';
-import { DadJokesModule } from './dad-jokes/dad-jokes.module';
-import { RiddlesModule } from './riddles/riddles.module';
-import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
-import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { HealthModule } from './health/health.module';
-import { SettingsModule } from './settings/settings.module';
-import { AutoSeedModule } from './database/auto-seed.module';
-
-// Common
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { DadJokesModule } from './dad-jokes/dad-jokes.module';
+import { AutoSeedModule } from './database/auto-seed.module';
+import { HealthModule } from './health/health.module';
+import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
+import { QuizModule } from './quiz/quiz.module';
+import { RiddlesModule } from './riddles/riddles.module';
+import { SettingsModule } from './settings/settings.module';
+import { UsersModule } from './users/users.module';
+
+// Common
 
 /**
  * Root application module that configures all core dependencies and modules
@@ -122,20 +121,4 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     },
   ],
 })
-export class AppModule implements NestModule {
-  /**
-   * Configures middleware for the application
-   * 
-   * @description Applies Helmet security middleware to all routes for
-   * security headers including CSP, HSTS, and XSS protection.
-   * 
-   * @param {MiddlewareConsumer} consumer - The middleware consumer instance
-   * @returns {void}
-   * @example
-   * // Automatically called by NestJS during bootstrap
-   * consumer.apply(helmet()).forRoutes('*');
-   */
-  configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(helmet()).forRoutes('*');
-  }
-}
+export class AppModule { }

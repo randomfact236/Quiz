@@ -1,16 +1,18 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
-import { Subject } from './entities/subject.entity';
+
+import { CacheService } from '../common/cache/cache.service';
+import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
+import { BulkActionType } from '../common/enums/bulk-action.enum';
+import { ContentStatus } from '../common/enums/content-status.enum';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionService } from '../common/services/bulk-action.service';
+import { settings } from '../config/settings';
+
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
-import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
-import { CacheService } from '../common/cache/cache.service';
-import { settings } from '../config/settings';
-import { BulkActionService } from '../common/services/bulk-action.service';
-import { BulkActionType } from '../common/enums/bulk-action.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
-import { ContentStatus } from '../common/enums/content-status.enum';
+import { Subject } from './entities/subject.entity';
 
 @Injectable()
 export class QuizService {
@@ -61,7 +63,7 @@ export class QuizService {
       where: { slug },
       relations: ['chapters'],
     });
-    if (!subject) throw new NotFoundException('Subject not found');
+    if (!subject) { throw new NotFoundException('Subject not found'); }
     return subject;
   }
 
@@ -74,7 +76,7 @@ export class QuizService {
 
   async updateSubject(id: string, dto: Partial<CreateSubjectDto>): Promise<Subject> {
     const subject = await this.subjectRepo.findOne({ where: { id } });
-    if (!subject) throw new NotFoundException('Subject not found');
+    if (!subject) { throw new NotFoundException('Subject not found'); }
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.del('subjects:all');
@@ -83,7 +85,7 @@ export class QuizService {
 
   async deleteSubject(id: string): Promise<void> {
     const result = await this.subjectRepo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('Subject not found');
+    if (result.affected === 0) { throw new NotFoundException('Subject not found'); }
     await this.cacheService.del(settings.quiz.cache.allSubjectsKey);
   }
 
@@ -98,21 +100,26 @@ export class QuizService {
 
   async createChapter(name: string, subjectId: string): Promise<Chapter> {
     const subject = await this.subjectRepo.findOne({ where: { id: subjectId } });
-    if (!subject) throw new NotFoundException('Subject not found');
-    const chapter = this.chapterRepo.create({ name, subject });
+    if (!subject) { throw new NotFoundException('Subject not found'); }
+    
+    // Get the next chapter number for this subject
+    const existingChapters = await this.chapterRepo.find({ where: { subjectId } });
+    const chapterNumber = existingChapters.length + 1;
+    
+    const chapter = this.chapterRepo.create({ name, subject, subjectId, chapterNumber });
     return this.chapterRepo.save(chapter);
   }
 
   async updateChapter(id: string, name: string): Promise<Chapter> {
     const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (!chapter) throw new NotFoundException('Chapter not found');
+    if (!chapter) { throw new NotFoundException('Chapter not found'); }
     chapter.name = name;
     return this.chapterRepo.save(chapter);
   }
 
   async deleteChapter(id: string): Promise<void> {
     const result = await this.chapterRepo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('Chapter not found');
+    if (result.affected === 0) { throw new NotFoundException('Chapter not found'); }
   }
 
   // ==================== QUESTIONS ====================
@@ -134,21 +141,29 @@ export class QuizService {
   async findAllQuestions(
     pagination: PaginationDto,
     status?: ContentStatus,
+    subjectSlug?: string,
   ): Promise<{ data: Question[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
 
-    const where: FindOptionsWhere<Question> = {};
+    const query = this.questionRepo.createQueryBuilder('question')
+      .leftJoinAndSelect('question.chapter', 'chapter')
+      .leftJoinAndSelect('chapter.subject', 'subject');
+
     if (status) {
-      where.status = status;
+      query.andWhere('question.status = :status', { status });
     }
 
-    const [data, total] = await this.questionRepo.findAndCount({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { updatedAt: 'DESC' },
-    });
+    if (subjectSlug) {
+      query.andWhere('subject.slug = :subjectSlug', { subjectSlug });
+    }
+
+    const [data, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('question.updatedAt', 'DESC')
+      .getManyAndCount();
+
     return { data, total };
   }
 
@@ -230,15 +245,19 @@ export class QuizService {
 
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-    if (!chapter) throw new NotFoundException('Chapter not found');
+    if (!chapter) { throw new NotFoundException('Chapter not found'); }
+    
+    // Combine correct answer with wrong answers to form options array
+    const options = [dto.correctAnswer, ...dto.wrongAnswers].filter(Boolean);
+    
     const question = this.questionRepo.create({
       question: dto.question,
       correctAnswer: dto.correctAnswer,
-      options: dto.wrongAnswers,
+      options: options,
       level: dto.level,
       explanation: dto.explanation,
       chapter,
-      status: ContentStatus.DRAFT,
+      status: dto.status || ContentStatus.PUBLISHED,
     });
     return this.questionRepo.save(question);
   }
@@ -284,14 +303,17 @@ export class QuizService {
           continue;
         }
 
+        // Combine correct answer with wrong answers to form options array
+        const options = [q.correctAnswer, ...q.wrongAnswers].filter(Boolean);
+
         const question = transactionalEntityManager.create(Question, {
           question: q.question,
           correctAnswer: q.correctAnswer,
-          options: q.wrongAnswers,
+          options: options,
           level: q.level,
           explanation: q.explanation,
           chapter,
-          status: ContentStatus.DRAFT,
+          status: q.status || ContentStatus.PUBLISHED,
         });
         questions.push(question);
       }
@@ -307,7 +329,7 @@ export class QuizService {
 
   async updateQuestion(id: string, dto: Partial<CreateQuestionDto>): Promise<Question> {
     const question = await this.questionRepo.findOne({ where: { id } });
-    if (!question) throw new NotFoundException('Question not found');
+    if (!question) { throw new NotFoundException('Question not found'); }
 
     // Update fields with proper empty string handling
     if (dto.question !== undefined) {
@@ -330,20 +352,25 @@ export class QuizService {
     if (dto.explanation !== undefined) {
       question.explanation = dto.explanation;
     }
+    if (dto.chapterId !== undefined) {
+      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+      if (!chapter) { throw new NotFoundException('Chapter not found'); }
+      question.chapter = chapter;
+    }
 
     return this.questionRepo.save(question);
   }
 
   async updateQuestionStatus(id: string, status: ContentStatus): Promise<Question> {
     const question = await this.questionRepo.findOne({ where: { id } });
-    if (!question) throw new NotFoundException('Question not found');
+    if (!question) { throw new NotFoundException('Question not found'); }
     question.status = status;
     return this.questionRepo.save(question);
   }
 
   async deleteQuestion(id: string): Promise<void> {
     const result = await this.questionRepo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('Question not found');
+    if (result.affected === 0) { throw new NotFoundException('Question not found'); }
   }
 
   // ==================== BULK ACTIONS ====================

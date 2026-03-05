@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DadJokesController } from './dad-jokes.controller';
+
+import { CacheModule } from '../common/cache/cache.module';
+import { BulkActionService } from '../common/services/bulk-action.service';
+
 import { DadJokesQuizController } from './dad-jokes-quiz.controller';
 import { DadJokesStatsController } from './dad-jokes-stats.controller';
+import { DadJokesController } from './dad-jokes.controller';
 import { DadJokesService } from './dad-jokes.service';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
-import { JokeSubject } from './entities/joke-subject.entity';
 import { JokeChapter } from './entities/joke-chapter.entity';
+import { JokeSubject } from './entities/joke-subject.entity';
 import { QuizJoke } from './entities/quiz-joke.entity';
-import { CacheModule } from '../common/cache/cache.module';
-import { BulkActionService } from '../common/services/bulk-action.service';
+
 
 /**
  * Dad Jokes module for managing classic and quiz format jokes

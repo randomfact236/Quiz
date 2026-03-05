@@ -15,7 +15,7 @@ export type ContentStatus = 'published' | 'draft' | 'trash';
 
 /** Question Type */
 export interface Question {
-  id: number;
+  id: string;
   question: string;
   optionA: string;
   optionB: string;
@@ -29,7 +29,7 @@ export interface Question {
 
 /** Subject Type */
 export interface Subject {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   emoji: string;
@@ -46,19 +46,21 @@ export type MenuSection =
 
 /** Joke Type - Enterprise Grade */
 export interface Joke {
-  id: number;
+  id: string;
   setup: string;
   punchline: string;
   joke?: string; // Keep for backward compatibility
   category: string;
   status: ContentStatus;
+  likes?: number;
+  dislikes?: number;
   createdAt?: string;
   updatedAt?: string;
 }
 
 /** Joke Category Type */
 export interface JokeCategory {
-  id: number;
+  id: string;
   name: string;
   emoji: string;
   description?: string;
@@ -66,7 +68,7 @@ export interface JokeCategory {
 
 /** Riddle Type - Enterprise Grade */
 export interface Riddle {
-  id: number;
+  id: string;
   question: string;
   answer?: string;
   options: string[];

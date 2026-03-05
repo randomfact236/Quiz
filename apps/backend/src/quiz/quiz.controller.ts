@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Delete,
   Body,
   Param,
@@ -12,22 +13,43 @@ import {
   HttpStatus,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
-import { QuizService } from './quiz.service';
-import { Subject } from './entities/subject.entity';
-import { Chapter } from './entities/chapter.entity';
-import { Question } from './entities/question.entity';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { Type } from 'class-transformer';
+
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
+import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateQuestionDto,
   CreateSubjectDto,
   PaginationDto,
 } from '../common/dto/base.dto';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
-import { StatusFilterDto } from '../common/dto/bulk-action.dto';
-import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
+import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { RolesGuard } from '../common/guards/roles.guard';
+
+import { Chapter } from './entities/chapter.entity';
+import { Question } from './entities/question.entity';
+import { Subject } from './entities/subject.entity';
+import { QuizService } from './quiz.service';
+
+export class QuizQueryDto extends PaginationDto {
+  @ApiPropertyOptional({ description: 'Filter by content status' })
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by subject slug' })
+  @IsOptional()
+  @IsString()
+  subject?: string;
+
+  @ApiPropertyOptional({ description: 'Include trashed items' })
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  includeTrash?: boolean;
+}
 
 @ApiTags('Quiz')
 @Controller('quiz')
@@ -134,10 +156,9 @@ export class QuizController {
   @ApiOperation({ summary: 'Get all questions with optional status filter (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
   async getAllQuestions(
-    @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto,
+    @Query() query: QuizQueryDto,
   ): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findAllQuestions(pagination, filter.status);
+    return this.quizService.findAllQuestions(query, query.status as any, query.subject);
   }
 
   @Get('questions/:chapterId')
@@ -150,7 +171,7 @@ export class QuizController {
   }
 
   private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {
-    if (!count) return defaultValue;
+    if (!count) { return defaultValue; }
     const parsed = parseInt(count, 10);
     if (isNaN(parsed) || parsed < 1) {
       throw new BadRequestException('Count must be a positive number');
@@ -204,7 +225,7 @@ export class QuizController {
     return await this.quizService.createQuestionsBulk(dto);
   }
 
-  @Put('questions/:id')
+  @Patch('questions/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()

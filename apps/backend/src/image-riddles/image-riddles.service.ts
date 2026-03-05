@@ -9,8 +9,8 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
-import { ImageRiddle } from './entities/image-riddle.entity';
-import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
+
+import { CacheService } from '../common/cache/cache.service';
 import {
   CreateImageRiddleDto,
   UpdateImageRiddleDto,
@@ -19,17 +19,19 @@ import {
   PaginationDto,
   SearchImageRiddlesDto,
 } from '../common/dto/base.dto';
+import { BulkActionType } from '../common/enums/bulk-action.enum';
+import { ContentStatus } from '../common/enums/content-status.enum';
+import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionService } from '../common/services/bulk-action.service';
+import { settings } from '../config/settings';
+
 import {
   IActionOption,
   applyActionDefaults,
   validateActionOption
 } from './entities/image-riddle-action.entity';
-import { CacheService } from '../common/cache/cache.service';
-import { settings } from '../config/settings';
-import { BulkActionService } from '../common/services/bulk-action.service';
-import { BulkActionType } from '../common/enums/bulk-action.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
-import { ContentStatus } from '../common/enums/content-status.enum';
+import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
+import { ImageRiddle } from './entities/image-riddle.entity';
 import { updateBasicFields, updateCategory, updateActionOptions } from './image-riddles-update.helper';
 
 @Injectable()
@@ -129,7 +131,7 @@ export class ImageRiddlesService {
     const limit = pagination.limit ?? 10;
     
     const where: FindOptionsWhere<ImageRiddle> = { isActive: true };
-    if (status) {
+    if (status != null) {
       where.status = status;
     }
 
@@ -272,7 +274,7 @@ export class ImageRiddlesService {
   }
 
   private async resolveCategory(categoryId?: string): Promise<ImageRiddleCategory | undefined> {
-    if (!categoryId?.length) return undefined;
+    if (!categoryId?.length) {return undefined;}
     const category = await this.categoryRepo.findOne({ where: { id: categoryId } });
     if (category === null) {
       throw new NotFoundException('Category not found');
@@ -281,7 +283,7 @@ export class ImageRiddlesService {
   }
 
   private processActionOptions(dtoActions?: Partial<IActionOption>[]): IActionOption[] | null {
-    if (!dtoActions?.length) return null;
+    if (!dtoActions?.length) {return null;}
 
     const actionOptions = dtoActions.map(action => ({
       ...applyActionDefaults(action),

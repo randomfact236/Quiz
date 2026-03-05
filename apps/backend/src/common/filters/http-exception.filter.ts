@@ -43,7 +43,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let stack = undefined;
 
     if (exception instanceof HttpException) {
-      const httpException = exception as HttpException;
+      const httpException = exception;
       status = httpException.getStatus();
       const exceptionResponse = httpException.getResponse();
 
@@ -57,7 +57,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         error = typeof responseObj.error === 'string' ? responseObj.error : error;
         details = responseObj.details as ErrorDetails | undefined;
       } else {
-        message = exceptionResponse as string;
+        message = exceptionResponse;
       }
     } else if (exception instanceof Error) {
       message = exception.message;
@@ -88,8 +88,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // Include details in development
     if (process.env.NODE_ENV !== 'production') {
-      if (details) errorResponse.details = details;
-      if (stack) errorResponse.stack = stack;
+      if (details) {errorResponse.details = details;}
+      if (stack) {errorResponse.stack = stack;}
     }
 
     response.status(status).json(errorResponse);

@@ -8,8 +8,9 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { Repository, DataSource, In, FindOptionsWhere } from 'typeorm';
-import { ContentStatus } from '../enums/content-status.enum';
+
 import { BulkActionType } from '../enums/bulk-action.enum';
+import { ContentStatus } from '../enums/content-status.enum';
 import {
   BulkActionResult,
   BulkActionFailure,
@@ -17,6 +18,7 @@ import {
   BulkActionOptions,
   IStatusEntity,
 } from '../interfaces/bulk-action-result.interface';
+
 import { BulkActionStrategyFactory, getActionPastTense } from './bulk-action-strategies';
 
 /**

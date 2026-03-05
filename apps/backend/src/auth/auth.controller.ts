@@ -1,6 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
+
 import { AuthService } from './auth.service';
+import { RegisterDto, LoginDto, RefreshDto } from './dto/auth.dto';
 
 /**
  * Authentication response type
@@ -12,6 +15,7 @@ interface AuthResponse {
     name: string;
   };
   token: string;
+  refreshToken: string;
 }
 
 /**
@@ -20,72 +24,61 @@ interface AuthResponse {
  * @description Provides endpoints for user authentication including
  * registration of new users and login for existing users. Returns
  * JWT tokens upon successful authentication.
- * 
- * @class
- * @example
- * // Register a new user
- * POST /auth/register
- * { "email": "user@example.com", "password": "secret", "name": "John" }
- * 
- * // Login existing user
- * POST /auth/login
- * { "email": "user@example.com", "password": "secret" }
  */
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  /**
-   * Creates an instance of AuthController
-   * 
-   * @param {AuthService} authService - The authentication service for handling business logic
-   */
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   /**
    * Register a new user account
    * 
-   * @description Creates a new user with the provided credentials and returns
-   * the user data along with a JWT token for immediate authentication.
-   * 
-   * @param {string} email - User's email address (unique identifier)
-   * @param {string} password - User's password (will be hashed)
-   * @param {string} name - User's display name
-   * @returns {Promise<AuthResponse>} User data and JWT token
-   * @throws {UnauthorizedException} When email already exists
-   * @example
-   * const result = await authController.register('user@example.com', 'password', 'John');
-   * // Returns: { user: { id, email, name }, token: 'eyJhbGciOiJIUzI1NiIs...' }
+   * @param dto - Validated registration payload (email, password, name)
+   * @returns User data and JWT token
+   * @throws {ConflictException} When email already exists
    */
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @ApiOperation({ summary: 'Register a new user' })
-  async register(
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Body('name') name: string,
-  ): Promise<AuthResponse> {
-    return this.authService.register(email, password, name);
+  @ApiResponse({ status: 201, description: 'User registered successfully' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
+  async register(@Body() dto: RegisterDto): Promise<AuthResponse> {
+    return this.authService.register(dto.email, dto.password, dto.name);
   }
 
   /**
    * Authenticate an existing user
    * 
-   * @description Validates user credentials and returns a JWT token
-   * upon successful authentication.
-   * 
-   * @param {string} email - User's registered email address
-   * @param {string} password - User's password
-   * @returns {Promise<AuthResponse>} User data and JWT token
+   * @param dto - Validated login payload (email, password)
+   * @returns User data and JWT token
    * @throws {UnauthorizedException} When credentials are invalid
-   * @example
-   * const result = await authController.login('user@example.com', 'password');
-   * // Returns: { user: { id, email, name }, token: 'eyJhbGciOiJIUzI1NiIs...' }
    */
   @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 50, ttl: 60000 } })
   @ApiOperation({ summary: 'Login user' })
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ): Promise<AuthResponse> {
-    return this.authService.login(email, password);
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  async login(@Body() dto: LoginDto): Promise<AuthResponse> {
+    return this.authService.login(dto.email, dto.password);
+  }
+
+  /**
+   * Refresh an access token
+   * 
+   * @param dto - Payload containing the refresh token
+   * @returns New access token and refresh token
+   */
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Refresh access token' })
+  @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
+  @ApiResponse({ status: 401, description: 'Invalid refresh token' })
+  async refresh(@Body() dto: RefreshDto): Promise<AuthResponse> {
+    return this.authService.refresh(dto.refreshToken);
   }
 }

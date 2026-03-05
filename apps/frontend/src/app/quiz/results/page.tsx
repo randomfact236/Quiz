@@ -14,6 +14,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RotateCcw, Share2, Home, Trophy } from 'lucide-react';
+import toast from '@/lib/toast';
 
 import type { QuizSession, QuizResult } from '@/types/quiz';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
@@ -46,7 +47,7 @@ function calculateResult(session: QuizSession): QuizResult {
 
   session.questions.forEach((q) => {
     const isCorrect = session.answers[q.id] === q.correctAnswer;
-    
+
     byDifficulty[q.level].total++;
     if (isCorrect) {
       correctCount++;
@@ -56,8 +57,8 @@ function calculateResult(session: QuizSession): QuizResult {
     }
   });
 
-  const percentage = session.maxScore > 0 
-    ? (session.score / session.maxScore) * 100 
+  const percentage = session.maxScore > 0
+    ? (session.score / session.maxScore) * 100
     : 0;
 
   return {
@@ -74,7 +75,7 @@ function ResultsContent(): JSX.Element {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams?.get('session') || '';
-  
+
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showReview, setShowReview] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -105,10 +106,11 @@ function ResultsContent(): JSX.Element {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      toast.success('Results copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Fallback
-      alert('Results copied to clipboard!');
+      toast.error('Failed to copy results to clipboard.');
     }
   };
 
@@ -134,7 +136,7 @@ function ResultsContent(): JSX.Element {
         score={result?.session.score || 0}
         maxScore={result?.session.maxScore || 10}
       />
-      
+
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -190,29 +192,27 @@ function ResultsContent(): JSX.Element {
                 return (
                   <div
                     key={level}
-                    className={`rounded-xl p-3 text-center ${
-                      data.total === 0
-                        ? 'bg-gray-100'
-                        : pct >= 70
-                          ? 'bg-green-50'
-                          : pct >= 50
-                            ? 'bg-yellow-50'
-                            : 'bg-red-50'
-                    }`}
+                    className={`rounded-xl p-3 text-center ${data.total === 0
+                      ? 'bg-gray-100'
+                      : pct >= 70
+                        ? 'bg-green-50'
+                        : pct >= 50
+                          ? 'bg-yellow-50'
+                          : 'bg-red-50'
+                      }`}
                   >
                     <p className="mb-1 text-xs font-medium uppercase text-gray-500">
                       {level}
                     </p>
                     <p
-                      className={`text-xl font-bold ${
-                        data.total === 0
-                          ? 'text-gray-400'
-                          : pct >= 70
-                            ? 'text-green-600'
-                            : pct >= 50
-                              ? 'text-yellow-600'
-                              : 'text-red-600'
-                      }`}
+                      className={`text-xl font-bold ${data.total === 0
+                        ? 'text-gray-400'
+                        : pct >= 70
+                          ? 'text-green-600'
+                          : pct >= 50
+                            ? 'text-yellow-600'
+                            : 'text-red-600'
+                        }`}
                     >
                       {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                     </p>

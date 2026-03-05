@@ -30,6 +30,9 @@ const DEFAULT_TIME_LIMITS: Record<string, number> = {
   extreme: 120,
 };
 
+// Constants
+const MAX_QUESTIONS = 10;
+
 function QuizContent(): JSX.Element {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -122,19 +125,15 @@ function QuizContent(): JSX.Element {
 
   // Redirect to results when completed
   useEffect(() => {
-    if (quiz.status === 'completed') {
-      const history = JSON.parse(localStorage.getItem('aiquiz:quiz-history') || '[]');
-      const latestSession = history[history.length - 1];
-      if (latestSession) {
-        router.push(`/quiz/results?session=${latestSession.id}`);
-      }
+    if (quiz.status === 'completed' && quiz.sessionId) {
+      router.push(`/quiz/results?session=${quiz.sessionId}`);
     }
-  }, [quiz.status, router]);
+  }, [quiz.status, quiz.sessionId, router]);
 
   // Loading state
   if (quiz.status === 'loading' || isLoadingSettings) {
     return (
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
           <p className="text-xl font-semibold text-white">Loading quiz...</p>
@@ -254,7 +253,7 @@ function QuizContent(): JSX.Element {
                   shownBubblesRef={shownBubblesRef}
                   question={quiz.currentQuestion}
                   questionNumber={quiz.currentQuestionIndex + 1}
-                  totalQuestions={Math.min(quiz.totalQuestions, 10)}
+                  totalQuestions={Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
                   selectedAnswer={quiz.answers[quiz.currentQuestion.id] || null}
                   onSelectAnswer={(answer) => {
                     quiz.selectAnswer(answer);
@@ -263,7 +262,7 @@ function QuizContent(): JSX.Element {
                   disabled={quiz.status !== 'playing'}
                   subjectEmoji={subjectEmoji}
                   score={quiz.score}
-                  maxScore={Math.min(quiz.totalQuestions, 10)}
+                  maxScore={Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
                   timeUp={isTimeUp}
                   questionTimeRemaining={isTimerMode ? quiz.timeRemaining : practiceQuestionTime}
                   questionTimeLimit={isTimerMode ? (timeLimit ?? PRACTICE_QUESTION_LIMIT) : PRACTICE_QUESTION_LIMIT}
@@ -287,13 +286,13 @@ function QuizContent(): JSX.Element {
             </button>
 
             <span className="text-sm text-white/70">
-              {quiz.currentQuestionIndex + 1} / {Math.min(quiz.totalQuestions, 10)}
+              {quiz.currentQuestionIndex + 1} / {Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
             </span>
 
             <button
               onClick={() => {
                 questionCardRef.current?.clearBubbles();
-                if (quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1) {
+                if (quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, MAX_QUESTIONS) - 1) {
                   setShowConfirmSubmit(true);
                 } else {
                   quiz.goToNext();
@@ -301,7 +300,7 @@ function QuizContent(): JSX.Element {
               }}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
             >
-              {quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, 10) - 1 ? 'Submit' : 'Next'}
+              {quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, MAX_QUESTIONS) - 1 ? 'Submit' : 'Next'}
               <ArrowLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
@@ -320,11 +319,11 @@ function QuizContent(): JSX.Element {
               Submit Quiz?
             </h2>
 
-            {quiz.answeredCount < Math.min(quiz.totalQuestions, 10) ? (
+            {quiz.answeredCount < Math.min(quiz.totalQuestions, MAX_QUESTIONS) ? (
               <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
                 <p className="font-medium">⚠️ Not all questions answered!</p>
                 <p className="text-sm">
-                  You&apos;ve answered {quiz.answeredCount} of {Math.min(quiz.totalQuestions, 10)} questions.
+                  You&apos;ve answered {quiz.answeredCount} of {Math.min(quiz.totalQuestions, MAX_QUESTIONS)} questions.
                 </p>
               </div>
             ) : (
@@ -421,7 +420,7 @@ function QuizContent(): JSX.Element {
               >
                 {quiz.availableQuestions > 0 ? 'Cancel' : 'Close'}
               </button>
-              {quiz.availableQuestions > 0 && (
+              {quiz.availableQuestions > 0 ? (
                 <button
                   onClick={() => {
                     quiz.extendQuiz(additionalQuestions);
@@ -436,6 +435,10 @@ function QuizContent(): JSX.Element {
                 >
                   Add & Continue
                 </button>
+              ) : (
+                <div className="flex-1 rounded-lg bg-red-50 p-2 text-center text-xs font-semibold text-red-600 border border-red-200">
+                  Maximum Limit Reached
+                </div>
               )}
             </div>
           </motion.div>

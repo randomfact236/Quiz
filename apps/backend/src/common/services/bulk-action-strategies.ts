@@ -6,10 +6,11 @@
  * ============================================================================
  */
 
-import { Repository, QueryRunner } from 'typeorm';
 import { Logger } from '@nestjs/common';
-import { ContentStatus } from '../enums/content-status.enum';
+import { Repository, QueryRunner } from 'typeorm';
+
 import { BulkActionType } from '../enums/bulk-action.enum';
+import { ContentStatus } from '../enums/content-status.enum';
 import { IStatusEntity } from '../interfaces/bulk-action-result.interface';
 
 /**

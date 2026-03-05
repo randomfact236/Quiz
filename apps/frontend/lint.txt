@@ -1,0 +1,30 @@
+﻿
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\app\admin\components\ImageRiddlesAdminSection.tsx
+  1151:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  1417:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\app\admin\components\RiddlesSection.tsx
+  176:6  warning  React Hook useEffect has a missing dependency: 'setAllRiddles'. Either include it or remove the dependency array. If 'setAllRiddles' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\app\image-riddles\page.tsx
+  435:21   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  579:19   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  587:157  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\app\riddles\components\RiddleCard.tsx
+  202:8  warning  React Hook useEffect has a missing dependency: 'activeShownBubblesRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\app\riddles\play\page.tsx
+  183:6  warning  React Hook useEffect has missing dependencies: 'chapterNameParam' and 'startNewSession'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  245:6  warning  React Hook useEffect has a missing dependency: 'handleSubmit'. Either include it or remove the dependency array                              react-hooks/exhaustive-deps
+  268:6  warning  React Hook useEffect has a missing dependency: 'calculateTimeTaken'. Either include it or remove the dependency array                        react-hooks/exhaustive-deps
+  277:6  warning  React Hook useEffect has a missing dependency: 'calculateTimeTaken'. Either include it or remove the dependency array                        react-hooks/exhaustive-deps
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\components\quiz\FloatingBackground.tsx
+  54:6  warning  React Hook useEffect has missing dependencies: 'count' and 'emojis'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\webiste theme and plugin\Ai-Quiz\Quiz\apps\frontend\src\components\quiz\QuestionCard.tsx
+  220:6  warning  React Hook useEffect has a missing dependency: 'activeShownBubblesRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Γ£û 13 problems (1 error, 12 warnings)
+

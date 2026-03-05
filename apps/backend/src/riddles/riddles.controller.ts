@@ -13,7 +13,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
-import { RiddlesService } from './riddles.service';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   // Riddle DTOs
   CreateRiddleDto,
@@ -34,16 +35,17 @@ import {
   StatusCountResponseDto,
   StatusFilterDto,
 } from '../common';
-import { PaginationDto } from '../common/dto/base.dto';
-import { Riddle } from './entities/riddle.entity';
-import { RiddleCategory } from './entities/riddle-category.entity';
-import { RiddleSubject } from './entities/riddle-subject.entity';
-import { RiddleChapter } from './entities/riddle-chapter.entity';
-import { QuizRiddle } from './entities/quiz-riddle.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
+import { Roles } from '../common/decorators/roles.decorator';
+import { PaginationDto } from '../common/dto/base.dto';
+import { RolesGuard } from '../common/guards/roles.guard';
+
+import { QuizRiddle } from './entities/quiz-riddle.entity';
+import { RiddleCategory } from './entities/riddle-category.entity';
+import { RiddleChapter } from './entities/riddle-chapter.entity';
+import { RiddleSubject } from './entities/riddle-subject.entity';
+import { Riddle } from './entities/riddle.entity';
+import { RiddlesService } from './riddles.service';
 
 
 @ApiTags('Riddles')

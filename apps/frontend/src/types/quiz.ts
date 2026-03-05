@@ -60,6 +60,7 @@ export interface QuizState {
   timeRemaining: number;
   status: 'loading' | 'playing' | 'paused' | 'completed';
   startTime: number;
+  sessionId: string;
 }
 
 /** Quiz Actions */
@@ -86,7 +87,7 @@ export interface QuizComputed {
 }
 
 /** Combined Quiz Hook Return */
-export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed {}
+export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed { }
 
 /** Quiz Result Summary */
 export interface QuizResult {

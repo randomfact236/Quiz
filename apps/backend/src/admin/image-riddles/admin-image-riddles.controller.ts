@@ -16,18 +16,20 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
-import { AdminImageRiddlesService } from './admin-image-riddles.service';
+
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import {
   CreateImageRiddleDto,
   UpdateImageRiddleDto,
   CreateImageRiddleCategoryDto,
   UpdateImageRiddleCategoryDto,
 } from '../../common/dto/base.dto';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { ImageRiddle } from '../../image-riddles/entities/image-riddle.entity';
 import { ImageRiddleCategory } from '../../image-riddles/entities/image-riddle-category.entity';
+import { ImageRiddle } from '../../image-riddles/entities/image-riddle.entity';
+
+import { AdminImageRiddlesService } from './admin-image-riddles.service';
 
 /**
  * Admin Image Riddles Controller

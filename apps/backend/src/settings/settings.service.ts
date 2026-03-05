@@ -1,10 +1,12 @@
 import { Injectable, OnModuleInit, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
-import { SystemSetting } from './entities/system-setting.entity';
+
 import { settings } from '../config/settings';
-import { AppSettings, SettingsValue } from './interfaces/settings.interface';
+
 import { isValidSettingKey, AllowedSettingKey } from './dto/update-settings.dto';
+import { SystemSetting } from './entities/system-setting.entity';
+import { AppSettings, SettingsValue } from './interfaces/settings.interface';
 
 /**
  * Type for nested settings object
@@ -109,7 +111,7 @@ export class SettingsService implements OnModuleInit {
                 throw new BadRequestException(`Setting key part contains forbidden pattern: ${part}`);
             }
             
-            if (!current[part]) current[part] = {};
+            if (!current[part]) {current[part] = {};}
             current = current[part] as NestedSettings;
         }
 
@@ -152,7 +154,7 @@ export class SettingsService implements OnModuleInit {
                     target[key] = sourceValue as NestedSettings[string];
                 }
             } else {
-                target[key] = source[key] as NestedSettings[string];
+                target[key] = source[key];
             }
         }
         return target;
@@ -173,8 +175,8 @@ export class SettingsService implements OnModuleInit {
         let current: unknown = this.effectiveSettings;
 
         for (const part of parts) {
-            if (current === undefined) return undefined;
-            if (typeof current !== 'object' || current === null) return undefined;
+            if (current === undefined) {return undefined;}
+            if (typeof current !== 'object' || current === null) {return undefined;}
             current = (current as NestedSettings)[part];
         }
 

@@ -6,7 +6,10 @@
  * ============================================================================
  */
 
-const API_BASE_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
+const BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
+const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
+
+import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';
 
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -29,10 +32,13 @@ export async function apiRequest<T>(
 ): Promise<ApiResponse<T>> {
   const url = `${API_BASE_URL}${endpoint}`;
 
+  const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+
   const config: RequestInit = {
     method: options.method || 'GET',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   };
@@ -48,6 +54,44 @@ export async function apiRequest<T>(
   try {
     const response = await fetch(url, { ...config, signal: controller.signal });
     clearTimeout(timeout);
+
+    // If 401 Unauthorized and we have a refresh token, try to refresh and retry
+    if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
+      const refreshToken = getItem<string | null>(STORAGE_KEYS.REFRESH_TOKEN, null);
+      if (refreshToken) {
+        try {
+          const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken })
+          });
+
+          if (refreshRes.ok) {
+            const refreshData = await refreshRes.json();
+            setItem(STORAGE_KEYS.AUTH_TOKEN, refreshData.token);
+            setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshData.refreshToken);
+
+            // Retrofit config and retry original request
+            const retryHeaders = new Headers(config.headers);
+            retryHeaders.set('Authorization', `Bearer ${refreshData.token}`);
+            const retryConfig = { ...config, headers: retryHeaders };
+
+            const retryRes = await fetch(url, retryConfig);
+            if (!retryRes.ok) throw new Error('Retry failed');
+
+            return {
+              data: await retryRes.json(),
+              status: retryRes.status,
+              ok: retryRes.ok,
+            };
+          }
+        } catch (e) {
+          // If refresh fails, clear tokens so the user is forced to log in again
+          removeItem(STORAGE_KEYS.AUTH_TOKEN);
+          removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+        }
+      }
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ message: 'Unknown error' }));

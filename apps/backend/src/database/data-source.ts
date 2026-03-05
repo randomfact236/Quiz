@@ -12,6 +12,7 @@
  */
 
 import { DataSource } from 'typeorm';
+
 import { getCliDatabaseConfig, validateDatabaseEnv } from './database-config';
 
 // No explicit migrations required, TypeORM synchronize handles schema creation in development

@@ -1,4 +1,5 @@
 import { Module, Global } from '@nestjs/common';
+
 import { CacheService } from './cache.service';
 
 @Global()

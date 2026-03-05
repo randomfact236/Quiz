@@ -12,6 +12,8 @@
  */
 
 import { DataSource } from 'typeorm';
+
+import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 import {
   seedSubjects,
   seedChapters,
@@ -22,7 +24,6 @@ import {
   seedRiddles,
   seedAdminUser,
 } from './seed-helpers';
-import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 
 // Validate environment before proceeding
 try {
