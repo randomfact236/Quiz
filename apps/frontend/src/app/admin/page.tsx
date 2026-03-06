@@ -24,6 +24,7 @@ import type {
   Question,
   MenuSection
 } from './types';
+import { downloadFile, parseQuestionCSV, exportQuestionsToCSV } from './utils';
 
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';
@@ -34,6 +35,7 @@ import {
   initialJokes as libInitialJokes
 } from '@/lib/initial-data';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
+import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
 // type ImageRiddle = {
@@ -339,9 +341,10 @@ export default function AdminPage(): JSX.Element {
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('json');
   const [showEditSubjectModal, setShowEditSubjectModal] = useState(false);
-  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
-  const [selectedSubjectForChapter, setSelectedSubjectForChapter] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<'academic' | 'professional' | 'entertainment'>('academic');
   const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
 
@@ -358,11 +361,185 @@ export default function AdminPage(): JSX.Element {
     setActiveSection(slug as MenuSection);
   };
 
+  // Handle questions import
+  const handleQuestionsImport = (subjectSlug: string, newQuestions: Question[]) => {
+    setAllQuestions(prev => ({
+      ...prev,
+      [subjectSlug]: [...(prev[subjectSlug] ?? []), ...newQuestions],
+    }));
+    // Auto-save to file
+    setTimeout(() => {
+      const data = {
+        subjects,
+        questions: { ...allQuestions, [subjectSlug]: [...(allQuestions[subjectSlug] ?? []), ...newQuestions] },
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data);
+    }, 100);
+  };
+
+  // Handle questions update (edit, delete, status change)
+  const handleQuestionsUpdate = (subjectSlug: string, updatedQuestions: Question[]) => {
+    setAllQuestions(prev => ({
+      ...prev,
+      [subjectSlug]: updatedQuestions,
+    }));
+    // Auto-save to file
+    setTimeout(() => {
+      const data = {
+        subjects,
+        questions: { ...allQuestions, [subjectSlug]: updatedQuestions },
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data);
+    }, 100);
+  };
+
+  // Handle clear all questions for a subject
+  const handleClearQuestions = (subjectSlug: string) => {
+    setAllQuestions(prev => ({
+      ...prev,
+      [subjectSlug]: [],
+    }));
+    // Auto-save to file
+    setTimeout(() => {
+      const data = {
+        subjects,
+        questions: { ...allQuestions, [subjectSlug]: [] },
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data);
+    }, 100);
+  };
+
+  // Export questions to JSON or CSV file (for backup/deployment)
+  const handleExportQuestions = () => {
+    if (exportFormat === 'json') {
+      const data = {
+        subjects,
+        questions: allQuestions,
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data).then(() => {
+        exportQuizDataToFile(data);
+        setShowExportModal(false);
+      });
+    } else {
+      // CSV export - combine all questions from all subjects
+      let csvContent = '';
+      subjects.forEach(subject => {
+        const questions = allQuestions[subject.slug] || [];
+        if (questions.length > 0) {
+          csvContent += exportQuestionsToCSV(questions, subject.name);
+          csvContent += '\n\n';
+        }
+      });
+      downloadFile(csvContent, 'all_questions.csv', 'text/csv');
+      setShowExportModal(false);
+    }
+  };
+
+  // Import questions from JSON or CSV file
+  const handleImportQuestions = async (file: File) => {
+    const fileName = file.name.toLowerCase();
+    
+    if (fileName.endsWith('.json')) {
+      const data = await importQuizDataFromFile(file);
+      if (data) {
+        setSubjects(data.subjects);
+        setAllQuestions(data.questions);
+        await saveQuizData(data);
+        setShowImportModal(false);
+      }
+    } else if (fileName.endsWith('.csv')) {
+      // CSV import - parse and add to existing subjects
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const content = e.target?.result as string;
+        const result = parseQuestionCSV(content);
+        
+        if (result.subjectName) {
+          // Find or create subject
+          let subject = subjects.find(s => s.name.toLowerCase() === result.subjectName.toLowerCase());
+          if (!subject) {
+            // Create new subject from CSV
+            const slug = result.subjectName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            subject = {
+              id: String(Date.now()),
+              slug,
+              name: result.subjectName,
+              emoji: '📚',
+              category: 'academic',
+              order: subjects.length,
+            };
+            setSubjects(prev => [...prev, subject!]);
+            setAllQuestions(prev => ({ ...prev, [slug]: [] }));
+          }
+          
+          // Add questions to subject
+          setAllQuestions(prev => ({
+            ...prev,
+            [subject!.slug]: [...(prev[subject!.slug] || []), ...result.imported],
+          }));
+          
+          // Save to file
+          const data = {
+            subjects: [...subjects, subject],
+            questions: { ...allQuestions, [subject.slug]: [...(allQuestions[subject.slug] || []), ...result.imported] },
+            lastUpdated: new Date().toISOString(),
+          };
+          await saveQuizData(data);
+        }
+        setShowImportModal(false);
+      };
+      reader.readAsText(file);
+    }
+  };
+
   // Add new subject
   const handleAddSubject = (newSubject: Subject) => {
     setSubjects(prev => [...prev, newSubject]);
     setAllQuestions(prev => ({ ...prev, [newSubject.slug]: [] }));
     setShowAddSubjectModal(false);
+    // Auto-save to file
+    setTimeout(() => {
+      const updatedQuestions = { ...allQuestions, [newSubject.slug]: [] };
+      const data = {
+        subjects: [...subjects, newSubject],
+        questions: updatedQuestions,
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data);
+    }, 100);
+  };
+
+  // Add new subject by name and slug (used for CSV import)
+  const handleAddSubjectByName = (name: string, slug: string) => {
+    const newSubject: Subject = {
+      id: String(Date.now()),
+      slug,
+      name,
+      emoji: '📚',
+      category: 'academic',
+    };
+    setSubjects(prev => [...prev, newSubject]);
+    setAllQuestions(prev => ({ ...prev, [slug]: [] }));
+    // Auto-save to file
+    setTimeout(() => {
+      const updatedQuestions = { ...allQuestions, [slug]: [] };
+      const data = {
+        subjects: [...subjects, newSubject],
+        questions: updatedQuestions,
+        lastUpdated: new Date().toISOString(),
+      };
+      saveQuizData(data);
+    }, 100);
+  };
+
+  // Add chapter to subject (chapters are derived from question chapter strings)
+  const handleAddChapter = (_subjectSlug: string, _chapterName: string) => {
+    // Chapters are automatically derived from question.chapter strings
+    // No action needed - the chapter will appear when questions are imported
   };
 
   // Edit subject
@@ -384,13 +561,6 @@ export default function AdminPage(): JSX.Element {
     }
     setShowEditSubjectModal(false);
     setEditingSubject(null);
-  };
-
-  // Add new chapter (creates empty chapter without sample questions)
-  const handleAddChapter = (_subjectSlug: string, _chapterName: string) => {
-    // Chapter is created empty - no sample questions added
-    // Questions can be added later via import or manual entry
-    setShowAddChapterModal(false);
   };
 
   // Show loading state until hydration is complete to avoid section flash
@@ -612,6 +782,8 @@ export default function AdminPage(): JSX.Element {
               subjects={subjects}
               allQuestions={allQuestions}
               onAddSubject={() => setShowAddSubjectModal(true)}
+              onExport={() => setShowExportModal(true)}
+              onImport={() => setShowImportModal(true)}
             />
           )}
           {subjects.some(s => s.slug === activeSection) && (
@@ -620,13 +792,11 @@ export default function AdminPage(): JSX.Element {
               questions={getQuestionsForSubject(activeSection)}
               allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
-              onAddChapter={() => {
-                setSelectedSubjectForChapter(activeSection);
-                setShowAddChapterModal(true);
-              }}
-              onCountChange={(slug, count) =>
-                setQuestionCounts(prev => ({ ...prev, [slug]: count }))
-              }
+              onAddSubject={handleAddSubjectByName}
+              onAddChapter={handleAddChapter}
+              onQuestionsImport={handleQuestionsImport}
+              onQuestionsUpdate={handleQuestionsUpdate}
+              onClearQuestions={handleClearQuestions}
             />
           )}
           {activeSection === 'jokes' && (
@@ -663,6 +833,89 @@ export default function AdminPage(): JSX.Element {
         />
       )}
 
+      {/* Export Questions Modal */}
+      {showExportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-secondary-100">📤 Export Questions</h3>
+            <p className="text-gray-600 dark:text-secondary-300 mb-4">
+              Choose export format:
+            </p>
+            
+            {/* Format Selection */}
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setExportFormat('json')}
+                className={`flex-1 rounded-lg px-4 py-2 border-2 ${
+                  exportFormat === 'json' 
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600' 
+                    : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
+                }`}
+              >
+                📄 JSON
+              </button>
+              <button
+                onClick={() => setExportFormat('csv')}
+                className={`flex-1 rounded-lg px-4 py-2 border-2 ${
+                  exportFormat === 'csv' 
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600' 
+                    : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
+                }`}
+              >
+                📊 CSV
+              </button>
+            </div>
+
+            {exportFormat === 'json' ? (
+              <>
+                <p className="text-gray-600 dark:text-secondary-300 mb-4">
+                  Downloads all subjects and questions as a JSON file. Best for:
+                </p>
+                <ul className="text-sm text-gray-500 dark:text-secondary-400 mb-4 list-disc list-inside">
+                  <li>Full backup and restore</li>
+                  <li>Include in website code for deployment</li>
+                  <li>Transfer to another website</li>
+                </ul>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-600 dark:text-secondary-300 mb-4">
+                  Downloads all questions as CSV files. Best for:
+                </p>
+                <ul className="text-sm text-gray-500 dark:text-secondary-400 mb-4 list-disc list-inside">
+                  <li>Open in Excel/Google Sheets</li>
+                  <li>Edit questions in spreadsheet</li>
+                  <li>Share with others easily</li>
+                </ul>
+              </>
+            )}
+            
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleExportQuestions}
+                className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+              >
+                {exportFormat === 'json' ? 'Download JSON' : 'Download CSV'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import Questions Modal */}
+      {showImportModal && (
+        <ImportQuestionsModal
+          onClose={() => setShowImportModal(false)}
+          onImport={handleImportQuestions}
+        />
+      )}
+
       {/* Edit Subject Modal */}
       {showEditSubjectModal && editingSubject && (
         <EditSubjectModal
@@ -670,15 +923,6 @@ export default function AdminPage(): JSX.Element {
           onClose={() => { setShowEditSubjectModal(false); setEditingSubject(null); }}
           onUpdate={handleUpdateSubject}
           existingSlugs={subjects.filter(s => s.id !== editingSubject.id).map(s => s.slug)}
-        />
-      )}
-
-      {/* Add Chapter Modal */}
-      {showAddChapterModal && (
-        <AddChapterModal
-          onClose={() => setShowAddChapterModal(false)}
-          onAdd={(chapterName) => handleAddChapter(selectedSubjectForChapter, chapterName)}
-          subjectName={subjects.find(s => s.slug === selectedSubjectForChapter)?.name ?? ''}
         />
       )}
 
@@ -808,6 +1052,80 @@ function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'aca
   );
 }
 
+// Import Questions Modal
+function ImportQuestionsModal({ onClose, onImport }: {
+  onClose: () => void;
+  onImport: (file: File) => void;
+}): JSX.Element {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState('');
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const fileName = file.name.toLowerCase();
+      if (!fileName.endsWith('.json') && !fileName.endsWith('.csv')) {
+        setError('Please select a JSON or CSV file');
+        return;
+      }
+      setSelectedFile(file);
+      setError('');
+    }
+  };
+
+  const handleImport = () => {
+    if (selectedFile) {
+      onImport(selectedFile);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+        <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-secondary-100">📥 Import Questions</h3>
+        <p className="text-gray-600 dark:text-secondary-300 mb-4">
+          Upload a JSON or CSV file with questions.
+        </p>
+        
+        <div className="bg-gray-50 dark:bg-secondary-700 p-3 rounded-lg mb-4 text-sm">
+          <p className="font-medium mb-1">JSON:</p>
+          <p className="text-gray-500 dark:text-secondary-400 text-xs mb-2">Full backup from this website</p>
+          <p className="font-medium mb-1">CSV:</p>
+          <p className="text-gray-500 dark:text-secondary-400 text-xs">Add questions from spreadsheet (creates subject if not exists)</p>
+        </div>
+        
+        <div className="mb-4">
+          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-secondary-300">
+            Select JSON or CSV File
+          </label>
+          <input
+            type="file"
+            accept=".json,.csv"
+            onChange={handleFileChange}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-700 text-gray-900 dark:text-secondary-100"
+          />
+        </div>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <div className="flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleImport}
+            disabled={!selectedFile}
+            className="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Import
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Edit Subject Modal
 function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
   subject: Subject;
@@ -908,82 +1226,39 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
   );
 }
 
-// Add Chapter Modal
-function AddChapterModal({ onClose, onAdd, subjectName }: {
-  onClose: () => void;
-  onAdd: (chapterName: string) => void;
-  subjectName: string;
-}): JSX.Element {
-  const [chapterName, setChapterName] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!chapterName.trim()) {
-      setError('Chapter name is required');
-      return;
-    }
-
-    onAdd(chapterName.trim());
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
-        <h3 className="text-xl font-bold mb-1 text-gray-900 dark:text-secondary-100">Add New Chapter</h3>
-        <p className="text-gray-500 dark:text-secondary-400 text-sm mb-4">for {subjectName}</p>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="chapterName" className="block text-sm font-medium text-gray-700 dark:text-secondary-300 mb-1">Chapter Name</label>
-            <input
-              id="chapterName"
-              type="text"
-              value={chapterName}
-              onChange={(e) => setChapterName(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 bg-white dark:bg-secondary-900 text-gray-900 dark:text-secondary-100"
-              placeholder="e.g., Quantum Mechanics"
-            />
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <div className="flex gap-2 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-            >
-              Add Chapter
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
 // Dashboard Section
-function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject }: {
+function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject, onExport, onImport }: {
   onSelectSubject: (section: MenuSection) => void;
   subjects: Subject[];
   allQuestions: Record<string, Question[]>;
   onAddSubject: () => void;
+  onExport: () => void;
+  onImport: () => void;
 }): JSX.Element {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Quick Overview</h3>
-        <button
-          onClick={onAddSubject}
-          className="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 flex items-center gap-2"
-        >
-          <span>+</span> Add Subject
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={onAddSubject}
+            className="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 flex items-center gap-2"
+          >
+            <span>+</span> Add Subject
+          </button>
+          <button
+            onClick={onExport}
+            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 flex items-center gap-2"
+          >
+            <span>📤</span> Export
+          </button>
+          <button
+            onClick={onImport}
+            className="rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 flex items-center gap-2"
+          >
+            <span>📥</span> Import
+          </button>
+        </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {subjects.map((subject) => (

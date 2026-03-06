@@ -42,10 +42,6 @@ function QuizContent(): JSX.Element {
   const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
 
-  // Per-question timer for practice mode (visual only — doesn't auto-advance)
-  const [practiceQuestionTime, setPracticeQuestionTime] = useState(60);
-  const PRACTICE_QUESTION_LIMIT = 60; // seconds shown on ring in practice mode
-
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
 
@@ -108,20 +104,6 @@ function QuizContent(): JSX.Element {
 
   // Use quiz hook
   const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);
-
-  // Practice mode: per-question countdown (visual only, resets on navigation)
-  useEffect(() => {
-    if (isTimerMode) return; // timer mode uses quiz.timeRemaining
-    setPracticeQuestionTime(PRACTICE_QUESTION_LIMIT);
-  }, [quiz.currentQuestionIndex, isTimerMode]);
-
-  useEffect(() => {
-    if (isTimerMode || quiz.status !== 'playing') return;
-    const t = setInterval(() => {
-      setPracticeQuestionTime(prev => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(t);
-  }, [quiz.currentQuestionIndex, quiz.status, isTimerMode]);
 
   // Redirect to results when completed
   useEffect(() => {
@@ -264,8 +246,10 @@ function QuizContent(): JSX.Element {
                   score={quiz.score}
                   maxScore={Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
                   timeUp={isTimeUp}
-                  questionTimeRemaining={isTimerMode ? quiz.timeRemaining : practiceQuestionTime}
-                  questionTimeLimit={isTimerMode ? (timeLimit ?? PRACTICE_QUESTION_LIMIT) : PRACTICE_QUESTION_LIMIT}
+                  {...(isTimerMode && {
+                    questionTimeRemaining: quiz.timeRemaining,
+                    questionTimeLimit: timeLimit ?? 60
+                  })}
                 />
               </motion.div>
             )}

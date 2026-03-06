@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
 import type { Question } from '@/types/quiz';
 
 interface SubjectInfo {
@@ -97,48 +98,59 @@ export default function TimerChallengePage(): JSX.Element {
     const subjectList = storedSubjects.length > 0 ? storedSubjects : defaultSubjects;
     setSubjects(subjectList);
     
-    // Calculate question counts
-    const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-    const counts: LevelCount = {
-      subjectWise: {},
-      allSubject: {},
-      completeMix: 0
-    };
-    
-    // Initialize counts
-    levels.forEach(level => {
-      counts.allSubject[level.toLowerCase()] = 0;
-    });
-    
-    // Count questions
-    Object.entries(allQuestions).forEach(([subjectSlug, subjectQuestions]) => {
-      counts.subjectWise[subjectSlug] = {};
+    // Load questions from JSON file first, then fall back to localStorage
+    const loadQuestions = async () => {
+      let allQuestions: Record<string, Question[]> = {};
       
-      subjectQuestions.forEach(q => {
-        if (q.status === 'published' && q.level) {
-          const level = q.level.toLowerCase();
-          
-          // Subject wise count
-          if (!counts.subjectWise[subjectSlug]) {
-            counts.subjectWise[subjectSlug] = {};
-          }
-          if (!counts.subjectWise[subjectSlug][level]) {
-            counts.subjectWise[subjectSlug][level] = 0;
-          }
-          counts.subjectWise[subjectSlug][level]++;
-          
-          // All subject level wise count
-          if (counts.allSubject[level] !== undefined) {
-            counts.allSubject[level]++;
-          }
-          
-          // Complete mix count
-          counts.completeMix++;
+      try {
+        const fileQuestions = await loadQuestionsFromFile();
+        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
+          allQuestions = fileQuestions;
+        } else {
+          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
         }
+      } catch {
+        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+      }
+      
+      const counts: LevelCount = {
+        subjectWise: {},
+        allSubject: {},
+        completeMix: 0
+      };
+      
+      levels.forEach(level => {
+        counts.allSubject[level.toLowerCase()] = 0;
       });
-    });
-    
-    setLevelCounts(counts);
+      
+      Object.entries(allQuestions).forEach(([subjectSlug, subjectQuestions]) => {
+        counts.subjectWise[subjectSlug] = {};
+        
+        subjectQuestions.forEach(q => {
+          if (q.status === 'published' && q.level) {
+            const level = q.level.toLowerCase();
+            
+            if (!counts.subjectWise[subjectSlug]) {
+              counts.subjectWise[subjectSlug] = {};
+            }
+            if (!counts.subjectWise[subjectSlug][level]) {
+              counts.subjectWise[subjectSlug][level] = 0;
+            }
+            counts.subjectWise[subjectSlug][level]++;
+            
+            if (counts.allSubject[level] !== undefined) {
+              counts.allSubject[level]++;
+            }
+            
+            counts.completeMix++;
+          }
+        });
+      });
+      
+      setLevelCounts(counts);
+    };
+
+    loadQuestions();
   }, []);
 
   // Group subjects into rows of 4 for desktop

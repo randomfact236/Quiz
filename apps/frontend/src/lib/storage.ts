@@ -84,6 +84,15 @@ export function removeItem(key: string): void {
 }
 
 /**
+ * Clear quiz-specific data (questions and subjects).
+ */
+export function clearQuizData(): void {
+    if (typeof window === 'undefined') { return; }
+    localStorage.removeItem('aiquiz:subjects');
+    localStorage.removeItem('aiquiz:questions');
+}
+
+/**
  * Clear all app data (keys starting with PREFIX).
  */
 export function clearAll(): void {

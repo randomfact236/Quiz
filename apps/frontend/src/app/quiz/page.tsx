@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState, useMemo } from 'react';
 import { GraduationCap, Briefcase, Gamepad2, Home, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { getChapterProgress } from '@/lib/progress';
+import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
 
 interface Subject {
   id: number;
@@ -267,45 +268,57 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load questions from localStorage for this subject
-    const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-    const subjectQuestions = allQuestions[subject] || [];
-
-    // Group questions by chapter
-    const chapterMap = new Map<string, ChapterInfo>();
-
-    subjectQuestions.forEach(q => {
-      // Skip questions in trash
-      if (q.status === 'trash') return;
-
-      const chapterName = q.chapter || 'General';
-
-      if (!chapterMap.has(chapterName)) {
-        // Get progress for this chapter
-        const progress = getChapterProgress(subject, chapterName);
-
-        chapterMap.set(chapterName, {
-          name: chapterName,
-          questionCount: 0,
-          levels: new Set(),
-          isCompleted: progress?.completed ?? false,
-          bestScore: progress?.bestScore ?? 0,
-          attempts: progress?.attempts ?? 0,
-        });
+    // Load questions from JSON file first, then fall back to localStorage
+    const loadQuestions = async () => {
+      let allQuestions: Record<string, Question[]> = {};
+      
+      try {
+        const fileQuestions = await loadQuestionsFromFile();
+        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
+          allQuestions = fileQuestions;
+        } else {
+          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+        }
+      } catch {
+        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
       }
+      
+      const subjectQuestions = allQuestions[subject] || [];
 
-      const chapter = chapterMap.get(chapterName)!;
-      chapter.questionCount++;
-      chapter.levels.add(q.level);
-    });
+      const chapterMap = new Map<string, ChapterInfo>();
 
-    // Convert to array and sort by name
-    const chapterList = Array.from(chapterMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+      subjectQuestions.forEach(q => {
+        if (q.status === 'trash') return;
 
-    setChapters(chapterList);
-    setIsLoading(false);
+        const chapterName = q.chapter || 'General';
+
+        if (!chapterMap.has(chapterName)) {
+          const progress = getChapterProgress(subject, chapterName);
+
+          chapterMap.set(chapterName, {
+            name: chapterName,
+            questionCount: 0,
+            levels: new Set(),
+            isCompleted: progress?.completed ?? false,
+            bestScore: progress?.bestScore ?? 0,
+            attempts: progress?.attempts ?? 0,
+          });
+        }
+
+        const chapter = chapterMap.get(chapterName)!;
+        chapter.questionCount++;
+        chapter.levels.add(q.level);
+      });
+
+      const chapterArray = Array.from(chapterMap.values()).sort((a, b) => 
+        a.name.localeCompare(b.name)
+      );
+      
+      setChapters(chapterArray);
+      setIsLoading(false);
+    };
+
+    loadQuestions();
   }, [subject]);
 
   if (isLoading) {
@@ -404,36 +417,42 @@ const levelColors: Record<string, string> = {
 };
 
 function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
-  // Both sections open by default
   const [normalOpen, setNormalOpen] = useState(true);
   const [timerOpen, setTimerOpen] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
 
-  // Get question counts by level - only after hydration
-  const questionCounts = useMemo(() => {
-    // Return empty counts during SSR to avoid hydration mismatch
-    if (!isHydrated) {
-      return {} as Record<string, number>;
-    }
-
-    const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-    const subjectQuestions = allQuestions[subject] || [];
-
-    const counts: Record<string, number> = {};
-    levels.forEach(level => {
-      counts[level] = subjectQuestions.filter(q =>
-        q.chapter === chapter &&
-        q.level === level.toLowerCase() &&
-        q.status === 'published'
-      ).length;
-    });
-    return counts;
-  }, [subject, chapter, isHydrated]);
-
-  // Mark as hydrated after mount
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    const loadQuestions = async () => {
+      let allQuestions: Record<string, Question[]> = {};
+      
+      try {
+        const fileQuestions = await loadQuestionsFromFile();
+        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
+          allQuestions = fileQuestions;
+        } else {
+          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+        }
+      } catch {
+        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+      }
+      
+      const subjectQuestions = allQuestions[subject] || [];
+
+      const counts: Record<string, number> = {};
+      levels.forEach(level => {
+        counts[level] = subjectQuestions.filter(q =>
+          q.chapter === chapter &&
+          q.level === level.toLowerCase() &&
+          q.status === 'published'
+        ).length;
+      });
+      setQuestionCounts(counts);
+    };
+
+    loadQuestions();
+  }, [subject, chapter]);
+
+  const isLoading = Object.keys(questionCounts).length === 0;
 
   return (
     <div>
@@ -479,7 +498,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
                       <span className="text-2xl mb-1">{levelEmojis[level]}</span>
                       <span className="font-semibold text-sm">{level}</span>
                       <span className="mt-1 text-xs opacity-90">
-                        {isHydrated ? `${count} questions` : 'Loading...'}
+                        {!isLoading ? `${count} questions` : 'Loading...'}
                       </span>
                     </Link>
                   );
@@ -520,7 +539,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
                       <span className="text-2xl mb-1">{levelEmojis[level]}</span>
                       <span className="font-semibold text-sm">{level}</span>
                       <span className="mt-1 text-xs opacity-90">
-                        {isHydrated ? `${count} questions` : 'Loading...'}
+                        {!isLoading ? `${count} questions` : 'Loading...'}
                       </span>
                     </Link>
                   );

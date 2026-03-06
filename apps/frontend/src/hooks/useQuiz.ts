@@ -17,6 +17,7 @@ import type {
   UseQuizReturn
 } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
+import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
 
 /** Generate UUID for session */
 function generateUUID(): string {
@@ -38,60 +39,64 @@ function calculateScore(questions: Question[], answers: Record<number, string>):
   return score;
 }
 
+/** Load questions from localStorage or file */
+async function loadAllQuestions(): Promise<Record<string, Question[]>> {
+  try {
+    const fileQuestions = await loadQuestionsFromFile();
+    if (fileQuestions && Object.keys(fileQuestions).length > 0) {
+      return fileQuestions;
+    }
+  } catch (error) {
+    console.error('Failed to load questions from file:', error);
+  }
+  return getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+}
+
 /** Load questions from localStorage (max 10) */
-function loadQuestions(subject: string, chapter: string, level: string): Question[] {
-  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+async function loadQuestions(subject: string, chapter: string, level: string): Promise<Question[]> {
+  const allQuestions = await loadAllQuestions();
   const subjectQuestions = allQuestions[subject] || [];
 
   const filtered = subjectQuestions.filter(q => {
-    // Filter by chapter
     if (q.chapter !== chapter) return false;
-    // Filter by level
     if (q.level !== level) return false;
-    // Filter by status (only published)
     if (q.status === 'trash' || q.status === 'draft') return false;
     return true;
   });
 
-  // Limit to MAX_QUESTIONS
   return filtered.slice(0, 10);
 }
 
 /** Load additional questions excluding already shown ones */
-function loadAdditionalQuestions(
+async function loadAdditionalQuestions(
   subject: string,
   chapter: string,
   level: string,
   excludeIds: number[],
   count: number
-): Question[] {
-  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+): Promise<Question[]> {
+  const allQuestions = await loadAllQuestions();
   const subjectQuestions = allQuestions[subject] || [];
 
   const filtered = subjectQuestions.filter(q => {
-    // Filter by chapter
     if (q.chapter !== chapter) return false;
-    // Filter by level
     if (q.level !== level) return false;
-    // Filter by status (only published)
     if (q.status === 'trash' || q.status === 'draft') return false;
-    // Exclude already shown questions
     if (excludeIds.includes(q.id)) return false;
     return true;
   });
 
-  // Limit to requested count
   return filtered.slice(0, count);
 }
 
 /** Count available questions excluding already shown ones */
-function countAvailableQuestions(
+async function countAvailableQuestions(
   subject: string,
   chapter: string,
   level: string,
   excludeIds: number[]
-): number {
-  const allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+): Promise<number> {
+  const allQuestions = await loadAllQuestions();
   const subjectQuestions = allQuestions[subject] || [];
 
   const filtered = subjectQuestions.filter(q => {
@@ -158,46 +163,52 @@ export function useQuiz(
     sessionId: '',
   });
 
+  const [totalAvailable, setTotalAvailable] = useState(0);
+
   // Load questions on mount
   useEffect(() => {
-    const questions = loadQuestions(subject, chapter, level);
+    const load = async () => {
+      const questions = await loadQuestions(subject, chapter, level);
+      const availableCount = await countAvailableQuestions(subject, chapter, level, []);
+      setTotalAvailable(availableCount);
 
-    if (questions.length === 0) {
-      setState(prev => ({ ...prev, status: 'completed' }));
-      return;
-    }
+      if (questions.length === 0) {
+        setState(prev => ({ ...prev, status: 'completed' }));
+        return;
+      }
 
-    // Create new session
-    sessionRef.current = {
-      id: generateUUID(),
-      subject,
-      subjectName: getSubjectName(subject),
-      chapter,
-      level,
-      questions,
-      answers: {},
-      score: 0,
-      maxScore: questions.length,
-      startedAt: new Date().toISOString(),
-      timeTaken: 0,
-      status: 'in-progress',
+      sessionRef.current = {
+        id: generateUUID(),
+        subject,
+        subjectName: getSubjectName(subject),
+        chapter,
+        level,
+        questions,
+        answers: {},
+        score: 0,
+        maxScore: questions.length,
+        startedAt: new Date().toISOString(),
+        timeTaken: 0,
+        status: 'in-progress',
+      };
+
+      const sid = sessionRef.current.id;
+
+      setState({
+        questions,
+        currentQuestionIndex: 0,
+        answers: {},
+        score: 0,
+        timeRemaining: timeLimit || 0,
+        status: 'playing',
+        startTime: Date.now(),
+        sessionId: sid,
+      });
+
+      saveCurrentSession(sessionRef.current);
     };
 
-    const sid = sessionRef.current.id;
-
-    setState({
-      questions,
-      currentQuestionIndex: 0,
-      answers: {},
-      score: 0,
-      timeRemaining: timeLimit || 0,
-      status: 'playing',
-      startTime: Date.now(),
-      sessionId: sid,
-    });
-
-    // Save session for potential resume
-    saveCurrentSession(sessionRef.current);
+    load();
   }, [subject, chapter, level, timeLimit]);
 
   // Timer effect
@@ -322,29 +333,23 @@ export function useQuiz(
   }, [state.status, state.startTime, state.score, state.answers]);
 
   // Extend quiz with additional questions
-  const extendQuiz = useCallback((additionalCount: number) => {
+  const extendQuiz = useCallback(async (additionalCount: number) => {
+    const shownIds = state.questions.map(q => q.id);
+    const additionalQuestions = await loadAdditionalQuestions(
+      subject,
+      chapter,
+      level,
+      shownIds,
+      additionalCount
+    );
+
+    if (additionalQuestions.length === 0) {
+      return;
+    }
+
     setState(prev => {
-      // Get IDs of already shown questions
-      const shownIds = prev.questions.map(q => q.id);
-
-      // Load additional questions
-      const additionalQuestions = loadAdditionalQuestions(
-        subject,
-        chapter,
-        level,
-        shownIds,
-        additionalCount
-      );
-
-      if (additionalQuestions.length === 0) {
-        // No more questions available
-        return prev;
-      }
-
-      // Combine questions
       const newQuestions = [...prev.questions, ...additionalQuestions];
 
-      // Update session
       if (sessionRef.current) {
         sessionRef.current.questions = newQuestions;
         sessionRef.current.maxScore = newQuestions.length;
@@ -356,7 +361,10 @@ export function useQuiz(
         questions: newQuestions,
       };
     });
-  }, [subject, chapter, level]);
+
+    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, []);
+    setTotalAvailable(newAvailableCount);
+  }, [subject, chapter, level, state.questions]);
 
   // Pause quiz
   const pauseQuiz = useCallback(() => {
@@ -379,9 +387,8 @@ export function useQuiz(
     const hasAnsweredCurrent = currentQuestion ? !!state.answers[currentQuestion.id] : false;
     const answeredCount = Object.keys(state.answers).length;
 
-    // Count available questions for extending
     const shownIds = state.questions.map(q => q.id);
-    const availableQuestions = countAvailableQuestions(subject, chapter, level, shownIds);
+    const availableQuestions = totalAvailable - shownIds.length;
 
     return {
       currentQuestion,
@@ -391,9 +398,9 @@ export function useQuiz(
       hasAnsweredCurrent,
       totalQuestions: state.questions.length,
       answeredCount,
-      availableQuestions,
+      availableQuestions: Math.max(0, availableQuestions),
     };
-  }, [state.questions, state.currentQuestionIndex, state.answers, subject, chapter, level]);
+  }, [state.questions, state.currentQuestionIndex, state.answers, totalAvailable]);
 
   return {
     ...state,
