@@ -1,5 +1,15 @@
 {
-  "subjects": [],
-  "questions": {},
-  "lastUpdated": "2024-01-01T00:00:00.000Z"
+  "subjects": [
+    {
+      "id": "1772804477780",
+      "slug": "sceince",
+      "name": "Sceince",
+      "emoji": "📚",
+      "category": "academic"
+    }
+  ],
+  "questions": {
+    "sceince": []
+  },
+  "lastUpdated": "2026-03-06T13:41:17.888Z"
 }

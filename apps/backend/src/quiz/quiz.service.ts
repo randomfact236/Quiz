@@ -33,29 +33,24 @@ export class QuizService {
   // ==================== SUBJECTS ====================
 
   async findAllSubjects(pagination?: PaginationDto, hasContentOnly: boolean = false): Promise<{ data: Subject[]; total: number }> {
-    const cacheKey = pagination
-      ? `${settings.quiz.cache.allSubjectsKey}:page:${pagination.page}:limit:${pagination.limit}:hasContent:${hasContentOnly}`
-      : `${settings.quiz.cache.allSubjectsKey}:hasContent:${hasContentOnly}`;
+    // NOTE: No caching for subjects list — ensures deletions are immediately reflected.
+    const page = pagination?.page ?? 1;
+    const limit = pagination?.limit ?? 100;
 
-    return this.cacheService.getOrSet(cacheKey, async () => {
-      const page = pagination?.page ?? 1;
-      const limit = pagination?.limit ?? 100;
+    const query = this.subjectRepo.createQueryBuilder('subject')
+      .orderBy('subject.order', 'ASC')
+      .addOrderBy('subject.name', 'ASC')
+      .skip((page - 1) * limit)
+      .take(limit);
 
-      const query = this.subjectRepo.createQueryBuilder('subject')
-        .orderBy('subject.name', 'ASC')
-        .skip((page - 1) * limit)
-        .take(limit);
+    if (hasContentOnly) {
+      // Filter subjects that have at least one chapter with at least one question
+      query.innerJoin('subject.chapters', 'chapter')
+        .innerJoin('chapter.questions', 'question');
+    }
 
-      if (hasContentOnly) {
-        // Filter subjects that have at least one chapter with at least one question
-        query.innerJoin('subject.chapters', 'chapter')
-          .innerJoin('chapter.questions', 'question');
-      }
-
-      const [data, total] = await query.getManyAndCount();
-
-      return { data, total };
-    }, settings.quiz.cache.subjectsTtl);
+    const [data, total] = await query.getManyAndCount();
+    return { data, total };
   }
 
   async findSubjectBySlug(slug: string): Promise<Subject> {
@@ -70,7 +65,8 @@ export class QuizService {
   async createSubject(dto: CreateSubjectDto): Promise<Subject> {
     const subject = this.subjectRepo.create(dto);
     const saved = await this.subjectRepo.save(subject);
-    await this.cacheService.del('subjects:all');
+    // Clear all subjects cache variants
+    await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
     return saved;
   }
 
@@ -79,14 +75,43 @@ export class QuizService {
     if (!subject) { throw new NotFoundException('Subject not found'); }
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
-    await this.cacheService.del('subjects:all');
+    // Clear all subjects cache variants
+    await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
     return saved;
   }
 
   async deleteSubject(id: string): Promise<void> {
-    const result = await this.subjectRepo.delete(id);
-    if (result.affected === 0) { throw new NotFoundException('Subject not found'); }
-    await this.cacheService.del(settings.quiz.cache.allSubjectsKey);
+    const subject = await this.subjectRepo.findOne({
+      where: { id },
+      relations: ['chapters', 'chapters.questions']
+    });
+
+    if (!subject) {
+      throw new NotFoundException('Subject not found');
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (subject.chapters && subject.chapters.length > 0) {
+        for (const chapter of subject.chapters) {
+          await queryRunner.manager.delete(Question, { chapterId: chapter.id });
+        }
+        await queryRunner.manager.delete(Chapter, { subjectId: id });
+      }
+      
+      await queryRunner.manager.delete(Subject, { id });
+      
+      await queryRunner.commitTransaction();
+      await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   // ==================== CHAPTERS ====================
@@ -101,11 +126,11 @@ export class QuizService {
   async createChapter(name: string, subjectId: string): Promise<Chapter> {
     const subject = await this.subjectRepo.findOne({ where: { id: subjectId } });
     if (!subject) { throw new NotFoundException('Subject not found'); }
-    
+
     // Get the next chapter number for this subject
     const existingChapters = await this.chapterRepo.find({ where: { subjectId } });
     const chapterNumber = existingChapters.length + 1;
-    
+
     const chapter = this.chapterRepo.create({ name, subject, subjectId, chapterNumber });
     return this.chapterRepo.save(chapter);
   }
@@ -246,10 +271,10 @@ export class QuizService {
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
     if (!chapter) { throw new NotFoundException('Chapter not found'); }
-    
+
     // Combine correct answer with wrong answers to form options array
     const options = [dto.correctAnswer, ...dto.wrongAnswers].filter(Boolean);
-    
+
     const question = this.questionRepo.create({
       question: dto.question,
       correctAnswer: dto.correctAnswer,

@@ -34,7 +34,7 @@ case "$1" in
         FRONTEND_PID=$!
         echo ""
         echo "Both servers starting!"
-        echo "- Backend: http://localhost:4000"
+        echo "- Backend: http://localhost:3011"
         echo "- Frontend: http://localhost:3000"
         echo ""
         echo "Press Ctrl+C to stop all servers"

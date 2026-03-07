@@ -2,10 +2,25 @@ import { api } from './api-client';
 
 export interface JokeCategory {
     id: string;
-    name: string;
     slug: string;
+    name: string;
     emoji: string;
     description?: string;
+}
+
+export interface Joke {
+    id: string;
+    joke: string;
+    category: string;
+    categoryId?: string;
+    likes: number;
+    dislikes: number;
+    status?: string;
+}
+
+export async function getJokes(): Promise<Joke[]> {
+    const response = await api.get<{ data: Joke[]; total: number }>('/jokes/classic?page=1&limit=100');
+    return response.data.data;
 }
 
 export async function getJokeCategories(hasContent: boolean = false): Promise<JokeCategory[]> {

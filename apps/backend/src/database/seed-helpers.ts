@@ -94,11 +94,26 @@ export async function seedSubjects(dataSource: DataSource): Promise<InsertedSubj
 
   const insertedSubjects: InsertedSubject[] = [];
   for (const subject of subjects) {
+    // DO NOTHING on conflict: preserves user deletions — a deleted subject stays deleted.
     const result = await dataSource.query<QueryResultWithId[]>(
-      `INSERT INTO subjects (slug, name, emoji, category, "order", "isActive") VALUES ($1, $2, $3, $4, $5, true) RETURNING id`,
+      `INSERT INTO subjects (slug, name, emoji, category, "order", "isActive") 
+       VALUES ($1, $2, $3, $4, $5, true) 
+       ON CONFLICT (slug) DO NOTHING
+       RETURNING id`,
       [subject.slug, subject.name, subject.emoji, subject.category, subject.order]
     );
-    insertedSubjects.push({ ...subject, id: result[0].id });
+    // If subject already existed (DO NOTHING), fetch the existing id
+    if (result.length === 0) {
+      const existing = await dataSource.query<QueryResultWithId[]>(
+        `SELECT id FROM subjects WHERE slug = $1`,
+        [subject.slug]
+      );
+      if (existing.length > 0) {
+        insertedSubjects.push({ ...subject, id: existing[0].id });
+      }
+    } else {
+      insertedSubjects.push({ ...subject, id: result[0].id });
+    }
   }
   return insertedSubjects;
 }
@@ -130,11 +145,25 @@ export async function seedChapters(
   for (const subject of insertedSubjects) {
     const chapters = chapterNames[subject.slug] || [];
     for (let i = 0; i < chapters.length; i++) {
+      // DO NOTHING on conflict: preserves user deletions
       const result = await dataSource.query<QueryResultWithId[]>(
-        `INSERT INTO chapters (name, "chapterNumber", "subjectId") VALUES ($1, $2, $3) RETURNING id`,
+        `INSERT INTO chapters (name, "chapterNumber", "subjectId") 
+         VALUES ($1, $2, $3) 
+         ON CONFLICT (name, "subjectId") DO NOTHING
+         RETURNING id`,
         [chapters[i], i + 1, subject.id]
       );
-      insertedChapters.push({ id: result[0].id, subjectId: subject.id, name: chapters[i] });
+      if (result.length === 0) {
+        const existing = await dataSource.query<QueryResultWithId[]>(
+          `SELECT id FROM chapters WHERE name = $1 AND "subjectId" = $2`,
+          [chapters[i], subject.id]
+        );
+        if (existing.length > 0) {
+          insertedChapters.push({ id: existing[0].id, subjectId: subject.id, name: chapters[i] });
+        }
+      } else {
+        insertedChapters.push({ id: result[0].id, subjectId: subject.id, name: chapters[i] });
+      }
     }
   }
   return insertedChapters;
@@ -200,7 +229,7 @@ export async function seedDadJokes(
   dataSource: DataSource,
   jokeCategories: InsertedJokeCategory[]
 ): Promise<void> {
-  if (jokeCategories.length === 0) {return;}
+  if (jokeCategories.length === 0) { return; }
 
   const dadJokes = [
     { joke: "Why don't scientists trust atoms? Because they make up everything!", categoryId: jokeCategories[0].id },
@@ -252,7 +281,7 @@ export async function seedRiddles(
   dataSource: DataSource,
   riddleCategories: InsertedRiddleCategory[]
 ): Promise<void> {
-  if (riddleCategories.length === 0) {return;}
+  if (riddleCategories.length === 0) { return; }
 
   const riddles = [
     { question: 'What has keys but no locks?', answer: 'A piano', difficulty: 'easy', categoryId: riddleCategories[1]?.id || riddleCategories[0].id },

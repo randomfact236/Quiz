@@ -14,7 +14,7 @@ import type {
 } from '@/types/settings.types';
 
 // API_URL removed - using localStorage
-// const API_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api';
+// const API_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3011/api';
 
 // Re-export SystemSettings for backward compatibility
 export type { SystemSettings };

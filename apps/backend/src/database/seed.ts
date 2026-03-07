@@ -15,9 +15,6 @@ import { DataSource } from 'typeorm';
 
 import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 import {
-  seedSubjects,
-  seedChapters,
-  seedQuestions,
   seedJokeCategories,
   seedDadJokes,
   seedRiddleCategories,
@@ -56,17 +53,8 @@ async function seed(): Promise<void> {
     await _AppDataSource.initialize();
     console.log('✅ Database connection established');
 
-    // Seed Subjects
-    console.log('📚 Seeding subjects...');
-    const insertedSubjects = await seedSubjects(_AppDataSource);
-
-    // Seed Chapters for each subject
-    console.log('📖 Seeding chapters...');
-    const insertedChapters = await seedChapters(_AppDataSource, insertedSubjects);
-
-    // Seed Sample Questions
-    console.log('❓ Seeding questions...');
-    await seedQuestions(_AppDataSource, insertedChapters);
+    // Note: Quiz subjects, chapters, and questions are NOT seeded by default.
+    // Add them via the admin panel to avoid confusion.
 
     // Seed Joke Categories
     console.log('😄 Seeding joke categories...');

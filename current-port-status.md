@@ -48,8 +48,8 @@
 - **3011**: Next.js Production Preview ✅ Available (Alternative to protected 3002)
 
 #### Backend Services:
-- **4000**: NestJS API Server ✅ Available
-- **4001**: NestJS Admin API ✅ Available
+- **3011**: NestJS API Server ✅ Available (EXCLUSIVE)
+- **3012**: NestJS Admin API ✅ Available
 
 #### Database Services:
 - **5432**: PostgreSQL Database ✅ Available
@@ -100,8 +100,8 @@
 ## 🚀 Deployment URLs (Development):
 - Frontend: http://localhost:3010
 - Preview: http://localhost:3011
-- API: http://localhost:4000/api
-- Admin API: http://localhost:4001
+- API: http://localhost:3011/api
+- Admin API: http://localhost:3012
 - RabbitMQ UI: http://localhost:15673
 - Grafana: http://localhost:3004
 - Prometheus: http://localhost:9090

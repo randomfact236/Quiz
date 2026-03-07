@@ -9,7 +9,7 @@
 # PORT ALLOCATIONS:
 # -----------------
 FRONTEND_PORT=3010
-BACKEND_PORT=4000
+BACKEND_PORT=3011
 POSTGRESQL_PORT=5432
 REDIS_PORT=6379
 
@@ -29,6 +29,6 @@ REDIS_PORT=6379
 # Run as Admin: port-security-enforcer.ps1 -Action setup
 # This reserves ports in Windows and creates firewall rules.
 
-ALLOWED_PORTS=3010,4000,5432,6379
+ALLOWED_PORTS=3010,3011,5432,6379
 PROJECT_NAME=AI-Quiz-Platform
 LOCK_VERSION=1.0

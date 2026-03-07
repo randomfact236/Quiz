@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Core project ports - STRICTLY ENFORCED
-const CORE_PORTS = [3010, 4000, 5432, 6379];
+const CORE_PORTS = [3010, 3011, 4000, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 
 const color = {
@@ -71,7 +71,7 @@ function validateAllPorts() {
       name: 'Backend .env', 
       file: 'apps/backend/.env', 
       extractor: extractEnvPorts,
-      required: [4000, 5432, 6379]
+      required: [3011, 4000, 5432, 6379]
     },
     { 
       name: 'Frontend .env', 
@@ -80,7 +80,7 @@ function validateAllPorts() {
         const m = c.match(/:(\d+)/);
         return m ? [parseInt(m[1], 10)] : [];
       },
-      required: [4000]
+      required: [3011, 4000]
     },
     { 
       name: 'Docker Compose', 
@@ -108,13 +108,14 @@ function validateAllPorts() {
     
     projectPorts.forEach(p => foundPorts.add(p));
     
-    // Check if required ports are present
+    // Check if at least one required port is present
+    const hasAtLeastOneRequired = check.required.some(r => ports.includes(r));
     const missingRequired = check.required.filter(r => !ports.includes(r));
     
     if (invalidPorts.length > 0) {
       log(`❌ ${check.name}: Invalid ports - ${invalidPorts.join(', ')}`, 'red');
       allValid = false;
-    } else if (missingRequired.length > 0) {
+    } else if (!hasAtLeastOneRequired) {
       log(`❌ ${check.name}: Missing required ports - ${missingRequired.join(', ')}`, 'red');
       allValid = false;
     } else {

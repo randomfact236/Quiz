@@ -15,14 +15,10 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, GraduationCap, Target, Layers, Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 
-import { STORAGE_KEYS, getItem } from '@/lib/storage';
-import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
-import type { Question } from '@/types/quiz';
+import { getSubjects, getQuestionsBySubject } from '@/lib/quiz-api';
+import type { QuizSubject } from '@/lib/quiz-api';
 
-interface SubjectInfo {
-  slug: string;
-  name: string;
-  emoji: string;
+interface SubjectInfo extends QuizSubject {
 }
 
 const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Extreme'] as const;
@@ -83,74 +79,60 @@ export default function PracticeModePage(): JSX.Element {
   useEffect(() => {
     setIsHydrated(true);
     
-    // Load subjects
-    const storedSubjects = getItem<SubjectInfo[]>(STORAGE_KEYS.SUBJECTS, []);
-    const defaultSubjects: SubjectInfo[] = [
-      { slug: 'science', name: 'Science', emoji: '🔬' },
-      { slug: 'math', name: 'Math', emoji: '🔢' },
-      { slug: 'history', name: 'History', emoji: '📜' },
-      { slug: 'geography', name: 'Geography', emoji: '🌍' },
-      { slug: 'english', name: 'English', emoji: '📖' },
-      { slug: 'technology', name: 'Technology', emoji: '💻' },
-      { slug: 'business', name: 'Business', emoji: '💼' },
-      { slug: 'health', name: 'Health', emoji: '💪' },
-    ];
-    const subjectList = storedSubjects.length > 0 ? storedSubjects : defaultSubjects;
-    setSubjects(subjectList);
-    
-    // Load questions from JSON file first, then fall back to localStorage
-    const loadQuestions = async () => {
-      let allQuestions: Record<string, Question[]> = {};
-      
+    const loadData = async () => {
       try {
-        const fileQuestions = await loadQuestionsFromFile();
-        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
-          allQuestions = fileQuestions;
-        } else {
-          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-        }
-      } catch {
-        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-      }
-      
-      const counts: LevelCount = {
-        subjectWise: {},
-        allSubject: {},
-        completeMix: 0
-      };
-      
-      levels.forEach(level => {
-        counts.allSubject[level.toLowerCase()] = 0;
-      });
-      
-      Object.entries(allQuestions).forEach(([subjectSlug, subjectQuestions]) => {
-        counts.subjectWise[subjectSlug] = {};
+        const subjectsData = await getSubjects(false);
+        const subjectList = subjectsData.length > 0 ? subjectsData : [];
+        setSubjects(subjectList);
         
-        subjectQuestions.forEach(q => {
-          if (q.status === 'published' && q.level) {
-            const level = q.level.toLowerCase();
-            
-            if (!counts.subjectWise[subjectSlug]) {
-              counts.subjectWise[subjectSlug] = {};
-            }
-            if (!counts.subjectWise[subjectSlug][level]) {
-              counts.subjectWise[subjectSlug][level] = 0;
-            }
-            counts.subjectWise[subjectSlug][level]++;
-            
-            if (counts.allSubject[level] !== undefined) {
-              counts.allSubject[level]++;
-            }
-            
-            counts.completeMix++;
-          }
+        const counts: LevelCount = {
+          subjectWise: {},
+          allSubject: {},
+          completeMix: 0
+        };
+        
+        levels.forEach(level => {
+          counts.allSubject[level.toLowerCase()] = 0;
         });
-      });
-      
-      setLevelCounts(counts);
+        
+        for (const subject of subjectsData) {
+          counts.subjectWise[subject.slug] = {};
+          
+          try {
+            const questions = await getQuestionsBySubject(subject.slug, 'published');
+            
+            questions.forEach(q => {
+               if (q.level) {
+                 const level = q.level.toLowerCase();
+                 
+                 if (!counts.subjectWise[subject.slug]) {
+                   counts.subjectWise[subject.slug] = {};
+                 }
+                 const subjectCounts = counts.subjectWise[subject.slug]!;
+                 if (!subjectCounts[level]) {
+                   subjectCounts[level] = 0;
+                 }
+                 subjectCounts[level]++;
+                 
+                 if (counts.allSubject[level] !== undefined) {
+                   counts.allSubject[level]++;
+                 }
+                 
+                 counts.completeMix++;
+               }
+             });
+          } catch (error) {
+            console.error(`Failed to load questions for subject: ${subject.slug}`, error);
+          }
+        }
+        
+        setLevelCounts(counts);
+      } catch (error) {
+        console.error('Failed to load subjects:', error);
+      }
     };
 
-    loadQuestions();
+    loadData();
   }, []);
 
   // Group subjects into rows of 4 for desktop
@@ -188,13 +170,22 @@ export default function PracticeModePage(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
       <div className="mx-auto max-w-4xl">
-        <Link 
-          href="/quiz" 
-          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Quiz
-        </Link>
+        <div className="mb-6 flex flex-wrap gap-2">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Home
+          </Link>
+          <Link 
+            href="/quiz" 
+            className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Quiz
+          </Link>
+        </div>
         
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
@@ -254,8 +245,8 @@ export default function PracticeModePage(): JSX.Element {
                               <span className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800'}`}>
                                 {subject.name}
                               </span>
-                              <span className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : 'text-gray-500'}`}>
-                                {isHydrated ? `${totalQuestions} Qs` : '...'}
+                              <span className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : (totalQuestions > 0 ? 'text-gray-500' : 'text-orange-500')}`}>
+                                {totalQuestions > 0 ? (isHydrated ? `${totalQuestions} Qs` : '...') : 'Coming Soon'}
                               </span>
                             </button>
                           );

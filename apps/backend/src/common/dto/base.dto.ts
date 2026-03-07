@@ -656,6 +656,21 @@ export class CreateSubjectDto {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({ example: 'mathematics' })
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
+
+  @ApiProperty({ example: '📚' })
+  @IsString()
+  @IsOptional()
+  emoji?: string;
+
+  @ApiProperty({ example: 'academic' })
+  @IsString()
+  @IsOptional()
+  category?: string;
+
   @ApiPropertyOptional({ example: 'Math fundamentals and advanced topics' })
   @IsOptional()
   @IsString()

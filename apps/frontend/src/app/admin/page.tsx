@@ -34,8 +34,9 @@ import { RiddleSidebar } from './components/RiddleSidebar';
 import {
   initialJokes as libInitialJokes
 } from '@/lib/initial-data';
-import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
+import { getSubjects, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, deleteQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject } from '@/lib/quiz-api';
+import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
 // type ImageRiddle = {
@@ -96,82 +97,18 @@ type ImportExportConfig<T> = {
 */
 
 // Initial Data
-const initialQuestions: Record<string, Question[]> = {
-  science: [
-    { id: '1', question: 'What is the chemical symbol for water?', optionA: 'H2O', optionB: 'CO2', optionC: 'NaCl', optionD: 'O2', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
-    { id: '2', question: 'What planet is known as the Red Planet?', optionA: 'Venus', optionB: 'Mars', optionC: 'Jupiter', optionD: 'Saturn', correctAnswer: 'B', level: 'easy', chapter: 'Solar System' },
-    { id: '3', question: 'What is the speed of light?', optionA: '300,000 km/s', optionB: '150,000 km/s', optionC: '500,000 km/s', optionD: '200,000 km/s', correctAnswer: 'A', level: 'medium', chapter: 'Physics Basics' },
-    { id: '4', question: 'What is the powerhouse of the cell?', optionA: 'Nucleus', optionB: 'Ribosome', optionC: 'Mitochondria', optionD: 'Golgi Body', correctAnswer: 'C', level: 'easy', chapter: 'Cell Biology' },
-    { id: '5', question: 'What gas do plants absorb from the atmosphere?', optionA: 'Oxygen', optionB: 'Nitrogen', optionC: 'Carbon Dioxide', optionD: 'Hydrogen', correctAnswer: 'C', level: 'easy', chapter: 'Plant Biology' },
-    { id: '6', question: 'What is the atomic number of Carbon?', optionA: '4', optionB: '6', optionC: '8', optionD: '12', correctAnswer: 'B', level: 'medium', chapter: 'Chemistry Basics' },
-    { id: '7', question: 'Which force keeps planets in orbit around the Sun?', optionA: 'Electromagnetic', optionB: 'Nuclear', optionC: 'Gravitational', optionD: 'Friction', correctAnswer: 'C', level: 'easy', chapter: 'Physics Basics' },
-    { id: '8', question: 'What is the chemical formula for table salt?', optionA: 'NaCl', optionB: 'KCl', optionC: 'CaCO3', optionD: 'MgO', correctAnswer: 'A', level: 'easy', chapter: 'Chemistry Basics' },
-    { id: '9', question: 'How many bones are in the adult human body?', optionA: '186', optionB: '206', optionC: '226', optionD: '256', correctAnswer: 'B', level: 'medium', chapter: 'Human Anatomy' },
-    { id: '10', question: 'What is the largest organ in the human body?', optionA: 'Heart', optionB: 'Liver', optionC: 'Skin', optionD: 'Brain', correctAnswer: 'C', level: 'easy', chapter: 'Human Anatomy' },
-  ],
-  math: [
-    { id: '11', question: 'What is 15 x 8?', optionA: '110', optionB: '120', optionC: '130', optionD: '140', correctAnswer: 'B', level: 'easy', chapter: 'Multiplication', status: 'published' as const },
-    { id: '12', question: 'What is the square root of 144?', optionA: '10', optionB: '11', optionC: '12', optionD: '13', correctAnswer: 'C', level: 'easy', chapter: 'Square Roots', status: 'published' as const },
-    { id: '13', question: 'What is the value of pi to 2 decimal places?', optionA: '3.12', optionB: '3.14', optionC: '3.16', optionD: '3.18', correctAnswer: 'B', level: 'easy', chapter: 'Constants', status: 'published' as const },
-    { id: '14', question: 'Solve: 2x + 5 = 15', optionA: 'x = 3', optionB: 'x = 4', optionC: 'x = 5', optionD: 'x = 6', correctAnswer: 'C', level: 'medium', chapter: 'Algebra', status: 'published' as const },
-    { id: '15', question: 'What is 25% of 200?', optionA: '25', optionB: '50', optionC: '75', optionD: '100', correctAnswer: 'B', level: 'easy', chapter: 'Percentages', status: 'published' as const },
-    { id: '16', question: 'What is the sum of angles in a triangle?', optionA: '90 deg', optionB: '180 deg', optionC: '270 deg', optionD: '360 deg', correctAnswer: 'B', level: 'easy', chapter: 'Geometry', status: 'published' as const },
-    { id: '17', question: 'What is 7^2 + 3^2?', optionA: '52', optionB: '58', optionC: '62', optionD: '68', correctAnswer: 'B', level: 'medium', chapter: 'Exponents', status: 'published' as const },
-    { id: '18', question: 'Simplify: 3/4 + 1/4', optionA: '1/2', optionB: '3/8', optionC: '1', optionD: '4/8', correctAnswer: 'C', level: 'easy', chapter: 'Fractions', status: 'published' as const },
-  ],
-  history: [
-    { id: '19', question: 'In which year did World War II end?', optionA: '1943', optionB: '1944', optionC: '1945', optionD: '1946', correctAnswer: 'C', level: 'easy', chapter: 'World War II' },
-    { id: '20', question: 'Who was the first President of the United States?', optionA: 'Thomas Jefferson', optionB: 'John Adams', optionC: 'George Washington', optionD: 'Benjamin Franklin', correctAnswer: 'C', level: 'easy', chapter: 'US Presidents' },
-    { id: '21', question: 'Which ancient civilization built the pyramids?', optionA: 'Romans', optionB: 'Greeks', optionC: 'Egyptians', optionD: 'Mayans', correctAnswer: 'C', level: 'easy', chapter: 'Ancient Civilizations' },
-    { id: '22', question: 'In what year did the Titanic sink?', optionA: '1910', optionB: '1911', optionC: '1912', optionD: '1913', correctAnswer: 'C', level: 'medium', chapter: 'Maritime History' },
-    { id: '23', question: 'Who painted the Mona Lisa?', optionA: 'Michelangelo', optionB: 'Leonardo da Vinci', optionC: 'Raphael', optionD: 'Donatello', correctAnswer: 'B', level: 'easy', chapter: 'Renaissance' },
-    { id: '24', question: 'Which empire was ruled by Genghis Khan?', optionA: 'Roman Empire', optionB: 'Ottoman Empire', optionC: 'Mongol Empire', optionD: 'Persian Empire', correctAnswer: 'C', level: 'medium', chapter: 'Medieval Period' },
-  ],
-  geography: [
-    { id: '25', question: 'What is the capital of France?', optionA: 'London', optionB: 'Paris', optionC: 'Berlin', optionD: 'Rome', correctAnswer: 'B', level: 'easy', chapter: 'European Capitals' },
-    { id: '26', question: 'Which is the largest ocean on Earth?', optionA: 'Atlantic', optionB: 'Indian', optionC: 'Arctic', optionD: 'Pacific', correctAnswer: 'D', level: 'easy', chapter: 'Oceans' },
-    { id: '27', question: 'What is the longest river in the world?', optionA: 'Amazon', optionB: 'Nile', optionC: 'Mississippi', optionD: 'Yangtze', correctAnswer: 'B', level: 'medium', chapter: 'Rivers' },
-    { id: '28', question: 'Which continent has the most countries?', optionA: 'Asia', optionB: 'Europe', optionC: 'Africa', optionD: 'South America', correctAnswer: 'C', level: 'medium', chapter: 'Continents' },
-    { id: '29', question: 'What is the smallest country in the world?', optionA: 'Monaco', optionB: 'San Marino', optionC: 'Vatican City', optionD: 'Liechtenstein', correctAnswer: 'C', level: 'easy', chapter: 'Countries' },
-    { id: '30', question: 'Which mountain range contains Mount Everest?', optionA: 'Alps', optionB: 'Andes', optionC: 'Rocky Mountains', optionD: 'Himalayas', correctAnswer: 'D', level: 'easy', chapter: 'Mountains' },
-  ],
-  english: [
-    { id: '31', question: 'What is the past tense of "run"?', optionA: 'Runned', optionB: 'Ran', optionC: 'Running', optionD: 'Runs', correctAnswer: 'B', level: 'easy', chapter: 'Verbs' },
-    { id: '32', question: 'Which word is a synonym of "happy"?', optionA: 'Sad', optionB: 'Angry', optionC: 'Joyful', optionD: 'Tired', correctAnswer: 'C', level: 'easy', chapter: 'Synonyms' },
-    { id: '33', question: 'What type of word is "beautiful"?', optionA: 'Noun', optionB: 'Verb', optionC: 'Adjective', optionD: 'Adverb', correctAnswer: 'C', level: 'easy', chapter: 'Parts of Speech' },
-    { id: '34', question: 'Which sentence is grammatically correct?', optionA: 'She don\'t like apples', optionB: 'She doesn\'t likes apples', optionC: 'She doesn\'t like apples', optionD: 'She not like apples', correctAnswer: 'C', level: 'medium', chapter: 'Grammar' },
-    { id: '35', question: 'What is the plural of "child"?', optionA: 'Childs', optionB: 'Children', optionC: 'Childes', optionD: 'Childrens', correctAnswer: 'B', level: 'easy', chapter: 'Plurals' },
-    { id: '36', question: 'Which is an example of alliteration?', optionA: 'The sun smiled', optionB: 'Peter Piper picked', optionC: 'As busy as a bee', optionD: 'Boom! Crash!', correctAnswer: 'B', level: 'medium', chapter: 'Literary Devices' },
-  ],
-  technology: [
-    { id: '37', question: 'What does CPU stand for?', optionA: 'Central Processing Unit', optionB: 'Computer Personal Unit', optionC: 'Central Program Utility', optionD: 'Computer Processing Unit', correctAnswer: 'A', level: 'easy', chapter: 'Hardware' },
-    { id: '38', question: 'Which company developed the iPhone?', optionA: 'Google', optionB: 'Samsung', optionC: 'Apple', optionD: 'Microsoft', correctAnswer: 'C', level: 'easy', chapter: 'Mobile Technology' },
-    { id: '39', question: 'What does HTML stand for?', optionA: 'Hyper Text Markup Language', optionB: 'High Tech Modern Language', optionC: 'Hyper Transfer Markup Language', optionD: 'Home Tool Markup Language', correctAnswer: 'A', level: 'easy', chapter: 'Web Development' },
-    { id: '40', question: 'What is the main function of RAM?', optionA: 'Long-term storage', optionB: 'Temporary memory', optionC: 'Processing calculations', optionD: 'Graphics rendering', correctAnswer: 'B', level: 'medium', chapter: 'Hardware' },
-    { id: '41', question: 'Which protocol is used for secure web browsing?', optionA: 'HTTP', optionB: 'FTP', optionC: 'HTTPS', optionD: 'SMTP', correctAnswer: 'C', level: 'easy', chapter: 'Networking' },
-    { id: '42', question: 'What does "bug" mean in programming?', optionA: 'A feature', optionB: 'An error', optionC: 'A virus', optionD: 'A shortcut', correctAnswer: 'B', level: 'easy', chapter: 'Programming' },
-  ],
-};
+const defaultQuestions: Record<string, Question[]> = {};
 
 // Helper to check if a string is an emoji
 const isEmoji = (str: string): boolean => {
   return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(str);
 };
 
-const initialSubjects: Subject[] = [
-  { id: '1', slug: 'science', name: 'Science', emoji: 'science', category: 'academic' },
-  { id: '2', slug: 'math', name: 'Math', emoji: 'math', category: 'academic' },
-  { id: '3', slug: 'history', name: 'History', emoji: 'history', category: 'academic' },
-  { id: '4', slug: 'geography', name: 'Geography', emoji: 'geography', category: 'academic' },
-  { id: '5', slug: 'english', name: 'English', emoji: 'english', category: 'academic' },
-  { id: '6', slug: 'technology', name: 'Technology', emoji: 'technology', category: 'professional' },
-];
+const defaultSubjects: Subject[] = [];
 
 // Storage key for persisting active section
-const ACTIVE_SECTION_KEY = 'aiquiz:active-section';
-
 export default function AdminPage(): JSX.Element {
-  // Initialize with default, then load from localStorage in useEffect
+  // Load from database via API - no localStorage fallback
   const [activeSection, setActiveSection] = useState<MenuSection>('dashboard');
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -180,8 +117,8 @@ export default function AdminPage(): JSX.Element {
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
   // Dynamic data state
-  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(initialQuestions);
+  const [subjects, setSubjects] = useState<Subject[]>(defaultSubjects);
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
   // Real question counts fetched from the backend (used for sidebar badges)
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
@@ -219,59 +156,47 @@ export default function AdminPage(): JSX.Element {
     });
   }, []);
 
-  // Load all state from localStorage after hydration (to avoid SSR mismatch)
+  // Load data from API (database is the only source of truth)
   useEffect(() => {
-    // 1. Load data
-    const savedQuestions = getItem(STORAGE_KEYS.QUESTIONS, initialQuestions);
-    const savedSection = localStorage.getItem(ACTIVE_SECTION_KEY);
-    const savedRiddleOrder = getItem('aiquiz:riddle-chapter-order', []);
+    // Load subjects from API (Source of Truth)
+    getSubjects(false)
+      .then(async (apiSubjects) => {
+        const loadedSubjects = apiSubjects && apiSubjects.length > 0 
+          ? sanitizeSubjects(apiSubjects as unknown as Subject[])
+          : [];
+        setSubjects(loadedSubjects);
 
-    // Load subjects from API (Source of Truth) + fetch real question counts
-    import('@/lib/api-client').then(({ api }) => {
-      api.get<{ data: Subject[]; total: number }>('/quiz/subjects')
-        .then(async response => {
-          let loadedSubjects: Subject[];
-          if (response.ok && response.data.data.length > 0) {
-            loadedSubjects = sanitizeSubjects(response.data.data);
-            setSubjects(loadedSubjects);
-          } else {
-            // Fallback to localStorage then initial data
-            const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
-            loadedSubjects = sanitizeSubjects(savedSubjects);
-            setSubjects(loadedSubjects);
-          }
+        // Set active section - default to dashboard
+        if (loadedSubjects.length > 0) {
+          setActiveSection(loadedSubjects[0].slug);
+        } else {
+          setActiveSection('dashboard');
+        }
 
-          // Fetch real question counts from backend for each subject (for sidebar badges)
-          try {
-            const counts: Record<string, number> = {};
-            await Promise.all(
-              loadedSubjects.map(async (s) => {
-                // Only fetch for real DB subjects (UUID ids, not fallback '1','2' etc.)
-                if (!s.id || !s.id.includes('-')) return;
-                const qRes = await api.get<{ data: unknown[]; total: number }>(`/quiz/questions?subject=${s.slug}&limit=1`);
-                if (qRes.ok) {
-                  counts[s.slug] = qRes.data.total ?? 0;
-                }
-              })
-            );
-            setQuestionCounts(counts);
-          } catch (e) {
-            console.error('Failed to fetch question counts:', e);
-          }
-        })
-        .catch(err => {
-          console.error('Failed to fetch subjects:', err);
-          const savedSubjects = getItem(STORAGE_KEYS.SUBJECTS, initialSubjects);
-          setSubjects(sanitizeSubjects(savedSubjects));
-        });
-    });
+        // Fetch real question counts from backend for each subject (for sidebar badges)
+        try {
+          const counts: Record<string, number> = {};
+          await Promise.all(
+            loadedSubjects.map(async (s) => {
+              try {
+                const count = await getQuestionCountBySubject(s.slug);
+                counts[s.slug] = count;
+              } catch {
+                counts[s.slug] = 0;
+              }
+            })
+          );
+          setQuestionCounts(counts);
+        } catch (e) {
+          console.error('Failed to fetch question counts:', e);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch subjects:', err);
+        setActiveSection('dashboard');
+      });
 
-    // 2. Update state
-    setAllQuestions(savedQuestions);
-    if (savedSection) setActiveSection(savedSection as MenuSection);
-    setRiddleChapterOrder(savedRiddleOrder);
-
-    // 3. Complete hydration
+    // Complete hydration
     setIsHydrated(true);
   }, [sanitizeSubjects]);
 
@@ -298,46 +223,37 @@ export default function AdminPage(): JSX.Element {
   }, []);
 
 
-  // Migration: Fix any corrupted emojis in existing subjects (runs once)
+  // Fetch questions from API when subject is selected
   useEffect(() => {
-    const MIGRATION_KEY = 'aiquiz:emoji-migration-v2';
-    if (typeof window !== 'undefined' && !localStorage.getItem(MIGRATION_KEY)) {
-      // Sanitize existing subjects without resetting to defaults
-      setSubjects(prev => sanitizeSubjects(prev));
-      localStorage.setItem(MIGRATION_KEY, 'done');
+    const isSubjectSection = subjects.some(s => s.slug === activeSection);
+    
+    if (isSubjectSection && activeSection !== 'dashboard') {
+      const fetchQuestions = async () => {
+        try {
+          const result = await getQuestionsBySubject(activeSection);
+          const mappedQuestions: Question[] = result.map(q => ({
+            id: q.id as string,
+            question: q.question,
+            options: q.options || [],
+            correctOption: q.correctAnswer || 'A',
+            level: (q.level || 'medium') as Question['level'],
+            chapter: q.chapter?.name || 'General',
+            status: (q.status || 'published') as Question['status'],
+            hint: q.hint,
+            explanation: q.explanation,
+          }));
+          setAllQuestions(prev => ({
+            ...prev,
+            [activeSection]: mappedQuestions
+          }));
+        } catch (err) {
+          console.error('Failed to fetch questions for subject:', activeSection, err);
+        }
+      };
+      
+      fetchQuestions();
     }
-  }, [sanitizeSubjects]);
-
-  // Migration: Sync jokes with hardcoded initial data if version mismatch (runs once)
-  useEffect(() => {
-    const JOKES_SYNC_KEY = 'aiquiz:jokes-v2-sync';
-    if (typeof window !== 'undefined' && !localStorage.getItem(JOKES_SYNC_KEY)) {
-      // Force sync with initial jokes from library to ensure 15+ new jokes appear
-      setAllJokes(libInitialJokes as unknown as Joke[]);
-      localStorage.setItem(JOKES_SYNC_KEY, 'done');
-    }
-  }, [setAllJokes]);
-
-  // Persistence effects - Guarded by isHydrated to prevent overwriting with defaults
-  useEffect(() => {
-    if (isHydrated) {
-      setItem(STORAGE_KEYS.SUBJECTS, subjects);
-    }
-  }, [subjects, isHydrated]);
-
-  useEffect(() => {
-    if (isHydrated) {
-      setItem(STORAGE_KEYS.QUESTIONS, allQuestions);
-    }
-  }, [allQuestions, isHydrated]);
-
-
-
-  useEffect(() => {
-    if (isHydrated) {
-      setItem('aiquiz:riddle-chapter-order', riddleChapterOrder);
-    }
-  }, [riddleChapterOrder, isHydrated]);
+  }, [activeSection, subjects]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -347,6 +263,7 @@ export default function AdminPage(): JSX.Element {
   const [showEditSubjectModal, setShowEditSubjectModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'academic' | 'professional' | 'entertainment'>('academic');
   const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
+  const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
 
   const getSubjectFromSection = (section: MenuSection): Subject | null => {
     return subjects.find(s => s.slug === section) ?? null;
@@ -362,54 +279,132 @@ export default function AdminPage(): JSX.Element {
   };
 
   // Handle questions import
-  const handleQuestionsImport = (subjectSlug: string, newQuestions: Question[]) => {
-    setAllQuestions(prev => ({
-      ...prev,
-      [subjectSlug]: [...(prev[subjectSlug] ?? []), ...newQuestions],
+  const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
+    const subject = subjects.find(s => s.slug === subjectSlug);
+    
+    const apiQuestions = newQuestions.map(q => ({
+      question: q.question,
+      options: q.options,
+      correctAnswer: q.correctOption,
+      level: q.level,
+      hint: q.hint,
+      explanation: q.explanation,
+      subjectId: subject?.id,
+      status: q.status || 'published',
     }));
-    // Auto-save to file
-    setTimeout(() => {
-      const data = {
-        subjects,
-        questions: { ...allQuestions, [subjectSlug]: [...(allQuestions[subjectSlug] ?? []), ...newQuestions] },
-        lastUpdated: new Date().toISOString(),
-      };
-      saveQuizData(data);
-    }, 100);
+
+    try {
+      await createQuestionsBulk(apiQuestions);
+      const result = await getQuestionsBySubject(subjectSlug);
+      const mappedQuestions: Question[] = result.map(q => ({
+        id: q.id as string,
+        question: q.question,
+        options: q.options || [],
+        correctOption: q.correctAnswer || 'A',
+        level: (q.level || 'medium') as Question['level'],
+        chapter: q.chapter?.name || 'General',
+        status: (q.status || 'published') as Question['status'],
+        hint: q.hint,
+        explanation: q.explanation,
+      }));
+      setAllQuestions(prev => ({
+        ...prev,
+        [subjectSlug]: mappedQuestions
+      }));
+      setQuestionCounts(prev => ({
+        ...prev,
+        [subjectSlug]: mappedQuestions.length
+      }));
+    } catch (err) {
+      console.error('Failed to save questions to database:', err);
+    }
   };
 
   // Handle questions update (edit, delete, status change)
-  const handleQuestionsUpdate = (subjectSlug: string, updatedQuestions: Question[]) => {
-    setAllQuestions(prev => ({
-      ...prev,
-      [subjectSlug]: updatedQuestions,
-    }));
-    // Auto-save to file
-    setTimeout(() => {
-      const data = {
-        subjects,
-        questions: { ...allQuestions, [subjectSlug]: updatedQuestions },
-        lastUpdated: new Date().toISOString(),
-      };
-      saveQuizData(data);
-    }, 100);
+  const handleQuestionsUpdate = async (subjectSlug: string, updatedQuestions: Question[]) => {
+    const subject = subjects.find(s => s.slug === subjectSlug);
+    
+    for (const q of updatedQuestions) {
+      if (!q.id || q.id.startsWith('local-')) {
+        const apiQuestion = {
+          question: q.question,
+          options: q.options,
+          correctAnswer: q.correctOption,
+          level: q.level,
+          hint: q.hint,
+          explanation: q.explanation,
+          subjectId: subject?.id,
+          status: q.status || 'published',
+        };
+        try {
+          await createQuestion(apiQuestion);
+        } catch (err) {
+          console.error('Failed to create question:', err);
+        }
+      } else {
+        try {
+          await updateQuestion(q.id, {
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctOption,
+            level: q.level,
+            hint: q.hint,
+            explanation: q.explanation,
+            status: q.status,
+          });
+        } catch (err) {
+          console.error('Failed to update question:', q.id, err);
+        }
+      }
+    }
+
+    try {
+      const result = await getQuestionsBySubject(subjectSlug);
+      const mappedQuestions: Question[] = result.map(q => ({
+        id: q.id as string,
+        question: q.question,
+        options: q.options || [],
+        correctOption: q.correctAnswer || 'A',
+        level: (q.level || 'medium') as Question['level'],
+        chapter: q.chapter?.name || 'General',
+        status: (q.status || 'published') as Question['status'],
+        hint: q.hint,
+        explanation: q.explanation,
+      }));
+      setAllQuestions(prev => ({
+        ...prev,
+        [subjectSlug]: mappedQuestions
+      }));
+      setQuestionCounts(prev => ({
+        ...prev,
+        [subjectSlug]: mappedQuestions.length
+      }));
+    } catch (err) {
+      console.error('Failed to refetch questions:', err);
+    }
   };
 
   // Handle clear all questions for a subject
-  const handleClearQuestions = (subjectSlug: string) => {
+  const handleClearQuestions = async (subjectSlug: string) => {
+    const currentQuestions = allQuestions[subjectSlug] || [];
+    const questionIds = currentQuestions.filter(q => q.id && !q.id.startsWith('local-')).map(q => q.id);
+    
+    if (questionIds.length > 0) {
+      try {
+        await bulkActionQuestions(questionIds, 'delete');
+      } catch (err) {
+        console.error('Failed to delete questions from database:', err);
+      }
+    }
+
     setAllQuestions(prev => ({
       ...prev,
       [subjectSlug]: [],
     }));
-    // Auto-save to file
-    setTimeout(() => {
-      const data = {
-        subjects,
-        questions: { ...allQuestions, [subjectSlug]: [] },
-        lastUpdated: new Date().toISOString(),
-      };
-      saveQuizData(data);
-    }, 100);
+    setQuestionCounts(prev => ({
+      ...prev,
+      [subjectSlug]: 0
+    }));
   };
 
   // Export questions to JSON or CSV file (for backup/deployment)
@@ -446,6 +441,19 @@ export default function AdminPage(): JSX.Element {
     if (fileName.endsWith('.json')) {
       const data = await importQuizDataFromFile(file);
       if (data) {
+        // Save each subject to database
+        for (const subject of data.subjects) {
+          try {
+            await createSubject({
+              name: subject.name,
+              slug: subject.slug,
+              emoji: subject.emoji || '📚',
+              category: subject.category,
+            });
+          } catch (err) {
+            console.error('Failed to create subject:', subject.name, err);
+          }
+        }
         setSubjects(data.subjects);
         setAllQuestions(data.questions);
         await saveQuizData(data);
@@ -472,6 +480,17 @@ export default function AdminPage(): JSX.Element {
               category: 'academic',
               order: subjects.length,
             };
+            // Save to database
+            try {
+              await createSubject({
+                name: result.subjectName,
+                slug,
+                emoji: '📚',
+                category: 'academic',
+              });
+            } catch (err) {
+              console.error('Failed to create subject in database:', err);
+            }
             setSubjects(prev => [...prev, subject!]);
             setAllQuestions(prev => ({ ...prev, [slug]: [] }));
           }
@@ -482,7 +501,7 @@ export default function AdminPage(): JSX.Element {
             [subject!.slug]: [...(prev[subject!.slug] || []), ...result.imported],
           }));
           
-          // Save to file
+          // Save to file (backup only)
           const data = {
             subjects: [...subjects, subject],
             questions: { ...allQuestions, [subject.slug]: [...(allQuestions[subject.slug] || []), ...result.imported] },
@@ -497,24 +516,24 @@ export default function AdminPage(): JSX.Element {
   };
 
   // Add new subject
-  const handleAddSubject = (newSubject: Subject) => {
+  const handleAddSubject = async (newSubject: Subject) => {
+    try {
+      await createSubject({
+        name: newSubject.name,
+        slug: newSubject.slug,
+        emoji: newSubject.emoji || '📚',
+        category: newSubject.category,
+      });
+    } catch (err) {
+      console.error('Failed to create subject in database:', err);
+    }
     setSubjects(prev => [...prev, newSubject]);
     setAllQuestions(prev => ({ ...prev, [newSubject.slug]: [] }));
     setShowAddSubjectModal(false);
-    // Auto-save to file
-    setTimeout(() => {
-      const updatedQuestions = { ...allQuestions, [newSubject.slug]: [] };
-      const data = {
-        subjects: [...subjects, newSubject],
-        questions: updatedQuestions,
-        lastUpdated: new Date().toISOString(),
-      };
-      saveQuizData(data);
-    }, 100);
   };
 
   // Add new subject by name and slug (used for CSV import)
-  const handleAddSubjectByName = (name: string, slug: string) => {
+  const handleAddSubjectByName = async (name: string, slug: string) => {
     const newSubject: Subject = {
       id: String(Date.now()),
       slug,
@@ -522,24 +541,74 @@ export default function AdminPage(): JSX.Element {
       emoji: '📚',
       category: 'academic',
     };
+    try {
+      await createSubject({
+        name,
+        slug,
+        emoji: '📚',
+        category: 'academic',
+      });
+    } catch (err) {
+      console.error('Failed to create subject in database:', err);
+    }
     setSubjects(prev => [...prev, newSubject]);
     setAllQuestions(prev => ({ ...prev, [slug]: [] }));
-    // Auto-save to file
-    setTimeout(() => {
-      const updatedQuestions = { ...allQuestions, [slug]: [] };
-      const data = {
-        subjects: [...subjects, newSubject],
-        questions: updatedQuestions,
-        lastUpdated: new Date().toISOString(),
-      };
-      saveQuizData(data);
-    }, 100);
   };
 
   // Add chapter to subject (chapters are derived from question chapter strings)
   const handleAddChapter = (_subjectSlug: string, _chapterName: string) => {
     // Chapters are automatically derived from question.chapter strings
     // No action needed - the chapter will appear when questions are imported
+  };
+
+  // Delete subject
+  const handleDeleteSubject = (subjectId: string) => {
+    const subject = subjects.find(s => s.id === subjectId);
+    if (!subject) return;
+    setSubjectToDelete(subject);
+  };
+
+  const confirmDeleteSubject = async () => {
+    if (!subjectToDelete) return;
+
+    const subjectId = subjectToDelete.id;
+    const subjectSlug = subjectToDelete.slug;
+    const wasActiveSection = activeSection === subjectSlug;
+
+    if (!subjectId.startsWith('local-')) {
+      try {
+        await deleteSubject(subjectId);
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        if (error.message?.includes('not found') || error.message?.includes('Subject not found')) {
+          console.warn('Subject may have already been deleted from database, removing from local state');
+        } else {
+          console.error('Failed to delete subject from database:', err);
+        }
+      }
+    }
+
+    const remainingSubjects = subjects.filter(s => s.id !== subjectId);
+    setSubjects(remainingSubjects);
+    setAllQuestions(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+    setQuestionCounts(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+
+    if (wasActiveSection && remainingSubjects.length > 0) {
+      const nextSubject = remainingSubjects[0];
+      setActiveSection(nextSubject.slug);
+    } else if (wasActiveSection && remainingSubjects.length === 0) {
+      setActiveSection('dashboard');
+    }
+
+    setSubjectToDelete(null);
   };
 
   // Edit subject
@@ -549,7 +618,18 @@ export default function AdminPage(): JSX.Element {
   };
 
   // Update subject
-  const handleUpdateSubject = (updatedSubject: Subject) => {
+  const handleUpdateSubject = async (updatedSubject: Subject) => {
+    // Update in database
+    try {
+      await updateSubject(updatedSubject.id, {
+        name: updatedSubject.name,
+        emoji: updatedSubject.emoji,
+        category: updatedSubject.category,
+        isActive: updatedSubject.isActive,
+      });
+    } catch (err) {
+      console.error('Failed to update subject in database:', err);
+    }
     setSubjects(prev => prev.map(s => s.id === updatedSubject.id ? updatedSubject : s));
     // If slug changed, update questions key
     if (editingSubject && editingSubject.slug !== updatedSubject.slug) {
@@ -694,9 +774,6 @@ export default function AdminPage(): JSX.Element {
                 }}
                 onReorderChapters={(newOrder) => {
                   setRiddleChapterOrder(newOrder);
-                  if (typeof window !== 'undefined') {
-                    setItem('aiquiz:riddle-chapter-order', newOrder);
-                  }
                 }}
                 chapterCounts={riddleChapterCounts}
               />
@@ -784,6 +861,7 @@ export default function AdminPage(): JSX.Element {
               onAddSubject={() => setShowAddSubjectModal(true)}
               onExport={() => setShowExportModal(true)}
               onImport={() => setShowImportModal(true)}
+              onDeleteSubject={handleDeleteSubject}
             />
           )}
           {subjects.some(s => s.slug === activeSection) && (
@@ -797,6 +875,8 @@ export default function AdminPage(): JSX.Element {
               onQuestionsImport={handleQuestionsImport}
               onQuestionsUpdate={handleQuestionsUpdate}
               onClearQuestions={handleClearQuestions}
+              onEditSubject={handleEditSubject}
+              onDeleteSubject={handleDeleteSubject}
             />
           )}
           {activeSection === 'jokes' && (
@@ -924,6 +1004,41 @@ export default function AdminPage(): JSX.Element {
           onUpdate={handleUpdateSubject}
           existingSlugs={subjects.filter(s => s.id !== editingSubject.id).map(s => s.slug)}
         />
+      )}
+
+      {/* Delete Subject Confirmation Modal */}
+      {subjectToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+            <h3 className="text-xl font-bold mb-4 text-red-600 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              </svg>
+              Delete Subject
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete <strong className="text-gray-800">"{subjectToDelete.name}"</strong>? 
+              <br /><br />
+              This will also delete all questions in this subject. This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setSubjectToDelete(null)}
+                className="flex-1 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteSubject}
+                className="flex-1 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <AdminGuard />
@@ -1227,13 +1342,14 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
 }
 
 // Dashboard Section
-function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject, onExport, onImport }: {
+function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject, onExport, onImport, onDeleteSubject }: {
   onSelectSubject: (section: MenuSection) => void;
   subjects: Subject[];
   allQuestions: Record<string, Question[]>;
   onAddSubject: () => void;
   onExport: () => void;
   onImport: () => void;
+  onDeleteSubject: (subjectId: string) => void;
 }): JSX.Element {
   return (
     <div>
@@ -1262,21 +1378,39 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {subjects.map((subject) => (
-          <button
+          <div
             key={subject.slug}
-            onClick={() => onSelectSubject(subject.slug as MenuSection)}
-            className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow text-left"
+            className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow relative group"
           >
-            <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-white">
-                <span className="text-2xl">{isEmoji(subject.emoji) ? subject.emoji : '📚'}</span>
+            <button
+              onClick={() => onSelectSubject(subject.slug as MenuSection)}
+              className="w-full text-left"
+            >
+              <div className="flex items-center gap-4">
+                <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-white">
+                  <span className="text-2xl">{isEmoji(subject.emoji) ? subject.emoji : '📚'}</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800">{subject.name}</p>
+                  <p className="text-sm text-gray-500">{(allQuestions[subject.slug] ?? []).length} questions</p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-gray-800">{subject.name}</p>
-                <p className="text-sm text-gray-500">{(allQuestions[subject.slug] ?? []).length} questions</p>
-              </div>
-            </div>
-          </button>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteSubject(subject.id);
+              }}
+              className="absolute top-2 right-2 p-2 rounded-lg text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+              title="Delete subject"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
         ))}
       </div>
     </div>
@@ -1670,22 +1804,15 @@ function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
 // ============================================================================
 
 function useGlobalJokes() {
-  const [allJokes, setAllJokes] = useState<Joke[]>(libInitialJokes as unknown as Joke[]);
+  const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    // Initial load from storage
-    const saved = getItem<Joke[]>(STORAGE_KEYS.JOKES, libInitialJokes as unknown as Joke[]);
-    setAllJokes(saved);
-    setIsHydrated(true);
+    getJokes()
+      .then(setAllJokes)
+      .catch(() => setAllJokes([]))
+      .finally(() => setIsHydrated(true));
   }, []);
-
-  // Persistence (Guarded)
-  useEffect(() => {
-    if (isHydrated) {
-      setItem(STORAGE_KEYS.JOKES, allJokes);
-    }
-  }, [allJokes, isHydrated]);
 
   return { allJokes, setAllJokes };
 }
@@ -1693,29 +1820,17 @@ function useGlobalJokes() {
 // ============================================================================
 // GLOBAL JOKE CATEGORIES STATE (shared with JokesSection component)
 // ============================================================================
-const defaultJokeCategories: JokeCategory[] = [
-  { id: '1', name: 'Classic Dad Jokes', emoji: '😂', description: 'Timeless classics that never fail to get an eye-roll.' },
-  { id: '2', name: 'Programming Jokes', emoji: '💻', description: 'Programming and tech humor for the nerdy dad.' },
-  { id: '3', name: 'Parenting Dad Jokes', emoji: '👶', description: 'Jokes about the adventures of raising kids.' },
-  { id: '4', name: 'Work Office Dad Jokes', emoji: '💼', description: 'Corporate humor for the 9-to-5 dad.' },
-];
 
 function useGlobalJokeCategories() {
-  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(defaultJokeCategories);
+  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const saved = getItem<JokeCategory[]>(STORAGE_KEYS.JOKE_CATEGORIES, defaultJokeCategories);
-    setJokeCategories(saved);
-    setIsHydrated(true);
+    getJokeCategories()
+      .then(setJokeCategories)
+      .catch(() => setJokeCategories([]))
+      .finally(() => setIsHydrated(true));
   }, []);
-
-  // Persistence (Guarded)
-  useEffect(() => {
-    if (isHydrated) {
-      setItem(STORAGE_KEYS.JOKE_CATEGORIES, jokeCategories);
-    }
-  }, [jokeCategories, isHydrated]);
 
   return { jokeCategories, setJokeCategories };
 }

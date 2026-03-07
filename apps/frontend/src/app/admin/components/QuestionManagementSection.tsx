@@ -7,6 +7,7 @@ import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, parseQuestionCSV, exportQuestionsToCSV } from '../utils';
+import { bulkActionQuestions } from '@/lib/quiz-api';
 
 /**
  * Props for the QuestionManagementSection component
@@ -30,6 +31,10 @@ interface QuestionManagementSectionProps {
   onQuestionsUpdate: (subjectSlug: string, updatedQuestions: Question[]) => void;
   /** Callback to clear all questions for a subject */
   onClearQuestions: (subjectSlug: string) => void;
+  /** Callback to edit a subject */
+  onEditSubject: (subject: Subject) => void;
+  /** Callback to delete a subject */
+  onDeleteSubject: (subjectId: string) => void;
 }
 
 /**
@@ -71,6 +76,8 @@ export function QuestionManagementSection({
   onQuestionsImport,
   onQuestionsUpdate,
   onClearQuestions,
+  onEditSubject,
+  onDeleteSubject,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states
   const [filterLevel, setFilterLevel] = useState<string>('all');
@@ -299,36 +306,48 @@ export function QuestionManagementSection({
     async (action: BulkActionType) => {
       setBulkActionLoading(true);
 
+      const idsToUpdate = selectedIds.filter(id => id && !id.startsWith('local-'));
+      const hasValidIds = idsToUpdate.length > 0;
+
+      if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete')) {
+        try {
+          await bulkActionQuestions(idsToUpdate, action);
+        } catch (err) {
+          console.error('Bulk action failed:', err);
+        }
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setLocalQuestions((prev) =>
-        prev
-          .map((q) => {
-            if (selectedIds.includes(String(q.id))) {
-              switch (action) {
-                case 'publish':
-                  return { ...q, status: 'published' as ContentStatus };
-                case 'draft':
-                  return { ...q, status: 'draft' as ContentStatus };
-                case 'trash':
-                  return { ...q, status: 'trash' as ContentStatus };
-                case 'delete':
-                  return null;
-                case 'restore':
-                  return { ...q, status: 'draft' as ContentStatus };
-                default:
-                  return q;
-              }
+      const updatedQuestions = localQuestions
+        .map((q) => {
+          if (selectedIds.includes(String(q.id))) {
+            switch (action) {
+              case 'publish':
+                return { ...q, status: 'published' as ContentStatus };
+              case 'draft':
+                return { ...q, status: 'draft' as ContentStatus };
+              case 'trash':
+                return { ...q, status: 'trash' as ContentStatus };
+              case 'delete':
+                return null;
+              case 'restore':
+                return { ...q, status: 'draft' as ContentStatus };
+              default:
+                return q;
             }
-            return q;
-          })
-          .filter(Boolean) as Question[]
-      );
+          }
+          return q;
+        })
+        .filter(Boolean) as Question[];
+
+      setLocalQuestions(updatedQuestions);
+      onQuestionsUpdate(subject.slug, updatedQuestions);
 
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds]
+    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate]
   );
 
   // Reset form
@@ -791,21 +810,52 @@ export function QuestionManagementSection({
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-600 mr-2">Subject:</span>
           {allSubjects.map((s) => (
-            <button
-              key={s.slug}
-              onClick={() => onSubjectSelect(s.slug)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                subject.slug === s.slug
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              aria-pressed={subject.slug === s.slug}
-            >
-              <span role="img" aria-hidden="true">
-                {s.emoji}
-              </span>{' '}
-              {s.name}
-            </button>
+            <div key={s.slug} className="flex items-center gap-0.5">
+              <button
+                onClick={() => onSubjectSelect(s.slug)}
+                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${
+                  subject.slug === s.slug
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                aria-pressed={subject.slug === s.slug}
+              >
+                <span role="img" aria-hidden="true">
+                  {s.emoji}
+                </span>{' '}
+                {s.name}
+              </button>
+              {/* Edit button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditSubject(s);
+                }}
+                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${
+                  subject.slug === s.slug
+                    ? 'bg-blue-400 text-white hover:bg-blue-300'
+                    : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
+                }`}
+                title={`Edit ${s.name}`}
+              >
+                <Pencil size={12} />
+              </button>
+              {/* Delete button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteSubject(s.id);
+                }}
+                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${
+                  subject.slug === s.slug
+                    ? 'bg-blue-400 text-white hover:bg-red-400'
+                    : 'bg-gray-200 text-red-600 hover:bg-red-50'
+                }`}
+                title={`Delete ${s.name}`}
+              >
+                <Trash2 size={12} />
+              </button>
+            </div>
           ))}
         </div>
 

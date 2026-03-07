@@ -82,7 +82,7 @@ FROM node:20-alpine AS production
 
 # Set environment
 ENV NODE_ENV=production
-ENV PORT=4000
+ENV PORT=3011
 
 # Install production dependencies and security updates
 RUN apk update && apk upgrade && \
@@ -120,11 +120,11 @@ RUN mkdir -p /app/logs && chown -R nestjs:nodejs /app
 USER nestjs
 
 # Expose port
-EXPOSE 4000
+EXPOSE 3011
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:4000/api/health || exit 1
+    CMD curl -f http://localhost:3011/api/health || exit 1
 
 # Use entrypoint script
 ENTRYPOINT ["docker-entrypoint.sh"]
@@ -138,7 +138,7 @@ CMD ["node", "dist/main.js"]
 FROM node:20-alpine AS development
 
 ENV NODE_ENV=development
-ENV PORT=4000
+ENV PORT=3011
 
 RUN apk update && apk upgrade && \
     apk add --no-cache \
@@ -167,7 +167,7 @@ COPY tsconfig.json ./
 
 WORKDIR /app/apps/backend
 
-EXPOSE 4000
+EXPOSE 3011
 
 # Start in development mode with hot reload
 CMD ["npm", "run", "start:dev"]

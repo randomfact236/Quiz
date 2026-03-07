@@ -17,7 +17,8 @@ import type {
   UseQuizReturn
 } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
-import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
+import { getQuestionsBySubject, getQuestionsByChapter, getRandomQuestions, getMixedQuestions, getSubjectBySlug } from '@/lib/quiz-api';
+ import type { QuizQuestion } from '@/lib/quiz-api';
 
 /** Generate UUID for session */
 function generateUUID(): string {
@@ -26,6 +27,23 @@ function generateUUID(): string {
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+}
+
+/** Convert QuizQuestion from API to Question type */
+function convertQuizQuestion(q: QuizQuestion): Question {
+  return {
+    id: parseInt(q.id, 10),
+    question: q.question,
+    optionA: q.options[0] || '',
+    optionB: q.options[1] || '',
+    optionC: q.options[2] || '',
+    optionD: q.options[3] || '',
+    correctAnswer: q.correctAnswer,
+    level: q.level,
+    chapter: q.chapterId,
+    status: q.status || 'published',
+    explanation: q.explanation || '',
+  };
 }
 
 /** Calculate score based on answers */
@@ -39,32 +57,42 @@ function calculateScore(questions: Question[], answers: Record<number, string>):
   return score;
 }
 
-/** Load questions from localStorage or file */
-async function loadAllQuestions(): Promise<Record<string, Question[]>> {
-  try {
-    const fileQuestions = await loadQuestionsFromFile();
-    if (fileQuestions && Object.keys(fileQuestions).length > 0) {
-      return fileQuestions;
-    }
-  } catch (error) {
-    console.error('Failed to load questions from file:', error);
-  }
-  return getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-}
-
-/** Load questions from localStorage (max 10) */
+/** Load questions from API based on subject, chapter, and level */
 async function loadQuestions(subject: string, chapter: string, level: string): Promise<Question[]> {
-  const allQuestions = await loadAllQuestions();
-  const subjectQuestions = allQuestions[subject] || [];
-
-  const filtered = subjectQuestions.filter(q => {
-    if (q.chapter !== chapter) return false;
-    if (q.level !== level) return false;
-    if (q.status === 'trash' || q.status === 'draft') return false;
-    return true;
-  });
-
-  return filtered.slice(0, 10);
+  try {
+    let questions: QuizQuestion[] = [];
+    
+    if (subject === 'all') {
+      if (level === 'all') {
+        questions = await getMixedQuestions(50);
+      } else {
+        questions = await getRandomQuestions(level, 20);
+      }
+    } else {
+      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      
+      if (chapter !== 'all') {
+        const subjectData = await getSubjectBySlug(subject);
+        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
+        if (chapterObj) {
+          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
+          questions = chapterQuestions.data || [];
+        }
+      } else {
+        questions = subjectQuestions;
+      }
+      
+      if (level !== 'all') {
+        questions = questions.filter(q => q.level === level);
+      }
+    }
+    
+    const convertedQuestions = questions.map(convertQuizQuestion).slice(0, 10);
+    return convertedQuestions;
+  } catch (error) {
+    console.error('Failed to load questions from API:', error);
+    return [];
+  }
 }
 
 /** Load additional questions excluding already shown ones */
@@ -75,18 +103,44 @@ async function loadAdditionalQuestions(
   excludeIds: number[],
   count: number
 ): Promise<Question[]> {
-  const allQuestions = await loadAllQuestions();
-  const subjectQuestions = allQuestions[subject] || [];
-
-  const filtered = subjectQuestions.filter(q => {
-    if (q.chapter !== chapter) return false;
-    if (q.level !== level) return false;
-    if (q.status === 'trash' || q.status === 'draft') return false;
-    if (excludeIds.includes(q.id)) return false;
-    return true;
-  });
-
-  return filtered.slice(0, count);
+  try {
+    let questions: QuizQuestion[] = [];
+    
+    if (subject === 'all') {
+      if (level === 'all') {
+        questions = await getMixedQuestions(count + excludeIds.length);
+      } else {
+        questions = await getRandomQuestions(level, count + excludeIds.length);
+      }
+    } else {
+      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      
+      if (chapter !== 'all') {
+        const subjectData = await getSubjectBySlug(subject);
+        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
+        if (chapterObj) {
+          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
+          questions = chapterQuestions.data || [];
+        }
+      } else {
+        questions = subjectQuestions;
+      }
+      
+      if (level !== 'all') {
+        questions = questions.filter(q => q.level === level);
+      }
+    }
+    
+    const convertedQuestions = questions
+      .map(convertQuizQuestion)
+      .filter(q => !excludeIds.includes(q.id))
+      .slice(0, count);
+    
+    return convertedQuestions;
+  } catch (error) {
+    console.error('Failed to load additional questions from API:', error);
+    return [];
+  }
 }
 
 /** Count available questions excluding already shown ones */
@@ -96,18 +150,40 @@ async function countAvailableQuestions(
   level: string,
   excludeIds: number[]
 ): Promise<number> {
-  const allQuestions = await loadAllQuestions();
-  const subjectQuestions = allQuestions[subject] || [];
-
-  const filtered = subjectQuestions.filter(q => {
-    if (q.chapter !== chapter) return false;
-    if (q.level !== level) return false;
-    if (q.status === 'trash' || q.status === 'draft') return false;
-    if (excludeIds.includes(q.id)) return false;
-    return true;
-  });
-
-  return filtered.length;
+  try {
+    let questions: QuizQuestion[] = [];
+    
+    if (subject === 'all') {
+      if (level === 'all') {
+        questions = await getMixedQuestions(100);
+      } else {
+        questions = await getRandomQuestions(level, 100);
+      }
+    } else {
+      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      
+      if (chapter !== 'all') {
+        const subjectData = await getSubjectBySlug(subject);
+        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
+        if (chapterObj) {
+          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
+          questions = chapterQuestions.data || [];
+        }
+      } else {
+        questions = subjectQuestions;
+      }
+      
+      if (level !== 'all') {
+        questions = questions.filter(q => q.level === level);
+      }
+    }
+    
+    const convertedQuestions = questions.map(convertQuizQuestion);
+    return convertedQuestions.filter(q => !excludeIds.includes(q.id)).length;
+  } catch (error) {
+    console.error('Failed to count available questions from API:', error);
+    return 0;
+  }
 }
 
 /** Save quiz session to history */
@@ -129,16 +205,14 @@ function clearCurrentSession(): void {
   }
 }
 
-interface SubjectInfo {
-  slug: string;
-  name: string;
-}
-
 /** Get subject name from slug */
-function getSubjectName(slug: string): string {
-  const subjects = getItem<SubjectInfo[]>(STORAGE_KEYS.SUBJECTS, []);
-  const subject = subjects.find((s) => s.slug === slug);
-  return subject?.name || slug;
+async function getSubjectName(slug: string): Promise<string> {
+  try {
+    const subject = await getSubjectBySlug(slug);
+    return subject.name;
+  } catch {
+    return slug;
+  }
 }
 
 export function useQuiz(
@@ -180,7 +254,7 @@ export function useQuiz(
       sessionRef.current = {
         id: generateUUID(),
         subject,
-        subjectName: getSubjectName(subject),
+        subjectName: await getSubjectName(subject),
         chapter,
         level,
         questions,

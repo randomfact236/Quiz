@@ -4,46 +4,18 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
 import { GraduationCap, Briefcase, Gamepad2, Home, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
-import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { getSubjects, getQuestionsBySubject, getSubjectBySlug, getQuestionsByChapter } from '@/lib/quiz-api';
 import { getChapterProgress } from '@/lib/progress';
-import { loadQuestionsFromFile } from '@/lib/quiz-data-manager';
+import type { QuizSubject } from '@/lib/quiz-api';
 
-interface Subject {
-  id: number;
-  slug: string;
-  name: string;
-  emoji: string;
-  category: 'academic' | 'professional' | 'entertainment';
+type SubjectCategory = 'academic' | 'professional' | 'entertainment';
+
+interface Subject extends QuizSubject {
+  category: SubjectCategory;
   order?: number;
 }
 
-interface CategorySection {
-  id: 'academic' | 'professional' | 'entertainment';
-  title: string;
-  icon: React.ReactNode;
-  colorClass: string;
-}
 
-const categories: CategorySection[] = [
-  {
-    id: 'academic',
-    title: 'Academic',
-    icon: <GraduationCap className="h-5 w-5" />,
-    colorClass: 'text-blue-600',
-  },
-  {
-    id: 'professional',
-    title: 'Professional & Life',
-    icon: <Briefcase className="h-5 w-5" />,
-    colorClass: 'text-teal-600',
-  },
-  {
-    id: 'entertainment',
-    title: 'Entertainment & Culture',
-    icon: <Gamepad2 className="h-5 w-5" />,
-    colorClass: 'text-purple-600',
-  },
-];
 
 // Map of icon keys to emoji or icon display
 const iconDisplayMap: Record<string, string> = {
@@ -76,35 +48,49 @@ function getSubjectDisplay(emoji: string): string {
   return emoji;
 }
 
-function SubjectCard({ slug, emoji, name }: { slug: string; emoji: string; name: string }): JSX.Element {
+function SubjectCard({ slug, emoji, name, questionCount, isLive, isActive }: { slug: string; emoji: string; name: string; questionCount: number; isLive: boolean; isActive: boolean }): JSX.Element {
   const display = getSubjectDisplay(emoji);
+  const isAvailable = isActive && isLive;
 
   return (
     <Link
-      href={`/quiz?subject=${slug}`}
-      className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
-      aria-label={`Select ${name} subject`}
+      href={isAvailable ? `/quiz?subject=${slug}` : '#'}
+      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 hover:scale-105 hover:bg-white hover:shadow-xl cursor-pointer' : 'bg-gray-100/50 cursor-not-allowed opacity-75'}`}
+      aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
     >
       <span className="text-4xl" aria-hidden="true">{display}</span>
       <span className="mt-2 font-bold text-gray-800">{name}</span>
+      {isAvailable ? (
+        <span className="mt-1 text-xs font-medium text-green-600">✓ {questionCount} questions</span>
+      ) : (
+        <span className="mt-1 text-xs font-medium text-gray-500">Coming Soon</span>
+      )}
     </Link>
   );
 }
 
 function CategorySection({
-  category,
+  title,
+  icon,
+  colorClass,
   subjects,
+  questionCounts,
 }: {
-  category: CategorySection;
+  title: string;
+  icon: React.ReactNode;
+  colorClass: string;
   subjects: Subject[];
+  questionCounts: Record<string, number>;
 }): JSX.Element | null {
-  if (subjects.length === 0) return null;
+  if (subjects.length === 0) {
+    return null;
+  }
 
   return (
     <div className="mb-8">
-      <div className={`mb-4 flex items-center gap-2 ${category.colorClass}`}>
-        {category.icon}
-        <h2 className="text-xl font-bold">{category.title}</h2>
+      <div className={`mb-4 flex items-center gap-2 ${colorClass}`}>
+        {icon}
+        <h2 className="text-xl font-bold">{title.toUpperCase()}</h2>
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
         {subjects.map((subject) => (
@@ -113,6 +99,9 @@ function CategorySection({
             slug={subject.slug}
             emoji={subject.emoji}
             name={subject.name}
+            questionCount={questionCounts[subject.slug] || 0}
+            isLive={(questionCounts[subject.slug] || 0) > 0}
+            isActive={subject.isActive}
           />
         ))}
       </div>
@@ -120,69 +109,85 @@ function CategorySection({
   );
 }
 
+// Helper to determine styling for categories dynamically
+function getCategoryDesign(categoryName: string) {
+  const name = categoryName.toLowerCase();
+
+  if (name.includes('academic') || name.includes('science') || name.includes('math') || name.includes('school')) {
+    return {
+      colorClass: 'text-blue-600',
+      icon: <GraduationCap className="h-5 w-5" />
+    };
+  }
+  if (name.includes('professional') || name.includes('life') || name.includes('business') || name.includes('tech')) {
+    return {
+      colorClass: 'text-teal-600',
+      icon: <Briefcase className="h-5 w-5" />
+    };
+  }
+  if (name.includes('entertainment') || name.includes('culture') || name.includes('game') || name.includes('fun')) {
+    return {
+      colorClass: 'text-purple-600',
+      icon: <Gamepad2 className="h-5 w-5" />
+    };
+  }
+
+  return {
+    colorClass: 'text-gray-600',
+    icon: <BookOpen className="h-5 w-5" />
+  };
+}
+
 function SubjectSelection(): JSX.Element {
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load subjects from localStorage
-    const loadSubjects = () => {
-      const storedSubjects = getItem<Subject[]>(STORAGE_KEYS.SUBJECTS, []);
-      // Sort by order field
-      const sortedSubjects = storedSubjects.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-      setSubjects(sortedSubjects);
-      setIsLoading(false);
-    };
+    const loadData = async () => {
+      try {
+        const subjectsData = await getSubjects(false);
+        const sortedSubjects = subjectsData.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)) as Subject[];
+        setSubjects(sortedSubjects);
 
-    loadSubjects();
-
-    // Listen for storage changes (when admin updates subjects)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEYS.SUBJECTS) {
-        loadSubjects();
+        const counts: Record<string, number> = {};
+        for (const subject of subjectsData) {
+          try {
+            const questions = await getQuestionsBySubject(subject.slug, 'published');
+            if (questions.length > 0) {
+              counts[subject.slug] = questions.length;
+            }
+          } catch {
+            console.error(`Failed to load questions for subject: ${subject.slug}`);
+          }
+        }
+        setQuestionCounts(counts);
+      } catch (error) {
+        console.error('Failed to load subjects:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    loadData();
   }, []);
 
-  // Group subjects by category and sort by order
+  // Group subjects dynamically based on category string
   const subjectsByCategory = useMemo(() => {
-    const grouped: { academic: Subject[]; professional: Subject[]; entertainment: Subject[] } = {
-      academic: [],
-      professional: [],
-      entertainment: [],
-    };
+    const grouped: Record<string, Subject[]> = {};
 
     subjects.forEach((subject) => {
-      const category = subject.category;
-      if (category === 'academic' || category === 'professional' || category === 'entertainment') {
-        grouped[category].push(subject);
+      const category = subject.category || 'Other';
+      if (!grouped[category]) {
+        grouped[category] = [];
       }
+      grouped[category].push(subject);
     });
 
     return grouped;
   }, [subjects]);
 
-  // Default subjects if none configured
-  const defaultSubjects: Subject[] = [
-    { id: 1, slug: 'science', name: 'Science', emoji: 'science', category: 'academic' },
-    { id: 2, slug: 'math', name: 'Math', emoji: 'math', category: 'academic' },
-    { id: 3, slug: 'history', name: 'History', emoji: 'history', category: 'academic' },
-    { id: 4, slug: 'geography', name: 'Geography', emoji: 'geography', category: 'academic' },
-    { id: 5, slug: 'english', name: 'English', emoji: 'english', category: 'academic' },
-    { id: 6, slug: 'technology', name: 'Technology', emoji: 'technology', category: 'professional' },
-    { id: 7, slug: 'business', name: 'Business', emoji: 'business', category: 'professional' },
-    { id: 8, slug: 'health', name: 'Health', emoji: 'health', category: 'professional' },
-    { id: 9, slug: 'parenting', name: 'Parenting', emoji: 'parenting', category: 'professional' },
-  ];
-
-  const displayByCategory = subjects.length > 0 ? subjectsByCategory : {
-    academic: defaultSubjects.filter(s => s.category === 'academic'),
-    professional: defaultSubjects.filter(s => s.category === 'professional'),
-    entertainment: defaultSubjects.filter(s => s.category === 'entertainment'),
-  };
+  const sortedCategories = Object.keys(subjectsByCategory).sort();
 
   if (isLoading) {
     return (
@@ -229,29 +234,24 @@ function SubjectSelection(): JSX.Element {
       </h1>
 
       <div>
-        {categories.map((category) => (
-          <CategorySection
-            key={category.id}
-            category={category}
-            subjects={displayByCategory[category.id]}
-          />
-        ))}
+        {sortedCategories.map((categoryName) => {
+          const catSubjects = subjectsByCategory[categoryName];
+          const design = getCategoryDesign(categoryName);
+
+          return (
+            <CategorySection
+              key={categoryName}
+              title={categoryName}
+              icon={design.icon}
+              colorClass={design.colorClass}
+              subjects={catSubjects}
+              questionCounts={questionCounts}
+            />
+          );
+        })}
       </div>
     </div>
   );
-}
-
-interface Question {
-  id: number;
-  question: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-  chapter: string;
-  status?: 'published' | 'draft' | 'trash';
 }
 
 interface ChapterInfo {
@@ -268,57 +268,54 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load questions from JSON file first, then fall back to localStorage
-    const loadQuestions = async () => {
-      let allQuestions: Record<string, Question[]> = {};
-      
+    const loadChapters = async () => {
       try {
-        const fileQuestions = await loadQuestionsFromFile();
-        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
-          allQuestions = fileQuestions;
-        } else {
-          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+        const subjectData = await getSubjectBySlug(subject);
+
+        const chapterMap = new Map<string, ChapterInfo>();
+
+        if (subjectData.chapters && subjectData.chapters.length > 0) {
+          for (const chapter of subjectData.chapters) {
+            const progress = getChapterProgress(subject, chapter.name);
+            chapterMap.set(chapter.id, {
+              name: chapter.name,
+              questionCount: 0,
+              levels: new Set(),
+              isCompleted: progress?.completed ?? false,
+              bestScore: progress?.bestScore ?? 0,
+              attempts: progress?.attempts ?? 0,
+            });
+          }
+
+          for (const chapter of subjectData.chapters) {
+            try {
+              const questions = await getQuestionsByChapter(chapter.id);
+              const chapterInfo = chapterMap.get(chapter.id);
+              if (chapterInfo) {
+                chapterInfo.questionCount = questions.data.length;
+                questions.data.forEach(q => {
+                  chapterInfo.levels.add(q.level);
+                });
+              }
+            } catch (error) {
+              console.error(`Failed to load questions for chapter ${chapter.id}:`, error);
+            }
+          }
         }
-      } catch {
-        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
+
+        const chapterArray = Array.from(chapterMap.values()).sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        setChapters(chapterArray);
+      } catch (error) {
+        console.error('Failed to load chapters:', error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      const subjectQuestions = allQuestions[subject] || [];
-
-      const chapterMap = new Map<string, ChapterInfo>();
-
-      subjectQuestions.forEach(q => {
-        if (q.status === 'trash') return;
-
-        const chapterName = q.chapter || 'General';
-
-        if (!chapterMap.has(chapterName)) {
-          const progress = getChapterProgress(subject, chapterName);
-
-          chapterMap.set(chapterName, {
-            name: chapterName,
-            questionCount: 0,
-            levels: new Set(),
-            isCompleted: progress?.completed ?? false,
-            bestScore: progress?.bestScore ?? 0,
-            attempts: progress?.attempts ?? 0,
-          });
-        }
-
-        const chapter = chapterMap.get(chapterName)!;
-        chapter.questionCount++;
-        chapter.levels.add(q.level);
-      });
-
-      const chapterArray = Array.from(chapterMap.values()).sort((a, b) => 
-        a.name.localeCompare(b.name)
-      );
-      
-      setChapters(chapterArray);
-      setIsLoading(false);
     };
 
-    loadQuestions();
+    loadChapters();
   }, [subject]);
 
   if (isLoading) {
@@ -423,30 +420,26 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
   useEffect(() => {
     const loadQuestions = async () => {
-      let allQuestions: Record<string, Question[]> = {};
-      
       try {
-        const fileQuestions = await loadQuestionsFromFile();
-        if (fileQuestions && Object.keys(fileQuestions).length > 0) {
-          allQuestions = fileQuestions;
-        } else {
-          allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-        }
-      } catch {
-        allQuestions = getItem<Record<string, Question[]>>(STORAGE_KEYS.QUESTIONS, {});
-      }
-      
-      const subjectQuestions = allQuestions[subject] || [];
+        const subjectData = await getSubjectBySlug(subject);
 
-      const counts: Record<string, number> = {};
-      levels.forEach(level => {
-        counts[level] = subjectQuestions.filter(q =>
-          q.chapter === chapter &&
-          q.level === level.toLowerCase() &&
-          q.status === 'published'
-        ).length;
-      });
-      setQuestionCounts(counts);
+        const foundChapter = subjectData.chapters?.find(c => c.name === chapter);
+
+        if (foundChapter) {
+          const questions = await getQuestionsByChapter(foundChapter.id);
+
+          const counts: Record<string, number> = {};
+          levels.forEach(level => {
+            counts[level] = questions.data.filter(q =>
+              q.level === level.toLowerCase() &&
+              q.status === 'published'
+            ).length;
+          });
+          setQuestionCounts(counts);
+        }
+      } catch (error) {
+        console.error('Failed to load questions:', error);
+      }
     };
 
     loadQuestions();

@@ -114,7 +114,7 @@ export function getCliDatabaseConfig(): DataSourceOptions {
  */
 export function getSeedDatabaseConfig(): DataSourceOptions {
   const nodeEnv = process.env.NODE_ENV || 'development';
-  
+
   // Security: Prevent accidental seeding in production
   if (nodeEnv === 'production') {
     throw new Error(

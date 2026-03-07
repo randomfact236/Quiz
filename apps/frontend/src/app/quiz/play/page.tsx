@@ -18,7 +18,7 @@ import { ArrowLeft, AlertCircle, Timer, Pause, Play } from 'lucide-react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
-import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { getSubjectBySlug } from '@/lib/quiz-api';
 import { SettingsService } from '@/services/settings.service';
 
 // Default time limits per level (in seconds) - fallback if settings not available
@@ -41,6 +41,8 @@ function QuizContent(): JSX.Element {
   const [additionalQuestions, setAdditionalQuestions] = useState(5);
   const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  const [subjectName, setSubjectName] = useState<string>('');
+  const [subjectEmoji, setSubjectEmoji] = useState<string>('📚');
 
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
@@ -85,6 +87,23 @@ function QuizContent(): JSX.Element {
     loadTimerSettings();
   }, [mode, level]);
 
+  // Load subject data from API
+  useEffect(() => {
+    const loadSubjectData = async () => {
+      if (!subject) return;
+      try {
+        const subjectData = await getSubjectBySlug(subject);
+        setSubjectName(subjectData.name);
+        setSubjectEmoji(subjectData.emoji);
+      } catch (error) {
+        console.error('Failed to load subject data:', error);
+        setSubjectName(subject);
+      }
+    };
+
+    loadSubjectData();
+  }, [subject]);
+
   // Validate params
   useEffect(() => {
     if (!subject || !chapter || !level) {
@@ -95,12 +114,6 @@ function QuizContent(): JSX.Element {
   // Determine timer mode
   const isTimerMode = mode === 'timer';
   const timerMode = isTimerMode ? 'per-question' : undefined;
-
-  // Get subject name and emoji
-  const subjects = getItem<{ slug: string; name: string; emoji: string }[]>(STORAGE_KEYS.SUBJECTS, []);
-  const subjectData = subjects.find(s => s.slug === subject);
-  const subjectName = subjectData?.name || subject;
-  const subjectEmoji = subjectData?.emoji || '📚';
 
   // Use quiz hook
   const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);

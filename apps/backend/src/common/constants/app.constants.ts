@@ -26,9 +26,9 @@ export const REDIS_PORT = 6379;
 
 /**
  * Default backend server port
- * @default 4000
+ * @default 3011
  */
-export const SERVER_PORT = 4000;
+export const SERVER_PORT = 3011;
 
 /**
  * Default frontend application port

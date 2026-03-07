@@ -90,7 +90,7 @@ services:
     environment:
       # Node Environment
       NODE_ENV: production
-      PORT: 4000
+      PORT: 3011
       
       # Database
       DB_HOST: postgres
@@ -117,14 +117,14 @@ services:
       # Logging
       LOG_LEVEL: info
     ports:
-      - "4000:4000"
+      - "3011:3011"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3011/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -149,7 +149,7 @@ services:
       dockerfile: apps/frontend/Dockerfile
       target: production
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3011/api}
         NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-AI Quiz Platform}
         NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-1.0.0}
     container_name: quiz-frontend-prod
@@ -157,7 +157,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3010
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3011/api}
     ports:
       - "3010:3010"
     depends_on:

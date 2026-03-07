@@ -1,16 +1,13 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { GraduationCap, Briefcase, Gamepad2 } from 'lucide-react';
+import { GraduationCap, Briefcase, Gamepad2, BookOpen } from 'lucide-react';
 import { TopicCard } from './TopicCard';
-import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { getSubjects, getQuestionsBySubject } from '@/lib/quiz-api';
+import type { QuizSubject } from '@/lib/quiz-api';
 
-interface Subject {
-  id: number;
-  slug: string;
-  name: string;
-  emoji: string;
-  category: 'academic' | 'professional' | 'entertainment';
+interface Subject extends QuizSubject {
+  category: string;
   order?: number;
 }
 
@@ -34,15 +31,23 @@ function Section({ title, colorClass, expanded, onToggle, children, icon }: Sect
       >
         <div className="flex items-center gap-2">
           {icon}
-          <h3 className={`font-semibold ${colorClass.includes('blue') ? 'text-indigo-700' : colorClass.includes('green') ? 'text-teal-700' : 'text-purple-700'}`}>
-            ━━━━ {title} ━━━━
+          <h3 className={`font-semibold ${colorClass.includes('blue') ? 'text-indigo-700' :
+              colorClass.includes('green') ? 'text-teal-700' :
+                colorClass.includes('purple') ? 'text-purple-700' :
+                  'text-gray-700'
+            }`}>
+            ━━━━ {title.toUpperCase()} ━━━━
           </h3>
         </div>
-        <span className={`${colorClass.includes('blue') ? 'text-indigo-500' : colorClass.includes('green') ? 'text-teal-500' : 'text-purple-500'} transition-transform ${expanded ? 'rotate-180' : ''}`}>▼</span>
+        <span className={`${colorClass.includes('blue') ? 'text-indigo-500' :
+            colorClass.includes('green') ? 'text-teal-500' :
+              colorClass.includes('purple') ? 'text-purple-500' :
+                'text-gray-500'
+          } transition-transform ${expanded ? 'rotate-180' : ''}`}>▼</span>
       </button>
-      
+
       {expanded && (
-        <div className="mt-3 grid grid-cols-3 gap-2">
+        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
           {children}
         </div>
       )}
@@ -50,79 +55,106 @@ function Section({ title, colorClass, expanded, onToggle, children, icon }: Sect
   );
 }
 
+// Helper to determine styling for categories dynamically
+function getCategoryDesign(categoryName: string) {
+  const name = categoryName.toLowerCase();
+
+  if (name.includes('academic') || name.includes('science') || name.includes('math') || name.includes('school')) {
+    return {
+      colorClass: 'bg-gradient-to-r from-blue-50 to-indigo-50',
+      icon: <GraduationCap className="h-4 w-4 text-indigo-600" />
+    };
+  }
+  if (name.includes('professional') || name.includes('life') || name.includes('business') || name.includes('tech')) {
+    return {
+      colorClass: 'bg-gradient-to-r from-green-50 to-teal-50',
+      icon: <Briefcase className="h-4 w-4 text-teal-600" />
+    };
+  }
+  if (name.includes('entertainment') || name.includes('culture') || name.includes('game') || name.includes('fun')) {
+    return {
+      colorClass: 'bg-gradient-to-r from-purple-50 to-pink-50',
+      icon: <Gamepad2 className="h-4 w-4 text-purple-600" />
+    };
+  }
+
+  // Default fallback style for unknown categories
+  return {
+    colorClass: 'bg-gradient-to-r from-gray-50 to-slate-50',
+    icon: <BookOpen className="h-4 w-4 text-gray-600" />
+  };
+}
+
 export function TopicsSection(): JSX.Element {
   const [topicsExpanded, setTopicsExpanded] = useState(true);
-  const [academicExpanded, setAcademicExpanded] = useState(true);
-  const [professionalExpanded, setProfessionalExpanded] = useState(true);
-  const [entertainmentExpanded, setEntertainmentExpanded] = useState(false);
+  const [categoryExpanded, setCategoryExpanded] = useState<Record<string, boolean>>({});
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load subjects from localStorage
-    const loadSubjects = () => {
-      const storedSubjects = getItem<Subject[]>(STORAGE_KEYS.SUBJECTS, []);
-      // Sort by order field
-      const sortedSubjects = storedSubjects.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-      setSubjects(sortedSubjects);
-    };
+    const loadData = async () => {
+      try {
+        const subjectsData = await getSubjects(false);
+        const sortedSubjects = subjectsData.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)) as Subject[];
 
-    loadSubjects();
+        const counts: Record<string, number> = {};
+        for (const subject of subjectsData) {
+          try {
+            const questions = await getQuestionsBySubject(subject.slug, 'published');
+            if (questions.length > 0) {
+              counts[subject.slug] = questions.length;
+            }
+          } catch (err) {
+            console.error(`Failed to load questions for ${subject.slug}:`, err);
+          }
+        }
 
-    // Listen for storage changes (when admin updates subjects)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEYS.SUBJECTS) {
-        loadSubjects();
+        setSubjects(sortedSubjects);
+        setQuestionCounts(counts);
+
+        // Initialize all found categories to be expanded by default
+        const uniqueCategories = Array.from(new Set(sortedSubjects.map(s => s.category || 'Other')));
+        const initialExpandedState: Record<string, boolean> = {};
+        uniqueCategories.forEach(cat => {
+          initialExpandedState[cat] = true;
+        });
+
+        // Merge with existing state so we don't overwrite user toggles if it re-renders
+        setCategoryExpanded(prev => ({ ...initialExpandedState, ...prev }));
+
+      } catch (error) {
+        console.error('Failed to load subjects:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load topics');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    loadData();
   }, []);
 
-  // Group subjects by category
+  const toggleCategory = (category: string) => {
+    setCategoryExpanded(prev => ({ ...prev, [category]: !prev[category] }));
+  };
+
   const subjectsByCategory = useMemo(() => {
-    const grouped: { academic: Subject[]; professional: Subject[]; entertainment: Subject[] } = {
-      academic: [],
-      professional: [],
-      entertainment: [],
-    };
-    
+    const grouped: Record<string, Subject[]> = {};
+
     subjects.forEach((subject) => {
-      const category = subject.category;
-      if (category === 'academic' || category === 'professional' || category === 'entertainment') {
-        grouped[category].push(subject);
+      const category = subject.category || 'Other';
+      if (!grouped[category]) {
+        grouped[category] = [];
       }
+      grouped[category].push(subject);
     });
-    
+
     return grouped;
   }, [subjects]);
 
-  // Default topics if no subjects configured
-  const defaultAcademicTopics = [
-    { href: '/quiz?subject=science', emoji: '🔬', label: 'Science' },
-    { href: '/quiz?subject=math', emoji: '🔢', label: 'Math' },
-    { href: '/quiz?subject=history', emoji: '📜', label: 'History' },
-    { href: '/quiz?subject=geography', emoji: '🌍', label: 'Geography' },
-    { href: '/quiz?subject=english', emoji: '📖', label: 'English' },
-    { href: '/quiz?subject=environment', emoji: '🌱', label: 'Environment' },
-  ];
-
-  const defaultProfessionalTopics = [
-    { href: '/quiz?subject=technology', emoji: '💻', label: 'Technology' },
-    { href: '/quiz?subject=business', emoji: '💼', label: 'Business' },
-    { href: '/quiz?subject=health', emoji: '💪', label: 'Health' },
-    { href: '/quiz?subject=parenting', emoji: '👶', label: 'Parenting' },
-  ];
-
-  const defaultEntertainmentTopics = [
-    { emoji: '🐾', label: 'Animals', soon: true, href: '/quiz/animals' },
-    { emoji: '🎬', label: 'Movies', soon: true, href: '/quiz/movies' },
-    { emoji: '🏆', label: 'Sports', soon: true, href: '/quiz/sports' },
-    { emoji: '🍔', label: 'Food', soon: true, href: '/quiz/food' },
-    { emoji: '🎨', label: 'Art', soon: true, href: '/quiz/art' },
-  ];
-
-  const hasSubjects = subjects.length > 0;
+  const hasAnySubjects = subjects.length > 0;
+  const sortedCategories = Object.keys(subjectsByCategory).sort(); // Sort categories alphabetically
 
   return (
     <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
@@ -137,80 +169,58 @@ export function TopicsSection(): JSX.Element {
           ▼
         </span>
       </button>
-      
+
       {topicsExpanded && (
-        <div className="space-y-2 p-4 pt-0">
-          {/* Academic Section */}
-          <Section
-            title="ACADEMIC"
-            colorClass="bg-gradient-to-r from-blue-50 to-indigo-50"
-            expanded={academicExpanded}
-            onToggle={() => setAcademicExpanded(!academicExpanded)}
-            icon={<GraduationCap className="h-4 w-4 text-indigo-600" />}
-          >
-            {hasSubjects ? (
-              subjectsByCategory.academic.map((subject) => (
-                <TopicCard 
-                  key={subject.id} 
-                  href={`/quiz?subject=${subject.slug}`} 
-                  emoji={subject.emoji} 
-                  label={subject.name} 
-                />
-              ))
-            ) : (
-              defaultAcademicTopics.map((topic) => (
-                <TopicCard key={topic.label} {...topic} />
-              ))
-            )}
-          </Section>
+        <div className="space-y-4 p-4 pt-0">
+          {error ? (
+            <div className="py-8 text-center text-red-400">
+              <p className="text-3xl mb-2">⚠️</p>
+              <p className="text-sm font-medium">Failed to load topics</p>
+              <p className="text-xs mt-1">{error}</p>
+            </div>
+          ) : isLoading ? (
+            <div className="py-8 text-center text-gray-400">
+              <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
+              <p className="text-sm">Loading topics...</p>
+            </div>
+          ) : !hasAnySubjects ? (
+            <div className="py-8 text-center text-gray-400">
+              <p className="text-3xl mb-2">📭</p>
+              <p className="text-sm font-medium">No quiz topics available yet.</p>
+              <p className="text-xs mt-1">Check back soon or ask the admin to add subjects.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {sortedCategories.map((categoryName) => {
+                const dbSubjects = subjectsByCategory[categoryName];
+                const design = getCategoryDesign(categoryName);
 
-          {/* Professional & Life Section */}
-          <Section
-            title="PROFESSIONAL & LIFE"
-            colorClass="bg-gradient-to-r from-green-50 to-teal-50"
-            expanded={professionalExpanded}
-            onToggle={() => setProfessionalExpanded(!professionalExpanded)}
-            icon={<Briefcase className="h-4 w-4 text-teal-600" />}
-          >
-            {hasSubjects ? (
-              subjectsByCategory.professional.map((subject) => (
-                <TopicCard 
-                  key={subject.id} 
-                  href={`/quiz?subject=${subject.slug}`} 
-                  emoji={subject.emoji} 
-                  label={subject.name} 
-                />
-              ))
-            ) : (
-              defaultProfessionalTopics.map((topic) => (
-                <TopicCard key={topic.label} {...topic} />
-              ))
-            )}
-          </Section>
+                // Fallback to true if undefined
+                const isExpanded = categoryExpanded[categoryName] ?? true;
 
-          {/* Entertainment & Culture Section */}
-          <Section
-            title="ENTERTAINMENT & CULTURE"
-            colorClass="bg-gradient-to-r from-purple-50 to-pink-50"
-            expanded={entertainmentExpanded}
-            onToggle={() => setEntertainmentExpanded(!entertainmentExpanded)}
-            icon={<Gamepad2 className="h-4 w-4 text-purple-600" />}
-          >
-            {hasSubjects ? (
-              subjectsByCategory.entertainment.map((subject) => (
-                <TopicCard 
-                  key={subject.id} 
-                  href={`/quiz?subject=${subject.slug}`} 
-                  emoji={subject.emoji} 
-                  label={subject.name} 
-                />
-              ))
-            ) : (
-              defaultEntertainmentTopics.map((topic) => (
-                <TopicCard key={topic.label} {...topic} />
-              ))
-            )}
-          </Section>
+                return (
+                  <Section
+                    key={categoryName}
+                    title={categoryName}
+                    colorClass={design.colorClass}
+                    expanded={isExpanded}
+                    onToggle={() => toggleCategory(categoryName)}
+                    icon={design.icon}
+                  >
+                    {dbSubjects.map((subject) => (
+                      <TopicCard
+                        key={subject.id}
+                        href={(questionCounts[subject.slug] || 0) > 0 ? `/quiz?subject=${subject.slug}` : '#'}
+                        emoji={subject.emoji}
+                        label={subject.name}
+                        soon={(questionCounts[subject.slug] || 0) === 0}
+                      />
+                    ))}
+                  </Section>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

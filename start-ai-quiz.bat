@@ -56,7 +56,7 @@ timeout /t 3 /nobreak >nul
 start "AI Quiz Frontend" cmd /k "cd /d "%PROJECT_ROOT%apps\frontend" && npm run dev"
 echo.
 echo Both servers starting!
-echo - Backend: http://localhost:4000
+echo - Backend: http://localhost:3011
 echo - Frontend: http://localhost:3000
 echo.
 echo Press any key to close this window...

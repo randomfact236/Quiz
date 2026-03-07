@@ -49,11 +49,11 @@
   - **Access**: Local preview builds
 
 ### Backend Services
-- **Port 4000**: NestJS API Server
+- **Port 3011**: NestJS API Server
   - **Service**: AI Quiz Backend API (NestJS 10)
   - **Protocol**: HTTP
   - **Environment**: Development
-  - **Access**: API endpoints (http://localhost:4000/api)
+  - **Access**: API endpoints (http://localhost:3011/api)
   - **Load Balancer**: nginx on port 443 (production)
 
 - **Port 4001**: NestJS Admin API
