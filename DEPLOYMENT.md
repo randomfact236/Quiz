@@ -21,7 +21,7 @@ cp .env.production.example .env.production
 - Docker 20.10+
 - Docker Compose 2.0+
 - 4GB+ RAM available
-- Ports 3010, 4000, 5432, 6379 available (or configure alternatives)
+- Ports 3010, 3012, 5432, 6379 available (or configure alternatives)
 
 ---
 
@@ -142,7 +142,7 @@ Check status manually:
 
 ```bash
 # Backend
-curl http://localhost:4000/api/health
+curl http://localhost:3012/api/health
 
 # Frontend
 curl http://localhost:3010/
@@ -174,7 +174,7 @@ server {
     }
     
     location /api {
-        proxy_pass http://localhost:4000;
+        proxy_pass http://localhost:3012;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
     }
