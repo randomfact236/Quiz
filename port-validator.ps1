@@ -10,7 +10,7 @@
 #>
 
 # Allowed ports for this project
-$script:AllowedPorts = @(3010, 4000, 5432, 6379)
+$script:AllowedPorts = @(3010, 3012, 5432, 6379)
 $script:AllowedPortRanges = @()  # Add ranges if needed, e.g., @(3000..3010)
 
 function Test-ValidProjectPort($Port) {
@@ -117,7 +117,7 @@ function Validate-AllConfigurations {
 function Get-AllowedPorts {
     return @{
         Frontend = 3010
-        Backend = 4000
+        Backend = 3012
         PostgreSQL = 5432
         Redis = 6379
     }

@@ -10,7 +10,7 @@ param(
 
 $projectRoot = "E:\webiste theme and plugin\Ai-Quiz\Quiz"
 $frontendPort = 3010
-$backendPort = 4000
+$backendPort = 3012
 $logFile = "$projectRoot\server-monitor.log"
 
 function Write-Log($message, $type = "info") {

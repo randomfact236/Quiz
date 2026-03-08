@@ -157,7 +157,7 @@ function Get-Status {
     
     # Check backend
     try {
-        $response = Invoke-WebRequest -Uri "http://localhost:4000/api/health" -UseBasicParsing -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri "http://localhost:3012/api/health" -UseBasicParsing -ErrorAction Stop
         if ($response.StatusCode -eq 200) {
             Write-Success "Backend API: Healthy"
         }
@@ -186,7 +186,7 @@ function Invoke-Deploy {
     Invoke-Start
     Write-Success "Deployment completed!"
     Write-Info "Frontend: http://localhost:3010"
-    Write-Info "Backend API: http://localhost:4000/api"
+    Write-Info "Backend API: http://localhost:3012/api"
 }
 
 # Update and redeploy

@@ -3,7 +3,7 @@
 # This script starts both frontend and backend servers and monitors them
 
 $ErrorActionPreference = "Continue"
-$backendPort = 4000
+$backendPort = 3012
 $frontendPort = 3010
 $maxWaitSeconds = 60
 

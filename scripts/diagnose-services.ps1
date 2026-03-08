@@ -369,7 +369,7 @@ function Show-Summary {
             Write-Host "  2. Start containers: docker-compose up -d" -ForegroundColor $Yellow
         }
         if ($portIssues -or $connectionIssues) {
-            Write-Host "  3. Check firewall settings for ports 3010, 4000" -ForegroundColor $Yellow
+            Write-Host "  3. Check firewall settings for ports 3010, 3012" -ForegroundColor $Yellow
             Write-Host "  4. Verify services are healthy: docker-compose ps" -ForegroundColor $Yellow
         }
         

@@ -32,7 +32,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # Project Configuration - Define all ports used by the project
 $ProjectPorts = @{
     Frontend = 3010
-    Backend = 4000
+    Backend = 3012
     PostgreSQL = 5432
     Redis = 6379
 }

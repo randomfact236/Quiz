@@ -136,7 +136,7 @@ cmd_status() {
     log_info "\nHealth Checks:"
     
     # Check backend health
-    if curl -sf http://localhost:4000/api/health &> /dev/null; then
+    if curl -sf http://localhost:3012/api/health &> /dev/null; then
         log_success "Backend API: Healthy"
     else
         log_error "Backend API: Unhealthy"
@@ -158,7 +158,7 @@ cmd_deploy() {
     cmd_start
     log_success "Deployment completed!"
     log_info "Frontend: http://localhost:3010"
-    log_info "Backend API: http://localhost:4000/api"
+    log_info "Backend API: http://localhost:3012/api"
 }
 
 # Update and redeploy

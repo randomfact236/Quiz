@@ -7,7 +7,7 @@ param(
 )
 
 $FrontendPort = 3010
-$BackendPort = 4000
+$BackendPort = 3012
 $FrontendUrl = "http://localhost:$FrontendPort"
 $BackendUrl = "http://localhost:$BackendPort/api"
 $ProjectRoot = "e:\webiste theme and plugin\Ai-Quiz\Quiz"

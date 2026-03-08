@@ -161,9 +161,9 @@ cmd_start() {
     echo ""
     echo -e "${GREEN}Access your application:${NC}"
     echo "  - Frontend:    http://localhost:3010"
-    echo "  - Backend API: http://localhost:4000/api"
-    echo "  - API Docs:    http://localhost:4000/api/docs"
-    echo "  - Health:      http://localhost:4000/api/health"
+    echo "  - Backend API: http://localhost:3012/api"
+    echo "  - API Docs:    http://localhost:3012/api/docs"
+    echo "  - Health:      http://localhost:3012/api/health"
     
     if [ "$PROFILE" = "nginx" ] || [ "$PROFILE" = "production" ]; then
         echo "  - Nginx:       http://localhost (port 80)"

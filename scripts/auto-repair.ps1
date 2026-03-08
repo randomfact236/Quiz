@@ -396,7 +396,7 @@ function Test-Connection {
     
     $tests = @(
         @{ Url = "http://localhost:3010"; Name = "Frontend" },
-        @{ Url = "http://localhost:4000/api/health"; Name = "Backend" }
+        @{ Url = "http://localhost:3012/api/health"; Name = "Backend" }
     )
     
     $passed = 0

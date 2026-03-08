@@ -232,7 +232,7 @@ if ($fixed) {
     Write-Host "`n📱 Access your application at:" -ForegroundColor $White
     Write-Host "   Frontend:    http://localhost:3010" -ForegroundColor $Blue
     Write-Host "   Backend API: http://localhost:3012/api" -ForegroundColor $Blue
-    Write-Host "   API Docs:    http://localhost:4000/api/docs" -ForegroundColor $Blue
+    Write-Host "   API Docs:    http://localhost:3012/api/docs" -ForegroundColor $Blue
     Write-Host "`n💡 To view logs: docker-compose logs -f" -ForegroundColor $Yellow
     Write-Host "💡 To stop: docker-compose down" -ForegroundColor $Yellow
     
@@ -246,7 +246,7 @@ if ($fixed) {
     Write-Host "`n❌ FAILED after $MaxAttempts attempts" -ForegroundColor $Red
     Write-Host "`nPossible reasons:" -ForegroundColor $Yellow
     Write-Host "   • Docker is not installed or not running" -ForegroundColor $Yellow
-    Write-Host "   • Ports 3010, 4000 are occupied by other applications" -ForegroundColor $Yellow
+    Write-Host "   • Ports 3010, 3012 are occupied by other applications" -ForegroundColor $Yellow
     Write-Host "   • Insufficient system resources (RAM/CPU)" -ForegroundColor $Yellow
     Write-Host "   • Firewall/antivirus blocking connections" -ForegroundColor $Yellow
     Write-Host "`nTry these manual steps:" -ForegroundColor $White
