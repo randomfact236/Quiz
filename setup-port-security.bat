@@ -16,7 +16,7 @@ echo   AI QUIZ PLATFORM - PORT SECURITY
 echo ========================================
 echo.
 echo This will:
-echo  1. Reserve ports 3010, 4000, 5432, 6379 in Windows
+echo  1. Reserve ports 3010, 3012, 5432, 6379 in Windows
 echo  2. Create firewall rules to protect these ports
 echo  3. Block external access to project ports
 echo.
@@ -49,7 +49,7 @@ echo ========================================
 echo.
 echo Reserved Ports:
 echo   - Frontend:  3010
-echo   - Backend:   4000
+echo   - Backend:   3012
 echo   - PostgreSQL: 5432
 echo   - Redis:     6379
 echo.

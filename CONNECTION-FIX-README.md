@@ -215,7 +215,7 @@ docker-compose --profile migrate run --rm migrate
 curl http://localhost:3010
 
 # Test backend
-curl http://localhost:4000/api/health
+curl http://localhost:3012/api/health
 
 # Test with verbose output
 curl -v http://localhost:3010
@@ -225,7 +225,7 @@ curl -v http://localhost:3010
 
 Open these URLs:
 - http://localhost:3010 - Should show the app
-- http://localhost:4000/api/health - Should return `{"status":"ok"}`
+- http://localhost:3012/api/health - Should return `{"status":"ok"}`
 - http://localhost:3012/api/docs - Should show Swagger UI
 
 ---
@@ -323,7 +323,7 @@ docker-compose up -d
 You know it's working when:
 
 1. `docker-compose ps` shows all containers "Up"
-2. `curl http://localhost:4000/api/health` returns JSON
+2. `curl http://localhost:3012/api/health` returns JSON
 3. Browser shows the application at http://localhost:3010
 4. No error messages in `docker-compose logs`
 

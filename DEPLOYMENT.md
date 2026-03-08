@@ -98,7 +98,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │   Nginx/SSL     │────▶│   Frontend      │────▶│    Backend      │
 │   (Optional)    │     │   Next.js 15    │     │   NestJS 10     │
-│   :443          │     │   :3010         │     │   :4000         │
+│   :443          │     │   :3010         │     │   :3012         │
 └─────────────────┘     └─────────────────┘     └────────┬────────┘
                                                          │
                               ┌─────────────────────────┘
@@ -123,7 +123,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 | Service | Image | Port | Purpose |
 |---------|-------|------|---------|
 | Frontend | Node 20 Alpine | 3010 | Next.js 15 App |
-| Backend | Node 20 Alpine | 4000 | NestJS API |
+| Backend | Node 20 Alpine | 3012 | NestJS API |
 | Database | Postgres 15 Alpine | 5432 | Data storage |
 | Cache | Redis 7 Alpine | 6379 | Session & cache |
 
@@ -303,7 +303,7 @@ Edit `docker-compose.prod.yml` to change ports:
 ```yaml
 ports:
   - "3001:3010"  # Frontend on 3001
-  - "4001:4000"  # Backend on 4001
+  - "4001:3012"  # Backend on 4001 maps to 3012
 ```
 
 ### Container Won't Start

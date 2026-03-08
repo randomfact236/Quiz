@@ -25,7 +25,7 @@ echo ========================================
 echo   AI QUIZ PLATFORM - PORT RESERVATION
 echo ========================================
 echo.
-echo Reserving ports: 3010, 4000, 5432, 6379
+echo Reserving ports: 3010, 3012, 5432, 6379
 echo.
 
 :: Reserve ports
@@ -36,11 +36,11 @@ if %errorLevel% == 0 (
     echo [INFO] Port 3010 already reserved or error
 )
 
-netsh int ip add excludedportrange protocol=tcp startport=4000 numberofports=1
+netsh int ip add excludedportrange protocol=tcp startport=3012 numberofports=1
 if %errorLevel% == 0 (
-    echo [OK] Port 4000 reserved
+    echo [OK] Port 3012 reserved
 ) else (
-    echo [INFO] Port 4000 already reserved or error
+    echo [INFO] Port 3012 already reserved or error
 )
 
 netsh int ip add excludedportrange protocol=tcp startport=5432 numberofports=1
@@ -61,7 +61,7 @@ if %errorLevel% == 0 (
 echo.
 echo Creating firewall rules...
 netsh advfirewall firewall add rule name="AIQuiz_Port_3010" dir=in action=allow protocol=tcp localport=3010 remoteip=localsubnet >nul 2>&1
-netsh advfirewall firewall add rule name="AIQuiz_Port_4000" dir=in action=allow protocol=tcp localport=4000 remoteip=localsubnet >nul 2>&1
+netsh advfirewall firewall add rule name="AIQuiz_Port_3012" dir=in action=allow protocol=tcp localport=3012 remoteip=localsubnet >nul 2>&1
 netsh advfirewall firewall add rule name="AIQuiz_Port_5432" dir=in action=allow protocol=tcp localport=5432 remoteip=localsubnet >nul 2>&1
 netsh advfirewall firewall add rule name="AIQuiz_Port_6379" dir=in action=allow protocol=tcp localport=6379 remoteip=localsubnet >nul 2>&1
 echo [OK] Firewall rules created
@@ -71,14 +71,14 @@ echo.
 echo ========================================
 echo   VERIFICATION
 echo ========================================
-netsh int ip show excludedportrange protocol=tcp | findstr "3010 4000 5432 6379"
+netsh int ip show excludedportrange protocol=tcp | findstr "3010 3012 5432 6379"
 
 echo.
 echo ========================================
 echo   SETUP COMPLETE
 echo ========================================
 echo.
-echo Ports reserved: 3010, 4000, 5432, 6379
+echo Ports reserved: 3010, 3012, 5432, 6379
 echo.
 echo You can now run: npm run dev
 echo.
