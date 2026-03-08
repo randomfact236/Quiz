@@ -188,9 +188,9 @@ function Start-Services {
     Write-Host ""
     Write-Host "Access your application:" -ForegroundColor $Green
     Write-Host "  - Frontend:    http://localhost:3010"
-    Write-Host "  - Backend API: http://localhost:4000/api"
-    Write-Host "  - API Docs:    http://localhost:4000/api/docs"
-    Write-Host "  - Health:      http://localhost:4000/api/health"
+    Write-Host "  - Backend API: http://localhost:3012/api"
+    Write-Host "  - API Docs:    http://localhost:3012/api/docs"
+    Write-Host "  - Health:      http://localhost:3012/api/health"
     
     if ($Production -or $Nginx) {
         Write-Host "  - Nginx:       http://localhost (port 80)"

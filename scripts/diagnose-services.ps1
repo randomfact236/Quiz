@@ -83,7 +83,7 @@ function Test-ContainerStatus {
     
     $expectedContainers = @(
         @{ Name = "ai-quiz-frontend"; Port = 3010 },
-        @{ Name = "ai-quiz-backend"; Port = 4000 },
+        @{ Name = "ai-quiz-backend"; Port = 3012 },
         @{ Name = "ai-quiz-postgres"; Port = 5432 },
         @{ Name = "ai-quiz-redis"; Port = 6379 },
         @{ Name = "ai-quiz-minio"; Port = 9000 }
@@ -124,7 +124,7 @@ function Test-ContainerStatus {
 function Test-PortAvailability {
     Write-Host "`n[3/10] Checking Port Availability..." -ForegroundColor $Blue
     
-    $ports = @(3010, 4000, 5432, 6379, 9000, 9001)
+    $ports = @(3010, 3012, 5432, 6379, 9000, 9001)
     
     foreach ($port in $ports) {
         try {
@@ -153,8 +153,8 @@ function Test-HttpConnectivity {
     
     $endpoints = @(
         @{ Url = "http://localhost:3010"; Name = "Frontend" },
-        @{ Url = "http://localhost:4000/api/health"; Name = "Backend Health" },
-        @{ Url = "http://localhost:4000/api"; Name = "Backend API Root" }
+        @{ Url = "http://localhost:3012/api/health"; Name = "Backend Health" },
+        @{ Url = "http://localhost:3012/api"; Name = "Backend API Root" }
     )
     
     foreach ($endpoint in $endpoints) {
