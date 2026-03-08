@@ -109,7 +109,7 @@ docker-compose up -d --scale backend=3
 | Service | Development | Production (Nginx) | Internal |
 |---------|-------------|-------------------|----------|
 | Frontend | 3010 | 80 (via Nginx) | 3000 |
-| Backend API | 4000 | 80/api (via Nginx) | 4000 |
+| Backend API | 3012 | 80/api (via Nginx) | 3012 |
 | PostgreSQL | 5432 | - (internal only) | 5432 |
 | Redis | 6379 | - (internal only) | 6379 |
 | MinIO API | 9000 | - (internal only) | 9000 |
@@ -176,9 +176,9 @@ docker-compose up -d --scale backend=3
 
 ### Development Mode
 - Frontend: http://localhost:3010
-- Backend API: http://localhost:4000/api
-- API Docs: http://localhost:4000/api/docs
-- Health: http://localhost:4000/api/health
+- Backend API: http://localhost:3012/api
+- API Docs: http://localhost:3012/api/docs
+- Health: http://localhost:3012/api/health
 - MinIO Console: http://localhost:9001
 
 ### Production Mode (with Nginx)
@@ -202,7 +202,7 @@ MINIO_ROOT_PASSWORD=           # Strong MinIO password
 ### Optional Customization
 ```bash
 FRONTEND_PORT=3010            # Change if port conflict
-BACKEND_PORT=4000             # Change if port conflict
+BACKEND_PORT=3012             # Change if port conflict
 CORS_ORIGIN=                  # Your domain
 ```
 

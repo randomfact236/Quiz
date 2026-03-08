@@ -104,13 +104,13 @@ BACKEND_PORT=3012
 ```powershell
 # Run as Administrator
 New-NetFirewallRule -DisplayName "AI Quiz Frontend" -Direction Inbound -Protocol TCP -LocalPort 3010 -Action Allow
-New-NetFirewallRule -DisplayName "AI Quiz Backend" -Direction Inbound -Protocol TCP -LocalPort 4000 -Action Allow
+New-NetFirewallRule -DisplayName "AI Quiz Backend" -Direction Inbound -Protocol TCP -LocalPort 3012 -Action Allow
 ```
 
 **Fix (Linux):**
 ```bash
 sudo ufw allow 3010/tcp
-sudo ufw allow 4000/tcp
+sudo ufw allow 3012/tcp
 ```
 
 ### Issue 5: Database Connection Failed
@@ -156,7 +156,7 @@ Run individual diagnostic checks:
 
 # Just test ports
 Test-NetConnection -ComputerName localhost -Port 3010
-Test-NetConnection -ComputerName localhost -Port 4000
+Test-NetConnection -ComputerName localhost -Port 3012
 
 # Check Docker containers
 docker ps
@@ -226,7 +226,7 @@ curl -v http://localhost:3010
 Open these URLs:
 - http://localhost:3010 - Should show the app
 - http://localhost:4000/api/health - Should return `{"status":"ok"}`
-- http://localhost:4000/api/docs - Should show Swagger UI
+- http://localhost:3012/api/docs - Should show Swagger UI
 
 ---
 
@@ -237,7 +237,7 @@ Before reporting an issue, verify:
 - [ ] Docker Desktop is running
 - [ ] Containers are running (`docker-compose ps`)
 - [ ] Ports are not blocked by firewall
-- [ ] No other app is using port 3010 or 4000
+- [ ] No other app is using port 3010 or 3012
 - [ ] `.env` file exists and is configured
 - [ ] At least 2GB RAM available for Docker
 - [ ] Tried `docker-compose restart`
