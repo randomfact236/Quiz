@@ -7,8 +7,8 @@ echo ═════════════════════════
 echo.
 
 :: Check Backend
-echo Checking Backend (port 4000)...
-powershell -Command "$r=Test-NetConnection -ComputerName localhost -Port 4000 -WarningAction SilentlyContinue; if($r.TcpTestSucceeded){Write-Host '  ✅ Backend: RUNNING' -ForegroundColor Green}else{Write-Host '  ❌ Backend: STOPPED' -ForegroundColor Red}"
+echo Checking Backend (port 3012)...
+powershell -Command "$r=Test-NetConnection -ComputerName localhost -Port 3012 -WarningAction SilentlyContinue; if($r.TcpTestSucceeded){Write-Host '  ✅ Backend: RUNNING' -ForegroundColor Green}else{Write-Host '  ❌ Backend: STOPPED' -ForegroundColor Red}"
 echo.
 
 :: Check Frontend

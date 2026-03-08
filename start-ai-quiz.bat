@@ -57,7 +57,7 @@ start "AI Quiz Frontend" cmd /k "cd /d "%PROJECT_ROOT%apps\frontend" && npm run 
 echo.
 echo Both servers starting!
 echo - Backend: http://localhost:3012
-echo - Frontend: http://localhost:3000
+echo - Frontend: http://localhost:3010
 echo.
 echo Press any key to close this window...
 pause

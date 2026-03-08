@@ -74,7 +74,7 @@ FROM node:20-alpine AS production
 # Set environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
+ENV PORT=3010
 
 # Install security updates and curl for healthcheck
 RUN apk update && apk upgrade && \
@@ -97,11 +97,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/public ./public
 USER nextjs
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3010
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:3000/ || exit 1
+    CMD curl -f http://localhost:3010/ || exit 1
 
 # Start the application
 CMD ["node", "server.js"]
@@ -112,7 +112,7 @@ CMD ["node", "server.js"]
 FROM node:20-alpine AS development
 
 ENV NODE_ENV=development
-ENV PORT=3000
+ENV PORT=3010
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN apk update && apk upgrade && \
@@ -137,7 +137,7 @@ COPY tsconfig.json ./
 
 WORKDIR /app/apps/frontend
 
-EXPOSE 3000
+EXPOSE 3010
 
 # Start in development mode
 CMD ["npm", "run", "dev"]

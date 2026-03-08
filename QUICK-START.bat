@@ -15,7 +15,7 @@ if %ERRORLEVEL% EQU 0 (
     start http://localhost:3010
     echo.
     echo Frontend: http://localhost:3010
-    echo Backend:  http://localhost:4000
+    echo Backend:  http://localhost:3012
     echo.
     pause
     exit /b 0
@@ -37,7 +37,7 @@ if %ERRORLEVEL% EQU 0 (
     echo.
     start http://localhost:3010
     echo Frontend: http://localhost:3010
-    echo Backend:  http://localhost:4000
+    echo Backend:  http://localhost:3012
     echo.
     echo You can close this window. Servers will continue running.
     pause

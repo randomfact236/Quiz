@@ -19,6 +19,6 @@ WORKDIR /app/apps/backend
 # Skip prestart script in Docker
 ENV DOCKER_ENV=true
 
-EXPOSE 4000
+EXPOSE 3012
 
 CMD ["npm", "run", "start:dev"]

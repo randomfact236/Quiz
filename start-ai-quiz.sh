@@ -35,7 +35,7 @@ case "$1" in
         echo ""
         echo "Both servers starting!"
         echo "- Backend: http://localhost:3012"
-        echo "- Frontend: http://localhost:3000"
+        echo "- Frontend: http://localhost:3010"
         echo ""
         echo "Press Ctrl+C to stop all servers"
         wait

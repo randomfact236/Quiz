@@ -10,7 +10,7 @@ echo Starting servers and monitoring...
 echo.
 echo This will:
 echo   1. Clean up any stale processes
-echo   2. Start Backend on port 4000
+echo   2. Start Backend on port 3012
 echo   3. Start Frontend on port 3010
 echo   4. Open your browser automatically
 echo   5. Monitor and auto-restart if needed
