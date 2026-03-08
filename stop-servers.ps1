@@ -4,7 +4,7 @@
 
 $projectRoot = "E:\webiste theme and plugin\Ai-Quiz\Quiz"
 $frontendPort = 3010
-$backendPort = 4000
+$backendPort = 3012
 
 function Write-Status($message, $type = "info") {
     $timestamp = Get-Date -Format "HH:mm:ss"

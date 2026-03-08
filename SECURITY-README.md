@@ -66,30 +66,27 @@ Expected output should show:
 
 ---
 
-## 4. EXCLUSIVE PORT LIST
+## 4. EXCLUSIVE PORT LIST (Required Only)
 
-| Port | Service | Access |
-|------|---------|--------|
-| 3010 | Next.js Dev Server | Localhost only |
-| 3012 | Next.js Preview | Localhost only |
-| 4000 | NestJS API | Localhost only |
-| 4001 | NestJS Admin | Localhost only |
-| 5432 | PostgreSQL | Localhost only |
-| 5434 | PostgreSQL Test | Localhost only |
-| 6379 | Redis Cache | Localhost only |
-| 6381 | Redis Test | Localhost only |
-| 5674 | RabbitMQ AMQP | Localhost only |
-| 5673 | RabbitMQ Test | Localhost only |
-| 15673 | RabbitMQ Mgmt | Localhost only |
-| 9090 | Prometheus | Localhost only |
-| 3004 | Grafana | Localhost only |
-| 5601 | Kibana | Localhost only |
-| 9229 | Node.js Debug | Localhost only |
-| 9230 | Next.js Debug | Localhost only |
-| 8080 | Test Coverage | Localhost only |
-| 8081 | E2E Test Runner | Localhost only |
-| 9002 | MinIO API | Localhost only |
-| 9003 | MinIO Console | Localhost only |
+These are the **only required ports** for the website to work:
+
+| Port | Service | Access | Required? |
+|------|---------|--------|-----------|
+| 3010 | Frontend (Next.js) | Localhost only | ✅ YES |
+| 3012 | Backend (NestJS) | Localhost only | ✅ YES |
+| 5432 | PostgreSQL | Localhost only | ✅ YES |
+| 6379 | Redis Cache | Localhost only | ✅ YES |
+
+### Not Required Ports (Removed)
+The following ports are no longer part of this project:
+- Ports 3000-3004, 4000-4001 (Legacy/alternatives)
+- Ports 5433-5434 (PostgreSQL alternatives)
+- Ports 6380-6381 (Redis alternatives)
+- Ports 5672-5674, 15672-15673 (RabbitMQ - not implemented)
+- Ports 9000-9003 (MinIO - not implemented)
+- Ports 8080-8081 (Testing - optional)
+- Ports 9090, 5601 (Monitoring - optional)
+- Ports 9229-9230 (Debug - development only)
 
 ---
 
@@ -129,9 +126,8 @@ Expected output should show:
 
 - `firewall-protection.ps1` - Firewall setup script
 - `port-security-monitor.ps1` - Security monitoring
-- `network-security-config.py` - Security configuration reference
-- `current-port-status.md` - Port allocation and security status
-- `port-allocation-plan.md` - Detailed port planning
+- `.port-lock` - Port lock configuration
+- `port-allocation-plan.md` - Port allocation details
 
 ---
 
@@ -141,5 +137,6 @@ Expected output should show:
 - **Security lockdown is mandatory** - no exceptions
 - **Regular monitoring required** to maintain security
 - **All team members must follow** these security guidelines
+- **Only 4 ports required**: 3010, 3012, 5432, 6379
 
 **VIOLATION OF THESE RULES WILL RESULT IN IMMEDIATE PROJECT LOCKDOWN**

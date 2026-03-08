@@ -193,8 +193,7 @@ function Start-Services {
     Write-Host "  - Health:      http://localhost:3012/api/health"
     
     if ($Production -or $Nginx) {
-        Write-Host "  - Nginx:       http://localhost (port 80)"
-        Write-Host "  - MinIO Console: http://localhost:9001"
+        Write-Host "  - Backend:     http://localhost:3012"
     }
     
     Write-Host ""

@@ -85,8 +85,7 @@ function Test-ContainerStatus {
         @{ Name = "ai-quiz-frontend"; Port = 3010 },
         @{ Name = "ai-quiz-backend"; Port = 3012 },
         @{ Name = "ai-quiz-postgres"; Port = 5432 },
-        @{ Name = "ai-quiz-redis"; Port = 6379 },
-        @{ Name = "ai-quiz-minio"; Port = 9000 }
+        @{ Name = "ai-quiz-redis"; Port = 6379 }
     )
     
     foreach ($container in $expectedContainers) {
@@ -124,7 +123,7 @@ function Test-ContainerStatus {
 function Test-PortAvailability {
     Write-Host "`n[3/10] Checking Port Availability..." -ForegroundColor $Blue
     
-    $ports = @(3010, 3012, 5432, 6379, 9000, 9001)
+    $ports = @(3010, 3012, 5432, 6379)
     
     foreach ($port in $ports) {
         try {

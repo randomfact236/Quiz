@@ -332,9 +332,9 @@ function Repair-Firewall {
         }
         
         if (-not $backendRule) {
-            Write-Action "Adding firewall rule for port 4000 (Backend)..."
-            New-NetFirewallRule -DisplayName "AI Quiz Backend" -Direction Inbound -Protocol TCP -LocalPort 4000 -Action Allow -ErrorAction SilentlyContinue | Out-Null
-            Write-Fixed "Added firewall rule for port 4000"
+            Write-Action "Adding firewall rule for port 3012 (Backend)..."
+            New-NetFirewallRule -DisplayName "AI Quiz Backend" -Direction Inbound -Protocol TCP -LocalPort 3012 -Action Allow -ErrorAction SilentlyContinue | Out-Null
+            Write-Fixed "Added firewall rule for port 3012"
         }
         
         if ($frontendRule -and $backendRule) {

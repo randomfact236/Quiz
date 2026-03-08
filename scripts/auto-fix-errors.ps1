@@ -75,7 +75,7 @@ function Fix-CommonIssues($projectPath, $name) {
     
     if (-not $hasEnv -and $name -eq "Frontend") {
         Write-Status "Creating .env.local for frontend..." "warning"
-        "NEXT_PUBLIC_API_URL=http://localhost:3001" | Set-Content "$projectPath\.env.local"
+        "NEXT_PUBLIC_API_URL=http://localhost:3012" | Set-Content "$projectPath\.env.local"
         "NEXT_PUBLIC_APP_NAME=AI Quiz" | Add-Content "$projectPath\.env.local"
         $script:fixesApplied += "Created .env.local"
     }

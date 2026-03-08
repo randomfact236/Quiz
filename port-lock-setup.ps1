@@ -13,16 +13,10 @@ param(
 # EXCLUSIVELY BOOKED PORTS FOR AI QUIZ PROJECT
 # ============================================
 $ExclusivePorts = @(
-    3000,  # Web Frontend (Next.js)
-    3001,  # API Legacy
-    3002,  # Web Legacy
-    3003,  # API Server
-    5433,  # PostgreSQL Database
-    5672,  # RabbitMQ AMQP
-    6380,  # Redis Cache
-    9000,  # MinIO API
-    9001,  # MinIO Console
-    15672  # RabbitMQ Management
+    3010,  # Frontend (Next.js)
+    3012,  # Backend (NestJS)
+    5432,  # PostgreSQL Database
+    6379   # Redis Cache
 )
 
 $RulePrefix = "AI-QUIZ-LOCK"
@@ -146,16 +140,10 @@ Write-Host "  [+] Allowed essential system ports (53, 80, 443)" -ForegroundColor
 Write-Host "Step 4: Creating individual port lock rules..." -ForegroundColor Yellow
 
 $PortNames = @{
-    3000 = "Web-Frontend"
-    3001 = "API-Legacy"
-    3002 = "Web-Legacy"
-    3003 = "API-Server"
-    5433 = "PostgreSQL"
-    5672 = "RabbitMQ-AMQP"
-    6380 = "Redis-Cache"
-    9000 = "MinIO-API"
-    9001 = "MinIO-Console"
-    15672 = "RabbitMQ-Mgmt"
+    3010 = "Frontend"
+    3012 = "Backend"
+    5432 = "PostgreSQL"
+    6379 = "Redis"
 }
 
 foreach ($port in $ExclusivePorts) {
@@ -210,24 +198,16 @@ Write-Host "  PORT LOCK ACTIVATION COMPLETE!" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "EXCLUSIVE PORTS BOOKED:" -ForegroundColor Yellow
-Write-Host "  3000  - Web Frontend (Next.js)" -ForegroundColor White
-Write-Host "  3001  - API Legacy" -ForegroundColor White
-Write-Host "  3002  - Web Legacy" -ForegroundColor White
-Write-Host "  3003  - API Server" -ForegroundColor White
-Write-Host "  5433  - PostgreSQL Database" -ForegroundColor White
-Write-Host "  5672  - RabbitMQ AMQP" -ForegroundColor White
-Write-Host "  6380  - Redis Cache" -ForegroundColor White
-Write-Host "  9000  - MinIO API" -ForegroundColor White
-Write-Host "  9001  - MinIO Console" -ForegroundColor White
-Write-Host "  15672 - RabbitMQ Management" -ForegroundColor White
+Write-Host "  3010  - Frontend (Next.js)" -ForegroundColor White
+Write-Host "  3012  - Backend (NestJS)" -ForegroundColor White
+Write-Host "  5432  - PostgreSQL Database" -ForegroundColor White
+Write-Host "  6379  - Redis Cache" -ForegroundColor White
 Write-Host ""
 Write-Host "PROTECTION ACTIVE:" -ForegroundColor Green
 Write-Host "  [x] External access BLOCKED" -ForegroundColor Green
 Write-Host "  [x] Localhost access ALLOWED" -ForegroundColor Green
-Write-Host "  [x] Outbound restricted to booked ports" -ForegroundColor Green
-Write-Host "  [x] Audit logging ENABLED" -ForegroundColor Green
 Write-Host ""
-Write-Host "Total Ports Locked: 10" -ForegroundColor Cyan
+Write-Host "Total Ports Locked: 4" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "To check status: .\port-lock-setup.ps1 -Status" -ForegroundColor Yellow
 Write-Host "To remove lock:   .\port-lock-setup.ps1 -Remove" -ForegroundColor Yellow

@@ -2,7 +2,7 @@
 # Server Status Checker
 
 param(
-    [int]$BackendPort = 4000,
+    [int]$BackendPort = 3012,
     [int]$FrontendPort = 3010
 )
 
