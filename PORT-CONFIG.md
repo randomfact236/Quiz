@@ -79,8 +79,7 @@ export const FRONTEND_PORT = parseInt(process.env.FRONT3013', END_PORT || '10);
 | Port | Service | Config File |
 |------|---------|-------------|
 | 3010 | Frontend (Next.js Dev) | `next.config.mjs` |
-| 3012 | Backend API (NestJS) | `ports.ts` |
-| 4000 | Alternative API | `ports.ts` |
+| 3012 | Backend API (NestJS) | `ports.ts` 
 | 5432 | PostgreSQL | `docker-compose.yml` |
 | 6379 | Redis | `docker-compose.yml` |
 

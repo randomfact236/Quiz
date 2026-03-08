@@ -7,9 +7,8 @@
  * To change ports system-wide, modify only this file.
  * 
  * Port Usage:
- * - 3010: Frontend (Next.js) - handled by Next.js directly
- * - 3012: Backend API (NestJS) - THIS FILE controls this
- * - 4000: Alternative Backend API (for future use)
+ * - 3010: Frontend (Next.js)
+ * - 3012: Backend API (NestJS)
  * - 5432: PostgreSQL Database
  * - 6379: Redis Cache
  * ============================================================================
@@ -27,8 +26,6 @@ export const DATABASE_PORT = parseInt(process.env.DATABASE_PORT || '5432', 10);
 /** Redis Port */
 export const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379', 10);
 
-/** Alternative Backend API Port */
-export const ALT_BACKEND_PORT = parseInt(process.env.ALT_BACKEND_PORT || '4000', 10);
 
 /**
  * Get the API URL for the backend

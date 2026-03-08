@@ -4,7 +4,7 @@
  * Ensures the project only uses allowed ports
  */
 
-const ALLOWED_PORTS = [3010, 4000, 5432, 6379];
+const ALLOWED_PORTS = [3010, 3012, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 
 function validatePort() {

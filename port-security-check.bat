@@ -3,7 +3,7 @@ echo ==================================================
 echo 🔍 AI Quiz Port Security Check - %DATE% %TIME%
 echo ==================================================
 
-set "ports=3010 3012 4000 5432 6379"
+set "ports=3010 3012 5432 6379"
 
 echo Checking AI Quiz exclusive ports...
 echo.

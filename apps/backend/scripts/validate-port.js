@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ALLOWED_PORTS = [3010, 3011, 3012, 4000, 5432, 6379];
+const ALLOWED_PORTS = [3010, 3012, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 const ENV_FILE = path.join(__dirname, '..', '.env');
 
@@ -15,7 +15,7 @@ function validatePort() {
   // Check if running in Docker (environment variables already set)
   if (process.env.DOCKER_ENV === 'true' || process.env.CONTAINER_ENV === 'true') {
     console.log(`✓ ${PROJECT_NAME} Backend validated (Docker mode)`);
-    console.log(`✓ API Port: ${process.env.PORT || 4000}`);
+    console.log(`✓ API Port: ${process.env.PORT || 3012}`);
     console.log(`✓ Database Port: ${process.env.DB_PORT || 5432}`);
     console.log(`✓ Redis Port: ${process.env.REDIS_PORT || 6379}`);
     console.log(`✓ Allowed Ports: ${ALLOWED_PORTS.join(', ')}\n`);
@@ -33,7 +33,7 @@ function validatePort() {
 
   // Parse PORT from .env
   const portMatch = envContent.match(/PORT\s*=\s*(\d+)/);
-  const configuredPort = portMatch ? parseInt(portMatch[1], 10) : 4000;
+  const configuredPort = portMatch ? parseInt(portMatch[1], 10) : 3012;
 
   // Validate port
   if (!ALLOWED_PORTS.includes(configuredPort)) {

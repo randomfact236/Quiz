@@ -2,7 +2,7 @@
 # Run this script as Administrator to protect AI Quiz ports
 
 # AI Quiz exclusive ports - UPDATE HERE when ports change
-$aiQuizPorts = "3010", "3012", "4000", "5432", "6379"
+$aiQuizPorts = "3010", "3012", "5432", "6379"
 
 Write-Host "Setting up firewall protection for AI Quiz exclusive ports..." -ForegroundColor Green
 

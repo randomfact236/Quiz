@@ -7,8 +7,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// Core project ports - STRICTLY ENFORCED
-const CORE_PORTS = [3010, 3012, 4000, 5432, 6379];
+// Core project ports - STRICTLY ENFORCED (Clean: 3010, 3012, 5432, 6379)
+const CORE_PORTS = [3010, 3012, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 
 const color = {
@@ -71,7 +71,7 @@ function validateAllPorts() {
       name: 'Backend .env', 
       file: 'apps/backend/.env', 
       extractor: extractEnvPorts,
-      required: [3012, 4000, 5432, 6379]
+      required: [3012, 5432, 6379]
     },
     { 
       name: 'Frontend .env', 
@@ -80,7 +80,7 @@ function validateAllPorts() {
         const m = c.match(/:(\d+)/);
         return m ? [parseInt(m[1], 10)] : [];
       },
-      required: [3012, 4000]
+      required: [3012]
     },
     { 
       name: 'Docker Compose', 
@@ -129,7 +129,7 @@ function validateAllPorts() {
   log('----------------------------------------', 'cyan');
   const portMap = {
     'Frontend (Next.js)': 3010,
-    'Backend (NestJS)': 4000,
+    'Backend (NestJS)': 3012,
     'PostgreSQL': 5432,
     'Redis': 6379
   };
