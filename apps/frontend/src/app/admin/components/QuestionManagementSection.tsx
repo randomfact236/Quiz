@@ -6,7 +6,8 @@ import { Pencil, Trash2, FileQuestion } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
-import { downloadFile, parseQuestionCSV, exportQuestionsToCSV } from '../utils';
+import { downloadFile, exportQuestionsToCSV } from '../utils';
+import { importQuestionsFromCSV } from '../utils/csv-importer';
 import { bulkActionQuestions } from '@/lib/quiz-api';
 
 /**
@@ -22,11 +23,11 @@ interface QuestionManagementSectionProps {
   /** Callback when a subject is selected from filters */
   onSubjectSelect: (slug: string) => void;
   /** Callback to add a new subject */
-  onAddSubject: (name: string, slug: string) => void;
+  onAddSubject: (name: string, slug: string) => void | Promise<void>;
   /** Callback to add a new chapter */
   onAddChapter: (subjectSlug: string, chapterName: string) => void;
   /** Callback when questions are imported */
-  onQuestionsImport: (subjectSlug: string, newQuestions: Question[]) => void;
+  onQuestionsImport: (subjectSlug: string, newQuestions: Question[]) => void | Promise<void>;
   /** Callback when questions are updated (edited, deleted, status changed) */
   onQuestionsUpdate: (subjectSlug: string, updatedQuestions: Question[]) => void;
   /** Callback to clear all questions for a subject */
@@ -71,8 +72,6 @@ export function QuestionManagementSection({
   questions,
   allSubjects,
   onSubjectSelect,
-  onAddSubject,
-  onAddChapter,
   onQuestionsImport,
   onQuestionsUpdate,
   onClearQuestions,
@@ -105,8 +104,8 @@ export function QuestionManagementSection({
   const [showClearAllModal, setShowClearAllModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [importError, setImportError] = useState('');
-  const [importPreview, setImportPreview] = useState<Partial<Question>[]>([]);
-  const [importSubjectName, setImportSubjectName] = useState<string>('');
+  const [importSuccess, setImportSuccess] = useState('');
+  const [importLoading, setImportLoading] = useState(false);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
   const [uploadKey, setUploadKey] = useState(0); // Used to force FileUploader remount
 
@@ -114,14 +113,13 @@ export function QuestionManagementSection({
   useEffect(() => {
     if (showImportModal) {
       setImportError('');
-      setImportPreview([]);
-      setImportSubjectName('');
-      setUploadKey(prev => prev + 1); // Force FileUploader remount
+      setImportSuccess('');
+      setImportLoading(false);
+      setUploadKey(prev => prev + 1);
     }
   }, [showImportModal]);
 
   // Refs
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const importModalRef = useRef<HTMLDivElement>(null);
   const addModalRef = useRef<HTMLDivElement>(null);
   const editModalRef = useRef<HTMLDivElement>(null);
@@ -161,7 +159,7 @@ export function QuestionManagementSection({
   }, [localQuestions, subject.slug, onQuestionsUpdate]);
 
   // Get unique chapters for this subject - memoized
-  const chapters = useMemo(() => 
+  const chapters = useMemo(() =>
     [...new Set(localQuestions.map((q) => q.chapter))],
     [localQuestions]
   );
@@ -206,7 +204,7 @@ export function QuestionManagementSection({
   // Pagination calculations - memoized
   const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
   const startIndex = (currentPage - 1) * questionsPerPage;
-  const paginatedQuestions = useMemo(() => 
+  const paginatedQuestions = useMemo(() =>
     filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
     [filteredQuestions, startIndex, questionsPerPage]
   );
@@ -396,7 +394,7 @@ export function QuestionManagementSection({
   // Handle edit question
   const handleEditQuestion = useCallback(() => {
     if (!selectedQuestion) return;
-    
+
     if (
       !questionForm.question.trim() ||
       !questionForm.optionA.trim() ||
@@ -418,7 +416,7 @@ export function QuestionManagementSection({
       chapter: questionForm.chapter.trim(),
     };
 
-    setLocalQuestions(prev => 
+    setLocalQuestions(prev =>
       prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
     );
     setShowEditModal(false);
@@ -435,7 +433,7 @@ export function QuestionManagementSection({
       setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
     } else {
       // Move to trash otherwise
-      setLocalQuestions(prev => 
+      setLocalQuestions(prev =>
         prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
       );
     }
@@ -488,102 +486,58 @@ export function QuestionManagementSection({
     downloadFile(JSON.stringify(data, null, 2), `${subject.name}_questions.json`, 'application/json');
   }, [filteredQuestions, subject.name]);
 
-  // Handle file upload
+
+  // Handle CSV file upload — directly imports to DB without preview step
   const handleFileUpload = useCallback(
-    (file: File) => {
+    async (file: File) => {
       setImportError('');
-      const reader = new FileReader();
+      setImportSuccess('');
 
-      reader.onload = (event) => {
-        try {
-          const content = event.target?.result as string;
-          let parsed: Partial<Question>[] = [];
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        setImportError('Only CSV files are supported. Please upload a .csv file.');
+        return;
+      }
 
-          // Parse as JSON for .json files, CSV for .csv files
-          const fileName = file.name.toLowerCase();
-          if (fileName.endsWith('.json')) {
-            const data = JSON.parse(content);
-            parsed = Array.isArray(data.questions)
-              ? data.questions
-              : Array.isArray(data)
-                ? data
-                : [];
-          } else {
-            // Use the new CSV parser that handles animals-questions.csv format
-            const result = parseQuestionCSV(content);
-            if (result.failed.length > 0 && result.imported.length === 0) {
-              setImportError(`Import failed: ${result.failed.map(f => `Row ${f.row}: ${f.error}`).join(', ')}`);
-              return;
-            }
-            if (result.failed.length > 0) {
-              console.warn('Some rows failed to import:', result.failed);
-            }
-            parsed = result.imported;
-            setImportSubjectName(result.subjectName || '');
+      setImportLoading(true);
+
+      try {
+        const content = await file.text();
+        const result = await importQuestionsFromCSV(content, allSubjects);
+
+        if (result.success) {
+          const msg = `✅ Imported ${result.questionsImported} questions into "${result.subjectName}"` +
+            (result.warnings.length > 0 ? ` (${result.warnings.length} warnings)` : '');
+          setImportSuccess(msg);
+
+          // Notify parent to refresh state
+          await onQuestionsImport(result.subjectSlug, []);
+
+          // Auto-close after short delay
+          setTimeout(() => {
+            setShowImportModal(false);
+            setImportSuccess('');
+            setUploadKey(k => k + 1);
+          }, 2500);
+        } else {
+          setImportError(
+            result.errors.join('\n') ||
+            'Import failed. Check that your CSV matches the required format.'
+          );
+          if (result.warnings.length > 0) {
+            console.warn('Import warnings:', result.warnings);
           }
-
-          if (parsed.length === 0) {
-            setImportError('No valid questions found in file');
-            return;
-          }
-
-          setImportPreview(parsed);
-        } catch (err) {
-          setImportError('Failed to parse file: ' + (err as Error).message);
         }
-      };
-
-      reader.readAsText(file);
+      } catch (err) {
+        setImportError('Failed to read or import file: ' + (err as Error).message);
+      } finally {
+        setImportLoading(false);
+      }
     },
-    []
+    [allSubjects, onQuestionsImport]
   );
 
-  // Confirm import
-  const handleConfirmImport = useCallback(() => {
-    const newQuestions: Question[] = importPreview
-      .filter((q) => q.question?.trim())
-      .map((q, index) => ({
-        id: String(Date.now() + index),
-        question: q.question?.trim() ?? '',
-        optionA: q.optionA?.trim() ?? '',
-        optionB: q.optionB?.trim() ?? '',
-        optionC: q.optionC?.trim() ?? '',
-        optionD: q.optionD?.trim() ?? '',
-        correctAnswer: (q.correctAnswer?.trim() as Question['correctAnswer']) ?? 'A',
-        level: (q.level as Question['level']) ?? 'easy',
-        chapter: q.chapter?.trim() ?? 'General',
-        status: 'published',
-      }));
 
-    let targetSubjectSlug = subject.slug;
 
-    if (importSubjectName) {
-      const slug = importSubjectName.toLowerCase().replace(/\s+/g, '-');
-      const existingSubject = allSubjects.find(s => s.slug === slug);
-      
-      if (!existingSubject) {
-        onAddSubject(importSubjectName, slug);
-        targetSubjectSlug = slug;
-        onSubjectSelect(slug);
-      } else {
-        targetSubjectSlug = existingSubject.slug;
-        onSubjectSelect(existingSubject.slug);
-      }
-    }
-
-    const uniqueChapters = [...new Set(newQuestions.map(q => q.chapter).filter(Boolean))];
-    uniqueChapters.forEach(chapterName => {
-      onAddChapter(targetSubjectSlug, chapterName);
-    });
-
-    onQuestionsImport(targetSubjectSlug, newQuestions);
-    setShowImportModal(false);
-    setImportPreview([]);
-    setImportSubjectName('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  }, [importPreview, importSubjectName, subject, allSubjects, onSubjectSelect, onQuestionsImport, onAddSubject, onAddChapter]);
 
   // Clear filters
   const clearFilters = useCallback(() => {
@@ -611,17 +565,17 @@ export function QuestionManagementSection({
     }
 
     const newName = editingChapterName.trim();
-    
+
     // Update all questions with the old chapter name
-    setLocalQuestions(prev => prev.map(q => 
+    setLocalQuestions(prev => prev.map(q =>
       q.chapter === editingChapter ? { ...q, chapter: newName } : q
     ));
-    
+
     // If the filter was set to the old chapter, update it
     if (filterChapter === editingChapter) {
       setFilterChapter(newName);
     }
-    
+
     setEditingChapter(null);
     setEditingChapterName('');
   }, [editingChapter, editingChapterName, filterChapter]);
@@ -643,7 +597,8 @@ export function QuestionManagementSection({
       if (importModalRef.current && !importModalRef.current.contains(event.target as Node)) {
         setShowImportModal(false);
         setImportError('');
-        setImportPreview([]);
+        setImportLoading(false);
+        setImportSuccess('');
       }
     };
     if (showImportModal) {
@@ -813,11 +768,10 @@ export function QuestionManagementSection({
             <div key={s.slug} className="flex items-center gap-0.5">
               <button
                 onClick={() => onSubjectSelect(s.slug)}
-                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${
-                  subject.slug === s.slug
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${subject.slug === s.slug
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
                 aria-pressed={subject.slug === s.slug}
               >
                 <span role="img" aria-hidden="true">
@@ -831,11 +785,10 @@ export function QuestionManagementSection({
                   e.stopPropagation();
                   onEditSubject(s);
                 }}
-                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${
-                  subject.slug === s.slug
-                    ? 'bg-blue-400 text-white hover:bg-blue-300'
-                    : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
-                }`}
+                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${subject.slug === s.slug
+                  ? 'bg-blue-400 text-white hover:bg-blue-300'
+                  : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
+                  }`}
                 title={`Edit ${s.name}`}
               >
                 <Pencil size={12} />
@@ -846,11 +799,10 @@ export function QuestionManagementSection({
                   e.stopPropagation();
                   onDeleteSubject(s.id);
                 }}
-                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${
-                  subject.slug === s.slug
-                    ? 'bg-blue-400 text-white hover:bg-red-400'
-                    : 'bg-gray-200 text-red-600 hover:bg-red-50'
-                }`}
+                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${subject.slug === s.slug
+                  ? 'bg-blue-400 text-white hover:bg-red-400'
+                  : 'bg-gray-200 text-red-600 hover:bg-red-50'
+                  }`}
                 title={`Delete ${s.name}`}
               >
                 <Trash2 size={12} />
@@ -864,11 +816,10 @@ export function QuestionManagementSection({
           <span className="text-sm font-medium text-gray-600 mr-2">Chapter:</span>
           <button
             onClick={() => setFilterChapter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              filterChapter === 'all'
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === 'all'
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             aria-pressed={filterChapter === 'all'}
           >
             All Chapters <span className="opacity-70">({localQuestions.length})</span>
@@ -907,11 +858,10 @@ export function QuestionManagementSection({
                 <>
                   <button
                     onClick={() => setFilterChapter(ch)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      filterChapter === ch
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === ch
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
                     aria-pressed={filterChapter === ch}
                   >
                     {ch} <span className="opacity-70">({chapterCounts[ch] || 0})</span>
@@ -928,7 +878,7 @@ export function QuestionManagementSection({
             </div>
           ))}
           <button
-            onClick={() => {}}
+            onClick={() => { }}
             className="px-3 py-1.5 rounded-lg text-sm font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center gap-1"
           >
             <span>+</span> Add Chapter
@@ -942,13 +892,12 @@ export function QuestionManagementSection({
             <button
               key={level}
               onClick={() => setFilterLevel(level)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${
-                filterLevel === level
-                  ? level === 'all'
-                    ? 'bg-purple-500 text-white'
-                    : getLevelButtonColor(level)
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${filterLevel === level
+                ? level === 'all'
+                  ? 'bg-purple-500 text-white'
+                  : getLevelButtonColor(level)
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               aria-pressed={filterLevel === level}
             >
               {level === 'all' ? 'All Levels' : level}{' '}
@@ -985,126 +934,90 @@ export function QuestionManagementSection({
       {/* Import Modal */}
       {showImportModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="import-modal-title">
-          <div ref={importModalRef} className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+          <div ref={importModalRef} className="bg-white rounded-xl p-6 w-full max-w-lg">
             <h3 id="import-modal-title" className="text-xl font-bold mb-4">
-              Bulk Import Questions
+              📥 Import Questions from CSV
             </h3>
 
-            {!importPreview.length ? (
-              <div className="space-y-4">
-                <FileUploader
-                  key={uploadKey}
-                  onFileSelect={handleFileUpload}
-                  accept=".csv,.json"
-                  label="Select CSV or JSON File"
-                  description="Drag and drop your CSV or JSON file here, or click to browse"
-                />
+            <div className="space-y-4">
+              {/* File Uploader — disabled while loading */}
+              {!importLoading && !importSuccess && (
+                <>
+                  <FileUploader
+                    key={uploadKey}
+                    onFileSelect={handleFileUpload}
+                    accept=".csv"
+                    label="Select CSV File"
+                    description="Drag and drop your CSV file here, or click to browse"
+                  />
 
-                <div className="bg-gray-50 p-4 rounded-lg text-sm">
-                  <p className="font-medium mb-2">CSV Format (with headers):</p>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto mb-2">
-                    # Subject: SubjectName
-                  </code>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                    ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
-                  </code>
-                  <p className="text-xs text-gray-600 mt-1 mb-3">
-                    Supports: comment lines (#), quoted values, empty options for True/False questions
-                  </p>
-                  <p className="font-medium mb-2">JSON Format:</p>
-                  <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
-                    {`{"questions": [{"question": "...", "optionA": "...", "optionB": "...", "optionC": "...", "optionD": "...", "correctAnswer": "A", "level": "easy", "chapter": "..."}]}`}
-                  </code>
+                  <div className="bg-gray-50 p-4 rounded-lg text-sm space-y-2">
+                    <p className="font-medium">Required CSV Format:</p>
+                    <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                      # Subject: SubjectName
+                    </code>
+                    <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                      ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+                    </code>
+                    <div className="text-xs text-gray-600 space-y-0.5 mt-1">
+                      <p>• <strong>easy</strong> — True/False (Option A = FALSE, Option B = TRUE)</p>
+                      <p>• <strong>medium</strong> — 2 options (A, B)</p>
+                      <p>• <strong>hard</strong> — 3 options (A, B, C)</p>
+                      <p>• <strong>expert</strong> — 4 options (A, B, C, D)</p>
+                      <p>• <strong>extreme</strong> — open answer (Correct Answer column = answer text, no options needed)</p>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Loading State */}
+              {importLoading && (
+                <div className="flex flex-col items-center py-8 gap-3">
+                  <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+                  <p className="text-gray-600 font-medium">Importing questions to database…</p>
+                  <p className="text-gray-400 text-sm">This may take a moment for large files</p>
                 </div>
+              )}
 
-                {importError && (
-                  <p className="text-red-500 text-sm" role="alert">
-                    {importError}
-                  </p>
-                )}
+              {/* Success State */}
+              {importSuccess && (
+                <div className="flex flex-col items-center py-6 gap-3 text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">✅</span>
+                  </div>
+                  <p className="text-green-700 font-semibold">{importSuccess}</p>
+                  <p className="text-gray-400 text-sm">Modal will close automatically…</p>
+                </div>
+              )}
 
+              {/* Error Message */}
+              {importError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-red-600 text-sm font-medium mb-1">Import Failed</p>
+                  <p className="text-red-500 text-sm whitespace-pre-line">{importError}</p>
+                </div>
+              )}
+
+              {/* Cancel button (hidden while loading or success) */}
+              {!importLoading && !importSuccess && (
                 <div className="flex gap-2 pt-2">
                   <button
                     onClick={() => {
                       setShowImportModal(false);
                       setImportError('');
-                      if (fileInputRef.current) {
-                        fileInputRef.current.value = '';
-                      }
+                      setUploadKey(k => k + 1);
                     }}
                     className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
                   >
                     Cancel
                   </button>
                 </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <p className="text-green-600 font-medium">
-                  ✓ Found {importPreview.length} questions to import
-                </p>
-
-                <div className="max-h-64 overflow-auto border rounded-lg">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-50 sticky top-0">
-                      <tr>
-                        <th className="px-3 py-2 text-left">Question</th>
-                        <th className="px-3 py-2 text-left">Options</th>
-                        <th className="px-3 py-2 text-left">Answer</th>
-                        <th className="px-3 py-2 text-left">Level</th>
-                        <th className="px-3 py-2 text-left">Chapter</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {importPreview.slice(0, 5).map((q, i) => (
-                        <tr
-                          key={`preview-${q.id ?? q.question?.slice(0, 20)}-${i}`}
-                          className="border-t"
-                        >
-                          <td className="px-3 py-2 truncate max-w-xs">{q.question}</td>
-                          <td className="px-3 py-2 text-xs text-gray-500">
-                            A: {q.optionA}, B: {q.optionB}...
-                          </td>
-                          <td className="px-3 py-2">{q.correctAnswer}</td>
-                          <td className="px-3 py-2">{q.level}</td>
-                          <td className="px-3 py-2">{q.chapter}</td>
-                        </tr>
-                      ))}
-                      {importPreview.length > 5 && (
-                        <tr>
-                          <td colSpan={5} className="px-3 py-2 text-center text-gray-500">
-                            ... and {importPreview.length - 5} more
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <button
-                    onClick={() => {
-                      setImportPreview([]);
-                      if (fileInputRef.current) {
-                        fileInputRef.current.value = '';
-                      }
-                    }}
-                    className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleConfirmImport}
-                    className="flex-1 rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-                  >
-                    Import {importPreview.length} Questions
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
+
 
       {/* Add Question Modal */}
       {showAddModal && (
@@ -1481,9 +1394,9 @@ export function QuestionManagementSection({
             <h3 id="delete-modal-title" className="text-xl font-bold mb-4 text-red-600">
               🗑️ {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
             </h3>
-            
+
             <p className="text-gray-600 mb-6">
-              {selectedQuestion.status === 'trash' 
+              {selectedQuestion.status === 'trash'
                 ? `Are you sure you want to permanently delete this question? This action cannot be undone.`
                 : `Are you sure you want to move this question to trash? You can restore it later from the Trash section.`}
             </p>
@@ -1505,11 +1418,10 @@ export function QuestionManagementSection({
               </button>
               <button
                 onClick={handleDeleteQuestion}
-                className={`flex-1 rounded-lg px-4 py-2 text-white ${
-                  selectedQuestion.status === 'trash' 
-                    ? 'bg-red-600 hover:bg-red-700' 
-                    : 'bg-yellow-500 hover:bg-yellow-600'
-                }`}
+                className={`flex-1 rounded-lg px-4 py-2 text-white ${selectedQuestion.status === 'trash'
+                  ? 'bg-red-600 hover:bg-red-700'
+                  : 'bg-yellow-500 hover:bg-yellow-600'
+                  }`}
               >
                 {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
               </button>
@@ -1624,7 +1536,7 @@ export function QuestionManagementSection({
             <span className="font-medium">{filteredQuestions.length}</span> questions
           </p>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1643,7 +1555,7 @@ export function QuestionManagementSection({
               />
               of <span className="font-medium">{totalPages || 1}</span>
             </span>
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage >= totalPages}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"

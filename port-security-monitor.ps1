@@ -1,7 +1,7 @@
 # AI Quiz Project - Port Security Monitor
 # This script monitors that AI Quiz ports are properly secured
 
-$aiQuizPorts = 3010, 3011, 4000, 4001, 5432, 5434, 6379, 6381, 5674, 5673, 15673, 9090, 3004, 5601, 9229, 9230, 8080, 8081, 9002, 9003
+$aiQuizPorts = 3010, 3012, 4000, 5432, 6379
 
 Write-Host "🔍 AI Quiz Port Security Check - $(Get-Date)" -ForegroundColor Cyan
 Write-Host ("=" * 50) -ForegroundColor Cyan

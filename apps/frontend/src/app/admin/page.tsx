@@ -24,7 +24,8 @@ import type {
   Question,
   MenuSection
 } from './types';
-import { downloadFile, parseQuestionCSV, exportQuestionsToCSV } from './utils';
+import { downloadFile, exportQuestionsToCSV } from './utils';
+import { importQuestionsFromCSV } from './utils/csv-importer';
 
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';
@@ -35,7 +36,7 @@ import {
   initialJokes as libInitialJokes
 } from '@/lib/initial-data';
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, deleteQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject } from '@/lib/quiz-api';
+import { getSubjects, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, deleteQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter } from '@/lib/quiz-api';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
@@ -161,7 +162,7 @@ export default function AdminPage(): JSX.Element {
     // Load subjects from API (Source of Truth)
     getSubjects(false)
       .then(async (apiSubjects) => {
-        const loadedSubjects = apiSubjects && apiSubjects.length > 0 
+        const loadedSubjects = apiSubjects && apiSubjects.length > 0
           ? sanitizeSubjects(apiSubjects as unknown as Subject[])
           : [];
         setSubjects(loadedSubjects);
@@ -226,22 +227,37 @@ export default function AdminPage(): JSX.Element {
   // Fetch questions from API when subject is selected
   useEffect(() => {
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
-    
+
     if (isSubjectSection && activeSection !== 'dashboard') {
       const fetchQuestions = async () => {
         try {
           const result = await getQuestionsBySubject(activeSection);
-          const mappedQuestions: Question[] = result.map(q => ({
-            id: q.id as string,
-            question: q.question,
-            options: q.options || [],
-            correctOption: q.correctAnswer || 'A',
-            level: (q.level || 'medium') as Question['level'],
-            chapter: q.chapter?.name || 'General',
-            status: (q.status || 'published') as Question['status'],
-            hint: q.hint,
-            explanation: q.explanation,
-          }));
+          const mappedQuestions: Question[] = result.map(q => {
+            const _opts = q.options || [];
+            const optA = _opts[0] || '';
+            const optB = _opts[1] || '';
+            const optC = _opts[2] || '';
+            const optD = _opts[3] || '';
+            let correctLetter = 'A';
+            if (q.correctAnswer === optB) correctLetter = 'B';
+            else if (q.correctAnswer === optC) correctLetter = 'C';
+            else if (q.correctAnswer === optD) correctLetter = 'D';
+
+            return {
+              id: q.id as string,
+              question: q.question,
+              optionA: optA,
+              optionB: optB,
+              optionC: optC,
+              optionD: optD,
+              correctAnswer: correctLetter,
+              level: (q.level || 'medium') as Question['level'],
+              chapter: q.chapter?.name || 'General',
+              status: (q.status || 'published') as Question['status'],
+              hint: q.hint,
+              explanation: q.explanation,
+            };
+          });
           setAllQuestions(prev => ({
             ...prev,
             [activeSection]: mappedQuestions
@@ -250,7 +266,7 @@ export default function AdminPage(): JSX.Element {
           console.error('Failed to fetch questions for subject:', activeSection, err);
         }
       };
-      
+
       fetchQuestions();
     }
   }, [activeSection, subjects]);
@@ -280,33 +296,122 @@ export default function AdminPage(): JSX.Element {
 
   // Handle questions import
   const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
+    let subjectId: string | undefined;
+
+    // First, check if subject is in local state
     const subject = subjects.find(s => s.slug === subjectSlug);
-    
-    const apiQuestions = newQuestions.map(q => ({
-      question: q.question,
-      options: q.options,
-      correctAnswer: q.correctOption,
-      level: q.level,
-      hint: q.hint,
-      explanation: q.explanation,
-      subjectId: subject?.id,
-      status: q.status || 'published',
-    }));
+    if (subject?.id) {
+      subjectId = subject.id;
+    }
+
+    // Always fetch from API to ensure we have the correct subject ID
+    // This handles cases where subject exists in DB but not in frontend state
+    try {
+      const subjectData = await getSubjectBySlug(subjectSlug);
+      if (subjectData?.id) {
+        subjectId = subjectData.id;
+        // Add subject to state if it's not there
+        if (!subject) {
+          const newSubject = {
+            id: subjectData.id,
+            slug: subjectData.slug,
+            name: subjectData.name,
+            emoji: subjectData.emoji || '📚',
+            category: subjectData.category || 'academic',
+            order: subjects.length,
+          };
+          setSubjects(prev => [...prev, newSubject]);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch subject from API:', err);
+      // If subject was found in state, use its ID despite API error
+      if (!subjectId) {
+        console.error('Subject not found in state or API');
+        return;
+      }
+    }
+
+    if (!subjectId) {
+      console.error('Subject ID not found');
+      return;
+    }
+
+    // Get chapters for this subject
+    let chapters = await getChaptersBySubject(subjectId);
+
+    // Get unique chapters from questions
+    const questionChapters = [...new Set(newQuestions.map(q => q.chapter || 'General'))];
+
+    // Find or create each chapter
+    for (const chapterName of questionChapters) {
+      let chapter = chapters.find(c => c.name.toLowerCase() === chapterName.toLowerCase());
+      if (!chapter) {
+        try {
+          chapter = await createChapter({ name: chapterName, subjectId });
+          chapters.push(chapter);
+        } catch (err) {
+          console.error(`Failed to create chapter ${chapterName}:`, err);
+        }
+      }
+    }
+
+    // Build a map of chapter names to IDs
+    const chapterMap = new Map(chapters.map(c => [c.name.toLowerCase(), c.id]));
+
+    const apiQuestions = newQuestions.map(q => {
+      const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
+      const correctLetter = (q.correctAnswer || 'A').toUpperCase();
+      const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
+      const wrongAnswers = allOptions.filter((_, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        return letter !== correctLetter;
+      });
+
+      const chapterName = (q.chapter || 'General').toLowerCase();
+      const chapterId = chapterMap.get(chapterName) || chapterMap.get('general');
+
+      return {
+        question: q.question,
+        correctAnswer: correctAnswerText,
+        wrongAnswers,
+        level: q.level,
+        hint: q.hint || '',
+        explanation: q.explanation || '',
+        chapterId: chapterId,
+        status: q.status || 'published',
+      };
+    });
 
     try {
       await createQuestionsBulk(apiQuestions);
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(q => ({
-        id: q.id as string,
-        question: q.question,
-        options: q.options || [],
-        correctOption: q.correctAnswer || 'A',
-        level: (q.level || 'medium') as Question['level'],
-        chapter: q.chapter?.name || 'General',
-        status: (q.status || 'published') as Question['status'],
-        hint: q.hint,
-        explanation: q.explanation,
-      }));
+      const mappedQuestions: Question[] = result.map(q => {
+        const _opts = q.options || [];
+        const optA = _opts[0] || '';
+        const optB = _opts[1] || '';
+        const optC = _opts[2] || '';
+        const optD = _opts[3] || '';
+        let correctLetter = 'A';
+        if (q.correctAnswer === optB) correctLetter = 'B';
+        else if (q.correctAnswer === optC) correctLetter = 'C';
+        else if (q.correctAnswer === optD) correctLetter = 'D';
+
+        return {
+          id: q.id as string,
+          question: q.question,
+          optionA: optA,
+          optionB: optB,
+          optionC: optC,
+          optionD: optD,
+          correctAnswer: correctLetter,
+          level: (q.level || 'medium') as Question['level'],
+          chapter: q.chapter?.name || 'General',
+          status: (q.status || 'published') as Question['status'],
+          hint: q.hint,
+          explanation: q.explanation,
+        };
+      });
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
@@ -320,21 +425,44 @@ export default function AdminPage(): JSX.Element {
     }
   };
 
-  // Handle questions update (edit, delete, status change)
   const handleQuestionsUpdate = async (subjectSlug: string, updatedQuestions: Question[]) => {
     const subject = subjects.find(s => s.slug === subjectSlug);
-    
+    if (!subject) return;
+
+    let chapterMap = new Map<string, string>();
+    try {
+      const existingChapters = await getChaptersBySubject(subject.id);
+      chapterMap = new Map(existingChapters.map(c => [c.name.toLowerCase(), c.id]));
+    } catch (err) {
+      console.error('Failed to fetch chapters for update:', err);
+    }
+
     for (const q of updatedQuestions) {
+      const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
+      const correctLetter = (q.correctAnswer || 'A').toUpperCase();
+      const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
+      const wrongAnswers = allOptions.filter((_, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        return letter !== correctLetter;
+      });
+
+      const chapterName = (q.chapter || 'General').toLowerCase();
+      const chapterId = chapterMap.get(chapterName) || '';
+
       if (!q.id || q.id.startsWith('local-')) {
+        if (!chapterId) {
+          console.error('Cannot create question without a valid chapter ID');
+          continue;
+        }
         const apiQuestion = {
           question: q.question,
-          options: q.options,
-          correctAnswer: q.correctOption,
+          wrongAnswers,
+          correctAnswer: correctAnswerText,
           level: q.level,
-          hint: q.hint,
-          explanation: q.explanation,
-          subjectId: subject?.id,
-          status: q.status || 'published',
+          hint: q.hint || '',
+          explanation: q.explanation || '',
+          chapterId: chapterId,
+          status: q.status === 'trash' ? 'draft' : (q.status || 'published'),
         };
         try {
           await createQuestion(apiQuestion);
@@ -345,12 +473,12 @@ export default function AdminPage(): JSX.Element {
         try {
           await updateQuestion(q.id, {
             question: q.question,
-            options: q.options,
-            correctAnswer: q.correctOption,
+            wrongAnswers,
+            correctAnswer: correctAnswerText,
             level: q.level,
-            hint: q.hint,
-            explanation: q.explanation,
-            status: q.status,
+            hint: q.hint || '',
+            explanation: q.explanation || '',
+            status: q.status === 'trash' ? 'draft' : (q.status || 'published'),
           });
         } catch (err) {
           console.error('Failed to update question:', q.id, err);
@@ -360,17 +488,32 @@ export default function AdminPage(): JSX.Element {
 
     try {
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(q => ({
-        id: q.id as string,
-        question: q.question,
-        options: q.options || [],
-        correctOption: q.correctAnswer || 'A',
-        level: (q.level || 'medium') as Question['level'],
-        chapter: q.chapter?.name || 'General',
-        status: (q.status || 'published') as Question['status'],
-        hint: q.hint,
-        explanation: q.explanation,
-      }));
+      const mappedQuestions: Question[] = result.map(q => {
+        const _opts = q.options || [];
+        const optA = _opts[0] || '';
+        const optB = _opts[1] || '';
+        const optC = _opts[2] || '';
+        const optD = _opts[3] || '';
+        let correctLetter = 'A';
+        if (q.correctAnswer === optB) correctLetter = 'B';
+        else if (q.correctAnswer === optC) correctLetter = 'C';
+        else if (q.correctAnswer === optD) correctLetter = 'D';
+
+        return {
+          id: q.id as string,
+          question: q.question,
+          optionA: optA,
+          optionB: optB,
+          optionC: optC,
+          optionD: optD,
+          correctAnswer: correctLetter,
+          level: (q.level || 'medium') as Question['level'],
+          chapter: q.chapter?.name || 'General',
+          status: (q.status || 'published') as Question['status'],
+          hint: q.hint,
+          explanation: q.explanation,
+        };
+      });
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
@@ -388,7 +531,7 @@ export default function AdminPage(): JSX.Element {
   const handleClearQuestions = async (subjectSlug: string) => {
     const currentQuestions = allQuestions[subjectSlug] || [];
     const questionIds = currentQuestions.filter(q => q.id && !q.id.startsWith('local-')).map(q => q.id);
-    
+
     if (questionIds.length > 0) {
       try {
         await bulkActionQuestions(questionIds, 'delete');
@@ -437,7 +580,7 @@ export default function AdminPage(): JSX.Element {
   // Import questions from JSON or CSV file
   const handleImportQuestions = async (file: File) => {
     const fileName = file.name.toLowerCase();
-    
+
     if (fileName.endsWith('.json')) {
       const data = await importQuizDataFromFile(file);
       if (data) {
@@ -460,54 +603,41 @@ export default function AdminPage(): JSX.Element {
         setShowImportModal(false);
       }
     } else if (fileName.endsWith('.csv')) {
-      // CSV import - parse and add to existing subjects
       const reader = new FileReader();
       reader.onload = async (e) => {
         const content = e.target?.result as string;
-        const result = parseQuestionCSV(content);
-        
-        if (result.subjectName) {
-          // Find or create subject
-          let subject = subjects.find(s => s.name.toLowerCase() === result.subjectName.toLowerCase());
+
+        const result = await importQuestionsFromCSV(content, subjects);
+
+        console.log('Import result:', result);
+        console.log('Parsed rows:', result); // Debug full result
+
+        if (result.success) {
+          const subject = subjects.find(s => s.slug === result.subjectSlug);
           if (!subject) {
-            // Create new subject from CSV
-            const slug = result.subjectName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-            subject = {
+            setSubjects(prev => [...prev, {
               id: String(Date.now()),
-              slug,
+              slug: result.subjectSlug,
               name: result.subjectName,
               emoji: '📚',
               category: 'academic',
               order: subjects.length,
-            };
-            // Save to database
-            try {
-              await createSubject({
-                name: result.subjectName,
-                slug,
-                emoji: '📚',
-                category: 'academic',
-              });
-            } catch (err) {
-              console.error('Failed to create subject in database:', err);
-            }
-            setSubjects(prev => [...prev, subject!]);
-            setAllQuestions(prev => ({ ...prev, [slug]: [] }));
+            }]);
           }
-          
-          // Add questions to subject
+
+          const newQuestions = await getQuestionsBySubject(result.subjectSlug);
           setAllQuestions(prev => ({
             ...prev,
-            [subject!.slug]: [...(prev[subject!.slug] || []), ...result.imported],
+            [result.subjectSlug]: newQuestions
           }));
-          
-          // Save to file (backup only)
-          const data = {
-            subjects: [...subjects, subject],
-            questions: { ...allQuestions, [subject.slug]: [...(allQuestions[subject.slug] || []), ...result.imported] },
-            lastUpdated: new Date().toISOString(),
-          };
-          await saveQuizData(data);
+          setQuestionCounts(prev => ({
+            ...prev,
+            [result.subjectSlug]: result.questionsImported
+          }));
+
+          alert(`Successfully imported ${result.questionsImported} questions!\nSubject: ${result.subjectName}\nChapters: ${result.chaptersCreated}`);
+        } else {
+          alert(`Import failed:\n${result.errors.join('\n')}`);
         }
         setShowImportModal(false);
       };
@@ -921,26 +1051,24 @@ export default function AdminPage(): JSX.Element {
             <p className="text-gray-600 dark:text-secondary-300 mb-4">
               Choose export format:
             </p>
-            
+
             {/* Format Selection */}
             <div className="flex gap-2 mb-4">
               <button
                 onClick={() => setExportFormat('json')}
-                className={`flex-1 rounded-lg px-4 py-2 border-2 ${
-                  exportFormat === 'json' 
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600' 
-                    : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
-                }`}
+                className={`flex-1 rounded-lg px-4 py-2 border-2 ${exportFormat === 'json'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600'
+                  : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
+                  }`}
               >
                 📄 JSON
               </button>
               <button
                 onClick={() => setExportFormat('csv')}
-                className={`flex-1 rounded-lg px-4 py-2 border-2 ${
-                  exportFormat === 'csv' 
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600' 
-                    : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
-                }`}
+                className={`flex-1 rounded-lg px-4 py-2 border-2 ${exportFormat === 'csv'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600'
+                  : 'border-gray-300 dark:border-secondary-600 text-gray-600 dark:text-secondary-400'
+                  }`}
               >
                 📊 CSV
               </button>
@@ -969,7 +1097,7 @@ export default function AdminPage(): JSX.Element {
                 </ul>
               </>
             )}
-            
+
             <div className="flex gap-2 mt-4">
               <button
                 onClick={() => setShowExportModal(false)}
@@ -1019,7 +1147,7 @@ export default function AdminPage(): JSX.Element {
               Delete Subject
             </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete <strong className="text-gray-800">"{subjectToDelete.name}"</strong>? 
+              Are you sure you want to delete <strong className="text-gray-800">"{subjectToDelete.name}"</strong>?
               <br /><br />
               This will also delete all questions in this subject. This action cannot be undone.
             </p>
@@ -1201,14 +1329,14 @@ function ImportQuestionsModal({ onClose, onImport }: {
         <p className="text-gray-600 dark:text-secondary-300 mb-4">
           Upload a JSON or CSV file with questions.
         </p>
-        
+
         <div className="bg-gray-50 dark:bg-secondary-700 p-3 rounded-lg mb-4 text-sm">
           <p className="font-medium mb-1">JSON:</p>
           <p className="text-gray-500 dark:text-secondary-400 text-xs mb-2">Full backup from this website</p>
           <p className="font-medium mb-1">CSV:</p>
           <p className="text-gray-500 dark:text-secondary-400 text-xs">Add questions from spreadsheet (creates subject if not exists)</p>
         </div>
-        
+
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-secondary-300">
             Select JSON or CSV File

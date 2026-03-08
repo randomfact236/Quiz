@@ -295,12 +295,32 @@ export class QuizService {
       throw new BadRequestException('No questions provided for bulk creation');
     }
 
-    // Limit batch size
-    const MAX_BULK_SIZE = 100;
-    if (dto.length > MAX_BULK_SIZE) {
-      throw new BadRequestException(`Batch size exceeds maximum of ${MAX_BULK_SIZE} questions`);
+    // Chunk size to prevent memory issues and database timeouts
+    const CHUNK_SIZE = 100;
+    const totalChunks = Math.ceil(dto.length / CHUNK_SIZE);
+    let totalCreated = 0;
+
+    // Process in chunks to prevent memory exhaustion
+    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+      const start = chunkIndex * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, dto.length);
+      const chunk = dto.slice(start, end);
+
+      const result = await this.processQuestionChunk(chunk, errors, start);
+      totalCreated += result.count;
     }
 
+    return { count: totalCreated, errors };
+  }
+
+  /**
+   * Process a single chunk of questions within a transaction
+   */
+  private async processQuestionChunk(
+    dto: CreateQuestionDto[],
+    errors: string[],
+    offset: number,
+  ): Promise<{ count: number; errors: string[] }> {
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique chapter IDs for batch fetch - fixes N+1 query
       const chapterIds = [...new Set(dto.map(q => q.chapterId))];
@@ -317,14 +337,14 @@ export class QuizService {
         const chapter = chapterMap.get(q.chapterId);
 
         if (!chapter) {
-          errors.push(`Row ${i + 1}: Chapter not found (ID: ${q.chapterId})`);
+          errors.push(`Row ${offset + i + 1}: Chapter not found (ID: ${q.chapterId})`);
           continue;
         }
 
         // Validate level
         const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
         if (!validLevels.includes(q.level)) {
-          errors.push(`Row ${i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`);
+          errors.push(`Row ${offset + i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`);
           continue;
         }
 

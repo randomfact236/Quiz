@@ -44,10 +44,10 @@ services:
     container_name: ai-quiz-api
     restart: unless-stopped
     ports:
-      - "3011:3011"
+      - "3012:3012"
     environment:
       - NODE_ENV=development
-      - PORT=3011
+      - PORT=3012
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=${DB_USERNAME:-postgres}

@@ -71,7 +71,7 @@ Expected output should show:
 | Port | Service | Access |
 |------|---------|--------|
 | 3010 | Next.js Dev Server | Localhost only |
-| 3011 | Next.js Preview | Localhost only |
+| 3012 | Next.js Preview | Localhost only |
 | 4000 | NestJS API | Localhost only |
 | 4001 | NestJS Admin | Localhost only |
 | 5432 | PostgreSQL | Localhost only |

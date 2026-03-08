@@ -1,8 +1,8 @@
 # AI Quiz Project - Firewall Protection Script
 # Run this script as Administrator to protect AI Quiz ports
 
-# Block external access to AI Quiz exclusive ports
-$aiQuizPorts = "3010", "3011", "4000", "4001", "5432", "5434", "6379", "6381", "5674", "5673", "15673", "9090", "3004", "5601", "9229", "9230", "8080", "8081", "9002", "9003"
+# AI Quiz exclusive ports - UPDATE HERE when ports change
+$aiQuizPorts = "3010", "3012", "4000", "5432", "6379"
 
 Write-Host "Setting up firewall protection for AI Quiz exclusive ports..." -ForegroundColor Green
 
@@ -35,3 +35,5 @@ New-NetFirewallRule `
 
 Write-Host "Firewall protection configured!" -ForegroundColor Green
 Write-Host "AI Quiz ports are now protected from external access." -ForegroundColor Yellow
+Write-Host ""
+Write-Host "Protected ports: $($aiQuizPorts -join ', ')" -ForegroundColor Cyan

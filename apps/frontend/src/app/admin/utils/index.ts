@@ -176,9 +176,10 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
     const line = lines[i]?.trim() ?? '';
     if (line.startsWith('#')) {
       // Extract subject name from comment like "# Subject: Animals"
+      // Also strip trailing commas that might exist in some CSV formats (e.g., "# Subject: Animals,,,,,,,")
       const match = line.match(/#\s*Subject:\s*(.+)/i);
       if (match?.[1]) {
-        subjectName = match[1].trim();
+        subjectName = match[1].replace(/,+$/, '').trim();
       }
       headerIndex = i + 1;
     } else if (line.includes('Question') && line.includes('Option')) {
@@ -286,6 +287,160 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
     failed,
     total: imported.length + failed.length,
     subjectName,
+  };
+}
+
+/**
+ * Parse animals_questions.csv format
+ * Handles TRUE/FALSE questions and regular multiple choice
+ * Format: # Subject: Animals
+ * Headers: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+ */
+export function parseAnimalsQuestionCSV(csvText: string): {
+  success: boolean;
+  imported: Question[];
+  failed: { row: number; error: string; data: unknown }[];
+  total: number;
+  subjectName: string;
+  chapters: string[];
+} {
+  const imported: Question[] = [];
+  const failed: { row: number; error: string; data: unknown }[] = [];
+  const chaptersSet = new Set<string>();
+
+  const lines = csvText.trim().split('\n');
+  let headerIndex = 0;
+  let subjectName = '';
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]?.trim() ?? '';
+    if (line.startsWith('#')) {
+      const match = line.match(/#\s*Subject:\s*(.+)/i);
+      if (match?.[1]) {
+        subjectName = match[1].trim();
+      }
+    } else if (line.includes('Question') && line.includes('Option')) {
+      headerIndex = i;
+      break;
+    }
+  }
+
+  const headerLine = lines[headerIndex];
+  if (!headerLine) {
+    return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0, subjectName: '', chapters: [] };
+  }
+
+  const headers = parseCSVLine(headerLine);
+
+  const getColumnIndex = (...names: string[]) => {
+    for (const name of names) {
+      const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
+      if (idx !== -1) return idx;
+    }
+    return -1;
+  };
+
+  const colIndex = {
+    id: getColumnIndex('id'),
+    question: getColumnIndex('question'),
+    optionA: getColumnIndex('option a'),
+    optionB: getColumnIndex('option b'),
+    optionC: getColumnIndex('option c'),
+    optionD: getColumnIndex('option d'),
+    correctAnswer: getColumnIndex('correct answer'),
+    level: getColumnIndex('level'),
+    chapter: getColumnIndex('chapter'),
+  };
+
+  if (colIndex.question === -1 || colIndex.optionA === -1 || colIndex.optionB === -1) {
+    return {
+      success: false,
+      imported: [],
+      failed: [{ row: 0, error: 'Missing required columns (Question, Option A, Option B)', data: headers }],
+      total: 0,
+      subjectName: '',
+      chapters: []
+    };
+  }
+
+  for (let i = headerIndex + 1; i < lines.length; i++) {
+    const rawLine = lines[i];
+    if (!rawLine) continue;
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    const values = parseCSVLine(line);
+
+    try {
+      const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
+
+      const questionText = getValue(colIndex.question);
+      let optionA = getValue(colIndex.optionA);
+      let optionB = getValue(colIndex.optionB);
+      const optionC = colIndex.optionC !== -1 ? getValue(colIndex.optionC) : '';
+      const optionD = colIndex.optionD !== -1 ? getValue(colIndex.optionD) : '';
+      const correctAnswerRaw = (getValue(colIndex.correctAnswer) || 'A').toUpperCase();
+      const level = (getValue(colIndex.level) || 'easy').toLowerCase() as Question['level'];
+      const chapter = getValue(colIndex.chapter) || 'General';
+
+      if (!questionText) {
+        failed.push({ row: i, error: 'Missing question text', data: line });
+        continue;
+      }
+
+      let correctAnswer = correctAnswerRaw;
+      let finalOptionA = optionA;
+      let finalOptionB = optionB;
+      let finalOptionC = optionC;
+      let finalOptionD = optionD;
+
+      const isTrueFalseQuestion = (val: string) => {
+        const v = val.toUpperCase();
+        return v === 'TRUE' || v === 'FALSE' || v === 'T' || v === 'F';
+      };
+
+      if (isTrueFalseQuestion(optionA) && isTrueFalseQuestion(optionB)) {
+        finalOptionA = 'True';
+        finalOptionB = 'False';
+
+        if (correctAnswerRaw === 'A' || correctAnswerRaw.toUpperCase() === 'TRUE' || correctAnswerRaw.toUpperCase() === 'T') {
+          correctAnswer = 'A';
+        } else {
+          correctAnswer = 'B';
+        }
+      }
+
+      if (!finalOptionA && !finalOptionB) {
+        failed.push({ row: i, error: 'Missing required options (A and B)', data: line });
+        continue;
+      }
+
+      chaptersSet.add(chapter);
+
+      imported.push({
+        id: String(Date.now() + i),
+        question: questionText,
+        optionA: finalOptionA,
+        optionB: finalOptionB,
+        optionC: finalOptionC || '',
+        optionD: finalOptionD || '',
+        correctAnswer,
+        level,
+        chapter,
+        status: 'published',
+      });
+    } catch (err) {
+      failed.push({ row: i, error: (err as Error).message, data: line });
+    }
+  }
+
+  return {
+    success: failed.length === 0,
+    imported,
+    failed,
+    total: imported.length + failed.length,
+    subjectName,
+    chapters: Array.from(chaptersSet),
   };
 }
 

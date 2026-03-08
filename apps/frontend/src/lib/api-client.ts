@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-const BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3011/api';
+const BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
 const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
 
 import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';

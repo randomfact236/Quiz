@@ -230,11 +230,6 @@ export class QuizController {
     if (!dto || dto.length === 0) {
       throw new BadRequestException('Request body must be a non-empty array of questions');
     }
-    // Limit array size to prevent memory issues
-    const MAX_BULK_SIZE = 100;
-    if (dto.length > MAX_BULK_SIZE) {
-      throw new BadRequestException(`Cannot create more than ${MAX_BULK_SIZE} questions in one request. Provided: ${dto.length}`);
-    }
     return await this.quizService.createQuestionsBulk(dto);
   }
 

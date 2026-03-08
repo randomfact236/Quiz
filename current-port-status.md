@@ -44,11 +44,11 @@
 ### ✅ EXCLUSIVE AI Quiz Project Ports (18 ports - LOCKED):
 
 #### Frontend Services:
-- **3010**: Next.js Development Server ✅ Available (Alternative to protected 3001)
-- **3011**: Next.js Production Preview ✅ Available (Alternative to protected 3002)
+- **3010**: Next.js Development Server ✅ Available
+- **3012**: Next.js Production Preview ✅ Available
 
 #### Backend Services:
-- **3011**: NestJS API Server ✅ Available (EXCLUSIVE)
+- **3012**: NestJS API Server ✅ Available (EXCLUSIVE)
 - **3012**: NestJS Admin API ✅ Available
 
 #### Database Services:
@@ -99,9 +99,7 @@
 
 ## 🚀 Deployment URLs (Development):
 - Frontend: http://localhost:3010
-- Preview: http://localhost:3011
-- API: http://localhost:3011/api
-- Admin API: http://localhost:3012
+- API: http://localhost:3012/api
 - RabbitMQ UI: http://localhost:15673
 - Grafana: http://localhost:3004
 - Prometheus: http://localhost:9090

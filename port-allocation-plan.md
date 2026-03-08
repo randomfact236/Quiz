@@ -26,7 +26,7 @@
 
 ### Available Port Ranges:
 - **3001-3002**: Legacy protected ports (avoided)
-- **3010-3011**: Available for frontend services
+- **3010-3012**: Available for frontend services
 - **4000-4999**: Generally available for applications
 - **5000-5999**: Available for development services
 - **8000-8999**: Available for web services
@@ -42,18 +42,18 @@
   - **Access**: Local development (http://localhost:3010)
   - **Load Balancer**: nginx on port 80 (production)
 
-- **Port 3011**: Next.js Production Preview
+- **Port 3012**: Next.js Production Preview
   - **Service**: AI Quiz Frontend Preview
   - **Protocol**: HTTP
   - **Environment**: Staging/Preview
   - **Access**: Local preview builds
 
 ### Backend Services
-- **Port 3011**: NestJS API Server
+- **Port 3012**: NestJS API Server
   - **Service**: AI Quiz Backend API (NestJS 10)
   - **Protocol**: HTTP
   - **Environment**: Development
-  - **Access**: API endpoints (http://localhost:3011/api)
+  - **Access**: API endpoints (http://localhost:3012/api)
   - **Load Balancer**: nginx on port 443 (production)
 
 - **Port 4001**: NestJS Admin API

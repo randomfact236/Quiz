@@ -2,7 +2,7 @@
 echo Starting AI Quiz Platform Development Environment...
 echo.
 
-echo Starting Backend (Port 3011)...
+echo Starting Backend (Port 3012)...
 start "AI Quiz Backend" cmd /k "cd apps\backend && npm run start:dev"
 
 echo Starting Frontend (Port 3010)...
@@ -11,7 +11,7 @@ start "AI Quiz Frontend" cmd /k "cd apps\frontend && npm run dev"
 echo.
 echo ===================================================
 echo Environment Started!
-echo Backend API: http://localhost:3011/api
+echo Backend API: http://localhost:3012/api
 echo Frontend: http://localhost:3010
 echo Admin Panel: http://localhost:3010/admin
 echo ===================================================

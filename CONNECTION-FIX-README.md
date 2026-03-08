@@ -90,8 +90,8 @@ netstat -ano | findstr :3010
 taskkill /PID <PID> /F
 
 # Or change ports in .env
-FRONTEND_PORT=3011
-BACKEND_PORT=4001
+FRONTEND_PORT=3010
+BACKEND_PORT=3012
 ```
 
 ### Issue 4: Firewall Blocking

@@ -4,37 +4,17 @@
  * ============================================================================
  * @module common/constants/app.constants
  * @description Centralized constants for the backend application.
- * All magic numbers should be defined here and imported where needed.
+ * 
+ * NOTE: Port configuration has been moved to './ports.ts'
+ * To change ports, edit ports.ts or use environment variables.
  * ============================================================================
  */
 
-// =============================================================================
-// PORT NUMBERS
-// =============================================================================
+// Import from centralized ports configuration
+import { BACKEND_PORT, FRONTEND_PORT, REDIS_PORT, DATABASE_PORT } from './ports';
 
-/**
- * Default PostgreSQL database port
- * @default 5432
- */
-export const DB_PORT = 5432;
-
-/**
- * Default Redis server port
- * @default 6379
- */
-export const REDIS_PORT = 6379;
-
-/**
- * Default backend server port
- * @default 3011
- */
-export const SERVER_PORT = 3011;
-
-/**
- * Default frontend application port
- * @default 3010
- */
-export const FRONTEND_PORT = 3010;
+// Re-export for backwards compatibility
+export { BACKEND_PORT as SERVER_PORT, FRONTEND_PORT, REDIS_PORT, DATABASE_PORT as DB_PORT };
 
 // =============================================================================
 // PAGINATION

@@ -40,7 +40,7 @@ services:
     environment:
       NODE_ENV: development
       DOCKER_ENV: "true"
-      PORT: 3011
+      PORT: 3012
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: aiquiz
@@ -52,7 +52,7 @@ services:
       JWT_EXPIRES_IN: 24h
       CORS_ORIGIN: http://localhost:3010
     ports:
-      - "3011:3011"
+      - "3012:3012"
     depends_on:
       postgres:
         condition: service_healthy
@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://localhost:3011/api
+      NEXT_PUBLIC_API_URL: http://localhost:3012/api
     ports:
       - "3010:3010"
     depends_on:

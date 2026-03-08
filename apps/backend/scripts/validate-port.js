@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ALLOWED_PORTS = [3010, 3011, 4000, 5432, 6379];
+const ALLOWED_PORTS = [3010, 3011, 3012, 4000, 5432, 6379];
 const PROJECT_NAME = 'AI Quiz Platform';
 const ENV_FILE = path.join(__dirname, '..', '.env');
 
