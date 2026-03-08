@@ -110,8 +110,8 @@ if ($result.Success) {
         Write-Status "   $Url" $Green
         Write-Status "`n   Other URLs:" $Blue
         Write-Status "   • Frontend:    http://localhost:3010" $Blue
-        Write-Status "   • Backend API: http://localhost:4000/api" $Blue
-        Write-Status "   • API Docs:    http://localhost:4000/api/docs" $Blue
+        Write-Status "   • Backend API: http://localhost:3012/api" $Blue
+        Write-Status "   • API Docs:    http://localhost:3012/api/docs" $Blue
     }
     
     exit 0

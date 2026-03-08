@@ -231,7 +231,7 @@ if ($fixed) {
     Write-Host "`n🎉 SUCCESS! AI Quiz Platform is now running!" -ForegroundColor $Green
     Write-Host "`n📱 Access your application at:" -ForegroundColor $White
     Write-Host "   Frontend:    http://localhost:3010" -ForegroundColor $Blue
-    Write-Host "   Backend API: http://localhost:4000/api" -ForegroundColor $Blue
+    Write-Host "   Backend API: http://localhost:3012/api" -ForegroundColor $Blue
     Write-Host "   API Docs:    http://localhost:4000/api/docs" -ForegroundColor $Blue
     Write-Host "`n💡 To view logs: docker-compose logs -f" -ForegroundColor $Yellow
     Write-Host "💡 To stop: docker-compose down" -ForegroundColor $Yellow
