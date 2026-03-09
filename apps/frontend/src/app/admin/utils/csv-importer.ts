@@ -213,22 +213,45 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     const questionText = get(col.question);
     if (!questionText) continue; // Skip blank rows
 
-    const levelRaw = get(col.level);
+    let optionA = get(col.optionA);
+    let optionB = get(col.optionB);
+    let optionC = col.optionC !== -1 ? get(col.optionC) : '';
+    let optionD = col.optionD !== -1 ? get(col.optionD) : '';
+    let correctAnswerRaw = get(col.correctAnswer);
+    let levelRaw = get(col.level);
+    let chapter = (col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General';
+
+    // Auto-detect shifted columns for "extreme" questions.
+    // If the user missed a comma for empty options, the 'extreme' level might end up in the correctAnswer column,
+    // the answer text in optionD, and the chapter in the level column.
+    if ((correctAnswerRaw || '').toLowerCase() === 'extreme') {
+      chapter = levelRaw || chapter;
+      levelRaw = 'extreme';
+      correctAnswerRaw = optionD || optionC || optionB || optionA;
+      // Clear the option that was used as the answer
+      if (optionD) optionD = '';
+      else if (optionC) optionC = '';
+      else if (optionB) optionB = '';
+      else if (optionA) optionA = '';
+    } else if ((optionD || '').toLowerCase() === 'extreme') {
+      // Further shifting (missed 2 commas)
+      chapter = correctAnswerRaw || chapter;
+      levelRaw = 'extreme';
+      correctAnswerRaw = optionC || optionB || optionA;
+      if (optionC) optionC = '';
+      else if (optionB) optionB = '';
+      else if (optionA) optionA = '';
+    }
+
     const levelLower = (levelRaw || 'easy').toLowerCase();
     console.log(`[DEBUG CSV] Row ${i + 1}: levelRaw="${levelRaw}", levelLower="${levelLower}"`);
     if (!VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number])) {
       warnings.push(`Row ${i + 1}: invalid level "${levelRaw}", defaulting to "easy".`);
     }
-    const level = VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number]) 
-      ? levelLower as CSVParseRow['level'] 
+    const level = VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number])
+      ? levelLower as CSVParseRow['level']
       : 'easy';
     console.log(`[DEBUG CSV] Row ${i + 1}: Final level="${level}"`);
-    const optionA = get(col.optionA);
-    const optionB = get(col.optionB);
-    const optionC = col.optionC !== -1 ? get(col.optionC) : '';
-    const optionD = col.optionD !== -1 ? get(col.optionD) : '';
-    const correctAnswerRaw = get(col.correctAnswer);
-    const chapter = (col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General';
 
     // ── Validate by level ────────────────────────────────────────────────────
 
@@ -356,10 +379,10 @@ export async function importQuestionsFromCSV(
     }
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : String(err);
-    const isNotFound = errorMessage.includes('404') || 
-                       errorMessage.includes('not found') || 
-                       errorMessage.toLowerCase().includes('not found');
-    
+    const isNotFound = errorMessage.includes('404') ||
+      errorMessage.includes('not found') ||
+      errorMessage.toLowerCase().includes('not found');
+
     if (!isNotFound) {
       errors.push(`API Error while checking subject: ${errorMessage}`);
     }

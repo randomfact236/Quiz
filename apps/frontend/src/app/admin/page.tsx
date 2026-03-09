@@ -142,7 +142,7 @@ export default function AdminPage(): JSX.Element {
       optionB: optB,
       optionC: optC,
       optionD: optD,
-      correctAnswer: correctLetter,
+      correctAnswer: q.level === 'extreme' ? q.correctAnswer : correctLetter,
       level: (q.level || 'medium') as Question['level'],
       chapter: q.chapter?.name || 'General',
       status: (q.status || 'published') as Question['status'],
@@ -384,7 +384,7 @@ export default function AdminPage(): JSX.Element {
     const apiQuestions = newQuestions.map(q => {
       const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
       const correctLetter = (q.correctAnswer || 'A').toUpperCase();
-      const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
+      const correctAnswerText = q.level === 'extreme' ? q.correctAnswer : (correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD);
 
       const chapterName = (q.chapter || 'General').toLowerCase();
       const chapterId = chapterMap.get(chapterName) || chapterMap.get('general');
@@ -432,7 +432,7 @@ export default function AdminPage(): JSX.Element {
     for (const q of updatedQuestions) {
       const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
       const correctLetter = (q.correctAnswer || 'A').toUpperCase();
-      const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
+      const correctAnswerText = q.level === 'extreme' ? q.correctAnswer : (correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD);
 
       const chapterName = (q.chapter || 'General').toLowerCase();
       const chapterId = chapterMap.get(chapterName) || '';

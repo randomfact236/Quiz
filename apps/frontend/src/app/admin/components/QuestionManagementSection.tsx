@@ -506,10 +506,10 @@ export function QuestionManagementSection({
       try {
         const content = await file.text();
         setLastImportContent(content);
-        
+
         // Step 1: Parse CSV first to show preview
         const parsed = parseCSVContent(content);
-        
+
         if (parsed.errors.length > 0) {
           setImportError(parsed.errors.join('\n'));
           setImportPreview(null);
@@ -545,7 +545,7 @@ export function QuestionManagementSection({
   const handleConfirmImport = useCallback(
     async () => {
       if (!importPreview) return;
-      
+
       setImportError('');
       setImportLoading(true);
 
@@ -1746,40 +1746,42 @@ const QuestionRow = React.memo(function QuestionRow({
       </td>
       <td className="px-3 py-3 align-top">
         {question.level === 'extreme' ? (
-          <div className="text-sm">
-            <span className="font-medium text-gray-700">Answer:</span>
-            <span className="ml-1 font-semibold text-green-700">{question.correctAnswer || 'N/A'}</span>
+          <div className="text-sm font-medium text-gray-500 italic">
+            Open ended (no options)
           </div>
         ) : (
-        <div className="space-y-1 text-xs">
-          <div className={question.correctAnswer === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-            A. {question.optionA}
-          </div>
-          <div className={question.correctAnswer === 'B' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-            B. {question.optionB}
-          </div>
-          {question.optionC && (
-            <div className={question.correctAnswer === 'C' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-              C. {question.optionC}
+          <div className="space-y-1 text-xs">
+            <div className={question.correctAnswer === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              A. {question.optionA}
             </div>
-          )}
-          {question.optionD && (
-            <div className={question.correctAnswer === 'D' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-              D. {question.optionD}
+            <div className={question.correctAnswer === 'B' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              B. {question.optionB}
             </div>
-          )}
-        </div>
+            {question.optionC && (
+              <div className={question.correctAnswer === 'C' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                C. {question.optionC}
+              </div>
+            )}
+            {question.optionD && (
+              <div className={question.correctAnswer === 'D' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                D. {question.optionD}
+              </div>
+            )}
+          </div>
         )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
         {question.level === 'extreme' ? (
-          <span className="inline-flex items-center justify-center rounded-full bg-purple-500 px-2 py-1 text-xs font-bold text-white">
-            {question.level}
-          </span>
+          <div className="text-xs">
+            <span className="font-medium text-gray-700 block mb-1">Answer:</span>
+            <span className="inline-flex items-center justify-center rounded bg-purple-100 px-2 py-1 font-semibold text-purple-700 max-w-[120px] truncate" title={question.correctAnswer}>
+              {question.correctAnswer || 'N/A'}
+            </span>
+          </div>
         ) : (
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
-          {question.correctAnswer}
-        </span>
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
+            {question.correctAnswer}
+          </span>
         )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
