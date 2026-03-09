@@ -299,6 +299,25 @@ export default function AdminPage(): JSX.Element {
 
   // Handle questions import
   const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
+    // If no new questions to import, just refresh the data from DB
+    if (!newQuestions || newQuestions.length === 0) {
+      try {
+        const result = await getQuestionsBySubject(subjectSlug);
+        const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
+        setAllQuestions(prev => ({
+          ...prev,
+          [subjectSlug]: mappedQuestions
+        }));
+        setQuestionCounts(prev => ({
+          ...prev,
+          [subjectSlug]: mappedQuestions.length
+        }));
+      } catch (err) {
+        console.error('Failed to refresh questions:', err);
+      }
+      return;
+    }
+
     let subjectId: string | undefined;
 
     // First, check if subject is in local state

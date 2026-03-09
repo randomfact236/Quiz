@@ -1646,6 +1646,12 @@ const QuestionRow = React.memo(function QuestionRow({
         </span>
       </td>
       <td className="px-3 py-3 align-top">
+        {question.level === 'extreme' ? (
+          <div className="text-sm">
+            <span className="font-medium text-gray-700">Answer:</span>
+            <span className="ml-1 font-semibold text-green-700">{question.correctAnswer || 'N/A'}</span>
+          </div>
+        ) : (
         <div className="space-y-1 text-xs">
           <div className={question.correctAnswer === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
             A. {question.optionA}
@@ -1664,11 +1670,18 @@ const QuestionRow = React.memo(function QuestionRow({
             </div>
           )}
         </div>
+        )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+        {question.level === 'extreme' ? (
+          <span className="inline-flex items-center justify-center rounded-full bg-purple-500 px-2 py-1 text-xs font-bold text-white">
+            {question.level}
+          </span>
+        ) : (
         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
           {question.correctAnswer}
         </span>
+        )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
         <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getLevelBadgeColor(question.level)}`}>

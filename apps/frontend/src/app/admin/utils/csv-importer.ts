@@ -51,6 +51,8 @@ export interface CSVParseRow {
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 
+const VALID_LEVELS = ['easy', 'medium', 'hard', 'expert', 'extreme'] as const;
+
 /**
  * Parse a single CSV line, respecting double-quoted fields that may contain commas.
  */
@@ -62,8 +64,7 @@ function parseCSVLine(line: string): string[] {
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
     if (char === '"') {
-      // Handle escaped quotes ("")
-      if (inQuotes && line[i + 1] === '"') {
+      if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
         current += '"';
         i++;
       } else {
@@ -102,11 +103,13 @@ function extractSubjectName(lines: string[]): string {
  */
 function generateSlug(name: string): string {
   return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
+    .replace(/[^a-z0-9\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/g, '')
     .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-|-$/g, '') || 'subject';
 }
 
 /**
@@ -202,9 +205,6 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
 
     const values = parseCSVLine(line);
 
-    // DEBUG: Log the parsed values
-    console.log(`[CSV Import] Row ${i + 1}:`, { values, headerLen: values.length });
-
     const get = (idx: number): string =>
       idx !== -1 && idx < values.length ? (values[idx] ?? '').trim() : '';
 
@@ -212,22 +212,19 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     if (!questionText) continue; // Skip blank rows
 
     const levelRaw = get(col.level);
-    const level = (levelRaw || 'easy').toLowerCase() as CSVParseRow['level'];
+    const levelLower = (levelRaw || 'easy').toLowerCase();
+    if (!VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number])) {
+      warnings.push(`Row ${i + 1}: invalid level "${levelRaw}", defaulting to "easy".`);
+    }
+    const level = VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number]) 
+      ? levelLower as CSVParseRow['level'] 
+      : 'easy';
     const optionA = get(col.optionA);
     const optionB = get(col.optionB);
     const optionC = col.optionC !== -1 ? get(col.optionC) : '';
     const optionD = col.optionD !== -1 ? get(col.optionD) : '';
     const correctAnswerRaw = get(col.correctAnswer);
     const chapter = (col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General';
-
-    // DEBUG: Log all parsed values
-    console.log(`[CSV Import] Row ${i + 1} Parsed:`, {
-      question: questionText,
-      optionA, optionB, optionC, optionD,
-      correctAnswerRaw,
-      level: levelRaw,
-      chapter
-    });
 
     // ── Validate by level ────────────────────────────────────────────────────
 
@@ -333,6 +330,7 @@ export async function importQuestionsFromCSV(
   const { subjectName, rows } = parsed;
   const subjectSlug = generateSlug(subjectName);
   const errors: string[] = [];
+  const warnings: string[] = [...parsed.warnings];
 
   // 2. Find or create the subject
   let subjectId: string | undefined;
@@ -351,8 +349,15 @@ export async function importQuestionsFromCSV(
     if (apiSubject?.id) {
       subjectId = apiSubject.id;
     }
-  } catch {
-    // Subject not found in DB — will create it below
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const isNotFound = errorMessage.includes('404') || 
+                       errorMessage.includes('not found') || 
+                       errorMessage.toLowerCase().includes('not found');
+    
+    if (!isNotFound) {
+      errors.push(`API Error while checking subject: ${errorMessage}`);
+    }
   }
 
   if (!subjectId) {
@@ -392,13 +397,10 @@ export async function importQuestionsFromCSV(
         if (newChapter && newChapter.id) {
           chapterMap.set(key, newChapter.id);
           chaptersCreated++;
-          console.log(`[CSV Import] Created chapter: ${chapterName} with id: ${newChapter.id}`);
         } else {
-          console.error(`[CSV Import] Chapter created but no id returned: ${chapterName}`, newChapter);
           errors.push(`Chapter "${chapterName}" was created but returned no ID`);
         }
       } catch (err) {
-        console.error(`[CSV Import] Failed to create chapter "${chapterName}":`, err);
         errors.push(`Failed to create chapter "${chapterName}": ${err}`);
       }
     }
@@ -411,10 +413,8 @@ export async function importQuestionsFromCSV(
       if (defaultChapter && defaultChapter.id) {
         chapterMap.set('general', defaultChapter.id);
         chaptersCreated++;
-        console.log(`[CSV Import] Created default chapter: General with id: ${defaultChapter.id}`);
       }
     } catch (err) {
-      console.error(`[CSV Import] Failed to create default chapter:`, err);
       errors.push(`Failed to create default chapter: ${err}`);
     }
   }
@@ -436,13 +436,11 @@ export async function importQuestionsFromCSV(
 
     // If chapter not found, try to use any available chapter or create a default
     if (!chapterId) {
-      // Try to get the first available chapter as fallback
       const availableChapters = Array.from(chapterMap.values());
       if (availableChapters.length > 0 && availableChapters[0]) {
         chapterId = availableChapters[0];
-        console.warn(`[CSV Import] Row ${idx + 1}: Chapter "${row.chapter}" not found, using first available chapter`);
+        warnings.push(`Row ${idx + 1}: Chapter "${row.chapter}" not found, using first available chapter`);
       } else {
-        // No chapters available - this shouldn't happen after our fix above
         errors.push(`Row ${idx + 1}: No chapters available for subject - skipping`);
         return null;
       }
@@ -490,9 +488,6 @@ export async function importQuestionsFromCSV(
   const questionsPayload: QuestionPayload[] = rawPayload.filter(
     (q): q is QuestionPayload => q !== null
   );
-
-  // DEBUG: Log the API payload
-  console.log('[CSV Import] Questions Payload:', JSON.stringify(questionsPayload, null, 2));
 
   if (questionsPayload.length === 0) {
     return {

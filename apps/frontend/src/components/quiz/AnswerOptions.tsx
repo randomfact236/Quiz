@@ -138,7 +138,7 @@ export function AnswerOptions({
             className="text-center"
           >
             <span className="text-sm text-gray-500">
-              Correct answer: {options[0]?.text}
+              Correct answer: {correctKey || 'N/A'}
             </span>
           </motion.div>
         )}

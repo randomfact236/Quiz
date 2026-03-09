@@ -30,6 +30,7 @@ export function QuestionReview({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const isCorrect = userAnswer === question.correctAnswer;
+  const isExtreme = question.level === 'extreme';
   const options = [
     { key: 'A', text: question.optionA },
     { key: 'B', text: question.optionB },
@@ -139,6 +140,20 @@ export function QuestionReview({
                   );
                 })}
               </div>
+
+              {/* Extreme question - show actual answer text */}
+              {isExtreme && (
+                <div className={`mt-4 rounded-lg border-2 p-4 ${
+                  isCorrect 
+                    ? 'border-green-500 bg-green-100 text-green-800' 
+                    : 'border-gray-300 bg-gray-50 text-gray-600'
+                }`}>
+                  <p className="text-sm font-medium">Your answer:</p>
+                  <p className="text-lg">{userAnswer || '(no answer)'}</p>
+                  <p className="mt-2 text-sm font-medium">Correct answer:</p>
+                  <p className="text-lg font-semibold">{question.correctAnswer}</p>
+                </div>
+              )}
 
               {/* Explanation (if available) */}
               {question.explanation && (
