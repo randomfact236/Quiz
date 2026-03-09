@@ -7,7 +7,7 @@ import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, exportQuestionsToCSV } from '../utils';
-import { importQuestionsFromCSV } from '../utils/csv-importer';
+import { importQuestionsFromCSV, parseCSVContent } from '../utils/csv-importer';
 import { bulkActionQuestions } from '@/lib/quiz-api';
 
 /**
@@ -106,6 +106,7 @@ export function QuestionManagementSection({
   const [importError, setImportError] = useState('');
   const [importSuccess, setImportSuccess] = useState('');
   const [importLoading, setImportLoading] = useState(false);
+  const [importPreview, setImportPreview] = useState<{ subjectName: string; questionCount: number; errors: string[]; warnings: string[] } | null>(null);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
   const [uploadKey, setUploadKey] = useState(0); // Used to force FileUploader remount
 
@@ -115,6 +116,8 @@ export function QuestionManagementSection({
       setImportError('');
       setImportSuccess('');
       setImportLoading(false);
+      setImportPreview(null);
+      setLastImportContent('');
       setUploadKey(prev => prev + 1);
     }
   }, [showImportModal]);
@@ -502,12 +505,61 @@ export function QuestionManagementSection({
 
       try {
         const content = await file.text();
-        const result = await importQuestionsFromCSV(content, allSubjects);
+        setLastImportContent(content);
+        
+        // Step 1: Parse CSV first to show preview
+        const parsed = parseCSVContent(content);
+        
+        if (parsed.errors.length > 0) {
+          setImportError(parsed.errors.join('\n'));
+          setImportPreview(null);
+          setImportLoading(false);
+          return;
+        }
+
+        if (parsed.rows.length === 0) {
+          setImportError('No valid questions found in CSV.');
+          setImportPreview(null);
+          setImportLoading(false);
+          return;
+        }
+
+        // Show preview with warnings
+        setImportPreview({
+          subjectName: parsed.subjectName,
+          questionCount: parsed.rows.length,
+          errors: parsed.errors,
+          warnings: parsed.warnings,
+        });
+        setImportLoading(false);
+
+      } catch (err) {
+        setImportError('Failed to read file: ' + (err as Error).message);
+        setImportLoading(false);
+      }
+    },
+    [allSubjects]
+  );
+
+  // Handle the actual import after user confirms
+  const handleConfirmImport = useCallback(
+    async () => {
+      if (!importPreview) return;
+      
+      setImportError('');
+      setImportLoading(true);
+
+      try {
+        // Get the last uploaded file content (we need to store it)
+        // For now, re-parse and import
+        const result = await importQuestionsFromCSV(lastImportContent || '', allSubjects);
 
         if (result.success) {
           const msg = `✅ Imported ${result.questionsImported} questions into "${result.subjectName}"` +
             (result.warnings.length > 0 ? ` (${result.warnings.length} warnings)` : '');
           setImportSuccess(msg);
+          setImportPreview(null);
+          setLastImportContent('');
 
           // Notify parent to refresh state
           await onQuestionsImport(result.subjectSlug, []);
@@ -523,18 +575,19 @@ export function QuestionManagementSection({
             result.errors.join('\n') ||
             'Import failed. Check that your CSV matches the required format.'
           );
-          if (result.warnings.length > 0) {
-            console.warn('Import warnings:', result.warnings);
-          }
+          setImportPreview(null);
         }
       } catch (err) {
-        setImportError('Failed to read or import file: ' + (err as Error).message);
+        setImportError('Failed to import: ' + (err as Error).message);
       } finally {
         setImportLoading(false);
       }
     },
-    [allSubjects, onQuestionsImport]
+    [importPreview, allSubjects, onQuestionsImport]
   );
+
+  // Store CSV content for import after confirmation
+  const [lastImportContent, setLastImportContent] = useState('');
 
 
 
@@ -941,7 +994,7 @@ export function QuestionManagementSection({
 
             <div className="space-y-4">
               {/* File Uploader — disabled while loading */}
-              {!importLoading && !importSuccess && (
+              {!importLoading && !importSuccess && !importPreview && (
                 <>
                   <FileUploader
                     key={uploadKey}
@@ -968,6 +1021,52 @@ export function QuestionManagementSection({
                     </div>
                   </div>
                 </>
+              )}
+
+              {/* Import Preview - Show after file is parsed */}
+              {importPreview && !importSuccess && (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">📋</span>
+                      <div>
+                        <p className="font-semibold text-blue-900">Import Preview</p>
+                        <p className="text-sm text-blue-700">
+                          {importPreview.questionCount} questions found for subject: <strong>{importPreview.subjectName}</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Warnings */}
+                  {importPreview.warnings.length > 0 && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                      <p className="font-semibold text-yellow-800 mb-2">⚠️ Warnings ({importPreview.warnings.length})</p>
+                      <ul className="text-sm text-yellow-700 space-y-1 max-h-32 overflow-y-auto">
+                        {importPreview.warnings.map((warning, idx) => (
+                          <li key={idx} className="text-xs">• {warning}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Confirm/Cancel Buttons */}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => { setImportPreview(null); setLastImportContent(''); }}
+                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+                    >
+                      ✕ Cancel
+                    </button>
+                    <button
+                      onClick={handleConfirmImport}
+                      disabled={importLoading}
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+                    >
+                      ✅ Confirm Import
+                    </button>
+                  </div>
+                </div>
               )}
 
               {/* Loading State */}
