@@ -34,6 +34,7 @@ export interface QuizQuestion {
     correctAnswer: string;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
+    chapter?: { id: string; name: string };
     explanation?: string;
     status?: 'published' | 'draft' | 'trash';
     updatedAt?: string;
@@ -50,7 +51,7 @@ export interface UpdateSubjectDto {
     name?: string;
     emoji?: string;
     category?: string;
-    isActive?: boolean;
+    isActive?: boolean | undefined;
 }
 
 export interface CreateChapterDto {
@@ -61,20 +62,20 @@ export interface CreateChapterDto {
 export interface CreateQuestionDto {
     question: string;
     correctAnswer: string;
-    wrongAnswers: string[];
+    options: string[];
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
-    explanation?: string;
-    status?: 'published' | 'draft';
+    explanation?: string | undefined;
+    status?: 'published' | 'draft' | undefined;
 }
 
 export interface UpdateQuestionDto {
     question?: string;
     correctAnswer?: string;
-    wrongAnswers?: string[];
+    options?: string[];
     level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-    explanation?: string;
-    status?: 'published' | 'draft';
+    explanation?: string | undefined;
+    status?: 'published' | 'draft' | undefined;
 }
 
 export interface PaginatedResponse<T> {

@@ -86,7 +86,7 @@ type SortBy = "createdAt" | "filename" | "fileSize";
 type SortOrder = "asc" | "desc";
 type FilterStatus = "all" | "converted" | "pending";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3003";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api";
 
 export default function MediaPage() {
   const router = useRouter();
@@ -128,7 +128,7 @@ export default function MediaPage() {
     isOpen: false,
     title: "",
     description: "",
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Drag & Drop
@@ -357,7 +357,7 @@ export default function MediaPage() {
 
     setIsUploading(false);
     setUploadProgress(0);
-    
+
     if (uploaded > 0) {
       toast.success(`${uploaded} file${uploaded === 1 ? "" : "s"} uploaded successfully`);
       await fetchMedia();
@@ -496,9 +496,8 @@ export default function MediaPage() {
 
       {/* Upload Drop Zone */}
       <Card
-        className={`border-2 border-dashed transition-colors ${
-          isDragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"
-        }`}
+        className={`border-2 border-dashed transition-colors ${isDragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300"
+          }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -655,11 +654,10 @@ export default function MediaPage() {
           {media.map((item) => (
             <Card
               key={item.id}
-              className={`overflow-hidden group cursor-pointer transition-all ${
-                selectedIds.has(item.id)
+              className={`overflow-hidden group cursor-pointer transition-all ${selectedIds.has(item.id)
                   ? "ring-2 ring-indigo-500 ring-offset-2"
                   : "hover:shadow-lg"
-              }`}
+                }`}
               onClick={() => setPreviewMedia(item)}
             >
               {/* Image Preview */}
@@ -675,7 +673,7 @@ export default function MediaPage() {
                     <ImageIcon className="h-12 w-12 text-muted-foreground" />
                   </div>
                 )}
-                
+
                 {/* Selection Checkbox */}
                 <div
                   className="absolute top-2 left-2"
@@ -776,9 +774,8 @@ export default function MediaPage() {
                 {media.map((item) => (
                   <tr
                     key={item.id}
-                    className={`border-b hover:bg-gray-50 cursor-pointer ${
-                      selectedIds.has(item.id) ? "bg-indigo-50/50" : ""
-                    }`}
+                    className={`border-b hover:bg-gray-50 cursor-pointer ${selectedIds.has(item.id) ? "bg-indigo-50/50" : ""
+                      }`}
                     onClick={() => setPreviewMedia(item)}
                   >
                     <td className="px-4 py-3" onClick={(e: React.MouseEvent) => e.stopPropagation()}>

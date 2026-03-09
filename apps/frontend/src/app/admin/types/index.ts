@@ -24,7 +24,9 @@ export interface Question {
   correctAnswer: string;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapter: string;
-  status?: ContentStatus;
+  status?: ContentStatus | undefined;
+  hint?: string | undefined;
+  explanation?: string | undefined;
 }
 
 /** Subject Type */
@@ -35,28 +37,14 @@ export interface Subject {
   emoji: string;
   category: 'academic' | 'professional' | 'entertainment';
   order?: number;
+  isActive?: boolean;
 }
 
 /** Menu Section Type */
-export type MenuSection =
-  | 'dashboard'
-  | 'science' | 'math' | 'history' | 'geography' | 'english' | 'technology'
-  | 'jokes' | 'riddles' | 'image-riddles'
-  | 'users' | 'settings';
+export type MenuSection = string;
 
 /** Joke Type - Enterprise Grade */
-export interface Joke {
-  id: string;
-  setup: string;
-  punchline: string;
-  joke?: string; // Keep for backward compatibility
-  category: string;
-  status: ContentStatus;
-  likes?: number;
-  dislikes?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
+export type Joke = import("@/lib/jokes-api").Joke;
 
 /** Joke Category Type */
 export interface JokeCategory {

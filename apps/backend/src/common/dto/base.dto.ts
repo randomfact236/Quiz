@@ -592,9 +592,9 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   correctAnswer: string;
 
-  @ApiProperty({ example: ['London', 'Berlin', 'Madrid'], type: [String] })
+  @ApiProperty({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
   @IsString({ each: true })
-  wrongAnswers: string[];
+  options: string[];
 
   @ApiProperty({ example: 'easy', enum: QuestionLevel })
   @IsEnum(QuestionLevel)
@@ -614,6 +614,11 @@ export class CreateQuestionDto {
   @IsOptional()
   @IsEnum(ContentStatus)
   status?: ContentStatus;
+
+  @ApiPropertyOptional({ example: 1, description: 'Question order within chapter' })
+  @IsOptional()
+  @IsInt()
+  order?: number;
 }
 
 export class UpdateQuestionDto {
@@ -627,10 +632,10 @@ export class UpdateQuestionDto {
   @IsString()
   correctAnswer?: string;
 
-  @ApiPropertyOptional({ example: ['London', 'Berlin', 'Madrid'], type: [String] })
+  @ApiPropertyOptional({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
   @IsOptional()
   @IsString({ each: true })
-  wrongAnswers?: string[];
+  options?: string[];
 
   @ApiPropertyOptional({ example: 'easy', enum: QuestionLevel })
   @IsOptional()
@@ -727,12 +732,12 @@ export class UpdateImageRiddleCategoryDto {
 
 // ==================== IMAGE RIDDLE ACTION OPTIONS ====================
 
-import { 
-  IActionOption, 
-  ActionOptionType, 
-  ActionOptionStyle, 
-  ActionOptionSize, 
-  ActionPosition 
+import {
+  IActionOption,
+  ActionOptionType,
+  ActionOptionStyle,
+  ActionOptionSize,
+  ActionPosition
 } from '../../image-riddles/entities/image-riddle-action.entity';
 
 /**
@@ -910,7 +915,7 @@ export class CreateImageRiddleDto {
   @IsString()
   categoryId?: string;
 
-  @ApiPropertyOptional({ 
+  @ApiPropertyOptional({
     description: 'Custom action options displayed below the question',
     type: [ActionOptionDto]
   })
@@ -978,7 +983,7 @@ export class UpdateImageRiddleDto {
   @IsBoolean()
   isActive?: boolean;
 
-  @ApiPropertyOptional({ 
+  @ApiPropertyOptional({
     description: 'Custom action options displayed below the question',
     type: [ActionOptionDto]
   })

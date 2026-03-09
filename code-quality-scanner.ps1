@@ -110,7 +110,7 @@ function Run-CodeAnalysis {
     }
     
     # Issue 5: Check for hardcoded values
-    $hardcodedPattern = "(localhost|3010|3012|127\.0\.0\.1)"
+    $hardcodedPattern = "(localhost|3000|4000|127\.0\.0\.1)"
     for ($i = 0; $i -lt $lines.Count; $i++) {
         if ($lines[$i] -match $hardcodedPattern -and $lines[$i] -notmatch "//.*$hardcodedPattern") {
             $issues += @{

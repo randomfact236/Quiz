@@ -193,18 +193,18 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     return { subjectName, rows, errors, warnings };
   }
 
-    // Parse data rows
-    for (let i = headerIndex + 1; i < lines.length; i++) {
+  // Parse data rows
+  for (let i = headerIndex + 1; i < lines.length; i++) {
     const rawLine = lines[i];
     if (!rawLine) continue;
     const line = rawLine.trim();
     if (!line || line.startsWith('#')) continue;
 
     const values = parseCSVLine(line);
-    
+
     // DEBUG: Log the parsed values
     console.log(`[CSV Import] Row ${i + 1}:`, { values, headerLen: values.length });
-    
+
     const get = (idx: number): string =>
       idx !== -1 && idx < values.length ? (values[idx] ?? '').trim() : '';
 
@@ -219,9 +219,15 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     const optionD = col.optionD !== -1 ? get(col.optionD) : '';
     const correctAnswerRaw = get(col.correctAnswer);
     const chapter = (col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General';
-    
-    // DEBUG: Log level and chapter parsing
-    console.log(`[CSV Import] Parsed - level: "${levelRaw}" -> "${level}", chapter: "${chapter}"`);
+
+    // DEBUG: Log all parsed values
+    console.log(`[CSV Import] Row ${i + 1} Parsed:`, {
+      question: questionText,
+      optionA, optionB, optionC, optionD,
+      correctAnswerRaw,
+      level: levelRaw,
+      chapter
+    });
 
     // ── Validate by level ────────────────────────────────────────────────────
 
@@ -277,7 +283,7 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     // Validate number of options based on level
     const hasC = !!optionC;
     const hasD = !!optionD;
-    
+
     if (level === 'medium' && (hasC || hasD)) {
       warnings.push(`Row ${i + 1} (medium): medium level should have 2 options, but C/D are provided. Using first 2.`);
     }
@@ -382,11 +388,34 @@ export async function importQuestionsFromCSV(
     if (!chapterMap.has(key)) {
       try {
         const newChapter = await createChapter({ name: chapterName, subjectId: subjectId! });
-        chapterMap.set(key, newChapter.id);
-        chaptersCreated++;
+        // Ensure the chapter has a valid id before adding to map
+        if (newChapter && newChapter.id) {
+          chapterMap.set(key, newChapter.id);
+          chaptersCreated++;
+          console.log(`[CSV Import] Created chapter: ${chapterName} with id: ${newChapter.id}`);
+        } else {
+          console.error(`[CSV Import] Chapter created but no id returned: ${chapterName}`, newChapter);
+          errors.push(`Chapter "${chapterName}" was created but returned no ID`);
+        }
       } catch (err) {
+        console.error(`[CSV Import] Failed to create chapter "${chapterName}":`, err);
         errors.push(`Failed to create chapter "${chapterName}": ${err}`);
       }
+    }
+  }
+
+  // If no chapters were found or created, create a default "General" chapter
+  if (chapterMap.size === 0) {
+    try {
+      const defaultChapter = await createChapter({ name: 'General', subjectId: subjectId! });
+      if (defaultChapter && defaultChapter.id) {
+        chapterMap.set('general', defaultChapter.id);
+        chaptersCreated++;
+        console.log(`[CSV Import] Created default chapter: General with id: ${defaultChapter.id}`);
+      }
+    } catch (err) {
+      console.error(`[CSV Import] Failed to create default chapter:`, err);
+      errors.push(`Failed to create default chapter: ${err}`);
     }
   }
 
@@ -394,27 +423,42 @@ export async function importQuestionsFromCSV(
   type QuestionPayload = {
     question: string;
     correctAnswer: string;
-    wrongAnswers: string[];
+    options: string[];
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
     status: 'published';
+    order?: number;
   };
 
   const rawPayload = rows.map((row, idx): QuestionPayload | null => {
-    const chapterId = chapterMap.get(row.chapter.toLowerCase());
+    const chapterKey = row.chapter.toLowerCase();
+    let chapterId: string | undefined = chapterMap.get(chapterKey);
+
+    // If chapter not found, try to use any available chapter or create a default
     if (!chapterId) {
-      errors.push(`Row ${idx + 1}: Chapter "${row.chapter}" not found — skipping.`);
-      return null;
+      // Try to get the first available chapter as fallback
+      const availableChapters = Array.from(chapterMap.values());
+      if (availableChapters.length > 0 && availableChapters[0]) {
+        chapterId = availableChapters[0];
+        console.warn(`[CSV Import] Row ${idx + 1}: Chapter "${row.chapter}" not found, using first available chapter`);
+      } else {
+        // No chapters available - this shouldn't happen after our fix above
+        errors.push(`Row ${idx + 1}: No chapters available for subject - skipping`);
+        return null;
+      }
     }
+
+    // TypeScript guarantee - chapterId is now defined
+    const finalChapterId = chapterId;
 
     // extreme: no options, correctAnswer is open text
     if (row.level === 'extreme') {
       return {
         question: row.questionText,
         correctAnswer: row.correctAnswerRaw,
-        wrongAnswers: [],
+        options: [],
         level: row.level,
-        chapterId,
+        chapterId: finalChapterId,
         status: 'published',
       };
     }
@@ -430,17 +474,15 @@ export async function importQuestionsFromCSV(
     const correctLetter = row.correctAnswerRaw.toUpperCase();
     const correctAnswerText = letterToOption[correctLetter] || row.optionA;
 
-    // wrongAnswers = all non-empty options except the correct one
-    const wrongAnswers: string[] = (['A', 'B', 'C', 'D'] as const)
-      .filter(l => l !== correctLetter && letterToOption[l])
-      .map(l => letterToOption[l] ?? '');
+    // options = all options exactly A, B, C, D
+    const options: string[] = [row.optionA, row.optionB, row.optionC, row.optionD].filter(o => o);
 
     return {
       question: row.questionText,
       correctAnswer: correctAnswerText,
-      wrongAnswers,
+      options,
       level: row.level,
-      chapterId,
+      chapterId: finalChapterId,
       status: 'published',
     };
   });
@@ -448,6 +490,9 @@ export async function importQuestionsFromCSV(
   const questionsPayload: QuestionPayload[] = rawPayload.filter(
     (q): q is QuestionPayload => q !== null
   );
+
+  // DEBUG: Log the API payload
+  console.log('[CSV Import] Questions Payload:', JSON.stringify(questionsPayload, null, 2));
 
   if (questionsPayload.length === 0) {
     return {

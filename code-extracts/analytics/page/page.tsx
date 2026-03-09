@@ -73,7 +73,7 @@ export default function AnalyticsDashboard() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3012/api';
       const response = await fetch(
         `${apiUrl}/analytics/dashboard?tab=${activeTab}&range=${dateRange}`
       );
@@ -230,7 +230,7 @@ export default function AnalyticsDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <ExportMenu 
+            <ExportMenu
               data={data}
               filename={`analytics-report-${new Date().toISOString().split('T')[0]}`}
             />
@@ -262,7 +262,7 @@ export default function AnalyticsDashboard() {
         <div className="bg-gray-800 rounded-b-lg p-6">
           {/* Search & Filter Bar */}
           <div className="mb-6">
-            <SearchFilterBar 
+            <SearchFilterBar
               onSearch={(query, filters) => {
                 console.log('Search:', query, filters);
                 // Implement search logic
@@ -708,11 +708,10 @@ export default function AnalyticsDashboard() {
                           <td className="py-3 text-right text-gray-400">{page.size}</td>
                           <td className="py-3 text-right text-gray-400">{page.requests}</td>
                           <td className="py-3 text-center">
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${
-                              page.status === 'good' ? 'bg-green-500/20 text-green-400' :
-                              page.status === 'warning' ? 'bg-yellow-500/20 text-yellow-400' :
-                              'bg-red-500/20 text-red-400'
-                            }`}>
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${page.status === 'good' ? 'bg-green-500/20 text-green-400' :
+                                page.status === 'warning' ? 'bg-yellow-500/20 text-yellow-400' :
+                                  'bg-red-500/20 text-red-400'
+                              }`}>
                               {page.status === 'good' ? 'Good' : page.status === 'warning' ? 'Warning' : 'Slow'}
                             </span>
                           </td>
@@ -763,13 +762,12 @@ export default function AnalyticsDashboard() {
                         </div>
                         <div className="text-right">
                           <p className="text-white font-bold">{error.rate}</p>
-                          <span className={`text-xs ${
-                            error.trend === 'down' ? 'text-green-400' :
-                            error.trend === 'up' ? 'text-red-400' :
-                            'text-yellow-400'
-                          }`}>
+                          <span className={`text-xs ${error.trend === 'down' ? 'text-green-400' :
+                              error.trend === 'up' ? 'text-red-400' :
+                                'text-yellow-400'
+                            }`}>
                             {error.trend === 'down' ? '↓ Improving' :
-                             error.trend === 'up' ? '↑ Increasing' : '→ Stable'}
+                              error.trend === 'up' ? '↑ Increasing' : '→ Stable'}
                           </span>
                         </div>
                       </div>

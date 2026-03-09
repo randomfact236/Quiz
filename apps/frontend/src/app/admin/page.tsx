@@ -32,11 +32,8 @@ import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, Ridd
 import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
-import {
-  initialJokes as libInitialJokes
-} from '@/lib/initial-data';
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, deleteQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter } from '@/lib/quiz-api';
+import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter } from '@/lib/quiz-api';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
@@ -126,6 +123,33 @@ export default function AdminPage(): JSX.Element {
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
 
+  // Helper to map API QuizQuestion to UI Question
+  const mapQuizQuestionToQuestion = (q: QuizQuestion): Question => {
+    const _opts = q.options || [];
+    const optA = _opts[0] || '';
+    const optB = _opts[1] || '';
+    const optC = _opts[2] || '';
+    const optD = _opts[3] || '';
+    let correctLetter = 'A';
+    if (q.correctAnswer === optB) correctLetter = 'B';
+    else if (q.correctAnswer === optC) correctLetter = 'C';
+    else if (q.correctAnswer === optD) correctLetter = 'D';
+
+    return {
+      id: q.id as string,
+      question: q.question,
+      optionA: optA,
+      optionB: optB,
+      optionC: optC,
+      optionD: optD,
+      correctAnswer: correctLetter,
+      level: (q.level || 'medium') as Question['level'],
+      chapter: q.chapter?.name || 'General',
+      status: (q.status || 'published') as Question['status'],
+      explanation: q.explanation,
+    };
+  };
+
   // Jokes state
   const { allJokes, setAllJokes } = useGlobalJokes();
   const { jokeCategories, setJokeCategories } = useGlobalJokeCategories();
@@ -169,7 +193,7 @@ export default function AdminPage(): JSX.Element {
 
         // Set active section - default to dashboard
         if (loadedSubjects.length > 0) {
-          setActiveSection(loadedSubjects[0].slug);
+          setActiveSection(loadedSubjects[0]!.slug);
         } else {
           setActiveSection('dashboard');
         }
@@ -232,35 +256,14 @@ export default function AdminPage(): JSX.Element {
       const fetchQuestions = async () => {
         try {
           const result = await getQuestionsBySubject(activeSection);
-          const mappedQuestions: Question[] = result.map(q => {
-            const _opts = q.options || [];
-            const optA = _opts[0] || '';
-            const optB = _opts[1] || '';
-            const optC = _opts[2] || '';
-            const optD = _opts[3] || '';
-            let correctLetter = 'A';
-            if (q.correctAnswer === optB) correctLetter = 'B';
-            else if (q.correctAnswer === optC) correctLetter = 'C';
-            else if (q.correctAnswer === optD) correctLetter = 'D';
-
-            return {
-              id: q.id as string,
-              question: q.question,
-              optionA: optA,
-              optionB: optB,
-              optionC: optC,
-              optionD: optD,
-              correctAnswer: correctLetter,
-              level: (q.level || 'medium') as Question['level'],
-              chapter: q.chapter?.name || 'General',
-              status: (q.status || 'published') as Question['status'],
-              hint: q.hint,
-              explanation: q.explanation,
-            };
-          });
+          const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
             [activeSection]: mappedQuestions
+          }));
+          setQuestionCounts(prev => ({
+            ...prev,
+            [activeSection]: mappedQuestions.length
           }));
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
@@ -317,7 +320,7 @@ export default function AdminPage(): JSX.Element {
             slug: subjectData.slug,
             name: subjectData.name,
             emoji: subjectData.emoji || '📚',
-            category: subjectData.category || 'academic',
+            category: (subjectData.category || 'academic') as 'academic' | 'professional' | 'entertainment',
             order: subjects.length,
           };
           setSubjects(prev => [...prev, newSubject]);
@@ -363,10 +366,6 @@ export default function AdminPage(): JSX.Element {
       const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
       const correctLetter = (q.correctAnswer || 'A').toUpperCase();
       const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
-      const wrongAnswers = allOptions.filter((_, idx) => {
-        const letter = String.fromCharCode(65 + idx);
-        return letter !== correctLetter;
-      });
 
       const chapterName = (q.chapter || 'General').toLowerCase();
       const chapterId = chapterMap.get(chapterName) || chapterMap.get('general');
@@ -374,44 +373,18 @@ export default function AdminPage(): JSX.Element {
       return {
         question: q.question,
         correctAnswer: correctAnswerText,
-        wrongAnswers,
+        options: allOptions,
         level: q.level,
-        hint: q.hint || '',
-        explanation: q.explanation || '',
-        chapterId: chapterId,
-        status: q.status || 'published',
+        explanation: q.explanation,
+        chapterId: chapterId || '',
+        status: (q.status === 'trash' ? 'draft' : (q.status || 'published')) as 'published' | 'draft',
       };
     });
 
     try {
       await createQuestionsBulk(apiQuestions);
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(q => {
-        const _opts = q.options || [];
-        const optA = _opts[0] || '';
-        const optB = _opts[1] || '';
-        const optC = _opts[2] || '';
-        const optD = _opts[3] || '';
-        let correctLetter = 'A';
-        if (q.correctAnswer === optB) correctLetter = 'B';
-        else if (q.correctAnswer === optC) correctLetter = 'C';
-        else if (q.correctAnswer === optD) correctLetter = 'D';
-
-        return {
-          id: q.id as string,
-          question: q.question,
-          optionA: optA,
-          optionB: optB,
-          optionC: optC,
-          optionD: optD,
-          correctAnswer: correctLetter,
-          level: (q.level || 'medium') as Question['level'],
-          chapter: q.chapter?.name || 'General',
-          status: (q.status || 'published') as Question['status'],
-          hint: q.hint,
-          explanation: q.explanation,
-        };
-      });
+      const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
@@ -441,10 +414,6 @@ export default function AdminPage(): JSX.Element {
       const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
       const correctLetter = (q.correctAnswer || 'A').toUpperCase();
       const correctAnswerText = correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD;
-      const wrongAnswers = allOptions.filter((_, idx) => {
-        const letter = String.fromCharCode(65 + idx);
-        return letter !== correctLetter;
-      });
 
       const chapterName = (q.chapter || 'General').toLowerCase();
       const chapterId = chapterMap.get(chapterName) || '';
@@ -456,7 +425,7 @@ export default function AdminPage(): JSX.Element {
         }
         const apiQuestion = {
           question: q.question,
-          wrongAnswers,
+          options: allOptions,
           correctAnswer: correctAnswerText,
           level: q.level,
           hint: q.hint || '',
@@ -473,12 +442,11 @@ export default function AdminPage(): JSX.Element {
         try {
           await updateQuestion(q.id, {
             question: q.question,
-            wrongAnswers,
+            options: allOptions,
             correctAnswer: correctAnswerText,
             level: q.level,
-            hint: q.hint || '',
             explanation: q.explanation || '',
-            status: q.status === 'trash' ? 'draft' : (q.status || 'published'),
+            status: (q.status === 'trash' ? 'draft' : (q.status || 'published')) as 'published' | 'draft',
           });
         } catch (err) {
           console.error('Failed to update question:', q.id, err);
@@ -488,32 +456,7 @@ export default function AdminPage(): JSX.Element {
 
     try {
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(q => {
-        const _opts = q.options || [];
-        const optA = _opts[0] || '';
-        const optB = _opts[1] || '';
-        const optC = _opts[2] || '';
-        const optD = _opts[3] || '';
-        let correctLetter = 'A';
-        if (q.correctAnswer === optB) correctLetter = 'B';
-        else if (q.correctAnswer === optC) correctLetter = 'C';
-        else if (q.correctAnswer === optD) correctLetter = 'D';
-
-        return {
-          id: q.id as string,
-          question: q.question,
-          optionA: optA,
-          optionB: optB,
-          optionC: optC,
-          optionD: optD,
-          correctAnswer: correctLetter,
-          level: (q.level || 'medium') as Question['level'],
-          chapter: q.chapter?.name || 'General',
-          status: (q.status || 'published') as Question['status'],
-          hint: q.hint,
-          explanation: q.explanation,
-        };
-      });
+      const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
@@ -620,15 +563,16 @@ export default function AdminPage(): JSX.Element {
               slug: result.subjectSlug,
               name: result.subjectName,
               emoji: '📚',
-              category: 'academic',
+              category: 'academic' as const,
               order: subjects.length,
             }]);
           }
 
           const newQuestions = await getQuestionsBySubject(result.subjectSlug);
+          const mappedQuestions: Question[] = newQuestions.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
-            [result.subjectSlug]: newQuestions
+            [result.subjectSlug]: mappedQuestions
           }));
           setQuestionCounts(prev => ({
             ...prev,
@@ -732,7 +676,7 @@ export default function AdminPage(): JSX.Element {
     });
 
     if (wasActiveSection && remainingSubjects.length > 0) {
-      const nextSubject = remainingSubjects[0];
+      const nextSubject = remainingSubjects[0]!;
       setActiveSection(nextSubject.slug);
     } else if (wasActiveSection && remainingSubjects.length === 0) {
       setActiveSection('dashboard');
@@ -1933,13 +1877,11 @@ function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
 
 function useGlobalJokes() {
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     getJokes()
       .then(setAllJokes)
-      .catch(() => setAllJokes([]))
-      .finally(() => setIsHydrated(true));
+      .catch(() => setAllJokes([]));
   }, []);
 
   return { allJokes, setAllJokes };
@@ -1951,13 +1893,11 @@ function useGlobalJokes() {
 
 function useGlobalJokeCategories() {
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     getJokeCategories()
       .then(setJokeCategories)
-      .catch(() => setJokeCategories([]))
-      .finally(() => setIsHydrated(true));
+      .catch(() => setJokeCategories([]));
   }, []);
 
   return { jokeCategories, setJokeCategories };

@@ -43,7 +43,7 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
   // Soft-delete pending state (no auto-timer — requires manual confirmation)
   const [pendingCategoryDelete, setPendingCategoryDelete] = useState<{
     category: JokeCategory;
-    originalStatuses: Record<string | number, string>;
+    originalStatuses: Record<string | number, string | undefined>;
   } | null>(null);
 
   const [selectedJoke, _setSelectedJoke] = useState<Joke | null>(null);
@@ -426,7 +426,7 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                       setJokeCategories(prev => prev.filter(c => c.id !== pendingCategoryDelete.category.id));
                     }
                     // Save original statuses and move jokes to draft as a safety measure
-                    const originalStatuses: Record<string | number, string> = {};
+                    const originalStatuses: Record<string | number, string | undefined> = {};
                     setAllJokes(prev => prev.map(j => {
                       if (j.category === cat.name) {
                         originalStatuses[j.id] = j.status;
@@ -566,8 +566,8 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(joke.status)}`}>
-                    {joke.status}
+                  <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor((joke.status || 'draft') as ContentStatus)}`}>
+                    {joke.status || 'draft'}
                   </span>
                 </td>
               </tr>

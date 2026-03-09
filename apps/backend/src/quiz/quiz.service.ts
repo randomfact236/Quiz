@@ -101,9 +101,9 @@ export class QuizService {
         }
         await queryRunner.manager.delete(Chapter, { subjectId: id });
       }
-      
+
       await queryRunner.manager.delete(Subject, { id });
-      
+
       await queryRunner.commitTransaction();
       await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
     } catch (err) {
@@ -272,13 +272,10 @@ export class QuizService {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
     if (!chapter) { throw new NotFoundException('Chapter not found'); }
 
-    // Combine correct answer with wrong answers to form options array
-    const options = [dto.correctAnswer, ...dto.wrongAnswers].filter(Boolean);
-
     const question = this.questionRepo.create({
       question: dto.question,
       correctAnswer: dto.correctAnswer,
-      options: options,
+      options: dto.options || [],
       level: dto.level,
       explanation: dto.explanation,
       chapter,
@@ -348,17 +345,15 @@ export class QuizService {
           continue;
         }
 
-        // Combine correct answer with wrong answers to form options array
-        const options = [q.correctAnswer, ...q.wrongAnswers].filter(Boolean);
-
         const question = transactionalEntityManager.create(Question, {
           question: q.question,
           correctAnswer: q.correctAnswer,
-          options: options,
+          options: q.options || [],
           level: q.level,
           explanation: q.explanation,
           chapter,
           status: q.status || ContentStatus.PUBLISHED,
+          order: q.order || i, // Use CSV row index as order if not provided
         });
         questions.push(question);
       }
@@ -383,8 +378,8 @@ export class QuizService {
     if (dto.correctAnswer !== undefined) {
       question.correctAnswer = dto.correctAnswer;
     }
-    if (dto.wrongAnswers !== undefined) {
-      question.options = dto.wrongAnswers;
+    if (dto.options !== undefined) {
+      question.options = dto.options;
     }
     if (dto.level !== undefined) {
       // Validate level if provided

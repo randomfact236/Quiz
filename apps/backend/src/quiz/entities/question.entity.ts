@@ -12,7 +12,7 @@ export class Question {
   @Column({ type: 'text' })
   question: string;
 
-  @Column({ type: 'simple-array' })
+  @Column({ type: 'jsonb', default: [] })
   options: string[];
 
   @Column()
@@ -36,6 +36,9 @@ export class Question {
     default: ContentStatus.DRAFT,
   })
   status: ContentStatus;
+
+  @Column({ type: 'int', default: 0 })
+  order: number;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

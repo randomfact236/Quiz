@@ -32,17 +32,17 @@ function Section({ title, colorClass, expanded, onToggle, children, icon }: Sect
         <div className="flex items-center gap-2">
           {icon}
           <h3 className={`font-semibold ${colorClass.includes('blue') ? 'text-indigo-700' :
-              colorClass.includes('green') ? 'text-teal-700' :
-                colorClass.includes('purple') ? 'text-purple-700' :
-                  'text-gray-700'
+            colorClass.includes('green') ? 'text-teal-700' :
+              colorClass.includes('purple') ? 'text-purple-700' :
+                'text-gray-700'
             }`}>
             ━━━━ {title.toUpperCase()} ━━━━
           </h3>
         </div>
         <span className={`${colorClass.includes('blue') ? 'text-indigo-500' :
-            colorClass.includes('green') ? 'text-teal-500' :
-              colorClass.includes('purple') ? 'text-purple-500' :
-                'text-gray-500'
+          colorClass.includes('green') ? 'text-teal-500' :
+            colorClass.includes('purple') ? 'text-purple-500' :
+              'text-gray-500'
           } transition-transform ${expanded ? 'rotate-180' : ''}`}>▼</span>
       </button>
 
@@ -192,7 +192,7 @@ export function TopicsSection(): JSX.Element {
           ) : (
             <div className="space-y-3">
               {sortedCategories.map((categoryName) => {
-                const dbSubjects = subjectsByCategory[categoryName];
+                const dbSubjects = subjectsByCategory[categoryName] || [];
                 const design = getCategoryDesign(categoryName);
 
                 // Fallback to true if undefined

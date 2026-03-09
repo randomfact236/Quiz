@@ -235,7 +235,7 @@ function SubjectSelection(): JSX.Element {
 
       <div>
         {sortedCategories.map((categoryName) => {
-          const catSubjects = subjectsByCategory[categoryName];
+          const catSubjects = subjectsByCategory[categoryName] || [];
           const design = getCategoryDesign(categoryName);
 
           return (

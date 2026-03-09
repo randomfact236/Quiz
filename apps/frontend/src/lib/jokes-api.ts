@@ -10,12 +10,16 @@ export interface JokeCategory {
 
 export interface Joke {
     id: string;
-    joke: string;
+    joke?: string | undefined;
     category: string;
-    categoryId?: string;
-    likes: number;
-    dislikes: number;
-    status?: string;
+    categoryId?: string | undefined;
+    likes?: number | undefined;
+    dislikes?: number | undefined;
+    status?: string | undefined;
+    setup?: string | undefined;
+    punchline?: string | undefined;
+    delivery?: string | undefined;
+    type?: string | undefined;
 }
 
 export async function getJokes(): Promise<Joke[]> {

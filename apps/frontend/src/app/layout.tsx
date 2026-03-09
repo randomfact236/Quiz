@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3000',
+    url: process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3010',
     siteName: 'AI Quiz Platform',
     title: 'AI Quiz - Interactive Learning Platform',
     description: 'Test your knowledge with interactive quizzes, dad jokes, and riddles!',
