@@ -75,6 +75,8 @@ services:
       - "3010:3010"
     depends_on:
       - backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./apps/frontend/src:/app/apps/frontend/src:ro
       - ./apps/frontend/public:/app/apps/frontend/public:ro
