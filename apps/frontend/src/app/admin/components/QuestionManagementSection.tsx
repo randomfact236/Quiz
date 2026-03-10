@@ -8,7 +8,7 @@ import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, exportQuestionsToCSV } from '../utils';
 import { importQuestionsFromCSV, parseCSVContent } from '../utils/quiz-importer';
-import { bulkActionQuestions } from '@/lib/quiz-api';
+import { bulkActionQuestions, createQuestion, updateQuestion, deleteQuestion } from '@/lib/quiz-api';
 
 /**
  * Props for the QuestionManagementSection component
@@ -375,7 +375,7 @@ export function QuestionManagementSection({
   }, []);
 
   // Handle add question
-  const handleAddQuestion = useCallback(() => {
+  const handleAddQuestion = useCallback(async () => {
     if (
       !questionForm.question.trim() ||
       !questionForm.optionA.trim() ||
@@ -385,26 +385,49 @@ export function QuestionManagementSection({
       return;
     }
 
-    const newQuestion: Question = {
-      id: String(Date.now()),
-      question: questionForm.question.trim(),
-      optionA: questionForm.optionA.trim(),
-      optionB: questionForm.optionB.trim(),
-      optionC: questionForm.optionC.trim(),
-      optionD: questionForm.optionD.trim(),
-      correctAnswer: questionForm.correctAnswer,
-      level: questionForm.level,
-      chapter: questionForm.chapter.trim(),
-      status: 'draft',
-    };
+    const chapterId = chapters.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
 
-    onQuestionsImport(subject.slug, [newQuestion]);
+    if (!chapterId) {
+      return;
+    }
+
+    try {
+      const created = await createQuestion({
+        question: questionForm.question.trim(),
+        optionA: questionForm.optionA.trim(),
+        optionB: questionForm.optionB.trim(),
+        optionC: questionForm.optionC.trim(),
+        optionD: questionForm.optionD.trim(),
+        correctAnswer: questionForm.correctAnswer,
+        level: questionForm.level,
+        chapterId,
+        status: 'draft',
+      });
+
+      const newQuestion: Question = {
+        id: created.id,
+        question: created.question,
+        optionA: created.optionA,
+        optionB: created.optionB,
+        optionC: created.optionC,
+        optionD: created.optionD,
+        correctAnswer: created.correctAnswer,
+        level: created.level,
+        chapter: questionForm.chapter.trim(),
+        status: 'draft',
+      };
+
+      onQuestionsImport(subject.slug, [newQuestion]);
+    } catch (err) {
+      console.error('Failed to create question:', err);
+    }
+
     setShowAddModal(false);
     resetQuestionForm();
-  }, [questionForm, subject.slug, onQuestionsImport, resetQuestionForm]);
+  }, [questionForm, subject.slug, chapters, onQuestionsImport, resetQuestionForm]);
 
   // Handle edit question
-  const handleEditQuestion = useCallback(() => {
+  const handleEditQuestion = useCallback(async () => {
     if (!selectedQuestion) return;
 
     if (
@@ -416,39 +439,68 @@ export function QuestionManagementSection({
       return;
     }
 
-    const updatedQuestion: Question = {
-      ...selectedQuestion,
-      question: questionForm.question.trim(),
-      optionA: questionForm.optionA.trim(),
-      optionB: questionForm.optionB.trim(),
-      optionC: questionForm.optionC.trim(),
-      optionD: questionForm.optionD.trim(),
-      correctAnswer: questionForm.correctAnswer,
-      level: questionForm.level,
-      chapter: questionForm.chapter.trim(),
-    };
+    const chapterId = chapters.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
 
-    setLocalQuestions(prev =>
-      prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
-    );
+    if (!chapterId) {
+      return;
+    }
+
+    try {
+      await updateQuestion(selectedQuestion.id, {
+        question: questionForm.question.trim(),
+        optionA: questionForm.optionA.trim(),
+        optionB: questionForm.optionB.trim(),
+        optionC: questionForm.optionC.trim(),
+        optionD: questionForm.optionD.trim(),
+        correctAnswer: questionForm.correctAnswer,
+        level: questionForm.level,
+        chapterId,
+      });
+
+      const updatedQuestion: Question = {
+        ...selectedQuestion,
+        question: questionForm.question.trim(),
+        optionA: questionForm.optionA.trim(),
+        optionB: questionForm.optionB.trim(),
+        optionC: questionForm.optionC.trim(),
+        optionD: questionForm.optionD.trim(),
+        correctAnswer: questionForm.correctAnswer,
+        level: questionForm.level,
+        chapter: questionForm.chapter.trim(),
+      };
+
+      setLocalQuestions(prev =>
+        prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
+      );
+    } catch (err) {
+      console.error('Failed to update question:', err);
+    }
+
     setShowEditModal(false);
     setSelectedQuestion(null);
     resetQuestionForm();
-  }, [questionForm, selectedQuestion, resetQuestionForm]);
+  }, [questionForm, selectedQuestion, chapters, resetQuestionForm]);
 
   // Handle delete question
-  const handleDeleteQuestion = useCallback(() => {
+  const handleDeleteQuestion = useCallback(async () => {
     if (!selectedQuestion) return;
 
-    if (selectedQuestion.status === 'trash') {
-      // Permanent delete if already in trash
-      setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
-    } else {
-      // Move to trash otherwise
-      setLocalQuestions(prev =>
-        prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
-      );
+    try {
+      if (selectedQuestion.status === 'trash') {
+        // Permanent delete if already in trash
+        await deleteQuestion(selectedQuestion.id);
+        setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
+      } else {
+        // Move to trash otherwise
+        await bulkActionQuestions([selectedQuestion.id], 'trash');
+        setLocalQuestions(prev =>
+          prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
+        );
+      }
+    } catch (err) {
+      console.error('Failed to delete question:', err);
     }
+
     // Close modal and clear selection immediately
     setShowDeleteModal(false);
     setSelectedQuestion(null);
