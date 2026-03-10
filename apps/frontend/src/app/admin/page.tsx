@@ -299,6 +299,15 @@ export default function AdminPage(): JSX.Element {
 
   // Handle questions import
   const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
+    // Refresh subjects list to ensure we have the latest (in case new subject was created)
+    try {
+      const apiSubjects = await getSubjects(false);
+      const updatedSubjects = sanitizeSubjects(apiSubjects as unknown as Subject[]);
+      setSubjects(updatedSubjects);
+    } catch (err) {
+      console.error('Failed to refresh subjects:', err);
+    }
+
     // If no new questions to import, just refresh the data from DB
     if (!newQuestions || newQuestions.length === 0) {
       try {
