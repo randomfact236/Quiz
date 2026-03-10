@@ -28,7 +28,7 @@ import type {
 } from './types';
 import { downloadFile, exportQuestionsToCSV } from './utils';
 import { removeItem, STORAGE_KEYS } from '@/lib/storage';
-import { importQuestionsFromCSV } from './utils/csv-importer';
+import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';

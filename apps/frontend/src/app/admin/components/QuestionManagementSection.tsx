@@ -7,7 +7,7 @@ import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, exportQuestionsToCSV } from '../utils';
-import { importQuestionsFromCSV, parseCSVContent } from '../utils/csv-importer';
+import { importQuestionsFromCSV, parseCSVContent } from '../utils/quiz-importer';
 import { bulkActionQuestions } from '@/lib/quiz-api';
 
 /**
