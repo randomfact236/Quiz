@@ -407,10 +407,12 @@ export async function importQuestionsFromCSV(
 
   // 3. Find or create chapters
   let existingChapters = await getChaptersBySubject(subjectId!).catch(() => []);
+  console.log(`[CSV Import] Subject ID: ${subjectId}, Existing chapters:`, existingChapters.map(c => c.name));
   const chapterMap = new Map(existingChapters.map(c => [c.name.toLowerCase(), c.id]));
   let chaptersCreated = 0;
 
   const uniqueChapters = [...new Set(rows.map(r => r.chapter))];
+  console.log(`[CSV Import] Unique chapters in CSV:`, uniqueChapters);
   for (const chapterName of uniqueChapters) {
     const key = chapterName.toLowerCase();
     if (!chapterMap.has(key)) {
