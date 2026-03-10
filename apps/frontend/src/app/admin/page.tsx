@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import {
   LayoutDashboard,
@@ -13,7 +14,8 @@ import {
   Image as ImageIcon,
   Settings,
   Users,
-  Home
+  Home,
+  LogOut
 } from 'lucide-react';
 
 import type {
@@ -25,6 +27,7 @@ import type {
   MenuSection
 } from './types';
 import { downloadFile, exportQuestionsToCSV } from './utils';
+import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/csv-importer';
 
 // Status Dashboard & Bulk Actions
@@ -106,6 +109,15 @@ const defaultSubjects: Subject[] = [];
 
 // Storage key for persisting active section
 export default function AdminPage(): JSX.Element {
+  const router = useRouter();
+
+  const handleLogout = useCallback(() => {
+    removeItem(STORAGE_KEYS.AUTH_TOKEN);
+    removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    sessionStorage.clear();
+    router.push('/admin/login');
+  }, [router]);
+
   // Load from database via API - no localStorage fallback
   const [activeSection, setActiveSection] = useState<MenuSection>('dashboard');
   const [isHydrated, setIsHydrated] = useState(false);
@@ -947,6 +959,14 @@ export default function AdminPage(): JSX.Element {
               <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                 A
               </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
             </div>
           </div>
         </header>

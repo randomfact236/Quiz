@@ -49,13 +49,20 @@ export const STORAGE_KEYS = {
 // ─── Core API ────────────────────────────────────────────────────────────────
 
 /**
- * Get a typed item from localStorage.
+ * Get a typed item from localStorage or sessionStorage.
  * Returns `defaultValue` if key doesn't exist or parsing fails.
+ * Checks sessionStorage first, then localStorage.
  */
 export function getItem<T>(key: string, defaultValue: T): T {
     if (typeof window === 'undefined') { return defaultValue; }
     try {
-        const raw = localStorage.getItem(key);
+        // Check sessionStorage first (for non-persistent login)
+        let raw = sessionStorage.getItem(key);
+        if (raw !== null) {
+            return JSON.parse(raw) as T;
+        }
+        // Then check localStorage (for persistent login)
+        raw = localStorage.getItem(key);
         if (raw === null) { return defaultValue; }
         return JSON.parse(raw) as T;
     } catch {
@@ -76,11 +83,12 @@ export function setItem<T>(key: string, value: T): void {
 }
 
 /**
- * Remove an item from localStorage.
+ * Remove an item from localStorage and sessionStorage.
  */
 export function removeItem(key: string): void {
     if (typeof window === 'undefined') { return; }
     localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
 }
 
 /**

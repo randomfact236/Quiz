@@ -141,7 +141,7 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
   const errors: string[] = [];
   const warnings: string[] = [];
   const rows: CSVParseRow[] = [];
-  const lines = csvContent.trim().split('\n');
+  const lines = csvContent.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 
   const subjectName = extractSubjectName(lines);
   if (!subjectName) {

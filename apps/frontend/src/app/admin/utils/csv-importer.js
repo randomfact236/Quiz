@@ -65,7 +65,7 @@ function parseCSVContent(csvContent) {
     var errors = [];
     var warnings = [];
     var rows = [];
-    var lines = csvContent.trim().split('\n');
+    var lines = csvContent.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
     var subjectName = extractSubjectName(lines);
     if (!subjectName) {
         errors.push('No subject found. Make sure the CSV starts with: # Subject: <Name>');

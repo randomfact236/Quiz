@@ -9,7 +9,14 @@ export function AdminGuard({ children }: { children?: React.ReactNode }) {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
-        const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+        const getToken = (): string | null => {
+            if (typeof window === 'undefined') return null;
+            return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) 
+                || sessionStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) 
+                || null;
+        };
+        
+        const token = getToken();
         if (!token) {
             router.replace('/admin/login');
             return;

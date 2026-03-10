@@ -145,14 +145,23 @@ export function QuestionManagementSection({
   const [editingChapter, setEditingChapter] = useState<string | null>(null);
   const [editingChapterName, setEditingChapterName] = useState('');
 
+  // Track initial load to prevent saving questions on first render
+  const isInitialLoadRef = useRef(true);
+
   // Sync local questions when props change (from parent/localStorage)
   useEffect(() => {
     setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
+    // Mark initial load as complete after questions are synced
+    isInitialLoadRef.current = false;
   }, [questions]);
 
   // Persist local questions changes back to parent
   const prevLocalQuestionsRef = useRef(localQuestions);
   useEffect(() => {
+    // Skip if this is the initial load - we don't want to save all questions on mount
+    if (isInitialLoadRef.current) {
+      return;
+    }
     // Only update parent if localQuestions actually changed from previous render
     const isDifferent = JSON.stringify(prevLocalQuestionsRef.current) !== JSON.stringify(localQuestions);
     if (isDifferent) {

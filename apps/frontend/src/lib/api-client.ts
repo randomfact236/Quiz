@@ -33,6 +33,7 @@ export async function apiRequest<T>(
   const url = `${API_BASE_URL}${endpoint}`;
 
   const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+  console.log('[API Debug] Token exists:', !!token, 'Endpoint:', endpoint);
 
   const config: RequestInit = {
     method: options.method || 'GET',
@@ -57,7 +58,9 @@ export async function apiRequest<T>(
 
     // If 401 Unauthorized and we have a refresh token, try to refresh and retry
     if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
+      console.log('[API Debug] Got 401, attempting refresh...');
       const refreshToken = getItem<string | null>(STORAGE_KEYS.REFRESH_TOKEN, null);
+      console.log('[API Debug] Refresh token exists:', !!refreshToken);
       if (refreshToken) {
         try {
           const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
@@ -68,8 +71,22 @@ export async function apiRequest<T>(
 
           if (refreshRes.ok) {
             const refreshData = await refreshRes.json();
-            setItem(STORAGE_KEYS.AUTH_TOKEN, refreshData.token);
-            setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshData.refreshToken);
+            
+            // Determine where to save tokens based on where the original tokens were stored
+            const hadSessionToken = sessionStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) !== null;
+            const hadLocalToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) !== null;
+            
+            // Save new tokens to the same storage(s) as original
+            if (hadSessionToken || !hadLocalToken) {
+              // If had session token OR didn't have local token, save to sessionStorage
+              sessionStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, refreshData.token);
+              sessionStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshData.refreshToken);
+            }
+            if (hadLocalToken) {
+              // If had local token (Remember Me was checked), also save to localStorage
+              localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, refreshData.token);
+              localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshData.refreshToken);
+            }
 
             // Retrofit config and retry original request
             const retryHeaders = new Headers(config.headers);
