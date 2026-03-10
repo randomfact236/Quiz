@@ -165,7 +165,6 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
   }
 
   const headers = parseCSVLine(lines[headerIndex]!);
-  console.log(`[DEBUG CSV] Detected headers:`, headers);
 
   // Locate columns (flexible matching)
   const findCol = (...names: string[]): number => {
@@ -186,7 +185,6 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     level: findCol('level', 'difficulty'),
     chapter: findCol('chapter', 'category', 'topic'),
   };
-  console.log(`[DEBUG CSV] Column indices:`, col);
 
   // Required columns
   const missing: string[] = [];
@@ -244,21 +242,18 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     }
 
     const levelLower = (levelRaw || 'easy').toLowerCase();
-    console.log(`[DEBUG CSV] Row ${i + 1}: levelRaw="${levelRaw}", levelLower="${levelLower}"`);
     if (!VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number])) {
       warnings.push(`Row ${i + 1}: invalid level "${levelRaw}", defaulting to "easy".`);
     }
-    const level = VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number])
-      ? levelLower as CSVParseRow['level']
+    const level = VALID_LEVELS.includes(levelLower as typeof VALID_LEVELS[number]) 
+      ? levelLower as CSVParseRow['level'] 
       : 'easy';
-    console.log(`[DEBUG CSV] Row ${i + 1}: Final level="${level}"`);
 
     // ── Validate by level ────────────────────────────────────────────────────
 
     // extreme: no options expected. Correct Answer column holds the open answer text.
     // NOTE: For extreme, the "Correct Answer" column MUST contain the actual answer text, not a letter!
     if (level === 'extreme') {
-      console.log(`[DEBUG CSV] Row ${i + 1}: Processing EXTREME - correctAnswerRaw="${correctAnswerRaw}"`);
       if (!correctAnswerRaw || correctAnswerRaw.length === 0) {
         warnings.push(`Row ${i + 1}: extreme question has no answer text in "Correct Answer" column - use the actual answer text, not a letter. Skipping.`);
         continue;
