@@ -217,7 +217,7 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
     let optionD = col.optionD !== -1 ? get(col.optionD) : '';
     let correctAnswerRaw = get(col.correctAnswer);
     let levelRaw = get(col.level);
-    let chapter = (col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General';
+    let chapter = ((col.chapter !== -1 ? get(col.chapter) : '') || subjectName || 'General').trim();
 
     // Auto-detect shifted columns for "extreme" questions.
     // If the user missed a comma for empty options, the 'extreme' level might end up in the correctAnswer column,
@@ -408,14 +408,14 @@ export async function importQuestionsFromCSV(
   // 3. Find or create chapters
   let existingChapters = await getChaptersBySubject(subjectId!).catch(() => []);
   console.log(`[CSV Import] Subject ID: ${subjectId}, Existing chapters:`, existingChapters.map(c => ({ name: c.name, id: c.id })));
-  const chapterMap = new Map(existingChapters.map(c => [c.name.toLowerCase(), c.id]));
+  const chapterMap = new Map(existingChapters.map(c => [c.name.toLowerCase().trim(), c.id]));
   console.log(`[CSV Import] Chapter map keys:`, Array.from(chapterMap.keys()));
   let chaptersCreated = 0;
 
   const uniqueChapters = [...new Set(rows.map(r => r.chapter))];
   console.log(`[CSV Import] Unique chapters in CSV:`, uniqueChapters);
   for (const chapterName of uniqueChapters) {
-    const key = chapterName.toLowerCase();
+    const key = chapterName.toLowerCase().trim();
     console.log(`[CSV Import] Checking chapter "${chapterName}" (key: "${key}"), found in map:`, chapterMap.has(key));
     if (!chapterMap.has(key)) {
       try {
@@ -458,7 +458,7 @@ export async function importQuestionsFromCSV(
   };
 
   const rawPayload = rows.map((row, idx): QuestionPayload | null => {
-    const chapterKey = row.chapter.toLowerCase();
+    const chapterKey = row.chapter.toLowerCase().trim();
     let chapterId: string | undefined = chapterMap.get(chapterKey);
 
     // If chapter not found, try to use any available chapter or create a default
