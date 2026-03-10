@@ -58,25 +58,37 @@ export function getItem<T>(key: string, defaultValue: T): T {
     try {
         // Check sessionStorage first (for non-persistent login)
         let raw = sessionStorage.getItem(key);
-        if (raw !== null) {
-            return JSON.parse(raw) as T;
+        if (raw === null) {
+            // Then check localStorage (for persistent login)
+            raw = localStorage.getItem(key);
         }
-        // Then check localStorage (for persistent login)
-        raw = localStorage.getItem(key);
+
         if (raw === null) { return defaultValue; }
-        return JSON.parse(raw) as T;
+
+        try {
+            return JSON.parse(raw) as T;
+        } catch {
+            // If parsing fails but we have a raw string, return it as type T
+            // This handles legacy tokens that weren't JSON-stringified
+            return raw as unknown as T;
+        }
     } catch {
         return defaultValue;
     }
 }
 
 /**
- * Save a typed item to localStorage (JSON-serialised).
+ * Save a typed item to localStorage or sessionStorage (JSON-serialised).
  */
-export function setItem<T>(key: string, value: T): void {
+export function setItem<T>(key: string, value: T, persistent = true): void {
     if (typeof window === 'undefined') { return; }
     try {
-        localStorage.setItem(key, JSON.stringify(value));
+        const serialized = typeof value === 'string' ? JSON.stringify(value) : JSON.stringify(value);
+        if (persistent) {
+            localStorage.setItem(key, serialized);
+        } else {
+            sessionStorage.setItem(key, serialized);
+        }
     } catch (err) {
         console.warn(`[storage] Failed to save key "${key}":`, err);
     }

@@ -1139,7 +1139,7 @@ export default function AdminPage(): JSX.Element {
               Delete Subject
             </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete <strong className="text-gray-800">"{subjectToDelete.name}"</strong>?
+              Are you sure you want to delete <strong className="text-gray-800">&quot;{subjectToDelete.name}&quot;</strong>?
               <br /><br />
               This will also delete all questions in this subject. This action cannot be undone.
             </p>

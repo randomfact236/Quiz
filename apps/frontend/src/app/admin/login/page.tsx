@@ -50,11 +50,11 @@ export default function AdminLogin() {
             }
 
             if (rememberMe) {
-                localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
-                localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken);
+                setItem(STORAGE_KEYS.AUTH_TOKEN, data.token, true);
+                setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken, true);
             } else {
-                sessionStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
-                sessionStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken);
+                setItem(STORAGE_KEYS.AUTH_TOKEN, data.token, false);
+                setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken, false);
             }
             router.push('/admin');
         } catch (err: unknown) {
