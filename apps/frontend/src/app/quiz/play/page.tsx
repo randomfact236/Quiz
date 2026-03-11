@@ -397,6 +397,68 @@ function QuizContent(): JSX.Element {
             </div>
           </div>
 
+          {/* Navigation and Progress at Top */}
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <button
+              onClick={() => {
+                questionCardRef.current?.clearBubbles();
+                quiz.goToPrevious();
+              }}
+              disabled={quiz.currentQuestionIndex === 0}
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] uppercase tracking-wider text-white/50 mb-0.5 font-bold">Progress</span>
+              <span className="text-sm font-bold text-white">
+                {quiz.currentQuestionIndex + 1} / {quiz.totalQuestions}
+              </span>
+            </div>
+
+            <div className="flex gap-2">
+              {/* Skip Button - Shown when currently not answered */}
+              {!quiz.hasAnsweredCurrent && (
+                <button
+                  onClick={() => {
+                    questionCardRef.current?.clearBubbles();
+                    if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+                      setShowConfirmSubmit(true);
+                    } else {
+                      quiz.goToNext();
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-1.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/20 border border-white/20"
+                >
+                  Skip
+                </button>
+              )}
+
+              {/* Next/Submit Button - Disabled until answered */}
+              <button
+                onClick={() => {
+                  questionCardRef.current?.clearBubbles();
+                  if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+                    setShowConfirmSubmit(true);
+                  } else {
+                    quiz.goToNext();
+                  }
+                }}
+                disabled={!quiz.hasAnsweredCurrent}
+                className={`inline-flex items-center gap-2 rounded-lg px-6 py-1.5 text-sm font-bold transition-all ${
+                  quiz.hasAnsweredCurrent
+                    ? 'bg-white text-indigo-600 shadow-lg scale-105'
+                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                }`}
+              >
+                {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}
+                <ArrowLeft className="h-4 w-4 rotate-180" />
+              </button>
+            </div>
+          </div>
+
           {/* Question Card */}
           <AnimatePresence mode="wait">
             {quiz.currentQuestion && (
@@ -431,40 +493,6 @@ function QuizContent(): JSX.Element {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Back and Next Navigation Buttons */}
-          <div className="mt-4 flex items-center justify-between gap-4 pb-4">
-            <button
-              onClick={() => {
-                questionCardRef.current?.clearBubbles();
-                quiz.goToPrevious();
-              }}
-              disabled={quiz.currentQuestionIndex === 0}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </button>
-
-            <span className="text-sm text-white/70">
-              {quiz.currentQuestionIndex + 1} / {quiz.totalQuestions}
-            </span>
-
-            <button
-              onClick={() => {
-                questionCardRef.current?.clearBubbles();
-                if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
-                  setShowConfirmSubmit(true);
-                } else {
-                  quiz.goToNext();
-                }
-              }}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
-            >
-              {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}
-              <ArrowLeft className="h-4 w-4 rotate-180" />
-            </button>
-          </div>
         </div>
       </div>
 
