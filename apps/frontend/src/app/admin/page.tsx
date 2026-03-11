@@ -593,7 +593,6 @@ export default function AdminPage(): JSX.Element {
         const result = await importQuestionsFromCSV(content, subjects);
 
         console.log('Import result:', result);
-        console.log('Parsed rows:', result); // Debug full result
 
         if (result.success) {
           const subject = subjects.find(s => s.slug === result.subjectSlug);

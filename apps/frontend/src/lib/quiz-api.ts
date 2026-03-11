@@ -155,7 +155,7 @@ export async function deleteChapter(id: string): Promise<void> {
 export async function getQuestionsByChapter(
     chapterId: string,
     page: number = 1,
-    limit: number = 1000
+    limit: number = 100
 ): Promise<PaginatedResponse<QuizQuestion>> {
     const response = await api.get<PaginatedResponse<QuizQuestion>>(
         `/quiz/questions/${chapterId}?page=${page}&limit=${limit}`
@@ -165,7 +165,7 @@ export async function getQuestionsByChapter(
 
 export async function getAllQuestions(
     page: number = 1,
-    limit: number = 1000,
+    limit: number = 100,
     status?: string,
     subjectSlug?: string
 ): Promise<PaginatedResponse<QuizQuestion>> {

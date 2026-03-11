@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle, Timer, Pause, Play } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Timer, Pause, Play, ChevronDown, ChevronUp, Plus, Minus } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
@@ -43,6 +43,9 @@ function QuizContent(): JSX.Element {
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [subjectName, setSubjectName] = useState<string>('');
   const [subjectEmoji, setSubjectEmoji] = useState<string>('📚');
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isStartingQuiz, setIsStartingQuiz] = useState(false);
+  const [preQuizExtraQuestions, setPreQuizExtraQuestions] = useState(0);
 
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
@@ -173,6 +176,167 @@ function QuizContent(): JSX.Element {
   // Check if time is up
   const isTimeUp = isTimerMode && quiz.timeRemaining === 0 && quiz.status === 'playing';
 
+  // Pre-quiz summary screen
+  if (!hasStarted) {
+    const levelDisplay = level.charAt(0).toUpperCase() + level.slice(1);
+    const modeDisplay = mode === 'timer' ? 'Timer Mode' : 'Normal Mode';
+    const totalQuestions = Math.min(quiz.totalQuestions, MAX_QUESTIONS);
+    const availableExtra = quiz.availableQuestions || 0;
+    const finalQuestionCount = totalQuestions + preQuizExtraQuestions;
+    
+    const handleStartQuiz = async () => {
+      setIsStartingQuiz(true);
+      if (preQuizExtraQuestions > 0 && availableExtra > 0) {
+        await quiz.extendQuiz(preQuizExtraQuestions);
+      }
+      setIsStartingQuiz(false);
+      setHasStarted(true);
+    };
+
+    return (
+      <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+        <FloatingBackground count={15} />
+        
+        {isStartingQuiz && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
+            <div className="flex flex-col items-center gap-3 rounded-2xl bg-white p-6 shadow-2xl">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+              <p className="text-lg font-semibold text-gray-800">Loading Questions...</p>
+              <p className="text-sm text-gray-500">Adding {preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}</p>
+            </div>
+          </div>
+        )}
+        
+        <div className="relative z-10 flex flex-col flex-1 px-3 py-4">
+          <div className="mx-auto w-full max-w-lg">
+            {/* Back Button */}
+            <Link
+              href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
+              className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Mode Selection
+            </Link>
+
+            {/* Pre-quiz Summary Card */}
+            <div className="rounded-2xl bg-white/95 p-5 shadow-2xl">
+              <div className="text-center mb-4">
+                <div className="text-5xl mb-2">{subjectEmoji}</div>
+                <h1 className="text-2xl font-bold text-gray-800 mb-1">
+                  {subjectName} Quiz
+                </h1>
+                <p className="text-gray-500 text-sm">Ready to test your knowledge?</p>
+              </div>
+
+              {/* Quiz Info Grid */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-indigo-50 rounded-lg p-3 text-center">
+                  <div className="text-2xl font-bold text-indigo-600">{finalQuestionCount}</div>
+                  <div className="text-xs text-gray-600">Questions</div>
+                </div>
+                <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                  <div className="text-2xl font-bold text-emerald-600">{levelDisplay}</div>
+                  <div className="text-xs text-gray-600">Difficulty</div>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-3 text-center">
+                  <div className="text-2xl font-bold text-blue-600">{mode === 'timer' ? '⏱️' : '🎯'}</div>
+                  <div className="text-xs text-gray-600">{modeDisplay}</div>
+                </div>
+                <div className="bg-orange-50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-bold text-orange-600">{chapter}</div>
+                  <div className="text-xs text-gray-600">Chapter</div>
+                </div>
+              </div>
+
+              {/* Add More Questions Section */}
+              {availableExtra > 0 && (
+                <div className="bg-purple-50 rounded-xl p-3 mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-gray-700 text-sm">Add More Questions:</span>
+                    <span className="text-xs text-purple-600">{availableExtra} more available</span>
+                  </div>
+                  
+                  {/* Slider */}
+                  <input
+                    type="range"
+                    min={0}
+                    max={Math.min(20, availableExtra)}
+                    value={preQuizExtraQuestions}
+                    onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
+                    className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mb-3"
+                  />
+                  
+                  {/* Dropdown and +/- Buttons */}
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => setPreQuizExtraQuestions(Math.max(0, preQuizExtraQuestions - 1))}
+                      disabled={preQuizExtraQuestions <= 0}
+                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Minus className="h-3 w-3" />
+                    </button>
+                    
+                    <select
+                      value={preQuizExtraQuestions}
+                      onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
+                      className="h-8 px-3 rounded-lg border border-purple-300 bg-white text-gray-700 font-semibold text-sm cursor-pointer"
+                    >
+                      {Array.from({ length: Math.min(20, availableExtra) + 1 }, (_, i) => (
+                        <option key={i} value={i}>{i}</option>
+                      ))}
+                    </select>
+                    
+                    <button
+                      onClick={() => setPreQuizExtraQuestions(Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1))}
+                      disabled={preQuizExtraQuestions >= Math.min(20, availableExtra)}
+                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </button>
+                  </div>
+                  
+                  {preQuizExtraQuestions > 0 && (
+                    <p className="text-center text-xs text-purple-600 mt-1">
+                      +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''} will be added
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Mode Description */}
+              <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                <p className="text-gray-600 text-sm text-center">
+                  {mode === 'timer' 
+                    ? '⏱️ You have limited time to answer each question. Think fast!' 
+                    : '🎯 Take your time and answer each question carefully.'}
+                </p>
+              </div>
+
+              {/* Start Button */}
+              <button
+                onClick={handleStartQuiz}
+                disabled={isStartingQuiz}
+                className="w-full py-3 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-lg font-bold rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isStartingQuiz ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Loading...
+                  </span>
+                ) : (
+                  <>🚀 Start Quiz {preQuizExtraQuestions > 0 ? `(${finalQuestionCount} Questions)` : ''}</>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       {/* Floating Background Emojis */}
@@ -248,7 +412,7 @@ function QuizContent(): JSX.Element {
                   shownBubblesRef={shownBubblesRef}
                   question={quiz.currentQuestion}
                   questionNumber={quiz.currentQuestionIndex + 1}
-                  totalQuestions={Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
+                  totalQuestions={quiz.totalQuestions}
                   selectedAnswer={quiz.answers[quiz.currentQuestion.id] || null}
                   onSelectAnswer={(answer) => {
                     quiz.selectAnswer(answer);
@@ -257,7 +421,7 @@ function QuizContent(): JSX.Element {
                   disabled={quiz.status !== 'playing'}
                   subjectEmoji={subjectEmoji}
                   score={quiz.score}
-                  maxScore={Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
+                  maxScore={quiz.totalQuestions}
                   timeUp={isTimeUp}
                   {...(isTimerMode && {
                     questionTimeRemaining: quiz.timeRemaining,
@@ -283,13 +447,13 @@ function QuizContent(): JSX.Element {
             </button>
 
             <span className="text-sm text-white/70">
-              {quiz.currentQuestionIndex + 1} / {Math.min(quiz.totalQuestions, MAX_QUESTIONS)}
+              {quiz.currentQuestionIndex + 1} / {quiz.totalQuestions}
             </span>
 
             <button
               onClick={() => {
                 questionCardRef.current?.clearBubbles();
-                if (quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, MAX_QUESTIONS) - 1) {
+                if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
                   setShowConfirmSubmit(true);
                 } else {
                   quiz.goToNext();
@@ -297,7 +461,7 @@ function QuizContent(): JSX.Element {
               }}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
             >
-              {quiz.currentQuestionIndex >= Math.min(quiz.totalQuestions, MAX_QUESTIONS) - 1 ? 'Submit' : 'Next'}
+              {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}
               <ArrowLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
@@ -316,11 +480,11 @@ function QuizContent(): JSX.Element {
               Submit Quiz?
             </h2>
 
-            {quiz.answeredCount < Math.min(quiz.totalQuestions, MAX_QUESTIONS) ? (
+            {quiz.answeredCount < quiz.totalQuestions ? (
               <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
                 <p className="font-medium">⚠️ Not all questions answered!</p>
                 <p className="text-sm">
-                  You&apos;ve answered {quiz.answeredCount} of {Math.min(quiz.totalQuestions, MAX_QUESTIONS)} questions.
+                  You&apos;ve answered {quiz.answeredCount} of {quiz.totalQuestions} questions.
                 </p>
               </div>
             ) : (
@@ -419,13 +583,12 @@ function QuizContent(): JSX.Element {
               </button>
               {quiz.availableQuestions > 0 ? (
                 <button
-                  onClick={() => {
-                    quiz.extendQuiz(additionalQuestions);
+                  onClick={async () => {
+                    await quiz.extendQuiz(additionalQuestions);
                     setShowExtendQuiz(false);
-                    // Go to next question (first new one)
-                    if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+                    setTimeout(() => {
                       quiz.goToNext();
-                    }
+                    }, 100);
                   }}
                   disabled={additionalQuestions > quiz.availableQuestions}
                   className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"

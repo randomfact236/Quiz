@@ -94,7 +94,7 @@ export function QuestionManagementSection({
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState('1');
-  const questionsPerPage = 10;
+  const [questionsPerPage, setQuestionsPerPage] = useState(10);
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -170,9 +170,9 @@ export function QuestionManagementSection({
     }
   }, [localQuestions, subject.slug, onQuestionsUpdate]);
 
-  // Get unique chapters for this subject - memoized
+  // Get unique chapters for this subject - memoized (sorted alphabetically)
   const chapters = useMemo(() =>
-    [...new Set(localQuestions.map((q) => q.chapter))],
+    [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b)),
     [localQuestions]
   );
 
@@ -193,14 +193,18 @@ export function QuestionManagementSection({
     return counts;
   }, [localQuestions]);
 
-  // Calculate level question counts - memoized
+  // Calculate level question counts - memoized (based on selected chapter)
   const levelCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: localQuestions.length };
-    localQuestions.forEach((q) => {
+    const questionsToCount = filterChapter === 'all' 
+      ? localQuestions 
+      : localQuestions.filter(q => q.chapter === filterChapter);
+    
+    const counts: Record<string, number> = { all: questionsToCount.length };
+    questionsToCount.forEach((q) => {
       counts[q.level] = (counts[q.level] || 0) + 1;
     });
     return counts;
-  }, [localQuestions]);
+  }, [localQuestions, filterChapter]);
 
   // Filter questions - memoized
   const filteredQuestions = useMemo(() => {
@@ -1690,11 +1694,29 @@ export function QuestionManagementSection({
 
         {/* Table Footer */}
         <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
-          <p className="text-sm text-gray-500">
-            Showing <span className="font-medium">{Math.min(startIndex + 1, filteredQuestions.length)}</span> - {' '}
-            <span className="font-medium">{Math.min(startIndex + questionsPerPage, filteredQuestions.length)}</span> of{' '}
-            <span className="font-medium">{filteredQuestions.length}</span> questions
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min(startIndex + 1, filteredQuestions.length)}</span> - {' '}
+              <span className="font-medium">{Math.min(startIndex + questionsPerPage, filteredQuestions.length)}</span> of{' '}
+              <span className="font-medium">{filteredQuestions.length}</span> questions
+            </p>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-600">Show:</label>
+              <select
+                value={questionsPerPage}
+                onChange={(e) => {
+                  setQuestionsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}

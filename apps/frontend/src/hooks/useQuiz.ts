@@ -436,7 +436,7 @@ export function useQuiz(
       };
     });
 
-    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, []);
+    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, shownIds);
     setTotalAvailable(newAvailableCount);
   }, [subject, chapter, level, state.questions]);
 

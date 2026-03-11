@@ -39,22 +39,6 @@ export const MAX_PAGE_SIZE = 100;
 export const MIN_PAGE_NUMBER = 1;
 
 // =============================================================================
-// RATE LIMITING
-// =============================================================================
-
-/**
- * Rate limit time-to-live in milliseconds (1 minute)
- * @default 60000
- */
-export const RATE_LIMIT_TTL_MS = 60000;
-
-/**
- * Maximum number of requests allowed per rate limit window
- * @default 500
- */
-export const RATE_LIMIT_MAX_REQUESTS = 500;
-
-// =============================================================================
 // TIME VALUES (Milliseconds)
 // =============================================================================
 

@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RotateCcw, Share2, Home, Trophy } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Share2, Home, Trophy, ChevronDown, ChevronUp, ArrowRight, BookOpen, List } from 'lucide-react';
 import toast from '@/lib/toast';
 
 import type { QuizSession, QuizResult } from '@/types/quiz';
@@ -129,7 +129,7 @@ function ResultsContent(): JSX.Element {
   const { session, correctCount, incorrectCount, percentage, grade, byDifficulty } = result;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-3 py-4">
       {/* Results Celebration */}
       <ResultsCelebration
         trigger={showCelebration}
@@ -137,9 +137,9 @@ function ResultsContent(): JSX.Element {
         maxScore={result?.session.maxScore || 10}
       />
 
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-2xl">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between">
           <Link
             href="/quiz"
             className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
@@ -254,9 +254,10 @@ function ResultsContent(): JSX.Element {
         >
           <button
             onClick={() => setShowReview(!showReview)}
-            className="w-full rounded-xl bg-white p-4 text-center font-semibold text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            className="w-full rounded-xl bg-white p-4 text-center font-semibold text-gray-800 shadow-lg transition-colors hover:bg-gray-50 flex items-center justify-center gap-2"
           >
             {showReview ? 'Hide' : 'Show'} Question Review ({session.questions.length} questions)
+            {showReview ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
           </button>
 
           {showReview && (
@@ -283,33 +284,53 @@ function ResultsContent(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="grid grid-cols-2 gap-4 sm:grid-cols-3"
+          className="space-y-3"
         >
-          <Link
-            href={`/quiz/play?subject=${session.subject}&chapter=${encodeURIComponent(
-              session.chapter
-            )}&level=${session.level}`}
-            className="flex flex-col items-center justify-center gap-2 rounded-xl bg-indigo-600 p-4 text-white shadow-lg transition-colors hover:bg-indigo-700"
-          >
-            <RotateCcw className="h-6 w-6" />
-            <span className="font-semibold">Retry Quiz</span>
-          </Link>
+          {/* Primary Actions - Row 1 */}
+          <div className="grid grid-cols-3 gap-3">
+            <Link
+              href={`/quiz/play?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}&level=${session.level}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-indigo-600 p-3 text-white shadow-lg transition-colors hover:bg-indigo-700"
+            >
+              <RotateCcw className="h-5 w-5" />
+              <span className="text-xs font-semibold">Retry Quiz</span>
+            </Link>
 
-          <Link
-            href={`/quiz?subject=${session.subject}`}
-            className="flex flex-col items-center justify-center gap-2 rounded-xl bg-white p-4 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-          >
-            <Trophy className="h-6 w-6 text-indigo-500" />
-            <span className="font-semibold">More Chapters</span>
-          </Link>
+            <Link
+              href={`/quiz?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <List className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Difficulty</span>
+            </Link>
 
-          <Link
-            href="/"
-            className="flex flex-col items-center justify-center gap-2 rounded-xl bg-white p-4 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-          >
-            <Home className="h-6 w-6 text-indigo-500" />
-            <span className="font-semibold">Home</span>
-          </Link>
+            <Link
+              href={`/quiz?subject=${session.subject}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <BookOpen className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Chapters</span>
+            </Link>
+          </div>
+
+          {/* Secondary Actions - Row 2 */}
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/quiz"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <Trophy className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">All Subjects</span>
+            </Link>
+
+            <Link
+              href="/"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <Home className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Home</span>
+            </Link>
+          </div>
         </motion.div>
       </div>
     </div>

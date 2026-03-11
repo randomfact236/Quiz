@@ -75,36 +75,54 @@ function CategorySection({
   colorClass,
   subjects,
   questionCounts,
+  isOpen,
+  onToggle,
 }: {
   title: string;
   icon: React.ReactNode;
   colorClass: string;
   subjects: Subject[];
   questionCounts: Record<string, number>;
+  isOpen: boolean;
+  onToggle: () => void;
 }): JSX.Element | null {
   if (subjects.length === 0) {
     return null;
   }
 
+  const totalQuestions = subjects.reduce((sum, subject) => sum + (questionCounts[subject.slug] || 0), 0);
+
   return (
-    <div className="mb-8">
-      <div className={`mb-4 flex items-center gap-2 ${colorClass}`}>
-        {icon}
-        <h2 className="text-xl font-bold">{title.toUpperCase()}</h2>
-      </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
-        {subjects.map((subject) => (
-          <SubjectCard
-            key={subject.id}
-            slug={subject.slug}
-            emoji={subject.emoji}
-            name={subject.name}
-            questionCount={questionCounts[subject.slug] || 0}
-            isLive={(questionCounts[subject.slug] || 0) > 0}
-            isActive={subject.isActive}
-          />
-        ))}
-      </div>
+    <div className="mb-6">
+      <button
+        onClick={onToggle}
+        className={`w-full flex items-center justify-between mb-4 p-4 rounded-xl bg-white/20 backdrop-blur-sm transition-all hover:bg-white/30 ${colorClass}`}
+      >
+        <div className="flex items-center gap-3">
+          {icon}
+          <h2 className="text-xl font-bold text-white">{title.toUpperCase()}</h2>
+          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-white/20 rounded-full text-white">
+            {subjects.length} subjects • {totalQuestions} questions
+          </span>
+        </div>
+        {isOpen ? <ChevronUp className="h-5 w-5 text-white" /> : <ChevronDown className="h-5 w-5 text-white" />}
+      </button>
+      
+      {isOpen && (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
+          {subjects.map((subject) => (
+            <SubjectCard
+              key={subject.id}
+              slug={subject.slug}
+              emoji={subject.emoji}
+              name={subject.name}
+              questionCount={questionCounts[subject.slug] || 0}
+              isLive={(questionCounts[subject.slug] || 0) > 0}
+              isActive={subject.isActive}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -142,6 +160,7 @@ function SubjectSelection(): JSX.Element {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const loadData = async () => {
@@ -172,6 +191,18 @@ function SubjectSelection(): JSX.Element {
     loadData();
   }, []);
 
+  const toggleCategory = (categoryName: string) => {
+    setOpenCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryName)) {
+        newSet.delete(categoryName);
+      } else {
+        newSet.add(categoryName);
+      }
+      return newSet;
+    });
+  };
+
   // Group subjects dynamically based on category string
   const subjectsByCategory = useMemo(() => {
     const grouped: Record<string, Subject[]> = {};
@@ -188,6 +219,13 @@ function SubjectSelection(): JSX.Element {
   }, [subjects]);
 
   const sortedCategories = Object.keys(subjectsByCategory).sort();
+
+  // Initialize all categories as open by default
+  useEffect(() => {
+    if (sortedCategories.length > 0 && openCategories.size === 0) {
+      setOpenCategories(new Set(sortedCategories));
+    }
+  }, [sortedCategories]);
 
   if (isLoading) {
     return (
@@ -246,6 +284,8 @@ function SubjectSelection(): JSX.Element {
               colorClass={design.colorClass}
               subjects={catSubjects}
               questionCounts={questionCounts}
+              isOpen={openCategories.has(categoryName)}
+              onToggle={() => toggleCategory(categoryName)}
             />
           );
         })}

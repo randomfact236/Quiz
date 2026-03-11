@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
@@ -9,8 +8,6 @@ import { AuthModule } from './auth/auth.module';
 import {
   DB_PORT,
   DB_POOL_SIZE,
-  RATE_LIMIT_TTL_MS,
-  RATE_LIMIT_MAX_REQUESTS,
 } from './common/constants/app.constants';
 
 // Modules
@@ -83,14 +80,6 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
     }),
 
-    // Rate Limiting
-    ThrottlerModule.forRoot([
-      {
-        ttl: RATE_LIMIT_TTL_MS, // 1 minute
-        limit: RATE_LIMIT_MAX_REQUESTS, // 100 requests per minute
-      },
-    ]),
-
     // Feature Modules
     QuizModule,
     DadJokesModule,
@@ -108,11 +97,6 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
-    },
-    // Global Rate Limiting Guard
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
     },
     // Global Logging Interceptor
     {
