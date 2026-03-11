@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle, Timer, Pause, Play, ChevronDown, ChevronUp, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
@@ -51,7 +51,7 @@ function QuizContent(): JSX.Element {
   const questionCardRef = useRef<QuestionCardRef>(null);
 
   // Track which questions have shown bubbles (persists across navigation)
-  const shownBubblesRef = useRef<Set<number>>(new Set());
+  const shownBubblesRef = useRef<Set<string>>(new Set());
 
   // Get URL params
   const subject = searchParams?.get('subject') || '';
@@ -183,7 +183,7 @@ function QuizContent(): JSX.Element {
     const totalQuestions = Math.min(quiz.totalQuestions, MAX_QUESTIONS);
     const availableExtra = quiz.availableQuestions || 0;
     const finalQuestionCount = totalQuestions + preQuizExtraQuestions;
-    
+
     const handleStartQuiz = async () => {
       setIsStartingQuiz(true);
       if (preQuizExtraQuestions > 0 && availableExtra > 0) {
@@ -196,7 +196,7 @@ function QuizContent(): JSX.Element {
     return (
       <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
         <FloatingBackground count={15} />
-        
+
         {isStartingQuiz && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-white p-6 shadow-2xl">
@@ -206,7 +206,7 @@ function QuizContent(): JSX.Element {
             </div>
           </div>
         )}
-        
+
         <div className="relative z-10 flex flex-col flex-1 px-3 py-4">
           <div className="mx-auto w-full max-w-lg">
             {/* Back Button */}
@@ -255,7 +255,7 @@ function QuizContent(): JSX.Element {
                     <span className="font-semibold text-gray-700 text-sm">Add More Questions:</span>
                     <span className="text-xs text-purple-600">{availableExtra} more available</span>
                   </div>
-                  
+
                   {/* Slider */}
                   <input
                     type="range"
@@ -265,7 +265,7 @@ function QuizContent(): JSX.Element {
                     onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
                     className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mb-3"
                   />
-                  
+
                   {/* Dropdown and +/- Buttons */}
                   <div className="flex items-center justify-center gap-3">
                     <button
@@ -275,7 +275,7 @@ function QuizContent(): JSX.Element {
                     >
                       <Minus className="h-3 w-3" />
                     </button>
-                    
+
                     <select
                       value={preQuizExtraQuestions}
                       onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
@@ -285,7 +285,7 @@ function QuizContent(): JSX.Element {
                         <option key={i} value={i}>{i}</option>
                       ))}
                     </select>
-                    
+
                     <button
                       onClick={() => setPreQuizExtraQuestions(Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1))}
                       disabled={preQuizExtraQuestions >= Math.min(20, availableExtra)}
@@ -294,7 +294,7 @@ function QuizContent(): JSX.Element {
                       <Plus className="h-3 w-3" />
                     </button>
                   </div>
-                  
+
                   {preQuizExtraQuestions > 0 && (
                     <p className="text-center text-xs text-purple-600 mt-1">
                       +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''} will be added
@@ -306,8 +306,8 @@ function QuizContent(): JSX.Element {
               {/* Mode Description */}
               <div className="bg-gray-50 rounded-lg p-3 mb-4">
                 <p className="text-gray-600 text-sm text-center">
-                  {mode === 'timer' 
-                    ? '⏱️ You have limited time to answer each question. Think fast!' 
+                  {mode === 'timer'
+                    ? '⏱️ You have limited time to answer each question. Think fast!'
                     : '🎯 Take your time and answer each question carefully.'}
                 </p>
               </div>

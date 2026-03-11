@@ -10,7 +10,7 @@ import { type ContentStatus } from '@/app/admin/types';
 
 /** Question Type (aligned with admin Question) */
 export interface Question {
-  id: number;
+  id: string;
   question: string;
   optionA: string;
   optionB: string;
@@ -32,7 +32,7 @@ export interface QuizSession {
   chapter: string;
   level: string;
   questions: Question[];
-  answers: Record<number, string>; // questionId -> selectedOption (A/B/C/D)
+  answers: Record<string, string>; // questionId -> selectedOption (A/B/C/D)
   score: number;
   maxScore: number;
   startedAt: string;
@@ -55,7 +55,7 @@ export interface QuizConfig {
 export interface QuizState {
   questions: Question[];
   currentQuestionIndex: number;
-  answers: Record<number, string>;
+  answers: Record<string, string>;
   score: number;
   timeRemaining: number;
   status: 'loading' | 'playing' | 'paused' | 'completed';

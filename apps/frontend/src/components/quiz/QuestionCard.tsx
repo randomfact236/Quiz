@@ -40,7 +40,7 @@ interface QuestionCardProps {
   /** Time up indicator */
   timeUp?: boolean;
   /** Ref to track which questions have shown bubbles */
-  shownBubblesRef?: React.MutableRefObject<Set<number>>;
+  shownBubblesRef?: React.MutableRefObject<Set<string>>;
   /** Per-question time remaining (seconds) — shows countdown ring when provided */
   questionTimeRemaining?: number;
   /** Per-question time limit (seconds) — used to calculate ring progress */
@@ -175,9 +175,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
 
   // Use the passed ref or create a local one if not provided
-  const localShownBubblesRef = useRef<Set<number>>(new Set());
+  const localShownBubblesRef = useRef<Set<string>>(new Set());
   const activeShownBubblesRef = shownBubblesRef || localShownBubblesRef;
-  const prevQuestionIdRef = useRef<number>(question.id);
+  const prevQuestionIdRef = useRef<string>(question.id);
 
   // Expose clearBubbles function via ref
   useImperativeHandle(ref, () => ({

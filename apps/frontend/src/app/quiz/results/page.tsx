@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RotateCcw, Share2, Home, Trophy, ChevronDown, ChevronUp, ArrowRight, BookOpen, List } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Share2, Home, Trophy, ChevronDown, ChevronUp, BookOpen, List } from 'lucide-react';
 import toast from '@/lib/toast';
 
 import type { QuizSession, QuizResult } from '@/types/quiz';

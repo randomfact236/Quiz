@@ -18,7 +18,7 @@ import type {
 } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
 import { getQuestionsBySubject, getQuestionsByChapter, getRandomQuestions, getMixedQuestions, getSubjectBySlug } from '@/lib/quiz-api';
- import type { QuizQuestion } from '@/lib/quiz-api';
+import type { QuizQuestion } from '@/lib/quiz-api';
 
 /** Generate UUID for session */
 function generateUUID(): string {
@@ -32,7 +32,7 @@ function generateUUID(): string {
 /** Convert QuizQuestion from API to Question type */
 function convertQuizQuestion(q: QuizQuestion): Question {
   return {
-    id: parseInt(q.id, 10),
+    id: q.id,
     question: q.question,
     optionA: q.options[0] || '',
     optionB: q.options[1] || '',
@@ -47,7 +47,7 @@ function convertQuizQuestion(q: QuizQuestion): Question {
 }
 
 /** Calculate score based on answers */
-function calculateScore(questions: Question[], answers: Record<number, string>): number {
+function calculateScore(questions: Question[], answers: Record<string, string>): number {
   let score = 0;
   questions.forEach(q => {
     if (answers[q.id] === q.correctAnswer) {
@@ -61,7 +61,7 @@ function calculateScore(questions: Question[], answers: Record<number, string>):
 async function loadQuestions(subject: string, chapter: string, level: string): Promise<Question[]> {
   try {
     let questions: QuizQuestion[] = [];
-    
+
     if (subject === 'all') {
       if (level === 'all') {
         questions = await getMixedQuestions(50);
@@ -70,7 +70,7 @@ async function loadQuestions(subject: string, chapter: string, level: string): P
       }
     } else {
       const subjectQuestions = await getQuestionsBySubject(subject, 'published');
-      
+
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
         const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
@@ -81,12 +81,12 @@ async function loadQuestions(subject: string, chapter: string, level: string): P
       } else {
         questions = subjectQuestions;
       }
-      
+
       if (level !== 'all') {
         questions = questions.filter(q => q.level === level);
       }
     }
-    
+
     const convertedQuestions = questions.map(convertQuizQuestion).slice(0, 10);
     return convertedQuestions;
   } catch (error) {
@@ -100,12 +100,12 @@ async function loadAdditionalQuestions(
   subject: string,
   chapter: string,
   level: string,
-  excludeIds: number[],
+  excludeIds: string[],
   count: number
 ): Promise<Question[]> {
   try {
     let questions: QuizQuestion[] = [];
-    
+
     if (subject === 'all') {
       if (level === 'all') {
         questions = await getMixedQuestions(count + excludeIds.length);
@@ -114,7 +114,7 @@ async function loadAdditionalQuestions(
       }
     } else {
       const subjectQuestions = await getQuestionsBySubject(subject, 'published');
-      
+
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
         const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
@@ -125,17 +125,17 @@ async function loadAdditionalQuestions(
       } else {
         questions = subjectQuestions;
       }
-      
+
       if (level !== 'all') {
         questions = questions.filter(q => q.level === level);
       }
     }
-    
+
     const convertedQuestions = questions
       .map(convertQuizQuestion)
       .filter(q => !excludeIds.includes(q.id))
       .slice(0, count);
-    
+
     return convertedQuestions;
   } catch (error) {
     console.error('Failed to load additional questions from API:', error);
@@ -148,11 +148,11 @@ async function countAvailableQuestions(
   subject: string,
   chapter: string,
   level: string,
-  excludeIds: number[]
+  excludeIds: string[]
 ): Promise<number> {
   try {
     let questions: QuizQuestion[] = [];
-    
+
     if (subject === 'all') {
       if (level === 'all') {
         questions = await getMixedQuestions(100);
@@ -161,7 +161,7 @@ async function countAvailableQuestions(
       }
     } else {
       const subjectQuestions = await getQuestionsBySubject(subject, 'published');
-      
+
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
         const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
@@ -172,12 +172,12 @@ async function countAvailableQuestions(
       } else {
         questions = subjectQuestions;
       }
-      
+
       if (level !== 'all') {
         questions = questions.filter(q => q.level === level);
       }
     }
-    
+
     const convertedQuestions = questions.map(convertQuizQuestion);
     return convertedQuestions.filter(q => !excludeIds.includes(q.id)).length;
   } catch (error) {
@@ -238,6 +238,7 @@ export function useQuiz(
   });
 
   const [totalAvailable, setTotalAvailable] = useState(0);
+  const [originalTotal, setOriginalTotal] = useState(0);
 
   // Load questions on mount
   useEffect(() => {
@@ -245,6 +246,7 @@ export function useQuiz(
       const questions = await loadQuestions(subject, chapter, level);
       const availableCount = await countAvailableQuestions(subject, chapter, level, []);
       setTotalAvailable(availableCount);
+      setOriginalTotal(availableCount);
 
       if (questions.length === 0) {
         setState(prev => ({ ...prev, status: 'completed' }));
@@ -408,12 +410,12 @@ export function useQuiz(
 
   // Extend quiz with additional questions
   const extendQuiz = useCallback(async (additionalCount: number) => {
-    const shownIds = state.questions.map(q => q.id);
+    const currentQuestionIds = state.questions.map(q => q.id);
     const additionalQuestions = await loadAdditionalQuestions(
       subject,
       chapter,
       level,
-      shownIds,
+      currentQuestionIds,
       additionalCount
     );
 
@@ -421,8 +423,9 @@ export function useQuiz(
       return;
     }
 
+    let newQuestions: Question[] = [];
     setState(prev => {
-      const newQuestions = [...prev.questions, ...additionalQuestions];
+      newQuestions = [...prev.questions, ...additionalQuestions];
 
       if (sessionRef.current) {
         sessionRef.current.questions = newQuestions;
@@ -436,7 +439,7 @@ export function useQuiz(
       };
     });
 
-    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, shownIds);
+    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, [...currentQuestionIds, ...additionalQuestions.map(q => q.id)]);
     setTotalAvailable(newAvailableCount);
   }, [subject, chapter, level, state.questions]);
 
@@ -461,8 +464,8 @@ export function useQuiz(
     const hasAnsweredCurrent = currentQuestion ? !!state.answers[currentQuestion.id] : false;
     const answeredCount = Object.keys(state.answers).length;
 
-    const shownIds = state.questions.map(q => q.id);
-    const availableQuestions = totalAvailable - shownIds.length;
+    const loadedCount = state.questions.length;
+    const availableQuestions = originalTotal > loadedCount ? originalTotal - loadedCount : 0;
 
     return {
       currentQuestion,
@@ -470,11 +473,11 @@ export function useQuiz(
       isFirstQuestion,
       isLastQuestion,
       hasAnsweredCurrent,
-      totalQuestions: state.questions.length,
+      totalQuestions: loadedCount,
       answeredCount,
-      availableQuestions: Math.max(0, availableQuestions),
+      availableQuestions,
     };
-  }, [state.questions, state.currentQuestionIndex, state.answers, totalAvailable]);
+  }, [state.questions, state.currentQuestionIndex, state.answers, originalTotal]);
 
   return {
     ...state,
