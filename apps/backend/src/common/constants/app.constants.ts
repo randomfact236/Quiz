@@ -50,9 +50,9 @@ export const RATE_LIMIT_TTL_MS = 60000;
 
 /**
  * Maximum number of requests allowed per rate limit window
- * @default 100
+ * @default 500
  */
-export const RATE_LIMIT_MAX_REQUESTS = 100;
+export const RATE_LIMIT_MAX_REQUESTS = 500;
 
 // =============================================================================
 // TIME VALUES (Milliseconds)
