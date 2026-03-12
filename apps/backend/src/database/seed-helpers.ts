@@ -94,24 +94,23 @@ export async function seedSubjects(dataSource: DataSource): Promise<InsertedSubj
 
   const insertedSubjects: InsertedSubject[] = [];
   for (const subject of subjects) {
-    // DO NOTHING on conflict: preserves user deletions — a deleted subject stays deleted.
-    const result = await dataSource.query<QueryResultWithId[]>(
-      `INSERT INTO subjects (slug, name, emoji, category, "order", "isActive") 
-       VALUES ($1, $2, $3, $4, $5, true) 
-       ON CONFLICT (slug) DO NOTHING
-       RETURNING id`,
-      [subject.slug, subject.name, subject.emoji, subject.category, subject.order]
+    // First check if subject already exists
+    const existing = await dataSource.query<QueryResultWithId[]>(
+      `SELECT id FROM subjects WHERE slug = $1`,
+      [subject.slug]
     );
-    // If subject already existed (DO NOTHING), fetch the existing id
-    if (result.length === 0) {
-      const existing = await dataSource.query<QueryResultWithId[]>(
-        `SELECT id FROM subjects WHERE slug = $1`,
-        [subject.slug]
-      );
-      if (existing.length > 0) {
-        insertedSubjects.push({ ...subject, id: existing[0].id });
-      }
+    
+    if (existing.length > 0) {
+      // Subject exists, use it
+      insertedSubjects.push({ ...subject, id: existing[0].id });
     } else {
+      // Insert new subject
+      const result = await dataSource.query<QueryResultWithId[]>(
+        `INSERT INTO subjects (slug, name, emoji, category, "order", "isActive") 
+         VALUES ($1, $2, $3, $4, $5, true) 
+         RETURNING id`,
+        [subject.slug, subject.name, subject.emoji, subject.category, subject.order]
+      );
       insertedSubjects.push({ ...subject, id: result[0].id });
     }
   }
@@ -145,23 +144,23 @@ export async function seedChapters(
   for (const subject of insertedSubjects) {
     const chapters = chapterNames[subject.slug] || [];
     for (let i = 0; i < chapters.length; i++) {
-      // DO NOTHING on conflict: preserves user deletions
-      const result = await dataSource.query<QueryResultWithId[]>(
-        `INSERT INTO chapters (name, "chapterNumber", "subjectId") 
-         VALUES ($1, $2, $3) 
-         ON CONFLICT (name, "subjectId") DO NOTHING
-         RETURNING id`,
-        [chapters[i], i + 1, subject.id]
+      // First check if chapter already exists
+      const existing = await dataSource.query<QueryResultWithId[]>(
+        `SELECT id FROM chapters WHERE name = $1 AND "subjectId" = $2`,
+        [chapters[i], subject.id]
       );
-      if (result.length === 0) {
-        const existing = await dataSource.query<QueryResultWithId[]>(
-          `SELECT id FROM chapters WHERE name = $1 AND "subjectId" = $2`,
-          [chapters[i], subject.id]
-        );
-        if (existing.length > 0) {
-          insertedChapters.push({ id: existing[0].id, subjectId: subject.id, name: chapters[i] });
-        }
+      
+      if (existing.length > 0) {
+        // Chapter exists, use it
+        insertedChapters.push({ id: existing[0].id, subjectId: subject.id, name: chapters[i] });
       } else {
+        // Insert new chapter
+        const result = await dataSource.query<QueryResultWithId[]>(
+          `INSERT INTO chapters (name, "chapterNumber", "subjectId") 
+           VALUES ($1, $2, $3) 
+           RETURNING id`,
+          [chapters[i], i + 1, subject.id]
+        );
         insertedChapters.push({ id: result[0].id, subjectId: subject.id, name: chapters[i] });
       }
     }
@@ -188,8 +187,8 @@ export async function seedQuestions(
     const chapter = insertedChapters[q.chapterIndex];
     if (chapter) {
       await dataSource.query(
-        `INSERT INTO questions (question, options, "correctAnswer", level, "chapterId") VALUES ($1, $2, $3, $4, $5)`,
-        [q.question, q.options, q.correctAnswer, q.level, chapter.id]
+        `INSERT INTO questions (question, options, "correctAnswer", level, "chapterId", status) VALUES ($1, $2, $3, $4, $5, 'published')`,
+        [q.question, JSON.stringify(q.options), q.correctAnswer, q.level, chapter.id]
       );
     }
   }

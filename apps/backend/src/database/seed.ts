@@ -19,7 +19,6 @@ import {
   seedDadJokes,
   seedRiddleCategories,
   seedRiddles,
-  seedAdminUser,
 } from './seed-helpers';
 
 // Validate environment before proceeding
@@ -53,8 +52,8 @@ async function seed(): Promise<void> {
     await _AppDataSource.initialize();
     console.log('✅ Database connection established');
 
-    // Note: Quiz subjects, chapters, and questions are NOT seeded by default.
-    // Add them via the admin panel to avoid confusion.
+    // Note: Quiz subjects, chapters, and questions are NOT seeded.
+    // Add them manually via admin panel or API if needed.
 
     // Seed Joke Categories
     console.log('😄 Seeding joke categories...');
@@ -71,10 +70,6 @@ async function seed(): Promise<void> {
     // Seed Riddles
     console.log('🎯 Seeding riddles...');
     await seedRiddles(_AppDataSource, insertedRiddleCategories);
-
-    // Seed Admin User
-    console.log('👤 Seeding admin user...');
-    await seedAdminUser(_AppDataSource);
 
     console.log('✅ Seeding completed successfully!');
     await _AppDataSource.destroy();

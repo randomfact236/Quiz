@@ -1,10 +1,11 @@
 import * as crypto from 'crypto';
 
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { BruteForceService } from './brute-force.service';
 
 /**
  * Authentication service handling user registration, login, and validation
@@ -22,15 +23,12 @@ import { UsersService } from '../users/users.service';
  */
 @Injectable()
 export class AuthService {
-  /**
-   * Creates an instance of AuthService
-   * 
-   * @param {UsersService} usersService - Service for user CRUD operations
-   * @param {JwtService} jwtService - Service for JWT token operations
-   */
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private bruteForceService: BruteForceService,
   ) { }
 
   /**
@@ -84,15 +82,26 @@ export class AuthService {
    * // Returns: { user: { id: 'uuid', email: 'user@example.com', name: 'John Doe' }, token: 'jwt-token' }
    */
   async login(email: string, password: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+    // Check if account is locked due to brute force
+    if (await this.bruteForceService.isLockedOut(email)) {
+      const remainingAttempts = await this.bruteForceService.getRemainingAttempts(email);
+      throw new UnauthorizedException(`Account locked. Too many failed attempts. Try again later.`);
+    }
+
     const user = await this.usersService.findByEmail(email);
     if (!user) {
+      await this.bruteForceService.recordFailedAttempt(email);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isValid = await this.usersService.validatePassword(password, user.password);
     if (!isValid) {
+      await this.bruteForceService.recordFailedAttempt(email);
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    // Record successful login to reset brute force counter
+    await this.bruteForceService.recordSuccess(email);
 
     const tokens = await this.generateTokens(user);
     return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };

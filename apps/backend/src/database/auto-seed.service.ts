@@ -18,7 +18,6 @@ import { RiddleChapter } from '../riddles/entities/riddle-chapter.entity';
 import { RiddleSubject } from '../riddles/entities/riddle-subject.entity';
 import { Riddle } from '../riddles/entities/riddle.entity';
 import { User } from '../users/entities/user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AutoSeedService implements OnModuleInit {
@@ -52,8 +51,7 @@ export class AutoSeedService implements OnModuleInit {
         await this.seedAll();
         this.logger.log('✅ Auto-seed completed successfully!');
       } else {
-        this.logger.log(`✅ Database already has ${subjectCount} subjects. Ensuring admin user exists...`);
-        await this.seedUsers();
+        this.logger.log(`✅ Database already has ${subjectCount} subjects.`);
       }
     } catch (error) {
       this.logger.error('❌ Auto-seed failed:', error.message);
@@ -65,7 +63,6 @@ export class AutoSeedService implements OnModuleInit {
     await this.seedRiddleCategories();
     await this.seedRiddleSubjects();
     await this.seedClassicRiddles();
-    await this.seedUsers();
   }
 
   private async seedRiddleCategories(): Promise<void> {
@@ -215,26 +212,5 @@ export class AutoSeedService implements OnModuleInit {
       { question: 'What goes up but never comes down?', options: ['Your age', 'A balloon', 'A rocket', 'A bird'], answer: 'Your age', explanation: 'Age only increases', hint: 'It increases every year' },
       { question: 'What has hands but cannot clap?', options: ['A clock', 'A robot', 'A doll', 'A statue'], answer: 'A clock', explanation: 'Clocks have hands', hint: 'Tells time' },
     ];
-  }
-
-  private async seedUsers(): Promise<void> {
-    const adminEmail = 'admin@example.com';
-    const hashedPassword = await bcrypt.hash('admin123', 12);
-    const existingAdmin = await this.userRepo.findOne({ where: { email: adminEmail } });
-
-    if (!existingAdmin) {
-      this.logger.log(`👥 Seeding default admin user (${adminEmail})...`);
-      const admin = this.userRepo.create({
-        email: adminEmail,
-        password: hashedPassword,
-        name: 'Admin User',
-        role: 'admin',
-      });
-      await this.userRepo.save(admin);
-      this.logger.log('✅ Default admin user created: admin@example.com / admin123');
-    } else {
-      await this.userRepo.update(existingAdmin.id, { password: hashedPassword });
-      this.logger.log(`✅ Admin user (${adminEmail}) already exists. Password synchronized to 'admin123'.`);
-    }
   }
 }

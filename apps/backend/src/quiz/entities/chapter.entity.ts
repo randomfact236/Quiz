@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Unique, Index } from 'typeorm';
 
 import { Question } from './question.entity';
 import { Subject } from './subject.entity';
 
 @Entity('chapters')
+@Unique(['name', 'subjectId'])
 export class Chapter {
   @PrimaryGeneratedColumn('uuid')
   id: string;

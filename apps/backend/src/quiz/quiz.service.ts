@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
+import { randomUUID } from 'crypto';
 
 import { CacheService } from '../common/cache/cache.service';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
@@ -17,6 +18,16 @@ import { Subject } from './entities/subject.entity';
 @Injectable()
 export class QuizService {
   private readonly logger = new Logger(QuizService.name);
+
+  private shuffleArray<T>(array: T[]): T[] {
+    // Fisher-Yates shuffle with crypto UUID for better randomness
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Number(randomUUID().replace(/-/g, '').slice(0, 8), 16) % (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
 
   constructor(
     @InjectRepository(Subject)
@@ -223,8 +234,8 @@ export class QuizService {
       .andWhere('question.status = :status', { status: ContentStatus.PUBLISHED })
       .getMany();
 
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    // Shuffle and pick count items using secure Fisher-Yates shuffle
+    const shuffled = this.shuffleArray(allIds).slice(0, count);
     const selectedIds = shuffled.map(q => q.id);
 
     return this.questionRepo.find({
@@ -258,8 +269,8 @@ export class QuizService {
       .where('question.status = :status', { status: ContentStatus.PUBLISHED })
       .getMany();
 
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
+    // Shuffle and pick count items using secure Fisher-Yates shuffle
+    const shuffled = this.shuffleArray(allIds).slice(0, count);
     const selectedIds = shuffled.map(q => q.id);
 
     return this.questionRepo.find({

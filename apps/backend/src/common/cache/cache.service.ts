@@ -54,6 +54,16 @@ export class CacheService {
     }
   }
 
+  async getTTL(key: string): Promise<number> {
+    try {
+      const ttl = await this.redis.ttl(key);
+      return ttl;
+    } catch (error) {
+      this.logger.error(`Cache TTL error for key ${key}:`, error.message);
+      return 0;
+    }
+  }
+
   async delPattern(pattern: string): Promise<void> {
     try {
       const keys = await this.redis.keys(pattern);
