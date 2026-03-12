@@ -82,7 +82,7 @@ export class QuizController {
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ): Promise<{ data: Question[]; total: number }> {
-    const pagination = { page: page || 1, limit: limit || 1000 };
+    const pagination = { page: page || 1, limit: limit || 10000 };
     return this.quizService.findAllQuestions(pagination, status as any, slug);
   }
 
