@@ -200,15 +200,15 @@ export function QuestionManagementSection({
     return [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
   }, [localQuestions, chapters]);
 
-  // Calculate status counts - memoized
+  // Calculate status counts - use pagination total if available, otherwise from local questions
   const statusCounts = useMemo(() => ({
-    total: localQuestions.length,
+    total: pagination?.total ?? localQuestions.length,
     published: localQuestions.filter((q) => q.status === 'published').length,
     draft: localQuestions.filter((q) => q.status === 'draft').length,
     trash: localQuestions.filter((q) => q.status === 'trash').length,
-  }), [localQuestions]);
+  }), [localQuestions, pagination]);
 
-  // Calculate chapter question counts - memoized
+  // Calculate chapter question counts - from local questions (current page)
   const chapterCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     localQuestions.forEach((q) => {
@@ -217,18 +217,20 @@ export function QuestionManagementSection({
     return counts;
   }, [localQuestions]);
 
-  // Calculate level question counts - memoized (based on selected chapter)
+  // Calculate level question counts - from local questions (current page)
   const levelCounts = useMemo(() => {
     const questionsToCount = filterChapter === 'all' 
       ? localQuestions 
       : localQuestions.filter(q => q.chapter === filterChapter);
     
-    const counts: Record<string, number> = { all: questionsToCount.length };
+    const counts: Record<string, number> = { 
+      all: pagination?.total ?? questionsToCount.length 
+    };
     questionsToCount.forEach((q) => {
       counts[q.level] = (counts[q.level] || 0) + 1;
     });
     return counts;
-  }, [localQuestions, filterChapter]);
+  }, [localQuestions, filterChapter, pagination]);
 
   // Filter questions - memoized
   const filteredQuestions = useMemo(() => {
@@ -975,7 +977,7 @@ export function QuestionManagementSection({
               }`}
             aria-pressed={filterChapter === 'all'}
           >
-            All Chapters <span className="opacity-70">({localQuestions.length})</span>
+            All Chapters <span className="opacity-70">({pagination?.total ?? localQuestions.length})</span>
           </button>
           {chaptersList.map((ch) => (
             <div key={ch} className="flex items-center gap-1">
