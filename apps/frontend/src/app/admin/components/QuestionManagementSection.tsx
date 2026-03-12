@@ -977,7 +977,7 @@ export function QuestionManagementSection({
           >
             All Chapters <span className="opacity-70">({localQuestions.length})</span>
           </button>
-          {chapters.map((ch) => (
+          {chaptersList.map((ch) => (
             <div key={ch} className="flex items-center gap-1">
               {editingChapter === ch ? (
                 <>
@@ -1366,7 +1366,7 @@ export function QuestionManagementSection({
                     aria-required="true"
                   >
                     <option value="">Select Chapter</option>
-                    {chapters.map((ch) => (
+                    {chaptersList.map((ch) => (
                       <option key={ch} value={ch}>
                         {ch}
                       </option>
@@ -1548,7 +1548,7 @@ export function QuestionManagementSection({
                     aria-required="true"
                   >
                     <option value="">Select Chapter</option>
-                    {chapters.map((ch) => (
+                    {chaptersList.map((ch) => (
                       <option key={ch} value={ch}>
                         {ch}
                       </option>
