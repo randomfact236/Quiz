@@ -131,6 +131,9 @@ export default function AdminPage(): JSX.Element {
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
   // Real question counts fetched from the backend (used for sidebar badges)
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
+  
+  // Server-side pagination state for questions
+  const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
@@ -260,22 +263,28 @@ export default function AdminPage(): JSX.Element {
   }, []);
 
 
-  // Fetch questions from API when subject is selected
+  // Fetch questions from API when subject is selected (server-side pagination)
   useEffect(() => {
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
     if (isSubjectSection && activeSection !== 'dashboard') {
       const fetchQuestions = async () => {
         try {
-          const result = await getQuestionsBySubject(activeSection);
-          const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
+          const currentPage = questionPagination[activeSection]?.page || 1;
+          const limit = questionPagination[activeSection]?.limit || 10;
+          const result = await getQuestionsBySubject(activeSection, undefined, currentPage, limit);
+          const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
             [activeSection]: mappedQuestions
           }));
           setQuestionCounts(prev => ({
             ...prev,
-            [activeSection]: mappedQuestions.length
+            [activeSection]: result.total
+          }));
+          setQuestionPagination(prev => ({
+            ...prev,
+            [activeSection]: { page: result.page, limit: result.limit, total: result.total }
           }));
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
@@ -284,7 +293,7 @@ export default function AdminPage(): JSX.Element {
 
       fetchQuestions();
     }
-  }, [activeSection, subjects]);
+  }, [activeSection, subjects, questionPagination]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -304,9 +313,21 @@ export default function AdminPage(): JSX.Element {
     return allQuestions[slug] ?? [];
   };
 
+  const getQuestionPagination = (slug: string) => {
+    return questionPagination[slug] || { page: 1, limit: 10, total: questionCounts[slug] || 0 };
+  };
+
   // Handle subject selection from filter
   const handleSubjectSelect = (slug: string) => {
     setActiveSection(slug as MenuSection);
+  };
+
+  // Handle question page change (server-side pagination)
+  const handleQuestionPageChange = (subjectSlug: string, newPage: number, newLimit: number) => {
+    setQuestionPagination(prev => ({
+      ...prev,
+      [subjectSlug]: { ...prev[subjectSlug], page: newPage, limit: newLimit }
+    }));
   };
 
   // Handle questions import
@@ -989,6 +1010,7 @@ export default function AdminPage(): JSX.Element {
             <QuestionManagementSection
               subject={getSubjectFromSection(activeSection) as Subject}
               questions={getQuestionsForSubject(activeSection)}
+              pagination={getQuestionPagination(activeSection)}
               allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}
@@ -998,6 +1020,7 @@ export default function AdminPage(): JSX.Element {
               onClearQuestions={handleClearQuestions}
               onEditSubject={handleEditSubject}
               onDeleteSubject={handleDeleteSubject}
+              onPageChange={handleQuestionPageChange}
             />
           )}
           {activeSection === 'jokes' && (

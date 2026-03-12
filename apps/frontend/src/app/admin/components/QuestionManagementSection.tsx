@@ -13,11 +13,19 @@ import { bulkActionQuestions, createQuestion, updateQuestion, deleteQuestion } f
 /**
  * Props for the QuestionManagementSection component
  */
+interface QuestionPagination {
+  page: number;
+  limit: number;
+  total: number;
+}
+
 interface QuestionManagementSectionProps {
   /** Currently selected subject */
   subject: Subject;
   /** Array of questions for the selected subject */
   questions: Question[];
+  /** Pagination info from server */
+  pagination?: QuestionPagination;
   /** All available subjects for filtering */
   allSubjects: Subject[];
   /** Callback when a subject is selected from filters */
@@ -36,6 +44,8 @@ interface QuestionManagementSectionProps {
   onEditSubject: (subject: Subject) => void;
   /** Callback to delete a subject */
   onDeleteSubject: (subjectId: string) => void;
+  /** Callback when page changes (server-side pagination) */
+  onPageChange?: (subjectSlug: string, page: number, limit: number) => void;
 }
 
 /**
@@ -70,6 +80,7 @@ interface QuestionFormState {
 export function QuestionManagementSection({
   subject,
   questions,
+  pagination,
   allSubjects,
   onSubjectSelect,
   onQuestionsImport,
@@ -77,6 +88,7 @@ export function QuestionManagementSection({
   onClearQuestions,
   onEditSubject,
   onDeleteSubject,
+  onPageChange,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states
   const [filterLevel, setFilterLevel] = useState<string>('all');
@@ -91,10 +103,17 @@ export function QuestionManagementSection({
   // Data states
   const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageInput, setPageInput] = useState('1');
-  const [questionsPerPage, setQuestionsPerPage] = useState(10);
+  // Server-side pagination (from props) or local fallback
+  const isServerPagination = pagination !== undefined;
+  const serverPagination = pagination || { page: 1, limit: 10, total: 0 };
+  
+  // Use server pagination if available, otherwise use local
+  const [currentPage, setCurrentPage] = useState(isServerPagination ? serverPagination.page : 1);
+  const [pageInput, setPageInput] = useState(isServerPagination ? String(serverPagination.page) : '1');
+  const [questionsPerPage, setQuestionsPerPage] = useState(isServerPagination ? serverPagination.limit : 10);
+
+  // Total count - use server total or local count
+  const totalQuestions = isServerPagination ? serverPagination.total : filteredQuestions.length;
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -217,13 +236,21 @@ export function QuestionManagementSection({
     });
   }, [localQuestions, filterLevel, filterChapter, searchTerm, statusFilter]);
 
-  // Pagination calculations - memoized
-  const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
-  const startIndex = (currentPage - 1) * questionsPerPage;
-  const paginatedQuestions = useMemo(() =>
-    filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
-    [filteredQuestions, startIndex, questionsPerPage]
-  );
+  // Pagination calculations - use server pagination if available
+  const totalPages = isServerPagination 
+    ? Math.ceil(serverPagination.total / questionsPerPage)
+    : Math.ceil(filteredQuestions.length / questionsPerPage);
+  
+  const startIndex = isServerPagination
+    ? (currentPage - 1) * questionsPerPage
+    : (currentPage - 1) * questionsPerPage;
+    
+  const paginatedQuestions = isServerPagination
+    ? questions  // Server pagination: use questions prop directly (already paginated)
+    : useMemo(  // Client pagination: slice the filtered questions
+        () => filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
+        [filteredQuestions, startIndex, questionsPerPage]
+      );
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -247,6 +274,9 @@ export function QuestionManagementSection({
     const page = parseInt(pageInput, 10);
     if (!isNaN(page) && page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      if (isServerPagination && onPageChange) {
+        onPageChange(subject.slug, page, questionsPerPage);
+      }
     } else {
       setPageInput(String(currentPage));
     }
@@ -1696,17 +1726,21 @@ export function QuestionManagementSection({
         <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
           <div className="flex items-center gap-4">
             <p className="text-sm text-gray-500">
-              Showing <span className="font-medium">{Math.min(startIndex + 1, filteredQuestions.length)}</span> - {' '}
-              <span className="font-medium">{Math.min(startIndex + questionsPerPage, filteredQuestions.length)}</span> of{' '}
-              <span className="font-medium">{filteredQuestions.length}</span> questions
+              Showing <span className="font-medium">{Math.min(startIndex + 1, totalQuestions)}</span> - {' '}
+              <span className="font-medium">{Math.min(startIndex + questionsPerPage, totalQuestions)}</span> of{' '}
+              <span className="font-medium">{totalQuestions}</span> questions
             </p>
             <div className="flex items-center gap-2">
               <label className="text-sm text-gray-600">Show:</label>
               <select
                 value={questionsPerPage}
                 onChange={(e) => {
-                  setQuestionsPerPage(Number(e.target.value));
+                  const newLimit = Number(e.target.value);
+                  setQuestionsPerPage(newLimit);
                   setCurrentPage(1);
+                  if (isServerPagination && onPageChange) {
+                    onPageChange(subject.slug, 1, newLimit);
+                  }
                 }}
                 className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
               >
@@ -1719,7 +1753,13 @@ export function QuestionManagementSection({
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => {
+                const newPage = Math.max(1, currentPage - 1);
+                setCurrentPage(newPage);
+                if (isServerPagination && onPageChange) {
+                  onPageChange(subject.slug, newPage, questionsPerPage);
+                }
+              }}
               disabled={currentPage === 1}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -1738,7 +1778,13 @@ export function QuestionManagementSection({
               of <span className="font-medium">{totalPages || 1}</span>
             </span>
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => {
+                const newPage = Math.min(totalPages, currentPage + 1);
+                setCurrentPage(newPage);
+                if (isServerPagination && onPageChange) {
+                  onPageChange(subject.slug, newPage, questionsPerPage);
+                }
+              }}
               disabled={currentPage >= totalPages}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
