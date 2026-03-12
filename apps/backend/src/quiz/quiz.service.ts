@@ -459,4 +459,48 @@ export class QuizService {
   async getStatusCounts(): Promise<StatusCountResponse> {
     return this.bulkActionService.getStatusCounts(this.questionRepo);
   }
+
+  /**
+   * Get status counts for a specific subject
+   * @param subjectSlug - The subject slug
+   * @returns StatusCountResponse with counts by status for the subject
+   */
+  async getStatusCountsBySubject(subjectSlug: string): Promise<StatusCountResponse> {
+    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
+    if (!subject) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
+
+    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
+    const chapterIds = chapters.map(c => c.id);
+
+    if (chapterIds.length === 0) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
+
+    const total = await this.questionRepo
+      .createQueryBuilder('question')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .getCount();
+
+    const published = await this.questionRepo
+      .createQueryBuilder('question')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .andWhere('question.status = :status', { status: 'published' })
+      .getCount();
+
+    const draft = await this.questionRepo
+      .createQueryBuilder('question')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .andWhere('question.status = :status', { status: 'draft' })
+      .getCount();
+
+    const trash = await this.questionRepo
+      .createQueryBuilder('question')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .andWhere('question.status = :status', { status: 'trash' })
+      .getCount();
+
+    return { total, published, draft, trash };
+  }
 }

@@ -210,6 +210,18 @@ export async function getQuestionCountBySubject(subjectSlug: string): Promise<nu
     return response.data.total;
 }
 
+export interface SubjectStatusCounts {
+    total: number;
+    published: number;
+    draft: number;
+    trash: number;
+}
+
+export async function getStatusCountsBySubject(subjectSlug: string): Promise<SubjectStatusCounts> {
+    const response = await api.get<SubjectStatusCounts>(`/quiz/subjects/${subjectSlug}/status-counts`);
+    return response.data;
+}
+
 export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
     const response = await api.post<QuizQuestion>('/quiz/questions', dto);
     return response.data;

@@ -28,6 +28,13 @@ interface QuestionManagementSectionProps {
   pagination?: QuestionPagination;
   /** All available chapters for this subject (from database) - array of objects with id and name */
   chapters?: { id: string; name: string }[];
+  /** Status counts from server (total, published, draft, trash) */
+  statusCounts?: {
+    total: number;
+    published: number;
+    draft: number;
+    trash: number;
+  };
   /** All available subjects for filtering */
   allSubjects: Subject[];
   /** Callback when a subject is selected from filters */
@@ -84,6 +91,7 @@ export function QuestionManagementSection({
   questions,
   pagination,
   chapters,
+  statusCounts,
   allSubjects,
   onSubjectSelect,
   onQuestionsImport,
@@ -200,13 +208,18 @@ export function QuestionManagementSection({
     return [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
   }, [localQuestions, chapters]);
 
-  // Calculate status counts - use pagination total if available, otherwise from local questions
-  const statusCounts = useMemo(() => ({
-    total: pagination?.total ?? localQuestions.length,
-    published: localQuestions.filter((q) => q.status === 'published').length,
-    draft: localQuestions.filter((q) => q.status === 'draft').length,
-    trash: localQuestions.filter((q) => q.status === 'trash').length,
-  }), [localQuestions, pagination]);
+  // Calculate status counts - use server statusCounts prop if available, otherwise from local questions
+  const computedStatusCounts = useMemo(() => {
+    if (statusCounts) {
+      return statusCounts;
+    }
+    return {
+      total: pagination?.total ?? localQuestions.length,
+      published: localQuestions.filter((q) => q.status === 'published').length,
+      draft: localQuestions.filter((q) => q.status === 'draft').length,
+      trash: localQuestions.filter((q) => q.status === 'trash').length,
+    };
+  }, [localQuestions, pagination, statusCounts]);
 
   // Calculate chapter question counts - from local questions (current page)
   const chapterCounts = useMemo(() => {
@@ -895,7 +908,7 @@ export function QuestionManagementSection({
       {/* Status Dashboard */}
       <div className="mb-4">
         <StatusDashboard
-          counts={statusCounts}
+          counts={computedStatusCounts}
           activeFilter={statusFilter}
           onFilterChange={setStatusFilter}
           loading={false}

@@ -36,7 +36,7 @@ import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter } from '@/lib/quiz-api';
+import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, getStatusCountsBySubject, SubjectStatusCounts } from '@/lib/quiz-api';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
 /** Image Riddle Type - Enterprise Grade - Available for future use */
@@ -140,6 +140,9 @@ export default function AdminPage(): JSX.Element {
 
   // Quiz chapters per subject (for filtering)
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
+
+  // Quiz status counts per subject (for stats display)
+  const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
 
   // Helper to map API QuizQuestion to UI Question
   const mapQuizQuestionToQuestion = (q: QuizQuestion): Question => {
@@ -303,6 +306,17 @@ export default function AdminPage(): JSX.Element {
            } catch (chaptersErr) {
              console.error('Failed to fetch chapters:', chaptersErr);
            }
+
+           // Also fetch status counts for this subject
+           try {
+             const statusCounts = await getStatusCountsBySubject(activeSection);
+             setSubjectStatusCounts(prev => ({
+               ...prev,
+               [activeSection]: statusCounts
+             }));
+           } catch (statusErr) {
+             console.error('Failed to fetch status counts:', statusErr);
+           }
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
         }
@@ -336,6 +350,10 @@ export default function AdminPage(): JSX.Element {
 
   const getChaptersForSubject = (slug: string): { id: string; name: string }[] => {
     return quizChapters[slug] ?? [];
+  };
+
+  const getStatusCountsForSubject = (slug: string): SubjectStatusCounts | undefined => {
+    return subjectStatusCounts[slug];
   };
 
   // Handle subject selection from filter
@@ -1045,6 +1063,7 @@ export default function AdminPage(): JSX.Element {
               questions={getQuestionsForSubject(activeSection)}
               pagination={getQuestionPagination(activeSection)}
               chapters={getChaptersForSubject(activeSection)}
+              statusCounts={getStatusCountsForSubject(activeSection)}
               allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}

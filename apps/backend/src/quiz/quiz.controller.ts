@@ -277,4 +277,15 @@ export class QuizController {
   async getStatusCounts(): Promise<StatusCountResponseDto> {
     return this.quizService.getStatusCounts();
   }
+
+  @Get('subjects/:slug/status-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get question counts by status for a subject (Admin only)' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  @ApiResponse({ status: 200, description: 'Returns status counts for subject', type: StatusCountResponseDto })
+  async getStatusCountsBySubject(@Param('slug') slug: string): Promise<StatusCountResponseDto> {
+    return this.quizService.getStatusCountsBySubject(slug);
+  }
 }
