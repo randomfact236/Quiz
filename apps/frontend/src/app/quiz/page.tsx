@@ -361,12 +361,20 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   if (isLoading) {
     return (
       <div>
-        <Link
-          href="/quiz"
-          className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-        >
-          ← Back to Subjects
-        </Link>
+        <div className="flex gap-2 mb-6">
+          <Link
+            href="/"
+            className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          >
+            🏠 Back to Home
+          </Link>
+          <Link
+            href="/quiz"
+            className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          >
+            ← Back to Subjects
+          </Link>
+        </div>
         <div className="flex h-64 items-center justify-center">
           <div className="text-2xl text-white">Loading chapters...</div>
         </div>
@@ -376,12 +384,20 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 
   return (
     <div>
-      <Link
-        href="/quiz"
-        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-      >
-        ← Back to Subjects
-      </Link>
+      <div className="flex gap-2 mb-6">
+        <Link
+          href="/"
+          className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+        >
+          🏠 Back to Home
+        </Link>
+        <Link
+          href="/quiz"
+          className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+        >
+          ← Back to Subjects
+        </Link>
+      </div>
       <h1 className="mb-8 text-center text-3xl font-bold text-white">
         📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
       </h1>
