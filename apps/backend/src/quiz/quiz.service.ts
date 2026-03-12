@@ -503,4 +503,86 @@ export class QuizService {
 
     return { total, published, draft, trash };
   }
+
+  /**
+   * Get question counts by chapter for a specific subject
+   * @param subjectSlug - The subject slug
+   * @returns Record of chapter names to counts
+   */
+  async getChapterCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
+    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
+    if (!subject) {
+      return {};
+    }
+
+    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
+    const chapterMap = new Map(chapters.map(c => [c.id, c.name]));
+
+    if (chapters.length === 0) {
+      return {};
+    }
+
+    const chapterIds = chapters.map(c => c.id);
+
+    const results = await this.questionRepo
+      .createQueryBuilder('question')
+      .select('question.chapterId', 'chapterId')
+      .addSelect('COUNT(*)', 'count')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .groupBy('question.chapterId')
+      .getRawMany();
+
+    const counts: Record<string, number> = {};
+    chapters.forEach(c => {
+      counts[c.name] = 0;
+    });
+    results.forEach(r => {
+      const chapterName = chapterMap.get(r.chapterId);
+      if (chapterName) {
+        counts[chapterName] = parseInt(r.count, 10);
+      }
+    });
+
+    return counts;
+  }
+
+  /**
+   * Get question counts by level for a specific subject
+   * @param subjectSlug - The subject slug
+   * @returns Record of levels to counts
+   */
+  async getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
+    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
+    if (!subject) {
+      return {};
+    }
+
+    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
+    const chapterIds = chapters.map(c => c.id);
+
+    if (chapterIds.length === 0) {
+      return {};
+    }
+
+    const results = await this.questionRepo
+      .createQueryBuilder('question')
+      .select('question.level', 'level')
+      .addSelect('COUNT(*)', 'count')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .groupBy('question.level')
+      .getRawMany();
+
+    const counts: Record<string, number> = {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      expert: 0,
+      extreme: 0
+    };
+    results.forEach(r => {
+      counts[r.level] = parseInt(r.count, 10);
+    });
+
+    return counts;
+  }
 }

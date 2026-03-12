@@ -35,6 +35,10 @@ interface QuestionManagementSectionProps {
     draft: number;
     trash: number;
   };
+  /** Chapter counts from server */
+  chapterCounts?: Record<string, number>;
+  /** Level counts from server */
+  levelCounts?: Record<string, number>;
   /** All available subjects for filtering */
   allSubjects: Subject[];
   /** Callback when a subject is selected from filters */
@@ -92,6 +96,8 @@ export function QuestionManagementSection({
   pagination,
   chapters,
   statusCounts,
+  chapterCounts,
+  levelCounts,
   allSubjects,
   onSubjectSelect,
   onQuestionsImport,
@@ -221,17 +227,23 @@ export function QuestionManagementSection({
     };
   }, [localQuestions, pagination, statusCounts]);
 
-  // Calculate chapter question counts - from local questions (current page)
-  const chapterCounts = useMemo(() => {
+  // Calculate chapter question counts - use server counts if available, otherwise from local questions
+  const computedChapterCounts = useMemo(() => {
+    if (chapterCounts) {
+      return chapterCounts;
+    }
     const counts: Record<string, number> = {};
     localQuestions.forEach((q) => {
       counts[q.chapter] = (counts[q.chapter] || 0) + 1;
     });
     return counts;
-  }, [localQuestions]);
+  }, [localQuestions, chapterCounts]);
 
-  // Calculate level question counts - from local questions (current page)
-  const levelCounts = useMemo(() => {
+  // Calculate level question counts - use server counts if available, otherwise from local questions
+  const computedLevelCounts = useMemo(() => {
+    if (levelCounts) {
+      return { ...levelCounts, all: levelCounts.easy + levelCounts.medium + levelCounts.hard + levelCounts.expert + levelCounts.extreme };
+    }
     const questionsToCount = filterChapter === 'all' 
       ? localQuestions 
       : localQuestions.filter(q => q.chapter === filterChapter);
@@ -243,7 +255,7 @@ export function QuestionManagementSection({
       counts[q.level] = (counts[q.level] || 0) + 1;
     });
     return counts;
-  }, [localQuestions, filterChapter, pagination]);
+  }, [localQuestions, filterChapter, pagination, levelCounts]);
 
   // Filter questions - memoized
   const filteredQuestions = useMemo(() => {
@@ -1032,7 +1044,7 @@ export function QuestionManagementSection({
                       }`}
                     aria-pressed={filterChapter === ch}
                   >
-                    {ch} <span className="opacity-70">({chapterCounts[ch] || 0})</span>
+                    {ch} <span className="opacity-70">({computedChapterCounts[ch] || 0})</span>
                   </button>
                   <button
                     onClick={() => handleStartEditChapter(ch)}
@@ -1069,7 +1081,7 @@ export function QuestionManagementSection({
               aria-pressed={filterLevel === level}
             >
               {level === 'all' ? 'All Levels' : level}{' '}
-              <span className="opacity-70">({levelCounts[level] || 0})</span>
+              <span className="opacity-70">({computedLevelCounts[level] || 0})</span>
             </button>
           ))}
         </div>

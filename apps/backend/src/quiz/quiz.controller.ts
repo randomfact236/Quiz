@@ -288,4 +288,24 @@ export class QuizController {
   async getStatusCountsBySubject(@Param('slug') slug: string): Promise<StatusCountResponseDto> {
     return this.quizService.getStatusCountsBySubject(slug);
   }
+
+  @Get('subjects/:slug/chapter-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get question counts by chapter for a subject (Admin only)' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  async getChapterCountsBySubject(@Param('slug') slug: string): Promise<Record<string, number>> {
+    return this.quizService.getChapterCountsBySubject(slug);
+  }
+
+  @Get('subjects/:slug/level-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get question counts by level for a subject (Admin only)' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  async getLevelCountsBySubject(@Param('slug') slug: string): Promise<Record<string, number>> {
+    return this.quizService.getLevelCountsBySubject(slug);
+  }
 }

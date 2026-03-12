@@ -222,6 +222,16 @@ export async function getStatusCountsBySubject(subjectSlug: string): Promise<Sub
     return response.data;
 }
 
+export async function getChapterCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
+    const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/chapter-counts`);
+    return response.data;
+}
+
+export async function getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
+    const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/level-counts`);
+    return response.data;
+}
+
 export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
     const response = await api.post<QuizQuestion>('/quiz/questions', dto);
     return response.data;
