@@ -173,8 +173,8 @@ function SubjectSelection(): JSX.Element {
         for (const subject of subjectsData) {
           try {
             const questions = await getQuestionsBySubject(subject.slug, 'published');
-            if (questions.length > 0) {
-              counts[subject.slug] = questions.length;
+            if (questions.total > 0) {
+              counts[subject.slug] = questions.total;
             }
           } catch {
             console.error(`Failed to load questions for subject: ${subject.slug}`);
