@@ -138,6 +138,9 @@ export default function AdminPage(): JSX.Element {
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
 
+  // Quiz chapters per subject (for filtering)
+  const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
+
   // Helper to map API QuizQuestion to UI Question
   const mapQuizQuestionToQuestion = (q: QuizQuestion): Question => {
     const _opts = q.options || [];
@@ -286,6 +289,20 @@ export default function AdminPage(): JSX.Element {
             ...prev,
             [activeSection]: { page: result.page, limit: result.limit, total: result.total }
           }));
+
+          // Also fetch chapters for this subject
+           try {
+             const subjectData = await getSubjectBySlug(activeSection);
+             if (subjectData?.chapters) {
+               const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
+               setQuizChapters(prev => ({
+                 ...prev,
+                 [activeSection]: chapterObjects
+               }));
+             }
+           } catch (chaptersErr) {
+             console.error('Failed to fetch chapters:', chaptersErr);
+           }
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
         }
@@ -315,6 +332,10 @@ export default function AdminPage(): JSX.Element {
 
   const getQuestionPagination = (slug: string) => {
     return questionPagination[slug] || { page: 1, limit: 10, total: questionCounts[slug] || 0 };
+  };
+
+  const getChaptersForSubject = (slug: string): { id: string; name: string }[] => {
+    return quizChapters[slug] ?? [];
   };
 
   // Handle subject selection from filter
@@ -1023,6 +1044,7 @@ export default function AdminPage(): JSX.Element {
               subject={getSubjectFromSection(activeSection) as Subject}
               questions={getQuestionsForSubject(activeSection)}
               pagination={getQuestionPagination(activeSection)}
+              chapters={getChaptersForSubject(activeSection)}
               allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}

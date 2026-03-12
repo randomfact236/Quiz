@@ -26,6 +26,8 @@ interface QuestionManagementSectionProps {
   questions: Question[];
   /** Pagination info from server */
   pagination?: QuestionPagination;
+  /** All available chapters for this subject (from database) - array of objects with id and name */
+  chapters?: { id: string; name: string }[];
   /** All available subjects for filtering */
   allSubjects: Subject[];
   /** Callback when a subject is selected from filters */
@@ -81,6 +83,7 @@ export function QuestionManagementSection({
   subject,
   questions,
   pagination,
+  chapters,
   allSubjects,
   onSubjectSelect,
   onQuestionsImport,
@@ -189,11 +192,13 @@ export function QuestionManagementSection({
     }
   }, [localQuestions, subject.slug, onQuestionsUpdate]);
 
-  // Get unique chapters for this subject - memoized (sorted alphabetically)
-  const chapters = useMemo(() =>
-    [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b)),
-    [localQuestions]
-  );
+  // Get unique chapters for this subject - use database chapters if available, otherwise extract from questions
+  const chaptersList = useMemo(() => {
+    if (chapters && chapters.length > 0) {
+      return chapters.map(c => c.name).sort((a, b) => a.localeCompare(b));
+    }
+    return [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
+  }, [localQuestions, chapters]);
 
   // Calculate status counts - memoized
   const statusCounts = useMemo(() => ({
@@ -419,7 +424,7 @@ export function QuestionManagementSection({
       return;
     }
 
-    const chapterId = chapters.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
+    const chapterId = chapters?.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
 
     if (!chapterId) {
       return;
@@ -473,7 +478,7 @@ export function QuestionManagementSection({
       return;
     }
 
-    const chapterId = chapters.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
+    const chapterId = chapters?.find(c => c.name.toLowerCase() === questionForm.chapter.trim().toLowerCase())?.id;
 
     if (!chapterId) {
       return;
