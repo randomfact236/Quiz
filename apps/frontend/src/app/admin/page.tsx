@@ -345,14 +345,18 @@ export default function AdminPage(): JSX.Element {
     if (!newQuestions || newQuestions.length === 0) {
       try {
         const result = await getQuestionsBySubject(subjectSlug);
-        const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
+        const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
         setAllQuestions(prev => ({
           ...prev,
           [subjectSlug]: mappedQuestions
         }));
         setQuestionCounts(prev => ({
           ...prev,
-          [subjectSlug]: mappedQuestions.length
+          [subjectSlug]: result.total  // FIX: Use actual total from API
+        }));
+        setQuestionPagination(prev => ({
+          ...prev,
+          [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
         }));
       } catch (err) {
         console.error('Failed to refresh questions:', err);
