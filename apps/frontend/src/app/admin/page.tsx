@@ -449,14 +449,18 @@ export default function AdminPage(): JSX.Element {
     try {
       await createQuestionsBulk(apiQuestions);
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
+      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
       }));
       setQuestionCounts(prev => ({
         ...prev,
-        [subjectSlug]: mappedQuestions.length
+        [subjectSlug]: result.total
+      }));
+      setQuestionPagination(prev => ({
+        ...prev,
+        [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
       }));
     } catch (err) {
       console.error('Failed to save questions to database:', err);
@@ -521,14 +525,18 @@ export default function AdminPage(): JSX.Element {
 
     try {
       const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.map(mapQuizQuestionToQuestion);
+      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
       setAllQuestions(prev => ({
         ...prev,
         [subjectSlug]: mappedQuestions
       }));
       setQuestionCounts(prev => ({
         ...prev,
-        [subjectSlug]: mappedQuestions.length
+        [subjectSlug]: result.total
+      }));
+      setQuestionPagination(prev => ({
+        ...prev,
+        [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
       }));
     } catch (err) {
       console.error('Failed to refetch questions:', err);
