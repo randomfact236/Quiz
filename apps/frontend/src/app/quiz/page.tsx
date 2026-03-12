@@ -676,6 +676,9 @@ function QuizContent(): JSX.Element {
 }
 
 export default function QuizPage(): JSX.Element {
+  const searchParams = useSearchParams();
+  const key = searchParams?.toString() || '';
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
       <div className="mx-auto max-w-4xl">
@@ -684,7 +687,7 @@ export default function QuizPage(): JSX.Element {
             <div className="text-2xl text-white">Loading...</div>
           </div>
         }>
-          <QuizContent />
+          <QuizContent key={key} />
         </Suspense>
       </div>
     </main>
