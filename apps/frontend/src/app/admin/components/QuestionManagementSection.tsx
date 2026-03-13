@@ -114,7 +114,7 @@ export function QuestionManagementSection({
   onFilterChange,
   onQuestionsRefresh,
 }: QuestionManagementSectionProps): JSX.Element {
-  // Filter states
+  // Filter states - triggers server-side filtering via callback
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -136,26 +136,15 @@ export function QuestionManagementSection({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
-  // Data states
-  const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
-
-  // Sync localQuestions with questions prop when it changes (skip during bulk actions to prevent overwriting)
-  useEffect(() => {
-    if (bulkActionLoading) return; // Skip sync during bulk actions
-    setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
-  }, [questions]);
-
-  // Server-side pagination (from props) or local fallback
+  // Server-side pagination - always use from props
   const isServerPagination = pagination !== undefined;
   const serverPagination = pagination || { page: 1, limit: 10, total: 0 };
+  const [currentPage, setCurrentPage] = useState(serverPagination.page);
+  const [pageInput, setPageInput] = useState(String(serverPagination.page));
+  const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
 
-  // Use server pagination if available, otherwise use local
-  const [currentPage, setCurrentPage] = useState(isServerPagination ? serverPagination.page : 1);
-  const [pageInput, setPageInput] = useState(isServerPagination ? String(serverPagination.page) : '1');
-  const [questionsPerPage, setQuestionsPerPage] = useState(isServerPagination ? serverPagination.limit : 10);
-
-  // Total count - use server total or local count
-  const totalQuestions = isServerPagination ? serverPagination.total : localQuestions.length;
+  // Total questions from server pagination
+  const totalQuestions = serverPagination.total;
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -216,39 +205,31 @@ export function QuestionManagementSection({
       return chapters.map(c => c.name).sort((a, b) => a.localeCompare(b));
     }
     // Fallback to extracting from local questions (only accurate when not using server pagination)
-    return [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
-  }, [localQuestions, chapters]);
+    return [...new Set(questions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
+  }, [questions, chapters]);
 
-  // Calculate status counts - use server statusCounts prop if available, otherwise from local questions
+  // Use server statusCounts if available
   const computedStatusCounts = useMemo(() => {
     if (statusCounts) {
       return statusCounts;
     }
     return {
-      total: pagination?.total ?? localQuestions.length,
-      published: localQuestions.filter((q) => q.status === 'published').length,
-      draft: localQuestions.filter((q) => q.status === 'draft').length,
-      trash: localQuestions.filter((q) => q.status === 'trash').length,
+      total: pagination?.total ?? questions.length,
+      published: questions.filter((q) => q.status === 'published').length,
+      draft: questions.filter((q) => q.status === 'draft').length,
+      trash: questions.filter((q) => q.status === 'trash').length,
     };
-  }, [localQuestions, pagination, statusCounts]);
+  }, [questions, pagination, statusCounts]);
 
-  // Calculate chapter question counts - use server counts if available, otherwise from local questions
-  // IMPORTANT: When using server pagination, localQuestions only contains current page
-  // so we should trust server chapterCounts when provided
+  // Use server chapterCounts if available
   const computedChapterCounts = useMemo(() => {
-    // If server provides chapterCounts, always use it (most accurate)
     if (chapterCounts && Object.keys(chapterCounts).length > 0) {
       return chapterCounts;
     }
-    // Fallback to counting from local questions (only accurate when not using server pagination)
-    const counts: Record<string, number> = {};
-    localQuestions.forEach((q) => {
-      counts[q.chapter] = (counts[q.chapter] || 0) + 1;
-    });
-    return counts;
-  }, [localQuestions, chapterCounts]);
+    return {};
+  }, [chapterCounts]);
 
-  // Calculate level question counts - use server counts if available, otherwise from local questions
+  // Use server levelCounts if available
   const computedLevelCounts = useMemo(() => {
     if (levelCounts && levelCounts['easy'] !== undefined) {
       return { 
@@ -256,22 +237,11 @@ export function QuestionManagementSection({
         all: (levelCounts['easy'] || 0) + (levelCounts['medium'] || 0) + (levelCounts['hard'] || 0) + (levelCounts['expert'] || 0) + (levelCounts['extreme'] || 0) 
       };
     }
-    // Count from all questions, not filtered - just apply status filter
-    const questionsToCount = statusFilter === 'all'
-      ? localQuestions
-      : localQuestions.filter(q => q.status === statusFilter);
+    return { all: pagination?.total ?? questions.length };
+  }, [pagination, levelCounts, questions]);
 
-    const counts: Record<string, number> = {
-      all: pagination?.total ?? questionsToCount.length
-    };
-    questionsToCount.forEach((q) => {
-      counts[q.level] = (counts[q.level] || 0) + 1;
-    });
-    return counts;
-  }, [localQuestions, filterChapter, pagination, levelCounts]);
-
-  // Questions are already filtered from the backend - use directly
-  const filteredQuestions = localQuestions;
+  // Questions are already filtered from the backend - use directly from props
+  const filteredQuestions = questions;
 
   // Check if showing all questions (either explicitly or all fit on one page)
   const isShowingAll = questionsPerPage >= filteredQuestions.length;
@@ -401,7 +371,7 @@ export function QuestionManagementSection({
 
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const updatedQuestions = localQuestions
+      const updatedQuestions = questions
         .map((q) => {
           const questionId = String(q.id);
           if (selectedIds.includes(questionId)) {
@@ -424,7 +394,6 @@ export function QuestionManagementSection({
         })
         .filter(Boolean) as Question[];
 
-      setLocalQuestions(updatedQuestions);
       onQuestionsUpdate(subject.slug, updatedQuestions);
 
       console.log('Bulk action completed:', action, 'updatedQuestions count:', updatedQuestions.length, 'published:', updatedQuestions.filter(q => q.status === 'published').length, 'draft:', updatedQuestions.filter(q => q.status === 'draft').length, 'trash:', updatedQuestions.filter(q => q.status === 'trash').length);
@@ -443,7 +412,7 @@ export function QuestionManagementSection({
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, onQuestionsRefresh, statusFilter]
+    [selectedIds, questions, subject.slug, onQuestionsUpdate, onQuestionsRefresh, statusFilter]
   );
 
   // Reset form
@@ -555,9 +524,7 @@ export function QuestionManagementSection({
         chapter: questionForm.chapter.trim(),
       };
 
-      setLocalQuestions(prev =>
-        prev.map(q => q.id === selectedQuestion.id ? updatedQuestion : q)
-      );
+      onQuestionsUpdate(subject.slug, questions.map(q => q.id === selectedQuestion.id ? updatedQuestion : q));
     } catch (err) {
       console.error('Failed to update question:', err);
     }
@@ -573,16 +540,11 @@ export function QuestionManagementSection({
 
     try {
       if (selectedQuestion.status === 'trash') {
-        // Permanent delete if already in trash
         await deleteQuestion(selectedQuestion.id);
-        setLocalQuestions(prev => prev.filter(q => q.id !== selectedQuestion.id));
       } else {
-        // Move to trash otherwise
         await bulkActionQuestions([selectedQuestion.id], 'trash');
-        setLocalQuestions(prev =>
-          prev.map(q => q.id === selectedQuestion.id ? { ...q, status: 'trash' as ContentStatus } : q)
-        );
       }
+      onQuestionsRefresh(subject.slug);
     } catch (err) {
       console.error('Failed to delete question:', err);
     }
@@ -590,7 +552,7 @@ export function QuestionManagementSection({
     // Close modal and clear selection immediately
     setShowDeleteModal(false);
     setSelectedQuestion(null);
-  }, [selectedQuestion]);
+  }, [selectedQuestion, subject.slug, onQuestionsRefresh]);
 
   // Open edit modal with question data
   const openEditModal = useCallback((question: Question) => {
@@ -766,10 +728,8 @@ export function QuestionManagementSection({
 
     const newName = editingChapterName.trim();
 
-    // Update all questions with the old chapter name
-    setLocalQuestions(prev => prev.map(q =>
-      q.chapter === editingChapter ? { ...q, chapter: newName } : q
-    ));
+    // Refresh questions after chapter rename
+    onQuestionsRefresh(subject.slug);
 
     // If the filter was set to the old chapter, update it
     if (filterChapter === editingChapter) {
@@ -778,7 +738,7 @@ export function QuestionManagementSection({
 
     setEditingChapter(null);
     setEditingChapterName('');
-  }, [editingChapter, editingChapterName, filterChapter]);
+  }, [editingChapter, editingChapterName, filterChapter, subject.slug, onQuestionsRefresh]);
 
   // Handle add new chapter
   const handleAddNewChapter = useCallback(() => {
@@ -1030,7 +990,7 @@ export function QuestionManagementSection({
               }`}
             aria-pressed={filterChapter === 'all'}
           >
-            All Chapters <span className="opacity-70">({pagination?.total ?? localQuestions.length})</span>
+            All Chapters <span className="opacity-70">({pagination?.total ?? questions.length})</span>
           </button>
           {chaptersList.map((ch) => (
             <div key={ch} className="flex items-center gap-1">
