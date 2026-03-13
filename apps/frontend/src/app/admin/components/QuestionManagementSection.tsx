@@ -123,6 +123,13 @@ export function QuestionManagementSection({
   // Data states
   const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
 
+  // Sync localQuestions with questions prop when it changes
+  useEffect(() => {
+    if (questions && questions.length > 0) {
+      setLocalQuestions(questions);
+    }
+  }, [questions]);
+
   // Server-side pagination (from props) or local fallback
   const isServerPagination = pagination !== undefined;
   const serverPagination = pagination || { page: 1, limit: 10, total: 0 };

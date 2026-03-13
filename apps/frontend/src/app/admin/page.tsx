@@ -409,7 +409,7 @@ export default function AdminPage(): JSX.Element {
   const handleQuestionsRefresh = async (subjectSlug: string) => {
     const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
     try {
-      const result = await getQuestionsBySubject(subjectSlug, 'all', pagination.page, pagination.limit);
+      const result = await getQuestionsBySubject(subjectSlug, undefined, pagination.page, pagination.limit);
       setQuestionsForSubject(subjectSlug, result.data);
       setQuestionPagination(prev => ({
         ...prev,
