@@ -405,6 +405,42 @@ export default function AdminPage(): JSX.Element {
     }));
   };
 
+  // Handle questions refresh from server (after bulk actions)
+  const handleQuestionsRefresh = async (subjectSlug: string) => {
+    const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
+    try {
+      const result = await getQuestionsBySubject(subjectSlug, 'all', pagination.page, pagination.limit);
+      setQuestionsForSubject(subjectSlug, result.data);
+      setQuestionPagination(prev => ({
+        ...prev,
+        [subjectSlug]: { ...pagination, total: result.total }
+      }));
+
+      // Also refresh status counts
+      const statusCounts = await getStatusCountsBySubject(subjectSlug);
+      setSubjectStatusCounts(prev => ({
+        ...prev,
+        [subjectSlug]: statusCounts
+      }));
+
+      // Also refresh chapter counts
+      const chapterCounts = await getChapterCountsBySubject(subjectSlug);
+      setSubjectChapterCounts(prev => ({
+        ...prev,
+        [subjectSlug]: chapterCounts
+      }));
+
+      // Also refresh level counts
+      const levelCounts = await getLevelCountsBySubject(subjectSlug);
+      setSubjectLevelCounts(prev => ({
+        ...prev,
+        [subjectSlug]: levelCounts
+      }));
+    } catch (err) {
+      console.error('Failed to refresh questions:', err);
+    }
+  };
+
   // Handle questions import
   const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
     // Refresh subjects list to ensure we have the latest (in case new subject was created)
@@ -1112,6 +1148,7 @@ export default function AdminPage(): JSX.Element {
               onEditSubject={handleEditSubject}
               onDeleteSubject={handleDeleteSubject}
               onPageChange={handleQuestionPageChange}
+              onQuestionsRefresh={handleQuestionsRefresh}
             />
           )}
           {activeSection === 'jokes' && (

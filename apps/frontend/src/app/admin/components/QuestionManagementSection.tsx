@@ -59,6 +59,8 @@ interface QuestionManagementSectionProps {
   onDeleteSubject: (subjectId: string) => void;
   /** Callback when page changes (server-side pagination) */
   onPageChange?: (subjectSlug: string, page: number, limit: number) => void;
+  /** Callback to refresh questions from server (after bulk actions) */
+  onQuestionsRefresh?: (subjectSlug: string) => void | Promise<void>;
 }
 
 /**
@@ -106,6 +108,7 @@ export function QuestionManagementSection({
   onEditSubject,
   onDeleteSubject,
   onPageChange,
+  onQuestionsRefresh,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states
   const [filterLevel, setFilterLevel] = useState<string>('all');
@@ -385,7 +388,7 @@ export function QuestionManagementSection({
       const idsToUpdate = selectedIds.filter(id => id && !id.startsWith('local-'));
       const hasValidIds = idsToUpdate.length > 0;
 
-      if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete')) {
+      if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete' || action === 'restore')) {
         try {
           await bulkActionQuestions(idsToUpdate, action);
         } catch (err) {
@@ -420,10 +423,15 @@ export function QuestionManagementSection({
       setLocalQuestions(updatedQuestions);
       onQuestionsUpdate(subject.slug, updatedQuestions);
 
+      // Refresh from server to get updated pagination counts
+      if (onQuestionsRefresh) {
+        await onQuestionsRefresh(subject.slug);
+      }
+
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate]
+    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, onQuestionsRefresh]
   );
 
   // Reset form
