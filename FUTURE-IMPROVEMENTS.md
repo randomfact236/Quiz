@@ -4,6 +4,29 @@
 
 ---
 
+## 📋 Global Features (Cross-cutting features)
+
+### Browser History Navigation ✅ DONE
+- [x] URL params for quiz flow (`?subject=animals&chapter=Mammals`)
+- [x] Browser back/forward button support
+- [x] Shareable/bookmarkable URLs
+- [ ] SessionStorage for quiz progress (mid-quiz refresh resume)
+- [ ] Timer persistence on refresh
+- [ ] Results page URL preservation
+
+### Authentication
+- [ ] User Registration
+  - Allow users to sign up
+  - Email verification
+- [ ] Password Reset
+  - Forgot password flow
+  - Reset via email
+- [ ] User Roles
+  - More granular role-based access control
+  - Content creator vs admin vs viewer
+
+---
+
 ## 📋 Quiz (All quiz-related improvements)
 
 ### High Priority
@@ -62,22 +85,6 @@
 - [ ] **Export functionality**
   - Export questions to CSV
   - Export with different formats
-
----
-
-## 📋 User Management
-
-- [ ] **User Registration**
-  - Allow users to sign up
-  - Email verification
-
-- [ ] **Password Reset**
-  - Forgot password flow
-  - Reset via email
-
-- [ ] **User Roles**
-  - More granular role-based access control
-  - Content creator vs admin vs viewer
 
 ---
 
