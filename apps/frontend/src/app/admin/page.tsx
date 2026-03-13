@@ -410,7 +410,11 @@ export default function AdminPage(): JSX.Element {
     const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
     try {
       const result = await getQuestionsBySubject(subjectSlug, undefined, pagination.page, pagination.limit);
-      setQuestionsForSubject(subjectSlug, result.data);
+      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
+      setAllQuestions(prev => ({
+        ...prev,
+        [subjectSlug]: mappedQuestions
+      }));
       setQuestionPagination(prev => ({
         ...prev,
         [subjectSlug]: { ...pagination, total: result.total }
