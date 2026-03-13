@@ -133,7 +133,7 @@ export function QuestionManagementSection({
   // Server-side pagination (from props) or local fallback
   const isServerPagination = pagination !== undefined;
   const serverPagination = pagination || { page: 1, limit: 10, total: 0 };
-  
+
   // Use server pagination if available, otherwise use local
   const [currentPage, setCurrentPage] = useState(isServerPagination ? serverPagination.page : 1);
   const [pageInput, setPageInput] = useState(isServerPagination ? String(serverPagination.page) : '1');
@@ -235,12 +235,12 @@ export function QuestionManagementSection({
       return { ...levelCounts, all: levelCounts.easy + levelCounts.medium + levelCounts.hard + levelCounts.expert + levelCounts.extreme };
     }
     // Count from all questions, not filtered - just apply status filter
-    const questionsToCount = statusFilter === 'all' 
-      ? localQuestions 
+    const questionsToCount = statusFilter === 'all'
+      ? localQuestions
       : localQuestions.filter(q => q.status === statusFilter);
-    
-    const counts: Record<string, number> = { 
-      all: pagination?.total ?? questionsToCount.length 
+
+    const counts: Record<string, number> = {
+      all: pagination?.total ?? questionsToCount.length
     };
     questionsToCount.forEach((q) => {
       counts[q.level] = (counts[q.level] || 0) + 1;
@@ -260,14 +260,14 @@ export function QuestionManagementSection({
   }, [localQuestions, filterLevel, filterChapter, searchTerm, statusFilter]);
 
   // Pagination calculations - use server pagination if available
-  const totalPages = isServerPagination 
+  const totalPages = isServerPagination
     ? Math.ceil(serverPagination.total / questionsPerPage)
     : Math.ceil(filteredQuestions.length / questionsPerPage);
-  
+
   const startIndex = isServerPagination
     ? (currentPage - 1) * questionsPerPage
     : (currentPage - 1) * questionsPerPage;
-    
+
   // Always use filteredQuestions for display - filter first, then paginate
   const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
 
@@ -412,12 +412,9 @@ export function QuestionManagementSection({
 
       console.log('Bulk action completed:', action, 'updatedQuestions count:', updatedQuestions.length, 'published:', updatedQuestions.filter(q => q.status === 'published').length, 'draft:', updatedQuestions.filter(q => q.status === 'draft').length, 'trash:', updatedQuestions.filter(q => q.status === 'trash').length);
 
-      // If moving to trash/draft and no questions left with current filter, show all
-      if ((action === 'trash' || action === 'draft') && statusFilter !== 'all') {
-        const remainingCount = updatedQuestions.filter(q => q.status === statusFilter).length;
-        if (remainingCount === 0) {
-          setStatusFilter('all');
-        }
+      // Always switch to "All" after moving to trash/draft so user can see remaining questions
+      if (action === 'trash' || action === 'draft') {
+        setStatusFilter('all');
       }
 
       setSelectedIds([]);
