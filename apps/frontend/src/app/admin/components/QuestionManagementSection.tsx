@@ -430,15 +430,10 @@ export function QuestionManagementSection({
       setLocalQuestions(updatedQuestions);
       onQuestionsUpdate(subject.slug, updatedQuestions);
 
-      // Refresh from server to get updated pagination counts
-      if (onQuestionsRefresh) {
-        await onQuestionsRefresh(subject.slug);
-      }
-
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, onQuestionsRefresh]
+    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate]
   );
 
   // Reset form
