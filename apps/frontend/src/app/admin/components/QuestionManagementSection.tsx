@@ -395,7 +395,9 @@ export function QuestionManagementSection({
 
       if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete' || action === 'restore')) {
         try {
-          await bulkActionQuestions(idsToUpdate, action);
+          // Restore action should publish the questions
+          const apiAction = action === 'restore' ? 'publish' : action;
+          await bulkActionQuestions(idsToUpdate, apiAction);
         } catch (err) {
           console.error('Bulk action failed:', err);
         }
