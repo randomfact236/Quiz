@@ -102,7 +102,6 @@ export function QuestionManagementSection({
   levelCounts,
   allSubjects,
   onSubjectSelect,
-  onAddSubject,
   onAddChapter,
   onQuestionsImport,
   onQuestionsUpdate,
@@ -141,7 +140,7 @@ export function QuestionManagementSection({
   const [questionsPerPage, setQuestionsPerPage] = useState(isServerPagination ? serverPagination.limit : 10);
 
   // Total count - use server total or local count
-  const totalQuestions = isServerPagination ? serverPagination.total : filteredQuestions.length;
+  const totalQuestions = isServerPagination ? serverPagination.total : localQuestions.length;
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -194,14 +193,14 @@ export function QuestionManagementSection({
   const [editingChapter, setEditingChapter] = useState<string | null>(null);
   const [editingChapterName, setEditingChapterName] = useState('');
 
-  // Track initial load to prevent saving questions on first render
-  const isInitialLoadRef = useRef(true);
-
   // Server-side pagination (from props) or local fallback
+  // IMPORTANT: When using server pagination, chapters prop should contain all chapters from DB
   const chaptersList = useMemo(() => {
+    // Prefer server-provided chapters (contains all chapters from DB)
     if (chapters && chapters.length > 0) {
       return chapters.map(c => c.name).sort((a, b) => a.localeCompare(b));
     }
+    // Fallback to extracting from local questions (only accurate when not using server pagination)
     return [...new Set(localQuestions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
   }, [localQuestions, chapters]);
 
@@ -219,10 +218,14 @@ export function QuestionManagementSection({
   }, [localQuestions, pagination, statusCounts]);
 
   // Calculate chapter question counts - use server counts if available, otherwise from local questions
+  // IMPORTANT: When using server pagination, localQuestions only contains current page
+  // so we should trust server chapterCounts when provided
   const computedChapterCounts = useMemo(() => {
-    if (chapterCounts) {
+    // If server provides chapterCounts, always use it (most accurate)
+    if (chapterCounts && Object.keys(chapterCounts).length > 0) {
       return chapterCounts;
     }
+    // Fallback to counting from local questions (only accurate when not using server pagination)
     const counts: Record<string, number> = {};
     localQuestions.forEach((q) => {
       counts[q.chapter] = (counts[q.chapter] || 0) + 1;
@@ -232,8 +235,11 @@ export function QuestionManagementSection({
 
   // Calculate level question counts - use server counts if available, otherwise from local questions
   const computedLevelCounts = useMemo(() => {
-    if (levelCounts) {
-      return { ...levelCounts, all: levelCounts.easy + levelCounts.medium + levelCounts.hard + levelCounts.expert + levelCounts.extreme };
+    if (levelCounts && levelCounts['easy'] !== undefined) {
+      return { 
+        ...levelCounts, 
+        all: (levelCounts['easy'] || 0) + (levelCounts['medium'] || 0) + (levelCounts['hard'] || 0) + (levelCounts['expert'] || 0) + (levelCounts['extreme'] || 0) 
+      };
     }
     // Count from all questions, not filtered - just apply status filter
     const questionsToCount = statusFilter === 'all'
@@ -421,10 +427,16 @@ export function QuestionManagementSection({
         setStatusFilter('all');
       }
 
+      // Refresh from server to get updated counts (status, chapter, level)
+      // This fixes the issue where counts don't update after bulk action
+      if (onQuestionsRefresh) {
+        onQuestionsRefresh(subject.slug);
+      }
+
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, statusFilter]
+    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, onQuestionsRefresh, statusFilter]
   );
 
   // Reset form
@@ -468,7 +480,7 @@ export function QuestionManagementSection({
         correctAnswer: questionForm.correctAnswer,
         level: questionForm.level,
         chapterId,
-        status: 'draft',
+        status: 'published',
       });
 
       const newQuestion: Question = {
@@ -481,7 +493,7 @@ export function QuestionManagementSection({
         correctAnswer: created.correctAnswer,
         level: created.level,
         chapter: questionForm.chapter.trim(),
-        status: 'draft',
+        status: 'published',
       };
 
       onQuestionsImport(subject.slug, [newQuestion]);
