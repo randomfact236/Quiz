@@ -418,7 +418,7 @@ export function QuestionManagementSection({
               case 'delete':
                 return null;
               case 'restore':
-                return { ...q, status: 'draft' as ContentStatus };
+                return { ...q, status: 'published' as ContentStatus };
               default:
                 return q;
             }
