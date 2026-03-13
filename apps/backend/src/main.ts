@@ -95,7 +95,7 @@ async function startServer(app: INestApplication, port: number): Promise<void> {
   const logger = new Logger('Bootstrap');
   const configService = app.get(ConfigService);
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 
   // Console box padding constant for consistent alignment
   const BOX_PADDING_WIDTH = 43;
