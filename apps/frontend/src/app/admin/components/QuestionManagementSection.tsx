@@ -286,7 +286,7 @@ export function QuestionManagementSection({
     : (currentPage - 1) * questionsPerPage;
     
   const paginatedQuestions = isServerPagination
-    ? questions  // Server pagination: use questions prop directly (already paginated)
+    ? localQuestions.slice(startIndex, startIndex + questionsPerPage)  // Use localQuestions for consistency
     : useMemo(  // Client pagination: slice the filtered questions
         () => filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
         [filteredQuestions, startIndex, questionsPerPage]
