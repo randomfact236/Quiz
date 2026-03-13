@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://quiz-backend:3012/api
+      NEXT_PUBLIC_API_URL: http://quiz-backend:3012/api/v1
     ports:
       - "3010:3010"
     depends_on:
