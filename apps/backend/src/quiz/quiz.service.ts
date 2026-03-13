@@ -177,8 +177,13 @@ export class QuizService {
 
   async findAllQuestions(
     pagination: PaginationDto,
-    status?: ContentStatus,
-    subjectSlug?: string,
+    filters: {
+      status?: ContentStatus;
+      level?: string;
+      chapter?: string;
+      search?: string;
+      subjectSlug?: string;
+    },
   ): Promise<{ data: Question[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -187,12 +192,24 @@ export class QuizService {
       .leftJoinAndSelect('question.chapter', 'chapter')
       .leftJoinAndSelect('chapter.subject', 'subject');
 
-    if (status) {
-      query.andWhere('question.status = :status', { status });
+    if (filters.status) {
+      query.andWhere('question.status = :status', { status: filters.status });
     }
 
-    if (subjectSlug) {
-      query.andWhere('subject.slug = :subjectSlug', { subjectSlug });
+    if (filters.level) {
+      query.andWhere('question.level = :level', { level: filters.level });
+    }
+
+    if (filters.chapter) {
+      query.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+    }
+
+    if (filters.search) {
+      query.andWhere('question.question_text ILIKE :search', { search: `%${filters.search}%` });
+    }
+
+    if (filters.subjectSlug) {
+      query.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
     }
 
     const [data, total] = await query

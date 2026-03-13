@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   LayoutDashboard,
   Gamepad2,
@@ -131,9 +131,13 @@ export default function AdminPage(): JSX.Element {
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
   // Real question counts fetched from the backend (used for sidebar badges)
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
-  
+
   // Server-side pagination state for questions
   const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
+  
+  // Server-side filters for questions
+  const [questionFilters, setQuestionFilters] = useState<Record<string, { status?: string; level?: string; chapter?: string; search?: string }>>({});
+  
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
@@ -276,9 +280,22 @@ export default function AdminPage(): JSX.Element {
 
 
   // Fetch questions from API when subject is selected (server-side pagination)
+  // Use ref to track if we've attempted initial fetch for each subject to prevent double-fetching
+  const initialFetchAttempted = useRef<Record<string, boolean>>({});
+
   useEffect(() => {
     // Wait for hydration before fetching
     if (!isHydrated) return;
+
+    // Skip if we've already attempted initial fetch for this subject (prevent double-fetching)
+    // But still allow refetch if the questions array is empty (first load or never fetched)
+    if (initialFetchAttempted.current[activeSection]) {
+      const currentQuestions = allQuestions[activeSection];
+      if (currentQuestions && currentQuestions.length > 0) {
+        return;
+      }
+    }
+    initialFetchAttempted.current[activeSection] = true;
 
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
@@ -287,7 +304,8 @@ export default function AdminPage(): JSX.Element {
         try {
           const currentPage = questionPagination[activeSection]?.page || 1;
           const limit = questionPagination[activeSection]?.limit || 10;
-          const result = await getQuestionsBySubject(activeSection, undefined, currentPage, limit);
+          const filters = questionFilters[activeSection] || {};
+          const result = await getQuestionsBySubject(activeSection, filters, currentPage, limit);
           const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
@@ -303,51 +321,51 @@ export default function AdminPage(): JSX.Element {
           }));
 
           // Also fetch chapters for this subject
-           try {
-             const subjectData = await getSubjectBySlug(activeSection);
-             if (subjectData?.chapters) {
-               const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
-               setQuizChapters(prev => ({
-                 ...prev,
-                 [activeSection]: chapterObjects
-               }));
-             }
-           } catch (chaptersErr) {
-             console.error('Failed to fetch chapters:', chaptersErr);
-           }
+          try {
+            const subjectData = await getSubjectBySlug(activeSection);
+            if (subjectData?.chapters) {
+              const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
+              setQuizChapters(prev => ({
+                ...prev,
+                [activeSection]: chapterObjects
+              }));
+            }
+          } catch (chaptersErr) {
+            console.error('Failed to fetch chapters:', chaptersErr);
+          }
 
-           // Also fetch status counts for this subject
-           try {
-             const statusCounts = await getStatusCountsBySubject(activeSection);
-             setSubjectStatusCounts(prev => ({
-               ...prev,
-               [activeSection]: statusCounts
-             }));
-           } catch (statusErr) {
-             console.error('Failed to fetch status counts:', statusErr);
-           }
+          // Also fetch status counts for this subject
+          try {
+            const statusCounts = await getStatusCountsBySubject(activeSection);
+            setSubjectStatusCounts(prev => ({
+              ...prev,
+              [activeSection]: statusCounts
+            }));
+          } catch (statusErr) {
+            console.error('Failed to fetch status counts:', statusErr);
+          }
 
-           // Also fetch chapter counts for this subject
-           try {
-             const chapterCounts = await getChapterCountsBySubject(activeSection);
-             setSubjectChapterCounts(prev => ({
-               ...prev,
-               [activeSection]: chapterCounts
-             }));
-           } catch (chapterErr) {
-             console.error('Failed to fetch chapter counts:', chapterErr);
-           }
+          // Also fetch chapter counts for this subject
+          try {
+            const chapterCounts = await getChapterCountsBySubject(activeSection);
+            setSubjectChapterCounts(prev => ({
+              ...prev,
+              [activeSection]: chapterCounts
+            }));
+          } catch (chapterErr) {
+            console.error('Failed to fetch chapter counts:', chapterErr);
+          }
 
-           // Also fetch level counts for this subject
-           try {
-             const levelCounts = await getLevelCountsBySubject(activeSection);
-             setSubjectLevelCounts(prev => ({
-               ...prev,
-               [activeSection]: levelCounts
-             }));
-           } catch (levelErr) {
-             console.error('Failed to fetch level counts:', levelErr);
-           }
+          // Also fetch level counts for this subject
+          try {
+            const levelCounts = await getLevelCountsBySubject(activeSection);
+            setSubjectLevelCounts(prev => ({
+              ...prev,
+              [activeSection]: levelCounts
+            }));
+          } catch (levelErr) {
+            console.error('Failed to fetch level counts:', levelErr);
+          }
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
         }
@@ -355,7 +373,7 @@ export default function AdminPage(): JSX.Element {
 
       fetchQuestions();
     }
-  }, [activeSection, subjects, questionPagination, isHydrated]);
+  }, [activeSection, subjects, questionPagination, questionFilters, isHydrated]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -402,17 +420,38 @@ export default function AdminPage(): JSX.Element {
 
   // Handle question page change (server-side pagination)
   const handleQuestionPageChange = (subjectSlug: string, newPage: number, newLimit: number) => {
+    setQuestionPagination(prev => {
+      const existingPagination = prev[subjectSlug];
+      return {
+        ...prev,
+        [subjectSlug]: { 
+          page: newPage, 
+          limit: newLimit,
+          total: existingPagination?.total ?? 0
+        }
+      };
+    });
+  };
+
+  // Handle question filter change (server-side filtering)
+  const handleQuestionFilterChange = (subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
+    setQuestionFilters(prev => ({
+      ...prev,
+      [subjectSlug]: filters
+    }));
+    // Reset to page 1 when filters change
     setQuestionPagination(prev => ({
       ...prev,
-      [subjectSlug]: { ...prev[subjectSlug], page: newPage, limit: newLimit }
+      [subjectSlug]: { ...prev[subjectSlug], page: 1 }
     }));
   };
 
   // Handle questions refresh from server (after bulk actions)
   const handleQuestionsRefresh = async (subjectSlug: string) => {
     const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
+    const filters = questionFilters[subjectSlug] || {};
     try {
-      const result = await getQuestionsBySubject(subjectSlug, undefined, pagination.page, pagination.limit);
+      const result = await getQuestionsBySubject(subjectSlug, filters, pagination.page, pagination.limit);
       const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
       setAllQuestions(prev => ({
         ...prev,
@@ -1155,6 +1194,7 @@ export default function AdminPage(): JSX.Element {
               onEditSubject={handleEditSubject}
               onDeleteSubject={handleDeleteSubject}
               onPageChange={handleQuestionPageChange}
+              onFilterChange={handleQuestionFilterChange}
               onQuestionsRefresh={handleQuestionsRefresh}
             />
           )}

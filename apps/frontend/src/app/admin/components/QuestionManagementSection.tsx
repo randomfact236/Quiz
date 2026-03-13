@@ -59,6 +59,8 @@ interface QuestionManagementSectionProps {
   onDeleteSubject: (subjectId: string) => void;
   /** Callback when page changes (server-side pagination) */
   onPageChange?: (subjectSlug: string, page: number, limit: number) => void;
+  /** Callback when filters change (server-side filtering) */
+  onFilterChange?: (subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => void;
   /** Callback to refresh questions from server (after bulk actions) */
   onQuestionsRefresh?: (subjectSlug: string) => void | Promise<void>;
 }
@@ -109,6 +111,7 @@ export function QuestionManagementSection({
   onEditSubject,
   onDeleteSubject,
   onPageChange,
+  onFilterChange,
   onQuestionsRefresh,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states
@@ -116,6 +119,18 @@ export function QuestionManagementSection({
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+
+  // Trigger API call when filters change (server-side filtering)
+  useEffect(() => {
+    if (onFilterChange) {
+      const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+      if (statusFilter !== 'all') filters.status = statusFilter;
+      if (filterLevel !== 'all') filters.level = filterLevel;
+      if (filterChapter !== 'all') filters.chapter = filterChapter;
+      if (searchTerm) filters.search = searchTerm;
+      onFilterChange(subject.slug, filters);
+    }
+  }, [statusFilter, filterLevel, filterChapter, searchTerm, subject.slug, onFilterChange]);
 
   // Selection states
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -255,16 +270,8 @@ export function QuestionManagementSection({
     return counts;
   }, [localQuestions, filterChapter, pagination, levelCounts]);
 
-  // Filter questions - memoized
-  const filteredQuestions = useMemo(() => {
-    return localQuestions.filter((q) => {
-      const matchesLevel = filterLevel === 'all' || q.level === filterLevel;
-      const matchesChapter = filterChapter === 'all' || q.chapter === filterChapter;
-      const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || q.status === statusFilter;
-      return matchesLevel && matchesChapter && matchesSearch && matchesStatus;
-    });
-  }, [localQuestions, filterLevel, filterChapter, searchTerm, statusFilter]);
+  // Questions are already filtered from the backend - use directly
+  const filteredQuestions = localQuestions;
 
   // Check if showing all questions (either explicitly or all fit on one page)
   const isShowingAll = questionsPerPage >= filteredQuestions.length;

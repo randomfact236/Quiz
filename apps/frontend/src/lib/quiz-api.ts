@@ -186,15 +186,31 @@ export async function getMixedQuestions(count: number = 50): Promise<QuizQuestio
     return response.data;
 }
 
+export interface QuestionFilters {
+  status?: string;
+  level?: string;
+  chapter?: string;
+  search?: string;
+}
+
 export async function getQuestionsBySubject(
     subjectSlug: string,
-    status?: string,
+    filters: QuestionFilters = {},
     page: number = 1,
     limit: number = 10
 ): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
     let url = `/quiz/subjects/${subjectSlug}/questions?page=${page}&limit=${limit}`;
-    if (status) {
-        url += `&status=${status}`;
+    if (filters.status) {
+        url += `&status=${filters.status}`;
+    }
+    if (filters.level) {
+        url += `&level=${filters.level}`;
+    }
+    if (filters.chapter) {
+        url += `&chapter=${encodeURIComponent(filters.chapter)}`;
+    }
+    if (filters.search) {
+        url += `&search=${encodeURIComponent(filters.search)}`;
     }
     const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
     return {

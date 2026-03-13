@@ -74,16 +74,20 @@ export class QuizController {
   }
 
   @Get('subjects/:slug/questions')
-  @ApiOperation({ summary: 'Get questions by subject slug' })
+  @ApiOperation({ summary: 'Get questions by subject slug with filters' })
   @ApiParam({ name: 'slug', example: 'science' })
   async getQuestionsBySubjectSlug(
     @Param('slug') slug: string,
     @Query('status') status?: string,
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('search') search?: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ): Promise<{ data: Question[]; total: number }> {
-    const pagination = { page: page || 1, limit: limit || 10000 };
-    return this.quizService.findAllQuestions(pagination, status as any, slug);
+    const pagination = { page: page || 1, limit: limit || 10 };
+    const filters = { status, level, chapter, search, subjectSlug: slug };
+    return this.quizService.findAllQuestions(pagination, filters);
   }
 
   @Post('subjects')
