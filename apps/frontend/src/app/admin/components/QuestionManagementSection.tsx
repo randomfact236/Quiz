@@ -1807,16 +1807,23 @@ export function QuestionManagementSection({
         <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
           <div className="flex items-center gap-4">
             <p className="text-sm text-gray-500">
-              Showing <span className="font-medium">{Math.min(startIndex + 1, totalQuestions)}</span> - {' '}
-              <span className="font-medium">{Math.min(startIndex + questionsPerPage, totalQuestions)}</span> of{' '}
-              <span className="font-medium">{totalQuestions}</span> questions
+              {questionsPerPage >= filteredQuestions.length ? (
+                <>Showing all <span className="font-medium">{totalQuestions}</span> questions</>
+              ) : (
+                <>
+                  Showing <span className="font-medium">{Math.min(startIndex + 1, totalQuestions)}</span> -{' '}
+                  <span className="font-medium">{Math.min(startIndex + questionsPerPage, totalQuestions)}</span> of{' '}
+                  <span className="font-medium">{totalQuestions}</span> questions
+                </>
+              )}
             </p>
             <div className="flex items-center gap-2">
               <label className="text-sm text-gray-600">Show:</label>
               <select
                 value={questionsPerPage}
                 onChange={(e) => {
-                  const newLimit = Number(e.target.value);
+                  const value = e.target.value;
+                  const newLimit = value === 'all' ? filteredQuestions.length : Number(value);
                   setQuestionsPerPage(newLimit);
                   setCurrentPage(1);
                   if (isServerPagination && onPageChange) {
@@ -1829,6 +1836,7 @@ export function QuestionManagementSection({
                 <option value={20}>20</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
+                <option value="all">All</option>
               </select>
             </div>
           </div>
