@@ -115,7 +115,7 @@ export function QuestionManagementSection({
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   // Selection states
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -128,7 +128,7 @@ export function QuestionManagementSection({
   useEffect(() => {
     if (bulkActionLoading) return; // Skip sync during bulk actions
     setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
-  }, [questions, bulkActionLoading]);
+  }, [questions]);
 
   // Server-side pagination (from props) or local fallback
   const isServerPagination = pagination !== undefined;
