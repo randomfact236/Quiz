@@ -125,10 +125,11 @@ export function QuestionManagementSection({
   // Data states
   const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
 
-  // Sync localQuestions with questions prop when it changes (only on initial mount or when questions prop fundamentally changes)
+  // Sync localQuestions with questions prop when it changes (skip during bulk actions to prevent overwriting)
   useEffect(() => {
+    if (bulkActionLoading) return; // Skip sync during bulk actions
     setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
-  }, [questions]);
+  }, [questions, bulkActionLoading]);
 
   // Server-side pagination (from props) or local fallback
   const isServerPagination = pagination !== undefined;
