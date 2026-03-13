@@ -259,6 +259,9 @@ export function QuestionManagementSection({
     });
   }, [localQuestions, filterLevel, filterChapter, searchTerm, statusFilter]);
 
+  // Check if showing all questions (either explicitly or all fit on one page)
+  const isShowingAll = questionsPerPage >= filteredQuestions.length;
+
   // Pagination calculations - use server pagination if available
   const totalPages = isServerPagination
     ? Math.ceil(serverPagination.total / questionsPerPage)
@@ -267,7 +270,7 @@ export function QuestionManagementSection({
   const startIndex = isServerPagination
     ? (currentPage - 1) * questionsPerPage
     : (currentPage - 1) * questionsPerPage;
-
+    
   // Always use filteredQuestions for display - filter first, then paginate
   const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
 
@@ -1804,7 +1807,7 @@ export function QuestionManagementSection({
         <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3">
           <div className="flex items-center gap-4">
             <p className="text-sm text-gray-500">
-              {questionsPerPage >= filteredQuestions.length ? (
+              {isShowingAll ? (
                 <>Showing all <span className="font-medium">{totalQuestions}</span> questions</>
               ) : (
                 <>
@@ -1838,6 +1841,7 @@ export function QuestionManagementSection({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {!isShowingAll && (
             <button
               onClick={() => {
                 const newPage = Math.max(1, currentPage - 1);
@@ -1851,6 +1855,8 @@ export function QuestionManagementSection({
             >
               Previous
             </button>
+            )}
+            {!isShowingAll && (
             <span className="text-sm text-gray-600 flex items-center gap-1">
               Page
               <input
@@ -1863,6 +1869,8 @@ export function QuestionManagementSection({
               />
               of <span className="font-medium">{totalPages || 1}</span>
             </span>
+            )}
+            {!isShowingAll && (
             <button
               onClick={() => {
                 const newPage = Math.min(totalPages, currentPage + 1);
@@ -1876,6 +1884,7 @@ export function QuestionManagementSection({
             >
               Next
             </button>
+            )}
           </div>
         </div>
       </div>
