@@ -205,7 +205,7 @@ export class QuizService {
     }
 
     if (filters.search) {
-      query.andWhere('question.question_text ILIKE :search', { search: `%${filters.search}%` });
+      query.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
     }
 
     if (filters.subjectSlug) {
