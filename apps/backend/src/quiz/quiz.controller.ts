@@ -175,7 +175,9 @@ export class QuizController {
   async getAllQuestions(
     @Query() query: QuizQueryDto,
   ): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findAllQuestions(query, query.status as any, query.subject);
+    const pagination = { page: query.page || 1, limit: query.limit || 10 };
+    const filters = { status: query.status as any, subjectSlug: query.subject };
+    return this.quizService.findAllQuestions(pagination, filters);
   }
 
   @Get('questions/:chapterId')
