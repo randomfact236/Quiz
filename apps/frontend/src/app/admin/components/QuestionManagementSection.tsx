@@ -102,6 +102,8 @@ export function QuestionManagementSection({
   levelCounts,
   allSubjects,
   onSubjectSelect,
+  onAddSubject,
+  onAddChapter,
   onQuestionsImport,
   onQuestionsUpdate,
   onClearQuestions,
@@ -123,9 +125,9 @@ export function QuestionManagementSection({
   // Data states
   const [localQuestions, setLocalQuestions] = useState<Question[]>(questions);
 
-  // Sync localQuestions with questions prop when it changes
+  // Sync localQuestions with questions prop when it changes (only on initial mount or when questions prop fundamentally changes)
   useEffect(() => {
-    setLocalQuestions(questions);
+    setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
   }, [questions]);
 
   // Server-side pagination (from props) or local fallback
@@ -143,6 +145,8 @@ export function QuestionManagementSection({
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+  const [newChapterName, setNewChapterName] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showClearAllModal, setShowClearAllModal] = useState(false);
@@ -192,29 +196,7 @@ export function QuestionManagementSection({
   // Track initial load to prevent saving questions on first render
   const isInitialLoadRef = useRef(true);
 
-  // Sync local questions when props change (from parent/localStorage)
-  useEffect(() => {
-    setLocalQuestions(questions.map((q) => ({ ...q, status: q.status || 'published' })));
-    // Mark initial load as complete after questions are synced
-    isInitialLoadRef.current = false;
-  }, [questions]);
-
-  // Persist local questions changes back to parent
-  const prevLocalQuestionsRef = useRef(localQuestions);
-  useEffect(() => {
-    // Skip if this is the initial load - we don't want to save all questions on mount
-    if (isInitialLoadRef.current) {
-      return;
-    }
-    // Only update parent if localQuestions actually changed from previous render
-    const isDifferent = JSON.stringify(prevLocalQuestionsRef.current) !== JSON.stringify(localQuestions);
-    if (isDifferent) {
-      prevLocalQuestionsRef.current = localQuestions;
-      onQuestionsUpdate(subject.slug, localQuestions);
-    }
-  }, [localQuestions, subject.slug, onQuestionsUpdate]);
-
-  // Get unique chapters for this subject - use database chapters if available, otherwise extract from questions
+  // Server-side pagination (from props) or local fallback
   const chaptersList = useMemo(() => {
     if (chapters && chapters.length > 0) {
       return chapters.map(c => c.name).sort((a, b) => a.localeCompare(b));
@@ -252,9 +234,10 @@ export function QuestionManagementSection({
     if (levelCounts) {
       return { ...levelCounts, all: levelCounts.easy + levelCounts.medium + levelCounts.hard + levelCounts.expert + levelCounts.extreme };
     }
-    const questionsToCount = filterChapter === 'all' 
+    // Count from all questions, not filtered - just apply status filter
+    const questionsToCount = statusFilter === 'all' 
       ? localQuestions 
-      : localQuestions.filter(q => q.chapter === filterChapter);
+      : localQuestions.filter(q => q.status === statusFilter);
     
     const counts: Record<string, number> = { 
       all: pagination?.total ?? questionsToCount.length 
@@ -285,12 +268,8 @@ export function QuestionManagementSection({
     ? (currentPage - 1) * questionsPerPage
     : (currentPage - 1) * questionsPerPage;
     
-  const paginatedQuestions = isServerPagination
-    ? localQuestions.slice(startIndex, startIndex + questionsPerPage)  // Use localQuestions for consistency
-    : useMemo(  // Client pagination: slice the filtered questions
-        () => filteredQuestions.slice(startIndex, startIndex + questionsPerPage),
-        [filteredQuestions, startIndex, questionsPerPage]
-      );
+  // Always use filteredQuestions for display - filter first, then paginate
+  const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -407,7 +386,8 @@ export function QuestionManagementSection({
 
       const updatedQuestions = localQuestions
         .map((q) => {
-          if (selectedIds.includes(String(q.id))) {
+          const questionId = String(q.id);
+          if (selectedIds.includes(questionId)) {
             switch (action) {
               case 'publish':
                 return { ...q, status: 'published' as ContentStatus };
@@ -430,10 +410,20 @@ export function QuestionManagementSection({
       setLocalQuestions(updatedQuestions);
       onQuestionsUpdate(subject.slug, updatedQuestions);
 
+      console.log('Bulk action completed:', action, 'updatedQuestions count:', updatedQuestions.length, 'published:', updatedQuestions.filter(q => q.status === 'published').length, 'draft:', updatedQuestions.filter(q => q.status === 'draft').length, 'trash:', updatedQuestions.filter(q => q.status === 'trash').length);
+
+      // If moving to trash/draft and no questions left with current filter, show all
+      if ((action === 'trash' || action === 'draft') && statusFilter !== 'all') {
+        const remainingCount = updatedQuestions.filter(q => q.status === statusFilter).length;
+        if (remainingCount === 0) {
+          setStatusFilter('all');
+        }
+      }
+
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate]
+    [selectedIds, localQuestions, subject.slug, onQuestionsUpdate, statusFilter]
   );
 
   // Reset form
@@ -770,6 +760,14 @@ export function QuestionManagementSection({
     setEditingChapterName('');
   }, [editingChapter, editingChapterName, filterChapter]);
 
+  // Handle add new chapter
+  const handleAddNewChapter = useCallback(() => {
+    if (!newChapterName.trim()) return;
+    onAddChapter(subject.slug, newChapterName.trim());
+    setNewChapterName('');
+    setShowAddChapterModal(false);
+  }, [newChapterName, subject.slug, onAddChapter]);
+
   // Handle outside click for export dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -1068,7 +1066,7 @@ export function QuestionManagementSection({
             </div>
           ))}
           <button
-            onClick={() => { }}
+            onClick={() => setShowAddChapterModal(true)}
             className="px-3 py-1.5 rounded-lg text-sm font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center gap-1"
           >
             <span>+</span> Add Chapter
@@ -1660,6 +1658,47 @@ export function QuestionManagementSection({
                   }`}
               >
                 {selectedQuestion.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Chapter Modal */}
+      {showAddChapterModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="add-chapter-title">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+            <h3 id="add-chapter-title" className="text-xl font-bold mb-4 text-purple-600">
+              📚 Add New Chapter
+            </h3>
+            <p className="text-gray-600 dark:text-secondary-300 mb-4">
+              Adding a new chapter to <strong>{subject.name}</strong>
+            </p>
+            <input
+              type="text"
+              value={newChapterName}
+              onChange={(e) => setNewChapterName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAddNewChapter();
+                if (e.key === 'Escape') setShowAddChapterModal(false);
+              }}
+              placeholder="Enter chapter name"
+              className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 mb-4 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:bg-secondary-700 dark:text-white"
+              autoFocus
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAddChapterModal(false)}
+                className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddNewChapter}
+                disabled={!newChapterName.trim()}
+                className="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Chapter
               </button>
             </div>
           </div>
