@@ -277,6 +277,9 @@ export default function AdminPage(): JSX.Element {
 
   // Fetch questions from API when subject is selected (server-side pagination)
   useEffect(() => {
+    // Wait for hydration before fetching
+    if (!isHydrated) return;
+
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
     if (isSubjectSection && activeSection !== 'dashboard') {
@@ -352,7 +355,7 @@ export default function AdminPage(): JSX.Element {
 
       fetchQuestions();
     }
-  }, [activeSection, subjects, questionPagination]);
+  }, [activeSection, subjects, questionPagination, isHydrated]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
