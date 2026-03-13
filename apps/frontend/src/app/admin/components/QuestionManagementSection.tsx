@@ -125,9 +125,7 @@ export function QuestionManagementSection({
 
   // Sync localQuestions with questions prop when it changes
   useEffect(() => {
-    if (questions && questions.length > 0) {
-      setLocalQuestions(questions);
-    }
+    setLocalQuestions(questions);
   }, [questions]);
 
   // Server-side pagination (from props) or local fallback
