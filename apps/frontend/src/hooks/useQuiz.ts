@@ -254,7 +254,6 @@ export function useQuiz(
     sessionId: '',
   });
 
-  const [totalAvailable, setTotalAvailable] = useState(0);
   const [originalTotal, setOriginalTotal] = useState(0);
 
   // Load questions on mount
@@ -262,7 +261,6 @@ export function useQuiz(
     const load = async () => {
       const questions = await loadQuestions(subject, chapter, level);
       const availableCount = await countAvailableQuestions(subject, chapter, level, []);
-      setTotalAvailable(availableCount);
       setOriginalTotal(availableCount);
 
       if (questions.length === 0) {
@@ -455,9 +453,6 @@ export function useQuiz(
         questions: newQuestions,
       };
     });
-
-    const newAvailableCount = await countAvailableQuestions(subject, chapter, level, [...currentQuestionIds, ...additionalQuestions.map(q => q.id)]);
-    setTotalAvailable(newAvailableCount);
   }, [subject, chapter, level, state.questions]);
 
   // Pause quiz

@@ -162,7 +162,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
 
   // Derive question type from level: extreme = open-ended, others = mcq
   const isOpenEnded = question.level === 'extreme';
-  const correctLetter = (question as any).correctLetter || null;
+  const correctLetter = question.correctLetter || null;
   
   const isCorrect = isOpenEnded
     ? selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toLowerCase().trim()
