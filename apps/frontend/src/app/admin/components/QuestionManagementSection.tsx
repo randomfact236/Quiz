@@ -1054,7 +1054,7 @@ export function QuestionManagementSection({
                   </button>
                   <button
                     onClick={() => handleStartEditChapter(ch)}
-                    className="text-gray-400 hover:text-gray-600 px-1 opacity-0 hover:opacity-100 transition-opacity"
+                    className="text-gray-400 hover:text-blue-600 px-1 transition-colors"
                     title="Edit chapter name"
                   >
                     <Pencil className="w-3 h-3" />
@@ -1067,7 +1067,7 @@ export function QuestionManagementSection({
                         setShowDeleteChapterModal(true);
                       }
                     }}
-                    className="text-gray-400 hover:text-red-600 px-1 opacity-0 hover:opacity-100 transition-opacity"
+                    className="text-gray-400 hover:text-red-600 px-1 transition-colors"
                     title="Delete chapter"
                   >
                     <Trash2 className="w-3 h-3" />
