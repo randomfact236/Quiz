@@ -264,6 +264,13 @@ export function QuestionManagementSection({
     setPageInput('1');
   }, [filterLevel, filterChapter, searchTerm, statusFilter]);
 
+  // Sync local state with server pagination when it changes
+  useEffect(() => {
+    setCurrentPage(serverPagination.page);
+    setPageInput(String(serverPagination.page));
+    setQuestionsPerPage(serverPagination.limit);
+  }, [serverPagination.page, serverPagination.limit]);
+
   // Update page input when current page changes
   useEffect(() => {
     setPageInput(String(currentPage));

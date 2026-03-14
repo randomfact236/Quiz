@@ -237,16 +237,21 @@ export default function AdminPage(): JSX.Element {
       const filters = questionFilters[activeSection] || {};
       const filtersKey = JSON.stringify(filters);
       
+      console.log(`[FetchEffect] Checking fetch for ${activeSection}, page ${currentPage}, limit ${limit}`);
+      console.log(`[FetchEffect] Last fetch:`, lastFetchRef.current);
+      
       // Skip if we already fetched with these exact params
       if (lastFetchRef.current?.section === activeSection &&
           lastFetchRef.current?.page === currentPage &&
           lastFetchRef.current?.limit === limit &&
           lastFetchRef.current?.filters === filtersKey) {
+        console.log(`[FetchEffect] Skipping fetch - already fetched with these params`);
         return;
       }
       
       // Update last fetch params
       lastFetchRef.current = { section: activeSection, page: currentPage, limit: limit, filters: filtersKey };
+      console.log(`[FetchEffect] Fetching questions for ${activeSection}, page ${currentPage}`);
 
       const fetchQuestions = async () => {
         try {
@@ -854,13 +859,33 @@ export default function AdminPage(): JSX.Element {
     }
 
     const remainingSubjects = allSubjects.filter(s => s.id !== subjectId);
-    setSubjects(remainingSubjects);
+    setLocalSubjects(remainingSubjects);
     setAllQuestions(prev => {
       const updated = { ...prev };
       delete updated[subjectSlug];
       return updated;
     });
     setQuestionCounts(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+    setQuizChapters(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+    setSubjectStatusCounts(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+    setSubjectChapterCounts(prev => {
+      const updated = { ...prev };
+      delete updated[subjectSlug];
+      return updated;
+    });
+    setSubjectLevelCounts(prev => {
       const updated = { ...prev };
       delete updated[subjectSlug];
       return updated;
