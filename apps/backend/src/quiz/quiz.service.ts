@@ -301,10 +301,26 @@ export class QuizService {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
     if (!chapter) { throw new NotFoundException('Chapter not found'); }
 
+    // Validate question type
+    const questionType = dto.questionType || 'mcq';
+    const correctLetter = dto.correctLetter || null;
+
+    if (questionType === 'mcq' && !correctLetter) {
+      throw new BadRequestException('MCQ questions require correctLetter (A/B/C/D)');
+    }
+    if (questionType === 'open_ended' && correctLetter) {
+      throw new BadRequestException('Open-ended questions must have correctLetter: null');
+    }
+    if (questionType === 'mcq' && (!dto.options || dto.options.length < 2)) {
+      throw new BadRequestException('MCQ requires at least 2 options');
+    }
+
     const question = this.questionRepo.create({
       question: dto.question,
       correctAnswer: dto.correctAnswer,
-      options: dto.options || [],
+      questionType,
+      correctLetter,
+      options: dto.questionType === 'open_ended' ? null : (dto.options || []),
       level: dto.level,
       explanation: dto.explanation,
       chapter,
@@ -374,15 +390,30 @@ export class QuizService {
           continue;
         }
 
+        // Validate question type
+        const questionType = q.questionType || 'mcq';
+        const correctLetter = q.correctLetter || null;
+
+        if (questionType === 'mcq' && !correctLetter) {
+          errors.push(`Row ${offset + i + 1}: MCQ requires correctLetter (A/B/C/D)`);
+          continue;
+        }
+        if (questionType === 'open_ended' && correctLetter) {
+          errors.push(`Row ${offset + i + 1}: Open-ended must have correctLetter: null`);
+          continue;
+        }
+
         const question = transactionalEntityManager.create(Question, {
           question: q.question,
           correctAnswer: q.correctAnswer,
-          options: q.options || [],
+          questionType: q.questionType || 'mcq',
+          correctLetter: q.correctLetter || null,
+          options: q.questionType === 'open_ended' ? null : (q.options || []),
           level: q.level,
           explanation: q.explanation,
           chapter,
           status: q.status || ContentStatus.PUBLISHED,
-          order: q.order || i, // Use CSV row index as order if not provided
+          order: q.order || i,
         });
         questions.push(question);
       }
@@ -407,8 +438,14 @@ export class QuizService {
     if (dto.correctAnswer !== undefined) {
       question.correctAnswer = dto.correctAnswer;
     }
+    if (dto.questionType !== undefined) {
+      question.questionType = dto.questionType;
+    }
+    if (dto.correctLetter !== undefined) {
+      question.correctLetter = dto.correctLetter || null;
+    }
     if (dto.options !== undefined) {
-      question.options = dto.options;
+      question.options = dto.questionType === 'open_ended' ? null : dto.options;
     }
     if (dto.level !== undefined) {
       // Validate level if provided

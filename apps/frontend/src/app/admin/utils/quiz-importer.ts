@@ -447,7 +447,9 @@ export async function importQuestionsFromCSV(
   type QuestionPayload = {
     question: string;
     correctAnswer: string;
-    options: string[];
+    correctLetter: string | null;
+    questionType: 'mcq' | 'open_ended';
+    options: string[] | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
     status: 'published';
@@ -473,12 +475,14 @@ export async function importQuestionsFromCSV(
     // TypeScript guarantee - chapterId is now defined
     const finalChapterId = chapterId;
 
-    // extreme: no options, correctAnswer is open text
+    // extreme: no options, correctAnswer is open text (open-ended type)
     if (row.level === 'extreme') {
       return {
         question: row.questionText,
         correctAnswer: row.correctAnswerRaw,
-        options: [],
+        correctLetter: null,
+        questionType: 'open_ended',
+        options: null,
         level: row.level,
         chapterId: finalChapterId,
         status: 'published',
@@ -502,7 +506,9 @@ export async function importQuestionsFromCSV(
     return {
       question: row.questionText,
       correctAnswer: correctAnswerText,
-      options,
+      correctLetter: correctLetter,
+      questionType: 'mcq',
+      options: options,
       level: row.level,
       chapterId: finalChapterId,
       status: 'published',

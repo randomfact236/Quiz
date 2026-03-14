@@ -77,6 +77,8 @@ interface QuestionFormState {
   optionC: string;
   optionD: string;
   correctAnswer: Question['correctAnswer'];
+  correctLetter: string | null;
+  questionType: 'mcq' | 'open_ended';
   level: Question['level'];
   chapter: string;
 }
@@ -195,6 +197,8 @@ export function QuestionManagementSection({
     optionC: '',
     optionD: '',
     correctAnswer: 'A',
+    correctLetter: 'A',
+    questionType: 'mcq',
     level: 'easy',
     chapter: '',
   });
@@ -442,6 +446,8 @@ export function QuestionManagementSection({
       optionC: '',
       optionD: '',
       correctAnswer: 'A',
+      correctLetter: 'A',
+      questionType: 'mcq',
       level: 'easy',
       chapter: '',
     });
@@ -465,13 +471,29 @@ export function QuestionManagementSection({
     }
 
     try {
+      // Determine if open-ended based on level
+      const isOpenEnded = questionForm.level === 'extreme';
+      const questionType: 'mcq' | 'open_ended' = isOpenEnded ? 'open_ended' : 'mcq';
+      
+      // Build options array (only for MCQ)
+      const options = isOpenEnded 
+        ? null 
+        : [questionForm.optionA.trim(), questionForm.optionB.trim(), questionForm.optionC.trim(), questionForm.optionD.trim()].filter(Boolean);
+      
+      // Determine correctLetter and correctAnswer
+      const correctLetter = isOpenEnded ? null : questionForm.correctAnswer;
+      const correctAnswer = isOpenEnded ? questionForm.correctAnswer : 
+        (questionForm.correctAnswer === 'A' ? questionForm.optionA.trim() :
+         questionForm.correctAnswer === 'B' ? questionForm.optionB.trim() :
+         questionForm.correctAnswer === 'C' ? questionForm.optionC.trim() :
+         questionForm.optionD.trim());
+
       const created = await createQuestion({
         question: questionForm.question.trim(),
-        optionA: questionForm.optionA.trim(),
-        optionB: questionForm.optionB.trim(),
-        optionC: questionForm.optionC.trim(),
-        optionD: questionForm.optionD.trim(),
-        correctAnswer: questionForm.correctAnswer,
+        correctAnswer,
+        correctLetter,
+        questionType,
+        options,
         level: questionForm.level,
         chapterId,
         status: 'published',
@@ -480,11 +502,13 @@ export function QuestionManagementSection({
       const newQuestion: Question = {
         id: created.id,
         question: created.question,
-        optionA: created.optionA,
-        optionB: created.optionB,
-        optionC: created.optionC,
-        optionD: created.optionD,
+        optionA: created.options?.[0] || '',
+        optionB: created.options?.[1] || '',
+        optionC: created.options?.[2] || '',
+        optionD: created.options?.[3] || '',
         correctAnswer: created.correctAnswer,
+        questionType: created.questionType,
+        correctLetter: created.correctLetter,
         level: created.level,
         chapter: questionForm.chapter.trim(),
         status: 'published',
@@ -519,13 +543,29 @@ export function QuestionManagementSection({
     }
 
     try {
+      // Determine if open-ended based on level
+      const isOpenEnded = questionForm.level === 'extreme';
+      const questionType: 'mcq' | 'open_ended' = isOpenEnded ? 'open_ended' : 'mcq';
+      
+      // Build options array (only for MCQ)
+      const options = isOpenEnded 
+        ? null 
+        : [questionForm.optionA.trim(), questionForm.optionB.trim(), questionForm.optionC.trim(), questionForm.optionD.trim()].filter(Boolean);
+      
+      // Determine correctLetter and correctAnswer
+      const correctLetter = isOpenEnded ? null : questionForm.correctAnswer;
+      const correctAnswer = isOpenEnded ? questionForm.correctAnswer : 
+        (questionForm.correctAnswer === 'A' ? questionForm.optionA.trim() :
+         questionForm.correctAnswer === 'B' ? questionForm.optionB.trim() :
+         questionForm.correctAnswer === 'C' ? questionForm.optionC.trim() :
+         questionForm.optionD.trim());
+
       await updateQuestion(selectedQuestion.id, {
         question: questionForm.question.trim(),
-        optionA: questionForm.optionA.trim(),
-        optionB: questionForm.optionB.trim(),
-        optionC: questionForm.optionC.trim(),
-        optionD: questionForm.optionD.trim(),
-        correctAnswer: questionForm.correctAnswer,
+        correctAnswer,
+        correctLetter,
+        questionType,
+        options,
         level: questionForm.level,
         chapterId,
       });
@@ -533,11 +573,13 @@ export function QuestionManagementSection({
       const updatedQuestion: Question = {
         ...selectedQuestion,
         question: questionForm.question.trim(),
-        optionA: questionForm.optionA.trim(),
-        optionB: questionForm.optionB.trim(),
-        optionC: questionForm.optionC.trim(),
-        optionD: questionForm.optionD.trim(),
-        correctAnswer: questionForm.correctAnswer,
+        optionA: options?.[0] || '',
+        optionB: options?.[1] || '',
+        optionC: options?.[2] || '',
+        optionD: options?.[3] || '',
+        correctAnswer,
+        questionType,
+        correctLetter,
         level: questionForm.level,
         chapter: questionForm.chapter.trim(),
       };
@@ -575,13 +617,16 @@ export function QuestionManagementSection({
   // Open edit modal with question data
   const openEditModal = useCallback((question: Question) => {
     setSelectedQuestion(question);
+    const q = question as any;
     setQuestionForm({
       question: question.question,
-      optionA: question.optionA,
-      optionB: question.optionB,
-      optionC: question.optionC,
-      optionD: question.optionD,
-      correctAnswer: question.correctAnswer,
+      optionA: q.optionA || question.optionA || '',
+      optionB: q.optionB || question.optionB || '',
+      optionC: q.optionC || question.optionC || '',
+      optionD: q.optionD || question.optionD || '',
+      correctAnswer: q.correctLetter || question.correctAnswer || 'A',
+      correctLetter: q.correctLetter || null,
+      questionType: q.questionType || 'mcq',
       level: question.level,
       chapter: question.chapter,
     });
@@ -1811,6 +1856,9 @@ export function QuestionManagementSection({
                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
                   Chapter
                 </th>
+                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-20">
+                  Type
+                </th>
                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-48">
                   Options
                 </th>
@@ -1828,7 +1876,7 @@ export function QuestionManagementSection({
             <tbody className="divide-y divide-gray-200">
               {filteredQuestions.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center">
+                  <td colSpan={9} className="px-4 py-12 text-center">
                     <div className="flex flex-col items-center">
                       <FileQuestion className="w-12 h-12 text-gray-300 mb-3" />
                       <p className="text-gray-500 font-medium">No questions found</p>
@@ -2027,6 +2075,15 @@ const QuestionRow = React.memo(function QuestionRow({
         </span>
       </td>
       <td className="px-3 py-3 align-top">
+        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+          (question as any).questionType === 'open_ended' 
+            ? 'bg-green-100 text-green-700' 
+            : 'bg-blue-100 text-blue-700'
+        }`}>
+          {(question as any).questionType === 'open_ended' ? 'Open' : 'MCQ'}
+        </span>
+      </td>
+      <td className="px-3 py-3 align-top">
         {question.level === 'extreme' ? (
           <div className="text-sm font-medium text-gray-500 italic">
             Open ended (no options)
@@ -2053,7 +2110,7 @@ const QuestionRow = React.memo(function QuestionRow({
         )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
-        {question.level === 'extreme' ? (
+        {question.level === 'extreme' || (question as any).questionType === 'open_ended' ? (
           <div className="text-xs">
             <span className="font-medium text-gray-700 block mb-1">Answer:</span>
             <span className="inline-flex items-center justify-center rounded bg-purple-100 px-2 py-1 font-semibold text-purple-700 max-w-[120px] truncate" title={question.correctAnswer}>
@@ -2062,7 +2119,7 @@ const QuestionRow = React.memo(function QuestionRow({
           </div>
         ) : (
           <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
-            {question.correctAnswer}
+            {(question as any).correctLetter || question.correctAnswer}
           </span>
         )}
       </td>

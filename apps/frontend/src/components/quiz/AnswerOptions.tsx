@@ -123,7 +123,7 @@ export function AnswerOptions({
             onChange={(e) => {
               setExtremeAnswer(e.target.value);
               if (e.target.value.trim()) {
-                onSelect('A');
+                onSelect(e.target.value);
               }
             }}
             disabled={disabled}

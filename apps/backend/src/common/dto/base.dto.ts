@@ -581,6 +581,11 @@ export enum QuestionLevel {
   HARD = 'hard',
 }
 
+export enum QuestionType {
+  MCQ = 'mcq',
+  OPEN_ENDED = 'open_ended',
+}
+
 export class CreateQuestionDto {
   @ApiProperty({ example: 'What is the capital of France?' })
   @IsString()
@@ -591,6 +596,17 @@ export class CreateQuestionDto {
   @IsString()
   @IsNotEmpty()
   correctAnswer: string;
+
+  @ApiPropertyOptional({ enum: QuestionType, default: 'mcq' })
+  @IsOptional()
+  @IsEnum(QuestionType)
+  questionType?: 'mcq' | 'open_ended';
+
+  @ApiPropertyOptional({ example: 'A', description: 'Correct letter for MCQ (A/B/C/D)' })
+  @IsOptional()
+  @IsString()
+  @IsOptional()
+  correctLetter?: string;
 
   @ApiProperty({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
   @IsString({ each: true })
@@ -631,6 +647,16 @@ export class UpdateQuestionDto {
   @IsOptional()
   @IsString()
   correctAnswer?: string;
+
+  @ApiPropertyOptional({ enum: QuestionType })
+  @IsOptional()
+  @IsEnum(QuestionType)
+  questionType?: 'mcq' | 'open_ended';
+
+  @ApiPropertyOptional({ example: 'A', description: 'Correct letter for MCQ (A/B/C/D)' })
+  @IsOptional()
+  @IsString()
+  correctLetter?: string;
 
   @ApiPropertyOptional({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
   @IsOptional()

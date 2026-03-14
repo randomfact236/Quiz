@@ -30,8 +30,10 @@ export interface QuizChapter {
 export interface QuizQuestion {
     id: string;
     question: string;
-    options: string[];
+    options: string[] | null;
     correctAnswer: string;
+    questionType: 'mcq' | 'open_ended';
+    correctLetter: string | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
     chapter?: { id: string; name: string };
@@ -62,7 +64,9 @@ export interface CreateChapterDto {
 export interface CreateQuestionDto {
     question: string;
     correctAnswer: string;
-    options: string[];
+    correctLetter?: string | null;
+    questionType?: 'mcq' | 'open_ended';
+    options: string[] | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
     explanation?: string | undefined;
@@ -72,8 +76,11 @@ export interface CreateQuestionDto {
 export interface UpdateQuestionDto {
     question?: string;
     correctAnswer?: string;
-    options?: string[];
+    correctLetter?: string | null;
+    questionType?: 'mcq' | 'open_ended';
+    options?: string[] | null;
     level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+    chapterId?: string;
     explanation?: string | undefined;
     status?: 'published' | 'draft' | undefined;
 }

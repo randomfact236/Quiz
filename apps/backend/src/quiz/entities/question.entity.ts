@@ -12,11 +12,17 @@ export class Question {
   @Column({ type: 'text' })
   question: string;
 
-  @Column({ type: 'jsonb', default: [] })
-  options: string[];
+  @Column({ type: 'jsonb', default: [], nullable: true })
+  options: string[] | null;
 
   @Column()
   correctAnswer: string;
+
+  @Column({ type: 'enum', enum: ['mcq', 'open_ended'], default: 'mcq' })
+  questionType: 'mcq' | 'open_ended';
+
+  @Column({ type: 'varchar', length: 1, nullable: true })
+  correctLetter: string | null;
 
   @Column({ type: 'enum', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
   level: string;
