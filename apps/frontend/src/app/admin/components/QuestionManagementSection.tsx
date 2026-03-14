@@ -107,6 +107,7 @@ export function QuestionManagementSection({
   allSubjects,
   onSubjectSelect,
   onAddChapter,
+  onDeleteChapter,
   onQuestionsImport,
   onQuestionsUpdate,
   onClearQuestions,
@@ -1768,8 +1769,9 @@ export function QuestionManagementSection({
               </button>
               <button
                 onClick={() => {
-                  if (onDeleteChapter && chapterToDelete) {
-                    onDeleteChapter(subject.slug, chapterToDelete.id, chapterToDelete.name);
+                  const handler = onDeleteChapter;
+                  if (handler && chapterToDelete) {
+                    handler(subject.slug, chapterToDelete.id, chapterToDelete.name);
                     setShowDeleteChapterModal(false);
                     setChapterToDelete(null);
                   }
