@@ -139,12 +139,13 @@ export function QuestionManagementSection({
   // Server-side pagination - always use from props
   const isServerPagination = pagination !== undefined;
   const serverPagination = pagination || { page: 1, limit: 10, total: 0 };
+  
+  // Initialize from props, then sync with useEffect
   const [currentPage, setCurrentPage] = useState(serverPagination.page);
-  const [pageInput, setPageInput] = useState(String(serverPagination.page));
   const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
-
-  // Total questions from server pagination
   const totalQuestions = serverPagination.total;
+  
+  const [pageInput, setPageInput] = useState(String(serverPagination.page));
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -242,6 +243,9 @@ export function QuestionManagementSection({
 
   // Questions are already filtered from the backend - use directly from props
   const filteredQuestions = questions;
+
+  // Debug logging
+  console.log('[QuestionManagement] questions prop:', questions?.length, 'pagination:', pagination, 'page:', currentPage, 'limit:', questionsPerPage);
 
   // Check if showing all questions - use server total if available
   const isShowingAll = questionsPerPage >= totalQuestions;

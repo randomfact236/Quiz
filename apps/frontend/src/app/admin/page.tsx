@@ -370,9 +370,10 @@ export default function AdminPage(): JSX.Element {
 
   // Handle question page change (server-side pagination)
   const handleQuestionPageChange = (subjectSlug: string, newPage: number, newLimit: number) => {
+    console.log(`[handleQuestionPageChange] Setting page to ${newPage}, limit ${newLimit} for ${subjectSlug}`);
     setQuestionPagination(prev => {
       const existingPagination = prev[subjectSlug];
-      return {
+      const newState = {
         ...prev,
         [subjectSlug]: { 
           page: newPage, 
@@ -380,6 +381,8 @@ export default function AdminPage(): JSX.Element {
           total: existingPagination?.total ?? 0
         }
       };
+      console.log(`[handleQuestionPageChange] New pagination state:`, newState[subjectSlug]);
+      return newState;
     });
   };
 
