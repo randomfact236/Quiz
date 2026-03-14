@@ -2090,15 +2090,17 @@ const QuestionRow = React.memo(function QuestionRow({
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
         {question.level === 'extreme' ? (
           <div className="text-xs">
-            <span className="font-medium text-gray-700 block mb-1">Answer:</span>
-            <span className="inline-flex items-center justify-center rounded bg-purple-100 px-2 py-1 font-semibold text-purple-700 max-w-[120px] truncate" title={question.correctAnswer}>
+            <span className="font-semibold text-purple-700">
               {question.correctAnswer || 'N/A'}
             </span>
           </div>
         ) : (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
-            {(question as any).correctLetter || question.correctAnswer}
-          </span>
+          <div className="text-xs">
+            <span className="font-semibold text-green-700">
+              {question.correctLetter}
+            </span>
+            <span className="text-gray-600"> - {question.correctAnswer}</span>
+          </div>
         )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
