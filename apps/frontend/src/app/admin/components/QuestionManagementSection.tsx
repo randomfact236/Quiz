@@ -1768,11 +1768,11 @@ export function QuestionManagementSection({
               </button>
               <button
                 onClick={() => {
-                  if (onDeleteChapter) {
+                  if (onDeleteChapter && chapterToDelete) {
                     onDeleteChapter(subject.slug, chapterToDelete.id, chapterToDelete.name);
+                    setShowDeleteChapterModal(false);
+                    setChapterToDelete(null);
                   }
-                  setShowDeleteChapterModal(false);
-                  setChapterToDelete(null);
                 }}
                 className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
               >
