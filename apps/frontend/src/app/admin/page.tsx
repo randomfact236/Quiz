@@ -36,7 +36,7 @@ import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts } from '@/lib/quiz-api';
+import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts } from '@/lib/quiz-api';
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
@@ -848,6 +848,17 @@ export default function AdminPage(): JSX.Element {
     }
   };
 
+  // Delete chapter from subject
+  const handleDeleteChapter = async (subjectSlug: string, chapterId: string, _chapterName: string) => {
+    try {
+      await deleteChapter(chapterId);
+      // Refresh questions to update the list
+      handleQuestionsRefresh(subjectSlug);
+    } catch (err) {
+      console.error('Failed to delete chapter:', err);
+    }
+  };
+
   // Delete subject
   const handleDeleteSubject = (subjectId: string) => {
     const subject = allSubjects.find(s => s.id === subjectId);
@@ -1192,6 +1203,7 @@ export default function AdminPage(): JSX.Element {
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}
               onAddChapter={handleAddChapter}
+              onDeleteChapter={handleDeleteChapter}
               onQuestionsImport={handleQuestionsImport}
               onQuestionsUpdate={handleQuestionsUpdate}
               onClearQuestions={handleClearQuestions}

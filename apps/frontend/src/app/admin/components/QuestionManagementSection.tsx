@@ -47,6 +47,8 @@ interface QuestionManagementSectionProps {
   onAddSubject: (name: string, slug: string) => void | Promise<void>;
   /** Callback to add a new chapter */
   onAddChapter: (subjectSlug: string, chapterName: string) => void;
+  /** Callback to delete a chapter */
+  onDeleteChapter?: (subjectSlug: string, chapterId: string, chapterName: string) => void;
   /** Callback when questions are imported */
   onQuestionsImport: (subjectSlug: string, newQuestions: Question[]) => void | Promise<void>;
   /** Callback when questions are updated (edited, deleted, status changed) */
@@ -1053,6 +1055,20 @@ export function QuestionManagementSection({
                     title="Edit chapter name"
                   >
                     <Pencil className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirm(`Delete chapter "${ch}"? This will also delete all questions in this chapter.`)) {
+                        const chapterObj = chapters?.find(c => c.name === ch);
+                        if (chapterObj && onDeleteChapter) {
+                          onDeleteChapter(subject.slug, chapterObj.id, ch);
+                        }
+                      }
+                    }}
+                    className="text-gray-400 hover:text-red-600 px-1 opacity-0 hover:opacity-100 transition-opacity"
+                    title="Delete chapter"
+                  >
+                    <Trash2 className="w-3 h-3" />
                   </button>
                 </>
               )}
