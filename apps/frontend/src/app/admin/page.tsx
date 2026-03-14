@@ -436,6 +436,20 @@ export default function AdminPage(): JSX.Element {
         ...prev,
         [subjectSlug]: levelCounts
       }));
+
+      // Also refresh chapters list
+      try {
+        const subjectData = await getSubjectBySlug(subjectSlug);
+        if (subjectData?.chapters) {
+          const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
+          setQuizChapters(prev => ({
+            ...prev,
+            [subjectSlug]: chapterObjects
+          }));
+        }
+      } catch (chaptersErr) {
+        console.error('Failed to refresh chapters:', chaptersErr);
+      }
     } catch (err) {
       console.error('Failed to refresh questions:', err);
     }
