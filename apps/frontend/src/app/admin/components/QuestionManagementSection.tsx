@@ -259,8 +259,10 @@ export function QuestionManagementSection({
     ? (currentPage - 1) * questionsPerPage
     : (currentPage - 1) * questionsPerPage;
     
-  // Always use filteredQuestions for display - filter first, then paginate
-  const paginatedQuestions = filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
+  // Use questions directly from server when server-side pagination, otherwise slice locally
+  const paginatedQuestions = isServerPagination 
+    ? questions  // Server already paginated
+    : filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
 
   // Reset to page 1 when filters change
   useEffect(() => {
