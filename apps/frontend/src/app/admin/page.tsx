@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   LayoutDashboard,
   Gamepad2,
@@ -217,14 +217,23 @@ export default function AdminPage(): JSX.Element {
 
 
   // Fetch questions from API when subject is selected (server-side pagination)
+  // Use ref to prevent duplicate fetches
+  const isFetchingRef = useRef(false);
+  
   useEffect(() => {
     // Wait for hydration before fetching
     if (!isHydrated) return;
+    
+    // Prevent duplicate fetches
+    if (isFetchingRef.current) return;
 
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
     if (isSubjectSection && activeSection !== 'dashboard') {
       const fetchQuestions = async () => {
+        // Mark as fetching
+        isFetchingRef.current = true;
+        
         try {
           const currentPage = questionPagination[activeSection]?.page || 1;
           const limit = questionPagination[activeSection]?.limit || 10;
@@ -292,6 +301,11 @@ export default function AdminPage(): JSX.Element {
           }
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
+        } finally {
+          // Reset fetching flag after a short delay to allow state updates to propagate
+          setTimeout(() => {
+            isFetchingRef.current = false;
+          }, 100);
         }
       };
 
