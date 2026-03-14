@@ -2097,9 +2097,11 @@ const QuestionRow = React.memo(function QuestionRow({
         ) : (
           <div className="text-xs">
             <span className="font-semibold text-green-700">
-              {question.correctLetter}
+              {question.correctLetter || question.correctAnswer}
             </span>
-            <span className="text-gray-600"> - {question.correctAnswer}</span>
+            {question.correctLetter && question.correctAnswer && question.correctLetter !== question.correctAnswer && (
+              <span className="text-gray-600"> - {question.correctAnswer}</span>
+            )}
           </div>
         )}
       </td>
