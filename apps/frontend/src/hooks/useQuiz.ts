@@ -69,7 +69,8 @@ async function loadQuestions(subject: string, chapter: string, level: string): P
         questions = await getRandomQuestions(level, 20);
       }
     } else {
-      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
+      const subjectQuestions = subjectQuestionsResult.data;
 
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
@@ -113,7 +114,8 @@ async function loadAdditionalQuestions(
         questions = await getRandomQuestions(level, count + excludeIds.length);
       }
     } else {
-      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
+      const subjectQuestions = subjectQuestionsResult.data;
 
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
@@ -160,7 +162,8 @@ async function countAvailableQuestions(
         questions = await getRandomQuestions(level, 100);
       }
     } else {
-      const subjectQuestions = await getQuestionsBySubject(subject, 'published');
+      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
+      const subjectQuestions = subjectQuestionsResult.data;
 
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);

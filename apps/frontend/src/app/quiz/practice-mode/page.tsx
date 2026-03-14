@@ -99,7 +99,8 @@ export default function PracticeModePage(): JSX.Element {
           counts.subjectWise[subject.slug] = {};
           
           try {
-            const questions = await getQuestionsBySubject(subject.slug, 'published');
+            const questionsResult = await getQuestionsBySubject(subject.slug, { status: 'published' });
+            const questions = questionsResult.data;
             
             questions.forEach(q => {
                if (q.level) {

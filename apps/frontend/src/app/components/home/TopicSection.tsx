@@ -102,7 +102,7 @@ export function TopicsSection(): JSX.Element {
         const counts: Record<string, number> = {};
         for (const subject of subjectsData) {
           try {
-            const questions = await getQuestionsBySubject(subject.slug, 'published');
+            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
             if (questions.total > 0) {
               counts[subject.slug] = questions.total;
             }
