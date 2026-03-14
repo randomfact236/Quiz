@@ -217,27 +217,34 @@ export default function AdminPage(): JSX.Element {
 
 
   // Fetch questions from API when subject is selected (server-side pagination)
-  // Use ref to prevent duplicate fetches
-  const isFetchingRef = useRef(false);
+  // Track last fetch params to prevent duplicate fetches
+  const lastFetchRef = useRef<{ section: string; page: number; limit: number; filters: string } | null>(null);
   
   useEffect(() => {
     // Wait for hydration before fetching
     if (!isHydrated) return;
-    
-    // Prevent duplicate fetches
-    if (isFetchingRef.current) return;
 
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
     if (isSubjectSection && activeSection !== 'dashboard') {
+      const currentPage = questionPagination[activeSection]?.page || 1;
+      const limit = questionPagination[activeSection]?.limit || 10;
+      const filters = questionFilters[activeSection] || {};
+      const filtersKey = JSON.stringify(filters);
+      
+      // Skip if we already fetched with these exact params
+      if (lastFetchRef.current?.section === activeSection &&
+          lastFetchRef.current?.page === currentPage &&
+          lastFetchRef.current?.limit === limit &&
+          lastFetchRef.current?.filters === filtersKey) {
+        return;
+      }
+      
+      // Update last fetch params
+      lastFetchRef.current = { section: activeSection, page: currentPage, limit: limit, filters: filtersKey };
+
       const fetchQuestions = async () => {
-        // Mark as fetching
-        isFetchingRef.current = true;
-        
         try {
-          const currentPage = questionPagination[activeSection]?.page || 1;
-          const limit = questionPagination[activeSection]?.limit || 10;
-          const filters = questionFilters[activeSection] || {};
           const result = await getQuestionsBySubject(activeSection, filters, currentPage, limit);
           const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
@@ -301,11 +308,6 @@ export default function AdminPage(): JSX.Element {
           }
         } catch (err) {
           console.error('Failed to fetch questions for subject:', activeSection, err);
-        } finally {
-          // Reset fetching flag after a short delay to allow state updates to propagate
-          setTimeout(() => {
-            isFetchingRef.current = false;
-          }, 100);
         }
       };
 

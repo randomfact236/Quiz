@@ -1828,7 +1828,9 @@ export function QuestionManagementSection({
               onClick={() => {
                 const newPage = Math.max(1, currentPage - 1);
                 setCurrentPage(newPage);
-                if (isServerPagination && onPageChange) {
+                setPageInput(String(newPage));
+                // Always notify parent of page change
+                if (onPageChange) {
                   onPageChange(subject.slug, newPage, questionsPerPage);
                 }
               }}
@@ -1857,7 +1859,9 @@ export function QuestionManagementSection({
               onClick={() => {
                 const newPage = Math.min(totalPages, currentPage + 1);
                 setCurrentPage(newPage);
-                if (isServerPagination && onPageChange) {
+                setPageInput(String(newPage));
+                // Always notify parent of page change
+                if (onPageChange) {
                   onPageChange(subject.slug, newPage, questionsPerPage);
                 }
               }}
