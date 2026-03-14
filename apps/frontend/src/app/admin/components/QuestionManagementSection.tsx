@@ -2100,10 +2100,15 @@ const QuestionRow = React.memo(function QuestionRow({
               {question.correctLetter || question.correctAnswer}
             </span>
             {question.correctLetter && question.correctAnswer && (
-              <span className="text-gray-600" title={question.correctAnswer}>
-                {' - ' + question.correctAnswer.split(' ').slice(0, 2).join(' ')}
-                {question.correctAnswer.split(' ').length > 2 && '...'}
-              </span>
+              <div className="text-gray-600" title={question.correctAnswer}>
+                {question.correctAnswer.split(' ').slice(0, 2).join(' ')}
+                {question.correctAnswer.split(' ').length > 2 && (
+                  <div className="text-gray-600">
+                    {question.correctAnswer.split(' ').slice(2, 4).join(' ')}
+                    {question.correctAnswer.split(' ').length > 4 && '...'}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
