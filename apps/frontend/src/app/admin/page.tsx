@@ -88,9 +88,11 @@ export default function AdminPage(): JSX.Element {
   // Use sanitized subjects from hook - this is the main subjects array used throughout
   const subjects = sanitizeSubjects(dbSubjects);
   
-  console.log('[AdminPage] dbSubjects from hook:', dbSubjects);
-  console.log('[AdminPage] sanitized subjects:', subjects);
-  console.log('[AdminPage] subjects count:', subjects?.length || 0);
+  // Local subjects state for immediate UI updates (add/delete without waiting for API)
+  const [localSubjects, setLocalSubjects] = useState<Subject[]>([]);
+  
+  // Combined subjects: local changes take priority
+  const allSubjects = localSubjects.length > 0 ? localSubjects : subjects;
   
   // Handle subject reordering - update order in database via API
   const handleReorderSubjects = useCallback(async (reorderedSubjects: Subject[]) => {
@@ -103,7 +105,7 @@ export default function AdminPage(): JSX.Element {
       }
       refetchSubjects();
     } catch (err) {
-      console.error('Failed to reorder subjects:', err);
+      console.error('Failed to reorder allSubjects:', err);
     }
   }, [refetchSubjects]);
   
@@ -134,9 +136,9 @@ export default function AdminPage(): JSX.Element {
     };
   }, []);
   
-  // For backward compatibility - setSubjects can update local subjects
+  // For backward compatibility - setSubjects can update local allSubjects
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // For backward compatibility - setSubjects can update local subjects
+  // For backward compatibility - setSubjects can update local allSubjects
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setSubjects = useCallback((newSubjects: Subject[] | ((prev: Subject[]) => Subject[])) => {
     // This is a placeholder - actual updates happen via refetchSubjects()
@@ -155,22 +157,25 @@ export default function AdminPage(): JSX.Element {
   const [subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
   const [subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
 
-  // Set active section based on loaded subjects (from database)
+  // Set active section based on loaded allSubjects (from database) - only on initial load
+  const hasSetInitialSection = useRef(false);
   useEffect(() => {
-    if (subjects.length > 0) {
-      setActiveSection(subjects[0]!.slug);
+    if (hasSetInitialSection.current) return;
+    if (allSubjects.length > 0) {
+      setActiveSection(allSubjects[0]!.slug);
+      hasSetInitialSection.current = true;
     } else {
       setActiveSection('dashboard');
     }
-  }, [subjects]);
+  }, [allSubjects]);
 
-  // Fetch question counts for subjects when subjects change
+  // Fetch question counts for allSubjects when allSubjects change
   useEffect(() => {
     const fetchQuestionCounts = async () => {
       try {
         const counts: Record<string, number> = {};
         await Promise.all(
-          subjects.map(async (s) => {
+          allSubjects.map(async (s) => {
             try {
               const count = await getQuestionCountBySubject(s.slug);
               counts[s.slug] = count;
@@ -185,13 +190,13 @@ export default function AdminPage(): JSX.Element {
       }
     };
 
-    if (subjects.length > 0) {
+    if (allSubjects.length > 0) {
       fetchQuestionCounts();
     }
 
     // Complete hydration
     setIsHydrated(true);
-  }, [subjects]);
+  }, [allSubjects]);
 
 
   // Fetch riddles from backend API
@@ -224,7 +229,7 @@ export default function AdminPage(): JSX.Element {
     // Wait for hydration before fetching
     if (!isHydrated) return;
 
-    const isSubjectSection = subjects.some(s => s.slug === activeSection);
+    const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
 
     if (isSubjectSection && activeSection !== 'dashboard') {
       const currentPage = questionPagination[activeSection]?.page || 1;
@@ -313,7 +318,7 @@ export default function AdminPage(): JSX.Element {
 
       fetchQuestions();
     }
-  }, [activeSection, subjects, questionPagination, questionFilters, isHydrated]);
+  }, [activeSection, allSubjects, questionPagination, questionFilters, isHydrated]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -326,7 +331,7 @@ export default function AdminPage(): JSX.Element {
   const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
 
   const getSubjectFromSection = (section: MenuSection): Subject | null => {
-    return subjects.find(s => s.slug === section) ?? null;
+    return allSubjects.find(s => s.slug === section) ?? null;
   };
 
   const getQuestionsForSubject = (slug: string): Question[] => {
@@ -430,13 +435,13 @@ export default function AdminPage(): JSX.Element {
 
   // Handle questions import
   const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
-    // Refresh subjects list to ensure we have the latest (in case new subject was created)
+    // Refresh allSubjects list to ensure we have the latest (in case new subject was created)
     try {
       const apiSubjects = await getSubjects(false);
       const updatedSubjects = sanitizeSubjects(apiSubjects as unknown as Subject[]);
       setSubjects(updatedSubjects);
     } catch (err) {
-      console.error('Failed to refresh subjects:', err);
+      console.error('Failed to refresh allSubjects:', err);
     }
 
     // If no new questions to import, just refresh the data from DB
@@ -465,7 +470,7 @@ export default function AdminPage(): JSX.Element {
     let subjectId: string | undefined;
 
     // First, check if subject is in local state
-    const subject = subjects.find(s => s.slug === subjectSlug);
+    const subject = allSubjects.find(s => s.slug === subjectSlug);
     if (subject?.id) {
       subjectId = subject.id;
     }
@@ -484,7 +489,7 @@ export default function AdminPage(): JSX.Element {
             name: subjectData.name,
             emoji: subjectData.emoji || '📚',
             category: (subjectData.category || 'academic') as 'academic' | 'professional' | 'entertainment',
-            order: subjects.length,
+            order: allSubjects.length,
           };
           setSubjects(prev => [...prev, newSubject]);
         }
@@ -566,7 +571,7 @@ export default function AdminPage(): JSX.Element {
   };
 
   const handleQuestionsUpdate = async (subjectSlug: string, updatedQuestions: Question[]) => {
-    const subject = subjects.find(s => s.slug === subjectSlug);
+    const subject = allSubjects.find(s => s.slug === subjectSlug);
     if (!subject) return;
 
     let chapterMap = new Map<string, string>();
@@ -668,7 +673,7 @@ export default function AdminPage(): JSX.Element {
   const handleExportQuestions = () => {
     if (exportFormat === 'json') {
       const data = {
-        subjects,
+        subjects: allSubjects,
         questions: allQuestions,
         lastUpdated: new Date().toISOString(),
       };
@@ -679,7 +684,7 @@ export default function AdminPage(): JSX.Element {
     } else {
       // CSV export - combine all questions from all subjects
       let csvContent = '';
-      subjects.forEach(subject => {
+      allSubjects.forEach(subject => {
         const questions = allQuestions[subject.slug] || [];
         if (questions.length > 0) {
           csvContent += exportQuestionsToCSV(questions, subject.name);
@@ -711,7 +716,7 @@ export default function AdminPage(): JSX.Element {
             console.error('Failed to create subject:', subject.name, err);
           }
         }
-        setSubjects(data.subjects);
+        setLocalSubjects(data.subjects);
         setAllQuestions(data.questions);
         await saveQuizData(data);
         setShowImportModal(false);
@@ -721,12 +726,12 @@ export default function AdminPage(): JSX.Element {
       reader.onload = async (e) => {
         const content = e.target?.result as string;
 
-        const result = await importQuestionsFromCSV(content, subjects);
+        const result = await importQuestionsFromCSV(content, allSubjects);
 
         console.log('Import result:', result);
 
         if (result.success) {
-          const subject = subjects.find(s => s.slug === result.subjectSlug);
+          const subject = allSubjects.find(s => s.slug === result.subjectSlug);
           if (!subject) {
             setSubjects(prev => [...prev, {
               id: String(Date.now()),
@@ -734,7 +739,7 @@ export default function AdminPage(): JSX.Element {
               name: result.subjectName,
               emoji: '📚',
               category: 'academic' as const,
-              order: subjects.length,
+              order: allSubjects.length,
             }]);
           }
 
@@ -762,52 +767,68 @@ export default function AdminPage(): JSX.Element {
   // Add new subject
   const handleAddSubject = async (newSubject: Subject) => {
     try {
-      await createSubject({
+      const created = await createSubject({
         name: newSubject.name,
         slug: newSubject.slug,
         emoji: newSubject.emoji || '📚',
         category: newSubject.category,
       });
+      // Add to local state immediately for UI update
+      const subjectWithId: Subject = {
+        ...newSubject,
+        id: created.id,
+      };
+      setLocalSubjects(prev => [...prev, subjectWithId]);
+      setAllQuestions(prev => ({ ...prev, [newSubject.slug]: [] }));
     } catch (err) {
       console.error('Failed to create subject in database:', err);
     }
-    setSubjects(prev => [...prev, newSubject]);
-    setAllQuestions(prev => ({ ...prev, [newSubject.slug]: [] }));
     setShowAddSubjectModal(false);
   };
 
   // Add new subject by name and slug (used for CSV import)
   const handleAddSubjectByName = async (name: string, slug: string) => {
-    const newSubject: Subject = {
-      id: String(Date.now()),
-      slug,
-      name,
-      emoji: '📚',
-      category: 'academic',
-    };
     try {
-      await createSubject({
+      const created = await createSubject({
         name,
         slug,
         emoji: '📚',
         category: 'academic',
       });
+      const newSubject: Subject = {
+        id: created.id,
+        slug,
+        name,
+        emoji: '📚',
+        category: 'academic',
+      };
+      setLocalSubjects(prev => [...prev, newSubject]);
+      setAllQuestions(prev => ({ ...prev, [slug]: [] }));
     } catch (err) {
       console.error('Failed to create subject in database:', err);
     }
-    setSubjects(prev => [...prev, newSubject]);
-    setAllQuestions(prev => ({ ...prev, [slug]: [] }));
   };
 
-  // Add chapter to subject (chapters are derived from question chapter strings)
-  const handleAddChapter = (_subjectSlug: string, _chapterName: string) => {
-    // Chapters are automatically derived from question.chapter strings
-    // No action needed - the chapter will appear when questions are imported
+  // Add chapter to subject
+  const handleAddChapter = async (subjectSlug: string, chapterName: string) => {
+    const subject = allSubjects.find(s => s.slug === subjectSlug);
+    if (!subject) {
+      console.error('Subject not found:', subjectSlug);
+      return;
+    }
+    
+    try {
+      await createChapter({ name: chapterName, subjectId: subject.id });
+      // Refresh questions to show the new chapter
+      handleQuestionsRefresh(subjectSlug);
+    } catch (err) {
+      console.error('Failed to create chapter:', err);
+    }
   };
 
   // Delete subject
   const handleDeleteSubject = (subjectId: string) => {
-    const subject = subjects.find(s => s.id === subjectId);
+    const subject = allSubjects.find(s => s.id === subjectId);
     if (!subject) return;
     setSubjectToDelete(subject);
   };
@@ -832,7 +853,7 @@ export default function AdminPage(): JSX.Element {
       }
     }
 
-    const remainingSubjects = subjects.filter(s => s.id !== subjectId);
+    const remainingSubjects = allSubjects.filter(s => s.id !== subjectId);
     setSubjects(remainingSubjects);
     setAllQuestions(prev => {
       const updated = { ...prev };
@@ -961,7 +982,7 @@ export default function AdminPage(): JSX.Element {
 
           {/* Quiz Module with Categories */}
           <QuizSidebar
-            subjects={subjects}
+            subjects={allSubjects}
             activeSection={activeSection}
             sidebarOpen={sidebarOpen}
             quizModuleExpanded={quizModuleExpanded}
@@ -972,7 +993,7 @@ export default function AdminPage(): JSX.Element {
               setShowAddSubjectModal(true);
             }}
             onEditSubject={handleEditSubject}
-            onReorderSubjects={setSubjects}
+            onReorderSubjects={handleReorderSubjects}
             questionCounts={questionCounts}
           />
 
@@ -1077,10 +1098,10 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
               {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
-              {subjects.some(s => s.slug === activeSection) && (
+              {allSubjects.some(s => s.slug === activeSection) && (
                 <>
-                  <span className="text-2xl">{isEmoji(subjects.find(s => s.slug === activeSection)?.emoji || '') ? subjects.find(s => s.slug === activeSection)?.emoji : '📚'}</span>
-                  <span>{subjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
+                  <span className="text-2xl">{isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚'}</span>
+                  <span>{allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
                 </>
               )}
             </h2>
@@ -1108,7 +1129,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'dashboard' && (
             <DashboardSection
               onSelectSubject={setActiveSection}
-              subjects={subjects}
+              allSubjects={allSubjects}
               allQuestions={allQuestions}
               onAddSubject={() => setShowAddSubjectModal(true)}
               onExport={() => setShowExportModal(true)}
@@ -1116,7 +1137,7 @@ export default function AdminPage(): JSX.Element {
               onDeleteSubject={handleDeleteSubject}
             />
           )}
-          {subjects.some(s => s.slug === activeSection) && (
+          {allSubjects.some(s => s.slug === activeSection) && (
             <QuestionManagementSection
               subject={getSubjectFromSection(activeSection) as Subject}
               questions={getQuestionsForSubject(activeSection)}
@@ -1125,7 +1146,7 @@ export default function AdminPage(): JSX.Element {
               statusCounts={getStatusCountsForSubject(activeSection)}
               chapterCounts={getChapterCountsForSubject(activeSection)}
               levelCounts={getLevelCountsForSubject(activeSection)}
-              allSubjects={[...subjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
+              allSubjects={[...allSubjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}
               onAddChapter={handleAddChapter}
@@ -1168,7 +1189,7 @@ export default function AdminPage(): JSX.Element {
         <AddSubjectModal
           onClose={() => setShowAddSubjectModal(false)}
           onAdd={handleAddSubject}
-          existingSlugs={subjects.map(s => s.slug)}
+          existingSlugs={allSubjects.map(s => s.slug)}
           defaultCategory={selectedCategory}
         />
       )}
@@ -1207,7 +1228,7 @@ export default function AdminPage(): JSX.Element {
             {exportFormat === 'json' ? (
               <>
                 <p className="text-gray-600 dark:text-secondary-300 mb-4">
-                  Downloads all subjects and questions as a JSON file. Best for:
+                  Downloads all allSubjects and questions as a JSON file. Best for:
                 </p>
                 <ul className="text-sm text-gray-500 dark:text-secondary-400 mb-4 list-disc list-inside">
                   <li>Full backup and restore</li>
@@ -1260,7 +1281,7 @@ export default function AdminPage(): JSX.Element {
           subject={editingSubject}
           onClose={() => { setShowEditSubjectModal(false); setEditingSubject(null); }}
           onUpdate={handleUpdateSubject}
-          existingSlugs={subjects.filter(s => s.id !== editingSubject.id).map(s => s.slug)}
+          existingSlugs={allSubjects.filter(s => s.id !== editingSubject.id).map(s => s.slug)}
         />
       )}
 
@@ -1324,7 +1345,7 @@ function MenuItem({ icon, label, active, expanded, onClick }: {
   );
 }
 
-// Available icon options for subjects
+// Available icon options for allSubjects
 // Add Subject Modal
 function AddSubjectModal({ onClose, onAdd, existingSlugs, defaultCategory = 'academic' }: {
   onClose: () => void;
@@ -1600,9 +1621,9 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
 }
 
 // Dashboard Section
-function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubject, onExport, onImport, onDeleteSubject }: {
+function DashboardSection({ onSelectSubject, allSubjects, allQuestions, onAddSubject, onExport, onImport, onDeleteSubject }: {
   onSelectSubject: (section: MenuSection) => void;
-  subjects: Subject[];
+  allSubjects: Subject[];
   allQuestions: Record<string, Question[]>;
   onAddSubject: () => void;
   onExport: () => void;
@@ -1635,7 +1656,7 @@ function DashboardSection({ onSelectSubject, subjects, allQuestions, onAddSubjec
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {subjects.map((subject) => (
+        {allSubjects.map((subject) => (
           <div
             key={subject.slug}
             className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow relative group"

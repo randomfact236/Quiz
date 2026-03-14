@@ -118,7 +118,7 @@ export function QuestionManagementSection({
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
 
   // Trigger API call when filters change (server-side filtering)
   useEffect(() => {
