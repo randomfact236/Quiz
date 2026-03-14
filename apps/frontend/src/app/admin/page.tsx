@@ -37,65 +37,8 @@ import { RiddleSidebar } from './components/RiddleSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts } from '@/lib/quiz-api';
+import { useQuizSubjects } from '@/hooks/useQuizSubjects';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
-
-/** Image Riddle Type - Enterprise Grade - Available for future use */
-// type ImageRiddle = {
-//   id: string;
-//   title: string;
-//   imageUrl: string;
-//   altText?: string;
-//   answer: string;
-//   hint: string;
-//   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-//   category: { name: string; emoji: string };
-//   status: ContentStatus;
-//   timerSeconds?: number | null;
-//   showTimer: boolean;
-//   isActive: boolean;
-//   createdAt?: string;
-//   updatedAt?: string;
-// };
-
-
-
-// ============================================================================
-// ENTERPRISE-GRADE VALIDATION RESULTS
-// ============================================================================
-
-/*
-type ValidationResult<T> = {
-  isValid: boolean;
-  data: T | null;
-  errors: string[];
-  warnings: string[];
-};
-
-type ImportResult<T> = {
-  success: boolean;
-  imported: T[];
-  failed: { row: number; error: string; data: unknown }[];
-  total: number;
-};
-*/
-
-// ============================================================================
-// ENTERPRISE-GRADE IMPORT/EXPORT CONFIG
-// ============================================================================
-
-/*
-type ImportExportConfig<T> = {
-  entityName: string;
-  filePrefix: string;
-  csvHeaders: string[];
-  jsonRootKey: string;
-  validators: {
-    required: (keyof T)[];
-    enumFields?: Record<string, string[]>;
-    maxLength?: Record<string, number>;
-  };
-};
-*/
 
 // Initial Data
 const defaultQuestions: Record<string, Question[]> = {};
@@ -104,8 +47,6 @@ const defaultQuestions: Record<string, Question[]> = {};
 const isEmoji = (str: string): boolean => {
   return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(str);
 };
-
-const defaultSubjects: Subject[] = [];
 
 // Storage key for persisting active section
 export default function AdminPage(): JSX.Element {
@@ -126,36 +67,48 @@ export default function AdminPage(): JSX.Element {
   const [riddleModuleExpanded, setRiddleModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
-  // Dynamic data state
-  const [subjects, setSubjects] = useState<Subject[]>(defaultSubjects);
-  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
-  // Real question counts fetched from the backend (used for sidebar badges)
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
-
-  // Server-side pagination state for questions
-  const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
+  // Use the hook directly for subjects - database only, no fake data
+  const { subjects: dbSubjects, refetch: refetchSubjects } = useQuizSubjects();
   
-  // Server-side filters for questions
-  const [questionFilters, setQuestionFilters] = useState<Record<string, { status?: string; level?: string; chapter?: string; search?: string }>>({});
+  // Helper to normalize subject emojis - preserves custom emojis
+  const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
+    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home', 'book-open', 'help-circle', 'graduation-cap', 'briefcase', 'gamepad-2'];
+    return storedSubjects.map(subject => {
+      const isCustomEmoji = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(subject.emoji);
+      if (validIconKeys.includes(subject.emoji) || isCustomEmoji) {
+        return subject;
+      }
+      const slugToIcon: Record<string, string> = {
+        'science': 'science', 'math': 'math', 'history': 'history', 'geography': 'geography', 'english': 'english', 'technology': 'technology',
+      };
+      return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
+    });
+  }, []);
+
+  // Use sanitized subjects from hook - this is the main subjects array used throughout
+  const subjects = sanitizeSubjects(dbSubjects);
   
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
-  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
-  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
-
-  // Quiz chapters per subject (for filtering)
-  const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
-
-  // Quiz status counts per subject (for stats display)
-  const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
-
-  // Quiz chapter counts per subject
-  const [subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
-
-  // Quiz level counts per subject
-  const [subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
-
+  console.log('[AdminPage] dbSubjects from hook:', dbSubjects);
+  console.log('[AdminPage] sanitized subjects:', subjects);
+  console.log('[AdminPage] subjects count:', subjects?.length || 0);
+  
+  // Handle subject reordering - update order in database via API
+  const handleReorderSubjects = useCallback(async (reorderedSubjects: Subject[]) => {
+    try {
+      for (let i = 0; i < reorderedSubjects.length; i++) {
+        const subject = reorderedSubjects[i];
+        if (subject && subject.order !== i) {
+          await updateSubject(subject.id, { order: i });
+        }
+      }
+      refetchSubjects();
+    } catch (err) {
+      console.error('Failed to reorder subjects:', err);
+    }
+  }, [refetchSubjects]);
+  
   // Helper to map API QuizQuestion to UI Question
-  const mapQuizQuestionToQuestion = (q: QuizQuestion): Question => {
+  const mapQuizQuestionToQuestion = useCallback((q: QuizQuestion): Question => {
     const _opts = q.options || [];
     const optA = _opts[0] || '';
     const optB = _opts[1] || '';
@@ -179,82 +132,66 @@ export default function AdminPage(): JSX.Element {
       status: (q.status || 'published') as Question['status'],
       explanation: q.explanation,
     };
-  };
-
-  // Jokes state
-  const { allJokes, setAllJokes } = useGlobalJokes();
-  const { jokeCategories, setJokeCategories } = useGlobalJokeCategories();
-
-  // Helper to normalize subject emojis - preserves custom emojis
-  const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
-    // Valid icon keys that we accept (Lucide icon names)
-    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home', 'book-open', 'help-circle', 'graduation-cap', 'briefcase', 'gamepad-2'];
-
-    return storedSubjects.map(subject => {
-      // Check if emoji is a valid icon key OR a custom emoji (contains emoji characters)
-      const isCustomEmoji = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(subject.emoji);
-
-      // If it's a valid icon key or custom emoji, keep it
-      if (validIconKeys.includes(subject.emoji) || isCustomEmoji) {
-        return subject;
-      }
-
-      // Otherwise, map subject slug to appropriate icon
-      const slugToIcon: Record<string, string> = {
-        'science': 'science',
-        'math': 'math',
-        'history': 'history',
-        'geography': 'geography',
-        'english': 'english',
-        'technology': 'technology',
-      };
-      return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
-    });
   }, []);
+  
+  // For backward compatibility - setSubjects can update local subjects
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // For backward compatibility - setSubjects can update local subjects
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const setSubjects = useCallback((newSubjects: Subject[] | ((prev: Subject[]) => Subject[])) => {
+    // This is a placeholder - actual updates happen via refetchSubjects()
+  }, []);
+  
+  // Other state
+  const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
+  const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
+  const [questionFilters, setQuestionFilters] = useState<Record<string, { status?: string; level?: string; chapter?: string; search?: string }>>({});
+  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
+  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
+  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
+  const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
+  const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
+  const [subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
+  const [subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
 
-  // Load data from API (database is the only source of truth)
+  // Set active section based on loaded subjects (from database)
   useEffect(() => {
-    // Load subjects from API (Source of Truth)
-    getSubjects(false)
-      .then(async (apiSubjects) => {
-        const loadedSubjects = apiSubjects && apiSubjects.length > 0
-          ? sanitizeSubjects(apiSubjects as unknown as Subject[])
-          : [];
-        setSubjects(loadedSubjects);
+    if (subjects.length > 0) {
+      setActiveSection(subjects[0]!.slug);
+    } else {
+      setActiveSection('dashboard');
+    }
+  }, [subjects]);
 
-        // Set active section - default to dashboard
-        if (loadedSubjects.length > 0) {
-          setActiveSection(loadedSubjects[0]!.slug);
-        } else {
-          setActiveSection('dashboard');
-        }
+  // Fetch question counts for subjects when subjects change
+  useEffect(() => {
+    const fetchQuestionCounts = async () => {
+      try {
+        const counts: Record<string, number> = {};
+        await Promise.all(
+          subjects.map(async (s) => {
+            try {
+              const count = await getQuestionCountBySubject(s.slug);
+              counts[s.slug] = count;
+            } catch {
+              counts[s.slug] = 0;
+            }
+          })
+        );
+        setQuestionCounts(counts);
+      } catch (e) {
+        console.error('Failed to fetch question counts:', e);
+      }
+    };
 
-        // Fetch real question counts from backend for each subject (for sidebar badges)
-        try {
-          const counts: Record<string, number> = {};
-          await Promise.all(
-            loadedSubjects.map(async (s) => {
-              try {
-                const count = await getQuestionCountBySubject(s.slug);
-                counts[s.slug] = count;
-              } catch {
-                counts[s.slug] = 0;
-              }
-            })
-          );
-          setQuestionCounts(counts);
-        } catch (e) {
-          console.error('Failed to fetch question counts:', e);
-        }
-      })
-      .catch((err) => {
-        console.error('Failed to fetch subjects:', err);
-        setActiveSection('dashboard');
-      });
+    if (subjects.length > 0) {
+      fetchQuestionCounts();
+    }
 
     // Complete hydration
     setIsHydrated(true);
-  }, [sanitizeSubjects]);
+  }, [subjects]);
 
 
   // Fetch riddles from backend API
@@ -434,17 +371,20 @@ export default function AdminPage(): JSX.Element {
   };
 
   // Handle question filter change (server-side filtering)
-  const handleQuestionFilterChange = (subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
-    setQuestionFilters(prev => ({
-      ...prev,
-      [subjectSlug]: filters
-    }));
+  const handleQuestionFilterChange = useCallback((subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
+    setQuestionFilters((prev) => {
+      const current = prev?.[subjectSlug];
+      const next = filters;
+      // Avoid update if nothing changed
+      if (JSON.stringify(current) === JSON.stringify(next)) return prev;
+      return { ...prev, [subjectSlug]: next };
+    });
     // Reset to page 1 when filters change
-    setQuestionPagination(prev => ({
+    setQuestionPagination((prev) => ({
       ...prev,
-      [subjectSlug]: { ...prev[subjectSlug], page: 1 }
+      [subjectSlug]: { page: 1, limit: prev?.[subjectSlug]?.limit ?? 10, total: prev?.[subjectSlug]?.total ?? 0 }
     }));
-  };
+  }, []);
 
   // Handle questions refresh from server (after bulk actions)
   const handleQuestionsRefresh = async (subjectSlug: string) => {

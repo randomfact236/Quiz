@@ -70,13 +70,11 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://quiz-backend:3012/api/v1
+      NEXT_PUBLIC_API_URL: http://localhost:3012/api/v1
     ports:
       - "3010:3010"
     depends_on:
       - backend
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - ./apps/frontend/src:/app/apps/frontend/src:ro
       - ./apps/frontend/public:/app/apps/frontend/public:ro

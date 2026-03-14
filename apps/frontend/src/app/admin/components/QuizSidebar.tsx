@@ -52,6 +52,13 @@ export function QuizSidebar({
     [subjects]
   );
 
+  // Debug logging
+  console.log('[QuizSidebar] Received subjects:', subjects);
+  console.log('[QuizSidebar] Subject count:', subjects.length);
+  console.log('[QuizSidebar] academicSubjects:', academicSubjects.length);
+  console.log('[QuizSidebar] professionalSubjects:', professionalSubjects.length);
+  console.log('[QuizSidebar] entertainmentSubjects:', entertainmentSubjects.length);
+
   const handleDragStart = useCallback((e: React.DragEvent, subject: Subject) => {
     setDraggedId(subject.id);
     e.dataTransfer.effectAllowed = 'move';

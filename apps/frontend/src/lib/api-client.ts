@@ -9,6 +9,10 @@
 const BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
 const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
 
+// DEBUG: Log the actual API URL being used
+console.log('[API Client] Using BASE URL:', BASE);
+console.log('[API Client] Using API_BASE_URL:', API_BASE_URL);
+
 import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';
 
 interface ApiOptions {
