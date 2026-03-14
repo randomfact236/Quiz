@@ -159,6 +159,60 @@ function ResultsContent(): JSX.Element {
           </div>
         </div>
 
+        {/* Action Buttons - Moved to Top */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6 space-y-3"
+        >
+          {/* Primary Actions - Row 1 */}
+          <div className="grid grid-cols-3 gap-3">
+            <Link
+              href={`/quiz/play?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}&level=${session.level}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-indigo-600 p-3 text-white shadow-lg transition-colors hover:bg-indigo-700"
+            >
+              <RotateCcw className="h-5 w-5" />
+              <span className="text-xs font-semibold">Retry Quiz</span>
+            </Link>
+
+            <Link
+              href={`/quiz?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <List className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Difficulty</span>
+            </Link>
+
+            <Link
+              href={`/quiz?subject=${session.subject}`}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <BookOpen className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Chapters</span>
+            </Link>
+          </div>
+
+          {/* Secondary Actions - Row 2 */}
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/quiz"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <Trophy className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">All Subjects</span>
+            </Link>
+
+            <Link
+              href="/"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+            >
+              <Home className="h-5 w-5 text-indigo-500" />
+              <span className="text-xs font-semibold">Home</span>
+            </Link>
+          </div>
+        </motion.div>
+
         {/* Score Card */}
         <div className="mb-6">
           <ScoreCard
@@ -277,60 +331,6 @@ function ResultsContent(): JSX.Element {
               ))}
             </motion.div>
           )}
-        </motion.div>
-
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="space-y-3"
-        >
-          {/* Primary Actions - Row 1 */}
-          <div className="grid grid-cols-3 gap-3">
-            <Link
-              href={`/quiz/play?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}&level=${session.level}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-indigo-600 p-3 text-white shadow-lg transition-colors hover:bg-indigo-700"
-            >
-              <RotateCcw className="h-5 w-5" />
-              <span className="text-xs font-semibold">Retry Quiz</span>
-            </Link>
-
-            <Link
-              href={`/quiz?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-            >
-              <List className="h-5 w-5 text-indigo-500" />
-              <span className="text-xs font-semibold">Difficulty</span>
-            </Link>
-
-            <Link
-              href={`/quiz?subject=${session.subject}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-            >
-              <BookOpen className="h-5 w-5 text-indigo-500" />
-              <span className="text-xs font-semibold">Chapters</span>
-            </Link>
-          </div>
-
-          {/* Secondary Actions - Row 2 */}
-          <div className="grid grid-cols-2 gap-3">
-            <Link
-              href="/quiz"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-            >
-              <Trophy className="h-5 w-5 text-indigo-500" />
-              <span className="text-xs font-semibold">All Subjects</span>
-            </Link>
-
-            <Link
-              href="/"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
-            >
-              <Home className="h-5 w-5 text-indigo-500" />
-              <span className="text-xs font-semibold">Home</span>
-            </Link>
-          </div>
         </motion.div>
       </div>
     </div>
