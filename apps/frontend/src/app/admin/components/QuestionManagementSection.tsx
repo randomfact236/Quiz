@@ -157,6 +157,8 @@ export function QuestionManagementSection({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showClearAllModal, setShowClearAllModal] = useState(false);
+  const [showDeleteChapterModal, setShowDeleteChapterModal] = useState(false);
+  const [chapterToDelete, setChapterToDelete] = useState<{ id: string; name: string } | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [importError, setImportError] = useState('');
   const [importSuccess, setImportSuccess] = useState('');
@@ -1058,11 +1060,10 @@ export function QuestionManagementSection({
                   </button>
                   <button
                     onClick={() => {
-                      if (confirm(`Delete chapter "${ch}"? This will also delete all questions in this chapter.`)) {
-                        const chapterObj = chapters?.find(c => c.name === ch);
-                        if (chapterObj && onDeleteChapter) {
-                          onDeleteChapter(subject.slug, chapterObj.id, ch);
-                        }
+                      const chapterObj = chapters?.find(c => c.name === ch);
+                      if (chapterObj) {
+                        setChapterToDelete({ id: chapterObj.id, name: ch });
+                        setShowDeleteChapterModal(true);
                       }
                     }}
                     className="text-gray-400 hover:text-red-600 px-1 opacity-0 hover:opacity-100 transition-opacity"
@@ -1736,6 +1737,46 @@ export function QuestionManagementSection({
                 className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
               >
                 Delete All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Chapter Confirmation Modal */}
+      {showDeleteChapterModal && chapterToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="delete-chapter-title">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md border dark:border-secondary-700">
+            <h3 id="delete-chapter-title" className="text-xl font-bold mb-4 text-red-600 flex items-center gap-2">
+              <Trash2 className="w-5 h-5" /> Delete Chapter
+            </h3>
+            <p className="text-gray-600 dark:text-secondary-300 mb-2">
+              Are you sure you want to delete the chapter <strong>"{chapterToDelete.name}"</strong>?
+            </p>
+            <p className="text-gray-500 dark:text-secondary-400 text-sm mb-6">
+              This will also delete all questions in this chapter. This action cannot be undone.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowDeleteChapterModal(false);
+                  setChapterToDelete(null);
+                }}
+                className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 dark:hover:bg-secondary-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (onDeleteChapter) {
+                    onDeleteChapter(subject.slug, chapterToDelete.id, chapterToDelete.name);
+                  }
+                  setShowDeleteChapterModal(false);
+                  setChapterToDelete(null);
+                }}
+                className="flex-1 rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+              >
+                Delete Chapter
               </button>
             </div>
           </div>
