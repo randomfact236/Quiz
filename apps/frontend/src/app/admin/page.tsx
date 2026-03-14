@@ -116,10 +116,6 @@ export default function AdminPage(): JSX.Element {
     const optB = _opts[1] || '';
     const optC = _opts[2] || '';
     const optD = _opts[3] || '';
-    let correctLetter = 'A';
-    if (q.correctAnswer === optB) correctLetter = 'B';
-    else if (q.correctAnswer === optC) correctLetter = 'C';
-    else if (q.correctAnswer === optD) correctLetter = 'D';
 
     return {
       id: q.id as string,
@@ -128,7 +124,8 @@ export default function AdminPage(): JSX.Element {
       optionB: optB,
       optionC: optC,
       optionD: optD,
-      correctAnswer: q.level === 'extreme' ? q.correctAnswer : correctLetter,
+      correctAnswer: q.correctAnswer,
+      correctLetter: q.correctLetter,
       level: (q.level || 'medium') as Question['level'],
       chapter: q.chapter?.name || 'General',
       status: (q.status || 'published') as Question['status'],
