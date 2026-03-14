@@ -31,14 +31,16 @@ function generateUUID(): string {
 
 /** Convert QuizQuestion from API to Question type */
 function convertQuizQuestion(q: QuizQuestion): Question {
+  const options = q.options || [];
   return {
     id: q.id,
     question: q.question,
-    optionA: q.options[0] || '',
-    optionB: q.options[1] || '',
-    optionC: q.options[2] || '',
-    optionD: q.options[3] || '',
+    optionA: options[0] || '',
+    optionB: options[1] || '',
+    optionC: options[2] || '',
+    optionD: options[3] || '',
     correctAnswer: q.correctAnswer,
+    correctLetter: q.correctLetter || null,
     level: q.level,
     chapter: q.chapterId,
     status: q.status || 'published',
@@ -50,8 +52,20 @@ function convertQuizQuestion(q: QuizQuestion): Question {
 function calculateScore(questions: Question[], answers: Record<string, string>): number {
   let score = 0;
   questions.forEach(q => {
-    if (answers[q.id] === q.correctAnswer) {
-      score++;
+    const isOpenEnded = q.level === 'extreme';
+    
+    if (isOpenEnded) {
+      // Open-ended: compare normalized text
+      const userAnswer = answers[q.id]?.toLowerCase().trim() || '';
+      const correctAnswer = q.correctAnswer?.toLowerCase().trim() || '';
+      if (userAnswer === correctAnswer) {
+        score++;
+      }
+    } else {
+      // MCQ: compare letters
+      if (answers[q.id] === q.correctLetter) {
+        score++;
+      }
     }
   });
   return score;
