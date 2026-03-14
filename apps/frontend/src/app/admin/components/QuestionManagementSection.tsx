@@ -243,8 +243,8 @@ export function QuestionManagementSection({
   // Questions are already filtered from the backend - use directly from props
   const filteredQuestions = questions;
 
-  // Check if showing all questions (either explicitly or all fit on one page)
-  const isShowingAll = questionsPerPage >= filteredQuestions.length;
+  // Check if showing all questions - use server total if available
+  const isShowingAll = questionsPerPage >= totalQuestions;
 
   // Pagination calculations - use server pagination if available
   const totalPages = isServerPagination
@@ -1803,10 +1803,12 @@ export function QuestionManagementSection({
                 value={questionsPerPage}
                 onChange={(e) => {
                   const value = e.target.value;
-                  const newLimit = value === 'all' ? filteredQuestions.length : Number(value);
+                  const newLimit = value === 'all' ? 1000 : Number(value);
                   setQuestionsPerPage(newLimit);
                   setCurrentPage(1);
-                  if (isServerPagination && onPageChange) {
+                  setPageInput('1');
+                  // Always trigger page change to refresh data
+                  if (onPageChange) {
                     onPageChange(subject.slug, 1, newLimit);
                   }
                 }}

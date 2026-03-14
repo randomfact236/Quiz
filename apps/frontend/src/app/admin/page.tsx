@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   LayoutDashboard,
   Gamepad2,
@@ -217,22 +217,9 @@ export default function AdminPage(): JSX.Element {
 
 
   // Fetch questions from API when subject is selected (server-side pagination)
-  // Use ref to track if we've attempted initial fetch for each subject to prevent double-fetching
-  const initialFetchAttempted = useRef<Record<string, boolean>>({});
-
   useEffect(() => {
     // Wait for hydration before fetching
     if (!isHydrated) return;
-
-    // Skip if we've already attempted initial fetch for this subject (prevent double-fetching)
-    // But still allow refetch if the questions array is empty (first load or never fetched)
-    if (initialFetchAttempted.current[activeSection]) {
-      const currentQuestions = allQuestions[activeSection];
-      if (currentQuestions && currentQuestions.length > 0) {
-        return;
-      }
-    }
-    initialFetchAttempted.current[activeSection] = true;
 
     const isSubjectSection = subjects.some(s => s.slug === activeSection);
 
@@ -375,8 +362,6 @@ export default function AdminPage(): JSX.Element {
     setQuestionFilters((prev) => {
       const current = prev?.[subjectSlug];
       const next = filters;
-      // Avoid update if nothing changed
-      if (JSON.stringify(current) === JSON.stringify(next)) return prev;
       return { ...prev, [subjectSlug]: next };
     });
     // Reset to page 1 when filters change
