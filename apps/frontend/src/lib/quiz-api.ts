@@ -32,7 +32,6 @@ export interface QuizQuestion {
     question: string;
     options: string[] | null;
     correctAnswer: string;
-    questionType: 'mcq' | 'open_ended';
     correctLetter: string | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
@@ -65,7 +64,6 @@ export interface CreateQuestionDto {
     question: string;
     correctAnswer: string;
     correctLetter?: string | null;
-    questionType?: 'mcq' | 'open_ended';
     options: string[] | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
@@ -77,7 +75,6 @@ export interface UpdateQuestionDto {
     question?: string;
     correctAnswer?: string;
     correctLetter?: string | null;
-    questionType?: 'mcq' | 'open_ended';
     options?: string[] | null;
     level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId?: string;

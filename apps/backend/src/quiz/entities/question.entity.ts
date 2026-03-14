@@ -18,9 +18,6 @@ export class Question {
   @Column()
   correctAnswer: string;
 
-  @Column({ type: 'enum', enum: ['mcq', 'open_ended'], default: 'mcq' })
-  questionType: 'mcq' | 'open_ended';
-
   @Column({ type: 'varchar', length: 1, nullable: true })
   correctLetter: string | null;
 

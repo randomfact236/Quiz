@@ -301,26 +301,26 @@ export class QuizService {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
     if (!chapter) { throw new NotFoundException('Chapter not found'); }
 
-    // Validate question type
-    const questionType = dto.questionType || 'mcq';
-    const correctLetter = dto.correctLetter || null;
-
-    if (questionType === 'mcq' && !correctLetter) {
+    // Derive question type from level: extreme = open-ended, others = mcq
+    const levelStr = String(dto.level);
+    const isOpenEnded = levelStr === 'extreme';
+    
+    // Validate based on level
+    if (!isOpenEnded && !dto.correctLetter) {
       throw new BadRequestException('MCQ questions require correctLetter (A/B/C/D)');
     }
-    if (questionType === 'open_ended' && correctLetter) {
+    if (isOpenEnded && dto.correctLetter) {
       throw new BadRequestException('Open-ended questions must have correctLetter: null');
     }
-    if (questionType === 'mcq' && (!dto.options || dto.options.length < 2)) {
+    if (!isOpenEnded && (!dto.options || dto.options.length < 2)) {
       throw new BadRequestException('MCQ requires at least 2 options');
     }
 
     const question = this.questionRepo.create({
       question: dto.question,
       correctAnswer: dto.correctAnswer,
-      questionType,
-      correctLetter,
-      options: dto.questionType === 'open_ended' ? null : (dto.options || []),
+      correctLetter: isOpenEnded ? null : dto.correctLetter,
+      options: isOpenEnded ? null : (dto.options || []),
       level: dto.level,
       explanation: dto.explanation,
       chapter,
@@ -390,15 +390,16 @@ export class QuizService {
           continue;
         }
 
-        // Validate question type
-        const questionType = q.questionType || 'mcq';
+        // Validate question type - derive from level
+        const levelStr = String(q.level);
+        const isOpenEnded = levelStr === 'extreme';
         const correctLetter = q.correctLetter || null;
 
-        if (questionType === 'mcq' && !correctLetter) {
+        if (!isOpenEnded && !correctLetter) {
           errors.push(`Row ${offset + i + 1}: MCQ requires correctLetter (A/B/C/D)`);
           continue;
         }
-        if (questionType === 'open_ended' && correctLetter) {
+        if (isOpenEnded && correctLetter) {
           errors.push(`Row ${offset + i + 1}: Open-ended must have correctLetter: null`);
           continue;
         }
@@ -406,9 +407,8 @@ export class QuizService {
         const question = transactionalEntityManager.create(Question, {
           question: q.question,
           correctAnswer: q.correctAnswer,
-          questionType: q.questionType || 'mcq',
-          correctLetter: q.correctLetter || null,
-          options: q.questionType === 'open_ended' ? null : (q.options || []),
+          correctLetter: isOpenEnded ? null : correctLetter,
+          options: isOpenEnded ? null : (q.options || []),
           level: q.level,
           explanation: q.explanation,
           chapter,
@@ -438,14 +438,13 @@ export class QuizService {
     if (dto.correctAnswer !== undefined) {
       question.correctAnswer = dto.correctAnswer;
     }
-    if (dto.questionType !== undefined) {
-      question.questionType = dto.questionType;
-    }
     if (dto.correctLetter !== undefined) {
       question.correctLetter = dto.correctLetter || null;
     }
     if (dto.options !== undefined) {
-      question.options = dto.questionType === 'open_ended' ? null : dto.options;
+      // Derive from level to determine if open-ended
+      const level = dto.level || question.level;
+      question.options = level === 'extreme' ? null : dto.options;
     }
     if (dto.level !== undefined) {
       // Validate level if provided
@@ -454,6 +453,11 @@ export class QuizService {
         throw new BadRequestException(`Invalid level: ${dto.level}. Valid values: ${validLevels.join(', ')}`);
       }
       question.level = dto.level;
+      // Also update options based on new level
+      if (String(dto.level) === 'extreme') {
+        question.options = null;
+        question.correctLetter = null;
+      }
     }
     if (dto.explanation !== undefined) {
       question.explanation = dto.explanation;

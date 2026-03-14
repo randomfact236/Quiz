@@ -448,7 +448,6 @@ export async function importQuestionsFromCSV(
     question: string;
     correctAnswer: string;
     correctLetter: string | null;
-    questionType: 'mcq' | 'open_ended';
     options: string[] | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
@@ -481,7 +480,6 @@ export async function importQuestionsFromCSV(
         question: row.questionText,
         correctAnswer: row.correctAnswerRaw,
         correctLetter: null,
-        questionType: 'open_ended',
         options: null,
         level: row.level,
         chapterId: finalChapterId,
@@ -507,7 +505,6 @@ export async function importQuestionsFromCSV(
       question: row.questionText,
       correctAnswer: correctAnswerText,
       correctLetter: correctLetter,
-      questionType: 'mcq',
       options: options,
       level: row.level,
       chapterId: finalChapterId,

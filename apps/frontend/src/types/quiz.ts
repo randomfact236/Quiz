@@ -17,7 +17,6 @@ export interface Question {
   optionC: string;
   optionD: string;
   correctAnswer: string;
-  questionType: 'mcq' | 'open_ended';
   correctLetter: string | null;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapter: string;

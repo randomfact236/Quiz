@@ -78,7 +78,6 @@ interface QuestionFormState {
   optionD: string;
   correctAnswer: Question['correctAnswer'];
   correctLetter: string | null;
-  questionType: 'mcq' | 'open_ended';
   level: Question['level'];
   chapter: string;
 }
@@ -198,7 +197,6 @@ export function QuestionManagementSection({
     optionD: '',
     correctAnswer: 'A',
     correctLetter: 'A',
-    questionType: 'mcq',
     level: 'easy',
     chapter: '',
   });
@@ -447,7 +445,6 @@ export function QuestionManagementSection({
       optionD: '',
       correctAnswer: 'A',
       correctLetter: 'A',
-      questionType: 'mcq',
       level: 'easy',
       chapter: '',
     });
@@ -473,7 +470,6 @@ export function QuestionManagementSection({
     try {
       // Determine if open-ended based on level
       const isOpenEnded = questionForm.level === 'extreme';
-      const questionType: 'mcq' | 'open_ended' = isOpenEnded ? 'open_ended' : 'mcq';
       
       // Build options array (only for MCQ)
       const options = isOpenEnded 
@@ -492,7 +488,6 @@ export function QuestionManagementSection({
         question: questionForm.question.trim(),
         correctAnswer,
         correctLetter,
-        questionType,
         options,
         level: questionForm.level,
         chapterId,
@@ -507,7 +502,6 @@ export function QuestionManagementSection({
         optionC: created.options?.[2] || '',
         optionD: created.options?.[3] || '',
         correctAnswer: created.correctAnswer,
-        questionType: created.questionType,
         correctLetter: created.correctLetter,
         level: created.level,
         chapter: questionForm.chapter.trim(),
@@ -545,7 +539,6 @@ export function QuestionManagementSection({
     try {
       // Determine if open-ended based on level
       const isOpenEnded = questionForm.level === 'extreme';
-      const questionType: 'mcq' | 'open_ended' = isOpenEnded ? 'open_ended' : 'mcq';
       
       // Build options array (only for MCQ)
       const options = isOpenEnded 
@@ -564,7 +557,6 @@ export function QuestionManagementSection({
         question: questionForm.question.trim(),
         correctAnswer,
         correctLetter,
-        questionType,
         options,
         level: questionForm.level,
         chapterId,
@@ -578,7 +570,6 @@ export function QuestionManagementSection({
         optionC: options?.[2] || '',
         optionD: options?.[3] || '',
         correctAnswer,
-        questionType,
         correctLetter,
         level: questionForm.level,
         chapter: questionForm.chapter.trim(),
@@ -625,8 +616,7 @@ export function QuestionManagementSection({
       optionC: q.optionC || question.optionC || '',
       optionD: q.optionD || question.optionD || '',
       correctAnswer: q.correctLetter || question.correctAnswer || 'A',
-      correctLetter: q.correctLetter || null,
-      questionType: q.questionType || 'mcq',
+      correctLetter: q.correctLetter || question.correctLetter || null,
       level: question.level,
       chapter: question.chapter,
     });
@@ -2076,33 +2066,33 @@ const QuestionRow = React.memo(function QuestionRow({
       </td>
       <td className="px-3 py-3 align-top">
         <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-          (question as any).questionType === 'open_ended' 
+          question.level === 'extreme' 
             ? 'bg-green-100 text-green-700' 
             : 'bg-blue-100 text-blue-700'
         }`}>
-          {(question as any).questionType === 'open_ended' ? 'Open' : 'MCQ'}
+          {question.level === 'extreme' ? 'Open' : 'MCQ'}
         </span>
       </td>
       <td className="px-3 py-3 align-top">
         {question.level === 'extreme' ? (
           <div className="text-sm font-medium text-gray-500 italic">
-            Open ended (no options)
+            —
           </div>
         ) : (
           <div className="space-y-1 text-xs">
-            <div className={question.correctAnswer === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+            <div className={question.correctLetter === 'A' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
               A. {question.optionA}
             </div>
-            <div className={question.correctAnswer === 'B' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+            <div className={question.correctLetter === 'B' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
               B. {question.optionB}
             </div>
             {question.optionC && (
-              <div className={question.correctAnswer === 'C' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              <div className={question.correctLetter === 'C' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
                 C. {question.optionC}
               </div>
             )}
             {question.optionD && (
-              <div className={question.correctAnswer === 'D' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+              <div className={question.correctLetter === 'D' ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
                 D. {question.optionD}
               </div>
             )}
@@ -2110,7 +2100,7 @@ const QuestionRow = React.memo(function QuestionRow({
         )}
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-center align-top">
-        {question.level === 'extreme' || (question as any).questionType === 'open_ended' ? (
+        {question.level === 'extreme' ? (
           <div className="text-xs">
             <span className="font-medium text-gray-700 block mb-1">Answer:</span>
             <span className="inline-flex items-center justify-center rounded bg-purple-100 px-2 py-1 font-semibold text-purple-700 max-w-[120px] truncate" title={question.correctAnswer}>

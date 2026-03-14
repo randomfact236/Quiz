@@ -160,16 +160,14 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   // Get 2 related emojis
   const relatedEmojis = getRelatedEmojis(subjectEmoji);
 
-  // Check if answer is correct for feedback display
-  // For MCQ: compare selected letter with correctLetter
-  // For open-ended: compare normalized text
-  const questionType = (question as any).questionType || 'mcq';
+  // Derive question type from level: extreme = open-ended, others = mcq
+  const isOpenEnded = question.level === 'extreme';
   const correctLetter = (question as any).correctLetter || null;
   
-  const isCorrect = questionType === 'mcq'
-    ? selectedAnswer === correctLetter
-    : selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toLowerCase().trim();
-    
+  const isCorrect = isOpenEnded
+    ? selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toLowerCase().trim()
+    : selectedAnswer === correctLetter;
+     
   const isWrong = selectedAnswer && !isCorrect;
 
   // Randomized feedback state
@@ -343,7 +341,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         <AnswerOptions
           options={options}
           selectedKey={selectedAnswer}
-          correctKey={showFeedback ? (questionType === 'mcq' ? correctLetter || '' : question.correctAnswer) : ''}
+          correctKey={showFeedback ? (isOpenEnded ? question.correctAnswer : (correctLetter || '')) : ''}
           onSelect={handleSelectAnswer}
           disabled={disabled || timeUp}
           showFeedback={showFeedback || false}
