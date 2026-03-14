@@ -1846,9 +1846,6 @@ export function QuestionManagementSection({
                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-28">
                   Chapter
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-20">
-                  Type
-                </th>
                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-48">
                   Options
                 </th>
@@ -1866,7 +1863,7 @@ export function QuestionManagementSection({
             <tbody className="divide-y divide-gray-200">
               {filteredQuestions.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-12 text-center">
+                  <td colSpan={8} className="px-4 py-12 text-center">
                     <div className="flex flex-col items-center">
                       <FileQuestion className="w-12 h-12 text-gray-300 mb-3" />
                       <p className="text-gray-500 font-medium">No questions found</p>
@@ -2062,15 +2059,6 @@ const QuestionRow = React.memo(function QuestionRow({
       <td className="px-3 py-3 align-top">
         <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
           {question.chapter || 'General'}
-        </span>
-      </td>
-      <td className="px-3 py-3 align-top">
-        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-          question.level === 'extreme' 
-            ? 'bg-green-100 text-green-700' 
-            : 'bg-blue-100 text-blue-700'
-        }`}>
-          {question.level === 'extreme' ? 'Open' : 'MCQ'}
         </span>
       </td>
       <td className="px-3 py-3 align-top">
