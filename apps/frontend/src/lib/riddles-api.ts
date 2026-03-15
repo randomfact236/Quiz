@@ -99,6 +99,14 @@ export async function createCategory(dto: { name: string; emoji?: string }): Pro
 }
 
 /**
+ * Get all classic categories (Admin/Public)
+ */
+export async function getCategories(): Promise<any[]> {
+  const response = await api.get<any[]>('/riddles/classic/categories');
+  return response.data;
+}
+
+/**
  * Update a subject (Admin only)
  */
 export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {

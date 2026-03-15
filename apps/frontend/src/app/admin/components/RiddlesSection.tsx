@@ -151,21 +151,15 @@ export function RiddlesSection({
     });
 
     // Load Riddle MCQ Categories and Subjects
-    import('@/lib/riddles-api').then(({ getSubjects }) => {
-      getSubjects()
-        .then(apiSubjects => {
-          setSubjects(apiSubjects);
-          // Group subjects by category
-          const cats = apiSubjects.reduce((acc: any[], subject: any) => {
-            if (subject.category && !acc.find(c => c.id === subject.category.id)) {
-              acc.push(subject.category);
-            }
-            return acc;
-          }, []);
-          setCategories(cats);
-        })
-        .catch(err => console.error('Failed to load subjects:', err));
-    });
+    Promise.all([
+      import('@/lib/riddles-api').then(m => m.getSubjects()),
+      import('@/lib/riddles-api').then(m => m.getCategories())
+    ])
+      .then(([apiSubjects, apiCategories]) => {
+        setSubjects(apiSubjects);
+        setCategories(apiCategories);
+      })
+      .catch(err => console.error('Failed to load subjects/categories:', err));
   }, []);
 
   // Get unique chapters from riddles and always include the currently filtered one
@@ -719,7 +713,7 @@ export function RiddlesSection({
     if (!newCategoryName.trim()) return;
     setCategoryFormLoading(true);
     try {
-      const { createCategory } = await import('@/lib/riddles-api');
+      const { createCategory, getCategories, getSubjects } = await import('@/lib/riddles-api');
       await createCategory({
         name: newCategoryName,
         emoji: newCategoryEmoji,
@@ -727,17 +721,13 @@ export function RiddlesSection({
       setNewCategoryName('');
       setNewCategoryEmoji('📁');
       setShowAddCategoryModal(false);
-      // Reload subjects
-      const { getSubjects } = await import('@/lib/riddles-api');
-      const apiSubjects = await getSubjects();
+      // Reload categories and subjects
+      const [apiCategories, apiSubjects] = await Promise.all([
+        getCategories(),
+        getSubjects()
+      ]);
+      setCategories(apiCategories);
       setSubjects(apiSubjects);
-      const cats = apiSubjects.reduce((acc: any[], subject: any) => {
-        if (subject.category && !acc.find(c => c.id === subject.category.id)) {
-          acc.push(subject.category);
-        }
-        return acc;
-      }, []);
-      setCategories(cats);
     } catch (err: any) {
       alert('Failed to create category: ' + err.message);
     } finally {
@@ -762,9 +752,14 @@ export function RiddlesSection({
       setNewSubjectName('');
       setNewSubjectEmoji('📚');
       setShowAddSubjectModal(false);
-      // Reload subjects
-      const apiSubjects = await (await import('@/lib/riddles-api')).getSubjects();
+      // Reload subjects and categories
+      const { getSubjects, getCategories } = await import('@/lib/riddles-api');
+      const [apiSubjects, apiCategories] = await Promise.all([
+        getSubjects(),
+        getCategories()
+      ]);
       setSubjects(apiSubjects);
+      setCategories(apiCategories);
     } catch (err: any) {
       alert('Failed to create subject: ' + err.message);
     } finally {
