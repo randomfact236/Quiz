@@ -790,7 +790,7 @@ export function RiddlesSection({
     if (!newSubjectName.trim()) return;
     setCategoryFormLoading(true);
     try {
-      const { createSubject, getCategories, createCategory } = await import('@/lib/riddles-api');
+      const { createSubject, getSubjects, getCategories, createCategory } = await import('@/lib/riddles-api');
       
       let categoryId = selectedCategoryId;
       
