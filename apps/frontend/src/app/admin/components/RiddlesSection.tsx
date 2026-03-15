@@ -558,9 +558,10 @@ export function RiddlesSection({
       return;
     }
 
-    const chapterId = chapterNameToId[riddleForm.chapter.trim()];
-    if (!chapterId) {
-      alert(`Chapter "${riddleForm.chapter}" not found on backend. Please ensure it exists.`);
+    const subjectId = riddleForm.chapter.trim();
+    const selectedSubject = subjects.find(s => s.id === subjectId);
+    if (!selectedSubject) {
+      alert(`Subject not found. Please select a valid subject.`);
       return;
     }
 
@@ -581,7 +582,7 @@ export function RiddlesSection({
         correctLetter: riddleForm.correctLetter,
         correctAnswer: correctAnswerText,
         level: riddleForm.difficulty,
-        chapterId: chapterId,
+        subjectId: subjectId,
       })) as any;
 
       const newRiddle: Riddle = {
@@ -1507,20 +1508,20 @@ export function RiddlesSection({
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="riddle-chapter" className="mb-1 block text-sm font-medium text-gray-700">
-                    Chapter *
+                  <label htmlFor="riddle-subject" className="mb-1 block text-sm font-medium text-gray-700">
+                    Subject *
                   </label>
                   <select
-                    id="riddle-chapter"
+                    id="riddle-subject"
                     value={riddleForm.chapter}
                     onChange={e => setRiddleForm(prev => ({ ...prev, chapter: e.target.value }))}
                     className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     aria-required="true"
                   >
-                    <option value="">Select Chapter</option>
-                    {chapters.map(ch => (
-                      <option key={`chapter-option-${ch}`} value={ch}>
-                        {ch}
+                    <option value="">Select Subject</option>
+                    {subjects.map(sub => (
+                      <option key={`subject-option-${sub.id}`} value={sub.id}>
+                        {sub.emoji || '📚'} {sub.name}
                       </option>
                     ))}
                   </select>
