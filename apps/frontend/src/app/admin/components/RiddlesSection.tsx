@@ -48,6 +48,9 @@ interface RiddleFormState {
   correctLetter: string;
   difficulty: Riddle['difficulty'];
   chapter: string;
+  hint: string;
+  explanation: string;
+  isOpenEnded: boolean;
 }
 
 /**
@@ -116,6 +119,9 @@ export function RiddlesSection({
     correctLetter: 'A',
     difficulty: 'easy',
     chapter: '',
+    hint: '',
+    explanation: '',
+    isOpenEnded: false,
   });
 
   const [chapterNameToId, setChapterNameToId] = useState<Record<string, string>>({});
@@ -480,6 +486,9 @@ export function RiddlesSection({
       correctLetter: 'A',
       difficulty: 'easy',
       chapter: '',
+      hint: '',
+      explanation: '',
+      isOpenEnded: false,
     });
   };
 
@@ -697,14 +706,17 @@ export function RiddlesSection({
     setSelectedRiddle(riddle);
     setRiddleForm({
       question: riddle.question,
-      optionA: riddle.options[0] || '',
-      optionB: riddle.options[1] || '',
-      optionC: riddle.options[2] || '',
-      optionD: riddle.options[3] || '',
+      optionA: riddle.options?.[0] || '',
+      optionB: riddle.options?.[1] || '',
+      optionC: riddle.options?.[2] || '',
+      optionD: riddle.options?.[3] || '',
       correctOption: riddle.correctOption,
       correctLetter: riddle.correctOption,
       difficulty: riddle.difficulty,
       chapter: riddle.chapter,
+      hint: riddle.hint || '',
+      explanation: riddle.explanation || '',
+      isOpenEnded: riddle.difficulty === 'expert',
     });
     setShowEditModal(true);
   };
@@ -1488,30 +1500,34 @@ export function RiddlesSection({
                     <option value="D">D</option>
                   </select>
                 </div>
-                <div>
-                  <label htmlFor="riddle-difficulty" className="mb-1 block text-sm font-medium text-gray-700">
-                    Difficulty *
-                  </label>
-                  <select
-                    id="riddle-difficulty"
-                    value={riddleForm.difficulty}
-                    onChange={e =>
-                      setRiddleForm(prev => ({ ...prev, difficulty: e.target.value as Riddle['difficulty'] }))
-                    }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                    aria-required="true"
-                  >
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                    <option value="expert">Expert</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="riddle-subject" className="mb-1 block text-sm font-medium text-gray-700">
-                    Subject *
-                  </label>
-                  <select
+                  <div>
+                    <label htmlFor="riddle-difficulty" className="mb-1 block text-sm font-medium text-gray-700">
+                      Difficulty *
+                    </label>
+                    <select
+                      id="riddle-difficulty"
+                      value={riddleForm.difficulty}
+                      onChange={e =>
+                        setRiddleForm(prev => ({ 
+                          ...prev, 
+                          difficulty: e.target.value as Riddle['difficulty'],
+                          isOpenEnded: e.target.value === 'expert'
+                        }))
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      aria-required="true"
+                    >
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                      <option value="expert">Expert (Open-Ended)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="riddle-subject" className="mb-1 block text-sm font-medium text-gray-700">
+                      Subject *
+                    </label>
+                    <select
                     id="riddle-subject"
                     value={riddleForm.chapter}
                     onChange={e => setRiddleForm(prev => ({ ...prev, chapter: e.target.value }))}
