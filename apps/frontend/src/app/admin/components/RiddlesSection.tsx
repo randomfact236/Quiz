@@ -1006,7 +1006,7 @@ export function RiddlesSection({
       </div>
 
       {/* Category & Subject with Level & Search */}
-      <div className="mb-4 space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
+      <div className={`mb-4 space-y-3 rounded-lg border p-4 ${selectedCategoryId || selectedSubjectId ? 'bg-purple-50 border-purple-300' : 'bg-gray-50 border-gray-200'}`}>
         {/* Categories Row with Add Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Category:</span>
@@ -1020,10 +1020,10 @@ export function RiddlesSection({
             All
           </button>
           {categories.map(cat => (
-            <div key={`cat-${cat.id}`} className="flex items-center gap-1 rounded-lg bg-white border border-gray-300 px-2 py-1">
+            <div key={`cat-${cat.id}`} className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${selectedCategoryId === cat.id ? 'bg-purple-500 border-purple-600' : 'bg-white border-gray-300 hover:bg-purple-50'}`}>
               <button
                 className={`text-sm font-medium transition-colors ${selectedCategoryId === cat.id
-                  ? 'text-purple-600'
+                  ? 'text-white'
                   : 'text-gray-700 hover:text-purple-600'
                   }`}
                 onClick={() => setSelectedCategoryId(cat.id)}
@@ -1032,14 +1032,14 @@ export function RiddlesSection({
               </button>
               <button
                 onClick={() => handleEditCategory(cat)}
-                className="ml-1 text-xs text-gray-400 hover:text-blue-500"
+                className={`ml-1 text-xs ${selectedCategoryId === cat.id ? 'text-purple-200 hover:text-white' : 'text-gray-400 hover:text-blue-500'}`}
                 title="Edit"
               >
                 ✏️
               </button>
               <button
                 onClick={() => setDeletingCategoryId(cat.id)}
-                className="text-xs text-gray-400 hover:text-red-600"
+                className={`text-xs ${selectedCategoryId === cat.id ? 'text-purple-200 hover:text-white' : 'text-gray-400 hover:text-red-500'}`}
                 title="Delete"
               >
                 🗑️
@@ -1069,10 +1069,10 @@ export function RiddlesSection({
           {subjects
             .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
             .map(sub => (
-              <div key={`sub-${sub.id}`} className="flex items-center gap-1 rounded-lg bg-white border border-gray-200 px-2 py-1">
+              <div key={`sub-${sub.id}`} className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${selectedSubjectId === sub.id ? 'bg-indigo-500 border-indigo-600' : 'bg-white border-gray-200 hover:bg-indigo-50'}`}>
                 <button
                   className={`text-sm transition-colors ${selectedSubjectId === sub.id
-                    ? 'text-indigo-600 font-medium'
+                    ? 'text-white font-medium'
                     : 'text-gray-700 hover:text-indigo-600'
                     }`}
                   onClick={() => setSelectedSubjectId(sub.id)}
@@ -1081,14 +1081,14 @@ export function RiddlesSection({
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleEditSubject(sub); }}
-                  className="ml-1 text-xs text-gray-400 hover:text-blue-500"
+                  className={`ml-1 text-xs ${selectedSubjectId === sub.id ? 'text-indigo-200 hover:text-white' : 'text-gray-400 hover:text-blue-500'}`}
                   title="Edit"
                 >
                   ✏️
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); setDeletingSubjectId(sub.id); }}
-                  className="text-xs text-gray-400 hover:text-red-600"
+                  className={`text-xs ${selectedSubjectId === sub.id ? 'text-indigo-200 hover:text-white' : 'text-gray-400 hover:text-red-500'}`}
                   title="Delete"
                 >
                   🗑️

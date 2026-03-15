@@ -405,7 +405,8 @@ export class RiddlesService {
     return this.cacheService.getOrSet(
       cacheKey,
       async () => {
-        const query = this.subjectRepo.createQueryBuilder('subject');
+        const query = this.subjectRepo.createQueryBuilder('subject')
+          .leftJoinAndSelect('subject.category', 'category');
 
         if (!includeInactive) {
           query.andWhere('subject.isActive = :isActive', { isActive: true });
