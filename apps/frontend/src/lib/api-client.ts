@@ -125,6 +125,15 @@ export async function apiRequest<T>(
       throw new ApiError(response.status, error.message || `HTTP ${response.status}`);
     }
 
+    // Handle empty responses (204 No Content or empty body)
+    if (response.status === 204) {
+      return {
+        data: undefined as T,
+        status: response.status,
+        ok: response.ok,
+      };
+    }
+
     const data = await response.json();
 
     return {
