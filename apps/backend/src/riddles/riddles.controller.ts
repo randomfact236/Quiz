@@ -203,10 +203,10 @@ export class RiddlesController {
 
   @Delete('classic/categories/:id')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a riddle category and all its riddles (Admin only)' })
-  async removeCategory(@Param('id') id: string): Promise<void> {
+  async removeCategory(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
     await this.riddlesService.deleteCategory(id);
+    return { success: true, message: 'Category deleted successfully' };
   }
 
   @Put('classic/:id')
@@ -220,11 +220,10 @@ export class RiddlesController {
 
   @Delete('classic/:id')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a classic riddle (Admin only)' })
-  @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
-  async removeClassic(@Param('id') id: string): Promise<void> {
+  async removeClassic(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
     await this.riddlesService.deleteRiddle(id);
+    return { success: true, message: 'Riddle deleted successfully' };
   }
 
   // ==================== QUIZ FORMAT - PUBLIC ====================
@@ -343,10 +342,10 @@ export class RiddlesController {
 
   @Delete('subjects/:id')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete riddle subject (Quiz format, Admin only)' })
-  async deleteSubject(@Param('id') id: string): Promise<void> {
+  async deleteSubject(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
     await this.riddlesService.deleteSubject(id);
+    return { success: true, message: 'Subject deleted successfully' };
   }
 
   @Post('chapters')
@@ -368,10 +367,10 @@ export class RiddlesController {
 
   @Delete('chapters/:id')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete riddle chapter (Quiz format, Admin only)' })
-  async deleteChapter(@Param('id') id: string): Promise<void> {
+  async deleteChapter(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
     await this.riddlesService.deleteChapter(id);
+    return { success: true, message: 'Chapter deleted successfully' };
   }
 
   @Post('quiz/bulk-action')
@@ -410,10 +409,10 @@ export class RiddlesController {
 
   @Delete('quiz/:id')
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete quiz riddle (Admin only)' })
-  async deleteQuizRiddle(@Param('id') id: string): Promise<void> {
+  async deleteQuizRiddle(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
     await this.riddlesService.deleteQuizRiddle(id);
+    return { success: true, message: 'Quiz riddle deleted successfully' };
   }
 
   // ==================== STATS ====================
