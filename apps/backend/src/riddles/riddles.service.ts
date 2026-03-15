@@ -340,7 +340,14 @@ export class RiddlesService {
   }
 
   async createCategory(dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
-    const slug = this.generateSlug(dto.name);
+    let slug = this.generateSlug(dto.name);
+    
+    // Check for existing slug and append random suffix if duplicate
+    const existing = await this.categoryRepo.findOne({ where: { slug } });
+    if (existing) {
+      slug = `${slug}-${Date.now()}`;
+    }
+    
     const category = this.categoryRepo.create({
       name: dto.name,
       slug,
