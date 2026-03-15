@@ -790,20 +790,33 @@ export function RiddlesSection({
     if (!newSubjectName.trim()) return;
     setCategoryFormLoading(true);
     try {
-      const { createSubject } = await import('@/lib/riddles-api');
+      const { createSubject, getCategories, createCategory } = await import('@/lib/riddles-api');
+      
+      let categoryId = selectedCategoryId;
+      
+      // If no category selected, get or create "Miscellaneous" category
+      if (!categoryId) {
+        let miscCategory = categories.find(c => c.name.toLowerCase() === 'miscellaneous');
+        if (!miscCategory) {
+          miscCategory = await createCategory({
+            name: 'Miscellaneous',
+            emoji: '📁'
+          });
+        }
+        categoryId = miscCategory.id;
+      }
+      
       const subjectDto: any = {
         name: newSubjectName,
         emoji: newSubjectEmoji,
+        categoryId: categoryId,
       };
-      if (selectedCategoryId) {
-        subjectDto.categoryId = selectedCategoryId;
-      }
+      
       await createSubject(subjectDto);
       setNewSubjectName('');
       setNewSubjectEmoji('📚');
       setShowAddSubjectModal(false);
       // Reload subjects and categories
-      const { getSubjects, getCategories } = await import('@/lib/riddles-api');
       const [apiSubjects, apiCategories] = await Promise.all([
         getSubjects(),
         getCategories()
