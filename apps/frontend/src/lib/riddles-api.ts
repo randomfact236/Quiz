@@ -218,13 +218,13 @@ export async function getRiddlesBySubject(
   page: number = 1,
   limit: number = 50,
   level?: string
-): Promise<PaginatedResponse<QuizRiddle>> {
+): Promise<{ data: QuizRiddle[]; total: number }> {
   let url = `/riddles/quiz-by-subject/${subjectId}?page=${page}&limit=${limit}`;
   if (level && level !== 'all') {
     url += `&level=${level}`;
   }
-  const response = await apiRequest<QuizRiddle[]>(url);
-  return response.data as unknown as PaginatedResponse<QuizRiddle>;
+  const response = await apiRequest<{ data: QuizRiddle[]; total: number }>(url);
+  return response.data;
 }
 
 /**

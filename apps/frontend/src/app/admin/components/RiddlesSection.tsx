@@ -210,8 +210,8 @@ export function RiddlesSection({
     const matchesChapter = !riddleFilterChapter || riddle.chapter === riddleFilterChapter;
     const matchesSearch = !riddleSearch ||
       riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.options[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.options[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+      riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
     const riddleStatus = riddle.status || 'published';
     const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
     return matchesDifficulty && matchesChapter && matchesSearch && matchesStatus;
@@ -1581,71 +1581,6 @@ export function RiddlesSection({
                 className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
               >
                 {selectedRiddle.status === 'trash' ? 'Permanently Delete' : 'Trash'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Chapter Modal */}
-      {showAddChapterModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md transform rounded-xl border border-gray-100 bg-white p-6 text-left align-middle shadow-2xl transition-all">
-            <h3 className="mb-4 text-xl font-bold leading-6 text-gray-900">Add New Chapter</h3>
-            <div className="mb-6">
-              <label htmlFor="new-chapter-name" className="mb-2 block text-sm font-medium text-gray-700">
-                Chapter Name
-              </label>
-              <input
-                id="new-chapter-name"
-                type="text"
-                autoFocus
-                value={newChapterName}
-                onChange={(e) => setNewChapterName(e.target.value)}
-                placeholder="e.g., Logic Puzzles, Math Riddles, Wordplay"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition-all placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    const cleanName = newChapterName.trim();
-                    if (cleanName) {
-                      setRiddleFilterChapter(cleanName);
-                      // Persist new chapter in the order state
-                      if (!riddleChapterOrder.includes(cleanName)) {
-                        setRiddleChapterOrder(prev => [...prev, cleanName]);
-                      }
-                      setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
-                      setShowAddChapterModal(false);
-                    }
-                  } else if (e.key === 'Escape') {
-                    setShowAddChapterModal(false);
-                  }
-                }}
-              />
-            </div>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowAddChapterModal(false)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  const cleanName = newChapterName.trim();
-                  if (cleanName) {
-                    setRiddleFilterChapter(cleanName);
-                    // Persist new chapter in the order state
-                    if (!riddleChapterOrder.includes(cleanName)) {
-                      setRiddleChapterOrder(prev => [...prev, cleanName]);
-                    }
-                    setRiddleForm(prev => ({ ...prev, chapter: cleanName }));
-                    setShowAddChapterModal(false);
-                  }
-                }}
-                disabled={!newChapterName.trim()}
-                className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-green-300"
-              >
-                Create Chapter
               </button>
             </div>
           </div>
