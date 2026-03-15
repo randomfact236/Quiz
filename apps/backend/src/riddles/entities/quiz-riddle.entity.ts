@@ -11,6 +11,7 @@ import {
 import { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';
 
 import { RiddleChapter } from './riddle-chapter.entity';
+import { RiddleSubject } from './riddle-subject.entity';
 
 // Re-export for modules that import the enum alongside the entity
 export { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';
@@ -39,7 +40,17 @@ export class QuizRiddle {
   @Column({ type: 'enum', enum: QuizRiddleLevel })
   level: string;
 
-  @ManyToOne(() => RiddleChapter, (chapter) => chapter.riddles)
+  @Column({ nullable: true })
+  subjectId: string;
+
+  @ManyToOne(() => RiddleSubject, (subject) => subject.riddles, { nullable: true })
+  @JoinColumn({ name: 'subjectId' })
+  subject: RiddleSubject;
+
+  @Column({ nullable: true })
+  chapterId: string;
+
+  @ManyToOne(() => RiddleChapter, (chapter) => chapter.riddles, { nullable: true })
   @JoinColumn({ name: 'chapterId' })
   chapter: RiddleChapter;
 

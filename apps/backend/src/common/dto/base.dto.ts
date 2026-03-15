@@ -403,10 +403,8 @@ export class UpdateQuizJokeDto {
 // ==================== RIDDLE SUBJECTS (Quiz Format) ====================
 
 export class CreateRiddleSubjectDto {
-  @ApiProperty({ example: 'brain-teasers', description: 'Unique slug' })
-  @IsString()
-  @IsNotEmpty()
-  slug: string;
+  @ApiPropertyOptional({ example: 'brain-teasers', description: 'Unique slug (auto-generated if not provided)' })
+  slug?: string;
 
   @ApiProperty({ example: 'Brain Teasers', description: 'Subject name' })
   @IsString()
@@ -417,6 +415,11 @@ export class CreateRiddleSubjectDto {
   @IsString()
   @IsNotEmpty()
   emoji: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID (for Riddle MCQ)' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
 
   @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
   @IsOptional()
@@ -445,6 +448,11 @@ export class UpdateRiddleSubjectDto {
   @IsOptional()
   @IsString()
   emoji?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
 
   @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
   @IsOptional()
@@ -510,6 +518,11 @@ export class CreateQuizRiddleDto {
   @IsString({ each: true })
   options: string[];
 
+  @ApiProperty({ example: 'A' })
+  @IsString()
+  @IsNotEmpty()
+  correctLetter: string;
+
   @ApiProperty({ example: 'A piano' })
   @IsString()
   @IsNotEmpty()
@@ -519,10 +532,15 @@ export class CreateQuizRiddleDto {
   @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
   level: string;
 
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID (alternative to chapterId)' })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  chapterId: string;
+  subjectId?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsOptional()
+  @IsString()
+  chapterId?: string;
 
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()
@@ -547,6 +565,11 @@ export class UpdateQuizRiddleDto {
   @IsString({ each: true })
   options?: string[];
 
+  @ApiPropertyOptional({ example: 'A' })
+  @IsOptional()
+  @IsString()
+  correctLetter?: string;
+
   @ApiPropertyOptional({ example: 'A piano' })
   @IsOptional()
   @IsString()
@@ -556,6 +579,11 @@ export class UpdateQuizRiddleDto {
   @IsOptional()
   @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
   level?: string;
+
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID' })
+  @IsOptional()
+  @IsString()
+  subjectId?: string;
 
   @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsOptional()

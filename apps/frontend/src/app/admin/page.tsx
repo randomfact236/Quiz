@@ -1205,7 +1205,7 @@ export default function AdminPage(): JSX.Element {
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
               {activeSection === 'dashboard' && <><LayoutDashboard className="w-6 h-6" /> Dashboard</>}
               {activeSection === 'jokes' && <><Smile className="w-6 h-6" /> Dad Jokes Management</>}
-              {activeSection === 'riddles' && <><Puzzle className="w-6 h-6" /> Riddles Management</>}
+              {activeSection === 'riddles' && <><Puzzle className="w-6 h-6" /> Riddle MCQ Management</>}
               {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
               {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}

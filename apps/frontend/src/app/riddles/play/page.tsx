@@ -136,7 +136,7 @@ function RiddlePlayPageContent(): JSX.Element {
         let fetchedRiddles: Riddle[] = [];
 
         if (chapterId === 'all') {
-          let mixed: { level?: string; id: string; question: string; options: string[]; correctAnswer: string; chapter?: { name?: string }; chapterId: string; explanation?: string; hint?: string }[] = [];
+          let mixed: { level?: string; id: string; question: string; options: string[]; correctAnswer: string; chapter?: { name?: string }; chapterId?: string; explanation?: string; hint?: string }[] = [];
 
           if (level && level !== 'all') {
             const response = await getRandomRiddles(level, 20);

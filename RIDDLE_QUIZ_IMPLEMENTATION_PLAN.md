@@ -1,14 +1,13 @@
-# Riddle Quiz Implementation Plan
+# Riddle MCQ Implementation Plan
 
 ## System Overview
 
 | Aspect | Riddle | Quiz |
 |--------|--------|------|
-| **Hierarchy** | Category → Subject → Riddles | Subject → Chapter → Questions |
-| **Difficulty** | 4 levels (easy, medium, hard, expert) | 5 levels (easy→extreme) |
+| **Hierarchy** | Category → Subject → Riddle MCQs | Subject → Chapter → Questions |
 | **True/False** | ❌ No | ✅ Yes |
 | **Answer Storage** | `correctLetter` + `correctAnswer` | Same |
-| **Dynamic** | ✅ Fully dynamic | ✅ Fully dynamic |
+| **Dynamic** | ✅ Fully dynamic (Riddle MCQ) | ✅ Fully dynamic |
 
 ---
 
@@ -18,9 +17,9 @@
 
 | Level | Database Table | Name | Quiz Equivalent |
 |-------|---------------|------|-----------------|
-| 1 | `riddle_categories` | **Category** | Subject |
-| 2 | `riddle_subjects` | **Subject** | Chapter |
-| 3 | `quiz_riddles` | **Riddles** | Questions |
+| 1 | `riddle_mcq_categories` | **Category** | Subject |
+| 2 | `riddle_mcq_subjects` | **Subject** | Chapter |
+| 3 | `quiz_riddle_mcqs` | **Riddle MCQs** | Questions |
 
 ### Difficulty (4 Levels - NO true/false)
 
@@ -37,9 +36,9 @@
 
 | Step | Action |
 |------|--------|
-| 1.1 | Add `categoryId` to `riddle_subjects` (FK) |
-| 1.2 | Add unique constraint: `(name, categoryId)` on `riddle_subjects` |
-| 1.3 | Drop `riddle_chapters` table (not needed for riddles) |
+| 1.1 | Add `categoryId` to `riddle_mcq_subjects` (FK) |
+| 1.2 | Add unique constraint: `(name, categoryId)` on `riddle_mcq_subjects` |
+| 1.3 | Drop `riddle_chapters` table (not needed for Riddle MCQ) |
 | 1.4 | Auto-generate slug from name on create |
 
 ---
@@ -50,9 +49,9 @@
 
 | Entity | Changes |
 |--------|---------|
-| `riddle-category.entity.ts` | Add `@OneToMany(() => RiddleSubject)` |
-| `riddle-subject.entity.ts` | Add `@ManyToOne(() => RiddleCategory)`, remove chapter relationship |
-| `quiz-riddle.entity.ts` | Ensure `hint` field exists |
+| `riddle-mcq-category.entity.ts` | Add `@OneToMany(() => RiddleMcqSubject)` |
+| `riddle-mcq-subject.entity.ts` | Add `@ManyToOne(() => RiddleMcqCategory)`, remove chapter relationship |
+| `quiz-riddle-mcq.entity.ts` | Ensure `hint` field exists |
 
 ### Service
 
@@ -68,14 +67,14 @@
 ## Part 3: Frontend Types
 
 ```typescript
-interface RiddleCategory {
+interface RiddleMcqCategory {
   id: string;
   name: string;
   slug: string;
   emoji?: string;
 }
 
-interface RiddleSubject {
+interface RiddleMcqSubject {
   id: string;
   name: string;
   slug: string;
@@ -83,7 +82,7 @@ interface RiddleSubject {
   emoji?: string;
 }
 
-interface Riddle {
+interface RiddleMcq {
   id: string;
   question: string;
   options: string[];
@@ -102,39 +101,39 @@ interface Riddle {
 ## Part 4: Frontend API
 
 ```typescript
-// Categories
-getCategories()
-createCategory(data: { name, emoji? })
-updateCategory(id: string, data: { name, emoji? })
-deleteCategory(id: string)
+// Riddle MCQ Categories
+getRiddleMcqCategories()
+createRiddleMcqCategory(data: { name, emoji? })
+updateRiddleMcqCategory(id: string, data: { name, emoji? })
+deleteRiddleMcqCategory(id: string)
 
-// Subjects
-getSubjects(categoryId?: string)
-createSubject(data: { name, categoryId, emoji? })
-updateSubject(id: string, data: { name, categoryId, emoji? })
-deleteSubject(id: string)
+// Riddle MCQ Subjects
+getRiddleMcqSubjects(categoryId?: string)
+createRiddleMcqSubject(data: { name, categoryId, emoji? })
+updateRiddleMcqSubject(id: string, data: { name, categoryId, emoji? })
+deleteRiddleMcqSubject(id: string)
 
-// Riddles
-getRiddlesBySubject(subjectId, page?, limit?)
-createRiddle(data: RiddleDto)
-updateRiddle(id: string, data: RiddleDto)
-deleteRiddle(id: string)
+// Riddle MCQs
+getRiddleMcqsBySubject(subjectId, page?, limit?)
+createRiddleMcq(data: RiddleMcqDto)
+updateRiddleMcq(id: string, data: RiddleMcqDto)
+deleteRiddleMcq(id: string)
 ```
 
 ---
 
 ## Part 5: Admin UI
 
-### 5.1 Category Management
+### 5.1 Riddle MCQ Category Management
 - List all categories with emoji
 - Create/Edit/Delete modals
 
-### 5.2 Subject Management
+### 5.2 Riddle MCQ Subject Management
 - List subjects grouped by category
 - Create/Edit with category selector
 - Delete with warning
 
-### 5.3 Riddle Management
+### 5.3 Riddle MCQ Management
 - Filters: Category, Subject, Level, Search
 - Create/Edit form with:
   - Question textarea
@@ -195,9 +194,9 @@ Category, Subject, Question, Option A, Option B, Option C, Option D, Correct Ans
 ## Part 7: Data Cleanup (One-time)
 
 ```sql
-DELETE FROM quiz_riddles;
-DELETE FROM riddle_subjects;
-DELETE FROM riddle_categories;
+DELETE FROM quiz_riddle_mcqs;
+DELETE FROM riddle_mcq_subjects;
+DELETE FROM riddle_mcq_categories;
 DROP TABLE IF EXISTS riddle_chapters;
 ```
 
@@ -206,15 +205,15 @@ DROP TABLE IF EXISTS riddle_chapters;
 ## Files to Modify
 
 ### Backend (4 files)
-- `riddle-category.entity.ts`
-- `riddle-subject.entity.ts`
-- `riddles.service.ts`
-- `riddles.controller.ts`
+- `riddle-mcq-category.entity.ts` (rename from riddle-category.entity.ts)
+- `riddle-mcq-subject.entity.ts` (rename from riddle-subject.entity.ts)
+- `riddle-mcqs.service.ts` (rename from riddles.service.ts)
+- `riddle-mcqs.controller.ts` (rename from riddles.controller.ts)
 
 ### Frontend (4 files)
-- `admin/types/index.ts`
-- `riddles-api.ts`
-- `RiddlesSection.tsx`
+- `admin/types/index.ts` (update types to RiddleMcq*)
+- `riddle-mcqs-api.ts` (rename from riddles-api.ts)
+- `RiddleMcqSection.tsx` (rename from RiddlesSection.tsx)
 - `admin/utils/index.ts`
 
 ---
@@ -223,7 +222,8 @@ DROP TABLE IF EXISTS riddle_chapters;
 
 | Aspect | Status |
 |--------|--------|
-| Hierarchy | ✅ Category → Subject → Riddles |
+| Rename existing | ✅ riddle → riddle-mcq (files, types, routes) |
+| Hierarchy | ✅ Category → Subject → Riddle MCQs |
 | Difficulty | ✅ 4 levels (no true/false) |
 | Answer Storage | ✅ Keep correctLetter + correctAnswer |
 | Hint System | ✅ Optional import, 💡 slide-reveal UI |

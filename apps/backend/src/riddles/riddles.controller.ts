@@ -279,6 +279,17 @@ export class RiddlesController {
     return this.riddlesService.findAllQuizRiddlesAdmin();
   }
 
+  @Get('quiz-by-subject/:subjectId')
+  @ApiOperation({ summary: 'Get quiz riddles by subject ID (Riddle MCQ)' })
+  @ApiResponse({ status: 200, description: 'Returns quiz riddles by subject' })
+  findQuizRiddlesBySubject(
+    @Param('subjectId') subjectId: string,
+    @Query() pagination: PaginationDto,
+    @Query('level') level?: string,
+  ): Promise<{ data: QuizRiddle[]; total: number }> {
+    return this.riddlesService.findQuizRiddlesBySubject(subjectId, pagination, level);
+  }
+
   @Get('quiz/:chapterId')
   @ApiOperation({ summary: 'Get quiz riddles by chapter ID' })
   @ApiResponse({ status: 200, description: 'Returns quiz riddles' })

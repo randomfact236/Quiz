@@ -121,6 +121,18 @@ export function RiddlesSection({
   const [chapterNameToId, setChapterNameToId] = useState<Record<string, string>>({});
   const defaultSubjectIdRef = useRef<string>('');
 
+  // Riddle MCQ Category & Subject State
+  const [categories, setCategories] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryEmoji, setNewCategoryEmoji] = useState('📁');
+  const [newSubjectName, setNewSubjectName] = useState('');
+  const [newSubjectEmoji, setNewSubjectEmoji] = useState('📚');
+  const [categoryFormLoading, setCategoryFormLoading] = useState(false);
+
   useEffect(() => {
     import('@/lib/riddles-api').then(({ getAllChapters }) => {
       getAllChapters()
@@ -137,6 +149,23 @@ export function RiddlesSection({
         })
         .catch(err => console.error('Failed to load chapters for RiddlesSection:', err));
     });
+
+    // Load Riddle MCQ Categories and Subjects
+    import('@/lib/riddles-api').then(({ getSubjects }) => {
+      getSubjects()
+        .then(apiSubjects => {
+          setSubjects(apiSubjects);
+          // Group subjects by category
+          const cats = apiSubjects.reduce((acc: any[], subject: any) => {
+            if (subject.category && !acc.find(c => c.id === subject.category.id)) {
+              acc.push(subject.category);
+            }
+            return acc;
+          }, []);
+          setCategories(cats);
+        })
+        .catch(err => console.error('Failed to load subjects:', err));
+    });
   }, []);
 
   // Get unique chapters from riddles and always include the currently filtered one
@@ -146,12 +175,6 @@ export function RiddlesSection({
     chapterSet.add(riddleFilterChapter);
   }
   const chapters = Array.from(chapterSet);
-
-  // Calculate chapter counts
-  const chapterCounts = chapters.reduce((acc, chapter) => {
-    acc[chapter] = allRiddles.filter(r => r.chapter === chapter).length;
-    return acc;
-  }, {} as Record<string, number>);
 
   // Calculate difficulty counts
   const difficultyCounts = {
@@ -691,12 +714,70 @@ export function RiddlesSection({
     { value: 'expert', label: 'Expert' },
   ];
 
+  // Handle create category (creates a subject with category)
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    setCategoryFormLoading(true);
+    try {
+      const { createSubject } = await import('@/lib/riddles-api');
+      await createSubject({
+        name: newCategoryName,
+        emoji: newCategoryEmoji,
+      });
+      setNewCategoryName('');
+      setNewCategoryEmoji('📁');
+      setShowAddCategoryModal(false);
+      // Reload subjects
+      const { getSubjects } = await import('@/lib/riddles-api');
+      const apiSubjects = await getSubjects();
+      setSubjects(apiSubjects);
+      const cats = apiSubjects.reduce((acc: any[], subject: any) => {
+        if (subject.category && !acc.find(c => c.id === subject.category.id)) {
+          acc.push(subject.category);
+        }
+        return acc;
+      }, []);
+      setCategories(cats);
+    } catch (err: any) {
+      alert('Failed to create category: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
+  // Handle create subject
+  const handleCreateSubject = async () => {
+    if (!newSubjectName.trim()) return;
+    setCategoryFormLoading(true);
+    try {
+      const { createSubject } = await import('@/lib/riddles-api');
+      const subjectDto: any = {
+        name: newSubjectName,
+        emoji: newSubjectEmoji,
+      };
+      if (selectedCategoryId) {
+        subjectDto.categoryId = selectedCategoryId;
+      }
+      await createSubject(subjectDto);
+      setNewSubjectName('');
+      setNewSubjectEmoji('📚');
+      setShowAddSubjectModal(false);
+      // Reload subjects
+      const apiSubjects = await (await import('@/lib/riddles-api')).getSubjects();
+      setSubjects(apiSubjects);
+    } catch (err: any) {
+      alert('Failed to create subject: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">🎭 Riddles Management</h3>
+          <h3 className="text-lg font-semibold">🎭 Riddle MCQ Management</h3>
           <p className="text-sm text-gray-500">{filteredRiddles.length} total riddles</p>
         </div>
         <div className="flex gap-2">
@@ -768,63 +849,82 @@ export function RiddlesSection({
         />
       </div>
 
-      {/* Filters */}
-      <div className="mb-4 space-y-3">
-        {/* Chapter Row */}
+      {/* Category & Subject with Level & Search */}
+      <div className="mb-4 space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
+        {/* Categories Row with Add Buttons */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-sm text-gray-600">Chapter:</span>
+          <span className="text-sm font-medium text-gray-700">Category:</span>
           <button
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterChapter === ''
-              ? 'bg-green-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategoryId === ''
+              ? 'bg-purple-500 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
               }`}
-            onClick={() => setRiddleFilterChapter('')}
-            aria-pressed={riddleFilterChapter === ''}
+            onClick={() => setSelectedCategoryId('')}
           >
-            All Chapters <span className="opacity-70">({allRiddles.length})</span>
+            All
           </button>
-          {chapters.map(chapter => (
+          {categories.map(cat => (
             <button
-              key={`chapter-${chapter}`}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterChapter === chapter
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              key={`cat-${cat.id}`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategoryId === cat.id
+                ? 'bg-purple-500 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
                 }`}
-              onClick={() => setRiddleFilterChapter(chapter)}
-              aria-pressed={riddleFilterChapter === chapter}
+              onClick={() => setSelectedCategoryId(cat.id)}
             >
-              {chapter} <span className="opacity-70">({chapterCounts[chapter] || 0})</span>
+              {cat.emoji || '📁'} {cat.name}
             </button>
           ))}
           <button
-            onClick={() => {
-              setNewChapterName('');
-              setShowAddChapterModal(true);
-            }}
-            className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-200"
+            onClick={() => setShowAddCategoryModal(true)}
+            className="rounded-lg bg-purple-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-600"
           >
-            + Add Chapter
+            + Add
+          </button>
+        </div>
+
+        {/* Subjects Row with Add Button */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Subject:</span>
+          {subjects
+            .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
+            .map(sub => (
+              <span
+                key={`sub-${sub.id}`}
+                className="rounded-lg px-3 py-1.5 text-sm bg-white border border-gray-200 text-gray-700"
+              >
+                {sub.emoji || '📚'} {sub.name}
+              </span>
+            ))}
+          {subjects.filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId).length === 0 && (
+            <span className="text-sm text-gray-400">No subjects found</span>
+          )}
+          <button
+            onClick={() => setShowAddSubjectModal(true)}
+            className="rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-600"
+          >
+            + Add
           </button>
         </div>
 
         {/* Level Row */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-sm text-gray-600">Level:</span>
+          <span className="text-sm font-medium text-gray-700">Level:</span>
           <button
             className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterLevel === ''
-              ? 'bg-purple-500 text-white'
+              ? 'bg-green-500 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             onClick={() => setRiddleFilterLevel('')}
             aria-pressed={riddleFilterLevel === ''}
           >
-            All Levels <span className="opacity-70">({allRiddles.length})</span>
+            All <span className="opacity-70">({allRiddles.length})</span>
           </button>
           {difficultyLevels.map(({ value, label }) => (
             <button
               key={`level-${value}`}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${riddleFilterLevel === value
-                ? 'bg-purple-500 text-white'
+                ? 'bg-green-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               onClick={() => setRiddleFilterLevel(value)}
@@ -837,7 +937,7 @@ export function RiddlesSection({
 
         {/* Search Row */}
         <div className="flex items-center gap-2">
-          <label htmlFor="riddle-search" className="mr-1 text-sm text-gray-600">
+          <label htmlFor="riddle-search" className="text-sm font-medium text-gray-700">
             Search:
           </label>
           <input
@@ -849,10 +949,9 @@ export function RiddlesSection({
             onChange={e => setRiddleSearch(e.target.value)}
             aria-label="Search riddles by keyword"
           />
-          {(riddleFilterChapter || riddleFilterLevel || riddleSearch || statusFilter !== 'all') && (
+          {(riddleFilterLevel || riddleSearch || statusFilter !== 'all') && (
             <button
               onClick={() => {
-                setRiddleFilterChapter('');
                 setRiddleFilterLevel('');
                 setRiddleSearch('');
                 setStatusFilter('all');
@@ -1417,6 +1516,123 @@ export function RiddlesSection({
                 className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-green-300"
               >
                 Create Chapter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Category Modal */}
+      {showAddCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold">➕ Add New Category</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Category Name *
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryName}
+                  onChange={e => setNewCategoryName(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="e.g., Logic, Math, Word Play"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Emoji
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryEmoji}
+                  onChange={e => setNewCategoryEmoji(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="📁"
+                />
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowAddCategoryModal(false)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateCategory}
+                disabled={!newCategoryName.trim() || categoryFormLoading}
+                className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Creating...' : 'Create Category'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Subject Modal */}
+      {showAddSubjectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold">➕ Add New Subject</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Subject Name *
+                </label>
+                <input
+                  type="text"
+                  value={newSubjectName}
+                  onChange={e => setNewSubjectName(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="e.g., Brain Teasers, Word Puzzles"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Emoji
+                </label>
+                <input
+                  type="text"
+                  value={newSubjectEmoji}
+                  onChange={e => setNewSubjectEmoji(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="🧩"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Category (optional)
+                </label>
+                <select
+                  value={selectedCategoryId}
+                  onChange={e => setSelectedCategoryId(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">No Category</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.emoji} {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowAddSubjectModal(false)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateSubject}
+                disabled={!newSubjectName.trim() || categoryFormLoading}
+                className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Creating...' : 'Create Subject'}
               </button>
             </div>
           </div>

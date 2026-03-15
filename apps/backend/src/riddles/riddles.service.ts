@@ -314,7 +314,7 @@ export class RiddlesService {
       async () => {
         return this.categoryRepo.find({
           order: { name: 'ASC' },
-          relations: ['riddles'],
+          relations: ['riddles', 'subjects'],
         });
       },
       DEFAULT_CACHE_TTL_S,
@@ -324,7 +324,7 @@ export class RiddlesService {
   async findCategoryById(id: string): Promise<RiddleCategory> {
     const category = await this.categoryRepo.findOne({
       where: { id },
-      relations: ['riddles'],
+      relations: ['riddles', 'subjects'],
     });
     if (category === null) {
       throw new NotFoundException('Category not found');
@@ -332,9 +332,18 @@ export class RiddlesService {
     return category;
   }
 
+  private generateSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
   async createCategory(dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
+    const slug = this.generateSlug(dto.name);
     const category = this.categoryRepo.create({
       name: dto.name,
+      slug,
       emoji: dto.emoji ?? settings.riddles.defaults.categoryEmoji,
     });
     const saved = await this.categoryRepo.save(category);
@@ -346,7 +355,10 @@ export class RiddlesService {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (category === null) {throw new NotFoundException('Category not found');}
     // H-1 fix: use !== undefined so empty strings can explicitly clear the field
-    if (dto.name !== undefined) {category.name = dto.name;}
+    if (dto.name !== undefined) {
+      category.name = dto.name;
+      category.slug = this.generateSlug(dto.name);
+    }
     if (dto.emoji !== undefined) {category.emoji = dto.emoji;}
     const saved = await this.categoryRepo.save(category);
     await this.cacheService.del('riddles:categories');
@@ -356,7 +368,7 @@ export class RiddlesService {
   async deleteCategory(id: string): Promise<void> {
     const category = await this.categoryRepo.findOne({
       where: { id },
-      relations: ['riddles'],
+      relations: ['riddles', 'subjects'],
     });
     if (category === null) {
       throw new NotFoundException('Category not found');
@@ -364,6 +376,12 @@ export class RiddlesService {
 
     if (category.riddles !== undefined && category.riddles !== null && category.riddles.length > 0) {
       await this.riddleRepo.remove(category.riddles);
+    }
+
+    if (category.subjects && category.subjects.length > 0) {
+      for (const subject of category.subjects) {
+        await this.subjectRepo.remove(subject);
+      }
     }
 
     await this.categoryRepo.remove(category);
@@ -415,9 +433,19 @@ export class RiddlesService {
   }
 
   async createSubject(dto: CreateRiddleSubjectDto): Promise<RiddleSubject> {
+    const slug = dto.slug || this.generateSlug(dto.name);
+    let category: RiddleCategory | null = null;
+    if (dto.categoryId) {
+      category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
+      if (!category) {
+        throw new NotFoundException(`Category with id "${dto.categoryId}" not found`);
+      }
+    }
     const subject = this.subjectRepo.create({
       ...dto,
+      slug,
       isActive: true,
+      category: category || undefined,
     });
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.del('riddles:subjects:active');
@@ -426,9 +454,31 @@ export class RiddlesService {
   }
 
   async updateSubject(id: string, dto: UpdateRiddleSubjectDto): Promise<RiddleSubject> {
-    const subject = await this.subjectRepo.findOne({ where: { id } });
+    const subject = await this.subjectRepo.findOne({ where: { id }, relations: ['category'] });
     if (subject === null) {throw new NotFoundException('Subject not found');}
-    Object.assign(subject, dto);
+    
+    if (dto.name !== undefined) {
+      subject.name = dto.name;
+      if (!dto.slug) {
+        subject.slug = this.generateSlug(dto.name);
+      }
+    }
+    if (dto.slug !== undefined) {subject.slug = dto.slug;}
+    if (dto.emoji !== undefined) {subject.emoji = dto.emoji;}
+    if (dto.description !== undefined) {subject.description = dto.description;}
+    if (dto.isActive !== undefined) {subject.isActive = dto.isActive;}
+    if (dto.order !== undefined) {subject.order = dto.order;}
+    if (dto.categoryId !== undefined) {
+      if (dto.categoryId) {
+        const cat = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
+        if (cat) {
+          subject.category = cat;
+        }
+      } else {
+        subject.category = null as any;
+      }
+    }
+    
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.del('riddles:subjects:active');
     await this.cacheService.del('riddles:subjects:all');
@@ -553,6 +603,35 @@ export class RiddlesService {
   }
 
   // ==================== QUIZ FORMAT - RIDDLES ====================
+
+  async findQuizRiddlesBySubject(
+    subjectId: string,
+    pagination: PaginationDto,
+    level?: string,
+  ): Promise<{ data: QuizRiddle[]; total: number }> {
+    const subjectExists = await this.subjectRepo.count({ where: { id: subjectId } });
+    if (subjectExists === 0) {
+      throw new NotFoundException(`Subject with id "${subjectId}" not found`);
+    }
+
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const where: any = { subject: { id: subjectId } };
+    
+    if (level && level !== 'all' && validLevels.includes(level.toLowerCase())) {
+      where.level = level.toLowerCase();
+    }
+
+    const page = pagination.page ?? 1;
+    const limit = pagination.limit ?? 10;
+    const [data, total] = await this.quizRiddleRepo.findAndCount({
+      where,
+      relations: ['subject'],
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'ASC' },
+    });
+    return { data, total };
+  }
 
   async findQuizRiddlesByChapter(
     chapterId: string,
@@ -750,9 +829,21 @@ export class RiddlesService {
   }
 
   async createQuizRiddle(dto: CreateQuizRiddleDto): Promise<QuizRiddle> {
-    const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-    if (chapter === null) {
-      throw new NotFoundException(`Chapter with id "${dto.chapterId}" not found`);
+    let subject: RiddleSubject | null = null;
+    let chapter: RiddleChapter | null = null;
+
+    if (dto.subjectId) {
+      subject = await this.subjectRepo.findOne({ where: { id: dto.subjectId } });
+      if (subject === null) {
+        throw new NotFoundException(`Subject with id "${dto.subjectId}" not found`);
+      }
+    } else if (dto.chapterId) {
+      chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
+      if (chapter === null) {
+        throw new NotFoundException(`Chapter with id "${dto.chapterId}" not found`);
+      }
+    } else {
+      throw new BadRequestException('Either subjectId or chapterId is required');
     }
 
     // Validate: expert = open-ended (no correctLetter), others = MCQ (requires correctLetter)
@@ -776,7 +867,8 @@ export class RiddlesService {
       level: dto.level,
       explanation: dto.explanation,
       hint: dto.hint,
-      chapter,
+      subject: subject || undefined,
+      chapter: chapter || undefined,
     });
     const saved = await this.quizRiddleRepo.save(riddle);
     await this.cacheService.delPattern('riddles:*'); // Invalidate after create
@@ -810,10 +902,11 @@ export class RiddlesService {
       const riddles: QuizRiddle[] = [];
       for (let i = 0; i < dto.length; i++) {
         const r = dto[i];
-        const chapter = chapterMap.get(r.chapterId);
+        const chapterId = r.chapterId || '';
+        const chapter = chapterId ? chapterMap.get(chapterId) : null;
 
-        if (!chapter) {
-          errors.push(`Row ${i + 1}: Chapter not found (ID: ${r.chapterId})`);
+        if (!chapter && chapterId) {
+          errors.push(`Row ${i + 1}: Chapter not found (ID: ${chapterId})`);
           continue;
         }
 
@@ -829,7 +922,7 @@ export class RiddlesService {
           continue;
         }
 
-        const riddle = transactionalEntityManager.create(QuizRiddle, {
+        const riddleData: Partial<QuizRiddle> = {
           question: r.question,
           options: isOpenEnded ? null : r.options,
           correctLetter: isOpenEnded ? null : r.correctLetter,
@@ -837,8 +930,16 @@ export class RiddlesService {
           level: r.level,
           explanation: r.explanation,
           hint: r.hint,
-          chapter,
-        });
+        };
+
+        if (r.subjectId) {
+          riddleData.subjectId = r.subjectId;
+        }
+        if (chapter) {
+          riddleData.chapterId = chapter.id;
+        }
+
+        const riddle = transactionalEntityManager.create(QuizRiddle, riddleData);
         riddles.push(riddle);
       }
 

@@ -33,13 +33,16 @@ export interface UpdateChapterDto {
 
 export interface CreateSubjectDto {
   name: string;
-  slug: string;
+  slug?: string;
   emoji?: string;
+  categoryId?: string;
 }
 
 export interface UpdateSubjectDto {
   name?: string;
+  slug?: string;
   emoji?: string;
+  categoryId?: string;
 }
 
 export interface CreateRiddleDto {
@@ -48,7 +51,10 @@ export interface CreateRiddleDto {
   correctLetter: string;
   correctAnswer: string;
   level: 'easy' | 'medium' | 'hard' | 'expert';
-  chapterId: string;
+  subjectId?: string;
+  chapterId?: string;
+  hint?: string;
+  explanation?: string;
   status?: 'published' | 'draft' | 'trash';
 }
 
@@ -172,6 +178,23 @@ export async function reorderChapters(dto: ReorderChaptersDto): Promise<void> {
 // ============================================================================
 // Riddles API (Quiz Format)
 // ============================================================================
+
+/**
+ * Get quiz riddles by subject ID (Riddle MCQ)
+ */
+export async function getRiddlesBySubject(
+  subjectId: string,
+  page: number = 1,
+  limit: number = 50,
+  level?: string
+): Promise<PaginatedResponse<QuizRiddle>> {
+  let url = `/riddles/quiz-by-subject/${subjectId}?page=${page}&limit=${limit}`;
+  if (level && level !== 'all') {
+    url += `&level=${level}`;
+  }
+  const response = await apiRequest<QuizRiddle[]>(url);
+  return response.data as unknown as PaginatedResponse<QuizRiddle>;
+}
 
 /**
  * Get quiz riddles by chapter ID

@@ -10,6 +10,18 @@
 // Backend Entity Types (from API)
 // ============================================================================
 
+/** Riddle Category - Backend Entity (for Riddle MCQ) */
+export interface RiddleMcqCategory {
+  id: string;
+  name: string;
+  slug: string;
+  emoji?: string;
+  subjects?: RiddleSubject[];
+  riddles?: ClassicRiddle[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 /** Riddle Subject - Backend Entity */
 export interface RiddleSubject {
   id: string;
@@ -19,7 +31,10 @@ export interface RiddleSubject {
   description?: string;
   isActive: boolean;
   order: number;
+  categoryId?: string;
+  category?: RiddleMcqCategory;
   chapters?: RiddleChapter[];
+  riddles?: QuizRiddle[];
 }
 
 /** Riddle Chapter - Backend Entity */
@@ -40,7 +55,9 @@ export interface QuizRiddle {
   correctLetter: string | null; // 'A', 'B', 'C', 'D' or null for expert
   correctAnswer: string; // kept for backward compatibility
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-  chapterId: string;
+  subjectId?: string;
+  subject?: RiddleSubject;
+  chapterId?: string;
   chapter?: RiddleChapter;
   explanation?: string;
   hint?: string;
@@ -235,8 +252,8 @@ export function adaptQuizRiddle(riddle: QuizRiddle): Riddle {
     correctAnswer: riddle.correctAnswer,
     difficulty: isOpenEnded ? 'expert' : (riddle.level as Riddle['difficulty']),
     level: isOpenEnded ? 'extreme' : riddle.level,
-    chapter: riddle.chapter?.name || 'General',
-    chapterId: riddle.chapterId,
+    chapter: riddle.chapter?.name || riddle.subject?.name || 'General',
+    chapterId: riddle.chapterId || riddle.subjectId || '',
     status: 'published',
     hint: riddle.hint || '',
     explanation: riddle.explanation || '',
