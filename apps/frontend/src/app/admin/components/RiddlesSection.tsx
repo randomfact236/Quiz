@@ -131,6 +131,7 @@ export function RiddlesSection({
   const [categories, setCategories] = useState<any[]>([]);
   const [subjects, setSubjects] = useState<any[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+  const [selectedSubjectId, setSelectedSubjectId] = useState<string>('');
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -1056,22 +1057,37 @@ export function RiddlesSection({
         {/* Subjects Row with Add Button */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Subject:</span>
+          <button
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedSubjectId === ''
+              ? 'bg-indigo-500 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+              }`}
+            onClick={() => setSelectedSubjectId('')}
+          >
+            All
+          </button>
           {subjects
             .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
             .map(sub => (
               <div key={`sub-${sub.id}`} className="flex items-center gap-1 rounded-lg bg-white border border-gray-200 px-2 py-1">
-                <span className="text-sm text-gray-700">
-                  {sub.emoji || '📚'} {sub.name}
-                </span>
                 <button
-                  onClick={() => handleEditSubject(sub)}
+                  className={`text-sm transition-colors ${selectedSubjectId === sub.id
+                    ? 'text-indigo-600 font-medium'
+                    : 'text-gray-700 hover:text-indigo-600'
+                    }`}
+                  onClick={() => setSelectedSubjectId(sub.id)}
+                >
+                  {sub.emoji || '📚'} {sub.name}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleEditSubject(sub); }}
                   className="ml-1 text-xs text-gray-400 hover:text-blue-500"
                   title="Edit"
                 >
                   ✏️
                 </button>
                 <button
-                  onClick={() => setDeletingSubjectId(sub.id)}
+                  onClick={(e) => { e.stopPropagation(); setDeletingSubjectId(sub.id); }}
                   className="text-xs text-gray-400 hover:text-red-600"
                   title="Delete"
                 >
