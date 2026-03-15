@@ -30,11 +30,12 @@ export function RiddleReview({
     const [isExpanded, setIsExpanded] = useState(false);
 
     const isCorrect = userAnswer === riddle.correctOption;
+    const riddleOptions = riddle.options || [];
     const options = [
-        { key: 'A', text: riddle.options[0] },
-        { key: 'B', text: riddle.options[1] },
-        { key: 'C', text: riddle.options[2] },
-        { key: 'D', text: riddle.options[3] },
+        { key: 'A', text: riddleOptions[0] },
+        { key: 'B', text: riddleOptions[1] },
+        { key: 'C', text: riddleOptions[2] },
+        { key: 'D', text: riddleOptions[3] },
     ].filter(o => o.text !== undefined && o.text !== null);
 
     return (

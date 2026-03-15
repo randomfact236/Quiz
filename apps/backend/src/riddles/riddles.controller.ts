@@ -285,8 +285,9 @@ export class RiddlesController {
   findQuizRiddlesByChapter(
     @Param('chapterId') chapterId: string,
     @Query() pagination: PaginationDto,
+    @Query('level') level?: string,
   ): Promise<{ data: QuizRiddle[]; total: number }> {
-    return this.riddlesService.findQuizRiddlesByChapter(chapterId, pagination);
+    return this.riddlesService.findQuizRiddlesByChapter(chapterId, pagination, level);
   }
 
   @Get('mixed')
@@ -299,7 +300,7 @@ export class RiddlesController {
 
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random quiz riddles by difficulty level' })
-  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'] })
   @ApiResponse({ status: 200, description: 'Returns random riddles' })
   getRandomQuizRiddles(
     @Param('level') level: string,

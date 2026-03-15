@@ -37,7 +37,8 @@ export interface QuizRiddle {
   id: string;
   question: string;
   options: string[];
-  correctAnswer: string; // 'A', 'B', 'C', or 'D'
+  correctLetter: string | null; // 'A', 'B', 'C', 'D' or null for expert
+  correctAnswer: string; // kept for backward compatibility
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapterId: string;
   chapter?: RiddleChapter;
@@ -65,9 +66,12 @@ export interface ClassicRiddle {
 export interface Riddle {
   id: string;
   question: string;
-  options: string[];
-  correctOption: string; // 'A', 'B', 'C', etc.
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  options: string[] | null;
+  correctOption: string; // 'A', 'B', 'C', etc. (derived from correctLetter)
+  correctLetter: string | null; // 'A', 'B', 'C', 'D' or null for expert
+  correctAnswer?: string; // Text answer for expert level
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert'; // For display
+  level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme'; // For AnswerOptions component
   chapter: string; // chapter name (for display)
   chapterId: string; // chapter ID (for API)
   status: 'published' | 'draft' | 'trash';
@@ -219,12 +223,18 @@ export const DEFAULT_CHAPTER_ICONS: Record<string, string> = {
  * Convert backend QuizRiddle to frontend Riddle format
  */
 export function adaptQuizRiddle(riddle: QuizRiddle): Riddle {
+  // Map expert/extreme to 'extreme' for AnswerOptions compatibility (shows text input)
+  const isOpenEnded = riddle.level === 'expert' || riddle.level === 'extreme';
+  
   return {
     id: riddle.id,
     question: riddle.question,
     options: riddle.options,
-    correctOption: riddle.correctAnswer,
-    difficulty: riddle.level === 'extreme' ? 'expert' : riddle.level,
+    correctLetter: riddle.correctLetter || null,
+    correctOption: riddle.correctLetter || riddle.correctAnswer,
+    correctAnswer: riddle.correctAnswer,
+    difficulty: isOpenEnded ? 'expert' : (riddle.level as Riddle['difficulty']),
+    level: isOpenEnded ? 'extreme' : riddle.level,
     chapter: riddle.chapter?.name || 'General',
     chapterId: riddle.chapterId,
     status: 'published',

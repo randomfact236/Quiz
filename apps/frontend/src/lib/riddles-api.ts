@@ -45,8 +45,9 @@ export interface UpdateSubjectDto {
 export interface CreateRiddleDto {
   question: string;
   options: string[];
-  correctOption: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  correctLetter: string;
+  correctAnswer: string;
+  level: 'easy' | 'medium' | 'hard' | 'expert';
   chapterId: string;
   status?: 'published' | 'draft' | 'trash';
 }
@@ -178,11 +179,14 @@ export async function reorderChapters(dto: ReorderChaptersDto): Promise<void> {
 export async function getRiddlesByChapter(
   chapterId: string,
   page: number = 1,
-  limit: number = 50
+  limit: number = 50,
+  level?: string
 ): Promise<PaginatedResponse<QuizRiddle>> {
-  const response = await apiRequest<QuizRiddle[]>(
-    `/riddles/quiz/${chapterId}?page=${page}&limit=${limit}`
-  );
+  let url = `/riddles/quiz/${chapterId}?page=${page}&limit=${limit}`;
+  if (level && level !== 'all') {
+    url += `&level=${level}`;
+  }
+  const response = await apiRequest<QuizRiddle[]>(url);
   // Backend returns { data, total } format
   return response.data as unknown as PaginatedResponse<QuizRiddle>;
 }

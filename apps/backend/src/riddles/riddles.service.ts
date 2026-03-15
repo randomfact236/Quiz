@@ -557,16 +557,26 @@ export class RiddlesService {
   async findQuizRiddlesByChapter(
     chapterId: string,
     pagination: PaginationDto,
+    level?: string,
   ): Promise<{ data: QuizRiddle[]; total: number }> {
     // Verify chapter exists before querying to return a meaningful 404
     const chapterExists = await this.chapterRepo.count({ where: { id: chapterId } });
     if (chapterExists === 0) {
       throw new NotFoundException(`Chapter with id "${chapterId}" not found`);
     }
+
+    // Build where clause with optional level filter
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const where: any = { chapter: { id: chapterId } };
+    
+    if (level && level !== 'all' && validLevels.includes(level.toLowerCase())) {
+      where.level = level.toLowerCase();
+    }
+
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
     const [data, total] = await this.quizRiddleRepo.findAndCount({
-      where: { chapter: { id: chapterId } },
+      where,
       relations: ['chapter'],
       skip: (page - 1) * limit,
       take: limit,
@@ -577,26 +587,68 @@ export class RiddlesService {
 
   async findRandomQuizRiddles(level: string, count: number): Promise<QuizRiddle[]> {
     // Validate level parameter
-    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
-    if (!validLevels.includes(level)) {
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const normalizedLevel = level.toLowerCase();
+
+    if (!validLevels.includes(normalizedLevel)) {
       throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
     }
 
-    const totalCount = await this.quizRiddleRepo.count({ where: { level } });
+    // Support 'all' level - reuse mixed logic
+    if (normalizedLevel === 'all') {
+      return this.findMixedQuizRiddles(count);
+    }
+
+    const totalCount = await this.quizRiddleRepo.count({ where: { level: normalizedLevel } });
     if (totalCount === 0) {
       return [];
     }
 
     // If requesting more than available, return all
     if (count >= totalCount) {
-      return this.quizRiddleRepo.find({ where: { level }, relations: ['chapter'] });
+      return this.quizRiddleRepo.find({ where: { level: normalizedLevel }, relations: ['chapter'] });
+    }
+
+    // Fallback logic: if less than 5 riddles available, include from adjacent level
+    const MIN_RIDDLES_THRESHOLD = 5;
+    let riddles: QuizRiddle[] = [];
+
+    if (totalCount < MIN_RIDDLES_THRESHOLD) {
+      // Get fallback levels: hard→medium, expert→hard, etc.
+      const fallbackLevels: Record<string, string> = {
+        'hard': 'medium',
+        'expert': 'hard',
+        'extreme': 'hard',
+        'medium': 'easy',
+        'easy': 'medium', // fallback to medium if not enough easy
+      };
+      
+      const fallbackLevel = fallbackLevels[normalizedLevel];
+      if (fallbackLevel) {
+        const fallbackCount = await this.quizRiddleRepo.count({ where: { level: fallbackLevel } });
+        if (fallbackCount > 0) {
+          const fallbackRiddles = await this.quizRiddleRepo.find({
+            where: { level: fallbackLevel },
+            relations: ['chapter'],
+          });
+          // Combine and shuffle
+          const allRiddles = [...fallbackRiddles];
+          const allIds = allRiddles.map(r => r.id);
+          const selectedIds = this.fisherYatesSample(allIds, count);
+          riddles = allRiddles.filter(r => selectedIds.includes(r.id));
+        }
+      }
+
+      if (riddles.length > 0) {
+        return riddles;
+      }
     }
 
     // Fetch only IDs, apply proper Fisher-Yates shuffle, then load selected records
     const allIds = await this.quizRiddleRepo
       .createQueryBuilder('riddle')
       .select('riddle.id')
-      .where('riddle.level = :level', { level })
+      .where('riddle.level = :level', { level: normalizedLevel })
       .getMany();
 
     const selectedIds = this.fisherYatesSample(allIds.map(r => r.id), count);
@@ -702,9 +754,24 @@ export class RiddlesService {
     if (chapter === null) {
       throw new NotFoundException(`Chapter with id "${dto.chapterId}" not found`);
     }
+
+    // Validate: expert = open-ended (no correctLetter), others = MCQ (requires correctLetter)
+    const isOpenEnded = dto.level === 'expert';
+    
+    if (!isOpenEnded && !dto.correctLetter) {
+      throw new BadRequestException(`${dto.level} level requires correctLetter (A/B/C/D)`);
+    }
+    if (isOpenEnded && dto.correctLetter) {
+      throw new BadRequestException('Expert level (open-ended) must have correctLetter: null');
+    }
+    if (!isOpenEnded && (!dto.options || dto.options.length < 2)) {
+      throw new BadRequestException(`${dto.level} level requires at least 2 options`);
+    }
+
     const riddle = this.quizRiddleRepo.create({
       question: dto.question,
-      options: dto.options,
+      options: isOpenEnded ? null : dto.options,
+      correctLetter: isOpenEnded ? null : dto.correctLetter,
       correctAnswer: dto.correctAnswer,
       level: dto.level,
       explanation: dto.explanation,
@@ -750,9 +817,22 @@ export class RiddlesService {
           continue;
         }
 
+        // Validate: expert = open-ended (no correctLetter), others = MCQ
+        const isOpenEnded = r.level === 'expert';
+        
+        if (!isOpenEnded && !r.correctLetter) {
+          errors.push(`Row ${i + 1}: ${r.level} level requires correctLetter (A/B/C/D)`);
+          continue;
+        }
+        if (isOpenEnded && r.correctLetter) {
+          errors.push(`Row ${i + 1}: Expert level (open-ended) must have correctLetter: null`);
+          continue;
+        }
+
         const riddle = transactionalEntityManager.create(QuizRiddle, {
           question: r.question,
-          options: r.options,
+          options: isOpenEnded ? null : r.options,
+          correctLetter: isOpenEnded ? null : r.correctLetter,
           correctAnswer: r.correctAnswer,
           level: r.level,
           explanation: r.explanation,
@@ -784,12 +864,33 @@ export class RiddlesService {
     const riddle = await this.quizRiddleRepo.findOne({ where: { id }, relations: ['chapter'] });
     if (riddle === null) {throw new NotFoundException('Quiz riddle not found');}
 
+    // Validate if level is being changed
+    const newLevel = dto.level || riddle.level;
+    const isOpenEnded = newLevel === 'expert';
+    
+    if (dto.correctLetter !== undefined) {
+      if (isOpenEnded && dto.correctLetter) {
+        throw new BadRequestException('Expert level (open-ended) must have correctLetter: null');
+      }
+      if (!isOpenEnded && !dto.correctLetter) {
+        throw new BadRequestException(`${newLevel} level requires correctLetter (A/B/C/D)`);
+      }
+      riddle.correctLetter = dto.correctLetter || null;
+    }
+
     if (dto.question !== undefined) {riddle.question = dto.question;}
     if (dto.correctAnswer !== undefined) {riddle.correctAnswer = dto.correctAnswer;}
-    if (dto.level !== undefined) {riddle.level = dto.level;}
+    if (dto.level !== undefined) {
+      riddle.level = dto.level;
+      // Update options and correctLetter based on new level
+      if (dto.level === 'expert') {
+        riddle.options = null;
+        riddle.correctLetter = null;
+      }
+    }
     if (dto.explanation !== undefined) {riddle.explanation = dto.explanation ?? '';}
     if (dto.hint !== undefined) {riddle.hint = dto.hint ?? '';}
-    if (dto.options !== undefined) {riddle.options = dto.options;}
+    if (dto.options !== undefined) {riddle.options = isOpenEnded ? null : dto.options;}
 
     if (dto.chapterId !== undefined) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });

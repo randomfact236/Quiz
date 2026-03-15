@@ -272,6 +272,7 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
         optionC: optionC || '',
         optionD: optionD || '',
         correctAnswer: correctAnswer.toUpperCase(),
+        correctLetter: correctAnswer.toUpperCase(),
         level,
         chapter,
         status: 'published',
@@ -425,6 +426,7 @@ export function parseAnimalsQuestionCSV(csvText: string): {
         optionC: finalOptionC || '',
         optionD: finalOptionD || '',
         correctAnswer,
+        correctLetter: correctAnswer,
         level,
         chapter,
         status: 'published',
@@ -514,6 +516,7 @@ export const riddleConfig: ImportExportConfig<Riddle> = {
     enumFields: {
       difficulty: ['easy', 'medium', 'hard', 'expert'],
       correctOption: ['A', 'B', 'C', 'D'],
+      correctLetter: ['A', 'B', 'C', 'D'],
     },
     maxLength: { question: 1000, answer: 500, chapter: 200, hint: 500 },
   },

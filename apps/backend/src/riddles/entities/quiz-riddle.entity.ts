@@ -23,8 +23,11 @@ export class QuizRiddle {
   @Column({ type: 'text' })
   question: string;
 
-  @Column({ type: 'simple-array' })
-  options: string[];
+  @Column({ type: 'simple-array', nullable: true })
+  options: string[] | null;
+
+  @Column({ type: 'varchar', length: 1, nullable: true })
+  correctLetter: string | null;
 
   @Column()
   correctAnswer: string;

@@ -45,6 +45,7 @@ interface RiddleFormState {
   optionC: string;
   optionD: string;
   correctOption: string;
+  correctLetter: string;
   difficulty: Riddle['difficulty'];
   chapter: string;
 }
@@ -112,6 +113,7 @@ export function RiddlesSection({
     optionC: '',
     optionD: '',
     correctOption: 'A',
+    correctLetter: 'A',
     difficulty: 'easy',
     chapter: '',
   });
@@ -402,6 +404,7 @@ export function RiddlesSection({
         return {
           question: r.question,
           options: r.options || [],
+          correctLetter: r.correctOption?.toUpperCase() || 'A',
           correctAnswer,
           level: r.difficulty || 'medium',
           chapterId: cId,
@@ -416,7 +419,7 @@ export function RiddlesSection({
           id: String(qr.id),
           question: qr.question,
           options: qr.options || [],
-          correctOption: qr.correctAnswer || 'A',
+          correctOption: qr.correctLetter || qr.correctAnswer || 'A',
           difficulty: (qr.level as Riddle['difficulty']) || 'medium',
           chapter: qr.chapter?.name || 'General',
           status: 'published' as const,
@@ -447,6 +450,7 @@ export function RiddlesSection({
       optionC: '',
       optionD: '',
       correctOption: 'A',
+      correctLetter: 'A',
       difficulty: 'easy',
       chapter: '',
     });
@@ -535,24 +539,29 @@ export function RiddlesSection({
 
     try {
       const { createRiddle } = await import('@/lib/riddles-api');
+      const options = [
+        riddleForm.optionA.trim(),
+        riddleForm.optionB.trim(),
+        riddleForm.optionC.trim(),
+        riddleForm.optionD.trim(),
+      ].filter(Boolean);
+      const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddleForm.correctLetter || 'A');
+      const correctAnswerText = options[letterIndex] || options[0] || '';
+      
       const created = (await createRiddle({
         question: riddleForm.question.trim(),
-        options: [
-          riddleForm.optionA.trim(),
-          riddleForm.optionB.trim(),
-          riddleForm.optionC.trim(),
-          riddleForm.optionD.trim(),
-        ].filter(Boolean),
-        correctOption: riddleForm.correctOption,
-        difficulty: riddleForm.difficulty as any,
+        options,
+        correctLetter: riddleForm.correctLetter,
+        correctAnswer: correctAnswerText,
+        level: riddleForm.difficulty,
         chapterId: chapterId,
-      })) as any; // Type override since backend returns QuizRiddle string id
+      })) as any;
 
       const newRiddle: Riddle = {
         id: String(Date.now()),
         question: created.question,
         options: created.options || [],
-        correctOption: created.correctAnswer || riddleForm.correctOption,
+        correctOption: created.correctLetter || riddleForm.correctLetter,
         difficulty: created.level as any,
         chapter: riddleForm.chapter.trim(),
         status: 'published' as const,
@@ -585,16 +594,21 @@ export function RiddlesSection({
 
     try {
       const { updateRiddle } = await import('@/lib/riddles-api');
+      const options = [
+        riddleForm.optionA.trim(),
+        riddleForm.optionB.trim(),
+        riddleForm.optionC.trim(),
+        riddleForm.optionD.trim(),
+      ].filter(Boolean);
+      const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddleForm.correctLetter || 'A');
+      const correctAnswerText = options[letterIndex] || options[0] || '';
+      
       await updateRiddle(String(selectedRiddle.id), {
         question: riddleForm.question.trim(),
-        options: [
-          riddleForm.optionA.trim(),
-          riddleForm.optionB.trim(),
-          riddleForm.optionC.trim(),
-          riddleForm.optionD.trim(),
-        ].filter(Boolean),
-        correctOption: riddleForm.correctOption,
-        difficulty: riddleForm.difficulty as any,
+        options,
+        correctLetter: riddleForm.correctLetter,
+        correctAnswer: correctAnswerText,
+        level: riddleForm.difficulty,
         chapterId: chapterId,
       });
 
@@ -604,13 +618,8 @@ export function RiddlesSection({
             ? {
               ...r,
               question: riddleForm.question.trim(),
-              options: [
-                riddleForm.optionA.trim(),
-                riddleForm.optionB.trim(),
-                riddleForm.optionC.trim(),
-                riddleForm.optionD.trim(),
-              ].filter(Boolean),
-              correctOption: riddleForm.correctOption,
+              options,
+              correctOption: riddleForm.correctLetter,
               difficulty: riddleForm.difficulty,
               chapter: riddleForm.chapter.trim(),
             }
@@ -665,6 +674,7 @@ export function RiddlesSection({
       optionC: riddle.options[2] || '',
       optionD: riddle.options[3] || '',
       correctOption: riddle.correctOption,
+      correctLetter: riddle.correctOption,
       difficulty: riddle.difficulty,
       chapter: riddle.chapter,
     });
@@ -1237,8 +1247,8 @@ export function RiddlesSection({
                   </label>
                   <select
                     id="riddle-correct-answer"
-                    value={riddleForm.correctOption}
-                    onChange={e => setRiddleForm(prev => ({ ...prev, correctOption: e.target.value }))}
+                    value={riddleForm.correctLetter}
+                    onChange={e => setRiddleForm(prev => ({ ...prev, correctOption: e.target.value, correctLetter: e.target.value }))}
                     className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     aria-required="true"
                   >

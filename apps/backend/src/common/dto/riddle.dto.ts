@@ -271,6 +271,11 @@ export class CreateQuizRiddleDto {
     @IsString({ each: true })
     options: string[];
 
+    @ApiProperty({ example: 'A' })
+    @IsString()
+    @IsNotEmpty()
+    correctLetter: string;
+
     @ApiProperty({ example: 'A piano' })
     @IsString()
     @IsNotEmpty()
@@ -309,6 +314,11 @@ export class UpdateQuizRiddleDto {
     @IsArray()
     @IsString({ each: true })
     options?: string[];
+
+    @ApiPropertyOptional({ example: 'A' })
+    @IsOptional()
+    @IsString()
+    correctLetter?: string;
 
     @ApiPropertyOptional({ example: 'A piano' })
     @IsOptional()

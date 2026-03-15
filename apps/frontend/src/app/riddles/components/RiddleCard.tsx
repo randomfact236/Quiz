@@ -144,6 +144,9 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     const [bubbleTrigger, setBubbleTrigger] = useState(false);
     const [bubbleType, setBubbleType] = useState<'correct' | 'wrong'>('correct');
 
+    // Hint state
+    const [showHint, setShowHint] = useState(false);
+
     // Ref to control bubble effect
     const bubbleRef = useRef<BubbleEmojiEffectRef>(null);
 
@@ -155,14 +158,16 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     // Floating emojis based on difficulty
     const floatingEmojis = getFloatingEmojis(riddle.difficulty);
 
-    // Build options array from riddle data
-    const options = riddle.options.map((text, index) => ({
+    // Build options array from riddle data (handle null for expert)
+    const options = (riddle.options || []).map((text, index) => ({
         key: String.fromCharCode(65 + index),
         text,
     }));
 
     // Map riddle difficulty to AnswerOptions level prop
-    const level = (riddle.difficulty as 'easy' | 'medium' | 'hard' | 'expert') || 'expert';
+    // Use riddle.level if available (extreme for open-ended), otherwise fallback to difficulty
+    const level = (riddle.level as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme') || 
+                  (riddle.difficulty as 'easy' | 'medium' | 'hard' | 'expert') || 'expert';
 
     // Expose clearBubbles function via ref
     useImperativeHandle(ref, () => ({
@@ -177,6 +182,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
         if (riddle.id !== prevRiddleIdRef.current) {
             bubbleRef.current?.clear();
             setBubbleTrigger(false);
+            setShowHint(false); // Reset hint visibility for new riddle
             prevRiddleIdRef.current = riddle.id;
         }
     }, [riddle.id]);
@@ -269,6 +275,30 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
                         </motion.span>
                     ))}
                 </div>
+
+                {/* Hint Button — Show after floating emojis, before score */}
+                {riddle.hint && !showFeedback && (
+                    <div className="mb-4">
+                        {!showHint ? (
+                            <button
+                                onClick={() => setShowHint(true)}
+                                className="mx-auto flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-200 transition-colors"
+                            >
+                                <span>💡</span>
+                                <span>Show Hint</span>
+                            </button>
+                        ) : (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-center"
+                            >
+                                <p className="text-sm font-medium text-amber-800">Hint:</p>
+                                <p className="text-sm text-amber-700">{riddle.hint}</p>
+                            </motion.div>
+                        )}
+                    </div>
+                )}
 
                 {/* Score Display */}
                 {score !== undefined && maxScore !== undefined && (

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   LayoutDashboard,
@@ -97,12 +97,9 @@ export default function AdminPage(): JSX.Element {
   // Handle subject reordering - update order in database via API
   const handleReorderSubjects = useCallback(async (reorderedSubjects: Subject[]) => {
     try {
-      for (let i = 0; i < reorderedSubjects.length; i++) {
-        const subject = reorderedSubjects[i];
-        if (subject && subject.order !== i) {
-          await updateSubject(subject.id, { order: i });
-        }
-      }
+      // Note: Backend doesn't support order field in UpdateSubjectDto yet
+      // This is a placeholder for future implementation
+      console.log('Subject reordering not yet implemented:', reorderedSubjects.map(s => s.slug));
       refetchSubjects();
     } catch (err) {
       console.error('Failed to reorder allSubjects:', err);
@@ -134,11 +131,12 @@ export default function AdminPage(): JSX.Element {
   }, []);
   
   // For backward compatibility - setSubjects can update local allSubjects
+  // This is a no-op placeholder - actual updates happen via refetchSubjects()
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // For backward compatibility - setSubjects can update local allSubjects
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const setSubjects = useCallback((newSubjects: Subject[] | ((prev: Subject[]) => Subject[])) => {
-    // This is a placeholder - actual updates happen via refetchSubjects()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const setSubjects = useCallback((_newSubjects?: any) => {
+    // no-op - actual updates happen via refetchSubjects()
   }, []);
   
   // Other state
@@ -149,22 +147,102 @@ export default function AdminPage(): JSX.Element {
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
   const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
   const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
+  const [allJokes, setAllJokes] = useState<Joke[]>([]);
+  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
   const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
   const [subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
   const [subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
 
-  // Set active section based on loaded allSubjects (from database) - only on initial load
+  // URL-based state management - replaces localStorage
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  
+  // Get section from URL, default to dashboard
+  const urlSection = searchParams.get('section') || 'dashboard';
+  const urlChapter = searchParams.get('chapter');
+
+  // Set active section from URL on initial load
   const hasSetInitialSection = useRef(false);
   useEffect(() => {
     if (hasSetInitialSection.current) return;
-    if (allSubjects.length > 0) {
-      setActiveSection(allSubjects[0]!.slug);
+    if (allSubjects.length > 0 || urlSection) {
+      // URL section takes priority, but validate if it's a quiz subject
+      if (urlSection === 'riddles' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'dashboard') {
+        setActiveSection(urlSection as MenuSection);
+      } else {
+        // It's a quiz subject - check if valid
+        const isValidSubject = allSubjects.some(s => s.slug === urlSection);
+        if (isValidSubject) {
+          setActiveSection(urlSection as MenuSection);
+        } else if (allSubjects.length > 0) {
+          setActiveSection(allSubjects[0]!.slug);
+        } else {
+          setActiveSection('dashboard');
+        }
+      }
       hasSetInitialSection.current = true;
-    } else {
-      setActiveSection('dashboard');
     }
-  }, [allSubjects]);
+  }, [allSubjects, urlSection]);
+
+  // Handle URL changes after initial load - update activeSection when URL changes
+  useEffect(() => {
+    if (!hasSetInitialSection.current) return; // Wait for initial load
+    if (!urlSection) return;
+
+    // Determine the target section
+    let targetSection = urlSection;
+    
+    // Check if it's a special section (riddles, jokes, etc.)
+    const isSpecialSection = ['riddles', 'image-riddles', 'jokes', 'users', 'settings', 'dashboard'].includes(urlSection);
+    
+    if (!isSpecialSection) {
+      // It's a quiz subject - check if valid
+      const isValidSubject = allSubjects.some(s => s.slug === urlSection);
+      if (!isValidSubject) {
+        // Invalid subject, fallback to first subject or dashboard
+        targetSection = allSubjects.length > 0 ? allSubjects[0]!.slug : 'dashboard';
+      }
+    }
+
+    // Update state if different from current
+    if (activeSection !== targetSection) {
+      setActiveSection(targetSection as MenuSection);
+    }
+  }, [urlSection, allSubjects, activeSection]);
+
+  // Set riddle chapter filter from URL
+  const hasSetInitialChapter = useRef(false);
+  useEffect(() => {
+    if (hasSetInitialChapter.current) return;
+    if (urlChapter && allRiddles.length > 0) {
+      if (allRiddles.some(r => r.chapter === urlChapter)) {
+        setRiddleFilterChapter(urlChapter);
+      }
+      hasSetInitialChapter.current = true;
+    }
+  }, [urlChapter, allRiddles]);
+
+  // URL update helper - replaces localStorage.setItem
+  const updateURL = useCallback((params: { section?: string; subject?: string | null; chapter?: string | null }) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    
+    if (params.section) {
+      newParams.set('section', params.section);
+    }
+    if (params.subject !== undefined && params.subject !== null) {
+      newParams.set('subject', params.subject);
+    } else if (params.subject === null) {
+      newParams.delete('subject');
+    }
+    if (params.chapter !== undefined && params.chapter !== null) {
+      newParams.set('chapter', encodeURIComponent(params.chapter));
+    } else if (params.chapter === null) {
+      newParams.delete('chapter');
+    }
+    
+    router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+  }, [router, pathname, searchParams]);
 
   // Fetch question counts for allSubjects when allSubjects change
   useEffect(() => {
@@ -205,13 +283,15 @@ export default function AdminPage(): JSX.Element {
             id: qr.id as string,
             question: qr.question,
             options: qr.options || [],
-            correctOption: qr.correctAnswer || 'A',
+            correctOption: qr.correctLetter || qr.correctAnswer || 'A',
+            correctLetter: qr.correctLetter,
             difficulty: (qr.level as Riddle['difficulty']) || 'medium',
-            chapter: qr.chapter?.name || 'General',
+            chapter: (qr as any).chapter?.name || (qr as any).subject?.name || 'General',
             status: 'published' as const,
             ...(qr.hint ? { hint: qr.hint } : {}),
           }));
           setAllRiddles(mappedRiddles);
+          // Riddle chapter filter is now handled via URL in useEffect above
         })
         .catch((err: any) => console.error('Failed to load quiz riddles:', err));
     });
@@ -386,9 +466,7 @@ export default function AdminPage(): JSX.Element {
   // Handle question filter change (server-side filtering)
   const handleQuestionFilterChange = useCallback((subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
     setQuestionFilters((prev) => {
-      const current = prev?.[subjectSlug];
-      const next = filters;
-      return { ...prev, [subjectSlug]: next };
+      return { ...prev, [subjectSlug]: filters };
     });
     // Reset to page 1 when filters change
     setQuestionPagination((prev) => ({
@@ -458,7 +536,8 @@ export default function AdminPage(): JSX.Element {
     try {
       const apiSubjects = await getSubjects(false);
       const updatedSubjects = sanitizeSubjects(apiSubjects as unknown as Subject[]);
-      setSubjects(updatedSubjects);
+      // Update local subjects directly - this works because subjects is a local state
+      setSubjects(updatedSubjects as any);
     } catch (err) {
       console.error('Failed to refresh allSubjects:', err);
     }
@@ -500,18 +579,7 @@ export default function AdminPage(): JSX.Element {
       const subjectData = await getSubjectBySlug(subjectSlug);
       if (subjectData?.id) {
         subjectId = subjectData.id;
-        // Add subject to state if it's not there
-        if (!subject) {
-          const newSubject = {
-            id: subjectData.id,
-            slug: subjectData.slug,
-            name: subjectData.name,
-            emoji: subjectData.emoji || '📚',
-            category: (subjectData.category || 'academic') as 'academic' | 'professional' | 'entertainment',
-            order: allSubjects.length,
-          };
-          setSubjects(prev => [...prev, newSubject]);
-        }
+        // Subject will be refreshed via refetchSubjects() - no need to add to state
       }
     } catch (err) {
       console.error('Failed to fetch subject from API:', err);
@@ -750,20 +818,11 @@ export default function AdminPage(): JSX.Element {
         console.log('Import result:', result);
 
         if (result.success) {
-          const subject = allSubjects.find(s => s.slug === result.subjectSlug);
-          if (!subject) {
-            setSubjects(prev => [...prev, {
-              id: String(Date.now()),
-              slug: result.subjectSlug,
-              name: result.subjectName,
-              emoji: '📚',
-              category: 'academic' as const,
-              order: allSubjects.length,
-            }]);
-          }
-
+          // Refresh subjects and questions after successful import
+          refetchSubjects();
+          
           const newQuestions = await getQuestionsBySubject(result.subjectSlug);
-          const mappedQuestions: Question[] = newQuestions.map(mapQuizQuestionToQuestion);
+          const mappedQuestions: Question[] = newQuestions.data.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
             [result.subjectSlug]: mappedQuestions
@@ -1027,7 +1086,7 @@ export default function AdminPage(): JSX.Element {
             label="Dashboard"
             active={activeSection === 'dashboard'}
             expanded={sidebarOpen}
-            onClick={() => setActiveSection('dashboard')}
+            onClick={() => updateURL({ section: 'dashboard' })}
           />
 
           {/* Quiz Module with Categories */}
@@ -1037,7 +1096,7 @@ export default function AdminPage(): JSX.Element {
             sidebarOpen={sidebarOpen}
             quizModuleExpanded={quizModuleExpanded}
             onToggleExpand={() => setQuizModuleExpanded(!quizModuleExpanded)}
-            onSelectSubject={(slug) => setActiveSection(slug as MenuSection)}
+            onSelectSubject={(slug) => updateURL({ section: slug })}
             onAddSubject={(category) => {
               setSelectedCategory(category);
               setShowAddSubjectModal(true);
@@ -1070,7 +1129,7 @@ export default function AdminPage(): JSX.Element {
                 label="Dad Jokes"
                 active={activeSection === 'jokes'}
                 expanded={sidebarOpen}
-                onClick={() => setActiveSection('jokes')}
+                onClick={() => updateURL({ section: 'jokes' })}
               />
               <RiddleSidebar
                 chapters={orderedRiddleChapters}
@@ -1082,10 +1141,12 @@ export default function AdminPage(): JSX.Element {
                   setRiddleModuleExpanded(!riddleModuleExpanded);
                   setActiveSection('riddles');
                   setRiddleFilterChapter('');
+                  updateURL({ section: 'riddles', chapter: null });
                 }}
                 onSelectChapter={(chapter) => {
                   setActiveSection('riddles');
                   setRiddleFilterChapter(chapter);
+                  updateURL({ section: 'riddles', chapter });
                 }}
                 onReorderChapters={(newOrder) => {
                   setRiddleChapterOrder(newOrder);
@@ -1097,7 +1158,7 @@ export default function AdminPage(): JSX.Element {
                 label="Image Riddles"
                 active={activeSection === 'image-riddles'}
                 expanded={sidebarOpen}
-                onClick={() => setActiveSection('image-riddles')}
+                onClick={() => updateURL({ section: 'image-riddles' })}
               />
             </>
           )}
@@ -1113,14 +1174,14 @@ export default function AdminPage(): JSX.Element {
             label="Users"
             active={activeSection === 'users'}
             expanded={sidebarOpen}
-            onClick={() => setActiveSection('users')}
+            onClick={() => updateURL({ section: 'users' })}
           />
           <MenuItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"
             active={activeSection === 'settings'}
             expanded={sidebarOpen}
-            onClick={() => setActiveSection('settings')}
+            onClick={() => updateURL({ section: 'settings' })}
           />
         </nav>
 

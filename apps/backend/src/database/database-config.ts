@@ -69,9 +69,9 @@ export function getDatabaseConfig(
   const isDevelopment = nodeEnv === 'development';
   const isProduction = nodeEnv === 'production';
 
-  // Security: Never synchronize in production
-  // DEVELOPMENT ONLY: Enable synchronize to auto-create tables
-  const synchronize = options.synchronize ?? (isDevelopment ? true : false);
+  // SECURITY: Never synchronize in production
+  // Disabled temporarily due to schema mismatch issues
+  const synchronize = false;
 
   // Logging: Only enable in development, never in production
   const logging = options.logging ?? (isDevelopment && !isProduction);

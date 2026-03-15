@@ -595,7 +595,7 @@ export function QuestionManagementSection({
       } else {
         await bulkActionQuestions([selectedQuestion.id], 'trash');
       }
-      onQuestionsRefresh(subject.slug);
+      onQuestionsRefresh?.(subject.slug);
     } catch (err) {
       console.error('Failed to delete question:', err);
     }
@@ -782,7 +782,7 @@ export function QuestionManagementSection({
     const newName = editingChapterName.trim();
 
     // Refresh questions after chapter rename
-    onQuestionsRefresh(subject.slug);
+    onQuestionsRefresh?.(subject.slug);
 
     // If the filter was set to the old chapter, update it
     if (filterChapter === editingChapter) {
@@ -1135,7 +1135,7 @@ export function QuestionManagementSection({
               aria-pressed={filterLevel === level}
             >
               {level === 'all' ? 'All Levels' : level}{' '}
-              <span className="opacity-70">({computedLevelCounts[level] || 0})</span>
+              <span className="opacity-70">({(computedLevelCounts as Record<string, number>)[level] || 0})</span>
             </button>
           ))}
         </div>
@@ -1787,7 +1787,7 @@ export function QuestionManagementSection({
               <Trash2 className="w-5 h-5" /> Delete Chapter
             </h3>
             <p className="text-gray-600 dark:text-secondary-300 mb-2">
-              Are you sure you want to delete the chapter <strong>"{chapterToDelete.name}"</strong>?
+              Are you sure you want to delete the chapter <strong>&quot;{chapterToDelete.name}&quot;</strong>?
             </p>
             <p className="text-gray-500 dark:text-secondary-400 text-sm mb-6">
               This will also delete all questions in this chapter. This action cannot be undone.

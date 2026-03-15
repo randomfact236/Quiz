@@ -148,12 +148,9 @@ function RiddlePlayPageContent(): JSX.Element {
           fetchedRiddles = mixed.map(r => adaptQuizRiddle(r as any));
           setChapterName(level === 'all' ? 'Mixed Chapters' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
         } else {
-          const response = await getRiddlesByChapter(chapterId, 1, 50);
-          let filteredData = response.data;
-          if (level && level !== 'all') {
-            filteredData = filteredData.filter(r => r.level?.toLowerCase() === level.toLowerCase());
-          }
-          fetchedRiddles = filteredData.map(adaptQuizRiddle);
+          // Pass level filter to backend API (more efficient than frontend filtering)
+          const response = await getRiddlesByChapter(chapterId, 1, 50, level);
+          fetchedRiddles = response.data.map(r => adaptQuizRiddle(r as any));
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
             const baseName = chapterNameParam || fetchedRiddles[0].chapter;
             setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
@@ -319,12 +316,26 @@ function RiddlePlayPageContent(): JSX.Element {
     }
   }, [currentIndex]);
 
+  // Helper function to check if answer is correct (handles expert/open-ended normalization)
+  const isAnswerCorrect = (riddle: typeof riddles[0], userAnswer: string | undefined): boolean => {
+    if (!userAnswer) return false;
+    const isExpert = riddle.level === 'extreme' || riddle.difficulty === 'expert';
+    if (isExpert) {
+      // Expert level: case-insensitive, trim whitespace
+      const normalizedUser = userAnswer.toLowerCase().trim();
+      const normalizedCorrect = riddle.correctAnswer?.toLowerCase().trim() || riddle.correctOption?.toLowerCase().trim() || '';
+      return normalizedUser === normalizedCorrect;
+    }
+    // MCQ level: direct letter comparison
+    return userAnswer === riddle.correctOption;
+  };
+
   const handleSubmit = useCallback(() => {
     if (!session) return;
 
     let correctCount = 0;
     riddles.forEach(r => {
-      if (answers[r.id] === r.correctOption) correctCount++;
+      if (isAnswerCorrect(r, answers[r.id])) correctCount++;
     });
 
     const completedSession: RiddleSession = {
@@ -360,12 +371,9 @@ function RiddlePlayPageContent(): JSX.Element {
           newRiddles = response.map(r => adaptQuizRiddle(r as any));
         }
       } else {
-        const response = await getRiddlesByChapter(chapterId, 1, 100);
-        let filteredData = response.data;
-        if (level && level !== 'all') {
-          filteredData = filteredData.filter(r => r.level?.toLowerCase() === level.toLowerCase());
-        }
-        newRiddles = filteredData.map(adaptQuizRiddle);
+        // Pass level filter to backend API (more efficient)
+        const response = await getRiddlesByChapter(chapterId, 1, 100, level);
+        newRiddles = response.data.map(r => adaptQuizRiddle(r as any));
       }
 
       const uniqueNew = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);

@@ -43,8 +43,22 @@ function calculateResult(session: RiddleSession): RiddleResult {
         expert: { correct: 0, total: 0 },
     };
 
+    // Helper function to check if answer is correct (handles expert/open-ended normalization)
+    const isAnswerCorrect = (riddle: typeof session.riddles[0], userAnswer: string | undefined): boolean => {
+        if (!userAnswer) return false;
+        const isExpert = riddle.level === 'extreme' || riddle.difficulty === 'expert';
+        if (isExpert) {
+            // Expert level: case-insensitive, trim whitespace
+            const normalizedUser = userAnswer.toLowerCase().trim();
+            const normalizedCorrect = riddle.correctAnswer?.toLowerCase().trim() || riddle.correctOption?.toLowerCase().trim() || '';
+            return normalizedUser === normalizedCorrect;
+        }
+        // MCQ level: direct letter comparison
+        return userAnswer === riddle.correctOption;
+    };
+
     session.riddles.forEach((r) => {
-        const isCorrect = session.answers[r.id] === r.correctOption;
+        const isCorrect = isAnswerCorrect(r, session.answers[r.id]);
         const diff = r.difficulty as keyof typeof byDifficulty;
 
         // Safety check just in case difficulty is missing or invalid
