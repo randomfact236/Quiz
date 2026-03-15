@@ -966,11 +966,11 @@ export function RiddlesSection({
             All
           </button>
           {categories.map(cat => (
-            <div key={`cat-${cat.id}`} className="flex items-center gap-1">
+            <div key={`cat-${cat.id}`} className="flex items-center gap-1 rounded-lg bg-white border border-gray-300 px-2 py-1">
               <button
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategoryId === cat.id
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                className={`text-sm font-medium transition-colors ${selectedCategoryId === cat.id
+                  ? 'text-purple-600'
+                  : 'text-gray-700 hover:text-purple-600'
                   }`}
                 onClick={() => setSelectedCategoryId(cat.id)}
               >
@@ -978,14 +978,14 @@ export function RiddlesSection({
               </button>
               <button
                 onClick={() => handleEditCategory(cat)}
-                className="p-1 text-gray-500 hover:text-blue-500"
+                className="ml-1 text-xs text-gray-400 hover:text-blue-500"
                 title="Edit"
               >
                 ✏️
               </button>
               <button
                 onClick={() => setDeletingCategoryId(cat.id)}
-                className="p-1 text-gray-500 hover:text-red-500"
+                className="text-xs text-gray-400 hover:text-red-600"
                 title="Delete"
               >
                 🗑️
@@ -1006,20 +1006,20 @@ export function RiddlesSection({
           {subjects
             .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
             .map(sub => (
-              <div key={`sub-${sub.id}`} className="flex items-center gap-1">
-                <span className="rounded-lg px-3 py-1.5 text-sm bg-white border border-gray-200 text-gray-700">
+              <div key={`sub-${sub.id}`} className="flex items-center gap-1 rounded-lg bg-white border border-gray-200 px-2 py-1">
+                <span className="text-sm text-gray-700">
                   {sub.emoji || '📚'} {sub.name}
                 </span>
                 <button
                   onClick={() => handleEditSubject(sub)}
-                  className="p-1 text-gray-500 hover:text-blue-500"
+                  className="ml-1 text-xs text-gray-400 hover:text-blue-500"
                   title="Edit"
                 >
                   ✏️
                 </button>
                 <button
                   onClick={() => setDeletingSubjectId(sub.id)}
-                  className="p-1 text-gray-500 hover:text-red-500"
+                  className="text-xs text-gray-400 hover:text-red-600"
                   title="Delete"
                 >
                   🗑️
