@@ -558,12 +558,17 @@ export function RiddlesSection({
 
   // CRUD Functions
   const handleAddRiddle = async () => {
-    if (
-      !riddleForm.question.trim() ||
-      !riddleForm.optionA.trim() ||
-      !riddleForm.optionB.trim() ||
-      !riddleForm.chapter.trim()
-    ) {
+    // Validate based on question type
+    if (!riddleForm.question.trim()) {
+      alert('Please enter a question.');
+      return;
+    }
+    if (!riddleForm.chapter.trim()) {
+      alert('Please select a subject.');
+      return;
+    }
+    if (!riddleForm.isOpenEnded && (!riddleForm.optionA.trim() || !riddleForm.optionB.trim())) {
+      alert('Please provide at least 2 options for MCQ questions.');
       return;
     }
 
@@ -582,17 +587,39 @@ export function RiddlesSection({
         riddleForm.optionC.trim(),
         riddleForm.optionD.trim(),
       ].filter(Boolean);
+
+      // For open-ended (Expert) - no options needed
+      // For MCQ - need at least 2 options
+      if (!riddleForm.isOpenEnded && options.length < 2) {
+        alert('Please provide at least 2 options for MCQ questions.');
+        return;
+      }
+
       const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddleForm.correctLetter || 'A');
       const correctAnswerText = options[letterIndex] || options[0] || '';
       
-      const created = (await createRiddle({
+      // Build API payload based on question type
+      const riddlePayload: any = {
         question: riddleForm.question.trim(),
-        options,
-        correctLetter: riddleForm.correctLetter,
-        correctAnswer: correctAnswerText,
         level: riddleForm.difficulty,
         subjectId: subjectId,
-      })) as any;
+        hint: riddleForm.hint.trim() || undefined,
+        explanation: riddleForm.explanation.trim() || undefined,
+      };
+
+      if (riddleForm.isOpenEnded) {
+        // Open-ended (Expert): no options, no correctLetter
+        riddlePayload.options = [];
+        riddlePayload.correctLetter = null;
+        riddlePayload.correctAnswer = riddleForm.correctOption || correctAnswerText || 'expert';
+      } else {
+        // MCQ: has options
+        riddlePayload.options = options;
+        riddlePayload.correctLetter = riddleForm.correctLetter;
+        riddlePayload.correctAnswer = correctAnswerText;
+      }
+
+      const created = (await createRiddle(riddlePayload)) as any;
 
       const newRiddle: Riddle = {
         id: String(Date.now()),
@@ -1420,7 +1447,38 @@ export function RiddlesSection({
                 />
               </div>
 
-              {/* Options Grid */}
+              {/* Hint Field */}
+              <div>
+                <label htmlFor="riddle-hint" className="mb-1 block text-sm font-medium text-gray-700">
+                  Hint (optional)
+                </label>
+                <input
+                  id="riddle-hint"
+                  type="text"
+                  value={riddleForm.hint}
+                  onChange={e => setRiddleForm(prev => ({ ...prev, hint: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  placeholder="Enter a hint for the riddle..."
+                />
+              </div>
+
+              {/* Explanation Field */}
+              <div>
+                <label htmlFor="riddle-explanation" className="mb-1 block text-sm font-medium text-gray-700">
+                  Explanation (optional)
+                </label>
+                <textarea
+                  id="riddle-explanation"
+                  value={riddleForm.explanation}
+                  onChange={e => setRiddleForm(prev => ({ ...prev, explanation: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  rows={2}
+                  placeholder="Explain the answer..."
+                />
+              </div>
+
+              {/* Options Grid - Only show if NOT open-ended */}
+              {!riddleForm.isOpenEnded && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="riddle-option-a" className="mb-1 block text-sm font-medium text-gray-700">
@@ -1477,9 +1535,11 @@ export function RiddlesSection({
                   />
                 </div>
               </div>
+              )}
 
               {/* Correct Answer, Difficulty, Chapter */}
               <div className="grid grid-cols-3 gap-4">
+                {!riddleForm.isOpenEnded && (
                 <div>
                   <label
                     htmlFor="riddle-correct-answer"
@@ -1500,6 +1560,25 @@ export function RiddlesSection({
                     <option value="D">D</option>
                   </select>
                 </div>
+                )}
+                {riddleForm.isOpenEnded && (
+                <div>
+                  <label
+                    htmlFor="riddle-correct-answer-text"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Correct Answer (for reference)
+                  </label>
+                  <input
+                    id="riddle-correct-answer-text"
+                    type="text"
+                    value={riddleForm.correctOption}
+                    onChange={e => setRiddleForm(prev => ({ ...prev, correctOption: e.target.value, correctLetter: 'A' }))}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Enter the correct answer text..."
+                  />
+                </div>
+                )}
                   <div>
                     <label htmlFor="riddle-difficulty" className="mb-1 block text-sm font-medium text-gray-700">
                       Difficulty *
