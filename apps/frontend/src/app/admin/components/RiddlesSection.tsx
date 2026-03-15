@@ -133,6 +133,16 @@ export function RiddlesSection({
   const [newSubjectEmoji, setNewSubjectEmoji] = useState('📚');
   const [categoryFormLoading, setCategoryFormLoading] = useState(false);
 
+  // Edit/Delete State
+  const [editingCategory, setEditingCategory] = useState<any | null>(null);
+  const [editingSubject, setEditingSubject] = useState<any | null>(null);
+  const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null);
+  const [deletingSubjectId, setDeletingSubjectId] = useState<string | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState('');
+  const [editCategoryEmoji, setEditCategoryEmoji] = useState('');
+  const [editSubjectName, setEditSubjectName] = useState('');
+  const [editSubjectEmoji, setEditSubjectEmoji] = useState('');
+
   useEffect(() => {
     import('@/lib/riddles-api').then(({ getAllChapters }) => {
       getAllChapters()
@@ -767,6 +777,103 @@ export function RiddlesSection({
     }
   };
 
+  // Handle edit category
+  const handleEditCategory = (category: any) => {
+    setEditCategoryName(category.name);
+    setEditCategoryEmoji(category.emoji || '📁');
+    setEditingCategory(category);
+  };
+
+  const handleUpdateCategory = async () => {
+    if (!editCategoryName.trim() || !editingCategory) return;
+    setCategoryFormLoading(true);
+    try {
+      const { updateCategory, getCategories } = await import('@/lib/riddles-api');
+      await updateCategory(editingCategory.id, {
+        name: editCategoryName,
+        emoji: editCategoryEmoji,
+      });
+      setEditingCategory(null);
+      const apiCategories = await getCategories();
+      setCategories(apiCategories);
+    } catch (err: any) {
+      alert('Failed to update category: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
+  // Handle delete category
+  const handleDeleteCategory = async () => {
+    if (!deletingCategoryId) return;
+    setCategoryFormLoading(true);
+    try {
+      const { deleteCategory, getCategories } = await import('@/lib/riddles-api');
+      await deleteCategory(deletingCategoryId);
+      setDeletingCategoryId(null);
+      if (selectedCategoryId === deletingCategoryId) {
+        setSelectedCategoryId('');
+      }
+      const apiCategories = await getCategories();
+      setCategories(apiCategories);
+    } catch (err: any) {
+      alert('Failed to delete category: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
+  // Handle edit subject
+  const handleEditSubject = (subject: any) => {
+    setEditSubjectName(subject.name);
+    setEditSubjectEmoji(subject.emoji || '📚');
+    setEditingSubject(subject);
+  };
+
+  const handleUpdateSubject = async () => {
+    if (!editSubjectName.trim() || !editingSubject) return;
+    setCategoryFormLoading(true);
+    try {
+      const { updateSubject, getSubjects, getCategories } = await import('@/lib/riddles-api');
+      await updateSubject(editingSubject.id, {
+        name: editSubjectName,
+        emoji: editSubjectEmoji,
+      });
+      setEditingSubject(null);
+      const [apiSubjects, apiCategories] = await Promise.all([
+        getSubjects(),
+        getCategories()
+      ]);
+      setSubjects(apiSubjects);
+      setCategories(apiCategories);
+    } catch (err: any) {
+      alert('Failed to update subject: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
+  // Handle delete subject
+  const handleDeleteSubject = async () => {
+    if (!deletingSubjectId) return;
+    setCategoryFormLoading(true);
+    try {
+      const { deleteSubject, getSubjects, getCategories } = await import('@/lib/riddles-api');
+      await deleteSubject(deletingSubjectId);
+      setDeletingSubjectId(null);
+      const [apiSubjects, apiCategories] = await Promise.all([
+        getSubjects(),
+        getCategories()
+      ]);
+      setSubjects(apiSubjects);
+      setCategories(apiCategories);
+    } catch (err: any) {
+      alert('Failed to delete subject: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
@@ -859,16 +966,31 @@ export function RiddlesSection({
             All
           </button>
           {categories.map(cat => (
-            <button
-              key={`cat-${cat.id}`}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategoryId === cat.id
-                ? 'bg-purple-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                }`}
-              onClick={() => setSelectedCategoryId(cat.id)}
-            >
-              {cat.emoji || '📁'} {cat.name}
-            </button>
+            <div key={`cat-${cat.id}`} className="flex items-center gap-1">
+              <button
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategoryId === cat.id
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                  }`}
+                onClick={() => setSelectedCategoryId(cat.id)}
+              >
+                {cat.emoji || '📁'} {cat.name}
+              </button>
+              <button
+                onClick={() => handleEditCategory(cat)}
+                className="p-1 text-gray-500 hover:text-blue-500"
+                title="Edit"
+              >
+                ✏️
+              </button>
+              <button
+                onClick={() => setDeletingCategoryId(cat.id)}
+                className="p-1 text-gray-500 hover:text-red-500"
+                title="Delete"
+              >
+                🗑️
+              </button>
+            </div>
           ))}
           <button
             onClick={() => setShowAddCategoryModal(true)}
@@ -884,12 +1006,25 @@ export function RiddlesSection({
           {subjects
             .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
             .map(sub => (
-              <span
-                key={`sub-${sub.id}`}
-                className="rounded-lg px-3 py-1.5 text-sm bg-white border border-gray-200 text-gray-700"
-              >
-                {sub.emoji || '📚'} {sub.name}
-              </span>
+              <div key={`sub-${sub.id}`} className="flex items-center gap-1">
+                <span className="rounded-lg px-3 py-1.5 text-sm bg-white border border-gray-200 text-gray-700">
+                  {sub.emoji || '📚'} {sub.name}
+                </span>
+                <button
+                  onClick={() => handleEditSubject(sub)}
+                  className="p-1 text-gray-500 hover:text-blue-500"
+                  title="Edit"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => setDeletingSubjectId(sub.id)}
+                  className="p-1 text-gray-500 hover:text-red-500"
+                  title="Delete"
+                >
+                  🗑️
+                </button>
+              </div>
             ))}
           {subjects.filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId).length === 0 && (
             <span className="text-sm text-gray-400">No subjects found</span>
@@ -1632,6 +1767,164 @@ export function RiddlesSection({
                 className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-50"
               >
                 {categoryFormLoading ? 'Creating...' : 'Create Subject'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Category Modal */}
+      {editingCategory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold">✏️ Edit Category</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Category Name *
+                </label>
+                <input
+                  type="text"
+                  value={editCategoryName}
+                  onChange={e => setEditCategoryName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="e.g., Logic, Math, Word Play"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Emoji
+                </label>
+                <input
+                  type="text"
+                  value={editCategoryEmoji}
+                  onChange={e => setEditCategoryEmoji(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="📁"
+                />
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setEditingCategory(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateCategory}
+                disabled={!editCategoryName.trim() || categoryFormLoading}
+                className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Subject Modal */}
+      {editingSubject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold">✏️ Edit Subject</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Subject Name *
+                </label>
+                <input
+                  type="text"
+                  value={editSubjectName}
+                  onChange={e => setEditSubjectName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateSubject()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="e.g., Brain Teasers, Word Puzzles"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Emoji
+                </label>
+                <input
+                  type="text"
+                  value={editSubjectEmoji}
+                  onChange={e => setEditSubjectEmoji(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateSubject()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="🧩"
+                />
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setEditingSubject(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateSubject}
+                disabled={!editSubjectName.trim() || categoryFormLoading}
+                className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Category Confirmation */}
+      {deletingCategoryId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Category</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete this category? This action cannot be undone.
+            </p>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setDeletingCategoryId(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteCategory}
+                disabled={categoryFormLoading}
+                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Subject Confirmation */}
+      {deletingSubjectId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Subject</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete this subject? This action cannot be undone.
+            </p>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setDeletingSubjectId(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteSubject}
+                disabled={categoryFormLoading}
+                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

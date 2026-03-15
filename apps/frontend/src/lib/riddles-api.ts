@@ -107,6 +107,21 @@ export async function getCategories(): Promise<any[]> {
 }
 
 /**
+ * Update a classic category (Admin only)
+ */
+export async function updateCategory(id: string, dto: { name?: string; emoji?: string }): Promise<any> {
+  const response = await api.put(`/riddles/classic/categories/${id}`, dto);
+  return response.data;
+}
+
+/**
+ * Delete a classic category (Admin only)
+ */
+export async function deleteCategory(id: string): Promise<void> {
+  await api.delete(`/riddles/classic/categories/${id}`);
+}
+
+/**
  * Update a subject (Admin only)
  */
 export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {
