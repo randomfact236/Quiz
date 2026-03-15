@@ -714,13 +714,13 @@ export function RiddlesSection({
     { value: 'expert', label: 'Expert' },
   ];
 
-  // Handle create category (creates a subject with category)
+  // Handle create category (creates a classic category)
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) return;
     setCategoryFormLoading(true);
     try {
-      const { createSubject } = await import('@/lib/riddles-api');
-      await createSubject({
+      const { createCategory } = await import('@/lib/riddles-api');
+      await createCategory({
         name: newCategoryName,
         emoji: newCategoryEmoji,
       });
@@ -1536,6 +1536,7 @@ export function RiddlesSection({
                   type="text"
                   value={newCategoryName}
                   onChange={e => setNewCategoryName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateCategory()}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                   placeholder="e.g., Logic, Math, Word Play"
                 />
@@ -1548,6 +1549,7 @@ export function RiddlesSection({
                   type="text"
                   value={newCategoryEmoji}
                   onChange={e => setNewCategoryEmoji(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateCategory()}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                   placeholder="📁"
                 />
@@ -1586,6 +1588,7 @@ export function RiddlesSection({
                   type="text"
                   value={newSubjectName}
                   onChange={e => setNewSubjectName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateSubject()}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                   placeholder="e.g., Brain Teasers, Word Puzzles"
                 />
@@ -1598,6 +1601,7 @@ export function RiddlesSection({
                   type="text"
                   value={newSubjectEmoji}
                   onChange={e => setNewSubjectEmoji(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateSubject()}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                   placeholder="🧩"
                 />

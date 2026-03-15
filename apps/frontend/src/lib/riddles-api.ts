@@ -91,6 +91,14 @@ export async function createSubject(dto: CreateSubjectDto): Promise<RiddleSubjec
 }
 
 /**
+ * Create a new classic category (Admin only)
+ */
+export async function createCategory(dto: { name: string; emoji?: string }): Promise<any> {
+  const response = await api.post('/riddles/classic/categories', dto);
+  return response.data;
+}
+
+/**
  * Update a subject (Admin only)
  */
 export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {
