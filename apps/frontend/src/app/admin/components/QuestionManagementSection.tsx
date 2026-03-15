@@ -65,6 +65,14 @@ interface QuestionManagementSectionProps {
   onFilterChange?: (subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => void;
   /** Callback to refresh questions from server (after bulk actions) */
   onQuestionsRefresh?: (subjectSlug: string) => void | Promise<void>;
+  /** Question counts per subject */
+  questionCounts?: Record<string, number>;
+  /** Callback to get all questions (for "All" mode) */
+  onGetAllQuestions?: (filters: { status?: string; level?: string; chapter?: string; search?: string }, page: number, limit: number) => Promise<{ data: Question[]; total: number }>;
+  /** Callback to get all questions status counts (for "All" mode) */
+  onGetAllQuestionsStatusCounts?: () => Promise<{ total: number; published: number; draft: number; trash: number }>;
+  /** Whether to show all subjects mode (controlled) */
+  showAllMode?: boolean;
 }
 
 /**
@@ -117,12 +125,32 @@ export function QuestionManagementSection({
   onPageChange,
   onFilterChange,
   onQuestionsRefresh,
+  questionCounts,
+  onGetAllQuestions,
+  onGetAllQuestionsStatusCounts,
+  showAllMode = false,
 }: QuestionManagementSectionProps): JSX.Element {
   // Filter states - triggers server-side filtering via callback
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+
+  // "All" mode state - controlled by showAllMode prop
+  const [showAllSubjects, setShowAllSubjects] = useState(showAllMode);
+  const [allModeQuestions, setAllModeQuestions] = useState<Question[]>([]);
+  const [allModePagination, setAllModePagination] = useState({ page: 1, limit: 10, total: 0 });
+  const [allModeStatusCounts, setAllModeStatusCounts] = useState<{ total: number; published: number; draft: number; trash: number } | undefined>();
+
+  // Sync showAllSubjects when showAllMode prop changes
+  useEffect(() => {
+    setShowAllSubjects(showAllMode);
+  }, [showAllMode]);
+
+  // Display values - use allMode data when showAllSubjects is true
+  const displayQuestions = showAllSubjects ? allModeQuestions : questions;
+  const displayPagination = showAllSubjects ? allModePagination : (pagination || { page: 1, limit: 10, total: 0 });
+  const displayStatusCounts = showAllSubjects ? allModeStatusCounts : statusCounts;
 
   // Trigger API call when filters change (server-side filtering)
   useEffect(() => {
@@ -147,7 +175,31 @@ export function QuestionManagementSection({
   // Initialize from props, then sync with useEffect
   const [currentPage, setCurrentPage] = useState(serverPagination.page);
   const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
-  const totalQuestions = serverPagination.total;
+
+  // Fetch "All" mode data when filters change
+  useEffect(() => {
+    if (showAllSubjects && onGetAllQuestions) {
+      const fetchAllQuestions = async () => {
+        const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+        if (statusFilter !== 'all') filters.status = statusFilter;
+        if (filterLevel !== 'all') filters.level = filterLevel;
+        if (filterChapter !== 'all') filters.chapter = filterChapter;
+        if (searchTerm) filters.search = searchTerm;
+        const result = await onGetAllQuestions(filters, currentPage, questionsPerPage);
+        setAllModeQuestions(result.data);
+        setAllModePagination(prev => ({ ...prev, total: result.total }));
+      };
+      fetchAllQuestions();
+    }
+  }, [showAllSubjects, currentPage, questionsPerPage, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestions]);
+
+  // Fetch "All" mode status counts
+  useEffect(() => {
+    if (showAllSubjects && onGetAllQuestionsStatusCounts) {
+      onGetAllQuestionsStatusCounts().then(setAllModeStatusCounts);
+    }
+  }, [showAllSubjects, onGetAllQuestionsStatusCounts]);
+  const totalQuestions = displayPagination.total;
   
   const [pageInput, setPageInput] = useState(String(serverPagination.page));
 
@@ -216,10 +268,10 @@ export function QuestionManagementSection({
     return [...new Set(questions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
   }, [questions, chapters]);
 
-  // Use server statusCounts if available
+  // Use server statusCounts if available (or allModeStatusCounts when showAllSubjects)
   const computedStatusCounts = useMemo(() => {
-    if (statusCounts) {
-      return statusCounts;
+    if (displayStatusCounts) {
+      return displayStatusCounts;
     }
     return {
       total: pagination?.total ?? questions.length,
@@ -227,7 +279,7 @@ export function QuestionManagementSection({
       draft: questions.filter((q) => q.status === 'draft').length,
       trash: questions.filter((q) => q.status === 'trash').length,
     };
-  }, [questions, pagination, statusCounts]);
+  }, [questions, pagination, displayStatusCounts]);
 
   // Use server chapterCounts if available
   const computedChapterCounts = useMemo(() => {
@@ -249,7 +301,7 @@ export function QuestionManagementSection({
   }, [pagination, levelCounts, questions]);
 
   // Questions are already filtered from the backend - use directly from props
-  const filteredQuestions = questions;
+  const filteredQuestions = displayQuestions;
 
   // Debug logging
   console.log('[QuestionManagement] questions prop:', questions?.length, 'pagination:', pagination, 'page:', currentPage, 'limit:', questionsPerPage);
@@ -259,7 +311,7 @@ export function QuestionManagementSection({
 
   // Pagination calculations - use server pagination if available
   const totalPages = isServerPagination
-    ? Math.ceil(serverPagination.total / questionsPerPage)
+    ? Math.ceil(displayPagination.total / questionsPerPage)
     : Math.ceil(filteredQuestions.length / questionsPerPage);
 
   const startIndex = isServerPagination
@@ -985,20 +1037,33 @@ export function QuestionManagementSection({
         {/* Subject Filters Row */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-600 mr-2">Subject:</span>
+          
+          {/* ALL button */}
+          <button
+            onClick={() => setShowAllSubjects(true)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              showAllSubjects
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            All ({Object.values(questionCounts || {}).reduce((a, b) => a + b, 0)})
+          </button>
+          
           {allSubjects.map((s) => (
             <div key={s.slug} className="flex items-center gap-0.5">
               <button
-                onClick={() => onSubjectSelect(s.slug)}
-                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${subject.slug === s.slug
+                onClick={() => { setShowAllSubjects(false); onSubjectSelect(s.slug); }}
+                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${!showAllSubjects && subject.slug === s.slug
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
-                aria-pressed={subject.slug === s.slug}
+                aria-pressed={!showAllSubjects && subject.slug === s.slug}
               >
                 <span role="img" aria-hidden="true">
                   {s.emoji}
                 </span>{' '}
-                {s.name}
+                {s.name} ({questionCounts?.[s.slug] || 0})
               </button>
               {/* Edit button */}
               <button
@@ -1006,7 +1071,7 @@ export function QuestionManagementSection({
                   e.stopPropagation();
                   onEditSubject(s);
                 }}
-                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${subject.slug === s.slug
+                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${!showAllSubjects && subject.slug === s.slug
                   ? 'bg-blue-400 text-white hover:bg-blue-300'
                   : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
                   }`}
@@ -1020,7 +1085,7 @@ export function QuestionManagementSection({
                   e.stopPropagation();
                   onDeleteSubject(s.id);
                 }}
-                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${subject.slug === s.slug
+                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${!showAllSubjects && subject.slug === s.slug
                   ? 'bg-blue-400 text-white hover:bg-red-400'
                   : 'bg-gray-200 text-red-600 hover:bg-red-50'
                   }`}

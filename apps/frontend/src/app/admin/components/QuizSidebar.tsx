@@ -15,6 +15,8 @@ interface QuizSidebarProps {
   onEditSubject: (subject: Subject) => void;
   onReorderSubjects: (subjects: Subject[]) => void;
   questionCounts?: Record<string, number>;
+  totalQuestionCount?: number;
+  onSelectAll?: () => void;
 }
 
 // Helper to check if a string is an emoji
@@ -33,6 +35,8 @@ export function QuizSidebar({
   onEditSubject,
   onReorderSubjects,
   questionCounts = {},
+  totalQuestionCount = 0,
+  onSelectAll,
 }: QuizSidebarProps): JSX.Element {
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTargetCategory, setDropTargetCategory] = useState<string | null>(null);
@@ -242,6 +246,31 @@ export function QuizSidebar({
       {/* Category Sections */}
       {quizModuleExpanded && (
         <div className="px-2 mt-2">
+          {/* All Subjects Option */}
+          {onSelectAll && (
+            <button
+              onClick={onSelectAll}
+              className={`w-full flex items-center justify-between px-3 py-2 mb-2 rounded-lg transition-colors ${
+                activeSection === 'all-subjects'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              {sidebarOpen ? (
+                <>
+                  <span className="flex items-center gap-2">
+                    <span>📚</span>
+                    <span className="font-medium">All Subjects</span>
+                  </span>
+                  <span className="text-xs bg-gray-600 px-2 py-0.5 rounded-full">
+                    {totalQuestionCount}
+                  </span>
+                </>
+              ) : (
+                <span className="text-lg">📚</span>
+              )}
+            </button>
+          )}
           {renderCategorySection('Academic', academicSubjects, 'academic')}
           {renderCategorySection('Professional & Life', professionalSubjects, 'professional')}
           {renderCategorySection('Entertainment & Culture', entertainmentSubjects, 'entertainment')}

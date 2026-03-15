@@ -221,6 +221,16 @@ export class QuizService {
     return { data, total };
   }
 
+  async getAllQuestionsStatusCounts(): Promise<{ total: number; published: number; draft: number; trash: number }> {
+    const [total, published, draft, trash] = await Promise.all([
+      this.questionRepo.count(),
+      this.questionRepo.count({ where: { status: ContentStatus.PUBLISHED } }),
+      this.questionRepo.count({ where: { status: ContentStatus.DRAFT } }),
+      this.questionRepo.count({ where: { status: ContentStatus.TRASH } }),
+    ]);
+    return { total, published, draft, trash };
+  }
+
   async findRandomQuestions(level: string, count: number): Promise<Question[]> {
     // Validate level parameter
     const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];

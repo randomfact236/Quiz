@@ -36,7 +36,7 @@ import { QuizSidebar } from './components/QuizSidebar';
 import { RiddleSidebar } from './components/RiddleSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts } from '@/lib/quiz-api';
+import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts, getAllQuestionsWithFilters, getAllQuestionsStatusCounts } from '@/lib/quiz-api';
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
 import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
@@ -168,7 +168,7 @@ export default function AdminPage(): JSX.Element {
     if (hasSetInitialSection.current) return;
     if (allSubjects.length > 0 || urlSection) {
       // URL section takes priority, but validate if it's a quiz subject
-      if (urlSection === 'riddles' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'dashboard') {
+      if (urlSection === 'riddles' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'dashboard' || urlSection === 'all-subjects') {
         setActiveSection(urlSection as MenuSection);
       } else {
         // It's a quiz subject - check if valid
@@ -194,7 +194,7 @@ export default function AdminPage(): JSX.Element {
     let targetSection = urlSection;
     
     // Check if it's a special section (riddles, jokes, etc.)
-    const isSpecialSection = ['riddles', 'image-riddles', 'jokes', 'users', 'settings', 'dashboard'].includes(urlSection);
+    const isSpecialSection = ['riddles', 'image-riddles', 'jokes', 'users', 'settings', 'dashboard', 'all-subjects'].includes(urlSection);
     
     if (!isSpecialSection) {
       // It's a quiz subject - check if valid
@@ -443,6 +443,7 @@ export default function AdminPage(): JSX.Element {
   // Handle subject selection from filter
   const handleSubjectSelect = (slug: string) => {
     setActiveSection(slug as MenuSection);
+    updateURL({ section: slug || 'dashboard' });
   };
 
   // Handle question page change (server-side pagination)
@@ -528,6 +529,18 @@ export default function AdminPage(): JSX.Element {
     } catch (err) {
       console.error('Failed to refresh questions:', err);
     }
+  };
+
+  // Handle get all questions (for "All" mode)
+  const handleGetAllQuestions = async (filters: { status?: string; level?: string; chapter?: string; search?: string }, page: number, limit: number) => {
+    const result = await getAllQuestionsWithFilters(filters, page, limit);
+    const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
+    return { data: mappedQuestions, total: result.total };
+  };
+
+  // Handle get all questions status counts (for "All" mode)
+  const handleGetAllQuestionsStatusCounts = async () => {
+    return await getAllQuestionsStatusCounts();
   };
 
   // Handle questions import
@@ -1104,6 +1117,8 @@ export default function AdminPage(): JSX.Element {
             onEditSubject={handleEditSubject}
             onReorderSubjects={handleReorderSubjects}
             questionCounts={questionCounts}
+            totalQuestionCount={Object.values(questionCounts).reduce((a, b) => a + b, 0)}
+            onSelectAll={() => updateURL({ section: 'all-subjects' })}
           />
 
           {/* Other Modules Header */}
@@ -1209,10 +1224,10 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
               {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
-              {allSubjects.some(s => s.slug === activeSection) && (
+              {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && (
                 <>
-                  <span className="text-2xl">{isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚'}</span>
-                  <span>{allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
+                  <span className="text-2xl">{activeSection === 'all-subjects' ? '📚' : (isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚')}</span>
+                  <span>{activeSection === 'all-subjects' ? 'All Subjects' : allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
                 </>
               )}
             </h2>
@@ -1248,15 +1263,15 @@ export default function AdminPage(): JSX.Element {
               onDeleteSubject={handleDeleteSubject}
             />
           )}
-          {allSubjects.some(s => s.slug === activeSection) && (
+          {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && allSubjects.length > 0 && (
             <QuestionManagementSection
-              subject={getSubjectFromSection(activeSection) as Subject}
-              questions={getQuestionsForSubject(activeSection)}
-              pagination={getQuestionPagination(activeSection)}
-              chapters={getChaptersForSubject(activeSection)}
-              statusCounts={getStatusCountsForSubject(activeSection)}
-              chapterCounts={getChapterCountsForSubject(activeSection)}
-              levelCounts={getLevelCountsForSubject(activeSection)}
+              subject={activeSection === 'all-subjects' ? allSubjects[0]! : getSubjectFromSection(activeSection)!}
+              questions={activeSection === 'all-subjects' ? [] : getQuestionsForSubject(activeSection)}
+              pagination={activeSection === 'all-subjects' ? { page: 1, limit: 10, total: Object.values(questionCounts).reduce((a, b) => a + b, 0) } : getQuestionPagination(activeSection)}
+              chapters={activeSection === 'all-subjects' ? [] : getChaptersForSubject(activeSection)}
+              statusCounts={activeSection === 'all-subjects' ? undefined : getStatusCountsForSubject(activeSection)}
+              chapterCounts={activeSection === 'all-subjects' ? undefined : getChapterCountsForSubject(activeSection)}
+              levelCounts={activeSection === 'all-subjects' ? undefined : getLevelCountsForSubject(activeSection)}
               allSubjects={[...allSubjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}
@@ -1270,6 +1285,10 @@ export default function AdminPage(): JSX.Element {
               onPageChange={handleQuestionPageChange}
               onFilterChange={handleQuestionFilterChange}
               onQuestionsRefresh={handleQuestionsRefresh}
+              questionCounts={questionCounts}
+              onGetAllQuestions={handleGetAllQuestions}
+              onGetAllQuestionsStatusCounts={handleGetAllQuestionsStatusCounts}
+              showAllMode={activeSection === 'all-subjects'}
             />
           )}
           {activeSection === 'jokes' && (

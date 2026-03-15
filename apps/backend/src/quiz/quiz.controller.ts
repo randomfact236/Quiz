@@ -90,6 +90,27 @@ export class QuizController {
     return this.quizService.findAllQuestions(pagination, filters);
   }
 
+  @Get('questions/all')
+  @ApiOperation({ summary: 'Get all questions from all subjects with filters' })
+  async getAllQuestionsWithFilters(
+    @Query('status') status?: string,
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('search') search?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<{ data: Question[]; total: number }> {
+    const pagination = { page: page || 1, limit: limit || 10 };
+    const filters = { status: status as any, level, chapter, search };
+    return this.quizService.findAllQuestions(pagination, filters);
+  }
+
+  @Get('questions/all/status-counts')
+  @ApiOperation({ summary: 'Get status counts for all questions' })
+  async getAllQuestionsStatusCounts(): Promise<{ total: number; published: number; draft: number; trash: number }> {
+    return this.quizService.getAllQuestionsStatusCounts();
+  }
+
   @Post('subjects')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')

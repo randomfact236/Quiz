@@ -247,6 +247,31 @@ export async function getChapterCountsBySubject(subjectSlug: string): Promise<Re
     return response.data;
 }
 
+export async function getAllQuestionsWithFilters(
+    filters: QuestionFilters = {},
+    page: number = 1,
+    limit: number = 10
+): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
+    let url = `/quiz/questions/all?page=${page}&limit=${limit}`;
+    if (filters.status) url += `&status=${filters.status}`;
+    if (filters.level) url += `&level=${filters.level}`;
+    if (filters.chapter) url += `&chapter=${encodeURIComponent(filters.chapter)}`;
+    if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
+    
+    const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
+    return {
+        data: response.data.data,
+        total: response.data.total,
+        page,
+        limit
+    };
+}
+
+export async function getAllQuestionsStatusCounts(): Promise<SubjectStatusCounts> {
+    const response = await api.get<SubjectStatusCounts>('/quiz/questions/all/status-counts');
+    return response.data;
+}
+
 export async function getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
     const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/level-counts`);
     return response.data;
