@@ -31,7 +31,7 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';
+import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
@@ -271,12 +271,11 @@ export default function AdminPage(): JSX.Element {
             correctOption: qr.correctLetter || qr.correctAnswer || 'A',
             correctLetter: qr.correctLetter,
             difficulty: (qr.level as Riddle['difficulty']) || 'medium',
-            chapter: (qr as any).chapter?.name || (qr as any).subject?.name || 'General',
             status: 'published' as const,
-            ...(qr.hint ? { hint: qr.hint } : {}),
+            hint: qr.hint || '',
+            explanation: qr.explanation || '',
           }));
           setAllRiddles(mappedRiddles);
-          // Riddle chapter filter is now handled via URL in useEffect above
         })
         .catch((err: any) => console.error('Failed to load quiz riddles:', err));
     });
@@ -1240,7 +1239,7 @@ export default function AdminPage(): JSX.Element {
             />
           )}
           {activeSection === 'riddles' && (
-            <RiddlesSection
+            <RiddleMcqSection
               allRiddles={allRiddles}
               setAllRiddles={setAllRiddles}
             />

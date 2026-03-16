@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
@@ -16,9 +16,9 @@ import {
 } from '../utils';
 
 /**
- * Props for the RiddlesSection component
+ * Props for the RiddleMcqSection component
  */
-interface RiddlesSectionProps {
+interface RiddleMcqSectionProps {
   /** Optional initial riddles data */
   initialRiddles?: Riddle[];
   /** Controlled state for all riddles from parent */
@@ -47,11 +47,11 @@ interface RiddleFormState {
 }
 
 /**
- * RiddlesSection Component
+ * RiddleMcqSection Component
  *
- * Manages the riddle content section in the admin panel.
+ * Manages the riddle MCQ content section in the admin panel.
  * Features include:
- * - Riddle list display with filtering by chapter, difficulty, and search
+ * - Riddle list display with filtering by difficulty, and search
  * - Add/Edit riddle modal with form validation
  * - Bulk actions (publish, draft, trash, delete, restore)
  * - CSV/JSON import and export functionality
@@ -59,13 +59,13 @@ interface RiddleFormState {
  *
  * @example
  * ```tsx
- * <RiddlesSection />
+ * <RiddleMcqSection />
  * ```
  */
-export function RiddlesSection({
+export function RiddleMcqSection({
   allRiddles,
   setAllRiddles,
-}: RiddlesSectionProps): JSX.Element {
+}: RiddleMcqSectionProps): JSX.Element {
   // Filter States
   const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
   const [riddleSearch, setRiddleSearch] = useState<string>('');
@@ -81,6 +81,8 @@ export function RiddlesSection({
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showTrashConfirm, setShowTrashConfirm] = useState(false);
+  const [expandedHintId, setExpandedHintId] = useState<string | null>(null);
+  const [expandedExplanationId, setExpandedExplanationId] = useState<string | null>(null);
   const [selectedRiddle, setSelectedRiddle] = useState<Riddle | null>(null);
 
   // Import State
@@ -540,16 +542,22 @@ export function RiddlesSection({
         riddlePayload.correctAnswer = correctAnswerText;
       }
 
+      console.log('Creating riddle with explanation:', riddleForm.explanation);
       const created = (await createRiddle(riddlePayload)) as any;
+      console.log('API response:', created);
 
       const newRiddle: Riddle = {
         id: String(Date.now()),
-        question: created.question,
-        options: created.options || [],
+        question: created.question || riddleForm.question,
+        options: created.options || options,
         correctOption: created.correctLetter || riddleForm.correctLetter,
-        difficulty: created.level as any,
+        difficulty: (created.level as any) || riddleForm.difficulty,
         status: 'published' as const,
+        hint: created.hint ?? riddleForm.hint ?? '',
+        explanation: created.explanation ?? riddleForm.explanation ?? '',
       };
+      
+      console.log('New riddle with explanation:', newRiddle.explanation);
 
       setAllRiddles(prev => [newRiddle, ...prev]);
       setShowAddModal(false);
@@ -588,14 +596,23 @@ export function RiddlesSection({
       const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddleForm.correctLetter || 'A');
       const correctAnswerText = options[letterIndex] || options[0] || '';
       
-      await updateRiddle(String(selectedRiddle.id), {
+      const updateData: any = {
         question: riddleForm.question.trim(),
         options,
         correctLetter: riddleForm.correctLetter,
         correctAnswer: correctAnswerText,
         level: riddleForm.difficulty,
         subjectId: subjectId,
-      });
+      };
+      
+      if (riddleForm.hint.trim()) {
+        updateData.hint = riddleForm.hint.trim();
+      }
+      if (riddleForm.explanation.trim()) {
+        updateData.explanation = riddleForm.explanation.trim();
+      }
+      
+      await updateRiddle(String(selectedRiddle.id), updateData);
 
       setAllRiddles(prev =>
         prev.map(r =>
@@ -606,6 +623,8 @@ export function RiddlesSection({
               options,
               correctOption: riddleForm.correctLetter,
               difficulty: riddleForm.difficulty,
+              hint: riddleForm.hint || '',
+              explanation: riddleForm.explanation || '',
             }
             : r
         )
@@ -651,6 +670,8 @@ export function RiddlesSection({
 
   const openEditModal = (riddle: Riddle) => {
     setSelectedRiddle(riddle);
+    // Use first available subject for editing if no subject is stored
+    const defaultSubjectId = subjects.length > 0 ? subjects[0].id : '';
     setRiddleForm({
       question: riddle.question,
       optionA: riddle.options?.[0] || '',
@@ -660,7 +681,7 @@ export function RiddlesSection({
       correctOption: riddle.correctOption,
       correctLetter: riddle.correctOption,
       difficulty: riddle.difficulty,
-      subjectId: '',
+      subjectId: defaultSubjectId,
       categoryId: '',
       hint: riddle.hint || '',
       explanation: riddle.explanation || '',
@@ -1123,59 +1144,94 @@ export function RiddlesSection({
           </thead>
           <tbody className="divide-y divide-gray-100">
             {paginatedRiddles.map((riddle, index) => (
-              <tr key={`riddle-row-${riddle.id}`} className="hover:bg-gray-50">
-                <td className="px-3 py-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(String(riddle.id))}
-                    onChange={() => toggleSelection(String(riddle.id))}
-                    className="rounded border-gray-300"
-                    aria-label={`Select riddle ${riddle.id}`}
-                  />
-                </td>
-                <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
-                <td className="px-3 py-3 align-top">
-                  <p className="text-sm font-medium text-gray-800 line-clamp-2">{riddle.question}</p>
-                  <div className="mt-2 flex gap-2">
-                    <button
-                      onClick={() => openEditModal(riddle)}
-                      className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
-                      aria-label={`Edit riddle ${riddle.id}`}
-                    >
-                      ✏️ Edit
-                    </button>
-                    <button
-                      onClick={() => openTrashConfirm(riddle)}
-                      className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
-                      aria-label={`Trash riddle ${riddle.id}`}
-                    >
-                      🗑️ Trash
-                    </button>
-                  </div>
-                </td>
-                <td className="px-3 py-3 align-top">
-                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
-                    Quiz Riddle
-                  </span>
-                </td>
-                <td className="px-3 py-3 align-top">
-                  <div className="space-y-1 text-xs">
-                    <div className={isCorrectOption(riddle, 0) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                      A. {riddle.options[0]}
+              <React.Fragment key={`riddle-row-${riddle.id}`}>
+                <tr className="hover:bg-gray-50">
+                  <td className="px-3 py-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(String(riddle.id))}
+                      onChange={() => toggleSelection(String(riddle.id))}
+                      className="rounded border-gray-300"
+                      aria-label={`Select riddle ${riddle.id}`}
+                    />
+                  </td>
+                    <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
+                  <td className="px-3 py-3 align-top">
+                    <p className="text-sm font-medium text-gray-800 line-clamp-2">{riddle.question}</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {riddle.hint && (
+                        <button
+                          onClick={() => setExpandedHintId(expandedHintId === riddle.id ? null : riddle.id)}
+                          className={`inline-flex items-center gap-1 rounded px-2 py-1 text-xs hover:bg-yellow-100 ${
+                            expandedHintId === riddle.id ? 'bg-yellow-100 text-yellow-800' : 'bg-yellow-50 text-yellow-600'
+                          }`}
+                          aria-label={`${expandedHintId === riddle.id ? 'Hide' : 'Show'} hint for riddle ${riddle.id}`}
+                        >
+                          💡 Hint
+                        </button>
+                      )}
+                      {riddle.explanation && (
+                        <button
+                          onClick={() => setExpandedExplanationId(expandedExplanationId === riddle.id ? null : riddle.id)}
+                          className={`inline-flex items-center gap-1 rounded px-2 py-1 text-xs hover:bg-blue-100 ${
+                            expandedExplanationId === riddle.id ? 'bg-blue-100 text-blue-800' : 'bg-blue-50 text-blue-600'
+                          }`}
+                          aria-label={`${expandedExplanationId === riddle.id ? 'Hide' : 'Show'} explanation for riddle ${riddle.id}`}
+                        >
+                          📖 Explanation
+                        </button>
+                      )}
+                      <button
+                        onClick={() => openEditModal(riddle)}
+                        className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
+                        aria-label={`Edit riddle ${riddle.id}`}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => openTrashConfirm(riddle)}
+                        className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
+                        aria-label={`Trash riddle ${riddle.id}`}
+                      >
+                        🗑️ Trash
+                      </button>
                     </div>
-                    <div className={isCorrectOption(riddle, 1) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                      B. {riddle.options[1]}
-                    </div>
-                    {riddle.options[2] && (
-                      <div className={isCorrectOption(riddle, 2) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                        C. {riddle.options[2]}
+                    {/* Expandable Hint - separate row */}
+                    {riddle.hint && expandedHintId === riddle.id && (
+                      <div className="mt-2 rounded bg-yellow-50 p-2 text-xs text-yellow-800">
+                        <span className="font-semibold">💡 Hint:</span> {riddle.hint}
                       </div>
                     )}
-                    {riddle.options[3] && (
-                      <div className={isCorrectOption(riddle, 3) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                        D. {riddle.options[3]}
+                    {/* Expandable Explanation - separate row */}
+                    {riddle.explanation && expandedExplanationId === riddle.id && (
+                      <div className="mt-2 rounded bg-blue-50 p-2 text-xs text-blue-800">
+                        <span className="font-semibold">📖 Explanation:</span> {riddle.explanation}
                       </div>
                     )}
+                  </td>
+                  <td className="px-3 py-3 align-top">
+                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+                      Quiz Riddle
+                    </span>
+                  </td>
+                  <td className="px-3 py-3 align-top">
+                    <div className="space-y-1 text-xs">
+                      <div className={isCorrectOption(riddle, 0) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                        A. {riddle.options[0]}
+                      </div>
+                      <div className={isCorrectOption(riddle, 1) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                        B. {riddle.options[1]}
+                      </div>
+                      {riddle.options[2] && (
+                        <div className={isCorrectOption(riddle, 2) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                          C. {riddle.options[2]}
+                        </div>
+                      )}
+                      {riddle.options[3] && (
+                        <div className={isCorrectOption(riddle, 3) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                          D. {riddle.options[3]}
+                        </div>
+                      )}
                   </div>
                 </td>
                 <td className="whitespace-nowrap px-3 py-3 text-center align-top">
@@ -1192,8 +1248,9 @@ export function RiddlesSection({
                   <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusBadgeColor(riddle.status)}`}>
                     {riddle.status}
                   </span>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
@@ -1368,16 +1425,18 @@ export function RiddlesSection({
 
       {/* Add/Edit Modal */}
       {(showAddModal || showEditModal) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div
             ref={showAddModal ? addModalRef : editModalRef}
-            className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl bg-white p-6"
+            className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl bg-white shadow-2xl"
           >
-            <h3 className="mb-4 text-xl font-bold">
-              {showAddModal ? '➕ Add New Riddle' : '✏️ Edit Riddle'}
-            </h3>
+            <div className="flex-shrink-0 border-b px-6 py-4">
+              <h3 className="text-xl font-bold">
+                {showAddModal ? '➕ Add New Riddle' : '✏️ Edit Riddle'}
+              </h3>
+            </div>
 
-            <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               {/* Question */}
               <div>
                 <label htmlFor="riddle-question" className="mb-1 block text-sm font-medium text-gray-700">
@@ -1587,8 +1646,7 @@ export function RiddlesSection({
                   disabled={
                     !riddleForm.question.trim() ||
                     !riddleForm.optionA.trim() ||
-                    !riddleForm.optionB.trim() ||
-                    !riddleForm.subjectId.trim()
+                    !riddleForm.optionB.trim()
                   }
                   className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
