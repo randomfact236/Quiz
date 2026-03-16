@@ -171,8 +171,9 @@ export function RiddleMcqSection({
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     allRiddles.forEach(r => {
-      if (r.categoryId) {
-        counts[r.categoryId] = (counts[r.categoryId] || 0) + 1;
+      const catId = String(r.categoryId || '');
+      if (catId) {
+        counts[catId] = (counts[catId] || 0) + 1;
       }
     });
     return counts;
@@ -181,8 +182,9 @@ export function RiddleMcqSection({
   const subjectCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     allRiddles.forEach(r => {
-      if (r.subjectId) {
-        counts[r.subjectId] = (counts[r.subjectId] || 0) + 1;
+      const subId = String(r.subjectId || '');
+      if (subId) {
+        counts[subId] = (counts[subId] || 0) + 1;
       }
     });
     return counts;
@@ -1136,7 +1138,7 @@ export function RiddleMcqSection({
                   }`}
                 onClick={() => setSelectedCategoryId(cat.id)}
               >
-                {cat.emoji || '📁'} {cat.name} <span className="opacity-70">({categoryCounts[cat.id] || 0})</span>
+                {cat.emoji || '📁'} {cat.name} <span className="opacity-70">({categoryCounts[String(cat.id)] || 0})</span>
               </button>
               <button
                 onClick={() => handleEditCategory(cat)}
@@ -1803,7 +1805,7 @@ export function RiddleMcqSection({
                     <option value="">Select Subject</option>
                     {subjects.map(sub => (
                       <option key={`subject-option-${sub.id}`} value={sub.id}>
-                  {sub.emoji || '📚'} {sub.name} <span className="opacity-70">({subjectCounts[sub.id] || 0})</span>
+                  {sub.emoji || '📚'} {sub.name} <span className="opacity-70">({subjectCounts[String(sub.id)] || 0})</span>
                       </option>
                     ))}
                   </select>
