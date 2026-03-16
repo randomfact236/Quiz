@@ -383,43 +383,70 @@ export class RiddlesService {
     });
     const chapterIds = chapters.map(c => c.id);
     
-    // Delete all riddle_mcqs by subjectId and chapterId
-    if (subjectIds.length > 0) {
-      await this.riddleMcqRepo.createQueryBuilder()
-        .delete()
-        .where('"subjectId" IN (:...subjectIds)', { subjectIds })
-        .execute();
+    // Use raw SQL to delete from ALL tables
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    
+    try {
+      // Delete from riddle_mcqs
+      if (subjectIds.length > 0) {
+        await queryRunner.query(
+          `DELETE FROM riddle_mcqs WHERE "subjectId" = ANY($1)`,
+          [subjectIds]
+        );
+      }
+      if (chapterIds.length > 0) {
+        await queryRunner.query(
+          `DELETE FROM riddle_mcqs WHERE "chapterId" = ANY($1)`,
+          [chapterIds]
+        );
+      }
+      
+      // Also try legacy table
+      try {
+        if (subjectIds.length > 0) {
+          await queryRunner.query(
+            `DELETE FROM quiz_riddles WHERE "subjectId" = ANY($1)`,
+            [subjectIds]
+          );
+        }
+        if (chapterIds.length > 0) {
+          await queryRunner.query(
+            `DELETE FROM quiz_riddles WHERE "chapterId" = ANY($1)`,
+            [chapterIds]
+          );
+        }
+      } catch (e) {
+        // Table doesn't exist
+      }
+      
+      // Delete chapters
+      await queryRunner.query(
+        `DELETE FROM riddle_chapters WHERE "subjectId" = ANY($1)`,
+        [subjectIds]
+      );
+      
+      // Delete subjects
+      await queryRunner.query(
+        `DELETE FROM riddle_subjects WHERE "categoryId" = $1`,
+        [id]
+      );
+      
+      // Delete classic riddles
+      await queryRunner.query(
+        `DELETE FROM riddles WHERE "categoryId" = $1`,
+        [id]
+      );
+      
+      // Delete category
+      await queryRunner.query(
+        `DELETE FROM riddle_categories WHERE id = $1`,
+        [id]
+      );
+      
+    } finally {
+      await queryRunner.release();
     }
-    if (chapterIds.length > 0) {
-      await this.riddleMcqRepo.createQueryBuilder()
-        .delete()
-        .where('"chapterId" IN (:...chapterIds)', { chapterIds })
-        .execute();
-    }
-    
-    // Delete all chapters
-    await this.chapterRepo.createQueryBuilder()
-      .delete()
-      .where('"subjectId" IN (:...subjectIds)', { subjectIds })
-      .execute();
-    
-    // Delete all subjects
-    await this.subjectRepo.createQueryBuilder()
-      .delete()
-      .where('"categoryId" = :id', { id })
-      .execute();
-    
-    // Delete classic riddles in this category
-    await this.riddleRepo.createQueryBuilder()
-      .delete()
-      .where('"categoryId" = :id', { id })
-      .execute();
-    
-    // Delete category
-    await this.categoryRepo.createQueryBuilder()
-      .delete()
-      .where('id = :id', { id })
-      .execute();
 
     // Invalidate cache
     await this.cacheService.delPattern('riddles:*');
@@ -523,39 +550,64 @@ export class RiddlesService {
 
   /**
    * Delete a subject and ALL its child chapters and riddle MCQs.
-   * Uses raw SQL queries to ensure deletion works properly.
+   * Uses raw SQL with CASCADE to ensure deletion works properly.
    */
   async deleteSubject(id: string): Promise<void> {
     // First, get all chapter IDs for this subject
     const chapters = await this.chapterRepo.find({ where: { subjectId: id } });
     const chapterIds = chapters.map(c => c.id);
     
-    // Delete all riddle_mcqs that reference this subject or its chapters
-    // Using direct query to bypass any ORM issues
-    if (chapterIds.length > 0) {
-      await this.riddleMcqRepo.createQueryBuilder()
-        .delete()
-        .where('"subjectId" = :id', { id })
-        .orWhere('"chapterId" IN (:...chapterIds)', { chapterIds })
-        .execute();
-    } else {
-      await this.riddleMcqRepo.createQueryBuilder()
-        .delete()
-        .where('"subjectId" = :id', { id })
-        .execute();
+    // Use raw SQL to delete from ALL tables that might reference this subject
+    // This handles both riddle_mcqs and any legacy tables
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    
+    try {
+      // Delete from riddle_mcqs
+      if (chapterIds.length > 0) {
+        await queryRunner.query(
+          `DELETE FROM riddle_mcqs WHERE "subjectId" = $1 OR "chapterId" = ANY($2)`,
+          [id, chapterIds]
+        );
+      } else {
+        await queryRunner.query(
+          `DELETE FROM riddle_mcqs WHERE "subjectId" = $1`,
+          [id]
+        );
+      }
+      
+      // Also try to delete from quiz_riddles (legacy table name)
+      try {
+        if (chapterIds.length > 0) {
+          await queryRunner.query(
+            `DELETE FROM quiz_riddles WHERE "subjectId" = $1 OR "chapterId" = ANY($2)`,
+            [id, chapterIds]
+          );
+        } else {
+          await queryRunner.query(
+            `DELETE FROM quiz_riddles WHERE "subjectId" = $1`,
+            [id]
+          );
+        }
+      } catch (e) {
+        // Table doesn't exist, ignore
+      }
+      
+      // Delete chapters
+      await queryRunner.query(
+        `DELETE FROM riddle_chapters WHERE "subjectId" = $1`,
+        [id]
+      );
+      
+      // Delete subject
+      await queryRunner.query(
+        `DELETE FROM riddle_subjects WHERE id = $1`,
+        [id]
+      );
+      
+    } finally {
+      await queryRunner.release();
     }
-
-    // Delete all chapters for this subject
-    await this.chapterRepo.createQueryBuilder()
-      .delete()
-      .where('"subjectId" = :id', { id })
-      .execute();
-
-    // Delete the subject
-    await this.subjectRepo.createQueryBuilder()
-      .delete()
-      .where('id = :id', { id })
-      .execute();
     
     await this.cacheService.del('riddles:subjects:active');
     await this.cacheService.del('riddles:subjects:all');
