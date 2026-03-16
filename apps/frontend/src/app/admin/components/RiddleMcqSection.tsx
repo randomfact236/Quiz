@@ -151,21 +151,70 @@ export function RiddleMcqSection({
       .catch(err => console.error('Failed to load subjects/categories:', err));
   }, []);
 
-  // Calculate difficulty counts
-  const difficultyCounts = {
-    easy: allRiddles.filter(r => r.difficulty === 'easy').length,
-    medium: allRiddles.filter(r => r.difficulty === 'medium').length,
-    hard: allRiddles.filter(r => r.difficulty === 'hard').length,
-    expert: allRiddles.filter(r => r.difficulty === 'expert').length,
-  };
+  // Calculate difficulty counts - based on current filters (category, subject, search, status)
+  const difficultyCounts = useMemo(() => {
+    const subjectToCategory: Record<string, string> = {};
+    subjects.forEach(s => {
+      if (s.category?.id) {
+        subjectToCategory[s.id] = s.category.id;
+      }
+    });
 
-  // Calculate status counts
-  const statusCounts = {
-    total: allRiddles.length,
-    published: allRiddles.filter(r => r.status === 'published').length,
-    draft: allRiddles.filter(r => r.status === 'draft').length,
-    trash: allRiddles.filter(r => r.status === 'trash').length,
-  };
+    const filtered = allRiddles.filter(riddle => {
+      const matchesSearch = !riddleSearch ||
+        riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      const riddleStatus = riddle.status || 'published';
+      const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
+      let catId = String(riddle.categoryId || '');
+      if (!catId && riddle.subjectId && subjectToCategory[riddle.subjectId]) {
+        catId = subjectToCategory[riddle.subjectId] || '';
+      }
+      const matchesCategory = !selectedCategoryId || catId === selectedCategoryId;
+      const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
+      return matchesSearch && matchesStatus && matchesCategory && matchesSubject;
+    });
+
+    return {
+      easy: filtered.filter(r => r.difficulty === 'easy').length,
+      medium: filtered.filter(r => r.difficulty === 'medium').length,
+      hard: filtered.filter(r => r.difficulty === 'hard').length,
+      expert: filtered.filter(r => r.difficulty === 'expert').length,
+    };
+  }, [allRiddles, subjects, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
+
+  // Calculate status counts - based on current filters (category, subject, search, difficulty)
+  const statusCounts = useMemo(() => {
+    const subjectToCategory: Record<string, string> = {};
+    subjects.forEach(s => {
+      if (s.category?.id) {
+        subjectToCategory[s.id] = s.category.id;
+      }
+    });
+
+    const filtered = allRiddles.filter(riddle => {
+      const matchesSearch = !riddleSearch ||
+        riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
+      let catId = String(riddle.categoryId || '');
+      if (!catId && riddle.subjectId && subjectToCategory[riddle.subjectId]) {
+        catId = subjectToCategory[riddle.subjectId] || '';
+      }
+      const matchesCategory = !selectedCategoryId || catId === selectedCategoryId;
+      const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
+      return matchesSearch && matchesDifficulty && matchesCategory && matchesSubject;
+    });
+
+    return {
+      total: filtered.length,
+      published: filtered.filter(r => r.status === 'published').length,
+      draft: filtered.filter(r => r.status === 'draft').length,
+      trash: filtered.filter(r => r.status === 'trash').length,
+    };
+  }, [allRiddles, subjects, riddleSearch, riddleFilterLevel, selectedCategoryId, selectedSubjectId]);
 
   // Calculate category and subject counts - using subjects array to get categoryId from subjectId
   // Counts are based on current filters (difficulty, search, status, subject)
@@ -1283,7 +1332,7 @@ export function RiddleMcqSection({
             onClick={() => setRiddleFilterLevel('')}
             aria-pressed={riddleFilterLevel === ''}
           >
-            All <span className="opacity-70">({allRiddles.length})</span>
+            All <span className="opacity-70">({filteredRiddles.length})</span>
           </button>
           {difficultyLevels.map(({ value, label }) => (
             <button
