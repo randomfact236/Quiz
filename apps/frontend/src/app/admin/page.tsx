@@ -275,6 +275,7 @@ export default function AdminPage(): JSX.Element {
             hint: qr.hint || '',
             explanation: qr.explanation || '',
             answer: qr.correctAnswer || '',
+            subject: qr.subject?.name || '',
           }));
           setAllRiddles(mappedRiddles);
         })

@@ -457,7 +457,11 @@ export function RiddleMcqSection({
         // Handle Expert level
         const isExpert = riddle.difficulty === 'expert';
         const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddle.correctOption?.toUpperCase() || 'A');
-        const correctAnswer = riddle.options?.[letterIndex] || riddle.options?.[0] || '';
+        // For expert: correctAnswer is the text answer from CSV
+        // For MCQ: correctAnswer is the option text
+        const correctAnswer = isExpert 
+          ? riddle.correctOption || ''  // For expert, correctOption contains the text answer
+          : (riddle.options?.[letterIndex] || riddle.options?.[0] || '');
         
         dtos.push({
           question: riddle.question,
@@ -502,6 +506,9 @@ export function RiddleMcqSection({
           difficulty: (qr.level as Riddle['difficulty']) || 'medium',
           status: 'published' as const,
           answer: qr.correctAnswer || '',
+          hint: qr.hint || '',
+          explanation: qr.explanation || '',
+          subject: qr.subject?.name || '',
         }));
         setAllRiddles(mapped);
       }
