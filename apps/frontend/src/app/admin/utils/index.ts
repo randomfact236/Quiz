@@ -826,7 +826,7 @@ export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
       answer: getValue(2, 'answer', 'optiona'), // Provide a fallback if needed
       options: finalOptions,
       correctOption: getValue(6, 'correctanswer', 'correctoption') || 'A',
-      difficulty: (getValue(7, 'level', 'difficulty') || 'medium') as Riddle['difficulty'],
+      difficulty: (getValue(7, 'level', 'difficulty') || 'medium').toLowerCase() as Riddle['difficulty'],
       chapter: getValue(8, 'chapter') || 'General',
       hint: getValue(10, 'hint'),
       status: 'published' as const,

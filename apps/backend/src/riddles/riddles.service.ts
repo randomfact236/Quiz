@@ -622,7 +622,7 @@ export class RiddlesService {
       throw new NotFoundException(`Subject with id "${subjectId}" not found`);
     }
 
-    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'all'];
     const where: any = { subject: { id: subjectId } };
     
     if (level && level !== 'all' && validLevels.includes(level.toLowerCase())) {
@@ -653,7 +653,7 @@ export class RiddlesService {
     }
 
     // Build where clause with optional level filter
-    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'all'];
     const where: any = { chapter: { id: chapterId } };
     
     if (level && level !== 'all' && validLevels.includes(level.toLowerCase())) {
@@ -674,7 +674,7 @@ export class RiddlesService {
 
   async findRandomRiddleMcqs(level: string, count: number): Promise<RiddleMcq[]> {
     // Validate level parameter
-    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'];
+    const validLevels = ['easy', 'medium', 'hard', 'expert', 'all'];
     const normalizedLevel = level.toLowerCase();
 
     if (!validLevels.includes(normalizedLevel)) {
@@ -705,7 +705,6 @@ export class RiddlesService {
       const fallbackLevels: Record<string, string> = {
         'hard': 'medium',
         'expert': 'hard',
-        'extreme': 'hard',
         'medium': 'easy',
         'easy': 'medium', // fallback to medium if not enough easy
       };

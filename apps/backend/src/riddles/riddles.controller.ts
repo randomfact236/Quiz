@@ -310,7 +310,7 @@ export class RiddlesController {
 
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random riddle MCQs by difficulty level' })
-  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'] })
+  @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'all'] })
   @ApiResponse({ status: 200, description: 'Returns random riddles' })
   getRandomRiddleMcqs(
     @Param('level') level: string,
@@ -476,10 +476,10 @@ export class RiddlesController {
 
   /**
    * Validate difficulty level for riddle MCQs.
-   * riddle MCQ DB enum allows: easy | medium | hard | expert | extreme.
+   * riddle MCQ DB enum allows: easy | medium | hard | expert.
    */
   private validateQuizDifficulty(level: string): void {
-    const validDifficulties = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+    const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
     if (!validDifficulties.includes(level)) {
       throw new BadRequestException(
         `Invalid difficulty level: "${level}". Valid values for riddle MCQs are: ${validDifficulties.join(', ')}`,

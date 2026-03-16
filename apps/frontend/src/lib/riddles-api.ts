@@ -48,7 +48,7 @@ export interface UpdateSubjectDto {
 export interface CreateRiddleDto {
   question: string;
   options: string[];
-  correctLetter: string;
+  correctLetter: string | null;
   correctAnswer: string;
   level: 'easy' | 'medium' | 'hard' | 'expert';
   subjectId?: string;

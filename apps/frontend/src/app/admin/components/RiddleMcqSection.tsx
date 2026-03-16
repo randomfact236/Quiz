@@ -357,12 +357,16 @@ export function RiddleMcqSection({
         const correctAnswer = (r.options && r.options[letterIndex] != null)
           ? r.options[letterIndex]
           : (r.options?.[0] || r.correctOption || 'A');
+        const level = (r.difficulty || 'medium').toLowerCase();
+        // Expert level = open-ended (no correctLetter), others = MCQ (requires correctLetter)
+        const isExpert = level === 'expert';
+        console.log('Importing riddle with difficulty:', r.difficulty, '-> normalized:', level, 'isExpert:', isExpert);
         return {
           question: r.question,
           options: r.options || [],
-          correctLetter: r.correctOption?.toUpperCase() || 'A',
+          correctLetter: isExpert ? null : (r.correctOption?.toUpperCase() || 'A'),
           correctAnswer,
-          level: r.difficulty || 'medium',
+          level: level as 'easy' | 'medium' | 'hard' | 'expert',
           subjectId: subjectId,
         };
       });
