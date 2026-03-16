@@ -503,21 +503,30 @@ export class RiddlesService {
   async deleteSubject(id: string): Promise<void> {
     const subject = await this.subjectRepo.findOne({
       where: { id },
-      relations: ['chapters', 'chapters.riddles'],
+      relations: ['chapters', 'chapters.riddles', 'riddles'],
     });
     if (subject === null) {
       throw new NotFoundException(`Subject with id "${id}" not found`);
     }
 
-    // Remove riddle MCQs first, then chapters, then the subject
+    // Step 1: Remove riddle MCQs directly associated with subject (not via chapters)
+    if (subject.riddles?.length) {
+      await this.riddleMcqRepo.remove(subject.riddles);
+    }
+
+    // Step 2: Remove riddle MCQs via chapters
     for (const chapter of subject.chapters ?? []) {
       if (chapter.riddles?.length) {
         await this.riddleMcqRepo.remove(chapter.riddles);
       }
     }
+
+    // Step 3: Remove chapters
     if (subject.chapters?.length) {
       await this.chapterRepo.remove(subject.chapters);
     }
+
+    // Step 4: Remove subject
     await this.subjectRepo.remove(subject);
     await this.cacheService.del('riddles:subjects:active');
     await this.cacheService.del('riddles:subjects:all');
