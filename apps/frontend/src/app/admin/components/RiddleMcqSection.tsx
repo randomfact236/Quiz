@@ -335,7 +335,7 @@ export function RiddleMcqSection({
     try {
       const {
         bulkCreateRiddles,
-        getAllQuizRiddlesAdmin,
+        getAllRiddleMcqsAdmin,
         getSubjects,
       } = await import('@/lib/riddles-api');
 
@@ -370,7 +370,7 @@ export function RiddleMcqSection({
       if (dtos.length > 0) {
         await bulkCreateRiddles(dtos as any);
 
-        const updated = await getAllQuizRiddlesAdmin();
+        const updated = await getAllRiddleMcqsAdmin();
         const mapped = updated.map(qr => ({
           id: String(qr.id),
           question: qr.question,

@@ -7,8 +7,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Riddle } from './riddle.entity';
 import { RiddleSubject } from './riddle-subject.entity';
+import { Riddle } from './riddle.entity';
 
 @Entity('riddle_categories')
 export class RiddleCategory {

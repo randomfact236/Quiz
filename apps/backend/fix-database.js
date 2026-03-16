@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS riddle_chapters (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create quiz_riddles table
-CREATE TABLE IF NOT EXISTS quiz_riddles (
+-- Create riddle_mcqs table
+CREATE TABLE IF NOT EXISTS riddle_mcqs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question TEXT NOT NULL,
     options TEXT[] NOT NULL,
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS riddles (
 );
 
 -- Create indexes
-CREATE INDEX IF NOT EXISTS idx_quiz_riddles_chapter ON quiz_riddles("chapterId");
-CREATE INDEX IF NOT EXISTS idx_quiz_riddles_level ON quiz_riddles(level);
+CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_chapter ON riddle_mcqs("chapterId");
+CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_level ON riddle_mcqs(level);
 CREATE INDEX IF NOT EXISTS idx_riddle_chapters_subject ON riddle_chapters("subjectId");
 CREATE INDEX IF NOT EXISTS idx_riddle_subjects_slug ON riddle_subjects(slug);
 
@@ -122,7 +122,7 @@ BEGIN
     SELECT id INTO ch_id FROM riddle_chapters WHERE name = 'Trick Questions' LIMIT 1;
     
     IF ch_id IS NOT NULL THEN
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint) VALUES 
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint) VALUES 
             ('What has keys but no locks?', ARRAY['A piano', 'A keyboard', 'A map', 'A car'], 'A piano', 'easy', ch_id, 'A piano has musical keys', 'Think about music'),
             ('What gets wetter the more it dries?', ARRAY['A towel', 'A sponge', 'Water', 'Rain'], 'A towel', 'easy', ch_id, 'A towel absorbs water', 'Used after showering'),
             ('The more you take, the more you leave behind. What am I?', ARRAY['Footsteps', 'Memories', 'Time', 'Money'], 'Footsteps', 'medium', ch_id, 'You leave footsteps when walking', 'You make them when walking')
@@ -132,7 +132,7 @@ BEGIN
     SELECT id INTO ch_id FROM riddle_chapters WHERE name = 'Deduction' LIMIT 1;
     
     IF ch_id IS NOT NULL THEN
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint) VALUES 
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint) VALUES 
             ('A farmer has 17 sheep and all but 9 die. How many are left?', ARRAY['9', '8', '17', '0'], '9', 'easy', ch_id, 'Read carefully: all BUT 9 died', 'Read the question again'),
             ('If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies?', ARRAY['Yes', 'No', 'Maybe', 'Not enough info'], 'Yes', 'medium', ch_id, 'Transitive property applies', 'Think about transitive logic')
         ON CONFLICT DO NOTHING;
@@ -166,7 +166,7 @@ async function fix() {
     // Verify
     const subjects = await client.query('SELECT COUNT(*) as count FROM riddle_subjects');
     const chapters = await client.query('SELECT COUNT(*) as count FROM riddle_chapters');
-    const riddles = await client.query('SELECT COUNT(*) as count FROM quiz_riddles');
+    const riddles = await client.query('SELECT COUNT(*) as count FROM riddle_mcqs');
     
     console.log('');
     console.log('📊 Database Status:');

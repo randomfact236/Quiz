@@ -106,23 +106,23 @@ async createRiddlesBulk(dto: CreateRiddleDto[]): Promise<{ count: number; errors
 
 **Before (No validation):**
 ```typescript
-getRandomQuizRiddles(
+getRandomRiddleMcqs(
   @Param('level') level: string,
   @Query('count') count?: string,
-): Promise<QuizRiddle[]> {
-  return this.riddlesService.findRandomQuizRiddles(level, count ? parseInt(count) : 10);
+): Promise<RiddleMcq[]> {
+  return this.riddlesService.findRandomRiddleMcqs(level, count ? parseInt(count) : 10);
 }
 ```
 
 **After (With validation):**
 ```typescript
-getRandomQuizRiddles(
+getRandomRiddleMcqs(
   @Param('level') level: string,
   @Query('count') count?: string,
-): Promise<QuizRiddle[]> {
+): Promise<RiddleMcq[]> {
   const parsedCount = this.validateCount(count, 10, 1, 50);
   this.validateDifficulty(level);
-  return this.riddlesService.findRandomQuizRiddles(level, parsedCount);
+  return this.riddlesService.findRandomRiddleMcqs(level, parsedCount);
 }
 
 private validateCount(
@@ -170,8 +170,8 @@ async findRandomRiddle(): Promise<Riddle> {
     .getOne();
 }
 
-async findRandomQuizRiddles(level: string, count: number): Promise<QuizRiddle[]> {
-  return this.quizRiddleRepo
+async findRandomRiddleMcqs(level: string, count: number): Promise<RiddleMcq[]> {
+  return this.riddleMcqRepo
     .createQueryBuilder('riddle')
     .orderBy('RANDOM()')  // ❌ Full table scan!
     .limit(count)
@@ -193,15 +193,15 @@ async findRandomRiddle(): Promise<Riddle> {
     .getOne();
 }
 
-async findRandomQuizRiddles(level: string, count: number): Promise<QuizRiddle[]> {
+async findRandomRiddleMcqs(level: string, count: number): Promise<RiddleMcq[]> {
   // Get IDs, shuffle in memory, then fetch
-  const allIds = await this.quizRiddleRepo
+  const allIds = await this.riddleMcqRepo
     .createQueryBuilder('riddle')
     .select('riddle.id')
     .getMany();
   
   const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-  return this.quizRiddleRepo.find({ where: { id: In(selectedIds) } });
+  return this.riddleMcqRepo.find({ where: { id: In(selectedIds) } });
 }
 ```
 

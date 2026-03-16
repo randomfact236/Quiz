@@ -51,7 +51,7 @@
 |--------|---------|
 | `riddle-mcq-category.entity.ts` | Add `@OneToMany(() => RiddleMcqSubject)` |
 | `riddle-mcq-subject.entity.ts` | Add `@ManyToOne(() => RiddleMcqCategory)`, remove chapter relationship |
-| `quiz-riddle-mcq.entity.ts` | Ensure `hint` field exists |
+| `riddle-mcq.entity.ts` | Ensure `hint` field exists |
 
 ### Service
 

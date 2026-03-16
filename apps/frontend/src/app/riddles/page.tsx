@@ -10,7 +10,7 @@ import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 export default function RiddlesPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<{ totalSubjects: number, totalChapters: number, totalQuizRiddles: number } | null>(null);
+  const [stats, setStats] = useState<{ totalSubjects: number, totalChapters: number, totalRiddleMcqs: number } | null>(null);
 
   // Fetch stats from backend
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function RiddlesPage(): JSX.Element {
     fetchData();
   }, []);
 
-  const totalRiddles = stats?.totalQuizRiddles || 0;
+  const totalRiddles = stats?.totalRiddleMcqs || 0;
 
 
   if (loading) {

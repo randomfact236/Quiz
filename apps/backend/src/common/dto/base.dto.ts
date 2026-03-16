@@ -2,8 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
 
-import { ContentStatus } from '../enums/content-status.enum';
-
 import {
   MIN_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
@@ -14,6 +12,8 @@ import {
   MIN_TIMER_SECONDS,
   MAX_TIMER_SECONDS,
 } from '../constants/app.constants';
+import { ContentStatus } from '../enums/content-status.enum';
+
 
 // ==================== PAGINATION ====================
 
@@ -505,9 +505,9 @@ export class UpdateRiddleChapterDto {
   chapterNumber?: number;
 }
 
-// ==================== QUIZ RIDDLES (Quiz Format) ====================
+// ==================== RIDDLE MCQs (Quiz Format) ====================
 
-export class CreateQuizRiddleDto {
+export class CreateRiddleMcqDto {
   @ApiProperty({ example: 'What has keys but no locks?' })
   @IsString()
   @IsNotEmpty()
@@ -553,7 +553,7 @@ export class CreateQuizRiddleDto {
   hint?: string;
 }
 
-export class UpdateQuizRiddleDto {
+export class UpdateRiddleMcqDto {
   @ApiPropertyOptional({ example: 'What has keys but no locks?' })
   @IsOptional()
   @IsString()

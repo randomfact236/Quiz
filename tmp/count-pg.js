@@ -17,7 +17,7 @@ async function run() {
     try {
         await client.connect();
         console.log('Connected to database');
-        const res = await client.query('SELECT count(*) FROM quiz_riddles');
+        const res = await client.query('SELECT count(*) FROM riddle_mcqs');
         console.log('COUNT:' + res.rows[0].count);
         await client.end();
     } catch (err) {

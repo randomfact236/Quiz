@@ -11,6 +11,7 @@
  */
 
 import { DataSource } from 'typeorm';
+
 import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 
 try {
@@ -230,7 +231,7 @@ async function resetAndSeedQuestions() {
                 }
 
                 // Check if chapter exists
-                let chapters = await dataSource.query(
+                const chapters = await dataSource.query(
                     `SELECT id FROM chapters WHERE name = $1 AND "subjectId" = $2`,
                     [q.chapter, subjectId]
                 );

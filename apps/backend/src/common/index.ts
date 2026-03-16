@@ -12,7 +12,7 @@
 export * from './enums/content-status.enum';
 export * from './enums/bulk-action.enum';
 export * from './enums/riddle-difficulty.enum';    // RiddleDifficulty
-export * from './enums/quiz-riddle-level.enum';    // QuizRiddleLevel
+export * from './enums/riddle-mcq-level.enum';    // QuizRiddleLevel
 
 // Interfaces
 export * from './interfaces/bulk-action-result.interface';

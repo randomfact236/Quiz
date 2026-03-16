@@ -22,10 +22,10 @@ async function countRiddles() {
         console.log('📦 Database connected');
 
         const result = await dataSource.query(
-            'SELECT COUNT(*) as count FROM quiz_riddles'
+            'SELECT COUNT(*) as count FROM riddle_mcqs'
         );
 
-        console.log(`TOTAL_QUIZ_RIDDLES: ${result[0].count}`);
+        console.log(`TOTAL_RIDDLE_MCQS: ${result[0].count}`);
         await dataSource.destroy();
     } catch (error) {
         console.error('❌ Connection failed:', error);

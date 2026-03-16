@@ -8,16 +8,16 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';
+import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 
 import { RiddleChapter } from './riddle-chapter.entity';
 import { RiddleSubject } from './riddle-subject.entity';
 
 // Re-export for modules that import the enum alongside the entity
-export { QuizRiddleLevel } from '../../common/enums/quiz-riddle-level.enum';
+export { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 
-@Entity('quiz_riddles')
-export class QuizRiddle {
+@Entity('riddle_mcqs')
+export class RiddleMcq {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -35,9 +35,9 @@ export class QuizRiddle {
 
   /**
    * Difficulty level — stored as a DB enum, typed as string to remain
-   * compatible with DTO inputs. See QuizRiddleLevel for valid values.
+   * compatible with DTO inputs. See RiddleMcqLevel for valid values.
    */
-  @Column({ type: 'enum', enum: QuizRiddleLevel })
+  @Column({ type: 'enum', enum: RiddleMcqLevel })
   level: string;
 
   @Column({ nullable: true })

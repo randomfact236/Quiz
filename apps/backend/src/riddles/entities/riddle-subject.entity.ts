@@ -11,7 +11,7 @@ import {
 
 import { RiddleCategory } from './riddle-category.entity';
 import { RiddleChapter } from './riddle-chapter.entity';
-import { QuizRiddle } from './quiz-riddle.entity';
+import { RiddleMcq } from './riddle-mcq.entity';
 
 @Entity('riddle_subjects')
 export class RiddleSubject {
@@ -46,8 +46,8 @@ export class RiddleSubject {
   @OneToMany(() => RiddleChapter, (chapter) => chapter.subject)
   chapters: RiddleChapter[];
 
-  @OneToMany(() => QuizRiddle, (riddle) => riddle.subject)
-  riddles: QuizRiddle[];
+  @OneToMany(() => RiddleMcq, (riddle) => riddle.subject)
+  riddles: RiddleMcq[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

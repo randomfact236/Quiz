@@ -25,8 +25,8 @@ import {
   UpdateRiddleSubjectDto,
   CreateRiddleChapterDto,
   UpdateRiddleChapterDto,
-  CreateQuizRiddleDto,
-  UpdateQuizRiddleDto,
+  CreateRiddleMcqDto,
+  UpdateRiddleMcqDto,
   SearchRiddlesDto,
   // Bulk DTOs
   BulkImportResultDto,
@@ -40,9 +40,9 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { PaginationDto } from '../common/dto/base.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
-import { QuizRiddle } from './entities/quiz-riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
+import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { Riddle } from './entities/riddle.entity';
 import { RiddlesService } from './riddles.service';
@@ -272,53 +272,53 @@ export class RiddlesController {
 
   @Get('quiz/all')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all quiz riddles (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Returns all quiz riddles' })
-  findAllQuizRiddlesAdmin(): Promise<QuizRiddle[]> {
-    return this.riddlesService.findAllQuizRiddlesAdmin();
+  @ApiOperation({ summary: 'Get all riddle MCQs (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns all riddle MCQs' })
+  findAllRiddleMcqsAdmin(): Promise<RiddleMcq[]> {
+    return this.riddlesService.findAllRiddleMcqsAdmin();
   }
 
   @Get('quiz-by-subject/:subjectId')
-  @ApiOperation({ summary: 'Get quiz riddles by subject ID (Riddle MCQ)' })
-  @ApiResponse({ status: 200, description: 'Returns quiz riddles by subject' })
-  findQuizRiddlesBySubject(
+  @ApiOperation({ summary: 'Get riddle MCQs by subject ID (Riddle MCQ)' })
+  @ApiResponse({ status: 200, description: 'Returns riddle MCQs by subject' })
+  findRiddleMcqsBySubject(
     @Param('subjectId') subjectId: string,
     @Query() pagination: PaginationDto,
     @Query('level') level?: string,
-  ): Promise<{ data: QuizRiddle[]; total: number }> {
-    return this.riddlesService.findQuizRiddlesBySubject(subjectId, pagination, level);
+  ): Promise<{ data: RiddleMcq[]; total: number }> {
+    return this.riddlesService.findRiddleMcqsBySubject(subjectId, pagination, level);
   }
 
   @Get('quiz/:chapterId')
-  @ApiOperation({ summary: 'Get quiz riddles by chapter ID' })
-  @ApiResponse({ status: 200, description: 'Returns quiz riddles' })
-  findQuizRiddlesByChapter(
+  @ApiOperation({ summary: 'Get riddle MCQs by chapter ID' })
+  @ApiResponse({ status: 200, description: 'Returns riddle MCQs' })
+  findRiddleMcqsByChapter(
     @Param('chapterId') chapterId: string,
     @Query() pagination: PaginationDto,
     @Query('level') level?: string,
-  ): Promise<{ data: QuizRiddle[]; total: number }> {
-    return this.riddlesService.findQuizRiddlesByChapter(chapterId, pagination, level);
+  ): Promise<{ data: RiddleMcq[]; total: number }> {
+    return this.riddlesService.findRiddleMcqsByChapter(chapterId, pagination, level);
   }
 
   @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed quiz riddles from all chapters' })
+  @ApiOperation({ summary: 'Get mixed riddle MCQs from all chapters' })
   @ApiResponse({ status: 200, description: 'Returns mixed riddles' })
-  getMixedQuizRiddles(@Query('count') count?: string): Promise<QuizRiddle[]> {
+  getMixedRiddleMcqs(@Query('count') count?: string): Promise<RiddleMcq[]> {
     const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
-    return this.riddlesService.findMixedQuizRiddles(parsedCount);
+    return this.riddlesService.findMixedRiddleMcqs(parsedCount);
   }
 
   @Get('random/:level')
-  @ApiOperation({ summary: 'Get random quiz riddles by difficulty level' })
+  @ApiOperation({ summary: 'Get random riddle MCQs by difficulty level' })
   @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert', 'extreme', 'all'] })
   @ApiResponse({ status: 200, description: 'Returns random riddles' })
-  getRandomQuizRiddles(
+  getRandomRiddleMcqs(
     @Param('level') level: string,
     @Query('count') count?: string,
-  ): Promise<QuizRiddle[]> {
+  ): Promise<RiddleMcq[]> {
     const parsedCount = this.validateCount(count, 10, 1, 50);
     this.validateQuizDifficulty(level);
-    return this.riddlesService.findRandomQuizRiddles(level, parsedCount);
+    return this.riddlesService.findRandomRiddleMcqs(level, parsedCount);
   }
 
   // ==================== QUIZ FORMAT - ADMIN ====================
@@ -376,43 +376,43 @@ export class RiddlesController {
   @Post('quiz/bulk-action')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Execute bulk action on quiz riddles (Admin only)' })
+  @ApiOperation({ summary: 'Execute bulk action on riddle MCQs (Admin only)' })
   @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
   async executeBulkActionQuiz(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
-    return this.riddlesService.bulkActionQuizRiddles(dto.ids, dto.action);
+    return this.riddlesService.bulkActionRiddleMcqs(dto.ids, dto.action);
   }
 
   @Post('quiz')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new quiz riddle (Admin only)' })
-  createQuizRiddle(@Body() dto: CreateQuizRiddleDto): Promise<QuizRiddle> {
-    return this.riddlesService.createQuizRiddle(dto);
+  @ApiOperation({ summary: 'Create new riddle MCQ (Admin only)' })
+  createRiddleMcq(@Body() dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
+    return this.riddlesService.createRiddleMcq(dto);
   }
 
   @Post('quiz/bulk')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create quiz riddles (Admin only)' })
-  async createQuizRiddlesBulk(@Body() dto: CreateQuizRiddleDto[]): Promise<{ count: number; errors: string[] }> {
-    const result = await this.riddlesService.createQuizRiddlesBulk(dto);
+  @ApiOperation({ summary: 'Bulk create riddle MCQs (Admin only)' })
+  async createRiddleMcqsBulk(@Body() dto: CreateRiddleMcqDto[]): Promise<{ count: number; errors: string[] }> {
+    const result = await this.riddlesService.createRiddleMcqsBulk(dto);
     return { count: result.count, errors: result.errors };
   }
 
   @Put('quiz/:id')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update quiz riddle (Admin only)' })
-  updateQuizRiddle(
+  @ApiOperation({ summary: 'Update riddle MCQ (Admin only)' })
+  updateRiddleMcq(
     @Param('id') id: string,
-    @Body() dto: UpdateQuizRiddleDto,
-  ): Promise<QuizRiddle> {
-    return this.riddlesService.updateQuizRiddle(id, dto);
+    @Body() dto: UpdateRiddleMcqDto,
+  ): Promise<RiddleMcq> {
+    return this.riddlesService.updateRiddleMcq(id, dto);
   }
 
   @Delete('quiz/:id')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete quiz riddle (Admin only)' })
-  async deleteQuizRiddle(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
-    await this.riddlesService.deleteQuizRiddle(id);
-    return { success: true, message: 'Quiz riddle deleted successfully' };
+  @ApiOperation({ summary: 'Delete riddle MCQ (Admin only)' })
+  async deleteRiddleMcq(@Param('id') id: string): Promise<{ success: boolean; message: string }> {
+    await this.riddlesService.deleteRiddleMcq(id);
+    return { success: true, message: 'riddle MCQ deleted successfully' };
   }
 
   // ==================== STATS ====================
@@ -423,7 +423,7 @@ export class RiddlesController {
   getStats(): Promise<{
     totalClassicRiddles: number;
     totalCategories: number;
-    totalQuizRiddles: number;
+    totalRiddleMcqs: number;
     totalSubjects: number;
     totalChapters: number;
     riddlesByDifficulty: Record<string, number>;
@@ -463,7 +463,7 @@ export class RiddlesController {
   /**
    * Validate difficulty level for CLASSIC riddles.
    * Classic riddle DB enum only allows: easy | medium | hard.
-   * Prevents values like 'expert' or 'extreme' that only belong to quiz riddles.
+   * Prevents values like 'expert' or 'extreme' that only belong to riddle MCQs.
    */
   private validateClassicDifficulty(level: string): void {
     const validDifficulties = ['easy', 'medium', 'hard'];
@@ -475,14 +475,14 @@ export class RiddlesController {
   }
 
   /**
-   * Validate difficulty level for QUIZ riddles.
-   * Quiz riddle DB enum allows: easy | medium | hard | expert | extreme.
+   * Validate difficulty level for riddle MCQs.
+   * riddle MCQ DB enum allows: easy | medium | hard | expert | extreme.
    */
   private validateQuizDifficulty(level: string): void {
     const validDifficulties = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validDifficulties.includes(level)) {
       throw new BadRequestException(
-        `Invalid difficulty level: "${level}". Valid values for quiz riddles are: ${validDifficulties.join(', ')}`,
+        `Invalid difficulty level: "${level}". Valid values for riddle MCQs are: ${validDifficulties.join(', ')}`,
       );
     }
   }

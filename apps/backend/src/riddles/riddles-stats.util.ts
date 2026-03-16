@@ -2,9 +2,9 @@ import { Repository } from 'typeorm';
 
 import { ContentStatus } from '../common/enums/content-status.enum';
 
-import { QuizRiddle } from './entities/quiz-riddle.entity';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
+import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { Riddle } from './entities/riddle.entity';
 
@@ -15,7 +15,7 @@ import { Riddle } from './entities/riddle.entity';
 export interface RiddlesStats {
   totalClassicRiddles: number;
   totalCategories: number;
-  totalQuizRiddles: number;
+  totalRiddleMcqs: number;
   totalSubjects: number;
   totalChapters: number;
   riddlesByDifficulty: Record<string, number>;
@@ -33,7 +33,7 @@ export interface RiddlesStats {
  *
  * @param riddleRepo    - Riddle repository
  * @param categoryRepo  - Category repository
- * @param quizRiddleRepo - Quiz riddle repository
+ * @param riddleMcqRepo - Quiz riddle repository
  * @param subjectRepo   - Subject repository
  * @param chapterRepo   - Chapter repository
  * @returns Aggregated statistics for all riddle types
@@ -42,7 +42,7 @@ export interface RiddlesStats {
 export async function computeRiddleStats(
   riddleRepo: Repository<Riddle>,
   categoryRepo: Repository<RiddleCategory>,
-  quizRiddleRepo: Repository<QuizRiddle>,
+  riddleMcqRepo: Repository<RiddleMcq>,
   subjectRepo: Repository<RiddleSubject>,
   chapterRepo: Repository<RiddleChapter>,
 ): Promise<RiddlesStats> {
@@ -51,7 +51,7 @@ export async function computeRiddleStats(
     const [
       totalClassicRiddles,
       totalCategories,
-      totalQuizRiddles,
+      totalRiddleMcqs,
       totalSubjects,
       totalChapters,
       difficultyRows,
@@ -59,7 +59,7 @@ export async function computeRiddleStats(
       // H-4 fix: restrict to PUBLISHED only — DRAFT and TRASH must not be counted
       riddleRepo.count({ where: { status: ContentStatus.PUBLISHED } }),
       categoryRepo.count(),
-      quizRiddleRepo.count(),
+      riddleMcqRepo.count(),
       // Count subjects that have at least one chapter with at least one riddle
       subjectRepo.createQueryBuilder('subject')
         .innerJoin('subject.chapters', 'chapter')
@@ -92,7 +92,7 @@ export async function computeRiddleStats(
     return {
       totalClassicRiddles,
       totalCategories,
-      totalQuizRiddles,
+      totalRiddleMcqs,
       totalSubjects,
       totalChapters,
       riddlesByDifficulty,

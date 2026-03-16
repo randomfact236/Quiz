@@ -43,7 +43,7 @@ async function seedRiddleLevels() {
     console.log(`📚 Using subject: ${subjects[0].name}`);
 
     // Get or create a chapter
-    let chapters = await dataSource.query(`
+    const chapters = await dataSource.query(`
       SELECT id FROM riddle_chapters 
       WHERE "subjectId" = $1 
       LIMIT 1
@@ -106,7 +106,7 @@ async function seedRiddleLevels() {
     for (const riddle of riddles) {
       // Check if riddle already exists
       const existing = await dataSource.query(`
-        SELECT id FROM quiz_riddles 
+        SELECT id FROM riddle_mcqs 
         WHERE question = $1 AND level = $2
       `, [riddle.question, riddle.level]);
 
@@ -116,7 +116,7 @@ async function seedRiddleLevels() {
       }
 
       await dataSource.query(`
-        INSERT INTO quiz_riddles 
+        INSERT INTO riddle_mcqs 
         (question, options, "correctLetter", "correctAnswer", level, hint, explanation, "subjectId", "chapterId")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       `, [

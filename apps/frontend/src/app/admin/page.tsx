@@ -261,10 +261,10 @@ export default function AdminPage(): JSX.Element {
 
   // Fetch riddles from backend API
   useEffect(() => {
-    import('@/lib/riddles-api').then(({ getAllQuizRiddlesAdmin }) => {
-      getAllQuizRiddlesAdmin()
-        .then(quizRiddles => {
-          const mappedRiddles = quizRiddles.map(qr => ({
+    import('@/lib/riddles-api').then(({ getAllRiddleMcqsAdmin }) => {
+      getAllRiddleMcqsAdmin()
+        .then(riddleMcqs => {
+          const mappedRiddles = riddleMcqs.map(qr => ({
             id: qr.id as string,
             question: qr.question,
             options: qr.options || [],

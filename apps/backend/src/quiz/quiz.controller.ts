@@ -14,8 +14,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsOptional, IsString, IsBoolean } from 'class-validator';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';

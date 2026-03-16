@@ -52,7 +52,7 @@ query:
       )
     
 query: 
-      CREATE TABLE IF NOT EXISTS quiz_riddles (
+      CREATE TABLE IF NOT EXISTS riddle_mcqs (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         question TEXT NOT NULL,
         options TEXT[] NOT NULL,
@@ -69,8 +69,8 @@ query:
       CREATE INDEX IF NOT EXISTS idx_riddles_category ON riddles("categoryId");
       CREATE INDEX IF NOT EXISTS idx_riddles_difficulty ON riddles(difficulty);
       CREATE INDEX IF NOT EXISTS idx_riddles_status ON riddles(status);
-      CREATE INDEX IF NOT EXISTS idx_quiz_riddles_chapter ON quiz_riddles("chapterId");
-      CREATE INDEX IF NOT EXISTS idx_quiz_riddles_level ON quiz_riddles(level);
+      CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_chapter ON riddle_mcqs("chapterId");
+      CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_level ON riddle_mcqs(level);
       CREATE INDEX IF NOT EXISTS idx_riddle_chapters_subject ON riddle_chapters("subjectId");
       CREATE INDEX IF NOT EXISTS idx_riddle_subjects_slug ON riddle_subjects(slug);
       CREATE INDEX IF NOT EXISTS idx_riddle_subjects_active ON riddle_subjects("isActive");

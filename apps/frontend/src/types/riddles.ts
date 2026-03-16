@@ -34,7 +34,7 @@ export interface RiddleSubject {
   categoryId?: string;
   category?: RiddleMcqCategory;
   chapters?: RiddleChapter[];
-  riddles?: QuizRiddle[];
+  riddles?: RiddleMcq[];
 }
 
 /** Riddle Chapter - Backend Entity */
@@ -44,11 +44,11 @@ export interface RiddleChapter {
   chapterNumber: number;
   subjectId: string;
   subject?: RiddleSubject;
-  riddles?: QuizRiddle[];
+  riddles?: RiddleMcq[];
 }
 
-/** Quiz Riddle - Backend Entity (for gameplay) */
-export interface QuizRiddle {
+/** Riddle MCQ - Backend Entity (for gameplay) */
+export interface RiddleMcq {
   id: string;
   question: string;
   options: string[];
@@ -237,9 +237,9 @@ export const DEFAULT_CHAPTER_ICONS: Record<string, string> = {
 // ============================================================================
 
 /**
- * Convert backend QuizRiddle to frontend Riddle format
+ * Convert backend RiddleMcq to frontend Riddle format
  */
-export function adaptQuizRiddle(riddle: QuizRiddle): Riddle {
+export function adaptRiddleMcq(riddle: RiddleMcq): Riddle {
   // Map expert/extreme to 'extreme' for AnswerOptions compatibility (shows text input)
   const isOpenEnded = riddle.level === 'expert' || riddle.level === 'extreme';
   
@@ -285,8 +285,8 @@ export function adaptChapter(chapter: RiddleChapter): ChapterDisplay {
 /**
  * Convert frontend Riddle back to backend format
  */
-export function toBackendRiddle(riddle: Partial<Riddle>): Partial<QuizRiddle> {
-  const result: Partial<QuizRiddle> = {};
+export function toBackendRiddle(riddle: Partial<Riddle>): Partial<RiddleMcq> {
+  const result: Partial<RiddleMcq> = {};
   
   if (riddle.id) result.id = riddle.id;
   if (riddle.question) result.question = riddle.question;

@@ -72,4 +72,4 @@ Write-Host ""
 Write-Host "You can verify by running these SQL queries in your database:" -ForegroundColor Cyan
 Write-Host "  SELECT * FROM riddle_subjects;" -ForegroundColor Gray
 Write-Host "  SELECT * FROM riddle_chapters;" -ForegroundColor Gray
-Write-Host "  SELECT * FROM quiz_riddles;" -ForegroundColor Gray
+Write-Host "  SELECT * FROM riddle_mcqs;" -ForegroundColor Gray

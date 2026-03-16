@@ -1,7 +1,8 @@
+import { randomUUID } from 'crypto';
+
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
-import { randomUUID } from 'crypto';
 
 import { CacheService } from '../common/cache/cache.service';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
@@ -192,7 +193,7 @@ export class QuizService {
       .leftJoinAndSelect('question.chapter', 'chapter')
       .leftJoinAndSelect('chapter.subject', 'subject');
 
-    if (filters.status) {
+    if (filters.status != null) {
       query.andWhere('question.status = :status', { status: filters.status });
     }
 
@@ -334,7 +335,7 @@ export class QuizService {
       level: dto.level,
       explanation: dto.explanation,
       chapter,
-      status: dto.status || ContentStatus.PUBLISHED,
+      status: (dto.status != null) || ContentStatus.PUBLISHED,
     });
     return this.questionRepo.save(question);
   }
@@ -422,7 +423,7 @@ export class QuizService {
           level: q.level,
           explanation: q.explanation,
           chapter,
-          status: q.status || ContentStatus.PUBLISHED,
+          status: (q.status != null) || ContentStatus.PUBLISHED,
           order: q.order || i,
         });
         questions.push(question);
@@ -453,7 +454,7 @@ export class QuizService {
     }
     if (dto.options !== undefined) {
       // Derive from level to determine if open-ended
-      const level = dto.level || question.level;
+      const level = (dto.level != null) || question.level;
       question.options = level === 'extreme' ? null : dto.options;
     }
     if (dto.level !== undefined) {

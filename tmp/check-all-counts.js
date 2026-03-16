@@ -19,10 +19,10 @@ async function run() {
         console.log('Connected to database');
         const resQ = await client.query('SELECT count(*) FROM questions');
         const resR = await client.query('SELECT count(*) FROM riddles');
-        const resQR = await client.query('SELECT count(*) FROM quiz_riddles');
+        const resQR = await client.query('SELECT count(*) FROM riddle_mcqs');
         console.log('QUESTIONS_COUNT:' + resQ.rows[0].count);
         console.log('CLASSIC_RIDDLES_COUNT:' + resR.rows[0].count);
-        console.log('QUIZ_RIDDLES_COUNT:' + resQR.rows[0].count);
+        console.log('RIDDLE_MCQS_COUNT:' + resQR.rows[0].count);
         await client.end();
     } catch (err) {
         console.error('Error:', err.message);

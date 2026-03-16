@@ -12,9 +12,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import { ContentStatus } from '../common/enums/content-status.enum';
-import { QuizRiddle } from '../riddles/entities/quiz-riddle.entity';
 import { RiddleCategory } from '../riddles/entities/riddle-category.entity';
 import { RiddleChapter } from '../riddles/entities/riddle-chapter.entity';
+import { RiddleMcq } from '../riddles/entities/riddle-mcq.entity';
 import { RiddleSubject } from '../riddles/entities/riddle-subject.entity';
 import { Riddle } from '../riddles/entities/riddle.entity';
 import { User } from '../users/entities/user.entity';
@@ -28,8 +28,8 @@ export class AutoSeedService implements OnModuleInit {
     private subjectRepo: Repository<RiddleSubject>,
     @InjectRepository(RiddleChapter)
     private chapterRepo: Repository<RiddleChapter>,
-    @InjectRepository(QuizRiddle)
-    private quizRiddleRepo: Repository<QuizRiddle>,
+    @InjectRepository(RiddleMcq)
+    private riddleMcqRepo: Repository<RiddleMcq>,
     @InjectRepository(RiddleCategory)
     private categoryRepo: Repository<RiddleCategory>,
     @InjectRepository(Riddle)
@@ -131,7 +131,7 @@ export class AutoSeedService implements OnModuleInit {
 
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i];
-      const riddle = this.quizRiddleRepo.create({
+      const riddle = this.riddleMcqRepo.create({
         question: template.question,
         options: template.options,
         correctAnswer: template.answer,
@@ -141,7 +141,7 @@ export class AutoSeedService implements OnModuleInit {
         hint: template.hint,
       });
 
-      await this.quizRiddleRepo.save(riddle);
+      await this.riddleMcqRepo.save(riddle);
     }
   }
 

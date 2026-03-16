@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { QuizRiddle } from './quiz-riddle.entity';
+import { RiddleMcq } from './riddle-mcq.entity';
 import { RiddleSubject } from './riddle-subject.entity';
 
 @Entity('riddle_chapters')
@@ -30,8 +30,8 @@ export class RiddleChapter {
   @Column()
   subjectId: string;
 
-  @OneToMany(() => QuizRiddle, (riddle) => riddle.chapter)
-  riddles: QuizRiddle[];
+  @OneToMany(() => RiddleMcq, (riddle) => riddle.chapter)
+  riddles: RiddleMcq[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

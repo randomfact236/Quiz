@@ -26,12 +26,12 @@ import {
     MAX_PAGE_SIZE,
 } from '../constants/app.constants';
 import { ContentStatus } from '../enums/content-status.enum';
-import { QuizRiddleLevel } from '../enums/quiz-riddle-level.enum';
 import { RiddleDifficulty } from '../enums/riddle-difficulty.enum';
+import { RiddleMcqLevel } from '../enums/riddle-mcq-level.enum';
 
 // Re-export enums so consumers can import from a single riddle DTO path if needed
 export { RiddleDifficulty } from '../enums/riddle-difficulty.enum';
-export { QuizRiddleLevel } from '../enums/quiz-riddle-level.enum';
+export { RiddleMcqLevel } from '../enums/riddle-mcq-level.enum';
 
 // ==================== PAGINATION (riddle-specific) ====================
 
@@ -266,9 +266,9 @@ export class UpdateRiddleChapterDto {
     chapterNumber?: number;
 }
 
-// ==================== QUIZ RIDDLES (Quiz Format) ====================
+// ==================== RIDDLE MCQs (Quiz Format) ====================
 
-export class CreateQuizRiddleDto {
+export class CreateRiddleMcqDto {
     @ApiProperty({ example: 'What has keys but no locks?' })
     @IsString()
     @IsNotEmpty()
@@ -289,11 +289,11 @@ export class CreateQuizRiddleDto {
     @IsNotEmpty()
     correctAnswer: string;
 
-    @ApiProperty({ example: QuizRiddleLevel.MEDIUM, enum: QuizRiddleLevel })
-    @IsEnum(QuizRiddleLevel, {
-        message: `level must be one of: ${Object.values(QuizRiddleLevel).join(', ')}`,
+    @ApiProperty({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
+    @IsEnum(RiddleMcqLevel, {
+        message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
     })
-    level: QuizRiddleLevel;
+    level: RiddleMcqLevel;
 
     @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID (alternative to chapterId)' })
     @IsOptional()
@@ -316,7 +316,7 @@ export class CreateQuizRiddleDto {
     hint?: string;
 }
 
-export class UpdateQuizRiddleDto {
+export class UpdateRiddleMcqDto {
     @ApiPropertyOptional({ example: 'What has keys but no locks?' })
     @IsOptional()
     @IsString()
@@ -338,12 +338,12 @@ export class UpdateQuizRiddleDto {
     @IsString()
     correctAnswer?: string;
 
-    @ApiPropertyOptional({ example: QuizRiddleLevel.MEDIUM, enum: QuizRiddleLevel })
+    @ApiPropertyOptional({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
     @IsOptional()
-    @IsEnum(QuizRiddleLevel, {
-        message: `level must be one of: ${Object.values(QuizRiddleLevel).join(', ')}`,
+    @IsEnum(RiddleMcqLevel, {
+        message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
     })
-    level?: QuizRiddleLevel;
+    level?: RiddleMcqLevel;
 
     @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID' })
     @IsOptional()

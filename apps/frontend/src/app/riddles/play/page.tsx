@@ -32,7 +32,7 @@ import {
   setupNavigationWarning
 } from '@/lib/riddle-session';
 import { getRiddlesByChapter, getMixedRiddles, getRandomRiddles } from '@/lib/riddles-api';
-import { adaptQuizRiddle, type Riddle, type RiddleSession } from '@/types/riddles';
+import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
@@ -145,12 +145,12 @@ function RiddlePlayPageContent(): JSX.Element {
             mixed = await getMixedRiddles(20);
           }
 
-          fetchedRiddles = mixed.map(r => adaptQuizRiddle(r as any));
+          fetchedRiddles = mixed.map(r => adaptRiddleMcq(r as any));
           setChapterName(level === 'all' ? 'Mixed Chapters' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
         } else {
           // Pass level filter to backend API (more efficient than frontend filtering)
           const response = await getRiddlesByChapter(chapterId, 1, 50, level);
-          fetchedRiddles = response.data.map(r => adaptQuizRiddle(r as any));
+          fetchedRiddles = response.data.map(r => adaptRiddleMcq(r as any));
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
             const baseName = chapterNameParam || fetchedRiddles[0].chapter;
             setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
@@ -365,15 +365,15 @@ function RiddlePlayPageContent(): JSX.Element {
       if (chapterId === 'all') {
         if (level && level !== 'all') {
           const response = await getRandomRiddles(level, additionalRiddles + 10);
-          newRiddles = response.map(r => adaptQuizRiddle({ ...r, level: r.level || level } as any));
+          newRiddles = response.map(r => adaptRiddleMcq({ ...r, level: r.level || level } as any));
         } else {
           const response = await getMixedRiddles(additionalRiddles + 10);
-          newRiddles = response.map(r => adaptQuizRiddle(r as any));
+          newRiddles = response.map(r => adaptRiddleMcq(r as any));
         }
       } else {
         // Pass level filter to backend API (more efficient)
         const response = await getRiddlesByChapter(chapterId, 1, 100, level);
-        newRiddles = response.data.map(r => adaptQuizRiddle(r as any));
+        newRiddles = response.data.map(r => adaptRiddleMcq(r as any));
       }
 
       const uniqueNew = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);

@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS riddle_chapters (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Create quiz_riddles table (quiz format with multiple choice)
-CREATE TABLE IF NOT EXISTS quiz_riddles (
+-- 3. Create riddle_mcqs table (quiz format with multiple choice)
+CREATE TABLE IF NOT EXISTS riddle_mcqs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question TEXT NOT NULL,
     options TEXT[] NOT NULL,
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS riddles (
 CREATE INDEX IF NOT EXISTS idx_riddles_category ON riddles("categoryId");
 CREATE INDEX IF NOT EXISTS idx_riddles_difficulty ON riddles(difficulty);
 CREATE INDEX IF NOT EXISTS idx_riddles_status ON riddles(status);
-CREATE INDEX IF NOT EXISTS idx_quiz_riddles_chapter ON quiz_riddles("chapterId");
-CREATE INDEX IF NOT EXISTS idx_quiz_riddles_level ON quiz_riddles(level);
+CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_chapter ON riddle_mcqs("chapterId");
+CREATE INDEX IF NOT EXISTS idx_riddle_mcqs_level ON riddle_mcqs(level);
 CREATE INDEX IF NOT EXISTS idx_riddle_chapters_subject ON riddle_chapters("subjectId");
 CREATE INDEX IF NOT EXISTS idx_riddle_subjects_slug ON riddle_subjects(slug);
 CREATE INDEX IF NOT EXISTS idx_riddle_subjects_active ON riddle_subjects("isActive");
@@ -145,24 +145,24 @@ BEGIN
     
     IF ch_id IS NOT NULL THEN
         -- Riddle 1
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'What has keys but no locks?', ARRAY['A piano', 'A keyboard', 'A map', 'A car'], 'A piano', 'easy', ch_id, 'A piano has musical keys but no locks', 'Think about music'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'What has keys but no locks?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'What has keys but no locks?' AND "chapterId" = ch_id);
         
         -- Riddle 2
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'What gets wetter the more it dries?', ARRAY['A towel', 'A sponge', 'Water', 'Rain'], 'A towel', 'easy', ch_id, 'A towel absorbs water as it dries things', 'Used after showering'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'What gets wetter the more it dries?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'What gets wetter the more it dries?' AND "chapterId" = ch_id);
         
         -- Riddle 3
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'The more you take, the more you leave behind. What am I?', ARRAY['Footsteps', 'Memories', 'Time', 'Money'], 'Footsteps', 'medium', ch_id, 'As you walk, you leave footsteps behind', 'You make them when walking'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'The more you take, the more you leave behind. What am I?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'The more you take, the more you leave behind. What am I?' AND "chapterId" = ch_id);
         
         -- Riddle 4
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'What has a head and a tail but no body?', ARRAY['A coin', 'A snake', 'A rope', 'A bookmark'], 'A coin', 'easy', ch_id, 'A coin has a head side and a tail side', 'Used for purchases'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'What has a head and a tail but no body?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'What has a head and a tail but no body?' AND "chapterId" = ch_id);
     END IF;
 END $$;
 
@@ -178,14 +178,14 @@ BEGIN
     
     IF ch_id IS NOT NULL THEN
         -- Riddle 1
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'A farmer has 17 sheep and all but 9 die. How many are left?', ARRAY['9', '8', '17', '0'], '9', 'easy', ch_id, 'Read carefully: all BUT 9 died', 'Read the question again'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'A farmer has 17 sheep and all but 9 die. How many are left?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'A farmer has 17 sheep and all but 9 die. How many are left?' AND "chapterId" = ch_id);
         
         -- Riddle 2
-        INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+        INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
         SELECT 'If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops Lazzies?', ARRAY['Yes', 'No', 'Maybe', 'Not enough info'], 'Yes', 'medium', ch_id, 'Transitive property: Bloops → Razzies → Lazzies', 'Think about transitive logic'
-        WHERE NOT EXISTS (SELECT 1 FROM quiz_riddles WHERE question = 'If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops Lazzies?' AND "chapterId" = ch_id);
+        WHERE NOT EXISTS (SELECT 1 FROM riddle_mcqs WHERE question = 'If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops Lazzies?' AND "chapterId" = ch_id);
     END IF;
 END $$;
 
@@ -205,7 +205,7 @@ SELECT 'riddle_subjects' as table_name, COUNT(*) as row_count FROM riddle_subjec
 UNION ALL
 SELECT 'riddle_chapters', COUNT(*) FROM riddle_chapters
 UNION ALL
-SELECT 'quiz_riddles', COUNT(*) FROM quiz_riddles
+SELECT 'riddle_mcqs', COUNT(*) FROM riddle_mcqs
 UNION ALL
 SELECT 'riddle_categories', COUNT(*) FROM riddle_categories
 UNION ALL

@@ -8,7 +8,7 @@
  */
 
 import { api, apiRequest } from './api-client';
-import type { Riddle, RiddleChapter, RiddleSubject, QuizRiddle } from '@/types/riddles';
+import type { Riddle, RiddleChapter, RiddleSubject, RiddleMcq } from '@/types/riddles';
 
 // ============================================================================
 // Types
@@ -211,69 +211,69 @@ export async function reorderChapters(dto: ReorderChaptersDto): Promise<void> {
 // ============================================================================
 
 /**
- * Get quiz riddles by subject ID (Riddle MCQ)
+ * Get riddle MCQs by subject ID (Riddle MCQ)
  */
 export async function getRiddlesBySubject(
   subjectId: string,
   page: number = 1,
   limit: number = 50,
   level?: string
-): Promise<{ data: QuizRiddle[]; total: number }> {
+): Promise<{ data: RiddleMcq[]; total: number }> {
   let url = `/riddles/quiz-by-subject/${subjectId}?page=${page}&limit=${limit}`;
   if (level && level !== 'all') {
     url += `&level=${level}`;
   }
-  const response = await apiRequest<{ data: QuizRiddle[]; total: number }>(url);
+  const response = await apiRequest<{ data: RiddleMcq[]; total: number }>(url);
   return response.data;
 }
 
 /**
- * Get quiz riddles by chapter ID
+ * Get riddle MCQs by chapter ID
  */
 export async function getRiddlesByChapter(
   chapterId: string,
   page: number = 1,
   limit: number = 50,
   level?: string
-): Promise<PaginatedResponse<QuizRiddle>> {
+): Promise<PaginatedResponse<RiddleMcq>> {
   let url = `/riddles/quiz/${chapterId}?page=${page}&limit=${limit}`;
   if (level && level !== 'all') {
     url += `&level=${level}`;
   }
-  const response = await apiRequest<QuizRiddle[]>(url);
+  const response = await apiRequest<RiddleMcq[]>(url);
   // Backend returns { data, total } format
-  return response.data as unknown as PaginatedResponse<QuizRiddle>;
+  return response.data as unknown as PaginatedResponse<RiddleMcq>;
 }
 
 /**
- * Get random quiz riddles by difficulty
+ * Get random riddle MCQs by difficulty
  */
 export async function getRandomRiddles(
   level: string,
   count: number = 10
-): Promise<QuizRiddle[]> {
-  const response = await api.get<QuizRiddle[]>(`/riddles/random/${level}?count=${count}`);
+): Promise<RiddleMcq[]> {
+  const response = await api.get<RiddleMcq[]>(`/riddles/random/${level}?count=${count}`);
   return response.data;
 }
 
 /**
- * Get mixed quiz riddles from all chapters
+ * Get mixed riddle MCQs from all chapters
  */
-export async function getMixedRiddles(count: number = 50): Promise<QuizRiddle[]> {
-  const response = await api.get<QuizRiddle[]>(`/riddles/mixed?count=${count}`);
+export async function getMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
+  const response = await api.get<RiddleMcq[]>(`/riddles/mixed?count=${count}`);
   return response.data;
 }
 
 /**
- * Get all quiz riddles for Admin panel
+ * Get all riddle MCQs for Admin panel
  */
-export async function getAllQuizRiddlesAdmin(): Promise<QuizRiddle[]> {
-  const response = await api.get<QuizRiddle[]>('/riddles/quiz/all');
+export async function getAllRiddleMcqsAdmin(): Promise<RiddleMcq[]> {
+  const response = await api.get<RiddleMcq[]>('/riddles/quiz/all');
   return response.data;
 }
 
 /**
- * Execute bulk action on quiz riddles
+ * Execute bulk action on riddle MCQs
  */
 export async function bulkActionRiddles(
   ids: string[],
@@ -284,7 +284,7 @@ export async function bulkActionRiddles(
 }
 
 /**
- * Create a new quiz riddle (Admin only)
+ * Create a new riddle MCQ (Admin only)
  */
 export async function createRiddle(dto: CreateRiddleDto): Promise<Riddle> {
   const response = await api.post<Riddle>('/riddles/quiz', dto);
@@ -292,7 +292,7 @@ export async function createRiddle(dto: CreateRiddleDto): Promise<Riddle> {
 }
 
 /**
- * Bulk create quiz riddles (Admin only)
+ * Bulk create riddle MCQs (Admin only)
  */
 export async function bulkCreateRiddles(
   dtos: CreateRiddleDto[]
@@ -302,7 +302,7 @@ export async function bulkCreateRiddles(
 }
 
 /**
- * Update a quiz riddle (Admin only)
+ * Update a riddle MCQ (Admin only)
  */
 export async function updateRiddle(id: string, dto: Partial<CreateRiddleDto>): Promise<Riddle> {
   const response = await api.put<Riddle>(`/riddles/quiz/${id}`, dto);
@@ -310,7 +310,7 @@ export async function updateRiddle(id: string, dto: Partial<CreateRiddleDto>): P
 }
 
 /**
- * Delete a quiz riddle (Admin only)
+ * Delete a riddle MCQ (Admin only)
  */
 export async function deleteRiddle(id: string): Promise<void> {
   await api.delete(`/riddles/quiz/${id}`);
@@ -356,7 +356,7 @@ export async function getClassicRiddlesByDifficulty(
 export interface RiddlesStats {
   totalClassicRiddles: number;
   totalCategories: number;
-  totalQuizRiddles: number;
+  totalRiddleMcqs: number;
   totalSubjects: number;
   totalChapters: number;
   riddlesByDifficulty: Record<string, number>;

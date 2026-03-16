@@ -121,7 +121,7 @@ export default function RiddlePracticePage(): JSX.Element {
     const counts: LevelCount = {
       chapterWise: {},
       allChapter: { easy: 0, medium: 0, hard: 0, expert: 0 },
-      completeMix: stats?.totalQuizRiddles || 0
+      completeMix: stats?.totalRiddleMcqs || 0
     };
 
     // Calculate per-chapter and total counts by difficulty

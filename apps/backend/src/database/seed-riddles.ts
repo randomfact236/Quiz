@@ -2,7 +2,7 @@
  * ============================================================================
  * Riddle Seed Data
  * ============================================================================
- * Seeds initial riddle subjects, chapters, and quiz riddles
+ * Seeds initial riddle subjects, chapters, and riddle MCQs
  * Run with: npx ts-node src/database/seed-riddles.ts
  * ============================================================================
  */
@@ -85,7 +85,7 @@ async function seedRiddles() {
         
         for (const riddle of sampleRiddles) {
           await dataSource.query(`
-            INSERT INTO quiz_riddles (question, options, "correctAnswer", level, "chapterId", explanation, hint)
+            INSERT INTO riddle_mcqs (question, options, "correctAnswer", level, "chapterId", explanation, hint)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
           `, [
             riddle.question,
@@ -102,7 +102,7 @@ async function seedRiddles() {
     }
 
     console.log(`✅ Inserted ${totalChapters} chapters`);
-    console.log(`✅ Inserted ${totalRiddles} quiz riddles`);
+    console.log(`✅ Inserted ${totalRiddles} riddle MCQs`);
     console.log('🎉 Riddle seed completed successfully!');
 
     await dataSource.destroy();

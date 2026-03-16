@@ -1,13 +1,13 @@
 /**
- * Quiz riddle difficulty levels.
+ * Riddle MCQ difficulty levels.
  *
  * The DB column is typed as a PostgreSQL enum using these values.
- * DTOs validate against this enum via @IsEnum(QuizRiddleLevel).
+ * DTOs validate against this enum via @IsEnum(RiddleMcqLevel).
  *
  * Important: Classic riddles use a SEPARATE enum (RiddleDifficulty) that
  * only includes easy | medium | hard. Do not use these extra levels for classic riddles.
  */
-export enum QuizRiddleLevel {
+export enum RiddleMcqLevel {
     EASY = 'easy',
     MEDIUM = 'medium',
     HARD = 'hard',

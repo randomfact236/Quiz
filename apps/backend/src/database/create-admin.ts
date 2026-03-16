@@ -13,10 +13,13 @@
  * ============================================================================
  */
 
-import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { getDatabaseConfig, validateDatabaseEnv } from './database-config';
+import { DataSource } from 'typeorm';
+
 import { User } from '../users/entities/user.entity';
+
+import { getDatabaseConfig, validateDatabaseEnv } from './database-config';
+
 
 function parseArgs(args: string[]): { email: string; password: string; name: string } | null {
   let email = '';
@@ -52,7 +55,7 @@ function parseArgs(args: string[]): { email: string; password: string; name: str
   if (!email && !password && args.length >= 2) {
     email = args[0];
     password = args[1];
-    if (args[2]) name = args[2];
+    if (args[2]) {name = args[2];}
   }
 
   if (email && password) {

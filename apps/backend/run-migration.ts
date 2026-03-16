@@ -47,7 +47,7 @@ async function runMigration() {
     console.log('  - riddles');
     console.log('  - riddle_subjects');
     console.log('  - riddle_chapters');
-    console.log('  - quiz_riddles');
+    console.log('  - riddle_mcqs');
 
     await dataSource.destroy();
     process.exit(0);

@@ -9,6 +9,7 @@
  */
 
 import { DataSource } from 'typeorm';
+
 import { getSeedDatabaseConfig, validateDatabaseEnv } from './database-config';
 
 // Validate environment before proceeding
