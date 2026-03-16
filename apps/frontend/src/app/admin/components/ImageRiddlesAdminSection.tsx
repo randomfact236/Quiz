@@ -448,13 +448,21 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     }
   }, [categories, isHydrated]);
 
-  // Calculate status counts (memoized)
-  const statusCounts = useMemo<StatusCounts>(() => ({
-    total: imageRiddles.length,
-    published: imageRiddles.filter(r => r.status === 'published').length,
-    draft: imageRiddles.filter(r => r.status === 'draft').length,
-    trash: imageRiddles.filter(r => r.status === 'trash').length,
-  }), [imageRiddles]);
+  // Calculate status counts - based on current filters (difficulty, category, search)
+  const statusCounts = useMemo<StatusCounts>(() => {
+    const filtered = imageRiddles.filter(riddle => {
+      const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
+      const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
+      const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesDifficulty && matchesCategory && matchesSearch;
+    });
+    return {
+      total: filtered.length,
+      published: filtered.filter(r => r.status === 'published').length,
+      draft: filtered.filter(r => r.status === 'draft').length,
+      trash: filtered.filter(r => r.status === 'trash').length,
+    };
+  }, [imageRiddles, filterDifficulty, filterCategory, searchTerm]);
 
   // Category Handlers
   const handleAddCategory = () => {
