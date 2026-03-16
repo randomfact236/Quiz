@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
@@ -167,6 +167,27 @@ export function RiddleMcqSection({
     trash: allRiddles.filter(r => r.status === 'trash').length,
   };
 
+  // Calculate category and subject counts
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    allRiddles.forEach(r => {
+      if (r.categoryId) {
+        counts[r.categoryId] = (counts[r.categoryId] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [allRiddles]);
+
+  const subjectCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    allRiddles.forEach(r => {
+      if (r.subjectId) {
+        counts[r.subjectId] = (counts[r.subjectId] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [allRiddles]);
+
   // Migrate riddles without status to 'published'
   useEffect(() => {
     const needsMigration = allRiddles.some(r => !r.status);
@@ -184,7 +205,9 @@ export function RiddleMcqSection({
       riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
     const riddleStatus = riddle.status || 'published';
     const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
-    return matchesDifficulty && matchesSearch && matchesStatus;
+    const matchesCategory = !selectedCategoryId || riddle.categoryId === selectedCategoryId;
+    const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
+    return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory && matchesSubject;
   });
 
   // Pagination
@@ -496,6 +519,12 @@ export function RiddleMcqSection({
           fileInputRef.current.value = '';
         }
         
+        // Refresh subjects and categories lists to show newly created ones
+        const refreshedSubjects = await getSubjects();
+        const refreshedCategories = await getCategories();
+        setSubjects(refreshedSubjects);
+        setCategories(refreshedCategories);
+        
         // Refresh riddles list
         const updated = await getAllRiddleMcqsAdmin();
         const mapped = updated.map(qr => ({
@@ -509,6 +538,8 @@ export function RiddleMcqSection({
           hint: qr.hint || '',
           explanation: qr.explanation || '',
           subject: qr.subject?.name || qr.chapter?.subject?.name || '',
+          subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
+          categoryId: qr.chapter?.subject?.categoryId || '',
         }));
         setAllRiddles(mapped);
       }
@@ -1105,7 +1136,7 @@ export function RiddleMcqSection({
                   }`}
                 onClick={() => setSelectedCategoryId(cat.id)}
               >
-                {cat.emoji || '📁'} {cat.name}
+                {cat.emoji || '📁'} {cat.name} <span className="opacity-70">({categoryCounts[cat.id] || 0})</span>
               </button>
               <button
                 onClick={() => handleEditCategory(cat)}
@@ -1772,7 +1803,7 @@ export function RiddleMcqSection({
                     <option value="">Select Subject</option>
                     {subjects.map(sub => (
                       <option key={`subject-option-${sub.id}`} value={sub.id}>
-                        {sub.emoji || '📚'} {sub.name}
+                  {sub.emoji || '📚'} {sub.name} <span className="opacity-70">({subjectCounts[sub.id] || 0})</span>
                       </option>
                     ))}
                   </select>

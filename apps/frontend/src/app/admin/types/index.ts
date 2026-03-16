@@ -67,7 +67,9 @@ export interface Riddle {
   hint?: string;
   explanation?: string;
   subject?: string;
+  subjectId?: string;
   category?: string;
+  categoryId?: string;
   createdAt?: string;
   updatedAt?: string;
 }

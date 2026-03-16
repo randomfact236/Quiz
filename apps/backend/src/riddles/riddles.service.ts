@@ -498,39 +498,32 @@ export class RiddlesService {
   /**
    * Delete a subject and ALL its child chapters and riddle MCQs.
    * Deletion is performed in dependency order to respect FK constraints.
+   * Wrapped in a transaction to ensure atomicity.
    */
   async deleteSubject(id: string): Promise<void> {
-    const subject = await this.subjectRepo.findOne({
-      where: { id },
-      relations: ['chapters', 'chapters.riddles'],
-    });
-    if (subject === null) {
-      throw new NotFoundException(`Subject with id "${id}" not found`);
-    }
+    await this.dataSource.transaction(async (manager) => {
+      // Step 1: Delete ALL riddle MCQs directly associated with this subjectId
+      await manager.delete(RiddleMcq, { subjectId: id });
 
-    // Step 1: Delete ALL riddle MCQs directly associated with this subjectId
-    // (Not just those loaded via relations - query directly to catch all)
-    const directRiddles = await this.riddleMcqRepo.find({
-      where: { subjectId: id },
-    });
-    if (directRiddles.length > 0) {
-      await this.riddleMcqRepo.remove(directRiddles);
-    }
-
-    // Step 2: Delete riddle MCQs via chapters
-    for (const chapter of subject.chapters ?? []) {
-      if (chapter.riddles?.length) {
-        await this.riddleMcqRepo.remove(chapter.riddles);
+      // Step 2: Get chapters for this subject and delete their riddles
+      const chapters = await manager.find(RiddleChapter, {
+        where: { subjectId: id },
+        relations: ['riddles'],
+      });
+      
+      for (const chapter of chapters) {
+        if (chapter.riddles?.length) {
+          await manager.remove(RiddleMcq, chapter.riddles);
+        }
       }
-    }
 
-    // Step 3: Delete chapters
-    if (subject.chapters?.length) {
-      await this.chapterRepo.remove(subject.chapters);
-    }
+      // Step 3: Delete chapters
+      await manager.delete(RiddleChapter, { subjectId: id });
 
-    // Step 4: Delete subject
-    await this.subjectRepo.remove(subject);
+      // Step 4: Delete subject
+      await manager.delete(RiddleSubject, { id });
+    });
+    
     await this.cacheService.del('riddles:subjects:active');
     await this.cacheService.del('riddles:subjects:all');
   }
