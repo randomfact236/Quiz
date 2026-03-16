@@ -182,7 +182,7 @@ export function RiddleMcqSection({
       // Try direct categoryId first, then fallback to subject's category
       let catId = String(r.categoryId || '');
       if (!catId && r.subjectId && subjectToCategory[r.subjectId]) {
-        catId = subjectToCategory[r.subjectId];
+        catId = subjectToCategory[r.subjectId] || '';
       }
       if (catId) {
         counts[catId] = (counts[catId] || 0) + 1;
@@ -193,14 +193,21 @@ export function RiddleMcqSection({
 
   const subjectCounts = useMemo(() => {
     const counts: Record<string, number> = {};
+    // First build map from subjects array
+    const subjectIdToCount: Record<string, number> = {};
     allRiddles.forEach(r => {
       const subId = String(r.subjectId || '');
       if (subId) {
-        counts[subId] = (counts[subId] || 0) + 1;
+        subjectIdToCount[subId] = (subjectIdToCount[subId] || 0) + 1;
       }
     });
+    // Now map to display names
+    subjects.forEach(s => {
+      const count = subjectIdToCount[String(s.id)] || 0;
+      counts[String(s.id)] = count;
+    });
     return counts;
-  }, [allRiddles]);
+  }, [allRiddles, subjects]);
 
   // Migrate riddles without status to 'published'
   useEffect(() => {
@@ -1139,7 +1146,7 @@ export function RiddleMcqSection({
               }`}
             onClick={() => setSelectedCategoryId('')}
           >
-            All
+            All ({allRiddles.length})
           </button>
           {categories.map(cat => (
             <div key={`cat-${cat.id}`} className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${selectedCategoryId === cat.id ? 'bg-purple-500 border-purple-600' : 'bg-white border-gray-300 hover:bg-purple-50'}`}>
@@ -1186,7 +1193,7 @@ export function RiddleMcqSection({
               }`}
             onClick={() => setSelectedSubjectId('')}
           >
-            All
+            All ({filteredRiddles.length})
           </button>
           {subjects
             .filter(s => !selectedCategoryId || s.category?.id === selectedCategoryId)
