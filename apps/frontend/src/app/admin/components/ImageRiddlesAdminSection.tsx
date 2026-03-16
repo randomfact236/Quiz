@@ -526,6 +526,40 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     toast.success('🔄 Synced with source defaults — 20 riddles loaded!');
   }, []);
 
+  // Calculate category counts - based on current filters (difficulty, search, status)
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const filtered = imageRiddles.filter(riddle => {
+      const matchesDifficulty = !filterDifficulty || riddle.difficulty === filterDifficulty;
+      const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
+      return matchesDifficulty && matchesSearch && matchesStatus;
+    });
+    filtered.forEach(r => {
+      const catName = r.category?.name || '';
+      if (catName) {
+        counts[catName] = (counts[catName] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [imageRiddles, filterDifficulty, searchTerm, statusFilter]);
+
+  // Calculate difficulty counts - based on current filters (category, search, status)
+  const difficultyCounts = useMemo(() => {
+    const filtered = imageRiddles.filter(riddle => {
+      const matchesCategory = !filterCategory || riddle.category?.name === filterCategory;
+      const matchesSearch = !searchTerm || riddle.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || riddle.status === statusFilter;
+      return matchesCategory && matchesSearch && matchesStatus;
+    });
+    return {
+      easy: filtered.filter(r => r.difficulty === 'easy').length,
+      medium: filtered.filter(r => r.difficulty === 'medium').length,
+      hard: filtered.filter(r => r.difficulty === 'hard').length,
+      expert: filtered.filter(r => r.difficulty === 'expert').length,
+    };
+  }, [imageRiddles, filterCategory, searchTerm, statusFilter]);
+
   // Filter and Sort riddles (memoized)
   const filteredRiddles = useMemo(() => {
     let result = imageRiddles.filter(riddle => {
@@ -980,11 +1014,11 @@ export function ImageRiddlesAdminSection(): JSX.Element {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
           >
-            All Categories <span className="opacity-70">({imageRiddles.length})</span>
+            All Categories <span className="opacity-70">({filteredRiddles.length})</span>
           </button>
 
           {categories.map(cat => {
-            const count = imageRiddles.filter(r => r.category?.name === cat.name).length;
+            const count = categoryCounts[cat.name] || 0;
             const isActive = filterCategory === cat.name;
             return (
               <div
@@ -1053,10 +1087,10 @@ export function ImageRiddlesAdminSection(): JSX.Element {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
           >
-            All Levels <span className="opacity-70">({imageRiddles.length})</span>
+            All Levels <span className="opacity-70">({filteredRiddles.length})</span>
           </button>
           {['easy', 'medium', 'hard', 'expert'].map(diff => {
-            const count = imageRiddles.filter(r => r.difficulty === diff).length;
+            const count = difficultyCounts[diff as keyof typeof difficultyCounts] || 0;
             const isActive = filterDifficulty === diff;
             return (
               <button
