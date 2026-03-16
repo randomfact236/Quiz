@@ -167,17 +167,29 @@ export function RiddleMcqSection({
     trash: allRiddles.filter(r => r.status === 'trash').length,
   };
 
-  // Calculate category and subject counts
+  // Calculate category and subject counts - using subjects array to get categoryId from subjectId
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
+    // Create a map of subjectId -> categoryId
+    const subjectToCategory: Record<string, string> = {};
+    subjects.forEach(s => {
+      if (s.category?.id) {
+        subjectToCategory[s.id] = s.category.id;
+      }
+    });
+    
     allRiddles.forEach(r => {
-      const catId = String(r.categoryId || '');
+      // Try direct categoryId first, then fallback to subject's category
+      let catId = String(r.categoryId || '');
+      if (!catId && r.subjectId && subjectToCategory[r.subjectId]) {
+        catId = subjectToCategory[r.subjectId];
+      }
       if (catId) {
         counts[catId] = (counts[catId] || 0) + 1;
       }
     });
     return counts;
-  }, [allRiddles]);
+  }, [allRiddles, subjects]);
 
   const subjectCounts = useMemo(() => {
     const counts: Record<string, number> = {};
