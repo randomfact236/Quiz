@@ -71,7 +71,7 @@ export function RiddleMcqSection({
   const [riddleSearch, setRiddleSearch] = useState<string>('');
   const [riddlePage, setRiddlePage] = useState(1);
   const [pageInput, setPageInput] = useState('1');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const riddlesPerPage = 10;
