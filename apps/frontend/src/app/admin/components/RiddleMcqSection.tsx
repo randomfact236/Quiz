@@ -218,18 +218,42 @@ export function RiddleMcqSection({
   }, [allRiddles]);
 
   // Filter riddles based on all criteria
-  const filteredRiddles = allRiddles.filter(riddle => {
-    const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
-    const matchesSearch = !riddleSearch ||
-      riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
-      riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
-    const riddleStatus = riddle.status || 'published';
-    const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
-    const matchesCategory = !selectedCategoryId || riddle.categoryId === selectedCategoryId;
-    const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
-    return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory && matchesSubject;
-  });
+  const filteredRiddles = useMemo(() => {
+    // Build category lookup from subjects
+    const subjectToCategory: Record<string, string> = {};
+    subjects.forEach(s => {
+      if (s.category?.id) {
+        subjectToCategory[String(s.id)] = String(s.category.id);
+      }
+    });
+    
+    return allRiddles.filter(riddle => {
+      // Difficulty filter
+      const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
+      
+      // Search filter
+      const matchesSearch = !riddleSearch ||
+        riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      
+      // Status filter
+      const riddleStatus = riddle.status || 'published';
+      const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
+      
+      // Category filter - use fallback from subject
+      let catId = riddle.categoryId;
+      if (!catId && riddle.subjectId) {
+        catId = subjectToCategory[riddle.subjectId] || '';
+      }
+      const matchesCategory = !selectedCategoryId || catId === selectedCategoryId;
+      
+      // Subject filter
+      const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
+      
+      return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory && matchesSubject;
+    });
+  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
 
   // Pagination
   const totalRiddlePages = Math.ceil(filteredRiddles.length / riddlesPerPage);
@@ -1206,7 +1230,7 @@ export function RiddleMcqSection({
                     }`}
                   onClick={() => setSelectedSubjectId(sub.id)}
                 >
-                  {sub.emoji || '📚'} {sub.name}
+                  {sub.emoji || '📚'} {sub.name} <span className="opacity-70">({subjectCounts[String(sub.id)] || 0})</span>
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleEditSubject(sub); }}
