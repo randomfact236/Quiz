@@ -168,18 +168,29 @@ export function RiddleMcqSection({
   };
 
   // Calculate category and subject counts - using subjects array to get categoryId from subjectId
+  // Counts are based on current filters (difficulty, search, status, subject)
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    // Create a map of subjectId -> categoryId
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
       if (s.category?.id) {
         subjectToCategory[s.id] = s.category.id;
       }
     });
-    
-    allRiddles.forEach(r => {
-      // Try direct categoryId first, then fallback to subject's category
+
+    const filteredForCounts = allRiddles.filter(riddle => {
+      const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
+      const matchesSearch = !riddleSearch ||
+        riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      const riddleStatus = riddle.status || 'published';
+      const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
+      const matchesSubject = !selectedSubjectId || riddle.subjectId === selectedSubjectId;
+      return matchesDifficulty && matchesSearch && matchesStatus && matchesSubject;
+    });
+
+    filteredForCounts.forEach(r => {
       let catId = String(r.categoryId || '');
       if (!catId && r.subjectId && subjectToCategory[r.subjectId]) {
         catId = subjectToCategory[r.subjectId] || '';
@@ -189,25 +200,39 @@ export function RiddleMcqSection({
       }
     });
     return counts;
-  }, [allRiddles, subjects]);
+  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedSubjectId]);
 
   const subjectCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    // First build map from subjects array
-    const subjectIdToCount: Record<string, number> = {};
-    allRiddles.forEach(r => {
-      const subId = String(r.subjectId || '');
-      if (subId) {
-        subjectIdToCount[subId] = (subjectIdToCount[subId] || 0) + 1;
+    const subjectToCategory: Record<string, string> = {};
+    subjects.forEach(s => {
+      if (s.category?.id) {
+        subjectToCategory[s.id] = s.category.id;
       }
     });
-    // Now map to display names
-    subjects.forEach(s => {
-      const count = subjectIdToCount[String(s.id)] || 0;
-      counts[String(s.id)] = count;
+
+    const filteredForCounts = allRiddles.filter(riddle => {
+      const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
+      const matchesSearch = !riddleSearch ||
+        riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
+        riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
+      const riddleStatus = riddle.status || 'published';
+      const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
+      const matchesCategory = !selectedCategoryId || 
+        (String(riddle.categoryId) === selectedCategoryId ||
+         (riddle.subjectId && subjectToCategory[riddle.subjectId] === selectedCategoryId));
+      return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory;
+    });
+
+    filteredForCounts.forEach(r => {
+      const subId = String(r.subjectId || '');
+      if (subId) {
+        counts[subId] = (counts[subId] || 0) + 1;
+      }
     });
     return counts;
-  }, [allRiddles, subjects]);
+  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId]);
 
   // Migrate riddles without status to 'published'
   useEffect(() => {
@@ -407,9 +432,8 @@ export function RiddleMcqSection({
         createSubject,
       } = await import('@/lib/riddles-api');
 
-      // Step 1: Determine Category
+      // Step 1: Determine Category - create if not exists
       let categoryId = selectedCategoryId;
-      let targetCategoryName = '';
       
       if (importCategory) {
         // Try to find category from CSV header
@@ -419,30 +443,18 @@ export function RiddleMcqSection({
         
         if (existingCategory) {
           categoryId = existingCategory.id;
-          targetCategoryName = existingCategory.name;
         } else {
-          // Category not found - use Miscellaneous
-          const miscCategory = categories.find(c => 
-            c.name.toLowerCase() === 'miscellaneous'
-          );
-          
-          if (miscCategory) {
-            categoryId = miscCategory.id;
-            targetCategoryName = 'Miscellaneous';
-          } else {
-            // Create Miscellaneous category
-            const newCategory = await createCategory({ 
-              name: 'Miscellaneous',
-              emoji: '📁'
-            });
-            categoryId = newCategory.id;
-            targetCategoryName = 'Miscellaneous';
-            // Update categories list
-            setCategories(prev => [...prev, newCategory]);
-          }
+          // Create new category from CSV
+          const newCategory = await createCategory({ 
+            name: importCategory,
+            emoji: '📁'
+          });
+          categoryId = newCategory.id;
+          // Update categories list
+          setCategories(prev => [...prev, newCategory]);
         }
       } else if (!categoryId) {
-        // No category header and nothing selected - use Miscellaneous
+        // No category header in CSV and nothing selected - use Miscellaneous
         const miscCategory = categories.find(c => 
           c.name.toLowerCase() === 'miscellaneous'
         );
@@ -450,6 +462,7 @@ export function RiddleMcqSection({
         if (miscCategory) {
           categoryId = miscCategory.id;
         } else {
+          // Create Miscellaneous category
           const newCategory = await createCategory({ 
             name: 'Miscellaneous',
             emoji: '📁'
@@ -1170,7 +1183,7 @@ export function RiddleMcqSection({
               }`}
             onClick={() => setSelectedCategoryId('')}
           >
-            All ({allRiddles.length})
+            All ({filteredRiddles.length})
           </button>
           {categories.map(cat => (
             <div key={`cat-${cat.id}`} className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${selectedCategoryId === cat.id ? 'bg-purple-500 border-purple-600' : 'bg-white border-gray-300 hover:bg-purple-50'}`}>
