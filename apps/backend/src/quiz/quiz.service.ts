@@ -335,7 +335,7 @@ export class QuizService {
       level: dto.level,
       explanation: dto.explanation,
       chapter,
-      status: (dto.status != null) || ContentStatus.PUBLISHED,
+      status: dto.status || ContentStatus.PUBLISHED,
     });
     return this.questionRepo.save(question);
   }
@@ -423,7 +423,7 @@ export class QuizService {
           level: q.level,
           explanation: q.explanation,
           chapter,
-          status: (q.status != null) || ContentStatus.PUBLISHED,
+          status: q.status || ContentStatus.PUBLISHED,
           order: q.order || i,
         });
         questions.push(question);
