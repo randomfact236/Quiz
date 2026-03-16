@@ -509,16 +509,16 @@ export function downloadFile(content: string, filename: string, type: string): v
 export const riddleConfig: ImportExportConfig<Riddle> = {
   entityName: 'Riddle',
   filePrefix: 'riddles',
-  csvHeaders: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level'],
+  csvHeaders: ['#', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Subject', 'Hint', 'Explanation'],
   jsonRootKey: 'riddles',
   validators: {
-    required: ['question', 'options', 'correctOption', 'difficulty'],
+    required: ['question', 'difficulty'],
     enumFields: {
       difficulty: ['easy', 'medium', 'hard', 'expert'],
       correctOption: ['A', 'B', 'C', 'D'],
       correctLetter: ['A', 'B', 'C', 'D'],
     },
-    maxLength: { question: 1000, answer: 500, hint: 500 },
+    maxLength: { question: 1000, answer: 500, hint: 500, explanation: 2000 },
   },
 };
 
@@ -737,23 +737,28 @@ function validateCSVStructure(
 
 /**
  * Convert riddles to CSV format matching quiz export format
- * Headers: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level
+ * Headers: #,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Subject,Hint,Explanation
  */
-export function riddlesToCSV(riddles: Riddle[]): string {
+export function riddlesToCSV(riddles: Riddle[], categoryName?: string): string {
   const lines: string[] = [];
 
-  // Add count comment
-  lines.push(`# Count: ${riddles.length}`);
+  // Add category header comment
+  if (categoryName) {
+    lines.push(`# Category: ${categoryName}`);
+  }
+  
+  // Add total count
+  lines.push(`# Total: ${riddles.length}`);
 
-  // Add headers matching quiz format
-  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level');
+  // Add headers
+  lines.push('#,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Subject,Hint,Explanation');
 
-  // Add data rows
-  riddles.forEach(riddle => {
+  // Add data rows with sequential numbers
+  riddles.forEach((riddle, idx) => {
     const options = riddle.options || [];
 
     const row = [
-      riddle.id,
+      String(idx + 1),  // Sequential row number instead of ID
       escapeCSV(riddle.question),
       escapeCSV(options[0] || ''),
       escapeCSV(options[1] || ''),
@@ -761,6 +766,9 @@ export function riddlesToCSV(riddles: Riddle[]): string {
       escapeCSV(options[3] || ''),
       riddle.correctOption || 'A',
       riddle.difficulty,
+      escapeCSV(riddle.subject || ''),
+      escapeCSV(riddle.hint || ''),
+      escapeCSV(riddle.explanation || ''),
     ];
 
     lines.push(row.join(','));
@@ -790,46 +798,70 @@ export function riddlesToJSON(riddles: Riddle[]): string {
 }
 
 /**
- * Parse riddle CSV
+ * Parse riddle CSV with header support
  */
-export function parseRiddleCSV(csvText: string): ImportResult<Riddle> {
-  return importFromCSV(csvText, riddleConfig, (values, headers) => {
-    const getValue = (_index: number, ...headerNames: string[]): string => {
-      // Ignore spaces for matching headers like "Option A" to "optiona"
-      const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/\s+/g, ''));
-      for (const headerName of headerNames) {
-        const normalizedHeaderName = headerName.toLowerCase().replace(/\s+/g, '');
-        const headerIndex = normalizedHeaders.findIndex(h => h.includes(normalizedHeaderName));
-        if (headerIndex !== -1 && headerIndex < values.length) {
-          return values[headerIndex] ?? '';
-        }
+export interface ParsedRiddleCSV {
+  category: string | undefined;
+  total: number | undefined;
+  riddles: Riddle[];
+}
+
+export function parseRiddleCSV(csvText: string): ParsedRiddleCSV {
+  const lines = csvText.trim().split('\n');
+  let category: string | undefined;
+  let total: number | undefined;
+  const dataLines: string[] = [];
+  
+  // Parse header comments
+  for (const line of lines) {
+    if (line.startsWith('#')) {
+      const categoryMatch = line.match(/#\s*Category:\s*(.+)/i);
+      if (categoryMatch && categoryMatch[1]) {
+        category = categoryMatch[1].trim();
       }
-      return '';
+      const totalMatch = line.match(/#\s*Total:\s*(\d+)/i);
+      if (totalMatch && totalMatch[1]) {
+        total = parseInt(totalMatch[1], 10);
+      }
+    } else if (line.trim()) {
+      dataLines.push(line);
+    }
+  }
+  
+  // Skip header row if it contains column names
+  const firstLine = dataLines[0];
+  const startIndex = firstLine && 
+    (firstLine.toLowerCase().includes('question') || firstLine.startsWith('#')) ? 1 : 0;
+  
+  // Parse data rows
+  const riddles: Riddle[] = dataLines.slice(startIndex).map((line, index) => {
+    const values = parseCSVLine(line);
+    
+    const riddle: Riddle = {
+      id: String(Date.now() + index),
+      question: values[1] || '',
+      options: [
+        values[2] || '',
+        values[3] || '',
+        values[4] || '',
+        values[5] || '',
+      ].filter(Boolean),
+      correctOption: values[6] || 'A',
+      difficulty: (values[7] || 'medium').toLowerCase() as Riddle['difficulty'],
+      subject: values[8] || '',
+      status: 'published',
     };
-
-    const optA = getValue(2, 'optiona', 'answer');
-    const optB = getValue(3, 'optionb');
-    const optC = getValue(4, 'optionc');
-    const optD = getValue(5, 'optiond');
-
-    const options: string[] = [];
-    if (optA) options.push(optA);
-    if (optB) options.push(optB);
-    if (optC) options.push(optC);
-    if (optD) options.push(optD);
-
-    const finalOptions = options.length >= 2 ? options : ['Option A', 'Option B', 'Option C', 'Option D'];
-
-    return {
-      id: String(Date.now() + Math.floor(Math.random() * 1000)),
-      question: getValue(1, 'question'),
-      answer: getValue(2, 'answer', 'optiona'), // Provide a fallback if needed
-      options: finalOptions,
-      correctOption: getValue(6, 'correctanswer', 'correctoption') || 'A',
-      difficulty: (getValue(7, 'level', 'difficulty') || 'medium').toLowerCase() as Riddle['difficulty'],
-      chapter: getValue(8, 'chapter') || 'General',
-      hint: getValue(10, 'hint'),
-      status: 'published' as const,
-    };
+    
+    // Only add optional fields if they have values
+    if (values[9]?.trim()) {
+      riddle.hint = values[9].trim();
+    }
+    if (values[10]?.trim()) {
+      riddle.explanation = values[10].trim();
+    }
+    
+    return riddle;
   });
+  
+  return { category, total, riddles };
 }

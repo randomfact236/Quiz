@@ -90,6 +90,7 @@ export function RiddleMcqSection({
   const [importPreview, setImportPreview] = useState<Riddle[]>([]);
   const [importWarnings, setImportWarnings] = useState<string[]>([]);
   const [isImporting, setIsImporting] = useState(false);
+  const [importCategory, setImportCategory] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const importModalRef = useRef<HTMLDivElement>(null);
   const addModalRef = useRef<HTMLDivElement>(null);
@@ -260,20 +261,15 @@ export function RiddleMcqSection({
 
   // Export Functions
   const handleExportCSV = () => {
-    // Debug: Log first riddle to see data structure
-    console.log('Exporting riddles:', filteredRiddles.length);
-    const firstRiddle = filteredRiddles[0];
-    if (firstRiddle) {
-      console.log('First riddle:', firstRiddle);
-      console.log('Options:', firstRiddle.options);
-    }
+    // Get current category name
+    const currentCategory = categories.find(c => c.id === selectedCategoryId);
+    const categoryName = currentCategory?.name || 'Miscellaneous';
+    
+    console.log('Exporting riddles:', filteredRiddles.length, 'from category:', categoryName);
 
-    const csv = riddlesToCSV(filteredRiddles);
+    const csv = riddlesToCSV(filteredRiddles, categoryName);
 
-    // Debug: Log generated CSV
-    console.log('Generated CSV (first 500 chars):', csv.substring(0, 500));
-
-    downloadFile(csv, `riddles_export_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+    downloadFile(csv, `riddles_${categoryName}_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
   };
 
   const handleExportJSON = () => {
@@ -285,12 +281,12 @@ export function RiddleMcqSection({
   const handleFileUpload = (file: File) => {
     setImportError('');
     setImportWarnings([]);
+    setImportCategory(undefined);
     const reader = new FileReader();
 
     reader.onload = (event) => {
       try {
         const content = event.target?.result as string;
-        let result: import('../types').ImportResult<Riddle>;
 
         if (file.name.endsWith('.json')) {
           const validation = validateJSONStructure<Riddle>(content, 'riddles');
@@ -298,28 +294,28 @@ export function RiddleMcqSection({
             setImportError(validation.errors.join('; '));
             return;
           }
-          result = {
-            success: true,
-            imported: validation.data.map(r => ({
-              ...r,
-              id: String(Date.now() + Math.floor(Math.random() * 1000)),
-              status: r.status || 'published',
-            })),
-            failed: [],
-            total: validation.data.length,
-          };
+          const imported = validation.data.map(r => ({
+            ...r,
+            id: String(Date.now() + Math.floor(Math.random() * 1000)),
+            status: r.status || 'published',
+          }));
+          
+          if (imported.length === 0) {
+            setImportError('No valid riddles found');
+            return;
+          }
+          
+          setImportPreview(imported);
         } else {
-          result = parseRiddleCSV(content);
-        }
-
-        if (result.imported.length === 0) {
-          setImportError(result.failed.map(f => f.error).join('; ') || 'No valid riddles found');
-          return;
-        }
-
-        setImportPreview(result.imported);
-        if (result.failed.length > 0) {
-          setImportWarnings(result.failed.map(f => `Row ${f.row}: ${f.error}`));
+          const parsed = parseRiddleCSV(content);
+          
+          if (parsed.riddles.length === 0) {
+            setImportError('No valid riddles found in CSV');
+            return;
+          }
+          
+          setImportCategory(parsed.category);
+          setImportPreview(parsed.riddles);
         }
       } catch (err) {
         setImportError('Failed to parse file: ' + (err as Error).message);
@@ -332,48 +328,171 @@ export function RiddleMcqSection({
   const handleConfirmImport = async () => {
     setIsImporting(true);
     setImportError('');
+    
     try {
       const {
         bulkCreateRiddles,
         getAllRiddleMcqsAdmin,
         getSubjects,
+        getCategories,
+        createCategory,
+        createSubject,
       } = await import('@/lib/riddles-api');
 
-      // Get first available subject for import
-      let subjectId = '';
-      try {
-        const apiSubjects = await getSubjects();
-        subjectId = apiSubjects[0]?.id || '';
-      } catch { }
-
-      if (!subjectId) {
-        setImportError('No subjects found in the database. Please create a subject first.');
+      // Step 1: Determine Category
+      let categoryId = selectedCategoryId;
+      let targetCategoryName = '';
+      
+      if (importCategory) {
+        // Try to find category from CSV header
+        const existingCategory = categories.find(c => 
+          c.name.toLowerCase() === importCategory.toLowerCase()
+        );
+        
+        if (existingCategory) {
+          categoryId = existingCategory.id;
+          targetCategoryName = existingCategory.name;
+        } else {
+          // Category not found - use Miscellaneous
+          const miscCategory = categories.find(c => 
+            c.name.toLowerCase() === 'miscellaneous'
+          );
+          
+          if (miscCategory) {
+            categoryId = miscCategory.id;
+            targetCategoryName = 'Miscellaneous';
+          } else {
+            // Create Miscellaneous category
+            const newCategory = await createCategory({ 
+              name: 'Miscellaneous',
+              emoji: '📁'
+            });
+            categoryId = newCategory.id;
+            targetCategoryName = 'Miscellaneous';
+            // Update categories list
+            setCategories(prev => [...prev, newCategory]);
+          }
+        }
+      } else if (!categoryId) {
+        // No category header and nothing selected - use Miscellaneous
+        const miscCategory = categories.find(c => 
+          c.name.toLowerCase() === 'miscellaneous'
+        );
+        
+        if (miscCategory) {
+          categoryId = miscCategory.id;
+        } else {
+          const newCategory = await createCategory({ 
+            name: 'Miscellaneous',
+            emoji: '📁'
+          });
+          categoryId = newCategory.id;
+          setCategories(prev => [...prev, newCategory]);
+        }
+      }
+      
+      if (!categoryId) {
+        setImportError('No category available for import');
         return;
       }
 
-      // Build riddle DTOs
-      const dtos = importPreview.map(r => {
-        const letterIndex = ['A', 'B', 'C', 'D'].indexOf(r.correctOption?.toUpperCase() || 'A');
-        const correctAnswer = (r.options && r.options[letterIndex] != null)
-          ? r.options[letterIndex]
-          : (r.options?.[0] || r.correctOption || 'A');
-        const level = (r.difficulty || 'medium').toLowerCase();
-        // Expert level = open-ended (no correctLetter), others = MCQ (requires correctLetter)
-        const isExpert = level === 'expert';
-        console.log('Importing riddle with difficulty:', r.difficulty, '-> normalized:', level, 'isExpert:', isExpert);
-        return {
-          question: r.question,
-          options: r.options || [],
-          correctLetter: isExpert ? null : (r.correctOption?.toUpperCase() || 'A'),
+      // Step 2: Get or create subjects under category
+      let apiSubjects = await getSubjects();
+      let categorySubjects = apiSubjects.filter(s => s.categoryId === categoryId);
+      
+      // Step 3: Build DTOs with subject resolution
+      const dtos = [];
+      
+      for (const riddle of importPreview) {
+        // Determine subject
+        let subjectId = categorySubjects[0]?.id;
+        
+        if (riddle.subject) {
+          const existingSubject = categorySubjects.find(s => 
+            s.name.toLowerCase() === riddle.subject?.toLowerCase()
+          );
+          
+          if (existingSubject) {
+            subjectId = existingSubject.id;
+          } else {
+            // Create new subject
+            try {
+              const newSubject = await createSubject({
+                name: riddle.subject,
+                categoryId: categoryId,
+                emoji: '📚'
+              });
+              subjectId = newSubject.id;
+              categorySubjects.push(newSubject);
+              apiSubjects.push(newSubject);
+            } catch (err) {
+              console.error('Failed to create subject:', err);
+              // Fallback to first subject
+              subjectId = categorySubjects[0]?.id;
+            }
+          }
+        } else if (!subjectId) {
+          // No subject specified and no existing subjects - create General
+          try {
+            const newSubject = await createSubject({
+              name: 'General',
+              categoryId: categoryId,
+              emoji: '📚'
+            });
+            subjectId = newSubject.id;
+            categorySubjects.push(newSubject);
+            apiSubjects.push(newSubject);
+          } catch (err) {
+            console.error('Failed to create General subject:', err);
+            setImportError('No subjects available for import');
+            return;
+          }
+        }
+        
+        if (!subjectId) {
+          setImportError(`Could not determine subject for riddle: ${riddle.question.substring(0, 50)}...`);
+          return;
+        }
+        
+        // Handle Expert level
+        const isExpert = riddle.difficulty === 'expert';
+        const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddle.correctOption?.toUpperCase() || 'A');
+        const correctAnswer = riddle.options?.[letterIndex] || riddle.options?.[0] || '';
+        
+        dtos.push({
+          question: riddle.question,
+          options: riddle.options || [],
+          correctLetter: isExpert ? null : (riddle.correctOption?.toUpperCase() || 'A'),
           correctAnswer,
-          level: level as 'easy' | 'medium' | 'hard' | 'expert',
+          level: riddle.difficulty,
           subjectId: subjectId,
-        };
-      });
-
-      if (dtos.length > 0) {
-        await bulkCreateRiddles(dtos as any);
-
+          hint: riddle.hint,
+          explanation: riddle.explanation,
+        });
+      }
+      
+      if (dtos.length === 0) {
+        setImportError('No riddles to import');
+        return;
+      }
+      
+      // Step 4: Import riddles
+      const result = await bulkCreateRiddles(dtos as any);
+      
+      if (result.errors.length > 0) {
+        console.error('Import errors:', result.errors);
+        setImportError(`Imported ${result.count} riddles with ${result.errors.length} errors: ${result.errors.join('; ')}`);
+      } else {
+        setImportError('');
+        setShowImportModal(false);
+        setImportPreview([]);
+        setImportWarnings([]);
+        setImportCategory(undefined);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        
+        // Refresh riddles list
         const updated = await getAllRiddleMcqsAdmin();
         const mapped = updated.map(qr => ({
           id: String(qr.id),
@@ -385,13 +504,6 @@ export function RiddleMcqSection({
           answer: qr.correctAnswer || '',
         }));
         setAllRiddles(mapped);
-      }
-
-      setShowImportModal(false);
-      setImportPreview([]);
-      setImportWarnings([]);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
       }
     } catch (err: any) {
       console.error('Import failed', err);

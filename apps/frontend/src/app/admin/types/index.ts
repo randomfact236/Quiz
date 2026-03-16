@@ -66,6 +66,8 @@ export interface Riddle {
   status: ContentStatus;
   hint?: string;
   explanation?: string;
+  subject?: string;
+  category?: string;
   createdAt?: string;
   updatedAt?: string;
 }
