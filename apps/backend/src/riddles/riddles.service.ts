@@ -373,29 +373,50 @@ export class RiddlesService {
   }
 
   async deleteCategory(id: string): Promise<void> {
-    const category = await this.categoryRepo.findOne({
-      where: { id },
-      relations: ['riddles', 'subjects'],
-    });
-    if (category === null) {
-      throw new NotFoundException('Category not found');
-    }
-
-    if (category.riddles !== undefined && category.riddles !== null && category.riddles.length > 0) {
-      await this.riddleRepo.remove(category.riddles);
-    }
-
-    if (category.subjects && category.subjects.length > 0) {
-      for (const subject of category.subjects) {
-        // Use deleteSubject for proper cascade deletion of chapters and riddles
-        await this.deleteSubject(subject.id);
+    await this.dataSource.transaction(async (manager) => {
+      // Get category with all relations
+      const category = await manager.findOne(RiddleCategory, {
+        where: { id },
+        relations: ['riddles', 'subjects'],
+      });
+      if (category === null) {
+        throw new NotFoundException('Category not found');
       }
-    }
 
-    await this.categoryRepo.remove(category);
-    // H-3 fix: invalidate the full riddles:* pattern — paginated riddle lists
-    // cache category relations and will serve stale data if only the narrow
-    // 'riddles:categories' key is busted.
+      // Step 1: Delete all classic riddles in this category
+      if (category.riddles && category.riddles.length > 0) {
+        await manager.remove(Riddle, category.riddles);
+      }
+
+      // Step 2: For each subject, delete all their riddle_mcqs and chapters
+      if (category.subjects && category.subjects.length > 0) {
+        for (const subject of category.subjects) {
+          // Get chapters for this subject
+          const chapters = await manager.find(RiddleChapter, {
+            where: { subjectId: subject.id },
+          });
+
+          // Delete riddle_mcqs by subjectId
+          await manager.delete(RiddleMcq, { subjectId: subject.id });
+
+          // Delete riddle_mcqs by chapterId
+          for (const chapter of chapters) {
+            await manager.delete(RiddleMcq, { chapterId: chapter.id });
+          }
+
+          // Delete chapters
+          await manager.delete(RiddleChapter, { subjectId: subject.id });
+        }
+
+        // Delete subjects
+        await manager.delete(RiddleSubject, { categoryId: id });
+      }
+
+      // Step 3: Delete category
+      await manager.delete(RiddleCategory, { id });
+    });
+
+    // Invalidate cache
     await this.cacheService.delPattern('riddles:*');
   }
 
@@ -502,22 +523,22 @@ export class RiddlesService {
    */
   async deleteSubject(id: string): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
+      // Get all chapter IDs for this subject first
+      const chapters = await manager.find(RiddleChapter, {
+        where: { subjectId: id },
+      });
+      const chapterIds = chapters.map(c => c.id);
+
       // Step 1: Delete ALL riddle MCQs directly associated with this subjectId
       await manager.delete(RiddleMcq, { subjectId: id });
 
-      // Step 2: Get chapters for this subject and delete their riddles
-      const chapters = await manager.find(RiddleChapter, {
-        where: { subjectId: id },
-        relations: ['riddles'],
-      });
-      
+      // Step 2: Delete riddle MCQs via chapters
+      // First delete by each chapter's riddles relationship
       for (const chapter of chapters) {
-        if (chapter.riddles?.length) {
-          await manager.remove(RiddleMcq, chapter.riddles);
-        }
+        await manager.delete(RiddleMcq, { chapterId: chapter.id });
       }
 
-      // Step 3: Delete chapters
+      // Step 3: Delete chapters (all at once)
       await manager.delete(RiddleChapter, { subjectId: id });
 
       // Step 4: Delete subject
