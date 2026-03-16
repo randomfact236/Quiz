@@ -373,48 +373,53 @@ export class RiddlesService {
   }
 
   async deleteCategory(id: string): Promise<void> {
-    await this.dataSource.transaction(async (manager) => {
-      // Get category with all relations
-      const category = await manager.findOne(RiddleCategory, {
-        where: { id },
-        relations: ['riddles', 'subjects'],
-      });
-      if (category === null) {
-        throw new NotFoundException('Category not found');
-      }
-
-      // Step 1: Delete all classic riddles in this category
-      if (category.riddles && category.riddles.length > 0) {
-        await manager.remove(Riddle, category.riddles);
-      }
-
-      // Step 2: For each subject, delete all their riddle_mcqs and chapters
-      if (category.subjects && category.subjects.length > 0) {
-        for (const subject of category.subjects) {
-          // Get chapters for this subject
-          const chapters = await manager.find(RiddleChapter, {
-            where: { subjectId: subject.id },
-          });
-
-          // Delete riddle_mcqs by subjectId
-          await manager.delete(RiddleMcq, { subjectId: subject.id });
-
-          // Delete riddle_mcqs by chapterId
-          for (const chapter of chapters) {
-            await manager.delete(RiddleMcq, { chapterId: chapter.id });
-          }
-
-          // Delete chapters
-          await manager.delete(RiddleChapter, { subjectId: subject.id });
-        }
-
-        // Delete subjects
-        await manager.delete(RiddleSubject, { categoryId: id });
-      }
-
-      // Step 3: Delete category
-      await manager.delete(RiddleCategory, { id });
+    // Get all subjects for this category
+    const subjects = await this.subjectRepo.find({ where: { categoryId: id } });
+    const subjectIds = subjects.map(s => s.id);
+    
+    // Get all chapters for all subjects
+    const chapters = await this.chapterRepo.find({ 
+      where: subjectIds.map(sid => ({ subjectId: sid })) 
     });
+    const chapterIds = chapters.map(c => c.id);
+    
+    // Delete all riddle_mcqs by subjectId and chapterId
+    if (subjectIds.length > 0) {
+      await this.riddleMcqRepo.createQueryBuilder()
+        .delete()
+        .where('"subjectId" IN (:...subjectIds)', { subjectIds })
+        .execute();
+    }
+    if (chapterIds.length > 0) {
+      await this.riddleMcqRepo.createQueryBuilder()
+        .delete()
+        .where('"chapterId" IN (:...chapterIds)', { chapterIds })
+        .execute();
+    }
+    
+    // Delete all chapters
+    await this.chapterRepo.createQueryBuilder()
+      .delete()
+      .where('"subjectId" IN (:...subjectIds)', { subjectIds })
+      .execute();
+    
+    // Delete all subjects
+    await this.subjectRepo.createQueryBuilder()
+      .delete()
+      .where('"categoryId" = :id', { id })
+      .execute();
+    
+    // Delete classic riddles in this category
+    await this.riddleRepo.createQueryBuilder()
+      .delete()
+      .where('"categoryId" = :id', { id })
+      .execute();
+    
+    // Delete category
+    await this.categoryRepo.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
 
     // Invalidate cache
     await this.cacheService.delPattern('riddles:*');
@@ -518,32 +523,39 @@ export class RiddlesService {
 
   /**
    * Delete a subject and ALL its child chapters and riddle MCQs.
-   * Deletion is performed in dependency order to respect FK constraints.
-   * Wrapped in a transaction to ensure atomicity.
+   * Uses raw SQL queries to ensure deletion works properly.
    */
   async deleteSubject(id: string): Promise<void> {
-    await this.dataSource.transaction(async (manager) => {
-      // Get all chapter IDs for this subject first
-      const chapters = await manager.find(RiddleChapter, {
-        where: { subjectId: id },
-      });
-      const chapterIds = chapters.map(c => c.id);
+    // First, get all chapter IDs for this subject
+    const chapters = await this.chapterRepo.find({ where: { subjectId: id } });
+    const chapterIds = chapters.map(c => c.id);
+    
+    // Delete all riddle_mcqs that reference this subject or its chapters
+    // Using direct query to bypass any ORM issues
+    if (chapterIds.length > 0) {
+      await this.riddleMcqRepo.createQueryBuilder()
+        .delete()
+        .where('"subjectId" = :id', { id })
+        .orWhere('"chapterId" IN (:...chapterIds)', { chapterIds })
+        .execute();
+    } else {
+      await this.riddleMcqRepo.createQueryBuilder()
+        .delete()
+        .where('"subjectId" = :id', { id })
+        .execute();
+    }
 
-      // Step 1: Delete ALL riddle MCQs directly associated with this subjectId
-      await manager.delete(RiddleMcq, { subjectId: id });
+    // Delete all chapters for this subject
+    await this.chapterRepo.createQueryBuilder()
+      .delete()
+      .where('"subjectId" = :id', { id })
+      .execute();
 
-      // Step 2: Delete riddle MCQs via chapters
-      // First delete by each chapter's riddles relationship
-      for (const chapter of chapters) {
-        await manager.delete(RiddleMcq, { chapterId: chapter.id });
-      }
-
-      // Step 3: Delete chapters (all at once)
-      await manager.delete(RiddleChapter, { subjectId: id });
-
-      // Step 4: Delete subject
-      await manager.delete(RiddleSubject, { id });
-    });
+    // Delete the subject
+    await this.subjectRepo.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
     
     await this.cacheService.del('riddles:subjects:active');
     await this.cacheService.del('riddles:subjects:all');
