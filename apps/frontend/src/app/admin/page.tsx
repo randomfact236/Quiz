@@ -31,7 +31,7 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
+import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
@@ -1207,7 +1207,7 @@ export default function AdminPage(): JSX.Element {
             />
           )}
           {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && allSubjects.length > 0 && (
-            <QuestionManagementSection
+            <QuizManagementSection
               subject={activeSection === 'all-subjects' ? allSubjects[0]! : getSubjectFromSection(activeSection)!}
               questions={activeSection === 'all-subjects' ? [] : getQuestionsForSubject(activeSection)}
               pagination={activeSection === 'all-subjects' ? { page: 1, limit: 10, total: Object.values(questionCounts).reduce((a, b) => a + b, 0) } : getQuestionPagination(activeSection)}
