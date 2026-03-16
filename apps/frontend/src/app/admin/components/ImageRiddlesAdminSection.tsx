@@ -391,7 +391,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const [filterDifficulty, setFilterDifficulty] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
