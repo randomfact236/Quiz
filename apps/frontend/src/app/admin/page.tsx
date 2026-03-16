@@ -1170,7 +1170,7 @@ export default function AdminPage(): JSX.Element {
               {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && (
                 <>
                   <span className="text-2xl">{activeSection === 'all-subjects' ? '📚' : (isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚')}</span>
-                  <span>{activeSection === 'all-subjects' ? 'All Subjects' : allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Question Management</span>
+                  <span>{activeSection === 'all-subjects' ? 'All Subjects' : allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Quiz Management</span>
                 </>
               )}
             </h2>
