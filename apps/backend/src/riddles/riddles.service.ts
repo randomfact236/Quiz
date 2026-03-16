@@ -387,7 +387,8 @@ export class RiddlesService {
 
     if (category.subjects && category.subjects.length > 0) {
       for (const subject of category.subjects) {
-        await this.subjectRepo.remove(subject);
+        // Use deleteSubject for proper cascade deletion of chapters and riddles
+        await this.deleteSubject(subject.id);
       }
     }
 
@@ -792,7 +793,7 @@ export class RiddlesService {
    */
   async findAllRiddleMcqsAdmin(): Promise<RiddleMcq[]> {
     return this.riddleMcqRepo.find({
-      relations: ['chapter', 'chapter.subject'],
+      relations: ['chapter', 'chapter.subject', 'subject'],
       order: { createdAt: 'DESC' },
     });
   }

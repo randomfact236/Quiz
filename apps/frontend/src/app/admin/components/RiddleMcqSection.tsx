@@ -481,7 +481,7 @@ export function RiddleMcqSection({
       }
       
       // Step 4: Import riddles
-      const result = await bulkCreateRiddles(dtos as any);
+      const result = await bulkCreateRiddles([...dtos].reverse() as any);
       
       if (result.errors.length > 0) {
         console.error('Import errors:', result.errors);
@@ -508,7 +508,7 @@ export function RiddleMcqSection({
           answer: qr.correctAnswer || '',
           hint: qr.hint || '',
           explanation: qr.explanation || '',
-          subject: qr.subject?.name || '',
+          subject: qr.subject?.name || qr.chapter?.subject?.name || '',
         }));
         setAllRiddles(mapped);
       }
@@ -2069,7 +2069,7 @@ export function RiddleMcqSection({
           <div className="w-full max-w-md rounded-xl bg-white p-6">
             <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Category</h3>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to delete this category? This action cannot be undone.
+              Are you sure you want to delete this category? All subjects, chapters, and riddles under this category will also be deleted. This action cannot be undone.
             </p>
             <div className="mt-4 flex justify-end gap-3">
               <button
@@ -2096,7 +2096,7 @@ export function RiddleMcqSection({
           <div className="w-full max-w-md rounded-xl bg-white p-6">
             <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Subject</h3>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to delete this subject? This action cannot be undone.
+              Are you sure you want to delete this subject? All chapters and riddles under this subject will also be deleted. This action cannot be undone.
             </p>
             <div className="mt-4 flex justify-end gap-3">
               <button
