@@ -25,14 +25,6 @@ interface RiddlesSectionProps {
   allRiddles: Riddle[];
   /** State setter for all riddles from parent */
   setAllRiddles: React.Dispatch<React.SetStateAction<Riddle[]>>;
-  /** Controlled state for the active chapter filter from parent */
-  riddleFilterChapter: string;
-  /** State setter for the active chapter filter from parent */
-  setRiddleFilterChapter: React.Dispatch<React.SetStateAction<string>>;
-  /** Controlled state for chapter order from parent */
-  riddleChapterOrder: string[];
-  /** State setter for chapter order from parent */
-  setRiddleChapterOrder: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 /**
@@ -47,7 +39,8 @@ interface RiddleFormState {
   correctOption: string;
   correctLetter: string;
   difficulty: Riddle['difficulty'];
-  chapter: string;
+  subjectId: string;
+  categoryId: string;
   hint: string;
   explanation: string;
   isOpenEnded: boolean;
@@ -72,10 +65,6 @@ interface RiddleFormState {
 export function RiddlesSection({
   allRiddles,
   setAllRiddles,
-  riddleFilterChapter,
-  setRiddleFilterChapter,
-  riddleChapterOrder,
-  setRiddleChapterOrder,
 }: RiddlesSectionProps): JSX.Element {
   // Filter States
   const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
@@ -93,8 +82,6 @@ export function RiddlesSection({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showTrashConfirm, setShowTrashConfirm] = useState(false);
   const [selectedRiddle, setSelectedRiddle] = useState<Riddle | null>(null);
-  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
-  const [newChapterName, setNewChapterName] = useState('');
 
   // Import State
   const [importError, setImportError] = useState('');
@@ -118,14 +105,12 @@ export function RiddlesSection({
     correctOption: 'A',
     correctLetter: 'A',
     difficulty: 'easy',
-    chapter: '',
+    subjectId: '',
+    categoryId: '',
     hint: '',
     explanation: '',
     isOpenEnded: false,
   });
-
-  const [chapterNameToId, setChapterNameToId] = useState<Record<string, string>>({});
-  const defaultSubjectIdRef = useRef<string>('');
 
   // Riddle MCQ Category & Subject State
   const [categories, setCategories] = useState<any[]>([]);
@@ -150,24 +135,8 @@ export function RiddlesSection({
   const [editSubjectName, setEditSubjectName] = useState('');
   const [editSubjectEmoji, setEditSubjectEmoji] = useState('');
 
+  // Load Riddle MCQ Categories and Subjects
   useEffect(() => {
-    import('@/lib/riddles-api').then(({ getAllChapters }) => {
-      getAllChapters()
-        .then(apiChapters => {
-          const mapping: Record<string, string> = {};
-          apiChapters.forEach((c: any) => {
-            mapping[c.name] = c.id;
-            // Store the first subjectId we encounter as the default
-            if (!defaultSubjectIdRef.current && c.subject?.id) {
-              defaultSubjectIdRef.current = c.subject.id;
-            }
-          });
-          setChapterNameToId(mapping);
-        })
-        .catch(err => console.error('Failed to load chapters for RiddlesSection:', err));
-    });
-
-    // Load Riddle MCQ Categories and Subjects
     Promise.all([
       import('@/lib/riddles-api').then(m => m.getSubjects()),
       import('@/lib/riddles-api').then(m => m.getCategories())
@@ -178,14 +147,6 @@ export function RiddlesSection({
       })
       .catch(err => console.error('Failed to load subjects/categories:', err));
   }, []);
-
-  // Get unique chapters from riddles and always include the currently filtered one
-  // and all chapters from the persisted order
-  const chapterSet = new Set([...riddleChapterOrder, ...allRiddles.map(r => r.chapter)]);
-  if (riddleFilterChapter && riddleFilterChapter !== '') {
-    chapterSet.add(riddleFilterChapter);
-  }
-  const chapters = Array.from(chapterSet);
 
   // Calculate difficulty counts
   const difficultyCounts = {
@@ -214,14 +175,13 @@ export function RiddlesSection({
   // Filter riddles based on all criteria
   const filteredRiddles = allRiddles.filter(riddle => {
     const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
-    const matchesChapter = !riddleFilterChapter || riddle.chapter === riddleFilterChapter;
     const matchesSearch = !riddleSearch ||
       riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
       riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
       riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
     const riddleStatus = riddle.status || 'published';
     const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
-    return matchesDifficulty && matchesChapter && matchesSearch && matchesStatus;
+    return matchesDifficulty && matchesSearch && matchesStatus;
   });
 
   // Pagination
@@ -374,63 +334,23 @@ export function RiddlesSection({
       const {
         bulkCreateRiddles,
         getAllQuizRiddlesAdmin,
-        createChapter,
-        getAllChapters,
         getSubjects,
       } = await import('@/lib/riddles-api');
 
-      // Build up-to-date chapter map (re-fetch to include any recently created chapters)
-      const apiChapters = await getAllChapters();
-      const latestMap: Record<string, string> = {};
-      let subjectId = defaultSubjectIdRef.current;
-      apiChapters.forEach((c: any) => {
-        latestMap[c.name] = c.id;
-        if (!subjectId && c.subject?.id) subjectId = c.subject.id;
-      });
-
-      // If we still have no subject, fetch subjects list and pick the first
-      if (!subjectId) {
-        try {
-          const subjects = await getSubjects();
-          subjectId = subjects[0]?.id || '';
-        } catch { }
-      }
+      // Get first available subject for import
+      let subjectId = '';
+      try {
+        const apiSubjects = await getSubjects();
+        subjectId = apiSubjects[0]?.id || '';
+      } catch { }
 
       if (!subjectId) {
-        setImportError('No subjects found in the database. Please create a subject and chapter first.');
+        setImportError('No subjects found in the database. Please create a subject first.');
         return;
       }
 
-      // Collect unique chapter names from the import file
-      const uniqueChapterNames = [...new Set(
-        importPreview.map(r => r.chapter?.trim()).filter(Boolean)
-      )] as string[];
-
-      // Auto-create any chapters that don't exist yet
-      for (const chapterName of uniqueChapterNames) {
-        if (!latestMap[chapterName]) {
-          try {
-            // Determine next chapter number
-            const nextNum = Object.keys(latestMap).length + 1;
-            const created = await createChapter({
-              name: chapterName,
-              chapterNumber: nextNum,
-              subjectId,
-            });
-            latestMap[chapterName] = created.id;
-          } catch (err: any) {
-            console.warn(`Could not create chapter "${chapterName}":`, err.message);
-          }
-        }
-      }
-
-      // Update state so other parts of the UI also see new chapters
-      setChapterNameToId({ ...latestMap });
-
-      // Build riddle DTOs using the correct chapter IDs
+      // Build riddle DTOs
       const dtos = importPreview.map(r => {
-        const chapterKey = r.chapter?.trim() || '';
-        const cId = latestMap[chapterKey] || Object.values(latestMap)[0];
         const letterIndex = ['A', 'B', 'C', 'D'].indexOf(r.correctOption?.toUpperCase() || 'A');
         const correctAnswer = (r.options && r.options[letterIndex] != null)
           ? r.options[letterIndex]
@@ -441,7 +361,7 @@ export function RiddlesSection({
           correctLetter: r.correctOption?.toUpperCase() || 'A',
           correctAnswer,
           level: r.difficulty || 'medium',
-          chapterId: cId,
+          subjectId: subjectId,
         };
       });
 
@@ -455,7 +375,6 @@ export function RiddlesSection({
           options: qr.options || [],
           correctOption: qr.correctLetter || qr.correctAnswer || 'A',
           difficulty: (qr.level as Riddle['difficulty']) || 'medium',
-          chapter: qr.chapter?.name || 'General',
           status: 'published' as const,
         }));
         setAllRiddles(mapped);
@@ -486,7 +405,8 @@ export function RiddlesSection({
       correctOption: 'A',
       correctLetter: 'A',
       difficulty: 'easy',
-      chapter: '',
+      subjectId: '',
+      categoryId: '',
       hint: '',
       explanation: '',
       isOpenEnded: false,
@@ -564,7 +484,7 @@ export function RiddlesSection({
       alert('Please enter a question.');
       return;
     }
-    if (!riddleForm.chapter.trim()) {
+    if (!riddleForm.subjectId.trim()) {
       alert('Please select a subject.');
       return;
     }
@@ -573,7 +493,7 @@ export function RiddlesSection({
       return;
     }
 
-    const subjectId = riddleForm.chapter.trim();
+    const subjectId = riddleForm.subjectId.trim();
     const selectedSubject = subjects.find(s => s.id === subjectId);
     if (!selectedSubject) {
       alert(`Subject not found. Please select a valid subject.`);
@@ -628,7 +548,6 @@ export function RiddlesSection({
         options: created.options || [],
         correctOption: created.correctLetter || riddleForm.correctLetter,
         difficulty: created.level as any,
-        chapter: riddleForm.chapter.trim(),
         status: 'published' as const,
       };
 
@@ -646,14 +565,15 @@ export function RiddlesSection({
       !riddleForm.question.trim() ||
       !riddleForm.optionA.trim() ||
       !riddleForm.optionB.trim() ||
-      !riddleForm.chapter.trim()
+      !riddleForm.subjectId.trim()
     ) {
       return;
     }
 
-    const chapterId = chapterNameToId[riddleForm.chapter.trim()];
-    if (!chapterId) {
-      alert(`Chapter "${riddleForm.chapter}" not found on backend. Please ensure it exists.`);
+    const subjectId = riddleForm.subjectId.trim();
+    const selectedSubject = subjects.find(s => s.id === subjectId);
+    if (!selectedSubject) {
+      alert(`Subject not found. Please select a valid subject.`);
       return;
     }
 
@@ -674,7 +594,7 @@ export function RiddlesSection({
         correctLetter: riddleForm.correctLetter,
         correctAnswer: correctAnswerText,
         level: riddleForm.difficulty,
-        chapterId: chapterId,
+        subjectId: subjectId,
       });
 
       setAllRiddles(prev =>
@@ -686,7 +606,6 @@ export function RiddlesSection({
               options,
               correctOption: riddleForm.correctLetter,
               difficulty: riddleForm.difficulty,
-              chapter: riddleForm.chapter.trim(),
             }
             : r
         )
@@ -741,7 +660,8 @@ export function RiddlesSection({
       correctOption: riddle.correctOption,
       correctLetter: riddle.correctOption,
       difficulty: riddle.difficulty,
-      chapter: riddle.chapter,
+      subjectId: '',
+      categoryId: '',
       hint: riddle.hint || '',
       explanation: riddle.explanation || '',
       isOpenEnded: riddle.difficulty === 'expert',
@@ -1235,7 +1155,7 @@ export function RiddlesSection({
                 </td>
                 <td className="px-3 py-3 align-top">
                   <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
-                    {riddle.chapter || 'General'}
+                    Quiz Riddle
                   </span>
                 </td>
                 <td className="px-3 py-3 align-top">
@@ -1396,7 +1316,6 @@ export function RiddlesSection({
                         <th className="px-3 py-2 text-left">Question</th>
                         <th className="px-3 py-2 text-left">Answer</th>
                         <th className="px-3 py-2 text-left">Level</th>
-                        <th className="px-3 py-2 text-left">Chapter</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1408,7 +1327,6 @@ export function RiddlesSection({
                           <td className="max-w-xs truncate px-3 py-2">{riddle.question}</td>
                           <td className="px-3 py-2">{riddle.answer}</td>
                           <td className="px-3 py-2">{riddle.difficulty}</td>
-                          <td className="px-3 py-2">{riddle.chapter}</td>
                         </tr>
                       ))}
                       {importPreview.length > 5 && (
@@ -1637,8 +1555,8 @@ export function RiddlesSection({
                     </label>
                     <select
                     id="riddle-subject"
-                    value={riddleForm.chapter}
-                    onChange={e => setRiddleForm(prev => ({ ...prev, chapter: e.target.value }))}
+                    value={riddleForm.subjectId}
+                    onChange={e => setRiddleForm(prev => ({ ...prev, subjectId: e.target.value }))}
                     className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     aria-required="true"
                   >
@@ -1670,7 +1588,7 @@ export function RiddlesSection({
                     !riddleForm.question.trim() ||
                     !riddleForm.optionA.trim() ||
                     !riddleForm.optionB.trim() ||
-                    !riddleForm.chapter.trim()
+                    !riddleForm.subjectId.trim()
                   }
                   className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >

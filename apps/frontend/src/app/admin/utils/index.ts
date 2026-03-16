@@ -509,16 +509,16 @@ export function downloadFile(content: string, filename: string, type: string): v
 export const riddleConfig: ImportExportConfig<Riddle> = {
   entityName: 'Riddle',
   filePrefix: 'riddles',
-  csvHeaders: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
+  csvHeaders: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level'],
   jsonRootKey: 'riddles',
   validators: {
-    required: ['question', 'options', 'correctOption', 'difficulty', 'chapter'],
+    required: ['question', 'options', 'correctOption', 'difficulty'],
     enumFields: {
       difficulty: ['easy', 'medium', 'hard', 'expert'],
       correctOption: ['A', 'B', 'C', 'D'],
       correctLetter: ['A', 'B', 'C', 'D'],
     },
-    maxLength: { question: 1000, answer: 500, chapter: 200, hint: 500 },
+    maxLength: { question: 1000, answer: 500, hint: 500 },
   },
 };
 
@@ -737,7 +737,7 @@ function validateCSVStructure(
 
 /**
  * Convert riddles to CSV format matching quiz export format
- * Headers: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+ * Headers: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level
  */
 export function riddlesToCSV(riddles: Riddle[]): string {
   const lines: string[] = [];
@@ -746,7 +746,7 @@ export function riddlesToCSV(riddles: Riddle[]): string {
   lines.push(`# Count: ${riddles.length}`);
 
   // Add headers matching quiz format
-  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter');
+  lines.push('ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level');
 
   // Add data rows
   riddles.forEach(riddle => {
@@ -761,7 +761,6 @@ export function riddlesToCSV(riddles: Riddle[]): string {
       escapeCSV(options[3] || ''),
       riddle.correctOption || 'A',
       riddle.difficulty,
-      escapeCSV(riddle.chapter),
     ];
 
     lines.push(row.join(','));

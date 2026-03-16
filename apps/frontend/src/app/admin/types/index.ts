@@ -63,9 +63,9 @@ export interface Riddle {
   options: string[];
   correctOption: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  chapter: string;
   status: ContentStatus;
   hint?: string;
+  explanation?: string;
   createdAt?: string;
   updatedAt?: string;
 }

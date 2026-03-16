@@ -33,7 +33,6 @@ import { importQuestionsFromCSV } from './utils/quiz-importer';
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuestionManagementSection, RiddlesSection, SettingsSection, AdminGuard } from './components';
 import { QuizSidebar } from './components/QuizSidebar';
-import { RiddleSidebar } from './components/RiddleSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts, getAllQuestionsWithFilters, getAllQuestionsStatusCounts } from '@/lib/quiz-api';
@@ -64,7 +63,6 @@ export default function AdminPage(): JSX.Element {
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [quizModuleExpanded, setQuizModuleExpanded] = useState(true);
-  const [riddleModuleExpanded, setRiddleModuleExpanded] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
@@ -145,8 +143,6 @@ export default function AdminPage(): JSX.Element {
   const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
   const [questionFilters, setQuestionFilters] = useState<Record<string, { status?: string; level?: string; chapter?: string; search?: string }>>({});
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
-  const [riddleFilterChapter, setRiddleFilterChapter] = useState<string>('');
-  const [riddleChapterOrder, setRiddleChapterOrder] = useState<string[]>([]);
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
@@ -160,7 +156,6 @@ export default function AdminPage(): JSX.Element {
   
   // Get section from URL, default to dashboard
   const urlSection = searchParams.get('section') || 'dashboard';
-  const urlChapter = searchParams.get('chapter');
 
   // Set active section from URL on initial load
   const hasSetInitialSection = useRef(false);
@@ -211,17 +206,7 @@ export default function AdminPage(): JSX.Element {
     }
   }, [urlSection, allSubjects, activeSection]);
 
-  // Set riddle chapter filter from URL
-  const hasSetInitialChapter = useRef(false);
-  useEffect(() => {
-    if (hasSetInitialChapter.current) return;
-    if (urlChapter && allRiddles.length > 0) {
-      if (allRiddles.some(r => r.chapter === urlChapter)) {
-        setRiddleFilterChapter(urlChapter);
-      }
-      hasSetInitialChapter.current = true;
-    }
-  }, [urlChapter, allRiddles]);
+
 
   // URL update helper - replaces localStorage.setItem
   const updateURL = useCallback((params: { section?: string; subject?: string | null; chapter?: string | null }) => {
@@ -1042,37 +1027,7 @@ export default function AdminPage(): JSX.Element {
     );
   }
 
-  // Compute Riddle Chapters and Counts for the Sidebar
-  // Include chapters from persisted order AND from existing riddles
-  const uniqueRiddleChaptersSet = new Set([...riddleChapterOrder, ...allRiddles.map(r => r.chapter)]);
 
-  // Include currently filtered chapter even if empty
-  if (riddleFilterChapter && riddleFilterChapter !== '') {
-    uniqueRiddleChaptersSet.add(riddleFilterChapter);
-  }
-  const uniqueRiddleChapters = Array.from(uniqueRiddleChaptersSet);
-
-  // Calculate sorted order using persisted riddleChapterOrder
-  const orderedRiddleChapters = [...uniqueRiddleChapters].sort((a, b) => {
-    const indexA = riddleChapterOrder.indexOf(a);
-    const indexB = riddleChapterOrder.indexOf(b);
-
-    // If both exist in order, sort by order
-    if (indexA !== -1 && indexB !== -1) {
-      return indexA - indexB;
-    }
-    // If only A exists, A comes first
-    if (indexA !== -1) return -1;
-    // If only B exists, B comes first
-    if (indexB !== -1) return 1;
-    // If neither exists, sort alphabetically
-    return a.localeCompare(b);
-  });
-
-  const riddleChapterCounts = uniqueRiddleChapters.reduce((acc, chapter) => {
-    acc[chapter] = allRiddles.filter(r => r.chapter === chapter).length;
-    return acc;
-  }, {} as Record<string, number>);
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
@@ -1146,27 +1101,12 @@ export default function AdminPage(): JSX.Element {
                 expanded={sidebarOpen}
                 onClick={() => updateURL({ section: 'jokes' })}
               />
-              <RiddleSidebar
-                chapters={orderedRiddleChapters}
-                activeSection={activeSection}
-                activeChapter={riddleFilterChapter}
-                sidebarOpen={sidebarOpen}
-                moduleExpanded={riddleModuleExpanded}
-                onToggleExpand={() => {
-                  setRiddleModuleExpanded(!riddleModuleExpanded);
-                  setActiveSection('riddles');
-                  setRiddleFilterChapter('');
-                  updateURL({ section: 'riddles', chapter: null });
-                }}
-                onSelectChapter={(chapter) => {
-                  setActiveSection('riddles');
-                  setRiddleFilterChapter(chapter);
-                  updateURL({ section: 'riddles', chapter });
-                }}
-                onReorderChapters={(newOrder) => {
-                  setRiddleChapterOrder(newOrder);
-                }}
-                chapterCounts={riddleChapterCounts}
+              <MenuItem
+                icon={<Puzzle className="w-5 h-5" />}
+                label="Riddle MCQ"
+                active={activeSection === 'riddles'}
+                expanded={sidebarOpen}
+                onClick={() => updateURL({ section: 'riddles' })}
               />
               <MenuItem
                 icon={<ImageIcon className="w-5 h-5" />}
@@ -1303,10 +1243,6 @@ export default function AdminPage(): JSX.Element {
             <RiddlesSection
               allRiddles={allRiddles}
               setAllRiddles={setAllRiddles}
-              riddleFilterChapter={riddleFilterChapter}
-              setRiddleFilterChapter={setRiddleFilterChapter}
-              riddleChapterOrder={riddleChapterOrder}
-              setRiddleChapterOrder={setRiddleChapterOrder}
             />
           )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
