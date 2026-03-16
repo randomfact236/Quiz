@@ -134,7 +134,7 @@ export function QuestionManagementSection({
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterChapter, setFilterChapter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('published');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   // "All" mode state - controlled by showAllMode prop
   const [showAllSubjects, setShowAllSubjects] = useState(showAllMode);
