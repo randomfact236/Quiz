@@ -274,6 +274,7 @@ export default function AdminPage(): JSX.Element {
             status: 'published' as const,
             hint: qr.hint || '',
             explanation: qr.explanation || '',
+            answer: qr.correctAnswer || '',
           }));
           setAllRiddles(mappedRiddles);
         })

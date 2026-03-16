@@ -378,6 +378,7 @@ export function RiddleMcqSection({
           correctOption: qr.correctLetter || qr.correctAnswer || 'A',
           difficulty: (qr.level as Riddle['difficulty']) || 'medium',
           status: 'published' as const,
+          answer: qr.correctAnswer || '',
         }));
         setAllRiddles(mapped);
       }
@@ -555,6 +556,7 @@ export function RiddleMcqSection({
         status: 'published' as const,
         hint: created.hint ?? riddleForm.hint ?? '',
         explanation: created.explanation ?? riddleForm.explanation ?? '',
+        answer: created.correctAnswer || (riddleForm.isOpenEnded ? riddleForm.correctOption : '') || '',
       };
       
       console.log('New riddle with explanation:', newRiddle.explanation);
@@ -596,14 +598,24 @@ export function RiddleMcqSection({
       const letterIndex = ['A', 'B', 'C', 'D'].indexOf(riddleForm.correctLetter || 'A');
       const correctAnswerText = options[letterIndex] || options[0] || '';
       
+      // Build API payload based on question type
       const updateData: any = {
         question: riddleForm.question.trim(),
-        options,
-        correctLetter: riddleForm.correctLetter,
-        correctAnswer: correctAnswerText,
         level: riddleForm.difficulty,
         subjectId: subjectId,
       };
+      
+      if (riddleForm.isOpenEnded) {
+        // Open-ended (Expert): no options, no correctLetter
+        updateData.options = [];
+        updateData.correctLetter = null;
+        updateData.correctAnswer = riddleForm.correctOption || correctAnswerText || 'expert';
+      } else {
+        // MCQ: has options
+        updateData.options = options;
+        updateData.correctLetter = riddleForm.correctLetter;
+        updateData.correctAnswer = correctAnswerText;
+      }
       
       if (riddleForm.hint.trim()) {
         updateData.hint = riddleForm.hint.trim();
@@ -620,11 +632,12 @@ export function RiddleMcqSection({
             ? {
               ...r,
               question: riddleForm.question.trim(),
-              options,
-              correctOption: riddleForm.correctLetter,
+              options: riddleForm.isOpenEnded ? [] : options,
+              correctOption: riddleForm.isOpenEnded ? 'A' : riddleForm.correctLetter,
               difficulty: riddleForm.difficulty,
               hint: riddleForm.hint || '',
               explanation: riddleForm.explanation || '',
+              answer: riddleForm.isOpenEnded ? (riddleForm.correctOption || '') : '',
             }
             : r
         )
@@ -1215,29 +1228,43 @@ export function RiddleMcqSection({
                     </span>
                   </td>
                   <td className="px-3 py-3 align-top">
-                    <div className="space-y-1 text-xs">
-                      <div className={isCorrectOption(riddle, 0) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                        A. {riddle.options[0]}
+                    {riddle.difficulty === 'expert' ? (
+                      <div className="text-xs text-gray-600">
+                        <span className="font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded">
+                          Open-ended question
+                        </span>
                       </div>
-                      <div className={isCorrectOption(riddle, 1) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                        B. {riddle.options[1]}
+                    ) : (
+                      <div className="space-y-1 text-xs">
+                        <div className={isCorrectOption(riddle, 0) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                          A. {riddle.options[0]}
+                        </div>
+                        <div className={isCorrectOption(riddle, 1) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                          B. {riddle.options[1]}
+                        </div>
+                        {riddle.options[2] && (
+                          <div className={isCorrectOption(riddle, 2) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                            C. {riddle.options[2]}
+                          </div>
+                        )}
+                        {riddle.options[3] && (
+                          <div className={isCorrectOption(riddle, 3) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
+                            D. {riddle.options[3]}
+                          </div>
+                        )}
                       </div>
-                      {riddle.options[2] && (
-                        <div className={isCorrectOption(riddle, 2) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                          C. {riddle.options[2]}
-                        </div>
-                      )}
-                      {riddle.options[3] && (
-                        <div className={isCorrectOption(riddle, 3) ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded' : 'text-gray-600 px-1.5'}>
-                          D. {riddle.options[3]}
-                        </div>
-                      )}
-                  </div>
+                    )}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3 text-center align-top">
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
-                    {riddle.correctOption}
-                  </span>
+                  {riddle.difficulty === 'expert' ? (
+                    <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs" title={riddle.answer || 'No answer set'}>
+                      {riddle.answer || 'No answer'}
+                    </div>
+                  ) : (
+                    <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs" title={`${riddle.correctOption}. ${riddle.options[['A', 'B', 'C', 'D'].indexOf(riddle.correctOption)]}`}>
+                      {riddle.correctOption}. {riddle.options[['A', 'B', 'C', 'D'].indexOf(riddle.correctOption)]}
+                    </div>
+                  )}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3 text-center align-top">
                   <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${getDifficultyColor(riddle.difficulty)}`}>
