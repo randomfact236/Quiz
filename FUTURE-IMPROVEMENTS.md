@@ -61,6 +61,84 @@
 
 ---
 
+## 📋 Quiz Admin Features
+
+### High Priority
+- [ ] **Question Hint UI**
+  - Add hint field to question form
+  - Display hints during quiz (optional)
+  - Store hints in database
+
+### Medium Priority
+- [ ] **Subject Reordering**
+  - Enable order field in UpdateSubject API
+  - Drag-and-drop reordering in admin UI
+  - Persist custom order
+
+- [ ] **Question Duplication**
+  - Clone/duplicate existing questions
+  - Quick action button in question list
+  - Clone to same or different chapter
+
+### Medium Priority
+- [ ] **Excel Import**
+  - Support .xlsx file format
+  - Use xlsx library for parsing
+  - Same validation as CSV import
+
+- [ ] **PDF Export**
+  - Export questions to PDF format
+  - Include question, options, answer key
+  - Use jspdf library
+
+- [ ] **Undo Bulk Actions**
+  - Store previous state before bulk action
+  - Show toast with undo option (30 second window)
+  - Implement restore logic for each action type
+
+### Low Priority
+- [ ] **Question Tags**
+  - Add tags column to Question entity
+  - Tag management UI
+  - Filter questions by tags
+
+- [ ] **Image/Media Attachments**
+  - Add image upload support
+  - Display images in questions
+  - Support for audio/video questions
+
+- [ ] **Question Analytics**
+  - Track question attempt counts
+  - Success rate per question
+  - Admin analytics dashboard
+
+---
+
+## 📋 Filter System Enhancements (Phase 3)
+
+### Filter Presets
+- [ ] Save frequently used filter combinations
+- [ ] Quick access buttons for common filters
+- [ ] Persist presets in localStorage
+
+### Keyboard Navigation
+- [ ] Arrow keys to navigate filter buttons
+- [ ] Enter/Space to select filter
+- [ ] Escape to clear filters
+
+### Count Animations
+- [ ] Animate count numbers when they update
+- [ ] Color transitions for active/inactive filters
+- [ ] Smooth transitions between filter states
+
+### Additional Filters
+- [ ] Date Range Filter - Filter by creation/update date
+- [ ] Has Explanation Filter - Questions with/without explanations
+- [ ] Sort Options - Sort by date, level, chapter, alphabetical
+- [ ] Filter Summary - "Showing X of Y questions" display
+
+---
+
 ## 📋 CSV Import (For importing questions)
 
 ### High Priority
@@ -151,4 +229,4 @@
 
 ---
 
-*Last Updated: 2026-03-10*
+*Last Updated: 2026-03-17*

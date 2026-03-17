@@ -272,8 +272,91 @@ export async function getAllQuestionsStatusCounts(): Promise<SubjectStatusCounts
     return response.data;
 }
 
+export async function getAllQuestionsChapterCounts(): Promise<Record<string, number>> {
+    const response = await api.get<Record<string, number>>('/quiz/questions/all/chapter-counts');
+    return response.data;
+}
+
+export async function getAllQuestionsLevelCounts(): Promise<Record<string, number>> {
+    const response = await api.get<Record<string, number>>('/quiz/questions/all/level-counts');
+    return response.data;
+}
+
+export async function getAllQuestionsFilterCounts(filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
+    const params = new URLSearchParams();
+    if (filters.level) params.append('level', filters.level);
+    if (filters.chapter) params.append('chapter', filters.chapter);
+    if (filters.status) params.append('status', filters.status);
+    if (filters.search) params.append('search', filters.search);
+    
+    const response = await api.get<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>(`/quiz/questions/all/filter-counts?${params.toString()}`);
+    return response.data;
+}
+
+export async function getSubjectFilterCounts(subjectSlug: string, filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
+    const params = new URLSearchParams();
+    if (filters.level) params.append('level', filters.level);
+    if (filters.chapter) params.append('chapter', filters.chapter);
+    if (filters.status) params.append('status', filters.status);
+    if (filters.search) params.append('search', filters.search);
+    
+    const response = await api.get<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>(`/quiz/subjects/${subjectSlug}/filter-counts?${params.toString()}`);
+    return response.data;
+}
+
 export async function getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
     const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/level-counts`);
+    return response.data;
+}
+
+// ========== FILTERED COUNTS API ==========
+
+export interface FilterParams {
+    status?: string;
+    level?: string;
+    chapter?: string;
+    search?: string;
+}
+
+export async function getFilteredStatusCounts(
+    subjectSlug: string,
+    filters: FilterParams
+): Promise<SubjectStatusCounts> {
+    const params = new URLSearchParams();
+    if (filters.level) params.append('level', filters.level);
+    if (filters.chapter) params.append('chapter', filters.chapter);
+    if (filters.search) params.append('search', filters.search);
+    
+    const url = `/quiz/subjects/${subjectSlug}/status-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
+    const response = await api.get<SubjectStatusCounts>(url);
+    return response.data;
+}
+
+export async function getFilteredChapterCounts(
+    subjectSlug: string,
+    filters: FilterParams
+): Promise<Record<string, number>> {
+    const params = new URLSearchParams();
+    if (filters.status) params.append('status', filters.status);
+    if (filters.level) params.append('level', filters.level);
+    if (filters.search) params.append('search', filters.search);
+    
+    const url = `/quiz/subjects/${subjectSlug}/chapter-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
+    const response = await api.get<Record<string, number>>(url);
+    return response.data;
+}
+
+export async function getFilteredLevelCounts(
+    subjectSlug: string,
+    filters: FilterParams
+): Promise<Record<string, number>> {
+    const params = new URLSearchParams();
+    if (filters.status) params.append('status', filters.status);
+    if (filters.chapter) params.append('chapter', filters.chapter);
+    if (filters.search) params.append('search', filters.search);
+    
+    const url = `/quiz/subjects/${subjectSlug}/level-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
+    const response = await api.get<Record<string, number>>(url);
     return response.data;
 }
 

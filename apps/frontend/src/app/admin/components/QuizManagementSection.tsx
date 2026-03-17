@@ -8,7 +8,7 @@ import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, exportQuestionsToCSV } from '../utils';
 import { importQuestionsFromCSV, parseCSVContent } from '../utils/quiz-importer';
-import { bulkActionQuestions, createQuestion, updateQuestion, deleteQuestion } from '@/lib/quiz-api';
+import { bulkActionQuestions, createQuestion, updateQuestion, deleteQuestion, SubjectStatusCounts } from '@/lib/quiz-api';
 
 /**
  * Props for the QuestionManagementSection component
@@ -19,7 +19,7 @@ interface QuestionPagination {
   total: number;
 }
 
-interface QuestionManagementSectionProps {
+interface QuizManagementSectionProps {
   /** Currently selected subject */
   subject: Subject;
   /** Array of questions for the selected subject */
@@ -29,16 +29,11 @@ interface QuestionManagementSectionProps {
   /** All available chapters for this subject (from database) - array of objects with id and name */
   chapters?: { id: string; name: string }[];
   /** Status counts from server (total, published, draft, trash) */
-  statusCounts?: {
-    total: number;
-    published: number;
-    draft: number;
-    trash: number;
-  };
+  statusCounts?: SubjectStatusCounts | undefined;
   /** Chapter counts from server */
-  chapterCounts?: Record<string, number>;
+  chapterCounts?: Record<string, number> | undefined;
   /** Level counts from server */
-  levelCounts?: Record<string, number>;
+  levelCounts?: Record<string, number> | undefined;
   /** All available subjects for filtering */
   allSubjects: Subject[];
   /** Callback when a subject is selected from filters */
@@ -61,18 +56,28 @@ interface QuestionManagementSectionProps {
   onDeleteSubject: (subjectId: string) => void;
   /** Callback when page changes (server-side pagination) */
   onPageChange?: (subjectSlug: string, page: number, limit: number) => void;
-  /** Callback when filters change (server-side filtering) */
-  onFilterChange?: (subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => void;
   /** Callback to refresh questions from server (after bulk actions) */
   onQuestionsRefresh?: (subjectSlug: string) => void | Promise<void>;
   /** Question counts per subject */
   questionCounts?: Record<string, number>;
   /** Callback to get all questions (for "All" mode) */
   onGetAllQuestions?: (filters: { status?: string; level?: string; chapter?: string; search?: string }, page: number, limit: number) => Promise<{ data: Question[]; total: number }>;
-  /** Callback to get all questions status counts (for "All" mode) */
   onGetAllQuestionsStatusCounts?: () => Promise<{ total: number; published: number; draft: number; trash: number }>;
+  /** Callback to get all questions filter counts (for "All" mode) */
+  onGetAllQuestionsFilterCounts?: (filters: { status?: string; level?: string; chapter?: string; search?: string }) => Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>;
   /** Whether to show all subjects mode (controlled) */
   showAllMode?: boolean;
+  /** Whether the subject data is loading */
+  isLoading?: boolean;
+  /** Controlled filter state from parent */
+  filters?: {
+    status?: string;
+    level?: string;
+    chapter?: string;
+    search?: string;
+  };
+  /** Callback when filters change (controlled - replaces old onFilterChange) */
+  onFilterChange?: (filters: { status?: string; level?: string; chapter?: string; search?: string }) => void;
 }
 
 /**
@@ -128,41 +133,85 @@ export function QuizManagementSection({
   questionCounts,
   onGetAllQuestions,
   onGetAllQuestionsStatusCounts,
+  onGetAllQuestionsFilterCounts,
   showAllMode = false,
-}: QuestionManagementSectionProps): JSX.Element {
-  // Filter states - triggers server-side filtering via callback
-  const [filterLevel, setFilterLevel] = useState<string>('all');
-  const [filterChapter, setFilterChapter] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  isLoading = false,
+  filters,
+}: QuizManagementSectionProps): JSX.Element {
+  // Use controlled filters if provided, otherwise use local state
+  const [localFilterLevel, setLocalFilterLevel] = useState<string>('all');
+  const [localFilterChapter, setLocalFilterChapter] = useState<string>('all');
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
+  const [localStatusFilter, setLocalStatusFilter] = useState<StatusFilter>('all');
 
-  // "All" mode state - controlled by showAllMode prop
-  const [showAllSubjects, setShowAllSubjects] = useState(showAllMode);
+  // Controlled vs local filter state
+  const filterLevel = filters?.level ?? localFilterLevel;
+  const setFilterLevel = (value: string) => {
+    if (filters) {
+      onFilterChange?.({ level: value });
+    } else {
+      setLocalFilterLevel(value);
+    }
+  };
+
+  const filterChapter = filters?.chapter ?? localFilterChapter;
+  const setFilterChapter = (value: string) => {
+    if (filters) {
+      onFilterChange?.({ chapter: value });
+    } else {
+      setLocalFilterChapter(value);
+    }
+  };
+
+  const searchTerm = filters?.search ?? localSearchTerm;
+  const setSearchTerm = (value: string) => {
+    if (filters) {
+      onFilterChange?.({ search: value });
+    } else {
+      setLocalSearchTerm(value);
+    }
+  };
+
+  const statusFilter = (filters?.status as StatusFilter) ?? localStatusFilter;
+  const setStatusFilter = (value: StatusFilter) => {
+    if (filters) {
+      onFilterChange?.({ status: value });
+    } else {
+      setLocalStatusFilter(value);
+    }
+  };
+
+  // "All" mode state - controlled by showAllMode prop (no local state, use prop only)
   const [allModeQuestions, setAllModeQuestions] = useState<Question[]>([]);
   const [allModePagination, setAllModePagination] = useState({ page: 1, limit: 10, total: 0 });
   const [allModeStatusCounts, setAllModeStatusCounts] = useState<{ total: number; published: number; draft: number; trash: number } | undefined>();
+  const [allModeChapterCounts, setAllModeChapterCounts] = useState<Record<string, number> | undefined>();
+  const [allModeLevelCounts, setAllModeLevelCounts] = useState<Record<string, number> | undefined>();
+  
+  // Track last fetched filters to prevent infinite loops
+  const lastFetchedFiltersRef = useRef<string>('');
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Sync showAllSubjects when showAllMode prop changes
+  // Display values - use allMode data when showAllMode is true (using prop, not local state)
+  const displayQuestions = showAllMode ? allModeQuestions : questions;
+  const displayPagination = showAllMode ? allModePagination : (pagination || { page: 1, limit: 10, total: 0 });
+  const displayStatusCounts = showAllMode ? allModeStatusCounts : statusCounts;
+  // Use allMode counts when in "All Subjects" mode, otherwise use props
+  const displayChapterCounts = showAllMode ? allModeChapterCounts : chapterCounts;
+  const displayLevelCounts = showAllMode ? allModeLevelCounts : levelCounts;
+
+  // Trigger API call when filters change (server-side filtering) - only for single subject mode
   useEffect(() => {
-    setShowAllSubjects(showAllMode);
-  }, [showAllMode]);
-
-  // Display values - use allMode data when showAllSubjects is true
-  const displayQuestions = showAllSubjects ? allModeQuestions : questions;
-  const displayPagination = showAllSubjects ? allModePagination : (pagination || { page: 1, limit: 10, total: 0 });
-  const displayStatusCounts = showAllSubjects ? allModeStatusCounts : statusCounts;
-
-  // Trigger API call when filters change (server-side filtering)
-  useEffect(() => {
-    if (onFilterChange) {
-      const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-      if (statusFilter !== 'all') filters.status = statusFilter;
-      if (filterLevel !== 'all') filters.level = filterLevel;
-      if (filterChapter !== 'all') filters.chapter = filterChapter;
-      if (searchTerm) filters.search = searchTerm;
-      onFilterChange(subject.slug, filters);
+    // Only trigger if using local state (not controlled)
+    if (!filters && !showAllMode && onFilterChange) {
+      const newFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+      if (statusFilter !== 'all') newFilters.status = statusFilter;
+      if (filterLevel !== 'all') newFilters.level = filterLevel;
+      if (filterChapter !== 'all') newFilters.chapter = filterChapter;
+      if (searchTerm) newFilters.search = searchTerm;
+      onFilterChange(newFilters);
     }
-  }, [statusFilter, filterLevel, filterChapter, searchTerm, subject.slug, onFilterChange]);
+  }, [showAllMode, statusFilter, filterLevel, filterChapter, searchTerm, subject.slug, onFilterChange, filters]);
 
   // Selection states
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -176,29 +225,110 @@ export function QuizManagementSection({
   const [currentPage, setCurrentPage] = useState(serverPagination.page);
   const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
 
+  // Track last fetched params for questions
+  const lastFetchedQuestionsRef = useRef<string>('');
+  const questionsAbortRef = useRef<AbortController | null>(null);
+  
   // Fetch "All" mode data when filters change
   useEffect(() => {
-    if (showAllSubjects && onGetAllQuestions) {
-      const fetchAllQuestions = async () => {
-        const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-        if (statusFilter !== 'all') filters.status = statusFilter;
-        if (filterLevel !== 'all') filters.level = filterLevel;
-        if (filterChapter !== 'all') filters.chapter = filterChapter;
-        if (searchTerm) filters.search = searchTerm;
-        const result = await onGetAllQuestions(filters, currentPage, questionsPerPage);
-        setAllModeQuestions(result.data);
-        setAllModePagination(prev => ({ ...prev, total: result.total }));
-      };
-      fetchAllQuestions();
+    if (!showAllMode || !onGetAllQuestions) {
+      return undefined;
     }
-  }, [showAllSubjects, currentPage, questionsPerPage, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestions]);
+    
+    const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+    if (statusFilter !== 'all') filters.status = statusFilter;
+    if (filterLevel !== 'all') filters.level = filterLevel;
+    if (filterChapter !== 'all') filters.chapter = filterChapter;
+    if (searchTerm) filters.search = searchTerm;
+    
+    const paramsKey = JSON.stringify({ filters, page: currentPage, limit: questionsPerPage });
+    if (lastFetchedQuestionsRef.current === paramsKey) {
+      return undefined;
+    }
+    
+    // Cancel any pending request
+    if (questionsAbortRef.current) {
+      questionsAbortRef.current.abort();
+    }
+    
+    const controller = new AbortController();
+    questionsAbortRef.current = controller;
+    
+    lastFetchedQuestionsRef.current = paramsKey;
+    
+    const fetchAllQuestions = async () => {
+      try {
+        const result = await onGetAllQuestions(filters, currentPage, questionsPerPage);
+        if (!controller.signal.aborted) {
+          setAllModeQuestions(result.data);
+          setAllModePagination(prev => ({ ...prev, total: result.total }));
+        }
+      } catch (err) {
+        if (!controller.signal.aborted) {
+          console.error('Failed to fetch all questions:', err);
+        }
+      }
+    };
+    
+    fetchAllQuestions();
+    
+    return () => {
+      controller.abort();
+    };
+  }, [showAllMode, currentPage, questionsPerPage, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestions]);
 
   // Fetch "All" mode status counts
   useEffect(() => {
-    if (showAllSubjects && onGetAllQuestionsStatusCounts) {
-      onGetAllQuestionsStatusCounts().then(setAllModeStatusCounts);
+    if (!showAllMode || !onGetAllQuestionsStatusCounts) {
+      return undefined;
     }
-  }, [showAllSubjects, onGetAllQuestionsStatusCounts]);
+    onGetAllQuestionsStatusCounts().then(setAllModeStatusCounts);
+    return undefined;
+  }, [showAllMode, onGetAllQuestionsStatusCounts]);
+
+  // Fetch "All" mode filter counts (chapters and levels)
+  useEffect(() => {
+    if (!showAllMode || !onGetAllQuestionsFilterCounts) {
+      return undefined;
+    }
+    
+    const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+    if (statusFilter !== 'all') filters.status = statusFilter;
+    if (filterLevel !== 'all') filters.level = filterLevel;
+    if (filterChapter !== 'all') filters.chapter = filterChapter;
+    if (searchTerm) filters.search = searchTerm;
+    
+    const filtersKey = JSON.stringify(filters);
+    if (lastFetchedFiltersRef.current === filtersKey) {
+      return undefined;
+    }
+    
+    // Cancel any pending request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    
+    lastFetchedFiltersRef.current = filtersKey;
+    
+    onGetAllQuestionsFilterCounts(filters).then((counts) => {
+      if (!controller.signal.aborted) {
+        setAllModeChapterCounts(counts.chapters);
+        setAllModeLevelCounts(counts.levels);
+        setAllModeStatusCounts(counts.status);
+      }
+    }).catch((err) => {
+      if (!controller.signal.aborted) {
+        console.error('Failed to fetch filter counts:', err);
+      }
+    });
+    
+    return () => {
+      controller.abort();
+    };
+  }, [showAllMode, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestionsFilterCounts]);
   const totalQuestions = displayPagination.total;
   
   const [pageInput, setPageInput] = useState(String(serverPagination.page));
@@ -257,48 +387,34 @@ export function QuizManagementSection({
   const [editingChapter, setEditingChapter] = useState<string | null>(null);
   const [editingChapterName, setEditingChapterName] = useState('');
 
-  // Server-side pagination (from props) or local fallback
-  // IMPORTANT: When using server pagination, chapters prop should contain all chapters from DB
+  // Server-provided chapters (contains all chapters from DB)
   const chaptersList = useMemo(() => {
-    // Prefer server-provided chapters (contains all chapters from DB)
     if (chapters && chapters.length > 0) {
-      return chapters.map(c => c.name).sort((a, b) => a.localeCompare(b));
+      return chapters.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
     }
-    // Fallback to extracting from local questions (only accurate when not using server pagination)
-    return [...new Set(questions.map((q) => q.chapter))].sort((a, b) => a.localeCompare(b));
-  }, [questions, chapters]);
+    return [];
+  }, [chapters]);
 
-  // Use server statusCounts if available (or allModeStatusCounts when showAllSubjects)
+  // Use statusCounts (from server or allMode)
   const computedStatusCounts = useMemo(() => {
-    if (displayStatusCounts) {
-      return displayStatusCounts;
-    }
-    return {
-      total: pagination?.total ?? questions.length,
-      published: questions.filter((q) => q.status === 'published').length,
-      draft: questions.filter((q) => q.status === 'draft').length,
-      trash: questions.filter((q) => q.status === 'trash').length,
-    };
-  }, [questions, pagination, displayStatusCounts]);
+    return displayStatusCounts || { total: 0, published: 0, draft: 0, trash: 0 };
+  }, [displayStatusCounts]);
 
-  // Use server chapterCounts if available
+  // Use chapterCounts (from server or computed from allModeQuestions)
   const computedChapterCounts = useMemo(() => {
-    if (chapterCounts && Object.keys(chapterCounts).length > 0) {
-      return chapterCounts;
-    }
-    return {};
-  }, [chapterCounts]);
+    return displayChapterCounts || {};
+  }, [displayChapterCounts]);
 
-  // Use server levelCounts if available
+  // Use levelCounts (from server or computed from allModeQuestions)
   const computedLevelCounts = useMemo(() => {
-    if (levelCounts && levelCounts['easy'] !== undefined) {
-      return { 
-        ...levelCounts, 
-        all: (levelCounts['easy'] || 0) + (levelCounts['medium'] || 0) + (levelCounts['hard'] || 0) + (levelCounts['expert'] || 0) + (levelCounts['extreme'] || 0) 
-      };
-    }
-    return { all: pagination?.total ?? questions.length };
-  }, [pagination, levelCounts, questions]);
+    const counts: Record<string, number> = displayLevelCounts || {};
+    const easy = counts['easy'] || 0;
+    const medium = counts['medium'] || 0;
+    const hard = counts['hard'] || 0;
+    const expert = counts['expert'] || 0;
+    const extreme = counts['extreme'] || 0;
+    return { easy, medium, hard, expert, extreme, all: easy + medium + hard + expert + extreme };
+  }, [displayLevelCounts]);
 
   // Questions are already filtered from the backend - use directly from props
   const filteredQuestions = displayQuestions;
@@ -319,8 +435,8 @@ export function QuizManagementSection({
     : (currentPage - 1) * questionsPerPage;
     
   // Use questions directly from server when server-side pagination, otherwise slice locally
-  // When in "All" mode (showAllSubjects), use filteredQuestions which contains allModeQuestions
-  const paginatedQuestions = showAllSubjects
+  // When in "All" mode (showAllMode), use filteredQuestions which contains allModeQuestions
+  const paginatedQuestions = showAllMode
     ? filteredQuestions  // All mode questions are already fetched and filtered
     : isServerPagination 
       ? questions  // Server already paginated for single subject
@@ -1036,17 +1152,35 @@ export function QuizManagementSection({
       />
 
       {/* Filter Bar */}
-      <div className="mb-4 rounded-xl bg-white p-4 shadow-md space-y-4">
+      <div className="mb-4 rounded-xl bg-white p-4 shadow-md space-y-4 relative">
+        {/* Loading overlay */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-xl z-20 flex items-center justify-center transition-opacity duration-200">
+            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-lg shadow-lg">
+              <svg className="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span className="text-sm font-medium text-gray-700">Loading...</span>
+            </div>
+          </div>
+        )}
+        
         {/* Subject Filters Row */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-600 mr-2">Subject:</span>
           
           {/* ALL button */}
           <button
-            onClick={() => setShowAllSubjects(true)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              showAllSubjects
-                ? 'bg-blue-500 text-white'
+            onClick={() => {
+              setFilterChapter('all');
+              setFilterLevel('all');
+              setStatusFilter('all');
+              onSubjectSelect('all-subjects');
+            }}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${
+              showAllMode
+                ? 'bg-blue-500 text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -1056,12 +1190,17 @@ export function QuizManagementSection({
           {allSubjects.map((s) => (
             <div key={s.slug} className="flex items-center gap-0.5">
               <button
-                onClick={() => { setShowAllSubjects(false); onSubjectSelect(s.slug); }}
-                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${!showAllSubjects && subject.slug === s.slug
-                  ? 'bg-blue-500 text-white'
+                onClick={() => { 
+                  setFilterChapter('all');
+                  setFilterLevel('all');
+                  setStatusFilter('all');
+                  onSubjectSelect(s.slug); 
+                }}
+                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${!showAllMode && subject.slug === s.slug
+                  ? 'bg-blue-500 text-white shadow-md'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
-                aria-pressed={!showAllSubjects && subject.slug === s.slug}
+                aria-pressed={!showAllMode && subject.slug === s.slug}
               >
                 <span role="img" aria-hidden="true">
                   {s.emoji}
@@ -1074,7 +1213,7 @@ export function QuizManagementSection({
                   e.stopPropagation();
                   onEditSubject(s);
                 }}
-                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${!showAllSubjects && subject.slug === s.slug
+                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${!showAllMode && subject.slug === s.slug
                   ? 'bg-blue-400 text-white hover:bg-blue-300'
                   : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
                   }`}
@@ -1088,7 +1227,7 @@ export function QuizManagementSection({
                   e.stopPropagation();
                   onDeleteSubject(s.id);
                 }}
-                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${!showAllSubjects && subject.slug === s.slug
+                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${!showAllMode && subject.slug === s.slug
                   ? 'bg-blue-400 text-white hover:bg-red-400'
                   : 'bg-gray-200 text-red-600 hover:bg-red-50'
                   }`}
@@ -1105,8 +1244,8 @@ export function QuizManagementSection({
           <span className="text-sm font-medium text-gray-600 mr-2">Chapter:</span>
           <button
             onClick={() => setFilterChapter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === 'all'
-              ? 'bg-green-500 text-white'
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${filterChapter === 'all'
+              ? 'bg-green-500 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             aria-pressed={filterChapter === 'all'}
@@ -1114,8 +1253,8 @@ export function QuizManagementSection({
             All Chapters <span className="opacity-70">({pagination?.total ?? questions.length})</span>
           </button>
           {chaptersList.map((ch) => (
-            <div key={ch} className="flex items-center gap-1">
-              {editingChapter === ch ? (
+            <div key={ch.id} className="flex items-center gap-1">
+              {editingChapter === ch.id ? (
                 <>
                   <input
                     type="text"
@@ -1146,17 +1285,17 @@ export function QuizManagementSection({
               ) : (
                 <>
                   <button
-                    onClick={() => setFilterChapter(ch)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterChapter === ch
-                      ? 'bg-green-500 text-white'
+                    onClick={() => setFilterChapter(ch.name)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${filterChapter === ch.name
+                      ? 'bg-green-500 text-white shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
-                    aria-pressed={filterChapter === ch}
+                    aria-pressed={filterChapter === ch.name}
                   >
-                    {ch} <span className="opacity-70">({computedChapterCounts[ch] || 0})</span>
+                    {ch.name} <span className="opacity-70">({computedChapterCounts[ch.name] || 0})</span>
                   </button>
                   <button
-                    onClick={() => handleStartEditChapter(ch)}
+                    onClick={() => handleStartEditChapter(ch.id)}
                     className="text-gray-400 hover:text-blue-600 px-1 transition-colors"
                     title="Edit chapter name"
                   >
@@ -1164,11 +1303,8 @@ export function QuizManagementSection({
                   </button>
                   <button
                     onClick={() => {
-                      const chapterObj = chapters?.find(c => c.name === ch);
-                      if (chapterObj) {
-                        setChapterToDelete({ id: chapterObj.id, name: ch });
-                        setShowDeleteChapterModal(true);
-                      }
+                      setChapterToDelete({ id: ch.id, name: ch.name });
+                      setShowDeleteChapterModal(true);
                     }}
                     className="text-gray-400 hover:text-red-600 px-1 transition-colors"
                     title="Delete chapter"
@@ -1194,10 +1330,10 @@ export function QuizManagementSection({
             <button
               key={level}
               onClick={() => setFilterLevel(level)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${filterLevel === level
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 capitalize ${filterLevel === level
                 ? level === 'all'
-                  ? 'bg-purple-500 text-white'
-                  : getLevelButtonColor(level)
+                  ? 'bg-purple-500 text-white shadow-md'
+                  : getLevelButtonColor(level) + ' shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               aria-pressed={filterLevel === level}
@@ -1516,8 +1652,8 @@ export function QuizManagementSection({
                   >
                     <option value="">Select Chapter</option>
                     {chaptersList.map((ch) => (
-                      <option key={ch} value={ch}>
-                        {ch}
+                      <option key={ch.id} value={ch.id}>
+                        {ch.name}
                       </option>
                     ))}
                   </select>
@@ -1698,8 +1834,8 @@ export function QuizManagementSection({
                   >
                     <option value="">Select Chapter</option>
                     {chaptersList.map((ch) => (
-                      <option key={ch} value={ch}>
-                        {ch}
+                      <option key={ch.id} value={ch.id}>
+                        {ch.name}
                       </option>
                     ))}
                   </select>

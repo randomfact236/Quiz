@@ -35,9 +35,8 @@ import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, RiddleMc
 import { QuizSidebar } from './components/QuizSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, SubjectStatusCounts, getAllQuestionsWithFilters, getAllQuestionsStatusCounts } from '@/lib/quiz-api';
+import { getSubjects, QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getChapterCountsBySubject, getLevelCountsBySubject, getAllQuestionsWithFilters, getAllQuestionsStatusCounts, getAllQuestionsFilterCounts, getSubjectFilterCounts, SubjectStatusCounts } from '@/lib/quiz-api';
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
-import { getJokes, getJokeCategories } from '@/lib/jokes-api';
 
 // Initial Data
 const defaultQuestions: Record<string, Question[]> = {};
@@ -141,7 +140,6 @@ export default function AdminPage(): JSX.Element {
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
-  const [questionFilters, setQuestionFilters] = useState<Record<string, { status?: string; level?: string; chapter?: string; search?: string }>>({});
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
@@ -149,6 +147,22 @@ export default function AdminPage(): JSX.Element {
   const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
   const [subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
   const [subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
+  const [isLoadingSubject, setIsLoadingSubject] = useState(false);
+
+  // Unified filter state (single source of truth)
+  const [currentFilters, setCurrentFilters] = useState({
+    status: 'all',
+    level: 'all',
+    chapter: 'all',
+    search: ''
+  });
+
+  // Debounce ref for search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Track last fetched filters to prevent infinite loops
+  const lastFetchedFiltersRef = useRef<string>('');
+  const lastFetchedSectionRef = useRef<string>('');
 
   // URL-based state management - replaces localStorage
   const searchParams = useSearchParams();
@@ -176,6 +190,16 @@ export default function AdminPage(): JSX.Element {
           setActiveSection('dashboard');
         }
       }
+
+      // Load filters from URL
+      setCurrentFilters(prev => ({
+        ...prev,
+        status: searchParams.get('status') || 'all',
+        level: searchParams.get('level') || 'all',
+        chapter: searchParams.get('chapter') || 'all',
+        search: searchParams.get('search') || ''
+      }));
+
       hasSetInitialSection.current = true;
     }
   }, [allSubjects, urlSection]);
@@ -253,11 +277,12 @@ export default function AdminPage(): JSX.Element {
     if (allSubjects.length > 0) {
       fetchQuestionCounts();
     }
-
-    // Complete hydration
-    setIsHydrated(true);
   }, [allSubjects]);
 
+  // Mark as hydrated once after initial mount
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Fetch riddles from backend API
   useEffect(() => {
@@ -299,18 +324,27 @@ export default function AdminPage(): JSX.Element {
     if (isSubjectSection && activeSection !== 'dashboard') {
       const currentPage = questionPagination[activeSection]?.page || 1;
       const limit = questionPagination[activeSection]?.limit || 10;
-      const filters = questionFilters[activeSection] || {};
+      const filters = currentFilters;
+      // Convert 'all' values to undefined and only include non-undefined values
+      const apiFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+      if (filters.status && filters.status !== 'all') apiFilters.status = filters.status;
+      if (filters.level && filters.level !== 'all') apiFilters.level = filters.level;
+      if (filters.chapter && filters.chapter !== 'all') apiFilters.chapter = filters.chapter;
+      if (filters.search) apiFilters.search = filters.search;
       const filtersKey = JSON.stringify(filters);
+      const hasChapters = quizChapters[activeSection] && quizChapters[activeSection].length > 0;
       
       console.log(`[FetchEffect] Checking fetch for ${activeSection}, page ${currentPage}, limit ${limit}`);
       console.log(`[FetchEffect] Last fetch:`, lastFetchRef.current);
+      console.log(`[FetchEffect] Has chapters:`, hasChapters);
       
-      // Skip if we already fetched with these exact params
+      // Skip if we already fetched with these exact params AND we have chapters
       if (lastFetchRef.current?.section === activeSection &&
           lastFetchRef.current?.page === currentPage &&
           lastFetchRef.current?.limit === limit &&
-          lastFetchRef.current?.filters === filtersKey) {
-        console.log(`[FetchEffect] Skipping fetch - already fetched with these params`);
+          lastFetchRef.current?.filters === filtersKey &&
+          hasChapters) {
+        console.log(`[FetchEffect] Skipping fetch - already fetched with these params and has chapters`);
         return;
       }
       
@@ -319,76 +353,179 @@ export default function AdminPage(): JSX.Element {
       console.log(`[FetchEffect] Fetching questions for ${activeSection}, page ${currentPage}`);
 
       const fetchQuestions = async () => {
+        setIsLoadingSubject(true);
         try {
-          const result = await getQuestionsBySubject(activeSection, filters, currentPage, limit);
-          const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
+          // Fetch all data in parallel for better performance
+          const [questionsResult, subjectData, statusCounts, chapterCounts, levelCounts] = await Promise.all([
+            getQuestionsBySubject(activeSection, apiFilters, currentPage, limit),
+            getSubjectBySlug(activeSection).catch(() => null),
+            getStatusCountsBySubject(activeSection).catch(() => null),
+            getChapterCountsBySubject(activeSection).catch(() => null),
+            getLevelCountsBySubject(activeSection).catch(() => null),
+          ]);
+
+          const mappedQuestions: Question[] = questionsResult.data.map(mapQuizQuestionToQuestion);
           setAllQuestions(prev => ({
             ...prev,
             [activeSection]: mappedQuestions
           }));
           setQuestionCounts(prev => ({
             ...prev,
-            [activeSection]: result.total
+            [activeSection]: questionsResult.total
           }));
           setQuestionPagination(prev => ({
             ...prev,
-            [activeSection]: { page: result.page, limit: result.limit, total: result.total }
+            [activeSection]: { page: questionsResult.page, limit: questionsResult.limit, total: questionsResult.total }
           }));
 
-          // Also fetch chapters for this subject
-          try {
-            const subjectData = await getSubjectBySlug(activeSection);
-            if (subjectData?.chapters) {
-              const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
-              setQuizChapters(prev => ({
-                ...prev,
-                [activeSection]: chapterObjects
-              }));
-            }
-          } catch (chaptersErr) {
-            console.error('Failed to fetch chapters:', chaptersErr);
+          // Set chapters if available
+          if (subjectData?.chapters) {
+            const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
+            setQuizChapters(prev => ({
+              ...prev,
+              [activeSection]: chapterObjects
+            }));
           }
 
-          // Also fetch status counts for this subject
-          try {
-            const statusCounts = await getStatusCountsBySubject(activeSection);
+          // Set status counts
+          if (statusCounts) {
             setSubjectStatusCounts(prev => ({
               ...prev,
               [activeSection]: statusCounts
             }));
-          } catch (statusErr) {
-            console.error('Failed to fetch status counts:', statusErr);
           }
 
-          // Also fetch chapter counts for this subject
-          try {
-            const chapterCounts = await getChapterCountsBySubject(activeSection);
+          // Set chapter counts
+          if (chapterCounts) {
             setSubjectChapterCounts(prev => ({
               ...prev,
               [activeSection]: chapterCounts
             }));
-          } catch (chapterErr) {
-            console.error('Failed to fetch chapter counts:', chapterErr);
           }
 
-          // Also fetch level counts for this subject
-          try {
-            const levelCounts = await getLevelCountsBySubject(activeSection);
+          // Set level counts
+          if (levelCounts) {
             setSubjectLevelCounts(prev => ({
               ...prev,
               [activeSection]: levelCounts
             }));
-          } catch (levelErr) {
-            console.error('Failed to fetch level counts:', levelErr);
           }
         } catch (err) {
-          console.error('Failed to fetch questions for subject:', activeSection, err);
+          console.error('Failed to fetch subject data:', activeSection, err);
+        } finally {
+          setIsLoadingSubject(false);
         }
       };
 
       fetchQuestions();
     }
-  }, [activeSection, allSubjects, questionPagination, questionFilters, isHydrated]);
+  }, [activeSection, allSubjects, questionPagination, currentFilters, isHydrated]);
+
+  // Fetch chapters and counts for "All Subjects" mode
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    if (activeSection === 'all-subjects' && allSubjects.length > 0) {
+      // Check if we already fetched for these exact filters
+      const filtersKey = JSON.stringify(currentFilters);
+      if (lastFetchedSectionRef.current === 'all-subjects' && lastFetchedFiltersRef.current === filtersKey) {
+        return;
+      }
+      
+      const fetchAllModeData = async () => {
+        try {
+          // Update refs before fetching
+          lastFetchedSectionRef.current = 'all-subjects';
+          lastFetchedFiltersRef.current = filtersKey;
+          
+          // Fetch chapters for all subjects
+          const allChapterData: Record<string, { id: string; name: string }[]> = {};
+          
+          await Promise.all(
+            allSubjects.map(async (subject) => {
+              try {
+                const subjectData = await getSubjectBySlug(subject.slug);
+                if (subjectData?.chapters) {
+                  allChapterData[subject.slug] = subjectData.chapters
+                    .map(c => ({ id: c.id, name: c.name }))
+                    .sort((a, b) => a.name.localeCompare(b.name));
+                }
+              } catch (err) {
+                console.error(`Failed to fetch chapters for ${subject.slug}:`, err);
+              }
+            })
+          );
+          
+          setQuizChapters(allChapterData);
+
+          // Fetch all-mode counts from API with current filters
+          try {
+            const apiFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+            if (currentFilters.status && currentFilters.status !== 'all') apiFilters.status = currentFilters.status;
+            if (currentFilters.level && currentFilters.level !== 'all') apiFilters.level = currentFilters.level;
+            if (currentFilters.chapter && currentFilters.chapter !== 'all') apiFilters.chapter = currentFilters.chapter;
+            if (currentFilters.search) apiFilters.search = currentFilters.search;
+            const filterCounts = await getAllQuestionsFilterCounts(apiFilters);
+            setSubjectChapterCounts(prev => ({ ...prev, 'all-subjects': filterCounts.chapters }));
+            setSubjectLevelCounts(prev => ({ ...prev, 'all-subjects': filterCounts.levels }));
+            setSubjectStatusCounts(prev => ({ ...prev, 'all-subjects': filterCounts.status }));
+          } catch (err) {
+            console.error('Failed to fetch all-mode counts:', err);
+          }
+        } catch (err) {
+          console.error('Failed to fetch all mode data:', err);
+        }
+      };
+      
+      fetchAllModeData();
+    }
+  }, [activeSection, allSubjects, currentFilters, isHydrated]);
+
+  // Fetch filtered counts for single subject mode when filters change
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
+    
+    if (isSubjectSection && activeSection !== 'dashboard' && activeSection !== 'all-subjects') {
+      // Check if we already fetched for these exact filters
+      const filtersKey = JSON.stringify(currentFilters);
+      if (lastFetchedSectionRef.current === activeSection && lastFetchedFiltersRef.current === filtersKey) {
+        return;
+      }
+      
+      const fetchFilteredCounts = async () => {
+        try {
+          // Only fetch if we have filters applied
+          const hasActiveFilters = currentFilters.status !== 'all' || 
+                                   currentFilters.level !== 'all' || 
+                                   currentFilters.chapter !== 'all' || 
+                                   (currentFilters.search && currentFilters.search.length > 0);
+          
+          if (hasActiveFilters) {
+            // Update refs before fetching
+            lastFetchedSectionRef.current = activeSection;
+            lastFetchedFiltersRef.current = filtersKey;
+            
+            const apiFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
+            if (currentFilters.status && currentFilters.status !== 'all') apiFilters.status = currentFilters.status;
+            if (currentFilters.level && currentFilters.level !== 'all') apiFilters.level = currentFilters.level;
+            if (currentFilters.chapter && currentFilters.chapter !== 'all') apiFilters.chapter = currentFilters.chapter;
+            if (currentFilters.search) apiFilters.search = currentFilters.search;
+            const filterCounts = await getSubjectFilterCounts(activeSection, apiFilters);
+            
+            setSubjectChapterCounts(prev => ({ ...prev, [activeSection]: filterCounts.chapters }));
+            setSubjectLevelCounts(prev => ({ ...prev, [activeSection]: filterCounts.levels }));
+            setSubjectStatusCounts(prev => ({ ...prev, [activeSection]: filterCounts.status }));
+          }
+        } catch (err) {
+          console.error('Failed to fetch filtered counts:', err);
+        }
+      };
+      
+      fetchFilteredCounts();
+    }
+  }, [activeSection, currentFilters, allSubjects, isHydrated]);
 
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
@@ -414,6 +551,18 @@ export default function AdminPage(): JSX.Element {
 
   const getChaptersForSubject = (slug: string): { id: string; name: string }[] => {
     return quizChapters[slug] ?? [];
+  };
+
+  const getAllChapters = (): { id: string; name: string }[] => {
+    const allChapters: { id: string; name: string }[] = [];
+    Object.values(quizChapters).forEach(chapters => {
+      chapters.forEach(ch => {
+        if (!allChapters.find(c => c.id === ch.id)) {
+          allChapters.push(ch);
+        }
+      });
+    });
+    return allChapters.sort((a, b) => a.name.localeCompare(b.name));
   };
 
   const getStatusCountsForSubject = (slug: string): SubjectStatusCounts | undefined => {
@@ -452,22 +601,10 @@ export default function AdminPage(): JSX.Element {
     });
   };
 
-  // Handle question filter change (server-side filtering)
-  const handleQuestionFilterChange = useCallback((subjectSlug: string, filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
-    setQuestionFilters((prev) => {
-      return { ...prev, [subjectSlug]: filters };
-    });
-    // Reset to page 1 when filters change
-    setQuestionPagination((prev) => ({
-      ...prev,
-      [subjectSlug]: { page: 1, limit: prev?.[subjectSlug]?.limit ?? 10, total: prev?.[subjectSlug]?.total ?? 0 }
-    }));
-  }, []);
-
   // Handle questions refresh from server (after bulk actions)
   const handleQuestionsRefresh = async (subjectSlug: string) => {
     const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
-    const filters = questionFilters[subjectSlug] || {};
+    const filters = currentFilters;
     try {
       const result = await getQuestionsBySubject(subjectSlug, filters, pagination.page, pagination.limit);
       const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
@@ -519,6 +656,61 @@ export default function AdminPage(): JSX.Element {
     }
   };
 
+  // Handle unified filter change (without URL sync - URL sync handled by useEffect)
+  const handleFilterChange = useCallback((newFilters: { status?: string; level?: string; chapter?: string; search?: string }) => {
+    // Debounce search input
+    if (newFilters.search !== undefined) {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+      
+      const searchValue = newFilters.search || '';
+      
+      searchDebounceRef.current = setTimeout(() => {
+        setCurrentFilters(prev => ({ ...prev, search: searchValue }));
+      }, 300);
+      
+      // Update local state immediately for UI responsiveness
+      setCurrentFilters(prev => ({ ...prev, search: searchValue }));
+      return;
+    }
+    
+    // For non-search filters, update immediately
+    setCurrentFilters(prev => ({ ...prev, ...newFilters }));
+  }, []);
+
+  // Sync filters to URL when they change
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    const newParams = new URLSearchParams(searchParams.toString());
+    
+    if (currentFilters.status && currentFilters.status !== 'all') {
+      newParams.set('status', currentFilters.status);
+    } else {
+      newParams.delete('status');
+    }
+    if (currentFilters.level && currentFilters.level !== 'all') {
+      newParams.set('level', currentFilters.level);
+    } else {
+      newParams.delete('level');
+    }
+    if (currentFilters.chapter && currentFilters.chapter !== 'all') {
+      newParams.set('chapter', currentFilters.chapter);
+    } else {
+      newParams.delete('chapter');
+    }
+    if (currentFilters.search) {
+      newParams.set('search', currentFilters.search);
+    } else {
+      newParams.delete('search');
+    }
+    
+    newParams.set('page', '1');
+    
+    router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+  }, [currentFilters, pathname, router, isHydrated]);
+
   // Handle get all questions (for "All" mode)
   const handleGetAllQuestions = async (filters: { status?: string; level?: string; chapter?: string; search?: string }, page: number, limit: number) => {
     const result = await getAllQuestionsWithFilters(filters, page, limit);
@@ -529,6 +721,11 @@ export default function AdminPage(): JSX.Element {
   // Handle get all questions status counts (for "All" mode)
   const handleGetAllQuestionsStatusCounts = async () => {
     return await getAllQuestionsStatusCounts();
+  };
+
+  // Handle get all questions filter counts (for "All" mode)
+  const handleGetAllQuestionsFilterCounts = async (filters: { status?: string; level?: string; chapter?: string; search?: string }) => {
+    return await getAllQuestionsFilterCounts(filters);
   };
 
   // Handle questions import
@@ -688,7 +885,6 @@ export default function AdminPage(): JSX.Element {
           options: allOptions,
           correctAnswer: correctAnswerText,
           level: q.level,
-          hint: q.hint || '',
           explanation: q.explanation || '',
           chapterId: chapterId,
           status: q.status === 'trash' ? 'draft' : (q.status || 'published'),
@@ -1002,10 +1198,10 @@ export default function AdminPage(): JSX.Element {
         category: updatedSubject.category,
         isActive: updatedSubject.isActive,
       });
+      refetchSubjects();
     } catch (err) {
       console.error('Failed to update subject in database:', err);
     }
-    setSubjects(prev => prev.map(s => s.id === updatedSubject.id ? updatedSubject : s));
     // If slug changed, update questions key
     if (editingSubject && editingSubject.slug !== updatedSubject.slug) {
       setAllQuestions(prev => {
@@ -1208,13 +1404,15 @@ export default function AdminPage(): JSX.Element {
           )}
           {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && allSubjects.length > 0 && (
             <QuizManagementSection
-              subject={activeSection === 'all-subjects' ? allSubjects[0]! : getSubjectFromSection(activeSection)!}
+              subject={activeSection === 'all-subjects' 
+                ? { id: 'all-subjects', slug: 'all-subjects', name: 'All Subjects', emoji: '📚', isActive: true, category: 'academic', order: -1 } as Subject
+                : getSubjectFromSection(activeSection)!}
               questions={activeSection === 'all-subjects' ? [] : getQuestionsForSubject(activeSection)}
-              pagination={activeSection === 'all-subjects' ? { page: 1, limit: 10, total: Object.values(questionCounts).reduce((a, b) => a + b, 0) } : getQuestionPagination(activeSection)}
-              chapters={activeSection === 'all-subjects' ? [] : getChaptersForSubject(activeSection)}
-              statusCounts={activeSection === 'all-subjects' ? undefined : getStatusCountsForSubject(activeSection)}
-              chapterCounts={activeSection === 'all-subjects' ? undefined : getChapterCountsForSubject(activeSection)}
-              levelCounts={activeSection === 'all-subjects' ? undefined : getLevelCountsForSubject(activeSection)}
+              pagination={activeSection === 'all-subjects' ? { page: 1, limit: 10, total: Object.values(questionCounts).reduce((a: number, b: number) => a + b, 0) } : getQuestionPagination(activeSection)}
+              chapters={activeSection === 'all-subjects' ? getAllChapters() : getChaptersForSubject(activeSection)}
+              statusCounts={activeSection === 'all-subjects' ? subjectStatusCounts['all-subjects'] : getStatusCountsForSubject(activeSection)}
+              chapterCounts={activeSection === 'all-subjects' ? subjectChapterCounts['all-subjects'] : getChapterCountsForSubject(activeSection)}
+              levelCounts={activeSection === 'all-subjects' ? subjectLevelCounts['all-subjects'] : getLevelCountsForSubject(activeSection)}
               allSubjects={[...allSubjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onSubjectSelect={handleSubjectSelect}
               onAddSubject={handleAddSubjectByName}
@@ -1226,12 +1424,15 @@ export default function AdminPage(): JSX.Element {
               onEditSubject={handleEditSubject}
               onDeleteSubject={handleDeleteSubject}
               onPageChange={handleQuestionPageChange}
-              onFilterChange={handleQuestionFilterChange}
               onQuestionsRefresh={handleQuestionsRefresh}
               questionCounts={questionCounts}
               onGetAllQuestions={handleGetAllQuestions}
               onGetAllQuestionsStatusCounts={handleGetAllQuestionsStatusCounts}
+              onGetAllQuestionsFilterCounts={handleGetAllQuestionsFilterCounts}
               showAllMode={activeSection === 'all-subjects'}
+              isLoading={isLoadingSubject}
+              filters={currentFilters}
+              onFilterChange={handleFilterChange}
             />
           )}
           {activeSection === 'jokes' && (
@@ -2147,38 +2348,6 @@ function _parseRiddleCSV(csvText: string): ImportResult<Riddle> {
   });
 }
 */
-
-// ============================================================================
-// GLOBAL JOKES STATE (shared with JokesSection component)
-// ============================================================================
-
-function useGlobalJokes() {
-  const [allJokes, setAllJokes] = useState<Joke[]>([]);
-
-  useEffect(() => {
-    getJokes()
-      .then(setAllJokes)
-      .catch(() => setAllJokes([]));
-  }, []);
-
-  return { allJokes, setAllJokes };
-}
-
-// ============================================================================
-// GLOBAL JOKE CATEGORIES STATE (shared with JokesSection component)
-// ============================================================================
-
-function useGlobalJokeCategories() {
-  const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
-
-  useEffect(() => {
-    getJokeCategories()
-      .then(setJokeCategories)
-      .catch(() => setJokeCategories([]));
-  }, []);
-
-  return { jokeCategories, setJokeCategories };
-}
 
 /** Admin Guard component to be used at the end of the page */
 

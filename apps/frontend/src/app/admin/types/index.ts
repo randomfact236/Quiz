@@ -26,7 +26,6 @@ export interface Question {
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapter: string;
   status?: ContentStatus | undefined;
-  hint?: string | undefined;
   explanation?: string | undefined;
 }
 

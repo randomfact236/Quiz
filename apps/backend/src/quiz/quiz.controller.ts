@@ -13,7 +13,7 @@ import {
   HttpStatus,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiQuery, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, IsBoolean } from 'class-validator';
 
@@ -109,6 +109,41 @@ export class QuizController {
   @ApiOperation({ summary: 'Get status counts for all questions' })
   async getAllQuestionsStatusCounts(): Promise<{ total: number; published: number; draft: number; trash: number }> {
     return this.quizService.getAllQuestionsStatusCounts();
+  }
+
+  @Get('questions/all/chapter-counts')
+  @ApiOperation({ summary: 'Get chapter counts for all questions across all subjects' })
+  async getAllQuestionsChapterCounts(): Promise<Record<string, number>> {
+    return this.quizService.getAllQuestionsChapterCounts();
+  }
+
+  @Get('questions/all/level-counts')
+  @ApiOperation({ summary: 'Get level counts for all questions across all subjects' })
+  async getAllQuestionsLevelCounts(): Promise<Record<string, number>> {
+    return this.quizService.getAllQuestionsLevelCounts();
+  }
+
+  @Get('questions/all/filter-counts')
+  @ApiOperation({ summary: 'Get filtered counts for all questions' })
+  async getAllQuestionsFilterCounts(
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+  ): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
+    return this.quizService.getAllQuestionsFilterCounts({ level, chapter, status, search });
+  }
+
+  @Get('subjects/:slug/filter-counts')
+  @ApiOperation({ summary: 'Get unified filter counts for a subject' })
+  async getSubjectFilterCounts(
+    @Param('slug') slug: string,
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+  ): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
+    return this.quizService.getSubjectFilterCounts(slug, { level, chapter, status, search });
   }
 
   @Post('subjects')
@@ -334,5 +369,61 @@ export class QuizController {
   @ApiParam({ name: 'slug', example: 'animals' })
   async getLevelCountsBySubject(@Param('slug') slug: string): Promise<Record<string, number>> {
     return this.quizService.getLevelCountsBySubject(slug);
+  }
+
+  // ========== FILTERED COUNTS ENDPOINTS ==========
+
+  @Get('subjects/:slug/status-counts-filtered')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get filtered status counts for a subject' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  @ApiQuery({ name: 'level', required: false, enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @ApiQuery({ name: 'chapter', required: false, type: String })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  async getFilteredStatusCounts(
+    @Param('slug') slug: string,
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('search') search?: string,
+  ): Promise<StatusCountResponseDto> {
+    return this.quizService.getFilteredStatusCounts(slug, { level, chapter, search });
+  }
+
+  @Get('subjects/:slug/chapter-counts-filtered')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get filtered chapter counts for a subject' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  @ApiQuery({ name: 'status', required: false, enum: ['published', 'draft', 'trash'] })
+  @ApiQuery({ name: 'level', required: false, enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  async getFilteredChapterCounts(
+    @Param('slug') slug: string,
+    @Query('status') status?: string,
+    @Query('level') level?: string,
+    @Query('search') search?: string,
+  ): Promise<Record<string, number>> {
+    return this.quizService.getFilteredChapterCounts(slug, { status, level, search });
+  }
+
+  @Get('subjects/:slug/level-counts-filtered')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get filtered level counts for a subject' })
+  @ApiParam({ name: 'slug', example: 'animals' })
+  @ApiQuery({ name: 'status', required: false, enum: ['published', 'draft', 'trash'] })
+  @ApiQuery({ name: 'chapter', required: false, type: String })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  async getFilteredLevelCounts(
+    @Param('slug') slug: string,
+    @Query('status') status?: string,
+    @Query('chapter') chapter?: string,
+    @Query('search') search?: string,
+  ): Promise<Record<string, number>> {
+    return this.quizService.getFilteredLevelCounts(slug, { status, chapter, search });
   }
 }
