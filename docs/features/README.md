@@ -45,11 +45,11 @@ Deep dive explaining:
 
 | Section | Implemented | Future | Total |
 |---------|-------------|--------|-------|
-| Quiz | 26 | 39 | 65 |
-| Riddles MCQ | 18 | 12 | 30 |
-| Riddles Image | 20 | 10 | 30 |
-| Dad Jokes | 18 | 11 | 29 |
-| **Total** | **82** | **72** | **154** |
+| Quiz | 26 | 53 | 79 |
+| Riddles MCQ | 18 | 34 | 52 |
+| Riddles Image | 20 | 36 | 56 |
+| Dad Jokes | 18 | 36 | 54 |
+| **Total** | **82** | **159** | **241** |
 
 ---
 

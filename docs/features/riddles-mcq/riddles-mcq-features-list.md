@@ -31,22 +31,69 @@
 ## Future Improvements
 
 ### 🔜 Core/Basic Features (High Priority)
-- [ ] More Categories
-- [ ] Difficulty Progression System
-- [ ] Enhanced Hint System
+
+#### Riddles Game
+- [ ] More Categories (add Logic, Word Play, Classic, Brain Teasers)
+- [ ] Difficulty Progression System (adaptive difficulty)
+- [ ] Enhanced Hint System (progressive hints, multiple hints per riddle)
+- [ ] Admin CRUD (create/edit/delete riddles via admin panel)
+
+#### Backend/API
+- [ ] CRUD API for Subjects
+- [ ] CRUD API for Chapters
+- [ ] CRUD API for Riddles
+- [ ] Bulk Import (CSV/JSON)
 
 ### 📋 Good to Have Features (Medium Priority)
-- [ ] Daily Challenges
-- [ ] Sound Effects
-- [ ] Timer Display
-- [ ] Progress Saving
+
+#### Riddles Game
+- [ ] Daily Challenges (new riddle each day)
+- [ ] Sound Effects (correct/wrong sounds)
+- [ ] Timer Display (visual countdown)
+- [ ] Progress Saving (localStorage resume)
+- [ ] Share Results (social sharing)
+
+#### Admin
+- [ ] Image Support (add images to riddles)
+- [ ] Difficulty Filter in Admin
+- [ ] Status Management (published/draft/trash)
+
+#### User Features
+- [ ] Favorites/Bookmarks
+- [ ] History Tracking
+- [ ] Performance Analytics
 
 ### 🚀 Enterprise Grade Features (Low Priority)
+
+#### Riddles Game
 - [ ] Achievement Badges
-- [ ] Social Sharing
-- [ ] User Profiles
-- [ ] Leaderboards
-- [ ] Comments/Reviews
+- [ ] Global Leaderboards
+- [ ] User Profiles/Accounts
+- [ ] Multiplayer Mode (compete with others)
+- [ ] Timed Tournaments
+
+#### Admin
+- [ ] Bulk Operations (publish, archive, delete)
+- [ ] Analytics Dashboard
+- [ ] Import/Export Tools
+- [ ] Question Bank Management
+
+#### Platform
+- [ ] Social Features (follow users)
+- [ ] Comments/Reviews on Riddles
+- [ ] Reporting System
+- [ ] Content Moderation
+
+#### Performance
+- [ ] Caching Layer
+- [ ] CDN for Images
+- [ ] API Rate Limiting
+
+#### UI/UX
+- [ ] Dark Mode
+- [ ] Accessibility (ARIA, keyboard nav)
+- [ ] Animations & Transitions
+- [ ] Mobile App (PWA)
 
 ---
 
@@ -54,7 +101,7 @@
 
 | Tier | Implemented | Future |
 |------|-------------|--------|
-| Core/Basic | 7 | 3 |
-| Good to Have | 5 | 4 |
-| Enterprise | 6 | 5 |
-| **Total** | **18** | **12** |
+| Core/Basic | 7 | 10 |
+| Good to Have | 5 | 9 |
+| Enterprise | 6 | 15 |
+| **Total** | **18** | **34** |

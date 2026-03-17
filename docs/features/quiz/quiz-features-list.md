@@ -37,15 +37,16 @@
 
 #### Quiz Game
 - [ ] Quiz Progress Saving (resume mid-quiz)
-- [ ] Multi-Topic Selection (multiple subjects)
-- [ ] Custom Timer Settings
-- [ ] Timer persistence on refresh
-- [ ] Results page URL preservation
+- [ ] Multi-Topic Selection (select multiple subjects)
+- [ ] Custom Timer Settings (user-defined time limits)
+- [ ] Timer persistence on refresh (sessionStorage)
+- [ ] Results page URL preservation (shareable results)
 - [ ] SessionStorage for quiz progress
 
 #### Quiz Admin
-- [ ] Question Hint UI (add hint field, display during quiz, store in database)
+- [ ] Question Hint UI (add hint field, display during quiz, store in DB)
 - [ ] Question Duplication (clone to same/different chapter)
+- [ ] Admin CRUD for all entities via UI
 
 #### Filter System
 - [ ] Filter Presets (save combinations, localStorage persistence)
@@ -58,13 +59,16 @@
 
 #### Quiz Game
 - [ ] Question Randomization/Shuffle
-- [ ] Quiz Analytics Dashboard
+- [ ] Quiz Analytics Dashboard (user performance)
+- [ ] Question Pool (select specific questions)
+- [ ] Custom Quiz Creation
 
 #### Quiz Admin
 - [ ] Subject Reordering (drag-and-drop, persist custom order)
 - [ ] Excel Import (.xlsx support)
 - [ ] Import Preview Enhancement (detailed preview, selective import)
 - [ ] Validation Improvements (text length, empty options, answer match)
+- [ ] Bulk Operations UI
 
 #### Filter System
 - [ ] Keyboard Navigation (arrow keys, Enter/Space, Escape)
@@ -75,6 +79,7 @@
 - [ ] Dark Mode (theme toggle, system preference)
 - [ ] Loading States (skeleton loaders, progress indicators)
 - [ ] Responsive Design (mobile, tablet optimizations)
+- [ ] Accessibility (ARIA, screen reader support)
 
 ### 🚀 Enterprise Grade Features (Low Priority)
 
@@ -83,6 +88,8 @@
 - [ ] Global Leaderboards
 - [ ] User Registration/Profiles
 - [ ] Points System/Gamification
+- [ ] Multiplayer Mode
+- [ ] Timed Tournaments
 
 #### Quiz Admin
 - [ ] Question Tags (tags column, management UI, filter by tags)
@@ -90,14 +97,18 @@
 - [ ] PDF Export (questions to PDF, include answer key)
 - [ ] Undo Bulk Actions (store previous state, toast with undo)
 - [ ] Question Analytics (attempt counts, success rate, dashboard)
+- [ ] Content Scheduling (publish at specific time)
 
 #### CSV Import
 - [ ] JSON Import support
 - [ ] Export functionality (CSV with different formats)
+- [ ] Template Downloads
 
 #### Performance
 - [ ] Caching (API responses, service worker for offline)
 - [ ] Optimizations (lazy loading, code splitting, bundle size)
+- [ ] Database Indexing
+- [ ] Query Optimization
 
 #### Testing
 - [ ] Unit Tests (utility functions, components)
@@ -107,6 +118,13 @@
 #### Documentation
 - [ ] API Documentation (Swagger/OpenAPI, Request/Response examples)
 - [ ] User Guide (admin panel, import questions, create quizzes)
+- [ ] Developer Documentation
+
+#### Platform
+- [ ] Multi-language Support (i18n)
+- [ ] Role-based Access Control
+- [ ] Audit Logs
+- [ ] Webhooks for Integrations
 
 ---
 
@@ -115,6 +133,6 @@
 | Tier | Implemented | Future |
 |------|-------------|--------|
 | Core/Basic | 7 | 10 |
-| Good to Have | 7 | 12 |
-| Enterprise | 12 | 17 |
-| **Total** | **26** | **39** |
+| Good to Have | 7 | 16 |
+| Enterprise | 12 | 27 |
+| **Total** | **26** | **53** |

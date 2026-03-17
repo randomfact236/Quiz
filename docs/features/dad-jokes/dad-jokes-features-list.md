@@ -29,21 +29,75 @@
 ## Future Improvements
 
 ### 🔜 Core/Basic Features (High Priority)
-- [ ] User Accounts
-- [ ] Save Favorites
-- [ ] Joke Submission
+
+#### User Features
+- [ ] User Accounts (registration, login, profiles)
+- [ ] Save Favorites (save jokes to personal collection)
+- [ ] Joke Submission (users submit their own jokes)
+- [ ] My Jokes (user's submitted jokes)
+
+#### Admin
+- [ ] Admin Panel (manage jokes, categories, users)
+- [ ] CRUD for Jokes
+- [ ] CRUD for Categories
+- [ ] User Management
 
 ### 📋 Good to Have Features (Medium Priority)
-- [ ] Joke Ratings
-- [ ] Comments
-- [ ] Collections/Playlists
-- [ ] Email Jokes
+
+#### User Features
+- [ ] Joke Ratings (rate joke quality 1-5 stars)
+- [ ] Comments (comment on jokes)
+- [ ] Collections/Playlists (create joke collections)
+- [ ] Email Jokes (send joke to friend via email)
+- [ ] Joke of the Day
+
+#### Engagement
+- [ ] Daily Newsletter
+- [ ] Push Notifications
+- [ ] Social Sharing (Facebook, Twitter, WhatsApp)
+- [ ] Shareable Profile (share favorite jokes)
+
+#### Content
+- [ ] More Categories (add new joke categories)
+- [ ] Content Moderation (report inappropriate jokes)
+- [ ] Joke Translation (multi-language support)
 
 ### 🚀 Enterprise Grade Features (Low Priority)
+
+#### Platform
 - [ ] Social Features (follow users)
+- [ ] User Activity Feed
+- [ ] Friend Leaderboards
+- [ ] Comments Replies (threaded comments)
+- [ ] Reactions (beyond like/dislike)
+
+#### Engagement
 - [ ] Daily Notifications
-- [ ] Email Subscription
-- [ ] Comment Replies
+- [ ] Email Subscription (daily/weekly jokes)
+- [ ] Push Notifications (new jokes, trending)
+- [ ] Gamification (points, levels, badges)
+
+#### Admin
+- [ ] Analytics Dashboard
+- [ ] Bulk Import/Export
+- [ ] Automated Moderation (AI content filter)
+- [ ] User Analytics
+- [ ] Revenue Features (premium subscriptions)
+
+#### Technical
+- [ ] API Documentation (Swagger)
+- [ ] Rate Limiting
+- [ ] Caching Layer
+- [ ] CDN for Images
+- [ ] PWA Support
+- [ ] Mobile App
+
+#### UI/UX
+- [ ] Dark Mode
+- [ ] Custom Themes
+- [ ] Animations
+- [ ] Accessibility
+- [ ] Multiple Languages (i18n)
 
 ---
 
@@ -51,7 +105,7 @@
 
 | Tier | Implemented | Future |
 |------|-------------|--------|
-| Core/Basic | 6 | 3 |
-| Good to Have | 6 | 4 |
-| Enterprise | 6 | 4 |
-| **Total** | **18** | **11** |
+| Core/Basic | 6 | 8 |
+| Good to Have | 6 | 11 |
+| Enterprise | 6 | 17 |
+| **Total** | **18** | **36** |

@@ -32,20 +32,70 @@
 ## Future Improvements
 
 ### 🔜 Core/Basic Features (High Priority)
-- [ ] Admin Image Upload
-- [ ] More Categories
-- [ ] Difficulty Progression
+
+#### Image Riddles Game
+- [ ] Admin Image Upload (upload via admin panel)
+- [ ] More Categories (add more visual riddle categories)
+- [ ] Difficulty Progression (adaptive difficulty based on performance)
+- [ ] Bulk Image Import (import multiple images at once)
+
+#### Backend/API
+- [ ] CRUD API for Categories
+- [ ] CRUD API for Image Riddles
+- [ ] Image Storage Integration (S3, Cloudinary, etc.)
 
 ### 📋 Good to Have Features (Medium Priority)
-- [ ] Sound Hints
-- [ ] Progress Saving (localStorage)
-- [ ] Daily Challenges
+
+#### Image Riddles Game
+- [ ] Sound Hints (audio clues)
+- [ ] Progress Saving (localStorage persistence)
+- [ ] Daily Challenges (new image each day)
+- [ ] Zoom Feature (pinch to zoom on mobile)
+- [ ] Full-screen Mode
+
+#### Hint System
+- [ ] Progressive Blur (start blurred, gradually reveal)
+- [ ] Multiple Hint Levels (3 hints, each revealing more)
+- [ ] Video Hints (short video clues)
+
+#### User Features
+- [ ] Favorites/Bookmarks
+- [ ] Solved History
+- [ ] Share to Social Media
 
 ### 🚀 Enterprise Grade Features (Low Priority)
-- [ ] Social Sharing
-- [ ] Leaderboards
+
+#### Admin
+- [ ] Image Compression/Optimization
+- [ ] Duplicate Detection
+- [ ] Bulk Operations (publish, archive, delete)
+- [ ] Analytics Dashboard (solves, attempts, popularity)
+- [ ] Content Moderation Tools
+
+#### Platform
 - [ ] User Accounts
-- [ ] Collections/Favorites
+- [ ] Leaderboards (fastest solvers)
+- [ ] Achievements/Badges
+- [ ] Tournaments/Events
+- [ ] Multiplayer Mode (race to solve)
+
+#### Image Features
+- [ ] AI-generated Hints (using AI to generate hints)
+- [ ] Image Categories/Tags
+- [ ] Image Search (search by image content)
+
+#### Performance
+- [ ] Lazy Loading Images
+- [ ] Image CDN
+- [ ] Caching Strategy
+- [ ] Offline Mode (PWA)
+
+#### UI/UX
+- [ ] Dark Mode
+- [ ] Custom Themes
+- [ ] Animations
+- [ ] Accessibility
+- [ ] Mobile App (PWA)
 
 ---
 
@@ -53,7 +103,7 @@
 
 | Tier | Implemented | Future |
 |------|-------------|--------|
-| Core/Basic | 6 | 3 |
-| Good to Have | 6 | 3 |
-| Enterprise | 8 | 4 |
-| **Total** | **20** | **10** |
+| Core/Basic | 6 | 9 |
+| Good to Have | 6 | 10 |
+| Enterprise | 8 | 17 |
+| **Total** | **20** | **36** |
