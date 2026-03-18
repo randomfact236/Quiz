@@ -5,6 +5,8 @@ import { FileUploader } from '@/components/ui/FileUploader';
 import { Pencil, Trash2, FileQuestion } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
+import { LevelFilter, ChapterFilter, SubjectFilter, SearchInput } from '@/components/ui/quiz-filters';
+import { useQuizFilters } from '@/lib/useQuizFilters';
 import type { Question, Subject, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import { downloadFile, exportQuestionsToCSV } from '../utils';
 import { importQuestionsFromCSV, parseCSVContent } from '../utils/quiz-importer';
@@ -30,16 +32,8 @@ interface QuizManagementSectionProps {
   chapters?: { id: string; name: string }[];
   /** Status counts from server (total, published, draft, trash) */
   statusCounts?: SubjectStatusCounts | undefined;
-  /** Chapter counts from server */
-  chapterCounts?: Record<string, number> | undefined;
-  /** Level counts from server */
-  levelCounts?: Record<string, number> | undefined;
-  /** All available subjects for filtering */
+  /** All available subjects (needed for CSV import) */
   allSubjects: Subject[];
-  /** Callback when a subject is selected from filters */
-  onSubjectSelect: (slug: string) => void;
-  /** Callback to add a new subject */
-  onAddSubject: (name: string, slug: string) => void | Promise<void>;
   /** Callback to add a new chapter */
   onAddChapter: (subjectSlug: string, chapterName: string) => void;
   /** Callback to delete a chapter */
@@ -50,34 +44,12 @@ interface QuizManagementSectionProps {
   onQuestionsUpdate: (subjectSlug: string, updatedQuestions: Question[]) => void;
   /** Callback to clear all questions for a subject */
   onClearQuestions: (subjectSlug: string) => void;
-  /** Callback to edit a subject */
-  onEditSubject: (subject: Subject) => void;
-  /** Callback to delete a subject */
-  onDeleteSubject: (subjectId: string) => void;
   /** Callback when page changes (server-side pagination) */
   onPageChange?: (subjectSlug: string, page: number, limit: number) => void;
   /** Callback to refresh questions from server (after bulk actions) */
   onQuestionsRefresh?: (subjectSlug: string) => void | Promise<void>;
-  /** Question counts per subject */
-  questionCounts?: Record<string, number>;
-  /** Callback to get all questions (for "All" mode) */
-  onGetAllQuestions?: (filters: { status?: string; level?: string; chapter?: string; search?: string }, page: number, limit: number) => Promise<{ data: Question[]; total: number }>;
-  onGetAllQuestionsStatusCounts?: () => Promise<{ total: number; published: number; draft: number; trash: number }>;
-  /** Callback to get all questions filter counts (for "All" mode) */
-  onGetAllQuestionsFilterCounts?: (filters: { status?: string; level?: string; chapter?: string; search?: string }) => Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>;
-  /** Whether to show all subjects mode (controlled) */
-  showAllMode?: boolean;
   /** Whether the subject data is loading */
   isLoading?: boolean;
-  /** Controlled filter state from parent */
-  filters?: {
-    status?: string;
-    level?: string;
-    chapter?: string;
-    search?: string;
-  };
-  /** Callback when filters change (controlled - replaces old onFilterChange) */
-  onFilterChange?: (filters: { status?: string; level?: string; chapter?: string; search?: string }) => void;
 }
 
 /**
@@ -116,222 +88,51 @@ export function QuizManagementSection({
   pagination,
   chapters,
   statusCounts,
-  chapterCounts,
-  levelCounts,
   allSubjects,
-  onSubjectSelect,
   onAddChapter,
   onDeleteChapter,
   onQuestionsImport,
   onQuestionsUpdate,
   onClearQuestions,
-  onEditSubject,
-  onDeleteSubject,
   onPageChange,
-  onFilterChange,
   onQuestionsRefresh,
-  questionCounts,
-  onGetAllQuestions,
-  onGetAllQuestionsStatusCounts,
-  onGetAllQuestionsFilterCounts,
-  showAllMode = false,
   isLoading = false,
-  filters,
 }: QuizManagementSectionProps): JSX.Element {
-  // Use controlled filters if provided, otherwise use local state
-  const [localFilterLevel, setLocalFilterLevel] = useState<string>('all');
-  const [localFilterChapter, setLocalFilterChapter] = useState<string>('all');
-  const [localSearchTerm, setLocalSearchTerm] = useState('');
-  const [localStatusFilter, setLocalStatusFilter] = useState<StatusFilter>('all');
-
-  // Controlled vs local filter state
-  const filterLevel = filters?.level ?? localFilterLevel;
-  const setFilterLevel = (value: string) => {
-    if (filters) {
-      onFilterChange?.({ level: value });
-    } else {
-      setLocalFilterLevel(value);
-    }
-  };
-
-  const filterChapter = filters?.chapter ?? localFilterChapter;
-  const setFilterChapter = (value: string) => {
-    if (filters) {
-      onFilterChange?.({ chapter: value });
-    } else {
-      setLocalFilterChapter(value);
-    }
-  };
-
-  const searchTerm = filters?.search ?? localSearchTerm;
-  const setSearchTerm = (value: string) => {
-    if (filters) {
-      onFilterChange?.({ search: value });
-    } else {
-      setLocalSearchTerm(value);
-    }
-  };
-
-  const statusFilter = (filters?.status as StatusFilter) ?? localStatusFilter;
-  const setStatusFilter = (value: StatusFilter) => {
-    if (filters) {
-      onFilterChange?.({ status: value });
-    } else {
-      setLocalStatusFilter(value);
-    }
-  };
-
-  // "All" mode state - controlled by showAllMode prop (no local state, use prop only)
-  const [allModeQuestions, setAllModeQuestions] = useState<Question[]>([]);
-  const [allModePagination, setAllModePagination] = useState({ page: 1, limit: 10, total: 0 });
-  const [allModeStatusCounts, setAllModeStatusCounts] = useState<{ total: number; published: number; draft: number; trash: number } | undefined>();
-  const [allModeChapterCounts, setAllModeChapterCounts] = useState<Record<string, number> | undefined>();
-  const [allModeLevelCounts, setAllModeLevelCounts] = useState<Record<string, number> | undefined>();
-  
-  // Track last fetched filters to prevent infinite loops
-  const lastFetchedFiltersRef = useRef<string>('');
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Display values - use allMode data when showAllMode is true (using prop, not local state)
-  const displayQuestions = showAllMode ? allModeQuestions : questions;
-  const displayPagination = showAllMode ? allModePagination : (pagination || { page: 1, limit: 10, total: 0 });
-  const displayStatusCounts = showAllMode ? allModeStatusCounts : statusCounts;
-  // Use allMode counts when in "All Subjects" mode, otherwise use props
-  const displayChapterCounts = showAllMode ? allModeChapterCounts : chapterCounts;
-  const displayLevelCounts = showAllMode ? allModeLevelCounts : levelCounts;
-
-  // Trigger API call when filters change (server-side filtering) - only for single subject mode
-  useEffect(() => {
-    // Only trigger if using local state (not controlled)
-    if (!filters && !showAllMode && onFilterChange) {
-      const newFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-      if (statusFilter !== 'all') newFilters.status = statusFilter;
-      if (filterLevel !== 'all') newFilters.level = filterLevel;
-      if (filterChapter !== 'all') newFilters.chapter = filterChapter;
-      if (searchTerm) newFilters.search = searchTerm;
-      onFilterChange(newFilters);
-    }
-  }, [showAllMode, statusFilter, filterLevel, filterChapter, searchTerm, subject.slug, onFilterChange, filters]);
-
-  // Selection states
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [bulkActionLoading, setBulkActionLoading] = useState(false);
-
   // Server-side pagination - always use from props
   const isServerPagination = pagination !== undefined;
   const serverPagination = pagination || { page: 1, limit: 10, total: 0 };
+
+  // Display values - directly from props
+  const displayQuestions = questions;
+  const displayPagination = serverPagination;
+  const displayStatusCounts = statusCounts;
+  const totalQuestions = displayPagination.total;
   
+  const [pageInput, setPageInput] = useState(String(serverPagination.page));
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
   // Initialize from props, then sync with useEffect
   const [currentPage, setCurrentPage] = useState(serverPagination.page);
   const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
 
-  // Track last fetched params for questions
-  const lastFetchedQuestionsRef = useRef<string>('');
-  const questionsAbortRef = useRef<AbortController | null>(null);
-  
-  // Fetch "All" mode data when filters change
-  useEffect(() => {
-    if (!showAllMode || !onGetAllQuestions) {
-      return undefined;
-    }
-    
-    const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-    if (statusFilter !== 'all') filters.status = statusFilter;
-    if (filterLevel !== 'all') filters.level = filterLevel;
-    if (filterChapter !== 'all') filters.chapter = filterChapter;
-    if (searchTerm) filters.search = searchTerm;
-    
-    const paramsKey = JSON.stringify({ filters, page: currentPage, limit: questionsPerPage });
-    if (lastFetchedQuestionsRef.current === paramsKey) {
-      return undefined;
-    }
-    
-    // Cancel any pending request
-    if (questionsAbortRef.current) {
-      questionsAbortRef.current.abort();
-    }
-    
-    const controller = new AbortController();
-    questionsAbortRef.current = controller;
-    
-    lastFetchedQuestionsRef.current = paramsKey;
-    
-    const fetchAllQuestions = async () => {
-      try {
-        const result = await onGetAllQuestions(filters, currentPage, questionsPerPage);
-        if (!controller.signal.aborted) {
-          setAllModeQuestions(result.data);
-          setAllModePagination(prev => ({ ...prev, total: result.total }));
-        }
-      } catch (err) {
-        if (!controller.signal.aborted) {
-          console.error('Failed to fetch all questions:', err);
-        }
-      }
-    };
-    
-    fetchAllQuestions();
-    
-    return () => {
-      controller.abort();
-    };
-  }, [showAllMode, currentPage, questionsPerPage, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestions]);
+  // URL-based filters
+  const { filters, setFilter, resetFilters } = useQuizFilters(subject.slug === 'all-subjects' ? undefined : subject.slug);
 
-  // Fetch "All" mode status counts
-  useEffect(() => {
-    if (!showAllMode || !onGetAllQuestionsStatusCounts) {
-      return undefined;
-    }
-    onGetAllQuestionsStatusCounts().then(setAllModeStatusCounts);
-    return undefined;
-  }, [showAllMode, onGetAllQuestionsStatusCounts]);
+  // For StatusDashboard - use URL filter
+  const statusFilter: StatusFilter = (filters.status as StatusFilter) || 'all';
+  const setStatusFilter = (status: StatusFilter) => {
+    setFilter('status', status);
+  };
 
-  // Fetch "All" mode filter counts (chapters and levels)
-  useEffect(() => {
-    if (!showAllMode || !onGetAllQuestionsFilterCounts) {
-      return undefined;
-    }
-    
-    const filters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-    if (statusFilter !== 'all') filters.status = statusFilter;
-    if (filterLevel !== 'all') filters.level = filterLevel;
-    if (filterChapter !== 'all') filters.chapter = filterChapter;
-    if (searchTerm) filters.search = searchTerm;
-    
-    const filtersKey = JSON.stringify(filters);
-    if (lastFetchedFiltersRef.current === filtersKey) {
-      return undefined;
-    }
-    
-    // Cancel any pending request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-    
-    lastFetchedFiltersRef.current = filtersKey;
-    
-    onGetAllQuestionsFilterCounts(filters).then((counts) => {
-      if (!controller.signal.aborted) {
-        setAllModeChapterCounts(counts.chapters);
-        setAllModeLevelCounts(counts.levels);
-        setAllModeStatusCounts(counts.status);
-      }
-    }).catch((err) => {
-      if (!controller.signal.aborted) {
-        console.error('Failed to fetch filter counts:', err);
-      }
-    });
-    
-    return () => {
-      controller.abort();
-    };
-  }, [showAllMode, statusFilter, filterLevel, filterChapter, searchTerm, onGetAllQuestionsFilterCounts]);
-  const totalQuestions = displayPagination.total;
-  
-  const [pageInput, setPageInput] = useState(String(serverPagination.page));
+  // Convert chapters prop to filter format
+  const chapterList = useMemo(() => {
+    return (chapters || []).map(ch => ({
+      id: ch.id,
+      name: ch.name,
+      count: 0,
+    }));
+  }, [chapters]);
 
   // Modal states
   const [showImportModal, setShowImportModal] = useState(false);
@@ -383,44 +184,13 @@ export function QuizManagementSection({
     chapter: '',
   });
 
-  // Chapter editing state
-  const [editingChapter, setEditingChapter] = useState<string | null>(null);
-  const [editingChapterName, setEditingChapterName] = useState('');
-
-  // Server-provided chapters (contains all chapters from DB)
-  const chaptersList = useMemo(() => {
-    if (chapters && chapters.length > 0) {
-      return chapters.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
-    }
-    return [];
-  }, [chapters]);
-
   // Use statusCounts (from server or allMode)
   const computedStatusCounts = useMemo(() => {
     return displayStatusCounts || { total: 0, published: 0, draft: 0, trash: 0 };
   }, [displayStatusCounts]);
 
-  // Use chapterCounts (from server or computed from allModeQuestions)
-  const computedChapterCounts = useMemo(() => {
-    return displayChapterCounts || {};
-  }, [displayChapterCounts]);
-
-  // Use levelCounts (from server or computed from allModeQuestions)
-  const computedLevelCounts = useMemo(() => {
-    const counts: Record<string, number> = displayLevelCounts || {};
-    const easy = counts['easy'] || 0;
-    const medium = counts['medium'] || 0;
-    const hard = counts['hard'] || 0;
-    const expert = counts['expert'] || 0;
-    const extreme = counts['extreme'] || 0;
-    return { easy, medium, hard, expert, extreme, all: easy + medium + hard + expert + extreme };
-  }, [displayLevelCounts]);
-
   // Questions are already filtered from the backend - use directly from props
   const filteredQuestions = displayQuestions;
-
-  // Debug logging
-  console.log('[QuestionManagement] questions prop:', questions?.length, 'pagination:', pagination, 'page:', currentPage, 'limit:', questionsPerPage);
 
   // Check if showing all questions - use server total if available
   const isShowingAll = questionsPerPage >= totalQuestions;
@@ -435,18 +205,9 @@ export function QuizManagementSection({
     : (currentPage - 1) * questionsPerPage;
     
   // Use questions directly from server when server-side pagination, otherwise slice locally
-  // When in "All" mode (showAllMode), use filteredQuestions which contains allModeQuestions
-  const paginatedQuestions = showAllMode
-    ? filteredQuestions  // All mode questions are already fetched and filtered
-    : isServerPagination 
-      ? questions  // Server already paginated for single subject
-      : filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-    setPageInput('1');
-  }, [filterLevel, filterChapter, searchTerm, statusFilter]);
+  const paginatedQuestions = isServerPagination 
+    ? questions  // Server already paginated for single subject
+    : filteredQuestions.slice(startIndex, startIndex + questionsPerPage);
 
   // Sync local state with server pagination when it changes
   useEffect(() => {
@@ -524,24 +285,6 @@ export function QuizManagementSection({
     }
   }, []);
 
-  // Get level button color
-  const getLevelButtonColor = useCallback((level: string): string => {
-    switch (level) {
-      case 'easy':
-        return 'bg-green-500 text-white';
-      case 'medium':
-        return 'bg-yellow-500 text-white';
-      case 'hard':
-        return 'bg-orange-500 text-white';
-      case 'expert':
-        return 'bg-red-500 text-white';
-      case 'extreme':
-        return 'bg-purple-500 text-white';
-      default:
-        return 'bg-gray-500 text-white';
-    }
-  }, []);
-
   // Bulk action handler
   const handleBulkAction = useCallback(
     async (action: BulkActionType) => {
@@ -587,13 +330,6 @@ export function QuizManagementSection({
 
       onQuestionsUpdate(subject.slug, updatedQuestions);
 
-      console.log('Bulk action completed:', action, 'updatedQuestions count:', updatedQuestions.length, 'published:', updatedQuestions.filter(q => q.status === 'published').length, 'draft:', updatedQuestions.filter(q => q.status === 'draft').length, 'trash:', updatedQuestions.filter(q => q.status === 'trash').length);
-
-      // Always switch to "All" after moving to trash/draft so user can see remaining questions
-      if (action === 'trash' || action === 'draft') {
-        setStatusFilter('all');
-      }
-
       // Refresh from server to get updated counts (status, chapter, level)
       // This fixes the issue where counts don't update after bulk action
       if (onQuestionsRefresh) {
@@ -603,7 +339,7 @@ export function QuizManagementSection({
       setSelectedIds([]);
       setBulkActionLoading(false);
     },
-    [selectedIds, questions, subject.slug, onQuestionsUpdate, onQuestionsRefresh, statusFilter]
+    [selectedIds, questions, subject.slug, onQuestionsUpdate, onQuestionsRefresh]
   );
 
   // Reset form
@@ -923,47 +659,6 @@ export function QuizManagementSection({
   const [lastImportContent, setLastImportContent] = useState('');
 
 
-
-
-  // Clear filters
-  const clearFilters = useCallback(() => {
-    setSearchTerm('');
-    setFilterLevel('all');
-    setFilterChapter('all');
-    setStatusFilter('all');
-  }, []);
-
-  // Handle chapter rename
-  const handleStartEditChapter = useCallback((chapterName: string) => {
-    setEditingChapter(chapterName);
-    setEditingChapterName(chapterName);
-  }, []);
-
-  const handleCancelEditChapter = useCallback(() => {
-    setEditingChapter(null);
-    setEditingChapterName('');
-  }, []);
-
-  const handleSaveChapterName = useCallback(() => {
-    if (!editingChapter || !editingChapterName.trim() || editingChapterName.trim() === editingChapter) {
-      setEditingChapter(null);
-      return;
-    }
-
-    const newName = editingChapterName.trim();
-
-    // Refresh questions after chapter rename
-    onQuestionsRefresh?.(subject.slug);
-
-    // If the filter was set to the old chapter, update it
-    if (filterChapter === editingChapter) {
-      setFilterChapter(newName);
-    }
-
-    setEditingChapter(null);
-    setEditingChapterName('');
-  }, [editingChapter, editingChapterName, filterChapter, subject.slug, onQuestionsRefresh]);
-
   // Handle add new chapter
   const handleAddNewChapter = useCallback(() => {
     if (!newChapterName.trim()) return;
@@ -1045,8 +740,6 @@ export function QuizManagementSection({
     }
     return undefined;
   }, [showDeleteModal]);
-
-  const hasActiveFilters = searchTerm || filterLevel !== 'all' || filterChapter !== 'all' || statusFilter !== 'all';
 
   return (
     <div>
@@ -1153,6 +846,68 @@ export function QuizManagementSection({
 
       {/* Filter Bar */}
       <div className="mb-4 rounded-xl bg-white p-4 shadow-md space-y-4 relative">
+        {/* Subject Filter Row */}
+        {subject.slug === 'all-subjects' ? (
+          allSubjects.length > 0 ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700 shrink-0">Subject:</span>
+              <SubjectFilter
+                value={filters.subject || 'all'}
+                onChange={(value) => setFilter('subject', value)}
+                subjects={allSubjects.map(s => ({ slug: s.slug, name: s.name, emoji: s.emoji }))}
+              />
+            </div>
+          ) : null
+        ) : (
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <span>Subject:</span>
+            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-lg">
+              {subject.emoji} {subject.name}
+            </span>
+          </div>
+        )}
+
+        {/* Chapter Filter Row */}
+        {chapterList.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700 shrink-0">Chapter:</span>
+            <ChapterFilter
+              value={filters.chapter}
+              onChange={(value) => setFilter('chapter', value)}
+              chapters={chapterList}
+            />
+          </div>
+        )}
+
+        {/* Level Filter Row */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-700 shrink-0">Level:</span>
+          <LevelFilter
+            value={filters.level}
+            onChange={(value) => setFilter('level', value)}
+            counts={{}}
+          />
+        </div>
+
+        {/* Search Row */}
+        <div className="w-full">
+          <SearchInput
+            value={filters.search}
+            onChange={(value) => setFilter('search', value)}
+            placeholder="Search questions..."
+          />
+        </div>
+
+        {/* Reset Filters */}
+        {(filters.level !== 'all' || filters.chapter !== 'all' || filters.search || filters.status !== 'all') && (
+          <button
+            onClick={resetFilters}
+            className="text-sm text-blue-600 hover:text-blue-800 underline"
+          >
+            Reset all filters
+          </button>
+        )}
+
         {/* Loading overlay */}
         {isLoading && (
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-xl z-20 flex items-center justify-center transition-opacity duration-200">
@@ -1165,208 +920,6 @@ export function QuizManagementSection({
             </div>
           </div>
         )}
-        
-        {/* Subject Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Subject:</span>
-          
-          {/* ALL button */}
-          <button
-            onClick={() => {
-              setFilterChapter('all');
-              setFilterLevel('all');
-              setStatusFilter('all');
-              onSubjectSelect('all-subjects');
-            }}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${
-              showAllMode
-                ? 'bg-blue-500 text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            All ({Object.values(questionCounts || {}).reduce((a, b) => a + b, 0)})
-          </button>
-          
-          {allSubjects.map((s) => (
-            <div key={s.slug} className="flex items-center gap-0.5">
-              <button
-                onClick={() => { 
-                  setFilterChapter('all');
-                  setFilterLevel('all');
-                  setStatusFilter('all');
-                  onSubjectSelect(s.slug); 
-                }}
-                className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${!showAllMode && subject.slug === s.slug
-                  ? 'bg-blue-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                aria-pressed={!showAllMode && subject.slug === s.slug}
-              >
-                <span role="img" aria-hidden="true">
-                  {s.emoji}
-                </span>{' '}
-                {s.name} ({questionCounts?.[s.slug] || 0})
-              </button>
-              {/* Edit button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEditSubject(s);
-                }}
-                className={`px-1.5 py-1.5 rounded-none transition-colors border-x border-white/20 ${!showAllMode && subject.slug === s.slug
-                  ? 'bg-blue-400 text-white hover:bg-blue-300'
-                  : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
-                  }`}
-                title={`Edit ${s.name}`}
-              >
-                <Pencil size={12} />
-              </button>
-              {/* Delete button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteSubject(s.id);
-                }}
-                className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${!showAllMode && subject.slug === s.slug
-                  ? 'bg-blue-400 text-white hover:bg-red-400'
-                  : 'bg-gray-200 text-red-600 hover:bg-red-50'
-                  }`}
-                title={`Delete ${s.name}`}
-              >
-                <Trash2 size={12} />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Chapter Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Chapter:</span>
-          <button
-            onClick={() => setFilterChapter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${filterChapter === 'all'
-              ? 'bg-green-500 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            aria-pressed={filterChapter === 'all'}
-          >
-            All Chapters <span className="opacity-70">({pagination?.total ?? questions.length})</span>
-          </button>
-          {chaptersList.map((ch) => (
-            <div key={ch.id} className="flex items-center gap-1">
-              {editingChapter === ch.id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editingChapterName}
-                    onChange={(e) => setEditingChapterName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleSaveChapterName();
-                      if (e.key === 'Escape') handleCancelEditChapter();
-                    }}
-                    className="px-2 py-1 text-sm border rounded-lg w-32"
-                    autoFocus
-                  />
-                  <button
-                    onClick={handleSaveChapterName}
-                    className="text-green-600 hover:text-green-800 px-1"
-                    title="Save"
-                  >
-                    ✓
-                  </button>
-                  <button
-                    onClick={handleCancelEditChapter}
-                    className="text-red-600 hover:text-red-800 px-1"
-                    title="Cancel"
-                  >
-                    ✕
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setFilterChapter(ch.name)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 ${filterChapter === ch.name
-                      ? 'bg-green-500 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    aria-pressed={filterChapter === ch.name}
-                  >
-                    {ch.name} <span className="opacity-70">({computedChapterCounts[ch.name] || 0})</span>
-                  </button>
-                  <button
-                    onClick={() => handleStartEditChapter(ch.id)}
-                    className="text-gray-400 hover:text-blue-600 px-1 transition-colors"
-                    title="Edit chapter name"
-                  >
-                    <Pencil className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setChapterToDelete({ id: ch.id, name: ch.name });
-                      setShowDeleteChapterModal(true);
-                    }}
-                    className="text-gray-400 hover:text-red-600 px-1 transition-colors"
-                    title="Delete chapter"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </>
-              )}
-            </div>
-          ))}
-          <button
-            onClick={() => setShowAddChapterModal(true)}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center gap-1"
-          >
-            <span>+</span> Add Chapter
-          </button>
-        </div>
-
-        {/* Level Filters Row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-2">Level:</span>
-          {['all', 'easy', 'medium', 'hard', 'expert', 'extreme'].map((level) => (
-            <button
-              key={level}
-              onClick={() => setFilterLevel(level)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out transform hover:scale-105 active:scale-95 capitalize ${filterLevel === level
-                ? level === 'all'
-                  ? 'bg-purple-500 text-white shadow-md'
-                  : getLevelButtonColor(level) + ' shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              aria-pressed={filterLevel === level}
-            >
-              {level === 'all' ? 'All Levels' : level}{' '}
-              <span className="opacity-70">({(computedLevelCounts as Record<string, number>)[level] || 0})</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Search Row */}
-        <div className="flex items-center gap-2">
-          <label htmlFor="question-search" className="text-sm font-medium text-gray-600">
-            Search:
-          </label>
-          <input
-            id="question-search"
-            type="text"
-            placeholder="Type to search questions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
-            aria-label="Search questions by keyword"
-          />
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm"
-            >
-              ✕ Clear
-            </button>
-          )}
-        </div>
       </div>
 
       {/* Import Modal */}
@@ -1651,7 +1204,7 @@ export function QuizManagementSection({
                     aria-required="true"
                   >
                     <option value="">Select Chapter</option>
-                    {chaptersList.map((ch) => (
+                    {chapters?.map((ch) => (
                       <option key={ch.id} value={ch.id}>
                         {ch.name}
                       </option>
@@ -1833,7 +1386,7 @@ export function QuizManagementSection({
                     aria-required="true"
                   >
                     <option value="">Select Chapter</option>
-                    {chaptersList.map((ch) => (
+                    {chapters?.map((ch) => (
                       <option key={ch.id} value={ch.id}>
                         {ch.name}
                       </option>

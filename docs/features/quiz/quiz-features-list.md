@@ -17,7 +17,6 @@
 - Challenge Mode (timed questions)
 - Timer Challenge Mode
 - Streak Tracking
-- Explanation Display after Answer
 
 ### ✅ Enterprise Grade Features
 - CSV Bulk Import
@@ -28,6 +27,26 @@
 - Search Questions
 - Real-time Filter Counts
 - Docker Deployment Support
+
+---
+
+## 🔴 Immediate Implementation (Current)
+
+### Filter System
+- [x] SQL GROUP BY Aggregation (completed - handles 100K+ questions)
+- [x] Single API Endpoint with filter-counts (completed)
+- [x] URL-centric state management (completed)
+- [ ] **Filter Summary** (show selected filters as chips) - 🔜 IN PROGRESS
+- [ ] **Remove Explanation Column** (remove from entity, DTOs, frontend) - 🔜 PENDING
+
+### New Filter System Architecture ✅ PLANNED
+| Component | Status |
+|-----------|--------|
+| Single API endpoint (filter-counts) | ✅ Backend ready |
+| useQuizFilters hook | ✅ Planned |
+| Button-based filter UI | ✅ Planned |
+| URL sync (browser history) | ✅ Planned |
+| Debounced API calls | ✅ Planned |
 
 ---
 
@@ -48,32 +67,14 @@
 - [ ] Question Duplication (clone to same/different chapter)
 - [ ] Admin CRUD for all entities via UI
 
-#### Filter System
+#### Filter System (Future)
+- [x] URL-centric state management (single source of truth)
+- [x] Database aggregation (no memory load)
 - [ ] Filter Presets (save combinations, localStorage persistence)
+- [ ] Sort Options (sort by date, level, status)
 - [ ] Date Range Filter (filter by creation/update date)
-
-#### CSV Import
-- [ ] Duplicate Question Detection (skip/update/warn)
-
-### 📋 Good to Have Features (Medium Priority)
-
-#### Quiz Game
-- [ ] Question Randomization/Shuffle
-- [ ] Quiz Analytics Dashboard (user performance)
-- [ ] Question Pool (select specific questions)
-- [ ] Custom Quiz Creation
-
-#### Quiz Admin
-- [ ] Subject Reordering (drag-and-drop, persist custom order)
-- [ ] Excel Import (.xlsx support)
-- [ ] Import Preview Enhancement (detailed preview, selective import)
-- [ ] Validation Improvements (text length, empty options, answer match)
-- [ ] Bulk Operations UI
-
-#### Filter System
-- [ ] Keyboard Navigation (arrow keys, Enter/Space, Escape)
-- [ ] Count Animations (animate numbers, color transitions)
-- [ ] Additional Filters (Has Explanation filter, Sort options, Filter Summary)
+- [ ] Redis Caching (reduce DB load for 100K+)
+- [ ] Materialized Views (NOT recommended - real-time AJAX system)
 
 #### UI/UX
 - [ ] Dark Mode (theme toggle, system preference)
@@ -104,11 +105,10 @@
 - [ ] Export functionality (CSV with different formats)
 - [ ] Template Downloads
 
-#### Performance
+#### Performance (Future)
+- [ ] Redis Caching (5-20ms response time)
 - [ ] Caching (API responses, service worker for offline)
-- [ ] Optimizations (lazy loading, code splitting, bundle size)
-- [ ] Database Indexing
-- [ ] Query Optimization
+- [ ] Materialized Views (NOT recommended - real-time AJAX system, no pre-computation needed)
 
 #### Testing
 - [ ] Unit Tests (utility functions, components)

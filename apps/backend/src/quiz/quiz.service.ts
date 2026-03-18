@@ -148,13 +148,6 @@ export class QuizService {
     return this.chapterRepo.save(chapter);
   }
 
-  async updateChapter(id: string, name: string): Promise<Chapter> {
-    const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (!chapter) { throw new NotFoundException('Chapter not found'); }
-    chapter.name = name;
-    return this.chapterRepo.save(chapter);
-  }
-
   async deleteChapter(id: string): Promise<void> {
     const result = await this.chapterRepo.delete(id);
     if (result.affected === 0) { throw new NotFoundException('Chapter not found'); }
@@ -258,105 +251,239 @@ export class QuizService {
     return { easy, medium, hard, expert, extreme };
   }
 
-  async getAllQuestionsFilterCounts(filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
-    const where: any = {};
-    
-    if (filters.level && filters.level !== 'all') {
-      where.level = filters.level;
+  async getFilterCounts(filters: {
+    subject?: string;
+    status?: string;
+    level?: string;
+    chapter?: string;
+    search?: string;
+  }): Promise<{
+    subjectCounts: { slug: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number }[];
+    levelCounts: { level: string; count: number }[];
+    statusCounts: { status: string; count: number }[];
+    total: number;
+  }> {
+    const baseQuery = this.questionRepo.createQueryBuilder('question')
+      .leftJoinAndSelect('question.chapter', 'chapter')
+      .leftJoinAndSelect('chapter.subject', 'subject');
+
+    if (filters.subject && filters.subject !== 'all') {
+      baseQuery.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subject });
     }
     if (filters.status && filters.status !== 'all') {
-      where.status = filters.status as ContentStatus;
+      baseQuery.andWhere('question.status = :status', { status: filters.status });
+    }
+    if (filters.level && filters.level !== 'all') {
+      baseQuery.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      baseQuery.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
     }
     if (filters.search) {
-      where.question = ILike(`%${filters.search}%`);
+      baseQuery.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
     }
 
-    // Get filtered questions for chapter/level counts
-    const filteredQuestions = await this.questionRepo.find({
-      relations: ['chapter'],
-      where,
+    const [total, statusResults, levelResults] = await Promise.all([
+      baseQuery.clone().getCount(),
+      baseQuery.clone()
+        .select('question.status', 'status')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.status')
+        .getRawMany(),
+      baseQuery.clone()
+        .select('question.level', 'level')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.level')
+        .getRawMany(),
+    ]);
+
+    let subjectResults: { slug: string; count: number }[] = [];
+    let chapterResults: { id: string; name: string; count: number }[] = [];
+
+    if (!filters.subject || filters.subject === 'all') {
+      const subjectRaw = await this.questionRepo.createQueryBuilder('question')
+        .leftJoin('question.chapter', 'chapter')
+        .leftJoin('chapter.subject', 'subject')
+        .select('subject.slug', 'slug')
+        .addSelect('COUNT(*)', 'count')
+        .where('subject.slug IS NOT NULL')
+        .groupBy('subject.slug')
+        .getRawMany();
+      subjectResults = subjectRaw.map(r => ({ slug: r.slug, count: parseInt(r.count, 10) }));
+    }
+
+    if (filters.subject && filters.subject !== 'all') {
+      const subject = await this.subjectRepo.findOne({ where: { slug: filters.subject } });
+      if (subject) {
+        const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
+        const chapterIds = chapters.map(c => c.id);
+        if (chapterIds.length > 0) {
+          const chapterRaw = await this.questionRepo.createQueryBuilder('question')
+            .select('question.chapterId', 'id')
+            .addSelect('chapter.name', 'name')
+            .addSelect('COUNT(*)', 'count')
+            .leftJoin('question.chapter', 'chapter')
+            .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+            .groupBy('question.chapterId')
+            .addGroupBy('chapter.name')
+            .getRawMany();
+          chapterResults = chapterRaw.map(r => ({ id: r.id, name: r.name, count: parseInt(r.count, 10) }));
+        }
+      }
+    } else {
+      const allChapters = await this.chapterRepo.find({ relations: ['subject'] });
+      const chapterMap = new Map(allChapters.map(c => [c.id, c.name]));
+      const chapterRaw = await baseQuery.clone()
+        .select('question.chapterId', 'id')
+        .addSelect('COUNT(*)', 'count')
+        .where('question.chapterId IS NOT NULL')
+        .groupBy('question.chapterId')
+        .getRawMany();
+      chapterResults = chapterRaw.map(r => ({
+        id: r.id,
+        name: chapterMap.get(r.id) || 'Unknown',
+        count: parseInt(r.count, 10)
+      }));
+    }
+
+    const statusCounts = statusResults.map(r => ({ status: r.status, count: parseInt(r.count, 10) }));
+    const levelCounts = levelResults.map(r => ({ level: r.level, count: parseInt(r.count, 10) }));
+
+    return {
+      subjectCounts: subjectResults,
+      chapterCounts: chapterResults,
+      levelCounts,
+      statusCounts,
+      total,
+    };
+  }
+
+  async getAllQuestionsFilterCounts(filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
+    const baseQuery = this.questionRepo.createQueryBuilder('question')
+      .leftJoinAndSelect('question.chapter', 'chapter');
+
+    if (filters.level && filters.level !== 'all') {
+      baseQuery.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      baseQuery.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+    }
+    if (filters.search) {
+      baseQuery.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
+    }
+
+    const [statusResults, chapterResults, levelResults] = await Promise.all([
+      baseQuery.clone()
+        .select('question.status', 'status')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.status')
+        .getRawMany(),
+      baseQuery.clone()
+        .select('chapter.name', 'chapterName')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('chapter.name')
+        .getRawMany(),
+      baseQuery.clone()
+        .select('question.level', 'level')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.level')
+        .getRawMany(),
+    ]);
+
+    const statusCounts = { total: 0, published: 0, draft: 0, trash: 0 };
+    statusResults.forEach(r => {
+      const count = parseInt(r.count, 10);
+      statusCounts.total += count;
+      if (r.status === 'published') statusCounts.published = count;
+      if (r.status === 'draft') statusCounts.draft = count;
+      if (r.status === 'trash') statusCounts.trash = count;
     });
 
-    // Calculate chapter counts from filtered questions
     const chapters: Record<string, number> = {};
-    filteredQuestions.forEach(q => {
-      const chapterName = q.chapter?.name || 'Unassigned';
-      chapters[chapterName] = (chapters[chapterName] || 0) + 1;
+    chapterResults.forEach(r => {
+      chapters[r.chapterName || 'Unassigned'] = parseInt(r.count, 10);
     });
 
-    // Calculate level counts from filtered questions
     const levels: Record<string, number> = { easy: 0, medium: 0, hard: 0, expert: 0, extreme: 0 };
-    filteredQuestions.forEach(q => {
-      if (q.level) {
-        levels[q.level] = (levels[q.level] || 0) + 1;
+    levelResults.forEach(r => {
+      if (r.level) {
+        levels[r.level] = parseInt(r.count, 10);
       }
     });
 
-    // Get status counts
-    const [total, published, draft, trash] = await Promise.all([
-      this.questionRepo.count({ where: filters.status && filters.status !== 'all' ? { ...where, status: filters.status as ContentStatus } : undefined }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.PUBLISHED } }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.DRAFT } }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.TRASH } }),
-    ]);
-
     return {
-      status: { total, published, draft, trash },
+      status: statusCounts,
       chapters,
       levels,
     };
   }
 
   async getSubjectFilterCounts(subjectSlug: string, filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
-    // Find subject by slug
     const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
     if (!subject) {
       throw new NotFoundException(`Subject with slug ${subjectSlug} not found`);
     }
 
-    const where: any = { subject: { id: subject.id } };
-    
+    const baseQuery = this.questionRepo.createQueryBuilder('question')
+      .leftJoinAndSelect('question.chapter', 'chapter')
+      .leftJoinAndSelect('chapter.subject', 'subject')
+      .where('subject.id = :subjectId', { subjectId: subject.id });
+
     if (filters.level && filters.level !== 'all') {
-      where.level = filters.level;
+      baseQuery.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      baseQuery.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
     }
     if (filters.status && filters.status !== 'all') {
-      where.status = filters.status as ContentStatus;
+      baseQuery.andWhere('question.status = :status', { status: filters.status });
     }
     if (filters.search) {
-      where.question = ILike(`%${filters.search}%`);
+      baseQuery.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
     }
 
-    // Get filtered questions for chapter/level counts
-    const filteredQuestions = await this.questionRepo.find({
-      relations: ['chapter'],
-      where,
+    const [statusResults, chapterResults, levelResults] = await Promise.all([
+      baseQuery.clone()
+        .select('question.status', 'status')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.status')
+        .getRawMany(),
+      baseQuery.clone()
+        .select('chapter.name', 'chapterName')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('chapter.name')
+        .getRawMany(),
+      baseQuery.clone()
+        .select('question.level', 'level')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('question.level')
+        .getRawMany(),
+    ]);
+
+    const statusCounts = { total: 0, published: 0, draft: 0, trash: 0 };
+    statusResults.forEach(r => {
+      const count = parseInt(r.count, 10);
+      statusCounts.total += count;
+      if (r.status === 'published') statusCounts.published = count;
+      if (r.status === 'draft') statusCounts.draft = count;
+      if (r.status === 'trash') statusCounts.trash = count;
     });
 
-    // Calculate chapter counts from filtered questions
     const chapters: Record<string, number> = {};
-    filteredQuestions.forEach(q => {
-      const chapterName = q.chapter?.name || 'Unassigned';
-      chapters[chapterName] = (chapters[chapterName] || 0) + 1;
+    chapterResults.forEach(r => {
+      chapters[r.chapterName || 'Unassigned'] = parseInt(r.count, 10);
     });
 
-    // Calculate level counts from filtered questions
     const levels: Record<string, number> = { easy: 0, medium: 0, hard: 0, expert: 0, extreme: 0 };
-    filteredQuestions.forEach(q => {
-      if (q.level) {
-        levels[q.level] = (levels[q.level] || 0) + 1;
+    levelResults.forEach(r => {
+      if (r.level) {
+        levels[r.level] = parseInt(r.count, 10);
       }
     });
 
-    // Get status counts
-    const [total, published, draft, trash] = await Promise.all([
-      this.questionRepo.count({ where: filters.status && filters.status !== 'all' ? { ...where, status: filters.status as ContentStatus } : where }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.PUBLISHED } }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.DRAFT } }),
-      this.questionRepo.count({ where: { ...where, status: ContentStatus.TRASH } }),
-    ]);
-
     return {
-      status: { total, published, draft, trash },
+      status: statusCounts,
       chapters,
       levels,
     };
@@ -463,7 +590,6 @@ export class QuizService {
       correctLetter: isOpenEnded ? null : dto.correctLetter,
       options: isOpenEnded ? null : (dto.options || []),
       level: dto.level,
-      explanation: dto.explanation,
       chapter,
       status: dto.status || ContentStatus.PUBLISHED,
     });
@@ -551,7 +677,6 @@ export class QuizService {
           correctLetter: isOpenEnded ? null : correctLetter,
           options: isOpenEnded ? null : (q.options || []),
           level: q.level,
-          explanation: q.explanation,
           chapter,
           status: q.status || ContentStatus.PUBLISHED,
           order: q.order || i,
@@ -600,22 +725,12 @@ export class QuizService {
         question.correctLetter = null;
       }
     }
-    if (dto.explanation !== undefined) {
-      question.explanation = dto.explanation;
-    }
     if (dto.chapterId !== undefined) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
       if (!chapter) { throw new NotFoundException('Chapter not found'); }
       question.chapter = chapter;
     }
 
-    return this.questionRepo.save(question);
-  }
-
-  async updateQuestionStatus(id: string, status: ContentStatus): Promise<Question> {
-    const question = await this.questionRepo.findOne({ where: { id } });
-    if (!question) { throw new NotFoundException('Question not found'); }
-    question.status = status;
     return this.questionRepo.save(question);
   }
 
@@ -770,145 +885,6 @@ export class QuizService {
       .where('question.chapterId IN (:...chapterIds)', { chapterIds })
       .groupBy('question.level')
       .getRawMany();
-
-    const counts: Record<string, number> = {
-      easy: 0,
-      medium: 0,
-      hard: 0,
-      expert: 0,
-      extreme: 0
-    };
-    results.forEach(r => {
-      counts[r.level] = parseInt(r.count, 10);
-    });
-
-    return counts;
-  }
-
-  // ========== FILTERED COUNTS METHODS ==========
-
-  /**
-   * Get filtered status counts for a subject
-   */
-  async getFilteredStatusCounts(
-    subjectSlug: string,
-    filters: { level?: string; chapter?: string; search?: string }
-  ): Promise<StatusCountResponse> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map(c => c.id);
-
-    if (chapterIds.length === 0) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    // Build base query
-    let query = this.questionRepo
-      .createQueryBuilder('question')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds });
-
-    // Apply filters
-    if (filters.level) {
-      query = query.andWhere('question.level = :level', { level: filters.level });
-    }
-    if (filters.chapter) {
-      query = query.andWhere('question.chapterId = :chapterId', { chapterId: filters.chapter });
-    }
-    if (filters.search) {
-      query = query.andWhere('question.question LIKE :search', { search: `%${filters.search}%` });
-    }
-
-    const total = await query.getCount();
-    const published = await query.clone().andWhere('question.status = :status', { status: 'published' }).getCount();
-    const draft = await query.clone().andWhere('question.status = :status', { status: 'draft' }).getCount();
-    const trash = await query.clone().andWhere('question.status = :status', { status: 'trash' }).getCount();
-
-    return { total, published, draft, trash };
-  }
-
-  /**
-   * Get filtered chapter counts for a subject
-   */
-  async getFilteredChapterCounts(
-    subjectSlug: string,
-    filters: { status?: string; level?: string; search?: string }
-  ): Promise<Record<string, number>> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return {};
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map(c => c.id);
-
-    if (chapterIds.length === 0) {
-      return {};
-    }
-
-    const counts: Record<string, number> = {};
-    for (const chapter of chapters) {
-      let query = this.questionRepo
-        .createQueryBuilder('question')
-        .where('question.chapterId = :chapterId', { chapterId: chapter.id });
-
-      if (filters.status) {
-        query = query.andWhere('question.status = :status', { status: filters.status });
-      }
-      if (filters.level) {
-        query = query.andWhere('question.level = :level', { level: filters.level });
-      }
-      if (filters.search) {
-        query = query.andWhere('question.question LIKE :search', { search: `%${filters.search}%` });
-      }
-
-      counts[chapter.name] = await query.getCount();
-    }
-
-    return counts;
-  }
-
-  /**
-   * Get filtered level counts for a subject
-   */
-  async getFilteredLevelCounts(
-    subjectSlug: string,
-    filters: { status?: string; chapter?: string; search?: string }
-  ): Promise<Record<string, number>> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return {};
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map(c => c.id);
-
-    if (chapterIds.length === 0) {
-      return {};
-    }
-
-    // Build base query
-    let query = this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.level', 'level')
-      .addSelect('COUNT(*)', 'count')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('question.level');
-
-    if (filters.status) {
-      query = query.andWhere('question.status = :status', { status: filters.status });
-    }
-    if (filters.chapter) {
-      query = query.andWhere('question.chapterId = :chapterId', { chapterId: filters.chapter });
-    }
-    if (filters.search) {
-      query = query.andWhere('question.question LIKE :search', { search: `%${filters.search}%` });
-    }
-
-    const results = await query.getRawMany();
 
     const counts: Record<string, number> = {
       easy: 0,

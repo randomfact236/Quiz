@@ -44,7 +44,6 @@ function convertQuizQuestion(q: QuizQuestion): Question {
     level: q.level,
     chapter: q.chapterId,
     status: q.status || 'published',
-    explanation: q.explanation || '',
   };
 }
 

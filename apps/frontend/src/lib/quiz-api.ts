@@ -36,7 +36,6 @@ export interface QuizQuestion {
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
     chapter?: { id: string; name: string };
-    explanation?: string;
     status?: 'published' | 'draft' | 'trash';
     updatedAt?: string;
 }
@@ -67,7 +66,6 @@ export interface CreateQuestionDto {
     options: string[] | null;
     level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId: string;
-    explanation?: string | undefined;
     status?: 'published' | 'draft' | undefined;
 }
 
@@ -78,7 +76,6 @@ export interface UpdateQuestionDto {
     options?: string[] | null;
     level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId?: string;
-    explanation?: string | undefined;
     status?: 'published' | 'draft' | undefined;
 }
 
@@ -143,14 +140,16 @@ export async function createChapter(dto: CreateChapterDto): Promise<QuizChapter>
     return response.data;
 }
 
-export async function updateChapter(id: string, name: string): Promise<QuizChapter> {
-    const response = await api.put<QuizChapter>(`/quiz/chapters/${id}`, { name });
-    return response.data;
-}
-
 export async function deleteChapter(id: string): Promise<void> {
     await api.delete(`/quiz/chapters/${id}`);
 }
+
+export async function getChaptersForSubject(subjectSlug: string): Promise<{ id: string; name: string }[]> {
+    const subject = await getSubjectBySlug(subjectSlug);
+    return subject.chapters.map(c => ({ id: c.id, name: c.name }));
+}
+
+
 
 // ============================================================================
 // Questions API
@@ -164,19 +163,6 @@ export async function getQuestionsByChapter(
     const response = await api.get<PaginatedResponse<QuizQuestion>>(
         `/quiz/questions/${chapterId}?page=${page}&limit=${limit}`
     );
-    return response.data;
-}
-
-export async function getAllQuestions(
-    page: number = 1,
-    limit: number = 100,
-    status?: string,
-    subjectSlug?: string
-): Promise<PaginatedResponse<QuizQuestion>> {
-    let url = `/quiz/questions?page=${page}&limit=${limit}`;
-    if (status) url += `&status=${status}`;
-    if (subjectSlug) url += `&subject=${subjectSlug}`;
-    const response = await api.get<PaginatedResponse<QuizQuestion>>(url);
     return response.data;
 }
 
@@ -247,41 +233,6 @@ export async function getChapterCountsBySubject(subjectSlug: string): Promise<Re
     return response.data;
 }
 
-export async function getAllQuestionsWithFilters(
-    filters: QuestionFilters = {},
-    page: number = 1,
-    limit: number = 10
-): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
-    let url = `/quiz/questions/all?page=${page}&limit=${limit}`;
-    if (filters.status) url += `&status=${filters.status}`;
-    if (filters.level) url += `&level=${filters.level}`;
-    if (filters.chapter) url += `&chapter=${encodeURIComponent(filters.chapter)}`;
-    if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
-    
-    const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
-    return {
-        data: response.data.data,
-        total: response.data.total,
-        page,
-        limit
-    };
-}
-
-export async function getAllQuestionsStatusCounts(): Promise<SubjectStatusCounts> {
-    const response = await api.get<SubjectStatusCounts>('/quiz/questions/all/status-counts');
-    return response.data;
-}
-
-export async function getAllQuestionsChapterCounts(): Promise<Record<string, number>> {
-    const response = await api.get<Record<string, number>>('/quiz/questions/all/chapter-counts');
-    return response.data;
-}
-
-export async function getAllQuestionsLevelCounts(): Promise<Record<string, number>> {
-    const response = await api.get<Record<string, number>>('/quiz/questions/all/level-counts');
-    return response.data;
-}
-
 export async function getAllQuestionsFilterCounts(filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
     const params = new URLSearchParams();
     if (filters.level) params.append('level', filters.level);
@@ -304,59 +255,29 @@ export async function getSubjectFilterCounts(subjectSlug: string, filters: { lev
     return response.data;
 }
 
-export async function getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
-    const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/level-counts`);
-    return response.data;
+export interface FilterCountsResponse {
+    subjectCounts: { slug: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number }[];
+    levelCounts: { level: string; count: number }[];
+    statusCounts: { status: string; count: number }[];
+    total: number;
 }
 
-// ========== FILTERED COUNTS API ==========
-
-export interface FilterParams {
+export async function getFilterCounts(filters: {
+    subject?: string;
     status?: string;
     level?: string;
     chapter?: string;
     search?: string;
-}
-
-export async function getFilteredStatusCounts(
-    subjectSlug: string,
-    filters: FilterParams
-): Promise<SubjectStatusCounts> {
+}): Promise<FilterCountsResponse> {
     const params = new URLSearchParams();
+    if (filters.subject) params.append('subject', filters.subject);
+    if (filters.status) params.append('status', filters.status);
     if (filters.level) params.append('level', filters.level);
     if (filters.chapter) params.append('chapter', filters.chapter);
     if (filters.search) params.append('search', filters.search);
     
-    const url = `/quiz/subjects/${subjectSlug}/status-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
-    const response = await api.get<SubjectStatusCounts>(url);
-    return response.data;
-}
-
-export async function getFilteredChapterCounts(
-    subjectSlug: string,
-    filters: FilterParams
-): Promise<Record<string, number>> {
-    const params = new URLSearchParams();
-    if (filters.status) params.append('status', filters.status);
-    if (filters.level) params.append('level', filters.level);
-    if (filters.search) params.append('search', filters.search);
-    
-    const url = `/quiz/subjects/${subjectSlug}/chapter-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
-    const response = await api.get<Record<string, number>>(url);
-    return response.data;
-}
-
-export async function getFilteredLevelCounts(
-    subjectSlug: string,
-    filters: FilterParams
-): Promise<Record<string, number>> {
-    const params = new URLSearchParams();
-    if (filters.status) params.append('status', filters.status);
-    if (filters.chapter) params.append('chapter', filters.chapter);
-    if (filters.search) params.append('search', filters.search);
-    
-    const url = `/quiz/subjects/${subjectSlug}/level-counts-filtered${params.toString() ? '?' + params.toString() : ''}`;
-    const response = await api.get<Record<string, number>>(url);
+    const response = await api.get<FilterCountsResponse>(`/quiz/filter-counts?${params.toString()}`);
     return response.data;
 }
 
@@ -390,7 +311,4 @@ export async function bulkActionQuestions(
     return response.data;
 }
 
-export async function getStatusCounts(): Promise<StatusCountResponse> {
-    const response = await api.get<StatusCountResponse>('/quiz/status-counts');
-    return response.data;
-}
+

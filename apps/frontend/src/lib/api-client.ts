@@ -13,7 +13,7 @@ const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
 console.log('[API Client] Using BASE URL:', BASE);
 console.log('[API Client] Using API_BASE_URL:', API_BASE_URL);
 
-import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';
+import { getItem, STORAGE_KEYS, removeItem } from './storage';
 
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

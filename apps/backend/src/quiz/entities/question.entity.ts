@@ -30,9 +30,6 @@ export class Question {
   @Column()
   chapterId: string;
 
-  @Column({ type: 'text', nullable: true })
-  explanation: string;
-
   @Column({
     type: 'enum',
     enum: ContentStatus,

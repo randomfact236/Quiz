@@ -638,11 +638,6 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   chapterId: string;
 
-  @ApiPropertyOptional({ example: 'Paris is the capital city of France.' })
-  @IsOptional()
-  @IsString()
-  explanation?: string;
-
   @ApiPropertyOptional({ example: 'published', enum: ContentStatus, description: 'Question status' })
   @IsOptional()
   @IsEnum(ContentStatus)
@@ -684,11 +679,6 @@ export class UpdateQuestionDto {
   @IsOptional()
   @IsString()
   chapterId?: string;
-
-  @ApiPropertyOptional({ example: 'Paris is the capital city of France.' })
-  @IsOptional()
-  @IsString()
-  explanation?: string;
 }
 
 // ==================== SUBJECTS ====================
