@@ -71,7 +71,7 @@ export function getDatabaseConfig(
 
   // SECURITY: Never synchronize in production
   // Disabled temporarily due to schema mismatch issues
-  const synchronize = false;
+  const synchronize = process.env.DB_SYNCHRONIZE === 'true';
 
   // Logging: Only enable in development, never in production
   const logging = options.logging ?? (isDevelopment && !isProduction);

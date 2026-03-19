@@ -33,6 +33,7 @@ services:
       REDIS_PORT: 6379
       CORS_ORIGIN: https://quiz.profitbenefit.com
       JWT_SECRET: your-secret-key-here-change-this-in-production
+      DB_SYNCHRONIZE: 'true'
     depends_on:
       - postgres
       - redis
