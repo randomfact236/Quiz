@@ -28,6 +28,7 @@ services:
       DB_USERNAME: aiquiz
       DB_PASSWORD: aiquiz_password
       DB_DATABASE: aiquiz
+      DB_SSL: 'false'
       REDIS_HOST: redis
       REDIS_PORT: 6379
       CORS_ORIGIN: https://quiz.profitbenefit.com
