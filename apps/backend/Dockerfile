@@ -5,7 +5,8 @@ COPY package.json package-lock.json* ./
 COPY apps/backend/package*.json ./apps/backend/
 RUN npm ci
 COPY apps/backend ./apps/backend
-RUN cd apps/backend && npm run build
+WORKDIR /app/apps/backend
+RUN DOCKER_ENV=true npm run build
 
 FROM node:20-alpine AS production
 RUN apk add --no-cache ca-certificates curl
