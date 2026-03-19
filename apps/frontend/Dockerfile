@@ -22,6 +22,7 @@ COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/apps/frontend/.next ./.next
 COPY --from=builder /app/apps/frontend/public ./public
 COPY --from=builder /app/apps/frontend/package.json ./package.json
+COPY --from=builder /app/apps/frontend/scripts ./scripts
 USER nextjs
 EXPOSE 3010
 CMD ["npm", "start"]
