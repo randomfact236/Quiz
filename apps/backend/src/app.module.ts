@@ -73,8 +73,8 @@ import { UsersModule } from './users/users.module';
           // SECURITY: Only log in development, never in production
           logging: !isProduction && configService.get('DB_LOGGING') === 'true',
           poolSize: DB_POOL_SIZE,
-          // SSL configuration for production
-          ssl: isProduction ? { rejectUnauthorized: false } : false,
+          // SSL configuration - disabled for Docker
+          ssl: false,
         };
       },
       inject: [ConfigService],
