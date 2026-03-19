@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto, RefreshDto } from './dto/auth.dto';
+import { LoginDto, RefreshDto } from './dto/auth.dto';
 
 /**
  * Authentication response type
@@ -19,34 +19,16 @@ interface AuthResponse {
 }
 
 /**
- * Authentication controller handling user registration and login
+ * Authentication controller handling user login
  * 
  * @description Provides endpoints for user authentication including
- * registration of new users and login for existing users. Returns
- * JWT tokens upon successful authentication.
+ * login for existing users. Returns JWT tokens upon successful authentication.
+ * Admin accounts are created via CLI only.
  */
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
-
-  /**
-   * Register a new user account
-   * 
-   * @param dto - Validated registration payload (email, password, name)
-   * @returns User data and JWT token
-   * @throws {ConflictException} When email already exists
-   */
-  @Post('register')
-  @HttpCode(HttpStatus.CREATED)
-  @Throttle({ default: { limit: 5, ttl: 60000 } })
-  @ApiOperation({ summary: 'Register a new user' })
-  @ApiResponse({ status: 201, description: 'User registered successfully' })
-  @ApiResponse({ status: 400, description: 'Validation failed' })
-  @ApiResponse({ status: 409, description: 'Email already exists' })
-  async register(@Body() dto: RegisterDto): Promise<AuthResponse> {
-    return this.authService.register(dto.email, dto.password, dto.name);
-  }
 
   /**
    * Authenticate an existing user

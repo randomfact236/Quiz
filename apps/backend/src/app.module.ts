@@ -14,7 +14,6 @@ import {
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { DadJokesModule } from './dad-jokes/dad-jokes.module';
-import { AutoSeedModule } from './database/auto-seed.module';
 import { HealthModule } from './health/health.module';
 import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
 import { QuizModule } from './quiz/quiz.module';
@@ -90,7 +89,6 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     HealthModule,
     SettingsModule,
-    AutoSeedModule,
   ],
   providers: [
     // Global Exception Filter
