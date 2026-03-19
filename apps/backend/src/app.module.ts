@@ -69,7 +69,7 @@ import { UsersModule } from './users/users.module';
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           // synchronize: auto-enables in development to pick up entity changes (e.g. new columns).
           // NEVER enable in production — use migrations instead.
-          synchronize: !isProduction,
+          synchronize: configService.get('DB_SYNCHRONIZE') === 'true',
           // SECURITY: Only log in development, never in production
           logging: !isProduction && configService.get('DB_LOGGING') === 'true',
           poolSize: DB_POOL_SIZE,
