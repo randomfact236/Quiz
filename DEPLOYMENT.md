@@ -1,407 +1,334 @@
-# AI Quiz Platform - Production Deployment Guide
+# AI Quiz Platform - Deployment Guide
 
-## Quick Start
+## Overview
 
-```bash
-# 1. Set up environment
-cp .env.production.example .env.production
-# Edit .env.production with your values
+Next.js + NestJS quiz app with local-first development, VPS for production only.
 
-# 2. Deploy (Linux/Mac)
-./deploy.sh
-
-# 3. Deploy (Windows PowerShell)
-.\deploy.ps1
-```
-
----
-
-## Prerequisites
-
-- Docker 20.10+
-- Docker Compose 2.0+
-- 4GB+ RAM available
-- Ports 3010, 3012, 5432, 6379 available (or configure alternatives)
-
----
-
-## Environment Configuration
-
-### 1. Create Environment File
-
-```bash
-cp .env.production.example .env.production
-```
-
-### 2. Required Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `POSTGRES_PASSWORD` | Database password | `StrongP@ssw0rd123` |
-| `JWT_SECRET` | JWT signing secret | `64-char-hex-string...` |
-| `CORS_ORIGIN` | Frontend URL | `https://quiz.yourdomain.com` |
-| `NEXT_PUBLIC_API_URL` | API URL for frontend | `https://api.yourdomain.com/api` |
-
-### 3. Generate JWT Secret
-
-```bash
-# Linux/Mac
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-
-# Windows PowerShell
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-```
-
----
-
-## Deployment Commands
-
-### Linux/Mac (Bash)
-
-```bash
-# Full deployment
-./deploy.sh deploy
-
-# Individual commands
-./deploy.sh build      # Build images
-./deploy.sh start      # Start services
-./deploy.sh stop       # Stop services
-./deploy.sh restart    # Restart services
-./deploy.sh logs       # View logs
-./deploy.sh status     # Check health
-./deploy.sh backup     # Backup database
-./deploy.sh update     # Update & redeploy
-```
-
-### Windows (PowerShell)
-
-```powershell
-# Full deployment
-.\deploy.ps1 deploy
-
-# Individual commands
-.\deploy.ps1 build
-.\deploy.ps1 start
-.\deploy.ps1 stop
-.\deploy.ps1 restart
-.\deploy.ps1 logs
-.\deploy.ps1 status
-.\deploy.ps1 backup
-.\deploy.ps1 update
-```
+**Domains:**
+- Production Frontend: https://quiz.profitbenefit.com
+- Production API: https://api.profitbenefit.com
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Nginx/SSL     │────▶│   Frontend      │────▶│    Backend      │
-│   (Optional)    │     │   Next.js 15    │     │   NestJS 10     │
-│   :443          │     │   :3010         │     │   :3012         │
-└─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                         │
-                              ┌─────────────────────────┘
-                              │
-                              ▼
-                    ┌─────────────────┐
-                    │    PostgreSQL   │
-                    │      :5432      │
-                    └─────────────────┘
-                              │
-                              ▼
-                    ┌─────────────────┐
-                    │     Redis       │
-                    │      :6379      │
-                    └─────────────────┘
+┌─────────────────────────────────────────┐      ┌─────────────────────────────┐
+│  LOCAL MACHINE (Development)            │      │  VPS PRODUCTION (Dokploy)   │
+│                                         │      │                             │
+│  Tier 1: No-Docker (Default)            │      │  Live site                  │
+│  ├── IDE: OpenCode/Trae/Antigravity     │─────▶│  quiz.profitbenefit.com     │
+│  ├── Local PostgreSQL                   │      │                             │
+│  ├── npm run dev                        │      │  Auto-deploy on git push    │
+│  └── localhost:3010 / localhost:3012     │      │                             │
+│                                         │      │                             │
+│  Tier 2: Local Docker (Heavy work only) │      │                             │
+│  ├── Full rebuild validation             │      │                             │
+│  ├── Database migrations                │      │                             │
+│  └── Temporary use, then down            │      │                             │
+│                                         │      │                             │
+│  RAM protected: ~4-7 GB normal          │      │                             │
+│  RAM spike: ~7-9 GB (Docker temporary)  │      │                             │
+└─────────────────────────────────────────┘      └─────────────────────────────┘
 ```
 
 ---
 
-## Services
+## Development Tiers
+
+| Tier | Use For | Docker? | RAM |
+|------|---------|---------|-----|
+| **No-Docker** | Daily coding, quick edits, extensive work | No | ~4-7 GB |
+| **Local Docker** | Big changes, migrations, pre-push validation | Yes (temporary) | ~7-9 GB |
+
+---
+
+## Viewing Options (Identical Result)
+
+| IDE | Browser Location | How |
+|-----|------------------|-----|
+| Trae | Inside IDE | Built-in panel |
+| Antigravity | Inside IDE | Built-in panel |
+| OpenCode | Outside IDE | External browser (same webpage) |
+
+**No difference in what you see or test.**
+
+---
+
+## Workflow
+
+```
+┌─────────────────┐
+│  Code locally   │
+│  No-Docker      │
+│  localhost:3010 │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    ↓         ↓
+  IDE         External
+  browser     browser
+  (Trae/      (OpenCode)
+  Antigravity)
+    │           │
+    └─────┬─────┘
+          ↓
+    ┌─────────────┐
+    │ Big change? │
+    └──────┬──────┘
+           │
+      ┌────┴────┐
+      ↓         ↓
+     No        Yes
+      │         │
+      ↓         ↓
+   Push to    Local Docker
+   production  Validate
+              ↓
+           Push to
+           production
+```
+
+---
+
+## Local Development Commands
+
+### Daily Development (No-Docker)
+```bash
+# Terminal 1 - Backend
+cd apps/backend && npm run start:dev
+
+# Terminal 2 - Frontend
+cd apps/frontend && npm run dev
+
+# View at localhost:3010
+# Inside IDE (Trae/Antigravity) or outside (OpenCode)
+```
+
+### Heavy Validation (Temporary Local Docker)
+```bash
+# When needed - big changes, migrations, pre-push validation
+docker-compose -f docker-compose.local.yml up -d
+
+# Test thoroughly
+
+# Done - free up RAM
+docker-compose -f docker-compose.local.yml down
+```
+
+### Production
+```bash
+git push origin main
+# Dokploy auto-deploys
+```
+
+---
+
+## RAM Protection
+
+| Situation | Action | Result |
+|-----------|--------|--------|
+| Normal work | No-Docker | ~4-7 GB |
+| Heavy validation | Local Docker temporary | ~7-9 GB short term |
+| RAM full | Stop Docker, continue no-Docker | Back to ~4-7 GB |
+
+---
+
+## Key Points
+
+| Aspect | Decision |
+|--------|----------|
+| Staging | **Not needed** - local test sufficient |
+| Browser location | **Your choice** - same result |
+| Default mode | **No-Docker** for RAM protection |
+| Heavy work | **Local Docker temporary** then down |
+| Production | **VPS only** - already configured |
+
+---
+
+## Production VPS Commands (Dokploy)
+
+### Full restart (delete + recreate)
+```bash
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker rm -f quiz-postgres quiz-redis quiz-backend quiz-frontend && docker compose -f docker-compose.prod.yml up -d
+```
+
+### View logs
+```bash
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker compose -f docker-compose.prod.yml logs -f
+```
+
+### View backend logs only
+```bash
+docker logs quiz-backend --tail=50
+```
+
+### Restart single service
+```bash
+docker restart quiz-backend
+```
+
+### Recreate containers with fresh images
+```bash
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d
+```
+
+---
+
+## Database Commands (VPS)
+
+### Connect to PostgreSQL
+```bash
+docker exec -it quiz-postgres psql -U aiquiz -d aiquiz
+```
+
+### List tables
+```bash
+docker exec quiz-postgres psql -U aiquiz -d aiquiz -c "\dt"
+```
+
+### Create admin via SQL (if npm create-admin fails)
+```bash
+docker exec quiz-postgres psql -U aiquiz -d aiquiz -c "INSERT INTO users (email, password, name, role, \"createdAt\", \"updatedAt\") VALUES ('admin@aiquiz.com', '\$2b\$12\$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewKyDAF3Dj/T1LGS', 'Admin User', 'admin', NOW(), NOW());"
+```
+Password: `admin123`
+
+### Reset database (delete and recreate)
+```bash
+docker exec quiz-postgres dropdb -U aiquiz aiquiz && docker exec quiz-postgres createdb -U aiquiz aiquiz && docker restart quiz-backend
+```
+
+### Create Admin via CLI (npm)
+```bash
+docker exec quiz-backend sh -c "cd /app/apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=admin123"
+```
+
+---
+
+## Database Credentials (VPS)
+```
+DB_HOST: postgres
+DB_PORT: 5432
+DB_USERNAME: aiquiz
+DB_PASSWORD: aiquiz_password
+DB_DATABASE: aiquiz
+```
+
+---
+
+## Container Names (VPS)
+- `quiz-postgres` - PostgreSQL 15 Alpine
+- `quiz-redis` - Redis 7 Alpine
+- `quiz-backend` - NestJS API
+- `quiz-frontend` - Next.js Frontend
+
+---
+
+## Services (VPS)
 
 | Service | Image | Port | Purpose |
 |---------|-------|------|---------|
-| Frontend | Node 20 Alpine | 3010 | Next.js 15 App |
+| Frontend | Node 20 Alpine | 3010 | Next.js App |
 | Backend | Node 20 Alpine | 3012 | NestJS API |
 | Database | Postgres 15 Alpine | 5432 | Data storage |
 | Cache | Redis 7 Alpine | 6379 | Session & cache |
 
 ---
 
-## Health Checks
+## Troubleshooting
 
-All services include automated health checks:
+### "Failed to fetch" on frontend
+- Backend may be down: `docker ps`
+- Check backend logs: `docker logs quiz-backend`
+- Verify `CORS_ORIGIN` includes frontend domain
 
-- **PostgreSQL**: `pg_isready` every 10s
-- **Redis**: `redis-cli ping` every 10s
-- **Backend**: HTTP GET `/api/health` every 30s
-- **Frontend**: HTTP GET `/` every 30s
+### Build fails
+- Check Dockerfile paths: `apps/backend/Dockerfile`, `apps/frontend/Dockerfile`
+- Verify docker-compose.prod.yml context is correct
 
-Check status manually:
+### DB connection fails
+- Verify `DB_SSL: 'false'` in docker-compose (required for Docker networking)
+- Check `DB_HOST=postgres` (service name, not localhost)
+- Verify database container is running
 
-```bash
-# Backend
-curl http://localhost:3012/api/health
+### Frontend 502 errors
+- Backend may be starting up - wait 10 seconds
+- Check backend health: `docker logs quiz-backend`
+- Verify `ALLOWED_ORIGINS` includes `quiz.profitbenefit.com`
 
-# Frontend
-curl http://localhost:3010/
-```
+### Docker layers caching old code
+- The build process caches npm install and COPY layers
+- For fresh rebuild: delete containers, then `docker compose -f docker-compose.prod.yml up -d --build`
 
----
-
-## SSL/HTTPS Setup
-
-### Option 1: Nginx Reverse Proxy (Recommended)
-
-Create `nginx.conf`:
-
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name quiz.yourdomain.com;
-    
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
-    
-    location / {
-        proxy_pass http://localhost:3010;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-    
-    location /api {
-        proxy_pass http://localhost:3012;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-    }
-}
-```
-
-### Option 2: Let's Encrypt with Certbot
-
-```bash
-# Install certbot
-sudo apt install certbot python3-certbot-nginx
-
-# Obtain certificate
-sudo certbot --nginx -d quiz.yourdomain.com -d api.yourdomain.com
-```
-
-### Option 3: Cloudflare Tunnel
-
-```bash
-# Install cloudflared
-wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-sudo dpkg -i cloudflared-linux-amd64.deb
-
-# Create tunnel
-cloudflared tunnel create quiz-app
-cloudflared tunnel route dns quiz-app quiz.yourdomain.com
-cloudflared tunnel run quiz-app
-```
+### Local "Works but prod doesn't" issues
+- Run `docker-compose.local.yml` to validate before big changes
+- Test migrations in local Docker first
+- Clear Redis cache if caching behavior differs
 
 ---
 
-## Backup & Restore
+## Security Notes (VPS)
+- PostgreSQL connection uses `ssl: false` inside Docker network
+- User registration is DISABLED - admin accounts via CLI only
+- Registration endpoint removed from auth controller
 
-### Automatic Backups
+---
 
-Backups are created automatically before updates. Location: `backups/`
+## Health Checks (VPS)
+
+| Service | Check | Interval |
+|---------|-------|----------|
+| PostgreSQL | `pg_isready` | 10s |
+| Redis | `redis-cli ping` | 10s |
+| Backend | HTTP GET `/api/health` | 30s |
+| Frontend | HTTP GET `/` | 30s |
+
+---
+
+## Backup & Restore (VPS)
 
 ### Manual Backup
-
 ```bash
-# Linux/Mac
-./deploy.sh backup
-
-# Windows
-.\deploy.ps1 backup
+docker exec quiz-postgres pg_dump -U aiquiz aiquiz > backups/backup_$(date +%Y%m%d_%H%M%S).sql
 ```
 
 ### Restore from Backup
-
 ```bash
-# Stop services
-./deploy.sh stop
-
-# Restore database
-docker exec -i quiz-postgres-prod psql -U aiquiz -d aiquiz < backups/backup_20240115_120000.sql
-
-# Start services
-./deploy.sh start
+docker exec -i quiz-postgres psql -U aiquiz -d aiquiz < backups/backup_YYYYMMDD_HHMMSS.sql
 ```
 
 ---
 
-## Monitoring
+## Direct VPS Push
 
-### View Logs
+| Edit Type | Safe to Push Direct? |
+|-----------|---------------------|
+| Text/spelling fix | ✅ Yes |
+| Color change | ✅ Yes |
+| Minor CSS adjustment | ✅ Yes |
+| Console.log addition | ✅ Yes |
+| Comment added | ✅ Yes |
+| Single line fix | ✅ Yes |
+| Typo fix | ✅ Yes |
 
-```bash
-# All services
-./deploy.sh logs
-
-# Specific service
-docker logs -f quiz-backend-prod
-docker logs -f quiz-frontend-prod
-docker logs -f quiz-postgres-prod
-docker logs -f quiz-redis-prod
-```
-
-### Resource Usage
-
-```bash
-docker stats
-```
-
-### Database Monitoring
-
-```bash
-# Connect to database
-docker exec -it quiz-postgres-prod psql -U aiquiz -d aiquiz
-
-# Check tables
-\dt
-
-# Check connections
-SELECT * FROM pg_stat_activity;
-```
+| Edit Type | Test First (Local Docker) |
+|-----------|--------------------------|
+| Database schema change | ❌ Required |
+| New API endpoint | ❌ Required |
+| Authentication change | ❌ Required |
+| Payment logic | ❌ Required |
+| Big refactor | ❌ Required |
+| Migration files | ❌ Required |
+| New dependency added | ❌ Required |
 
 ---
 
-## Troubleshooting
+## Bottom Line
 
-### Build Failures
-
-```bash
-# Clean build cache
-./deploy.sh clean
-./deploy.sh build
-```
-
-### Database Connection Issues
-
-```bash
-# Check postgres is running
-docker ps | grep postgres
-
-# Check logs
-docker logs quiz-postgres-prod
-
-# Verify credentials in .env.production
-cat .env.production | grep POSTGRES
-```
-
-### Port Conflicts
-
-Edit `docker-compose.prod.yml` to change ports:
-
-```yaml
-ports:
-  - "3001:3010"  # Frontend on 3001
-  - "4001:3012"  # Backend on 4001 maps to 3012
-```
-
-### Container Won't Start
-
-```bash
-# Check logs
-docker logs quiz-backend-prod
-docker logs quiz-frontend-prod
-
-# Restart specific service
-docker restart quiz-backend-prod
-```
-
----
-
-## Updates
-
-### Update Application
-
-```bash
-# Pull latest code and redeploy
-./deploy.sh update
-```
-
-This will:
-1. Create database backup
-2. Pull latest code from git
-3. Rebuild Docker images
-4. Restart services
-
-### Update Docker Images Only
-
-```bash
-./deploy.sh build
-./deploy.sh restart
-```
-
----
-
-## Security Checklist
-
-- [ ] Changed default PostgreSQL password
-- [ ] Generated strong JWT secret
-- [ ] Set correct CORS origin
-- [ ] Database ports bound to localhost only
-- [ ] SSL/HTTPS configured
-- [ ] Firewall rules configured (ufw/cloud provider)
-- [ ] Regular backups scheduled
-- [ ] `.env.production` not in git
-
----
-
-## Environment-Specific Configurations
-
-### VPS (DigitalOcean, AWS, Linode)
-
-```bash
-# 1. Set up firewall
-sudo ufw allow 22
-sudo ufw allow 443
-sudo ufw allow 80
-sudo ufw enable
-
-# 2. Deploy
-./deploy.sh deploy
-
-# 3. Set up SSL with Let's Encrypt
-sudo certbot --nginx
-```
-
-### Railway/Render (Platform)
-
-Use the provided Docker Compose or individual Dockerfiles:
-
-- Backend: `apps/backend/Dockerfile`
-- Frontend: `apps/frontend/Dockerfile`
-
-### Docker Swarm
-
-```bash
-# Initialize swarm
-docker swarm init
-
-# Deploy stack
-docker stack deploy -c docker-compose.prod.yml quiz-app
-
-# Check services
-docker stack ps quiz-app
-docker service logs quiz-app_backend
-```
-
----
-
-## Support
-
-For issues or questions:
-
-1. Check logs: `./deploy.sh logs`
-2. Check status: `./deploy.sh status`
-3. Review environment variables
-4. Verify ports are available
+- **Develop locally** (no-Docker default)
+- **View anywhere** (IDE inside or outside - same)
+- **Heavy work** → temporary local Docker → back to no-Docker
+- **Push to production** when ready
+- **No staging** - unnecessary for solo development
+- **Small edits** → safe to push direct to VPS
+- **Big changes** → validate in local Docker first
