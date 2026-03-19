@@ -89,7 +89,7 @@ export function getDatabaseConfig(
     logging,
     poolSize: DB_POOL_SIZE,
     // Additional security settings
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    ssl: false,
     // Connection timeout settings
     connectTimeoutMS: 10000,
     // Logging configuration
