@@ -142,7 +142,7 @@ async function createAdmin(): Promise<void> {
     await dataSource.destroy();
     process.exit(0);
   } catch (error) {
-    console.error('❌ Failed to create admin:', error.message);
+    console.error('❌ Failed to create admin:', (error as Error).message);
     await dataSource.destroy().catch(() => {});
     process.exit(1);
   }
