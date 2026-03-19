@@ -17,12 +17,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3010
 RUN apk add --no-cache curl
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/frontend/.next/standalone ./
-COPY --from=builder /app/apps/frontend/.next/static ./.next/static
+WORKDIR /app/apps/frontend
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/apps/frontend/.next ./.next
 COPY --from=builder /app/apps/frontend/public ./public
-COPY --from=builder /app/apps/frontend/server.js ./server.js
+COPY --from=builder /app/apps/frontend/package.json ./package.json
 USER nextjs
 EXPOSE 3010
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
