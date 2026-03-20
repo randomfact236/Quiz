@@ -13,98 +13,45 @@ Next.js + NestJS quiz app with local-first development, VPS for production only.
 ## Architecture
 
 ```
-┌─────────────────────────────────────────┐      ┌─────────────────────────────┐
-│  LOCAL MACHINE (Development)            │      │  VPS PRODUCTION (Dokploy)   │
-│                                         │      │                             │
-│  Tier 1: No-Docker (Default)            │      │  Live site                  │
-│  ├── IDE: OpenCode/Trae/Antigravity     │─────▶│  quiz.profitbenefit.com     │
-│  ├── Local PostgreSQL                   │      │                             │
-│  ├── npm run dev                        │      │  Auto-deploy on git push    │
-│  └── localhost:3010 / localhost:3012     │      │                             │
-│                                         │      │                             │
-│  Tier 2: Local Docker (Heavy work only) │      │                             │
-│  ├── Full rebuild validation             │      │                             │
-│  ├── Database migrations                │      │                             │
-│  └── Temporary use, then down            │      │                             │
-│                                         │      │                             │
-│  RAM protected: ~4-7 GB normal          │      │                             │
-│  RAM spike: ~7-9 GB (Docker temporary)  │      │                             │
-└─────────────────────────────────────────┘      └─────────────────────────────┘
+┌─────────────────────────────────────────────────────┐      ┌─────────────────────────────┐
+│  LOCAL MACHINE (Development)                         │      │  VPS PRODUCTION (Dokploy)   │
+│                                                     │      │                             │
+│  ┌─────────────────────────────────────────────┐    │      │  Live site                  │
+│  │  Docker: PostgreSQL :5432, Redis :6379      │    │      │  quiz.profitbenefit.com     │
+│  └─────────────────────────────────────────────┘    │      │                             │
+│                                                     │      │  Auto-deploy on git push    │
+│  npm run start:dev  →  localhost:3012 (Backend)      │─────▶│                             │
+│  npm run dev        →  localhost:3010 (Frontend)     │      │                             │
+│                                                     │      │                             │
+│  RAM usage: ~4-7 GB                                 │      │                             │
+└─────────────────────────────────────────────────────┘      └─────────────────────────────┘
 ```
 
 ---
 
-## Development Tiers
+## Development Setup
 
-| Tier | Use For | Docker? | RAM |
-|------|---------|---------|-----|
-| **No-Docker** | Daily coding, quick edits, extensive work | No | ~4-7 GB |
-| **Local Docker** | Big changes, migrations, pre-push validation | Yes (temporary) | ~7-9 GB |
-
----
-
-## Viewing Options (Identical Result)
-
-| IDE | Browser Location | How |
-|-----|------------------|-----|
-| Trae | Inside IDE | Built-in panel |
-| Antigravity | Inside IDE | Built-in panel |
-| OpenCode | Outside IDE | External browser (same webpage) |
-
-**No difference in what you see or test.**
-
----
-
-## Workflow
-
-```
-┌─────────────────┐
-│  Code locally   │
-│  No-Docker      │
-│  localhost:3010 │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    ↓         ↓
-  IDE         External
-  browser     browser
-  (Trae/      (OpenCode)
-  Antigravity)
-    │           │
-    └─────┬─────┘
-          ↓
-    ┌─────────────┐
-    │ Big change? │
-    └──────┬──────┘
-           │
-      ┌────┴────┐
-      ↓         ↓
-     No        Yes
-      │         │
-      ↓         ↓
-   Push to    Local Docker
-   production  Validate
-              ↓
-           Push to
-           production
-```
+| Component | Running On | How |
+|-----------|------------|-----|
+| PostgreSQL | Docker (localhost:5432) | `docker-compose.local.yml` |
+| Redis | Docker (localhost:6379) | `docker-compose.local.yml` |
+| Backend | npm (localhost:3012) | `npm run start:dev` |
+| Frontend | npm (localhost:3010) | `npm run dev` |
 
 ---
 
 ## Local Development Commands
 
-### Prerequisites for No-Docker Mode
-
-**Required services running locally:**
-- PostgreSQL on localhost:5432 (user: aiquiz, pass: aiquiz_password, db: aiquiz)
-- Redis on localhost:6379
-
-**Or use Docker for databases only:**
+### Start Databases (Docker)
 ```bash
+# Start PostgreSQL and Redis
 docker-compose -f docker-compose.local.yml up -d postgres redis
+
+# Verify they're running
+docker ps
 ```
 
-### Daily Development (No-Docker)
+### Start Development Servers
 ```bash
 # Terminal 1 - Backend
 cd apps/backend && npm run start:dev
@@ -113,17 +60,10 @@ cd apps/backend && npm run start:dev
 cd apps/frontend && npm run dev
 
 # View at localhost:3010
-# Inside IDE (Trae/Antigravity) or outside (OpenCode)
 ```
 
-### Heavy Validation (Full Local Docker)
+### Stop Databases (when done)
 ```bash
-# When needed - big changes, migrations, pre-push validation
-docker-compose -f docker-compose.local.yml up -d
-
-# Test thoroughly at localhost:3010
-
-# Done - free up RAM
 docker-compose -f docker-compose.local.yml down
 ```
 
@@ -135,24 +75,14 @@ git push origin main
 
 ---
 
-## RAM Protection
-
-| Situation | Action | Result |
-|-----------|--------|--------|
-| Normal work | No-Docker | ~4-7 GB |
-| Heavy validation | Local Docker temporary | ~7-9 GB short term |
-| RAM full | Stop Docker, continue no-Docker | Back to ~4-7 GB |
-
----
-
 ## Key Points
 
 | Aspect | Decision |
 |--------|----------|
 | Staging | **Not needed** - local test sufficient |
 | Browser location | **Your choice** - same result |
-| Default mode | **No-Docker** for RAM protection |
-| Heavy work | **Local Docker temporary** then down |
+| Local databases | **Docker** (PostgreSQL + Redis) |
+| Apps | **npm** (backend: start:dev, frontend: dev) |
 | Production | **VPS only** - already configured |
 
 ---
@@ -366,10 +296,11 @@ docker exec -i quiz-postgres psql -U aiquiz -d aiquiz < backups/backup_YYYYMMDD_
 
 ## Bottom Line
 
-- **Develop locally** (no-Docker default)
-- **View anywhere** (IDE inside or outside - same)
-- **Heavy work** → temporary local Docker → back to no-Docker
+- **Start Docker** for databases (PostgreSQL + Redis)
+- **Start npm** for apps (backend + frontend)
+- **Develop locally** with full stack running
+- **Test at** localhost:3010
 - **Push to production** when ready
 - **No staging** - unnecessary for solo development
 - **Small edits** → safe to push direct to VPS
-- **Big changes** → validate in local Docker first
+- **Big changes** → validate locally first
