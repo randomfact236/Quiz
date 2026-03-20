@@ -93,6 +93,17 @@ Next.js + NestJS quiz app with local-first development, VPS for production only.
 
 ## Local Development Commands
 
+### Prerequisites for No-Docker Mode
+
+**Required services running locally:**
+- PostgreSQL on localhost:5432 (user: aiquiz, pass: aiquiz_password, db: aiquiz)
+- Redis on localhost:6379
+
+**Or use Docker for databases only:**
+```bash
+docker-compose -f docker-compose.local.yml up -d postgres redis
+```
+
 ### Daily Development (No-Docker)
 ```bash
 # Terminal 1 - Backend
@@ -105,12 +116,12 @@ cd apps/frontend && npm run dev
 # Inside IDE (Trae/Antigravity) or outside (OpenCode)
 ```
 
-### Heavy Validation (Temporary Local Docker)
+### Heavy Validation (Full Local Docker)
 ```bash
 # When needed - big changes, migrations, pre-push validation
 docker-compose -f docker-compose.local.yml up -d
 
-# Test thoroughly
+# Test thoroughly at localhost:3010
 
 # Done - free up RAM
 docker-compose -f docker-compose.local.yml down
@@ -236,6 +247,36 @@ DB_DATABASE: aiquiz
 ---
 
 ## Troubleshooting
+
+### Login fails locally
+1. **Check if PostgreSQL is running:**
+   ```bash
+   # If using Docker:
+   docker ps | grep postgres
+   
+   # Or test connection:
+   psql -U aiquiz -d aiquiz -h localhost
+   ```
+
+2. **Check if Redis is running:**
+   ```bash
+   # If using Docker:
+   docker ps | grep redis
+   
+   # Or test:
+   redis-cli ping
+   ```
+
+3. **Create admin account (if no admin exists):**
+   ```bash
+   cd apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=admin123
+   ```
+
+4. **Check backend logs for errors:**
+   ```bash
+   cd apps/backend && npm run start:dev
+   # Look for Redis/Postgres connection errors
+   ```
 
 ### "Failed to fetch" on frontend
 - Backend may be down: `docker ps`
