@@ -240,7 +240,6 @@ export class RiddlesController {
   @ApiOperation({ summary: 'Get all subjects including inactive ones (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns all subjects' })
   findAllSubjectsAdmin(): Promise<RiddleSubject[]> {
-    // L-1 fix: allows admins to see inactive subjects so they can manage/re-activate them
     return this.riddlesService.findAllSubjects(true);
   }
 

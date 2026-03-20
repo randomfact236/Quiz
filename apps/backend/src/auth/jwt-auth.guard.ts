@@ -23,18 +23,6 @@ interface AuthUser {
 }
 
 /**
- * Passport validation info interface
- * 
- * @interface
- */
-interface PassportInfo {
-  /** Error message if validation failed */
-  message?: string;
-  /** Additional info properties */
-  [key: string]: unknown;
-}
-
-/**
  * JWT Authentication Guard protecting routes with JWT token validation
  * 
  * @description Extends Passport's AuthGuard to provide JWT-based route protection.

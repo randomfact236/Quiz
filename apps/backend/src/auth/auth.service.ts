@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from '../users/entities/user.entity';
@@ -24,8 +24,6 @@ import { BruteForceService } from './brute-force.service';
  */
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
-
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,

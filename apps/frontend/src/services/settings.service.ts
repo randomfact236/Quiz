@@ -13,9 +13,6 @@ import type {
     QuizDefaults,
 } from '@/types/settings.types';
 
-// API_URL removed - using localStorage
-// const API_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
-
 // Re-export SystemSettings for backward compatibility
 export type { SystemSettings };
 

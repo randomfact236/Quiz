@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: aiquiz
       POSTGRES_PASSWORD: aiquiz_password
       POSTGRES_DB: aiquiz
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
     networks:
       - quiz-network
 
@@ -58,3 +60,6 @@ services:
 networks:
   quiz-network:
     driver: bridge
+
+volumes:
+  postgres_prod_data:
