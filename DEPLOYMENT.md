@@ -89,6 +89,16 @@ git push origin main
 
 ## Production VPS Commands (Dokploy)
 
+### Recommended Deploy Command (prevents container conflicts)
+```bash
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker rm -f quiz-frontend quiz-backend quiz-postgres quiz-redis 2>/dev/null || true && docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+```
+
+### Or use the dedicated script (after pulling latest code)
+```bash
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && chmod +x dokploy-deploy.sh && ./dokploy-deploy.sh
+```
+
 ### Full restart (delete + recreate)
 ```bash
 cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker rm -f quiz-postgres quiz-redis quiz-backend quiz-frontend && docker compose -f docker-compose.prod.yml up -d
