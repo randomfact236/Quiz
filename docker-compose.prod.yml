@@ -44,6 +44,8 @@ services:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.profitbenefit.com/api/v1
     container_name: quiz-frontend
     environment:
       NODE_ENV: production
