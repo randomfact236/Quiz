@@ -97,8 +97,8 @@ cmd_build() {
 # Start all services
 cmd_start() {
     log_info "Cleaning up old containers..."
-    # Remove conflicting containers if they exist
-    docker rm -f quiz-frontend quiz-backend 2>/dev/null || true
+    # Remove all conflicting containers if they exist
+    docker rm -f quiz-frontend quiz-backend quiz-postgres quiz-redis 2>/dev/null || true
     
     log_info "Starting services..."
     # Use --remove-orphans to clean up any orphaned containers
