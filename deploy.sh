@@ -96,8 +96,13 @@ cmd_build() {
 
 # Start all services
 cmd_start() {
+    log_info "Cleaning up old containers..."
+    # Remove conflicting containers if they exist
+    docker rm -f quiz-frontend quiz-backend 2>/dev/null || true
+    
     log_info "Starting services..."
-    $(get_compose_cmd) up -d
+    # Use --remove-orphans to clean up any orphaned containers
+    $(get_compose_cmd) up -d --remove-orphans
     log_success "Services started"
     
     log_info "Waiting for health checks..."
