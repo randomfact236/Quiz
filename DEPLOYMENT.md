@@ -87,6 +87,43 @@ git push origin main
 
 ---
 
+## ⚠️ IMPORTANT: Container Conflict Issue & Permanent Fix
+
+### The Problem (History)
+When Dokploy rebuilds/deploys, old containers sometimes block new ones causing:
+- Error: `Conflict. The container name "/quiz-postgres" is already in use`
+- Deployment fails
+
+### Root Cause
+Docker containers persist until explicitly removed. If previous deployment is interrupted or containers aren't cleaned up properly, name collisions occur.
+
+### Permanent Solution (Implemented March 20, 2026)
+**Always clean ALL containers before deploying:**
+
+```bash
+docker rm -f quiz-frontend quiz-backend quiz-postgres quiz-redis 2>/dev/null || true
+```
+
+Then deploy with:
+```bash
+docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+```
+
+### Why This Works
+| Step | What Happens |
+|------|-------------|
+| `docker rm -f` | Force removes old containers by name |
+| `2>/dev/null \|\| true` | Won't fail if container doesn't exist |
+| `--remove-orphans` | Cleans up any extra containers not in new config |
+| `--build` | Rebuilds images with latest code |
+
+### Files Related to This Fix
+- `deploy.sh` - Updated to clean all containers in `cmd_start()`
+- `dokploy-deploy.sh` - New dedicated script for Dokploy auto-deploy
+- `docker-compose.prod.yml` - Added `postgres_prod_data` named volume for data persistence
+
+---
+
 ## Production VPS Commands (Dokploy)
 
 ### Recommended Deploy Command (prevents container conflicts)
