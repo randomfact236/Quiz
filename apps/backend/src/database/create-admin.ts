@@ -93,7 +93,6 @@ async function createAdmin(): Promise<void> {
 
   const { email, password, name } = parsed;
 
-  console.log(`\n🔧 Creating admin user: ${email}`);
 
   try {
     validateDatabaseEnv();
@@ -106,7 +105,6 @@ async function createAdmin(): Promise<void> {
 
   try {
     await dataSource.initialize();
-    console.log('✅ Database connected');
 
     const userRepo = dataSource.getRepository(User);
 
@@ -121,7 +119,7 @@ async function createAdmin(): Promise<void> {
         name,
         role: 'admin',
       });
-      console.log(`✅ Admin user updated: ${email}`);
+
     } else {
       // Create new admin user
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -132,12 +130,11 @@ async function createAdmin(): Promise<void> {
         role: 'admin',
       });
       await userRepo.save(admin);
-      console.log(`✅ Admin user created: ${email}`);
+
     }
 
-    console.log(`\n🎉 Admin setup complete!`);
-    console.log(`   Email: ${email}`);
-    console.log(`   Role: admin\n`);
+
+
 
     await dataSource.destroy();
     process.exit(0);

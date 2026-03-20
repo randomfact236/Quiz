@@ -102,7 +102,7 @@ export default function RiddleChallengePage(): JSX.Element {
                 });
               }
             } catch (err) {
-              console.warn(`Failed to fetch chapters for subject ${subject.name}:`, err);
+
             }
           }
         }

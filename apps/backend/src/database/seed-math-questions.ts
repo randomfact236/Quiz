@@ -106,9 +106,8 @@ const MATH_QUESTIONS = [
 ];
 
 async function seedMathQuestions(): Promise<void> {
-    console.log('🔢 Starting Math questions seed...');
+
     await dataSource.initialize();
-    console.log('✅ Database connection established');
 
     // ── 1. Find Math subject ───────────────────────────────────────────────────
     const subjectRows = await dataSource.query<QueryRow[]>(
@@ -121,7 +120,6 @@ async function seedMathQuestions(): Promise<void> {
         process.exit(1);
     }
     const mathSubjectId = subjectRows[0].id;
-    console.log(`📚 Math subject ID: ${mathSubjectId}`);
 
     // ── 2. Ensure each required chapter exists ─────────────────────────────────
     const requiredChapters = [...new Set(MATH_QUESTIONS.map(q => q.chapter))];
@@ -138,7 +136,7 @@ async function seedMathQuestions(): Promise<void> {
 
         if (existing.length > 0) {
             chapterIdMap[chapterName] = existing[0].id;
-            console.log(`  📖 Found existing chapter: ${chapterName}`);
+
         } else {
             // Insert new chapter with next available chapterNumber
             const maxNumRows = await dataSource.query<{ max: string | null }[]>(
@@ -181,11 +179,11 @@ async function seedMathQuestions(): Promise<void> {
        VALUES ($1, $2, $3, $4, $5, 'published')`,
             [q.question, q.wrongAnswers, q.correctAnswer, q.level, chapterId],
         );
-        console.log(`  ✅ Inserted: "${q.question}"`);
+
         inserted++;
     }
 
-    console.log(`\n🎉 Done! Inserted: ${inserted} | Skipped: ${skipped} | Total: ${MATH_QUESTIONS.length}`);
+
     await dataSource.destroy();
     process.exit(0);
 }

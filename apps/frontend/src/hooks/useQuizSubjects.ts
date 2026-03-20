@@ -24,12 +24,11 @@ export function useQuizSubjects(): UseQuizSubjectsReturn {
     setError(null);
     
     try {
-      console.log('[useQuizSubjects] Fetching subjects...');
+
       const response = await getSubjects(false);
-      console.log('[useQuizSubjects] Raw API response:', response);
-      
+
       if (!response) {
-        console.log('[useQuizSubjects] Response is null/undefined');
+
         setSubjects([]);
         setTotal(0);
         setIsLoading(false);
@@ -45,7 +44,7 @@ export function useQuizSubjects(): UseQuizSubjectsReturn {
         order: s.order ?? 0,
         isActive: s.isActive ?? true,
       }));
-      console.log('[useQuizSubjects] Processed subjects:', loadedSubjects);
+
       setSubjects(loadedSubjects);
       setTotal(loadedSubjects.length);
     } catch (err) {

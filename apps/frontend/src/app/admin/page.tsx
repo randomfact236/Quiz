@@ -1022,7 +1022,7 @@ export default function AdminPage(): JSX.Element {
       } catch (err: unknown) {
         const error = err as { message?: string };
         if (error.message?.includes('not found') || error.message?.includes('Subject not found')) {
-          console.warn('Subject may have already been deleted from database, removing from local state');
+
         } else {
           console.error('Failed to delete subject from database:', err);
           // Don't update local state if delete failed

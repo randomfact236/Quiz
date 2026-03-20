@@ -90,7 +90,7 @@ export function setItem<T>(key: string, value: T, persistent = true): void {
             sessionStorage.setItem(key, serialized);
         }
     } catch (err) {
-        console.warn(`[storage] Failed to save key "${key}":`, err);
+
     }
 }
 

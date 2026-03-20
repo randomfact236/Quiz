@@ -35,7 +35,7 @@ export function AdminGuard({ children }: { children?: React.ReactNode }) {
                 const currentTime = Math.floor(Date.now() / 1000);
                 // Redirect if token expires in less than 60 seconds (grace period)
                 if (payload.exp < currentTime + 60) {
-                    console.warn('Token expired or about to expire. Redirecting to login.');
+
                     removeItem(STORAGE_KEYS.AUTH_TOKEN);
                     removeItem(STORAGE_KEYS.REFRESH_TOKEN);
                     router.replace('/admin/login');

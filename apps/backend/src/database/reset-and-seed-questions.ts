@@ -194,17 +194,16 @@ const NEW_QUESTIONS = [
 ];
 
 async function resetAndSeedQuestions() {
-    console.log('🔄 Connecting to database...\n');
+
     await dataSource.initialize();
 
     try {
         // Step 1: Delete all existing questions
-        console.log('🗑️  Deleting all existing questions...');
+
         await dataSource.query('DELETE FROM questions');
-        console.log('✅ All questions deleted\n');
 
         // Step 2: Get subject IDs
-        console.log('📚 Fetching subject IDs...');
+
         const subjectRows = await dataSource.query(`
             SELECT id, slug FROM subjects
         `);
@@ -214,10 +213,9 @@ async function resetAndSeedQuestions() {
         if (subjectMap.size === 0) {
             throw new Error('No subjects found in database. Please run the main seed first.');
         }
-        console.log(`✅ Found ${subjectMap.size} subjects\n`);
 
         // Step 3: Get or create chapters for each subject
-        console.log('📖 Setting up chapters...');
+
         const chapterMap = new Map<string, string>();
 
         for (const q of NEW_QUESTIONS) {
@@ -226,7 +224,7 @@ async function resetAndSeedQuestions() {
             if (!chapterMap.has(chapterKey)) {
                 const subjectId = subjectMap.get(q.subjectSlug);
                 if (!subjectId) {
-                    console.warn(`⚠️  Subject not found: ${q.subjectSlug}, skipping questions`);
+
                     continue;
                 }
 
@@ -251,18 +249,16 @@ async function resetAndSeedQuestions() {
                 chapterMap.set(chapterKey, chapterId);
             }
         }
-        console.log(`✅ Set up ${chapterMap.size} chapters\n`);
 
         // Step 4: Insert new questions
-        console.log('📝 Inserting 20 new questions...\n');
-        
+
         for (let i = 0; i < NEW_QUESTIONS.length; i++) {
             const q = NEW_QUESTIONS[i];
             const chapterKey = `${q.subjectSlug}:${q.chapter}`;
             const chapterId = chapterMap.get(chapterKey);
 
             if (!chapterId) {
-                console.warn(`⚠️  Chapter not found for: ${q.question}`);
+
                 continue;
             }
 
@@ -281,11 +277,9 @@ async function resetAndSeedQuestions() {
             console.log(`   ${i + 1}. [${q.subjectSlug.toUpperCase()}] ${q.question.substring(0, 50)}...`);
         }
 
-        console.log('\n✅ Successfully seeded 20 new questions!');
-        
+
         // Verify count
         const countResult = await dataSource.query('SELECT COUNT(*) as count FROM questions');
-        console.log(`📊 Total questions in database: ${countResult[0].count}`);
 
     } catch (error) {
         console.error('❌ Error:', error);
@@ -297,7 +291,7 @@ async function resetAndSeedQuestions() {
 
 resetAndSeedQuestions()
     .then(() => {
-        console.log('\n🎉 Done!');
+
         process.exit(0);
     })
     .catch((error) => {

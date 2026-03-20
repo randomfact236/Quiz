@@ -407,7 +407,6 @@ export function RiddleMcqSection({
     const currentCategory = categories.find(c => c.id === selectedCategoryId);
     const categoryName = currentCategory?.name || 'Miscellaneous';
     
-    console.log('Exporting riddles:', filteredRiddles.length, 'from category:', categoryName);
 
     const csv = riddlesToCSV(filteredRiddles, categoryName);
 
@@ -804,9 +803,8 @@ export function RiddleMcqSection({
         riddlePayload.correctAnswer = correctAnswerText;
       }
 
-      console.log('Creating riddle with explanation:', riddleForm.explanation);
+
       const created = (await createRiddle(riddlePayload)) as any;
-      console.log('API response:', created);
 
       const newRiddle: Riddle = {
         id: String(Date.now()),
@@ -820,7 +818,6 @@ export function RiddleMcqSection({
         answer: created.correctAnswer || (riddleForm.isOpenEnded ? riddleForm.correctOption : '') || '',
       };
       
-      console.log('New riddle with explanation:', newRiddle.explanation);
 
       setAllRiddles(prev => [newRiddle, ...prev]);
       setShowAddModal(false);

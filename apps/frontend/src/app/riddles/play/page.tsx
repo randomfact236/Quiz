@@ -130,7 +130,7 @@ function RiddlePlayPageContent(): JSX.Element {
           const config = await Promise.race([settingsPromise, timeoutPromise]) as Awaited<ReturnType<typeof SettingsService.getSettings>>;
           setSettings(config);
         } catch (err) {
-          console.warn('Could not load settings, using defaults:', err);
+
         }
 
         let fetchedRiddles: Riddle[] = [];
@@ -170,7 +170,7 @@ function RiddlePlayPageContent(): JSX.Element {
           startNewSession(fetchedRiddles);
         }
       } catch (err) {
-        console.warn('Failed to fetch riddles:', err);
+
         setError('Failed to load riddles. Check your connection and try again.');
         setStatus('playing'); // exit loading state so error UI is visible
       }
