@@ -124,6 +124,36 @@ docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
 
 ---
 
+## Platform Comparison: Dokploy vs Coolify
+
+| Feature | Dokploy | Coolify |
+|---------|---------|---------|
+| Auto-deploy from GitHub | ✅ Yes | ✅ Yes |
+| Docker Compose support | ✅ Yes | ✅ Yes |
+| Pre-deploy hooks | ❌ No | ❌ No |
+| Custom Docker options | ✅ Append only | ✅ Yes |
+| Automatic DB Backups | ❌ No built-in | ✅ S3 backup |
+| Zero-downtime deploy | ⚠️ Limited | ✅ Yes |
+| Setup complexity | Low | Medium |
+
+### Decision: Stay with Dokploy
+
+**Neither platform has true pre-deploy hooks.** Both only allow appending Docker flags.
+
+**Keep Dokploy because:**
+1. Already configured and working
+2. "Stop → Deploy" workaround solves the issue in 5 seconds
+3. Migration to Coolify would take significant time for no real benefit
+4. The container conflict issue is minor and easily solved
+
+**Recommended workflow:**
+1. Click **Stop** button first
+2. Then click **Deploy** button
+
+This ensures clean deployment without conflicts.
+
+---
+
 ## Production VPS Commands (Dokploy)
 
 ### Recommended Deploy Command (prevents container conflicts)
