@@ -22,14 +22,11 @@ export function FileUploader({
     maxSizeMB = 5,
     className,
 }: FileUploaderProps) {
-    // Build accept string for file input
     const acceptForInput = '.json,.csv,application/json,text/csv,text/plain';
     const [isDragActive, setIsDragActive] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-
-    // ── Helpers ──────────────────────────────────────────────────────────────
 
     function getExtension(name: string): string {
         const parts = name.split('.');
@@ -41,69 +38,37 @@ export function FileUploader({
         const fileName = file.name.toLowerCase().trim();
         const ext = getExtension(file.name);
         const mime = (file.type || '').toLowerCase();
-        
-        console.log('[FileUploader] isFileAllowed check:', {
-            fileName,
-            extension: ext,
-            mimeType: mime,
-            acceptProp: accept,
-        });
-        
-        // Always allow files with correct extensions
+
         if (fileName.endsWith('.json') || fileName.endsWith('.csv')) {
-            console.log('[FileUploader] File allowed by extension');
             return true;
         }
 
-        // If no accept specified, allow all
         if (!accept) {
-            return true;
-        }
-
-        // If no accept specified, allow all
-        if (!accept) {
-            console.log('[FileUploader] No accept prop, allowing all files');
             return true;
         }
 
         const allowed = accept.split(',').map(s => s.trim().toLowerCase());
-        console.log('[FileUploader] Allowed extensions:', allowed);
 
-        // Extension match
         if (ext && allowed.includes(ext)) {
-            console.log('[FileUploader] File allowed by accept list');
             return true;
         }
 
-        // MIME‑type fuzzy match
         if (mime) {
             if (allowed.includes('.json') && (mime.includes('json') || mime === 'text/plain' || mime === 'application/octet-stream')) {
-                console.log('[FileUploader] File allowed by MIME type (JSON-like)');
                 return true;
             }
             if (allowed.includes('.csv') && (mime.includes('csv') || mime.includes('excel') || mime === 'text/plain' || mime === 'application/octet-stream')) {
-                console.log('[FileUploader] File allowed by MIME type (CSV-like)');
                 return true;
             }
         }
 
-        console.log('[FileUploader] File REJECTED');
         return false;
     }
 
     function processFile(file: File) {
         setError(null);
-        
-        // Debug logging
-        console.log('[FileUploader] Processing file:', {
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            extension: getExtension(file.name),
-        });
 
         if (!isFileAllowed(file)) {
-            console.log('[FileUploader] File rejected:', file.name, 'Type:', file.type);
             setError(`Invalid file type. Allowed: ${accept}`);
             return;
         }
@@ -117,13 +82,10 @@ export function FileUploader({
         onFileSelect(file);
     }
 
-    // ── Event Handlers (NO useCallback – avoids stale‑closure bugs) ─────────
-
     function handleDragEnter(e: React.DragEvent) {
         e.preventDefault();
         e.stopPropagation();
         setIsDragActive(true);
-        // Clear error when user starts dragging a new file
         setError(null);
     }
 
@@ -136,7 +98,6 @@ export function FileUploader({
     function handleDragOver(e: React.DragEvent) {
         e.preventDefault();
         e.stopPropagation();
-        // Must set dropEffect so the browser shows the correct cursor
         e.dataTransfer.dropEffect = 'copy';
     }
 
@@ -144,27 +105,18 @@ export function FileUploader({
         e.preventDefault();
         e.stopPropagation();
         setIsDragActive(false);
-        
-        console.log('[FileUploader] Drop event, files:', e.dataTransfer.files);
-        console.log('[FileUploader] Drop event, items:', e.dataTransfer.items);
 
         const file = e.dataTransfer.files?.[0];
         if (file) {
-            console.log('[FileUploader] Dropped file:', file.name, 'type:', file.type);
             processFile(file);
-        } else {
-            console.log('[FileUploader] No file in drop event');
         }
     }
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        console.log('[FileUploader] Input change event, files:', e.target.files);
         const file = e.target.files?.[0];
         if (file) {
-            console.log('[FileUploader] Selected file via input:', file.name, 'type:', file.type);
             processFile(file);
         }
-        // Reset input so the same file can be re‑selected
         if (inputRef.current) {inputRef.current.value = '';}
     }
 
@@ -176,12 +128,9 @@ export function FileUploader({
     }
 
     function handleZoneClick() {
-        // Clear any previous error when user clicks to try again
         setError(null);
         inputRef.current?.click();
     }
-
-    // ── Render ───────────────────────────────────────────────────────────────
 
     return (
         <div className={cn('w-full', className)}>
@@ -202,7 +151,6 @@ export function FileUploader({
                 onDrop={handleDrop}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') {handleZoneClick();} }}
             >
-                {/* Hidden native input */}
                 <input
                     ref={inputRef}
                     type="file"
