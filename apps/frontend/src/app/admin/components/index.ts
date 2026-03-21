@@ -5,3 +5,5 @@ export { RiddleMcqSection } from './RiddleMcqSection';
 export { AdminGuard } from './AdminGuard';
 export { SettingsSection } from './SettingsSection';
 export { RiddleSidebar } from './RiddleSidebar';
+
+export { default as QuizMcqSection } from './QuizMcqSection';

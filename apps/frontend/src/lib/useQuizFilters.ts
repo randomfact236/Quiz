@@ -14,7 +14,6 @@ export interface QuizFilters {
 export interface QuizFiltersState {
   filters: QuizFilters;
   setFilter: (key: keyof QuizFilters, value: string) => void;
-  setFilters: (filters: Partial<QuizFilters>) => void;
   resetFilters: () => void;
   isLoading: boolean;
 }
@@ -46,42 +45,42 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
     setIsLoading(true);
     const params = new URLSearchParams();
     
-    if (newFilters.status && newFilters.status !== 'all') params.set('status', newFilters.status);
-    if (newFilters.level && newFilters.level !== 'all') params.set('level', newFilters.level);
-    if (newFilters.chapter && newFilters.chapter !== 'all') params.set('chapter', newFilters.chapter);
-    if (newFilters.search) params.set('search', newFilters.search);
+    // Always preserve the current section from URL
+    const currentSection = searchParams.get('section') || 'quiz';
+    params.set('section', currentSection);
+    
+    // Order: subject → chapter → level → status → search (broad → specific)
     if (newFilters.subject && newFilters.subject !== 'all') params.set('subject', newFilters.subject);
+    if (newFilters.chapter && newFilters.chapter !== 'all') params.set('chapter', newFilters.chapter);
+    if (newFilters.level && newFilters.level !== 'all') params.set('level', newFilters.level);
+    if (newFilters.status && newFilters.status !== 'all') params.set('status', newFilters.status);
+    if (newFilters.search) params.set('search', newFilters.search);
 
     const queryString = params.toString();
-    const newURL = queryString ? `${pathname}?${queryString}` : pathname;
+    const newURL = `${pathname}?${queryString}`;
     
     router.push(newURL, { scroll: false });
     
     setTimeout(() => setIsLoading(false), 100);
-  }, [pathname, router]);
+  }, [pathname, router, searchParams]);
 
   const setFilter = useCallback((key: keyof QuizFilters, value: string) => {
     const newFilters = { ...filters, [key]: value };
     updateURL(newFilters);
   }, [filters, updateURL]);
 
-  const setFilters = useCallback((partialFilters: Partial<QuizFilters>) => {
-    const newFilters = { ...filters, ...partialFilters };
-    updateURL(newFilters);
-  }, [filters, updateURL]);
-
   const resetFilters = useCallback(() => {
-    const resetFilters = {
+    const defaultFilters = {
       ...DEFAULT_FILTERS,
       subject: subjectSlug || 'all',
     };
-    updateURL(resetFilters);
+    updateURL(defaultFilters);
   }, [subjectSlug, updateURL]);
 
   useEffect(() => {
     if (!isInitialized.current) {
       isInitialized.current = true;
-      if (subjectSlug && subjectSlug !== 'all-subjects') {
+      if (subjectSlug && subjectSlug !== 'quiz') {
         const currentSubject = searchParams.get('subject');
         if (!currentSubject) {
           setFilter('subject', subjectSlug);
@@ -93,7 +92,6 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
   return {
     filters,
     setFilter,
-    setFilters,
     resetFilters,
     isLoading,
   };

@@ -76,7 +76,7 @@ export interface UpdateQuestionDto {
     options?: string[] | null;
     level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
     chapterId?: string;
-    status?: 'published' | 'draft' | undefined;
+    status?: 'published' | 'draft' | 'trash' | undefined;
 }
 
 export interface PaginatedResponse<T> {
@@ -142,6 +142,11 @@ export async function createChapter(dto: CreateChapterDto): Promise<QuizChapter>
 
 export async function deleteChapter(id: string): Promise<void> {
     await api.delete(`/quiz/chapters/${id}`);
+}
+
+export async function updateChapter(id: string, dto: { name?: string; subjectId?: string }): Promise<QuizChapter> {
+    const response = await api.patch<QuizChapter>(`/quiz/chapters/${id}`, dto);
+    return response.data;
 }
 
 export async function getChaptersForSubject(subjectSlug: string): Promise<{ id: string; name: string }[]> {
@@ -228,33 +233,6 @@ export async function getStatusCountsBySubject(subjectSlug: string): Promise<Sub
     return response.data;
 }
 
-export async function getChapterCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
-    const response = await api.get<Record<string, number>>(`/quiz/subjects/${subjectSlug}/chapter-counts`);
-    return response.data;
-}
-
-export async function getAllQuestionsFilterCounts(filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
-    const params = new URLSearchParams();
-    if (filters.level) params.append('level', filters.level);
-    if (filters.chapter) params.append('chapter', filters.chapter);
-    if (filters.status) params.append('status', filters.status);
-    if (filters.search) params.append('search', filters.search);
-    
-    const response = await api.get<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>(`/quiz/questions/all/filter-counts?${params.toString()}`);
-    return response.data;
-}
-
-export async function getSubjectFilterCounts(subjectSlug: string, filters: { level?: string; chapter?: string; status?: string; search?: string }): Promise<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }> {
-    const params = new URLSearchParams();
-    if (filters.level) params.append('level', filters.level);
-    if (filters.chapter) params.append('chapter', filters.chapter);
-    if (filters.status) params.append('status', filters.status);
-    if (filters.search) params.append('search', filters.search);
-    
-    const response = await api.get<{ status: { total: number; published: number; draft: number; trash: number }; chapters: Record<string, number>; levels: Record<string, number> }>(`/quiz/subjects/${subjectSlug}/filter-counts?${params.toString()}`);
-    return response.data;
-}
-
 export interface FilterCountsResponse {
     subjectCounts: { slug: string; count: number }[];
     chapterCounts: { id: string; name: string; count: number }[];
@@ -279,6 +257,35 @@ export async function getFilterCounts(filters: {
     
     const response = await api.get<FilterCountsResponse>(`/quiz/filter-counts?${params.toString()}`);
     return response.data;
+}
+
+export async function getAllQuestions(
+    filters: {
+        subject?: string;
+        status?: string;
+        level?: string;
+        chapter?: string;
+        search?: string;
+    } = {},
+    page: number = 1,
+    limit: number = 10
+): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
+    const params = new URLSearchParams();
+    if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
+    if (filters.status && filters.status !== 'all') params.append('status', filters.status);
+    if (filters.level && filters.level !== 'all') params.append('level', filters.level);
+    if (filters.chapter && filters.chapter !== 'all') params.append('chapter', filters.chapter);
+    if (filters.search) params.append('search', filters.search);
+    params.append('page', String(page));
+    params.append('limit', String(limit));
+
+    const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/questions?${params.toString()}`);
+    return {
+        data: response.data.data,
+        total: response.data.total,
+        page,
+        limit
+    };
 }
 
 export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
@@ -309,6 +316,131 @@ export async function bulkActionQuestions(
         action
     });
     return response.data;
+}
+
+// ============================================================================
+// CSV Export/Import
+// ============================================================================
+
+const CSV_HEADERS = ['question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'level', 'chapter', 'subject', 'status'];
+
+export function exportQuestionsToCSV(questions: QuizQuestion[], subjectName?: string): void {
+    const rows = questions.map(q => {
+        const isExtreme = q.level === 'extreme';
+        const row = [
+            `"${(q.question || '').replace(/"/g, '""')}"`,
+            isExtreme ? '' : `"${(q.options?.[0] || '').replace(/"/g, '""')}"`,
+            isExtreme ? '' : `"${(q.options?.[1] || '').replace(/"/g, '""')}"`,
+            isExtreme ? '' : `"${(q.options?.[2] || '').replace(/"/g, '""')}"`,
+            isExtreme ? '' : `"${(q.options?.[3] || '').replace(/"/g, '""')}"`,
+            isExtreme ? `"${(q.correctAnswer || '').replace(/"/g, '""')}"` : (q.options ? String.fromCharCode(65 + q.options.findIndex(opt => opt === q.correctAnswer)) : ''),
+            q.level,
+            `"${(q.chapter?.name || '').replace(/"/g, '""')}"`,
+            `"${(subjectName || '').replace(/"/g, '""')}"`,
+            q.status || 'draft'
+        ];
+        return row.join(',');
+    });
+    
+    const csv = [CSV_HEADERS.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const date = new Date().toISOString().split('T')[0];
+    link.href = url;
+    link.download = `questions_export_${date}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+export function parseCSVQuestions(csvText: string): { data: CreateQuestionDto[]; errors: string[] } {
+    const lines = csvText.trim().split('\n');
+    const errors: string[] = [];
+    const data: CreateQuestionDto[] = [];
+    
+    // Skip header
+    for (let i = 1; i < lines.length; i++) {
+        try {
+            const line = lines[i];
+            if (!line) continue;
+            
+            // Simple CSV parsing (handles basic cases)
+            const values: string[] = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let j = 0; j < line.length; j++) {
+                const char = line[j];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            values.push(current.trim());
+            
+            if (values.length < 6) {
+                errors.push(`Row ${i + 1}: Not enough columns`);
+                continue;
+            }
+            
+            const [question, optA, optB, optC, optD, correctAnswer, level, _chapterName, _subjectName, status] = values;
+            
+            if (!question) {
+                errors.push(`Row ${i + 1}: Missing question text`);
+                continue;
+            }
+            
+            const isExtreme = (level || '').toLowerCase() === 'extreme';
+            const parsedLevel = (['easy', 'medium', 'hard', 'expert', 'extreme'].includes((level || '').toLowerCase()) 
+                ? level?.toLowerCase() 
+                : 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+            
+            const questionDto: CreateQuestionDto = {
+                question: question.replace(/^"|"$/g, '').replace(/""/g, '"'),
+                level: parsedLevel,
+                chapterId: '', // Must be set by caller
+                status: (status?.toLowerCase() === 'published' ? 'published' : 'draft') as 'published' | 'draft',
+                correctAnswer: '', // Will be set below
+                options: null, // Will be set below
+            };
+            
+            if (isExtreme) {
+                questionDto.options = null;
+                questionDto.correctAnswer = correctAnswer?.replace(/^"|"$/g, '').replace(/""/g, '"') || '';
+                questionDto.correctLetter = null;
+            } else {
+                questionDto.options = [
+                    (optA || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
+                    (optB || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
+                    (optC || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
+                    (optD || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
+                ];
+                
+                // Parse correct answer (either letter A-D or full text)
+                const ca = (correctAnswer || '').replace(/^"|"$/g, '').replace(/""/g, '"');
+                const caUpper = ca.toUpperCase();
+                if (['A', 'B', 'C', 'D'].includes(caUpper)) {
+                    questionDto.correctLetter = caUpper;
+                    questionDto.correctAnswer = questionDto.options[['A', 'B', 'C', 'D'].indexOf(caUpper)] || '';
+                } else {
+                    questionDto.correctLetter = null;
+                    questionDto.correctAnswer = ca;
+                }
+            }
+            
+            data.push(questionDto);
+        } catch (e) {
+            errors.push(`Row ${i + 1}: Parse error - ${String(e)}`);
+        }
+    }
+    
+    return { data, errors };
 }
 
 

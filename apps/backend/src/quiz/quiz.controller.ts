@@ -44,11 +44,20 @@ export class QuizQueryDto extends PaginationDto {
   @IsString()
   subject?: string;
 
-  @ApiPropertyOptional({ description: 'Include trashed items' })
+  @ApiPropertyOptional({ description: 'Filter by level' })
   @IsOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  includeTrash?: boolean;
+  @IsString()
+  level?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by chapter name' })
+  @IsOptional()
+  @IsString()
+  chapter?: string;
+
+  @ApiPropertyOptional({ description: 'Search in question text' })
+  @IsOptional()
+  @IsString()
+  search?: string;
 }
 
 @ApiTags('Quiz')
@@ -181,13 +190,19 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all questions with optional status filter (Admin only)' })
+  @ApiOperation({ summary: 'Get all questions with optional filters (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
   async getAllQuestions(
     @Query() query: QuizQueryDto,
   ): Promise<{ data: Question[]; total: number }> {
     const pagination = { page: query.page || 1, limit: query.limit || 10 };
-    const filters = { status: query.status as any, subjectSlug: query.subject };
+    const filters = { 
+      status: query.status as any, 
+      subjectSlug: query.subject,
+      level: query.level,
+      chapter: query.chapter,
+      search: query.search,
+    };
     return this.quizService.findAllQuestions(pagination, filters);
   }
 
@@ -294,25 +309,5 @@ export class QuizController {
   @ApiResponse({ status: 200, description: 'Returns status counts for subject', type: StatusCountResponseDto })
   async getStatusCountsBySubject(@Param('slug') slug: string): Promise<StatusCountResponseDto> {
     return this.quizService.getStatusCountsBySubject(slug);
-  }
-
-  @Get('subjects/:slug/chapter-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get question counts by chapter for a subject (Admin only)' })
-  @ApiParam({ name: 'slug', example: 'animals' })
-  async getChapterCountsBySubject(@Param('slug') slug: string): Promise<Record<string, number>> {
-    return this.quizService.getChapterCountsBySubject(slug);
-  }
-
-  @Get('subjects/:slug/level-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get question counts by level for a subject (Admin only)' })
-  @ApiParam({ name: 'slug', example: 'animals' })
-  async getLevelCountsBySubject(@Param('slug') slug: string): Promise<Record<string, number>> {
-    return this.quizService.getLevelCountsBySubject(slug);
   }
 }

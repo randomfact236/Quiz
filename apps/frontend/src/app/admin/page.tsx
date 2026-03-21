@@ -32,7 +32,7 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
+import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, QuizMcqSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 import { QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getFilterCounts, SubjectStatusCounts } from '@/lib/quiz-api';
@@ -58,7 +58,7 @@ export default function AdminPage(): JSX.Element {
   }, [router]);
 
   // Load from database via API - no localStorage fallback
-  const [activeSection, setActiveSection] = useState<MenuSection>('dashboard');
+  const [activeSection, setActiveSection] = useState<MenuSection>('summary');
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
@@ -125,9 +125,9 @@ export default function AdminPage(): JSX.Element {
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
   const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
-  // Note: subjectChapterCounts/subjectLevelCounts will be used in new filter system
   const [_subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
   const [_subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
+  const [subjectCounts, setSubjectCounts] = useState<{ slug: string; count: number }[]>([]);
   const [isLoadingSubject, setIsLoadingSubject] = useState(false);
 
   // Unified filter state (single source of truth)
@@ -149,7 +149,7 @@ export default function AdminPage(): JSX.Element {
   searchParamsRef.current = searchParams;
   
   // Get section from URL, default to dashboard
-  const urlSection = searchParams.get('section') || 'dashboard';
+  const urlSection = searchParams.get('section') || 'summary';
 
   // Set active section from URL on initial load
   const hasSetInitialSection = useRef(false);
@@ -157,7 +157,7 @@ export default function AdminPage(): JSX.Element {
     if (hasSetInitialSection.current) return;
     if (allSubjects.length > 0 || urlSection) {
       // URL section takes priority, but validate if it's a quiz subject
-      if (urlSection === 'riddles' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'dashboard' || urlSection === 'all-subjects') {
+      if (urlSection === 'riddle-mcq' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'summary' || urlSection === 'quiz') {
         setActiveSection(urlSection as MenuSection);
       } else {
         // It's a quiz subject - check if valid
@@ -167,7 +167,7 @@ export default function AdminPage(): JSX.Element {
         } else {
           // Invalid subject - default to dashboard instead of auto-selecting first subject
           // This prevents flickering and unexpected behavior
-          setActiveSection('dashboard');
+          setActiveSection('summary');
         }
       }
 
@@ -193,21 +193,45 @@ export default function AdminPage(): JSX.Element {
     let targetSection = urlSection;
     
     // Check if it's a special section (riddles, jokes, etc.)
-    const isSpecialSection = ['riddles', 'image-riddles', 'jokes', 'users', 'settings', 'dashboard', 'all-subjects'].includes(urlSection);
+    const isSpecialSection = ['riddle-mcq', 'image-riddles', 'jokes', 'users', 'settings', 'summary', 'quiz'].includes(urlSection);
     
     if (!isSpecialSection) {
-      // It's a quiz subject - only validate for special sections
-      // Allow any subject slug to be set (even if not in database yet)
-      // This prevents flickering when selecting subjects
-      targetSection = urlSection;
+      // It's a quiz subject - check if valid
+      const isValidSubject = allSubjects.some(s => s.slug === urlSection);
+      if (isValidSubject) {
+        targetSection = urlSection;
+      } else {
+        // Invalid subject - default to summary
+        targetSection = 'summary';
+      }
     }
 
-    // Update state if different from current
-    if (activeSection !== targetSection) {
-      setActiveSection(targetSection as MenuSection);
-    }
-  }, [urlSection, allSubjects, activeSection]);
+    // Only update if different from current state
+    setActiveSection(targetSection as MenuSection);
+  }, [urlSection, allSubjects]);
 
+  // Sync filter params from URL to currentFilters when URL changes
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    const urlStatus = searchParams.get('status') || 'all';
+    const urlLevel = searchParams.get('level') || 'all';
+    const urlChapter = searchParams.get('chapter') || 'all';
+    const urlSearch = searchParams.get('search') || '';
+    
+    // Only update if different to avoid infinite loops
+    if (currentFilters.status !== urlStatus || 
+        currentFilters.level !== urlLevel || 
+        currentFilters.chapter !== urlChapter || 
+        currentFilters.search !== urlSearch) {
+      setCurrentFilters({
+        status: urlStatus,
+        level: urlLevel,
+        chapter: urlChapter,
+        search: urlSearch
+      });
+    }
+  }, [searchParams, isHydrated]);
 
 
   // URL update helper - replaces localStorage.setItem
@@ -300,7 +324,7 @@ export default function AdminPage(): JSX.Element {
 
     const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
 
-    if (isSubjectSection && activeSection !== 'dashboard') {
+    if (isSubjectSection && activeSection !== 'summary') {
       const currentPage = questionPagination[activeSection]?.page || 1;
       const limit = questionPagination[activeSection]?.limit || 10;
       const filters = currentFilters;
@@ -390,25 +414,26 @@ export default function AdminPage(): JSX.Element {
     }
   }, [activeSection, allSubjects, questionPagination, currentFilters, isHydrated]);
 
-  // Fetch chapters and counts for "All Subjects" mode
+  // Fetch chapters and counts for "All Subjects" mode and Summary (dashboard)
   useEffect(() => {
     if (!isHydrated) return;
     
-    if (activeSection === 'all-subjects' && allSubjects.length > 0) {
+    if ((activeSection === 'quiz' || activeSection === 'summary') && allSubjects.length > 0) {
       // Check if we already fetched for these exact filters
       const filtersKey = JSON.stringify(currentFilters);
-      if (lastFetchedSectionRef.current === 'all-subjects' && lastFetchedFiltersRef.current === filtersKey) {
+      if (lastFetchedSectionRef.current === 'quiz' && lastFetchedFiltersRef.current === filtersKey) {
         return;
       }
       
       const fetchAllModeData = async () => {
         try {
           // Update refs before fetching
-          lastFetchedSectionRef.current = 'all-subjects';
+          lastFetchedSectionRef.current = 'quiz';
           lastFetchedFiltersRef.current = filtersKey;
           
-          // Fetch chapters for all subjects
+          // Fetch chapters and questions for all subjects
           const allChapterData: Record<string, { id: string; name: string }[]> = {};
+          const allQuestionsData: Record<string, Question[]> = {};
           
           await Promise.all(
             allSubjects.map(async (subject) => {
@@ -419,13 +444,18 @@ export default function AdminPage(): JSX.Element {
                     .map(c => ({ id: c.id, name: c.name }))
                     .sort((a, b) => a.name.localeCompare(b.name));
                 }
+                
+                // Fetch questions for each subject (limit 100 per subject for overview)
+                const questionsResult = await getQuestionsBySubject(subject.slug, {}, 1, 100);
+                allQuestionsData[subject.slug] = questionsResult.data.map(mapQuizQuestionToQuestion);
               } catch (err) {
-                console.error(`Failed to fetch chapters for ${subject.slug}:`, err);
+                console.error(`Failed to fetch data for ${subject.slug}:`, err);
               }
             })
           );
           
           setQuizChapters(allChapterData);
+          setAllQuestions(allQuestionsData);
 
           // Fetch all-mode counts from unified API
           try {
@@ -454,9 +484,10 @@ export default function AdminPage(): JSX.Element {
               statusRecord.total += s.count;
             });
             
-            setSubjectChapterCounts(prev => ({ ...prev, 'all-subjects': chapterCountsRecord }));
-            setSubjectLevelCounts(prev => ({ ...prev, 'all-subjects': levelCountsRecord }));
-            setSubjectStatusCounts(prev => ({ ...prev, 'all-subjects': statusRecord }));
+            setSubjectCounts(filterCounts.subjectCounts);
+            setSubjectChapterCounts(prev => ({ ...prev, 'quiz': chapterCountsRecord }));
+            setSubjectLevelCounts(prev => ({ ...prev, 'quiz': levelCountsRecord }));
+            setSubjectStatusCounts(prev => ({ ...prev, 'quiz': statusRecord }));
           } catch (err) {
             console.error('Failed to fetch all-mode counts:', err);
           }
@@ -475,7 +506,7 @@ export default function AdminPage(): JSX.Element {
     
     const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
     
-    if (isSubjectSection && activeSection !== 'dashboard' && activeSection !== 'all-subjects') {
+    if (isSubjectSection && activeSection !== 'summary' && activeSection !== 'quiz') {
       // Check if we already fetched for these exact filters
       const filtersKey = JSON.stringify(currentFilters);
       if (lastFetchedSectionRef.current === activeSection && lastFetchedFiltersRef.current === filtersKey) {
@@ -548,18 +579,6 @@ export default function AdminPage(): JSX.Element {
 
   const getChaptersForSubject = (slug: string): { id: string; name: string }[] => {
     return quizChapters[slug] ?? [];
-  };
-
-  const getAllChapters = (): { id: string; name: string }[] => {
-    const allChapters: { id: string; name: string }[] = [];
-    Object.values(quizChapters).forEach(chapters => {
-      chapters.forEach(ch => {
-        if (!allChapters.find(c => c.id === ch.id)) {
-          allChapters.push(ch);
-        }
-      });
-    });
-    return allChapters.sort((a, b) => a.name.localeCompare(b.name));
   };
 
   const getStatusCountsForSubject = (slug: string): SubjectStatusCounts | undefined => {
@@ -1001,13 +1020,7 @@ export default function AdminPage(): JSX.Element {
     }
   };
 
-  // Delete subject
-  const handleDeleteSubject = (subjectId: string) => {
-    const subject = allSubjects.find(s => s.id === subjectId);
-    if (!subject) return;
-    setSubjectToDelete(subject);
-  };
-
+  // Delete subject - triggered by modal confirmation
   const confirmDeleteSubject = async () => {
     if (!subjectToDelete) return;
 
@@ -1070,7 +1083,7 @@ export default function AdminPage(): JSX.Element {
       const nextSubject = remainingSubjects[0]!;
       setActiveSection(nextSubject.slug);
     } else if (wasActiveSection && remainingSubjects.length === 0) {
-      setActiveSection('dashboard');
+      setActiveSection('summary');
     }
     
     // Don't call refetchSubjects() here - it causes flickering
@@ -1137,22 +1150,25 @@ export default function AdminPage(): JSX.Element {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-2">
-          {/* Dashboard */}
+          {/* Summary */}
           <MenuItem
             icon={<LayoutDashboard className="w-5 h-5" />}
-            label="Dashboard"
-            active={activeSection === 'dashboard'}
+            label="Summary"
+            active={activeSection === 'summary'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'dashboard' })}
+            onClick={() => updateURL({ section: 'summary' })}
           />
 
           {/* Quiz Section */}
           <MenuItem
             icon={<BookOpen className="w-5 h-5" />}
             label="Quiz"
-            active={activeSection === 'all-subjects'}
+            active={activeSection === 'quiz'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'all-subjects' })}
+            onClick={() => {
+              setActiveSection('quiz');
+              updateURL({ section: 'quiz' });
+            }}
           />
 
           {/* Other Modules Header */}
@@ -1183,9 +1199,9 @@ export default function AdminPage(): JSX.Element {
               <MenuItem
                 icon={<Puzzle className="w-5 h-5" />}
                 label="Riddle MCQ"
-                active={activeSection === 'riddles'}
+                active={activeSection === 'riddle-mcq'}
                 expanded={sidebarOpen}
-                onClick={() => updateURL({ section: 'riddles' })}
+                onClick={() => updateURL({ section: 'riddle-mcq' })}
               />
               <MenuItem
                 icon={<ImageIcon className="w-5 h-5" />}
@@ -1237,16 +1253,16 @@ export default function AdminPage(): JSX.Element {
         <header className="bg-white shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
           <div className="flex items-center justify-between px-6 py-4">
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
-              {activeSection === 'dashboard' && <><LayoutDashboard className="w-6 h-6" /> Dashboard</>}
+              {activeSection === 'summary' && <><LayoutDashboard className="w-6 h-6" /> Summary</>}
               {activeSection === 'jokes' && <><Smile className="w-6 h-6" /> Dad Jokes Management</>}
               {activeSection === 'riddles' && <><Puzzle className="w-6 h-6" /> Riddle MCQ Management</>}
               {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
               {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
-              {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && (
+              {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'quiz') && (
                 <>
-                  <span className="text-2xl">{activeSection === 'all-subjects' ? '📚' : (isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚')}</span>
-                  <span>{activeSection === 'all-subjects' ? 'All Subjects' : allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Quiz Management</span>
+                  <span className="text-2xl">{activeSection === 'quiz' ? '📚' : (isEmoji(allSubjects.find(s => s.slug === activeSection)?.emoji || '') ? allSubjects.find(s => s.slug === activeSection)?.emoji : '📚')}</span>
+                  <span>{activeSection === 'quiz' ? 'All Subjects' : allSubjects.find(s => s.slug === activeSection)?.name ?? ''} - Quiz Management</span>
                 </>
               )}
             </h2>
@@ -1271,26 +1287,27 @@ export default function AdminPage(): JSX.Element {
 
         {/* Content Area */}
         <div className="p-6">
-          {activeSection === 'dashboard' && (
-            <DashboardSection
-              onSelectSubject={setActiveSection}
+          {activeSection === 'summary' && (
+            <div className="rounded-xl bg-white p-8 shadow-md text-center">
+              <p className="text-gray-500 font-medium">Summary</p>
+              <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
+            </div>
+          )}
+          {activeSection === 'quiz' && allSubjects.length > 0 && (
+            <QuizMcqSection
               allSubjects={allSubjects}
-              allQuestions={allQuestions}
-              onAddSubject={() => setShowAddSubjectModal(true)}
-              onExport={() => setShowExportModal(true)}
-              onImport={() => setShowImportModal(true)}
-              onDeleteSubject={handleDeleteSubject}
             />
           )}
-          {(allSubjects.some(s => s.slug === activeSection) || activeSection === 'all-subjects') && allSubjects.length > 0 && (
+          {allSubjects.some(s => s.slug === activeSection) && (
             <QuizManagementSection
-              subject={activeSection === 'all-subjects' 
-                ? { id: 'all-subjects', slug: 'all-subjects', name: 'All Subjects', emoji: '📚', isActive: true, category: 'academic', order: -1 } as Subject
-                : getSubjectFromSection(activeSection)!}
-              questions={activeSection === 'all-subjects' ? [] : getQuestionsForSubject(activeSection)}
-              pagination={activeSection === 'all-subjects' ? { page: 1, limit: 10, total: Object.values(questionCounts).reduce((a: number, b: number) => a + b, 0) } : getQuestionPagination(activeSection)}
-              chapters={activeSection === 'all-subjects' ? getAllChapters() : getChaptersForSubject(activeSection)}
-              statusCounts={activeSection === 'all-subjects' ? subjectStatusCounts['all-subjects'] : getStatusCountsForSubject(activeSection)}
+              subject={getSubjectFromSection(activeSection)!}
+              questions={getQuestionsForSubject(activeSection)}
+              pagination={getQuestionPagination(activeSection)}
+              chapters={getChaptersForSubject(activeSection)}
+              statusCounts={getStatusCountsForSubject(activeSection)}
+              chapterCounts={_subjectChapterCounts[activeSection] || {}}
+              levelCounts={_subjectLevelCounts[activeSection] || {}}
+              subjectCounts={subjectCounts}
               allSubjects={[...allSubjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
               onAddChapter={handleAddChapter}
               onDeleteChapter={handleDeleteChapter}
@@ -1753,82 +1770,6 @@ function EditSubjectModal({ subject, onClose, onUpdate, existingSlugs }: {
             </button>
           </div>
         </form>
-      </div>
-    </div>
-  );
-}
-
-// Dashboard Section
-function DashboardSection({ onSelectSubject, allSubjects, allQuestions, onAddSubject, onExport, onImport, onDeleteSubject }: {
-  onSelectSubject: (section: MenuSection) => void;
-  allSubjects: Subject[];
-  allQuestions: Record<string, Question[]>;
-  onAddSubject: () => void;
-  onExport: () => void;
-  onImport: () => void;
-  onDeleteSubject: (subjectId: string) => void;
-}): JSX.Element {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Quick Overview</h3>
-        <div className="flex gap-2">
-          <button
-            onClick={onAddSubject}
-            className="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 flex items-center gap-2"
-          >
-            <span>+</span> Add Subject
-          </button>
-          <button
-            onClick={onExport}
-            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 flex items-center gap-2"
-          >
-            <span>📤</span> Export
-          </button>
-          <button
-            onClick={onImport}
-            className="rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 flex items-center gap-2"
-          >
-            <span>📥</span> Import
-          </button>
-        </div>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {allSubjects.map((subject) => (
-          <div
-            key={subject.slug}
-            className="rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow relative group"
-          >
-            <button
-              onClick={() => onSelectSubject(subject.slug as MenuSection)}
-              className="w-full text-left"
-            >
-              <div className="flex items-center gap-4">
-                <div className="rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 p-3 text-white">
-                  <span className="text-2xl">{isEmoji(subject.emoji) ? subject.emoji : '📚'}</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800">{subject.name}</p>
-                  <p className="text-sm text-gray-500">{(allQuestions[subject.slug] ?? []).length} questions</p>
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteSubject(subject.id);
-              }}
-              className="absolute top-2 right-2 p-2 rounded-lg text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
-              title="Delete subject"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 6h18"></path>
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-              </svg>
-            </button>
-          </div>
-        ))}
       </div>
     </div>
   );
