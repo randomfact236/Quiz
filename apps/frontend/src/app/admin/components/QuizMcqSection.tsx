@@ -34,11 +34,12 @@ import type { Subject } from '../types';
 
 interface QuizMcqSectionProps {
   allSubjects: Subject[];
+  onSubjectsChange?: () => void;
 }
 
 const QUESTIONS_PAGE_SIZE = 10;
 
-export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
+export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMcqSectionProps) {
   const { filters, setFilter, resetFilters } = useQuizFilters();
   
   const [filterCounts, setFilterCounts] = useState<FilterCountsResponse | null>(null);
@@ -65,23 +66,22 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Memoize countParams for COUNTS (excludes status - shows ALL counts)
+  // Memoize countParams for COUNTS (excludes status - shows subject/chapter-filtered counts)
+  // We need status counts filtered by selected subject/chapter/level
   const countParams = useMemo(() => {
     const params: {
       subject?: string;
-      level?: string;
       chapter?: string;
       search?: string;
     } = {};
 
     if (filters.subject && filters.subject !== 'all') params.subject = filters.subject;
-    if (filters.level && filters.level !== 'all') params.level = filters.level;
     if (filters.chapter && filters.chapter !== 'all') params.chapter = filters.chapter;
     if (filters.search) params.search = filters.search;
     // Note: status EXCLUDED - we want to see counts for ALL statuses
 
     return params;
-  }, [filters.subject, filters.level, filters.chapter, filters.search]);
+  }, [filters.subject, filters.chapter, filters.search]);
 
   // Memoize dataParams for TABLE DATA (includes ALL filters)
   const dataParams = useMemo(() => {
@@ -153,6 +153,22 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
     setCurrentPage(1);
   }, [filters.subject, filters.status, filters.level, filters.chapter, filters.search]);
 
+  // Reset chapter filter when subject changes and current chapter doesn't belong to new subject
+  useEffect(() => {
+    if (filters.chapter && filters.chapter !== 'all' && filters.subject && filters.subject !== 'all') {
+      const selectedSubject = allSubjects.find(s => s.slug === filters.subject);
+      if (selectedSubject) {
+        // Check if current chapter belongs to selected subject
+        const chapterBelongsToSubject = filterCounts?.chapterCounts.some(
+          ch => ch.name === filters.chapter && ch.subjectId === selectedSubject.id
+        );
+        if (!chapterBelongsToSubject) {
+          setFilter('chapter', 'all');
+        }
+      }
+    }
+  }, [filters.subject, filters.chapter, filterCounts?.chapterCounts, allSubjects, setFilter]);
+
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,8 +219,11 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
         await updateSubject(editingSubject.id, data);
       }
       handleRefresh();
-    } catch (error) {
+      onSubjectsChange?.();
+    } catch (error: any) {
       console.error('Failed to save subject:', error);
+      const errorMessage = error?.message || 'Failed to save subject';
+      alert(errorMessage);
     }
   };
 
@@ -234,8 +253,11 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
         await updateChapter(editingChapter.id, data);
       }
       handleRefresh();
-    } catch (error) {
+      onSubjectsChange?.();
+    } catch (error: any) {
       console.error('Failed to save chapter:', error);
+      const errorMessage = error?.message || 'Failed to save chapter';
+      alert(errorMessage);
     }
   };
 
@@ -278,9 +300,11 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
       switch (deleteTarget.type) {
         case 'subject':
           await deleteSubject(deleteTarget.id);
+          onSubjectsChange?.();
           break;
         case 'chapter':
           await deleteChapter(deleteTarget.id);
+          onSubjectsChange?.();
           break;
         case 'question':
           await deleteQuestion(deleteTarget.id);
@@ -386,15 +410,37 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
         className="hidden"
       />
 
-      {/* Status Filter with Actions */}
+      {/* Action Buttons - Above all containers */}
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={handleAddQuestion}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add Question
+        </button>
+        <button
+          onClick={handleImportClick}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12M8 11l4-4 4 4M4 17h16"/></svg>
+          Import
+        </button>
+        <button
+          onClick={handleExport}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3M8 7l4-4 4 4M4 17h16"/></svg>
+          Export
+        </button>
+      </div>
+
+      {/* Status Filter */}
       <div className="rounded-xl bg-white p-4 shadow-md border border-gray-200">
         <StatusFilter
           value={filters.status || 'all'}
           onChange={(value) => setFilter('status', value)}
           counts={statusCounts}
-          onAddQuestion={handleAddQuestion}
-          onImport={handleImportClick}
-          onExport={handleExport}
         />
       </div>
 

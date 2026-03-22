@@ -1296,6 +1296,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'quiz' && allSubjects.length > 0 && (
             <QuizMcqSection
               allSubjects={allSubjects}
+              onSubjectsChange={refetchSubjects}
             />
           )}
           {allSubjects.some(s => s.slug === activeSection) && (

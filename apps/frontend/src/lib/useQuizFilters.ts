@@ -18,7 +18,7 @@ export interface QuizFiltersState {
 }
 
 const DEFAULT_FILTERS: QuizFilters = {
-  status: 'all',
+  status: 'published',
   level: 'all',
   chapter: 'all',
   search: '',
