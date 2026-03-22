@@ -149,13 +149,6 @@ export async function updateChapter(id: string, dto: { name?: string; subjectId?
     return response.data;
 }
 
-export async function getChaptersForSubject(subjectSlug: string): Promise<{ id: string; name: string }[]> {
-    const subject = await getSubjectBySlug(subjectSlug);
-    return subject.chapters.map(c => ({ id: c.id, name: c.name }));
-}
-
-
-
 // ============================================================================
 // Questions API
 // ============================================================================
