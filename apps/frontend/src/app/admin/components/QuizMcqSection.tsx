@@ -17,8 +17,8 @@ import {
   deleteChapter,
   deleteQuestion,
   exportQuestionsToCSV,
-  parseCSVQuestions,
 } from '@/lib/quiz-api';
+import { importQuestionsFromCSV } from '@/app/admin/utils/quiz-importer';
 import { SubjectFilter } from '@/components/ui/quiz-filters/SubjectFilter';
 import { ChapterFilter } from '@/components/ui/quiz-filters/ChapterFilter';
 import { LevelFilter } from '@/components/ui/quiz-filters/LevelFilter';
@@ -291,14 +291,19 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
     if (!file) return;
 
     const text = await file.text();
-    const { data, errors } = parseCSVQuestions(text);
     
-    if (errors.length > 0) {
-      alert(`Import warnings:\n${errors.slice(0, 5).join('\n')}${errors.length > 5 ? '\n...and more' : ''}`);
-    }
-    
-    if (data.length > 0) {
-      alert(`Parsed ${data.length} questions. Note: Import requires chapter/subject to be pre-created.`);
+    try {
+      const result = await importQuestionsFromCSV(text, allSubjects);
+      
+      if (result.success) {
+        alert(`Successfully imported ${result.questionsImported} questions!\nSubject: ${result.subjectName}\nChapters created: ${result.chaptersCreated}`);
+        handleRefresh();
+      } else {
+        alert(`Import failed:\n${result.errors.join('\n')}`);
+      }
+    } catch (err) {
+      console.error('Import error:', err);
+      alert('Import failed. Please check the CSV format.');
     }
     
     e.target.value = '';
