@@ -8,13 +8,15 @@ import {
   Gamepad2,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Smile,
   Puzzle,
   Image as ImageIcon,
   Settings,
   Users,
   Home,
-  LogOut
+  LogOut,
+  BookOpen
 } from 'lucide-react';
 
 import type {
@@ -31,10 +33,6 @@ import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
 import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, QuizMcqSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
-
-// Draggable Sidebar
-import { DraggableSidebar, subjectsToSidebarSections } from '@/components/ui/sidebar/DraggableSidebar';
-import type { SidebarSection } from '@/components/ui/sidebar/DraggableSidebar';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 import { QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getFilterCounts, SubjectStatusCounts } from '@/lib/quiz-api';
@@ -63,9 +61,7 @@ export default function AdminPage(): JSX.Element {
   const [activeSection, setActiveSection] = useState<MenuSection>('summary');
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  // Draggable Sidebar State
-  const [sidebarSections, setSidebarSections] = useState<SidebarSection[]>([]);
+  const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
   const { subjects: dbSubjects, refetch: refetchSubjects } = useQuizSubjects();
@@ -1153,18 +1149,91 @@ export default function AdminPage(): JSX.Element {
         </div>
 
         {/* Navigation */}
-        <DraggableSidebar
-          sections={sidebarSections.length > 0 ? sidebarSections : subjectsToSidebarSections(allSubjects)}
-          activeSection={activeSection}
-          sidebarOpen={sidebarOpen}
-          onSectionClick={(slug) => updateURL({ section: slug })}
-          onToggleCollapse={(sectionId) => {
-            setSidebarSections(prev => prev.map(s => 
-              s.id === sectionId ? { ...s, isCollapsed: !s.isCollapsed } : s
-            ));
-          }}
-          onSectionsChange={setSidebarSections}
-        />
+        <nav className="flex-1 overflow-y-auto py-2">
+          {/* Summary */}
+          <MenuItem
+            icon={<LayoutDashboard className="w-5 h-5" />}
+            label="Summary"
+            active={activeSection === 'summary'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'summary' })}
+          />
+
+          {/* Quiz Section */}
+          <MenuItem
+            icon={<BookOpen className="w-5 h-5" />}
+            label="Quiz"
+            active={activeSection === 'quiz'}
+            expanded={sidebarOpen}
+            onClick={() => {
+              setActiveSection('quiz');
+              updateURL({ section: 'quiz' });
+            }}
+          />
+
+          {/* Other Modules Header */}
+          <button
+            onClick={() => setOtherModulesExpanded(!otherModulesExpanded)}
+            className="w-full flex items-center justify-between px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:bg-gray-800 transition-colors"
+          >
+            {sidebarOpen ? (
+              <>
+                <span className="flex items-center gap-2"><Puzzle className="w-4 h-4" /> Other Modules</span>
+                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}><ChevronDown className="w-3 h-3" /></span>
+              </>
+            ) : (
+              <span className="flex items-center justify-center w-5 h-5"><Puzzle className="w-4 h-4" /></span>
+            )}
+          </button>
+
+          {/* Dad Jokes & Riddles */}
+          {otherModulesExpanded && (
+            <>
+              <MenuItem
+                icon={<Smile className="w-5 h-5" />}
+                label="Dad Jokes"
+                active={activeSection === 'jokes'}
+                expanded={sidebarOpen}
+                onClick={() => updateURL({ section: 'jokes' })}
+              />
+              <MenuItem
+                icon={<Puzzle className="w-5 h-5" />}
+                label="Riddle MCQ"
+                active={activeSection === 'riddle-mcq'}
+                expanded={sidebarOpen}
+                onClick={() => updateURL({ section: 'riddle-mcq' })}
+              />
+              <MenuItem
+                icon={<ImageIcon className="w-5 h-5" />}
+                label="Image Riddles"
+                active={activeSection === 'image-riddles'}
+                expanded={sidebarOpen}
+                onClick={() => updateURL({ section: 'image-riddles' })}
+              />
+            </>
+          )}
+
+          {/* System */}
+          {sidebarOpen && (
+            <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <Settings className="w-3 h-3" /> System
+            </div>
+          )}
+          <MenuItem
+            icon={<Users className="w-5 h-5" />}
+            label="Users"
+            active={activeSection === 'users'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'users' })}
+          />
+          <MenuItem
+            icon={<Settings className="w-5 h-5" />}
+            label="Settings"
+            active={activeSection === 'settings'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'settings' })}
+          />
+        </nav>
 
         {/* Back to Site */}
         <div className="border-t border-gray-800 p-4">
@@ -1227,7 +1296,6 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'quiz' && allSubjects.length > 0 && (
             <QuizMcqSection
               allSubjects={allSubjects}
-              onSubjectsChange={refetchSubjects}
             />
           )}
           {allSubjects.some(s => s.slug === activeSection) && (
@@ -1409,6 +1477,26 @@ export default function AdminPage(): JSX.Element {
 
       <AdminGuard />
     </div>
+  );
+}
+
+// Menu Item Component
+function MenuItem({ icon, label, active, expanded, onClick }: {
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  expanded: boolean;
+  onClick: () => void;
+}): JSX.Element {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+        }`}
+    >
+      <span className="flex items-center justify-center w-5 h-5">{icon}</span>
+      {expanded && <span>{label}</span>}
+    </button>
   );
 }
 
