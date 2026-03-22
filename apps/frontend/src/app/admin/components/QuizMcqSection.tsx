@@ -65,8 +65,26 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Memoize filterParams to prevent infinite loops
-  const filterParams = useMemo(() => {
+  // Memoize countParams for COUNTS (excludes status - shows ALL counts)
+  const countParams = useMemo(() => {
+    const params: {
+      subject?: string;
+      level?: string;
+      chapter?: string;
+      search?: string;
+    } = {};
+
+    if (filters.subject && filters.subject !== 'all') params.subject = filters.subject;
+    if (filters.level && filters.level !== 'all') params.level = filters.level;
+    if (filters.chapter && filters.chapter !== 'all') params.chapter = filters.chapter;
+    if (filters.search) params.search = filters.search;
+    // Note: status EXCLUDED - we want to see counts for ALL statuses
+
+    return params;
+  }, [filters.subject, filters.level, filters.chapter, filters.search]);
+
+  // Memoize dataParams for TABLE DATA (includes ALL filters)
+  const dataParams = useMemo(() => {
     const params: {
       subject?: string;
       status?: string;
@@ -84,13 +102,13 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
     return params;
   }, [filters.subject, filters.status, filters.level, filters.chapter, filters.search]);
 
-  // Fetch filter counts
+  // Fetch filter counts (uses countParams - excludes status)
   useEffect(() => {
     let cancelled = false;
     
     async function fetchCounts() {
       try {
-        const counts = await getFilterCounts(filterParams);
+        const counts = await getFilterCounts(countParams);
         if (!cancelled) {
           setFilterCounts(counts);
         }
@@ -102,16 +120,16 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
     fetchCounts();
     
     return () => { cancelled = true; };
-  }, [filterParams]);
+  }, [countParams]);
 
-  // Fetch questions
+  // Fetch questions (uses dataParams - includes ALL filters)
   useEffect(() => {
     let cancelled = false;
     
     async function fetchQuestionsData() {
       setIsLoading(true);
       try {
-        const result = await getAllQuestions(filterParams, currentPage, QUESTIONS_PAGE_SIZE);
+        const result = await getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE);
         if (!cancelled) {
           setQuestions(result.data);
           setTotalQuestions(result.total);
@@ -128,7 +146,7 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
     fetchQuestionsData();
     
     return () => { cancelled = true; };
-  }, [filterParams, currentPage]);
+  }, [dataParams, currentPage]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -142,14 +160,14 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
 
   const handleRefresh = useCallback(() => {
     Promise.all([
-      getFilterCounts(filterParams),
-      getAllQuestions(filterParams, currentPage, QUESTIONS_PAGE_SIZE),
+      getFilterCounts(countParams),
+      getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE),
     ]).then(([counts, result]) => {
       setFilterCounts(counts);
       setQuestions(result.data);
       setTotalQuestions(result.total);
     }).catch(console.error);
-  }, [filterParams, currentPage]);
+  }, [countParams, dataParams, currentPage]);
 
   // Subject handlers
   const handleAddSubject = () => {
@@ -311,9 +329,25 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
 
   // Get subject/chapter data for modals
   const subjectsForModal = allSubjects.map(s => ({ id: s.id, name: s.name, slug: s.slug }));
-  const chaptersForModal = filterCounts?.chapterCounts.map(c => ({ id: c.id, name: c.name, subjectId: '' })) || [];
+  const chaptersForModal = filterCounts?.chapterCounts.map(c => ({ id: c.id, name: c.name, subjectId: c.subjectId })) || [];
 
-  const chapterList = filterCounts?.chapterCounts.map(c => ({ id: c.id, name: c.name })) || [];
+  // Chapter list with counts and subjectId for cascading
+  const chapterList = filterCounts?.chapterCounts.map(c => ({ 
+    id: c.id, 
+    name: c.name, 
+    count: c.count,
+    subjectId: c.subjectId 
+  })) || [];
+
+  // Filter chapters by selected subject (cascading)
+  const visibleChapters = useMemo(() => {
+    if (filters.subject === 'all') return chapterList;
+    
+    const selectedSubject = allSubjects.find(s => s.slug === filters.subject);
+    if (!selectedSubject) return chapterList;
+    
+    return chapterList.filter(ch => ch.subjectId === selectedSubject.id);
+  }, [chapterList, filters.subject, allSubjects]);
   
   const levelCounts: Record<string, number> = {};
   filterCounts?.levelCounts.forEach(l => {
@@ -326,18 +360,20 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
   // Get subject name for display
   const getSubjectName = (slug: string) => allSubjects.find(s => s.slug === slug)?.name || slug;
 
-  // Prepare subject data with IDs for filter
-  const subjectsWithIds = allSubjects.map(s => {
-    const countData = subjectCounts.find(sc => sc.slug === s.slug);
-    return { 
-      id: s.id,
-      slug: s.slug, 
-      name: s.name, 
-      emoji: s.emoji, 
-      category: s.category,
-      count: countData?.count || 0 
-    };
-  });
+  // Prepare subject data with counts from API (not from props)
+  const subjectsWithIds = useMemo(() => {
+    return subjectCounts.map(sc => {
+      const subject = allSubjects.find(s => s.slug === sc.slug);
+      return { 
+        id: subject?.id || '',
+        slug: sc.slug, 
+        name: subject?.name || sc.slug, 
+        emoji: subject?.emoji || '📚', 
+        category: subject?.category || 'academic',
+        count: sc.count 
+      };
+    });
+  }, [subjectCounts, allSubjects]);
 
   return (
     <div className="space-y-4">
@@ -374,11 +410,11 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
           onDeleteSubject={handleDeleteSubject}
         />
 
-        {/* Chapter Filter */}
+        {/* Chapter Filter - shows only chapters for selected subject */}
         <ChapterFilter
           value={filters.chapter || 'all'}
           onChange={(value) => setFilter('chapter', value)}
-          chapters={chapterList}
+          chapters={visibleChapters}
           onAddChapter={handleAddChapter}
           onEditChapter={handleEditChapter}
           onDeleteChapter={handleDeleteChapter}

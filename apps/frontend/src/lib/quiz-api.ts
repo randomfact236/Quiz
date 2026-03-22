@@ -228,7 +228,7 @@ export async function getStatusCountsBySubject(subjectSlug: string): Promise<Sub
 
 export interface FilterCountsResponse {
     subjectCounts: { slug: string; count: number }[];
-    chapterCounts: { id: string; name: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number; subjectId: string; subjectSlug: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
     total: number;
