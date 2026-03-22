@@ -17,6 +17,7 @@ import {
   deleteChapter,
   deleteQuestion,
   exportQuestionsToCSV,
+  bulkActionQuestions,
 } from '@/lib/quiz-api';
 import { importQuestionsFromCSV } from '@/app/admin/utils/quiz-importer';
 import { SubjectFilter } from '@/components/ui/quiz-filters/SubjectFilter';
@@ -30,7 +31,9 @@ import { SubjectModal } from '@/components/ui/quiz-filters/SubjectModal';
 import { ChapterModal } from '@/components/ui/quiz-filters/ChapterModal';
 import { QuestionModal } from '@/components/ui/quiz-filters/QuestionModal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { Subject } from '../types';
+import type { BulkActionType, StatusFilter as BulkStatusFilter } from '@/types/status.types';
 
 interface QuizMcqSectionProps {
   allSubjects: Subject[];
@@ -65,6 +68,21 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'subject' | 'chapter' | 'question'; id: string; name: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Bulk actions state
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
+  // Import modal state
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importPreview, setImportPreview] = useState<{ subjectName: string; questionCount: number; errors: string[]; warnings: string[] } | null>(null);
+  const [importLoading, setImportLoading] = useState(false);
+  const [importError, setImportError] = useState('');
+  const [importSuccess, setImportSuccess] = useState('');
+  const [lastImportContent, setLastImportContent] = useState('');
+
+  // Page size state
+  const [pageSize, setPageSize] = useState(QUESTIONS_PAGE_SIZE);
 
   // Memoize countParams for COUNTS (excludes status - shows subject/chapter-filtered counts)
   // We need status counts filtered by selected subject/chapter/level
@@ -146,12 +164,12 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
     fetchQuestionsData();
     
     return () => { cancelled = true; };
-  }, [dataParams, currentPage]);
+  }, [dataParams, currentPage, pageSize]);
 
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.subject, filters.status, filters.level, filters.chapter, filters.search]);
+  }, [filters.subject, filters.status, filters.level, filters.chapter, filters.search, pageSize]);
 
   // Reset chapter filter when subject changes and current chapter doesn't belong to new subject
   useEffect(() => {
@@ -177,13 +195,99 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
   const handleRefresh = useCallback(() => {
     Promise.all([
       getFilterCounts(countParams),
-      getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE),
+      getAllQuestions(dataParams, currentPage, pageSize),
     ]).then(([counts, result]) => {
       setFilterCounts(counts);
       setQuestions(result.data);
       setTotalQuestions(result.total);
     }).catch(console.error);
-  }, [countParams, dataParams, currentPage]);
+  }, [countParams, dataParams, currentPage, pageSize]);
+
+  // Bulk action handlers
+  const handleBulkAction = useCallback(async (action: BulkActionType) => {
+    if (selectedIds.length === 0) return;
+    
+    // Map 'restore' to 'publish' since API doesn't support restore
+    const apiAction = action === 'restore' ? 'publish' : action;
+    
+    setBulkActionLoading(true);
+    try {
+      await bulkActionQuestions(selectedIds, apiAction as 'publish' | 'draft' | 'trash' | 'delete');
+      setSelectedIds([]);
+      handleRefresh();
+    } catch (error) {
+      console.error(`Failed to ${action} questions:`, error);
+    } finally {
+      setBulkActionLoading(false);
+    }
+  }, [selectedIds, handleRefresh]);
+
+  // Import handlers
+  const handleFileUpload = useCallback(async (file: File) => {
+    setImportLoading(true);
+    setImportError('');
+    setImportSuccess('');
+    
+    try {
+      const content = await file.text();
+      setLastImportContent(content);
+      
+      const result = await importQuestionsFromCSV(content, allSubjects);
+      
+      if (result.errors.length > 0) {
+        setImportError(result.errors.join('\n'));
+        setImportPreview(null);
+      } else {
+        setImportPreview({
+          subjectName: result.subjectName,
+          questionCount: result.questionsImported,
+          errors: result.errors,
+          warnings: result.warnings,
+        });
+      }
+    } catch (err) {
+      setImportError('Failed to read file: ' + (err as Error).message);
+    } finally {
+      setImportLoading(false);
+    }
+  }, [allSubjects]);
+
+  const handleConfirmImport = useCallback(async () => {
+    if (!importPreview) return;
+
+    setImportLoading(true);
+    try {
+      const result = await importQuestionsFromCSV(lastImportContent, allSubjects);
+
+      if (result.success) {
+        const msg = `✅ Imported ${result.questionsImported} questions into "${result.subjectName}"` +
+          (result.warnings.length > 0 ? ` (${result.warnings.length} warnings)` : '');
+        setImportSuccess(msg);
+        setImportPreview(null);
+        setLastImportContent('');
+
+        // Refresh data
+        handleRefresh();
+        onSubjectsChange?.();
+
+        // Auto-close after short delay
+        setTimeout(() => {
+          setShowImportModal(false);
+          setImportSuccess('');
+        }, 2500);
+      } else {
+        setImportError(
+          result.errors.join('\n') ||
+          'Import failed. Check that your CSV matches the required format.'
+        );
+        setImportPreview(null);
+      }
+    } catch (err) {
+      setImportError('Failed to import: ' + (err as Error).message);
+    } finally {
+      setImportLoading(false);
+    }
+  }, [importPreview, lastImportContent, allSubjects, handleRefresh, onSubjectsChange]);
 
   // Subject handlers
   const handleAddSubject = () => {
@@ -325,30 +429,22 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
 
   // Import handler
   const handleImportClick = () => {
-    fileInputRef.current?.click();
+    setShowImportModal(true);
+    setImportPreview(null);
+    setImportError('');
+    setImportSuccess('');
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const text = await file.text();
+    await handleFileUpload(file);
     
-    try {
-      const result = await importQuestionsFromCSV(text, allSubjects);
-      
-      if (result.success) {
-        alert(`Successfully imported ${result.questionsImported} questions!\nSubject: ${result.subjectName}\nChapters created: ${result.chaptersCreated}`);
-        handleRefresh();
-      } else {
-        alert(`Import failed:\n${result.errors.join('\n')}`);
-      }
-    } catch (err) {
-      console.error('Import error:', err);
-      alert('Import failed. Please check the CSV format.');
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
-    
-    e.target.value = '';
   };
 
   // Get subject/chapter data for modals
@@ -493,17 +589,46 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         />
       </div>
 
+      {/* Page Size Selector */}
+      <div className="flex justify-end mb-2">
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <span>Show:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            className="px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>
+          <span>per page</span>
+        </div>
+      </div>
+
       {/* Question Table */}
       <QuestionTable
         questions={questions}
         total={totalQuestions}
         page={currentPage}
-        limit={QUESTIONS_PAGE_SIZE}
+        limit={pageSize}
         onPageChange={handlePageChange}
         onQuestionUpdate={handleRefresh}
         onEditQuestion={handleEditQuestion}
         onDeleteQuestion={handleDeleteQuestion}
         isLoading={isLoading}
+      />
+
+      {/* Bulk Action Toolbar */}
+      <BulkActionToolbar
+        selectedIds={selectedIds}
+        totalItems={questions.length}
+        currentFilter={filters.status as BulkStatusFilter}
+        onSelectAll={() => setSelectedIds(questions.map(q => q.id))}
+        onDeselectAll={() => setSelectedIds([])}
+        onAction={handleBulkAction}
+        onClose={() => setSelectedIds([])}
+        loading={bulkActionLoading}
       />
 
       {/* Modals */}
@@ -543,6 +668,151 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         confirmLabel="Delete"
         confirmVariant="danger"
       />
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                📥 Import Questions from CSV
+              </h3>
+
+              <div className="space-y-4">
+                {/* File Upload */}
+                {!importLoading && !importSuccess && !importPreview && (
+                  <>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                      <input
+                        type="file"
+                        accept=".csv"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        id="import-file"
+                      />
+                      <label htmlFor="import-file" className="cursor-pointer block">
+                        <div className="text-gray-500 mb-2">
+                          <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                          <p className="font-medium">Drag and drop your CSV file here, or click to browse</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg text-sm space-y-2">
+                      <p className="font-medium">Required CSV Format:</p>
+                      <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                        # Subject: SubjectName
+                      </code>
+                      <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                        ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+                      </code>
+                      <div className="text-xs text-gray-600 space-y-0.5 mt-1">
+                        <p>• <strong>easy</strong> — True/False (Option A = FALSE, Option B = TRUE)</p>
+                        <p>• <strong>medium</strong> — 2 options (A, B)</p>
+                        <p>• <strong>hard</strong> — 3 options (A, B, C)</p>
+                        <p>• <strong>expert</strong> — 4 options (A, B, C, D)</p>
+                        <p>• <strong>extreme</strong> — open answer (Correct Answer column = answer text)</p>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Import Preview */}
+                {importPreview && !importSuccess && (
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-2xl">📋</span>
+                        <div>
+                          <p className="font-semibold text-blue-900">Import Preview</p>
+                          <p className="text-sm text-blue-700">
+                            {importPreview.questionCount} questions found for subject: <strong>{importPreview.subjectName}</strong>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Warnings */}
+                    {importPreview.warnings.length > 0 && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p className="font-semibold text-yellow-800 mb-2">⚠️ Warnings ({importPreview.warnings.length})</p>
+                        <ul className="text-sm text-yellow-700 space-y-1 max-h-32 overflow-y-auto">
+                          {importPreview.warnings.map((warning, idx) => (
+                            <li key={idx} className="text-xs">• {warning}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Confirm/Cancel Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => { setImportPreview(null); setLastImportContent(''); }}
+                        className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+                      >
+                        ✕ Cancel
+                      </button>
+                      <button
+                        onClick={handleConfirmImport}
+                        disabled={importLoading}
+                        className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+                      >
+                        ✅ Confirm Import
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Loading State */}
+                {importLoading && (
+                  <div className="flex flex-col items-center py-8 gap-3">
+                    <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+                    <p className="text-gray-600 font-medium">Importing questions to database…</p>
+                    <p className="text-gray-400 text-sm">This may take a moment for large files</p>
+                  </div>
+                )}
+
+                {/* Success State */}
+                {importSuccess && (
+                  <div className="flex flex-col items-center py-6 gap-3 text-center">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">✅</span>
+                    </div>
+                    <p className="text-green-700 font-semibold">{importSuccess}</p>
+                    <p className="text-gray-400 text-sm">Modal will close automatically…</p>
+                  </div>
+                )}
+
+                {/* Error State */}
+                {importError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="font-semibold text-red-800 mb-2">❌ Error</p>
+                    <p className="text-sm text-red-700 whitespace-pre-wrap">{importError}</p>
+                    <button
+                      onClick={() => setImportError('')}
+                      className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={() => setShowImportModal(false)}
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
