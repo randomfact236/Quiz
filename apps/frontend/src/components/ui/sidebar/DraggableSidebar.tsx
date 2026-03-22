@@ -2,27 +2,15 @@
 
 import { useState, useCallback } from 'react';
 import {
-  DndContext,
-  DragOverlay,
-  closestCorners,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragStartEvent,
-  DragOverEvent,
-  DragEndEvent,
-  defaultDropAnimationSideEffects,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, ChevronDown, ChevronRight, Plus, Pencil, Trash2, Check, X } from 'lucide-react';
+  GripVertical,
+  ChevronDown,
+  ChevronRight,
+  Plus,
+  Pencil,
+  Trash2,
+  Check,
+  X,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import type { Subject } from '@/app/admin/types';
@@ -59,10 +47,9 @@ interface DraggableSidebarProps {
   onSectionsChange: (sections: SidebarSection[]) => void;
 }
 
-// Sortable Section Header Component
-interface SortableSectionProps {
+// Section Header Component
+interface SidebarSectionHeaderProps {
   section: SidebarSection;
-  isActive: boolean;
   isExpanded: boolean;
   sidebarOpen: boolean;
   onToggle: () => void;
@@ -71,30 +58,15 @@ interface SortableSectionProps {
   onAddItem: (sectionId: string) => void;
 }
 
-function SortableSection({
+function SidebarSectionHeader({
   section,
-  isActive,
   isExpanded,
   sidebarOpen,
   onToggle,
   onEdit,
   onDelete,
   onAddItem,
-}: SortableSectionProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: section.id, data: { type: 'section', section } });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+}: SidebarSectionHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(section.name);
 
@@ -109,29 +81,12 @@ function SortableSection({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={cn(
-        'group relative',
-        isDragging && 'opacity-50'
-      )}
-    >
-      {/* Drag Handle */}
-      <button
-        {...attributes}
-        {...listeners}
-        className="absolute left-0 top-1/2 -translate-y-1/2 p-1 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing text-gray-500 hover:text-gray-300 transition-opacity"
-      >
-        <GripVertical className="w-4 h-4" />
-      </button>
-
+    <div className="group relative">
       {/* Section Header */}
       <div
         className={cn(
           'flex items-center justify-between px-4 py-2 mt-2 text-xs font-semibold uppercase tracking-wider',
-          'text-gray-500 hover:bg-gray-800 transition-colors cursor-pointer',
-          isActive && 'text-blue-400'
+          'text-gray-500 hover:bg-gray-800 transition-colors cursor-pointer'
         )}
         onClick={onToggle}
       >
@@ -161,7 +116,8 @@ function SortableSection({
               </div>
             ) : (
               <>
-                <span className="flex items-center gap-2 pl-4">
+                <span className="flex items-center gap-2">
+                  <GripVertical className="w-4 h-4 opacity-0 group-hover:opacity-100 cursor-grab" />
                   {section.name}
                 </span>
                 <div className="flex items-center gap-1">
@@ -207,7 +163,11 @@ function SortableSection({
           </>
         ) : (
           <span className="flex items-center justify-center w-5 h-5">
-            {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+            {isExpanded ? (
+              <ChevronDown className="w-3 h-3" />
+            ) : (
+              <ChevronRight className="w-3 h-3" />
+            )}
           </span>
         )}
       </div>
@@ -215,10 +175,9 @@ function SortableSection({
   );
 }
 
-// Sortable Item Component
-interface SortableItemProps {
+// Sidebar Item Component
+interface SidebarItemProps {
   item: SidebarItem;
-  sectionId: string;
   isActive: boolean;
   sidebarOpen: boolean;
   onClick: () => void;
@@ -226,29 +185,14 @@ interface SortableItemProps {
   onDelete: (itemId: string) => void;
 }
 
-function SortableItem({
+function SidebarItemComponent({
   item,
-  sectionId,
   isActive,
   sidebarOpen,
   onClick,
   onEdit,
   onDelete,
-}: SortableItemProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id, data: { type: 'item', item, sectionId } });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+}: SidebarItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(item.name);
 
@@ -263,30 +207,12 @@ function SortableItem({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={cn(
-        'group relative',
-        isDragging && 'opacity-50'
-      )}
-    >
-      {/* Drag Handle */}
-      <button
-        {...attributes}
-        {...listeners}
-        className="absolute left-0 top-1/2 -translate-y-1/2 p-1 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing text-gray-500 hover:text-gray-300 transition-opacity"
-      >
-        <GripVertical className="w-4 h-4" />
-      </button>
-
+    <div className="group relative">
       {/* Item */}
       {isEditing ? (
-        <div
-          className="flex items-center gap-2 px-4 py-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <span className="pl-4">{item.emoji || '📚'}</span>
+        <div className="flex items-center gap-2 px-4 py-2" onClick={(e) => e.stopPropagation()}>
+          <GripVertical className="w-4 h-4 text-gray-500" />
+          <span>{item.emoji || '📚'}</span>
           <input
             type="text"
             value={editName}
@@ -294,16 +220,10 @@ function SortableItem({
             className="flex-1 bg-gray-800 text-white text-sm px-2 py-1 rounded border border-gray-600 focus:border-blue-500 outline-none"
             autoFocus
           />
-          <button
-            onClick={handleSave}
-            className="p-1 text-green-400 hover:bg-gray-700 rounded"
-          >
+          <button onClick={handleSave} className="p-1 text-green-400 hover:bg-gray-700 rounded">
             <Check className="w-3 h-3" />
           </button>
-          <button
-            onClick={handleCancel}
-            className="p-1 text-red-400 hover:bg-gray-700 rounded"
-          >
+          <button onClick={handleCancel} className="p-1 text-red-400 hover:bg-gray-700 rounded">
             <X className="w-3 h-3" />
           </button>
         </div>
@@ -316,17 +236,20 @@ function SortableItem({
             isActive && 'bg-blue-600 text-white hover:bg-blue-700'
           )}
         >
-          <span className="flex items-center gap-3 pl-4">
+          <span className="flex items-center gap-3">
+            <GripVertical className="w-4 h-4 opacity-0 group-hover:opacity-100 text-gray-500 cursor-grab" />
             <span>{item.emoji || item.icon || '📚'}</span>
             {sidebarOpen && <span className="truncate">{item.name}</span>}
           </span>
           {sidebarOpen && (
             <div className="flex items-center gap-1">
               {item.count !== undefined && (
-                <span className={cn(
-                  'text-xs px-2 py-0.5 rounded-full',
-                  isActive ? 'bg-blue-500' : 'bg-gray-700 text-gray-300'
-                )}>
+                <span
+                  className={cn(
+                    'text-xs px-2 py-0.5 rounded-full',
+                    isActive ? 'bg-blue-500' : 'bg-gray-700 text-gray-300'
+                  )}
+                >
                   {item.count}
                 </span>
               )}
@@ -383,135 +306,6 @@ export function DraggableSidebar({
   onToggleCollapse,
   onSectionsChange,
 }: DraggableSidebarProps) {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeItem, setActiveItem] = useState<SidebarItem | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    const { active } = event;
-    setActiveId(active.id as string);
-    
-    const activeData = active.data.current;
-    if (activeData?.['type'] === 'item') {
-      setActiveItem(activeData['item']);
-    }
-  }, []);
-
-  const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { active, over } = event;
-
-    if (!over) return;
-
-    const activeId = active.id;
-    const overId = over.id;
-
-    if (activeId === overId) return;
-
-    const activeData = active.data.current;
-    const overData = over.data.current;
-
-    // Handle item moving between sections
-    if (activeData?.['type'] === 'item' && overData?.['type'] === 'section') {
-      const activeItem = activeData['item'];
-      const overSection = overData['section'];
-
-      if (activeItem.sectionId !== overSection.id) {
-        onSectionsChange(
-          sections.map((section) => {
-            if (section.id === activeItem.sectionId) {
-              return {
-                ...section,
-                items: section.items.filter((item) => item.id !== activeItem.id),
-              };
-            }
-            if (section.id === overSection.id) {
-              return {
-                ...section,
-                items: [...section.items, { ...activeItem, sectionId: overSection.id }],
-              };
-            }
-            return section;
-          })
-        );
-      }
-    }
-  }, [sections, onSectionsChange]);
-
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over) {
-      setActiveId(null);
-      setActiveItem(null);
-      return;
-    }
-
-    const activeId = active.id;
-    const overId = over.id;
-
-    if (activeId === overId) {
-      setActiveId(null);
-      setActiveItem(null);
-      return;
-    }
-
-    const activeData = active.data.current;
-    const overData = over.data.current;
-
-    // Reorder sections
-    if (activeData?.['type'] === 'section' && overData?.['type'] === 'section') {
-      const oldIndex = sections.findIndex((s) => s.id === activeId);
-      const newIndex = sections.findIndex((s) => s.id === overId);
-
-      onSectionsChange(arrayMove(sections, oldIndex, newIndex));
-    }
-
-    // Reorder items within section
-    if (activeData?.['type'] === 'item' && overData?.['type'] === 'item') {
-      const activeItem = activeData['item'];
-      const overItem = overData['item'];
-
-      if (activeItem.sectionId === overItem.sectionId) {
-        const section = sections.find((s) => s.id === activeItem.sectionId);
-        if (section) {
-          const oldIndex = section.items.findIndex((i) => i.id === activeId);
-          const newIndex = section.items.findIndex((i) => i.id === overId);
-
-          onSectionsChange(
-            sections.map((s) =>
-              s.id === section.id
-                ? { ...s, items: arrayMove(s.items, oldIndex, newIndex) }
-                : s
-            )
-          );
-        }
-      }
-    }
-
-    setActiveId(null);
-    setActiveItem(null);
-  }, [sections, onSectionsChange]);
-
-  const dropAnimation = {
-    sideEffects: defaultDropAnimationSideEffects({
-      styles: {
-        active: {
-          opacity: '0.5',
-        },
-      },
-    }),
-  };
-
   const handleAddSection = useCallback(() => {
     const newSection: SidebarSection = {
       id: `section-${Date.now()}`,
@@ -526,138 +320,117 @@ export function DraggableSidebar({
     onSectionsChange([...sections, newSection]);
   }, [sections, onSectionsChange]);
 
-  const handleAddItem = useCallback((sectionId: string) => {
-    const newItem: SidebarItem = {
-      id: `item-${Date.now()}`,
-      sectionId,
-      name: 'New Item',
-      slug: `new-item-${Date.now()}`,
-      emoji: '📚',
-      order: 0,
-    };
-    onSectionsChange(
-      sections.map((section) =>
-        section.id === sectionId
-          ? { ...section, items: [...section.items, newItem] }
-          : section
-      )
-    );
-  }, [sections, onSectionsChange]);
+  const handleAddItem = useCallback(
+    (sectionId: string) => {
+      const newItem: SidebarItem = {
+        id: `item-${Date.now()}`,
+        sectionId,
+        name: 'New Item',
+        slug: `new-item-${Date.now()}`,
+        emoji: '📚',
+        order: 0,
+      };
+      onSectionsChange(
+        sections.map((section) =>
+          section.id === sectionId ? { ...section, items: [...section.items, newItem] } : section
+        )
+      );
+    },
+    [sections, onSectionsChange]
+  );
 
-  const handleEditSection = useCallback((updatedSection: SidebarSection) => {
-    onSectionsChange(
-      sections.map((section) =>
-        section.id === updatedSection.id ? updatedSection : section
-      )
-    );
-  }, [sections, onSectionsChange]);
+  const handleEditSection = useCallback(
+    (updatedSection: SidebarSection) => {
+      onSectionsChange(
+        sections.map((section) => (section.id === updatedSection.id ? updatedSection : section))
+      );
+    },
+    [sections, onSectionsChange]
+  );
 
-  const handleEditItem = useCallback((updatedItem: SidebarItem) => {
-    onSectionsChange(
-      sections.map((section) =>
-        section.id === updatedItem.sectionId
-          ? {
-              ...section,
-              items: section.items.map((item) =>
-                item.id === updatedItem.id ? updatedItem : item
-              ),
-            }
-          : section
-      )
-    );
-  }, [sections, onSectionsChange]);
+  const handleEditItem = useCallback(
+    (updatedItem: SidebarItem) => {
+      onSectionsChange(
+        sections.map((section) =>
+          section.id === updatedItem.sectionId
+            ? {
+                ...section,
+                items: section.items.map((item) =>
+                  item.id === updatedItem.id ? updatedItem : item
+                ),
+              }
+            : section
+        )
+      );
+    },
+    [sections, onSectionsChange]
+  );
 
-  const handleDeleteSection = useCallback((sectionId: string) => {
-    onSectionsChange(sections.filter((section) => section.id !== sectionId));
-  }, [sections, onSectionsChange]);
+  const handleDeleteSection = useCallback(
+    (sectionId: string) => {
+      onSectionsChange(sections.filter((section) => section.id !== sectionId));
+    },
+    [sections, onSectionsChange]
+  );
 
-  const handleDeleteItem = useCallback((itemId: string) => {
-    onSectionsChange(
-      sections.map((section) => ({
-        ...section,
-        items: section.items.filter((item) => item.id !== itemId),
-      }))
-    );
-  }, [sections, onSectionsChange]);
+  const handleDeleteItem = useCallback(
+    (itemId: string) => {
+      onSectionsChange(
+        sections.map((section) => ({
+          ...section,
+          items: section.items.filter((item) => item.id !== itemId),
+        }))
+      );
+    },
+    [sections, onSectionsChange]
+  );
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <nav className="flex-1 overflow-y-auto py-2">
-        <SortableContext
-          items={sections.map((s) => s.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {sections.map((section) => (
-            <div key={section.id}>
-              <SortableSection
-                section={section}
-                isActive={false}
-                isExpanded={!section.isCollapsed}
-                sidebarOpen={sidebarOpen}
-                onToggle={() => onToggleCollapse(section.id)}
-                onEdit={handleEditSection}
-                onDelete={handleDeleteSection}
-                onAddItem={handleAddItem}
-              />
+    <nav className="flex-1 overflow-y-auto py-2">
+      {sections.map((section) => (
+        <div key={section.id}>
+          <SidebarSectionHeader
+            section={section}
+            isExpanded={!section.isCollapsed}
+            sidebarOpen={sidebarOpen}
+            onToggle={() => onToggleCollapse(section.id)}
+            onEdit={handleEditSection}
+            onDelete={handleDeleteSection}
+            onAddItem={handleAddItem}
+          />
 
-              <AnimatePresence>
-                {!section.isCollapsed && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <SortableContext
-                      items={section.items.map((i) => i.id)}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      {section.items.map((item) => (
-                        <SortableItem
-                          key={item.id}
-                          item={item}
-                          sectionId={section.id}
-                          isActive={activeSection === item.slug}
-                          sidebarOpen={sidebarOpen}
-                          onClick={() => onSectionClick(item.slug)}
-                          onEdit={handleEditItem}
-                          onDelete={handleDeleteItem}
-                        />
-                      ))}
-                    </SortableContext>
+          <AnimatePresence>
+            {!section.isCollapsed && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                {section.items.map((item) => (
+                  <SidebarItemComponent
+                    key={item.id}
+                    item={item}
+                    isActive={activeSection === item.slug}
+                    sidebarOpen={sidebarOpen}
+                    onClick={() => onSectionClick(item.slug)}
+                    onEdit={handleEditItem}
+                    onDelete={handleDeleteItem}
+                  />
+                ))}
 
-                    {section.items.length === 0 && sidebarOpen && (
-                      <div className="px-8 py-2 text-sm text-gray-500 italic">
-                        No items yet
-                      </div>
-                    )}
-                  </motion.div>
+                {section.items.length === 0 && sidebarOpen && (
+                  <div className="px-8 py-2 text-sm text-gray-500 italic">No items yet</div>
                 )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </SortableContext>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
 
-        <AddSectionButton onClick={handleAddSection} sidebarOpen={sidebarOpen} />
-      </nav>
-
-      <DragOverlay dropAnimation={dropAnimation}>
-        {activeId && activeItem ? (
-          <div className="flex items-center gap-3 px-4 py-2 bg-gray-800 text-white opacity-80 rounded">
-            <GripVertical className="w-4 h-4" />
-            <span>{activeItem.emoji || '📚'}</span>
-            <span>{activeItem.name}</span>
-          </div>
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+      <AddSectionButton onClick={handleAddSection} sidebarOpen={sidebarOpen} />
+    </nav>
   );
 }
 
@@ -679,7 +452,7 @@ export function subjectsToSidebarSections(subjects: Subject[]): SidebarSection[]
         slug: subject.slug,
         emoji: subject.emoji,
         order: index,
-        count: 0, // Will be populated from API
+        count: 0,
       })),
     },
     {
