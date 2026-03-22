@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 export interface QuizFilters {
@@ -15,7 +15,6 @@ export interface QuizFiltersState {
   filters: QuizFilters;
   setFilter: (key: keyof QuizFilters, value: string) => void;
   resetFilters: () => void;
-  isLoading: boolean;
 }
 
 const DEFAULT_FILTERS: QuizFilters = {
@@ -31,7 +30,6 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isInitialized = useRef(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const filters = useMemo<QuizFilters>(() => ({
     status: searchParams.get('status') || DEFAULT_FILTERS.status,
@@ -39,16 +37,15 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
     chapter: searchParams.get('chapter') || DEFAULT_FILTERS.chapter,
     search: searchParams.get('search') || DEFAULT_FILTERS.search,
     subject: subjectSlug || searchParams.get('subject') || DEFAULT_FILTERS.subject,
-  }), [searchParams, subjectSlug || '']);
+  }), [searchParams, subjectSlug]);
 
   const updateURL = useCallback((newFilters: QuizFilters) => {
-    setIsLoading(true);
     const params = new URLSearchParams();
-    
+
     // Always preserve the current section from URL
     const currentSection = searchParams.get('section') || 'quiz';
     params.set('section', currentSection);
-    
+
     // Order: subject → chapter → level → status → search (broad → specific)
     if (newFilters.subject && newFilters.subject !== 'all') params.set('subject', newFilters.subject);
     if (newFilters.chapter && newFilters.chapter !== 'all') params.set('chapter', newFilters.chapter);
@@ -58,10 +55,8 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
 
     const queryString = params.toString();
     const newURL = `${pathname}?${queryString}`;
-    
+
     router.push(newURL, { scroll: false });
-    
-    setTimeout(() => setIsLoading(false), 100);
   }, [pathname, router, searchParams]);
 
   const setFilter = useCallback((key: keyof QuizFilters, value: string) => {
@@ -93,7 +88,6 @@ export function useQuizFilters(subjectSlug?: string): QuizFiltersState {
     filters,
     setFilter,
     resetFilters,
-    isLoading,
   };
 }
 
