@@ -24,7 +24,7 @@ import { SubjectFilter } from '@/components/ui/quiz-filters/SubjectFilter';
 import { ChapterFilter } from '@/components/ui/quiz-filters/ChapterFilter';
 import { LevelFilter } from '@/components/ui/quiz-filters/LevelFilter';
 import { SearchInput } from '@/components/ui/quiz-filters/SearchInput';
-import { StatusFilter } from '@/components/ui/quiz-filters/StatusFilter';
+import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { QuestionTable } from '@/components/ui/quiz-filters/QuestionTable';
 import { SelectedFilters } from '@/components/ui/quiz-filters/SelectedFilters';
 import { SubjectModal } from '@/components/ui/quiz-filters/SubjectModal';
@@ -531,12 +531,20 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         </button>
       </div>
 
-      {/* Status Filter */}
+      {/* Status Dashboard */}
       <div className="rounded-xl bg-white p-4 shadow-md border border-gray-200">
-        <StatusFilter
-          value={filters.status || 'all'}
-          onChange={(value) => setFilter('status', value)}
-          counts={statusCounts}
+        <StatusDashboard
+          counts={{
+            total: statusCounts.find(s => s.status === 'all')?.count || 
+                   (statusCounts.find(s => s.status === 'published')?.count || 0) +
+                   (statusCounts.find(s => s.status === 'draft')?.count || 0) +
+                   (statusCounts.find(s => s.status === 'trash')?.count || 0),
+            published: statusCounts.find(s => s.status === 'published')?.count || 0,
+            draft: statusCounts.find(s => s.status === 'draft')?.count || 0,
+            trash: statusCounts.find(s => s.status === 'trash')?.count || 0,
+          }}
+          activeFilter={(filters.status === 'all' || filters.status === 'published' || filters.status === 'draft' || filters.status === 'trash') ? filters.status : 'all'}
+          onFilterChange={(filter) => setFilter('status', filter)}
         />
       </div>
 
