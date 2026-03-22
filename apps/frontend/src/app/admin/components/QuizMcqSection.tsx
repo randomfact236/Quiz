@@ -360,17 +360,17 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
   // Get subject name for display
   const getSubjectName = (slug: string) => allSubjects.find(s => s.slug === slug)?.name || slug;
 
-  // Prepare subject data with counts from API (not from props)
+  // Prepare subject data with counts from API - include ALL subjects from props
   const subjectsWithIds = useMemo(() => {
-    return subjectCounts.map(sc => {
-      const subject = allSubjects.find(s => s.slug === sc.slug);
+    return allSubjects.map(s => {
+      const countData = subjectCounts.find(sc => sc.slug === s.slug);
       return { 
-        id: subject?.id || '',
-        slug: sc.slug, 
-        name: subject?.name || sc.slug, 
-        emoji: subject?.emoji || '📚', 
-        category: subject?.category || 'academic',
-        count: sc.count 
+        id: s.id,
+        slug: s.slug, 
+        name: s.name, 
+        emoji: s.emoji || '📚', 
+        category: s.category || 'academic',
+        count: countData?.count || 0 
       };
     });
   }, [subjectCounts, allSubjects]);
