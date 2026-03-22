@@ -75,7 +75,7 @@ export function SubjectFilter({
               >
                 <span>{subject.emoji || '📚'}</span>
                 <span className="truncate max-w-[100px]">{subject.name}</span>
-                {subject.count !== undefined && subject.count > 0 && (
+                {subject.count !== undefined && (
                   <span className={cn(
                     'px-1.5 py-0.5 rounded text-xs font-semibold',
                     isActive ? 'bg-white/20 text-white' : 'bg-blue-200 text-blue-700'

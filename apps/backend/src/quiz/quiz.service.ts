@@ -223,7 +223,7 @@ export class QuizService {
     search?: string;
   }): Promise<{
     subjectCounts: { slug: string; count: number }[];
-    chapterCounts: { id: string; name: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
     total: number;
@@ -263,7 +263,7 @@ export class QuizService {
     ]);
 
     let subjectResults: { slug: string; count: number }[] = [];
-    let chapterResults: { id: string; name: string; count: number }[] = [];
+    let chapterResults: { id: string; name: string; count: number; subjectId: string }[] = [];
 
     if (!filters.subject || filters.subject === 'all') {
       const subjectRaw = await this.questionRepo.createQueryBuilder('question')
@@ -282,6 +282,7 @@ export class QuizService {
       if (subject) {
         const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
         const chapterIds = chapters.map(c => c.id);
+        const chapterMap = new Map(chapters.map(c => [c.id, { name: c.name, subjectId: c.subjectId }]));
         if (chapterIds.length > 0) {
           const chapterRaw = await this.questionRepo.createQueryBuilder('question')
             .select('question.chapterId', 'id')
@@ -292,23 +293,35 @@ export class QuizService {
             .groupBy('question.chapterId')
             .addGroupBy('chapter.name')
             .getRawMany();
-          chapterResults = chapterRaw.map(r => ({ id: r.id, name: r.name, count: parseInt(r.count, 10) }));
+          chapterResults = chapterRaw.map(r => {
+            const chapterInfo = chapterMap.get(r.id);
+            return { 
+              id: r.id, 
+              name: r.name, 
+              count: parseInt(r.count, 10),
+              subjectId: chapterInfo?.subjectId || subject.id
+            };
+          });
         }
       }
     } else {
       const allChapters = await this.chapterRepo.find({ relations: ['subject'] });
-      const chapterMap = new Map(allChapters.map(c => [c.id, c.name]));
+      const chapterMap = new Map(allChapters.map(c => [c.id, { name: c.name, subjectId: c.subjectId }]));
       const chapterRaw = await baseQuery.clone()
         .select('question.chapterId', 'id')
         .addSelect('COUNT(*)', 'count')
         .where('question.chapterId IS NOT NULL')
         .groupBy('question.chapterId')
         .getRawMany();
-      chapterResults = chapterRaw.map(r => ({
-        id: r.id,
-        name: chapterMap.get(r.id) || 'Unknown',
-        count: parseInt(r.count, 10)
-      }));
+      chapterResults = chapterRaw.map(r => {
+        const chapterInfo = chapterMap.get(r.id);
+        return {
+          id: r.id,
+          name: chapterInfo?.name || 'Unknown',
+          count: parseInt(r.count, 10),
+          subjectId: chapterInfo?.subjectId || ''
+        };
+      });
     }
 
     const statusCounts = statusResults.map(r => ({ status: r.status, count: parseInt(r.count, 10) }));
