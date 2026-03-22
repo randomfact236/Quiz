@@ -626,109 +626,24 @@ export class QuizService {
       return { total: 0, published: 0, draft: 0, trash: 0 };
     }
 
-    const total = await this.questionRepo
+    // Single query with GROUP BY for all status counts
+    const statusCounts = await this.questionRepo
       .createQueryBuilder('question')
+      .select('question.status', 'status')
+      .addSelect('CAST(COUNT(*) AS INT)', 'count')
       .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .getCount();
-
-    const published = await this.questionRepo
-      .createQueryBuilder('question')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .andWhere('question.status = :status', { status: 'published' })
-      .getCount();
-
-    const draft = await this.questionRepo
-      .createQueryBuilder('question')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .andWhere('question.status = :status', { status: 'draft' })
-      .getCount();
-
-    const trash = await this.questionRepo
-      .createQueryBuilder('question')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .andWhere('question.status = :status', { status: 'trash' })
-      .getCount();
-
-    return { total, published, draft, trash };
-  }
-
-  /**
-   * Get question counts by chapter for a specific subject
-   * @param subjectSlug - The subject slug
-   * @returns Record of chapter names to counts
-   */
-  async getChapterCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return {};
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterMap = new Map(chapters.map(c => [c.id, c.name]));
-
-    if (chapters.length === 0) {
-      return {};
-    }
-
-    const chapterIds = chapters.map(c => c.id);
-
-    const results = await this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.chapterId', 'chapterId')
-      .addSelect('COUNT(*)', 'count')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('question.chapterId')
+      .groupBy('question.status')
       .getRawMany();
 
-    const counts: Record<string, number> = {};
-    chapters.forEach(c => {
-      counts[c.name] = 0;
-    });
-    results.forEach(r => {
-      const chapterName = chapterMap.get(r.chapterId);
-      if (chapterName) {
-        counts[chapterName] = parseInt(r.count, 10);
+    // Initialize with defaults
+    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
+    
+    // Sum up total and populate individual statuses
+    statusCounts.forEach((row: { status: string; count: number }) => {
+      counts.total += row.count;
+      if (row.status in counts) {
+        (counts as any)[row.status] = row.count;
       }
-    });
-
-    return counts;
-  }
-
-  /**
-   * Get question counts by level for a specific subject
-   * @param subjectSlug - The subject slug
-   * @returns Record of levels to counts
-   */
-  async getLevelCountsBySubject(subjectSlug: string): Promise<Record<string, number>> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return {};
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map(c => c.id);
-
-    if (chapterIds.length === 0) {
-      return {};
-    }
-
-    const results = await this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.level', 'level')
-      .addSelect('COUNT(*)', 'count')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('question.level')
-      .getRawMany();
-
-    const counts: Record<string, number> = {
-      easy: 0,
-      medium: 0,
-      hard: 0,
-      expert: 0,
-      extreme: 0
-    };
-    results.forEach(r => {
-      counts[r.level] = parseInt(r.count, 10);
     });
 
     return counts;
