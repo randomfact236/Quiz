@@ -32,8 +32,20 @@ interface QuizManagementSectionProps {
   chapters?: { id: string; name: string }[];
   /** Status counts from server (total, published, draft, trash) */
   statusCounts?: SubjectStatusCounts | undefined;
+  /** Chapter filter counts */
+  chapterCounts?: Record<string, number> | undefined;
+  /** Level filter counts */
+  levelCounts?: Record<string, number> | undefined;
+  /** Subject filter counts (for quiz-mcq view) */
+  subjectCounts?: { slug: string; count: number }[];
   /** All available subjects (needed for CSV import) */
   allSubjects: Subject[];
+  /** Callback to add a new subject (for quiz-mcq view) */
+  onAddSubject?: () => void;
+  /** Callback to export (for quiz-mcq view) */
+  onExport?: () => void;
+  /** Callback to import (for quiz-mcq view) */
+  onImport?: () => void;
   /** Callback to add a new chapter */
   onAddChapter: (subjectSlug: string, chapterName: string) => void;
   /** Callback to delete a chapter */
@@ -88,7 +100,13 @@ export function QuizManagementSection({
   pagination,
   chapters,
   statusCounts,
+  chapterCounts,
+  levelCounts,
+  subjectCounts,
   allSubjects,
+  onAddSubject,
+  onExport,
+  onImport,
   onAddChapter,
   onDeleteChapter,
   onQuestionsImport,
@@ -117,7 +135,7 @@ export function QuizManagementSection({
   const [questionsPerPage, setQuestionsPerPage] = useState(serverPagination.limit);
 
   // URL-based filters
-  const { filters, setFilter, resetFilters } = useQuizFilters(subject.slug === 'all-subjects' ? undefined : subject.slug);
+  const { filters, setFilter, resetFilters } = useQuizFilters(subject.slug === 'quiz' ? undefined : subject.slug);
 
   // For StatusDashboard - use URL filter
   const statusFilter: StatusFilter = (filters.status as StatusFilter) || 'all';
@@ -125,12 +143,12 @@ export function QuizManagementSection({
     setFilter('status', status);
   };
 
-  // Convert chapters prop to filter format
+  // Convert chapters prop to filter format with counts
   const chapterList = useMemo(() => {
     return (chapters || []).map(ch => ({
       id: ch.id,
       name: ch.name,
-      count: 0,
+      count: chapterCounts?.[ch.name] || 0,
     }));
   }, [chapters]);
 
@@ -755,6 +773,35 @@ export function QuizManagementSection({
           </div>
         </div>
         <div className="flex gap-2">
+          {/* All Subjects Action Buttons */}
+          {subject.slug === 'quiz' && (
+            <>
+              {onAddSubject && (
+                <button
+                  onClick={onAddSubject}
+                  className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600 flex items-center gap-2"
+                >
+                  <span>+</span> Add Subject
+                </button>
+              )}
+              {onExport && (
+                <button
+                  onClick={onExport}
+                  className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 flex items-center gap-2"
+                >
+                  <span>📤</span> Export
+                </button>
+              )}
+              {onImport && (
+                <button
+                  onClick={onImport}
+                  className="rounded-lg bg-purple-500 px-4 py-2 text-white transition-colors hover:bg-purple-600 flex items-center gap-2"
+                >
+                  <span>📥</span> Import
+                </button>
+              )}
+            </>
+          )}
           <div className="relative" ref={exportDropdownRef}>
             <button
               onClick={() => setShowExportDropdown(!showExportDropdown)}
@@ -847,14 +894,17 @@ export function QuizManagementSection({
       {/* Filter Bar */}
       <div className="mb-4 rounded-xl bg-white p-4 shadow-md space-y-4 relative">
         {/* Subject Filter Row */}
-        {subject.slug === 'all-subjects' ? (
+        {subject.slug === 'quiz' ? (
           allSubjects.length > 0 ? (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700 shrink-0">Subject:</span>
               <SubjectFilter
                 value={filters.subject || 'all'}
                 onChange={(value) => setFilter('subject', value)}
-                subjects={allSubjects.map(s => ({ slug: s.slug, name: s.name, emoji: s.emoji }))}
+                subjects={allSubjects.map(s => {
+                  const countData = subjectCounts?.find(sc => sc.slug === s.slug);
+                  return { slug: s.slug, name: s.name, emoji: s.emoji, count: countData?.count || 0 };
+                })}
               />
             </div>
           ) : null
@@ -885,7 +935,7 @@ export function QuizManagementSection({
           <LevelFilter
             value={filters.level}
             onChange={(value) => setFilter('level', value)}
-            counts={{}}
+            counts={levelCounts || {}}
           />
         </div>
 
@@ -1882,4 +1932,5 @@ const QuestionRow = React.memo(function QuestionRow({
   );
 });
 
+export { QuestionRow };
 export default QuizManagementSection;

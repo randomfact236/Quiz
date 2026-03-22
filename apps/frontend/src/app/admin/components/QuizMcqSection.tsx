@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Plus, Upload, Download } from 'lucide-react';
 import { useQuizFilters } from '@/lib/useQuizFilters';
 import { 
   getFilterCounts, 
@@ -346,37 +345,15 @@ export default function QuizMcqSection({ allSubjects }: QuizMcqSectionProps) {
         className="hidden"
       />
 
-      {/* Action Buttons Row - Above Status Filter */}
-      <div className="flex items-center justify-end gap-2">
-        <button
-          onClick={handleAddQuestion}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Add Question
-        </button>
-        <button
-          onClick={handleImportClick}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          <Upload className="w-4 h-4" />
-          Import
-        </button>
-        <button
-          onClick={handleExport}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          Export
-        </button>
-      </div>
-
-      {/* Status Filter */}
+      {/* Status Filter with Actions */}
       <div className="rounded-xl bg-white p-4 shadow-md border border-gray-200">
         <StatusFilter
           value={filters.status || 'all'}
           onChange={(value) => setFilter('status', value)}
           counts={statusCounts}
+          onAddQuestion={handleAddQuestion}
+          onImport={handleImportClick}
+          onExport={handleExport}
         />
       </div>
 

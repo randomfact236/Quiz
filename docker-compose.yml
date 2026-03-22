@@ -34,7 +34,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: apps/backend/Dockerfile
+      dockerfile: apps/backend/Dockerfile.dev
     container_name: quiz-backend
     restart: unless-stopped
     environment:
@@ -59,7 +59,8 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./apps/backend/src:/app/apps/backend/src:ro
+      - ./apps/backend/src:/app/apps/backend/src:rw
+      - ./apps/backend/tsconfig.json:/app/apps/backend/tsconfig.json:rw
       - /app/node_modules
 
   frontend:
@@ -76,8 +77,9 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./apps/frontend/src:/app/apps/frontend/src:ro
-      - ./apps/frontend/public:/app/apps/frontend/public:ro
+      - ./apps/frontend/src:/app/apps/frontend/src:rw
+      - ./apps/frontend/public:/app/apps/frontend/public:rw
+      - ./apps/frontend/next.config.mjs:/app/apps/frontend/next.config.mjs:rw
       - /app/node_modules
 
 volumes:

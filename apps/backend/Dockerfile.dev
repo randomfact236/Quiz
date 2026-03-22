@@ -1,0 +1,10 @@
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+COPY apps/backend/package*.json ./apps/backend/
+RUN npm ci
+COPY apps/backend ./apps/backend
+COPY tsconfig.json ./
+WORKDIR /app/apps/backend
+EXPOSE 3012
+CMD ["npm", "run", "start:dev"]

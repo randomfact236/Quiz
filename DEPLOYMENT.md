@@ -10,6 +10,67 @@ Next.js + NestJS quiz app with local-first development, VPS for production only.
 
 ---
 
+## File Locations
+
+### Repository Structure
+
+```
+Quiz/
+├── apps/
+│   ├── backend/           # NestJS Backend API
+│   │   ├── src/
+│   │   │   ├── quiz/         # Quiz module
+│   │   │   ├── auth/         # Authentication
+│   │   │   ├── database/     # Database config & migrations
+│   │   │   └── ...
+│   │   ├── Dockerfile
+│   │   ├── .env
+│   │   └── package.json
+│   │
+│   └── frontend/          # Next.js Frontend
+│       ├── src/
+│       │   ├── app/          # Next.js app directory
+│       │   │   └── admin/   # Admin panel
+│       │   ├── components/   # React components
+│       │   ├── lib/          # Utilities & API clients
+│       │   └── hooks/        # Custom hooks
+│       ├── Dockerfile.simple
+│       ├── .env.local
+│       └── package.json
+│
+├── docker-compose.yml          # Development Docker
+├── docker-compose.prod.yml     # Production Docker
+├── dokploy-deploy.sh           # Dokploy auto-deploy script
+├── deploy.sh                   # Manual deployment script
+└── .env.example
+```
+
+### Local Development Files
+
+| Purpose | Local Path |
+|---------|------------|
+| **Backend Code** | `apps/backend/src/` |
+| **Frontend Code** | `apps/frontend/src/` |
+| **Backend Env** | `apps/backend/.env` |
+| **Frontend Env** | `apps/frontend/.env.local` |
+| **Root Env** | `.env` (root project) |
+| **Database Config** | `apps/backend/src/database/` |
+| **Migrations** | `apps/backend/src/migrations/` |
+| **Seed Scripts** | `apps/backend/src/database/seed*.ts` |
+
+### VPS (Production) Files
+
+| Purpose | VPS Path |
+|---------|----------|
+| **All App Files** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/` |
+| **Docker Compose** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/docker-compose.prod.yml` |
+| **Backend** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/apps/backend/` |
+| **Frontend** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/apps/frontend/` |
+| **Environment** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/.env` |
+| **Backups** | `/etc/dokploy/compose/quiz-stack-gz5jv5/code/backups/` |
+
+---
+
 ## Architecture
 
 ```
