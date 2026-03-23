@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn, Index } from 'typeorm';
 
 import { ContentStatus } from '../../common/enums/content-status.enum';
 
 import { Chapter } from './chapter.entity';
 
 @Entity('questions')
+@Index(['chapterId', 'level', 'status'])
 export class Question {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -21,15 +22,18 @@ export class Question {
   @Column({ type: 'varchar', length: 1, nullable: true })
   correctLetter: string | null;
 
+  @Index()
   @Column({ type: 'enum', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
   level: string;
 
   @ManyToOne(() => Chapter, chapter => chapter.questions)
   chapter: Chapter;
 
+  @Index()
   @Column()
   chapterId: string;
 
+  @Index()
   @Column({
     type: 'enum',
     enum: ContentStatus,

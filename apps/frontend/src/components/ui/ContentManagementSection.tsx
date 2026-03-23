@@ -92,7 +92,6 @@ const ITEM_ACTIONS: Record<
         { action: 'trash', label: 'Move to Trash', icon: Trash2, variant: 'text-red-600 dark:text-red-400' },
     ],
     trash: [
-        { action: 'restore', label: 'Restore', icon: RotateCcw, variant: 'text-blue-600 dark:text-blue-400' },
         { action: 'delete', label: 'Delete Permanently', icon: AlertTriangle, variant: 'text-red-600 dark:text-red-400' },
     ],
 };
@@ -709,7 +708,6 @@ export const ContentManagementSection = React.memo(function ContentManagementSec
                         publish: 'published',
                         draft: 'draft',
                         trash: 'trash',
-                        restore: 'draft',
                     };
                     const newStatus = statusMap[action];
                     if (!newStatus) {return prev;}

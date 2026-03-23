@@ -141,7 +141,6 @@ export function JokesSection({ allJokes, setAllJokes, jokeCategories, setJokeCat
           case 'draft': return { ...joke, status: 'draft' as ContentStatus };
           case 'trash': return { ...joke, status: 'trash' as ContentStatus };
           case 'delete': return null as unknown as Joke;
-          case 'restore': return { ...joke, status: 'draft' as ContentStatus };
           default: return joke;
         }
       }

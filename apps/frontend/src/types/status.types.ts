@@ -14,7 +14,7 @@ export type StatusFilter = 'all' | 'published' | 'draft' | 'trash';
 /**
  * Bulk action types for performing operations on multiple items
  */
-export type BulkActionType = 'publish' | 'draft' | 'trash' | 'delete' | 'restore';
+export type BulkActionType = 'publish' | 'draft' | 'trash' | 'delete';
 
 /**
  * Status count data structure
@@ -191,14 +191,6 @@ export const BULK_ACTIONS_CONFIG: Record<BulkActionType, BulkActionConfig> = {
     confirmationTitle: 'Delete Permanently',
     confirmationMessage: 'This action cannot be undone. The selected items will be permanently deleted.',
     confirmButtonText: 'Delete Permanently',
-    availableInFilters: ['trash'],
-  },
-  restore: {
-    action: 'restore',
-    label: 'Restore',
-    icon: 'RotateCcw',
-    variant: 'primary',
-    requiresConfirmation: false,
     availableInFilters: ['trash'],
   },
 } as const;

@@ -46,6 +46,7 @@ services:
       DB_USERNAME: aiquiz
       DB_PASSWORD: aiquiz_password
       DB_DATABASE: aiquiz
+      DB_SYNCHRONIZE: 'true'
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: your-super-secret-jwt-key-change-in-production

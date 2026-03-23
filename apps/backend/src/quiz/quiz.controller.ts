@@ -174,6 +174,18 @@ export class QuizController {
     return this.quizService.createChapter(dto.name, dto.subjectId);
   }
 
+  @Patch('chapters/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update chapter (Admin only)' })
+  async updateChapter(
+    @Param('id') id: string,
+    @Body() dto: { name?: string; subjectId?: string },
+  ): Promise<Chapter> {
+    return this.quizService.updateChapter(id, dto);
+  }
+
   @Delete('chapters/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -204,6 +216,21 @@ export class QuizController {
       search: query.search,
     };
     return this.quizService.findAllQuestions(pagination, filters);
+  }
+
+  @Get('public/questions')
+  @ApiOperation({ summary: 'Get published questions with filters (Public)' })
+  async getPublicQuestions(
+    @Query() query: { subject?: string; chapter?: string; level?: string; limit?: string },
+  ): Promise<{ data: Question[]; total: number }> {
+    const limit = this.validateCount(query.limit, 10, 50);
+    const filters = {
+      status: 'published' as any,
+      subjectSlug: query.subject,
+      level: query.level,
+      chapter: query.chapter,
+    };
+    return this.quizService.findAllQuestions({ page: 1, limit }, filters);
   }
 
   @Get('questions/:chapterId')

@@ -18,13 +18,17 @@ export interface QuizSubject {
     isActive: boolean;
     category?: string;
     order?: number;
+    questionCount?: number;
 }
 
 export interface QuizChapter {
     id: string;
     name: string;
+    slug: string;
     subjectId: string;
     chapterNumber: number;
+    questionCount?: number;
+    levels?: string[];
 }
 
 export interface QuizQuestion {
@@ -249,6 +253,17 @@ export async function getFilterCounts(filters: {
     if (filters.search) params.append('search', filters.search);
     
     const response = await api.get<FilterCountsResponse>(`/quiz/filter-counts?${params.toString()}`);
+    return response.data;
+}
+
+export async function getPublicQuestions(filters: { subject?: string | undefined; chapter?: string | undefined; level?: string | undefined; limit?: number }): Promise<{ data: QuizQuestion[]; total: number }> {
+    const params = new URLSearchParams();
+    if (filters.subject) params.append('subject', filters.subject);
+    if (filters.chapter) params.append('chapter', filters.chapter);
+    if (filters.level) params.append('level', filters.level.toLowerCase());
+    if (filters.limit) params.append('limit', filters.limit.toString());
+
+    const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/public/questions?${params.toString()}`);
     return response.data;
 }
 

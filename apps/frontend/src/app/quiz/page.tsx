@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
 import { GraduationCap, Briefcase, Gamepad2, Home, CheckCircle, Trophy, ChevronDown, ChevronUp, BookOpen, Puzzle } from 'lucide-react';
-import { getSubjects, getQuestionsBySubject, getSubjectBySlug, getQuestionsByChapter } from '@/lib/quiz-api';
+import { getSubjects, getSubjectBySlug, getFilterCounts } from '@/lib/quiz-api';
 import { getChapterProgress } from '@/lib/progress';
 import type { QuizSubject } from '@/lib/quiz-api';
 
@@ -74,7 +74,6 @@ function CategorySection({
   icon,
   colorClass,
   subjects,
-  questionCounts,
   isOpen,
   onToggle,
 }: {
@@ -82,7 +81,6 @@ function CategorySection({
   icon: React.ReactNode;
   colorClass: string;
   subjects: Subject[];
-  questionCounts: Record<string, number>;
   isOpen: boolean;
   onToggle: () => void;
 }): JSX.Element | null {
@@ -90,7 +88,6 @@ function CategorySection({
     return null;
   }
 
-  const totalQuestions = subjects.reduce((sum, subject) => sum + (questionCounts[subject.slug] || 0), 0);
 
   return (
     <div className="mb-6">
@@ -102,7 +99,7 @@ function CategorySection({
           {icon}
           <h2 className="text-xl font-bold text-white">{title.toUpperCase()}</h2>
           <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-white/20 rounded-full text-white">
-            {subjects.length} subjects • {totalQuestions} questions
+            {subjects.length} subjects • {subjects.reduce((sum, s) => sum + (s.questionCount || 0), 0)} questions
           </span>
         </div>
         {isOpen ? <ChevronUp className="h-5 w-5 text-white" /> : <ChevronDown className="h-5 w-5 text-white" />}
@@ -116,8 +113,8 @@ function CategorySection({
               slug={subject.slug}
               emoji={subject.emoji}
               name={subject.name}
-              questionCount={questionCounts[subject.slug] || 0}
-              isLive={(questionCounts[subject.slug] || 0) > 0}
+              questionCount={subject.questionCount || 0}
+              isLive={(subject.questionCount || 0) > 0}
               isActive={subject.isActive}
             />
           ))}
@@ -158,7 +155,6 @@ function getCategoryDesign(categoryName: string) {
 
 function SubjectSelection(): JSX.Element {
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
 
@@ -168,19 +164,6 @@ function SubjectSelection(): JSX.Element {
         const subjectsData = await getSubjects(false);
         const sortedSubjects = subjectsData.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)) as Subject[];
         setSubjects(sortedSubjects);
-
-        const counts: Record<string, number> = {};
-        for (const subject of subjectsData) {
-          try {
-            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
-            if (questions.total > 0) {
-              counts[subject.slug] = questions.total;
-            }
-          } catch {
-            console.error(`Failed to load questions for subject: ${subject.slug}`);
-          }
-        }
-        setQuestionCounts(counts);
       } catch (error) {
         console.error('Failed to load subjects:', error);
       } finally {
@@ -283,7 +266,6 @@ function SubjectSelection(): JSX.Element {
               icon={design.icon}
               colorClass={design.colorClass}
               subjects={catSubjects}
-              questionCounts={questionCounts}
               isOpen={openCategories.has(categoryName)}
               onToggle={() => toggleCategory(categoryName)}
             />
@@ -296,6 +278,7 @@ function SubjectSelection(): JSX.Element {
 
 interface ChapterInfo {
   name: string;
+  slug: string;
   questionCount: number;
   levels: Set<string>;
   isCompleted: boolean;
@@ -315,31 +298,17 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         const chapterMap = new Map<string, ChapterInfo>();
 
         if (subjectData.chapters && subjectData.chapters.length > 0) {
-          for (const chapter of subjectData.chapters) {
-            const progress = getChapterProgress(subject, chapter.name);
+          for (const chapter of subjectData.chapters as any) {
+            const progress = getChapterProgress(subjectData.id, chapter.id);
             chapterMap.set(chapter.id, {
               name: chapter.name,
-              questionCount: 0,
-              levels: new Set(),
+              slug: chapter.slug,
+              questionCount: chapter.questionCount || 0,
+              levels: new Set(chapter.levels || []),
               isCompleted: progress?.completed ?? false,
               bestScore: progress?.bestScore ?? 0,
               attempts: progress?.attempts ?? 0,
             });
-          }
-
-          for (const chapter of subjectData.chapters) {
-            try {
-              const questions = await getQuestionsByChapter(chapter.id);
-              const chapterInfo = chapterMap.get(chapter.id);
-              if (chapterInfo) {
-                chapterInfo.questionCount = questions.data.length;
-                questions.data.forEach(q => {
-                  chapterInfo.levels.add(q.level);
-                });
-              }
-            } catch (error) {
-              console.error(`Failed to load questions for chapter ${chapter.id}:`, error);
-            }
           }
         }
 
@@ -412,7 +381,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
           {chapters.map((chapter, index) => (
             <Link
               key={chapter.name}
-              href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
+              href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter.slug)}`}
               className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
             >
               <div className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted
@@ -475,30 +444,31 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    const loadQuestions = async () => {
+    const loadCounts = async () => {
       try {
         const subjectData = await getSubjectBySlug(subject);
-
-        const foundChapter = subjectData.chapters?.find(c => c.name === chapter);
+        const foundChapter = subjectData.chapters?.find(c => c.slug === chapter);
 
         if (foundChapter) {
-          const questions = await getQuestionsByChapter(foundChapter.id);
+          const filterData = await getFilterCounts({
+            chapter: foundChapter.id,
+            status: 'published'
+          });
 
           const counts: Record<string, number> = {};
-          levels.forEach(level => {
-            counts[level] = questions.data.filter(q =>
-              q.level === level.toLowerCase() &&
-              q.status === 'published'
-            ).length;
+          filterData.levelCounts.forEach(lc => {
+            // Map level key (e.g. 'easy') to display name (e.g. 'Easy')
+            const displayLevel = lc.level.charAt(0).toUpperCase() + lc.level.slice(1);
+            counts[displayLevel] = lc.count;
           });
           setQuestionCounts(counts);
         }
       } catch (error) {
-        console.error('Failed to load questions:', error);
+        console.error('Failed to load level counts:', error);
       }
     };
 
-    loadQuestions();
+    loadCounts();
   }, [subject, chapter]);
 
   const isLoading = Object.keys(questionCounts).length === 0;

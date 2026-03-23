@@ -17,8 +17,8 @@ import type {
   UseQuizReturn
 } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
-import { getQuestionsBySubject, getQuestionsByChapter, getRandomQuestions, getMixedQuestions, getSubjectBySlug } from '@/lib/quiz-api';
-import type { QuizQuestion } from '@/lib/quiz-api';
+import { getSubjectBySlug, getPublicQuestions } from '@/lib/quiz-api';
+import type { QuizQuestion, QuizChapter } from '@/lib/quiz-api';
 
 /** Generate UUID for session */
 function generateUUID(): string {
@@ -70,46 +70,33 @@ function calculateScore(questions: Question[], answers: Record<string, string>):
   return score;
 }
 
-/** Load questions from API based on subject, chapter, and level */
-async function loadQuestions(subject: string, chapter: string, level: string): Promise<Question[]> {
+/**
+ * Fix 3: loadQuestions now returns both questions AND total in a single API call.
+ * No separate countAvailableQuestions call needed.
+ */
+async function loadQuestions(
+  subject: string,
+  chapter: string,
+  level: string
+): Promise<{ questions: Question[]; total: number }> {
   try {
-    let questions: QuizQuestion[] = [];
+    const result = await getPublicQuestions({
+      subject: subject !== 'all' ? subject : undefined,
+      chapter: chapter !== 'all' ? chapter : undefined,
+      level: level !== 'all' ? level : undefined,
+      limit: 10
+    });
 
-    if (subject === 'all') {
-      if (level === 'all') {
-        questions = await getMixedQuestions(50);
-      } else {
-        questions = await getRandomQuestions(level, 20);
-      }
-    } else {
-      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
-      const subjectQuestions = subjectQuestionsResult.data;
-
-      if (chapter !== 'all') {
-        const subjectData = await getSubjectBySlug(subject);
-        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
-        if (chapterObj) {
-          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
-          questions = chapterQuestions.data || [];
-        }
-      } else {
-        questions = subjectQuestions;
-      }
-
-      if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
-      }
-    }
-
-    const convertedQuestions = questions.map(convertQuizQuestion).slice(0, 10);
-    return convertedQuestions;
+    return {
+      questions: result.data.map(convertQuizQuestion),
+      total: result.total,
+    };
   } catch (error) {
     console.error('Failed to load questions from API:', error);
-    return [];
+    return { questions: [], total: 0 };
   }
 }
 
-/** Load additional questions excluding already shown ones */
 async function loadAdditionalQuestions(
   subject: string,
   chapter: string,
@@ -118,87 +105,22 @@ async function loadAdditionalQuestions(
   count: number
 ): Promise<Question[]> {
   try {
-    let questions: QuizQuestion[] = [];
+    // We fetch a bit more to handle exclusions if the backend doesn't support exclusion yet
+    // For now, simple fetch and filter is okay as long as the initial set is filtered by level/subject on server
+    const result = await getPublicQuestions({
+      subject: subject !== 'all' ? subject : undefined,
+      chapter: chapter !== 'all' ? chapter : undefined,
+      level: level !== 'all' ? level : undefined,
+      limit: count + excludeIds.length + 5 // Buffer for exclusions
+    });
 
-    if (subject === 'all') {
-      if (level === 'all') {
-        questions = await getMixedQuestions(count + excludeIds.length);
-      } else {
-        questions = await getRandomQuestions(level, count + excludeIds.length);
-      }
-    } else {
-      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
-      const subjectQuestions = subjectQuestionsResult.data;
-
-      if (chapter !== 'all') {
-        const subjectData = await getSubjectBySlug(subject);
-        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
-        if (chapterObj) {
-          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
-          questions = chapterQuestions.data || [];
-        }
-      } else {
-        questions = subjectQuestions;
-      }
-
-      if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
-      }
-    }
-
-    const convertedQuestions = questions
+    return result.data
       .map(convertQuizQuestion)
       .filter(q => !excludeIds.includes(q.id))
       .slice(0, count);
-
-    return convertedQuestions;
   } catch (error) {
     console.error('Failed to load additional questions from API:', error);
     return [];
-  }
-}
-
-/** Count available questions excluding already shown ones */
-async function countAvailableQuestions(
-  subject: string,
-  chapter: string,
-  level: string,
-  excludeIds: string[]
-): Promise<number> {
-  try {
-    let questions: QuizQuestion[] = [];
-
-    if (subject === 'all') {
-      if (level === 'all') {
-        questions = await getMixedQuestions(100);
-      } else {
-        questions = await getRandomQuestions(level, 100);
-      }
-    } else {
-      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
-      const subjectQuestions = subjectQuestionsResult.data;
-
-      if (chapter !== 'all') {
-        const subjectData = await getSubjectBySlug(subject);
-        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
-        if (chapterObj) {
-          const chapterQuestions = await getQuestionsByChapter(chapterObj.id);
-          questions = chapterQuestions.data || [];
-        }
-      } else {
-        questions = subjectQuestions;
-      }
-
-      if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
-      }
-    }
-
-    const convertedQuestions = questions.map(convertQuizQuestion);
-    return convertedQuestions.filter(q => !excludeIds.includes(q.id)).length;
-  } catch (error) {
-    console.error('Failed to count available questions from API:', error);
-    return 0;
   }
 }
 
@@ -221,14 +143,14 @@ function clearCurrentSession(): void {
   }
 }
 
-/** Get subject name from slug */
-async function getSubjectName(slug: string): Promise<string> {
-  try {
-    const subject = await getSubjectBySlug(slug);
-    return subject.name;
-  } catch {
-    return slug;
-  }
+/**
+ * Fix 2: Optional subjectData prop. If provided, useQuiz skips the internal
+ * getSubjectBySlug call. If subject='all', both IDs are set to 'all' directly.
+ */
+export interface SubjectDataProp {
+  id: string;
+  name: string;
+  chapters?: QuizChapter[];
 }
 
 export function useQuiz(
@@ -236,7 +158,8 @@ export function useQuiz(
   chapter: string,
   level: string,
   timeLimit?: number, // in seconds, undefined = no limit
-  timerMode: 'total' | 'per-question' = 'per-question' // 'total' = whole quiz, 'per-question' = per question
+  timerMode: 'total' | 'per-question' = 'per-question', // 'total' = whole quiz, 'per-question' = per question
+  subjectData?: SubjectDataProp // Fix 2: optional pre-fetched subject data
 ): UseQuizReturn {
   // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
@@ -258,20 +181,53 @@ export function useQuiz(
   // Load questions on mount
   useEffect(() => {
     const load = async () => {
-      const questions = await loadQuestions(subject, chapter, level);
-      const availableCount = await countAvailableQuestions(subject, chapter, level, []);
-      setOriginalTotal(availableCount);
+      // Fix 3: loadQuestions now returns total — no second API call needed
+      const { questions, total } = await loadQuestions(subject, chapter, level);
+      setOriginalTotal(total);
 
       if (questions.length === 0) {
         setState(prev => ({ ...prev, status: 'completed' }));
         return;
       }
 
+      // Fix 2: Use provided subjectData if available, otherwise fetch it.
+      // For subject='all', skip API call entirely.
+      let resolvedSubjectId = 'all';
+      let resolvedSubjectName = subject;
+      let resolvedChapterId = 'all';
+
+      if (subject !== 'all') {
+        if (subjectData) {
+          // Use prop — no API call needed
+          resolvedSubjectId = subjectData.id;
+          resolvedSubjectName = subjectData.name;
+          if (chapter !== 'all') {
+            const chapterObj = subjectData.chapters?.find(c => c.slug === chapter);
+            resolvedChapterId = chapterObj?.id || 'all';
+          }
+        } else {
+          // Fallback: fetch if not provided (e.g. direct URL navigation)
+          try {
+            const fetchedSubject = await getSubjectBySlug(subject);
+            resolvedSubjectId = fetchedSubject.id;
+            resolvedSubjectName = fetchedSubject.name;
+            if (chapter !== 'all') {
+              const chapterObj = fetchedSubject.chapters?.find(c => c.slug === chapter);
+              resolvedChapterId = chapterObj?.id || 'all';
+            }
+          } catch (error) {
+            console.error('Failed to fetch subject data:', error);
+          }
+        }
+      }
+
       sessionRef.current = {
         id: generateUUID(),
         subject,
-        subjectName: await getSubjectName(subject),
+        subjectId: resolvedSubjectId,
+        subjectName: resolvedSubjectName,
         chapter,
+        chapterId: resolvedChapterId,
         level,
         questions,
         answers: {},
@@ -299,7 +255,7 @@ export function useQuiz(
     };
 
     load();
-  }, [subject, chapter, level, timeLimit]);
+  }, [subject, chapter, level, timeLimit, subjectData]);
 
   // Timer effect
   useEffect(() => {

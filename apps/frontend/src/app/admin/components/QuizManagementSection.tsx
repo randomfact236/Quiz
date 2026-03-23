@@ -311,11 +311,9 @@ export function QuizManagementSection({
       const idsToUpdate = selectedIds.filter(id => id && !id.startsWith('local-'));
       const hasValidIds = idsToUpdate.length > 0;
 
-      if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete' || action === 'restore')) {
+      if (hasValidIds && (action === 'publish' || action === 'draft' || action === 'trash' || action === 'delete')) {
         try {
-          // Restore action should publish the questions
-          const apiAction = action === 'restore' ? 'publish' : action;
-          await bulkActionQuestions(idsToUpdate, apiAction);
+          await bulkActionQuestions(idsToUpdate, action);
         } catch (err) {
           console.error('Bulk action failed:', err);
         }
@@ -336,8 +334,6 @@ export function QuizManagementSection({
                 return { ...q, status: 'trash' as ContentStatus };
               case 'delete':
                 return null;
-              case 'restore':
-                return { ...q, status: 'published' as ContentStatus };
               default:
                 return q;
             }

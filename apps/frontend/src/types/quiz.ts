@@ -28,9 +28,11 @@ export interface Question {
 /** Quiz Session State */
 export interface QuizSession {
   id: string; // UUID for the session
-  subject: string;
+  subject: string; // slug
+  subjectId: string; // UUID
   subjectName: string;
-  chapter: string;
+  chapter: string; // name
+  chapterId: string; // UUID
   level: string;
   questions: Question[];
   answers: Record<string, string>; // questionId -> selectedOption (A/B/C/D)
@@ -108,8 +110,10 @@ export interface QuizResult {
 
 /** Chapter Progress */
 export interface ChapterProgress {
-  subject: string;
-  chapter: string;
+  subject: string; // slug
+  subjectId: string;
+  chapter: string; // name
+  chapterId: string;
   attempts: number;
   bestScore: number;
   lastScore: number;
@@ -120,7 +124,8 @@ export interface ChapterProgress {
 
 /** Subject Progress */
 export interface SubjectProgress {
-  subject: string;
+  subject: string; // slug
+  subjectId: string;
   totalChapters: number;
   completedChapters: number;
   totalAttempts: number;

@@ -372,7 +372,7 @@ export function RiddleMcqSection({
 
     try {
       const { bulkActionRiddles } = await import('@/lib/riddles-api');
-      await bulkActionRiddles(selectedIds, action === 'restore' ? 'draft' : action);
+      await bulkActionRiddles(selectedIds, action);
 
       if (action === 'delete') {
         setAllRiddles(prev => prev.filter(r => !selectedIds.includes(String(r.id))));
@@ -382,7 +382,7 @@ export function RiddleMcqSection({
           prev.map(r => {
             if (selectedIds.includes(String(r.id))) {
               if (action === 'publish') return { ...r, status: 'published' as ContentStatus };
-              if (action === 'draft' || action === 'restore') return { ...r, status: 'draft' as ContentStatus };
+              if (action === 'draft') return { ...r, status: 'draft' as ContentStatus };
               if (action === 'trash') return { ...r, status: 'trash' as ContentStatus };
             }
             return r;

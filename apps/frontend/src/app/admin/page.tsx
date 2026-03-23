@@ -32,10 +32,10 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuizManagementSection, QuizMcqSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
+import { ImageRiddlesAdminSection, JokesSection, QuizMcqSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
-import { QuizQuestion, getQuestionsBySubject, getQuestionCountBySubject, createQuestionsBulk, updateQuestion, bulkActionQuestions, createQuestion, getChaptersBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, createChapter, deleteChapter, getStatusCountsBySubject, getFilterCounts, SubjectStatusCounts } from '@/lib/quiz-api';
+import { QuizQuestion, getQuestionsBySubject, deleteSubject, createSubject, updateSubject } from '@/lib/quiz-api';
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
 
 // Initial Data
@@ -118,29 +118,10 @@ export default function AdminPage(): JSX.Element {
   
   // Other state
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
-  const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
   const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
-  const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
-  const [subjectStatusCounts, setSubjectStatusCounts] = useState<Record<string, SubjectStatusCounts>>({});
-  const [_subjectChapterCounts, setSubjectChapterCounts] = useState<Record<string, Record<string, number>>>({});
-  const [_subjectLevelCounts, setSubjectLevelCounts] = useState<Record<string, Record<string, number>>>({});
-  const [subjectCounts, setSubjectCounts] = useState<{ slug: string; count: number }[]>([]);
-  const [isLoadingSubject, setIsLoadingSubject] = useState(false);
 
-  // Unified filter state (single source of truth)
-  const [currentFilters, setCurrentFilters] = useState({
-    status: 'all',
-    level: 'all',
-    chapter: 'all',
-    search: ''
-  });
-
-  // Track last fetched filters to prevent infinite loops
-  const lastFetchedFiltersRef = useRef<string>('');
-  const lastFetchedSectionRef = useRef<string>('');
 
   // URL-based state management - replaces localStorage
   const searchParams = useSearchParams();
@@ -170,15 +151,6 @@ export default function AdminPage(): JSX.Element {
           setActiveSection('summary');
         }
       }
-
-      // Load filters from URL
-      setCurrentFilters(prev => ({
-        ...prev,
-        status: searchParams.get('status') || 'all',
-        level: searchParams.get('level') || 'all',
-        chapter: searchParams.get('chapter') || 'all',
-        search: searchParams.get('search') || ''
-      }));
 
       hasSetInitialSection.current = true;
     }
@@ -210,29 +182,6 @@ export default function AdminPage(): JSX.Element {
     setActiveSection(targetSection as MenuSection);
   }, [urlSection, allSubjects]);
 
-  // Sync filter params from URL to currentFilters when URL changes
-  useEffect(() => {
-    if (!isHydrated) return;
-    
-    const urlStatus = searchParams.get('status') || 'all';
-    const urlLevel = searchParams.get('level') || 'all';
-    const urlChapter = searchParams.get('chapter') || 'all';
-    const urlSearch = searchParams.get('search') || '';
-    
-    // Only update if different to avoid infinite loops
-    if (currentFilters.status !== urlStatus || 
-        currentFilters.level !== urlLevel || 
-        currentFilters.chapter !== urlChapter || 
-        currentFilters.search !== urlSearch) {
-      setCurrentFilters({
-        status: urlStatus,
-        level: urlLevel,
-        chapter: urlChapter,
-        search: urlSearch
-      });
-    }
-  }, [searchParams, isHydrated]);
-
 
   // URL update helper - replaces localStorage.setItem
   const updateURL = useCallback((params: { section?: string; subject?: string | null; chapter?: string | null }) => {
@@ -256,31 +205,7 @@ export default function AdminPage(): JSX.Element {
     router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
   }, [router, pathname]);
 
-  // Fetch question counts for allSubjects when allSubjects change
-  useEffect(() => {
-    const fetchQuestionCounts = async () => {
-      try {
-        const counts: Record<string, number> = {};
-        await Promise.all(
-          allSubjects.map(async (s) => {
-            try {
-              const count = await getQuestionCountBySubject(s.slug);
-              counts[s.slug] = count;
-            } catch {
-              counts[s.slug] = 0;
-            }
-          })
-        );
-        setQuestionCounts(counts);
-      } catch (e) {
-        console.error('Failed to fetch question counts:', e);
-      }
-    };
 
-    if (allSubjects.length > 0) {
-      fetchQuestionCounts();
-    }
-  }, [allSubjects]);
 
   // Mark as hydrated once after initial mount
   useEffect(() => {
@@ -313,249 +238,6 @@ export default function AdminPage(): JSX.Element {
     });
   }, []);
 
-
-  // Fetch questions from API when subject is selected (server-side pagination)
-  // Track last fetch params to prevent duplicate fetches
-  const lastFetchRef = useRef<{ section: string; page: number; limit: number; filters: string } | null>(null);
-  
-  useEffect(() => {
-    // Wait for hydration before fetching
-    if (!isHydrated) return;
-
-    const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
-
-    if (isSubjectSection && activeSection !== 'summary') {
-      const currentPage = questionPagination[activeSection]?.page || 1;
-      const limit = questionPagination[activeSection]?.limit || 10;
-      const filters = currentFilters;
-      // Convert 'all' values to undefined and only include non-undefined values
-      const apiFilters: { status?: string; level?: string; chapter?: string; search?: string } = {};
-      if (filters.status && filters.status !== 'all') apiFilters.status = filters.status;
-      if (filters.level && filters.level !== 'all') apiFilters.level = filters.level;
-      if (filters.chapter && filters.chapter !== 'all') apiFilters.chapter = filters.chapter;
-      if (filters.search) apiFilters.search = filters.search;
-      const filtersKey = JSON.stringify(filters);
-      const hasChapters = quizChapters[activeSection] && quizChapters[activeSection].length > 0;
-      
-      // Skip if we already fetched with these exact params AND we have chapters
-      if (lastFetchRef.current?.section === activeSection &&
-          lastFetchRef.current?.page === currentPage &&
-          lastFetchRef.current?.limit === limit &&
-          lastFetchRef.current?.filters === filtersKey &&
-          hasChapters) {
-        return;
-      }
-      
-      // Update last fetch params
-      lastFetchRef.current = { section: activeSection, page: currentPage, limit: limit, filters: filtersKey };
-
-      const fetchQuestions = async () => {
-        setIsLoadingSubject(true);
-        try {
-          // Fetch all data in parallel for better performance
-          const [questionsResult, subjectData, filterCounts] = await Promise.all([
-            getQuestionsBySubject(activeSection, apiFilters, currentPage, limit),
-            getSubjectBySlug(activeSection).catch(() => null),
-            getFilterCounts({ subject: activeSection }).catch(() => null),
-          ]);
-
-          const mappedQuestions: Question[] = questionsResult.data.map(mapQuizQuestionToQuestion);
-          setAllQuestions(prev => ({
-            ...prev,
-            [activeSection]: mappedQuestions
-          }));
-          setQuestionCounts(prev => ({
-            ...prev,
-            [activeSection]: questionsResult.total
-          }));
-          setQuestionPagination(prev => ({
-            ...prev,
-            [activeSection]: { page: questionsResult.page, limit: questionsResult.limit, total: questionsResult.total }
-          }));
-
-          // Set chapters if available
-          if (subjectData?.chapters) {
-            const chapterObjects = subjectData.chapters.map((c: { id: string; name: string }) => ({ id: c.id, name: c.name })).sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
-            setQuizChapters(prev => ({
-              ...prev,
-              [activeSection]: chapterObjects
-            }));
-          }
-
-          // Set filter counts
-          if (filterCounts) {
-            // Convert chapterCounts to record format
-            const chapterCountsRecord: Record<string, number> = {};
-            filterCounts.chapterCounts.forEach((ch: { name: string; count: number }) => { chapterCountsRecord[ch.name] = ch.count; });
-            
-            // Convert levelCounts to record format  
-            const levelCountsRecord: Record<string, number> = {};
-            filterCounts.levelCounts.forEach((lv: { level: string; count: number }) => { levelCountsRecord[lv.level] = lv.count; });
-            
-            // Convert statusCounts to SubjectStatusCounts format
-            const statusRecord: SubjectStatusCounts = { total: 0, published: 0, draft: 0, trash: 0 };
-            filterCounts.statusCounts.forEach((s: { status: string; count: number }) => { 
-              statusRecord[s.status as keyof SubjectStatusCounts] = s.count;
-              statusRecord.total += s.count;
-            });
-            
-            setSubjectChapterCounts(prev => ({ ...prev, [activeSection]: chapterCountsRecord }));
-            setSubjectLevelCounts(prev => ({ ...prev, [activeSection]: levelCountsRecord }));
-            setSubjectStatusCounts(prev => ({ ...prev, [activeSection]: statusRecord }));
-          }
-        } catch (err) {
-          console.error('Failed to fetch subject data:', activeSection, err);
-        } finally {
-          setIsLoadingSubject(false);
-        }
-      };
-
-      fetchQuestions();
-    }
-  }, [activeSection, allSubjects, questionPagination, currentFilters, isHydrated]);
-
-  // Fetch chapters and counts for "All Subjects" mode and Summary (dashboard)
-  useEffect(() => {
-    if (!isHydrated) return;
-    
-    if ((activeSection === 'quiz' || activeSection === 'summary') && allSubjects.length > 0) {
-      // Check if we already fetched for these exact filters
-      const filtersKey = JSON.stringify(currentFilters);
-      if (lastFetchedSectionRef.current === 'quiz' && lastFetchedFiltersRef.current === filtersKey) {
-        return;
-      }
-      
-      const fetchAllModeData = async () => {
-        try {
-          // Update refs before fetching
-          lastFetchedSectionRef.current = 'quiz';
-          lastFetchedFiltersRef.current = filtersKey;
-          
-          // Fetch chapters and questions for all subjects
-          const allChapterData: Record<string, { id: string; name: string }[]> = {};
-          const allQuestionsData: Record<string, Question[]> = {};
-          
-          await Promise.all(
-            allSubjects.map(async (subject) => {
-              try {
-                const subjectData = await getSubjectBySlug(subject.slug);
-                if (subjectData?.chapters) {
-                  allChapterData[subject.slug] = subjectData.chapters
-                    .map(c => ({ id: c.id, name: c.name }))
-                    .sort((a, b) => a.name.localeCompare(b.name));
-                }
-                
-                // Fetch questions for each subject (limit 100 per subject for overview)
-                const questionsResult = await getQuestionsBySubject(subject.slug, {}, 1, 100);
-                allQuestionsData[subject.slug] = questionsResult.data.map(mapQuizQuestionToQuestion);
-              } catch (err) {
-                console.error(`Failed to fetch data for ${subject.slug}:`, err);
-              }
-            })
-          );
-          
-          setQuizChapters(allChapterData);
-          setAllQuestions(allQuestionsData);
-
-          // Fetch all-mode counts from unified API
-          try {
-            const apiFilters: { subject?: string; status?: string; level?: string; chapter?: string; search?: string } = {
-              subject: 'all',
-            };
-            if (currentFilters.status && currentFilters.status !== 'all') apiFilters.status = currentFilters.status;
-            if (currentFilters.level && currentFilters.level !== 'all') apiFilters.level = currentFilters.level;
-            if (currentFilters.chapter && currentFilters.chapter !== 'all') apiFilters.chapter = currentFilters.chapter;
-            if (currentFilters.search) apiFilters.search = currentFilters.search;
-            
-            const filterCounts = await getFilterCounts(apiFilters);
-            
-            // Convert chapterCounts to record format
-            const chapterCountsRecord: Record<string, number> = {};
-            filterCounts.chapterCounts.forEach(ch => { chapterCountsRecord[ch.name] = ch.count; });
-            
-            // Convert levelCounts to record format  
-            const levelCountsRecord: Record<string, number> = {};
-            filterCounts.levelCounts.forEach(lv => { levelCountsRecord[lv.level] = lv.count; });
-            
-            // Convert statusCounts to SubjectStatusCounts format
-            const statusRecord: SubjectStatusCounts = { total: 0, published: 0, draft: 0, trash: 0 };
-            filterCounts.statusCounts.forEach(s => { 
-              (statusRecord as any)[s.status] = s.count;
-              statusRecord.total += s.count;
-            });
-            
-            setSubjectCounts(filterCounts.subjectCounts);
-            setSubjectChapterCounts(prev => ({ ...prev, 'quiz': chapterCountsRecord }));
-            setSubjectLevelCounts(prev => ({ ...prev, 'quiz': levelCountsRecord }));
-            setSubjectStatusCounts(prev => ({ ...prev, 'quiz': statusRecord }));
-          } catch (err) {
-            console.error('Failed to fetch all-mode counts:', err);
-          }
-        } catch (err) {
-          console.error('Failed to fetch all mode data:', err);
-        }
-      };
-      
-      fetchAllModeData();
-    }
-  }, [activeSection, allSubjects, currentFilters, isHydrated]);
-
-  // Fetch filtered counts for single subject mode when filters change
-  useEffect(() => {
-    if (!isHydrated) return;
-    
-    const isSubjectSection = allSubjects.some(s => s.slug === activeSection);
-    
-    if (isSubjectSection && activeSection !== 'summary' && activeSection !== 'quiz') {
-      // Check if we already fetched for these exact filters
-      const filtersKey = JSON.stringify(currentFilters);
-      if (lastFetchedSectionRef.current === activeSection && lastFetchedFiltersRef.current === filtersKey) {
-        return;
-      }
-      
-      const fetchFilteredCounts = async () => {
-        try {
-          // Update refs before fetching
-          lastFetchedSectionRef.current = activeSection;
-          lastFetchedFiltersRef.current = filtersKey;
-          
-          const apiFilters: { subject: string; status?: string; level?: string; chapter?: string; search?: string } = {
-            subject: activeSection,
-          };
-          if (currentFilters.status && currentFilters.status !== 'all') apiFilters.status = currentFilters.status;
-          if (currentFilters.level && currentFilters.level !== 'all') apiFilters.level = currentFilters.level;
-          if (currentFilters.chapter && currentFilters.chapter !== 'all') apiFilters.chapter = currentFilters.chapter;
-          if (currentFilters.search) apiFilters.search = currentFilters.search;
-          
-          const filterCounts = await getFilterCounts(apiFilters);
-          
-          // Convert chapterCounts to record format
-          const chapterCountsRecord: Record<string, number> = {};
-          filterCounts.chapterCounts.forEach(ch => { chapterCountsRecord[ch.name] = ch.count; });
-          
-          // Convert levelCounts to record format  
-          const levelCountsRecord: Record<string, number> = {};
-          filterCounts.levelCounts.forEach(lv => { levelCountsRecord[lv.level] = lv.count; });
-          
-          // Convert statusCounts to SubjectStatusCounts format
-          const statusRecord: SubjectStatusCounts = { total: 0, published: 0, draft: 0, trash: 0 };
-          filterCounts.statusCounts.forEach(s => { 
-            (statusRecord as any)[s.status] = s.count;
-            statusRecord.total += s.count;
-          });
-          
-          setSubjectChapterCounts(prev => ({ ...prev, [activeSection]: chapterCountsRecord }));
-          setSubjectLevelCounts(prev => ({ ...prev, [activeSection]: levelCountsRecord }));
-          setSubjectStatusCounts(prev => ({ ...prev, [activeSection]: statusRecord }));
-        } catch (err) {
-          console.error('Failed to fetch filtered counts:', err);
-        }
-      };
-      
-      fetchFilteredCounts();
-    }
-  }, [activeSection, currentFilters, allSubjects, isHydrated]);
-
   // Modal states
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
@@ -565,325 +247,6 @@ export default function AdminPage(): JSX.Element {
   const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
   const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
 
-  const getSubjectFromSection = (section: MenuSection): Subject | null => {
-    return allSubjects.find(s => s.slug === section) ?? null;
-  };
-
-  const getQuestionsForSubject = (slug: string): Question[] => {
-    return allQuestions[slug] ?? [];
-  };
-
-  const getQuestionPagination = (slug: string) => {
-    return questionPagination[slug] || { page: 1, limit: 10, total: questionCounts[slug] || 0 };
-  };
-
-  const getChaptersForSubject = (slug: string): { id: string; name: string }[] => {
-    return quizChapters[slug] ?? [];
-  };
-
-  const getStatusCountsForSubject = (slug: string): SubjectStatusCounts | undefined => {
-    return subjectStatusCounts[slug];
-  };
-
-  // Handle question page change (server-side pagination)
-  const handleQuestionPageChange = (subjectSlug: string, newPage: number, newLimit: number) => {
-    setQuestionPagination(prev => {
-      const existingPagination = prev[subjectSlug];
-      return {
-        ...prev,
-        [subjectSlug]: { 
-          page: newPage, 
-          limit: newLimit,
-          total: existingPagination?.total ?? 0
-        }
-      };
-    });
-  };
-
-  // Handle questions refresh from server (after bulk actions)
-  const handleQuestionsRefresh = async (subjectSlug: string) => {
-    const pagination = questionPagination[subjectSlug] || { page: 1, limit: 10 };
-    const filters = currentFilters;
-    try {
-      const result = await getQuestionsBySubject(subjectSlug, filters, pagination.page, pagination.limit);
-      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
-      setAllQuestions(prev => ({
-        ...prev,
-        [subjectSlug]: mappedQuestions
-      }));
-      setQuestionPagination(prev => ({
-        ...prev,
-        [subjectSlug]: { ...pagination, total: result.total }
-      }));
-
-      // Also refresh status counts
-      const statusCounts = await getStatusCountsBySubject(subjectSlug);
-      setSubjectStatusCounts(prev => ({
-        ...prev,
-        [subjectSlug]: statusCounts
-      }));
-
-      // Also refresh counts using unified API
-      try {
-        const filterCounts = await getFilterCounts({ subject: subjectSlug });
-        
-        // Convert chapterCounts to record format
-        const chapterCountsRecord: Record<string, number> = {};
-        filterCounts.chapterCounts.forEach((ch: { name: string; count: number }) => { chapterCountsRecord[ch.name] = ch.count; });
-        
-        // Convert levelCounts to record format  
-        const levelCountsRecord: Record<string, number> = {};
-        filterCounts.levelCounts.forEach((lv: { level: string; count: number }) => { levelCountsRecord[lv.level] = lv.count; });
-        
-        setSubjectChapterCounts(prev => ({
-          ...prev,
-          [subjectSlug]: chapterCountsRecord
-        }));
-        
-        setSubjectLevelCounts(prev => ({
-          ...prev,
-          [subjectSlug]: levelCountsRecord
-        }));
-      } catch (countsErr) {
-        console.error('Failed to refresh counts:', countsErr);
-      }
-
-      // Also refresh chapters list
-      try {
-        const subjectData = await getSubjectBySlug(subjectSlug);
-        if (subjectData?.chapters) {
-          const chapterObjects = subjectData.chapters.map(c => ({ id: c.id, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
-          setQuizChapters(prev => ({
-            ...prev,
-            [subjectSlug]: chapterObjects
-          }));
-        }
-      } catch (chaptersErr) {
-        console.error('Failed to refresh chapters:', chaptersErr);
-      }
-    } catch (err) {
-      console.error('Failed to refresh questions:', err);
-    }
-  };
-
-  // Handle questions import
-  const handleQuestionsImport = async (subjectSlug: string, newQuestions: Question[]) => {
-    // Refresh allSubjects list to ensure we have the latest (in case new subject was created)
-    try {
-      await refetchSubjects();
-    } catch (err) {
-      console.error('Failed to refresh allSubjects:', err);
-    }
-
-    // If no new questions to import, just refresh the data from DB
-    if (!newQuestions || newQuestions.length === 0) {
-      try {
-        const result = await getQuestionsBySubject(subjectSlug);
-        const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
-        setAllQuestions(prev => ({
-          ...prev,
-          [subjectSlug]: mappedQuestions
-        }));
-        setQuestionCounts(prev => ({
-          ...prev,
-          [subjectSlug]: result.total  // FIX: Use actual total from API
-        }));
-        setQuestionPagination(prev => ({
-          ...prev,
-          [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
-        }));
-      } catch (err) {
-        console.error('Failed to refresh questions:', err);
-      }
-      return;
-    }
-
-    let subjectId: string | undefined;
-
-    // First, check if subject is in local state
-    const subject = allSubjects.find(s => s.slug === subjectSlug);
-    if (subject?.id) {
-      subjectId = subject.id;
-    }
-
-    // Always fetch from API to ensure we have the correct subject ID
-    // This handles cases where subject exists in DB but not in frontend state
-    try {
-      const subjectData = await getSubjectBySlug(subjectSlug);
-      if (subjectData?.id) {
-        subjectId = subjectData.id;
-        // Subject will be refreshed via refetchSubjects() - no need to add to state
-      }
-    } catch (err) {
-      console.error('Failed to fetch subject from API:', err);
-      // If subject was found in state, use its ID despite API error
-      if (!subjectId) {
-        console.error('Subject not found in state or API');
-        return;
-      }
-    }
-
-    if (!subjectId) {
-      console.error('Subject ID not found');
-      return;
-    }
-
-    // Get chapters for this subject
-    let chapters = await getChaptersBySubject(subjectId);
-
-    // Get unique chapters from questions
-    const questionChapters = [...new Set(newQuestions.map(q => q.chapter || 'General'))];
-
-    // Find or create each chapter
-    for (const chapterName of questionChapters) {
-      let chapter = chapters.find(c => c.name.toLowerCase() === chapterName.toLowerCase());
-      if (!chapter) {
-        try {
-          chapter = await createChapter({ name: chapterName, subjectId });
-          chapters.push(chapter);
-        } catch (err) {
-          console.error(`Failed to create chapter ${chapterName}:`, err);
-        }
-      }
-    }
-
-    // Build a map of chapter names to IDs
-    const chapterMap = new Map(chapters.map(c => [c.name.toLowerCase(), c.id]));
-
-    const apiQuestions = newQuestions.map(q => {
-      const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
-      const correctLetter = (q.correctAnswer || 'A').toUpperCase();
-      const correctAnswerText = q.level === 'extreme' ? q.correctAnswer : (correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD);
-
-      const chapterName = (q.chapter || 'General').toLowerCase();
-      const chapterId = chapterMap.get(chapterName) || chapterMap.get('general');
-
-      return {
-        question: q.question,
-        correctAnswer: correctAnswerText,
-        options: allOptions,
-        level: q.level,
-        chapterId: chapterId || '',
-        status: (q.status === 'trash' ? 'draft' : (q.status || 'published')) as 'published' | 'draft',
-      };
-    });
-
-    try {
-      await createQuestionsBulk(apiQuestions);
-      const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
-      setAllQuestions(prev => ({
-        ...prev,
-        [subjectSlug]: mappedQuestions
-      }));
-      setQuestionCounts(prev => ({
-        ...prev,
-        [subjectSlug]: result.total
-      }));
-      setQuestionPagination(prev => ({
-        ...prev,
-        [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
-      }));
-    } catch (err) {
-      console.error('Failed to save questions to database:', err);
-    }
-  };
-
-  const handleQuestionsUpdate = async (subjectSlug: string, updatedQuestions: Question[]) => {
-    const subject = allSubjects.find(s => s.slug === subjectSlug);
-    if (!subject) return;
-
-    let chapterMap = new Map<string, string>();
-    try {
-      const existingChapters = await getChaptersBySubject(subject.id);
-      chapterMap = new Map(existingChapters.map(c => [c.name.toLowerCase(), c.id]));
-    } catch (err) {
-      console.error('Failed to fetch chapters for update:', err);
-    }
-
-    for (const q of updatedQuestions) {
-      const allOptions = [q.optionA, q.optionB, q.optionC, q.optionD].filter(o => o);
-      const correctLetter = (q.correctAnswer || 'A').toUpperCase();
-      const correctAnswerText = q.level === 'extreme' ? q.correctAnswer : (correctLetter === 'A' ? q.optionA : correctLetter === 'B' ? q.optionB : correctLetter === 'C' ? q.optionC : q.optionD);
-
-      const chapterName = (q.chapter || 'General').toLowerCase();
-      const chapterId = chapterMap.get(chapterName) || '';
-
-      if (!q.id || q.id.startsWith('local-')) {
-        if (!chapterId) {
-          console.error('Cannot create question without a valid chapter ID');
-          continue;
-        }
-        const apiQuestion = {
-          question: q.question,
-          options: allOptions,
-          correctAnswer: correctAnswerText,
-          level: q.level,
-          chapterId: chapterId,
-          status: q.status === 'trash' ? 'draft' : (q.status || 'published'),
-        };
-        try {
-          await createQuestion(apiQuestion);
-        } catch (err) {
-          console.error('Failed to create question:', err);
-        }
-      } else {
-        try {
-          await updateQuestion(q.id, {
-            question: q.question,
-            options: allOptions,
-            correctAnswer: correctAnswerText,
-            level: q.level,
-            status: (q.status === 'trash' ? 'draft' : (q.status || 'published')) as 'published' | 'draft',
-          });
-        } catch (err) {
-          console.error('Failed to update question:', q.id, err);
-        }
-      }
-    }
-
-    try {
-      const result = await getQuestionsBySubject(subjectSlug);
-      const mappedQuestions: Question[] = result.data.map(mapQuizQuestionToQuestion);
-      setAllQuestions(prev => ({
-        ...prev,
-        [subjectSlug]: mappedQuestions
-      }));
-      setQuestionCounts(prev => ({
-        ...prev,
-        [subjectSlug]: result.total
-      }));
-      setQuestionPagination(prev => ({
-        ...prev,
-        [subjectSlug]: { page: result.page, limit: result.limit, total: result.total }
-      }));
-    } catch (err) {
-      console.error('Failed to refetch questions:', err);
-    }
-  };
-
-  // Handle clear all questions for a subject
-  const handleClearQuestions = async (subjectSlug: string) => {
-    const currentQuestions = allQuestions[subjectSlug] || [];
-    const questionIds = currentQuestions.filter(q => q.id && !q.id.startsWith('local-')).map(q => q.id);
-
-    if (questionIds.length > 0) {
-      try {
-        await bulkActionQuestions(questionIds, 'delete');
-      } catch (err) {
-        console.error('Failed to delete questions from database:', err);
-      }
-    }
-
-    setAllQuestions(prev => ({
-      ...prev,
-      [subjectSlug]: [],
-    }));
-    setQuestionCounts(prev => ({
-      ...prev,
-      [subjectSlug]: 0
-    }));
-  };
 
   // Export questions to JSON or CSV file (for backup/deployment)
   const handleExportQuestions = () => {
@@ -954,10 +317,6 @@ export default function AdminPage(): JSX.Element {
             ...prev,
             [result.subjectSlug]: mappedQuestions
           }));
-          setQuestionCounts(prev => ({
-            ...prev,
-            [result.subjectSlug]: result.questionsImported
-          }));
 
           alert(`Successfully imported ${result.questionsImported} questions!\nSubject: ${result.subjectName}\nChapters: ${result.chaptersCreated}`);
         } else {
@@ -992,33 +351,6 @@ export default function AdminPage(): JSX.Element {
     setShowAddSubjectModal(false);
   };
 
-  // Add chapter to subject
-  const handleAddChapter = async (subjectSlug: string, chapterName: string) => {
-    const subject = allSubjects.find(s => s.slug === subjectSlug);
-    if (!subject) {
-      console.error('Subject not found:', subjectSlug);
-      return;
-    }
-    
-    try {
-      await createChapter({ name: chapterName, subjectId: subject.id });
-      // Refresh questions to show the new chapter
-      handleQuestionsRefresh(subjectSlug);
-    } catch (err) {
-      console.error('Failed to create chapter:', err);
-    }
-  };
-
-  // Delete chapter from subject
-  const handleDeleteChapter = async (subjectSlug: string, chapterId: string, _chapterName: string) => {
-    try {
-      await deleteChapter(chapterId);
-      // Refresh questions to update the list
-      handleQuestionsRefresh(subjectSlug);
-    } catch (err) {
-      console.error('Failed to delete chapter:', err);
-    }
-  };
 
   // Delete subject - triggered by modal confirmation
   const confirmDeleteSubject = async () => {
@@ -1053,31 +385,7 @@ export default function AdminPage(): JSX.Element {
       delete updated[subjectSlug];
       return updated;
     });
-    setQuestionCounts(prev => {
-      const updated = { ...prev };
-      delete updated[subjectSlug];
-      return updated;
-    });
-    setQuizChapters(prev => {
-      const updated = { ...prev };
-      delete updated[subjectSlug];
-      return updated;
-    });
-    setSubjectStatusCounts(prev => {
-      const updated = { ...prev };
-      delete updated[subjectSlug];
-      return updated;
-    });
-    setSubjectChapterCounts(prev => {
-      const updated = { ...prev };
-      delete updated[subjectSlug];
-      return updated;
-    });
-    setSubjectLevelCounts(prev => {
-      const updated = { ...prev };
-      delete updated[subjectSlug];
-      return updated;
-    });
+
 
     if (wasActiveSection && remainingSubjects.length > 0) {
       const nextSubject = remainingSubjects[0]!;
@@ -1293,30 +601,17 @@ export default function AdminPage(): JSX.Element {
               <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
             </div>
           )}
-          {activeSection === 'quiz' && allSubjects.length > 0 && (
+          {activeSection === 'quiz' && (
             <QuizMcqSection
               allSubjects={allSubjects}
+              onSubjectsChange={refetchSubjects}
             />
           )}
           {allSubjects.some(s => s.slug === activeSection) && (
-            <QuizManagementSection
-              subject={getSubjectFromSection(activeSection)!}
-              questions={getQuestionsForSubject(activeSection)}
-              pagination={getQuestionPagination(activeSection)}
-              chapters={getChaptersForSubject(activeSection)}
-              statusCounts={getStatusCountsForSubject(activeSection)}
-              chapterCounts={_subjectChapterCounts[activeSection] || {}}
-              levelCounts={_subjectLevelCounts[activeSection] || {}}
-              subjectCounts={subjectCounts}
-              allSubjects={[...allSubjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))}
-              onAddChapter={handleAddChapter}
-              onDeleteChapter={handleDeleteChapter}
-              onQuestionsImport={handleQuestionsImport}
-              onQuestionsUpdate={handleQuestionsUpdate}
-              onClearQuestions={handleClearQuestions}
-              onPageChange={handleQuestionPageChange}
-              onQuestionsRefresh={handleQuestionsRefresh}
-              isLoading={isLoadingSubject}
+            <QuizMcqSection
+              allSubjects={allSubjects}
+              initialSubjectSlug={activeSection}
+              onSubjectsChange={refetchSubjects}
             />
           )}
           {activeSection === 'jokes' && (

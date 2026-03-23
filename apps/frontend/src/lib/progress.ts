@@ -9,9 +9,19 @@
 import type { QuizSession, ChapterProgress, SubjectProgress } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 
-/** Generate compound key for chapter progress */
-function getChapterKey(subject: string, chapter: string): string {
-  return `${subject}:${chapter}`;
+/** Generate primary ID-based key for chapter progress */
+function getChapterKey(subjectId: string, chapterId: string): string {
+  return `id:${subjectId}:${chapterId}`;
+}
+
+/** Helper to find progress using ID-based keys */
+function findChapterProgress(
+  chapterProgress: Record<string, ChapterProgress>,
+  subjectId: string,
+  chapterId: string
+): ChapterProgress | null {
+  const key = getChapterKey(subjectId, chapterId);
+  return chapterProgress[key] || null;
 }
 
 /** Save quiz result and update progress */
@@ -22,12 +32,20 @@ export function saveQuizResult(session: QuizSession): void {
     {}
   );
 
-  const key = getChapterKey(session.subject, session.chapter);
-  const existing = chapterProgress[key];
+  const key = getChapterKey(session.subjectId, session.chapterId);
+  
+  // Try to find existing progress using the helper
+  const existing = findChapterProgress(
+    chapterProgress,
+    session.subjectId,
+    session.chapterId
+  );
 
   const newProgress: ChapterProgress = {
     subject: session.subject,
+    subjectId: session.subjectId,
     chapter: session.chapter,
+    chapterId: session.chapterId,
     attempts: (existing?.attempts || 0) + 1,
     bestScore: Math.max(existing?.bestScore || 0, session.score),
     lastScore: session.score,
@@ -41,15 +59,17 @@ export function saveQuizResult(session: QuizSession): void {
     lastAttemptAt: new Date().toISOString(),
   };
 
+  // Always save with the new ID-based key
   chapterProgress[key] = newProgress;
+
   setItem(STORAGE_KEYS.CHAPTER_PROGRESS, chapterProgress);
 
   // Update subject progress
-  updateSubjectProgress(session.subject);
+  updateSubjectProgress(session.subject, session.subjectId);
 }
 
 /** Update subject progress based on chapter progress */
-function updateSubjectProgress(subjectSlug: string): void {
+function updateSubjectProgress(subjectSlug: string, subjectId: string): void {
   const chapterProgress = getItem<Record<string, ChapterProgress>>(
     STORAGE_KEYS.CHAPTER_PROGRESS,
     {}
@@ -57,10 +77,21 @@ function updateSubjectProgress(subjectSlug: string): void {
 
   // Get all chapters for this subject
   const subjectChapters = Object.values(chapterProgress).filter(
-    (p) => p.subject === subjectSlug
+    (p) => p.subjectId === subjectId || p.subject === subjectSlug
   );
 
-  if (subjectChapters.length === 0) return;
+  if (subjectChapters.length === 0) {
+    // If no chapters found, ensure subject progress is also cleared or not created
+    const subjectProgress = getItem<Record<string, SubjectProgress>>(
+      STORAGE_KEYS.SUBJECT_PROGRESS,
+      {}
+    );
+    if (subjectProgress[subjectId]) {
+      delete subjectProgress[subjectId];
+      setItem(STORAGE_KEYS.SUBJECT_PROGRESS, subjectProgress);
+    }
+    return;
+  }
 
   const totalChapters = subjectChapters.length;
   const completedChapters = subjectChapters.filter((p) => p.completed).length;
@@ -86,8 +117,9 @@ function updateSubjectProgress(subjectSlug: string): void {
     {}
   );
 
-  subjectProgress[subjectSlug] = {
+  subjectProgress[subjectId] = {
     subject: subjectSlug,
+    subjectId: subjectId,
     totalChapters,
     completedChapters,
     totalAttempts,
@@ -100,23 +132,31 @@ function updateSubjectProgress(subjectSlug: string): void {
 
 /** Get chapter progress */
 export function getChapterProgress(
-  subject: string,
-  chapter: string
+  subjectId: string,
+  chapterId: string
 ): ChapterProgress | null {
   const chapterProgress = getItem<Record<string, ChapterProgress>>(
     STORAGE_KEYS.CHAPTER_PROGRESS,
     {}
   );
-  return chapterProgress[getChapterKey(subject, chapter)] || null;
+  
+  return findChapterProgress(chapterProgress, subjectId, chapterId);
 }
 
 /** Get subject progress */
-export function getSubjectProgress(subject: string): SubjectProgress | null {
+export function getSubjectProgress(subject: string, subjectId?: string): SubjectProgress | null {
   const subjectProgress = getItem<Record<string, SubjectProgress>>(
     STORAGE_KEYS.SUBJECT_PROGRESS,
     {}
   );
-  return subjectProgress[subject] || null;
+  
+  if (subjectId && subjectProgress[subjectId]) {
+    return subjectProgress[subjectId];
+  }
+  
+  // Fallback to slug if ID not found or not provided
+  // This assumes subjectProgress might still contain slug-based keys from older versions
+  return Object.values(subjectProgress).find(p => p.subject === subject) || null;
 }
 
 /** Get all quiz history */
@@ -191,8 +231,8 @@ export function getTotalStats(): {
 }
 
 /** Check if chapter is completed */
-export function isChapterCompleted(subject: string, chapter: string): boolean {
-  const progress = getChapterProgress(subject, chapter);
+export function isChapterCompleted(subjectId: string, chapterId: string): boolean {
+  const progress = getChapterProgress(subjectId, chapterId);
   return progress?.completed ?? false;
 }
 

@@ -31,13 +31,14 @@ if (Test-Path "$projectRoot\.frontend.pid") {
     $pids += Get-Content "$projectRoot\.frontend.pid" -ErrorAction SilentlyContinue
 }
 
-foreach ($pid in $pids) {
-    if ($pid -and $pid -match '^\d+$') {
+for ($i = 0; $i -lt $pids.Count; $i++) {
+    $p = $pids[$i]
+    if ($p -and $p -match '^\d+$') {
         try {
-            Stop-Process -Id $pid -Force -ErrorAction Stop
-            Write-Status "Stopped process PID: $pid" "success"
+            Stop-Process -Id $p -Force -ErrorAction Stop
+            Write-Status "Stopped process PID: $p" "success"
         } catch {
-            Write-Status "Process $pid already stopped" "warning"
+            Write-Status "Process $p already stopped" "warning"
         }
     }
 }
@@ -52,11 +53,12 @@ foreach ($port in $ports) {
             $parts[-1]
         } | Select-Object -Unique
         
-        foreach ($procId in $procIds) {
-            if ($procId -ne '0' -and $procId -match '^\d+$') {
+        for ($j = 0; $j -lt $procIds.Count; $j++) {
+            $p = $procIds[$j]
+            if ($p -ne '0' -and $p -match '^\d+$') {
                 try {
-                    Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
-                    Write-Status "Killed process $procId on port $port" "warning"
+                    Stop-Process -Id $p -Force -ErrorAction SilentlyContinue
+                    Write-Status "Killed process $p on port $port" "warning"
                 } catch {}
             }
         }
@@ -70,3 +72,4 @@ Remove-Item "$projectRoot\.frontend.pid" -ErrorAction SilentlyContinue
 Write-Host ""
 Write-Status "All servers stopped!" "success"
 Write-Host ""
+"

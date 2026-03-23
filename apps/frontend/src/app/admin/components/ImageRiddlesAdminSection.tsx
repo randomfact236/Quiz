@@ -677,7 +677,6 @@ export function ImageRiddlesAdminSection(): JSX.Element {
           case 'draft': return { ...riddle, status: 'draft' as ContentStatus };
           case 'trash': return { ...riddle, status: 'trash' as ContentStatus };
           case 'delete': return null;
-          case 'restore': return { ...riddle, status: 'draft' as ContentStatus };
           default: return riddle;
         }
       }

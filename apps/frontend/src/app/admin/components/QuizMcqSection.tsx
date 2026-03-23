@@ -18,8 +18,10 @@ import {
   deleteQuestion,
   exportQuestionsToCSV,
   bulkActionQuestions,
+  CreateQuestionDto,
+  UpdateQuestionDto,
 } from '@/lib/quiz-api';
-import { importQuestionsFromCSV } from '@/app/admin/utils/quiz-importer';
+import { importQuestionsFromCSV, parseCSVContent } from '@/app/admin/utils/quiz-importer';
 import { SubjectFilter } from '@/components/ui/quiz-filters/SubjectFilter';
 import { ChapterFilter } from '@/components/ui/quiz-filters/ChapterFilter';
 import { LevelFilter } from '@/components/ui/quiz-filters/LevelFilter';
@@ -38,12 +40,13 @@ import type { BulkActionType, StatusFilter as BulkStatusFilter } from '@/types/s
 interface QuizMcqSectionProps {
   allSubjects: Subject[];
   onSubjectsChange?: () => void;
+  initialSubjectSlug?: string;
 }
 
 const QUESTIONS_PAGE_SIZE = 10;
 
-export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMcqSectionProps) {
-  const { filters, setFilter, resetFilters } = useQuizFilters();
+export default function QuizMcqSection({ allSubjects, onSubjectsChange, initialSubjectSlug }: QuizMcqSectionProps) {
+  const { filters, setFilter, resetFilters } = useQuizFilters(initialSubjectSlug);
   
   const [filterCounts, setFilterCounts] = useState<FilterCountsResponse | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -67,7 +70,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'subject' | 'chapter' | 'question'; id: string; name: string } | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const refreshControllerRef = useRef<AbortController | null>(null);
 
   // Bulk actions state
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -83,6 +86,9 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
 
   // Page size state
   const [pageSize, setPageSize] = useState(QUESTIONS_PAGE_SIZE);
+
+  // Export state
+  const [exporting, setExporting] = useState(false);
 
   // Memoize countParams for COUNTS (excludes status - shows subject/chapter-filtered counts)
   // We need status counts filtered by selected subject/chapter/level
@@ -147,7 +153,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
     async function fetchQuestionsData() {
       setIsLoading(true);
       try {
-        const result = await getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE);
+        const result = await getAllQuestions(dataParams, currentPage, pageSize);
         if (!cancelled) {
           setQuestions(result.data);
           setTotalQuestions(result.total);
@@ -193,26 +199,43 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
   }, []);
 
   const handleRefresh = useCallback(() => {
+    // Abort previous refresh if still in progress
+    if (refreshControllerRef.current) {
+      refreshControllerRef.current.abort();
+    }
+    
+    // Create new controller for this refresh
+    const controller = new AbortController();
+    refreshControllerRef.current = controller;
+    
     Promise.all([
       getFilterCounts(countParams),
       getAllQuestions(dataParams, currentPage, pageSize),
     ]).then(([counts, result]) => {
-      setFilterCounts(counts);
-      setQuestions(result.data);
-      setTotalQuestions(result.total);
-    }).catch(console.error);
+      // Only update if this request wasn't aborted
+      if (!controller.signal.aborted) {
+        setFilterCounts(counts);
+        setQuestions(result.data);
+        setTotalQuestions(result.total);
+      }
+    }).catch(err => {
+      if (err.name !== 'AbortError') {
+        console.error('Refresh failed:', err);
+      }
+    });
+
+    return () => {
+      controller.abort();
+    };
   }, [countParams, dataParams, currentPage, pageSize]);
 
   // Bulk action handlers
   const handleBulkAction = useCallback(async (action: BulkActionType) => {
     if (selectedIds.length === 0) return;
     
-    // Map 'restore' to 'publish' since API doesn't support restore
-    const apiAction = action === 'restore' ? 'publish' : action;
-    
     setBulkActionLoading(true);
     try {
-      await bulkActionQuestions(selectedIds, apiAction as 'publish' | 'draft' | 'trash' | 'delete');
+      await bulkActionQuestions(selectedIds, action as 'publish' | 'draft' | 'trash' | 'delete');
       setSelectedIds([]);
       handleRefresh();
     } catch (error) {
@@ -224,25 +247,35 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
 
   // Import handlers
   const handleFileUpload = useCallback(async (file: File) => {
-    setImportLoading(true);
     setImportError('');
     setImportSuccess('');
+    
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      setImportError('Only CSV files are supported. Please upload a .csv file.');
+      return;
+    }
+
+    setImportLoading(true);
     
     try {
       const content = await file.text();
       setLastImportContent(content);
       
-      const result = await importQuestionsFromCSV(content, allSubjects);
+      // Use parseCSVContent for preview only, do not import yet
+      const parsed = parseCSVContent(content);
       
-      if (result.errors.length > 0) {
-        setImportError(result.errors.join('\n'));
+      if (parsed.errors.length > 0) {
+        setImportError(parsed.errors.join('\n'));
+        setImportPreview(null);
+      } else if (parsed.rows.length === 0) {
+        setImportError('No valid questions found in CSV.');
         setImportPreview(null);
       } else {
         setImportPreview({
-          subjectName: result.subjectName,
-          questionCount: result.questionsImported,
-          errors: result.errors,
-          warnings: result.warnings,
+          subjectName: parsed.subjectName,
+          questionCount: parsed.rows.length,
+          errors: parsed.errors,
+          warnings: parsed.warnings,
         });
       }
     } catch (err) {
@@ -250,7 +283,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
     } finally {
       setImportLoading(false);
     }
-  }, [allSubjects]);
+  }, []);
 
   const handleConfirmImport = useCallback(async () => {
     if (!importPreview) return;
@@ -378,12 +411,12 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
     setQuestionModalOpen(true);
   };
 
-  const handleSaveQuestion = async (data: any) => {
+  const handleSaveQuestion = async (data: CreateQuestionDto | UpdateQuestionDto) => {
     try {
       if (questionModalMode === 'add') {
-        await createQuestion(data);
+        await createQuestion(data as CreateQuestionDto);
       } else if (editingQuestion) {
-        await updateQuestion(editingQuestion.id, data);
+        await updateQuestion(editingQuestion.id, data as UpdateQuestionDto);
       }
       handleRefresh();
     } catch (error) {
@@ -423,8 +456,33 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
   };
 
   // Export handler
-  const handleExport = () => {
-    exportQuestionsToCSV(questions, filters.subject);
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const allQuestions: QuizQuestion[] = [];
+      let page = 1;
+      let fetched = 0;
+      let total = Infinity;
+
+      while (fetched < total) {
+        // Fetch up to 100 per request to minimize calls
+        const result = await getAllQuestions(dataParams, page, 100);
+        allQuestions.push(...result.data);
+        total = result.total;
+        fetched += result.data.length;
+        page++;
+        
+        // Safety break
+        if (result.data.length === 0) break;
+      }
+
+      exportQuestionsToCSV(allQuestions, filters.subject);
+    } catch (error) {
+      console.error('Failed to export questions:', error);
+      alert('Failed to export questions. Please try again.');
+    } finally {
+      setExporting(false);
+    }
   };
 
   // Import handler
@@ -440,11 +498,6 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
     if (!file) return;
 
     await handleFileUpload(file);
-    
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
   };
 
   // Get subject/chapter data for modals
@@ -497,15 +550,6 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
 
   return (
     <div className="space-y-4">
-      {/* Hidden file input for import */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        accept=".csv"
-        onChange={handleFileChange}
-        className="hidden"
-      />
-
       {/* Action Buttons - Above all containers */}
       <div className="flex justify-end gap-2">
         <button
@@ -524,10 +568,23 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         </button>
         <button
           onClick={handleExport}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
+          disabled={exporting}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3M8 7l4-4 4 4M4 17h16"/></svg>
-          Export
+          {exporting ? (
+            <>
+              <svg className="animate-spin h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Exporting...
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3M8 7l4-4 4 4M4 17h16"/></svg>
+              Export
+            </>
+          )}
         </button>
       </div>
 

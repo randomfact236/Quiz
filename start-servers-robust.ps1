@@ -34,12 +34,15 @@ function Clear-Port($port) {
             $parts[-1]
         } | Select-Object -Unique
         
-        foreach ($pid in $pids) {
-            if ($pid -ne '0' -and $pid -match '^\d+$') {
+        for ($i = 0; $i -lt $pids.Count; $i++) {
+            $p = $pids[$i]
+            if ($p -and $p -match '^\d+$') {
                 try {
-                    Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
-                    Write-Status "Killed process $pid on port $port" "warning"
-                } catch {}
+                    Stop-Process -Id $p -Force -ErrorAction SilentlyContinue
+                    Write-Status "Killed process $p on port $port" "warning"
+                } catch {
+                    Write-Status "Process $p already stopped" "warning"
+                }
             }
         }
     }
@@ -73,8 +76,8 @@ function Start-Backend() {
         Write-Status "Cleared old build cache" "info"
     }
     
-    # Start backend in background
-    $proc = Start-Process -FilePath "npm" -ArgumentList "run", "start" -PassThru -WindowStyle Hidden -WorkingDirectory "$projectRoot\apps\backend"
+    # Start backend in background with log redirection
+    $proc = Start-Process -FilePath "npm" -ArgumentList "run", "start" -PassThru -WindowStyle Hidden -WorkingDirectory "$projectRoot\apps\backend" -RedirectStandardOutput "$projectRoot\backend_stdout.log" -RedirectStandardError "$projectRoot\backend_stderr.log"
     $proc.Id | Out-File -FilePath "$projectRoot\.backend.pid" -Encoding ASCII
     
     Write-Status "Backend starting with PID: $($proc.Id)" "info"

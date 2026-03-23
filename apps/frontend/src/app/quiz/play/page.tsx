@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
+import type { SubjectDataProp } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
 import { getSubjectBySlug } from '@/lib/quiz-api';
@@ -43,6 +44,9 @@ function QuizContent(): JSX.Element {
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [subjectName, setSubjectName] = useState<string>('');
   const [subjectEmoji, setSubjectEmoji] = useState<string>('📚');
+  const [chapterName, setChapterName] = useState<string>('');
+  // Fix 2: single fetched subjectData passed into hook to avoid duplicate getSubjectBySlug call
+  const [subjectData, setSubjectData] = useState<SubjectDataProp | undefined>(undefined);
   const [hasStarted, setHasStarted] = useState(false);
   const [isStartingQuiz, setIsStartingQuiz] = useState(false);
   const [preQuizExtraQuestions, setPreQuizExtraQuestions] = useState(0);
@@ -59,53 +63,58 @@ function QuizContent(): JSX.Element {
   const level = searchParams?.get('level') || '';
   const mode = searchParams?.get('mode') || 'normal';
 
-  // Load timer settings from settings
+  // Load subject data + timer settings in a single combined effect
   useEffect(() => {
-    const loadTimerSettings = async () => {
+    const loadPageData = async () => {
       try {
-        const settings = await SettingsService.getSettings();
-        const levelTimers = settings.quiz?.defaults?.levelTimers;
+        const [settings, fetchedSubject] = await Promise.all([
+          SettingsService.getSettings(),
+          subject ? getSubjectBySlug(subject) : Promise.resolve(null),
+        ]);
 
+        // Timer settings
+        const levelTimers = settings.quiz?.defaults?.levelTimers;
         if (mode === 'timer' && level) {
-          // Use level-specific timer if available, otherwise fallback to default
           const levelKey = level.toLowerCase();
           const timerValue = levelTimers?.[levelKey as keyof typeof levelTimers] ?? DEFAULT_TIME_LIMITS[levelKey] ?? 30;
           setTimeLimit(timerValue);
         } else {
           setTimeLimit(undefined);
         }
+
+        // Subject display data — passed to hook to avoid duplicate fetch
+        if (fetchedSubject) {
+          setSubjectName(fetchedSubject.name);
+          setSubjectEmoji(fetchedSubject.emoji);
+          const foundChapter = fetchedSubject.chapters?.find((c: any) => c.slug === chapter);
+          if (foundChapter) {
+            setChapterName(foundChapter.name);
+          } else {
+            setChapterName(chapter); // fallback
+          }
+          setSubjectData({
+            id: fetchedSubject.id,
+            name: fetchedSubject.name,
+            chapters: fetchedSubject.chapters,
+          });
+        }
       } catch (error) {
-        console.error('Failed to load timer settings:', error);
-        // Fallback to default time limits
+        console.error('Failed to load page data:', error);
+        // Fallback timer
         if (mode === 'timer' && level) {
           setTimeLimit(DEFAULT_TIME_LIMITS[level.toLowerCase()] ?? 30);
         } else {
           setTimeLimit(undefined);
         }
+        if (subject) setSubjectName(subject);
+        if (chapter) setChapterName(chapter);
       } finally {
         setIsLoadingSettings(false);
       }
     };
 
-    loadTimerSettings();
-  }, [mode, level]);
-
-  // Load subject data from API
-  useEffect(() => {
-    const loadSubjectData = async () => {
-      if (!subject) return;
-      try {
-        const subjectData = await getSubjectBySlug(subject);
-        setSubjectName(subjectData.name);
-        setSubjectEmoji(subjectData.emoji);
-      } catch (error) {
-        console.error('Failed to load subject data:', error);
-        setSubjectName(subject);
-      }
-    };
-
-    loadSubjectData();
-  }, [subject]);
+    loadPageData();
+  }, [mode, level, subject]);
 
   // Validate params
   useEffect(() => {
@@ -118,8 +127,8 @@ function QuizContent(): JSX.Element {
   const isTimerMode = mode === 'timer';
   const timerMode = isTimerMode ? 'per-question' : undefined;
 
-  // Use quiz hook
-  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);
+  // Use quiz hook — pass subjectData to avoid duplicate getSubjectBySlug call (Fix 2)
+  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode, subjectData);
 
   // Redirect to results when completed
   useEffect(() => {
@@ -243,7 +252,7 @@ function QuizContent(): JSX.Element {
                   <div className="text-xs text-gray-600">{modeDisplay}</div>
                 </div>
                 <div className="bg-orange-50 rounded-lg p-3 text-center">
-                  <div className="text-lg font-bold text-orange-600">{chapter}</div>
+                  <div className="text-lg font-bold text-orange-600">{chapterName}</div>
                   <div className="text-xs text-gray-600">Chapter</div>
                 </div>
               </div>
@@ -364,7 +373,7 @@ function QuizContent(): JSX.Element {
                 <span className="rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
                   {subjectName}
                 </span>
-                <span className="text-base text-white/90">{chapter}</span>
+                <span className="text-base text-white/90">{chapterName}</span>
               </div>
 
               {/* Timer Display */}

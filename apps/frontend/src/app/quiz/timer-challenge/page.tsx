@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 
-import { getSubjects, getQuestionsBySubject } from '@/lib/quiz-api';
+import { getSubjects, getFilterCounts } from '@/lib/quiz-api';
 import type { QuizSubject } from '@/lib/quiz-api';
 
 interface SubjectInfo extends QuizSubject {
@@ -75,6 +75,7 @@ export default function TimerChallengePage(): JSX.Element {
     allSubject: {},
     completeMix: 0
   });
+  const [loadedSubjects, setLoadedSubjects] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setIsHydrated(true);
@@ -82,59 +83,62 @@ export default function TimerChallengePage(): JSX.Element {
     const loadData = async () => {
       try {
         const subjectsData = await getSubjects(false);
-        const subjectList = subjectsData.length > 0 ? subjectsData : [];
-        setSubjects(subjectList);
+        setSubjects(subjectsData);
+        
+        // 1. Get global counts (allSubject and completeMix) in one call
+        const globalFilters = await getFilterCounts({ status: 'published' });
         
         const counts: LevelCount = {
           subjectWise: {},
           allSubject: {},
-          completeMix: 0
+          completeMix: globalFilters.total
         };
         
-        levels.forEach(level => {
-          counts.allSubject[level.toLowerCase()] = 0;
+        globalFilters.levelCounts.forEach(lc => {
+          counts.allSubject[lc.level.toLowerCase()] = lc.count;
         });
         
-        for (const subject of subjectsData) {
-          counts.subjectWise[subject.slug] = {};
-          
-          try {
-            const questionsResult = await getQuestionsBySubject(subject.slug, { status: 'published' });
-            const questions = questionsResult.data;
-            
-            questions.forEach(q => {
-              if (q.level) {
-                const level = q.level.toLowerCase();
-                
-                if (!counts.subjectWise[subject.slug]) {
-                  counts.subjectWise[subject.slug] = {};
-                }
-                const subjectCounts = counts.subjectWise[subject.slug]!;
-                if (!subjectCounts[level]) {
-                  subjectCounts[level] = 0;
-                }
-                subjectCounts[level]++;
-                
-                if (counts.allSubject[level] !== undefined) {
-                  counts.allSubject[level]++;
-                }
-                
-                counts.completeMix++;
-              }
-            });
-          } catch (error) {
-            console.error(`Failed to load questions for subject: ${subject.slug}`, error);
-          }
-        }
+        // Set initial subjects in subjectWise counts with total from subject.questionCount
+        subjectsData.forEach(s => {
+          counts.subjectWise[s.slug] = {
+            total: s.questionCount || 0
+          };
+        });
         
         setLevelCounts(counts);
       } catch (error) {
-        console.error('Failed to load subjects:', error);
+        console.error('Failed to load timer challenge data:', error);
       }
     };
 
     loadData();
   }, []);
+
+  // Fetch specific level counts for a subject when it's expanded
+  const loadSubjectLevelCounts = async (subjectSlug: string) => {
+    if (loadedSubjects.has(subjectSlug)) return;
+    
+    try {
+      // Use getFilterCounts scoped to this subject for published questions
+      const subjectFilters = await getFilterCounts({ subject: subjectSlug, status: 'published' });
+      
+      const subjectLevels: Record<string, number> = { total: subjectFilters.total };
+      subjectFilters.levelCounts.forEach(lc => {
+        subjectLevels[lc.level.toLowerCase()] = lc.count;
+      });
+      
+      setLevelCounts(prev => ({
+        ...prev,
+        subjectWise: {
+          ...prev.subjectWise,
+          [subjectSlug]: subjectLevels
+        }
+      }));
+      setLoadedSubjects(prev => new Set(prev).add(subjectSlug));
+    } catch (error) {
+      console.error(`Failed to load levels for subject: ${subjectSlug}`, error);
+    }
+  };
 
   // Group subjects into rows of 4 for desktop
   const subjectRows = useMemo(() => chunkArray(subjects, 4), [subjects]);
@@ -165,6 +169,9 @@ export default function TimerChallengePage(): JSX.Element {
   };
 
   const toggleSubject = (slug: string) => {
+    if (expandedSubject !== slug) {
+      loadSubjectLevelCounts(slug);
+    }
     setExpandedSubject(expandedSubject === slug ? null : slug);
   };
 
