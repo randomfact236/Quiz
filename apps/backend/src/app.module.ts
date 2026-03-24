@@ -17,7 +17,7 @@ import { DadJokesModule } from './dad-jokes/dad-jokes.module';
 import { HealthModule } from './health/health.module';
 import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
 import { QuizModule } from './quiz/quiz.module';
-import { RiddlesModule } from './riddles/riddles.module';
+import { RiddleMcqModule } from './riddle-mcq/riddle-mcq.module';
 import { SettingsModule } from './settings/settings.module';
 import { UsersModule } from './users/users.module';
 
@@ -82,7 +82,7 @@ import { UsersModule } from './users/users.module';
     // Feature Modules
     QuizModule,
     DadJokesModule,
-    RiddlesModule,
+    RiddleMcqModule,
     ImageRiddlesModule,
     AdminImageRiddlesModule,
     UsersModule,

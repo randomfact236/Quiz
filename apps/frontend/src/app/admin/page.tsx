@@ -305,7 +305,7 @@ export default function AdminPage(): JSX.Element {
             answer: qr.correctAnswer || '',
             subject: qr.subject?.name || qr.chapter?.subject?.name || '',
             subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-            categoryId: qr.chapter?.subject?.categoryId || '',
+            category: qr.chapter?.subject?.category || '',
           }));
           setAllRiddles(mappedRiddles);
         })
@@ -1255,7 +1255,7 @@ export default function AdminPage(): JSX.Element {
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
               {activeSection === 'summary' && <><LayoutDashboard className="w-6 h-6" /> Summary</>}
               {activeSection === 'jokes' && <><Smile className="w-6 h-6" /> Dad Jokes Management</>}
-              {activeSection === 'riddles' && <><Puzzle className="w-6 h-6" /> Riddle MCQ Management</>}
+              {activeSection === 'riddle-mcq' && <><Puzzle className="w-6 h-6" /> Riddle MCQ Management</>}
               {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
               {activeSection === 'users' && <><Users className="w-6 h-6" /> User Management</>}
               {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
@@ -1327,7 +1327,7 @@ export default function AdminPage(): JSX.Element {
               setJokeCategories={setJokeCategories}
             />
           )}
-          {activeSection === 'riddles' && (
+          {activeSection === 'riddle-mcq' && (
             <RiddleMcqSection
               allRiddles={allRiddles}
               setAllRiddles={setAllRiddles}

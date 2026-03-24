@@ -18,6 +18,7 @@ export class Chapter {
   @ManyToOne(() => Subject, subject => subject.chapters)
   subject: Subject;
 
+  @Index()
   @Column()
   subjectId: string;
 

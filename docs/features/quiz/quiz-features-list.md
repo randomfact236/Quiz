@@ -50,17 +50,40 @@
 
 ---
 
+## 🔜 Future Implementation (After Authentication)
+
+### User Authentication Required
+These features require user login/authentication to properly store and sync data across devices:
+
+| Feature | Priority | Description |
+|---------|----------|-------------|
+| **User Authentication** | HIGH | User registration/login system |
+| **Session Resume Dialog** | HIGH | Check for existing session on play page mount, show "Resume?" dialog (like riddles implementation) |
+| **Auto-Save Interval** | HIGH | Periodic saving every 10 seconds (currently only saves on answer selection) |
+| **Navigation Warning** | MEDIUM | Warn before leaving page with unsaved progress |
+| **Quiz History Page** | MEDIUM | Dedicated page to view all past quiz sessions with details |
+| **Session Expiry Handling** | MEDIUM | Clear sessions older than 24 hours |
+| **Resume Entry Point** | MEDIUM | Show "Continue where you left off" option on quiz home |
+| **Backend Session API** | HIGH | Save/resume/list sessions server-side with user ID |
+
+### Why Authentication First?
+- All session data will be stored with user ID from the start
+- No data migration needed later
+- Cross-device sync enabled
+- Clean architecture
+
+---
+
 ## Future Improvements
 
 ### 🔜 Core/Basic Features (High Priority)
 
 #### Quiz Game
-- [ ] Quiz Progress Saving (resume mid-quiz)
+- [ ] Quiz Progress Saving (resume mid-quiz) - 🔜 AFTER AUTH
 - [ ] Multi-Topic Selection (select multiple subjects)
 - [ ] Custom Timer Settings (user-defined time limits)
 - [ ] Timer persistence on refresh (sessionStorage)
 - [ ] Results page URL preservation (shareable results)
-- [ ] SessionStorage for quiz progress
 
 #### Quiz Admin
 - [ ] Question Hint UI (add hint field, display during quiz, store in DB)
@@ -74,7 +97,6 @@
 - [ ] Sort Options (sort by date, level, status)
 - [ ] Date Range Filter (filter by creation/update date)
 - [ ] Redis Caching (reduce DB load for 100K+)
-- [ ] Materialized Views (NOT recommended - real-time AJAX system)
 
 #### UI/UX
 - [ ] Dark Mode (theme toggle, system preference)
@@ -87,7 +109,7 @@
 #### Quiz Game
 - [ ] Achievement Badges
 - [ ] Global Leaderboards
-- [ ] User Registration/Profiles
+- [ ] User Registration/Profiles (see deferred section)
 - [ ] Points System/Gamification
 - [ ] Multiplayer Mode
 - [ ] Timed Tournaments
@@ -106,7 +128,8 @@
 - [ ] Template Downloads
 
 #### Performance (Future)
-- [ ] Redis Caching (5-20ms response time)
+- [x] Redis Caching (Phase 7 completed - 5-20ms response time)
+- [x] Database Indexes (Phase 6 completed - composite indexes on chapterId, level, status)
 - [ ] Caching (API responses, service worker for offline)
 - [ ] Materialized Views (NOT recommended - real-time AJAX system, no pre-computation needed)
 
@@ -130,9 +153,21 @@
 
 ## Feature Summary
 
-| Tier | Implemented | Future |
-|------|-------------|--------|
-| Core/Basic | 7 | 10 |
-| Good to Have | 7 | 16 |
-| Enterprise | 12 | 27 |
-| **Total** | **26** | **53** |
+| Tier | Implemented | Deferred (Auth) | Future |
+|------|-------------|-----------------|--------|
+| Core/Basic | 7 | 1 | 9 |
+| Good to Have | 7 | 6 | 10 |
+| Enterprise | 12 | 1 | 26 |
+| **Total** | **26** | **8** | **45** |
+
+---
+
+## Phase Summary
+
+| Phase | Features | Status |
+|-------|----------|--------|
+| Phase 1-5 | Core Quiz System | ✅ Complete |
+| Phase 6 | Database Indexes | ✅ Complete |
+| Phase 7 | Redis Cache | ✅ Complete |
+| Phase 8 | User Authentication | 🔜 NEXT |
+| Phase 9 | Quiz Session Features | 🔜 After Phase 8 |

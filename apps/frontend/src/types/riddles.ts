@@ -29,22 +29,27 @@ export interface RiddleSubject {
   name: string;
   emoji: string;
   description?: string;
+  category?: 'academic' | 'professional' | 'entertainment';
   isActive: boolean;
   order: number;
-  categoryId?: string;
-  category?: RiddleMcqCategory;
   chapters?: RiddleChapter[];
   riddles?: RiddleMcq[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /** Riddle Chapter - Backend Entity */
 export interface RiddleChapter {
   id: string;
   name: string;
+  slug?: string;
   chapterNumber: number;
   subjectId: string;
   subject?: RiddleSubject;
   riddles?: RiddleMcq[];
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /** Riddle MCQ - Backend Entity (for gameplay) */
@@ -61,6 +66,9 @@ export interface RiddleMcq {
   chapter?: RiddleChapter;
   explanation?: string;
   hint?: string;
+  status?: 'published' | 'draft' | 'trash';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /** Classic Riddle - Backend Entity (simple format) */

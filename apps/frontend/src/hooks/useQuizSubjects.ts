@@ -6,32 +6,18 @@ import type { Subject } from '@/app/admin/types';
 
 interface UseQuizSubjectsReturn {
   subjects: Subject[];
-  total: number;
-  isLoading: boolean;
-  isEmpty: boolean;
-  error: string | null;
   refetch: () => Promise<void>;
 }
 
 export function useQuizSubjects(): UseQuizSubjectsReturn {
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchSubjects = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    
     try {
-
       const response = await getSubjects(false);
 
       if (!response) {
-
         setSubjects([]);
-        setTotal(0);
-        setIsLoading(false);
         return;
       }
       
@@ -46,14 +32,9 @@ export function useQuizSubjects(): UseQuizSubjectsReturn {
       }));
 
       setSubjects(loadedSubjects);
-      setTotal(loadedSubjects.length);
     } catch (err) {
       console.error('[useQuizSubjects] Error fetching subjects:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch subjects');
       setSubjects([]);
-      setTotal(0);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
@@ -63,10 +44,6 @@ export function useQuizSubjects(): UseQuizSubjectsReturn {
 
   return {
     subjects,
-    total,
-    isLoading,
-    isEmpty: subjects.length === 0,
-    error,
     refetch: fetchSubjects,
   };
 }

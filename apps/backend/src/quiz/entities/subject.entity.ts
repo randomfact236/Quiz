@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn, Index } from 'typeorm';
 
 import { Chapter } from './chapter.entity';
 
@@ -7,6 +7,7 @@ export class Subject {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({ unique: true })
   slug: string;
 
@@ -22,6 +23,7 @@ export class Subject {
   @Column({ default: true })
   isActive: boolean;
 
+  @Index()
   @Column({ type: 'int', default: 0 })
   order: number;
 

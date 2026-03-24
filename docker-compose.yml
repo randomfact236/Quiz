@@ -37,6 +37,8 @@ services:
       dockerfile: apps/backend/Dockerfile.dev
     container_name: quiz-backend
     restart: unless-stopped
+    env_file:
+      - apps/backend/.env
     environment:
       NODE_ENV: development
       DOCKER_ENV: "true"
@@ -48,9 +50,8 @@ services:
       DB_DATABASE: aiquiz
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      JWT_SECRET: your-super-secret-jwt-key-change-in-production
-      JWT_EXPIRES_IN: 24h
       CORS_ORIGIN: http://localhost:3010
+      # JWT_SECRET and JWT_EXPIRES_IN loaded from env_file
     ports:
       - "3012:3012"
     depends_on:

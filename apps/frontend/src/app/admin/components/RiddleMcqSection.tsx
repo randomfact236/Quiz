@@ -155,8 +155,8 @@ export function RiddleMcqSection({
   const difficultyCounts = useMemo(() => {
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
-      if (s.category?.id) {
-        subjectToCategory[s.id] = s.category.id;
+      if (s.category) {
+        subjectToCategory[s.id] = s.category;
       }
     });
 
@@ -188,8 +188,8 @@ export function RiddleMcqSection({
   const statusCounts = useMemo(() => {
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
-      if (s.category?.id) {
-        subjectToCategory[s.id] = s.category.id;
+      if (s.category) {
+        subjectToCategory[s.id] = s.category;
       }
     });
 
@@ -216,14 +216,14 @@ export function RiddleMcqSection({
     };
   }, [allRiddles, subjects, riddleSearch, riddleFilterLevel, selectedCategoryId, selectedSubjectId]);
 
-  // Calculate category and subject counts - using subjects array to get categoryId from subjectId
+  // Calculate category and subject counts - using subjects array to get category from subjectId
   // Counts are based on current filters (difficulty, search, status, subject)
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
-      if (s.category?.id) {
-        subjectToCategory[s.id] = s.category.id;
+      if (s.category) {
+        subjectToCategory[s.id] = s.category;
       }
     });
 
@@ -255,8 +255,8 @@ export function RiddleMcqSection({
     const counts: Record<string, number> = {};
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
-      if (s.category?.id) {
-        subjectToCategory[s.id] = s.category.id;
+      if (s.category) {
+        subjectToCategory[s.id] = s.category;
       }
     });
 
@@ -296,8 +296,8 @@ export function RiddleMcqSection({
     // Build category lookup from subjects
     const subjectToCategory: Record<string, string> = {};
     subjects.forEach(s => {
-      if (s.category?.id) {
-        subjectToCategory[String(s.id)] = String(s.category.id);
+      if (s.category) {
+        subjectToCategory[String(s.id)] = String(s.category);
       }
     });
     
@@ -527,7 +527,7 @@ export function RiddleMcqSection({
 
       // Step 2: Get or create subjects under category
       let apiSubjects = await getSubjects();
-      let categorySubjects = apiSubjects.filter(s => s.categoryId === categoryId);
+      let categorySubjects = apiSubjects.filter(s => s.category === categoryId);
       
       // Step 3: Build DTOs with subject resolution
       const dtos = [];
@@ -548,7 +548,7 @@ export function RiddleMcqSection({
             try {
               const newSubject = await createSubject({
                 name: riddle.subject,
-                categoryId: categoryId,
+                category: categoryId as 'academic' | 'professional' | 'entertainment',
                 emoji: '📚'
               });
               subjectId = newSubject.id;
@@ -565,7 +565,7 @@ export function RiddleMcqSection({
           try {
             const newSubject = await createSubject({
               name: 'General',
-              categoryId: categoryId,
+              category: categoryId as 'academic' | 'professional' | 'entertainment',
               emoji: '📚'
             });
             subjectId = newSubject.id;
@@ -645,7 +645,7 @@ export function RiddleMcqSection({
           explanation: qr.explanation || '',
           subject: qr.subject?.name || qr.chapter?.subject?.name || '',
           subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-          categoryId: qr.chapter?.subject?.categoryId || '',
+          category: qr.chapter?.subject?.category || '',
         }));
         setAllRiddles(mapped);
       }
@@ -1022,7 +1022,7 @@ export function RiddleMcqSection({
       const subjectDto: any = {
         name: newSubjectName,
         emoji: newSubjectEmoji,
-        categoryId: categoryId,
+        category: categoryId as 'academic' | 'professional' | 'entertainment',
       };
       
       await createSubject(subjectDto);

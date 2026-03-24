@@ -2,16 +2,20 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn,
+  Index,
 } from 'typeorm';
 
-import { RiddleCategory } from './riddle-category.entity';
 import { RiddleChapter } from './riddle-chapter.entity';
 import { RiddleMcq } from './riddle-mcq.entity';
+
+export enum RiddleSubjectCategory {
+  ACADEMIC = 'academic',
+  PROFESSIONAL = 'professional',
+  ENTERTAINMENT = 'entertainment',
+}
 
 @Entity('riddle_subjects')
 export class RiddleSubject {
@@ -19,29 +23,31 @@ export class RiddleSubject {
   id: string;
 
   @Column({ unique: true })
+  @Index()
   slug: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   emoji: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: 'text', nullable: true })
+  description: string | null;
+
+  @Column({
+    type: 'enum',
+    enum: RiddleSubjectCategory,
+    default: RiddleSubjectCategory.ENTERTAINMENT,
+  })
+  category: RiddleSubjectCategory;
 
   @Column({ default: true })
   isActive: boolean;
 
   @Column({ type: 'int', default: 0 })
+  @Index()
   order: number;
-
-  @Column({ nullable: true })
-  categoryId: string;
-
-  @ManyToOne(() => RiddleCategory, (category) => category.subjects, { nullable: true })
-  @JoinColumn({ name: 'categoryId' })
-  category: RiddleCategory;
 
   @OneToMany(() => RiddleChapter, (chapter) => chapter.subject)
   chapters: RiddleChapter[];

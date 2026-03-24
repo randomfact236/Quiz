@@ -14,8 +14,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiQuery, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
@@ -25,7 +24,7 @@ import {
   CreateSubjectDto,
   PaginationDto,
 } from '../common/dto/base.dto';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { Chapter } from './entities/chapter.entity';
@@ -172,6 +171,18 @@ export class QuizController {
     @Body() dto: { name: string; subjectId: string },
   ): Promise<Chapter> {
     return this.quizService.createChapter(dto.name, dto.subjectId);
+  }
+
+  @Patch('chapters/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update chapter (Admin only)' })
+  async updateChapter(
+    @Param('id') id: string,
+    @Body() dto: { name?: string; subjectId?: string },
+  ): Promise<Chapter> {
+    return this.quizService.updateChapter(id, dto);
   }
 
   @Delete('chapters/:id')
