@@ -4,18 +4,16 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn,
-  Index,
   Unique,
+  Index,
+  JoinColumn,
 } from 'typeorm';
 
 import { RiddleMcq } from './riddle-mcq.entity';
 import { RiddleSubject } from './riddle-subject.entity';
 
 @Entity('riddle_chapters')
-@Unique(['slug', 'subjectId'])
+@Unique(['name', 'subjectId'])
 export class RiddleChapter {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,14 +21,11 @@ export class RiddleChapter {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
-  slug: string;
-
   @Column({ type: 'int' })
   chapterNumber: number;
 
-  @Column({ type: 'uuid' })
   @Index()
+  @Column()
   subjectId: string;
 
   @ManyToOne(() => RiddleSubject, (subject) => subject.chapters)
@@ -42,10 +37,4 @@ export class RiddleChapter {
 
   @OneToMany(() => RiddleMcq, (riddle) => riddle.chapter)
   riddles: RiddleMcq[];
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
 }

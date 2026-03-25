@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Put,
+  Patch,
   Delete,
   Body,
   Param,
@@ -12,24 +12,26 @@ import {
   HttpStatus,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { Roles } from '../common/decorators/roles.decorator';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
+import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
+import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
 import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { RiddleMcqService } from './riddle-mcq.service';
 import {
+  CreateRiddleCategoryDto,
   CreateRiddleMcqChapterDto,
   CreateRiddleMcqDto,
   CreateRiddleMcqSubjectDto,
   RiddleMcqPaginationDto,
-  RiddleMcqSearchDto,
+  UpdateRiddleCategoryDto,
   UpdateRiddleMcqChapterDto,
   UpdateRiddleMcqDto,
   UpdateRiddleMcqSubjectDto,
@@ -39,6 +41,61 @@ import {
 @Controller('riddle-mcq')
 export class RiddleMcqController {
   constructor(private readonly riddleMcqService: RiddleMcqService) {}
+
+  // ==================== CATEGORIES ====================
+
+  @Get('categories')
+  @ApiOperation({ summary: 'Get all active riddle categories' })
+  async getAllCategories(): Promise<RiddleCategory[]> {
+    return this.riddleMcqService.findAllCategories(false);
+  }
+
+  @Get('categories/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all categories including inactive (Admin only)' })
+  async getAllCategoriesAdmin(): Promise<RiddleCategory[]> {
+    return this.riddleMcqService.findAllCategories(true);
+  }
+
+  @Get('categories/:id')
+  @ApiOperation({ summary: 'Get category by ID' })
+  async getCategoryById(@Param('id') id: string): Promise<RiddleCategory> {
+    return this.riddleMcqService.findCategoryById(id);
+  }
+
+  @Post('categories')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create new riddle category (Admin only)' })
+  async createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
+    return this.riddleMcqService.createCategory(dto);
+  }
+
+  @Patch('categories/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update riddle category (Admin only)' })
+  async updateCategory(
+    @Param('id') id: string,
+    @Body() dto: UpdateRiddleCategoryDto,
+  ): Promise<RiddleCategory> {
+    return this.riddleMcqService.updateCategory(id, dto);
+  }
+
+  @Delete('categories/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Delete riddle category (Admin only)' })
+  async deleteCategory(@Param('id') id: string): Promise<{ message: string }> {
+    await this.riddleMcqService.deleteCategory(id);
+    return { message: 'Category deleted successfully' };
+  }
 
   // ==================== SUBJECTS ====================
 
@@ -75,7 +132,7 @@ export class RiddleMcqController {
     return this.riddleMcqService.createSubject(dto);
   }
 
-  @Put('subjects/:id')
+  @Patch('subjects/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
@@ -123,7 +180,7 @@ export class RiddleMcqController {
     return this.riddleMcqService.createChapter(dto);
   }
 
-  @Put('chapters/:id')
+  @Patch('chapters/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
@@ -218,7 +275,7 @@ export class RiddleMcqController {
     return this.riddleMcqService.createRiddleMcqsBulk(dtos);
   }
 
-  @Put('mcqs/:id')
+  @Patch('mcqs/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
@@ -248,7 +305,6 @@ export class RiddleMcqController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Execute bulk action on riddle MCQs (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
     return this.riddleMcqService.bulkActionRiddleMcqs(dto.ids, dto.action);
   }
@@ -275,22 +331,6 @@ export class RiddleMcqController {
     total: number;
   }> {
     return this.riddleMcqService.getFilterCounts();
-  }
-
-  @Get('subjects/:slug/status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get riddle MCQ counts by level for a subject (Admin only)' })
-  @ApiParam({ name: 'slug', example: 'brain-teasers' })
-  @ApiResponse({ status: 200, description: 'Returns counts by level for subject', type: StatusCountResponseDto })
-  async getStatusCountsBySubject(@Param('slug') slug: string): Promise<{
-    total: number;
-    published: number;
-    draft: number;
-    trash: number;
-  }> {
-    return this.riddleMcqService.getStatusCountsBySubject(slug);
   }
 
   // ==================== VALIDATION HELPERS ====================

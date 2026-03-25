@@ -1,9 +1,9 @@
 /**
  * ============================================================================
- * Riddle Timer Challenge Mode Page (Backend Connected)
+ * Riddle Practice Mode Page (Backend Connected)
  * ============================================================================
- * Multiple riddle modes with timer - Chapter wise, Level wise, Complete Mix
- * URL: /riddles/challenge
+ * Multiple riddle modes without timer - Chapter wise, Level wise, Complete Mix
+ * URL: /riddle-mcq/practice
  * ============================================================================
  */
 
@@ -13,9 +13,9 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, GraduationCap, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 
-import { getSubjects, getChaptersBySubject, getStats, type RiddlesStats } from '@/lib/riddles-api';
+import { getStats, getAllChapters, type RiddlesStats } from '@/lib/riddle-mcq-api';
 import type { RiddleChapter } from '@/types/riddles';
 
 // Riddle difficulty levels
@@ -50,7 +50,7 @@ interface LevelCount {
 }
 
 
-export default function RiddleChallengePage(): JSX.Element {
+export default function RiddlePracticePage(): JSX.Element {
   const router = useRouter();
 
   // Loading and error states
@@ -76,39 +76,33 @@ export default function RiddleChallengePage(): JSX.Element {
         setLoading(true);
         setError(null);
 
-        // Fetch stats, subjects and chapters from backend (only those with content)
-        const [statsData, subjectsData] = await Promise.all([
+        // Fetch stats and active chapters from backend (only those with content)
+        const [statsData, activeChapters] = await Promise.all([
           getStats().catch(err => {
             console.error('Failed to get stats:', err);
             return null;
           }),
-          getSubjects(true) // hasContent = true
+          getAllChapters(true) // hasContent = true
         ]);
 
         setStats(statsData);
 
-        // Fetch chapters for each subject (only those with content)
         const allChapters: ChapterWithSubject[] = [];
-        for (const subject of subjectsData) {
-          if (subject.id) {
-            try {
-              const subjectChapters = await getChaptersBySubject(subject.id, true); // hasContent = true
-              for (const chapter of subjectChapters) {
-                allChapters.push({
-                  ...chapter,
-                  subjectName: subject.name,
-                  subjectEmoji: subject.emoji || '📚',
-                  subjectId: subject.id
-                });
-              }
-            } catch (err) {
-
-            }
-          }
+        for (const chapter of activeChapters) {
+          allChapters.push({
+            ...chapter,
+            subjectName: chapter.subject?.name || 'Unknown',
+            subjectEmoji: chapter.subject?.emoji || '📚',
+            subjectId: chapter.subject?.id || ''
+          });
         }
 
-        // Sort by chapter number
-        allChapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
+        // Sort by subject order (if available) then chapter number
+        allChapters.sort((a, b) => {
+          // If subjects have an order property, use it. Otherwise, subjects are already in API order.
+          // For chapters within a subject, sort by chapter number.
+          return a.chapterNumber - b.chapterNumber;
+        });
 
         setChapters(allChapters);
       } catch (err) {
@@ -164,7 +158,6 @@ export default function RiddleChallengePage(): JSX.Element {
     return counts;
   }, [chapters, stats]);
 
-
   const getAllChapterCount = (level: Level): number => {
     return levelCounts.allChapter[level.toLowerCase()] || 0;
   };
@@ -176,15 +169,15 @@ export default function RiddleChallengePage(): JSX.Element {
 
 
   const handleStartMixForChapter = (chapterId: string) => {
-    router.push(`/riddles/play?chapterId=${encodeURIComponent(chapterId)}&level=all&mode=timer`);
+    router.push(`/riddle-mcq/play?chapterId=${encodeURIComponent(chapterId)}&level=all&mode=practice`);
   };
 
   const handleStartAllChapterLevelWise = (level: Level) => {
-    router.push(`/riddles/play?chapterId=all&level=${level.toLowerCase()}&mode=timer`);
+    router.push(`/riddle-mcq/play?chapterId=all&level=${level.toLowerCase()}&mode=practice`);
   };
 
   const handleStartCompleteMix = () => {
-    router.push(`/riddles/play?chapterId=all&level=all&mode=timer`);
+    router.push(`/riddle-mcq/play?chapterId=all&level=all&mode=practice`);
   };
 
 
@@ -247,8 +240,8 @@ export default function RiddleChallengePage(): JSX.Element {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 text-center text-4xl font-extrabold text-gray-800 tracking-tight"
         >
-          <span className="mr-3 opacity-80">⏱️</span>
-          Timer Challenge
+          <span className="mr-3 opacity-80">📚</span>
+          Practice Mode
         </motion.h1>
 
         <div className="space-y-6">
@@ -261,7 +254,7 @@ export default function RiddleChallengePage(): JSX.Element {
           >
             <button
               onClick={() => setChapterWiseOpen(!chapterWiseOpen)}
-              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
+              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
             >
               <div className="flex items-center gap-4">
                 <Target className="h-8 w-8" />
@@ -275,7 +268,7 @@ export default function RiddleChallengePage(): JSX.Element {
 
             {chapterWiseOpen && (
               <div className="p-6">
-                {/* Chapters as a flat grid - click to play mix directly */}
+                {/* Chapters as a flat grid - no subject grouping */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                   {chapters.map((chapter) => {
                     const totalRiddles = getTotalRiddlesForChapter(chapter.name);
@@ -287,7 +280,7 @@ export default function RiddleChallengePage(): JSX.Element {
                         key={chapter.id}
                         onClick={() => handleStartMixForChapter(chapter.id)}
                         disabled={totalRiddles === 0}
-                        className="w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg bg-white border-2 border-gray-200 hover:border-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg bg-white border-2 border-gray-200 hover:border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span className="text-3xl mb-1">{chapterIcon}</span>
                         <span className="font-semibold text-sm text-gray-800">{chapter.name}</span>
@@ -362,13 +355,13 @@ export default function RiddleChallengePage(): JSX.Element {
           >
             <button
               onClick={() => setCompleteMixOpen(!completeMixOpen)}
-              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-pink-500 to-rose-600 text-white"
+              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-purple-500 to-pink-600 text-white"
             >
               <div className="flex items-center gap-4">
                 <Grid3X3 className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">Complete Mix</span>
-                  <span className="text-sm opacity-90">All chapters, all levels - Ultimate challenge!</span>
+                  <span className="text-sm opacity-90">All chapters, all levels - Ultimate practice!</span>
                 </div>
               </div>
               {completeMixOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
@@ -377,23 +370,23 @@ export default function RiddleChallengePage(): JSX.Element {
             {completeMixOpen && (
               <div className="p-6 text-center">
                 <p className="mb-4 text-gray-600">
-                  Challenge yourself with riddles from all chapters and all difficulty levels!
+                  Practice with riddles from all chapters and all difficulty levels!
                 </p>
                 <div className="mb-6 flex justify-center gap-4 text-sm">
-                  <span className="rounded-full bg-pink-100 px-4 py-2 text-pink-700">
+                  <span className="rounded-full bg-purple-100 px-4 py-2 text-purple-700">
                     {levelCounts.completeMix} Total Riddles
                   </span>
-                  <span className="rounded-full bg-rose-100 px-4 py-2 text-rose-700">
+                  <span className="rounded-full bg-pink-100 px-4 py-2 text-pink-700">
                     4 Difficulty Levels
                   </span>
                 </div>
                 <button
                   onClick={handleStartCompleteMix}
                   disabled={levelCounts.completeMix === 0}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 px-8 py-4 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 px-8 py-4 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Timer className="h-5 w-5" />
-                  Start Complete Mix Challenge
+                  <GraduationCap className="h-5 w-5" />
+                  Start Complete Mix Practice
                 </button>
               </div>
             )}

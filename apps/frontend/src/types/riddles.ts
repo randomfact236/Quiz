@@ -29,7 +29,8 @@ export interface RiddleSubject {
   name: string;
   emoji: string;
   description?: string;
-  category?: 'academic' | 'professional' | 'entertainment';
+  categoryId?: string | null;
+  category?: { id: string; name: string; emoji: string; slug: string };
   isActive: boolean;
   order: number;
   chapters?: RiddleChapter[];

@@ -38,11 +38,12 @@ import type { BulkActionType, StatusFilter as BulkStatusFilter } from '@/types/s
 interface QuizMcqSectionProps {
   allSubjects: Subject[];
   onSubjectsChange?: () => void;
+  isLoading?: boolean;
 }
 
 const QUESTIONS_PAGE_SIZE = 10;
 
-export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMcqSectionProps) {
+export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoading: isLoadingSubjects }: QuizMcqSectionProps) {
   const { filters, setFilter, resetFilters } = useQuizFilters();
   
   const [filterCounts, setFilterCounts] = useState<FilterCountsResponse | null>(null);
@@ -506,32 +507,67 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         className="hidden"
       />
 
-      {/* Action Buttons - Above all containers */}
-      <div className="flex justify-end gap-2">
-        <button
-          onClick={handleAddQuestion}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-          Add Question
-        </button>
-        <button
-          onClick={handleImportClick}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12M8 11l4-4 4 4M4 17h16"/></svg>
-          Import
-        </button>
-        <button
-          onClick={handleExport}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3M8 7l4-4 4 4M4 17h16"/></svg>
-          Export
-        </button>
-      </div>
+      {/* Loading State */}
+      {isLoadingSubjects && (
+        <div className="rounded-xl bg-white p-8 shadow-md text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-500 font-medium">Loading quiz data...</p>
+        </div>
+      )}
 
-      {/* Status Dashboard */}
+      {/* Header */}
+      {!isLoadingSubjects && (
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">📝 Quiz MCQ Management</h3>
+            <p className="text-sm text-gray-500">{totalQuestions} total questions</p>
+          </div>
+          <div className="flex gap-2">
+            {/* Add Subject Button - Only show when no subjects */}
+            {allSubjects.length === 0 && (
+              <button
+                onClick={handleAddSubject}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Create First Subject
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - Only show when not loading */}
+      {!isLoadingSubjects && (
+        <>
+          {/* Action Buttons - Above all containers */}
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={handleAddQuestion}
+              disabled={allSubjects.length === 0}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              Add Question
+            </button>
+            <button
+              onClick={handleImportClick}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12M8 11l4-4 4 4M4 17h16"/></svg>
+              Import
+            </button>
+            <button
+              onClick={handleExport}
+              disabled={questions.length === 0}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3M8 7l4-4 4 4M4 17h16"/></svg>
+              Export
+            </button>
+          </div>
+
+          {/* Status Dashboard */}
       <div className="rounded-xl bg-white p-4 shadow-md border border-gray-200">
         <StatusDashboard
           counts={{
@@ -638,8 +674,10 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange }: QuizMc
         onClose={() => setSelectedIds([])}
         loading={bulkActionLoading}
       />
+      </>
+      )}
 
-      {/* Modals */}
+      {/* Modals -- always render modals outside the conditional */}
       <SubjectModal
         isOpen={subjectModalOpen}
         onClose={() => setSubjectModalOpen(false)}

@@ -4,7 +4,7 @@
  * ============================================================================
  * Main gameplay page for riddles - fetches from backend API.
  * Layout mirrors quiz/play/page.tsx exactly.
- * URL: /riddles/play?chapterId=&level=&mode=
+ * URL: /riddle-mcq/play?chapterId=&level=&mode=
  * ============================================================================
  */
 
@@ -31,7 +31,7 @@ import {
   createRiddleSession,
   setupNavigationWarning
 } from '@/lib/riddle-session';
-import { getRiddlesByChapter, getMixedRiddles, getRandomRiddles } from '@/lib/riddles-api';
+import { getRiddlesByChapter, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
@@ -351,7 +351,7 @@ function RiddlePlayPageContent(): JSX.Element {
     setStatus('completed');
     saveRiddleSession(completedSession);
     setShowConfirmSubmit(false);
-    router.push(`/riddles/results?session=${session.id}`);
+    router.push(`/riddle-mcq/results?session=${session.id}`);
   }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
 
   const handleExtendSession = useCallback(async () => {
@@ -412,7 +412,7 @@ function RiddlePlayPageContent(): JSX.Element {
   }, [riddles, chapterId, level, additionalRiddles, mode, settings, session]);
 
   // Determine back path
-  const backPath = mode === 'timer' ? '/riddles/challenge' : '/riddles/practice';
+  const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
 
   // Format time MM:SS — same as quiz page
   const formatTime = (seconds: number): string => {

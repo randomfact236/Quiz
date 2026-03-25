@@ -60,4 +60,23 @@ export class UsersService {
   async findByRefreshToken(refreshToken: string): Promise<User | null> {
     return this.userRepo.findOne({ where: { refreshToken } });
   }
+
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    return this.userRepo.findOne({ where: { googleId } });
+  }
+
+  async createWithGoogle(email: string, name: string, googleId: string, avatar?: string): Promise<User> {
+    const user = this.userRepo.create({
+      email,
+      name,
+      googleId,
+      avatar,
+      password: '',
+    });
+    return this.userRepo.save(user);
+  }
+
+  async updateGoogleId(userId: string, googleId: string): Promise<void> {
+    await this.userRepo.update(userId, { googleId });
+  }
 }

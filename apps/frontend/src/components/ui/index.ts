@@ -32,3 +32,6 @@ export type { ThemeToggleProps } from './ThemeToggle';
 
 // File Uploader
 export * from './FileUploader';
+
+// Google Login Button
+export { GoogleLoginButton } from './GoogleLoginButton';

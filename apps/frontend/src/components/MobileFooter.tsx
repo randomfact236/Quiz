@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getAllChapters } from '@/lib/riddles-api';
+import { getAllChapters } from '@/lib/riddle-mcq-api';
 import { getSubjects, QuizSubject } from '@/lib/quiz-api';
 import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
 import type { RiddleChapter } from '@/types/riddles';

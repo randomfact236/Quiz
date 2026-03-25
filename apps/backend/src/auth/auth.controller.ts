@@ -1,13 +1,12 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
 import { LoginDto, RefreshDto } from './dto/auth.dto';
+import { _Public } from '../common/decorators/public.decorator';
 
-/**
- * Authentication response type
- */
 interface AuthResponse {
   user: {
     id: string;
@@ -18,25 +17,23 @@ interface AuthResponse {
   refreshToken: string;
 }
 
-/**
- * Authentication controller handling user login
- * 
- * @description Provides endpoints for user authentication including
- * login for existing users. Returns JWT tokens upon successful authentication.
- * Admin accounts are created via CLI only.
- */
+interface GoogleAuthResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  };
+  token: string;
+  refreshToken: string;
+}
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  /**
-   * Authenticate an existing user
-   * 
-   * @param dto - Validated login payload (email, password)
-   * @returns User data and JWT token
-   * @throws {UnauthorizedException} When credentials are invalid
-   */
+  @_Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 50, ttl: 60000 } })
@@ -48,12 +45,7 @@ export class AuthController {
     return this.authService.login(dto.email, dto.password);
   }
 
-  /**
-   * Refresh an access token
-   * 
-   * @param dto - Payload containing the refresh token
-   * @returns New access token and refresh token
-   */
+  @_Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
@@ -62,5 +54,24 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refresh(@Body() dto: RefreshDto): Promise<AuthResponse> {
     return this.authService.refresh(dto.refreshToken);
+  }
+
+  @_Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({ summary: 'Initiate Google OAuth login' })
+  @ApiResponse({ status: 200, description: 'Redirects to Google OAuth' })
+  googleAuth() {}
+
+  @_Public()
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({ summary: 'Google OAuth callback' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  @ApiResponse({ status: 401, description: 'Authentication failed' })
+  @ApiExcludeEndpoint()
+  async googleAuthCallback(@Req() req: any): Promise<GoogleAuthResponse> {
+    const googleData = req.user;
+    return this.authService.googleLogin(googleData);
   }
 }

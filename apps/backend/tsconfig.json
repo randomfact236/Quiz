@@ -9,7 +9,10 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "../../",
+    "paths": {
+      "passport-google-oauth20": ["node_modules/passport-google-oauth20"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -18,6 +19,7 @@ const navLinks = [
 export default function Header(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { isAuthenticated, logout, user } = useAuth();
 
   const isActive = (href: string): boolean => {
     if (href === '/') {
@@ -51,7 +53,29 @@ export default function Header(): JSX.Element {
                 </li>
               ))}
             </ul>
-            <ThemeToggle size="sm" />
+            <div className="flex items-center gap-3">
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-secondary-600 dark:text-secondary-300">
+                    {user?.name}
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="text-sm text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                >
+                  Login
+                </Link>
+              )}
+              <ThemeToggle size="sm" />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -89,32 +113,55 @@ export default function Header(): JSX.Element {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen ? (
-          <div id="mobile-menu" className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
-            <ul className="space-y-2" role="menu">
-              {navLinks.map((link) => (
-                <li key={link.href} role="none">
-                  <Link
-                    href={link.href}
-                    className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                    onClick={() => setIsMenuOpen(false)}
-                    role="menuitem"
-                    aria-current={isActive(link.href) ? 'page' : undefined}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="border-t border-secondary-200 pt-2 dark:border-secondary-700">
-              <div className="flex items-center justify-between px-4 py-2">
-                <span className="text-sm text-secondary-600 dark:text-secondary-400">Theme</span>
-                <ThemeToggle size="sm" variant="dropdown" />
+          {/* Mobile Navigation */}
+          {isMenuOpen ? (
+            <div id="mobile-menu" className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
+              <ul className="space-y-2" role="menu">
+                {navLinks.map((link) => (
+                  <li key={link.href} role="none">
+                    <Link
+                      href={link.href}
+                      className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                      onClick={() => setIsMenuOpen(false)}
+                      role="menuitem"
+                      aria-current={isActive(link.href) ? 'page' : undefined}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t border-secondary-200 pt-2 dark:border-secondary-700">
+                <div className="flex items-center justify-between px-4 py-2">
+                  {isAuthenticated ? (
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-sm text-secondary-600 dark:text-secondary-400">
+                        {user?.name}
+                      </span>
+                      <button
+                        onClick={() => { logout(); setIsMenuOpen(false); }}
+                        className="text-sm text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                  )}
+                </div>
+                <div className="flex items-center justify-between px-4 py-2">
+                  <span className="text-sm text-secondary-600 dark:text-secondary-400">Theme</span>
+                  <ThemeToggle size="sm" variant="dropdown" />
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
       </nav>
     </header>
   );

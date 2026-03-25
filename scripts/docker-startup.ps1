@@ -168,21 +168,74 @@ function Start-Services {
         Write-Info "Using profile: nginx"
     }
     
+    # Stop any local processes on our ports to avoid conflicts
+    Write-Info "Checking for processes on required ports..."
+    $ports = @(3010, 3012, 5432, 6379)
+    foreach ($port in $ports) {
+        $conn = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | Where-Object { $_.State -eq "Listen" }
+        if ($conn) {
+            $pid = $conn.OwningProcess | Select-Object -First 1
+            Write-Warning "Port $port is in use by PID $pid"
+            Write-Info "Stopping process on port $port..."
+            Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            Start-Sleep -Milliseconds 500
+        }
+    }
+    
     Write-Info "Building and starting services..."
     
-    # Build images
-    Write-Info "Building Docker images..."
-    & $composeCmd @profileArgs build --parallel
+    # Remove old containers to ensure fresh start
+    Write-Info "Removing old containers..."
+    & $composeCmd down 2>$null
+    
+    # Build and start services with --build to ensure fresh images
+    Write-Info "Building Docker images (fresh build)..."
+    & $composeCmd @profileArgs build --parallel --no-cache
     if ($LASTEXITCODE -ne 0) { throw "Build failed" }
     
-    # Start services
+    # Start services with --build to rebuild if needed
     Write-Info "Starting services..."
-    & $composeCmd @profileArgs up -d --remove-orphans
+    & $composeCmd @profileArgs up -d --build --remove-orphans
     if ($LASTEXITCODE -ne 0) { throw "Failed to start services" }
     
-    # Wait for services
+    # Wait for services to be healthy
     Write-Info "Waiting for services to be healthy..."
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 10
+    
+    # Check backend health
+    $maxRetries = 30
+    $retryCount = 0
+    $backendHealthy = $false
+    while (-not $backendHealthy -and $retryCount -lt $maxRetries) {
+        try {
+            $response = Invoke-WebRequest -Uri "http://localhost:3012/api/health" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
+            if ($response.StatusCode -eq 200) {
+                $backendHealthy = $true
+            }
+        } catch {}
+        if (-not $backendHealthy) {
+            $retryCount++
+            Write-Info "Waiting for backend... ($retryCount/$maxRetries)"
+            Start-Sleep -Seconds 2
+        }
+    }
+    
+    # Check frontend health
+    $retryCount = 0
+    $frontendHealthy = $false
+    while (-not $frontendHealthy -and $retryCount -lt $maxRetries) {
+        try {
+            $response = Invoke-WebRequest -Uri "http://localhost:3010" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
+            if ($response.StatusCode -eq 200) {
+                $frontendHealthy = $true
+            }
+        } catch {}
+        if (-not $frontendHealthy) {
+            $retryCount++
+            Write-Info "Waiting for frontend... ($retryCount/$maxRetries)"
+            Start-Sleep -Seconds 2
+        }
+    }
     
     Write-Success "All services are running!"
     Write-Host ""
@@ -213,7 +266,16 @@ function Stop-Services {
 
 function Restart-Services {
     Write-Banner
-    Stop-Services
+    Write-Info "Stopping any local processes on ports..."
+    $ports = @(3010, 3012, 5432, 6379)
+    foreach ($port in $ports) {
+        $conn = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | Where-Object { $_.State -eq "Listen" }
+        if ($conn) {
+            $pid = $conn.OwningProcess | Select-Object -First 1
+            Write-Info "Stopping process $pid on port $port..."
+            Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+        }
+    }
     Start-Sleep -Seconds 2
     Start-Services
 }
@@ -352,10 +414,15 @@ function Build-Images {
         $profileArgs += "nginx"
     }
     
+    # Remove old containers first
+    Write-Info "Removing old containers..."
+    & $composeCmd down 2>$null
+    
     Write-Info "Rebuilding Docker images (no cache)..."
     & $composeCmd @profileArgs build --no-cache --parallel
     
-    Write-Success "Images rebuilt!"
+    Write-Success "Images rebuilt with --no-cache!"
+    Write-Info "Run '.\scripts\docker-startup.ps1 Start' to start the rebuilt containers"
 }
 
 function Update-Platform {

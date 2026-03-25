@@ -67,7 +67,6 @@ export interface Riddle {
   subject?: string;
   subjectId?: string;
   category?: string;
-  categoryId?: string;
   createdAt?: string;
   updatedAt?: string;
 }

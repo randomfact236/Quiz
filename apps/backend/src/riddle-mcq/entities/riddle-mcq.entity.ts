@@ -3,14 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn,
   Index,
+  JoinColumn,
 } from 'typeorm';
 
 import { RiddleChapter } from './riddle-chapter.entity';
-import { RiddleSubject } from './riddle-subject.entity';
 import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 
 export { RiddleMcqLevel };
@@ -23,9 +21,6 @@ export enum RiddleStatus {
 
 @Entity('riddle_mcqs')
 @Index(['chapterId', 'level', 'status'])
-@Index(['chapterId'])
-@Index(['level'])
-@Index(['status'])
 export class RiddleMcq {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -40,40 +35,27 @@ export class RiddleMcq {
   correctLetter: string | null;
 
   @Column({ type: 'text', nullable: true })
-  correctAnswer: string | null;
+  explanation: string | null;
 
+  @Index()
   @Column({ type: 'enum', enum: RiddleMcqLevel, default: RiddleMcqLevel.EASY })
   level: RiddleMcqLevel;
 
-  @Column({ type: 'text', nullable: true })
-  explanation: string | null;
+  @Index()
+  @Column()
+  chapterId: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  chapterId: string | null;
-
-  @ManyToOne(() => RiddleChapter, (chapter) => chapter.riddles, { nullable: true })
+  @ManyToOne(() => RiddleChapter, (chapter) => chapter.riddles)
   @JoinColumn({ name: 'chapterId' })
-  chapter: RiddleChapter | null;
+  chapter: RiddleChapter;
 
-  @Column({ type: 'uuid', nullable: true })
-  subjectId: string | null;
-
-  @ManyToOne(() => RiddleSubject, (subject) => subject.riddles, { nullable: true })
-  @JoinColumn({ name: 'subjectId' })
-  subject: RiddleSubject | null;
-
+  @Index()
   @Column({
     type: 'enum',
     enum: RiddleStatus,
     default: RiddleStatus.DRAFT,
   })
   status: RiddleStatus;
-
-  @Column({ type: 'text', nullable: true })
-  hint: string | null;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

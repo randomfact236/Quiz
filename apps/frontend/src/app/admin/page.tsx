@@ -289,7 +289,7 @@ export default function AdminPage(): JSX.Element {
 
   // Fetch riddles from backend API
   useEffect(() => {
-    import('@/lib/riddles-api').then(({ getAllRiddleMcqsAdmin }) => {
+    import('@/lib/riddle-mcq-api').then(({ getAllRiddleMcqsAdmin }) => {
       getAllRiddleMcqsAdmin()
         .then(riddleMcqs => {
           const mappedRiddles = riddleMcqs.map(qr => ({
@@ -305,7 +305,7 @@ export default function AdminPage(): JSX.Element {
             answer: qr.correctAnswer || '',
             subject: qr.subject?.name || qr.chapter?.subject?.name || '',
             subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-            category: qr.chapter?.subject?.category || '',
+            category: qr.chapter?.subject?.category?.name || 'Uncategorized',
           }));
           setAllRiddles(mappedRiddles);
         })
@@ -1293,9 +1293,10 @@ export default function AdminPage(): JSX.Element {
               <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
             </div>
           )}
-          {activeSection === 'quiz' && allSubjects.length > 0 && (
+          {activeSection === 'quiz' && (
             <QuizMcqSection
               allSubjects={allSubjects}
+              isLoading={isLoadingSubject}
             />
           )}
           {allSubjects.some(s => s.slug === activeSection) && (

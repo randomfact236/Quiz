@@ -130,4 +130,26 @@ export class AuthService {
   async validateUser(id: string): Promise<User | null> {
     return this.usersService.findById(id);
   }
+
+  async googleLogin(googleData: { googleId: string; email: string; name: string; avatar?: string }): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+    let user = await this.usersService.findByGoogleId(googleData.googleId);
+
+    if (!user) {
+      const existingEmailUser = await this.usersService.findByEmail(googleData.email);
+      if (existingEmailUser) {
+        await this.usersService.updateGoogleId(existingEmailUser.id, googleData.googleId);
+        user = await this.usersService.findById(existingEmailUser.id);
+      } else {
+        user = await this.usersService.createWithGoogle(
+          googleData.email,
+          googleData.name,
+          googleData.googleId,
+          googleData.avatar,
+        );
+      }
+    }
+
+    const tokens = await this.generateTokens(user);
+    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+  }
 }

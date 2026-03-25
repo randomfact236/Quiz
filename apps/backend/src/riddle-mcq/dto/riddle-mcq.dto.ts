@@ -13,7 +13,6 @@ import {
 
 import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 import { RiddleStatus } from '../entities/riddle-mcq.entity';
-import { RiddleSubjectCategory } from '../entities/riddle-subject.entity';
 
 export class RiddleMcqPaginationDto {
   @ApiPropertyOptional({ description: 'Page number', default: 1 })
@@ -39,7 +38,7 @@ export class RiddleMcqSearchDto extends RiddleMcqPaginationDto {
 
   @ApiPropertyOptional({ description: 'Filter by level' })
   @IsOptional()
-  @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
+  @IsEnum(['easy', 'medium', 'hard', 'expert'])
   level?: string;
 }
 
@@ -59,15 +58,10 @@ export class CreateRiddleMcqSubjectDto {
   @IsNotEmpty()
   emoji: string;
 
-  @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
   @IsOptional()
   @IsString()
-  description?: string;
-
-  @ApiPropertyOptional({ example: RiddleSubjectCategory.ENTERTAINMENT, enum: RiddleSubjectCategory })
-  @IsOptional()
-  @IsEnum(RiddleSubjectCategory)
-  category?: RiddleSubjectCategory;
+  categoryId?: string | null;
 
   @ApiPropertyOptional({ example: true })
   @IsOptional()
@@ -97,15 +91,66 @@ export class UpdateRiddleMcqSubjectDto {
   @IsString()
   emoji?: string;
 
-  @ApiPropertyOptional({ example: 'Mind-bending riddles and puzzles' })
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
   @IsOptional()
   @IsString()
-  description?: string;
+  categoryId?: string | null;
 
-  @ApiPropertyOptional({ example: RiddleSubjectCategory.ENTERTAINMENT, enum: RiddleSubjectCategory })
+  @ApiPropertyOptional({ example: true })
   @IsOptional()
-  @IsEnum(RiddleSubjectCategory)
-  category?: RiddleSubjectCategory;
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+export class CreateRiddleCategoryDto {
+  @ApiPropertyOptional({ example: 'logic-puzzles', description: 'Unique slug (auto-generated if not provided)' })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiProperty({ example: 'Logic Puzzles', description: 'Category name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: '🧩', description: 'Category emoji' })
+  @IsString()
+  @IsNotEmpty()
+  emoji: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+}
+
+export class UpdateRiddleCategoryDto {
+  @ApiPropertyOptional({ example: 'logic-puzzles' })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiPropertyOptional({ example: 'Logic Puzzles' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: '🧩' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
 
   @ApiPropertyOptional({ example: true })
   @IsOptional()
@@ -168,36 +213,21 @@ export class CreateRiddleMcqDto {
   @IsString()
   correctLetter?: string;
 
-  @ApiPropertyOptional({ example: 'A piano' })
-  @IsOptional()
-  @IsString()
-  correctAnswer?: string;
-
   @ApiProperty({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
   @IsEnum(RiddleMcqLevel, {
     message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
   })
   level: RiddleMcqLevel;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID' })
-  @IsOptional()
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsString()
-  subjectId?: string;
-
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
-  @IsOptional()
-  @IsString()
-  chapterId?: string;
+  @IsNotEmpty()
+  chapterId: string;
 
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()
   @IsString()
   explanation?: string;
-
-  @ApiPropertyOptional({ example: 'Think about musical instruments' })
-  @IsOptional()
-  @IsString()
-  hint?: string;
 
   @ApiPropertyOptional({ example: RiddleStatus.DRAFT, enum: RiddleStatus, description: 'Riddle status' })
   @IsOptional()
@@ -222,22 +252,12 @@ export class UpdateRiddleMcqDto {
   @IsString()
   correctLetter?: string;
 
-  @ApiPropertyOptional({ example: 'A piano' })
-  @IsOptional()
-  @IsString()
-  correctAnswer?: string;
-
   @ApiPropertyOptional({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
   @IsOptional()
   @IsEnum(RiddleMcqLevel, {
     message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
   })
   level?: RiddleMcqLevel;
-
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID' })
-  @IsOptional()
-  @IsString()
-  subjectId?: string;
 
   @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsOptional()
@@ -248,11 +268,6 @@ export class UpdateRiddleMcqDto {
   @IsOptional()
   @IsString()
   explanation?: string;
-
-  @ApiPropertyOptional({ example: 'Think about musical instruments' })
-  @IsOptional()
-  @IsString()
-  hint?: string;
 
   @ApiPropertyOptional({ example: RiddleStatus.DRAFT, enum: RiddleStatus, description: 'Riddle status' })
   @IsOptional()

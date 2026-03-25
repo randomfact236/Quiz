@@ -40,7 +40,7 @@ interface RiddleFormState {
   correctLetter: string;
   difficulty: Riddle['difficulty'];
   subjectId: string;
-  categoryId: string;
+  category: 'academic' | 'professional' | 'entertainment';
   hint: string;
   explanation: string;
   isOpenEnded: boolean;
@@ -90,7 +90,6 @@ export function RiddleMcqSection({
   const [importPreview, setImportPreview] = useState<Riddle[]>([]);
   const [importWarnings, setImportWarnings] = useState<string[]>([]);
   const [isImporting, setIsImporting] = useState(false);
-  const [importCategory, setImportCategory] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const importModalRef = useRef<HTMLDivElement>(null);
   const addModalRef = useRef<HTMLDivElement>(null);
@@ -109,7 +108,7 @@ export function RiddleMcqSection({
     correctLetter: 'A',
     difficulty: 'easy',
     subjectId: '',
-    categoryId: '',
+    category: 'entertainment',
     hint: '',
     explanation: '',
     isOpenEnded: false,
@@ -141,8 +140,8 @@ export function RiddleMcqSection({
   // Load Riddle MCQ Categories and Subjects
   useEffect(() => {
     Promise.all([
-      import('@/lib/riddles-api').then(m => m.getSubjects()),
-      import('@/lib/riddles-api').then(m => m.getCategories())
+      import('@/lib/riddle-mcq-api').then(m => m.getSubjects()),
+      import('@/lib/riddle-mcq-api').then(m => m.getCategories())
     ])
       .then(([apiSubjects, apiCategories]) => {
         setSubjects(apiSubjects);
@@ -167,7 +166,7 @@ export function RiddleMcqSection({
         riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
       const riddleStatus = riddle.status || 'published';
       const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
-      let catId = String(riddle.categoryId || '');
+      let catId = String(riddle.category || '');
       if (!catId && riddle.subjectId && subjectToCategory[riddle.subjectId]) {
         catId = subjectToCategory[riddle.subjectId] || '';
       }
@@ -199,7 +198,7 @@ export function RiddleMcqSection({
         riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
         riddle.options?.[1]?.toLowerCase().includes(riddleSearch.toLowerCase());
       const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
-      let catId = String(riddle.categoryId || '');
+      let catId = String(riddle.category || '');
       if (!catId && riddle.subjectId && subjectToCategory[riddle.subjectId]) {
         catId = subjectToCategory[riddle.subjectId] || '';
       }
@@ -240,7 +239,7 @@ export function RiddleMcqSection({
     });
 
     filteredForCounts.forEach(r => {
-      let catId = String(r.categoryId || '');
+      let catId = String(r.category || '');
       if (!catId && r.subjectId && subjectToCategory[r.subjectId]) {
         catId = subjectToCategory[r.subjectId] || '';
       }
@@ -269,7 +268,7 @@ export function RiddleMcqSection({
       const riddleStatus = riddle.status || 'published';
       const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
       const matchesCategory = !selectedCategoryId || 
-        (String(riddle.categoryId) === selectedCategoryId ||
+        (String(riddle.category) === selectedCategoryId ||
          (riddle.subjectId && subjectToCategory[riddle.subjectId] === selectedCategoryId));
       return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory;
     });
@@ -316,7 +315,7 @@ export function RiddleMcqSection({
       const matchesStatus = statusFilter === 'all' || riddleStatus === statusFilter;
       
       // Category filter - use fallback from subject
-      let catId = riddle.categoryId;
+      let catId: string = riddle.category || '';
       if (!catId && riddle.subjectId) {
         catId = subjectToCategory[riddle.subjectId] || '';
       }
@@ -371,7 +370,7 @@ export function RiddleMcqSection({
     setBulkActionLoading(true);
 
     try {
-      const { bulkActionRiddles } = await import('@/lib/riddles-api');
+      const { bulkActionRiddles } = await import('@/lib/riddle-mcq-api');
       await bulkActionRiddles(selectedIds, action === 'restore' ? 'draft' : action);
 
       if (action === 'delete') {
@@ -422,7 +421,6 @@ export function RiddleMcqSection({
   const handleFileUpload = (file: File) => {
     setImportError('');
     setImportWarnings([]);
-    setImportCategory(undefined);
     const reader = new FileReader();
 
     reader.onload = (event) => {
@@ -455,7 +453,6 @@ export function RiddleMcqSection({
             return;
           }
           
-          setImportCategory(parsed.category);
           setImportPreview(parsed.riddles);
         }
       } catch (err) {
@@ -475,59 +472,17 @@ export function RiddleMcqSection({
         bulkCreateRiddles,
         getAllRiddleMcqsAdmin,
         getSubjects,
-        getCategories,
-        createCategory,
         createSubject,
-      } = await import('@/lib/riddles-api');
+      } = await import('@/lib/riddle-mcq-api');
 
-      // Step 1: Determine Category - create if not exists
-      let categoryId = selectedCategoryId;
-      
-      if (importCategory) {
-        // Try to find category from CSV header
-        const existingCategory = categories.find(c => 
-          c.name.toLowerCase() === importCategory.toLowerCase()
-        );
-        
-        if (existingCategory) {
-          categoryId = existingCategory.id;
-        } else {
-          // Create new category from CSV
-          const newCategory = await createCategory({ 
-            name: importCategory,
-            emoji: '📁'
-          });
-          categoryId = newCategory.id;
-          // Update categories list
-          setCategories(prev => [...prev, newCategory]);
-        }
-      } else if (!categoryId) {
-        // No category header in CSV and nothing selected - use Miscellaneous
-        const miscCategory = categories.find(c => 
-          c.name.toLowerCase() === 'miscellaneous'
-        );
-        
-        if (miscCategory) {
-          categoryId = miscCategory.id;
-        } else {
-          // Create Miscellaneous category
-          const newCategory = await createCategory({ 
-            name: 'Miscellaneous',
-            emoji: '📁'
-          });
-          categoryId = newCategory.id;
-          setCategories(prev => [...prev, newCategory]);
-        }
-      }
-      
-      if (!categoryId) {
-        setImportError('No category available for import');
-        return;
-      }
+      // Use selectedCategoryId directly (which holds the category ID)
+      const categoryId = selectedCategoryId || null;
 
-      // Step 2: Get or create subjects under category
+      // Step 1: Get subjects
       let apiSubjects = await getSubjects();
-      let categorySubjects = apiSubjects.filter(s => s.category === categoryId);
+      let categorySubjects = categoryId 
+        ? apiSubjects.filter(s => s.categoryId === categoryId)
+        : apiSubjects;
       
       // Step 3: Build DTOs with subject resolution
       const dtos = [];
@@ -548,7 +503,7 @@ export function RiddleMcqSection({
             try {
               const newSubject = await createSubject({
                 name: riddle.subject,
-                category: categoryId as 'academic' | 'professional' | 'entertainment',
+                categoryId: categoryId,
                 emoji: '📚'
               });
               subjectId = newSubject.id;
@@ -565,7 +520,7 @@ export function RiddleMcqSection({
           try {
             const newSubject = await createSubject({
               name: 'General',
-              category: categoryId as 'academic' | 'professional' | 'entertainment',
+              categoryId: categoryId,
               emoji: '📚'
             });
             subjectId = newSubject.id;
@@ -620,16 +575,13 @@ export function RiddleMcqSection({
         setShowImportModal(false);
         setImportPreview([]);
         setImportWarnings([]);
-        setImportCategory(undefined);
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
         
-        // Refresh subjects and categories lists to show newly created ones
+        // Refresh subjects list to show newly created ones
         const refreshedSubjects = await getSubjects();
-        const refreshedCategories = await getCategories();
         setSubjects(refreshedSubjects);
-        setCategories(refreshedCategories);
         
         // Refresh riddles list
         const updated = await getAllRiddleMcqsAdmin();
@@ -645,7 +597,7 @@ export function RiddleMcqSection({
           explanation: qr.explanation || '',
           subject: qr.subject?.name || qr.chapter?.subject?.name || '',
           subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-          category: qr.chapter?.subject?.category || '',
+          category: qr.chapter?.subject?.category?.name || 'Uncategorized',
         }));
         setAllRiddles(mapped);
       }
@@ -669,7 +621,7 @@ export function RiddleMcqSection({
       correctLetter: 'A',
       difficulty: 'easy',
       subjectId: '',
-      categoryId: '',
+      category: 'entertainment',
       hint: '',
       explanation: '',
       isOpenEnded: false,
@@ -764,7 +716,7 @@ export function RiddleMcqSection({
     }
 
     try {
-      const { createRiddle } = await import('@/lib/riddles-api');
+      const { createRiddle } = await import('@/lib/riddle-mcq-api');
       const options = [
         riddleForm.optionA.trim(),
         riddleForm.optionB.trim(),
@@ -846,7 +798,7 @@ export function RiddleMcqSection({
     }
 
     try {
-      const { updateRiddle } = await import('@/lib/riddles-api');
+      const { updateRiddle } = await import('@/lib/riddle-mcq-api');
       const options = [
         riddleForm.optionA.trim(),
         riddleForm.optionB.trim(),
@@ -916,12 +868,12 @@ export function RiddleMcqSection({
     try {
       if (selectedRiddle.status === 'trash') {
         // Permanent delete if already in trash
-        const { bulkActionRiddles } = await import('@/lib/riddles-api');
+        const { bulkActionRiddles } = await import('@/lib/riddle-mcq-api');
         await bulkActionRiddles([String(selectedRiddle.id)], 'delete');
         setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
       } else {
         // Move to trash
-        const { bulkActionRiddles } = await import('@/lib/riddles-api');
+        const { bulkActionRiddles } = await import('@/lib/riddle-mcq-api');
         await bulkActionRiddles([String(selectedRiddle.id)], 'trash');
         setAllRiddles(prev => prev.map(r =>
           r.id === selectedRiddle.id ? { ...r, status: 'trash' as ContentStatus } : r
@@ -953,7 +905,7 @@ export function RiddleMcqSection({
       correctLetter: riddle.correctOption,
       difficulty: riddle.difficulty,
       subjectId: defaultSubjectId,
-      categoryId: '',
+      category: (riddle.category as 'academic' | 'professional' | 'entertainment') || 'entertainment',
       hint: riddle.hint || '',
       explanation: riddle.explanation || '',
       isOpenEnded: riddle.difficulty === 'expert',
@@ -971,12 +923,12 @@ export function RiddleMcqSection({
     { value: 'expert', label: 'Expert' },
   ];
 
-  // Handle create category (creates a classic category)
+  // Handle create category
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) return;
     setCategoryFormLoading(true);
     try {
-      const { createCategory, getCategories, getSubjects } = await import('@/lib/riddles-api');
+      const { createCategory, getCategories, getSubjects } = await import('@/lib/riddle-mcq-api');
       await createCategory({
         name: newCategoryName,
         emoji: newCategoryEmoji,
@@ -984,7 +936,6 @@ export function RiddleMcqSection({
       setNewCategoryName('');
       setNewCategoryEmoji('📁');
       setShowAddCategoryModal(false);
-      // Reload categories and subjects
       const [apiCategories, apiSubjects] = await Promise.all([
         getCategories(),
         getSubjects()
@@ -993,51 +944,6 @@ export function RiddleMcqSection({
       setSubjects(apiSubjects);
     } catch (err: any) {
       alert('Failed to create category: ' + err.message);
-    } finally {
-      setCategoryFormLoading(false);
-    }
-  };
-
-  // Handle create subject
-  const handleCreateSubject = async () => {
-    if (!newSubjectName.trim()) return;
-    setCategoryFormLoading(true);
-    try {
-      const { createSubject, getSubjects, getCategories, createCategory } = await import('@/lib/riddles-api');
-      
-      let categoryId = selectedCategoryId;
-      
-      // If no category selected, get or create "Miscellaneous" category
-      if (!categoryId) {
-        let miscCategory = categories.find(c => c.name.toLowerCase() === 'miscellaneous');
-        if (!miscCategory) {
-          miscCategory = await createCategory({
-            name: 'Miscellaneous',
-            emoji: '📁'
-          });
-        }
-        categoryId = miscCategory.id;
-      }
-      
-      const subjectDto: any = {
-        name: newSubjectName,
-        emoji: newSubjectEmoji,
-        category: categoryId as 'academic' | 'professional' | 'entertainment',
-      };
-      
-      await createSubject(subjectDto);
-      setNewSubjectName('');
-      setNewSubjectEmoji('📚');
-      setShowAddSubjectModal(false);
-      // Reload subjects and categories
-      const [apiSubjects, apiCategories] = await Promise.all([
-        getSubjects(),
-        getCategories()
-      ]);
-      setSubjects(apiSubjects);
-      setCategories(apiCategories);
-    } catch (err: any) {
-      alert('Failed to create subject: ' + err.message);
     } finally {
       setCategoryFormLoading(false);
     }
@@ -1054,7 +960,7 @@ export function RiddleMcqSection({
     if (!editCategoryName.trim() || !editingCategory) return;
     setCategoryFormLoading(true);
     try {
-      const { updateCategory, getCategories } = await import('@/lib/riddles-api');
+      const { updateCategory, getCategories } = await import('@/lib/riddle-mcq-api');
       await updateCategory(editingCategory.id, {
         name: editCategoryName,
         emoji: editCategoryEmoji,
@@ -1074,16 +980,46 @@ export function RiddleMcqSection({
     if (!deletingCategoryId) return;
     setCategoryFormLoading(true);
     try {
-      const { deleteCategory, getCategories } = await import('@/lib/riddles-api');
+      const { deleteCategory, getCategories, getSubjects } = await import('@/lib/riddle-mcq-api');
       await deleteCategory(deletingCategoryId);
       setDeletingCategoryId(null);
       if (selectedCategoryId === deletingCategoryId) {
         setSelectedCategoryId('');
       }
-      const apiCategories = await getCategories();
+      const [apiCategories, apiSubjects] = await Promise.all([
+        getCategories(),
+        getSubjects()
+      ]);
       setCategories(apiCategories);
+      setSubjects(apiSubjects);
     } catch (err: any) {
       alert('Failed to delete category: ' + err.message);
+    } finally {
+      setCategoryFormLoading(false);
+    }
+  };
+
+  // Handle create subject
+  const handleCreateSubject = async () => {
+    if (!newSubjectName.trim()) return;
+    setCategoryFormLoading(true);
+    try {
+      const { createSubject, getSubjects } = await import('@/lib/riddle-mcq-api');
+      
+      const subjectDto: any = {
+        name: newSubjectName,
+        emoji: newSubjectEmoji,
+        categoryId: selectedCategoryId || null,
+      };
+      
+      await createSubject(subjectDto);
+      setNewSubjectName('');
+      setNewSubjectEmoji('📚');
+      setShowAddSubjectModal(false);
+      const apiSubjects = await getSubjects();
+      setSubjects(apiSubjects);
+    } catch (err: any) {
+      alert('Failed to create subject: ' + err.message);
     } finally {
       setCategoryFormLoading(false);
     }
@@ -1100,7 +1036,7 @@ export function RiddleMcqSection({
     if (!editSubjectName.trim() || !editingSubject) return;
     setCategoryFormLoading(true);
     try {
-      const { updateSubject, getSubjects, getCategories } = await import('@/lib/riddles-api');
+      const { updateSubject, getSubjects, getCategories } = await import('@/lib/riddle-mcq-api');
       await updateSubject(editingSubject.id, {
         name: editSubjectName,
         emoji: editSubjectEmoji,
@@ -1124,7 +1060,7 @@ export function RiddleMcqSection({
     if (!deletingSubjectId) return;
     setCategoryFormLoading(true);
     try {
-      const { deleteSubject, getSubjects, getCategories } = await import('@/lib/riddles-api');
+      const { deleteSubject, getSubjects, getCategories } = await import('@/lib/riddle-mcq-api');
       await deleteSubject(deletingSubjectId);
       setDeletingSubjectId(null);
       const [apiSubjects, apiCategories] = await Promise.all([
@@ -2025,6 +1961,85 @@ export function RiddleMcqSection({
         </div>
       )}
 
+      {/* Edit Category Modal */}
+      {editingCategory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold">✏️ Edit Category</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Category Name *
+                </label>
+                <input
+                  type="text"
+                  value={editCategoryName}
+                  onChange={e => setEditCategoryName(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="e.g., Logic, Math, Word Play"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Emoji
+                </label>
+                <input
+                  type="text"
+                  value={editCategoryEmoji}
+                  onChange={e => setEditCategoryEmoji(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                  placeholder="📁"
+                />
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setEditingCategory(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateCategory}
+                disabled={!editCategoryName.trim() || categoryFormLoading}
+                className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Category Confirmation */}
+      {deletingCategoryId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6">
+            <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Category</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete this category? All subjects and riddles under this category will also be deleted. This action cannot be undone.
+            </p>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => setDeletingCategoryId(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteCategory}
+                disabled={categoryFormLoading}
+                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
+              >
+                {categoryFormLoading ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Add Subject Modal */}
       {showAddSubjectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -2094,58 +2109,6 @@ export function RiddleMcqSection({
         </div>
       )}
 
-      {/* Edit Category Modal */}
-      {editingCategory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6">
-            <h3 className="mb-4 text-xl font-bold">✏️ Edit Category</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Category Name *
-                </label>
-                <input
-                  type="text"
-                  value={editCategoryName}
-                  onChange={e => setEditCategoryName(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-                  placeholder="e.g., Logic, Math, Word Play"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Emoji
-                </label>
-                <input
-                  type="text"
-                  value={editCategoryEmoji}
-                  onChange={e => setEditCategoryEmoji(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleUpdateCategory()}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-                  placeholder="📁"
-                />
-              </div>
-            </div>
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                onClick={() => setEditingCategory(null)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdateCategory}
-                disabled={!editCategoryName.trim() || categoryFormLoading}
-                className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600 disabled:opacity-50"
-              >
-                {categoryFormLoading ? 'Saving...' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Edit Subject Modal */}
       {editingSubject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -2192,33 +2155,6 @@ export function RiddleMcqSection({
                 className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-50"
               >
                 {categoryFormLoading ? 'Saving...' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Category Confirmation */}
-      {deletingCategoryId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6">
-            <h3 className="mb-4 text-xl font-bold text-red-600">🗑️ Delete Category</h3>
-            <p className="text-gray-600 mb-4">
-              Are you sure you want to delete this category? All subjects, chapters, and riddles under this category will also be deleted. This action cannot be undone.
-            </p>
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                onClick={() => setDeletingCategoryId(null)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteCategory}
-                disabled={categoryFormLoading}
-                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
-              >
-                {categoryFormLoading ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

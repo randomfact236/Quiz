@@ -12,5 +12,4 @@ export enum RiddleMcqLevel {
     MEDIUM = 'medium',
     HARD = 'hard',
     EXPERT = 'expert',
-    EXTREME = 'extreme',
 }

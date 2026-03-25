@@ -18,6 +18,40 @@ export interface PaginatedResponse<T> {
   total: number;
 }
 
+// ============================================================================
+// Category Types
+// ============================================================================
+
+export interface RiddleCategory {
+  id: string;
+  slug: string;
+  name: string;
+  emoji: string;
+  isActive: boolean;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCategoryDto {
+  name: string;
+  slug?: string;
+  emoji?: string;
+  order?: number;
+}
+
+export interface UpdateCategoryDto {
+  name?: string;
+  slug?: string;
+  emoji?: string;
+  order?: number;
+  isActive?: boolean;
+}
+
+// ============================================================================
+// Chapter Types
+// ============================================================================
+
 export interface CreateChapterDto {
   name: string;
   chapterNumber: number;
@@ -29,26 +63,15 @@ export interface UpdateChapterDto {
   chapterNumber?: number;
 }
 
-export type RiddleSubjectCategoryType = 'academic' | 'professional' | 'entertainment';
-
-export interface RiddleCategory {
-  id: string;
-  name: string;
-  emoji: string;
-}
-
-export const RIDDLE_CATEGORIES: RiddleCategory[] = [
-  { id: 'academic', name: 'Academic', emoji: '🎓' },
-  { id: 'professional', name: 'Professional', emoji: '💼' },
-  { id: 'entertainment', name: 'Entertainment', emoji: '🎭' },
-];
+// ============================================================================
+// Subject Types
+// ============================================================================
 
 export interface CreateSubjectDto {
   name: string;
   slug?: string;
   emoji?: string;
-  description?: string;
-  category?: RiddleSubjectCategoryType;
+  categoryId?: string | null;
   isActive?: boolean;
   order?: number;
 }
@@ -57,23 +80,69 @@ export interface UpdateSubjectDto {
   name?: string;
   slug?: string;
   emoji?: string;
-  description?: string;
-  category?: 'academic' | 'professional' | 'entertainment';
+  categoryId?: string | null;
   isActive?: boolean;
   order?: number;
 }
+
+// ============================================================================
+// Riddle MCQ Types
+// ============================================================================
 
 export interface CreateRiddleMcqDto {
   question: string;
   options?: string[];
   correctLetter?: string;
   correctAnswer?: string;
-  level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+  level: 'easy' | 'medium' | 'hard' | 'expert';
   subjectId?: string;
   chapterId?: string;
   hint?: string;
   explanation?: string;
   status?: 'published' | 'draft' | 'trash';
+}
+
+// ============================================================================
+// Categories API
+// ============================================================================
+
+/**
+ * Get all riddle categories
+ */
+export async function getCategories(): Promise<RiddleCategory[]> {
+  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories');
+  return response.data;
+}
+
+/**
+ * Get all categories including inactive (Admin only)
+ */
+export async function getCategoriesAdmin(): Promise<RiddleCategory[]> {
+  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories/all');
+  return response.data;
+}
+
+/**
+ * Create a new category (Admin only)
+ */
+export async function createCategory(dto: CreateCategoryDto): Promise<RiddleCategory> {
+  const response = await api.post<RiddleCategory>('/riddle-mcq/categories', dto);
+  return response.data;
+}
+
+/**
+ * Update a category (Admin only)
+ */
+export async function updateCategory(id: string, dto: UpdateCategoryDto): Promise<RiddleCategory> {
+  const response = await api.patch<RiddleCategory>(`/riddle-mcq/categories/${id}`, dto);
+  return response.data;
+}
+
+/**
+ * Delete a category (Admin only)
+ */
+export async function deleteCategory(id: string): Promise<void> {
+  await api.delete(`/riddle-mcq/categories/${id}`);
 }
 
 // ============================================================================
@@ -86,54 +155,6 @@ export interface CreateRiddleMcqDto {
 export async function getSubjects(hasContent: boolean = false): Promise<RiddleSubject[]> {
   const response = await api.get<RiddleSubject[]>(`/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`);
   return response.data;
-}
-
-/**
- * Get riddle categories
- * Returns predefined categories derived from subject's category field
- */
-export async function getCategories(): Promise<RiddleCategory[]> {
-  return RIDDLE_CATEGORIES;
-}
-
-/**
- * Create a category (stub - categories are predefined)
- * Returns a virtual category for frontend compatibility
- */
-export async function createCategory(dto: { name: string; emoji?: string }): Promise<RiddleCategory> {
-  const id = dto.name.toLowerCase().replace(/\s+/g, '-');
-  const existing = RIDDLE_CATEGORIES.find(c => c.id === id);
-  if (existing) return existing;
-  
-  return {
-    id,
-    name: dto.name,
-    emoji: dto.emoji || '📁',
-  };
-}
-
-/**
- * Update a category (stub - categories are predefined)
- */
-export async function updateCategory(id: string, dto: { name?: string; emoji?: string }): Promise<RiddleCategory> {
-  const category = RIDDLE_CATEGORIES.find(c => c.id === id);
-  if (!category) {
-    throw new Error(`Category ${id} not found`);
-  }
-  return {
-    ...category,
-    name: dto.name || category.name,
-    emoji: dto.emoji || category.emoji,
-  };
-}
-
-/**
- * Delete a category (stub - categories are predefined, cannot be deleted)
- */
-export async function deleteCategory(id: string): Promise<void> {
-  if (!['academic', 'professional', 'entertainment'].includes(id)) {
-    throw new Error('Cannot delete custom categories');
-  }
 }
 
 /**
@@ -164,7 +185,7 @@ export async function createSubject(dto: CreateSubjectDto): Promise<RiddleSubjec
  * Update a subject (Admin only)
  */
 export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {
-  const response = await api.put<RiddleSubject>(`/riddle-mcq/subjects/${id}`, dto);
+  const response = await api.patch<RiddleSubject>(`/riddle-mcq/subjects/${id}`, dto);
   return response.data;
 }
 
@@ -226,7 +247,7 @@ export async function createChapter(dto: CreateChapterDto): Promise<RiddleChapte
  * Update a chapter (Admin only)
  */
 export async function updateChapter(id: string, dto: UpdateChapterDto): Promise<RiddleChapter> {
-  const response = await api.put<RiddleChapter>(`/riddle-mcq/chapters/${id}`, dto);
+  const response = await api.patch<RiddleChapter>(`/riddle-mcq/chapters/${id}`, dto);
   return response.data;
 }
 
@@ -335,7 +356,7 @@ export async function bulkCreateRiddles(
  * Update a riddle MCQ (Admin only)
  */
 export async function updateRiddle(id: string, dto: Partial<CreateRiddleMcqDto>): Promise<RiddleMcq> {
-  const response = await api.put<RiddleMcq>(`/riddle-mcq/mcqs/${id}`, dto);
+  const response = await api.patch<RiddleMcq>(`/riddle-mcq/mcqs/${id}`, dto);
   return response.data;
 }
 

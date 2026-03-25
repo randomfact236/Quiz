@@ -6,16 +6,19 @@ import { Repository, DataSource, In } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionResult } from '../common/interfaces/bulk-action-result.interface';
 
+import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleChapter } from './entities/riddle-chapter.entity';
 import { RiddleMcq, RiddleMcqLevel, RiddleStatus } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import {
+  CreateRiddleCategoryDto,
   CreateRiddleMcqChapterDto,
   CreateRiddleMcqDto,
   CreateRiddleMcqSubjectDto,
   RiddleMcqPaginationDto,
+  UpdateRiddleCategoryDto,
   UpdateRiddleMcqChapterDto,
   UpdateRiddleMcqDto,
   UpdateRiddleMcqSubjectDto,
@@ -52,6 +55,8 @@ export class RiddleMcqService {
   }
 
   constructor(
+    @InjectRepository(RiddleCategory)
+    private categoryRepo: Repository<RiddleCategory>,
     @InjectRepository(RiddleSubject)
     private subjectRepo: Repository<RiddleSubject>,
     @InjectRepository(RiddleChapter)
@@ -61,6 +66,82 @@ export class RiddleMcqService {
     private cacheService: CacheService,
     private dataSource: DataSource,
   ) {}
+
+  // ==================== CATEGORIES ====================
+
+  async findAllCategories(includeInactive: boolean = false): Promise<RiddleCategory[]> {
+    let query = this.categoryRepo.createQueryBuilder('category')
+      .orderBy('category.order', 'ASC')
+      .addOrderBy('category.name', 'ASC');
+
+    if (!includeInactive) {
+      query = query.where('category.isActive = :isActive', { isActive: true });
+    }
+
+    return query.getMany();
+  }
+
+  async findCategoryById(id: string): Promise<RiddleCategory> {
+    const category = await this.categoryRepo.findOne({ where: { id } });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    return category;
+  }
+
+  async createCategory(dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
+    if (dto.slug) {
+      const existing = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
+      if (existing) {
+        throw new BadRequestException(`Category with slug "${dto.slug}" already exists`);
+      }
+    } else {
+      dto.slug = this.generateSlug(dto.name);
+    }
+
+    const category = this.categoryRepo.create({
+      slug: dto.slug,
+      name: dto.name,
+      emoji: dto.emoji,
+      order: dto.order ?? 0,
+      isActive: dto.isActive ?? true,
+    });
+    const saved = await this.categoryRepo.save(category);
+    await this.cacheService.delPattern('riddle-mcq:*');
+    return saved;
+  }
+
+  async updateCategory(id: string, dto: UpdateRiddleCategoryDto): Promise<RiddleCategory> {
+    const category = await this.categoryRepo.findOne({ where: { id } });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    if (dto.slug !== undefined && dto.slug !== category.slug) {
+      const existing = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
+      if (existing) {
+        throw new BadRequestException(`Category with slug "${dto.slug}" already exists`);
+      }
+    }
+
+    if (dto.name !== undefined) category.name = dto.name;
+    if (dto.slug !== undefined) category.slug = dto.slug;
+    if (dto.emoji !== undefined) category.emoji = dto.emoji;
+    if (dto.order !== undefined) category.order = dto.order;
+    if (dto.isActive !== undefined) category.isActive = dto.isActive;
+
+    const saved = await this.categoryRepo.save(category);
+    await this.cacheService.delPattern('riddle-mcq:*');
+    return saved;
+  }
+
+  async deleteCategory(id: string): Promise<void> {
+    const result = await this.categoryRepo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Category not found');
+    }
+    await this.cacheService.delPattern('riddle-mcq:*');
+  }
 
   // ==================== SUBJECTS ====================
 
@@ -114,7 +195,14 @@ export class RiddleMcqService {
       dto.slug = this.generateSlug(dto.name);
     }
 
-    const subject = this.subjectRepo.create(dto);
+    const subject = this.subjectRepo.create({
+      slug: dto.slug,
+      name: dto.name,
+      emoji: dto.emoji,
+      categoryId: dto.categoryId || null,
+      order: dto.order ?? 0,
+      isActive: dto.isActive ?? true,
+    });
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.delPattern('riddle-mcq:*');
     return saved;
@@ -133,7 +221,13 @@ export class RiddleMcqService {
       }
     }
 
-    Object.assign(subject, dto);
+    if (dto.name !== undefined) subject.name = dto.name;
+    if (dto.slug !== undefined) subject.slug = dto.slug;
+    if (dto.emoji !== undefined) subject.emoji = dto.emoji;
+    if (dto.categoryId !== undefined) subject.categoryId = dto.categoryId;
+    if (dto.order !== undefined) subject.order = dto.order;
+    if (dto.isActive !== undefined) subject.isActive = dto.isActive;
+
     const saved = await this.subjectRepo.save(subject);
     await this.cacheService.delPattern('riddle-mcq:*');
     return saved;
@@ -315,7 +409,7 @@ export class RiddleMcqService {
   }
 
   async findRandomRiddleMcqs(level: string, count: number): Promise<RiddleMcq[]> {
-    const validLevels: RiddleMcqLevel[] = [RiddleMcqLevel.EASY, RiddleMcqLevel.MEDIUM, RiddleMcqLevel.HARD, RiddleMcqLevel.EXPERT, RiddleMcqLevel.EXTREME];
+    const validLevels: RiddleMcqLevel[] = [RiddleMcqLevel.EASY, RiddleMcqLevel.MEDIUM, RiddleMcqLevel.HARD, RiddleMcqLevel.EXPERT];
     const levelEnum = level as RiddleMcqLevel;
     if (!validLevels.includes(levelEnum)) {
       throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
@@ -386,7 +480,7 @@ export class RiddleMcqService {
   }
 
   async createRiddleMcq(dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
-    const isExpert = dto.level === 'expert';
+    const isExpert = dto.level === RiddleMcqLevel.EXPERT;
 
     if (!isExpert && (!dto.options || dto.options.length < 2)) {
       throw new BadRequestException('MCQ requires at least 2 options');
@@ -400,12 +494,9 @@ export class RiddleMcqService {
     riddle.question = dto.question;
     riddle.options = isExpert ? null : (dto.options || null);
     riddle.correctLetter = isExpert ? null : (dto.correctLetter || null);
-    riddle.correctAnswer = dto.correctAnswer || null;
     riddle.level = dto.level;
-    riddle.subjectId = dto.subjectId || null;
-    riddle.chapterId = dto.chapterId || null;
+    riddle.chapterId = dto.chapterId;
     riddle.explanation = dto.explanation || null;
-    riddle.hint = dto.hint || null;
     riddle.status = dto.status || RiddleStatus.DRAFT;
 
     const saved = await this.riddleMcqRepo.save(riddle);
@@ -449,9 +540,9 @@ export class RiddleMcqService {
 
       for (let i = 0; i < dtos.length; i++) {
         const dto = dtos[i];
-        const isExpert = dto.level === 'expert';
+        const isExpert = dto.level === RiddleMcqLevel.EXPERT;
 
-        const validLevels = ['easy', 'medium', 'hard', 'expert'];
+        const validLevels = [RiddleMcqLevel.EASY, RiddleMcqLevel.MEDIUM, RiddleMcqLevel.HARD, RiddleMcqLevel.EXPERT];
         if (!validLevels.includes(dto.level)) {
           errors.push(`Row ${offset + i + 1}: Invalid level '${dto.level}'`);
           continue;
@@ -467,17 +558,14 @@ export class RiddleMcqService {
           continue;
         }
 
-        const riddle = transactionalEntityManager.create(RiddleMcq, {
-          question: dto.question,
-          options: isExpert ? null : dto.options,
-          correctLetter: isExpert ? null : dto.correctLetter,
-          correctAnswer: dto.correctAnswer,
-          level: dto.level,
-          subjectId: dto.subjectId || null,
-          chapterId: dto.chapterId || null,
-          explanation: dto.explanation || null,
-          hint: dto.hint || null,
-        });
+        const riddle = new RiddleMcq();
+        riddle.question = dto.question;
+        riddle.options = isExpert ? null : (dto.options ?? null);
+        riddle.correctLetter = isExpert ? null : (dto.correctLetter ?? null);
+        riddle.level = dto.level;
+        riddle.chapterId = dto.chapterId;
+        riddle.explanation = dto.explanation ?? null;
+        riddle.status = dto.status ?? RiddleStatus.DRAFT;
         riddles.push(riddle);
       }
 
@@ -499,9 +587,6 @@ export class RiddleMcqService {
     if (dto.question !== undefined) {
       riddle.question = dto.question;
     }
-    if (dto.correctAnswer !== undefined) {
-      riddle.correctAnswer = dto.correctAnswer;
-    }
     if (dto.correctLetter !== undefined) {
       riddle.correctLetter = dto.correctLetter || null;
     }
@@ -509,24 +594,13 @@ export class RiddleMcqService {
       riddle.options = dto.options || null;
     }
     if (dto.level !== undefined) {
-      const isExpert = dto.level === 'expert';
       riddle.level = dto.level;
-      if (isExpert) {
-        riddle.options = null;
-        riddle.correctLetter = null;
-      }
-    }
-    if (dto.subjectId !== undefined) {
-      riddle.subjectId = dto.subjectId || null;
     }
     if (dto.chapterId !== undefined) {
-      riddle.chapterId = dto.chapterId || null;
+      riddle.chapterId = dto.chapterId;
     }
     if (dto.explanation !== undefined) {
       riddle.explanation = dto.explanation || null;
-    }
-    if (dto.hint !== undefined) {
-      riddle.hint = dto.hint || null;
     }
 
     const saved = await this.riddleMcqRepo.save(riddle);
@@ -561,8 +635,31 @@ export class RiddleMcqService {
             failed++;
             failures.push({ id, error: 'Not found' });
           }
+        } else if (
+          action === BulkActionType.PUBLISH ||
+          action === BulkActionType.DRAFT ||
+          action === BulkActionType.TRASH
+        ) {
+          const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
+          if (!riddle) {
+            failed++;
+            failures.push({ id, error: 'Not found' });
+          } else {
+            riddle.status = RiddleStatus[action.toUpperCase() as keyof typeof RiddleStatus];
+            await this.riddleMcqRepo.save(riddle);
+            succeeded++;
+          }
+        } else if (action === BulkActionType.RESTORE) {
+          const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
+          if (!riddle) {
+            failed++;
+            failures.push({ id, error: 'Not found' });
+          } else {
+            riddle.status = RiddleStatus.DRAFT;
+            await this.riddleMcqRepo.save(riddle);
+            succeeded++;
+          }
         } else {
-          this.logger.warn(`[RiddleMcqService] Action ${action} not supported - RiddleMcq has no status field`);
           failed++;
           failures.push({ id, error: `Action ${action} not supported` });
         }
@@ -637,7 +734,8 @@ export class RiddleMcqService {
 
         const subjectQuery = this.riddleMcqRepo
           .createQueryBuilder('riddle')
-          .leftJoin('riddle.subject', 'subject')
+          .leftJoin('riddle.chapter', 'chapter')
+          .leftJoin('chapter.subject', 'subject')
           .select('subject.id', 'id')
           .addSelect('subject.name', 'name')
           .addSelect('COUNT(*)', 'count')
@@ -703,35 +801,6 @@ export class RiddleMcqService {
       },
       this.CACHE_TTL.FILTER_COUNTS
     );
-  }
-
-  async getStatusCountsBySubject(subjectSlug: string): Promise<StatusCountResponse> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map((c) => c.id);
-
-    if (chapterIds.length === 0) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const statusCounts = await this.riddleMcqRepo
-      .createQueryBuilder('riddle')
-      .select('riddle.level', 'level')
-      .addSelect('CAST(COUNT(*) AS INT)', 'count')
-      .where('riddle.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('riddle.level')
-      .getRawMany();
-
-    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
-    statusCounts.forEach((row: { level: string; count: number }) => {
-      counts.total += row.count;
-    });
-
-    return counts;
   }
 
   // ==================== HELPERS ====================

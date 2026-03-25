@@ -10,6 +10,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { BruteForceService } from './brute-force.service';
 import { JwtStrategy } from './jwt.strategy';
+import { GoogleStrategy } from './google.strategy';
 
 
 /**
@@ -39,7 +40,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, BruteForceService],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, BruteForceService],
   exports: [AuthService, BruteForceService],
 })
 export class AuthModule {}

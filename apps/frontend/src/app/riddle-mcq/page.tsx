@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 
-import { getStats } from '@/lib/riddles-api';
+import { getStats } from '@/lib/riddle-mcq-api';
 import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 
 export default function RiddlesPage(): JSX.Element {
@@ -108,7 +108,7 @@ export default function RiddlesPage(): JSX.Element {
         {/* Mode Selection Cards */}
         <div className="mb-12 grid gap-6 sm:grid-cols-2" role="group" aria-label="Game mode selection">
           {/* Timer Challenge Card */}
-          <Link href="/riddles/challenge">
+          <Link href="/riddle-mcq/challenge">
             <div className="rounded-2xl bg-white p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer">
               <div className="mb-4 flex justify-center">
                 <span className="text-4xl" aria-hidden="true">⏱️</span>
@@ -122,7 +122,7 @@ export default function RiddlesPage(): JSX.Element {
           </Link>
 
           {/* Practice Mode Card */}
-          <Link href="/riddles/practice">
+          <Link href="/riddle-mcq/practice">
             <div className="rounded-2xl bg-white p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer">
               <div className="mb-4 flex justify-center">
                 <span className="text-4xl" aria-hidden="true">♾️</span>
