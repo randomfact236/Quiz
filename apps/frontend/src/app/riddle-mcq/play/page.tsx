@@ -31,7 +31,7 @@ import {
   createRiddleSession,
   setupNavigationWarning
 } from '@/lib/riddle-session';
-import { getRiddlesByChapter, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
+import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
@@ -146,13 +146,13 @@ function RiddlePlayPageContent(): JSX.Element {
           }
 
           fetchedRiddles = mixed.map(r => adaptRiddleMcq(r as any));
-          setChapterName(level === 'all' ? 'Mixed Chapters' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
+          setChapterName(level === 'all' ? 'Mixed Subjects' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
         } else {
           // Pass level filter to backend API (more efficient than frontend filtering)
-          const response = await getRiddlesByChapter(chapterId, 1, 50, level);
-          fetchedRiddles = response.data.map(r => adaptRiddleMcq(r as any));
+          const response = await getRiddlesBySubject(chapterId, 1, 50, level);
+          fetchedRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
-            const baseName = chapterNameParam || fetchedRiddles[0].chapter;
+            const baseName = chapterNameParam || 'Subject';
             setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
           }
         }
@@ -372,8 +372,8 @@ function RiddlePlayPageContent(): JSX.Element {
         }
       } else {
         // Pass level filter to backend API (more efficient)
-        const response = await getRiddlesByChapter(chapterId, 1, 100, level);
-        newRiddles = response.data.map(r => adaptRiddleMcq(r as any));
+        const response = await getRiddlesBySubject(chapterId, 1, 100, level);
+        newRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
       }
 
       const uniqueNew = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);

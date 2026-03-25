@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
+import { useRiddleMcqFilters } from '@/lib/useRiddleMcqFilters';
+import { getAllRiddles } from '@/lib/riddle-mcq-api';
 import type { Riddle, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import {
   getStatusBadgeColor,
@@ -19,12 +21,6 @@ import {
  * Props for the RiddleMcqSection component
  */
 interface RiddleMcqSectionProps {
-  /** Optional initial riddles data */
-  initialRiddles?: Riddle[];
-  /** Controlled state for all riddles from parent */
-  allRiddles: Riddle[];
-  /** State setter for all riddles from parent */
-  setAllRiddles: React.Dispatch<React.SetStateAction<Riddle[]>>;
 }
 
 /**
@@ -62,16 +58,25 @@ interface RiddleFormState {
  * <RiddleMcqSection />
  * ```
  */
-export function RiddleMcqSection({
-  allRiddles,
-  setAllRiddles,
-}: RiddleMcqSectionProps): JSX.Element {
-  // Filter States
+export function RiddleMcqSection(
+  _props: RiddleMcqSectionProps
+): JSX.Element {
+  // Use URL-based filters
+  const { filters, setFilter, resetFilters: _resetFilters, buildCountsParams: _buildCountsParams, buildDataParams } = useRiddleMcqFilters();
+  
+  // Internal state for riddles data (replaces riddles prop)
+  const [riddles, setRiddles] = useState<Riddle[]>([]);
+  const [_riddlesTotal, setRiddlesTotal] = useState(0);
+  const [_riddlesLoading, setRiddlesLoading] = useState(false);
+  
+  // Legacy filter states - kept for UI compatibility but synchronized with hook
   const [riddleFilterLevel, setRiddleFilterLevel] = useState<string>('');
   const [riddleSearch, setRiddleSearch] = useState<string>('');
-  const [riddlePage, setRiddlePage] = useState(1);
+  const riddlePage = filters.page;
+  const setRiddlePage = (page: number) => setFilter('page', page);
   const [pageInput, setPageInput] = useState('1');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const statusFilter = filters.status as StatusFilter;
+  const setStatusFilter = (status: StatusFilter) => setFilter('status', status);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const riddlesPerPage = 10;
@@ -150,6 +155,39 @@ export function RiddleMcqSection({
       .catch(err => console.error('Failed to load subjects/categories:', err));
   }, []);
 
+  // Fetch riddles from server based on filters
+  useEffect(() => {
+    const fetchRiddles = async () => {
+      setRiddlesLoading(true);
+      try {
+        const params = buildDataParams();
+        const result = await getAllRiddles(params, riddlePage, riddlesPerPage);
+        const mappedRiddles: Riddle[] = result.data.map((qr: any) => ({
+          id: String(qr.id),
+          question: qr.question,
+          options: qr.options || [],
+          correctOption: qr.correctLetter || qr.correctAnswer || 'A',
+          correctLetter: qr.correctLetter,
+          difficulty: (qr.level as Riddle['difficulty']) || 'medium',
+          status: (qr.status as Riddle['status']) || 'published',
+          answer: qr.correctAnswer || '',
+          hint: qr.hint || '',
+          explanation: qr.explanation || '',
+          subject: qr.subject?.name || '',
+          subjectId: qr.subject?.id || '',
+          category: qr.subject?.category?.name || 'Uncategorized',
+        }));
+        setRiddles(mappedRiddles);
+        setRiddlesTotal(result.total);
+      } catch (err) {
+        console.error('Failed to fetch riddles:', err);
+      } finally {
+        setRiddlesLoading(false);
+      }
+    };
+    fetchRiddles();
+  }, [filters, riddlePage, buildDataParams]);
+
   // Calculate difficulty counts - based on current filters (category, subject, search, status)
   const difficultyCounts = useMemo(() => {
     const subjectToCategory: Record<string, string> = {};
@@ -159,7 +197,7 @@ export function RiddleMcqSection({
       }
     });
 
-    const filtered = allRiddles.filter(riddle => {
+    const filtered = riddles.filter(riddle => {
       const matchesSearch = !riddleSearch ||
         riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
         riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
@@ -181,7 +219,7 @@ export function RiddleMcqSection({
       hard: filtered.filter(r => r.difficulty === 'hard').length,
       expert: filtered.filter(r => r.difficulty === 'expert').length,
     };
-  }, [allRiddles, subjects, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
+  }, [riddles, subjects, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
 
   // Calculate status counts - based on current filters (category, subject, search, difficulty)
   const statusCounts = useMemo(() => {
@@ -192,7 +230,7 @@ export function RiddleMcqSection({
       }
     });
 
-    const filtered = allRiddles.filter(riddle => {
+    const filtered = riddles.filter(riddle => {
       const matchesSearch = !riddleSearch ||
         riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
         riddle.options?.[0]?.toLowerCase().includes(riddleSearch.toLowerCase()) ||
@@ -213,7 +251,7 @@ export function RiddleMcqSection({
       draft: filtered.filter(r => r.status === 'draft').length,
       trash: filtered.filter(r => r.status === 'trash').length,
     };
-  }, [allRiddles, subjects, riddleSearch, riddleFilterLevel, selectedCategoryId, selectedSubjectId]);
+  }, [riddles, subjects, riddleSearch, riddleFilterLevel, selectedCategoryId, selectedSubjectId]);
 
   // Calculate category and subject counts - using subjects array to get category from subjectId
   // Counts are based on current filters (difficulty, search, status, subject)
@@ -226,7 +264,7 @@ export function RiddleMcqSection({
       }
     });
 
-    const filteredForCounts = allRiddles.filter(riddle => {
+    const filteredForCounts = riddles.filter(riddle => {
       const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
       const matchesSearch = !riddleSearch ||
         riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
@@ -248,7 +286,7 @@ export function RiddleMcqSection({
       }
     });
     return counts;
-  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedSubjectId]);
+  }, [riddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedSubjectId]);
 
   const subjectCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -259,7 +297,7 @@ export function RiddleMcqSection({
       }
     });
 
-    const filteredForCounts = allRiddles.filter(riddle => {
+    const filteredForCounts = riddles.filter(riddle => {
       const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
       const matchesSearch = !riddleSearch ||
         riddle.question.toLowerCase().includes(riddleSearch.toLowerCase()) ||
@@ -280,15 +318,15 @@ export function RiddleMcqSection({
       }
     });
     return counts;
-  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId]);
+  }, [riddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId]);
 
   // Migrate riddles without status to 'published'
   useEffect(() => {
-    const needsMigration = allRiddles.some(r => !r.status);
+    const needsMigration = riddles.some(r => !r.status);
     if (needsMigration) {
-      setAllRiddles(prev => prev.map(r => r.status ? r : { ...r, status: 'published' as const }));
+      setRiddles(prev => prev.map(r => r.status ? r : { ...r, status: 'published' as const }));
     }
-  }, [allRiddles]);
+  }, [riddles]);
 
   // Filter riddles based on all criteria
   const filteredRiddles = useMemo(() => {
@@ -300,7 +338,7 @@ export function RiddleMcqSection({
       }
     });
     
-    return allRiddles.filter(riddle => {
+    return riddles.filter(riddle => {
       // Difficulty filter
       const matchesDifficulty = !riddleFilterLevel || riddle.difficulty === riddleFilterLevel;
       
@@ -326,7 +364,7 @@ export function RiddleMcqSection({
       
       return matchesDifficulty && matchesSearch && matchesStatus && matchesCategory && matchesSubject;
     });
-  }, [allRiddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
+  }, [riddles, subjects, riddleFilterLevel, riddleSearch, statusFilter, selectedCategoryId, selectedSubjectId]);
 
   // Pagination
   const totalRiddlePages = Math.ceil(filteredRiddles.length / riddlesPerPage);
@@ -374,10 +412,10 @@ export function RiddleMcqSection({
       await bulkActionRiddles(selectedIds, action === 'restore' ? 'draft' : action);
 
       if (action === 'delete') {
-        setAllRiddles(prev => prev.filter(r => !selectedIds.includes(String(r.id))));
+        setRiddles(prev => prev.filter(r => !selectedIds.includes(String(r.id))));
       } else {
         // We mock status changes for UI optimism
-        setAllRiddles(prev =>
+        setRiddles(prev =>
           prev.map(r => {
             if (selectedIds.includes(String(r.id))) {
               if (action === 'publish') return { ...r, status: 'published' as ContentStatus };
@@ -470,7 +508,6 @@ export function RiddleMcqSection({
     try {
       const {
         bulkCreateRiddles,
-        getAllRiddleMcqsAdmin,
         getSubjects,
         createSubject,
       } = await import('@/lib/riddle-mcq-api');
@@ -583,23 +620,24 @@ export function RiddleMcqSection({
         const refreshedSubjects = await getSubjects();
         setSubjects(refreshedSubjects);
         
-        // Refresh riddles list
-        const updated = await getAllRiddleMcqsAdmin();
-        const mapped = updated.map(qr => ({
+        // Refresh riddles list using new API
+        const result = await getAllRiddles(buildDataParams(), riddlePage, riddlesPerPage);
+        const mapped: Riddle[] = result.data.map((qr: any) => ({
           id: String(qr.id),
           question: qr.question,
           options: qr.options || [],
           correctOption: qr.correctLetter || qr.correctAnswer || 'A',
           difficulty: (qr.level as Riddle['difficulty']) || 'medium',
-          status: 'published' as const,
+          status: (qr.status as Riddle['status']) || 'published',
           answer: qr.correctAnswer || '',
           hint: qr.hint || '',
           explanation: qr.explanation || '',
-          subject: qr.subject?.name || qr.chapter?.subject?.name || '',
-          subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-          category: qr.chapter?.subject?.category?.name || 'Uncategorized',
+          subject: qr.subject?.name || '',
+          subjectId: qr.subject?.id || '',
+          category: qr.subject?.category?.name || 'Uncategorized',
         }));
-        setAllRiddles(mapped);
+        setRiddles(mapped);
+        setRiddlesTotal(result.total);
       }
     } catch (err: any) {
       console.error('Import failed', err);
@@ -771,7 +809,7 @@ export function RiddleMcqSection({
       };
       
 
-      setAllRiddles(prev => [newRiddle, ...prev]);
+      setRiddles(prev => [newRiddle, ...prev]);
       setShowAddModal(false);
       resetRiddleForm();
     } catch (err: any) {
@@ -836,7 +874,7 @@ export function RiddleMcqSection({
       
       await updateRiddle(String(selectedRiddle.id), updateData);
 
-      setAllRiddles(prev =>
+      setRiddles(prev =>
         prev.map(r =>
           r.id === selectedRiddle.id
             ? {
@@ -870,12 +908,12 @@ export function RiddleMcqSection({
         // Permanent delete if already in trash
         const { bulkActionRiddles } = await import('@/lib/riddle-mcq-api');
         await bulkActionRiddles([String(selectedRiddle.id)], 'delete');
-        setAllRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
+        setRiddles(prev => prev.filter(r => r.id !== selectedRiddle.id));
       } else {
         // Move to trash
         const { bulkActionRiddles } = await import('@/lib/riddle-mcq-api');
         await bulkActionRiddles([String(selectedRiddle.id)], 'trash');
-        setAllRiddles(prev => prev.map(r =>
+        setRiddles(prev => prev.map(r =>
           r.id === selectedRiddle.id ? { ...r, status: 'trash' as ContentStatus } : r
         ));
       }
@@ -1494,7 +1532,7 @@ export function RiddleMcqSection({
           </p>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setRiddlePage(p => Math.max(1, p - 1))}
+              onClick={() => setRiddlePage(Math.max(1, riddlePage - 1))}
               disabled={riddlePage === 1}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
@@ -1513,7 +1551,7 @@ export function RiddleMcqSection({
               of <span className="font-medium">{totalRiddlePages || 1}</span>
             </span>
             <button
-              onClick={() => setRiddlePage(p => Math.min(totalRiddlePages, p + 1))}
+              onClick={() => setRiddlePage(Math.min(totalRiddlePages, riddlePage + 1))}
               disabled={riddlePage >= totalRiddlePages}
               className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >

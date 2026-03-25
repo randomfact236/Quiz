@@ -8,8 +8,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { RiddleChapter } from './riddle-chapter.entity';
 import { RiddleCategory } from './riddle-category.entity';
+import { RiddleMcq } from './riddle-mcq.entity';
 
 @Entity('riddle_subjects')
 export class RiddleSubject {
@@ -41,6 +41,6 @@ export class RiddleSubject {
   @Column({ type: 'int', default: 0 })
   order: number;
 
-  @OneToMany(() => RiddleChapter, (chapter) => chapter.subject)
-  chapters: RiddleChapter[];
+  @OneToMany(() => RiddleMcq, (riddle) => riddle.subject)
+  riddles: RiddleMcq[];
 }

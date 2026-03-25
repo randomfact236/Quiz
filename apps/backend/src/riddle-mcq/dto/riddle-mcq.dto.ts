@@ -164,38 +164,6 @@ export class UpdateRiddleCategoryDto {
   order?: number;
 }
 
-export class CreateRiddleMcqChapterDto {
-  @ApiProperty({ example: 'Logic Puzzles' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @ApiProperty({ example: 1 })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  chapterNumber: number;
-
-  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
-  @IsString()
-  @IsNotEmpty()
-  subjectId: string;
-}
-
-export class UpdateRiddleMcqChapterDto {
-  @ApiPropertyOptional({ example: 'Logic Puzzles' })
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @ApiPropertyOptional({ example: 1 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  chapterNumber?: number;
-}
-
 export class CreateRiddleMcqDto {
   @ApiProperty({ example: 'What has keys but no locks?' })
   @IsString()
@@ -222,7 +190,7 @@ export class CreateRiddleMcqDto {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsString()
   @IsNotEmpty()
-  chapterId: string;
+  subjectId: string;
 
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()
@@ -262,7 +230,7 @@ export class UpdateRiddleMcqDto {
   @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsOptional()
   @IsString()
-  chapterId?: string;
+  subjectId?: string;
 
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()

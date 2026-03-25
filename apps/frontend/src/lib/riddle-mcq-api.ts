@@ -4,10 +4,12 @@
  * ============================================================================
  * Backend API integration for riddle MCQ (Quiz format)
  * ============================================================================
+ * Structure: Category → Subject → MCQ (NO Chapter)
+ * ============================================================================
  */
 
 import { api, apiRequest } from './api-client';
-import type { RiddleMcq, RiddleChapter, RiddleSubject } from '@/types/riddles';
+import type { RiddleMcq, RiddleSubject } from '@/types/riddles';
 
 // ============================================================================
 // Types
@@ -49,21 +51,6 @@ export interface UpdateCategoryDto {
 }
 
 // ============================================================================
-// Chapter Types
-// ============================================================================
-
-export interface CreateChapterDto {
-  name: string;
-  chapterNumber: number;
-  subjectId: string;
-}
-
-export interface UpdateChapterDto {
-  name?: string;
-  chapterNumber?: number;
-}
-
-// ============================================================================
 // Subject Types
 // ============================================================================
 
@@ -95,11 +82,54 @@ export interface CreateRiddleMcqDto {
   correctLetter?: string;
   correctAnswer?: string;
   level: 'easy' | 'medium' | 'hard' | 'expert';
-  subjectId?: string;
-  chapterId?: string;
+  subjectId: string;  // REQUIRED - no chapterId
   hint?: string;
   explanation?: string;
   status?: 'published' | 'draft' | 'trash';
+}
+
+export interface UpdateRiddleMcqDto {
+  question?: string;
+  options?: string[];
+  correctLetter?: string;
+  correctAnswer?: string;
+  level?: 'easy' | 'medium' | 'hard' | 'expert';
+  subjectId?: string;
+  hint?: string;
+  explanation?: string;
+  status?: 'published' | 'draft' | 'trash';
+}
+
+// ============================================================================
+// Filter Types
+// ============================================================================
+
+export interface GetRiddlesParams {
+  subject?: string;
+  level?: string;
+  status?: string;
+  search?: string;
+}
+
+export interface GetFilterCountsParams {
+  subject?: string;
+  level?: string;
+}
+
+export interface FilterCounts {
+  subjectCounts: { id: string; name: string; count: number }[];
+  levelCounts: { level: string; count: number }[];
+  total: number;
+}
+
+// ============================================================================
+// Stats Types
+// ============================================================================
+
+export interface RiddlesStats {
+  totalRiddleMcqs: number;
+  totalSubjects: number;
+  mcqsByLevel: Record<string, number>;
 }
 
 // ============================================================================
@@ -158,7 +188,7 @@ export async function getSubjects(hasContent: boolean = false): Promise<RiddleSu
 }
 
 /**
- * Get subject by slug with chapters
+ * Get subject by slug
  */
 export async function getSubjectBySlug(slug: string): Promise<RiddleSubject> {
   const response = await api.get<RiddleSubject>(`/riddle-mcq/subjects/${slug}`);
@@ -197,73 +227,11 @@ export async function deleteSubject(id: string): Promise<void> {
 }
 
 // ============================================================================
-// Chapters API
-// ============================================================================
-
-/**
- * Get chapters by subject ID
- */
-export async function getChaptersBySubject(
-  subjectId: string,
-  hasContent: boolean = false
-): Promise<RiddleChapter[]> {
-  const response = await api.get<RiddleChapter[]>(
-    `/riddle-mcq/chapters/${subjectId}${hasContent ? '?hasContent=true' : ''}`
-  );
-  return response.data;
-}
-
-/**
- * Get all active chapters across all subjects
- */
-export async function getAllChapters(hasContent: boolean = false): Promise<RiddleChapter[]> {
-  if (hasContent) {
-    const response = await api.get<RiddleChapter[]>('/riddle-mcq/chapters/active/all');
-    return response.data;
-  }
-
-  const subjects = await getSubjects();
-  const allChapters: RiddleChapter[] = [];
-
-  for (const subject of subjects) {
-    if (subject.id) {
-      const chapters = await getChaptersBySubject(subject.id);
-      allChapters.push(...chapters.map(ch => ({ ...ch, subject })));
-    }
-  }
-
-  return allChapters;
-}
-
-/**
- * Create a new chapter (Admin only)
- */
-export async function createChapter(dto: CreateChapterDto): Promise<RiddleChapter> {
-  const response = await api.post<RiddleChapter>('/riddle-mcq/chapters', dto);
-  return response.data;
-}
-
-/**
- * Update a chapter (Admin only)
- */
-export async function updateChapter(id: string, dto: UpdateChapterDto): Promise<RiddleChapter> {
-  const response = await api.patch<RiddleChapter>(`/riddle-mcq/chapters/${id}`, dto);
-  return response.data;
-}
-
-/**
- * Delete a chapter (Admin only)
- */
-export async function deleteChapter(id: string): Promise<void> {
-  await api.delete(`/riddle-mcq/chapters/${id}`);
-}
-
-// ============================================================================
 // Riddle MCQ API
 // ============================================================================
 
 /**
- * Get riddle MCQs by subject ID
+ * Get riddle MCQs by subject ID (Public)
  */
 export async function getRiddlesBySubject(
   subjectId: string,
@@ -280,24 +248,7 @@ export async function getRiddlesBySubject(
 }
 
 /**
- * Get riddle MCQs by chapter ID
- */
-export async function getRiddlesByChapter(
-  chapterId: string,
-  page: number = 1,
-  limit: number = 50,
-  level?: string
-): Promise<PaginatedResponse<RiddleMcq>> {
-  let url = `/riddle-mcq/mcqs/${chapterId}?page=${page}&limit=${limit}`;
-  if (level && level !== 'all') {
-    url += `&level=${level}`;
-  }
-  const response = await apiRequest<RiddleMcq[]>(url);
-  return response.data as unknown as PaginatedResponse<RiddleMcq>;
-}
-
-/**
- * Get random riddle MCQs by difficulty
+ * Get random riddle MCQs by difficulty (Public)
  */
 export async function getRandomRiddles(
   level: string,
@@ -308,7 +259,7 @@ export async function getRandomRiddles(
 }
 
 /**
- * Get mixed riddle MCQs from all chapters
+ * Get mixed riddle MCQs from all subjects (Public)
  */
 export async function getMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
   const response = await api.get<RiddleMcq[]>(`/riddle-mcq/mixed?count=${count}`);
@@ -316,10 +267,33 @@ export async function getMixedRiddles(count: number = 50): Promise<RiddleMcq[]> 
 }
 
 /**
- * Get all riddle MCQs for Admin panel
+ * Get all riddle MCQs for Admin panel with filters (Admin)
  */
-export async function getAllRiddleMcqsAdmin(): Promise<RiddleMcq[]> {
-  const response = await api.get<RiddleMcq[]>('/riddle-mcq/all');
+export async function getAllRiddles(
+  params: GetRiddlesParams = {},
+  page: number = 1,
+  limit: number = 50
+): Promise<{ data: RiddleMcq[]; total: number }> {
+  const queryParams = new URLSearchParams();
+  
+  if (params.subject && params.subject !== 'all') {
+    queryParams.append('subject', params.subject);
+  }
+  if (params.level && params.level !== 'all') {
+    queryParams.append('level', params.level);
+  }
+  if (params.status && params.status !== 'all') {
+    queryParams.append('status', params.status);
+  }
+  if (params.search) {
+    queryParams.append('search', params.search);
+  }
+  
+  queryParams.append('page', String(page));
+  queryParams.append('limit', String(limit));
+  
+  const url = `/riddle-mcq/all?${queryParams.toString()}`;
+  const response = await api.get<{ data: RiddleMcq[]; total: number }>(url);
   return response.data;
 }
 
@@ -368,15 +342,32 @@ export async function deleteRiddle(id: string): Promise<void> {
 }
 
 // ============================================================================
-// Stats API
+// Filter Counts API
 // ============================================================================
 
-export interface RiddlesStats {
-  totalRiddleMcqs: number;
-  totalSubjects: number;
-  totalChapters: number;
-  mcqsByLevel: Record<string, number>;
+/**
+ * Get unified filter counts (Public)
+ */
+export async function getRiddleFilterCounts(
+  params: GetFilterCountsParams = {}
+): Promise<FilterCounts> {
+  const queryParams = new URLSearchParams();
+  
+  if (params.subject && params.subject !== 'all') {
+    queryParams.append('subject', params.subject);
+  }
+  if (params.level && params.level !== 'all') {
+    queryParams.append('level', params.level);
+  }
+  
+  const url = `/riddle-mcq/filter-counts?${queryParams.toString()}`;
+  const response = await api.get(url);
+  return response.data as FilterCounts;
 }
+
+// ============================================================================
+// Stats API
+// ============================================================================
 
 /**
  * Get riddle MCQ statistics
@@ -384,51 +375,4 @@ export interface RiddlesStats {
 export async function getStats(): Promise<RiddlesStats> {
   const response = await api.get<RiddlesStats>('/riddle-mcq/stats/overview');
   return response.data;
-}
-
-/**
- * Get unified filter counts
- */
-export async function getFilterCounts(): Promise<{
-  subjectCounts: { id: string; name: string; count: number }[];
-  chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
-  levelCounts: { level: string; count: number }[];
-  total: number;
-}> {
-  const response = await api.get('/riddle-mcq/filter-counts');
-  return response.data as { subjectCounts: { id: string; name: string; count: number }[]; chapterCounts: { id: string; name: string; count: number; subjectId: string }[]; levelCounts: { level: string; count: number }[]; total: number };
-}
-
-// ============================================================================
-// Adapter Functions (for frontend compatibility)
-// ============================================================================
-
-/**
- * Convert backend chapter format to frontend chapter format
- */
-export function adaptChapterToFrontend(
-  chapter: RiddleChapter & { subject?: RiddleSubject }
-): { title: string; icon: string; id: string; riddleCount: number } {
-  return {
-    id: chapter.id,
-    title: chapter.name,
-    icon: chapter.subject?.emoji || '📚',
-    riddleCount: chapter.riddles?.length || 0,
-  };
-}
-
-/**
- * Get chapters with riddle counts
- */
-export async function getChaptersWithCounts(): Promise<
-  Array<{ id: string; title: string; icon: string; count: number }>
-> {
-  const chapters = await getAllChapters(true);
-
-  return chapters.map(ch => ({
-    id: ch.id,
-    title: ch.name,
-    icon: ch.subject?.emoji || '📚',
-    count: ch.riddles?.length || 0,
-  }));
 }

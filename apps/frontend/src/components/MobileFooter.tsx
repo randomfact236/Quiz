@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getAllChapters } from '@/lib/riddle-mcq-api';
-import { getSubjects, QuizSubject } from '@/lib/quiz-api';
+import { getSubjects } from '@/lib/riddle-mcq-api';
+import { getSubjects as getQuizSubjects, QuizSubject } from '@/lib/quiz-api';
 import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
 import type { RiddleChapter } from '@/types/riddles';
 
@@ -68,10 +68,10 @@ export default function MobileFooter() {
             if (activeDrawer === DRAWER_TYPES.RIDDLES && riddleChapters.length === 0) {
                 setLoadingRiddles(true);
                 try {
-                    const data = await getAllChapters(true); // true = hasContentOnly
-                    setRiddleChapters(data);
+                    const data = await getSubjects(true); // true = hasContentOnly
+                    setRiddleChapters(data as any);
                 } catch (error) {
-                    console.error('Failed to fetch riddle chapters:', error);
+                    console.error('Failed to fetch riddle subjects:', error);
                 } finally {
                     setLoadingRiddles(false);
                 }
@@ -82,7 +82,7 @@ export default function MobileFooter() {
             if (activeDrawer === DRAWER_TYPES.QUIZ && quizSubjects.length === 0) {
                 setLoadingQuiz(true);
                 try {
-                    const data = await getSubjects(true);
+                    const data = await getQuizSubjects(true);
                     setQuizSubjects(data);
                 } catch (error) {
                     console.error('Failed to fetch quiz subjects:', error);

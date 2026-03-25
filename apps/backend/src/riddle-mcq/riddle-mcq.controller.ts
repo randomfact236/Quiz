@@ -12,7 +12,7 @@ import {
   HttpStatus,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
@@ -21,18 +21,15 @@ import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { RiddleCategory } from './entities/riddle-category.entity';
-import { RiddleChapter } from './entities/riddle-chapter.entity';
 import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { RiddleMcqService } from './riddle-mcq.service';
 import {
   CreateRiddleCategoryDto,
-  CreateRiddleMcqChapterDto,
   CreateRiddleMcqDto,
   CreateRiddleMcqSubjectDto,
   RiddleMcqPaginationDto,
   UpdateRiddleCategoryDto,
-  UpdateRiddleMcqChapterDto,
   UpdateRiddleMcqDto,
   UpdateRiddleMcqSubjectDto,
 } from './dto/riddle-mcq.dto';
@@ -117,7 +114,7 @@ export class RiddleMcqController {
   }
 
   @Get('subjects/:slug')
-  @ApiOperation({ summary: 'Get subject by slug with chapters' })
+  @ApiOperation({ summary: 'Get subject by slug' })
   @ApiParam({ name: 'slug', example: 'brain-teasers' })
   async getSubjectBySlug(@Param('slug') slug: string): Promise<RiddleSubject> {
     return this.riddleMcqService.findSubjectBySlug(slug);
@@ -148,58 +145,11 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete riddle subject (Admin only)' })
   async deleteSubject(@Param('id') id: string): Promise<{ message: string }> {
     await this.riddleMcqService.deleteSubject(id);
     return { message: 'Subject deleted successfully' };
-  }
-
-  // ==================== CHAPTERS ====================
-
-  @Get('chapters/active/all')
-  @ApiOperation({ summary: 'Get all chapters across all subjects that have content' })
-  async getAllActiveChapters(): Promise<RiddleChapter[]> {
-    return this.riddleMcqService.findAllActiveChapters();
-  }
-
-  @Get('chapters/:subjectId')
-  @ApiOperation({ summary: 'Get chapters by subject ID' })
-  async getChaptersBySubject(
-    @Param('subjectId') subjectId: string,
-    @Query('hasContent') hasContent?: string,
-  ): Promise<RiddleChapter[]> {
-    return this.riddleMcqService.findChaptersBySubject(subjectId, hasContent === 'true');
-  }
-
-  @Post('chapters')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new riddle chapter (Admin only)' })
-  async createChapter(@Body() dto: CreateRiddleMcqChapterDto): Promise<RiddleChapter> {
-    return this.riddleMcqService.createChapter(dto);
-  }
-
-  @Patch('chapters/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update riddle chapter (Admin only)' })
-  async updateChapter(
-    @Param('id') id: string,
-    @Body() dto: UpdateRiddleMcqChapterDto,
-  ): Promise<RiddleChapter> {
-    return this.riddleMcqService.updateChapter(id, dto);
-  }
-
-  @Delete('chapters/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete riddle chapter (Admin only)' })
-  async deleteChapter(@Param('id') id: string): Promise<{ message: string }> {
-    await this.riddleMcqService.deleteChapter(id);
-    return { message: 'Chapter deleted successfully' };
   }
 
   // ==================== MCQs ====================
@@ -208,9 +158,29 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all riddle MCQs (Admin only)' })
-  async getAllRiddleMcqsAdmin(): Promise<RiddleMcq[]> {
-    return this.riddleMcqService.findAllRiddleMcqsAdmin();
+  @ApiOperation({ summary: 'Get all riddle MCQs with filters (Admin only)' })
+  @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
+  @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })
+  @ApiQuery({ name: 'status', required: false, description: 'Filter by status' })
+  @ApiQuery({ name: 'search', required: false, description: 'Search in question text' })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Items per page' })
+  async getAllRiddleMcqsAdmin(
+    @Query('subject') subject?: string,
+    @Query('level') level?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ): Promise<{ data: RiddleMcq[]; total: number }> {
+    const pagination = {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 50,
+    };
+    return this.riddleMcqService.findAllRiddleMcqsAdmin(
+      { subject, level, status, search },
+      pagination
+    );
   }
 
   @Get('subjects/:subjectId/mcqs')
@@ -223,18 +193,8 @@ export class RiddleMcqController {
     return this.riddleMcqService.findRiddleMcqsBySubject(subjectId, pagination, level);
   }
 
-  @Get('mcqs/:chapterId')
-  @ApiOperation({ summary: 'Get riddle MCQs by chapter ID' })
-  async getRiddleMcqsByChapter(
-    @Param('chapterId') chapterId: string,
-    @Query() pagination: RiddleMcqPaginationDto,
-    @Query('level') level?: string,
-  ): Promise<{ data: RiddleMcq[]; total: number }> {
-    return this.riddleMcqService.findRiddleMcqsByChapter(chapterId, pagination, level);
-  }
-
   @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed riddle MCQs from all chapters' })
+  @ApiOperation({ summary: 'Get mixed riddle MCQs from all subjects' })
   async getMixedRiddleMcqs(@Query('count') count?: string): Promise<RiddleMcq[]> {
     const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
     return this.riddleMcqService.findMixedRiddleMcqs(parsedCount);
@@ -291,6 +251,7 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete riddle MCQ (Admin only)' })
   async deleteRiddleMcq(@Param('id') id: string): Promise<{ message: string }> {
     await this.riddleMcqService.deleteRiddleMcq(id);
@@ -316,7 +277,6 @@ export class RiddleMcqController {
   async getStats(): Promise<{
     totalRiddleMcqs: number;
     totalSubjects: number;
-    totalChapters: number;
     mcqsByLevel: Record<string, number>;
   }> {
     return this.riddleMcqService.getStats();
@@ -324,13 +284,17 @@ export class RiddleMcqController {
 
   @Get('filter-counts')
   @ApiOperation({ summary: 'Get unified filter counts' })
-  async getFilterCounts(): Promise<{
+  @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
+  @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })
+  async getFilterCounts(
+    @Query('subject') subject?: string,
+    @Query('level') level?: string,
+  ): Promise<{
     subjectCounts: { id: string; name: string; count: number }[];
-    chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     total: number;
   }> {
-    return this.riddleMcqService.getFilterCounts();
+    return this.riddleMcqService.getFilterCounts({ subject, level });
   }
 
   // ==================== VALIDATION HELPERS ====================

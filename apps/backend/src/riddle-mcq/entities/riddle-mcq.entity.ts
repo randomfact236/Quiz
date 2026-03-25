@@ -8,7 +8,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { RiddleChapter } from './riddle-chapter.entity';
 import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 
 export { RiddleMcqLevel };
@@ -20,7 +19,7 @@ export enum RiddleStatus {
 }
 
 @Entity('riddle_mcqs')
-@Index(['chapterId', 'level', 'status'])
+@Index(['subjectId', 'level', 'status'])
 export class RiddleMcq {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -43,11 +42,11 @@ export class RiddleMcq {
 
   @Index()
   @Column()
-  chapterId: string;
+  subjectId: string;
 
-  @ManyToOne(() => RiddleChapter, (chapter) => chapter.riddles)
-  @JoinColumn({ name: 'chapterId' })
-  chapter: RiddleChapter;
+  @ManyToOne('RiddleSubject', 'riddles')
+  @JoinColumn({ name: 'subjectId' })
+  subject: any;
 
   @Index()
   @Column({

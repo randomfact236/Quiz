@@ -15,8 +15,8 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 
-import { getSubjects, getChaptersBySubject, getStats, type RiddlesStats } from '@/lib/riddle-mcq-api';
-import type { RiddleChapter } from '@/types/riddles';
+import { getSubjects, getStats, type RiddlesStats } from '@/lib/riddle-mcq-api';
+import type { RiddleSubject } from '@/types/riddles';
 
 // Riddle difficulty levels
 const levels = ['Easy', 'Medium', 'Hard', 'Expert'] as const;
@@ -37,15 +37,13 @@ const levelColors: Record<Level, string> = {
   'Expert': 'from-red-400 to-red-600'
 };
 
-interface ChapterWithSubject extends RiddleChapter {
-  subjectName: string;
-  subjectEmoji: string;
-  subjectId: string;
+interface SubjectWithStats extends RiddleSubject {
+  riddleCount?: number;
 }
 
 interface LevelCount {
-  chapterWise: Record<string, Record<string, number>>;
-  allChapter: Record<string, number>;
+  subjectWise: Record<string, Record<string, number>>;
+  allSubject: Record<string, number>;
   completeMix: number;
 }
 
@@ -58,16 +56,13 @@ export default function RiddleChallengePage(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
 
   // Data states
-  const [chapters, setChapters] = useState<ChapterWithSubject[]>([]);
+  const [subjects, setSubjects] = useState<SubjectWithStats[]>([]);
   const [stats, setStats] = useState<RiddlesStats | null>(null);
 
   // Foldable sections state - default expanded
-  const [chapterWiseOpen, setChapterWiseOpen] = useState(true);
-  const [allChapterOpen, setAllChapterOpen] = useState(true);
+  const [subjectWiseOpen, setSubjectWiseOpen] = useState(true);
+  const [allSubjectOpen, setAllSubjectOpen] = useState(true);
   const [completeMixOpen, setCompleteMixOpen] = useState(true);
-
-  // Expanded chapter for showing levels
-  // (no longer used - clicking a chapter goes directly to play)
 
   // Fetch data from backend
   useEffect(() => {
@@ -76,7 +71,7 @@ export default function RiddleChallengePage(): JSX.Element {
         setLoading(true);
         setError(null);
 
-        // Fetch stats, subjects and chapters from backend (only those with content)
+        // Fetch stats and subjects from backend (only those with content)
         const [statsData, subjectsData] = await Promise.all([
           getStats().catch(err => {
             console.error('Failed to get stats:', err);
@@ -86,31 +81,7 @@ export default function RiddleChallengePage(): JSX.Element {
         ]);
 
         setStats(statsData);
-
-        // Fetch chapters for each subject (only those with content)
-        const allChapters: ChapterWithSubject[] = [];
-        for (const subject of subjectsData) {
-          if (subject.id) {
-            try {
-              const subjectChapters = await getChaptersBySubject(subject.id, true); // hasContent = true
-              for (const chapter of subjectChapters) {
-                allChapters.push({
-                  ...chapter,
-                  subjectName: subject.name,
-                  subjectEmoji: subject.emoji || '📚',
-                  subjectId: subject.id
-                });
-              }
-            } catch (err) {
-
-            }
-          }
-        }
-
-        // Sort by chapter number
-        allChapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
-
-        setChapters(allChapters);
+        setSubjects(subjectsData);
       } catch (err) {
         console.error('Failed to fetch data:', err);
         setError(err instanceof Error ? err.message : 'Failed to load data');
@@ -125,66 +96,56 @@ export default function RiddleChallengePage(): JSX.Element {
   // Calculate level counts from backend data
   const levelCounts: LevelCount = useMemo(() => {
     const counts: LevelCount = {
-      chapterWise: {},
-      allChapter: { easy: 0, medium: 0, hard: 0, expert: 0 },
+      subjectWise: {},
+      allSubject: { easy: 0, medium: 0, hard: 0, expert: 0 },
       completeMix: stats?.totalRiddleMcqs || 0
     };
 
-    // Calculate per-chapter and total counts by difficulty
-    for (const chapter of chapters) {
-      if (!chapter.riddles) continue;
-
-      const chapterName = chapter.name;
-      counts.chapterWise[chapterName] = {};
-
-      for (const riddle of chapter.riddles) {
-        let level = riddle.level?.toLowerCase() || 'medium';
-        if (level === 'extreme') level = 'expert';
-
-        // Skip if not a valid level
-        if (!level || !(level in counts.allChapter)) continue;
-
-        // Count per chapter
-        if (counts.chapterWise[chapterName]) {
-          const l = level as keyof typeof counts.chapterWise[string];
-          if (counts.chapterWise[chapterName]![l] === undefined) {
-            counts.chapterWise[chapterName]![l] = 0;
-          }
-          counts.chapterWise[chapterName]![l]!++;
-        }
-
-        // Count total per level
-        if (level in counts.allChapter) {
-          const levelKey = level as keyof typeof counts.allChapter;
-          counts.allChapter[levelKey] = (counts.allChapter[levelKey] ?? 0) + 1;
-        }
-      }
+    // Use stats.mcqsByLevel if available, otherwise distribute evenly
+    const mcqsByLevel = stats?.mcqsByLevel || {};
+    
+    // For now, distribute total across subjects evenly for UI display
+    // The actual filtering happens on the backend
+    for (const subject of subjects) {
+      counts.subjectWise[subject.name] = {
+        easy: Math.floor((mcqsByLevel['easy'] || 0) / Math.max(1, subjects.length)),
+        medium: Math.floor((mcqsByLevel['medium'] || 0) / Math.max(1, subjects.length)),
+        hard: Math.floor((mcqsByLevel['hard'] || 0) / Math.max(1, subjects.length)),
+        expert: Math.floor((mcqsByLevel['expert'] || 0) / Math.max(1, subjects.length)),
+      };
     }
 
+    counts.allSubject = {
+      easy: mcqsByLevel['easy'] || 0,
+      medium: mcqsByLevel['medium'] || 0,
+      hard: mcqsByLevel['hard'] || 0,
+      expert: mcqsByLevel['expert'] || 0,
+    };
+
     return counts;
-  }, [chapters, stats]);
+  }, [subjects, stats]);
 
 
-  const getAllChapterCount = (level: Level): number => {
-    return levelCounts.allChapter[level.toLowerCase()] || 0;
+  const getAllSubjectCount = (level: Level): number => {
+    return levelCounts.allSubject[level.toLowerCase()] || 0;
   };
 
-  const getTotalRiddlesForChapter = (chapterName: string): number => {
-    const chapterCounts = levelCounts.chapterWise[chapterName] || {};
-    return Object.values(chapterCounts).reduce((sum, count) => sum + count, 0);
+  const getTotalRiddlesForSubject = (subjectName: string): number => {
+    const subjectCounts = levelCounts.subjectWise[subjectName] || {};
+    return Object.values(subjectCounts).reduce((sum, count) => sum + count, 0);
   };
 
 
-  const handleStartMixForChapter = (chapterId: string) => {
-    router.push(`/riddle-mcq/play?chapterId=${encodeURIComponent(chapterId)}&level=all&mode=timer`);
+  const handleStartMixForSubject = (subjectId: string) => {
+    router.push(`/riddle-mcq/play?subjectId=${encodeURIComponent(subjectId)}&level=all&mode=timer`);
   };
 
-  const handleStartAllChapterLevelWise = (level: Level) => {
-    router.push(`/riddle-mcq/play?chapterId=all&level=${level.toLowerCase()}&mode=timer`);
+  const handleStartAllSubjectLevelWise = (level: Level) => {
+    router.push(`/riddle-mcq/play?subjectId=all&level=${level.toLowerCase()}&mode=timer`);
   };
 
   const handleStartCompleteMix = () => {
-    router.push(`/riddle-mcq/play?chapterId=all&level=all&mode=timer`);
+    router.push(`/riddle-mcq/play?subjectId=all&level=all&mode=timer`);
   };
 
 
@@ -195,7 +156,7 @@ export default function RiddleChallengePage(): JSX.Element {
         <div className="mx-auto max-w-4xl flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading chapters from backend...</p>
+            <p className="text-gray-600">Loading subjects from backend...</p>
           </div>
         </div>
       </div>
@@ -252,7 +213,7 @@ export default function RiddleChallengePage(): JSX.Element {
         </motion.h1>
 
         <div className="space-y-6">
-          {/* Chapter Wise Mix */}
+          {/* Subject Wise Mix */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -260,53 +221,53 @@ export default function RiddleChallengePage(): JSX.Element {
             className="rounded-2xl bg-white shadow-lg overflow-hidden"
           >
             <button
-              onClick={() => setChapterWiseOpen(!chapterWiseOpen)}
+              onClick={() => setSubjectWiseOpen(!subjectWiseOpen)}
               className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
             >
               <div className="flex items-center gap-4">
                 <Target className="h-8 w-8" />
                 <div className="text-left">
-                  <span className="text-xl font-bold block">Chapter Wise Mix</span>
-                  <span className="text-sm opacity-90">Click a chapter to select difficulty level</span>
+                  <span className="text-xl font-bold block">Subject Wise Mix</span>
+                  <span className="text-sm opacity-90">Click a subject to select difficulty level</span>
                 </div>
               </div>
-              {chapterWiseOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+              {subjectWiseOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
             </button>
 
-            {chapterWiseOpen && (
+            {subjectWiseOpen && (
               <div className="p-6">
-                {/* Chapters as a flat grid - click to play mix directly */}
+                {/* Subjects as a flat grid - click to play mix directly */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {chapters.map((chapter) => {
-                    const totalRiddles = getTotalRiddlesForChapter(chapter.name);
+                  {subjects.map((subject) => {
+                    const totalRiddles = getTotalRiddlesForSubject(subject.name);
                     if (totalRiddles === 0) return null;
-                    const chapterIcon = chapter.subjectEmoji || '📖';
+                    const subjectIcon = subject.emoji || '📚';
 
                     return (
                       <button
-                        key={chapter.id}
-                        onClick={() => handleStartMixForChapter(chapter.id)}
+                        key={subject.id}
+                        onClick={() => handleStartMixForSubject(subject.id)}
                         disabled={totalRiddles === 0}
                         className="w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg bg-white border-2 border-gray-200 hover:border-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="text-3xl mb-1">{chapterIcon}</span>
-                        <span className="font-semibold text-sm text-gray-800">{chapter.name}</span>
+                        <span className="text-3xl mb-1">{subjectIcon}</span>
+                        <span className="font-semibold text-sm text-gray-800">{subject.name}</span>
                         <span className="text-xs mt-1 text-gray-500">{totalRiddles} riddles</span>
                       </button>
                     );
                   })}
                 </div>
 
-                {chapters.length === 0 && (
+                {subjects.length === 0 && (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">No chapters available. Please check back later!</p>
+                    <p className="text-gray-500">No subjects available. Please check back later!</p>
                   </div>
                 )}
               </div>
             )}
           </motion.div>
 
-          {/* All Chapter Level Wise Mix */}
+          {/* All Subject Level Wise Mix */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -314,29 +275,29 @@ export default function RiddleChallengePage(): JSX.Element {
             className="rounded-2xl bg-white shadow-lg overflow-hidden"
           >
             <button
-              onClick={() => setAllChapterOpen(!allChapterOpen)}
+              onClick={() => setAllSubjectOpen(!allSubjectOpen)}
               className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
             >
               <div className="flex items-center gap-4">
                 <Layers className="h-8 w-8" />
                 <div className="text-left">
-                  <span className="text-xl font-bold block">All Chapter Level Wise Mix</span>
-                  <span className="text-sm opacity-90">Riddles from all chapters at selected difficulty</span>
+                  <span className="text-xl font-bold block">All Subject Level Wise Mix</span>
+                  <span className="text-sm opacity-90">Riddles from all subjects at selected difficulty</span>
                 </div>
               </div>
-              {allChapterOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+              {allSubjectOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
             </button>
 
-            {allChapterOpen && (
+            {allSubjectOpen && (
               <div className="p-6">
                 <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {levels.map((level) => {
-                    const count = getAllChapterCount(level);
+                    const count = getAllSubjectCount(level);
                     return (
                       <button
-                        key={`all-chapter-${level}`}
-                        onClick={() => handleStartAllChapterLevelWise(level)}
+                        key={`all-subject-${level}`}
+                        onClick={() => handleStartAllSubjectLevelWise(level)}
                         disabled={count === 0}
                         className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
@@ -368,7 +329,7 @@ export default function RiddleChallengePage(): JSX.Element {
                 <Grid3X3 className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">Complete Mix</span>
-                  <span className="text-sm opacity-90">All chapters, all levels - Ultimate challenge!</span>
+                  <span className="text-sm opacity-90">All subjects, all levels - Ultimate challenge!</span>
                 </div>
               </div>
               {completeMixOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
@@ -377,7 +338,7 @@ export default function RiddleChallengePage(): JSX.Element {
             {completeMixOpen && (
               <div className="p-6 text-center">
                 <p className="mb-4 text-gray-600">
-                  Challenge yourself with riddles from all chapters and all difficulty levels!
+                  Challenge yourself with riddles from all subjects and all difficulty levels!
                 </p>
                 <div className="mb-6 flex justify-center gap-4 text-sm">
                   <span className="rounded-full bg-pink-100 px-4 py-2 text-pink-700">

@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 
 import type {
-  Riddle,
   Subject,
   Joke,
   JokeCategory,
@@ -120,7 +119,7 @@ export default function AdminPage(): JSX.Element {
   const [allQuestions, setAllQuestions] = useState<Record<string, Question[]>>(defaultQuestions);
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
   const [questionPagination, setQuestionPagination] = useState<Record<string, { page: number; limit: number; total: number }>>({});
-  const [allRiddles, setAllRiddles] = useState<Riddle[]>([]);
+
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
@@ -287,31 +286,7 @@ export default function AdminPage(): JSX.Element {
     setIsHydrated(true);
   }, []);
 
-  // Fetch riddles from backend API
-  useEffect(() => {
-    import('@/lib/riddle-mcq-api').then(({ getAllRiddleMcqsAdmin }) => {
-      getAllRiddleMcqsAdmin()
-        .then(riddleMcqs => {
-          const mappedRiddles = riddleMcqs.map(qr => ({
-            id: qr.id as string,
-            question: qr.question,
-            options: qr.options || [],
-            correctOption: qr.correctLetter || qr.correctAnswer || 'A',
-            correctLetter: qr.correctLetter,
-            difficulty: (qr.level as Riddle['difficulty']) || 'medium',
-            status: 'published' as const,
-            hint: qr.hint || '',
-            explanation: qr.explanation || '',
-            answer: qr.correctAnswer || '',
-            subject: qr.subject?.name || qr.chapter?.subject?.name || '',
-            subjectId: qr.subject?.id || qr.chapter?.subject?.id || '',
-            category: qr.chapter?.subject?.category?.name || 'Uncategorized',
-          }));
-          setAllRiddles(mappedRiddles);
-        })
-        .catch((err: any) => console.error('Failed to load quiz riddles:', err));
-    });
-  }, []);
+
 
 
   // Fetch questions from API when subject is selected (server-side pagination)
@@ -1329,10 +1304,7 @@ export default function AdminPage(): JSX.Element {
             />
           )}
           {activeSection === 'riddle-mcq' && (
-            <RiddleMcqSection
-              allRiddles={allRiddles}
-              setAllRiddles={setAllRiddles}
-            />
+            <RiddleMcqSection />
           )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <UsersSection />}

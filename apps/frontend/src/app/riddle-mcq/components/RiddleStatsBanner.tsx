@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 interface RiddleStatsBannerProps {
     totalRiddles: number;
     totalSubjects: number;
-    totalChapters: number;
     perRiddleTime?: string;
     className?: string;
 }
@@ -12,14 +11,12 @@ interface RiddleStatsBannerProps {
 export const RiddleStatsBanner: React.FC<RiddleStatsBannerProps> = ({
     totalRiddles,
     totalSubjects,
-    totalChapters,
     perRiddleTime = "30s",
     className = ""
 }) => {
     const stats = [
         { label: "Total Riddles", value: totalRiddles, icon: "🧩" },
         { label: "Subjects", value: totalSubjects, icon: "📚" },
-        { label: "Chapters", value: totalChapters, icon: "📖" },
         { label: "Per Riddle", value: perRiddleTime, icon: "⏱️" },
     ];
 
