@@ -1,10 +1,14 @@
 # Riddles MCQ Section - Feature List
 
+## Current Structure
+```
+Category → Subject → Riddle (no chapters)
+```
+
 ## Implemented Features
 
 ### ✅ Core/Basic Features
 - Subject/Category Selection
-- Chapter Selection
 - Difficulty Level Selection (Easy, Medium, Hard, Expert)
 - Multiple Choice Display (4 options)
 - Answer Selection (A, B, C, D)
@@ -16,58 +20,64 @@
 - Challenge Mode (timed riddles)
 - Streak Tracking
 - Hint System
-- Statistics Banner (total subjects, chapters, riddles)
+- Statistics Banner (total subjects, riddles)
 
 ### ✅ Enterprise Grade Features
 - Category-wise Selection
-- All Chapters Mode
+- All Subjects Mode
 - Complete Mix Mode
-- Chapter-wise Level Counts
+- Subject-wise Level Counts
 - Docker Deployment Support
 - Backend API Integration
+- Redis Cache
+- Database Indexing
 
 ---
 
 ## Future Improvements
 
-### 🔜 Core/Basic Features (High Priority)
+### 🔜 High Priority - Admin Panel
 
-#### Riddles Game
-- [ ] More Categories (add Logic, Word Play, Classic, Brain Teasers)
-- [ ] Difficulty Progression System (adaptive difficulty)
-- [ ] Enhanced Hint System (progressive hints, multiple hints per riddle)
-- [ ] Admin CRUD (create/edit/delete riddles via admin panel)
+#### Category Management
+- [ ] Category CRUD (create/edit/delete via admin)
+- [ ] Category list view with search
+- [ ] Category status toggle (published/draft/trash)
 
-#### Backend/API
-- [ ] CRUD API for Subjects
-- [ ] CRUD API for Chapters
-- [ ] CRUD API for Riddles
-- [ ] Bulk Import (CSV/JSON)
+#### Subject Management
+- [ ] Subject CRUD (create/edit/delete via admin)
+- [ ] Subject list view with search/filter by category
+- [ ] Subject status toggle (published/draft/trash)
 
-### 📋 Good to Have Features (Medium Priority)
-
-#### Riddles Game
-- [ ] Daily Challenges (new riddle each day)
-- [ ] Sound Effects (correct/wrong sounds)
-- [ ] Timer Display (visual countdown)
-- [ ] Progress Saving (localStorage resume)
-- [ ] Share Results (social sharing)
-
-#### Admin
-- [ ] Image Support (add images to riddles)
+#### Riddle Management
+- [ ] Riddle CRUD (create/edit/delete via admin)
+- [ ] Riddle list view with search/filter by subject/level/status
+- [ ] Riddle status toggle (published/draft/trash)
 - [ ] Difficulty Filter in Admin
-- [ ] Status Management (published/draft/trash)
 
-#### User Features
+#### Data Management
+- [ ] Bulk Import CSV (import riddles from CSV file)
+
+### 📋 Medium Priority
+
+#### User Experience
+- [ ] Daily Challenges (new riddle each day)
+- [ ] Progress Saving (localStorage resume)
 - [ ] Favorites/Bookmarks
 - [ ] History Tracking
-- [ ] Performance Analytics
 
-### 🚀 Enterprise Grade Features (Low Priority)
+#### Game Enhancements
+- [ ] Sound Effects (correct/wrong sounds)
+- [ ] Timer Display (visual countdown)
+- [ ] Share Results (social sharing)
 
-#### Riddles Game
+### 🚀 Low Priority
+
+#### Gamification
 - [ ] Achievement Badges
 - [ ] Global Leaderboards
+- [ ] Performance Analytics
+
+#### Platform
 - [ ] User Profiles/Accounts
 - [ ] Multiplayer Mode (compete with others)
 - [ ] Timed Tournaments
@@ -75,19 +85,13 @@
 #### Admin
 - [ ] Bulk Operations (publish, archive, delete)
 - [ ] Analytics Dashboard
-- [ ] Import/Export Tools
 - [ ] Question Bank Management
 
-#### Platform
-- [ ] Social Features (follow users)
-- [ ] Comments/Reviews on Riddles
-- [ ] Reporting System
-- [ ] Content Moderation
-
-#### Performance
-- [ ] Caching Layer
+#### Technical
 - [ ] CDN for Images
 - [ ] API Rate Limiting
+- [ ] Content Moderation
+- [ ] Reporting System
 
 #### UI/UX
 - [ ] Dark Mode
@@ -95,13 +99,39 @@
 - [ ] Animations & Transitions
 - [ ] Mobile App (PWA)
 
+#### Social
+- [ ] Social Features (follow users)
+- [ ] Comments/Reviews on Riddles
+
 ---
 
 ## Feature Summary
 
 | Tier | Implemented | Future |
 |------|-------------|--------|
-| Core/Basic | 7 | 10 |
-| Good to Have | 5 | 9 |
-| Enterprise | 6 | 15 |
-| **Total** | **18** | **34** |
+| Core/Basic | 7 | 4 |
+| Good to Have | 7 | 6 |
+| Enterprise | 8 | 18 |
+| **Total** | **22** | **28** |
+
+---
+
+## Implementation Notes
+
+### Admin CRUD Details
+
+| Entity | Fields |
+|--------|--------|
+| **Category** | name, emoji, slug, status |
+| **Subject** | name, emoji, slug, categoryId, status |
+| **Riddle** | question, options (A,B,C,D), correctAnswer, level, hint, explanation, subjectId, status |
+
+### Bulk Import CSV Format
+```csv
+question,optionA,optionB,optionC,optionD,correctAnswer,level,subject,hint,explanation
+```
+
+### Status Values
+- `published` - visible to users
+- `draft` - saved but not visible
+- `trash` - deleted but restorable
