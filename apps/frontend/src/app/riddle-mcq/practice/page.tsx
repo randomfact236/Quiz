@@ -168,7 +168,7 @@ export default function RiddlePracticePage(): JSX.Element {
       <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
         <div className="mx-auto max-w-4xl">
           <Link
-            href="/riddles"
+            href="/riddle-mcq"
             className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -195,7 +195,7 @@ export default function RiddlePracticePage(): JSX.Element {
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <Link
-          href="/riddles"
+          href="/riddle-mcq"
           className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
         >
           <ArrowLeft className="h-4 w-4" />

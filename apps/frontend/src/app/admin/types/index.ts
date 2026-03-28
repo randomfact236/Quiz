@@ -34,7 +34,7 @@ export interface Subject {
   slug: string;
   name: string;
   emoji: string;
-  category: 'academic' | 'professional' | 'entertainment';
+  category: string;
   order?: number;
   isActive?: boolean;
 }

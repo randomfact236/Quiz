@@ -23,30 +23,32 @@ export const authService = {
     return response.data;
   },
 
-  googleLogin: (): void => {
-    const apiUrl = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
-    window.location.href = `${apiUrl}/auth/google`;
-  },
-
-  googleCallback: async (): Promise<AuthResponse> => {
-    const response = await api.get<AuthResponse>('/auth/google/callback');
+  register: async (name: string, email: string, password: string): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/register', { name, email, password });
     const { token, refreshToken } = response.data;
     setItem(STORAGE_KEYS.AUTH_TOKEN, token, true);
     setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, true);
     return response.data;
   },
 
-  refresh: async (refreshToken: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/refresh', { refreshToken });
-    const { token, refreshToken: newRefreshToken } = response.data;
-    setItem(STORAGE_KEYS.AUTH_TOKEN, token, true);
-    setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken, true);
-    return response.data;
+  googleLogin: (): void => {
+    const apiUrl = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
+    window.location.href = `${apiUrl}/auth/google`;
   },
 
   logout: (): void => {
     removeItem(STORAGE_KEYS.AUTH_TOKEN);
     removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+  },
+
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/forgot-password', { email });
+    return response.data;
+  },
+
+  resetPassword: async (token: string, newPassword: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/reset-password', { token, newPassword });
+    return response.data;
   },
 
   getCurrentUser: async (): Promise<AuthUser | null> => {

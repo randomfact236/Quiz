@@ -43,18 +43,18 @@ export default function AdminLogin() {
             const { data } = await api.post<{ token: string; refreshToken: string; user: any }>('/auth/login', {
                 email,
                 password,
-            });
+            }, { isAdmin: true });
 
             if (!data.token || data.user?.role !== 'admin') {
                 throw new Error('Unauthorized access. Admin privileges required.');
             }
 
             if (rememberMe) {
-                setItem(STORAGE_KEYS.AUTH_TOKEN, data.token, true);
-                setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken, true);
+                setItem(STORAGE_KEYS.ADMIN_TOKEN, data.token, true);
+                setItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN, data.refreshToken, true);
             } else {
-                setItem(STORAGE_KEYS.AUTH_TOKEN, data.token, false);
-                setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken, false);
+                setItem(STORAGE_KEYS.ADMIN_TOKEN, data.token, false);
+                setItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN, data.refreshToken, false);
             }
             router.push('/admin');
         } catch (err: unknown) {

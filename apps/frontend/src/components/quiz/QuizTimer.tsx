@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, AlertCircle } from 'lucide-react';
+import { formatTimeMMSS } from '@/lib/utils';
 
 interface QuizTimerProps {
   /** Time remaining in seconds */
@@ -35,13 +36,6 @@ export function QuizTimer({
   // Calculate percentage remaining
   const percentage = totalTime > 0 ? (timeRemaining / totalTime) * 100 : 0;
 
-  // Format time as MM:SS
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
   // Update warning states
   useEffect(() => {
     setIsWarning(timeRemaining <= 30 && timeRemaining > 10);
@@ -65,7 +59,7 @@ export function QuizTimer({
     return (
       <div className={`flex items-center gap-2 font-mono text-lg font-semibold ${getTextClass()}`}>
         <Clock className="h-5 w-5" />
-        {formatTime(timeRemaining)}
+        {formatTimeMMSS(timeRemaining)}
         {isCritical && <AlertCircle className="h-5 w-5 animate-pulse" />}
       </div>
     );
@@ -103,7 +97,7 @@ export function QuizTimer({
           />
         </svg>
         <div className={`absolute text-center font-mono text-sm font-bold ${getTextClass()}`}>
-          {formatTime(timeRemaining)}
+          {formatTimeMMSS(timeRemaining)}
         </div>
       </div>
     );
@@ -115,7 +109,7 @@ export function QuizTimer({
       <div className="mb-2 flex items-center justify-between">
         <div className={`flex items-center gap-2 font-mono text-lg font-semibold ${getTextClass()}`}>
           <Clock className="h-5 w-5" />
-          {formatTime(timeRemaining)}
+          {formatTimeMMSS(timeRemaining)}
         </div>
         {isCritical && (
           <span className="flex items-center gap-1 text-sm font-medium text-red-600 animate-pulse">

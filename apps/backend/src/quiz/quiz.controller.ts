@@ -18,6 +18,7 @@ import { IsOptional, IsString } from 'class-validator';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
+import { ContentStatus } from '../common/enums/content-status.enum';
 import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateQuestionDto,
@@ -82,11 +83,10 @@ export class QuizController {
   }
 
   @Get('subjects/:slug/questions')
-  @ApiOperation({ summary: 'Get questions by subject slug with filters' })
+  @ApiOperation({ summary: 'Get questions by subject slug with filters (PUBLIC - always returns PUBLISHED only)' })
   @ApiParam({ name: 'slug', example: 'science' })
   async getQuestionsBySubjectSlug(
     @Param('slug') slug: string,
-    @Query('status') status?: string,
     @Query('level') level?: string,
     @Query('chapter') chapter?: string,
     @Query('search') search?: string,
@@ -94,7 +94,8 @@ export class QuizController {
     @Query('limit') limit?: number,
   ): Promise<{ data: Question[]; total: number }> {
     const pagination = { page: page || 1, limit: limit || 10 };
-    const filters = { status: status as any, level, chapter, search, subjectSlug: slug };
+    // PUBLIC ENDPOINT: Always filter by PUBLISHED status - drafts are admin only
+    const filters = { status: ContentStatus.PUBLISHED, level, chapter, search, subjectSlug: slug };
     return this.quizService.findAllQuestions(pagination, filters);
   }
 
@@ -112,7 +113,7 @@ export class QuizController {
     @Query('chapter') chapter?: string,
     @Query('search') search?: string,
   ): Promise<{
-    subjectCounts: { slug: string; count: number }[];
+    subjects: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[];
     chapterCounts: { id: string; name: string; count: number }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
@@ -218,11 +219,12 @@ export class QuizController {
   }
 
   @Get('questions/:chapterId')
-  @ApiOperation({ summary: 'Get questions by chapter ID' })
+  @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
     @Param('chapterId') chapterId: string,
     @Query() pagination: PaginationDto,
   ): Promise<{ data: Question[]; total: number }> {
+    // PUBLIC ENDPOINT: Already filtered by PUBLISHED in service
     return this.quizService.findQuestionsByChapter(chapterId, pagination);
   }
 

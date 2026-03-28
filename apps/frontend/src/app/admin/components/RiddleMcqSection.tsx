@@ -62,7 +62,7 @@ export function RiddleMcqSection(
   _props: RiddleMcqSectionProps
 ): JSX.Element {
   // Use URL-based filters
-  const { filters, setFilter, resetFilters: _resetFilters, buildCountsParams: _buildCountsParams, buildDataParams } = useRiddleMcqFilters();
+  const { filters, setFilter, buildDataParams } = useRiddleMcqFilters();
   
   // Internal state for riddles data (replaces riddles prop)
   const [riddles, setRiddles] = useState<Riddle[]>([]);

@@ -4,16 +4,14 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { authService } from '@/lib/auth';
 
 interface GoogleLoginButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onError'> {
-  onLoginSuccess?: () => void;
   onLoginError?: (error: Error) => void;
 }
 
 export const GoogleLoginButton = forwardRef<HTMLButtonElement, GoogleLoginButtonProps>(
-  ({ onLoginSuccess, onLoginError, ...props }, ref) => {
-    const handleClick = async () => {
+  ({ onLoginError, ...props }, ref) => {
+    const handleClick = () => {
       try {
         authService.googleLogin();
-        onLoginSuccess?.();
       } catch (error) {
         onLoginError?.(error instanceof Error ? error : new Error('Google login failed'));
       }

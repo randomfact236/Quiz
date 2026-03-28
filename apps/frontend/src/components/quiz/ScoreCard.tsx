@@ -10,6 +10,7 @@
 
 import { motion } from 'framer-motion';
 import { Trophy, Clock, Target } from 'lucide-react';
+import { formatTimeCompact } from '@/lib/utils';
 
 interface ScoreCardProps {
   /** Score (number of correct answers) */
@@ -31,13 +32,6 @@ export function ScoreCard({
   grade,
   timeTaken,
 }: ScoreCardProps): JSX.Element {
-  // Format time as MM:SS
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}m ${secs}s`;
-  };
-
   // Get grade color
   const getGradeColor = (g: string): string => {
     switch (g) {
@@ -118,7 +112,7 @@ export function ScoreCard({
         <div className="rounded-xl bg-blue-50 p-4 text-center">
           <Clock className="mx-auto mb-2 h-6 w-6 text-blue-500" />
           <p className="text-2xl font-bold text-blue-700">
-            {formatTime(timeTaken)}
+            {formatTimeCompact(timeTaken)}
           </p>
           <p className="text-xs text-blue-600">Time Taken</p>
         </div>

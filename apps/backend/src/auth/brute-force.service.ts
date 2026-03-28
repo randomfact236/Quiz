@@ -56,10 +56,4 @@ export class BruteForceService {
     const attempts = await this.cacheService.get<number>(key);
     return (attempts || 0) >= this.MAX_ATTEMPTS;
   }
-
-  async getRemainingAttempts(identifier: string): Promise<number> {
-    const key = this.getKey(identifier);
-    const attempts = await this.cacheService.get<number>(key) || 0;
-    return Math.max(0, this.MAX_ATTEMPTS - attempts);
-  }
 }

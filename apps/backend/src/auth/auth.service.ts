@@ -1,51 +1,20 @@
 import * as crypto from 'crypto';
-
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-
 import { BruteForceService } from './brute-force.service';
+import { EmailService } from '../common/services/email.service';
 
-/**
- * Authentication service handling user registration, login, and validation
- * 
- * @description Core authentication service that manages user registration,
- * password validation, and JWT token generation. Integrates with UsersService
- * for user data management and JwtService for token operations.
- * 
- * @class
- * @example
- * // Inject and use in controllers or other services
- * constructor(private authService: AuthService) {}
- * 
- * const result = await this.authService.login(email, password);
- */
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
     private bruteForceService: BruteForceService,
+    private emailService: EmailService,
   ) { }
 
-  /**
-   * Register a new user with email, password, and name
-   * 
-   * @description Creates a new user account after checking for existing
-   * email conflicts. Automatically generates a JWT token upon successful
-   * registration for immediate authentication.
-   * 
-   * @param {string} email - User's email address (must be unique)
-   * @param {string} password - Plain text password (will be hashed)
-   * @param {string} name - User's display name
-   * @returns {Promise<{ user: Partial<User>, token: string }>} User data without password and JWT token
-   * @throws {UnauthorizedException} When email is already registered
-   * @example
-   * const result = await authService.register('user@example.com', 'password123', 'John Doe');
-   * // Returns: { user: { id: 'uuid', email: 'user@example.com', name: 'John Doe' }, token: 'jwt-token' }
-   */
   private async generateTokens(user: Partial<User>) {
     const payload = { id: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
@@ -59,31 +28,13 @@ export class AuthService {
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
-
     const user = await this.usersService.create(email, password, name);
     const tokens = await this.generateTokens(user);
-
     return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
   }
 
-  /**
-   * Authenticate user with email and password
-   * 
-   * @description Validates user credentials by checking email existence
-   * and password match. Returns a JWT token upon successful authentication.
-   * 
-   * @param {string} email - User's registered email address
-   * @param {string} password - Plain text password to verify
-   * @returns {Promise<{ user: Partial<User>, token: string }>} User data without password and JWT token
-   * @throws {UnauthorizedException} When email doesn't exist or password is invalid
-   * @example
-   * const result = await authService.login('user@example.com', 'password123');
-   * // Returns: { user: { id: 'uuid', email: 'user@example.com', name: 'John Doe' }, token: 'jwt-token' }
-   */
   async login(email: string, password: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
-    // Check if account is locked due to brute force
     if (await this.bruteForceService.isLockedOut(email)) {
-      const remainingAttempts = await this.bruteForceService.getRemainingAttempts(email);
       throw new UnauthorizedException(`Account locked. Too many failed attempts. Try again later.`);
     }
 
@@ -99,9 +50,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Record successful login to reset brute force counter
     await this.bruteForceService.recordSuccess(email);
-
     const tokens = await this.generateTokens(user);
     return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
   }
@@ -115,18 +64,6 @@ export class AuthService {
     return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
   }
 
-  /**
-   * Validate a user by ID (used by JWT strategy)
-   * 
-   * @description Retrieves user data for JWT token validation.
-   * Used internally by Passport JWT strategy during authentication.
-   * 
-   * @param {string} id - User's unique identifier from JWT payload
-   * @returns {Promise<User | null>} User entity or null if not found
-   * @example
-   * const user = await authService.validateUser('user-uuid');
-   * // Returns: User entity or null
-   */
   async validateUser(id: string): Promise<User | null> {
     return this.usersService.findById(id);
   }
@@ -151,5 +88,67 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
     return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+  }
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    const user = await this.usersService.findByEmail(email);
+    
+    // Always return success to prevent email enumeration attacks
+    // Even if user doesn't exist, we don't reveal it
+    if (!user) {
+      return { message: 'If an account with that email exists, we have sent a password reset link.' };
+    }
+
+    // Generate reset token (valid for 1 hour)
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    // Store hashed token in database
+    await this.usersService.updatePasswordResetToken(user.id, hashedToken, resetExpires);
+
+    // Send email
+    const result = await this.emailService.sendPasswordResetEmail(
+      user.email,
+      resetToken,
+      user.name,
+    );
+
+    if (!result.success) {
+      throw new BadRequestException('Failed to send reset email. Please try again later.');
+    }
+
+    return { message: 'If an account with that email exists, we have sent a password reset link.' };
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    // Find user with this reset token that hasn't expired
+    const user = await this.usersService.findByPasswordResetToken(hashedToken);
+    
+    if (!user) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    // Check if token is expired
+    if (user.passwordResetExpires && new Date() > user.passwordResetExpires) {
+      throw new BadRequestException('Reset token has expired. Please request a new one.');
+    }
+
+    // Update password
+    await this.usersService.updatePassword(user.id, newPassword);
+
+    // Clear reset token
+    await this.usersService.clearPasswordResetToken(user.id);
+
+    return { message: 'Password has been reset successfully. You can now login with your new password.' };
+  }
+
+  async updateDemographics(
+    userId: string,
+    data: { country?: string; sex?: 'male' | 'female'; ageGroup?: string },
+  ): Promise<User> {
+    return this.usersService.updateDemographics(userId, data);
   }
 }
