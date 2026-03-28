@@ -329,33 +329,24 @@ export function parseCSVContent(csvContent: string): ParsedCSV {
   return { subjectName, rows, errors, warnings };
 }
 
-// ─── Step 2 – Full import (parse + save to DB) ───────────────────────────────
+// ─── Step 2 – Execute import from pre-parsed data ─────────────────────────────
 
-export async function importQuestionsFromCSV(
-  csvContent: string,
+export interface ParsedImportData {
+  subjectName: string;
+  subjectSlug: string;
+  rows: CSVParseRow[];
+  errors: string[];
+  warnings: string[];
+}
+
+export async function executeImportFromParsed(
+  parsed: ParsedImportData,
   existingSubjects: Subject[]
 ): Promise<CSVImportResult> {
-  // 1. Parse CSV content
-  const parsed = parseCSVContent(csvContent);
-
-  if (parsed.errors.length > 0 || parsed.rows.length === 0) {
-    return {
-      success: false,
-      subjectName: parsed.subjectName,
-      subjectSlug: '',
-      questionsImported: 0,
-      chaptersCreated: 0,
-      errors: parsed.errors.length > 0 ? parsed.errors : ['No valid questions found in CSV.'],
-      warnings: parsed.warnings,
-    };
-  }
-
-  const { subjectName, rows } = parsed;
-  const subjectSlug = generateSlug(subjectName);
+  const { subjectName, subjectSlug, rows, warnings } = parsed;
   const errors: string[] = [];
-  const warnings: string[] = [...parsed.warnings];
 
-  // 2. Find or create the subject
+  // 1. Find or create the subject
   let subjectId: string | undefined;
 
   // Check local state first
@@ -390,7 +381,7 @@ export async function importQuestionsFromCSV(
         slug: subjectSlug,
         emoji: '📚',
         category: 'academic',
-      });
+      }, true);
       subjectId = created.id;
     } catch (err) {
       return {
@@ -416,7 +407,7 @@ export async function importQuestionsFromCSV(
     const key = chapterName.toLowerCase().trim();
     if (!chapterMap.has(key)) {
       try {
-        const newChapter = await createChapter({ name: chapterName, subjectId: subjectId! });
+        const newChapter = await createChapter({ name: chapterName, subjectId: subjectId! }, true);
         // Ensure the chapter has a valid id before adding to map
         if (newChapter && newChapter.id) {
           chapterMap.set(key, newChapter.id);
@@ -433,7 +424,7 @@ export async function importQuestionsFromCSV(
   // If no chapters were found or created, create a default "General" chapter
   if (chapterMap.size === 0) {
     try {
-      const defaultChapter = await createChapter({ name: 'General', subjectId: subjectId! });
+      const defaultChapter = await createChapter({ name: 'General', subjectId: subjectId! }, true);
       if (defaultChapter && defaultChapter.id) {
         chapterMap.set('general', defaultChapter.id);
         chaptersCreated++;
@@ -530,7 +521,7 @@ export async function importQuestionsFromCSV(
 
   // 5. Bulk save to database
   try {
-    await createQuestionsBulk(questionsPayload);
+    await createQuestionsBulk(questionsPayload, true);
     return {
       success: true,
       subjectName,
@@ -538,7 +529,7 @@ export async function importQuestionsFromCSV(
       questionsImported: questionsPayload.length,
       chaptersCreated,
       errors,
-      warnings: parsed.warnings,
+      warnings,
     };
   } catch (err) {
     return {
@@ -548,7 +539,41 @@ export async function importQuestionsFromCSV(
       questionsImported: 0,
       chaptersCreated,
       errors: [`Failed to bulk-save questions: ${err}`],
+      warnings,
+    };
+  }
+}
+
+// ─── Step 2b – Convenience wrapper (parse + import) ──────────────────────────
+
+export async function importQuestionsFromCSV(
+  csvContent: string,
+  existingSubjects: Subject[]
+): Promise<CSVImportResult> {
+  // 1. Parse CSV content
+  const parsed = parseCSVContent(csvContent);
+
+  if (parsed.errors.length > 0 || parsed.rows.length === 0) {
+    return {
+      success: false,
+      subjectName: parsed.subjectName,
+      subjectSlug: '',
+      questionsImported: 0,
+      chaptersCreated: 0,
+      errors: parsed.errors.length > 0 ? parsed.errors : ['No valid questions found in CSV.'],
       warnings: parsed.warnings,
     };
   }
+
+  // 2. Execute import with parsed data
+  const subjectSlug = generateSlug(parsed.subjectName);
+  const parsedImportData: ParsedImportData = {
+    subjectName: parsed.subjectName,
+    subjectSlug,
+    rows: parsed.rows,
+    errors: [],
+    warnings: parsed.warnings,
+  };
+
+  return executeImportFromParsed(parsedImportData, existingSubjects);
 }

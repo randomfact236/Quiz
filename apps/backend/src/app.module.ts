@@ -4,7 +4,9 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
+import { AdminUsersModule } from './admin/users/admin-users.module';
 import { AuthModule } from './auth/auth.module';
+import { GuestUsersModule } from './guest-users/guest-users.module';
 import {
   DB_PORT,
   DB_POOL_SIZE,
@@ -85,6 +87,8 @@ import { UsersModule } from './users/users.module';
     RiddleMcqModule,
     ImageRiddlesModule,
     AdminImageRiddlesModule,
+    AdminUsersModule,
+    GuestUsersModule,
     UsersModule,
     AuthModule,
     HealthModule,

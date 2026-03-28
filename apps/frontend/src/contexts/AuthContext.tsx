@@ -10,7 +10,6 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  googleLogin: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,21 +19,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
-    if (token) {
-      authService.getCurrentUser()
-        .then((user) => {
-          setUser(user);
-        })
-        .catch(() => {
+    const checkAuth = async () => {
+      const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+      if (token) {
+        try {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        } catch {
           setUser(null);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
+        }
+      }
       setIsLoading(false);
-    }
+    };
+    checkAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -48,12 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const googleLogin = () => {
-    authService.googleLogin();
-  };
-
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout, googleLogin }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

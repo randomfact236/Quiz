@@ -26,6 +26,24 @@ export class User {
   @Column({ nullable: true })
   googleId: string;
 
+  @Column({ nullable: true })
+  passwordResetToken: string;
+
+  @Column({ nullable: true })
+  passwordResetExpires: Date;
+
+  @Column({ nullable: true })
+  country: string;
+
+  @Column({ nullable: true })
+  sex: 'male' | 'female';
+
+  @Column({ nullable: true })
+  ageGroup: string;
+
+  @Column({ nullable: true })
+  lastActive: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

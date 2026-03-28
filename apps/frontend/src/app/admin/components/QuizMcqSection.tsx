@@ -19,7 +19,7 @@ import {
   exportQuestionsToCSV,
   bulkActionQuestions,
 } from '@/lib/quiz-api';
-import { importQuestionsFromCSV } from '@/app/admin/utils/quiz-importer';
+import { parseCSVContent, executeImportFromParsed, ParsedImportData } from '@/app/admin/utils/quiz-importer';
 import { SubjectFilter } from '@/components/ui/quiz-filters/SubjectFilter';
 import { ChapterFilter } from '@/components/ui/quiz-filters/ChapterFilter';
 import { LevelFilter } from '@/components/ui/quiz-filters/LevelFilter';
@@ -36,15 +36,14 @@ import type { Subject } from '../types';
 import type { BulkActionType, StatusFilter as BulkStatusFilter } from '@/types/status.types';
 
 interface QuizMcqSectionProps {
-  allSubjects: Subject[];
-  onSubjectsChange?: () => void;
   isLoading?: boolean;
+  subject?: Subject;
 }
 
 const QUESTIONS_PAGE_SIZE = 10;
 
-export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoading: isLoadingSubjects }: QuizMcqSectionProps) {
-  const { filters, setFilter, resetFilters } = useQuizFilters();
+export default function QuizMcqSection({ isLoading: isLoadingSubjects, subject }: QuizMcqSectionProps) {
+  const { filters, setFilter, resetFilters } = useQuizFilters(subject?.slug === 'quiz' ? undefined : subject?.slug);
   
   const [filterCounts, setFilterCounts] = useState<FilterCountsResponse | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -80,7 +79,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
   const [importLoading, setImportLoading] = useState(false);
   const [importError, setImportError] = useState('');
   const [importSuccess, setImportSuccess] = useState('');
-  const [lastImportContent, setLastImportContent] = useState('');
+  const [lastParsedData, setLastParsedData] = useState<ParsedImportData | null>(null);
 
   // Page size state
   const [pageSize, setPageSize] = useState(QUESTIONS_PAGE_SIZE);
@@ -127,7 +126,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     
     async function fetchCounts() {
       try {
-        const counts = await getFilterCounts(countParams);
+        const counts = await getFilterCounts(countParams, true);
         if (!cancelled) {
           setFilterCounts(counts);
         }
@@ -148,7 +147,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     async function fetchQuestionsData() {
       setIsLoading(true);
       try {
-        const result = await getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE);
+        const result = await getAllQuestions(dataParams, currentPage, QUESTIONS_PAGE_SIZE, true);
         if (!cancelled) {
           setQuestions(result.data);
           setTotalQuestions(result.total);
@@ -172,36 +171,27 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     setCurrentPage(1);
   }, [filters.subject, filters.status, filters.level, filters.chapter, filters.search, pageSize]);
 
-  // Reset chapter filter when subject changes and current chapter doesn't belong to new subject
-  useEffect(() => {
-    if (filters.chapter && filters.chapter !== 'all' && filters.subject && filters.subject !== 'all') {
-      const selectedSubject = allSubjects.find(s => s.slug === filters.subject);
-      if (selectedSubject) {
-        // Check if current chapter belongs to selected subject
-        const chapterBelongsToSubject = filterCounts?.chapterCounts.some(
-          ch => ch.name === filters.chapter && ch.subjectId === selectedSubject.id
-        );
-        if (!chapterBelongsToSubject) {
-          setFilter('chapter', 'all');
-        }
-      }
-    }
-  }, [filters.subject, filters.chapter, filterCounts?.chapterCounts, allSubjects, setFilter]);
+  // Reset chapter filter when subject changes - skip if chapter doesn't exist for subject
+  // Note: This check requires subject id which filterCounts doesn't provide yet
+  // Will be fixed when backend returns full subject data in filterCounts
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const handleRefresh = useCallback(() => {
-    Promise.all([
-      getFilterCounts(countParams),
-      getAllQuestions(dataParams, currentPage, pageSize),
-    ]).then(([counts, result]) => {
+  const handleRefresh = useCallback(async () => {
+    try {
+      const [counts, result] = await Promise.all([
+        getFilterCounts(countParams, true),
+        getAllQuestions(dataParams, currentPage, pageSize, true),
+      ]);
       setFilterCounts(counts);
       setQuestions(result.data);
       setTotalQuestions(result.total);
-    }).catch(console.error);
+    } catch (error) {
+      console.error('Failed to refresh:', error);
+    }
   }, [countParams, dataParams, currentPage, pageSize]);
 
   // Bulk action handlers
@@ -213,7 +203,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     
     setBulkActionLoading(true);
     try {
-      await bulkActionQuestions(selectedIds, apiAction as 'publish' | 'draft' | 'trash' | 'delete');
+      await bulkActionQuestions(selectedIds, apiAction as 'publish' | 'draft' | 'trash' | 'delete', true);
       setSelectedIds([]);
       handleRefresh();
     } catch (error) {
@@ -231,19 +221,33 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     
     try {
       const content = await file.text();
-      setLastImportContent(content);
       
-      const result = await importQuestionsFromCSV(content, allSubjects);
+      // Parse CSV only (no DB import)
+      const parsed = parseCSVContent(content);
       
-      if (result.errors.length > 0) {
-        setImportError(result.errors.join('\n'));
+      if (parsed.errors.length > 0) {
+        setImportError(parsed.errors.join('\n'));
         setImportPreview(null);
+        setLastParsedData(null);
+      } else if (parsed.rows.length === 0) {
+        setImportError('No valid questions found in CSV.');
+        setImportPreview(null);
+        setLastParsedData(null);
       } else {
+        // Store parsed data for later import
+        const subjectSlug = content.split('\n')[0]?.match(/#\s*Subject:\s*(.+)/i)?.[1]?.trim() || '';
+        setLastParsedData({
+          subjectName: parsed.subjectName,
+          subjectSlug: subjectSlug,
+          rows: parsed.rows,
+          errors: [],
+          warnings: parsed.warnings,
+        });
         setImportPreview({
-          subjectName: result.subjectName,
-          questionCount: result.questionsImported,
-          errors: result.errors,
-          warnings: result.warnings,
+          subjectName: parsed.subjectName,
+          questionCount: parsed.rows.length,
+          errors: [],
+          warnings: parsed.warnings,
         });
       }
     } catch (err) {
@@ -251,25 +255,25 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     } finally {
       setImportLoading(false);
     }
-  }, [allSubjects]);
+  }, []);
 
   const handleConfirmImport = useCallback(async () => {
-    if (!importPreview) return;
+    if (!importPreview || !lastParsedData) return;
 
     setImportLoading(true);
     try {
-      const result = await importQuestionsFromCSV(lastImportContent, allSubjects);
+      // Execute import with pre-parsed data (no re-parsing)
+      const result = await executeImportFromParsed(lastParsedData, (filterCounts?.subjects || []) as Subject[]);
 
       if (result.success) {
         const msg = `✅ Imported ${result.questionsImported} questions into "${result.subjectName}"` +
           (result.warnings.length > 0 ? ` (${result.warnings.length} warnings)` : '');
         setImportSuccess(msg);
         setImportPreview(null);
-        setLastImportContent('');
+        setLastParsedData(null);
 
         // Refresh data
-        handleRefresh();
-        onSubjectsChange?.();
+        await handleRefresh();
 
         // Auto-close after short delay
         setTimeout(() => {
@@ -288,7 +292,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     } finally {
       setImportLoading(false);
     }
-  }, [importPreview, lastImportContent, allSubjects, handleRefresh, onSubjectsChange]);
+  }, [importPreview, lastParsedData, handleRefresh]);
 
   // Subject handlers
   const handleAddSubject = () => {
@@ -319,12 +323,12 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     try {
       if (subjectModalMode === 'add') {
         const slug = data.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        await createSubject({ ...data, slug });
+        await createSubject({ ...data, slug }, true);
       } else if (editingSubject) {
-        await updateSubject(editingSubject.id, data);
+        await updateSubject(editingSubject.id, data, true);
       }
-      handleRefresh();
-      onSubjectsChange?.();
+      // HYBRID: Single call - handleRefresh updates filterCounts
+      await handleRefresh();
     } catch (error: any) {
       console.error('Failed to save subject:', error);
       const errorMessage = error?.message || 'Failed to save subject';
@@ -353,12 +357,12 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
   const handleSaveChapter = async (data: { name: string; subjectId: string }) => {
     try {
       if (chapterModalMode === 'add') {
-        await createChapter(data);
+        await createChapter(data, true);
       } else if (editingChapter) {
-        await updateChapter(editingChapter.id, data);
+        await updateChapter(editingChapter.id, data, true);
       }
-      handleRefresh();
-      onSubjectsChange?.();
+      // HYBRID: Single call - handleRefresh updates filterCounts
+      await handleRefresh();
     } catch (error: any) {
       console.error('Failed to save chapter:', error);
       const errorMessage = error?.message || 'Failed to save chapter';
@@ -382,9 +386,9 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
   const handleSaveQuestion = async (data: any) => {
     try {
       if (questionModalMode === 'add') {
-        await createQuestion(data);
+        await createQuestion(data, true);
       } else if (editingQuestion) {
-        await updateQuestion(editingQuestion.id, data);
+        await updateQuestion(editingQuestion.id, data, true);
       }
       handleRefresh();
     } catch (error) {
@@ -404,18 +408,17 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
     try {
       switch (deleteTarget.type) {
         case 'subject':
-          await deleteSubject(deleteTarget.id);
-          onSubjectsChange?.();
+          await deleteSubject(deleteTarget.id, true);
           break;
         case 'chapter':
-          await deleteChapter(deleteTarget.id);
-          onSubjectsChange?.();
+          await deleteChapter(deleteTarget.id, true);
           break;
         case 'question':
-          await deleteQuestion(deleteTarget.id);
+          await deleteQuestion(deleteTarget.id, true);
           break;
       }
-      handleRefresh();
+      // HYBRID: Single call - handleRefresh updates all filterCounts
+      await handleRefresh();
     } catch (error) {
       console.error('Failed to delete:', error);
     }
@@ -449,7 +452,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
   };
 
   // Get subject/chapter data for modals
-  const subjectsForModal = allSubjects.map(s => ({ id: s.id, name: s.name, slug: s.slug }));
+  const subjectsForModal = (filterCounts?.subjects || []).map(s => ({ id: s.id, name: s.name, slug: s.slug }));
   const chaptersForModal = filterCounts?.chapterCounts.map(c => ({ id: c.id, name: c.name, subjectId: c.subjectId })) || [];
 
   // Chapter list with counts and subjectId for cascading
@@ -464,37 +467,26 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
   const visibleChapters = useMemo(() => {
     if (filters.subject === 'all') return chapterList;
     
-    const selectedSubject = allSubjects.find(s => s.slug === filters.subject);
+    const selectedSubject = filterCounts?.subjects?.find(s => s.slug === filters.subject);
     if (!selectedSubject) return chapterList;
     
     return chapterList.filter(ch => ch.subjectId === selectedSubject.id);
-  }, [chapterList, filters.subject, allSubjects]);
+  }, [chapterList, filters.subject, filterCounts?.subjects]);
   
   const levelCounts: Record<string, number> = {};
   filterCounts?.levelCounts.forEach(l => {
     levelCounts[l.level] = l.count;
   });
 
-  const subjectCounts = filterCounts?.subjectCounts || [];
   const statusCounts = filterCounts?.statusCounts || [];
 
   // Get subject name for display
-  const getSubjectName = (slug: string) => allSubjects.find(s => s.slug === slug)?.name || slug;
+  const getSubjectName = (slug: string) => filterCounts?.subjects.find(s => s.slug === slug)?.name || slug;
 
-  // Prepare subject data with counts from API - include ALL subjects from props
+  // Prepare subject data with counts from API - filterCounts.subjects has full data
   const subjectsWithIds = useMemo(() => {
-    return allSubjects.map(s => {
-      const countData = subjectCounts.find(sc => sc.slug === s.slug);
-      return { 
-        id: s.id,
-        slug: s.slug, 
-        name: s.name, 
-        emoji: s.emoji || '📚', 
-        category: s.category || 'academic',
-        count: countData?.count || 0 
-      };
-    });
-  }, [subjectCounts, allSubjects]);
+    return filterCounts?.subjects || [];
+  }, [filterCounts?.subjects]);
 
   return (
     <div className="space-y-4">
@@ -524,7 +516,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
           </div>
           <div className="flex gap-2">
             {/* Add Subject Button - Only show when no subjects */}
-            {allSubjects.length === 0 && (
+            {!filterCounts?.subjects?.length && (
               <button
                 onClick={handleAddSubject}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -544,7 +536,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
           <div className="flex justify-end gap-2">
             <button
               onClick={handleAddQuestion}
-              disabled={allSubjects.length === 0}
+              disabled={!filterCounts?.subjects?.length}
               className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -802,7 +794,7 @@ export default function QuizMcqSection({ allSubjects, onSubjectsChange, isLoadin
                     {/* Confirm/Cancel Buttons */}
                     <div className="flex gap-3">
                       <button
-                        onClick={() => { setImportPreview(null); setLastImportContent(''); }}
+                        onClick={() => { setImportPreview(null); setLastParsedData(null); }}
                         className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
                       >
                         ✕ Cancel

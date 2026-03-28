@@ -27,7 +27,7 @@ export default function RiddlesError({
                         Retry
                     </button>
                     <Link
-                        href="/riddles"
+                        href="/riddle-mcq"
                         className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                     >
                         Back to Riddles

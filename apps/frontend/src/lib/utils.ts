@@ -130,3 +130,15 @@ export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) {return text;}
   return `${text.slice(0, maxLength - TRUNCATION_ELLIPSIS_LENGTH)}...`;
 }
+
+export function formatTimeMMSS(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+export function formatTimeCompact(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s`;
+}

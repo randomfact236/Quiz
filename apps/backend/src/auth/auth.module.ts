@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { CacheModule } from '../common/cache/cache.module';
 import { UsersModule } from '../users/users.module';
+import { EmailService } from '../common/services/email.service';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -12,19 +13,6 @@ import { BruteForceService } from './brute-force.service';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 
-
-/**
- * Authentication module providing JWT-based authentication
- * 
- * @description Configures Passport JWT authentication with async JWT
- * secret loading from environment variables. Exports AuthService
- * for use in other modules requiring authentication capabilities.
- * 
- * @class
- * @example
- * // Import in other modules to use authentication
- * imports: [AuthModule]
- */
 @Module({
   imports: [
     UsersModule,
@@ -40,7 +28,7 @@ import { GoogleStrategy } from './google.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, BruteForceService],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, BruteForceService, EmailService],
   exports: [AuthService, BruteForceService],
 })
 export class AuthModule {}

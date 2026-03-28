@@ -1,20 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { GoogleLoginButton } from '@/components/ui';
 import { authService } from '@/lib/auth';
+import { setItem, STORAGE_KEYS } from '@/lib/storage';
 import { Mail, Lock, AlertCircle, ChevronLeft, Eye, EyeOff, CheckCircle, XCircle } from 'lucide-react';
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const token = searchParams.get('token');
+        const refreshToken = searchParams.get('refreshToken');
+        
+        if (token && refreshToken) {
+            setItem(STORAGE_KEYS.AUTH_TOKEN, token, rememberMe);
+            setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, rememberMe);
+            router.push('/');
+        }
+    }, [searchParams, router, rememberMe]);
 
     const validateEmail = (email: string): boolean => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +36,7 @@ export default function LoginPage() {
 
     const isEmailValid = email.length > 0 ? validateEmail(email) : null;
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
@@ -44,17 +57,13 @@ export default function LoginPage() {
             router.push('/');
         } catch (err: unknown) {
             if (err instanceof Error) {
-                setError(err.message || 'Invalid email or password');
+                setError(err.message || 'Authentication failed');
             } else {
                 setError('An unexpected error occurred. Please try again.');
             }
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const handleGoogleSuccess = () => {
-        router.push('/');
     };
 
     const handleGoogleError = (err: Error) => {
@@ -74,16 +83,13 @@ export default function LoginPage() {
                     <Lock className="h-6 w-6 text-white" />
                 </div>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-                    Welcome Back
+                    Sign In
                 </h2>
-                <p className="mt-2 text-center text-sm text-white/80">
-                    Sign in to your account
-                </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
-                    <form className="space-y-6" onSubmit={handleLogin}>
+                    <form className="space-y-5" onSubmit={handleSubmit}>
                         {error && (
                             <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-4 rounded-md flex items-start gap-3">
                                 <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
@@ -106,7 +112,7 @@ export default function LoginPage() {
                                     autoComplete="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md py-2 px-3 border ${isEmailValid === false ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`}
+                                    className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md py-2.5 px-3 border ${isEmailValid === false ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`}
                                     placeholder="you@example.com"
                                 />
                                 {isEmailValid === false && (
@@ -137,7 +143,7 @@ export default function LoginPage() {
                                     autoComplete="current-password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md py-2 px-3 border"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md py-2.5 px-3 border"
                                     placeholder="••••••••"
                                 />
                                 <button
@@ -169,6 +175,12 @@ export default function LoginPage() {
                                     Remember me
                                 </label>
                             </div>
+                            <Link
+                                href="/forgot-password"
+                                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                            >
+                                Forgot password?
+                            </Link>
                         </div>
 
                         <button
@@ -184,7 +196,19 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <div className="mt-6">
+                    <div className="mt-5 text-center">
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                            Don't have an account?{' '}
+                            <Link 
+                                href="/register" 
+                                className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                            >
+                                Create one →
+                            </Link>
+                        </p>
+                    </div>
+
+                    <div className="mt-5">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
                                 <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
@@ -194,9 +218,8 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div className="mt-6">
-                            <GoogleLoginButton 
-                                onLoginSuccess={handleGoogleSuccess}
+                        <div className="mt-5">
+                            <GoogleLoginButton
                                 onLoginError={handleGoogleError}
                                 className="w-full"
                             />

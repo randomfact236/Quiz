@@ -112,18 +112,18 @@ export async function getSubjectBySlug(slug: string): Promise<QuizSubject & { ch
     return response.data;
 }
 
-export async function createSubject(dto: CreateSubjectDto): Promise<QuizSubject> {
-    const response = await api.post<QuizSubject>('/quiz/subjects', dto);
+export async function createSubject(dto: CreateSubjectDto, isAdmin: boolean = false): Promise<QuizSubject> {
+    const response = await api.post<QuizSubject>('/quiz/subjects', dto, { isAdmin });
     return response.data;
 }
 
-export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<QuizSubject> {
-    const response = await api.put<QuizSubject>(`/quiz/subjects/${id}`, dto);
+export async function updateSubject(id: string, dto: UpdateSubjectDto, isAdmin: boolean = false): Promise<QuizSubject> {
+    const response = await api.put<QuizSubject>(`/quiz/subjects/${id}`, dto, { isAdmin });
     return response.data;
 }
 
-export async function deleteSubject(id: string): Promise<void> {
-    await api.delete(`/quiz/subjects/${id}`);
+export async function deleteSubject(id: string, isAdmin: boolean = false): Promise<void> {
+    await api.delete(`/quiz/subjects/${id}`, { isAdmin });
 }
 
 // ============================================================================
@@ -135,17 +135,17 @@ export async function getChaptersBySubject(subjectId: string): Promise<QuizChapt
     return response.data;
 }
 
-export async function createChapter(dto: CreateChapterDto): Promise<QuizChapter> {
-    const response = await api.post<QuizChapter>('/quiz/chapters', dto);
+export async function createChapter(dto: CreateChapterDto, isAdmin: boolean = false): Promise<QuizChapter> {
+    const response = await api.post<QuizChapter>('/quiz/chapters', dto, { isAdmin });
     return response.data;
 }
 
-export async function deleteChapter(id: string): Promise<void> {
-    await api.delete(`/quiz/chapters/${id}`);
+export async function deleteChapter(id: string, isAdmin: boolean = false): Promise<void> {
+    await api.delete(`/quiz/chapters/${id}`, { isAdmin });
 }
 
-export async function updateChapter(id: string, dto: { name?: string; subjectId?: string }): Promise<QuizChapter> {
-    const response = await api.patch<QuizChapter>(`/quiz/chapters/${id}`, dto);
+export async function updateChapter(id: string, dto: { name?: string; subjectId?: string }, isAdmin: boolean = false): Promise<QuizChapter> {
+    const response = await api.patch<QuizChapter>(`/quiz/chapters/${id}`, dto, { isAdmin });
     return response.data;
 }
 
@@ -185,7 +185,8 @@ export async function getQuestionsBySubject(
     subjectSlug: string,
     filters: QuestionFilters = {},
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    isAdmin: boolean = false
 ): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
     let url = `/quiz/subjects/${subjectSlug}/questions?page=${page}&limit=${limit}`;
     if (filters.status) {
@@ -200,7 +201,7 @@ export async function getQuestionsBySubject(
     if (filters.search) {
         url += `&search=${encodeURIComponent(filters.search)}`;
     }
-    const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
+    const response = await api.get<{ data: QuizQuestion[]; total: number }>(url, { isAdmin });
     return {
         data: response.data.data,
         total: response.data.total,
@@ -227,8 +228,8 @@ export async function getStatusCountsBySubject(subjectSlug: string): Promise<Sub
 }
 
 export interface FilterCountsResponse {
-    subjectCounts: { slug: string; count: number }[];
-    chapterCounts: { id: string; name: string; count: number; subjectId: string; subjectSlug: string }[];
+    subjects: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
     total: number;
@@ -240,7 +241,7 @@ export async function getFilterCounts(filters: {
     level?: string;
     chapter?: string;
     search?: string;
-}): Promise<FilterCountsResponse> {
+}, isAdmin: boolean = false): Promise<FilterCountsResponse> {
     const params = new URLSearchParams();
     if (filters.subject) params.append('subject', filters.subject);
     if (filters.status) params.append('status', filters.status);
@@ -248,7 +249,7 @@ export async function getFilterCounts(filters: {
     if (filters.chapter) params.append('chapter', filters.chapter);
     if (filters.search) params.append('search', filters.search);
     
-    const response = await api.get<FilterCountsResponse>(`/quiz/filter-counts?${params.toString()}`);
+    const response = await api.get<FilterCountsResponse>(`/quiz/filter-counts?${params.toString()}`, { isAdmin });
     return response.data;
 }
 
@@ -261,7 +262,8 @@ export async function getAllQuestions(
         search?: string;
     } = {},
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    isAdmin: boolean = false
 ): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
     const params = new URLSearchParams();
     if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
@@ -272,7 +274,7 @@ export async function getAllQuestions(
     params.append('page', String(page));
     params.append('limit', String(limit));
 
-    const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/questions?${params.toString()}`);
+    const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/questions?${params.toString()}`, { isAdmin });
     return {
         data: response.data.data,
         total: response.data.total,
@@ -281,33 +283,34 @@ export async function getAllQuestions(
     };
 }
 
-export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
-    const response = await api.post<QuizQuestion>('/quiz/questions', dto);
+export async function createQuestion(dto: CreateQuestionDto, isAdmin: boolean = false): Promise<QuizQuestion> {
+    const response = await api.post<QuizQuestion>('/quiz/questions', dto, { isAdmin });
     return response.data;
 }
 
-export async function createQuestionsBulk(dto: CreateQuestionDto[]): Promise<BulkCreateResponse> {
-    const response = await api.post<BulkCreateResponse>('/quiz/questions/bulk', dto);
+export async function createQuestionsBulk(dto: CreateQuestionDto[], isAdmin: boolean = false): Promise<BulkCreateResponse> {
+    const response = await api.post<BulkCreateResponse>('/quiz/questions/bulk', dto, { isAdmin });
     return response.data;
 }
 
-export async function updateQuestion(id: string, dto: UpdateQuestionDto): Promise<QuizQuestion> {
-    const response = await api.patch<QuizQuestion>(`/quiz/questions/${id}`, dto);
+export async function updateQuestion(id: string, dto: UpdateQuestionDto, isAdmin: boolean = false): Promise<QuizQuestion> {
+    const response = await api.patch<QuizQuestion>(`/quiz/questions/${id}`, dto, { isAdmin });
     return response.data;
 }
 
-export async function deleteQuestion(id: string): Promise<void> {
-    await api.delete(`/quiz/questions/${id}`);
+export async function deleteQuestion(id: string, isAdmin: boolean = false): Promise<void> {
+    await api.delete(`/quiz/questions/${id}`, { isAdmin });
 }
 
 export async function bulkActionQuestions(
     ids: string[],
-    action: 'publish' | 'draft' | 'trash' | 'delete'
+    action: 'publish' | 'draft' | 'trash' | 'delete',
+    isAdmin: boolean = false
 ): Promise<{ success: number; failed: number }> {
     const response = await api.post<{ success: number; failed: number }>('/quiz/bulk-action', {
         ids,
         action
-    });
+    }, { isAdmin });
     return response.data;
 }
 
@@ -346,94 +349,6 @@ export function exportQuestionsToCSV(questions: QuizQuestion[], subjectName?: st
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-}
-
-export function parseCSVQuestions(csvText: string): { data: CreateQuestionDto[]; errors: string[] } {
-    const lines = csvText.trim().split('\n');
-    const errors: string[] = [];
-    const data: CreateQuestionDto[] = [];
-    
-    // Skip header
-    for (let i = 1; i < lines.length; i++) {
-        try {
-            const line = lines[i];
-            if (!line) continue;
-            
-            // Simple CSV parsing (handles basic cases)
-            const values: string[] = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let j = 0; j < line.length; j++) {
-                const char = line[j];
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    values.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            values.push(current.trim());
-            
-            if (values.length < 6) {
-                errors.push(`Row ${i + 1}: Not enough columns`);
-                continue;
-            }
-            
-            const [question, optA, optB, optC, optD, correctAnswer, level, _chapterName, _subjectName, status] = values;
-            
-            if (!question) {
-                errors.push(`Row ${i + 1}: Missing question text`);
-                continue;
-            }
-            
-            const isExtreme = (level || '').toLowerCase() === 'extreme';
-            const parsedLevel = (['easy', 'medium', 'hard', 'expert', 'extreme'].includes((level || '').toLowerCase()) 
-                ? level?.toLowerCase() 
-                : 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-            
-            const questionDto: CreateQuestionDto = {
-                question: question.replace(/^"|"$/g, '').replace(/""/g, '"'),
-                level: parsedLevel,
-                chapterId: '', // Must be set by caller
-                status: (status?.toLowerCase() === 'published' ? 'published' : 'draft') as 'published' | 'draft',
-                correctAnswer: '', // Will be set below
-                options: null, // Will be set below
-            };
-            
-            if (isExtreme) {
-                questionDto.options = null;
-                questionDto.correctAnswer = correctAnswer?.replace(/^"|"$/g, '').replace(/""/g, '"') || '';
-                questionDto.correctLetter = null;
-            } else {
-                questionDto.options = [
-                    (optA || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
-                    (optB || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
-                    (optC || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
-                    (optD || '').replace(/^"|"$/g, '').replace(/""/g, '"'),
-                ];
-                
-                // Parse correct answer (either letter A-D or full text)
-                const ca = (correctAnswer || '').replace(/^"|"$/g, '').replace(/""/g, '"');
-                const caUpper = ca.toUpperCase();
-                if (['A', 'B', 'C', 'D'].includes(caUpper)) {
-                    questionDto.correctLetter = caUpper;
-                    questionDto.correctAnswer = questionDto.options[['A', 'B', 'C', 'D'].indexOf(caUpper)] || '';
-                } else {
-                    questionDto.correctLetter = null;
-                    questionDto.correctAnswer = ca;
-                }
-            }
-            
-            data.push(questionDto);
-        } catch (e) {
-            errors.push(`Row ${i + 1}: Parse error - ${String(e)}`);
-        }
-    }
-    
-    return { data, errors };
 }
 
 

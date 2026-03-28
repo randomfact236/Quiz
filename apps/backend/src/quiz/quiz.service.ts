@@ -55,6 +55,10 @@ export class QuizService {
     private bulkActionService: BulkActionService,
   ) { }
 
+  private async clearQuizCaches(subjectId?: string) {
+    await this.cacheService.delPattern(`quiz:*`);
+  }
+
   // ==================== SUBJECTS ====================
 
   async findAllSubjects(pagination?: PaginationDto, hasContentOnly: boolean = false): Promise<{ data: Subject[]; total: number }> {
@@ -90,8 +94,7 @@ export class QuizService {
   async createSubject(dto: CreateSubjectDto): Promise<Subject> {
     const subject = this.subjectRepo.create(dto);
     const saved = await this.subjectRepo.save(subject);
-    // Clear all subjects cache variants
-    await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -100,8 +103,7 @@ export class QuizService {
     if (!subject) { throw new NotFoundException('Subject not found'); }
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
-    // Clear all subjects cache variants
-    await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -130,7 +132,7 @@ export class QuizService {
       await queryRunner.manager.delete(Subject, { id });
 
       await queryRunner.commitTransaction();
-      await this.cacheService.delPattern(`${settings.quiz.cache.allSubjectsKey}*`);
+      await this.clearQuizCaches();
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
@@ -165,7 +167,9 @@ export class QuizService {
     const chapterNumber = existingChapters.length + 1;
 
     const chapter = this.chapterRepo.create({ name, subject, subjectId, chapterNumber });
-    return this.chapterRepo.save(chapter);
+    const saved = await this.chapterRepo.save(chapter);
+    await this.clearQuizCaches(subjectId);
+    return saved;
   }
 
   async updateChapter(id: string, dto: { name?: string; subjectId?: string }): Promise<Chapter> {
@@ -174,13 +178,16 @@ export class QuizService {
     if (dto.name !== undefined) { chapter.name = dto.name; }
     if (dto.subjectId !== undefined) { chapter.subjectId = dto.subjectId; }
     const saved = await this.chapterRepo.save(chapter);
-    await this.cacheService.delPattern('quiz:*');
+    await this.clearQuizCaches(saved.subjectId);
     return saved;
   }
 
   async deleteChapter(id: string): Promise<void> {
+    const chapter = await this.chapterRepo.findOne({ where: { id } });
+    if (!chapter) throw new NotFoundException('Chapter not found');
     const result = await this.chapterRepo.delete(id);
     if (result.affected === 0) { throw new NotFoundException('Chapter not found'); }
+    await this.clearQuizCaches(chapter.subjectId);
   }
 
   async findQuestionsByChapter(
@@ -265,7 +272,7 @@ export class QuizService {
     chapter?: string;
     search?: string;
   }): Promise<{
-    subjectCounts: { slug: string; count: number }[];
+    subjects: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[];
     chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
@@ -313,7 +320,7 @@ export class QuizService {
         };
 
         // 1. SUBJECT COUNTS: No parent filters (always show totals)
-        let subjectResults: { slug: string; count: number }[] = [];
+        let subjectResults: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[] = [];
         const allSubjects = await this.subjectRepo.find();
         const subjectCountMap = new Map<string, number>();
         allSubjects.forEach(s => subjectCountMap.set(s.slug, 0));
@@ -330,7 +337,15 @@ export class QuizService {
         subjectRaw.forEach((r: { slug: string; count: string }) => {
           subjectCountMap.set(r.slug, parseInt(r.count, 10));
         });
-        subjectResults = Array.from(subjectCountMap.entries()).map(([slug, count]) => ({ slug, count }));
+        // Build full subject data with counts
+        subjectResults = allSubjects.map(s => ({
+          id: s.id,
+          name: s.name,
+          slug: s.slug,
+          emoji: s.emoji,
+          category: s.category,
+          count: subjectCountMap.get(s.slug) || 0
+        }));
 
         // 2. CHAPTER COUNTS: Subject filter only
         // Return ALL chapters with their question counts (0 if no questions)
@@ -426,7 +441,7 @@ export class QuizService {
         }));
 
         return {
-          subjectCounts: subjectResults,
+          subjects: subjectResults,
           chapterCounts: chapterResults,
           levelCounts,
           statusCounts,

@@ -16,6 +16,8 @@ const PREFIX = 'aiquiz:';
 export const STORAGE_KEYS = {
     AUTH_TOKEN: `${PREFIX}auth-token`,
     REFRESH_TOKEN: `${PREFIX}refresh-token`,
+    ADMIN_TOKEN: `${PREFIX}admin-token`,
+    ADMIN_REFRESH_TOKEN: `${PREFIX}admin-refresh-token`,
     SETTINGS: `${PREFIX}settings`,
     SUBJECTS: `${PREFIX}subjects`,
     QUESTIONS: `${PREFIX}questions`,

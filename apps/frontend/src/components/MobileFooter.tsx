@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { getSubjects } from '@/lib/riddle-mcq-api';
 import { getSubjects as getQuizSubjects, QuizSubject } from '@/lib/quiz-api';
 import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
-import type { RiddleChapter } from '@/types/riddles';
+import type { RiddleSubject } from '@/types/riddles';
 
 // Drawer Types
 type DrawerType = 'quiz' | 'jokes' | 'riddles' | 'image-riddles' | null;
@@ -48,7 +48,7 @@ export default function MobileFooter() {
     const [isClient, setIsClient] = useState(false);
     const [currentPath, setCurrentPath] = useState('/');
 
-    const [riddleChapters, setRiddleChapters] = useState<RiddleChapter[]>([]);
+    const [riddleSubjects, setRiddleSubjects] = useState<RiddleSubject[]>([]);
     const [quizSubjects, setQuizSubjects] = useState<QuizSubject[]>([]);
     const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
 
@@ -65,11 +65,11 @@ export default function MobileFooter() {
     // Fetch and check content availability for drawers
     useEffect(() => {
         const fetchRiddles = async () => {
-            if (activeDrawer === DRAWER_TYPES.RIDDLES && riddleChapters.length === 0) {
+            if (activeDrawer === DRAWER_TYPES.RIDDLES && riddleSubjects.length === 0) {
                 setLoadingRiddles(true);
                 try {
                     const data = await getSubjects(true); // true = hasContentOnly
-                    setRiddleChapters(data as any);
+                    setRiddleSubjects(data as any);
                 } catch (error) {
                     console.error('Failed to fetch riddle subjects:', error);
                 } finally {
@@ -109,7 +109,7 @@ export default function MobileFooter() {
         fetchRiddles();
         fetchQuiz();
         fetchJokes();
-    }, [activeDrawer, riddleChapters.length, quizSubjects.length, jokeCategories.length]);
+    }, [activeDrawer, riddleSubjects.length, quizSubjects.length, jokeCategories.length]);
 
     const toggleDrawer = (drawer: DrawerType) => {
         if (activeDrawer === drawer) {
@@ -230,17 +230,17 @@ export default function MobileFooter() {
                                         <Loader2 className="animate-spin text-purple-600" />
                                         <span className="text-sm text-gray-500">Loading chapters...</span>
                                     </div>
-                                ) : riddleChapters.length > 0 ? (
-                                    riddleChapters.map((chapter) => (
+                                ) : riddleSubjects.length > 0 ? (
+                                    riddleSubjects.map((subject) => (
                                         <Link
-                                            key={chapter.id}
-                                            href={`/riddles/play?chapterId=${chapter.id}&mode=practice`}
+                                            key={subject.id}
+                                            href={`/riddle-mcq/play?subjectId=${subject.id}&mode=practice`}
                                             onClick={closeDrawer}
                                             className="flex flex-col items-center rounded-xl bg-gray-50 p-3 text-center transition-colors hover:bg-purple-50 dark:bg-gray-700 dark:hover:bg-gray-600"
                                         >
-                                            <span className="mb-1 text-xl">{chapter.subject?.emoji || '🧩'}</span>
+                                            <span className="mb-1 text-xl">{subject.emoji || '🧩'}</span>
                                             <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                                {chapter.name}
+                                                {subject.name}
                                             </span>
                                         </Link>
                                     ))

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 export interface RiddleFilters {
@@ -31,7 +31,6 @@ export function useRiddleMcqFilters(): RiddleFiltersState {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const isInitialized = useRef(false);
 
   const filters = useMemo<RiddleFilters>(() => ({
     status: searchParams.get('status') || DEFAULT_FILTERS.status,
@@ -101,12 +100,6 @@ export function useRiddleMcqFilters(): RiddleFiltersState {
     }
     return params;
   }, [filters]);
-
-  useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-    }
-  }, []);
 
   return {
     filters,

@@ -8,7 +8,7 @@
  */
 
 import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
-import type { RiddleSession, RiddleHistoryEntry, RiddleResult } from '@/types/riddles';
+import type { RiddleSession, RiddleHistoryEntry } from '@/types/riddles';
 
 // Auto-save interval in milliseconds (10 seconds as per Phase 0)
 const AUTO_SAVE_INTERVAL_MS = 10000;
@@ -127,47 +127,11 @@ export function createAutoSaveInterval(
 // History Management
 // ============================================================================
 
-const MAX_HISTORY_ENTRIES = 50; // Keep last 50 sessions
-
-/**
- * Add a completed riddle session to history
- */
-export function addToRiddleHistory(result: RiddleResult): void {
-    const history = getItem<RiddleHistoryEntry[]>(STORAGE_KEYS.RIDDLE_HISTORY, []);
-
-    const entry: RiddleHistoryEntry = {
-        sessionId: result.session.id,
-        mode: result.session.mode,
-        chapterId: result.session.chapterId,
-        chapterName: result.session.chapterName,
-        difficulty: result.session.difficulty,
-        totalRiddles: result.session.riddles.length,
-        correctCount: result.correctCount,
-        percentage: result.percentage,
-        grade: result.grade,
-        timeTaken: result.session.timeTaken,
-        completedAt: result.session.completedAt || new Date().toISOString(),
-    };
-
-    // Add to beginning (most recent first)
-    const updatedHistory = [entry, ...history].slice(0, MAX_HISTORY_ENTRIES);
-    setItem(STORAGE_KEYS.RIDDLE_HISTORY, updatedHistory);
-}
-
 /**
  * Get riddle history
  */
 export function getRiddleHistory(): RiddleHistoryEntry[] {
     return getItem<RiddleHistoryEntry[]>(STORAGE_KEYS.RIDDLE_HISTORY, []);
-}
-
-export const loadRiddleHistory = getRiddleHistory;
-
-/**
- * Clear riddle history
- */
-export function clearRiddleHistory(): void {
-    removeItem(STORAGE_KEYS.RIDDLE_HISTORY);
 }
 
 // ============================================================================

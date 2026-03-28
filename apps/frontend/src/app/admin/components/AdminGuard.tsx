@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { STORAGE_KEYS, getItem, removeItem } from '@/lib/storage';
+import { getItem, STORAGE_KEYS } from '@/lib/storage';
 
 export function AdminGuard({ children }: { children?: React.ReactNode }) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
-        const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
+        const token = getItem<string | null>(STORAGE_KEYS.ADMIN_TOKEN, null);
         if (!token) {
             router.replace('/admin/login');
             return;
@@ -22,26 +22,13 @@ export function AdminGuard({ children }: { children?: React.ReactNode }) {
             const base64Url = parts[1] as string;
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             const jsonPayload = decodeURIComponent(
-                atob(base64)
+                window.atob(base64)
                     .split('')
                     .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
                     .join('')
             );
 
             const payload = JSON.parse(jsonPayload);
-
-            // Expiration check
-            if (payload.exp) {
-                const currentTime = Math.floor(Date.now() / 1000);
-                // Redirect if token expires in less than 60 seconds (grace period)
-                if (payload.exp < currentTime + 60) {
-
-                    removeItem(STORAGE_KEYS.AUTH_TOKEN);
-                    removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-                    router.replace('/admin/login');
-                    return;
-                }
-            }
 
             if (payload.role !== 'admin') {
                 router.replace('/'); // Redirect non-admins to home

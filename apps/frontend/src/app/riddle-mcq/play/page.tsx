@@ -37,6 +37,7 @@ import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
+import { formatTimeMMSS } from '@/lib/utils';
 
 // Auto-save interval in milliseconds
 const AUTO_SAVE_INTERVAL = 10000;
@@ -414,13 +415,6 @@ function RiddlePlayPageContent(): JSX.Element {
   // Determine back path
   const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
 
-  // Format time MM:SS — same as quiz page
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const currentRiddle = riddles[currentIndex];
   const answeredCount = Object.keys(answers).length;
   const isTimerMode = mode === 'timer';
@@ -544,7 +538,7 @@ function RiddlePlayPageContent(): JSX.Element {
                         : 'bg-white/90 text-gray-800'
                     }`}>
                     <Timer className="h-4 w-4" />
-                    <span>{formatTime(timeRemaining)}</span>
+                    <span>{formatTimeMMSS(timeRemaining)}</span>
                     {status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
                   </div>
 

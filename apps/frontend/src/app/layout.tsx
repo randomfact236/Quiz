@@ -4,8 +4,8 @@ import { Inter } from 'next/font/google';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import { AuthProvider } from '@/contexts/AuthContext';
+import DemographicsPopup from '@/components/DemographicsPopup';
+import { Providers } from './providers';
 import './globals.css';
 
 const inter = Inter({
@@ -85,20 +85,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col bg-white dark:bg-secondary-900 font-sans antialiased transition-colors duration-300">
-        <ThemeProvider>
-          <AuthProvider>
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
-            >
-              Skip to main content
-            </a>
-            <Header />
-            <main className="flex flex-col flex-1">{children}</main>
-            <Footer />
-            <MobileFooter />
-          </AuthProvider>
-        </ThemeProvider>
+        <Providers>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
+          >
+            Skip to main content
+          </a>
+          <Header />
+          <main className="flex flex-col flex-1">{children}</main>
+          <Footer />
+          <MobileFooter />
+          <DemographicsPopup />
+        </Providers>
       </body>
     </html>
   );
