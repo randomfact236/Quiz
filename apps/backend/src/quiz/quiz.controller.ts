@@ -100,7 +100,10 @@ export class QuizController {
   }
 
   @Get('filter-counts')
-  @ApiOperation({ summary: 'Get unified filter counts - single endpoint for all filters' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get unified filter counts - single endpoint for all filters (Admin only)' })
   @ApiQuery({ name: 'subject', required: false, description: 'Subject slug' })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'level', required: false })
