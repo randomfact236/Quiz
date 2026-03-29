@@ -31,7 +31,8 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import { importQuestionsFromCSV } from './utils/quiz-importer';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, QuizMcqSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
+import { ImageRiddlesAdminSection, JokesSection, RiddleMcqSection, SettingsSection, AdminGuard } from './components';
+import { QuizMcqContainer } from '@/features/quiz/components';
 
 import { saveQuizData, exportQuizDataToFile, importQuizDataFromFile } from '@/lib/quiz-data-manager';
 import { QuizQuestion, getQuestionsBySubject, deleteSubject, createSubject, updateSubject, getSubjectBySlug, getFilterCounts, SubjectStatusCounts } from '@/lib/quiz-api';
@@ -122,7 +123,6 @@ export default function AdminPage(): JSX.Element {
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
   const [quizChapters, setQuizChapters] = useState<Record<string, { id: string; name: string }[]>>({});
-  const [isLoadingSubject, setIsLoadingSubject] = useState(false);
 
   // Unified filter state (single source of truth)
   const [currentFilters, setCurrentFilters] = useState({
@@ -294,7 +294,6 @@ export default function AdminPage(): JSX.Element {
       lastFetchRef.current = { section: activeSection, page: currentPage, limit: limit, filters: filtersKey };
 
       const fetchQuestions = async () => {
-        setIsLoadingSubject(true);
         try {
           // Fetch all data in parallel for better performance
           const [questionsResult, subjectData, filterCounts] = await Promise.all([
@@ -341,8 +340,6 @@ export default function AdminPage(): JSX.Element {
           }
         } catch (err) {
           console.error('Failed to fetch subject data:', activeSection, err);
-        } finally {
-          setIsLoadingSubject(false);
         }
       };
 
@@ -491,10 +488,6 @@ export default function AdminPage(): JSX.Element {
   const [showEditSubjectModal, setShowEditSubjectModal] = useState(false);
   const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
   const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
-
-  const getSubjectFromSection = (section: MenuSection): Subject | null => {
-    return allSubjects.find(s => s.slug === section) ?? null;
-  };
 
   // Export questions to JSON or CSV file (for backup/deployment)
   const handleExportQuestions = () => {
@@ -852,16 +845,8 @@ export default function AdminPage(): JSX.Element {
               <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
             </div>
           )}
-          {activeSection === 'quiz' && (
-            <QuizMcqSection
-              isLoading={isLoadingSubject}
-            />
-          )}
-          {allSubjects.some(s => s.slug === activeSection) && (
-            <QuizMcqSection
-              isLoading={isLoadingSubject}
-              subject={getSubjectFromSection(activeSection)!}
-            />
+          {(activeSection === 'quiz' || allSubjects.some(s => s.slug === activeSection)) && (
+            <QuizMcqContainer />
           )}
           {activeSection === 'jokes' && (
             <JokesSection

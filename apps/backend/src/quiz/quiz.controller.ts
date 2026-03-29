@@ -224,21 +224,21 @@ export class QuizController {
       search: query.search,
     };
 
-    if (query.cursor) {
-      const result = await this.quizService.findAllQuestionsWithCursor(
-        filters,
-        query.cursor,
-        pagination.limit
-      );
-      return {
-        data: result.data,
-        total: result.total,
-        nextCursor: result.nextCursor,
-        hasMore: result.hasMore,
-      };
+    if (!query.cursor) {
+      throw new BadRequestException('Cursor parameter is required for pagination');
     }
 
-    return this.quizService.findAllQuestions(pagination, filters);
+    const result = await this.quizService.findAllQuestionsWithCursor(
+      filters,
+      query.cursor,
+      pagination.limit
+    );
+    return {
+      data: result.data,
+      total: result.total,
+      nextCursor: result.nextCursor,
+      hasMore: result.hasMore,
+    };
   }
 
   @Get('questions/:chapterId')
