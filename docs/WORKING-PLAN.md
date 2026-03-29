@@ -669,3 +669,23 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - ✅ Safe implementation (phase by phase, test after each)
 
 **Ready to start Phase 0 audit.**
+
+---
+
+## Pre-existing Warnings (Fix When Rebuilding)
+
+These warnings exist in non-quiz files.
+Fix them when rebuilding those sections.
+Do NOT touch them now.
+
+- ImageRiddlesAdminSection.tsx
+  → img tags should use Next.js Image
+  
+- riddle-mcq/play/page.tsx
+  → useEffect missing dependencies
+  
+- FloatingBackground.tsx
+  → useEffect missing dependencies
+  
+- QuestionCard.tsx
+  → useEffect missing dependencies
