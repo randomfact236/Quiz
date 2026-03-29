@@ -13,6 +13,7 @@ import { SubjectModal } from './modals/SubjectModal';
 import { ChapterModal } from './modals/ChapterModal';
 import { QuestionModal } from './modals/QuestionModal';
 import { ImportModal } from './modals/ImportModal';
+import { exportQuestionsToCSV } from '@/lib/quiz-api';
 import type { QuizQuestion, QuizSubject, QuizChapter } from '@/lib/quiz-api';
 
 interface QuestionModalState {
@@ -116,6 +117,7 @@ export function QuizMcqContainer() {
           question: undefined 
         })}
         onImport={() => setImportModal(true)}
+        onExport={() => exportQuestionsToCSV(questions)}
       />
       
       <FilterPanel

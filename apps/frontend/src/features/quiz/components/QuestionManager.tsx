@@ -31,7 +31,7 @@ export function QuestionManager({
   const [pageSize, setPageSize] = useState(10);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   
-  const { deleteAsync, bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
+  const { bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,13 +71,21 @@ export function QuestionManager({
   }, []);
 
   const handleDelete = useCallback(async (question: QuizQuestion) => {
-    if (!confirm(`Delete question: "${question.question.substring(0, 50)}..."?`)) return;
+    const isTrash = question.status === 'trash';
+    const message = isTrash
+      ? `Permanently delete question: "${question.question.substring(0, 50)}..."?`
+      : `Move to trash: "${question.question.substring(0, 50)}..."?`;
+    if (!confirm(message)) return;
     try {
-      await deleteAsync(question.id);
+      if (isTrash) {
+        await bulkDeleteAsync([question.id]);
+      } else {
+        await bulkUpdateStatusAsync({ ids: [question.id], action: 'trash' });
+      }
     } catch {
       // Error handled by mutation
     }
-  }, [deleteAsync]);
+  }, [bulkDeleteAsync, bulkUpdateStatusAsync]);
 
   const handleBulkAction = useCallback(async (action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore') => {
     const ids = Array.from(selectedIds);

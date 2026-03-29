@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
-import { X, Search } from 'lucide-react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import type { QuizFilters } from '../hooks/useQuizFilters';
 import type { QuizSubject, QuizChapter, FilterCountsResponse } from '@/lib/quiz-api';
@@ -17,7 +16,13 @@ interface FilterPanelProps {
   isLoading: boolean;
 }
 
-const LEVELS = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+const LEVELS = [
+  { value: 'easy', label: 'Easy' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'hard', label: 'Hard' },
+  { value: 'expert', label: 'Expert' },
+  { value: 'extreme', label: 'Extreme' },
+];
 
 export function FilterPanel({
   filters,
@@ -53,6 +58,14 @@ export function FilterPanel({
     trash: filterCounts.statusCounts.find(s => s.status === 'trash')?.count || 0,
   } : { total: 0, published: 0, draft: 0, trash: 0 };
 
+  const filteredChapters = useMemo(() => {
+    if (!filters.subject) return [];
+    return chapters.filter(c => {
+      const chapterCount = filterCounts?.chapterCounts?.find(cc => cc.name === c.name)?.count || 0;
+      return chapterCount > 0;
+    });
+  }, [chapters, filters.subject, filterCounts]);
+
   const selectedFilters = useMemo(() => {
     const result: { key: string; label: string; value: string }[] = [];
     if (filters.subject && filters.subject !== 'all') {
@@ -85,105 +98,114 @@ export function FilterPanel({
         loading={isLoading}
       />
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Subject
-            </label>
-            <select
-              value={filters.subject || 'all'}
-              onChange={(e) => onFilterChange('subject', e.target.value === 'all' ? undefined : e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Subjects</option>
-              {subjects.map(subject => (
-                <option key={subject.id} value={subject.slug}>
-                  {subject.emoji} {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Chapter
-            </label>
-            <select
-              value={filters.chapter || 'all'}
-              onChange={(e) => onFilterChange('chapter', e.target.value === 'all' ? undefined : e.target.value)}
-              disabled={!filters.subject || chapters.length === 0}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <option value="all">All Chapters</option>
-              {chapters.map(chapter => (
-                <option key={chapter.id} value={chapter.name}>
-                  {chapter.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Level
-            </label>
-            <select
-              value={filters.level || 'all'}
-              onChange={(e) => onFilterChange('level', e.target.value === 'all' ? undefined : e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Levels</option>
-              {LEVELS.map(level => (
-                <option key={level} value={level}>
-                  {level.charAt(0).toUpperCase() + level.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={handleSearchChange}
-                placeholder="Search questions..."
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
+      <div className={`space-y-3 rounded-lg border p-4 ${filters.subject ? 'bg-purple-50 border-purple-300' : 'bg-gray-50 border-gray-200'}`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Subject:</span>
+          <button
+            onClick={() => onFilterChange('subject', undefined)}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.subject || filters.subject === 'all'
+              ? 'bg-purple-600 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+              }`}
+          >
+            All ({statusCounts.total})
+          </button>
+          {subjects.map(subject => {
+            const subjectCount = filterCounts?.subjects?.find(s => s.name === subject.name)?.count || 0;
+            return (
+              <button
+                key={subject.id}
+                onClick={() => onFilterChange('subject', subject.slug)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.subject === subject.slug
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                  }`}
+              >
+                {subject.emoji} {subject.name} ({subjectCount})
+              </button>
+            );
+          })}
         </div>
 
-        {hasFilters && (
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-sm text-gray-500 dark:text-gray-400">Active filters:</span>
-            {selectedFilters.map(filter => (
-              <span
-                key={filter.key}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full"
-              >
-                {filter.label}: {filter.value}
-                <button
-                  onClick={() => onFilterChange(filter.key as keyof QuizFilters, undefined)}
-                  className="hover:text-blue-900 dark:hover:text-blue-100"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            ))}
+        {filters.subject && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">Chapter:</span>
             <button
-              onClick={onReset}
-              className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-auto"
+              onClick={() => onFilterChange('chapter', undefined)}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all'
+                ? 'bg-indigo-500 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                }`}
             >
-              Clear all
+              All ({filterCounts?.chapterCounts?.reduce((sum, c) => sum + c.count, 0) || 0})
             </button>
+            {filteredChapters.map(chapter => {
+              const chapterCount = filterCounts?.chapterCounts?.find(cc => cc.name === chapter.name)?.count || 0;
+              return (
+                <button
+                  key={chapter.id}
+                  onClick={() => onFilterChange('chapter', chapter.name)}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.chapter === chapter.name
+                    ? 'bg-indigo-500 text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                    }`}
+                >
+                  {chapter.name} ({chapterCount})
+                </button>
+              );
+            })}
           </div>
         )}
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Level:</span>
+          <button
+            onClick={() => onFilterChange('level', undefined)}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.level || filters.level === 'all'
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+          >
+            All ({statusCounts.total})
+          </button>
+          {LEVELS.map(({ value, label }) => {
+            const levelCount = filterCounts?.levelCounts?.find(l => l.level === value)?.count || 0;
+            return (
+              <button
+                key={value}
+                onClick={() => onFilterChange('level', value)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.level === value
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+              >
+                {label} ({levelCount})
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label htmlFor="quiz-search" className="text-sm font-medium text-gray-700">
+            Search:
+          </label>
+          <input
+            id="quiz-search"
+            type="text"
+            placeholder="Type to search questions..."
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            value={searchInput}
+            onChange={handleSearchChange}
+          />
+          {hasFilters && (
+            <button
+              onClick={onReset}
+              className="rounded-lg bg-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-300"
+            >
+              ✕ Clear
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
