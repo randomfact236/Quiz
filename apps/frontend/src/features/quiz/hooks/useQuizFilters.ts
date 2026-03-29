@@ -20,7 +20,7 @@ export function useQuizFilters() {
     subject: searchParams.get('subject') || undefined,
     chapter: searchParams.get('chapter') || undefined,
     level: searchParams.get('level') || undefined,
-    status: searchParams.get('status') || undefined,
+    status: searchParams.get('status') || 'published',
     search: searchParams.get('search') || undefined,
   }), [searchParams]);
 

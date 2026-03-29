@@ -49,7 +49,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setChapterId(question.chapterId);
       setLevel(question.level);
       setStatus((question.status === 'draft' || question.status === 'published') ? question.status : 'draft');
-      setOptions(question.options || ['', '', '', '']);
+      setOptions((question.options || ['', '', '', '']).map(opt => opt ?? ''));
       setCorrectLetter(question.correctLetter || 'A');
       const chapter = chapters.find(c => c.id === question.chapterId);
       if (chapter) {

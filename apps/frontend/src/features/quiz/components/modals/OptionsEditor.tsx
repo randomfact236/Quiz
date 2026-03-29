@@ -33,7 +33,7 @@ export function OptionsEditor({
             <span className="text-sm font-medium w-6">{letter}.</span>
             <input
               type="text"
-              value={options[index]}
+              value={options[index] ?? ''}
               onChange={(e) => onOptionChange(index, e.target.value)}
               className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
               placeholder={`Option ${letter}`}
