@@ -5,7 +5,6 @@ import type { QuizChapter } from '@/lib/quiz-api';
 interface ChapterFilterRowProps {
   chapter: QuizChapter;
   isSelected: boolean;
-  count: number;
   onSelect: () => void;
   onEdit: () => void;
   onDelete: () => void;
@@ -14,7 +13,6 @@ interface ChapterFilterRowProps {
 export function ChapterFilterRow({
   chapter,
   isSelected,
-  count,
   onSelect,
   onEdit,
   onDelete,

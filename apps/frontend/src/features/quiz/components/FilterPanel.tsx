@@ -93,7 +93,7 @@ export function FilterPanel({
   };
 
   const getChapterName = (id: string) => {
-    const c = chapters.find(c => c.id === id || c.name === id);
+    const c = chapters.find(c => c.id === id);
     return c ? c.name : id;
   };
 
@@ -162,14 +162,13 @@ export function FilterPanel({
               All
             </button>
             {filteredChapters.map(chapter => {
-              const isSelected = filters.chapter === chapter.name;
+              const isSelected = filters.chapter === chapter.id;
               return (
                 <ChapterFilterRow
                   key={chapter.id}
                   chapter={chapter}
                   isSelected={isSelected}
-                  count={0}
-                  onSelect={() => onFilterChange('chapter', chapter.name)}
+                  onSelect={() => onFilterChange('chapter', chapter.id)}
                   onEdit={() => onEditChapter(chapter)}
                   onDelete={() => onDeleteChapter(chapter)}
                 />

@@ -40,7 +40,9 @@ export class QuizService {
     for (let i = shuffled.length - 1; i > 0; i--) {
       const uuidPart = randomUUID().replace(/-/g, '').slice(0, 8);
       const j = Math.floor(parseInt(uuidPart, 16) % (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      const temp = shuffled[j]!;
+      shuffled[j] = shuffled[i]!;
+      shuffled[i] = temp;
     }
     return shuffled;
   }
@@ -57,7 +59,7 @@ export class QuizService {
     private bulkActionService: BulkActionService,
   ) { }
 
-  private async clearQuizCaches(subjectId?: string) {
+  private async clearQuizCaches(_subjectId?: string) {
     await this.cacheService.delPattern(`quiz:*`);
   }
 
@@ -185,11 +187,48 @@ export class QuizService {
   }
 
   async deleteChapter(id: string): Promise<void> {
-    const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (!chapter) throw new NotFoundException('Chapter not found');
-    const result = await this.chapterRepo.delete(id);
-    if (result.affected === 0) { throw new NotFoundException('Chapter not found'); }
-    await this.clearQuizCaches(chapter.subjectId);
+    const queryRunner = this.dataSource
+      .createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const chapter = await queryRunner
+        .manager.findOne(Chapter, { 
+          where: { id } 
+        });
+      
+      if (!chapter) {
+        throw new NotFoundException(
+          'Chapter not found'
+        );
+      }
+
+      // Delete all questions in chapter first
+      await queryRunner.manager.delete(
+        Question, 
+        { chapter: { id } }
+      );
+
+      // Then delete the chapter
+      await queryRunner.manager.delete(
+        Chapter, 
+        { id }
+      );
+
+      await queryRunner.commitTransaction();
+      
+      // Clear cache after successful delete
+      await this.clearQuizCaches(
+        chapter.subjectId
+      );
+
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findQuestionsByChapter(
@@ -725,6 +764,7 @@ export class QuizService {
       const questions: Question[] = [];
       for (let i = 0; i < dto.length; i++) {
         const q = dto[i];
+        if (!q) continue;
         const chapter = chapterMap.get(q.chapterId);
 
         if (!chapter) {

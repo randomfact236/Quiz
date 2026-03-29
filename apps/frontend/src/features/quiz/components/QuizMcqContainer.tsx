@@ -46,7 +46,8 @@ export function QuizMcqContainer() {
   // ALL hooks must be called before any conditional returns
   // 1. Query hooks
   const subjectsQuery = useSubjects();
-  const chaptersQuery = useChapters(filters.subject);
+  const selectedSubject = subjectsQuery.data?.find(s => s.slug === filters.subject);
+  const chaptersQuery = useChapters(selectedSubject?.id);
   const questionsQuery = useQuestions(filters);
   const filterCountsQuery = useFilterCounts(filters);
   
@@ -169,7 +170,10 @@ export function QuizMcqContainer() {
         onAddSubject={() => setSubjectModal({ open: true, subject: undefined })}
         onEditSubject={(s) => setSubjectModal({ open: true, subject: s })}
         onDeleteSubject={handleDeleteSubject}
-        onAddChapter={() => setChapterModal({ open: true, chapter: undefined, subjectId: filters.subject })}
+        onAddChapter={() => {
+          const subject = subjectsQuery.data?.find(s => s.slug === filters.subject);
+          setChapterModal({ open: true, chapter: undefined, subjectId: subject?.id });
+        }}
         onEditChapter={(c) => setChapterModal({ open: true, chapter: c, subjectId: c.subjectId })}
         onDeleteChapter={handleDeleteChapter}
       />
