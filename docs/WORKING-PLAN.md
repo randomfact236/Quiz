@@ -336,17 +336,74 @@ Infinite scroll integration. Local state for selectedIds.
 
 ---
 
-## Phase 5: Switch & Delete Old Code
+## Phase 5: Switch & Delete Old Code (ATOMIC COMMIT)
 
-**Only do this after all new components are verified working.**
+**IMPORTANT: Delete old code IN THE SAME COMMIT as switching to new code.**
 
-### Steps:
-1. Switch import in `page.tsx` from old `QuizMcqSection` to new `QuizMcqContainer`
-2. Verify all features work exactly as before visually
-3. Verify all CRUD operations work
-4. Verify filters, pagination, bulk actions work
-5. Delete old `QuizMcqSection.tsx` only after 100% verified
-6. Run `npx eslint src/ --fix` again to clean any leftover unused imports
+### Philosophy:
+```
+Write new code → Delete old code → Test → Commit
+ALL IN ONE COMMIT - Never split into separate phases
+```
+
+### Steps (All in ONE commit):
+
+#### Frontend Changes:
+1. Update `apps/frontend/src/app/admin/page.tsx`:
+   - Remove import of old `QuizMcqSection`
+   - Add import of new `QuizMcqContainer` from `@/features/quiz/components`
+   - Replace `<QuizMcqSection />` with `<QuizMcqContainer />`
+   - Remove any props only needed by old component
+
+2. Delete old files immediately:
+   - `apps/frontend/src/app/admin/components/QuizMcqSection.tsx`
+   - `apps/frontend/src/lib/useQuizFilters.ts` (old version)
+   - Any other files only used by old component
+
+3. Run `npx eslint src/ --fix` to clean unused imports
+
+#### Backend Changes (Same commit):
+4. Since frontend now uses cursor pagination exclusively:
+   - Delete `findAllQuestions()` method from `quiz.service.ts` (offset version)
+   - Update `getAllQuestions()` controller to always use cursor
+   - Remove `page` param handling (cursor only now)
+
+5. Verify endpoint still works:
+   - GET /quiz/questions?cursor=xxx → returns cursor pagination
+   - No more offset fallback needed
+
+#### Testing (Before commit):
+6. Test EVERYTHING:
+   - Page loads without errors
+   - All filters work
+   - Questions load with infinite scroll
+   - CRUD operations work
+   - Modals open/close properly
+   - No console errors
+
+### Atomic Commit Message:
+```
+Phase 5: Switch to new Quiz architecture - ATOMIC
+
+Frontend:
+- Replace QuizMcqSection with QuizMcqContainer
+- Delete old QuizMcqSection.tsx (862 lines)
+- Delete old useQuizFilters.ts
+- Update admin page to use new container
+
+Backend:
+- Remove findAllQuestions() offset method
+- getAllQuestions now uses cursor exclusively
+- Remove backward compatibility code
+
+Verification:
+- All features work identically
+- TypeScript: 0 errors
+- ESLint: 0 errors
+- Tests pass
+
+BREAKING CHANGE: Offset pagination removed, cursor only
+```
 
 ---
 
@@ -369,11 +426,22 @@ Infinite scroll integration. Local state for selectedIds.
 
 ## Golden Rules (Never Break These)
 
+### Code Cleanup Rule (CRITICAL):
 ```
-Dead code        → DELETE immediately, no hesitation
-Duplicate code   → KEEP best version, DELETE rest
-Unused imports   → AUTO-FIX with ESLint --fix
-Half-used code   → REWRITE properly, then commit
+Write new code → Delete old code → Test → Commit
+ALL IN ONE ATOMIC COMMIT
+
+NEVER leave dead code for "later cleanup"
+NEVER split delete into separate commit
+NEVER accumulate technical debt
+```
+
+### General Rules:
+```
+Dead code        → DELETE immediately in same commit as replacement
+Duplicate code   → KEEP best version, DELETE rest immediately
+Unused imports   → AUTO-FIX with ESLint --fix immediately
+Half-used code   → REWRITE properly, DELETE old immediately
 
 NEVER:
 → Delete working code before replacement is ready
@@ -384,6 +452,7 @@ NEVER:
 → Keep duplicates "just in case"
 → Use useEffect to sync React Query data into useState
 → Create components over 220 lines
+→ Leave old code sitting around (even "temporarily")
 ```
 
 ---
