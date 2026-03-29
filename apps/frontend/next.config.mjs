@@ -23,6 +23,13 @@ const nextConfig = {
         aggregateTimeout: 300,
       };
     }
+    
+    // Handle monorepo module resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@tanstack/react-query-devtools': require.resolve('@tanstack/react-query-devtools'),
+    };
+    
     return config;
   },
   
