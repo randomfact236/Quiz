@@ -154,7 +154,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
 
               <div className="bg-gray-50 rounded-lg p-4 text-sm">
                 <p className="font-medium text-gray-700 mb-2">CSV Format:</p>
-                <code className="text-xs text-gray-600 block">
+                <code className="text-xs text-gray-600 block overflow-x-auto whitespace-nowrap">
                   question,option_a,option_b,option_c,option_d,correct_answer,level,chapter,status
                 </code>
               </div>

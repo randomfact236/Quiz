@@ -72,13 +72,20 @@ export function FilterPanel({
     trash: filterCounts.statusCounts.find(s => s.status === 'trash')?.count || 0,
   } : { total: 0, published: 0, draft: 0, trash: 0 };
 
+  // Sort subjects alphabetically by name
+  const sortedSubjects = useMemo(() => {
+    return [...subjects].sort((a, b) => a.name.localeCompare(b.name));
+  }, [subjects]);
+
+  // Get chapters for selected subject, sorted alphabetically
   const filteredChapters = useMemo(() => {
     if (!filters.subject) return [];
-    return chapters.filter(c => {
-      const chapterCount = filterCounts?.chapterCounts?.find(cc => cc.name === c.name)?.count || 0;
-      return chapterCount > 0;
+    const subjectChapters = chapters.filter(c => {
+      const subject = subjects.find(s => s.slug === filters.subject);
+      return subject && c.subjectId === subject.id;
     });
-  }, [chapters, filters.subject, filterCounts]);
+    return subjectChapters.sort((a, b) => a.name.localeCompare(b.name));
+  }, [chapters, filters.subject, subjects]);
 
   const getSubjectName = (slug: string) => {
     const s = subjects.find(s => s.slug === slug);
@@ -119,7 +126,7 @@ export function FilterPanel({
           >
             All ({statusCounts.total})
           </button>
-          {subjects.map(subject => {
+          {sortedSubjects.map(subject => {
             const subjectCount = filterCounts?.subjects?.find(s => s.name === subject.name)?.count || 0;
             const isSelected = filters.subject === subject.slug;
             return (
@@ -152,17 +159,16 @@ export function FilterPanel({
                 : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
                 }`}
             >
-              All ({filterCounts?.chapterCounts?.reduce((sum, c) => sum + c.count, 0) || 0})
+              All
             </button>
             {filteredChapters.map(chapter => {
-              const chapterCount = filterCounts?.chapterCounts?.find(cc => cc.name === chapter.name)?.count || 0;
               const isSelected = filters.chapter === chapter.name;
               return (
                 <ChapterFilterRow
                   key={chapter.id}
                   chapter={chapter}
                   isSelected={isSelected}
-                  count={chapterCount}
+                  count={0}
                   onSelect={() => onFilterChange('chapter', chapter.name)}
                   onEdit={() => onEditChapter(chapter)}
                   onDelete={() => onDeleteChapter(chapter)}

@@ -13,6 +13,7 @@ import { SubjectModal } from './modals/SubjectModal';
 import { ChapterModal } from './modals/ChapterModal';
 import { QuestionModal } from './modals/QuestionModal';
 import { ImportModal } from './modals/ImportModal';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportQuestionsToCSV } from '@/lib/quiz-api';
 import type { QuizQuestion, QuizSubject, QuizChapter } from '@/lib/quiz-api';
 
@@ -30,6 +31,13 @@ interface ChapterModalState {
   open: boolean;
   chapter: QuizChapter | undefined;
   subjectId: string | undefined;
+}
+
+interface ConfirmState {
+  open: boolean;
+  title: string;
+  message: string;
+  onConfirm: () => void;
 }
 
 export function QuizMcqContainer() {
@@ -57,6 +65,12 @@ export function QuizMcqContainer() {
     subjectId: undefined
   });
   const [importModal, setImportModal] = useState(false);
+  const [confirm, setConfirm] = useState<ConfirmState>({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
   
   // 3. Memo hooks
   const questions = useMemo(() => 
@@ -107,6 +121,30 @@ export function QuizMcqContainer() {
       </div>
     );
   }
+
+  const handleDeleteSubject = (subject: QuizSubject) => {
+    setConfirm({
+      open: true,
+      title: 'Delete Subject',
+      message: `Delete subject "${subject.name}"? This will also delete all chapters in this subject.`,
+      onConfirm: () => {
+        subjectsQuery.delete(subject.id);
+        setConfirm(prev => ({ ...prev, open: false }));
+      },
+    });
+  };
+
+  const handleDeleteChapter = (chapter: QuizChapter) => {
+    setConfirm({
+      open: true,
+      title: 'Delete Chapter',
+      message: `Delete chapter "${chapter.name}"?`,
+      onConfirm: () => {
+        chaptersQuery.delete({ id: chapter.id, subjectId: chapter.subjectId });
+        setConfirm(prev => ({ ...prev, open: false }));
+      },
+    });
+  };
   
   return (
     <div className="space-y-6 p-6">
@@ -130,18 +168,10 @@ export function QuizMcqContainer() {
         isLoading={subjectsQuery.isLoading}
         onAddSubject={() => setSubjectModal({ open: true, subject: undefined })}
         onEditSubject={(s) => setSubjectModal({ open: true, subject: s })}
-        onDeleteSubject={(s) => {
-          if (confirm(`Delete subject "${s.name}"? This will also delete all chapters in this subject.`)) {
-            subjectsQuery.delete(s.id);
-          }
-        }}
+        onDeleteSubject={handleDeleteSubject}
         onAddChapter={() => setChapterModal({ open: true, chapter: undefined, subjectId: filters.subject })}
         onEditChapter={(c) => setChapterModal({ open: true, chapter: c, subjectId: c.subjectId })}
-        onDeleteChapter={(c) => {
-          if (confirm(`Delete chapter "${c.name}"?`)) {
-            chaptersQuery.delete({ id: c.id, subjectId: c.subjectId });
-          }
-        }}
+        onDeleteChapter={handleDeleteChapter}
       />
       
       <QuestionManager
@@ -192,6 +222,16 @@ export function QuizMcqContainer() {
       <ImportModal
         open={importModal}
         onClose={() => setImportModal(false)}
+      />
+
+      <ConfirmDialog
+        isOpen={confirm.open}
+        onClose={() => setConfirm(prev => ({ ...prev, open: false }))}
+        onConfirm={confirm.onConfirm}
+        title={confirm.title}
+        message={confirm.message}
+        confirmLabel="Delete"
+        confirmVariant="danger"
       />
     </div>
   );
