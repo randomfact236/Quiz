@@ -34,18 +34,37 @@ interface ChapterModalState {
 export function QuizMcqContainer() {
   const { filters, setFilter, resetFilters } = useQuizFilters();
   
+  // ALL hooks must be called before any conditional returns
+  // 1. Query hooks
   const subjectsQuery = useSubjects();
   const chaptersQuery = useChapters(filters.subject);
   const questionsQuery = useQuestions(filters);
   const filterCountsQuery = useFilterCounts(filters);
   
+  // 2. State hooks (MUST be before error checks)
+  const [questionModal, setQuestionModal] = useState<QuestionModalState>({ 
+    open: false, 
+    question: undefined 
+  });
+  const [subjectModal, setSubjectModal] = useState<SubjectModalState>({ 
+    open: false, 
+    subject: undefined 
+  });
+  const [chapterModal, setChapterModal] = useState<ChapterModalState>({ 
+    open: false,
+    chapter: undefined,
+    subjectId: undefined
+  });
+  const [importModal, setImportModal] = useState(false);
+  
+  // 3. Memo hooks
   const questions = useMemo(() => 
     questionsQuery.data?.pages.flatMap(page => page.data) ?? [],
     [questionsQuery.data]
   );
   const total = questionsQuery.data?.pages[0]?.total ?? 0;
 
-  // Error handling for critical queries
+  // 4. Error handling (AFTER all hooks)
   if (subjectsQuery.error) {
     return (
       <div className="p-6">
@@ -87,21 +106,6 @@ export function QuizMcqContainer() {
       </div>
     );
   }
-  
-  const [questionModal, setQuestionModal] = useState<QuestionModalState>({ 
-    open: false, 
-    question: undefined 
-  });
-  const [subjectModal, setSubjectModal] = useState<SubjectModalState>({ 
-    open: false, 
-    subject: undefined 
-  });
-  const [chapterModal, setChapterModal] = useState<ChapterModalState>({ 
-    open: false,
-    chapter: undefined,
-    subjectId: undefined
-  });
-  const [importModal, setImportModal] = useState(false);
   
   return (
     <div className="space-y-6 p-6">
