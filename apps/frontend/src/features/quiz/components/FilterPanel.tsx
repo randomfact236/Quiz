@@ -80,28 +80,23 @@ export function FilterPanel({
     });
   }, [chapters, filters.subject, filterCounts]);
 
-  const selectedFilters = useMemo(() => {
-    const result: { key: string; label: string; value: string }[] = [];
-    if (filters.subject && filters.subject !== 'all') {
-      const subject = subjects.find(s => s.slug === filters.subject);
-      if (subject) result.push({ key: 'subject', label: 'Subject', value: subject.name });
-    }
-    if (filters.chapter && filters.chapter !== 'all') {
-      result.push({ key: 'chapter', label: 'Chapter', value: filters.chapter });
-    }
-    if (filters.level && filters.level !== 'all') {
-      result.push({ key: 'level', label: 'Level', value: filters.level });
-    }
-    if (filters.status && filters.status !== 'all') {
-      result.push({ key: 'status', label: 'Status', value: filters.status });
-    }
-    if (filters.search) {
-      result.push({ key: 'search', label: 'Search', value: filters.search });
-    }
-    return result;
-  }, [filters, subjects]);
+  const getSubjectName = (slug: string) => {
+    const s = subjects.find(s => s.slug === slug);
+    return s ? s.emoji + ' ' + s.name : slug;
+  };
 
-  const hasFilters = selectedFilters.length > 0;
+  const getChapterName = (id: string) => {
+    const c = chapters.find(c => c.id === id || c.name === id);
+    return c ? c.name : id;
+  };
+
+  const hasActiveFilters = Boolean(
+    filters.subject ||
+    filters.chapter ||
+    filters.level ||
+    (filters.status && filters.status !== 'published') ||
+    filters.search
+  );
 
   return (
     <div className="space-y-4">
@@ -147,7 +142,7 @@ export function FilterPanel({
           </button>
         </div>
 
-        {filters.subject && (
+        {filters.subject && filters.subject !== '' && filters.subject !== 'all' && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-medium text-gray-700">Chapter:</span>
             <button
@@ -223,15 +218,49 @@ export function FilterPanel({
             value={searchInput}
             onChange={handleSearchChange}
           />
-          {hasFilters && (
+        </div>
+
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
+            <span className="text-xs font-medium text-gray-500 uppercase">Active Filters:</span>
+            {filters.subject && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full">
+                {getSubjectName(filters.subject)}
+                <button onClick={() => onFilterChange('subject', undefined)} className="hover:text-purple-900">×</button>
+              </span>
+            )}
+            {filters.chapter && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
+                {getChapterName(filters.chapter)}
+                <button onClick={() => onFilterChange('chapter', undefined)} className="hover:text-blue-900">×</button>
+              </span>
+            )}
+            {filters.level && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">
+                {filters.level}
+                <button onClick={() => onFilterChange('level', undefined)} className="hover:text-green-900">×</button>
+              </span>
+            )}
+            {filters.status && filters.status !== 'published' && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-700 text-sm rounded-full">
+                {filters.status}
+                <button onClick={() => onFilterChange('status', 'published')} className="hover:text-yellow-900">×</button>
+              </span>
+            )}
+            {filters.search && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+                &ldquo;{filters.search}&rdquo;
+                <button onClick={() => onFilterChange('search', undefined)} className="hover:text-gray-900">×</button>
+              </span>
+            )}
             <button
               onClick={onReset}
-              className="rounded-lg bg-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-300"
+              className="px-3 py-1 bg-red-100 text-red-600 text-sm rounded-full hover:bg-red-200"
             >
-              ✕ Clear
+              Clear All ×
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
