@@ -25,7 +25,7 @@ export function ChapterFilterRow({
         onClick={onSelect}
         className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 hover:text-indigo-600'}`}
       >
-        {chapter.name} ({count})
+        {chapter.name}
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onEdit(); }}
