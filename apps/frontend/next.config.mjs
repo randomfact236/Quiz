@@ -24,11 +24,11 @@ const nextConfig = {
       };
     }
     
-    // Handle monorepo module resolution
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@tanstack/react-query-devtools': require.resolve('@tanstack/react-query-devtools'),
-    };
+    // Handle monorepo module resolution for devtools
+    config.resolve.modules = [
+      ...config.resolve.modules,
+      '../../node_modules',
+    ];
     
     return config;
   },

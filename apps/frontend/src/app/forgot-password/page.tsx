@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
           Forgot Password?
         </h2>
         <p className="mt-2 text-center text-sm text-white/80">
-          Enter your email and we'll send you a reset link
+          Enter your email and we will send you a reset link
         </p>
       </div>
 
@@ -74,7 +74,7 @@ export default function ForgotPasswordPage() {
                 Check your email
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-                If an account with that email exists, we've sent a password reset link. 
+                If an account with that email exists, we have sent a password reset link. 
                 Please check your inbox (and spam folder).
               </p>
               <button

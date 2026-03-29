@@ -224,13 +224,9 @@ export class QuizController {
       search: query.search,
     };
 
-    if (!query.cursor) {
-      throw new BadRequestException('Cursor parameter is required for pagination');
-    }
-
     const result = await this.quizService.findAllQuestionsWithCursor(
       filters,
-      query.cursor,
+      query.cursor || 'initial',
       pagination.limit
     );
     return {
