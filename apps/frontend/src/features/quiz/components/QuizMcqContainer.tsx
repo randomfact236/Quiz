@@ -128,6 +128,20 @@ export function QuizMcqContainer() {
         chapters={chaptersQuery.data ?? []}
         filterCounts={filterCountsQuery.data}
         isLoading={subjectsQuery.isLoading}
+        onAddSubject={() => setSubjectModal({ open: true, subject: undefined })}
+        onEditSubject={(s) => setSubjectModal({ open: true, subject: s })}
+        onDeleteSubject={(s) => {
+          if (confirm(`Delete subject "${s.name}"? This will also delete all chapters in this subject.`)) {
+            subjectsQuery.delete(s.id);
+          }
+        }}
+        onAddChapter={() => setChapterModal({ open: true, chapter: undefined, subjectId: filters.subject })}
+        onEditChapter={(c) => setChapterModal({ open: true, chapter: c, subjectId: c.subjectId })}
+        onDeleteChapter={(c) => {
+          if (confirm(`Delete chapter "${c.name}"?`)) {
+            chaptersQuery.delete({ id: c.id, subjectId: c.subjectId });
+          }
+        }}
       />
       
       <QuestionManager

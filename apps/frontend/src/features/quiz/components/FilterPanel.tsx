@@ -2,6 +2,8 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
+import { SubjectFilterRow } from './SubjectFilterRow';
+import { ChapterFilterRow } from './ChapterFilterRow';
 import type { QuizFilters } from '../hooks/useQuizFilters';
 import type { QuizSubject, QuizChapter, FilterCountsResponse } from '@/lib/quiz-api';
 import type { StatusFilter } from '@/types/status.types';
@@ -14,6 +16,12 @@ interface FilterPanelProps {
   chapters: QuizChapter[];
   filterCounts: FilterCountsResponse | undefined;
   isLoading: boolean;
+  onAddSubject: () => void;
+  onEditSubject: (subject: QuizSubject) => void;
+  onDeleteSubject: (subject: QuizSubject) => void;
+  onAddChapter: () => void;
+  onEditChapter: (chapter: QuizChapter) => void;
+  onDeleteChapter: (chapter: QuizChapter) => void;
 }
 
 const LEVELS = [
@@ -32,6 +40,12 @@ export function FilterPanel({
   chapters,
   filterCounts,
   isLoading,
+  onAddSubject,
+  onEditSubject,
+  onDeleteSubject,
+  onAddChapter,
+  onEditChapter,
+  onDeleteChapter,
 }: FilterPanelProps) {
   const [searchInput, setSearchInput] = useState(filters.search || '');
 
@@ -112,19 +126,25 @@ export function FilterPanel({
           </button>
           {subjects.map(subject => {
             const subjectCount = filterCounts?.subjects?.find(s => s.name === subject.name)?.count || 0;
+            const isSelected = filters.subject === subject.slug;
             return (
-              <button
+              <SubjectFilterRow
                 key={subject.id}
-                onClick={() => onFilterChange('subject', subject.slug)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.subject === subject.slug
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                  }`}
-              >
-                {subject.emoji} {subject.name} ({subjectCount})
-              </button>
+                subject={subject}
+                isSelected={isSelected}
+                count={subjectCount}
+                onSelect={() => onFilterChange('subject', subject.slug)}
+                onEdit={() => onEditSubject(subject)}
+                onDelete={() => onDeleteSubject(subject)}
+              />
             );
           })}
+          <button
+            onClick={onAddSubject}
+            className="rounded-lg bg-purple-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-600"
+          >
+            + Add
+          </button>
         </div>
 
         {filters.subject && (
@@ -141,19 +161,25 @@ export function FilterPanel({
             </button>
             {filteredChapters.map(chapter => {
               const chapterCount = filterCounts?.chapterCounts?.find(cc => cc.name === chapter.name)?.count || 0;
+              const isSelected = filters.chapter === chapter.name;
               return (
-                <button
+                <ChapterFilterRow
                   key={chapter.id}
-                  onClick={() => onFilterChange('chapter', chapter.name)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.chapter === chapter.name
-                    ? 'bg-indigo-500 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                    }`}
-                >
-                  {chapter.name} ({chapterCount})
-                </button>
+                  chapter={chapter}
+                  isSelected={isSelected}
+                  count={chapterCount}
+                  onSelect={() => onFilterChange('chapter', chapter.name)}
+                  onEdit={() => onEditChapter(chapter)}
+                  onDelete={() => onDeleteChapter(chapter)}
+                />
               );
             })}
+            <button
+              onClick={onAddChapter}
+              className="rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-600"
+            >
+              + Add
+            </button>
           </div>
         )}
 
