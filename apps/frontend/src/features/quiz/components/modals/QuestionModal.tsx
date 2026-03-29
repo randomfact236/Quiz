@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import type { QuizQuestion, QuizSubject, QuizChapter, CreateQuestionDto } from '@/lib/quiz-api';
 import { useQuestionMutation } from '../../hooks';
+import { OptionsEditor, CORRECT_LETTERS } from './OptionsEditor';
+import { SubjectChapterFields } from './SubjectChapterFields';
 
 interface QuestionModalProps {
   open: boolean;
@@ -20,8 +22,6 @@ const LEVELS = [
   { value: 'expert', label: 'Expert' },
   { value: 'extreme', label: 'Extreme' },
 ];
-
-const CORRECT_LETTERS = ['A', 'B', 'C', 'D'];
 
 export function QuestionModal({ open, question, subjects, chapters, onClose }: QuestionModalProps) {
   const isEdit = useMemo(() => !!question, [question]);
@@ -51,7 +51,6 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setStatus((question.status === 'draft' || question.status === 'published') ? question.status : 'draft');
       setOptions(question.options || ['', '', '', '']);
       setCorrectLetter(question.correctLetter || 'A');
-      // Find subject from chapters
       const chapter = chapters.find(c => c.id === question.chapterId);
       if (chapter) {
         setSubjectId(chapter.subjectId);
@@ -68,7 +67,6 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   }, [open, question, chapters]);
 
   useEffect(() => {
-    // Reset chapter when subject changes
     if (subjectId && chapterId) {
       const chapterExists = filteredChapters.some(c => c.id === chapterId);
       if (!chapterExists) {
@@ -83,6 +81,14 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       newOptions[index] = value;
       return newOptions;
     });
+  };
+
+  const handleSubjectChange = (id: string) => {
+    setSubjectId(id);
+  };
+
+  const handleChapterChange = (id: string) => {
+    setChapterId(id);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,46 +145,14 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Subject <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select subject</option>
-              {subjects.map(subject => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.emoji} {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Chapter <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={chapterId}
-              onChange={(e) => setChapterId(e.target.value)}
-              disabled={!subjectId || filteredChapters.length === 0}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              required
-            >
-              <option value="">Select chapter</option>
-              {filteredChapters.map(chapter => (
-                <option key={chapter.id} value={chapter.id}>
-                  {chapter.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <SubjectChapterFields
+          subjectId={subjectId}
+          chapterId={chapterId}
+          subjects={subjects}
+          filteredChapters={filteredChapters}
+          onSubjectChange={handleSubjectChange}
+          onChapterChange={handleChapterChange}
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -211,32 +185,12 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Options
-          </label>
-          <div className="space-y-2">
-            {CORRECT_LETTERS.map((letter, index) => (
-              <div key={letter} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="correctAnswer"
-                  checked={correctLetter === letter}
-                  onChange={() => setCorrectLetter(letter)}
-                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium w-6">{letter}.</span>
-                <input
-                  type="text"
-                  value={options[index]}
-                  onChange={(e) => handleOptionChange(index, e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                  placeholder={`Option ${letter}`}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <OptionsEditor
+          options={options}
+          correctLetter={correctLetter}
+          onOptionChange={handleOptionChange}
+          onCorrectLetterChange={setCorrectLetter}
+        />
 
         <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button

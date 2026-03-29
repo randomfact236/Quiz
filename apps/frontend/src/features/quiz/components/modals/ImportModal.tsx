@@ -2,8 +2,9 @@
 
 import { useState, useRef } from 'react';
 import { Modal } from '@/components/ui/Modal';
-import { Upload, FileText, CheckCircle, XCircle } from 'lucide-react';
+import { Upload, FileText } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
+import { CSVPreview } from './CSVPreview';
 
 interface ImportModalProps {
   open: boolean;
@@ -44,7 +45,6 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
     if (!file) return;
 
     try {
-      // Parse CSV and create questions
       const text = await file.text();
       const lines = text.split('\n').filter(line => line.trim());
       if (lines.length < 2) {
@@ -56,7 +56,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
       const questions = [];
       const errors: string[] = [];
       
-        for (let i = 1; i < lines.length; i++) {
+      for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
         if (!line) continue;
         const values = line.split(',').map(v => v.trim());
@@ -70,18 +70,12 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
           continue;
         }
         
-        // Map CSV row to question DTO
         const question = {
           question: row['question'],
           chapterId: row['chapter'],
           level: (row['level'] || 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
           status: (row['status'] || 'draft') as 'draft' | 'published',
-          options: [
-            row['option_a'] || '',
-            row['option_b'] || '',
-            row['option_c'] || '',
-            row['option_d'] || '',
-          ].filter(Boolean),
+          options: [row['option_a'] || '', row['option_b'] || '', row['option_c'] || '', row['option_d'] || ''].filter(Boolean),
           correctLetter: row['correct_answer'] || 'A',
           correctAnswer: row['option_a'] || '',
         };
@@ -182,39 +176,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
             </div>
           </>
         ) : (
-          <div className="text-center py-6">
-            {result.success ? (
-              <>
-                <CheckCircle className="w-16 h-16 mx-auto text-green-500 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Import Successful!
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Successfully imported {result.count} questions
-                </p>
-              </>
-            ) : (
-              <>
-                <XCircle className="w-16 h-16 mx-auto text-red-500 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Import Failed
-                </h3>
-                {result.errors && (
-                  <ul className="text-left text-sm text-red-600 dark:text-red-400 mt-2 max-h-32 overflow-y-auto">
-                    {result.errors.map((error, i) => (
-                      <li key={i} className="py-1">• {error}</li>
-                    ))}
-                  </ul>
-                )}
-              </>
-            )}
-            <button
-              onClick={handleClose}
-              className="mt-6 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              Close
-            </button>
-          </div>
+          <CSVPreview result={result} onClose={handleClose} />
         )}
       </div>
     </Modal>
