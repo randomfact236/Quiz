@@ -25,6 +25,8 @@ export class QuizService {
       `quiz:filter-counts:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}`,
     QUESTIONS: (subject: string, chapter: string, level: string, status: string, page: number, limit: number) =>
       `quiz:questions:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}:${page}:${limit}`,
+    QUESTIONS_CURSOR: (subject: string, chapter: string, level: string, status: string, cursor: string, limit: number) =>
+      `quiz:questions:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}:cursor:${cursor}:${limit}`,
   };
 
   private readonly CACHE_TTL = {
@@ -260,6 +262,85 @@ export class QuizService {
           .getManyAndCount();
 
         return { data, total };
+      },
+      this.CACHE_TTL.QUESTIONS
+    );
+  }
+
+  async findAllQuestionsWithCursor(
+    filters: {
+      status?: ContentStatus;
+      level?: string;
+      chapter?: string;
+      search?: string;
+      subjectSlug?: string;
+    },
+    cursor?: string,
+    limit: number = 20,
+  ): Promise<{ data: Question[]; nextCursor: string | undefined; hasMore: boolean; total: number }> {
+    const effectiveLimit = Math.min(limit, 100);
+
+    const cacheKey = this.CACHE_KEYS.QUESTIONS_CURSOR(
+      filters.subjectSlug || 'all',
+      filters.chapter || 'all',
+      filters.level || 'all',
+      filters.status || 'all',
+      cursor || 'start',
+      effectiveLimit
+    );
+
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const queryBuilder = this.questionRepo.createQueryBuilder('question')
+          .leftJoinAndSelect('question.chapter', 'chapter')
+          .leftJoinAndSelect('chapter.subject', 'subject');
+
+        if (filters.status != null) {
+          queryBuilder.andWhere('question.status = :status', { status: filters.status });
+        }
+        if (filters.level) {
+          queryBuilder.andWhere('question.level = :level', { level: filters.level });
+        }
+        if (filters.chapter) {
+          queryBuilder.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+        }
+        if (filters.search) {
+          queryBuilder.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
+        }
+        if (filters.subjectSlug) {
+          queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
+        }
+
+        if (cursor) {
+          try {
+            const decoded = Buffer.from(cursor, 'base64').toString('ascii');
+            const [dateStr, id] = decoded.split('::');
+            const date = new Date(dateStr);
+            queryBuilder.andWhere(
+              '(question.updatedAt < :cursorDate OR (question.updatedAt = :cursorDate AND question.id < :cursorId))',
+              { cursorDate: date, cursorId: id }
+            );
+          } catch {
+            this.logger.warn(`Invalid cursor format: ${cursor}`);
+          }
+        }
+
+        const questions = await queryBuilder
+          .orderBy('question.updatedAt', 'DESC')
+          .addOrderBy('question.id', 'DESC')
+          .take(effectiveLimit + 1)
+          .getMany();
+
+        const hasMore = questions.length > effectiveLimit;
+        const data = hasMore ? questions.slice(0, effectiveLimit) : questions;
+
+        const lastQuestion = data[data.length - 1];
+        const nextCursor = hasMore && lastQuestion
+          ? Buffer.from(`${lastQuestion.updatedAt.toISOString()}::${lastQuestion.id}`).toString('base64')
+          : undefined;
+
+        return { data, nextCursor, hasMore, total: data.length };
       },
       this.CACHE_TTL.QUESTIONS
     );

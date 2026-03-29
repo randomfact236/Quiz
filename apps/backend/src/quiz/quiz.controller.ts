@@ -58,6 +58,11 @@ export class QuizQueryDto extends PaginationDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional({ description: 'Cursor for pagination (base64 encoded)' })
+  @IsOptional()
+  @IsString()
+  cursor?: string;
 }
 
 @ApiTags('Quiz')
@@ -209,7 +214,7 @@ export class QuizController {
   @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
   async getAllQuestions(
     @Query() query: QuizQueryDto,
-  ): Promise<{ data: Question[]; total: number }> {
+  ): Promise<{ data: Question[]; total: number; nextCursor?: string; hasMore?: boolean }> {
     const pagination = { page: query.page || 1, limit: query.limit || 10 };
     const filters = { 
       status: query.status as any, 
@@ -218,6 +223,21 @@ export class QuizController {
       chapter: query.chapter,
       search: query.search,
     };
+
+    if (query.cursor) {
+      const result = await this.quizService.findAllQuestionsWithCursor(
+        filters,
+        query.cursor,
+        pagination.limit
+      );
+      return {
+        data: result.data,
+        total: result.total,
+        nextCursor: result.nextCursor,
+        hasMore: result.hasMore,
+      };
+    }
+
     return this.quizService.findAllQuestions(pagination, filters);
   }
 
