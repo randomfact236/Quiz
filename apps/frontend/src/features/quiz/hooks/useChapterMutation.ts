@@ -35,9 +35,9 @@ export function useChapterMutation() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteChapter(id, true),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY] });
+    mutationFn: ({ id }: { id: string; subjectId: string }) => deleteChapter(id, true),
+    onSuccess: (_data, { subjectId }) => {
+      queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, subjectId] });
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },

@@ -312,15 +312,19 @@ export class QuizService {
           queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
         }
 
-        if (cursor) {
+        if (cursor && cursor !== 'initial') {
           try {
             const decoded = Buffer.from(cursor, 'base64').toString('ascii');
             const [dateStr, id] = decoded.split('::');
-            const date = new Date(dateStr);
-            queryBuilder.andWhere(
-              '(question.updatedAt < :cursorDate OR (question.updatedAt = :cursorDate AND question.id < :cursorId))',
-              { cursorDate: date, cursorId: id }
-            );
+            if (dateStr && id) {
+              const date = new Date(dateStr);
+              if (!isNaN(date.getTime())) {
+                queryBuilder.andWhere(
+                  '(question.updatedAt < :cursorDate OR (question.updatedAt = :cursorDate AND question.id < :cursorId))',
+                  { cursorDate: date, cursorId: id }
+                );
+              }
+            }
           } catch {
             this.logger.warn(`Invalid cursor format: ${cursor}`);
           }
@@ -340,10 +344,43 @@ export class QuizService {
           ? Buffer.from(`${lastQuestion.updatedAt.toISOString()}::${lastQuestion.id}`).toString('base64')
           : undefined;
 
-        return { data, nextCursor, hasMore, total: data.length };
+        // Get total count for pagination info
+        const total = await this.getTotalQuestionsCount(filters);
+
+        return { data, nextCursor, hasMore, total };
       },
       this.CACHE_TTL.QUESTIONS
     );
+  }
+
+  private async getTotalQuestionsCount(filters: {
+    status?: ContentStatus;
+    level?: string;
+    chapter?: string;
+    search?: string;
+    subjectSlug?: string;
+  }): Promise<number> {
+    const queryBuilder = this.questionRepo.createQueryBuilder('question')
+      .leftJoin('question.chapter', 'chapter')
+      .leftJoin('chapter.subject', 'subject');
+
+    if (filters.status != null) {
+      queryBuilder.andWhere('question.status = :status', { status: filters.status });
+    }
+    if (filters.level) {
+      queryBuilder.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      queryBuilder.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+    }
+    if (filters.search) {
+      queryBuilder.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
+    }
+    if (filters.subjectSlug) {
+      queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
+    }
+
+    return queryBuilder.getCount();
   }
 
   async getFilterCounts(filters: {

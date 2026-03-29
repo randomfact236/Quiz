@@ -35,7 +35,31 @@ export function useQuestionMutation() {
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteQuestion(id, true),
-    onSuccess: () => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: [QUESTIONS_KEY] });
+      const previous = queryClient.getQueryData([QUESTIONS_KEY]);
+      
+      queryClient.setQueriesData(
+        { queryKey: [QUESTIONS_KEY] },
+        (old: any) => {
+          if (!old?.pages) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page: any) => ({
+              ...page,
+              data: page.data.filter((q: any) => q.id !== id)
+            }))
+          };
+        }
+      );
+      return { previous };
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData([QUESTIONS_KEY], context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },

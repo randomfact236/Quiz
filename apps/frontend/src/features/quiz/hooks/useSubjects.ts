@@ -131,6 +131,7 @@ export function useSubjects() {
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
+    refetch: query.refetch,
     create: createMutation.mutateAsync,
     update: updateMutation.mutateAsync,
     delete: deleteMutation.mutateAsync,

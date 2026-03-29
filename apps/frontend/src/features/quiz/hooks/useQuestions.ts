@@ -47,7 +47,7 @@ export function useQuestions(filters: QuizFilters) {
       return {
         data: response.data,
         total: response.total,
-        hasMore: response.data.length === 20,
+        hasMore: response.hasMore ?? false,
       };
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,

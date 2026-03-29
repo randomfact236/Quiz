@@ -44,6 +44,49 @@ export function QuizMcqContainer() {
     [questionsQuery.data]
   );
   const total = questionsQuery.data?.pages[0]?.total ?? 0;
+
+  // Error handling for critical queries
+  if (subjectsQuery.error) {
+    return (
+      <div className="p-6">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-red-700 dark:text-red-300 font-medium">
+            Failed to load subjects
+          </p>
+          <p className="text-red-600 dark:text-red-400 text-sm mt-1">
+            {subjectsQuery.error instanceof Error ? subjectsQuery.error.message : 'Unknown error'}
+          </p>
+          <button
+            onClick={() => subjectsQuery.refetch()}
+            className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (questionsQuery.error) {
+    return (
+      <div className="p-6">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-red-700 dark:text-red-300 font-medium">
+            Failed to load questions
+          </p>
+          <p className="text-red-600 dark:text-red-400 text-sm mt-1">
+            {questionsQuery.error instanceof Error ? questionsQuery.error.message : 'Unknown error'}
+          </p>
+          <button
+            onClick={() => questionsQuery.refetch()}
+            className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
   
   const [questionModal, setQuestionModal] = useState<QuestionModalState>({ 
     open: false, 

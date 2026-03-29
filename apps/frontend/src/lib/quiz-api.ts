@@ -264,7 +264,7 @@ export async function getAllQuestions(
     page: number = 1,
     limit: number = 10,
     isAdmin: boolean = false
-): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
+): Promise<{ data: QuizQuestion[]; total: number; nextCursor?: string | undefined; hasMore?: boolean | undefined }> {
     const params = new URLSearchParams();
     if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
     if (filters.status && filters.status !== 'all') params.append('status', filters.status);
@@ -274,12 +274,12 @@ export async function getAllQuestions(
     params.append('page', String(page));
     params.append('limit', String(limit));
 
-    const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/questions?${params.toString()}`, { isAdmin });
+    const response = await api.get<{ data: QuizQuestion[]; total: number; nextCursor?: string; hasMore?: boolean }>(`/quiz/questions?${params.toString()}`, { isAdmin });
     return {
         data: response.data.data,
         total: response.data.total,
-        page,
-        limit
+        nextCursor: response.data.nextCursor,
+        hasMore: response.data.hasMore
     };
 }
 
