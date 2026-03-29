@@ -87,7 +87,7 @@ export function useChapters(subjectId: string | null | undefined) {
 
   // Delete mutation with optimistic update
   const deleteMutation = useMutation({
-    mutationFn: ({ id, subjectId: _subjectId }: { id: string; subjectId: string }) => deleteChapter(id, true),
+    mutationFn: ({ id }: { id: string; subjectId: string }) => deleteChapter(id, true),
     onMutate: async ({ id, subjectId: subjId }) => {
       await queryClient.cancelQueries({ queryKey: [CHAPTERS_KEY, subjId] as const });
       
