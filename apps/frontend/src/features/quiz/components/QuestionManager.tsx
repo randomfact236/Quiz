@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { QuizQuestion } from '@/lib/quiz-api';
 import { useQuestionMutation } from '../hooks';
@@ -19,6 +21,12 @@ interface QuestionManagerProps {
 
 const PAGE_SIZES = [10, 25, 50];
 
+interface DeleteConfirmState {
+  isOpen: boolean;
+  question: QuizQuestion | null;
+  isPermanent: boolean;
+}
+
 export function QuestionManager({
   questions,
   total,
@@ -31,6 +39,8 @@ export function QuestionManager({
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
+  const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>({ isOpen: false, question: null, isPermanent: false });
+  const [isDeleting, setIsDeleting] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   
   const { bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
@@ -72,22 +82,31 @@ export function QuestionManager({
     });
   }, []);
 
-  const handleDelete = useCallback(async (question: QuizQuestion) => {
+  const handleDelete = useCallback((question: QuizQuestion) => {
     const isTrash = question.status === 'trash';
-    const message = isTrash
-      ? `Permanently delete question: "${question.question.substring(0, 50)}..."?`
-      : `Move to trash: "${question.question.substring(0, 50)}..."?`;
-    if (!confirm(message)) return;
+    setDeleteConfirm({ isOpen: true, question, isPermanent: isTrash });
+  }, []);
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteConfirm.question) return;
+    setIsDeleting(true);
     try {
-      if (isTrash) {
-        await bulkDeleteAsync([question.id]);
+      if (deleteConfirm.isPermanent) {
+        await bulkDeleteAsync([deleteConfirm.question.id]);
       } else {
-        await bulkUpdateStatusAsync({ ids: [question.id], action: 'trash' });
+        await bulkUpdateStatusAsync({ ids: [deleteConfirm.question.id], action: 'trash' });
       }
+      setDeleteConfirm({ isOpen: false, question: null, isPermanent: false });
     } catch {
       // Error handled by mutation
+    } finally {
+      setIsDeleting(false);
     }
-  }, [bulkDeleteAsync, bulkUpdateStatusAsync]);
+  }, [deleteConfirm, bulkDeleteAsync, bulkUpdateStatusAsync]);
+
+  const cancelDelete = useCallback(() => {
+    setDeleteConfirm({ isOpen: false, question: null, isPermanent: false });
+  }, []);
 
   const handleBulkAction = useCallback(async (action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore') => {
     const ids = Array.from(selectedIds);
@@ -162,6 +181,77 @@ export function QuestionManager({
           <span className="text-sm text-gray-500 dark:text-gray-400">No more questions</span>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm.isOpen && deleteConfirm.question && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            onClick={!isDeleting ? cancelDelete : undefined}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 pointer-events-auto"
+              role="dialog"
+              aria-modal="true"
+            >
+              <div className="flex items-center gap-3 p-6 border-b border-gray-200 dark:border-gray-700">
+                <div className={`p-2 rounded-full ${deleteConfirm.isPermanent ? 'bg-red-100 dark:bg-red-900/30' : 'bg-amber-100 dark:bg-amber-900/30'}`}>
+                  {deleteConfirm.isPermanent ? (
+                    <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  ) : (
+                    <Trash2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                  )}
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  {deleteConfirm.isPermanent ? 'Delete Permanently' : 'Move to Trash'}
+                </h2>
+              </div>
+              <div className="p-6">
+                <p className="text-gray-600 dark:text-gray-400">
+                  {deleteConfirm.isPermanent
+                    ? `Are you sure you want to permanently delete this question? This action cannot be undone.`
+                    : `Are you sure you want to move this question to trash? You can restore it later from the Trash section.`
+                  }
+                </p>
+                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                    <strong>Question:</strong> {deleteConfirm.question.question}
+                  </p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 p-6 pt-0">
+                <button
+                  onClick={cancelDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 rounded-lg font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  disabled={isDeleting}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm text-white flex items-center gap-2 transition-colors disabled:opacity-50 ${
+                    deleteConfirm.isPermanent
+                      ? 'bg-red-600 hover:bg-red-700'
+                      : 'bg-amber-600 hover:bg-amber-700'
+                  }`}
+                >
+                  {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {deleteConfirm.isPermanent ? 'Delete Permanently' : 'Move to Trash'}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
