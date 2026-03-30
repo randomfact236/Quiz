@@ -928,6 +928,7 @@ export class QuizService {
 
         const questionLevel = (item.level || 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
         const questionStatus = item.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
+        const questionOrder = offset + i; // Use row index as order
 
         try {
           await manager.save(Question, {
@@ -938,6 +939,7 @@ export class QuizService {
             level: questionLevel,
             status: questionStatus,
             chapterId: chapter.id,
+            order: questionOrder,
           });
           count++;
         } catch (e: any) {
@@ -1091,7 +1093,7 @@ export class QuizService {
       queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
     }
 
-    const questions = await queryBuilder.orderBy('question.updatedAt', 'DESC').getMany();
+    const questions = await queryBuilder.orderBy('question.order', 'ASC').getMany();
 
     const subjectName = filters.subjectSlug
       ? (await this.subjectRepo.findOne({ where: { slug: filters.subjectSlug } }))?.name || 'All'

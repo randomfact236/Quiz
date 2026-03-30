@@ -77,9 +77,9 @@ export function FilterPanel({
     return [...subjects].sort((a, b) => a.name.localeCompare(b.name));
   }, [subjects]);
 
-  // Get chapters - all when no subject, or filtered by subject when selected
+  // Get chapters - all when no subject or "all", or filtered by subject when selected
   const filteredChapters = useMemo(() => {
-    if (!filters.subject) {
+    if (!filters.subject || filters.subject === 'all') {
       return [...chapters].sort((a, b) => a.name.localeCompare(b.name));
     }
     const subject = subjects.find(s => s.slug === filters.subject);
