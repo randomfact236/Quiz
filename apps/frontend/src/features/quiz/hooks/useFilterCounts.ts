@@ -13,7 +13,6 @@ export function useFilterCounts(filters: QuizFilters) {
       const response = await getFilterCounts(
         {
           ...(filters.subject && { subject: filters.subject }),
-          ...(filters.status && { status: filters.status }),
           ...(filters.level && { level: filters.level }),
           ...(filters.chapter && { chapter: filters.chapter }),
           ...(filters.search && { search: filters.search }),
