@@ -42,7 +42,9 @@ export function useQuizFilters() {
   }, [searchParams, pathname, router]);
 
   const resetFilters = useCallback(() => {
-    router.push(pathname, { scroll: false });
+    const params = new URLSearchParams();
+    params.set('section', 'quiz');
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [pathname, router]);
 
   return {

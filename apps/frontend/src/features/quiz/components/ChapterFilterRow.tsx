@@ -5,6 +5,7 @@ import type { QuizChapter } from '@/lib/quiz-api';
 interface ChapterFilterRowProps {
   chapter: QuizChapter;
   isSelected: boolean;
+  count: number;
   onSelect: () => void;
   onEdit: () => void;
   onDelete: () => void;
@@ -13,6 +14,7 @@ interface ChapterFilterRowProps {
 export function ChapterFilterRow({
   chapter,
   isSelected,
+  count,
   onSelect,
   onEdit,
   onDelete,
@@ -24,6 +26,7 @@ export function ChapterFilterRow({
         className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 hover:text-indigo-600'}`}
       >
         {chapter.name}
+        <span className={`ml-1 text-xs ${isSelected ? 'text-indigo-200' : 'text-gray-400'}`}>({count})</span>
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onEdit(); }}

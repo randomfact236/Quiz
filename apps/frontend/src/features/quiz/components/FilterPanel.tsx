@@ -77,14 +77,16 @@ export function FilterPanel({
     return [...subjects].sort((a, b) => a.name.localeCompare(b.name));
   }, [subjects]);
 
-  // Get chapters for selected subject, sorted alphabetically
+  // Get chapters - all when no subject, or filtered by subject when selected
   const filteredChapters = useMemo(() => {
-    if (!filters.subject) return [];
-    const subjectChapters = chapters.filter(c => {
-      const subject = subjects.find(s => s.slug === filters.subject);
-      return subject && c.subjectId === subject.id;
-    });
-    return subjectChapters.sort((a, b) => a.name.localeCompare(b.name));
+    if (!filters.subject) {
+      return [...chapters].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    const subject = subjects.find(s => s.slug === filters.subject);
+    if (!subject) return [];
+    return chapters
+      .filter(c => c.subjectId === subject.id)
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [chapters, filters.subject, subjects]);
 
   const getSubjectName = (slug: string) => {
@@ -149,39 +151,39 @@ export function FilterPanel({
           </button>
         </div>
 
-        {filters.subject && filters.subject !== '' && filters.subject !== 'all' && (
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-gray-700">Chapter:</span>
-            <button
-              onClick={() => onFilterChange('chapter', undefined)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all'
-                ? 'bg-indigo-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                }`}
-            >
-              All
-            </button>
-            {filteredChapters.map(chapter => {
-              const isSelected = filters.chapter === chapter.id;
-              return (
-                <ChapterFilterRow
-                  key={chapter.id}
-                  chapter={chapter}
-                  isSelected={isSelected}
-                  onSelect={() => onFilterChange('chapter', chapter.id)}
-                  onEdit={() => onEditChapter(chapter)}
-                  onDelete={() => onDeleteChapter(chapter)}
-                />
-              );
-            })}
-            <button
-              onClick={onAddChapter}
-              className="rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-600"
-            >
-              + Add
-            </button>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Chapter:</span>
+          <button
+            onClick={() => onFilterChange('chapter', undefined)}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all'
+              ? 'bg-indigo-500 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+              }`}
+          >
+            All
+          </button>
+          {filteredChapters.map(chapter => {
+            const isSelected = filters.chapter === chapter.id;
+            const chapterCount = filterCounts?.chapterCounts?.find(c => c.id === chapter.id)?.count || 0;
+            return (
+              <ChapterFilterRow
+                key={chapter.id}
+                chapter={chapter}
+                isSelected={isSelected}
+                count={chapterCount}
+                onSelect={() => onFilterChange('chapter', chapter.id)}
+                onEdit={() => onEditChapter(chapter)}
+                onDelete={() => onDeleteChapter(chapter)}
+              />
+            );
+          })}
+          <button
+            onClick={onAddChapter}
+            className="rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-600"
+          >
+            + Add
+          </button>
+        </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Level:</span>

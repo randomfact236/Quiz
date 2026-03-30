@@ -171,8 +171,12 @@ export function QuizMcqContainer() {
         onEditSubject={(s) => setSubjectModal({ open: true, subject: s })}
         onDeleteSubject={handleDeleteSubject}
         onAddChapter={() => {
-          const subject = subjectsQuery.data?.find(s => s.slug === filters.subject);
-          setChapterModal({ open: true, chapter: undefined, subjectId: subject?.id });
+          if (filters.subject) {
+            const subject = subjectsQuery.data?.find(s => s.slug === filters.subject);
+            setChapterModal({ open: true, chapter: undefined, subjectId: subject?.id });
+          } else {
+            setChapterModal({ open: true, chapter: undefined, subjectId: undefined });
+          }
         }}
         onEditChapter={(c) => setChapterModal({ open: true, chapter: c, subjectId: c.subjectId })}
         onDeleteChapter={handleDeleteChapter}
