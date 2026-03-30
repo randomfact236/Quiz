@@ -333,6 +333,27 @@ export class QuizController {
     return this.quizService.bulkAction(dto.ids, dto.action);
   }
 
+  @Get('questions/export')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Export questions as CSV (Admin only)' })
+  @ApiResponse({ status: 200, description: 'CSV file download' })
+  async exportQuestions(
+    @Query('subject') subject?: string,
+    @Query('level') level?: string,
+    @Query('chapter') chapter?: string,
+    @Query('status') status?: string,
+  ): Promise<{ csv: string; filename: string }> {
+    const filters = {
+      subjectSlug: subject,
+      level,
+      chapter,
+      status: status as any,
+    };
+    return this.quizService.exportQuestionsToCSV(filters);
+  }
+
   @Get('subjects/:slug/status-counts')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')

@@ -1067,4 +1067,70 @@ export class QuizService {
 
     return counts;
   }
+
+  async exportQuestionsToCSV(filters: {
+    subjectSlug?: string;
+    level?: string;
+    chapter?: string;
+    status?: ContentStatus;
+  }): Promise<{ csv: string; filename: string }> {
+    const queryBuilder = this.questionRepo.createQueryBuilder('question')
+      .leftJoinAndSelect('question.chapter', 'chapter')
+      .leftJoinAndSelect('chapter.subject', 'subject');
+
+    if (filters.status) {
+      queryBuilder.andWhere('question.status = :status', { status: filters.status });
+    }
+    if (filters.level) {
+      queryBuilder.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      queryBuilder.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+    }
+    if (filters.subjectSlug) {
+      queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
+    }
+
+    const questions = await queryBuilder.orderBy('question.updatedAt', 'DESC').getMany();
+
+    const subjectName = filters.subjectSlug
+      ? (await this.subjectRepo.findOne({ where: { slug: filters.subjectSlug } }))?.name || 'All'
+      : 'All';
+
+    const escapeCsvValue = (val: string): string => {
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val;
+    };
+
+    const headers = ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'];
+
+    const rows = questions.map((q, index) => {
+      const isExtreme = q.level === 'extreme';
+      const opts = q.options || [];
+
+      const correctAnswer = isExtreme
+        ? (q.correctAnswer || '')
+        : (q.correctLetter || 'A');
+
+      return [
+        index + 1,
+        escapeCsvValue(q.question || ''),
+        escapeCsvValue(isExtreme ? '' : (opts[0] || '')),
+        escapeCsvValue(isExtreme ? '' : (opts[1] || '')),
+        escapeCsvValue(isExtreme ? '' : (opts[2] || '')),
+        escapeCsvValue(isExtreme ? '' : (opts[3] || '')),
+        escapeCsvValue(correctAnswer),
+        q.level,
+        escapeCsvValue(q.chapter?.name || ''),
+      ].join(',');
+    });
+
+    const subjectHeader = `# Subject: ${subjectName}`;
+    const csv = [subjectHeader, headers.join(','), ...rows].join('\n');
+    const filename = `questions_export_${subjectName.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+
+    return { csv, filename };
+  }
 }

@@ -14,7 +14,7 @@ import { ChapterModal } from './modals/ChapterModal';
 import { QuestionModal } from './modals/QuestionModal';
 import { ImportModal } from './modals/ImportModal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { exportQuestionsToCSV } from '@/lib/quiz-api';
+import { exportQuestionsFromBackend } from '@/lib/quiz-api';
 import type { QuizQuestion, QuizSubject, QuizChapter } from '@/lib/quiz-api';
 
 interface QuestionModalState {
@@ -157,10 +157,12 @@ export function QuizMcqContainer() {
         })}
         onImport={() => setImportModal(true)}
         onExport={() => {
-          const subjectName = filters.subject 
-            ? subjectsQuery.data?.find(s => s.slug === filters.subject)?.name 
-            : undefined;
-          exportQuestionsToCSV(questions, subjectName);
+          const exportFilters: { subject?: string; level?: string; chapter?: string; status?: string } = {};
+          if (filters.subject && filters.subject !== 'all') exportFilters.subject = filters.subject;
+          if (filters.level && filters.level !== 'all') exportFilters.level = filters.level;
+          if (filters.chapter && filters.chapter !== 'all') exportFilters.chapter = filters.chapter;
+          if (filters.status && filters.status !== 'all') exportFilters.status = filters.status;
+          exportQuestionsFromBackend(exportFilters);
         }}
       />
       

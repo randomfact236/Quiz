@@ -318,53 +318,38 @@ export async function bulkActionQuestions(
 // CSV Export/Import
 // ============================================================================
 
-const CSV_HEADERS = ['Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'];
+export async function exportQuestionsFromBackend(
+    filters: {
+        subject?: string;
+        level?: string;
+        chapter?: string;
+        status?: string;
+    } = {},
+    isAdmin: boolean = true
+): Promise<void> {
+    const params = new URLSearchParams();
+    if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
+    if (filters.level && filters.level !== 'all') params.append('level', filters.level);
+    if (filters.chapter && filters.chapter !== 'all') params.append('chapter', filters.chapter);
+    if (filters.status && filters.status !== 'all') params.append('status', filters.status);
 
-export function exportQuestionsToCSV(questions: QuizQuestion[], subjectName?: string): void {
-    const escapeCsvValue = (val: string): string => {
-        if (val.includes(',') || val.includes('"') || val.includes('\n')) {
-            return `"${val.replace(/"/g, '""')}"`;
-        }
-        return val;
-    };
-
-    const rows = questions.map(q => {
-        const isExtreme = q.level === 'extreme';
-        const opts = q.options || [];
-        
-        let correctAnswer: string;
-        if (isExtreme) {
-            correctAnswer = q.correctAnswer || '';
-        } else {
-            const letterIndex = opts.findIndex(opt => opt === q.correctAnswer);
-            correctAnswer = letterIndex >= 0 ? String.fromCharCode(65 + letterIndex) : 'A';
-        }
-
-        return [
-            escapeCsvValue(q.question || ''),
-            escapeCsvValue(isExtreme ? '' : (opts[0] || '')),
-            escapeCsvValue(isExtreme ? '' : (opts[1] || '')),
-            escapeCsvValue(isExtreme ? '' : (opts[2] || '')),
-            escapeCsvValue(isExtreme ? '' : (opts[3] || '')),
-            escapeCsvValue(correctAnswer),
-            q.level,
-            escapeCsvValue(q.chapter?.name || ''),
-        ].join(',');
-    });
-
-    const subjectHeader = `# Subject: ${subjectName || 'General'}`;
-    const csv = [subjectHeader, CSV_HEADERS.join(','), ...rows].join('\n');
+    const response = await api.get<{ csv: string; filename: string }>(`/quiz/questions/export?${params.toString()}`, { isAdmin });
     
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([response.data.csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    const date = new Date().toISOString().split('T')[0];
     link.href = url;
-    link.download = `questions_export_${date}.csv`;
+    link.download = response.data.filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+}
+
+export function exportQuestionsToCSV(): void {
+    // DEPRECATED: Use exportQuestionsFromBackend instead
+    // This function only exports the current page of questions
+    // Backend export now handles ALL questions with proper filtering
 }
 
 

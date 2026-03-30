@@ -75,16 +75,18 @@ const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefi
 
     const cols = parseCSVRow(row);
 
-    if (cols.length < 8) continue;
+    // Skip ID column (col 0), start from Question (col 1)
+    // Expected format: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+    if (cols.length < 9) continue;
 
-    const question = cols[0] || '';
-    const optionA = cols[1];
-    const optionB = cols[2];
-    const optionC = cols[3];
-    const optionD = cols[4];
-    const correctAnswer = cols[5] || '';
-    const level = cols[6] || '';
-    const chapterName = cols[7] || '';
+    const question = cols[1] || '';
+    const optionA = cols[2];
+    const optionB = cols[3];
+    const optionC = cols[4];
+    const optionD = cols[5];
+    const correctAnswer = cols[6] || '';
+    const level = cols[7] || '';
+    const chapterName = cols[8] || '';
 
     if (!question || !chapterName) continue;
 
@@ -107,12 +109,12 @@ const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefi
 const downloadTemplate = () => {
   const template = `# Subject: Science
 
-Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
-What is H2O?,Water,Steam,Ice,Air,A,easy,Chemistry
-What is gravity?,Force,Mass,Volume,Density,B,medium,Physics
-How many teeth?,8,4,16,,B,hard,Mammals
-How much water daily?,20 gallons,50 gallons,100 gallons,200 gallons,B,expert,Mammals
-How many bones in trunk?,,,,,No Bones,extreme,Mammals`;
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,What is H2O?,Water,Steam,Ice,Air,A,easy,Chemistry
+2,What is gravity?,Force,Mass,Volume,Density,B,medium,Physics
+3,How many teeth?,8,4,16,,B,hard,Mammals
+4,How much water daily?,20 gallons,50 gallons,100 gallons,200 gallons,B,expert,Mammals
+5,How many bones in trunk?,,,,,No Bones,extreme,Biology`;
 
   const blob = new Blob([template], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
