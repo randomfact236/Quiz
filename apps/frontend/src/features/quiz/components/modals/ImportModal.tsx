@@ -48,24 +48,26 @@ const parseCSVRow = (row: string): string[] => {
 };
 
 const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefined; questions: ParsedQuestion[] } => {
-  const lines = text.trim().split('\n');
+  const lines = text.trim().split(/\r?\n/);
 
   let subjectName: string | undefined;
   const dataLines: string[] = [];
 
   for (const line of lines) {
-    if (line.startsWith('# Subject:')) {
-      subjectName = line.replace('# Subject:', '').trim();
-    } else if (line.trim()) {
-      dataLines.push(line);
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith('# Subject:')) {
+      const subjectPart = trimmedLine.replace('# Subject:', '').trim();
+      subjectName = subjectPart.split(',')[0]?.trim() || 'General';
+    } else if (trimmedLine && !trimmedLine.startsWith('Question,')) {
+      dataLines.push(trimmedLine);
     }
   }
 
-  if (dataLines.length < 2) {
-    return { subjectName, questions: [] };
+  if (dataLines.length < 1) {
+    return { subjectName: subjectName || 'General', questions: [] };
   }
 
-  const rows = dataLines.slice(1);
+  const rows = dataLines;
   const questions: ParsedQuestion[] = [];
 
   for (const row of rows) {
@@ -73,16 +75,16 @@ const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefi
 
     const cols = parseCSVRow(row);
 
-    const [
-      question,
-      optionA,
-      optionB,
-      optionC,
-      optionD,
-      correctAnswer,
-      level,
-      chapterName,
-    ] = cols;
+    if (cols.length < 8) continue;
+
+    const question = cols[0] || '';
+    const optionA = cols[1];
+    const optionB = cols[2];
+    const optionC = cols[3];
+    const optionD = cols[4];
+    const correctAnswer = cols[5] || '';
+    const level = cols[6] || '';
+    const chapterName = cols[7] || '';
 
     if (!question || !chapterName) continue;
 
@@ -99,7 +101,7 @@ const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefi
     });
   }
 
-  return { subjectName, questions };
+  return { subjectName: subjectName || 'General', questions };
 };
 
 const downloadTemplate = () => {
