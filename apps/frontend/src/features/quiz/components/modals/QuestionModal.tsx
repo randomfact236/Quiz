@@ -33,6 +33,9 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctLetter, setCorrectLetter] = useState('A');
+  const [openEndedAnswer, setOpenEndedAnswer] = useState('');
+  
+  const isExtreme = level === 'extreme';
   
   const { createAsync, updateAsync, isCreating, isUpdating, createError, updateError } = useQuestionMutation();
   const isPending = isCreating || isUpdating;
@@ -49,11 +52,18 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setChapterId(question.chapterId);
       setLevel(question.level);
       setStatus((question.status === 'draft' || question.status === 'published') ? question.status : 'draft');
-      setOptions((question.options || ['', '', '', '']).map(opt => opt ?? ''));
-      setCorrectLetter(question.correctLetter || 'A');
       const chapter = chapters.find(c => c.id === question.chapterId);
       if (chapter) {
         setSubjectId(chapter.subjectId);
+      }
+      if (question.level === 'extreme') {
+        setOpenEndedAnswer(question.correctAnswer || '');
+        setOptions(['', '', '', '']);
+        setCorrectLetter('A');
+      } else {
+        setOptions((question.options || ['', '', '', '']).map(opt => opt ?? ''));
+        setCorrectLetter(question.correctLetter || 'A');
+        setOpenEndedAnswer('');
       }
     } else if (open) {
       setQuestionText('');
@@ -63,6 +73,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setStatus('draft');
       setOptions(['', '', '', '']);
       setCorrectLetter('A');
+      setOpenEndedAnswer('');
     }
   }, [open, question, chapters]);
 
@@ -74,6 +85,18 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       }
     }
   }, [subjectId, chapterId, filteredChapters]);
+
+  const handleLevelChange = (newLevel: string) => {
+    if (level === 'extreme' && newLevel !== 'extreme') {
+      setOpenEndedAnswer('');
+      setOptions(['', '', '', '']);
+      setCorrectLetter('A');
+    } else if (level !== 'extreme' && newLevel === 'extreme') {
+      setOptions(['', '', '', '']);
+      setCorrectLetter('A');
+    }
+    setLevel(newLevel);
+  };
 
   const handleOptionChange = (index: number, value: string) => {
     setOptions(prev => {
@@ -95,15 +118,29 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
     e.preventDefault();
     if (!questionText.trim() || !chapterId) return;
 
-    const data: CreateQuestionDto = {
-      question: questionText.trim(),
-      chapterId,
-      level: level as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
-      status,
-      options: options.filter(o => o.trim()),
-      correctLetter,
-      correctAnswer: options[CORRECT_LETTERS.indexOf(correctLetter)] || '',
-    };
+    let data: CreateQuestionDto;
+
+    if (isExtreme) {
+      data = {
+        question: questionText.trim(),
+        chapterId,
+        level: level as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
+        status,
+        options: null,
+        correctAnswer: openEndedAnswer.trim(),
+        correctLetter: null,
+      };
+    } else {
+      data = {
+        question: questionText.trim(),
+        chapterId,
+        level: level as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
+        status,
+        options: options.filter(o => o.trim()),
+        correctLetter: correctLetter,
+        correctAnswer: options[CORRECT_LETTERS.indexOf(correctLetter)] || '',
+      };
+    }
 
     try {
       if (isEdit && question) {
@@ -169,7 +206,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
               </label>
               <select
                 value={level}
-                onChange={(e) => setLevel(e.target.value)}
+                onChange={(e) => handleLevelChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
               >
                 {LEVELS.map(l => (
@@ -193,12 +230,28 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
             </div>
           </div>
 
-          <OptionsEditor
-            options={options}
-            correctLetter={correctLetter}
-            onOptionChange={handleOptionChange}
-            onCorrectLetterChange={setCorrectLetter}
-          />
+          {isExtreme ? (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Correct Answer <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={openEndedAnswer}
+                onChange={(e) => setOpenEndedAnswer(e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter the correct answer/explanation..."
+                required={isExtreme}
+              />
+            </div>
+          ) : (
+            <OptionsEditor
+              options={options}
+              correctLetter={correctLetter}
+              onOptionChange={handleOptionChange}
+              onCorrectLetterChange={setCorrectLetter}
+            />
+          )}
         </div>
         <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-white flex-shrink-0">
           <button
