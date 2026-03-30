@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Trash2, AlertTriangle, Loader2 } from 'lucide-react';
+import { Trash2, Loader2 } from 'lucide-react';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { QuizQuestion } from '@/lib/quiz-api';
 import { useQuestionMutation } from '../hooks';
@@ -21,10 +21,9 @@ interface QuestionManagerProps {
 
 const PAGE_SIZES = [10, 25, 50];
 
-interface DeleteConfirmState {
+interface TrashConfirmState {
   isOpen: boolean;
   question: QuizQuestion | null;
-  isPermanent: boolean;
 }
 
 export function QuestionManager({
@@ -39,8 +38,8 @@ export function QuestionManager({
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
-  const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>({ isOpen: false, question: null, isPermanent: false });
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [trashConfirm, setTrashConfirm] = useState<TrashConfirmState>({ isOpen: false, question: null });
+  const [isTrashing, setIsTrashing] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   
   const { bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
@@ -83,29 +82,24 @@ export function QuestionManager({
   }, []);
 
   const handleDelete = useCallback((question: QuizQuestion) => {
-    const isTrash = question.status === 'trash';
-    setDeleteConfirm({ isOpen: true, question, isPermanent: isTrash });
+    setTrashConfirm({ isOpen: true, question });
   }, []);
 
-  const confirmDelete = useCallback(async () => {
-    if (!deleteConfirm.question) return;
-    setIsDeleting(true);
+  const confirmTrash = useCallback(async () => {
+    if (!trashConfirm.question) return;
+    setIsTrashing(true);
     try {
-      if (deleteConfirm.isPermanent) {
-        await bulkDeleteAsync([deleteConfirm.question.id]);
-      } else {
-        await bulkUpdateStatusAsync({ ids: [deleteConfirm.question.id], action: 'trash' });
-      }
-      setDeleteConfirm({ isOpen: false, question: null, isPermanent: false });
+      await bulkUpdateStatusAsync({ ids: [trashConfirm.question.id], action: 'trash' });
+      setTrashConfirm({ isOpen: false, question: null });
     } catch {
       // Error handled by mutation
     } finally {
-      setIsDeleting(false);
+      setIsTrashing(false);
     }
-  }, [deleteConfirm, bulkDeleteAsync, bulkUpdateStatusAsync]);
+  }, [trashConfirm, bulkUpdateStatusAsync]);
 
-  const cancelDelete = useCallback(() => {
-    setDeleteConfirm({ isOpen: false, question: null, isPermanent: false });
+  const cancelTrash = useCallback(() => {
+    setTrashConfirm({ isOpen: false, question: null });
   }, []);
 
   const handleBulkAction = useCallback(async (action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore') => {
@@ -182,15 +176,15 @@ export function QuestionManager({
         )}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {deleteConfirm.isOpen && deleteConfirm.question && (
+      {/* Trash Confirmation Modal */}
+      {trashConfirm.isOpen && trashConfirm.question && (
         <>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-            onClick={!isDeleting ? cancelDelete : undefined}
+            onClick={!isTrashing ? cancelTrash : undefined}
           />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
             <motion.div
@@ -203,49 +197,38 @@ export function QuestionManager({
               aria-modal="true"
             >
               <div className="flex items-center gap-3 p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className={`p-2 rounded-full ${deleteConfirm.isPermanent ? 'bg-red-100 dark:bg-red-900/30' : 'bg-amber-100 dark:bg-amber-900/30'}`}>
-                  {deleteConfirm.isPermanent ? (
-                    <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  ) : (
-                    <Trash2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                  )}
+                <div className="p-2 rounded-full bg-amber-100 dark:bg-amber-900/30">
+                  <Trash2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {deleteConfirm.isPermanent ? 'Delete Permanently' : 'Move to Trash'}
+                  Move to Trash
                 </h2>
               </div>
               <div className="p-6">
                 <p className="text-gray-600 dark:text-gray-400">
-                  {deleteConfirm.isPermanent
-                    ? `Are you sure you want to permanently delete this question? This action cannot be undone.`
-                    : `Are you sure you want to move this question to trash? You can restore it later from the Trash section.`
-                  }
+                  Are you sure you want to move this question to trash? You can restore it later from the Trash section.
                 </p>
                 <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
                   <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                    <strong>Question:</strong> {deleteConfirm.question.question}
+                    <strong>Question:</strong> {trashConfirm.question.question}
                   </p>
                 </div>
               </div>
               <div className="flex justify-end gap-3 p-6 pt-0">
                 <button
-                  onClick={cancelDelete}
-                  disabled={isDeleting}
+                  onClick={cancelTrash}
+                  disabled={isTrashing}
                   className="px-4 py-2 rounded-lg font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={confirmDelete}
-                  disabled={isDeleting}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm text-white flex items-center gap-2 transition-colors disabled:opacity-50 ${
-                    deleteConfirm.isPermanent
-                      ? 'bg-red-600 hover:bg-red-700'
-                      : 'bg-amber-600 hover:bg-amber-700'
-                  }`}
+                  onClick={confirmTrash}
+                  disabled={isTrashing}
+                  className="px-4 py-2 rounded-lg font-medium text-sm text-white bg-amber-600 hover:bg-amber-700 flex items-center gap-2 transition-colors disabled:opacity-50"
                 >
-                  {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {deleteConfirm.isPermanent ? 'Delete Permanently' : 'Move to Trash'}
+                  {isTrashing && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Move to Trash
                 </button>
               </div>
             </motion.div>
