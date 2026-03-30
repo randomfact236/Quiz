@@ -14,6 +14,7 @@ interface QuestionManagerProps {
   hasNextPage: boolean;
   onLoadMore: () => void;
   onEdit: (question: QuizQuestion) => void;
+  statusFilter?: string;
 }
 
 const PAGE_SIZES = [10, 25, 50];
@@ -26,6 +27,7 @@ export function QuestionManager({
   hasNextPage,
   onLoadMore,
   onEdit,
+  statusFilter = 'all',
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
@@ -128,7 +130,7 @@ export function QuestionManager({
         <BulkActionToolbar
           selectedIds={Array.from(selectedIds)}
           totalItems={total}
-          currentFilter="all"
+          currentFilter={statusFilter as any}
           onSelectAll={toggleSelectAll}
           onDeselectAll={() => setSelectedIds(new Set())}
           onAction={handleBulkAction}

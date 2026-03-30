@@ -193,6 +193,7 @@ export function QuizMcqContainer() {
           open: true, 
           question: q 
         })}
+        statusFilter={filters.status || 'all'}
       />
       
       <SubjectModal
