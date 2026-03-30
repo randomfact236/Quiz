@@ -156,7 +156,12 @@ export function QuizMcqContainer() {
           question: undefined 
         })}
         onImport={() => setImportModal(true)}
-        onExport={() => exportQuestionsToCSV(questions)}
+        onExport={() => {
+          const subjectName = filters.subject 
+            ? subjectsQuery.data?.find(s => s.slug === filters.subject)?.name 
+            : undefined;
+          exportQuestionsToCSV(questions, subjectName);
+        }}
       />
       
       <FilterPanel

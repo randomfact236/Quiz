@@ -318,27 +318,43 @@ export async function bulkActionQuestions(
 // CSV Export/Import
 // ============================================================================
 
-const CSV_HEADERS = ['question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'level', 'chapter', 'subject', 'status'];
+const CSV_HEADERS = ['Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'];
 
 export function exportQuestionsToCSV(questions: QuizQuestion[], subjectName?: string): void {
+    const escapeCsvValue = (val: string): string => {
+        if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+            return `"${val.replace(/"/g, '""')}"`;
+        }
+        return val;
+    };
+
     const rows = questions.map(q => {
         const isExtreme = q.level === 'extreme';
-        const row = [
-            `"${(q.question || '').replace(/"/g, '""')}"`,
-            isExtreme ? '' : `"${(q.options?.[0] || '').replace(/"/g, '""')}"`,
-            isExtreme ? '' : `"${(q.options?.[1] || '').replace(/"/g, '""')}"`,
-            isExtreme ? '' : `"${(q.options?.[2] || '').replace(/"/g, '""')}"`,
-            isExtreme ? '' : `"${(q.options?.[3] || '').replace(/"/g, '""')}"`,
-            isExtreme ? `"${(q.correctAnswer || '').replace(/"/g, '""')}"` : (q.options ? String.fromCharCode(65 + q.options.findIndex(opt => opt === q.correctAnswer)) : ''),
+        const opts = q.options || [];
+        
+        let correctAnswer: string;
+        if (isExtreme) {
+            correctAnswer = q.correctAnswer || '';
+        } else {
+            const letterIndex = opts.findIndex(opt => opt === q.correctAnswer);
+            correctAnswer = letterIndex >= 0 ? String.fromCharCode(65 + letterIndex) : 'A';
+        }
+
+        return [
+            escapeCsvValue(q.question || ''),
+            escapeCsvValue(isExtreme ? '' : (opts[0] || '')),
+            escapeCsvValue(isExtreme ? '' : (opts[1] || '')),
+            escapeCsvValue(isExtreme ? '' : (opts[2] || '')),
+            escapeCsvValue(isExtreme ? '' : (opts[3] || '')),
+            escapeCsvValue(correctAnswer),
             q.level,
-            `"${(q.chapter?.name || '').replace(/"/g, '""')}"`,
-            `"${(subjectName || '').replace(/"/g, '""')}"`,
-            q.status || 'draft'
-        ];
-        return row.join(',');
+            escapeCsvValue(q.chapter?.name || ''),
+        ].join(',');
     });
+
+    const subjectHeader = `# Subject: ${subjectName || 'General'}`;
+    const csv = [subjectHeader, CSV_HEADERS.join(','), ...rows].join('\n');
     
-    const csv = [CSV_HEADERS.join(','), ...rows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
