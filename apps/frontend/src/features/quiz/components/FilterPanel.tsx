@@ -112,7 +112,7 @@ export function FilterPanel({
       <StatusDashboard
         counts={statusCounts}
         activeFilter={(filters.status as StatusFilter) || 'all'}
-        onFilterChange={(filter) => onFilterChange('status', filter === 'all' ? undefined : filter)}
+        onFilterChange={(filter) => onFilterChange('status', filter === 'all' ? 'all' : filter)}
         loading={isLoading}
       />
 

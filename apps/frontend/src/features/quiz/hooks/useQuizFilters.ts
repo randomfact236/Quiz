@@ -20,7 +20,7 @@ export function useQuizFilters() {
     subject: searchParams.get('subject') || undefined,
     chapter: searchParams.get('chapter') || undefined,
     level: searchParams.get('level') || undefined,
-    status: searchParams.get('status') || 'all',
+    status: searchParams.get('status') || 'published',
     search: searchParams.get('search') || undefined,
   }), [searchParams]);
 
@@ -29,6 +29,8 @@ export function useQuizFilters() {
     
     if (value && value !== 'all') {
       params.set(key, value);
+    } else if (value === 'all') {
+      params.set(key, 'all');
     } else {
       params.delete(key);
     }
