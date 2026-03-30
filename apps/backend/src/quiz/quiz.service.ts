@@ -6,6 +6,7 @@ import { Repository, DataSource, In } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
+import { BulkQuestionDto, BulkQuestionItemDto } from '../common/dto/bulk-question.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
 import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
@@ -812,6 +813,139 @@ export class QuizService {
 
       const saved = await transactionalEntityManager.save(questions);
       return { count: saved.length, errors };
+    });
+  }
+
+  async createQuestionsBulkFromImport(dto: BulkQuestionDto): Promise<{ count: number; errors: string[] }> {
+    const { subjectName: defaultSubjectName, questions } = dto;
+    const errors: string[] = [];
+
+    if (!questions || questions.length === 0) {
+      throw new BadRequestException('No questions provided for bulk creation');
+    }
+
+    const CHUNK_SIZE = 100;
+    let totalCreated = 0;
+
+    for (let i = 0; i < questions.length; i += CHUNK_SIZE) {
+      const chunk = questions.slice(i, i + CHUNK_SIZE);
+      const result = await this.processBulkImportChunk(chunk, defaultSubjectName, errors, i);
+      totalCreated += result.count;
+    }
+
+    await this.cacheService.delPattern('quiz:*');
+    return { count: totalCreated, errors };
+  }
+
+  private async processBulkImportChunk(
+    items: BulkQuestionItemDto[],
+    defaultSubjectName: string | undefined,
+    errors: string[],
+    offset: number,
+  ): Promise<{ count: number }> {
+    return await this.dataSource.transaction(async (manager) => {
+      const allSubjectNames = [...new Set(items.map(q => q.subjectName || defaultSubjectName || 'General'))];
+      const subjectMap = new Map<string, Subject>();
+
+      for (const name of allSubjectNames) {
+        let subject = await manager.findOne(Subject, { where: { name } });
+        if (!subject) {
+          subject = await manager.save(Subject, {
+            name,
+            slug: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+            emoji: '📚',
+            isActive: true,
+          });
+        }
+        subjectMap.set(name, subject);
+      }
+
+      const chapterKeys = [...new Set(items.map(q => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`))];
+      const chapterMap = new Map<string, Chapter>();
+
+      for (const key of chapterKeys) {
+        const [chapterName, subjectName] = key.split('|');
+        const subject = subjectMap.get(subjectName || 'General');
+        if (!subject) continue;
+
+        let chapter = await manager.findOne(Chapter, {
+          where: { name: chapterName, subjectId: subject.id },
+        });
+        if (!chapter) {
+          chapter = await manager.save(Chapter, {
+            name: chapterName,
+            subjectId: subject.id,
+            chapterNumber: 0,
+          });
+        }
+        chapterMap.set(key, chapter);
+      }
+
+      let count = 0;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (!item.question || !item.chapterName) {
+          errors.push(`Row ${offset + i + 1}: Missing question or chapter`);
+          continue;
+        }
+
+        const subjectName = item.subjectName || defaultSubjectName || 'General';
+        const subject = subjectMap.get(subjectName);
+        const chapterKey = `${item.chapterName}|${subjectName}`;
+        const chapter = chapterMap.get(chapterKey);
+
+        if (!subject || !chapter) {
+          errors.push(`Row ${offset + i + 1}: Could not find/create subject or chapter`);
+          continue;
+        }
+
+        const isExtreme = item.level === 'extreme';
+        const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+
+        if (item.level && !validLevels.includes(item.level)) {
+          errors.push(`Row ${offset + i + 1}: Invalid level '${item.level}'`);
+          continue;
+        }
+
+        let options: string[] | null = null;
+        let correctLetter: string | null = null;
+        let correctAnswer = '';
+
+        if (!isExtreme) {
+          const letter = item.correctAnswer?.toUpperCase() || 'A';
+          correctLetter = ['A', 'B', 'C', 'D'].includes(letter) ? letter : 'A';
+
+          const opts = [item.optionA, item.optionB, item.optionC, item.optionD].filter(Boolean);
+          options = opts as string[];
+
+          const letterIndex = ['A', 'B', 'C', 'D'].indexOf(correctLetter || '');
+          correctAnswer = options[letterIndex] || options[0] || '';
+        } else {
+          options = null;
+          correctLetter = null;
+          correctAnswer = item.correctAnswer || '';
+        }
+
+        const questionLevel = (item.level || 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
+        const questionStatus = item.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
+
+        try {
+          await manager.save(Question, {
+            question: item.question,
+            options,
+            correctAnswer,
+            correctLetter,
+            level: questionLevel,
+            status: questionStatus,
+            chapterId: chapter.id,
+          });
+          count++;
+        } catch (e: any) {
+          errors.push(`Row ${offset + i + 1}: ${e.message}`);
+        }
+      }
+
+      return { count };
     });
   }
 

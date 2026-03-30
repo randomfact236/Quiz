@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { X, Upload, FileText } from 'lucide-react';
+import { X, Upload, FileText, Download } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
 import { CSVPreview } from './CSVPreview';
 
@@ -16,11 +16,118 @@ interface ImportResult {
   errors?: string[];
 }
 
+interface ParsedQuestion {
+  question: string;
+  optionA: string | undefined;
+  optionB: string | undefined;
+  optionC: string | undefined;
+  optionD: string | undefined;
+  correctAnswer: string;
+  level: string;
+  chapterName: string;
+  status: string;
+}
+
+const parseCSVRow = (row: string): string[] => {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (const char of row) {
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
+};
+
+const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefined; questions: ParsedQuestion[] } => {
+  const lines = text.trim().split('\n');
+
+  let subjectName: string | undefined;
+  const dataLines: string[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith('# Subject:')) {
+      subjectName = line.replace('# Subject:', '').trim();
+    } else if (line.trim()) {
+      dataLines.push(line);
+    }
+  }
+
+  if (dataLines.length < 2) {
+    return { subjectName, questions: [] };
+  }
+
+  const rows = dataLines.slice(1);
+  const questions: ParsedQuestion[] = [];
+
+  for (const row of rows) {
+    if (!row.trim()) continue;
+
+    const cols = parseCSVRow(row);
+
+    const [
+      question,
+      optionA,
+      optionB,
+      optionC,
+      optionD,
+      correctAnswer,
+      level,
+      chapterName,
+    ] = cols;
+
+    if (!question || !chapterName) continue;
+
+    questions.push({
+      question: question.trim(),
+      optionA: optionA?.trim(),
+      optionB: optionB?.trim(),
+      optionC: optionC?.trim(),
+      optionD: optionD?.trim(),
+      correctAnswer: correctAnswer?.trim() || '',
+      level: level?.trim() || 'easy',
+      chapterName: chapterName?.trim(),
+      status: 'published',
+    });
+  }
+
+  return { subjectName, questions };
+};
+
+const downloadTemplate = () => {
+  const template = `# Subject: Science
+
+Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+What is H2O?,Water,Steam,Ice,Air,A,easy,Chemistry
+What is gravity?,Force,Mass,Volume,Density,B,medium,Physics
+How many teeth?,8,4,16,,B,hard,Mammals
+How much water daily?,20 gallons,50 gallons,100 gallons,200 gallons,B,expert,Mammals
+How many bones in trunk?,,,,,No Bones,extreme,Mammals`;
+
+  const blob = new Blob([template], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'quiz_template.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
 export function ImportModal({ open, onClose }: ImportModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const { bulkCreateAsync, isBulkCreating, bulkCreateError } = useQuestionMutation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,49 +152,30 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
 
     try {
       const text = await file.text();
-      const lines = text.split('\n').filter(line => line.trim());
-      if (lines.length < 2) {
-        setResult({ success: false, errors: ['CSV file is empty or has no data rows'] });
+      const { subjectName, questions } = parseCSVWithSubjectHeader(text);
+
+      if (questions.length === 0) {
+        setResult({ success: false, errors: ['No valid questions found in CSV'] });
         return;
       }
-      const headers = lines[0]?.split(',').map(h => h.trim().toLowerCase()) || [];
-      
-      const questions = [];
-      const errors: string[] = [];
-      
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i];
-        if (!line) continue;
-        const values = line.split(',').map(v => v.trim());
-        const row: Record<string, string> = {};
-        headers.forEach((h, idx) => {
-          row[h] = values[idx] || '';
-        });
-        
-        if (!row['question'] || !row['chapter']) {
-          errors.push(`Row ${i}: Missing required fields`);
-          continue;
-        }
-        
-        const question = {
-          question: row['question'],
-          chapterId: row['chapter'],
-          level: (row['level'] || 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
-          status: (row['status'] || 'draft') as 'draft' | 'published',
-          options: [row['option_a'] || '', row['option_b'] || '', row['option_c'] || '', row['option_d'] || ''].filter(Boolean),
-          correctLetter: row['correct_answer'] || 'A',
-          correctAnswer: row['option_a'] || '',
-        };
-        
-        questions.push(question);
-      }
-      
-      if (questions.length > 0) {
-        await bulkCreateAsync(questions);
-        setResult({ success: true, count: questions.length });
-      } else {
-        setResult({ success: false, errors: errors.length > 0 ? errors : ['No valid questions found'] });
-      }
+
+      const payload = {
+        subjectName,
+        questions: questions.map(q => ({
+          question: q.question,
+          optionA: q.optionA,
+          optionB: q.optionB,
+          optionC: q.optionC,
+          optionD: q.optionD,
+          correctAnswer: q.correctAnswer,
+          level: q.level,
+          chapterName: q.chapterName,
+          status: q.status,
+        })),
+      };
+
+      await bulkCreateAsync(payload as any);
+      setResult({ success: true, count: questions.length });
     } catch {
       setResult({ success: false, errors: [bulkCreateError?.message || 'Import failed'] });
     }
@@ -153,9 +241,19 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4 text-sm">
-                <p className="font-medium text-gray-700 mb-2">CSV Format:</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="font-medium text-gray-700">CSV Format:</p>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); downloadTemplate(); }}
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
+                  >
+                    <Download className="w-3 h-3" />
+                    Download Template
+                  </button>
+                </div>
                 <code className="text-xs text-gray-600 block overflow-x-auto whitespace-nowrap">
-                  question,option_a,option_b,option_c,option_d,correct_answer,level,chapter,status
+                  # Subject: name<br />
+                  Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
                 </code>
               </div>
 

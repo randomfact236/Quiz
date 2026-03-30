@@ -26,6 +26,7 @@ import {
   PaginationDto,
 } from '../common/dto/base.dto';
 import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
+import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { Chapter } from './entities/chapter.entity';
@@ -289,12 +290,12 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create questions (Admin only)' })
-  async createQuestionsBulk(@Body() dto: CreateQuestionDto[]): Promise<{ count: number; errors: string[] }> {
-    if (!dto || dto.length === 0) {
-      throw new BadRequestException('Request body must be a non-empty array of questions');
+  @ApiOperation({ summary: 'Bulk create questions with auto-create subjects/chapters (Admin only)' })
+  async createQuestionsBulk(@Body() dto: BulkQuestionDto): Promise<{ count: number; errors: string[] }> {
+    if (!dto.questions || dto.questions.length === 0) {
+      throw new BadRequestException('Request body must contain questions array');
     }
-    return await this.quizService.createQuestionsBulk(dto);
+    return await this.quizService.createQuestionsBulkFromImport(dto);
   }
 
   @Patch('questions/:id')
