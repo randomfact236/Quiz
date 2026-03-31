@@ -33,7 +33,7 @@ export function useQuestions(filters: QuizFilters) {
 
       const response = await getAllQuestions(
         {
-          ...(filters.subject && { subject: filters.subject }),
+          ...(filters.subject && filters.subject !== 'all' && { subject: filters.subject }),
           ...(filters.status && { status: filters.status }),
           ...(filters.level && { level: filters.level }),
           ...(filters.chapter && { chapter: filters.chapter }),
