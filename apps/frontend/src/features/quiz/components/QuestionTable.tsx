@@ -113,10 +113,9 @@ export function QuestionTable({
                   </td>
                   <td className="px-3 py-3 align-top">
                     {isExtreme ? (
-                      <div className="text-xs text-gray-600">
-                        <span className="font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded">
-                          Open-ended question
-                        </span>
+                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words max-w-48">
+                        <span className="font-medium text-purple-600">A: </span>
+                        {question.correctAnswer || 'No answer'}
                       </div>
                     ) : (
                       <div className="space-y-1 text-xs">
@@ -140,9 +139,7 @@ export function QuestionTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-center align-top">
                     {isExtreme ? (
-                      <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs">
-                        {question.correctAnswer || 'No answer'}
-                      </div>
+                      <span className="text-gray-400 text-xs">—</span>
                     ) : (
                       <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs">
                         {question.correctLetter}. {question.options?.[CORRECT_LETTERS.indexOf(question.correctLetter || 'A')] || ''}
