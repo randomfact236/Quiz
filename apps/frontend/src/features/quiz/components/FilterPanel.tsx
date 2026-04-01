@@ -94,9 +94,9 @@ export function FilterPanel({
     return s ? s.emoji + ' ' + s.name : slug;
   };
 
-  const getChapterName = (id: string) => {
-    const c = chapters.find(c => c.id === id);
-    return c ? c.name : id;
+  const getChapterName = (nameOrId: string) => {
+    const c = chapters.find(c => c.name === nameOrId || c.id === nameOrId);
+    return c ? c.name : nameOrId;
   };
 
   const hasActiveFilters = Boolean(
@@ -163,7 +163,7 @@ export function FilterPanel({
             All
           </button>
           {filteredChapters.map(chapter => {
-            const isSelected = filters.chapter === chapter.id;
+            const isSelected = filters.chapter === chapter.name;
             const chapterCount = filterCounts?.chapterCounts?.find(c => c.id === chapter.id)?.count || 0;
             return (
               <ChapterFilterRow
@@ -171,7 +171,7 @@ export function FilterPanel({
                 chapter={chapter}
                 isSelected={isSelected}
                 count={chapterCount}
-                onSelect={() => onFilterChange('chapter', chapter.id)}
+                onSelect={() => onFilterChange('chapter', chapter.name)}
                 onEdit={() => onEditChapter(chapter)}
                 onDelete={() => onDeleteChapter(chapter)}
               />

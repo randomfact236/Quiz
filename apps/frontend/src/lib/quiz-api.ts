@@ -131,12 +131,12 @@ export async function deleteSubject(id: string, isAdmin: boolean = false): Promi
 // ============================================================================
 
 export async function getAllChapters(): Promise<QuizChapter[]> {
-    const response = await api.get<QuizChapter[]>('/quiz/chapters');
+    const response = await api.get<QuizChapter[]>('/quiz/chapters', { isAdmin: true });
     return response.data;
 }
 
 export async function getChaptersBySubject(subjectId: string): Promise<QuizChapter[]> {
-    const response = await api.get<QuizChapter[]>(`/quiz/chapters/${subjectId}`);
+    const response = await api.get<QuizChapter[]>(`/quiz/chapters/${subjectId}`, { isAdmin: true });
     return response.data;
 }
 
