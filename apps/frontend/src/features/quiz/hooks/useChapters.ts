@@ -20,7 +20,7 @@ export function useChapters(subjectId: string | null | undefined) {
 
   // Query - fetches all chapters when subjectId is null/undefined, or filtered by subject when provided
   const query = useQuery({
-    queryKey: [CHAPTERS_KEY, subjectId],
+    queryKey: [CHAPTERS_KEY, subjectId ?? 'all'],
     queryFn: () => subjectId ? getChaptersBySubject(subjectId) : getAllChapters(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
