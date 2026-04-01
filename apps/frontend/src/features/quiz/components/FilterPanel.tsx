@@ -77,17 +77,35 @@ export function FilterPanel({
     return [...subjects].sort((a, b) => a.name.localeCompare(b.name));
   }, [subjects]);
 
+  // Build effective chapters list:
+  // Primary source: chaptersQuery.data (from useChapters hook)
+  // Fallback: filterCounts.chapterCounts (always populated from filter-counts API)
+  // This ensures chapters show even if getAllChapters() call fails or is loading
+  const effectiveChapters = useMemo(() => {
+    if (chapters.length > 0) return chapters;
+    // Fallback: derive chapter objects from filterCounts
+    if (filterCounts?.chapterCounts && filterCounts.chapterCounts.length > 0) {
+      return filterCounts.chapterCounts.map(c => ({
+        id: c.id,
+        name: c.name,
+        subjectId: c.subjectId,
+        chapterNumber: 0,
+      }));
+    }
+    return [];
+  }, [chapters, filterCounts?.chapterCounts]);
+
   // Get chapters - all when no subject or "all", or filtered by subject when selected
   const filteredChapters = useMemo(() => {
     if (!filters.subject || filters.subject === 'all') {
-      return [...chapters].sort((a, b) => a.name.localeCompare(b.name));
+      return [...effectiveChapters].sort((a, b) => a.name.localeCompare(b.name));
     }
     const subject = subjects.find(s => s.slug === filters.subject);
     if (!subject) return [];
-    return chapters
+    return effectiveChapters
       .filter(c => c.subjectId === subject.id)
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [chapters, filters.subject, subjects]);
+  }, [effectiveChapters, filters.subject, subjects]);
 
   const getSubjectName = (slug: string) => {
     const s = subjects.find(s => s.slug === slug);
@@ -95,9 +113,12 @@ export function FilterPanel({
   };
 
   const getChapterName = (nameOrId: string) => {
-    const c = chapters.find(c => c.name === nameOrId || c.id === nameOrId);
+    const c = effectiveChapters.find(c => c.name === nameOrId || c.id === nameOrId);
     return c ? c.name : nameOrId;
   };
+
+  // Total question count across all chapters
+  const totalChapterCount = filterCounts?.chapterCounts?.reduce((sum, c) => sum + c.count, 0) ?? 0;
 
   const hasActiveFilters = Boolean(
     filters.subject ||
@@ -160,7 +181,7 @@ export function FilterPanel({
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
               }`}
           >
-            All
+            All ({totalChapterCount})
           </button>
           {filteredChapters.map(chapter => {
             const isSelected = filters.chapter === chapter.name;
