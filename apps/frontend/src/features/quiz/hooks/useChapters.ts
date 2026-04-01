@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
+  getAllChapters,
   getChaptersBySubject, 
   createChapter, 
   updateChapter, 
@@ -17,11 +18,10 @@ const FILTER_COUNTS_KEY = 'filter-counts';
 export function useChapters(subjectId: string | null | undefined) {
   const queryClient = useQueryClient();
 
-  // Query
+  // Query - fetches all chapters when subjectId is null/undefined, or filtered by subject when provided
   const query = useQuery({
     queryKey: [CHAPTERS_KEY, subjectId],
-    queryFn: () => subjectId ? getChaptersBySubject(subjectId) : [],
-    enabled: !!subjectId,
+    queryFn: () => subjectId ? getChaptersBySubject(subjectId) : getAllChapters(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

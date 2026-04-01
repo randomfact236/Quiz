@@ -164,6 +164,12 @@ export class QuizController {
 
   // ==================== CHAPTERS ====================
 
+  @Get('chapters')
+  @ApiOperation({ summary: 'Get all chapters' })
+  async getAllChapters(): Promise<Chapter[]> {
+    return this.quizService.findAllChapters();
+  }
+
   @Get('chapters/:subjectId')
   @ApiOperation({ summary: 'Get chapters by subject ID' })
   async getChaptersBySubject(

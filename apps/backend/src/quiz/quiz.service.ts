@@ -155,6 +155,12 @@ export class QuizService {
     });
   }
 
+  async findAllChapters(): Promise<Chapter[]> {
+    return this.chapterRepo.find({
+      order: { id: 'ASC' },
+    });
+  }
+
   async createChapter(name: string, subjectId: string): Promise<Chapter> {
     const subject = await this.subjectRepo.findOne({ where: { id: subjectId } });
     if (!subject) { throw new NotFoundException('Subject not found'); }

@@ -130,6 +130,11 @@ export async function deleteSubject(id: string, isAdmin: boolean = false): Promi
 // Chapters API
 // ============================================================================
 
+export async function getAllChapters(): Promise<QuizChapter[]> {
+    const response = await api.get<QuizChapter[]>('/quiz/chapters');
+    return response.data;
+}
+
 export async function getChaptersBySubject(subjectId: string): Promise<QuizChapter[]> {
     const response = await api.get<QuizChapter[]>(`/quiz/chapters/${subjectId}`);
     return response.data;
