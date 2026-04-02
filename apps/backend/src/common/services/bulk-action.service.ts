@@ -108,8 +108,9 @@ export class BulkActionService {
         }
       }
 
-      // Commit transaction if any succeeded
-      if (succeeded > 0) {
+      // Commit transaction (either changes were made, or all items were already in target state)
+      // Only rollback if there were actual failures with no successes
+      if (failures.length === 0 || succeeded > 0) {
         await queryRunner.commitTransaction();
       } else {
         await queryRunner.rollbackTransaction();
@@ -117,7 +118,7 @@ export class BulkActionService {
 
       const duration = Date.now() - startTime;
       const result: BulkActionResult = {
-        success: succeeded > 0 && failures.length === 0,
+        success: failures.length === 0,
         processed: ids.length,
         succeeded,
         failed: failures.length,

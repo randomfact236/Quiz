@@ -309,7 +309,7 @@ export async function deleteQuestion(id: string, isAdmin: boolean = false): Prom
 
 export async function bulkActionQuestions(
     ids: string[],
-    action: 'publish' | 'draft' | 'trash' | 'delete',
+    action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore',
     isAdmin: boolean = false
 ): Promise<{ success: number; failed: number }> {
     const response = await api.post<{ success: number; failed: number }>('/quiz/bulk-action', {
@@ -324,6 +324,7 @@ export async function bulkActionQuestions(
 // ============================================================================
 
 export async function exportQuestionsFromBackend(
+
     filters: {
         subject?: string;
         level?: string;

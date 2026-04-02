@@ -106,17 +106,29 @@ export function QuestionManager({
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
 
+    // Validate all IDs are valid UUIDs before sending
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const invalidIds = ids.filter(id => !uuidRegex.test(id));
+    if (invalidIds.length > 0) {
+      console.error('[BulkAction] Invalid UUIDs found:', invalidIds);
+      alert(`Bulk action failed: Invalid ID format detected`);
+      return;
+    }
+
     try {
       if (action === 'delete') {
         await bulkDeleteAsync(ids);
-      } else if (action !== 'restore') {
+      } else {
         await bulkUpdateStatusAsync({ ids, action });
       }
       setSelectedIds(new Set());
-    } catch {
-      // Error handled by mutation
+    } catch (error) {
+      console.error(`[BulkAction] Failed to execute "${action}":`, error);
+      const message = error instanceof Error ? error.message : 'An unknown error occurred';
+      alert(`Bulk action failed: ${message}`);
     }
   }, [selectedIds, bulkDeleteAsync, bulkUpdateStatusAsync]);
+
 
   return (
     <div className="space-y-4">

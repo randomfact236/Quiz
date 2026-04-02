@@ -43,15 +43,16 @@ export class BulkActionDto {
   action: BulkActionType;
 
   @ApiProperty({
-    description: 'Array of entity IDs to process (UUID v4 format)',
+    description: 'Array of entity IDs to process',
     type: [String],
     example: ['550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440001'],
   })
   @IsArray()
-  @IsUUID('4', { each: true })
+  @IsUUID('all', { each: true })
   @ArrayMinSize(1)
   @ArrayMaxSize(MAX_BULK_ITEMS, { message: `Cannot process more than ${MAX_BULK_ITEMS} items at once` })
   ids: string[];
+
 
   @ApiPropertyOptional({
     description: 'Optional reason for the bulk action (for audit logs)',

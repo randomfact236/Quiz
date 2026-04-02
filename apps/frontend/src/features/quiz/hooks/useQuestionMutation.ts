@@ -101,14 +101,20 @@ export function useQuestionMutation() {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },
+    onError: (error) => {
+      console.error('[BulkAction] Delete failed:', error);
+    },
   });
 
   const bulkUpdateStatusMutation = useMutation({
-    mutationFn: ({ ids, action }: { ids: string[]; action: 'publish' | 'draft' | 'trash' }) => 
+    mutationFn: ({ ids, action }: { ids: string[]; action: 'publish' | 'draft' | 'trash' | 'restore' }) => 
       bulkActionQuestions(ids, action, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+    },
+    onError: (error) => {
+      console.error('[BulkAction] Status update failed:', error);
     },
   });
 
