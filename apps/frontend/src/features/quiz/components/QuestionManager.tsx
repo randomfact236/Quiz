@@ -106,6 +106,10 @@ export function QuestionManager({
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
 
+    // Debug: Show actual IDs being sent
+    console.log('[BulkAction] Selected IDs:', ids);
+    console.log('[BulkAction] First 3 question IDs:', questions.slice(0, 3).map(q => q.id));
+
     // Validate all IDs are valid UUIDs before sending
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     const invalidIds = ids.filter(id => !uuidRegex.test(id));
@@ -127,7 +131,7 @@ export function QuestionManager({
       const message = error instanceof Error ? error.message : 'An unknown error occurred';
       alert(`Bulk action failed: ${message}`);
     }
-  }, [selectedIds, bulkDeleteAsync, bulkUpdateStatusAsync]);
+  }, [selectedIds, questions, bulkDeleteAsync, bulkUpdateStatusAsync]);
 
 
   return (
