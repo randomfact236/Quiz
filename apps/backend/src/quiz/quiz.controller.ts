@@ -353,21 +353,24 @@ export class QuizController {
   // ==================== BULK ACTIONS ====================
 
   @Post('bulk-action')
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: false,
-    })
-  )
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Execute bulk action on questions (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
-  async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
-    return this.quizService.bulkAction(dto.ids, dto.action);
+  @ApiOperation({ summary: 'Execute bulk action' })
+  async executeBulkAction(@Body() body: any): Promise<any> {
+    const ids = body.ids || [];
+    const action = body.action;
+
+    if (!ids || ids.length === 0) {
+      throw new BadRequestException('No IDs provided');
+    }
+
+    if (!action) {
+      throw new BadRequestException('No action provided');
+    }
+
+    return this.quizService.bulkAction(ids, action);
   }
 
   @Get('questions/export')
