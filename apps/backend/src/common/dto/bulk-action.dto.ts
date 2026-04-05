@@ -46,6 +46,7 @@ export class BulkActionDto {
     example: ['550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440001'],
   })
   @IsArray()
+  @IsString({ each: true })
   @ArrayMinSize(1)
   @ArrayMaxSize(MAX_BULK_ITEMS, {
     message: `Cannot process more than ${MAX_BULK_ITEMS} items at once`,

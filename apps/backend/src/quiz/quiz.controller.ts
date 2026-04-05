@@ -13,6 +13,8 @@ import {
   HttpStatus,
   BadRequestException,
   RawBodyRequest,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -351,6 +353,13 @@ export class QuizController {
   // ==================== BULK ACTIONS ====================
 
   @Post('bulk-action')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: false,
+    })
+  )
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
