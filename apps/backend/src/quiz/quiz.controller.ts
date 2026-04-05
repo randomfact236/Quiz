@@ -12,20 +12,29 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
+  RawBodyRequest,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiResponse, ApiQuery, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiParam,
+  ApiResponse,
+  ApiQuery,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { ContentStatus } from '../common/enums/content-status.enum';
 import { Roles } from '../common/decorators/roles.decorator';
+import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
 import {
-  CreateQuestionDto,
-  CreateSubjectDto,
-  PaginationDto,
-} from '../common/dto/base.dto';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto } from '../common/dto/bulk-action.dto';
+  BulkActionDto,
+  BulkActionResponseDto,
+  StatusCountResponseDto,
+} from '../common/dto/bulk-action.dto';
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
@@ -69,7 +78,7 @@ export class QuizQueryDto extends PaginationDto {
 @ApiTags('Quiz')
 @Controller('quiz')
 export class QuizController {
-  constructor(private readonly quizService: QuizService) { }
+  constructor(private readonly quizService: QuizService) {}
 
   // ==================== SUBJECTS ====================
 
@@ -89,7 +98,9 @@ export class QuizController {
   }
 
   @Get('subjects/:slug/questions')
-  @ApiOperation({ summary: 'Get questions by subject slug with filters (PUBLIC - always returns PUBLISHED only)' })
+  @ApiOperation({
+    summary: 'Get questions by subject slug with filters (PUBLIC - always returns PUBLISHED only)',
+  })
   @ApiParam({ name: 'slug', example: 'science' })
   async getQuestionsBySubjectSlug(
     @Param('slug') slug: string,
@@ -97,7 +108,7 @@ export class QuizController {
     @Query('chapter') chapter?: string,
     @Query('search') search?: string,
     @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Query('limit') limit?: number
   ): Promise<{ data: Question[]; total: number }> {
     const pagination = { page: page || 1, limit: limit || 10 };
     // PUBLIC ENDPOINT: Always filter by PUBLISHED status - drafts are admin only
@@ -109,7 +120,9 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get unified filter counts - single endpoint for all filters (Admin only)' })
+  @ApiOperation({
+    summary: 'Get unified filter counts - single endpoint for all filters (Admin only)',
+  })
   @ApiQuery({ name: 'subject', required: false, description: 'Subject slug' })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'level', required: false })
@@ -120,9 +133,16 @@ export class QuizController {
     @Query('status') status?: string,
     @Query('level') level?: string,
     @Query('chapter') chapter?: string,
-    @Query('search') search?: string,
+    @Query('search') search?: string
   ): Promise<{
-    subjects: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[];
+    subjects: {
+      id: string;
+      name: string;
+      slug: string;
+      emoji: string;
+      category: string;
+      count: number;
+    }[];
     chapterCounts: { id: string; name: string; count: number }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
@@ -147,7 +167,7 @@ export class QuizController {
   @ApiOperation({ summary: 'Update subject (Admin only)' })
   async updateSubject(
     @Param('id') id: string,
-    @Body() dto: Partial<CreateSubjectDto>,
+    @Body() dto: Partial<CreateSubjectDto>
   ): Promise<Subject> {
     return this.quizService.updateSubject(id, dto);
   }
@@ -172,9 +192,7 @@ export class QuizController {
 
   @Get('chapters/:subjectId')
   @ApiOperation({ summary: 'Get chapters by subject ID' })
-  async getChaptersBySubject(
-    @Param('subjectId') subjectId: string,
-  ): Promise<Chapter[]> {
+  async getChaptersBySubject(@Param('subjectId') subjectId: string): Promise<Chapter[]> {
     return this.quizService.findChaptersBySubject(subjectId);
   }
 
@@ -183,9 +201,7 @@ export class QuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new chapter (Admin only)' })
-  async createChapter(
-    @Body() dto: { name: string; subjectId: string },
-  ): Promise<Chapter> {
+  async createChapter(@Body() dto: { name: string; subjectId: string }): Promise<Chapter> {
     return this.quizService.createChapter(dto.name, dto.subjectId);
   }
 
@@ -196,7 +212,7 @@ export class QuizController {
   @ApiOperation({ summary: 'Update chapter (Admin only)' })
   async updateChapter(
     @Param('id') id: string,
-    @Body() dto: { name?: string; subjectId?: string },
+    @Body() dto: { name?: string; subjectId?: string }
   ): Promise<Chapter> {
     return this.quizService.updateChapter(id, dto);
   }
@@ -220,11 +236,11 @@ export class QuizController {
   @ApiOperation({ summary: 'Get all questions with optional filters (Admin only)' })
   @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
   async getAllQuestions(
-    @Query() query: QuizQueryDto,
+    @Query() query: QuizQueryDto
   ): Promise<{ data: Question[]; total: number; nextCursor?: string; hasMore?: boolean }> {
     const pagination = { page: query.page || 1, limit: query.limit || 10 };
-    const filters = { 
-      status: query.status as any, 
+    const filters = {
+      status: query.status as any,
       subjectSlug: query.subject,
       level: query.level,
       chapter: query.chapter,
@@ -248,14 +264,16 @@ export class QuizController {
   @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
     @Param('chapterId') chapterId: string,
-    @Query() pagination: PaginationDto,
+    @Query() pagination: PaginationDto
   ): Promise<{ data: Question[]; total: number }> {
     // PUBLIC ENDPOINT: Already filtered by PUBLISHED in service
     return this.quizService.findQuestionsByChapter(chapterId, pagination);
   }
 
   private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {
-    if (!count) { return defaultValue; }
+    if (!count) {
+      return defaultValue;
+    }
     const parsed = parseInt(count, 10);
     if (isNaN(parsed) || parsed < 1) {
       throw new BadRequestException('Count must be a positive number');
@@ -277,7 +295,7 @@ export class QuizController {
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
     @Param('level') level: string,
-    @Query('count') count?: string,
+    @Query('count') count?: string
   ): Promise<Question[]> {
     const validCount = this.validateCount(count, 10);
     return this.quizService.findRandomQuestions(level, validCount);
@@ -296,8 +314,12 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create questions with auto-create subjects/chapters (Admin only)' })
-  async createQuestionsBulk(@Body() dto: BulkQuestionDto): Promise<{ count: number; errors: string[] }> {
+  @ApiOperation({
+    summary: 'Bulk create questions with auto-create subjects/chapters (Admin only)',
+  })
+  async createQuestionsBulk(
+    @Body() dto: BulkQuestionDto
+  ): Promise<{ count: number; errors: string[] }> {
     if (!dto.questions || dto.questions.length === 0) {
       throw new BadRequestException('Request body must contain questions array');
     }
@@ -311,7 +333,7 @@ export class QuizController {
   @ApiOperation({ summary: 'Update question (Admin only)' })
   async updateQuestion(
     @Param('id') id: string,
-    @Body() dto: Partial<CreateQuestionDto>,
+    @Body() dto: Partial<CreateQuestionDto>
   ): Promise<Question> {
     return this.quizService.updateQuestion(id, dto);
   }
@@ -349,7 +371,7 @@ export class QuizController {
     @Query('subject') subject?: string,
     @Query('level') level?: string,
     @Query('chapter') chapter?: string,
-    @Query('status') status?: string,
+    @Query('status') status?: string
   ): Promise<{ csv: string; filename: string }> {
     const filters = {
       subjectSlug: subject,
@@ -366,7 +388,11 @@ export class QuizController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get question counts by status for a subject (Admin only)' })
   @ApiParam({ name: 'slug', example: 'animals' })
-  @ApiResponse({ status: 200, description: 'Returns status counts for subject', type: StatusCountResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns status counts for subject',
+    type: StatusCountResponseDto,
+  })
   async getStatusCountsBySubject(@Param('slug') slug: string): Promise<StatusCountResponseDto> {
     return this.quizService.getStatusCountsBySubject(slug);
   }

@@ -38,10 +38,13 @@ export function QuestionManager({
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
-  const [trashConfirm, setTrashConfirm] = useState<TrashConfirmState>({ isOpen: false, question: null });
+  const [trashConfirm, setTrashConfirm] = useState<TrashConfirmState>({
+    isOpen: false,
+    question: null,
+  });
   const [isTrashing, setIsTrashing] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  
+
   const { bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
 
   useEffect(() => {
@@ -65,12 +68,12 @@ export function QuestionManager({
     if (selectedIds.size === questions.length) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(questions.map(q => q.id)));
+      setSelectedIds(new Set(questions.map((q) => q.id)));
     }
   }, [selectedIds.size, questions]);
 
   const toggleSelectOne = useCallback((id: string) => {
-    setSelectedIds(prev => {
+    setSelectedIds((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -102,37 +105,26 @@ export function QuestionManager({
     setTrashConfirm({ isOpen: false, question: null });
   }, []);
 
-  const handleBulkAction = useCallback(async (action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore') => {
-    const ids = Array.from(selectedIds);
-    if (ids.length === 0) return;
+  const handleBulkAction = useCallback(
+    async (action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore') => {
+      const ids = Array.from(selectedIds);
+      if (ids.length === 0) return;
 
-    // Debug: Show actual IDs being sent
-    console.log('[BulkAction] Selected IDs:', ids);
-    console.log('[BulkAction] First 3 question IDs:', questions.slice(0, 3).map(q => q.id));
-
-    // Validate all IDs are valid UUIDs before sending
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const invalidIds = ids.filter(id => !uuidRegex.test(id));
-    if (invalidIds.length > 0) {
-      console.error('[BulkAction] Invalid UUIDs found:', invalidIds);
-      alert(`Bulk action failed: Invalid ID format detected`);
-      return;
-    }
-
-    try {
-      if (action === 'delete') {
-        await bulkDeleteAsync(ids);
-      } else {
-        await bulkUpdateStatusAsync({ ids, action });
+      try {
+        if (action === 'delete') {
+          await bulkDeleteAsync(ids);
+        } else {
+          await bulkUpdateStatusAsync({ ids, action });
+        }
+        setSelectedIds(new Set());
+      } catch (error) {
+        console.error(`[BulkAction] Failed to execute "${action}":`, error);
+        const message = error instanceof Error ? error.message : 'An unknown error occurred';
+        alert(`Bulk action failed: ${message}`);
       }
-      setSelectedIds(new Set());
-    } catch (error) {
-      console.error(`[BulkAction] Failed to execute "${action}":`, error);
-      const message = error instanceof Error ? error.message : 'An unknown error occurred';
-      alert(`Bulk action failed: ${message}`);
-    }
-  }, [selectedIds, questions, bulkDeleteAsync, bulkUpdateStatusAsync]);
-
+    },
+    [selectedIds, bulkDeleteAsync, bulkUpdateStatusAsync]
+  );
 
   return (
     <div className="space-y-4">
@@ -144,15 +136,15 @@ export function QuestionManager({
             onChange={(e) => setPageSize(Number(e.target.value))}
             className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
           >
-            {PAGE_SIZES.map(size => (
-              <option key={size} value={size}>{size}</option>
+            {PAGE_SIZES.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
             ))}
           </select>
           <span className="text-sm text-gray-600 dark:text-gray-400">per page</span>
         </div>
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          Total: {total} questions
-        </span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">Total: {total} questions</span>
       </div>
 
       {selectedIds.size > 0 && (
@@ -222,7 +214,8 @@ export function QuestionManager({
               </div>
               <div className="p-6">
                 <p className="text-gray-600 dark:text-gray-400">
-                  Are you sure you want to move this question to trash? You can restore it later from the Trash section.
+                  Are you sure you want to move this question to trash? You can restore it later
+                  from the Trash section.
                 </p>
                 <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
                   <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">

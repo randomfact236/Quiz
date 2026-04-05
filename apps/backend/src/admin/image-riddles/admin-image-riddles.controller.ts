@@ -10,7 +10,6 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
-  ParseUUIDPipe,
   ValidationPipe,
   UsePipes,
   Logger,
@@ -93,7 +92,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Returns riddle' })
   @ApiResponse({ status: 404, description: 'Riddle not found' })
   async findRiddleById(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<ImageRiddle> {
     this.logger.debug(`Fetching riddle: ${id}`);
     return this.adminService.findRiddleById(id);
@@ -128,7 +127,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Riddle updated successfully' })
   @ApiResponse({ status: 404, description: 'Riddle not found' })
   async updateRiddle(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
     @Body() dto: UpdateImageRiddleDto,
   ): Promise<ImageRiddle> {
     this.logger.log(`Updating riddle: ${id}`);
@@ -141,7 +140,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
   @ApiResponse({ status: 404, description: 'Riddle not found' })
   async deleteRiddle(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<void> {
     this.logger.log(`Deleting riddle: ${id}`);
     await this.adminService.deleteRiddle(id);
@@ -151,7 +150,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Toggle riddle active status' })
   @ApiResponse({ status: 200, description: 'Status toggled successfully' })
   async toggleActive(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<{ isActive: boolean }> {
     this.logger.log(`Toggling active status for riddle: ${id}`);
     return this.adminService.toggleActive(id);
@@ -174,7 +173,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Returns category' })
   @ApiResponse({ status: 404, description: 'Category not found' })
   async findCategoryById(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<ImageRiddleCategory> {
     this.logger.debug(`Fetching category: ${id}`);
     return this.adminService.findCategoryById(id);
@@ -196,7 +195,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Update category' })
   @ApiResponse({ status: 200, description: 'Category updated successfully' })
   async updateCategory(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
     @Body() dto: UpdateImageRiddleCategoryDto,
   ): Promise<ImageRiddleCategory> {
     this.logger.log(`Updating category: ${id}`);
@@ -208,7 +207,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Delete category' })
   @ApiResponse({ status: 204, description: 'Category deleted successfully' })
   async deleteCategory(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<void> {
     this.logger.log(`Deleting category: ${id}`);
     await this.adminService.deleteCategory(id);

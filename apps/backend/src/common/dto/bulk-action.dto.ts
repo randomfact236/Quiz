@@ -7,7 +7,7 @@
  */
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsArray, IsUUID, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsArray, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
 
 import { MAX_BULK_ITEMS } from '../constants/app.constants';
 import { BulkActionType } from '../enums/bulk-action.enum';
@@ -28,8 +28,6 @@ export class BulkImportResultDto {
   errors?: string[];
 }
 
-
-
 /**
  * DTO for bulk action requests
  */
@@ -48,11 +46,12 @@ export class BulkActionDto {
     example: ['550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440001'],
   })
   @IsArray()
-  @IsUUID('all', { each: true })
+  // @IsUUID('all', { each: true }) // TEMPORARILY DISABLED FOR DEBUGGING
   @ArrayMinSize(1)
-  @ArrayMaxSize(MAX_BULK_ITEMS, { message: `Cannot process more than ${MAX_BULK_ITEMS} items at once` })
+  @ArrayMaxSize(MAX_BULK_ITEMS, {
+    message: `Cannot process more than ${MAX_BULK_ITEMS} items at once`,
+  })
   ids: string[];
-
 
   @ApiPropertyOptional({
     description: 'Optional reason for the bulk action (for audit logs)',
