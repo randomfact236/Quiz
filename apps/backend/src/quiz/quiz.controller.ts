@@ -38,6 +38,7 @@ import {
   StatusCountResponseDto,
 } from '../common/dto/bulk-action.dto';
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
+import { ExportQueryDto } from './dto/export-query.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { Chapter } from './entities/chapter.entity';
@@ -369,18 +370,14 @@ export class QuizController {
   @ApiOperation({ summary: 'Export questions as CSV (Admin only)' })
   @ApiResponse({ status: 200, description: 'CSV file download' })
   async exportQuestions(
-    @Query('subject') subject?: string,
-    @Query('level') level?: string,
-    @Query('chapter') chapter?: string,
-    @Query('status') status?: string
+    @Query() query: ExportQueryDto
   ): Promise<{ csv: string; filename: string }> {
-    const filters = {
-      subjectSlug: subject,
-      level,
-      chapter,
-      status: status as any,
-    };
-    return this.quizService.exportQuestionsToCSV(filters);
+    return this.quizService.exportQuestionsToCSV({
+      subjectSlug: query.subject,
+      level: query.level,
+      chapter: query.chapter,
+      status: query.status as any,
+    });
   }
 
   @Get('subjects/:slug/status-counts')
