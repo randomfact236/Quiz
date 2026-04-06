@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { X, Upload, FileText, Download } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
 import { CSVPreview } from './CSVPreview';
@@ -47,7 +48,9 @@ const parseCSVRow = (row: string): string[] => {
   return result;
 };
 
-const parseCSVWithSubjectHeader = (text: string): { subjectName: string | undefined; questions: ParsedQuestion[] } => {
+const parseCSVWithSubjectHeader = (
+  text: string
+): { subjectName: string | undefined; questions: ParsedQuestion[] } => {
   const lines = text.trim().split(/\r?\n/);
 
   let subjectName: string | undefined;
@@ -131,6 +134,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
   const { bulkCreateAsync, isBulkCreating, bulkCreateError } = useQuestionMutation();
 
@@ -165,7 +169,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
 
       const payload = {
         subjectName,
-        questions: questions.map(q => ({
+        questions: questions.map((q) => ({
           question: q.question,
           optionA: q.optionA,
           optionB: q.optionB,
@@ -179,6 +183,10 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
       };
 
       await bulkCreateAsync(payload as any);
+      queryClient.invalidateQueries({ queryKey: ['subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['chapters'] });
+      queryClient.invalidateQueries({ queryKey: ['filter-counts'] });
+      queryClient.invalidateQueries({ queryKey: ['questions'] });
       setResult({ success: true, count: questions.length });
     } catch {
       setResult({ success: false, errors: [bulkCreateError?.message || 'Import failed'] });
@@ -194,11 +202,11 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ position: 'fixed' }}>
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={handleClose}
-      />
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ position: 'fixed' }}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose} />
       <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white flex-shrink-0">
           <h2 className="text-lg font-bold text-gray-900">Import Questions from CSV</h2>
@@ -214,9 +222,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
                 onDragOver={(e) => e.preventDefault()}
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                  file
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-300 hover:border-gray-400'
+                  file ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                 }`}
               >
                 <input
@@ -237,9 +243,7 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
                     <p className="text-gray-600">
                       Drag and drop a CSV file here, or click to browse
                     </p>
-                    <p className="text-sm text-gray-500 mt-2">
-                      Only .csv files are supported
-                    </p>
+                    <p className="text-sm text-gray-500 mt-2">Only .csv files are supported</p>
                   </>
                 )}
               </div>
@@ -248,7 +252,10 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
                 <div className="flex items-center justify-between mb-2">
                   <p className="font-medium text-gray-700">CSV Format:</p>
                   <button
-                    onClick={(e) => { e.stopPropagation(); downloadTemplate(); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadTemplate();
+                    }}
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
                   >
                     <Download className="w-3 h-3" />
@@ -256,7 +263,8 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
                   </button>
                 </div>
                 <code className="text-xs text-gray-600 block overflow-x-auto whitespace-nowrap">
-                  # Subject: name<br />
+                  # Subject: name
+                  <br />
                   Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
                 </code>
               </div>

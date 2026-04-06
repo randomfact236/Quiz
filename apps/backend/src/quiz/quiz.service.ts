@@ -407,8 +407,8 @@ export class QuizService {
         }
 
         const questions = await queryBuilder
-          .orderBy('question.updatedAt', 'DESC')
-          .addOrderBy('question.id', 'DESC')
+          .orderBy('question.order', 'ASC')
+          .addOrderBy('question.id', 'ASC')
           .take(effectiveLimit + 1)
           .getMany();
 
@@ -914,8 +914,18 @@ export class QuizService {
     offset: number
   ): Promise<{ count: number }> {
     return await this.dataSource.transaction(async (manager) => {
+      // Filter valid items FIRST to avoid creating empty chapters/subjects
+      const validItems = items.filter((q) => q.question && q.chapterName);
+      const invalidItems = items.filter((q) => !q.question || !q.chapterName);
+
+      // Report errors for invalid items
+      invalidItems.forEach((item, i) => {
+        const originalIndex = items.indexOf(item);
+        errors.push(`Row ${offset + originalIndex + 1}: Missing question or chapter name`);
+      });
+
       const allSubjectNames = [
-        ...new Set(items.map((q) => q.subjectName || defaultSubjectName || 'General')),
+        ...new Set(validItems.map((q) => q.subjectName || defaultSubjectName || 'General')),
       ];
       const subjectMap = new Map<string, Subject>();
 
@@ -937,7 +947,9 @@ export class QuizService {
 
       const chapterKeys = [
         ...new Set(
-          items.map((q) => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`)
+          validItems.map(
+            (q) => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`
+          )
         ),
       ];
       const chapterMap = new Map<string, Chapter>();
@@ -961,12 +973,8 @@ export class QuizService {
       }
 
       let count = 0;
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        if (!item.question || !item.chapterName) {
-          errors.push(`Row ${offset + i + 1}: Missing question or chapter`);
-          continue;
-        }
+      for (let i = 0; i < validItems.length; i++) {
+        const item = validItems[i];
 
         const subjectName = item.subjectName || defaultSubjectName || 'General';
         const subject = subjectMap.get(subjectName);

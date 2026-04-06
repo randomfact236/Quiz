@@ -263,6 +263,23 @@ export class QuizController {
     };
   }
 
+  @Get('questions/export')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Export questions as CSV (Admin only)' })
+  @ApiResponse({ status: 200, description: 'CSV file download' })
+  async exportQuestions(
+    @Query() query: ExportQueryDto
+  ): Promise<{ csv: string; filename: string }> {
+    return this.quizService.exportQuestionsToCSV({
+      subjectSlug: query.subject,
+      level: query.level,
+      chapter: query.chapter,
+      status: query.status as any,
+    });
+  }
+
   @Get('questions/:chapterId')
   @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
@@ -361,23 +378,6 @@ export class QuizController {
   @ApiOperation({ summary: 'Execute bulk action' })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
     return this.quizService.bulkAction(dto.ids, dto.action);
-  }
-
-  @Get('questions/export')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Export questions as CSV (Admin only)' })
-  @ApiResponse({ status: 200, description: 'CSV file download' })
-  async exportQuestions(
-    @Query() query: ExportQueryDto
-  ): Promise<{ csv: string; filename: string }> {
-    return this.quizService.exportQuestionsToCSV({
-      subjectSlug: query.subject,
-      level: query.level,
-      chapter: query.chapter,
-      status: query.status as any,
-    });
   }
 
   @Get('subjects/:slug/status-counts')
