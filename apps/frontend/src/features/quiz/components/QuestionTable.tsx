@@ -169,9 +169,9 @@ export function QuestionTable({
                       </div>
                     )}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 text-center align-top">
+                  <td className="px-3 py-3 text-center align-top">
                     {isExtreme ? (
-                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words max-w-48">
+                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words min-w-0">
                         {question.correctAnswer || 'No answer'}
                       </div>
                     ) : (
