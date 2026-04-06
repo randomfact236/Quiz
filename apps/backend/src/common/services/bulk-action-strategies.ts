@@ -48,14 +48,10 @@ export class PublishStrategy implements IBulkActionStrategy {
       return; // Already published
     }
 
-    await queryRunner.manager.update(
-      repository.target,
-      entity.id,
-      {
-        status: ContentStatus.PUBLISHED as any,
-        updatedAt: new Date(),
-      } as any,
-    );
+    await queryRunner.manager.update(repository.target, entity.id, {
+      status: ContentStatus.PUBLISHED as any,
+      updatedAt: new Date(),
+    } as any);
 
     logger.debug(`[BULK ACTION] Published ${entityName} ${entity.id}`, 'BulkActionService');
   }
@@ -76,14 +72,10 @@ export class DraftStrategy implements IBulkActionStrategy {
       return; // Already draft
     }
 
-    await queryRunner.manager.update(
-      repository.target,
-      entity.id,
-      {
-        status: ContentStatus.DRAFT as any,
-        updatedAt: new Date(),
-      } as any,
-    );
+    await queryRunner.manager.update(repository.target, entity.id, {
+      status: ContentStatus.DRAFT as any,
+      updatedAt: new Date(),
+    } as any);
 
     logger.debug(`[BULK ACTION] Drafted ${entityName} ${entity.id}`, 'BulkActionService');
   }
@@ -104,14 +96,10 @@ export class TrashStrategy implements IBulkActionStrategy {
       return; // Already trashed
     }
 
-    await queryRunner.manager.update(
-      repository.target,
-      entity.id,
-      {
-        status: ContentStatus.TRASH as any,
-        updatedAt: new Date(),
-      } as any,
-    );
+    await queryRunner.manager.update(repository.target, entity.id, {
+      status: ContentStatus.TRASH as any,
+      updatedAt: new Date(),
+    } as any);
 
     logger.debug(`[BULK ACTION] Trashed ${entityName} ${entity.id}`, 'BulkActionService');
   }
@@ -132,14 +120,10 @@ export class RestoreStrategy implements IBulkActionStrategy {
       return; // Not in trash
     }
 
-    await queryRunner.manager.update(
-      repository.target,
-      entity.id,
-      {
-        status: ContentStatus.DRAFT as any,
-        updatedAt: new Date(),
-      } as any,
-    );
+    await queryRunner.manager.update(repository.target, entity.id, {
+      status: ContentStatus.PUBLISHED as any,
+      updatedAt: new Date(),
+    } as any);
 
     logger.debug(`[BULK ACTION] Restored ${entityName} ${entity.id}`, 'BulkActionService');
   }
