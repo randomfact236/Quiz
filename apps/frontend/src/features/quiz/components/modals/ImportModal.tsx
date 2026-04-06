@@ -64,7 +64,9 @@ const parseCSVWithSubjectHeader = (
     } else if (
       trimmedLine &&
       !trimmedLine.startsWith('Question,') &&
-      !trimmedLine.startsWith('ID,')
+      !trimmedLine.startsWith('ID,') &&
+      !trimmedLine.startsWith('#') &&
+      !trimmedLine.startsWith('id,')
     ) {
       dataLines.push(trimmedLine);
     }
