@@ -61,7 +61,11 @@ const parseCSVWithSubjectHeader = (
     if (trimmedLine.startsWith('# Subject:')) {
       const subjectPart = trimmedLine.replace('# Subject:', '').trim();
       subjectName = subjectPart.split(',')[0]?.trim() || 'General';
-    } else if (trimmedLine && !trimmedLine.startsWith('Question,')) {
+    } else if (
+      trimmedLine &&
+      !trimmedLine.startsWith('Question,') &&
+      !trimmedLine.startsWith('ID,')
+    ) {
       dataLines.push(trimmedLine);
     }
   }
@@ -91,7 +95,10 @@ const parseCSVWithSubjectHeader = (
     const level = cols[7] || '';
     const chapterName = cols[8] || '';
 
+    // Skip header rows and empty rows
     if (!question || !chapterName) continue;
+    if (question === 'Question' || chapterName === 'Chapter') continue;
+    if (level === 'Level') continue;
 
     questions.push({
       question: question.trim(),
