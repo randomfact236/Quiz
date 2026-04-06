@@ -7,7 +7,15 @@
  */
 
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsArray, ArrayMinSize, ArrayMaxSize, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsArray,
+  Matches,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 import { MAX_BULK_ITEMS } from '../constants/app.constants';
 import { BulkActionType } from '../enums/bulk-action.enum';
@@ -43,10 +51,14 @@ export class BulkActionDto {
   @ApiProperty({
     description: 'Array of entity IDs to process',
     type: [String],
+    format: 'uuid',
     example: ['550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440001'],
   })
   @IsArray()
-  @IsString({ each: true })
+  @Matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, {
+    each: true,
+    message: 'Each value in ids must be a valid UUID',
+  })
   @ArrayMinSize(1)
   @ArrayMaxSize(MAX_BULK_ITEMS, {
     message: `Cannot process more than ${MAX_BULK_ITEMS} items at once`,
