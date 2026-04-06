@@ -9,7 +9,10 @@ import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dt
 import { BulkQuestionDto, BulkQuestionItemDto } from '../common/dto/bulk-question.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import {
+  BulkActionResult,
+  StatusCountResponse,
+} from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { settings } from '../config/settings';
 
@@ -24,9 +27,23 @@ export class QuizService {
   private readonly CACHE_KEYS = {
     FILTER_COUNTS: (subject: string, chapter: string, level: string, status: string) =>
       `quiz:filter-counts:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}`,
-    QUESTIONS: (subject: string, chapter: string, level: string, status: string, page: number, limit: number) =>
+    QUESTIONS: (
+      subject: string,
+      chapter: string,
+      level: string,
+      status: string,
+      page: number,
+      limit: number
+    ) =>
       `quiz:questions:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}:${page}:${limit}`,
-    QUESTIONS_CURSOR: (subject: string, chapter: string, level: string, status: string, cursor: string, limit: number) =>
+    QUESTIONS_CURSOR: (
+      subject: string,
+      chapter: string,
+      level: string,
+      status: string,
+      cursor: string,
+      limit: number
+    ) =>
       `quiz:questions:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}:cursor:${cursor}:${limit}`,
   };
 
@@ -57,8 +74,8 @@ export class QuizService {
     private questionRepo: Repository<Question>,
     private cacheService: CacheService,
     private dataSource: DataSource,
-    private bulkActionService: BulkActionService,
-  ) { }
+    private bulkActionService: BulkActionService
+  ) {}
 
   private async clearQuizCaches(_subjectId?: string) {
     await this.cacheService.delPattern(`quiz:*`);
@@ -66,12 +83,16 @@ export class QuizService {
 
   // ==================== SUBJECTS ====================
 
-  async findAllSubjects(pagination?: PaginationDto, hasContentOnly: boolean = false): Promise<{ data: Subject[]; total: number }> {
+  async findAllSubjects(
+    pagination?: PaginationDto,
+    hasContentOnly: boolean = false
+  ): Promise<{ data: Subject[]; total: number }> {
     // NOTE: No caching for subjects list — ensures deletions are immediately reflected.
     const page = pagination?.page ?? 1;
     const limit = pagination?.limit ?? 100;
 
-    const query = this.subjectRepo.createQueryBuilder('subject')
+    const query = this.subjectRepo
+      .createQueryBuilder('subject')
       .orderBy('subject.order', 'ASC')
       .addOrderBy('subject.name', 'ASC')
       .skip((page - 1) * limit)
@@ -79,8 +100,7 @@ export class QuizService {
 
     if (hasContentOnly) {
       // Filter subjects that have at least one chapter with at least one question
-      query.innerJoin('subject.chapters', 'chapter')
-        .innerJoin('chapter.questions', 'question');
+      query.innerJoin('subject.chapters', 'chapter').innerJoin('chapter.questions', 'question');
     }
 
     const [data, total] = await query.getManyAndCount();
@@ -92,7 +112,9 @@ export class QuizService {
       where: { slug },
       relations: ['chapters'],
     });
-    if (!subject) { throw new NotFoundException('Subject not found'); }
+    if (!subject) {
+      throw new NotFoundException('Subject not found');
+    }
     return subject;
   }
 
@@ -105,7 +127,9 @@ export class QuizService {
 
   async updateSubject(id: string, dto: Partial<CreateSubjectDto>): Promise<Subject> {
     const subject = await this.subjectRepo.findOne({ where: { id } });
-    if (!subject) { throw new NotFoundException('Subject not found'); }
+    if (!subject) {
+      throw new NotFoundException('Subject not found');
+    }
     Object.assign(subject, dto);
     const saved = await this.subjectRepo.save(subject);
     await this.clearQuizCaches();
@@ -115,7 +139,7 @@ export class QuizService {
   async deleteSubject(id: string): Promise<void> {
     const subject = await this.subjectRepo.findOne({
       where: { id },
-      relations: ['chapters', 'chapters.questions']
+      relations: ['chapters', 'chapters.questions'],
     });
 
     if (!subject) {
@@ -163,11 +187,13 @@ export class QuizService {
 
   async createChapter(name: string, subjectId: string): Promise<Chapter> {
     const subject = await this.subjectRepo.findOne({ where: { id: subjectId } });
-    if (!subject) { throw new NotFoundException('Subject not found'); }
+    if (!subject) {
+      throw new NotFoundException('Subject not found');
+    }
 
     // Check if chapter already exists in this subject
     const existingChapter = await this.chapterRepo.findOne({
-      where: { name, subjectId }
+      where: { name, subjectId },
     });
     if (existingChapter) {
       throw new BadRequestException(`Chapter "${name}" already exists in this subject`);
@@ -185,51 +211,44 @@ export class QuizService {
 
   async updateChapter(id: string, dto: { name?: string; subjectId?: string }): Promise<Chapter> {
     const chapter = await this.chapterRepo.findOne({ where: { id } });
-    if (!chapter) { throw new NotFoundException('Chapter not found'); }
-    if (dto.name !== undefined) { chapter.name = dto.name; }
-    if (dto.subjectId !== undefined) { chapter.subjectId = dto.subjectId; }
+    if (!chapter) {
+      throw new NotFoundException('Chapter not found');
+    }
+    if (dto.name !== undefined) {
+      chapter.name = dto.name;
+    }
+    if (dto.subjectId !== undefined) {
+      chapter.subjectId = dto.subjectId;
+    }
     const saved = await this.chapterRepo.save(chapter);
     await this.clearQuizCaches(saved.subjectId);
     return saved;
   }
 
   async deleteChapter(id: string): Promise<void> {
-    const queryRunner = this.dataSource
-      .createQueryRunner();
+    const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      const chapter = await queryRunner
-        .manager.findOne(Chapter, { 
-          where: { id } 
-        });
-      
+      const chapter = await queryRunner.manager.findOne(Chapter, {
+        where: { id },
+      });
+
       if (!chapter) {
-        throw new NotFoundException(
-          'Chapter not found'
-        );
+        throw new NotFoundException('Chapter not found');
       }
 
       // Delete all questions in chapter first
-      await queryRunner.manager.delete(
-        Question, 
-        { chapter: { id } }
-      );
+      await queryRunner.manager.delete(Question, { chapter: { id } });
 
       // Then delete the chapter
-      await queryRunner.manager.delete(
-        Chapter, 
-        { id }
-      );
+      await queryRunner.manager.delete(Chapter, { id });
 
       await queryRunner.commitTransaction();
-      
-      // Clear cache after successful delete
-      await this.clearQuizCaches(
-        chapter.subjectId
-      );
 
+      // Clear cache after successful delete
+      await this.clearQuizCaches(chapter.subjectId);
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
@@ -240,7 +259,7 @@ export class QuizService {
 
   async findQuestionsByChapter(
     chapterId: string,
-    pagination: PaginationDto,
+    pagination: PaginationDto
   ): Promise<{ data: Question[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -260,7 +279,7 @@ export class QuizService {
       chapter?: string;
       search?: string;
       subjectSlug?: string;
-    },
+    }
   ): Promise<{ data: Question[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -277,7 +296,8 @@ export class QuizService {
     return this.cacheService.getOrSet(
       cacheKey,
       async () => {
-        const query = this.questionRepo.createQueryBuilder('question')
+        const query = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject');
 
@@ -322,8 +342,13 @@ export class QuizService {
       subjectSlug?: string;
     },
     cursor?: string,
-    limit: number = 20,
-  ): Promise<{ data: Question[]; nextCursor: string | undefined; hasMore: boolean; total: number }> {
+    limit: number = 20
+  ): Promise<{
+    data: Question[];
+    nextCursor: string | undefined;
+    hasMore: boolean;
+    total: number;
+  }> {
     const effectiveLimit = Math.min(limit, 100);
 
     const cacheKey = this.CACHE_KEYS.QUESTIONS_CURSOR(
@@ -338,7 +363,8 @@ export class QuizService {
     return this.cacheService.getOrSet(
       cacheKey,
       async () => {
-        const queryBuilder = this.questionRepo.createQueryBuilder('question')
+        const queryBuilder = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject');
 
@@ -352,10 +378,14 @@ export class QuizService {
           queryBuilder.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
         }
         if (filters.search) {
-          queryBuilder.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
+          queryBuilder.andWhere('question.question ILIKE :search', {
+            search: `%${filters.search}%`,
+          });
         }
         if (filters.subjectSlug) {
-          queryBuilder.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
+          queryBuilder.andWhere('subject.slug = :subjectSlug', {
+            subjectSlug: filters.subjectSlug,
+          });
         }
 
         if (cursor && cursor !== 'initial') {
@@ -386,9 +416,12 @@ export class QuizService {
         const data = hasMore ? questions.slice(0, effectiveLimit) : questions;
 
         const lastQuestion = data[data.length - 1];
-        const nextCursor = hasMore && lastQuestion
-          ? Buffer.from(`${lastQuestion.updatedAt.toISOString()}::${lastQuestion.id}`).toString('base64')
-          : undefined;
+        const nextCursor =
+          hasMore && lastQuestion
+            ? Buffer.from(`${lastQuestion.updatedAt.toISOString()}::${lastQuestion.id}`).toString(
+                'base64'
+              )
+            : undefined;
 
         // Get total count for pagination info
         const total = await this.getTotalQuestionsCount(filters);
@@ -406,7 +439,8 @@ export class QuizService {
     search?: string;
     subjectSlug?: string;
   }): Promise<number> {
-    const queryBuilder = this.questionRepo.createQueryBuilder('question')
+    const queryBuilder = this.questionRepo
+      .createQueryBuilder('question')
       .leftJoin('question.chapter', 'chapter')
       .leftJoin('chapter.subject', 'subject');
 
@@ -436,7 +470,14 @@ export class QuizService {
     chapter?: string;
     search?: string;
   }): Promise<{
-    subjects: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[];
+    subjects: {
+      id: string;
+      name: string;
+      slug: string;
+      emoji: string;
+      category: string;
+      count: number;
+    }[];
     chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
@@ -457,12 +498,12 @@ export class QuizService {
         // Chapter counts: Subject filter only
         // Level counts: Subject + Chapter filters
         // Status counts: Subject + Chapter + Level filters
-        
+
         // Helper to apply filters based on hierarchy position
         const applyParentFilters = (
-          query: any, 
-          includeSubject: boolean, 
-          includeChapter: boolean, 
+          query: any,
+          includeSubject: boolean,
+          includeChapter: boolean,
           includeLevel: boolean,
           includeStatus: boolean
         ) => {
@@ -484,37 +525,45 @@ export class QuizService {
         };
 
         // 1. SUBJECT COUNTS: No parent filters (always show totals)
-        let subjectResults: { id: string; name: string; slug: string; emoji: string; category: string; count: number }[] = [];
+        let subjectResults: {
+          id: string;
+          name: string;
+          slug: string;
+          emoji: string;
+          category: string;
+          count: number;
+        }[] = [];
         const allSubjects = await this.subjectRepo.find();
         const subjectCountMap = new Map<string, number>();
-        allSubjects.forEach(s => subjectCountMap.set(s.slug, 0));
+        allSubjects.forEach((s) => subjectCountMap.set(s.slug, 0));
 
-        const subjectQuery = this.questionRepo.createQueryBuilder('question')
+        const subjectQuery = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoin('question.chapter', 'chapter')
           .leftJoin('chapter.subject', 'subject')
           .select('subject.slug', 'slug')
           .addSelect('COUNT(*)', 'count')
           .where('subject.slug IS NOT NULL');
-        
+
         // Subject counts: NO parent filters applied
         const subjectRaw = await subjectQuery.groupBy('subject.slug').getRawMany();
         subjectRaw.forEach((r: { slug: string; count: string }) => {
           subjectCountMap.set(r.slug, parseInt(r.count, 10));
         });
         // Build full subject data with counts
-        subjectResults = allSubjects.map(s => ({
+        subjectResults = allSubjects.map((s) => ({
           id: s.id,
           name: s.name,
           slug: s.slug,
           emoji: s.emoji,
           category: s.category,
-          count: subjectCountMap.get(s.slug) || 0
+          count: subjectCountMap.get(s.slug) || 0,
         }));
 
         // 2. CHAPTER COUNTS: Subject filter only
         // Return ALL chapters with their question counts (0 if no questions)
         let chapterResults: { id: string; name: string; count: number; subjectId: string }[] = [];
-        
+
         // Get all chapters first
         let chaptersToShow: Chapter[] = [];
         if (filters.subject && filters.subject !== 'all') {
@@ -525,28 +574,30 @@ export class QuizService {
         } else {
           chaptersToShow = await this.chapterRepo.find({ relations: ['subject'] });
         }
-        
+
         // Create a map of all chapters with initial count of 0
-        const chapterCountMap = new Map<string, { name: string; subjectId: string; count: number }>();
-        chaptersToShow.forEach(c => {
+        const chapterCountMap = new Map<
+          string,
+          { name: string; subjectId: string; count: number }
+        >();
+        chaptersToShow.forEach((c) => {
           chapterCountMap.set(c.id, { name: c.name, subjectId: c.subjectId, count: 0 });
         });
-        
+
         // Get question counts for chapters that have questions
         if (chaptersToShow.length > 0) {
-          const chapterIds = chaptersToShow.map(c => c.id);
-          const chapterQuery = this.questionRepo.createQueryBuilder('question')
+          const chapterIds = chaptersToShow.map((c) => c.id);
+          const chapterQuery = this.questionRepo
+            .createQueryBuilder('question')
             .select('question.chapterId', 'id')
             .addSelect('COUNT(*)', 'count')
             .where('question.chapterId IN (:...chapterIds)', { chapterIds });
-          
+
           // Chapter counts: Subject filter only (no chapter, level, status filters)
           applyParentFilters(chapterQuery, false, false, false, false);
-          
-          const chapterRaw = await chapterQuery
-            .groupBy('question.chapterId')
-            .getRawMany();
-          
+
+          const chapterRaw = await chapterQuery.groupBy('question.chapterId').getRawMany();
+
           // Update counts for chapters that have questions
           chapterRaw.forEach((r: { id: string; count: string }) => {
             const existing = chapterCountMap.get(r.id);
@@ -555,53 +606,56 @@ export class QuizService {
             }
           });
         }
-        
+
         // Convert map to array
         chapterResults = Array.from(chapterCountMap.entries()).map(([id, data]) => ({
           id,
           name: data.name,
           count: data.count,
-          subjectId: data.subjectId
+          subjectId: data.subjectId,
         }));
 
         // 3. LEVEL COUNTS: Subject + Chapter filters
-        const levelQuery = this.questionRepo.createQueryBuilder('question')
+        const levelQuery = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject')
           .select('question.level', 'level')
           .addSelect('COUNT(*)', 'count');
-        
+
         // Level counts: Subject + Chapter filters only
         applyParentFilters(levelQuery, true, true, false, false);
-        
+
         const levelResults = await levelQuery.groupBy('question.level').getRawMany();
 
         // 4. STATUS COUNTS: Subject + Chapter + Level filters
-        const statusQuery = this.questionRepo.createQueryBuilder('question')
+        const statusQuery = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject')
           .select('question.status', 'status')
           .addSelect('COUNT(*)', 'count');
-        
+
         // Status counts: Subject + Chapter + Level filters only
         applyParentFilters(statusQuery, true, true, true, false);
-        
+
         const statusResults = await statusQuery.groupBy('question.status').getRawMany();
 
         // Calculate total with all filters (for table data count)
-        const totalQuery = this.questionRepo.createQueryBuilder('question')
+        const totalQuery = this.questionRepo
+          .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject');
         applyParentFilters(totalQuery, true, true, true, true);
         const total = await totalQuery.getCount();
 
-        const statusCounts = statusResults.map((r: { status: string; count: string }) => ({ 
-          status: r.status, 
-          count: parseInt(r.count, 10) 
+        const statusCounts = statusResults.map((r: { status: string; count: string }) => ({
+          status: r.status,
+          count: parseInt(r.count, 10),
         }));
-        const levelCounts = levelResults.map((r: { level: string; count: string }) => ({ 
-          level: r.level, 
-          count: parseInt(r.count, 10) 
+        const levelCounts = levelResults.map((r: { level: string; count: string }) => ({
+          level: r.level,
+          count: parseInt(r.count, 10),
         }));
 
         return {
@@ -620,12 +674,14 @@ export class QuizService {
     // Validate level parameter
     const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validLevels.includes(level)) {
-      throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
+      throw new BadRequestException(
+        `Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`
+      );
     }
 
     // More efficient random selection using offset-based approach
     const totalCount = await this.questionRepo.count({
-      where: { level, status: ContentStatus.PUBLISHED }
+      where: { level, status: ContentStatus.PUBLISHED },
     });
 
     if (totalCount === 0) {
@@ -635,7 +691,7 @@ export class QuizService {
     // If requesting more than available, return all
     if (count >= totalCount) {
       return this.questionRepo.find({
-        where: { level, status: ContentStatus.PUBLISHED }
+        where: { level, status: ContentStatus.PUBLISHED },
       });
     }
 
@@ -649,7 +705,7 @@ export class QuizService {
 
     // Shuffle and pick count items using secure Fisher-Yates shuffle
     const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map(q => q.id);
+    const selectedIds = shuffled.map((q) => q.id);
 
     return this.questionRepo.find({
       where: { id: In(selectedIds) },
@@ -660,7 +716,7 @@ export class QuizService {
   async findMixedQuestions(count: number): Promise<Question[]> {
     // More efficient random selection
     const totalCount = await this.questionRepo.count({
-      where: { status: ContentStatus.PUBLISHED }
+      where: { status: ContentStatus.PUBLISHED },
     });
 
     if (totalCount === 0) {
@@ -684,7 +740,7 @@ export class QuizService {
 
     // Shuffle and pick count items using secure Fisher-Yates shuffle
     const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map(q => q.id);
+    const selectedIds = shuffled.map((q) => q.id);
 
     return this.questionRepo.find({
       where: { id: In(selectedIds) },
@@ -694,12 +750,14 @@ export class QuizService {
 
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {
     const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-    if (!chapter) { throw new NotFoundException('Chapter not found'); }
+    if (!chapter) {
+      throw new NotFoundException('Chapter not found');
+    }
 
     // Derive question type from level: extreme = open-ended, others = mcq
     const levelStr = String(dto.level);
     const isOpenEnded = levelStr === 'extreme';
-    
+
     // Validate based on level
     if (!isOpenEnded && !dto.correctLetter) {
       throw new BadRequestException('MCQ questions require correctLetter (A/B/C/D)');
@@ -715,7 +773,7 @@ export class QuizService {
       question: dto.question,
       correctAnswer: dto.correctAnswer,
       correctLetter: isOpenEnded ? null : dto.correctLetter,
-      options: isOpenEnded ? null : (dto.options || []),
+      options: isOpenEnded ? null : dto.options || [],
       level: dto.level,
       chapter,
       status: dto.status || ContentStatus.PUBLISHED,
@@ -725,7 +783,9 @@ export class QuizService {
     return saved;
   }
 
-  async createQuestionsBulk(dto: CreateQuestionDto[]): Promise<{ count: number; errors: string[] }> {
+  async createQuestionsBulk(
+    dto: CreateQuestionDto[]
+  ): Promise<{ count: number; errors: string[] }> {
     const errors: string[] = [];
 
     // Validate input
@@ -756,17 +816,17 @@ export class QuizService {
   private async processQuestionChunk(
     dto: CreateQuestionDto[],
     errors: string[],
-    offset: number,
+    offset: number
   ): Promise<{ count: number; errors: string[] }> {
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique chapter IDs for batch fetch - fixes N+1 query
-      const chapterIds = [...new Set(dto.map(q => q.chapterId))];
+      const chapterIds = [...new Set(dto.map((q) => q.chapterId))];
       const chapters = await transactionalEntityManager.find(Chapter, {
         where: { id: In(chapterIds) },
       });
 
       // Create a map for quick lookup
-      const chapterMap = new Map(chapters.map(c => [c.id, c]));
+      const chapterMap = new Map(chapters.map((c) => [c.id, c]));
 
       const questions: Question[] = [];
       for (let i = 0; i < dto.length; i++) {
@@ -782,7 +842,9 @@ export class QuizService {
         // Validate level
         const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
         if (!validLevels.includes(q.level)) {
-          errors.push(`Row ${offset + i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`);
+          errors.push(
+            `Row ${offset + i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`
+          );
           continue;
         }
 
@@ -804,7 +866,7 @@ export class QuizService {
           question: q.question,
           correctAnswer: q.correctAnswer,
           correctLetter: isOpenEnded ? null : correctLetter,
-          options: isOpenEnded ? null : (q.options || []),
+          options: isOpenEnded ? null : q.options || [],
           level: q.level,
           chapter,
           status: q.status || ContentStatus.PUBLISHED,
@@ -822,7 +884,9 @@ export class QuizService {
     });
   }
 
-  async createQuestionsBulkFromImport(dto: BulkQuestionDto): Promise<{ count: number; errors: string[] }> {
+  async createQuestionsBulkFromImport(
+    dto: BulkQuestionDto
+  ): Promise<{ count: number; errors: string[] }> {
     const { subjectName: defaultSubjectName, questions } = dto;
     const errors: string[] = [];
 
@@ -847,10 +911,12 @@ export class QuizService {
     items: BulkQuestionItemDto[],
     defaultSubjectName: string | undefined,
     errors: string[],
-    offset: number,
+    offset: number
   ): Promise<{ count: number }> {
     return await this.dataSource.transaction(async (manager) => {
-      const allSubjectNames = [...new Set(items.map(q => q.subjectName || defaultSubjectName || 'General'))];
+      const allSubjectNames = [
+        ...new Set(items.map((q) => q.subjectName || defaultSubjectName || 'General')),
+      ];
       const subjectMap = new Map<string, Subject>();
 
       for (const name of allSubjectNames) {
@@ -858,7 +924,10 @@ export class QuizService {
         if (!subject) {
           subject = await manager.save(Subject, {
             name,
-            slug: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+            slug: name
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, ''),
             emoji: '📚',
             isActive: true,
           });
@@ -866,7 +935,11 @@ export class QuizService {
         subjectMap.set(name, subject);
       }
 
-      const chapterKeys = [...new Set(items.map(q => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`))];
+      const chapterKeys = [
+        ...new Set(
+          items.map((q) => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`)
+        ),
+      ];
       const chapterMap = new Map<string, Chapter>();
 
       for (const key of chapterKeys) {
@@ -932,8 +1005,14 @@ export class QuizService {
           correctAnswer = item.correctAnswer || '';
         }
 
-        const questionLevel = (item.level || 'easy') as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-        const questionStatus = item.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
+        const questionLevel = (item.level || 'easy') as
+          | 'easy'
+          | 'medium'
+          | 'hard'
+          | 'expert'
+          | 'extreme';
+        const questionStatus =
+          item.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
         const questionOrder = offset + i; // Use row index as order
 
         try {
@@ -959,7 +1038,9 @@ export class QuizService {
 
   async updateQuestion(id: string, dto: Partial<CreateQuestionDto>): Promise<Question> {
     const question = await this.questionRepo.findOne({ where: { id } });
-    if (!question) { throw new NotFoundException('Question not found'); }
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
 
     // Update fields with proper empty string handling
     if (dto.question !== undefined) {
@@ -973,14 +1054,16 @@ export class QuizService {
     }
     if (dto.options !== undefined) {
       // Derive from level to determine if open-ended
-      const level = (dto.level != null) || question.level;
+      const level = dto.level != null || question.level;
       question.options = level === 'extreme' ? null : dto.options;
     }
     if (dto.level !== undefined) {
       // Validate level if provided
       const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
       if (!validLevels.includes(dto.level)) {
-        throw new BadRequestException(`Invalid level: ${dto.level}. Valid values: ${validLevels.join(', ')}`);
+        throw new BadRequestException(
+          `Invalid level: ${dto.level}. Valid values: ${validLevels.join(', ')}`
+        );
       }
       question.level = dto.level;
       // Also update options based on new level
@@ -991,7 +1074,9 @@ export class QuizService {
     }
     if (dto.chapterId !== undefined) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (!chapter) { throw new NotFoundException('Chapter not found'); }
+      if (!chapter) {
+        throw new NotFoundException('Chapter not found');
+      }
       question.chapter = chapter;
     }
 
@@ -1003,7 +1088,9 @@ export class QuizService {
 
   async deleteQuestion(id: string): Promise<void> {
     const result = await this.questionRepo.delete(id);
-    if (result.affected === 0) { throw new NotFoundException('Question not found'); }
+    if (result.affected === 0) {
+      throw new NotFoundException('Question not found');
+    }
     // Invalidate cache after delete
     await this.cacheService.delPattern('quiz:*');
   }
@@ -1023,7 +1110,7 @@ export class QuizService {
       this.questionRepo,
       'question',
       ids,
-      action,
+      action
     );
 
     // Invalidate cache if any changes were made
@@ -1047,7 +1134,7 @@ export class QuizService {
     }
 
     const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map(c => c.id);
+    const chapterIds = chapters.map((c) => c.id);
 
     if (chapterIds.length === 0) {
       return { total: 0, published: 0, draft: 0, trash: 0 };
@@ -1064,7 +1151,7 @@ export class QuizService {
 
     // Initialize with defaults
     const counts = { total: 0, published: 0, draft: 0, trash: 0 };
-    
+
     // Sum up total and populate individual statuses
     statusCounts.forEach((row: { status: string; count: number }) => {
       counts.total += row.count;
@@ -1082,7 +1169,8 @@ export class QuizService {
     chapter?: string;
     status?: ContentStatus;
   }): Promise<{ csv: string; filename: string }> {
-    const queryBuilder = this.questionRepo.createQueryBuilder('question')
+    const queryBuilder = this.questionRepo
+      .createQueryBuilder('question')
       .leftJoinAndSelect('question.chapter', 'chapter')
       .leftJoinAndSelect('chapter.subject', 'subject');
 
@@ -1112,23 +1200,31 @@ export class QuizService {
       return val;
     };
 
-    const headers = ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'];
+    const headers = [
+      'ID',
+      'Question',
+      'Option A',
+      'Option B',
+      'Option C',
+      'Option D',
+      'Correct Answer',
+      'Level',
+      'Chapter',
+    ];
 
     const rows = questions.map((q, index) => {
       const isExtreme = q.level === 'extreme';
       const opts = q.options || [];
 
-      const correctAnswer = isExtreme
-        ? (q.correctAnswer || '')
-        : (q.correctLetter || 'A');
+      const correctAnswer = isExtreme ? q.correctAnswer || '' : q.correctLetter || 'A';
 
       return [
         index + 1,
         escapeCsvValue(q.question || ''),
-        escapeCsvValue(isExtreme ? '' : (opts[0] || '')),
-        escapeCsvValue(isExtreme ? '' : (opts[1] || '')),
-        escapeCsvValue(isExtreme ? '' : (opts[2] || '')),
-        escapeCsvValue(isExtreme ? '' : (opts[3] || '')),
+        escapeCsvValue(isExtreme ? q.correctAnswer || '' : opts[0] || ''),
+        escapeCsvValue(isExtreme ? '' : opts[1] || ''),
+        escapeCsvValue(isExtreme ? '' : opts[2] || ''),
+        escapeCsvValue(isExtreme ? '' : opts[3] || ''),
         escapeCsvValue(correctAnswer),
         q.level,
         escapeCsvValue(q.chapter?.name || ''),

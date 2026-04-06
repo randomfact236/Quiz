@@ -15,12 +15,18 @@ const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
   easy: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300' },
   medium: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300' },
   hard: { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-300' },
-  expert: { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300' },
+  expert: {
+    bg: 'bg-orange-100 dark:bg-orange-900/30',
+    text: 'text-orange-700 dark:text-orange-300',
+  },
   extreme: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300' },
 };
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  published: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300' },
+  published: {
+    bg: 'bg-green-100 dark:bg-green-900/30',
+    text: 'text-green-700 dark:text-green-300',
+  },
   draft: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300' },
   trash: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300' },
 };
@@ -52,11 +58,19 @@ export function QuestionTable({
             </th>
             <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-12">#</th>
             <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">Question</th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-28">Chapter</th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-48">Options</th>
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-28">
+              Chapter
+            </th>
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-48">
+              Options
+            </th>
             <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-16">Ans</th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">Level</th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">Status</th>
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">
+              Level
+            </th>
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">
+              Status
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -64,20 +78,38 @@ export function QuestionTable({
             <tr>
               <td colSpan={8}>
                 <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-                  <svg className="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-12 h-12 text-gray-300 mb-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   <p className="font-medium">No questions found</p>
-                  <p className="text-sm text-gray-400 mt-1">Try adjusting filters or add new questions</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Try adjusting filters or add new questions
+                  </p>
                 </div>
               </td>
             </tr>
           ) : (
             questions.map((question, index) => {
-              const levelColors = LEVEL_COLORS[question.level] || { bg: 'bg-gray-100', text: 'text-gray-700' };
-              const statusColors = STATUS_COLORS[question.status || 'draft'] || { bg: 'bg-gray-100', text: 'text-gray-700' };
+              const levelColors = LEVEL_COLORS[question.level] || {
+                bg: 'bg-gray-100',
+                text: 'text-gray-700',
+              };
+              const statusColors = STATUS_COLORS[question.status || 'draft'] || {
+                bg: 'bg-gray-100',
+                text: 'text-gray-700',
+              };
               const isExtreme = question.level === 'extreme';
-              
+
               return (
                 <tr key={question.id} className="hover:bg-gray-50">
                   <td className="px-3 py-4">
@@ -90,7 +122,9 @@ export function QuestionTable({
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
                   <td className="px-3 py-3 align-top">
-                    <p className="text-sm font-medium text-gray-800 line-clamp-2">{question.question}</p>
+                    <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                      {question.question}
+                    </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <button
                         onClick={() => onEdit(question)}
@@ -113,10 +147,7 @@ export function QuestionTable({
                   </td>
                   <td className="px-3 py-3 align-top">
                     {isExtreme ? (
-                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words max-w-48">
-                        <span className="font-medium text-purple-600">A: </span>
-                        {question.correctAnswer || 'No answer'}
-                      </div>
+                      <span className="text-xs text-gray-400 italic">Open-ended</span>
                     ) : (
                       <div className="space-y-1 text-xs">
                         {question.options?.slice(0, 4).map((opt, i) => {
@@ -125,9 +156,10 @@ export function QuestionTable({
                           return (
                             <div
                               key={i}
-                              className={isCorrect
-                                ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded'
-                                : 'text-gray-600 px-1.5'
+                              className={
+                                isCorrect
+                                  ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded'
+                                  : 'text-gray-600 px-1.5'
                               }
                             >
                               {letter}. {opt}
@@ -139,20 +171,29 @@ export function QuestionTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-center align-top">
                     {isExtreme ? (
-                      <span className="text-gray-400 text-xs">—</span>
+                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words max-w-48">
+                        {question.correctAnswer || 'No answer'}
+                      </div>
                     ) : (
                       <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs">
-                        {question.correctLetter}. {question.options?.[CORRECT_LETTERS.indexOf(question.correctLetter || 'A')] || ''}
+                        {question.correctLetter}.{' '}
+                        {question.options?.[
+                          CORRECT_LETTERS.indexOf(question.correctLetter || 'A')
+                        ] || ''}
                       </div>
                     )}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-center align-top">
-                    <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${levelColors.bg} ${levelColors.text}`}>
+                    <span
+                      className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${levelColors.bg} ${levelColors.text}`}
+                    >
                       {question.level}
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-center align-top">
-                    <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${statusColors.bg} ${statusColors.text}`}>
+                    <span
+                      className={`inline-block rounded-full px-2 py-1 text-xs font-medium capitalize ${statusColors.bg} ${statusColors.text}`}
+                    >
                       {question.status || 'draft'}
                     </span>
                   </td>
