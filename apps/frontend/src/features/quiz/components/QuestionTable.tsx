@@ -64,7 +64,7 @@ export function QuestionTable({
             <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-48">
               Options
             </th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-16">Ans</th>
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-48">Ans</th>
             <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">
               Level
             </th>
