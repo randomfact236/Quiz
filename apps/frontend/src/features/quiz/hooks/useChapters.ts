@@ -25,14 +25,28 @@ export function useChapters(subjectId: string | null | undefined) {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Create mutation - refetch after success instead of optimistic update
+  // Create mutation - manually update cache with server response
   const createMutation = useMutation({
     mutationFn: (dto: CreateChapterDto) => createChapter(dto, true),
-    onSettled: async (_data, _error, dto) => {
-      const subjectKey = dto.subjectId || 'all';
-      await queryClient.refetchQueries({ queryKey: [CHAPTERS_KEY, subjectKey] });
-      await queryClient.refetchQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
-      await queryClient.refetchQueries({ queryKey: [FILTER_COUNTS_KEY] });
+    onSettled: async (data, _error, dto) => {
+      if (data) {
+        // Manually add new chapter to the 'all' cache
+        queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, 'all'], (old = []) => {
+          const exists = old.some((c) => c.id === data.id);
+          if (exists) return old;
+          return [...old, data];
+        });
+
+        // Also add to subject-specific cache if applicable
+        if (dto.subjectId) {
+          queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, dto.subjectId], (old = []) => {
+            const exists = old.some((c) => c.id === data.id);
+            if (exists) return old;
+            return [...old, data];
+          });
+        }
+      }
+      queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },
   });
 
