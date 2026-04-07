@@ -1,18 +1,27 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  createQuestion, 
-  updateQuestion, 
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import {
+  createQuestion,
+  updateQuestion,
   deleteQuestion,
   bulkActionQuestions,
   createQuestionsBulk,
   type CreateQuestionDto,
-  type UpdateQuestionDto
+  type UpdateQuestionDto,
+  type QuizQuestion,
+  type BulkQuestionDto,
 } from '@/lib/quiz-api';
 
 const QUESTIONS_KEY = 'questions';
 const FILTER_COUNTS_KEY = 'filter-counts';
+
+interface QuestionsPage {
+  data: QuizQuestion[];
+  total: number;
+  nextCursor?: string;
+  hasMore?: boolean;
+}
 
 export function useQuestionMutation() {
   const queryClient = useQueryClient();
@@ -26,30 +35,27 @@ export function useQuestionMutation() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, dto }: { id: string; dto: UpdateQuestionDto }) => updateQuestion(id, dto, true),
+    mutationFn: ({ id, dto }: { id: string; dto: UpdateQuestionDto }) =>
+      updateQuestion(id, dto, true),
     onMutate: async ({ id, dto }) => {
       await queryClient.cancelQueries({ queryKey: [QUESTIONS_KEY] });
-      
+
       const previous = queryClient.getQueryData([QUESTIONS_KEY]);
-      
+
       queryClient.setQueriesData(
         { queryKey: [QUESTIONS_KEY] },
-        (old: any) => {
+        (old: InfiniteData<QuestionsPage> | undefined) => {
           if (!old?.pages) return old;
           return {
             ...old,
-            pages: old.pages.map((page: any) => ({
+            pages: old.pages.map((page) => ({
               ...page,
-              data: page.data.map((q: any) =>
-                q.id === id 
-                  ? { ...q, ...dto } 
-                  : q
-              )
-            }))
+              data: page.data.map((q: QuizQuestion) => (q.id === id ? { ...q, ...dto } : q)),
+            })),
           };
         }
       );
-      
+
       return { previous };
     },
     onError: (_err, _vars, context) => {
@@ -68,17 +74,17 @@ export function useQuestionMutation() {
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: [QUESTIONS_KEY] });
       const previous = queryClient.getQueryData([QUESTIONS_KEY]);
-      
+
       queryClient.setQueriesData(
         { queryKey: [QUESTIONS_KEY] },
-        (old: any) => {
+        (old: InfiniteData<QuestionsPage> | undefined) => {
           if (!old?.pages) return old;
           return {
             ...old,
-            pages: old.pages.map((page: any) => ({
+            pages: old.pages.map((page) => ({
               ...page,
-              data: page.data.filter((q: any) => q.id !== id)
-            }))
+              data: page.data.filter((q: QuizQuestion) => q.id !== id),
+            })),
           };
         }
       );
@@ -107,8 +113,13 @@ export function useQuestionMutation() {
   });
 
   const bulkUpdateStatusMutation = useMutation({
-    mutationFn: ({ ids, action }: { ids: string[]; action: 'publish' | 'draft' | 'trash' | 'restore' }) => 
-      bulkActionQuestions(ids, action, true),
+    mutationFn: ({
+      ids,
+      action,
+    }: {
+      ids: string[];
+      action: 'publish' | 'draft' | 'trash' | 'restore';
+    }) => bulkActionQuestions(ids, action, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -119,7 +130,7 @@ export function useQuestionMutation() {
   });
 
   const bulkCreateMutation = useMutation({
-    mutationFn: (dtos: CreateQuestionDto[]) => createQuestionsBulk(dtos, true),
+    mutationFn: (dto: BulkQuestionDto) => createQuestionsBulk(dto, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -127,57 +138,51 @@ export function useQuestionMutation() {
   });
 
   return {
-    // Create single
     create: createMutation.mutate,
     createAsync: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
     createError: createMutation.error,
-    
-    // Update
+
     update: updateMutation.mutate,
     updateAsync: updateMutation.mutateAsync,
     isUpdating: updateMutation.isPending,
     updateError: updateMutation.error,
-    
-    // Delete single
+
     delete: deleteMutation.mutate,
     deleteAsync: deleteMutation.mutateAsync,
     isDeleting: deleteMutation.isPending,
     deleteError: deleteMutation.error,
-    
-    // Bulk create
+
     bulkCreate: bulkCreateMutation.mutate,
     bulkCreateAsync: bulkCreateMutation.mutateAsync,
     isBulkCreating: bulkCreateMutation.isPending,
     bulkCreateError: bulkCreateMutation.error,
-    
-    // Bulk delete
+
     bulkDelete: bulkDeleteMutation.mutate,
     bulkDeleteAsync: bulkDeleteMutation.mutateAsync,
     isBulkDeleting: bulkDeleteMutation.isPending,
     bulkDeleteError: bulkDeleteMutation.error,
-    
-    // Bulk update status
+
     bulkUpdateStatus: bulkUpdateStatusMutation.mutate,
     bulkUpdateStatusAsync: bulkUpdateStatusMutation.mutateAsync,
     isBulkUpdatingStatus: bulkUpdateStatusMutation.isPending,
     bulkUpdateStatusError: bulkUpdateStatusMutation.error,
-    
-    // Combined processing state
-    isProcessing: createMutation.isPending || 
-                  updateMutation.isPending || 
-                  deleteMutation.isPending ||
-                  bulkCreateMutation.isPending ||
-                  bulkDeleteMutation.isPending ||
-                  bulkUpdateStatusMutation.isPending,
-    
-    // Combined error state
-    isError: createMutation.isError || 
-             updateMutation.isError || 
-             deleteMutation.isError ||
-             bulkCreateMutation.isError ||
-             bulkDeleteMutation.isError ||
-             bulkUpdateStatusMutation.isError,
+
+    isProcessing:
+      createMutation.isPending ||
+      updateMutation.isPending ||
+      deleteMutation.isPending ||
+      bulkCreateMutation.isPending ||
+      bulkDeleteMutation.isPending ||
+      bulkUpdateStatusMutation.isPending,
+
+    isError:
+      createMutation.isError ||
+      updateMutation.isError ||
+      deleteMutation.isError ||
+      bulkCreateMutation.isError ||
+      bulkDeleteMutation.isError ||
+      bulkUpdateStatusMutation.isError,
   };
 }
 

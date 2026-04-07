@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { X, Upload, FileText, Download } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
 import { CSVPreview } from './CSVPreview';
+import type { BulkQuestionItemDto } from '@/lib/quiz-api';
 
 interface ImportModalProps {
   open: boolean;
@@ -176,8 +177,9 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
         return;
       }
 
-      const payload = {
-        subjectName,
+      const payload: { questions: typeof questions } & (typeof subjectName extends string
+        ? { subjectName: string }
+        : {}) = {
         questions: questions.map((q) => ({
           question: q.question,
           optionA: q.optionA,
@@ -191,7 +193,11 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
         })),
       };
 
-      await bulkCreateAsync(payload as any);
+      if (subjectName) {
+        (payload as any).subjectName = subjectName;
+      }
+
+      await bulkCreateAsync(payload);
       queryClient.invalidateQueries({ queryKey: ['subjects'] });
       queryClient.invalidateQueries({ queryKey: ['chapters'] });
       queryClient.invalidateQueries({ queryKey: ['filter-counts'] });

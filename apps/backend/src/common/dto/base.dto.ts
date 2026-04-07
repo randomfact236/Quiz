@@ -1,6 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsOptional, IsInt, Min, Max, IsEnum, IsBoolean, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  Min,
+  Max,
+  IsEnum,
+  IsBoolean,
+  IsArray,
+} from 'class-validator';
 
 import {
   MIN_PAGE_NUMBER,
@@ -13,7 +23,6 @@ import {
   MAX_TIMER_SECONDS,
 } from '../constants/app.constants';
 import { ContentStatus } from '../enums/content-status.enum';
-
 
 // ==================== PAGINATION ====================
 
@@ -159,7 +168,7 @@ export class UpdateRiddleCategoryDto {
 // ==================== DAD JOKES (Classic Format) ====================
 
 export class CreateDadJokeDto {
-  @ApiProperty({ example: 'Why don\'t scientists trust atoms?' })
+  @ApiProperty({ example: "Why don't scientists trust atoms?" })
   @IsString()
   @IsNotEmpty()
   joke: string;
@@ -171,12 +180,15 @@ export class CreateDadJokeDto {
 }
 
 export class UpdateDadJokeDto {
-  @ApiPropertyOptional({ example: 'Why don\'t scientists trust atoms?' })
+  @ApiPropertyOptional({ example: "Why don't scientists trust atoms?" })
   @IsOptional()
   @IsString()
   joke?: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
   @IsOptional()
   @IsString()
   categoryId?: string;
@@ -221,7 +233,10 @@ export class UpdateRiddleDto {
   @IsEnum(['easy', 'medium', 'hard'])
   difficulty?: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
   @IsOptional()
   @IsString()
   categoryId?: string;
@@ -327,12 +342,20 @@ export class UpdateJokeChapterDto {
 // ==================== QUIZ JOKES (Quiz Format) ====================
 
 export class CreateQuizJokeDto {
-  @ApiProperty({ example: 'Why don\'t scientists trust atoms?' })
+  @ApiProperty({ example: "Why don't scientists trust atoms?" })
   @IsString()
   @IsNotEmpty()
   question: string;
 
-  @ApiProperty({ example: ['Because they make up everything', 'They are too small', 'They are unstable', 'They are radioactive'], type: [String] })
+  @ApiProperty({
+    example: [
+      'Because they make up everything',
+      'They are too small',
+      'They are unstable',
+      'They are radioactive',
+    ],
+    type: [String],
+  })
   @IsArray()
   @IsString({ each: true })
   options: string[];
@@ -363,12 +386,20 @@ export class CreateQuizJokeDto {
 }
 
 export class UpdateQuizJokeDto {
-  @ApiPropertyOptional({ example: 'Why don\'t scientists trust atoms?' })
+  @ApiPropertyOptional({ example: "Why don't scientists trust atoms?" })
   @IsOptional()
   @IsString()
   question?: string;
 
-  @ApiPropertyOptional({ example: ['Because they make up everything', 'They are too small', 'They are unstable', 'They are radioactive'], type: [String] })
+  @ApiPropertyOptional({
+    example: [
+      'Because they make up everything',
+      'They are too small',
+      'They are unstable',
+      'They are radioactive',
+    ],
+    type: [String],
+  })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
@@ -403,7 +434,10 @@ export class UpdateQuizJokeDto {
 // ==================== RIDDLE SUBJECTS (Quiz Format) ====================
 
 export class CreateRiddleSubjectDto {
-  @ApiPropertyOptional({ example: 'brain-teasers', description: 'Unique slug (auto-generated if not provided)' })
+  @ApiPropertyOptional({
+    example: 'brain-teasers',
+    description: 'Unique slug (auto-generated if not provided)',
+  })
   slug?: string;
 
   @ApiProperty({ example: 'Brain Teasers', description: 'Subject name' })
@@ -416,7 +450,10 @@ export class CreateRiddleSubjectDto {
   @IsNotEmpty()
   emoji: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID (for Riddle MCQ)' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID (for Riddle MCQ)',
+  })
   @IsOptional()
   @IsString()
   categoryId?: string;
@@ -449,7 +486,10 @@ export class UpdateRiddleSubjectDto {
   @IsString()
   emoji?: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
   @IsOptional()
   @IsString()
   categoryId?: string;
@@ -532,7 +572,10 @@ export class CreateRiddleMcqDto {
   @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
   level: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID (alternative to chapterId)' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Subject ID (alternative to chapterId)',
+  })
   @IsOptional()
   @IsString()
   subjectId?: string;
@@ -580,7 +623,10 @@ export class UpdateRiddleMcqDto {
   @IsEnum(['easy', 'medium', 'hard', 'expert', 'extreme'])
   level?: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Subject ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Subject ID',
+  })
   @IsOptional()
   @IsString()
   subjectId?: string;
@@ -607,6 +653,8 @@ export enum QuestionLevel {
   EASY = 'easy',
   MEDIUM = 'medium',
   HARD = 'hard',
+  EXPERT = 'expert',
+  EXTREME = 'extreme',
 }
 
 export class CreateQuestionDto {
@@ -626,8 +674,9 @@ export class CreateQuestionDto {
   correctLetter?: string;
 
   @ApiProperty({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
+  @IsOptional()
   @IsString({ each: true })
-  options: string[];
+  options?: string[] | null;
 
   @ApiProperty({ example: 'easy', enum: QuestionLevel })
   @IsEnum(QuestionLevel)
@@ -638,7 +687,11 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   chapterId: string;
 
-  @ApiPropertyOptional({ example: 'published', enum: ContentStatus, description: 'Question status' })
+  @ApiPropertyOptional({
+    example: 'published',
+    enum: ContentStatus,
+    description: 'Question status',
+  })
   @IsOptional()
   @IsEnum(ContentStatus)
   status?: ContentStatus;
@@ -675,7 +728,10 @@ export class UpdateQuestionDto {
   @IsEnum(QuestionLevel)
   level?: QuestionLevel;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Chapter ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Chapter ID',
+  })
   @IsOptional()
   @IsString()
   chapterId?: string;
@@ -765,7 +821,7 @@ import {
   ActionOptionType,
   ActionOptionStyle,
   ActionOptionSize,
-  ActionPosition
+  ActionPosition,
 } from '../../image-riddles/entities/image-riddle-action.entity';
 
 /**
@@ -786,7 +842,10 @@ export class ActionOptionDto implements Partial<IActionOption> {
   @IsEnum(['button', 'link', 'toggle', 'dropdown', 'custom'])
   type!: ActionOptionType;
 
-  @ApiProperty({ example: 'primary', enum: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'] })
+  @ApiProperty({
+    example: 'primary',
+    enum: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'],
+  })
   @IsEnum(['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'])
   style!: ActionOptionStyle;
 
@@ -819,7 +878,10 @@ export class ActionOptionDto implements Partial<IActionOption> {
   @IsString()
   keyboardShortcut?: string;
 
-  @ApiPropertyOptional({ example: 'below_question', enum: ['below_question', 'above_image', 'below_image', 'floating'] })
+  @ApiPropertyOptional({
+    example: 'below_question',
+    enum: ['below_question', 'above_image', 'below_image', 'floating'],
+  })
   @IsOptional()
   @IsEnum(['below_question', 'above_image', 'below_image', 'floating'])
   position?: ActionPosition;
@@ -920,7 +982,10 @@ export class CreateImageRiddleDto {
   @IsEnum(['easy', 'medium', 'hard', 'expert'])
   difficulty: string;
 
-  @ApiPropertyOptional({ example: 60, description: 'Custom timer in seconds (null = use difficulty default)' })
+  @ApiPropertyOptional({
+    example: 60,
+    description: 'Custom timer in seconds (null = use difficulty default)',
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -933,25 +998,34 @@ export class CreateImageRiddleDto {
   @IsBoolean()
   showTimer?: boolean;
 
-  @ApiPropertyOptional({ example: 'An optical illusion image showing a hidden face', description: 'Alt text for accessibility' })
+  @ApiPropertyOptional({
+    example: 'An optical illusion image showing a hidden face',
+    description: 'Alt text for accessibility',
+  })
   @IsOptional()
   @IsString()
   altText?: string;
 
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
   @IsOptional()
   @IsString()
   categoryId?: string;
 
   @ApiPropertyOptional({
     description: 'Custom action options displayed below the question',
-    type: [ActionOptionDto]
+    type: [ActionOptionDto],
   })
   @IsOptional()
   @IsArray()
   actionOptions?: ActionOptionDto[];
 
-  @ApiPropertyOptional({ example: true, description: 'Use default action options when custom not provided' })
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Use default action options when custom not provided',
+  })
   @IsOptional()
   @IsBoolean()
   useDefaultActions?: boolean;
@@ -983,7 +1057,10 @@ export class UpdateImageRiddleDto {
   @IsEnum(['easy', 'medium', 'hard', 'expert'])
   difficulty?: string;
 
-  @ApiPropertyOptional({ example: 60, description: 'Custom timer in seconds (null = use difficulty default)' })
+  @ApiPropertyOptional({
+    example: 60,
+    description: 'Custom timer in seconds (null = use difficulty default)',
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -1013,13 +1090,16 @@ export class UpdateImageRiddleDto {
 
   @ApiPropertyOptional({
     description: 'Custom action options displayed below the question',
-    type: [ActionOptionDto]
+    type: [ActionOptionDto],
   })
   @IsOptional()
   @IsArray()
   actionOptions?: ActionOptionDto[];
 
-  @ApiPropertyOptional({ example: true, description: 'Use default action options when custom not provided' })
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Use default action options when custom not provided',
+  })
   @IsOptional()
   @IsBoolean()
   useDefaultActions?: boolean;
@@ -1036,7 +1116,10 @@ export class SearchImageRiddlesDto extends PaginationDto {
   @IsString()
   categoryId?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by difficulty', enum: ['easy', 'medium', 'hard', 'expert'] })
+  @ApiPropertyOptional({
+    description: 'Filter by difficulty',
+    enum: ['easy', 'medium', 'hard', 'expert'],
+  })
   @IsOptional()
   @IsEnum(['easy', 'medium', 'hard', 'expert'])
   difficulty?: string;

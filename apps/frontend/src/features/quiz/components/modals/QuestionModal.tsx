@@ -25,7 +25,7 @@ const LEVELS = [
 
 export function QuestionModal({ open, question, subjects, chapters, onClose }: QuestionModalProps) {
   const isEdit = useMemo(() => !!question, [question]);
-  
+
   const [questionText, setQuestionText] = useState('');
   const [subjectId, setSubjectId] = useState('');
   const [chapterId, setChapterId] = useState('');
@@ -34,16 +34,17 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctLetter, setCorrectLetter] = useState('A');
   const [openEndedAnswer, setOpenEndedAnswer] = useState('');
-  
+
   const isExtreme = level === 'extreme';
-  
-  const { createAsync, updateAsync, isCreating, isUpdating, createError, updateError } = useQuestionMutation();
+
+  const { createAsync, updateAsync, isCreating, isUpdating, createError, updateError } =
+    useQuestionMutation();
   const isPending = isCreating || isUpdating;
   const error = isEdit ? updateError : createError;
 
   const filteredChapters = useMemo(() => {
     if (!subjectId) return [];
-    return chapters.filter(c => c.subjectId === subjectId);
+    return chapters.filter((c) => c.subjectId === subjectId);
   }, [chapters, subjectId]);
 
   useEffect(() => {
@@ -51,8 +52,10 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setQuestionText(question.question);
       setChapterId(question.chapterId);
       setLevel(question.level);
-      setStatus((question.status === 'draft' || question.status === 'published') ? question.status : 'draft');
-      const chapter = chapters.find(c => c.id === question.chapterId);
+      setStatus(
+        question.status === 'draft' || question.status === 'published' ? question.status : 'draft'
+      );
+      const chapter = chapters.find((c) => c.id === question.chapterId);
       if (chapter) {
         setSubjectId(chapter.subjectId);
       }
@@ -61,7 +64,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
         setOptions(['', '', '', '']);
         setCorrectLetter('A');
       } else {
-        setOptions((question.options || ['', '', '', '']).map(opt => opt ?? ''));
+        setOptions((question.options || ['', '', '', '']).map((opt) => opt ?? ''));
         setCorrectLetter(question.correctLetter || 'A');
         setOpenEndedAnswer('');
       }
@@ -79,7 +82,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
 
   useEffect(() => {
     if (subjectId && chapterId) {
-      const chapterExists = filteredChapters.some(c => c.id === chapterId);
+      const chapterExists = filteredChapters.some((c) => c.id === chapterId);
       if (!chapterExists) {
         setChapterId('');
       }
@@ -96,22 +99,6 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       setCorrectLetter('A');
     }
     setLevel(newLevel);
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    setOptions(prev => {
-      const newOptions = [...prev];
-      newOptions[index] = value;
-      return newOptions;
-    });
-  };
-
-  const handleSubjectChange = (id: string) => {
-    setSubjectId(id);
-  };
-
-  const handleChapterChange = (id: string) => {
-    setChapterId(id);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -136,7 +123,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
         chapterId,
         level: level as 'easy' | 'medium' | 'hard' | 'expert' | 'extreme',
         status,
-        options: options.filter(o => o.trim()),
+        options: options.filter((o) => o.trim()),
         correctLetter: correctLetter,
         correctAnswer: options[CORRECT_LETTERS.indexOf(correctLetter)] || '',
       };
@@ -157,23 +144,23 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ position: 'fixed' }}>
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ position: 'fixed' }}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-          <h2 className="text-lg font-bold text-gray-900">{isEdit ? 'Edit Question' : 'Add Question'}</h2>
+          <h2 className="text-lg font-bold text-gray-900">
+            {isEdit ? 'Edit Question' : 'Add Question'}
+          </h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">
-              {error.message}
-            </div>
+            <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error.message}</div>
           )}
 
           <div>
@@ -195,30 +182,28 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
             chapterId={chapterId}
             subjects={subjects}
             filteredChapters={filteredChapters}
-            onSubjectChange={handleSubjectChange}
-            onChapterChange={handleChapterChange}
+            onSubjectChange={(id) => setSubjectId(id)}
+            onChapterChange={(id) => setChapterId(id)}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Level
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
               <select
                 value={level}
                 onChange={(e) => handleLevelChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
               >
-                {LEVELS.map(l => (
-                  <option key={l.value} value={l.value}>{l.label}</option>
+                {LEVELS.map((l) => (
+                  <option key={l.value} value={l.value}>
+                    {l.label}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'draft' | 'published')}
@@ -248,7 +233,9 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
             <OptionsEditor
               options={options}
               correctLetter={correctLetter}
-              onOptionChange={handleOptionChange}
+              onOptionChange={(index, value) =>
+                setOptions((prev) => prev.map((o, i) => (i === index ? value : o)))
+              }
               onCorrectLetterChange={setCorrectLetter}
             />
           )}

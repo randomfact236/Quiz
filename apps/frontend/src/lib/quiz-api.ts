@@ -96,6 +96,24 @@ export interface StatusCountResponse {
   trash: number;
 }
 
+export interface BulkQuestionItemDto {
+  question: string;
+  optionA?: string;
+  optionB?: string;
+  optionC?: string;
+  optionD?: string;
+  correctAnswer?: string;
+  level?: string;
+  subjectName?: string;
+  chapterName: string;
+  status?: string;
+}
+
+export interface BulkQuestionDto {
+  subjectName?: string;
+  questions: BulkQuestionItemDto[];
+}
+
 // ============================================================================
 // Subjects API
 // ============================================================================
@@ -344,10 +362,14 @@ export async function createQuestion(
 }
 
 export async function createQuestionsBulk(
-  dto: CreateQuestionDto[],
+  dto: BulkQuestionDto,
   isAdmin: boolean = false
-): Promise<BulkCreateResponse> {
-  const response = await api.post<BulkCreateResponse>('/quiz/questions/bulk', dto, { isAdmin });
+): Promise<{ count: number; errors: string[] }> {
+  const response = await api.post<{ count: number; errors: string[] }>(
+    '/quiz/questions/bulk',
+    dto,
+    { isAdmin }
+  );
   return response.data;
 }
 

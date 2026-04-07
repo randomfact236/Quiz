@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAllChapters,
   getChaptersBySubject,
-  updateChapter,
   deleteChapter,
   type QuizChapter,
 } from '@/lib/quiz-api';
@@ -21,35 +20,6 @@ export function useChapters(subjectId: string | null | undefined) {
     queryKey: [CHAPTERS_KEY, subjectId ?? 'all'],
     queryFn: () => (subjectId ? getChaptersBySubject(subjectId) : getAllChapters()),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-  // Update mutation with optimistic update
-  const updateMutation = useMutation({
-    mutationFn: ({ id, dto }: { id: string; dto: { name?: string; subjectId?: string } }) =>
-      updateChapter(id, dto, true),
-    onMutate: async ({ id, dto }) => {
-      const subjId = dto.subjectId;
-      if (!subjId) return;
-
-      await queryClient.cancelQueries({ queryKey: [CHAPTERS_KEY, subjId] as const });
-
-      const previousChapters = queryClient.getQueryData<QuizChapter[]>([CHAPTERS_KEY, subjId]);
-
-      queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, subjId], (old = []) =>
-        old.map((chapter) => (chapter.id === id ? { ...chapter, ...dto } : chapter))
-      );
-
-      return { previousChapters };
-    },
-    onError: (_err, { dto }, context) => {
-      if (dto.subjectId && context?.previousChapters) {
-        queryClient.setQueryData([CHAPTERS_KEY, dto.subjectId], context.previousChapters);
-      }
-    },
-    onSettled: () => {
-      // Only invalidate filter counts - let optimistic update handle chapters cache
-      queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
-    },
   });
 
   // Delete mutation with optimistic update
@@ -86,12 +56,9 @@ export function useChapters(subjectId: string | null | undefined) {
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
-    update: updateMutation.mutateAsync,
     delete: deleteMutation.mutateAsync,
     // Mutation states
-    isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
-    updateError: updateMutation.error,
     deleteError: deleteMutation.error,
   };
 }
