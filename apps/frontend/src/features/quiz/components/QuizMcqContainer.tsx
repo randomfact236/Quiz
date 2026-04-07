@@ -42,28 +42,22 @@ interface ConfirmState {
 
 export function QuizMcqContainer() {
   const { filters, setFilter, resetFilters } = useQuizFilters();
-  
+
   // ALL hooks must be called before any conditional returns
-  // 1. Query hooks
-  const subjectsQuery = useSubjects();
-  const selectedSubject = subjectsQuery.data?.find(s => s.slug === filters.subject);
-  const chaptersQuery = useChapters(selectedSubject?.id);
-  const questionsQuery = useQuestions(filters);
-  const filterCountsQuery = useFilterCounts(filters);
-  
-  // 2. State hooks (MUST be before error checks)
-  const [questionModal, setQuestionModal] = useState<QuestionModalState>({ 
-    open: false, 
-    question: undefined 
+  // 1. State hooks (MUST be before error checks and query hooks)
+  const [pageSize, setPageSize] = useState(20);
+  const [questionModal, setQuestionModal] = useState<QuestionModalState>({
+    open: false,
+    question: undefined,
   });
-  const [subjectModal, setSubjectModal] = useState<SubjectModalState>({ 
-    open: false, 
-    subject: undefined 
+  const [subjectModal, setSubjectModal] = useState<SubjectModalState>({
+    open: false,
+    subject: undefined,
   });
-  const [chapterModal, setChapterModal] = useState<ChapterModalState>({ 
+  const [chapterModal, setChapterModal] = useState<ChapterModalState>({
     open: false,
     chapter: undefined,
-    subjectId: undefined
+    subjectId: undefined,
   });
   const [importModal, setImportModal] = useState(false);
   const [confirm, setConfirm] = useState<ConfirmState>({
@@ -72,10 +66,17 @@ export function QuizMcqContainer() {
     message: '',
     onConfirm: () => {},
   });
-  
+
+  // 2. Query hooks
+  const subjectsQuery = useSubjects();
+  const selectedSubject = subjectsQuery.data?.find((s) => s.slug === filters.subject);
+  const chaptersQuery = useChapters(selectedSubject?.id);
+  const questionsQuery = useQuestions(filters, pageSize);
+  const filterCountsQuery = useFilterCounts(filters);
+
   // 3. Memo hooks
-  const questions = useMemo(() => 
-    questionsQuery.data?.pages.flatMap(page => page.data) ?? [],
+  const questions = useMemo(
+    () => questionsQuery.data?.pages.flatMap((page) => page.data) ?? [],
     [questionsQuery.data]
   );
   const total = questionsQuery.data?.pages[0]?.total ?? 0;
@@ -85,9 +86,7 @@ export function QuizMcqContainer() {
     return (
       <div className="p-6">
         <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-red-700 dark:text-red-300 font-medium">
-            Failed to load subjects
-          </p>
+          <p className="text-red-700 dark:text-red-300 font-medium">Failed to load subjects</p>
           <p className="text-red-600 dark:text-red-400 text-sm mt-1">
             {subjectsQuery.error instanceof Error ? subjectsQuery.error.message : 'Unknown error'}
           </p>
@@ -106,9 +105,7 @@ export function QuizMcqContainer() {
     return (
       <div className="p-6">
         <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-red-700 dark:text-red-300 font-medium">
-            Failed to load questions
-          </p>
+          <p className="text-red-700 dark:text-red-300 font-medium">Failed to load questions</p>
           <p className="text-red-600 dark:text-red-400 text-sm mt-1">
             {questionsQuery.error instanceof Error ? questionsQuery.error.message : 'Unknown error'}
           </p>
@@ -130,7 +127,7 @@ export function QuizMcqContainer() {
       message: `Delete subject "${subject.name}"? This will also delete all chapters in this subject.`,
       onConfirm: () => {
         subjectsQuery.delete(subject.id);
-        setConfirm(prev => ({ ...prev, open: false }));
+        setConfirm((prev) => ({ ...prev, open: false }));
       },
     });
   };
@@ -142,22 +139,29 @@ export function QuizMcqContainer() {
       message: `Delete chapter "${chapter.name}"?`,
       onConfirm: () => {
         chaptersQuery.delete({ id: chapter.id, subjectId: chapter.subjectId });
-        setConfirm(prev => ({ ...prev, open: false }));
+        setConfirm((prev) => ({ ...prev, open: false }));
       },
     });
   };
-  
+
   return (
     <div className="space-y-6 p-6">
       <QuizHeader
         totalQuestions={total}
-        onAddQuestion={() => setQuestionModal({ 
-          open: true, 
-          question: undefined 
-        })}
+        onAddQuestion={() =>
+          setQuestionModal({
+            open: true,
+            question: undefined,
+          })
+        }
         onImport={() => setImportModal(true)}
         onExport={() => {
-          const exportFilters: { subject?: string; level?: string; chapter?: string; status?: string } = {};
+          const exportFilters: {
+            subject?: string;
+            level?: string;
+            chapter?: string;
+            status?: string;
+          } = {};
           if (filters.subject && filters.subject !== 'all') exportFilters.subject = filters.subject;
           if (filters.level && filters.level !== 'all') exportFilters.level = filters.level;
           if (filters.chapter && filters.chapter !== 'all') exportFilters.chapter = filters.chapter;
@@ -165,7 +169,7 @@ export function QuizMcqContainer() {
           exportQuestionsFromBackend(exportFilters);
         }}
       />
-      
+
       <FilterPanel
         filters={filters}
         onFilterChange={setFilter}
@@ -179,7 +183,7 @@ export function QuizMcqContainer() {
         onDeleteSubject={handleDeleteSubject}
         onAddChapter={() => {
           if (filters.subject) {
-            const subject = subjectsQuery.data?.find(s => s.slug === filters.subject);
+            const subject = subjectsQuery.data?.find((s) => s.slug === filters.subject);
             setChapterModal({ open: true, chapter: undefined, subjectId: subject?.id });
           } else {
             setChapterModal({ open: true, chapter: undefined, subjectId: undefined });
@@ -188,7 +192,7 @@ export function QuizMcqContainer() {
         onEditChapter={(c) => setChapterModal({ open: true, chapter: c, subjectId: c.subjectId })}
         onDeleteChapter={handleDeleteChapter}
       />
-      
+
       <QuestionManager
         questions={questions}
         total={total}
@@ -196,53 +200,60 @@ export function QuizMcqContainer() {
         isFetching={questionsQuery.isFetching}
         hasNextPage={questionsQuery.hasNextPage ?? false}
         onLoadMore={questionsQuery.fetchNextPage}
-        onEdit={(q) => setQuestionModal({ 
-          open: true, 
-          question: q 
-        })}
+        onEdit={(q) =>
+          setQuestionModal({
+            open: true,
+            question: q,
+          })
+        }
         statusFilter={filters.status || 'all'}
+        pageSize={pageSize}
+        onPageSizeChange={setPageSize}
       />
-      
+
       <SubjectModal
         open={subjectModal.open}
         subject={subjectModal.subject}
-        onClose={() => setSubjectModal({ 
-          open: false, 
-          subject: undefined 
-        })}
+        onClose={() =>
+          setSubjectModal({
+            open: false,
+            subject: undefined,
+          })
+        }
       />
-      
+
       <ChapterModal
         open={chapterModal.open}
         chapter={chapterModal.chapter}
         subjectId={chapterModal.subjectId}
         subjects={subjectsQuery.data ?? []}
-        onClose={() => setChapterModal({ 
-          open: false,
-          chapter: undefined,
-          subjectId: undefined
-        })}
+        onClose={() =>
+          setChapterModal({
+            open: false,
+            chapter: undefined,
+            subjectId: undefined,
+          })
+        }
       />
-      
+
       <QuestionModal
         open={questionModal.open}
         question={questionModal.question}
         subjects={subjectsQuery.data ?? []}
         chapters={chaptersQuery.data ?? []}
-        onClose={() => setQuestionModal({ 
-          open: false, 
-          question: undefined 
-        })}
+        onClose={() =>
+          setQuestionModal({
+            open: false,
+            question: undefined,
+          })
+        }
       />
-      
-      <ImportModal
-        open={importModal}
-        onClose={() => setImportModal(false)}
-      />
+
+      <ImportModal open={importModal} onClose={() => setImportModal(false)} />
 
       <ConfirmDialog
         isOpen={confirm.open}
-        onClose={() => setConfirm(prev => ({ ...prev, open: false }))}
+        onClose={() => setConfirm((prev) => ({ ...prev, open: false }))}
         onConfirm={confirm.onConfirm}
         title={confirm.title}
         message={confirm.message}

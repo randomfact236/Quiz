@@ -369,15 +369,6 @@ export async function bulkActionQuestions(
   action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore',
   isAdmin: boolean = false
 ): Promise<{ success: number; failed: number }> {
-  // Before calling apiRequest, validate all IDs are UUIDs
-  const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const invalidIds = ids.filter((id) => !UUID_REGEX.test(id));
-
-  if (invalidIds.length > 0) {
-    console.error('bulkActionQuestions received non-UUID ids:', invalidIds);
-    throw new Error(`Invalid IDs passed to bulkActionQuestions: ${invalidIds.join(', ')}`);
-  }
-
   const response = await api.post<{ success: number; failed: number }>(
     '/quiz/bulk-action',
     {
@@ -422,10 +413,4 @@ export async function exportQuestionsFromBackend(
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
-}
-
-export function exportQuestionsToCSV(): void {
-  // DEPRECATED: Use exportQuestionsFromBackend instead
-  // This function only exports the current page of questions
-  // Backend export now handles ALL questions with proper filtering
 }

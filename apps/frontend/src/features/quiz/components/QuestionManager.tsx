@@ -17,6 +17,8 @@ interface QuestionManagerProps {
   onLoadMore: () => void;
   onEdit: (question: QuizQuestion) => void;
   statusFilter?: string;
+  pageSize: number;
+  onPageSizeChange: (size: number) => void;
 }
 
 const PAGE_SIZES = [10, 25, 50];
@@ -35,9 +37,10 @@ export function QuestionManager({
   onLoadMore,
   onEdit,
   statusFilter = 'all',
+  pageSize,
+  onPageSizeChange,
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [pageSize, setPageSize] = useState(10);
   const [trashConfirm, setTrashConfirm] = useState<TrashConfirmState>({
     isOpen: false,
     question: null,
@@ -133,7 +136,7 @@ export function QuestionManager({
           <span className="text-sm text-gray-600 dark:text-gray-400">Show:</span>
           <select
             value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
+            onChange={(e) => onPageSizeChange(Number(e.target.value))}
             className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
           >
             {PAGE_SIZES.map((size) => (

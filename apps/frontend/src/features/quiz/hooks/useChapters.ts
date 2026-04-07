@@ -4,11 +4,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAllChapters,
   getChaptersBySubject,
-  createChapter,
   updateChapter,
   deleteChapter,
   type QuizChapter,
-  type CreateChapterDto,
 } from '@/lib/quiz-api';
 
 const CHAPTERS_KEY = 'chapters';
@@ -23,31 +21,6 @@ export function useChapters(subjectId: string | null | undefined) {
     queryKey: [CHAPTERS_KEY, subjectId ?? 'all'],
     queryFn: () => (subjectId ? getChaptersBySubject(subjectId) : getAllChapters()),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-  // Create mutation - manually update cache with server response
-  const createMutation = useMutation({
-    mutationFn: (dto: CreateChapterDto) => createChapter(dto, true),
-    onSettled: async (data, _error, dto) => {
-      if (data) {
-        // Manually add new chapter to the 'all' cache
-        queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, 'all'], (old = []) => {
-          const exists = old.some((c) => c.id === data.id);
-          if (exists) return old;
-          return [...old, data];
-        });
-
-        // Also add to subject-specific cache if applicable
-        if (dto.subjectId) {
-          queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, dto.subjectId], (old = []) => {
-            const exists = old.some((c) => c.id === data.id);
-            if (exists) return old;
-            return [...old, data];
-          });
-        }
-      }
-      queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
-    },
   });
 
   // Update mutation with optimistic update
@@ -113,14 +86,11 @@ export function useChapters(subjectId: string | null | undefined) {
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
-    create: createMutation.mutateAsync,
     update: updateMutation.mutateAsync,
     delete: deleteMutation.mutateAsync,
     // Mutation states
-    isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
-    createError: createMutation.error,
     updateError: updateMutation.error,
     deleteError: deleteMutation.error,
   };

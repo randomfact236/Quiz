@@ -77,7 +77,7 @@ export class QuizService {
     private bulkActionService: BulkActionService
   ) {}
 
-  private async clearQuizCaches(_subjectId?: string) {
+  private async clearQuizCaches() {
     await this.cacheService.delPattern(`quiz:*`);
   }
 
@@ -205,7 +205,7 @@ export class QuizService {
 
     const chapter = this.chapterRepo.create({ name, subject, subjectId, chapterNumber });
     const saved = await this.chapterRepo.save(chapter);
-    await this.clearQuizCaches(subjectId);
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -221,7 +221,7 @@ export class QuizService {
       chapter.subjectId = dto.subjectId;
     }
     const saved = await this.chapterRepo.save(chapter);
-    await this.clearQuizCaches(saved.subjectId);
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -248,7 +248,7 @@ export class QuizService {
       await queryRunner.commitTransaction();
 
       // Clear cache after successful delete
-      await this.clearQuizCaches(chapter.subjectId);
+      await this.clearQuizCaches();
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
@@ -781,107 +781,6 @@ export class QuizService {
     const saved = await this.questionRepo.save(question);
     await this.cacheService.delPattern('quiz:*');
     return saved;
-  }
-
-  async createQuestionsBulk(
-    dto: CreateQuestionDto[]
-  ): Promise<{ count: number; errors: string[] }> {
-    const errors: string[] = [];
-
-    // Validate input
-    if (!dto || dto.length === 0) {
-      throw new BadRequestException('No questions provided for bulk creation');
-    }
-
-    // Chunk size to prevent memory issues and database timeouts
-    const CHUNK_SIZE = 100;
-    const totalChunks = Math.ceil(dto.length / CHUNK_SIZE);
-    let totalCreated = 0;
-
-    // Process in chunks to prevent memory exhaustion
-    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
-      const start = chunkIndex * CHUNK_SIZE;
-      const end = Math.min(start + CHUNK_SIZE, dto.length);
-      const chunk = dto.slice(start, end);
-
-      const result = await this.processQuestionChunk(chunk, errors, start);
-      totalCreated += result.count;
-    }
-
-    // Invalidate cache after bulk create
-    await this.cacheService.delPattern('quiz:*');
-
-    return { count: totalCreated, errors };
-  }
-  private async processQuestionChunk(
-    dto: CreateQuestionDto[],
-    errors: string[],
-    offset: number
-  ): Promise<{ count: number; errors: string[] }> {
-    return await this.dataSource.transaction(async (transactionalEntityManager) => {
-      // Get all unique chapter IDs for batch fetch - fixes N+1 query
-      const chapterIds = [...new Set(dto.map((q) => q.chapterId))];
-      const chapters = await transactionalEntityManager.find(Chapter, {
-        where: { id: In(chapterIds) },
-      });
-
-      // Create a map for quick lookup
-      const chapterMap = new Map(chapters.map((c) => [c.id, c]));
-
-      const questions: Question[] = [];
-      for (let i = 0; i < dto.length; i++) {
-        const q = dto[i];
-        if (!q) continue;
-        const chapter = chapterMap.get(q.chapterId);
-
-        if (!chapter) {
-          errors.push(`Row ${offset + i + 1}: Chapter not found (ID: ${q.chapterId})`);
-          continue;
-        }
-
-        // Validate level
-        const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
-        if (!validLevels.includes(q.level)) {
-          errors.push(
-            `Row ${offset + i + 1}: Invalid level '${q.level}'. Valid: ${validLevels.join(', ')}`
-          );
-          continue;
-        }
-
-        // Validate question type - derive from level
-        const levelStr = String(q.level);
-        const isOpenEnded = levelStr === 'extreme';
-        const correctLetter = q.correctLetter || null;
-
-        if (!isOpenEnded && !correctLetter) {
-          errors.push(`Row ${offset + i + 1}: MCQ requires correctLetter (A/B/C/D)`);
-          continue;
-        }
-        if (isOpenEnded && correctLetter) {
-          errors.push(`Row ${offset + i + 1}: Open-ended must have correctLetter: null`);
-          continue;
-        }
-
-        const question = transactionalEntityManager.create(Question, {
-          question: q.question,
-          correctAnswer: q.correctAnswer,
-          correctLetter: isOpenEnded ? null : correctLetter,
-          options: isOpenEnded ? null : q.options || [],
-          level: q.level,
-          chapter,
-          status: q.status || ContentStatus.PUBLISHED,
-          order: q.order || i,
-        });
-        questions.push(question);
-      }
-
-      if (questions.length === 0) {
-        throw new BadRequestException(`No valid questions to create. Errors: ${errors.join('; ')}`);
-      }
-
-      const saved = await transactionalEntityManager.save(questions);
-      return { count: saved.length, errors };
-    });
   }
 
   async createQuestionsBulkFromImport(

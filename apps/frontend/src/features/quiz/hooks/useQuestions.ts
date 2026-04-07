@@ -14,9 +14,9 @@ interface QuestionsResponse {
   hasMore?: boolean;
 }
 
-export function useQuestions(filters: QuizFilters) {
+export function useQuestions(filters: QuizFilters, pageSize: number = 20) {
   return useInfiniteQuery({
-    queryKey: [QUESTIONS_KEY, filters],
+    queryKey: [QUESTIONS_KEY, filters, pageSize],
     queryFn: async ({ pageParam }): Promise<QuestionsResponse> => {
       const params = new URLSearchParams();
 
@@ -27,7 +27,7 @@ export function useQuestions(filters: QuizFilters) {
       if (filters.search) params.append('search', filters.search);
       if (pageParam) params.append('cursor', pageParam as string);
 
-      params.append('limit', '20');
+      params.append('limit', String(pageSize));
 
       const response = await api.get<{
         data: QuizQuestion[];
@@ -39,11 +39,11 @@ export function useQuestions(filters: QuizFilters) {
       return {
         data: response.data.data,
         total: response.data.total,
-        nextCursor: response.data.nextCursor,
-        hasMore: response.data.hasMore ?? false,
+        ...(response.data.nextCursor && { nextCursor: response.data.nextCursor }),
+        ...(response.data.hasMore !== undefined && { hasMore: response.data.hasMore }),
       };
     },
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     staleTime: 30 * 1000, // 30 seconds
     initialPageParam: undefined as string | undefined,
   });

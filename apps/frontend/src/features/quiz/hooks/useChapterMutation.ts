@@ -44,6 +44,7 @@ export function useChapterMutation() {
       if (dto.subjectId) {
         queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, dto.subjectId] });
       }
+      queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },
   });
@@ -52,6 +53,7 @@ export function useChapterMutation() {
     mutationFn: ({ id }: { id: string; subjectId: string }) => deleteChapter(id, true),
     onSuccess: (_data, { subjectId }) => {
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, subjectId] });
+      queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },
