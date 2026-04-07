@@ -25,47 +25,14 @@ export function useChapters(subjectId: string | null | undefined) {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Create mutation with optimistic update
+  // Create mutation - refetch after success instead of optimistic update
   const createMutation = useMutation({
     mutationFn: (dto: CreateChapterDto) => createChapter(dto, true),
-    onMutate: async (dto) => {
+    onSettled: async (_data, _error, dto) => {
       const subjectKey = dto.subjectId || 'all';
-      await queryClient.cancelQueries({ queryKey: [CHAPTERS_KEY, subjectKey] as const });
-      await queryClient.cancelQueries({ queryKey: [CHAPTERS_KEY, 'all'] as const });
-
-      const previousChapters = queryClient.getQueryData<QuizChapter[]>([CHAPTERS_KEY, subjectKey]);
-      const previousAllChapters = queryClient.getQueryData<QuizChapter[]>([CHAPTERS_KEY, 'all']);
-
-      const tempChapter: QuizChapter = {
-        id: `temp-${Date.now()}`,
-        name: dto.name,
-        subjectId: dto.subjectId,
-        chapterNumber: (previousChapters?.length || 0) + 1,
-      };
-
-      queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, subjectKey], (old = []) => [
-        ...old,
-        tempChapter,
-      ]);
-      queryClient.setQueryData<QuizChapter[]>([CHAPTERS_KEY, 'all'], (old = []) => [
-        ...old,
-        tempChapter,
-      ]);
-
-      return { previousChapters, previousAllChapters };
-    },
-    onError: (_err, dto, context) => {
-      const subjectKey = dto.subjectId || 'all';
-      if (context?.previousChapters) {
-        queryClient.setQueryData([CHAPTERS_KEY, subjectKey], context.previousChapters);
-      }
-      if (context?.previousAllChapters) {
-        queryClient.setQueryData([CHAPTERS_KEY, 'all'], context.previousAllChapters);
-      }
-    },
-    onSettled: () => {
-      // Only invalidate filter counts - let optimistic update handle chapters cache
-      queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      await queryClient.refetchQueries({ queryKey: [CHAPTERS_KEY, subjectKey] });
+      await queryClient.refetchQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
+      await queryClient.refetchQueries({ queryKey: [FILTER_COUNTS_KEY] });
     },
   });
 
