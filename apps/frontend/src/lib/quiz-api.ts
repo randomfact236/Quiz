@@ -362,6 +362,14 @@ export async function createQuestion(
 }
 
 export async function createQuestionsBulk(
+  dto: CreateQuestionDto[],
+  isAdmin: boolean = false
+): Promise<BulkCreateResponse> {
+  const response = await api.post<BulkCreateResponse>('/quiz/questions/bulk', dto, { isAdmin });
+  return response.data;
+}
+
+export async function createQuestionsBulkFromImport(
   dto: BulkQuestionDto,
   isAdmin: boolean = false
 ): Promise<{ count: number; errors: string[] }> {

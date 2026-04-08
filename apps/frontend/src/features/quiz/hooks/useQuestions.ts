@@ -46,6 +46,7 @@ export function useQuestions(filters: QuizFilters, pageSize: number = 20) {
     getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     staleTime: 30 * 1000, // 30 seconds
     initialPageParam: undefined as string | undefined,
+    refetchOnWindowFocus: false,
   });
 }
 

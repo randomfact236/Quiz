@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { X, Upload, FileText, Download } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
 import { CSVPreview } from './CSVPreview';
-import type { BulkQuestionItemDto } from '@/lib/quiz-api';
+import type { BulkQuestionDto } from '@/lib/quiz-api';
 
 interface ImportModalProps {
   open: boolean;
@@ -177,24 +177,25 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
         return;
       }
 
-      const payload: { questions: typeof questions } & (typeof subjectName extends string
-        ? { subjectName: string }
-        : {}) = {
-        questions: questions.map((q) => ({
-          question: q.question,
-          optionA: q.optionA,
-          optionB: q.optionB,
-          optionC: q.optionC,
-          optionD: q.optionD,
-          correctAnswer: q.correctAnswer,
-          level: q.level,
-          chapterName: q.chapterName,
-          status: q.status,
-        })),
+      const payload: BulkQuestionDto = {
+        questions: questions.map((q) => {
+          const item: BulkQuestionDto['questions'][number] = {
+            question: q.question,
+            chapterName: q.chapterName,
+            level: q.level,
+            status: q.status,
+          };
+          if (q.optionA) item.optionA = q.optionA;
+          if (q.optionB) item.optionB = q.optionB;
+          if (q.optionC) item.optionC = q.optionC;
+          if (q.optionD) item.optionD = q.optionD;
+          if (q.correctAnswer) item.correctAnswer = q.correctAnswer;
+          return item;
+        }),
       };
 
       if (subjectName) {
-        (payload as any).subjectName = subjectName;
+        payload.subjectName = subjectName;
       }
 
       await bulkCreateAsync(payload);

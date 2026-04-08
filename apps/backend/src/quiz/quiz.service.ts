@@ -391,13 +391,13 @@ export class QuizService {
         if (cursor && cursor !== 'initial') {
           try {
             const decoded = Buffer.from(cursor, 'base64').toString('ascii');
-            const [dateStr, id] = decoded.split('::');
-            if (dateStr && id) {
-              const date = new Date(dateStr);
-              if (!isNaN(date.getTime())) {
+            const [orderStr, id] = decoded.split('::');
+            if (orderStr && id) {
+              const order = parseInt(orderStr, 10);
+              if (!isNaN(order)) {
                 queryBuilder.andWhere(
-                  '(question.updatedAt < :cursorDate OR (question.updatedAt = :cursorDate AND question.id < :cursorId))',
-                  { cursorDate: date, cursorId: id }
+                  '(question.order > :cursorOrder OR (question.order = :cursorOrder AND question.id > :cursorId))',
+                  { cursorOrder: order, cursorId: id }
                 );
               }
             }
@@ -418,9 +418,7 @@ export class QuizService {
         const lastQuestion = data[data.length - 1];
         const nextCursor =
           hasMore && lastQuestion
-            ? Buffer.from(`${lastQuestion.updatedAt.toISOString()}::${lastQuestion.id}`).toString(
-                'base64'
-              )
+            ? Buffer.from(`${lastQuestion.order}::${lastQuestion.id}`).toString('base64')
             : undefined;
 
         // Get total count for pagination info

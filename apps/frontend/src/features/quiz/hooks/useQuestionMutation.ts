@@ -6,7 +6,7 @@ import {
   updateQuestion,
   deleteQuestion,
   bulkActionQuestions,
-  createQuestionsBulk,
+  createQuestionsBulkFromImport,
   type CreateQuestionDto,
   type UpdateQuestionDto,
   type QuizQuestion,
@@ -130,7 +130,7 @@ export function useQuestionMutation() {
   });
 
   const bulkCreateMutation = useMutation({
-    mutationFn: (dto: BulkQuestionDto) => createQuestionsBulk(dto, true),
+    mutationFn: (dto: BulkQuestionDto) => createQuestionsBulkFromImport(dto, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });

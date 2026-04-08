@@ -146,7 +146,7 @@ export class QuizController {
       category: string;
       count: number;
     }[];
-    chapterCounts: { id: string; name: string; count: number }[];
+    chapterCounts: { id: string; name: string; count: number; subjectId: string }[];
     levelCounts: { level: string; count: number }[];
     statusCounts: { status: string; count: number }[];
     total: number;
