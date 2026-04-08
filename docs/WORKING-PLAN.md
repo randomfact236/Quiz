@@ -1,6 +1,7 @@
 # Complete Quiz MCQ Rebuild Plan
 
 ## Philosophy
+
 > **"Audit everything, clean safely, build properly, replace confidently"**
 
 ---
@@ -10,6 +11,7 @@
 Before touching ANY code, document everything.
 
 ### Questions to Answer:
+
 - What features currently WORK?
 - What features are BROKEN?
 - What code is DEAD (never called)?
@@ -19,11 +21,12 @@ Before touching ANY code, document everything.
 
 ### Create Audit Spreadsheet:
 
-| Feature/Code | Status | Type | Location | Action |
-|---|---|---|---|---|
+| Feature/Code | Status            | Type                            | Location    | Action                  |
+| ------------ | ----------------- | ------------------------------- | ----------- | ----------------------- |
 | Each feature | Works/Broken/Dead | Dead/Duplicate/Unused/Half-used | File + line | Keep/Delete/Rewrite/Fix |
 
 ### Run Detection Tools:
+
 ```bash
 npx ts-prune              # unused exports
 npx knip                  # dead code
@@ -32,6 +35,7 @@ npx eslint --rule 'no-unused-vars: error'   # unused imports
 ```
 
 ### Decision Rules:
+
 ```
 Is it ever called?
 → NO  → DELETE
@@ -51,6 +55,7 @@ Is it ever called?
 **Delete ONLY dead/legacy code — nothing working gets touched yet.**
 
 ### Frontend Safe Deletes:
+
 - `quiz-data-manager.ts` → Dead legacy
 - `questions.json` → Dead legacy data
 - `api/quiz-data/route.ts` → Dead legacy route
@@ -61,15 +66,18 @@ Is it ever called?
 - Run `npx eslint src/ --fix` → auto-remove unused imports
 
 ### Backend Safe Deletes:
+
 - `?status=` param on public endpoints → Security leak, remove
 - `subjects:*` cache pattern → Wrong pattern, remove
 
 ### Do NOT Touch Yet:
+
 - `quiz.service.ts` → Has bugs but still works
 - `quiz.controller.ts` → Has bugs but still works
 - `QuizMcqSection.tsx` → Working UI, leave alone
 
 ### Golden Rule:
+
 **Commit after every deletion.**
 
 ---
@@ -79,6 +87,7 @@ Is it ever called?
 **Rewrite one file at a time. Test and commit after each.**
 
 ### Files to Keep Unchanged:
+
 - `entities/` → DB schema is correct
 - `dto/` → Input validation is correct
 - `quiz.module.ts` → Module structure is correct
@@ -86,6 +95,7 @@ Is it ever called?
 ### Files to Fully Rewrite:
 
 #### File 1 — `cache.service.ts`
+
 - Replace blocking `KEYS` command → non-blocking `SCAN`
 - Test Redis operations after
 - Commit
@@ -106,6 +116,7 @@ async delPattern(pattern: string): Promise<void> {
 ```
 
 #### File 2 — `quiz.controller.ts`
+
 - Remove `?status=` from all public endpoints → always return PUBLISHED only
 - Add cursor pagination params
 - Fix auth guards
@@ -114,6 +125,7 @@ async delPattern(pattern: string): Promise<void> {
 - Commit
 
 #### File 3 — `quiz.service.ts`
+
 - Fix cache invalidation → `quiz:*` pattern (not `subjects:*`)
 - Replace offset pagination → cursor-based pagination
 - Add transactional deletes (cascade safe)
@@ -126,6 +138,7 @@ async delPattern(pattern: string): Promise<void> {
 - Commit
 
 ### Golden Rules for Backend Rewrite:
+
 - Never rewrite two files simultaneously
 - Always test after each file
 - Always commit after each file
@@ -138,6 +151,7 @@ async delPattern(pattern: string): Promise<void> {
 **Build new React Query hooks. Old QuizMcqSection still runs untouched.**
 
 ### Setup First:
+
 ```bash
 npm install @tanstack/react-query @tanstack/react-query-devtools
 ```
@@ -147,6 +161,7 @@ Create query client configuration and add `QueryClientProvider` to layout.
 ### Build These Hooks:
 
 #### `useQuizFilters.ts` — URL-based filter state
+
 ```typescript
 export function useQuizFilters() {
   const router = useRouter();
@@ -161,26 +176,30 @@ export function useQuizFilters() {
     search: searchParams.get('search') || undefined,
   };
 
-  const setFilter = useCallback((key, value) => {
-    const params = new URLSearchParams(searchParams);
-    if (value && value !== 'all') {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    if (key === 'subject') params.delete('chapter');
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [searchParams, pathname, router]);
+  const setFilter = useCallback(
+    (key, value) => {
+      const params = new URLSearchParams(searchParams);
+      if (value && value !== 'all') {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+      if (key === 'subject') params.delete('chapter');
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [searchParams, pathname, router]
+  );
 
   return { filters, setFilter };
 }
 ```
 
 #### `useSubjects.ts` — Optimistic updates
+
 ```typescript
 export function useSubjects() {
   const queryClient = useQueryClient();
-  
+
   const query = useQuery({
     queryKey: ['subjects'],
     queryFn: () => quizApi.getSubjects(),
@@ -206,10 +225,11 @@ export function useSubjects() {
 ```
 
 #### `useChapters.ts` — Optimistic updates
+
 ```typescript
 export function useChapters(subjectId: string | null) {
   const queryClient = useQueryClient();
-  
+
   const query = useQuery({
     queryKey: ['chapters', subjectId],
     queryFn: () => subjectId ? quizApi.getChapters(subjectId) : [],
@@ -218,24 +238,33 @@ export function useChapters(subjectId: string | null) {
   });
 
   // Mutations with cache invalidation...
-  
+
   return { data: query.data ?? [], isLoading: query.isLoading, ... };
 }
 ```
 
-#### `useQuestions.ts` — Cursor pagination
+#### `useQuestions.ts` — URL-driven pagination
+
 ```typescript
-export function useQuestions(filters: QuizFilters) {
-  return useInfiniteQuery({
-    queryKey: ['questions', filters],
-    queryFn: ({ pageParam }) => quizApi.getQuestions(filters, pageParam, 20),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+// URL reads: ?page=2&pageSize=20
+export function useQuestions(filters: QuizFilters, page: number = 1, pageSize: number = 20) {
+  return useQuery({
+    queryKey: ['questions', filters, page, pageSize],
+    queryFn: () => quizApi.getQuestions(filters, page, pageSize),
     staleTime: 30 * 1000,
   });
+}
+
+// Helper hook for URL pagination state
+export function usePagination() {
+  const { filters, setFilter, setPage, setPageSize, resetFilters, page, pageSize } =
+    useQuizFilters();
+  return { filters, page, pageSize, setPage, setPageSize, setFilter, resetFilters };
 }
 ```
 
 #### `useFilterCounts.ts` — Cached counts
+
 ```typescript
 export function useFilterCounts(filters: QuizFilters) {
   return useQuery({
@@ -247,16 +276,19 @@ export function useFilterCounts(filters: QuizFilters) {
 ```
 
 #### Mutation Hooks:
+
 - `useSubjectMutation` — Create/update/delete with rollback
 - `useChapterMutation` — Create/update/delete with rollback
 - `useQuestionMutation` — Create/update/delete/bulk with cache invalidation
 
 ### Cache Invalidation Rules:
+
 - Subject CRUD → invalidate `subjects`, `chapters`, `questions`, `filter-counts`
 - Chapter CRUD → invalidate `chapters`, `questions`, `filter-counts`
 - Question CRUD → invalidate `questions`, `filter-counts`
 
 ### Golden Rule:
+
 **Old QuizMcqSection must still work during this entire phase.**
 
 ---
@@ -266,6 +298,7 @@ export function useFilterCounts(filters: QuizFilters) {
 **Build new components alongside old ones. Old QuizMcqSection still runs.**
 
 ### Component Structure:
+
 ```
 QuizMcqContainer (coordinator, ~180 lines)
 ├── QuizHeader (presentational, ~120 lines)
@@ -289,6 +322,7 @@ QuizMcqContainer (coordinator, ~180 lines)
 ### Component Responsibilities:
 
 #### `QuizMcqContainer` — Data coordinator only
+
 ```typescript
 export function QuizMcqContainer() {
   const { filters, setFilter } = useQuizFilters();
@@ -296,9 +330,9 @@ export function QuizMcqContainer() {
   const chaptersQuery = useChapters(filters.subject);
   const questionsQuery = useQuestions(filters);
   const filterCountsQuery = useFilterCounts(filters);
-  
+
   const questions = questionsQuery.data?.pages.flatMap(p => p.data) ?? [];
-  
+
   return (
     <div>
       <QuizHeader totalQuestions={total} onAddQuestion={...} />
@@ -311,15 +345,19 @@ export function QuizMcqContainer() {
 ```
 
 #### `QuizHeader` — Presentational only
+
 No data fetching. Receives props only.
 
 #### `FilterPanel` — Receives filter data as props
+
 Local UI state only. No data fetching.
 
 #### `QuestionManager` — Handles selection state locally
+
 Infinite scroll integration. Local state for selectedIds.
 
 ### Key Architecture Principles:
+
 - React Query cache is the ONLY source of truth
 - NO `useEffect` sync bridges between React Query and `useState`
 - NO god components (max 220 lines per file)
@@ -327,6 +365,7 @@ Infinite scroll integration. Local state for selectedIds.
 - Only UI state (modal open/close, selectedIds) lives in `useState`
 
 ### Build Order:
+
 1. `QuizHeader` — simplest, purely presentational
 2. `FilterPanel` — receives props, no data fetching
 3. `SubjectModal`, `ChapterModal` — simple forms
@@ -341,6 +380,7 @@ Infinite scroll integration. Local state for selectedIds.
 **IMPORTANT: Delete old code IN THE SAME COMMIT as switching to new code.**
 
 ### Philosophy:
+
 ```
 Write new code → Delete old code → Test → Commit
 ALL IN ONE COMMIT - Never split into separate phases
@@ -349,6 +389,7 @@ ALL IN ONE COMMIT - Never split into separate phases
 ### Steps (All in ONE commit):
 
 #### Frontend Changes:
+
 1. Update `apps/frontend/src/app/admin/page.tsx`:
    - Remove import of old `QuizMcqSection`
    - Add import of new `QuizMcqContainer` from `@/features/quiz/components`
@@ -363,6 +404,7 @@ ALL IN ONE COMMIT - Never split into separate phases
 3. Run `npx eslint src/ --fix` to clean unused imports
 
 #### Backend Changes (Same commit):
+
 4. Since frontend now uses cursor pagination exclusively:
    - Delete `findAllQuestions()` method from `quiz.service.ts` (offset version)
    - Update `getAllQuestions()` controller to always use cursor
@@ -373,6 +415,7 @@ ALL IN ONE COMMIT - Never split into separate phases
    - No more offset fallback needed
 
 #### Testing (Before commit):
+
 6. Test EVERYTHING:
    - Page loads without errors
    - All filters work
@@ -382,6 +425,7 @@ ALL IN ONE COMMIT - Never split into separate phases
    - No console errors
 
 ### Atomic Commit Message:
+
 ```
 Phase 5: Switch to new Quiz architecture - ATOMIC
 
@@ -427,6 +471,7 @@ BREAKING CHANGE: Offset pagination removed, cursor only
 ## Golden Rules (Never Break These)
 
 ### Code Cleanup Rule (CRITICAL):
+
 ```
 Write new code → Delete old code → Test → Commit
 ALL IN ONE ATOMIC COMMIT
@@ -437,6 +482,7 @@ NEVER accumulate technical debt
 ```
 
 ### General Rules:
+
 ```
 Dead code        → DELETE immediately in same commit as replacement
 Duplicate code   → KEEP best version, DELETE rest immediately
@@ -459,28 +505,30 @@ NEVER:
 
 ## Success Metrics
 
-| Metric | Before | After |
-|---|---|---|
-| Largest file | 863 lines | ~220 lines |
-| God components | 1 | 0 |
-| Dead files | 3+ | 0 |
-| Duplicate functions | 2+ | 0 |
-| Sources of truth | 2 (useState + API) | 1 (React Query) |
-| API calls per Subject CRUD | 2 | 1 |
-| API calls per Question CRUD | 2 | 2 (necessary) |
-| Redis blocking risk | High | None |
-| Cache invalidation | Wrong pattern | Correct pattern |
-| Public endpoint security | Leaks drafts | Always published only |
-| Scalability | Limited (offset) | Unlimited (cursor) |
+| Metric                      | Before             | After                         |
+| --------------------------- | ------------------ | ----------------------------- |
+| Largest file                | 863 lines          | ~220 lines                    |
+| God components              | 1                  | 0                             |
+| Dead files                  | 3+                 | 0                             |
+| Duplicate functions         | 2+                 | 0                             |
+| Sources of truth            | 2 (useState + API) | 1 (React Query)               |
+| API calls per Subject CRUD  | 2                  | 1                             |
+| API calls per Question CRUD | 2                  | 2 (necessary)                 |
+| Redis blocking risk         | High               | None                          |
+| Cache invalidation          | Wrong pattern      | Correct pattern               |
+| Public endpoint security    | Leaks drafts       | Always published only         |
+| Scalability                 | Limited (offset)   | Unlimited (URL-driven offset) |
 
 ---
 
 ## Critical Backend Issues to Fix
 
 ### Issue 1: Redis Blocking (KEYS Command)
+
 **Problem:** Current `cache.service.ts` uses `KEYS` command which blocks Redis.
 
 **Fix:**
+
 ```typescript
 // BEFORE (blocking):
 async clearCache() {
@@ -504,9 +552,11 @@ async delPattern(pattern: string): Promise<void> {
 ```
 
 ### Issue 2: Wrong Cache Invalidation
+
 **Problem:** Invalidates `subjects:*` instead of `quiz:*`.
 
 **Fix:**
+
 ```typescript
 // BEFORE (wrong):
 await this.cache.delPattern('subjects:*');
@@ -515,40 +565,61 @@ await this.cache.delPattern('subjects:*');
 await this.cache.delPattern('quiz:*');
 ```
 
-### Issue 3: No Cursor Pagination
-**Problem:** Uses offset pagination which gets slow at scale.
+### Issue 3: URL-Driven Offset Pagination
+
+**Problem:** Need offset pagination driven by URL params.
 
 **Fix:**
+
 ```typescript
-// Add cursor-based pagination to quiz.service.ts
-async findQuestionsWithCursor(filters, cursor?: string, limit: number = 20) {
-  const query = this.questionRepo.createQueryBuilder('q')
-    .orderBy('q.createdAt', 'DESC')
-    .take(limit + 1);
+// Add offset-based pagination to quiz.service.ts
+async findQuestionsPaginated(
+  filters: QuizFilters,
+  page: number = 1,
+  pageSize: number = 20
+) {
+  const effectiveLimit = Math.min(pageSize, 100); // Cap at 100
+  const skip = (page - 1) * effectiveLimit;
 
-  if (cursor) {
-    const decoded = Buffer.from(cursor, 'base64').toString('ascii');
-    const [date, id] = decoded.split('::');
-    query.andWhere('(q.createdAt < :date OR (q.createdAt = :date AND q.id < :id))', 
-      { date, id });
-  }
+  const queryBuilder = this.questionRepo
+    .createQueryBuilder('question')
+    .leftJoinAndSelect('question.chapter', 'chapter')
+    .leftJoinAndSelect('chapter.subject', 'subject');
 
-  const questions = await query.getMany();
-  const hasMore = questions.length > limit;
-  const data = hasMore ? questions.slice(0, limit) : questions;
-  
-  const nextCursor = hasMore 
-    ? Buffer.from(`${data[data.length-1].createdAt}::${data[data.length-1].id}`).toString('base64')
-    : undefined;
+  // Apply filters (status, level, subject, chapter, search)
+  // ...
 
-  return { data, nextCursor, hasMore, total: await this.getTotalCount(filters) };
+  // Get total count
+  const total = await queryBuilder.getCount();
+
+  // Get paginated results
+  const questions = await queryBuilder
+    .orderBy('question.order', 'ASC')
+    .addOrderBy('question.id', 'ASC')
+    .skip(skip)
+    .take(effectiveLimit)
+    .getMany();
+
+  const totalPages = Math.ceil(total / effectiveLimit);
+
+  return {
+    data: questions,
+    total,
+    page,
+    pageSize: effectiveLimit,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
 }
 ```
 
 ### Issue 4: No Transactional Deletes
+
 **Problem:** Cascade delete not wrapped in transaction.
 
 **Fix:**
+
 ```typescript
 async deleteSubject(id: string): Promise<void> {
   const queryRunner = this.dataSource.createQueryRunner();
@@ -562,7 +633,7 @@ async deleteSubject(id: string): Promise<void> {
     }
     await queryRunner.manager.delete(Chapter, { subjectId: id });
     await queryRunner.manager.delete(Subject, { id });
-    
+
     await queryRunner.commitTransaction();
     await this.clearQuizCaches();
   } catch (err) {
@@ -575,16 +646,18 @@ async deleteSubject(id: string): Promise<void> {
 ```
 
 ### Issue 5: Security Leak in Public Endpoints
+
 **Problem:** Public endpoints accept `?status=` parameter.
 
 **Fix:**
+
 ```typescript
 // In quiz.controller.ts - public endpoints:
 @Get('subjects/:slug/questions')
 async getPublicQuestions(@Param('slug') slug: string) {
   // Always filter by PUBLISHED only - ignore any status param
-  return this.quizService.findAllQuestions({ 
-    subjectSlug: slug, 
+  return this.quizService.findAllQuestions({
+    subjectSlug: slug,
     status: ContentStatus.PUBLISHED // Force published only
   });
 }
@@ -595,6 +668,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 ## Implementation Checklist
 
 ### Phase 0: Audit
+
 - [ ] Run `npx ts-prune`
 - [ ] Run `npx knip`
 - [ ] Run `npx jscpd src/`
@@ -602,6 +676,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - [ ] Document every feature status
 
 ### Phase 1: Safe Cleanup
+
 - [ ] Delete `quiz-data-manager.ts`
 - [ ] Delete `questions.json`
 - [ ] Delete `api/quiz-data/route.ts`
@@ -610,6 +685,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - [ ] Commit after each deletion
 
 ### Phase 2: Backend Rewrite
+
 - [ ] Rewrite `cache.service.ts` (KEYS → SCAN)
 - [ ] Test Redis operations
 - [ ] Rewrite `quiz.controller.ts` (cursor params, auth)
@@ -618,6 +694,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - [ ] Test all CRUD operations
 
 ### Phase 3: Frontend Hooks
+
 - [ ] Install React Query
 - [ ] Create `useQuizFilters`
 - [ ] Create `useSubjects`
@@ -628,6 +705,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - [ ] Verify old QuizMcqSection still works
 
 ### Phase 4: Frontend Components
+
 - [ ] Build `QuizHeader`
 - [ ] Build `FilterPanel`
 - [ ] Build modals (Subject, Chapter, Question, Import)
@@ -636,12 +714,14 @@ async getPublicQuestions(@Param('slug') slug: string) {
 - [ ] Wire everything together
 
 ### Phase 5: Switch & Delete
+
 - [ ] Switch to new container
 - [ ] Verify all features work
 - [ ] Delete old QuizMcqSection.tsx
 - [ ] Clean up unused imports
 
 ### Phase 6: Testing
+
 - [ ] Unit tests (all hooks)
 - [ ] Integration tests (API)
 - [ ] Visual tests (UI identical)
@@ -661,6 +741,7 @@ async getPublicQuestions(@Param('slug') slug: string) {
 ## Final Notes
 
 **This plan gives you:**
+
 - ✅ True ideal architecture (single source of truth)
 - ✅ Component decomposition (no god components)
 - ✅ Scalable backend (cursor pagination, SCAN instead of KEYS)
@@ -680,12 +761,9 @@ Do NOT touch them now.
 
 - ImageRiddlesAdminSection.tsx
   → img tags should use Next.js Image
-  
 - riddle-mcq/play/page.tsx
   → useEffect missing dependencies
-  
 - FloatingBackground.tsx
   → useEffect missing dependencies
-  
 - QuestionCard.tsx
   → useEffect missing dependencies

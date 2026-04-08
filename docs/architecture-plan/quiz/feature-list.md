@@ -5,6 +5,7 @@
 ### Core CRUD
 
 #### Subject Features
+
 - Subject list via GET /api/v1/quiz/subjects (public, no auth)
 - Subject create via POST /api/v1/quiz/subjects (admin only, JWT auth)
 - Subject update via PUT /api/v1/quiz/subjects/:id (admin only, JWT auth)
@@ -16,6 +17,7 @@
 - Subject category optional field
 
 #### Chapter Features
+
 - Chapter list via GET /api/v1/quiz/chapters/:subjectId (public, no auth)
 - Chapter create via POST /api/v1/quiz/chapters (admin only, JWT auth)
 - Chapter update via PATCH /api/v1/quiz/chapters/:id (admin only, JWT auth)
@@ -25,6 +27,7 @@
 - Chapter name unique per subject (composite unique constraint)
 
 #### Question Features
+
 - Question list via GET /api/v1/quiz/questions (admin only, JWT auth, cursor pagination)
 - Question create via POST /api/v1/quiz/questions (admin only, JWT auth)
 - Question update via PATCH /api/v1/quiz/questions/:id (admin only, JWT auth)
@@ -59,16 +62,21 @@
 
 ### Pagination
 
-- Cursor-based pagination for question list
-- Base64 encoded cursor containing date and id
+- URL-driven offset pagination (?page=2)
+- Page number persists in URL
+- Page size persists in URL (?pageSize=50)
 - 20 questions per page default
-- nextCursor and hasMore in response
-- Infinite scroll loading in admin UI
-- Load more trigger at bottom of list
+- Offset calculated as (page - 1) \* pageSize
+- Total count and total pages in response
+- Page buttons (1, 2, 3, ...) with Next/Previous
+- Page size selector (10, 25, 50) in header
+- Filter change resets to page 1
+- Refresh-safe URLs
 
 ### Import & Export
 
 #### Import Features
+
 - CSV file upload via drag-drop or click
 - Bulk question import via POST /api/v1/quiz/questions/bulk
 - Auto-create subjects during import (creates if not exists)
@@ -81,6 +89,7 @@
 - Error reporting per row
 
 #### Export Features
+
 - Backend-based export (fetches ALL matching questions)
 - Export via GET /api/v1/quiz/questions/export (admin only, JWT auth)
 - Filters apply to export (subject, level, chapter, status)
@@ -93,6 +102,7 @@
 ### UI & UX
 
 #### FilterPanel
+
 - Subject filter row with emoji and count
 - Level filter row with count per level
 - StatusDashboard with published/draft/trash counts
@@ -103,6 +113,7 @@
 - Add chapter button (opens modal with subject pre-selected)
 
 #### QuestionTable
+
 - Columns: #, Question, Chapter, Options, Ans, Level, Status, Actions
 - Row selection via checkbox
 - Select all checkbox in header
@@ -114,6 +125,7 @@
 - Level badges: Easy (green), Medium (blue), Hard (orange), Expert (purple), Extreme (red)
 
 #### Modals
+
 - SubjectModal: Create/edit subject with name, emoji, category
 - ChapterModal: Create/edit chapter with name, subject selector
 - QuestionModal: Create/edit question with full form
@@ -121,6 +133,7 @@
 - Custom confirmation modal for trash action (styled, not browser confirm)
 
 #### StatusDashboard
+
 - Three buttons: All, Published, Trash
 - Count displayed on each button
 - Active state highlighting

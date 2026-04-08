@@ -13,6 +13,7 @@
 ### CRUD Behaviour
 
 **Create:**
+
 1. Client sends POST to /api/v1/quiz/subjects with name, slug, emoji, category
 2. Backend validates input with class-validator
 3. Subject record created in database with generated UUID
@@ -20,12 +21,14 @@
 5. Client receives created subject with all fields
 
 **Read:**
+
 1. Client sends GET to /api/v1/quiz/subjects (public, no auth)
 2. Backend returns all subjects ordered by order field, then name
 3. hasContent query param filters to subjects with questions only
 4. getSubjectBySlug endpoint returns single subject with its chapters loaded
 
 **Update:**
+
 1. Client sends PUT to /api/v1/quiz/subjects/:id with partial fields
 2. Backend finds subject by ID, returns 404 if not found
 3. Only provided fields are updated (partial update)
@@ -33,6 +36,7 @@
 5. Client receives updated subject
 
 **Delete:**
+
 1. Client sends DELETE to /api/v1/quiz/subjects/:id (admin only)
 2. Backend finds subject with relations (chapters and questions)
 3. Transaction starts: deletes all questions in each chapter, then chapters, then subject
@@ -65,6 +69,7 @@
 ### CRUD Behaviour
 
 **Create:**
+
 1. Client sends POST to /api/v1/quiz/chapters with name and subjectId
 2. Backend verifies subject exists, returns 404 if not
 3. Backend checks chapter name doesn't already exist in this subject
@@ -73,17 +78,20 @@
 6. Cache invalidated for that subject
 
 **Read:**
+
 1. Client sends GET to /api/v1/quiz/chapters/:subjectId
 2. Backend returns all chapters for that subject ordered by id ascending
 3. Alternative: FilterPanel shows chapters based on selected subject filter
 
 **Update:**
+
 1. Client sends PATCH to /api/v1/quiz/chapters/:id with name or subjectId
 2. Backend finds chapter by ID, returns 404 if not found
 3. Only provided fields updated
 4. If subjectId changed, cache cleared for both old and new subject
 
 **Delete:**
+
 1. Client sends DELETE to /api/v1/quiz/chapters/:id (admin only)
 2. Transaction: deletes all questions linked to chapter, then deletes chapter
 3. Cache cleared for the chapter's subjectId
@@ -116,6 +124,7 @@
 ### CRUD Behaviour
 
 **Create:**
+
 1. Client sends POST to /api/v1/quiz/questions with question text, options, level, chapterId, etc
 2. Backend validates required fields (question, chapterId, level)
 3. For extreme level: options set to null, correctLetter set to null
@@ -124,6 +133,7 @@
 6. Cache invalidated
 
 **Read:**
+
 1. Admin: GET /api/v1/quiz/questions with optional filters (status, subject, level, chapter, search)
 2. Uses cursor-based pagination for efficient loading
 3. Returns data, total count, nextCursor, hasMore
@@ -131,6 +141,7 @@
 5. Public endpoints always filter by PUBLISHED status only
 
 **Update:**
+
 1. Client sends PATCH to /api/v1/quiz/questions/:id with partial fields
 2. Backend finds question by ID, returns 404 if not found
 3. Only provided fields updated
@@ -138,11 +149,13 @@
 5. If level changed from extreme: options and correctLetter preserved from request
 
 **Delete:**
+
 1. Client sends DELETE to /api/v1/quiz/questions/:id (admin only)
 2. Question record deleted from database
 3. Cache invalidated
 
 **Bulk Operations:**
+
 - Bulk create via POST /api/v1/quiz/questions/bulk accepts array of questions
 - Auto-creates subjects and chapters if they don't exist (by name lookup)
 - Bulk action via POST /api/v1/quiz/bulk-action supports publish, draft, trash, delete on multiple questions
@@ -200,31 +213,48 @@
 
 ### How it works
 
-- Cursor-based pagination for question list
-- Cursor is base64 encoded string containing date and ID
-- Format: "2024-01-15T10:30:00.000Z::uuid-string"
-- Backend decodes cursor, queries for items older/newer than cursor position
-- Default page size: 20 questions
-- Maximum limit: 100 questions per request
+- URL-driven offset pagination for question list
+- Page number stored in URL: `?page=2`
+- Page size stored in URL: `?pageSize=20`
+- Backend receives page and limit parameters
+- Returns slice of questions for that page
 
-### Cursor behaviour
+### URL behaviour
 
-1. Initial request: cursor parameter not sent, backend returns first page
-2. Backend returns questions ordered by updatedAt DESC, id DESC
-3. Last item's updatedAt and id encoded as nextCursor
-4. Subsequent requests send cursor parameter
-5. Backend decodes cursor, queries for items that come after that position
-6. When no more items, hasMore returns false
+1. Initial load: `?page=1&pageSize=20`
+2. User clicks Next → URL changes to `?page=2`
+3. Component re-renders, reads `page=2` from URL
+4. React Query fetches with `page=2`
+5. Backend returns questions 21-40
+6. User refreshes → same page shown (URL preserved)
+7. User shares URL → other user sees same page
+
+### Backend Pagination
+
+```
+GET /api/v1/quiz/questions?page=2&pageSize=20&status=published&subject=math
+```
+
+| Parameter  | Default               | Description              |
+| ---------- | --------------------- | ------------------------ |
+| `page`     | 1                     | Page number (1-indexed)  |
+| `pageSize` | 20                    | Items per page (max 100) |
+| `skip`     | `(page-1) * pageSize` | Calculated internally    |
 
 ### UI Design
 
-- Infinite scroll pattern
-- useInfiniteQuery from React Query manages pages
-- getNextPageParam extracts nextCursor from last page
-- Load more triggered when scroll position reaches bottom element
-- Loading indicator shown while fetching next page
-- "No more questions" message when pagination exhausted
-- Page size selector (10, 25, 50) in QuestionManager header
+- Pagination controls with page buttons (1, 2, 3, ...)
+- Next/Previous buttons
+- Page size selector (10, 25, 50)
+- Total count and page info display
+- Jump to page input (optional)
+
+### Navigation Rules
+
+- Filter change → Reset to page 1
+- Page size change → Reset to page 1
+- Search change → Reset to page 1
+- Subject change → Reset to page 1
 
 ---
 
@@ -303,7 +333,7 @@
 - No options or configuration - exports current filter view
 - Filter status applies (exports only matching questions)
 - Browser download starts automatically
-- Filename format: questions_export_{subject}_{date}.csv
+- Filename format: questions*export*{subject}\_{date}.csv
 
 ---
 
@@ -320,11 +350,11 @@
 
 ### Invalidation rules
 
-- Any create/update/delete on subject clears quiz:* patterns
-- Any create/update/delete on chapter clears quiz:* patterns
-- Any create/update/delete on question clears quiz:* patterns
+- Any create/update/delete on subject clears quiz:\* patterns
+- Any create/update/delete on chapter clears quiz:\* patterns
+- Any create/update/delete on question clears quiz:\* patterns
 - Bulk operations also trigger cache clear
-- clearQuizCaches method deletes all quiz:* keys via pattern matching
+- clearQuizCaches method deletes all quiz:\* keys via pattern matching
 
 ---
 
@@ -343,6 +373,7 @@
 ### Admin endpoints
 
 All other endpoints require:
+
 - Valid JWT token in Authorization header (Bearer scheme)
 - User must have 'admin' role
 
@@ -358,6 +389,7 @@ All other endpoints require:
 ## Data Flow Summary
 
 ### Question Fetch Flow (Admin)
+
 1. URL change triggers useQuizFilters
 2. useQuestions hook called with new filters
 3. React Query fetches from GET /api/v1/quiz/questions?filters
@@ -367,12 +399,14 @@ All other endpoints require:
 7. useInfiniteQuery manages pages and cursor
 
 ### Question Fetch Flow (Public)
+
 1. Frontend calls getQuestionsBySubjectSlug with slug and filters
 2. Backend automatically filters by PUBLISHED status
 3. Results not cached (public content changes frequently)
 4. Returns data and total count only (no pagination)
 
 ### Import Flow
+
 1. Client uploads CSV file
 2. Frontend parses and validates rows
 3. Payload sent to POST /api/v1/quiz/questions/bulk
@@ -383,6 +417,7 @@ All other endpoints require:
 8. Response returns count and any errors
 
 ### Filter Counts Flow
+
 1. FilterPanel renders with current filters
 2. useFilterCounts called with filters
 3. Backend calculates counts for subjects, chapters, levels, statuses
