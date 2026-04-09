@@ -9,11 +9,11 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useRef } from 'react';
+import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus, Zap, Link2 } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
@@ -58,6 +58,10 @@ function QuizContent(): JSX.Element {
   const chapter = searchParams?.get('chapter') || '';
   const level = searchParams?.get('level') || '';
   const mode = searchParams?.get('mode') || 'normal';
+  const questionParam = parseInt(searchParams?.get('question') || '0', 10) || null;
+
+  // Share toast state
+  const [shareToast, setShareToast] = useState<string | null>(null);
 
   // Load timer settings from settings
   useEffect(() => {
@@ -69,7 +73,10 @@ function QuizContent(): JSX.Element {
         if (mode === 'timer' && level) {
           // Use level-specific timer if available, otherwise fallback to default
           const levelKey = level.toLowerCase();
-          const timerValue = levelTimers?.[levelKey as keyof typeof levelTimers] ?? DEFAULT_TIME_LIMITS[levelKey] ?? 30;
+          const timerValue =
+            levelTimers?.[levelKey as keyof typeof levelTimers] ??
+            DEFAULT_TIME_LIMITS[levelKey] ??
+            30;
           setTimeLimit(timerValue);
         } else {
           setTimeLimit(undefined);
@@ -119,7 +126,7 @@ function QuizContent(): JSX.Element {
   const timerMode = isTimerMode ? 'per-question' : undefined;
 
   // Use quiz hook
-  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode);
+  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode, questionParam);
 
   // Redirect to results when completed
   useEffect(() => {
@@ -127,6 +134,59 @@ function QuizContent(): JSX.Element {
       router.push(`/quiz/results?session=${quiz.sessionId}`);
     }
   }, [quiz.status, quiz.sessionId, router]);
+
+  // Sync question number to URL - always keep ?question=X in sync
+  useEffect(() => {
+    if (quiz.status === 'playing' && quiz.totalQuestions > 0) {
+      const params = new URLSearchParams(searchParams?.toString() || '');
+      const currentQuestionNum = String(quiz.currentQuestionIndex + 1);
+      const existingParam = params.get('question');
+      if (existingParam !== currentQuestionNum) {
+        params.set('question', currentQuestionNum);
+        router.replace(`/quiz/play?${params.toString()}`, { scroll: false });
+      }
+    }
+  }, [quiz.currentQuestionIndex, quiz.status, quiz.totalQuestions]);
+
+  // Share handler
+  const handleShare = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setShareToast(
+            `Link copied! Question ${quiz.currentQuestionIndex + 1} of ${quiz.totalQuestions}`
+          );
+          setTimeout(() => setShareToast(null), 2000);
+        })
+        .catch(() => {
+          setShareToast('Failed to copy link');
+          setTimeout(() => setShareToast(null), 2000);
+        });
+    }
+  }, [quiz.currentQuestionIndex, quiz.totalQuestions]);
+
+  // Get next skipped question index
+  const getNextSkippedIndex = useCallback((): number | null => {
+    if (quiz.manuallySkipped.size === 0) return null;
+    const skippedArray = Array.from(quiz.manuallySkipped);
+    const questionIds = quiz.questions.map((q) => q.id);
+    const skippedIndices = skippedArray
+      .map((id) => questionIds.indexOf(id))
+      .filter((idx) => idx >= 0 && idx > quiz.currentQuestionIndex)
+      .sort((a, b) => a - b);
+    if (skippedIndices.length > 0) {
+      const idx = skippedIndices[0];
+      return idx !== undefined ? idx : null;
+    }
+    // If no skipped ahead, wrap around to first skipped
+    const allSkippedIndices = skippedArray
+      .map((id) => questionIds.indexOf(id))
+      .filter((idx) => idx >= 0)
+      .sort((a, b) => a - b);
+    const idx = allSkippedIndices[0];
+    return idx !== undefined ? idx : null;
+  }, [quiz.manuallySkipped, quiz.questions, quiz.currentQuestionIndex]);
 
   // Loading state
   if (quiz.status === 'loading' || isLoadingSettings) {
@@ -155,9 +215,7 @@ function QuizContent(): JSX.Element {
 
           <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
             <AlertCircle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
-            <h1 className="mb-2 text-2xl font-bold text-gray-800">
-              No Questions Available
-            </h1>
+            <h1 className="mb-2 text-2xl font-bold text-gray-800">No Questions Available</h1>
             <p className="mb-4 text-gray-600">
               There are no published questions for this chapter and difficulty level.
             </p>
@@ -202,7 +260,9 @@ function QuizContent(): JSX.Element {
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-white p-6 shadow-2xl">
               <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
               <p className="text-lg font-semibold text-gray-800">Loading Questions...</p>
-              <p className="text-sm text-gray-500">Adding {preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}</p>
+              <p className="text-sm text-gray-500">
+                Adding {preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}
+              </p>
             </div>
           </div>
         )}
@@ -222,9 +282,7 @@ function QuizContent(): JSX.Element {
             <div className="rounded-2xl bg-white/95 p-5 shadow-2xl">
               <div className="text-center mb-4">
                 <div className="text-5xl mb-2">{subjectEmoji}</div>
-                <h1 className="text-2xl font-bold text-gray-800 mb-1">
-                  {subjectName} Quiz
-                </h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-1">{subjectName} Quiz</h1>
                 <p className="text-gray-500 text-sm">Ready to test your knowledge?</p>
               </div>
 
@@ -239,7 +297,9 @@ function QuizContent(): JSX.Element {
                   <div className="text-xs text-gray-600">Difficulty</div>
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-blue-600">{mode === 'timer' ? '⏱️' : '🎯'}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {mode === 'timer' ? '⏱️' : '🎯'}
+                  </div>
                   <div className="text-xs text-gray-600">{modeDisplay}</div>
                 </div>
                 <div className="bg-orange-50 rounded-lg p-3 text-center">
@@ -269,7 +329,9 @@ function QuizContent(): JSX.Element {
                   {/* Dropdown and +/- Buttons */}
                   <div className="flex items-center justify-center gap-3">
                     <button
-                      onClick={() => setPreQuizExtraQuestions(Math.max(0, preQuizExtraQuestions - 1))}
+                      onClick={() =>
+                        setPreQuizExtraQuestions(Math.max(0, preQuizExtraQuestions - 1))
+                      }
                       disabled={preQuizExtraQuestions <= 0}
                       className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
@@ -282,12 +344,18 @@ function QuizContent(): JSX.Element {
                       className="h-8 px-3 rounded-lg border border-purple-300 bg-white text-gray-700 font-semibold text-sm cursor-pointer"
                     >
                       {Array.from({ length: Math.min(20, availableExtra) + 1 }, (_, i) => (
-                        <option key={i} value={i}>{i}</option>
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
                       ))}
                     </select>
 
                     <button
-                      onClick={() => setPreQuizExtraQuestions(Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1))}
+                      onClick={() =>
+                        setPreQuizExtraQuestions(
+                          Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1)
+                        )
+                      }
                       disabled={preQuizExtraQuestions >= Math.min(20, availableExtra)}
                       className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
@@ -297,7 +365,8 @@ function QuizContent(): JSX.Element {
 
                   {preQuizExtraQuestions > 0 && (
                     <p className="text-center text-xs text-purple-600 mt-1">
-                      +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''} will be added
+                      +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}{' '}
+                      will be added
                     </p>
                   )}
                 </div>
@@ -321,13 +390,28 @@ function QuizContent(): JSX.Element {
                 {isStartingQuiz ? (
                   <span className="flex items-center justify-center gap-2">
                     <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
                     </svg>
                     Loading...
                   </span>
                 ) : (
-                  <>🚀 Start Quiz {preQuizExtraQuestions > 0 ? `(${finalQuestionCount} Questions)` : ''}</>
+                  <>
+                    🚀 Start Quiz{' '}
+                    {preQuizExtraQuestions > 0 ? `(${finalQuestionCount} Questions)` : ''}
+                  </>
                 )}
               </button>
             </div>
@@ -367,30 +451,71 @@ function QuizContent(): JSX.Element {
                 <span className="text-base text-white/90">{chapter}</span>
               </div>
 
+              <div className="flex items-center gap-2">
+                {/* Skipped Button */}
+                {quiz.manuallySkipped.size > 0 && (
+                  <button
+                    onClick={() => {
+                      const nextSkipped = getNextSkippedIndex();
+                      if (nextSkipped !== null) {
+                        quiz.jumpToQuestion(nextSkipped);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-orange-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-orange-600 transition-colors"
+                  >
+                    <Zap className="h-3 w-3" />
+                    Skipped ({quiz.manuallySkipped.size})
+                  </button>
+                )}
+
+                {/* Unvisited Button - Only shown when arrived via shared link and not dismissed */}
+                {questionParam && questionParam > 1 && !quiz.dismissedUnvisited && (
+                  <button
+                    onClick={quiz.dismissUnvisited}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-600 transition-colors"
+                  >
+                    <Link2 className="h-3 w-3" />
+                    Unvisited ({questionParam - 1})
+                  </button>
+                )}
+              </div>
+
               {/* Timer Display */}
               {isTimerMode && (quiz.status === 'playing' || quiz.status === 'paused') && (
                 <div className="flex items-center gap-2">
                   {/* Timer Clock */}
-                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${quiz.status === 'paused'
-                    ? 'bg-yellow-500 text-white'
-                    : quiz.timeRemaining <= 10
-                      ? 'bg-red-500 text-white animate-pulse'
-                      : quiz.timeRemaining <= 20
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-white/90 text-gray-800'
-                    }`}>
+                  <div
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
+                      quiz.status === 'paused'
+                        ? 'bg-yellow-500 text-white'
+                        : quiz.timeRemaining <= 10
+                          ? 'bg-red-500 text-white animate-pulse'
+                          : quiz.timeRemaining <= 20
+                            ? 'bg-orange-500 text-white'
+                            : 'bg-white/90 text-gray-800'
+                    }`}
+                  >
                     <Timer className="h-4 w-4" />
-                    <span>{Math.floor(quiz.timeRemaining / 60)}:{(quiz.timeRemaining % 60).toString().padStart(2, '0')}</span>
+                    <span>
+                      {Math.floor(quiz.timeRemaining / 60)}:
+                      {(quiz.timeRemaining % 60).toString().padStart(2, '0')}
+                    </span>
                     {quiz.status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
                   </div>
 
                   {/* Pause/Resume Button */}
                   <button
-                    onClick={() => quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz()}
+                    onClick={() =>
+                      quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz()
+                    }
                     className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
                     title={quiz.status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
                   >
-                    {quiz.status === 'paused' ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                    {quiz.status === 'paused' ? (
+                      <Play className="h-4 w-4" />
+                    ) : (
+                      <Pause className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               )}
@@ -423,9 +548,10 @@ function QuizContent(): JSX.Element {
                   score={quiz.score}
                   maxScore={quiz.totalQuestions}
                   timeUp={isTimeUp}
+                  onShare={handleShare}
                   {...(isTimerMode && {
                     questionTimeRemaining: quiz.timeRemaining,
-                    questionTimeLimit: timeLimit ?? 60
+                    questionTimeLimit: timeLimit ?? 60,
                   })}
                 />
               </motion.div>
@@ -447,7 +573,9 @@ function QuizContent(): JSX.Element {
             </button>
 
             <div className="flex flex-col items-center">
-              <span className="text-[10px] uppercase tracking-wider text-white/50 font-bold">Progress</span>
+              <span className="text-[10px] uppercase tracking-wider text-white/50 font-bold">
+                Progress
+              </span>
               <span className="text-sm font-bold text-white">
                 {quiz.currentQuestionIndex + 1} / {quiz.totalQuestions}
               </span>
@@ -462,7 +590,7 @@ function QuizContent(): JSX.Element {
                     if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
                       setShowConfirmSubmit(true);
                     } else {
-                      quiz.goToNext();
+                      quiz.handleSkip();
                     }
                   }}
                   className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/20 border border-white/20"
@@ -496,6 +624,20 @@ function QuizContent(): JSX.Element {
         </div>
       </div>
 
+      {/* Share Toast */}
+      <AnimatePresence>
+        {shareToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-gray-800 px-4 py-2 text-sm text-white shadow-lg"
+          >
+            {shareToast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Confirm Submit Modal */}
       {showConfirmSubmit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -504,9 +646,7 @@ function QuizContent(): JSX.Element {
             animate={{ scale: 1, opacity: 1 }}
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Submit Quiz?
-            </h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Submit Quiz?</h2>
 
             {quiz.answeredCount < quiz.totalQuestions ? (
               <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
@@ -553,13 +693,12 @@ function QuizContent(): JSX.Element {
             animate={{ scale: 1, opacity: 1 }}
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Extend Quiz
-            </h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Quiz</h2>
 
             <div className="mb-4 space-y-3">
               <p className="text-gray-600">
-                You&apos;ve answered <strong>{quiz.answeredCount}</strong> of <strong>{quiz.totalQuestions}</strong> questions.
+                You&apos;ve answered <strong>{quiz.answeredCount}</strong> of{' '}
+                <strong>{quiz.totalQuestions}</strong> questions.
               </p>
 
               <div className="rounded-lg bg-blue-50 p-3">
@@ -585,11 +724,25 @@ function QuizContent(): JSX.Element {
                   min={1}
                   max={Math.min(20, quiz.availableQuestions)}
                   value={additionalQuestions}
-                  onChange={(e) => setAdditionalQuestions(Math.max(1, Math.min(Math.min(20, quiz.availableQuestions), parseInt(e.target.value) || 1)))}
+                  onChange={(e) =>
+                    setAdditionalQuestions(
+                      Math.max(
+                        1,
+                        Math.min(
+                          Math.min(20, quiz.availableQuestions),
+                          parseInt(e.target.value) || 1
+                        )
+                      )
+                    )
+                  }
                   className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
                 />
                 <button
-                  onClick={() => setAdditionalQuestions(Math.min(Math.min(20, quiz.availableQuestions), additionalQuestions + 1))}
+                  onClick={() =>
+                    setAdditionalQuestions(
+                      Math.min(Math.min(20, quiz.availableQuestions), additionalQuestions + 1)
+                    )
+                  }
                   disabled={additionalQuestions >= Math.min(20, quiz.availableQuestions)}
                   className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                 >
@@ -638,14 +791,16 @@ function QuizContent(): JSX.Element {
 
 export default function QuizPage(): JSX.Element {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
-          <p className="text-xl font-semibold text-white">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+            <p className="text-xl font-semibold text-white">Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <QuizContent />
     </Suspense>
   );

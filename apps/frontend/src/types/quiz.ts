@@ -62,6 +62,9 @@ export interface QuizState {
   status: 'loading' | 'playing' | 'paused' | 'completed';
   startTime: number;
   sessionId: string;
+  visited: Set<string>;
+  manuallySkipped: Set<string>;
+  dismissedUnvisited: boolean;
 }
 
 /** Quiz Actions */
@@ -73,6 +76,10 @@ export interface QuizActions {
   pauseQuiz: () => void;
   resumeQuiz: () => void;
   extendQuiz: (additionalCount: number) => void;
+  handleSkip: () => void;
+  jumpToQuestion: (index: number) => void;
+  dismissUnvisited: () => void;
+  startFromShare: number | null;
 }
 
 /** Quiz Computed Values */
@@ -88,7 +95,7 @@ export interface QuizComputed {
 }
 
 /** Combined Quiz Hook Return */
-export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed { }
+export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed {}
 
 /** Quiz Result Summary */
 export interface QuizResult {
@@ -135,7 +142,16 @@ export interface Achievement {
   description: string;
   icon: string;
   condition: {
-    type: 'quiz_count' | 'perfect_score' | 'streak' | 'chapter_complete' | 'subject_master' | 'speed_run' | 'subject_explore' | 'retry' | 'accuracy';
+    type:
+      | 'quiz_count'
+      | 'perfect_score'
+      | 'streak'
+      | 'chapter_complete'
+      | 'subject_master'
+      | 'speed_run'
+      | 'subject_explore'
+      | 'retry'
+      | 'accuracy';
     threshold: number;
   };
   unlockedAt?: string | undefined;

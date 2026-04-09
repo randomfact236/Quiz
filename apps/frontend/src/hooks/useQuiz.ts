@@ -9,22 +9,22 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import type {
-  Question,
-  QuizSession,
-  QuizState,
-  QuizComputed,
-  UseQuizReturn
-} from '@/types/quiz';
+import type { Question, QuizSession, QuizState, QuizComputed, UseQuizReturn } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
-import { getQuestionsBySubject, getQuestionsByChapter, getRandomQuestions, getMixedQuestions, getSubjectBySlug } from '@/lib/quiz-api';
+import {
+  getQuestionsBySubject,
+  getQuestionsByChapter,
+  getRandomQuestions,
+  getMixedQuestions,
+  getSubjectBySlug,
+} from '@/lib/quiz-api';
 import type { QuizQuestion } from '@/lib/quiz-api';
 
 /** Generate UUID for session */
 function generateUUID(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -50,9 +50,9 @@ function convertQuizQuestion(q: QuizQuestion): Question {
 /** Calculate score based on answers */
 function calculateScore(questions: Question[], answers: Record<string, string>): number {
   let score = 0;
-  questions.forEach(q => {
+  questions.forEach((q) => {
     const isOpenEnded = q.level === 'extreme';
-    
+
     if (isOpenEnded) {
       // Open-ended: compare normalized text
       const userAnswer = answers[q.id]?.toLowerCase().trim() || '';
@@ -97,7 +97,7 @@ async function loadQuestions(subject: string, chapter: string, level: string): P
       }
 
       if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
+        questions = questions.filter((q) => q.level === level);
       }
     }
 
@@ -142,13 +142,13 @@ async function loadAdditionalQuestions(
       }
 
       if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
+        questions = questions.filter((q) => q.level === level);
       }
     }
 
     const convertedQuestions = questions
       .map(convertQuizQuestion)
-      .filter(q => !excludeIds.includes(q.id))
+      .filter((q) => !excludeIds.includes(q.id))
       .slice(0, count);
 
     return convertedQuestions;
@@ -190,12 +190,12 @@ async function countAvailableQuestions(
       }
 
       if (level !== 'all') {
-        questions = questions.filter(q => q.level === level);
+        questions = questions.filter((q) => q.level === level);
       }
     }
 
     const convertedQuestions = questions.map(convertQuizQuestion);
-    return convertedQuestions.filter(q => !excludeIds.includes(q.id)).length;
+    return convertedQuestions.filter((q) => !excludeIds.includes(q.id)).length;
   } catch (error) {
     console.error('Failed to count available questions from API:', error);
     return 0;
@@ -236,7 +236,8 @@ export function useQuiz(
   chapter: string,
   level: string,
   timeLimit?: number, // in seconds, undefined = no limit
-  timerMode: 'total' | 'per-question' = 'per-question' // 'total' = whole quiz, 'per-question' = per question
+  timerMode: 'total' | 'per-question' = 'per-question', // 'total' = whole quiz, 'per-question' = per question
+  startFromShare?: number | null // 1-based question number from URL, null = fresh start
 ): UseQuizReturn {
   // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
@@ -251,6 +252,9 @@ export function useQuiz(
     status: 'loading',
     startTime: Date.now(),
     sessionId: '',
+    visited: new Set<string>(),
+    manuallySkipped: new Set<string>(),
+    dismissedUnvisited: false,
   });
 
   const [originalTotal, setOriginalTotal] = useState(0);
@@ -263,7 +267,7 @@ export function useQuiz(
       setOriginalTotal(availableCount);
 
       if (questions.length === 0) {
-        setState(prev => ({ ...prev, status: 'completed' }));
+        setState((prev) => ({ ...prev, status: 'completed' }));
         return;
       }
 
@@ -284,29 +288,44 @@ export function useQuiz(
 
       const sid = sessionRef.current.id;
 
+      // Clamp startFromShare to valid range
+      let initialIndex = 0;
+      if (startFromShare && startFromShare > 1) {
+        initialIndex = Math.min(startFromShare - 1, questions.length - 1);
+      }
+
+      const initialVisited = new Set<string>();
+      const initQuestion = questions[initialIndex];
+      if (initQuestion) {
+        initialVisited.add(initQuestion.id);
+      }
+
       setState({
         questions,
-        currentQuestionIndex: 0,
+        currentQuestionIndex: initialIndex,
         answers: {},
         score: 0,
         timeRemaining: timeLimit || 0,
         status: 'playing',
         startTime: Date.now(),
         sessionId: sid,
+        visited: initialVisited,
+        manuallySkipped: new Set<string>(),
+        dismissedUnvisited: false,
       });
 
       saveCurrentSession(sessionRef.current);
     };
 
     load();
-  }, [subject, chapter, level, timeLimit]);
+  }, [subject, chapter, level, timeLimit, startFromShare]);
 
   // Timer effect
   useEffect(() => {
     if (state.status !== 'playing' || !timeLimit) return;
 
     const timer = setInterval(() => {
-      setState(prev => {
+      setState((prev) => {
         // Don't count down if paused
         if (prev.status === 'paused') return prev;
 
@@ -322,7 +341,7 @@ export function useQuiz(
               return {
                 ...prev,
                 timeRemaining: timeLimit, // Reset timer for next question
-                currentQuestionIndex: prev.currentQuestionIndex + 1
+                currentQuestionIndex: prev.currentQuestionIndex + 1,
               };
             }
           } else {
@@ -339,12 +358,17 @@ export function useQuiz(
 
   // Select answer
   const selectAnswer = useCallback((option: string) => {
-    setState(prev => {
+    setState((prev) => {
       const currentQuestion = prev.questions[prev.currentQuestionIndex];
       if (!currentQuestion) return prev;
 
       const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
       const newScore = calculateScore(prev.questions, newAnswers);
+
+      // Track visited and remove from manuallySkipped
+      const newVisited = new Set(prev.visited).add(currentQuestion.id);
+      const newSkipped = new Set(prev.manuallySkipped);
+      newSkipped.delete(currentQuestion.id);
 
       // Update session
       if (sessionRef.current) {
@@ -357,33 +381,49 @@ export function useQuiz(
         ...prev,
         answers: newAnswers,
         score: newScore,
+        visited: newVisited,
+        manuallySkipped: newSkipped,
       };
     });
   }, []);
 
   // Go to previous question
   const goToPrevious = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      currentQuestionIndex: Math.max(0, prev.currentQuestionIndex - 1),
-      // Reset timer for per-question mode
-      timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
-    }));
+    setState((prev) => {
+      const newIndex = Math.max(0, prev.currentQuestionIndex - 1);
+      const visitedQuestion = prev.questions[newIndex];
+      const newVisited = new Set(prev.visited);
+      if (visitedQuestion) newVisited.add(visitedQuestion.id);
+
+      return {
+        ...prev,
+        currentQuestionIndex: newIndex,
+        visited: newVisited,
+        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+      };
+    });
   }, [timerMode, timeLimit]);
 
   // Go to next question
   const goToNext = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      currentQuestionIndex: Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1),
-      // Reset timer for per-question mode
-      timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
-    }));
+    setState((prev) => {
+      const newIndex = Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1);
+      const visitedQuestion = prev.questions[newIndex];
+      const newVisited = new Set(prev.visited);
+      if (visitedQuestion) newVisited.add(visitedQuestion.id);
+
+      return {
+        ...prev,
+        currentQuestionIndex: newIndex,
+        visited: newVisited,
+        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+      };
+    });
   }, [timerMode, timeLimit]);
 
   // Submit quiz
   const submitQuiz = useCallback(() => {
-    setState(prev => {
+    setState((prev) => {
       const timeTaken = Math.floor((Date.now() - prev.startTime) / 1000);
 
       if (sessionRef.current) {
@@ -407,7 +447,11 @@ export function useQuiz(
 
   // Auto-save session when timer expires (status becomes 'completed')
   useEffect(() => {
-    if (state.status === 'completed' && sessionRef.current && sessionRef.current.status !== 'completed') {
+    if (
+      state.status === 'completed' &&
+      sessionRef.current &&
+      sessionRef.current.status !== 'completed'
+    ) {
       const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
 
       sessionRef.current.status = 'completed';
@@ -423,53 +467,117 @@ export function useQuiz(
   }, [state.status, state.startTime, state.score, state.answers]);
 
   // Extend quiz with additional questions
-  const extendQuiz = useCallback(async (additionalCount: number) => {
-    const currentQuestionIds = state.questions.map(q => q.id);
-    const additionalQuestions = await loadAdditionalQuestions(
-      subject,
-      chapter,
-      level,
-      currentQuestionIds,
-      additionalCount
-    );
+  const extendQuiz = useCallback(
+    async (additionalCount: number) => {
+      const currentQuestionIds = state.questions.map((q) => q.id);
+      const additionalQuestions = await loadAdditionalQuestions(
+        subject,
+        chapter,
+        level,
+        currentQuestionIds,
+        additionalCount
+      );
 
-    if (additionalQuestions.length === 0) {
-      return;
-    }
-
-    let newQuestions: Question[] = [];
-    setState(prev => {
-      newQuestions = [...prev.questions, ...additionalQuestions];
-
-      if (sessionRef.current) {
-        sessionRef.current.questions = newQuestions;
-        sessionRef.current.maxScore = newQuestions.length;
-        saveCurrentSession(sessionRef.current);
+      if (additionalQuestions.length === 0) {
+        return;
       }
 
-      return {
-        ...prev,
-        questions: newQuestions,
-      };
-    });
-  }, [subject, chapter, level, state.questions]);
+      let newQuestions: Question[] = [];
+      setState((prev) => {
+        newQuestions = [...prev.questions, ...additionalQuestions];
+
+        if (sessionRef.current) {
+          sessionRef.current.questions = newQuestions;
+          sessionRef.current.maxScore = newQuestions.length;
+          saveCurrentSession(sessionRef.current);
+        }
+
+        return {
+          ...prev,
+          questions: newQuestions,
+        };
+      });
+    },
+    [subject, chapter, level, state.questions]
+  );
 
   // Pause quiz
   const pauseQuiz = useCallback(() => {
-    setState(prev => ({ ...prev, status: 'paused' }));
+    setState((prev) => ({ ...prev, status: 'paused' }));
   }, []);
 
   // Resume quiz
   const resumeQuiz = useCallback(() => {
-    setState(prev => ({ ...prev, status: 'playing' }));
+    setState((prev) => ({ ...prev, status: 'playing' }));
   }, []);
+
+  // Handle skip - track as manually skipped, move to next
+  const handleSkip = useCallback(() => {
+    setState((prev) => {
+      const currentQuestion = prev.questions[prev.currentQuestionIndex];
+      if (!currentQuestion) return prev;
+
+      const newIndex = Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1);
+      const visitedQuestion = prev.questions[newIndex];
+
+      const newSkipped = new Set(prev.manuallySkipped).add(currentQuestion.id);
+      const newVisited = new Set(prev.visited).add(currentQuestion.id);
+      if (visitedQuestion) newVisited.add(visitedQuestion.id);
+
+      return {
+        ...prev,
+        currentQuestionIndex: newIndex,
+        manuallySkipped: newSkipped,
+        visited: newVisited,
+        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+      };
+    });
+  }, [timerMode, timeLimit]);
+
+  // Jump to a specific question index
+  const jumpToQuestion = useCallback(
+    (index: number) => {
+      setState((prev) => {
+        const newIndex = Math.max(0, Math.min(index, prev.questions.length - 1));
+        const visitedQuestion = prev.questions[newIndex];
+        const newVisited = new Set(prev.visited);
+        if (visitedQuestion) newVisited.add(visitedQuestion.id);
+
+        return {
+          ...prev,
+          currentQuestionIndex: newIndex,
+          visited: newVisited,
+          timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+        };
+      });
+    },
+    [timerMode, timeLimit]
+  );
+
+  // Dismiss unvisited banner - jump to Q1, never show again
+  const dismissUnvisited = useCallback(() => {
+    setState((prev) => {
+      const visitedQuestion = prev.questions[0];
+      const newVisited = new Set(prev.visited);
+      if (visitedQuestion) newVisited.add(visitedQuestion.id);
+
+      return {
+        ...prev,
+        currentQuestionIndex: 0,
+        dismissedUnvisited: true,
+        visited: newVisited,
+        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+      };
+    });
+  }, [timerMode, timeLimit]);
 
   // Computed values
   const computed: QuizComputed = useMemo(() => {
     const currentQuestion = state.questions[state.currentQuestionIndex] || null;
-    const progress = state.questions.length > 0
-      ? ((state.currentQuestionIndex + 1) / state.questions.length) * 100
-      : 0;
+    const progress =
+      state.questions.length > 0
+        ? ((state.currentQuestionIndex + 1) / state.questions.length) * 100
+        : 0;
     const isFirstQuestion = state.currentQuestionIndex === 0;
     const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
     const hasAnsweredCurrent = currentQuestion ? !!state.answers[currentQuestion.id] : false;
@@ -500,5 +608,9 @@ export function useQuiz(
     pauseQuiz,
     resumeQuiz,
     extendQuiz,
+    handleSkip,
+    jumpToQuestion,
+    dismissUnvisited,
+    startFromShare: startFromShare || null,
   };
 }

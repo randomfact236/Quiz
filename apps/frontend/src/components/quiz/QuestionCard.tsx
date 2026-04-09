@@ -12,6 +12,7 @@
 
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion } from 'framer-motion';
+import { Share2 } from 'lucide-react';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
 import type { Question } from '@/types/quiz';
@@ -45,6 +46,8 @@ interface QuestionCardProps {
   questionTimeRemaining?: number;
   /** Per-question time limit (seconds) — used to calculate ring progress */
   questionTimeLimit?: number;
+  /** Share callback */
+  onShare?: () => void;
 }
 
 export interface QuestionCardRef {
@@ -99,7 +102,13 @@ function getRandomFeedback(type: 'correct' | 'wrong'): { text: string; emoji: st
 }
 
 /** Circular countdown ring — shown inside the card per question */
-function QuestionTimerRing({ timeRemaining, timeLimit }: { timeRemaining: number; timeLimit: number }): JSX.Element {
+function QuestionTimerRing({
+  timeRemaining,
+  timeLimit,
+}: {
+  timeRemaining: number;
+  timeLimit: number;
+}): JSX.Element {
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.max(0, Math.min(1, timeRemaining / timeLimit));
@@ -109,11 +118,15 @@ function QuestionTimerRing({ timeRemaining, timeLimit }: { timeRemaining: number
   const color = isCritical ? '#ef4444' : isWarning ? '#f97316' : '#6366f1';
 
   return (
-    <div className={`relative flex items-center justify-center ${isCritical ? 'animate-pulse' : ''}`}>
+    <div
+      className={`relative flex items-center justify-center ${isCritical ? 'animate-pulse' : ''}`}
+    >
       <svg width={56} height={56} className="-rotate-90">
         <circle cx={28} cy={28} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={4} />
         <circle
-          cx={28} cy={28} r={radius}
+          cx={28}
+          cy={28}
+          r={radius}
           fill="none"
           stroke={color}
           strokeWidth={4}
@@ -123,32 +136,33 @@ function QuestionTimerRing({ timeRemaining, timeLimit }: { timeRemaining: number
           style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }}
         />
       </svg>
-      <span
-        className="absolute text-sm font-bold"
-        style={{ color }}
-      >
+      <span className="absolute text-sm font-bold" style={{ color }}>
         {timeRemaining}
       </span>
     </div>
   );
 }
 
-export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(function QuestionCard({
-  question,
-  questionNumber,
-  totalQuestions,
-  selectedAnswer,
-  onSelectAnswer,
-  showFeedback,
-  disabled = false,
-  subjectEmoji,
-  score,
-  maxScore,
-  timeUp = false,
-  shownBubblesRef,
-  questionTimeRemaining,
-  questionTimeLimit,
-}, ref): JSX.Element {
+export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(function QuestionCard(
+  {
+    question,
+    questionNumber,
+    totalQuestions,
+    selectedAnswer,
+    onSelectAnswer,
+    showFeedback,
+    disabled = false,
+    subjectEmoji,
+    score,
+    maxScore,
+    timeUp = false,
+    shownBubblesRef,
+    questionTimeRemaining,
+    questionTimeLimit,
+    onShare,
+  },
+  ref
+): JSX.Element {
   // Map question options to the format AnswerOptions expects
   const options = [
     { key: 'A', text: question.optionA },
@@ -163,11 +177,11 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   // Derive question type from level: extreme = open-ended, others = mcq
   const isOpenEnded = question.level === 'extreme';
   const correctLetter = question.correctLetter || null;
-  
+
   const isCorrect = isOpenEnded
     ? selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toLowerCase().trim()
     : selectedAnswer === correctLetter;
-     
+
   const isWrong = selectedAnswer && !isCorrect;
 
   // Randomized feedback state
@@ -225,23 +239,19 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
     }
   }, [selectedAnswer, showFeedback, isCorrect, isWrong, question.id]);
 
-
   // Handle answer selection - DON'T clear bubbles
-  const handleSelectAnswer = useCallback((option: string) => {
-    // Bubbles stay visible until navigation buttons clicked
-    onSelectAnswer(option);
-  }, [onSelectAnswer]);
+  const handleSelectAnswer = useCallback(
+    (option: string) => {
+      // Bubbles stay visible until navigation buttons clicked
+      onSelectAnswer(option);
+    },
+    [onSelectAnswer]
+  );
 
   return (
     <>
       {/* Bubble Emoji Effect */}
-      <BubbleEmojiEffect
-        ref={bubbleRef}
-        trigger={bubbleTrigger}
-        type={bubbleType}
-        count={60}
-
-      />
+      <BubbleEmojiEffect ref={bubbleRef} trigger={bubbleTrigger} type={bubbleType} count={60} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -301,17 +311,29 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
 
         {/* Score Display - Above Progress Bar */}
         {score !== undefined && maxScore !== undefined && (
-          <div className="mb-2 text-center">
+          <div className="mb-2 flex items-center justify-center gap-3">
             <span className="text-base font-semibold text-indigo-600">
               Score: {score}/{maxScore}
             </span>
+            {onShare && (
+              <button
+                onClick={onShare}
+                className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-600 transition-colors hover:bg-indigo-100"
+                title="Share this question"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+                Share
+              </button>
+            )}
           </div>
         )}
 
         {/* Progress Bar */}
         <div className="mb-5">
           <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
-            <span>Question {questionNumber} of {totalQuestions}</span>
+            <span>
+              Question {questionNumber} of {totalQuestions}
+            </span>
             <span>{Math.round((questionNumber / totalQuestions) * 100)}%</span>
           </div>
           <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
@@ -331,7 +353,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
             animate={{ opacity: 1, scale: 1 }}
             className="mb-4 text-center"
           >
-            <span className={`text-base font-semibold ${isCorrect ? 'text-green-600' : 'text-red-500'}`}>
+            <span
+              className={`text-base font-semibold ${isCorrect ? 'text-green-600' : 'text-red-500'}`}
+            >
               {feedback.text} {feedback.emoji}
             </span>
           </motion.div>
@@ -341,7 +365,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         <AnswerOptions
           options={options}
           selectedKey={selectedAnswer}
-          correctKey={showFeedback ? (isOpenEnded ? question.correctAnswer : (correctLetter || '')) : ''}
+          correctKey={
+            showFeedback ? (isOpenEnded ? question.correctAnswer : correctLetter || '') : ''
+          }
           onSelect={handleSelectAnswer}
           disabled={disabled || timeUp}
           showFeedback={showFeedback || false}
