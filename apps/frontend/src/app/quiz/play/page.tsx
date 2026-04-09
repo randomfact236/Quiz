@@ -131,9 +131,9 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.status, quiz.sessionId, router]);
 
-  // Sync question number to URL - always keep ?question=X in sync
+  // Sync question number to URL - only when quiz has started
   useEffect(() => {
-    if (quiz.status === 'playing' && quiz.totalQuestions > 0) {
+    if (hasStarted && quiz.status === 'playing' && quiz.totalQuestions > 0) {
       const params = new URLSearchParams(searchParams?.toString() || '');
       const currentQuestionNum = String(quiz.currentQuestionIndex + 1);
       const existingParam = params.get('question');
@@ -142,7 +142,7 @@ function QuizContent(): JSX.Element {
         router.replace(`/quiz/play?${params.toString()}`, { scroll: false });
       }
     }
-  }, [quiz.currentQuestionIndex, quiz.status, quiz.totalQuestions]);
+  }, [quiz.currentQuestionIndex, quiz.status, quiz.totalQuestions, hasStarted]);
 
   // Share handler
   const handleShare = useCallback(() => {
