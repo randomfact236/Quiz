@@ -110,13 +110,12 @@ export class QuizController {
     @Query('level') level?: string,
     @Query('chapter') chapter?: string,
     @Query('search') search?: string,
-    @Query('page') page?: number,
     @Query('limit') limit?: number
   ): Promise<{ data: Question[]; total: number }> {
-    const pagination = { page: page || 1, limit: limit || 10 };
-    // PUBLIC ENDPOINT: Always filter by PUBLISHED status - drafts are admin only
+    // If no limit sent → return ALL questions (no limit)
+    // If limit sent → apply it for future flexibility
     const filters = { status: ContentStatus.PUBLISHED, level, chapter, search, subjectSlug: slug };
-    return this.quizService.findAllQuestions(pagination, filters);
+    return this.quizService.findAllQuestions({ page: 1, limit: limit || 0 }, filters);
   }
 
   @Get('filter-counts')
@@ -278,11 +277,10 @@ export class QuizController {
   @Get('questions/:chapterId')
   @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
-    @Param('chapterId') chapterId: string,
-    @Query() pagination: PaginationDto
+    @Param('chapterId') chapterId: string
   ): Promise<{ data: Question[]; total: number }> {
     // PUBLIC ENDPOINT: Already filtered by PUBLISHED in service
-    return this.quizService.findQuestionsByChapter(chapterId, pagination);
+    return this.quizService.findAllQuestionsByChapter(chapterId);
   }
 
   private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {
@@ -301,19 +299,16 @@ export class QuizController {
 
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed questions from all subjects' })
-  async getMixedQuestions(@Query('count') count?: string): Promise<Question[]> {
-    const validCount = this.validateCount(count, DEFAULT_PAGE_SIZE);
-    return this.quizService.findMixedQuestions(validCount);
+  async getMixedQuestions(): Promise<{ data: Question[]; total: number }> {
+    return this.quizService.findAllMixedQuestions();
   }
 
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
-    @Param('level') level: string,
-    @Query('count') count?: string
-  ): Promise<Question[]> {
-    const validCount = this.validateCount(count, 10);
-    return this.quizService.findRandomQuestions(level, validCount);
+    @Param('level') level: string
+  ): Promise<{ data: Question[]; total: number }> {
+    return this.quizService.findAllRandomQuestionsByLevel(level);
   }
 
   @Post('questions')

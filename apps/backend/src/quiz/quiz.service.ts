@@ -257,18 +257,12 @@ export class QuizService {
     }
   }
 
-  async findQuestionsByChapter(
-    chapterId: string,
-    pagination: PaginationDto
-  ): Promise<{ data: Question[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
-    const [data, total] = await this.questionRepo.findAndCount({
+  async findAllQuestionsByChapter(chapterId: string): Promise<{ data: Question[]; total: number }> {
+    const data = await this.questionRepo.find({
       where: { chapter: { id: chapterId }, status: ContentStatus.PUBLISHED },
-      skip: (page - 1) * limit,
-      take: limit,
+      order: { updatedAt: 'DESC' },
     });
-    return { data, total };
+    return { data, total: data.length };
   }
 
   async findAllQuestions(
@@ -282,7 +276,7 @@ export class QuizService {
     }
   ): Promise<{ data: Question[]; total: number; totalPages: number }> {
     const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
+    const limit = pagination.limit ?? 0;
 
     const cacheKey = this.CACHE_KEYS.QUESTIONS(
       filters.subjectSlug || 'all',
@@ -321,13 +315,13 @@ export class QuizService {
           query.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
         }
 
-        const [data, total] = await query
-          .skip((page - 1) * limit)
-          .take(limit)
-          .orderBy('question.updatedAt', 'DESC')
-          .getManyAndCount();
+        if (limit > 0) {
+          query.skip((page - 1) * limit).take(limit);
+        }
 
-        const totalPages = Math.ceil(total / limit);
+        const [data, total] = await query.orderBy('question.updatedAt', 'DESC').getManyAndCount();
+
+        const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
         return { data, total, totalPages };
       },
       this.CACHE_TTL.QUESTIONS
@@ -669,82 +663,28 @@ export class QuizService {
     );
   }
 
-  async findRandomQuestions(level: string, count: number): Promise<Question[]> {
-    // Validate level parameter
+  async findAllRandomQuestionsByLevel(level: string): Promise<{ data: Question[]; total: number }> {
     const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validLevels.includes(level)) {
-      throw new BadRequestException(
-        `Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`
-      );
+      throw new BadRequestException(`Invalid level: ${level}`);
     }
 
-    // More efficient random selection using offset-based approach
-    const totalCount = await this.questionRepo.count({
+    const data = await this.questionRepo.find({
       where: { level, status: ContentStatus.PUBLISHED },
-    });
-
-    if (totalCount === 0) {
-      return [];
-    }
-
-    // If requesting more than available, return all
-    if (count >= totalCount) {
-      return this.questionRepo.find({
-        where: { level, status: ContentStatus.PUBLISHED },
-      });
-    }
-
-    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
-    const allIds = await this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.id')
-      .where('question.level = :level', { level })
-      .andWhere('question.status = :status', { status: ContentStatus.PUBLISHED })
-      .getMany();
-
-    // Shuffle and pick count items using secure Fisher-Yates shuffle
-    const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map((q) => q.id);
-
-    return this.questionRepo.find({
-      where: { id: In(selectedIds) },
       relations: ['chapter'],
+      order: { updatedAt: 'DESC' },
     });
+    return { data, total: data.length };
   }
 
-  async findMixedQuestions(count: number): Promise<Question[]> {
-    // More efficient random selection
-    const totalCount = await this.questionRepo.count({
+  async findAllMixedQuestions(limit: number = 500): Promise<{ data: Question[]; total: number }> {
+    const data = await this.questionRepo.find({
       where: { status: ContentStatus.PUBLISHED },
-    });
-
-    if (totalCount === 0) {
-      return [];
-    }
-
-    // If requesting more than available, return all
-    if (count >= totalCount) {
-      return this.questionRepo.find({
-        where: { status: ContentStatus.PUBLISHED },
-        relations: ['chapter'],
-      });
-    }
-
-    // Get all IDs, shuffle, then fetch selected
-    const allIds = await this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.id')
-      .where('question.status = :status', { status: ContentStatus.PUBLISHED })
-      .getMany();
-
-    // Shuffle and pick count items using secure Fisher-Yates shuffle
-    const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map((q) => q.id);
-
-    return this.questionRepo.find({
-      where: { id: In(selectedIds) },
       relations: ['chapter'],
+      order: { updatedAt: 'DESC' },
+      take: limit,
     });
+    return { data, total: data.length };
   }
 
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {
