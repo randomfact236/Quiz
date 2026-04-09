@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle, Timer, Pause, Play, Zap, Link2 } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus, Zap, Link2 } from 'lucide-react';
 
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
@@ -35,6 +35,8 @@ function QuizContent(): JSX.Element {
   const router = useRouter();
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [showExtendQuiz, setShowExtendQuiz] = useState(false);
+  const [additionalQuestions, setAdditionalQuestions] = useState(5);
+  const [preQuizExtraQuestions, setPreQuizExtraQuestions] = useState(0);
   const [timeLimit, setTimeLimit] = useState<number | undefined>(undefined);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [subjectName, setSubjectName] = useState<string>('');
@@ -234,8 +236,13 @@ function QuizContent(): JSX.Element {
     const modeDisplay = mode === 'timer' ? 'Timer Mode' : 'Normal Mode';
     const totalAvailable = quiz.availableQuestions?.length || 0;
     const sessionSize = quiz.sessionSize || 10;
+    const availableExtra = totalAvailable - sessionSize;
+    const finalQuestionCount = sessionSize + preQuizExtraQuestions;
 
     const handleStartQuiz = () => {
+      if (preQuizExtraQuestions > 0 && availableExtra > 0) {
+        quiz.addMoreQuestions(preQuizExtraQuestions);
+      }
       setHasStarted(true);
     };
 
@@ -276,8 +283,8 @@ function QuizContent(): JSX.Element {
               {/* Quiz Info Grid */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-indigo-50 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-indigo-600">{sessionSize}</div>
-                  <div className="text-xs text-gray-600">of {totalAvailable} Questions</div>
+                  <div className="text-2xl font-bold text-indigo-600">{finalQuestionCount}</div>
+                  <div className="text-xs text-gray-600">Questions</div>
                 </div>
                 <div className="bg-emerald-50 rounded-lg p-3 text-center">
                   <div className="text-2xl font-bold text-emerald-600">{levelDisplay}</div>
@@ -295,6 +302,70 @@ function QuizContent(): JSX.Element {
                 </div>
               </div>
 
+              {/* Add More Questions Section */}
+              {availableExtra > 0 && (
+                <div className="bg-purple-50 rounded-xl p-3 mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-gray-700 text-sm">Add More Questions:</span>
+                    <span className="text-xs text-purple-600">{availableExtra} more available</span>
+                  </div>
+
+                  {/* Slider */}
+                  <input
+                    type="range"
+                    min={0}
+                    max={Math.min(20, availableExtra)}
+                    value={preQuizExtraQuestions}
+                    onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
+                    className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mb-3"
+                  />
+
+                  {/* Dropdown and +/- Buttons */}
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() =>
+                        setPreQuizExtraQuestions(Math.max(0, preQuizExtraQuestions - 1))
+                      }
+                      disabled={preQuizExtraQuestions <= 0}
+                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Minus className="h-3 w-3" />
+                    </button>
+
+                    <select
+                      value={preQuizExtraQuestions}
+                      onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
+                      className="h-8 px-3 rounded-lg border border-purple-300 bg-white text-gray-700 font-semibold text-sm cursor-pointer"
+                    >
+                      {Array.from({ length: Math.min(20, availableExtra) + 1 }, (_, i) => (
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      ))}
+                    </select>
+
+                    <button
+                      onClick={() =>
+                        setPreQuizExtraQuestions(
+                          Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1)
+                        )
+                      }
+                      disabled={preQuizExtraQuestions >= Math.min(20, availableExtra)}
+                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </button>
+                  </div>
+
+                  {preQuizExtraQuestions > 0 && (
+                    <p className="text-center text-xs text-purple-600 mt-1">
+                      +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}{' '}
+                      will be added
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Mode Description */}
               <div className="bg-gray-50 rounded-lg p-3 mb-4">
                 <p className="text-gray-600 text-sm text-center">
@@ -309,7 +380,9 @@ function QuizContent(): JSX.Element {
                 onClick={handleStartQuiz}
                 className="w-full py-3 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-lg font-bold rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all"
               >
-                🚀 Start Quiz
+                {preQuizExtraQuestions > 0
+                  ? `🚀 Start Quiz (${finalQuestionCount} Questions)`
+                  : '🚀 Start Quiz'}
               </button>
             </div>
           </div>
@@ -595,7 +668,7 @@ function QuizContent(): JSX.Element {
             animate={{ scale: 1, opacity: 1 }}
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">Add More Questions</h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Quiz</h2>
 
             <div className="mb-4 space-y-3">
               <p className="text-gray-600">
@@ -609,8 +682,48 @@ function QuizContent(): JSX.Element {
                 </p>
               </div>
 
-              <p className="text-sm text-gray-500 text-center">
-                Add 10 more questions to continue your quiz?
+              <p className="text-sm text-gray-500">
+                How many additional questions would you like to add?
+              </p>
+
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setAdditionalQuestions(Math.max(1, additionalQuestions - 1))}
+                  disabled={additionalQuestions <= 1}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={Math.min(20, quiz.availableCount)}
+                  value={additionalQuestions}
+                  onChange={(e) =>
+                    setAdditionalQuestions(
+                      Math.max(
+                        1,
+                        Math.min(Math.min(20, quiz.availableCount), parseInt(e.target.value) || 1)
+                      )
+                    )
+                  }
+                  className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
+                />
+                <button
+                  onClick={() =>
+                    setAdditionalQuestions(
+                      Math.min(Math.min(20, quiz.availableCount), additionalQuestions + 1)
+                    )
+                  }
+                  disabled={additionalQuestions >= Math.min(20, quiz.availableCount)}
+                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  +
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-400">
+                New questions will be added without repeating any you&apos;ve already seen.
               </p>
             </div>
 
@@ -624,12 +737,16 @@ function QuizContent(): JSX.Element {
               {quiz.availableCount > 0 ? (
                 <button
                   onClick={() => {
-                    quiz.addMoreQuestions();
+                    quiz.addMoreQuestions(additionalQuestions);
                     setShowExtendQuiz(false);
+                    setTimeout(() => {
+                      quiz.goToNext();
+                    }, 100);
                   }}
-                  className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
+                  disabled={additionalQuestions > quiz.availableCount}
+                  className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
                 >
-                  Add 10 More
+                  Add & Continue
                 </button>
               ) : (
                 <div className="flex-1 rounded-lg bg-red-50 p-2 text-center text-xs font-semibold text-red-600 border border-red-200">

@@ -386,9 +386,9 @@ export function useQuiz(
   }, [state.status, state.startTime, state.score, state.answers]);
 
   // Add more questions to session
-  const addMoreQuestions = useCallback(() => {
+  const addMoreQuestions = useCallback((count: number) => {
     setState((prev) => {
-      const newSize = Math.min(prev.sessionSize + 10, prev.availableQuestions.length);
+      const newSize = Math.min(prev.sessionSize + count, prev.availableQuestions.length);
       return {
         ...prev,
         questions: prev.availableQuestions.slice(0, newSize),

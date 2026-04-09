@@ -77,7 +77,7 @@ export interface QuizActions {
   submitQuiz: () => void;
   pauseQuiz: () => void;
   resumeQuiz: () => void;
-  addMoreQuestions: () => void;
+  addMoreQuestions: (count: number) => void;
   handleSkip: () => void;
   jumpToQuestion: (index: number) => void;
   dismissUnvisited: () => void;
