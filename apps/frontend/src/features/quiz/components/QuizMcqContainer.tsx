@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useQuizFilters } from '../hooks/useQuizFilters';
 import { useSubjects } from '../hooks/useSubjects';
 import { useChapters } from '../hooks/useChapters';
@@ -41,11 +41,11 @@ interface ConfirmState {
 }
 
 export function QuizMcqContainer() {
-  const { filters, setFilter, resetFilters } = useQuizFilters();
+  const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } =
+    useQuizFilters();
 
   // ALL hooks must be called before any conditional returns
   // 1. State hooks (MUST be before error checks and query hooks)
-  const [pageSize, setPageSize] = useState(20);
   const [questionModal, setQuestionModal] = useState<QuestionModalState>({
     open: false,
     question: undefined,
@@ -71,15 +71,13 @@ export function QuizMcqContainer() {
   const subjectsQuery = useSubjects();
   const selectedSubject = subjectsQuery.data?.find((s) => s.slug === filters.subject);
   const chaptersQuery = useChapters(selectedSubject?.id);
-  const questionsQuery = useQuestions(filters, pageSize);
+  const questionsQuery = useQuestions(filters, page, pageSize);
   const filterCountsQuery = useFilterCounts(filters);
 
   // 3. Memo hooks
-  const questions = useMemo(
-    () => questionsQuery.data?.pages.flatMap((page) => page.data) ?? [],
-    [questionsQuery.data]
-  );
-  const total = questionsQuery.data?.pages[0]?.total ?? 0;
+  const questions = questionsQuery.data?.data ?? [];
+  const total = questionsQuery.data?.total ?? 0;
+  const totalPages = questionsQuery.data?.totalPages ?? 1;
 
   // 4. Error handling (AFTER all hooks)
   if (subjectsQuery.error) {
@@ -196,10 +194,13 @@ export function QuizMcqContainer() {
       <QuestionManager
         questions={questions}
         total={total}
+        page={page}
+        pageSize={pageSize}
+        totalPages={totalPages}
         isLoading={questionsQuery.isLoading}
         isFetching={questionsQuery.isFetching}
-        hasNextPage={questionsQuery.hasNextPage ?? false}
-        onLoadMore={questionsQuery.fetchNextPage}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
         onEdit={(q) =>
           setQuestionModal({
             open: true,
@@ -207,8 +208,6 @@ export function QuizMcqContainer() {
           })
         }
         statusFilter={filters.status || 'all'}
-        pageSize={pageSize}
-        onPageSizeChange={setPageSize}
       />
 
       <SubjectModal

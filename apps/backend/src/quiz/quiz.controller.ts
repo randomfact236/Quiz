@@ -240,7 +240,7 @@ export class QuizController {
   @ApiResponse({ status: 200, description: 'Returns paginated questions', type: Object })
   async getAllQuestions(
     @Query() query: QuizQueryDto
-  ): Promise<{ data: Question[]; total: number; nextCursor?: string; hasMore?: boolean }> {
+  ): Promise<{ data: Question[]; total: number; totalPages: number }> {
     const pagination = { page: query.page || 1, limit: query.limit || 10 };
     const filters = {
       status: query.status as any,
@@ -250,16 +250,11 @@ export class QuizController {
       search: query.search,
     };
 
-    const result = await this.quizService.findAllQuestionsWithCursor(
-      filters,
-      query.cursor || 'initial',
-      pagination.limit
-    );
+    const result = await this.quizService.findAllQuestions(pagination, filters);
     return {
       data: result.data,
       total: result.total,
-      nextCursor: result.nextCursor,
-      hasMore: result.hasMore,
+      totalPages: result.totalPages,
     };
   }
 

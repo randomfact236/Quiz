@@ -9,6 +9,8 @@ interface QuestionTableProps {
   onToggleSelectOne: (id: string) => void;
   onEdit: (question: QuizQuestion) => void;
   onDelete: (question: QuizQuestion) => void;
+  page?: number;
+  pageSize?: number;
 }
 
 const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
@@ -40,8 +42,11 @@ export function QuestionTable({
   onToggleSelectOne,
   onEdit,
   onDelete,
+  page = 1,
+  pageSize = 10,
 }: QuestionTableProps) {
   const isAllSelected = questions.length > 0 && selectedIds.size === questions.length;
+  const startIndex = (page - 1) * pageSize;
 
   return (
     <div className="overflow-x-auto rounded-xl bg-white shadow-md">
@@ -120,7 +125,7 @@ export function QuestionTable({
                       className="rounded border-gray-300"
                     />
                   </td>
-                  <td className="px-3 py-4 text-sm text-gray-600">{index + 1}</td>
+                  <td className="px-3 py-4 text-sm text-gray-600">{startIndex + index + 1}</td>
                   <td className="px-3 py-3 align-top">
                     <p className="text-sm font-medium text-gray-800 line-clamp-2">
                       {question.question}

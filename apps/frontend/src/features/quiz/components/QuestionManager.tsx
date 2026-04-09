@@ -1,8 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Trash2, Loader2 } from 'lucide-react';
+import {
+  Trash2,
+  Loader2,
+  ChevronFirst,
+  ChevronLast,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import type { QuizQuestion } from '@/lib/quiz-api';
 import { useQuestionMutation } from '../hooks';
@@ -11,14 +18,15 @@ import { QuestionTable } from './QuestionTable';
 interface QuestionManagerProps {
   questions: QuizQuestion[];
   total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
   isLoading: boolean;
   isFetching: boolean;
-  hasNextPage: boolean;
-  onLoadMore: () => void;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (size: number) => void;
   onEdit: (question: QuizQuestion) => void;
   statusFilter?: string;
-  pageSize: number;
-  onPageSizeChange: (size: number) => void;
 }
 
 const PAGE_SIZES = [10, 25, 50];
@@ -28,17 +36,52 @@ interface TrashConfirmState {
   question: QuizQuestion | null;
 }
 
+function getPageNumbers(current: number, total: number): (number | string)[] {
+  const pages: (number | string)[] = [];
+  const windowSize = 5;
+
+  if (total <= windowSize) {
+    for (let i = 1; i <= total; i++) pages.push(i);
+    return pages;
+  }
+
+  const halfWindow = Math.floor(windowSize / 2);
+  let start = Math.max(1, current - halfWindow);
+  let end = Math.min(total, start + windowSize - 1);
+
+  if (end - start < windowSize - 1) {
+    start = Math.max(1, end - windowSize + 1);
+  }
+
+  if (start > 1) {
+    pages.push(1);
+    if (start > 2) pages.push('...');
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (end < total) {
+    if (end < total - 1) pages.push('...');
+    pages.push(total);
+  }
+
+  return pages;
+}
+
 export function QuestionManager({
   questions,
   total,
+  page,
+  pageSize,
+  totalPages,
   isLoading,
   isFetching,
-  hasNextPage,
-  onLoadMore,
+  onPageChange,
+  onPageSizeChange,
   onEdit,
   statusFilter = 'all',
-  pageSize,
-  onPageSizeChange,
 }: QuestionManagerProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [trashConfirm, setTrashConfirm] = useState<TrashConfirmState>({
@@ -46,26 +89,8 @@ export function QuestionManager({
     question: null,
   });
   const [isTrashing, setIsTrashing] = useState(false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const { bulkUpdateStatusAsync, bulkDeleteAsync, isProcessing } = useQuestionMutation();
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting && hasNextPage && !isFetching) {
-          onLoadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetching, onLoadMore]);
 
   const toggleSelectAll = useCallback(() => {
     if (selectedIds.size === questions.length) {
@@ -131,24 +156,7 @@ export function QuestionManager({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600 dark:text-gray-400">Show:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
-          >
-            {PAGE_SIZES.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-          <span className="text-sm text-gray-600 dark:text-gray-400">per page</span>
-        </div>
-        <span className="text-sm text-gray-600 dark:text-gray-400">Total: {total} questions</span>
-      </div>
+      <span className="text-sm text-gray-600 dark:text-gray-400">Total: {total} questions</span>
 
       {selectedIds.size > 0 && (
         <BulkActionToolbar
@@ -175,15 +183,85 @@ export function QuestionManager({
           onToggleSelectOne={toggleSelectOne}
           onEdit={onEdit}
           onDelete={handleDelete}
+          page={page}
+          pageSize={pageSize}
         />
       )}
 
-      <div ref={loadMoreRef} className="py-4 text-center">
-        {isFetching && (
-          <span className="text-sm text-gray-500 dark:text-gray-400">Loading more...</span>
-        )}
-        {!hasNextPage && questions.length > 0 && (
-          <span className="text-sm text-gray-500 dark:text-gray-400">No more questions</span>
+      <div className="flex items-center justify-between py-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600 dark:text-gray-400">Show:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => onPageSizeChange(Number(e.target.value))}
+            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
+          >
+            {PAGE_SIZES.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+          <span className="text-sm text-gray-600 dark:text-gray-400">per page</span>
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => onPageChange(1)}
+              disabled={page === 1 || isFetching}
+              className="p-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="First page"
+            >
+              <ChevronFirst className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onPageChange(page - 1)}
+              disabled={page === 1 || isFetching}
+              className="p-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {getPageNumbers(page, totalPages).map((pageNum, index) =>
+              pageNum === '...' ? (
+                <span key={`ellipsis-${index}`} className="px-2 py-1">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={pageNum}
+                  onClick={() => onPageChange(pageNum as number)}
+                  disabled={isFetching}
+                  className={`px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed ${
+                    page === pageNum
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={() => onPageChange(page + 1)}
+              disabled={page === totalPages || isFetching}
+              className="p-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Next page"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onPageChange(totalPages)}
+              disabled={page === totalPages || isFetching}
+              className="p-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Last page"
+            >
+              <ChevronLast className="w-4" />
+            </button>
+          </div>
         )}
       </div>
 

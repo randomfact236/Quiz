@@ -327,8 +327,7 @@ export async function getAllQuestions(
 ): Promise<{
   data: QuizQuestion[];
   total: number;
-  nextCursor?: string | undefined;
-  hasMore?: boolean | undefined;
+  totalPages: number;
 }> {
   const params = new URLSearchParams();
   if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
@@ -342,14 +341,12 @@ export async function getAllQuestions(
   const response = await api.get<{
     data: QuizQuestion[];
     total: number;
-    nextCursor?: string;
-    hasMore?: boolean;
+    totalPages: number;
   }>(`/quiz/questions?${params.toString()}`, { isAdmin });
   return {
     data: response.data.data,
     total: response.data.total,
-    nextCursor: response.data.nextCursor,
-    hasMore: response.data.hasMore,
+    totalPages: response.data.totalPages,
   };
 }
 

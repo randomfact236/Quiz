@@ -280,7 +280,7 @@ export class QuizService {
       search?: string;
       subjectSlug?: string;
     }
-  ): Promise<{ data: Question[]; total: number }> {
+  ): Promise<{ data: Question[]; total: number; totalPages: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
 
@@ -327,7 +327,8 @@ export class QuizService {
           .orderBy('question.updatedAt', 'DESC')
           .getManyAndCount();
 
-        return { data, total };
+        const totalPages = Math.ceil(total / limit);
+        return { data, total, totalPages };
       },
       this.CACHE_TTL.QUESTIONS
     );
