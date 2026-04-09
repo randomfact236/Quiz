@@ -195,26 +195,23 @@ export async function updateChapter(
 // ============================================================================
 
 export async function getQuestionsByChapter(
-  chapterId: string,
-  page: number = 1,
-  limit: number = 100
-): Promise<PaginatedResponse<QuizQuestion>> {
-  const response = await api.get<PaginatedResponse<QuizQuestion>>(
-    `/quiz/questions/${chapterId}?page=${page}&limit=${limit}`
+  chapterId: string
+): Promise<{ data: QuizQuestion[]; total: number }> {
+  const response = await api.get<{ data: QuizQuestion[]; total: number }>(
+    `/quiz/questions/${chapterId}`
   );
   return response.data;
 }
 
 export async function getRandomQuestions(
-  level: string,
-  count: number = 10
-): Promise<QuizQuestion[]> {
-  const response = await api.get<QuizQuestion[]>(`/quiz/random/${level}?count=${count}`);
+  level: string
+): Promise<{ data: QuizQuestion[]; total: number }> {
+  const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/random/${level}`);
   return response.data;
 }
 
-export async function getMixedQuestions(count: number = 50): Promise<QuizQuestion[]> {
-  const response = await api.get<QuizQuestion[]>(`/quiz/mixed?count=${count}`);
+export async function getMixedQuestions(): Promise<{ data: QuizQuestion[]; total: number }> {
+  const response = await api.get<{ data: QuizQuestion[]; total: number }>(`/quiz/mixed`);
   return response.data;
 }
 
@@ -228,30 +225,23 @@ export interface QuestionFilters {
 export async function getQuestionsBySubject(
   subjectSlug: string,
   filters: QuestionFilters = {},
-  page: number = 1,
-  limit: number = 10,
   isAdmin: boolean = false
-): Promise<{ data: QuizQuestion[]; total: number; page: number; limit: number }> {
-  let url = `/quiz/subjects/${subjectSlug}/questions?page=${page}&limit=${limit}`;
+): Promise<{ data: QuizQuestion[]; total: number }> {
+  let url = `/quiz/subjects/${subjectSlug}/questions`;
   if (filters.status) {
-    url += `&status=${filters.status}`;
+    url += `?status=${filters.status}`;
   }
   if (filters.level) {
-    url += `&level=${filters.level}`;
+    url += `${filters.status ? '&' : '?'}level=${filters.level}`;
   }
   if (filters.chapter) {
-    url += `&chapter=${encodeURIComponent(filters.chapter)}`;
+    url += `${filters.status || filters.level ? '&' : '?'}chapter=${encodeURIComponent(filters.chapter)}`;
   }
   if (filters.search) {
-    url += `&search=${encodeURIComponent(filters.search)}`;
+    url += `${filters.status || filters.level || filters.chapter ? '&' : '?'}search=${encodeURIComponent(filters.search)}`;
   }
   const response = await api.get<{ data: QuizQuestion[]; total: number }>(url, { isAdmin });
-  return {
-    data: response.data.data,
-    total: response.data.total,
-    page,
-    limit,
-  };
+  return response.data;
 }
 
 export async function getQuestionCountBySubject(subjectSlug: string): Promise<number> {

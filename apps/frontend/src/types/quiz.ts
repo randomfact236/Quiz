@@ -55,6 +55,8 @@ export interface QuizConfig {
 /** Quiz State for useQuiz hook */
 export interface QuizState {
   questions: Question[];
+  availableQuestions: Question[];
+  sessionSize: number;
   currentQuestionIndex: number;
   answers: Record<string, string>;
   score: number;
@@ -75,7 +77,7 @@ export interface QuizActions {
   submitQuiz: () => void;
   pauseQuiz: () => void;
   resumeQuiz: () => void;
-  extendQuiz: (additionalCount: number) => void;
+  addMoreQuestions: () => void;
   handleSkip: () => void;
   jumpToQuestion: (index: number) => void;
   dismissUnvisited: () => void;
@@ -91,7 +93,7 @@ export interface QuizComputed {
   hasAnsweredCurrent: boolean;
   totalQuestions: number;
   answeredCount: number;
-  availableQuestions: number; // Questions available for extending
+  availableCount: number; // Questions available for extending
 }
 
 /** Combined Quiz Hook Return */
