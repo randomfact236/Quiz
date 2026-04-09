@@ -13,7 +13,17 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RotateCcw, Share2, Home, Trophy, ChevronDown, ChevronUp, BookOpen, List } from 'lucide-react';
+import {
+  ArrowLeft,
+  RotateCcw,
+  Share2,
+  Home,
+  Trophy,
+  ChevronDown,
+  ChevronUp,
+  BookOpen,
+  List,
+} from 'lucide-react';
 import toast from '@/lib/toast';
 
 import type { QuizSession, QuizResult } from '@/types/quiz';
@@ -46,7 +56,7 @@ function calculateResult(session: QuizSession): QuizResult {
   };
 
   session.questions.forEach((q) => {
-    const isCorrect = session.answers[q.id] === q.correctAnswer;
+    const isCorrect = session.answers[q.id] === q.correctLetter;
 
     byDifficulty[q.level].total++;
     if (isCorrect) {
@@ -57,9 +67,7 @@ function calculateResult(session: QuizSession): QuizResult {
     }
   });
 
-  const percentage = session.maxScore > 0
-    ? (session.score / session.maxScore) * 100
-    : 0;
+  const percentage = session.maxScore > 0 ? (session.score / session.maxScore) * 100 : 0;
 
   return {
     session,
@@ -237,46 +245,41 @@ function ResultsContent(): JSX.Element {
           </h3>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-            {(['easy', 'medium', 'hard', 'expert', 'extreme'] as const).map(
-              (level) => {
-                const data = byDifficulty[level];
-                const pct =
-                  data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
+            {(['easy', 'medium', 'hard', 'expert', 'extreme'] as const).map((level) => {
+              const data = byDifficulty[level];
+              const pct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
 
-                return (
-                  <div
-                    key={level}
-                    className={`rounded-xl p-3 text-center ${data.total === 0
+              return (
+                <div
+                  key={level}
+                  className={`rounded-xl p-3 text-center ${
+                    data.total === 0
                       ? 'bg-gray-100'
                       : pct >= 70
                         ? 'bg-green-50'
                         : pct >= 50
                           ? 'bg-yellow-50'
                           : 'bg-red-50'
-                      }`}
-                  >
-                    <p className="mb-1 text-xs font-medium uppercase text-gray-500">
-                      {level}
-                    </p>
-                    <p
-                      className={`text-xl font-bold ${data.total === 0
+                  }`}
+                >
+                  <p className="mb-1 text-xs font-medium uppercase text-gray-500">{level}</p>
+                  <p
+                    className={`text-xl font-bold ${
+                      data.total === 0
                         ? 'text-gray-400'
                         : pct >= 70
                           ? 'text-green-600'
                           : pct >= 50
                             ? 'text-yellow-600'
                             : 'text-red-600'
-                        }`}
-                    >
-                      {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
-                    </p>
-                    {data.total > 0 && (
-                      <p className="text-xs text-gray-500">{pct}%</p>
-                    )}
-                  </div>
-                );
-              }
-            )}
+                    }`}
+                  >
+                    {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
+                  </p>
+                  {data.total > 0 && <p className="text-xs text-gray-500">{pct}%</p>}
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 
