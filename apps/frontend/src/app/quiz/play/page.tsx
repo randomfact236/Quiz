@@ -97,7 +97,11 @@ function QuizContent(): JSX.Element {
   // Load subject data from API
   useEffect(() => {
     const loadSubjectData = async () => {
-      if (!subject) return;
+      if (!subject || subject === 'all') {
+        setSubjectName('All Subjects');
+        setSubjectEmoji('📚');
+        return;
+      }
       try {
         const subjectData = await getSubjectBySlug(subject);
         setSubjectName(subjectData.name);
