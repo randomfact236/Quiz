@@ -174,70 +174,86 @@ export function useQuiz(
 
   const [originalTotal, setOriginalTotal] = useState(0);
 
-  // Load questions on mount
+  // Store initial startFromShare once - never update after
+  const startFromShareRef = useRef(startFromShare);
+
+  // Effect 1: Load questions when subject/chapter/level changes
   useEffect(() => {
+    const controller = new AbortController();
+
     const load = async () => {
-      const { all, total } = await loadQuestions(subject, chapter, level);
-      setOriginalTotal(total);
+      try {
+        const { all, total } = await loadQuestions(subject, chapter, level);
+        if (controller.signal.aborted) return;
 
-      if (all.length === 0) {
-        setState((prev) => ({ ...prev, status: 'completed' }));
-        return;
+        setOriginalTotal(total);
+
+        if (all.length === 0) {
+          setState((prev) => ({ ...prev, status: 'completed' }));
+          return;
+        }
+
+        // Set initial index here where 'all' is already loaded
+        let initialIndex = 0;
+        if (startFromShareRef.current && startFromShareRef.current > 1) {
+          initialIndex = Math.min(startFromShareRef.current - 1, all.length - 1);
+        }
+
+        const initialQuestions = all.slice(0, 10);
+        const initialVisited = new Set<string>();
+        const initQuestion = initialQuestions[initialIndex];
+        if (initQuestion) {
+          initialVisited.add(initQuestion.id);
+        }
+
+        sessionRef.current = {
+          id: generateUUID(),
+          subject,
+          subjectName: await getSubjectName(subject),
+          chapter,
+          level,
+          questions: initialQuestions,
+          answers: {},
+          score: 0,
+          maxScore: initialQuestions.length,
+          startedAt: new Date().toISOString(),
+          timeTaken: 0,
+          status: 'in-progress',
+        };
+
+        const sid = sessionRef.current.id;
+
+        setState((prev) => ({
+          ...prev,
+          availableQuestions: all,
+          questions: initialQuestions,
+          sessionSize: 10,
+          currentQuestionIndex: initialIndex,
+          answers: {},
+          score: 0,
+          timeRemaining: timeLimit || 0,
+          status: 'playing',
+          startTime: Date.now(),
+          sessionId: sid,
+          visited: initialVisited,
+          manuallySkipped: new Set<string>(),
+          dismissedUnvisited: false,
+        }));
+
+        saveCurrentSession(sessionRef.current);
+      } catch {
+        if (controller.signal.aborted) return;
       }
-
-      const initialQuestions = all.slice(0, 10);
-
-      sessionRef.current = {
-        id: generateUUID(),
-        subject,
-        subjectName: await getSubjectName(subject),
-        chapter,
-        level,
-        questions: initialQuestions,
-        answers: {},
-        score: 0,
-        maxScore: initialQuestions.length,
-        startedAt: new Date().toISOString(),
-        timeTaken: 0,
-        status: 'in-progress',
-      };
-
-      const sid = sessionRef.current.id;
-
-      // Clamp startFromShare to valid range
-      let initialIndex = 0;
-      if (startFromShare && startFromShare > 1) {
-        initialIndex = Math.min(startFromShare - 1, initialQuestions.length - 1);
-      }
-
-      const initialVisited = new Set<string>();
-      const initQuestion = initialQuestions[initialIndex];
-      if (initQuestion) {
-        initialVisited.add(initQuestion.id);
-      }
-
-      setState((prev) => ({
-        ...prev,
-        availableQuestions: all,
-        questions: initialQuestions,
-        sessionSize: 10,
-        currentQuestionIndex: initialIndex,
-        answers: {},
-        score: 0,
-        timeRemaining: timeLimit || 0,
-        status: 'playing',
-        startTime: Date.now(),
-        sessionId: sid,
-        visited: initialVisited,
-        manuallySkipped: new Set<string>(),
-        dismissedUnvisited: false,
-      }));
-
-      saveCurrentSession(sessionRef.current);
     };
 
     load();
-  }, [subject, chapter, level, timeLimit, startFromShare]);
+    return () => controller.abort();
+  }, [subject, chapter, level]);
+
+  // Effect 2: Sync timeRemaining when timeLimit changes
+  useEffect(() => {
+    setState((prev) => ({ ...prev, timeRemaining: timeLimit || 0 }));
+  }, [timeLimit]);
 
   // Timer effect
   useEffect(() => {
@@ -507,6 +523,6 @@ export function useQuiz(
     handleSkip,
     jumpToQuestion,
     dismissUnvisited,
-    startFromShare: startFromShare || null,
+    startFromShare: startFromShareRef.current || null,
   };
 }

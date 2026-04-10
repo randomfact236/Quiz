@@ -55,6 +55,7 @@ function QuizContent(): JSX.Element {
   const level = searchParams?.get('level') || '';
   const mode = searchParams?.get('mode') || 'normal';
   const questionParam = parseInt(searchParams?.get('question') || '0', 10) || null;
+  const type = searchParams?.get('type') || '';
 
   // Share toast state
   const [shareToast, setShareToast] = useState<string | null>(null);
@@ -404,7 +405,13 @@ function QuizContent(): JSX.Element {
             {/* Exit Button */}
             <div className="mb-1">
               <Link
-                href={`/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
+                href={
+                  type === 'challenge' && mode === 'practice'
+                    ? '/quiz/practice-mode'
+                    : type === 'challenge' && mode === 'timer'
+                      ? '/quiz/timer-challenge'
+                      : `/quiz?subject=${subject}&chapter=${encodeURIComponent(chapter)}`
+                }
                 className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -422,11 +429,6 @@ function QuizContent(): JSX.Element {
               </div>
 
               <div className="flex items-center gap-2">
-                {/* DEBUG VISIBLE */}
-                <span className="text-xs text-white bg-black px-2 py-0.5 rounded">
-                  skip={quiz.manuallySkipped.size} param={questionParam}
-                </span>
-
                 {/* Skipped Button */}
                 {quiz.manuallySkipped.size > 0 && (
                   <button
@@ -444,13 +446,13 @@ function QuizContent(): JSX.Element {
                 )}
 
                 {/* Unvisited Button - Only shown when arrived via shared link and not dismissed */}
-                {questionParam && questionParam > 1 && !quiz.dismissedUnvisited && (
+                {quiz.startFromShare && quiz.startFromShare > 1 && !quiz.dismissedUnvisited && (
                   <button
                     onClick={quiz.dismissUnvisited}
                     className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-600 transition-colors"
                   >
                     <Link2 className="h-3 w-3" />
-                    Unvisited ({questionParam - 1})
+                    Unvisited ({(quiz.startFromShare ?? 0) - 1})
                   </button>
                 )}
               </div>
