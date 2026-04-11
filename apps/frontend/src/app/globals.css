@@ -56,8 +56,12 @@
 
   body {
     @apply bg-white text-secondary-900 dark:bg-secondary-900 dark:text-secondary-100;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   html {
@@ -142,4 +146,16 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+}
+
+#nprogress .bar {
+  background: #6366f1;
+  height: 3px;
+  box-shadow: 0 0 8px #6366f1;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #6366f1,
+    0 0 5px #6366f1;
 }

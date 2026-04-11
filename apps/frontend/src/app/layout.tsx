@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
 import DemographicsPopup from '@/components/DemographicsPopup';
+import { NavigationProgress } from '@/components/NavigationProgress';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -85,6 +87,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col bg-white dark:bg-secondary-900 font-sans antialiased transition-colors duration-300">
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <Providers>
           <a
             href="#main-content"
