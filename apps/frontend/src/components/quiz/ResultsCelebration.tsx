@@ -51,21 +51,14 @@ export function ResultsCelebration({
     }
 
     const percentage = (score / maxScore) * 100;
-    
-    // Determine tier and emoji set
-    let emojiSet: string[];
-    let count: number;
-    
-    if (percentage >= 80) {
-      emojiSet = CELEBRATION_EMOJIS.perfect;
-      count = 20;
-    } else if (percentage >= 40) {
-      emojiSet = CELEBRATION_EMOJIS.good;
-      count = 15;
-    } else {
-      emojiSet = CELEBRATION_EMOJIS.tryAgain;
-      count = 12;
+
+    if (percentage <= 70) {
+      setEmojis([]);
+      return;
     }
+
+    const emojiSet = CELEBRATION_EMOJIS.perfect;
+    const count = 15;
 
     // Generate celebration emojis
     const newEmojis: CelebrationEmoji[] = Array.from({ length: count }, (_, i) => ({
@@ -92,14 +85,14 @@ export function ResultsCelebration({
       {emojis.map((emoji) => (
         <motion.span
           key={emoji.id}
-          initial={{ 
+          initial={{
             y: '100vh',
             x: `${emoji.x}vw`,
             scale: 0,
             opacity: 0,
             rotate: 0,
           }}
-          animate={{ 
+          animate={{
             y: '-20vh',
             scale: [0, emoji.scale, emoji.scale * 0.8, 0],
             opacity: [0, 1, 1, 0],

@@ -101,8 +101,7 @@ function ResultsContent(): JSX.Element {
     }
 
     setResult(calculateResult(session));
-    // Trigger celebration after a short delay
-    setTimeout(() => setShowCelebration(true), 500);
+    setShowCelebration(true);
   }, [sessionId, router]);
 
   // Share results

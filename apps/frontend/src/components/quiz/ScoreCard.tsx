@@ -8,6 +8,7 @@
 
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Clock, Target } from 'lucide-react';
 import { formatTimeCompact } from '@/lib/utils';
@@ -32,6 +33,23 @@ export function ScoreCard({
   grade,
   timeTaken,
 }: ScoreCardProps): JSX.Element {
+  const [displayScore, setDisplayScore] = useState(0);
+
+  useEffect(() => {
+    if (score === 0) {
+      setDisplayScore(0);
+      return;
+    }
+
+    let current = 0;
+    const timer = setInterval(() => {
+      current += 1;
+      setDisplayScore(current);
+      if (current >= score) clearInterval(timer);
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [score]);
   // Get grade color
   const getGradeColor = (g: string): string => {
     switch (g) {
@@ -57,7 +75,7 @@ export function ScoreCard({
     if (p >= 80) return 'Great job! 👏';
     if (p >= 70) return 'Good work! 👍';
     if (p >= 60) return 'Keep practicing! 💪';
-    return 'Don\'t give up! 📚';
+    return "Don't give up! 📚";
   };
 
   return (
@@ -94,7 +112,7 @@ export function ScoreCard({
         <div className="rounded-xl bg-indigo-50 p-4 text-center">
           <Trophy className="mx-auto mb-2 h-6 w-6 text-indigo-500" />
           <p className="text-2xl font-bold text-indigo-700">
-            {score}/{total}
+            {displayScore}/{total}
           </p>
           <p className="text-xs text-indigo-600">Correct Answers</p>
         </div>
@@ -102,18 +120,14 @@ export function ScoreCard({
         {/* Percentage */}
         <div className="rounded-xl bg-green-50 p-4 text-center">
           <Target className="mx-auto mb-2 h-6 w-6 text-green-500" />
-          <p className="text-2xl font-bold text-green-700">
-            {Math.round(percentage)}%
-          </p>
+          <p className="text-2xl font-bold text-green-700">{Math.round(percentage)}%</p>
           <p className="text-xs text-green-600">Accuracy</p>
         </div>
 
         {/* Time */}
         <div className="rounded-xl bg-blue-50 p-4 text-center">
           <Clock className="mx-auto mb-2 h-6 w-6 text-blue-500" />
-          <p className="text-2xl font-bold text-blue-700">
-            {formatTimeCompact(timeTaken)}
-          </p>
+          <p className="text-2xl font-bold text-blue-700">{formatTimeCompact(timeTaken)}</p>
           <p className="text-xs text-blue-600">Time Taken</p>
         </div>
       </div>
