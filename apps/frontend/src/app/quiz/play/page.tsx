@@ -41,21 +41,29 @@ function QuizContent(): JSX.Element {
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [subjectName, setSubjectName] = useState<string>('');
   const [subjectEmoji, setSubjectEmoji] = useState<string>('📚');
-  const [hasStarted, setHasStarted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Get URL params first (needed for hasStarted)
+  const subject = searchParams?.get('subject') || '';
+  const chapter = searchParams?.get('chapter') || '';
+  const level = searchParams?.get('level') || '';
+  const mode = searchParams?.get('mode') || 'normal';
+  const questionParam = parseInt(searchParams?.get('question') || '0', 10) || null;
+  const totalParam = parseInt(searchParams?.get('total') || '0', 10) || null;
+  const isSharedLink = searchParams?.get('shared') === 'true';
+  const type = searchParams?.get('type') || '';
+
+  const [hasStarted, setHasStarted] = useState(() => isSharedLink || !!questionParam);
 
   // Ref to control QuestionCard bubble effects
   const questionCardRef = useRef<QuestionCardRef>(null);
 
   // Track which questions have shown bubbles (persists across navigation)
   const shownBubblesRef = useRef<Set<string>>(new Set());
-
-  // Get URL params
-  const subject = searchParams?.get('subject') || '';
-  const chapter = searchParams?.get('chapter') || '';
-  const level = searchParams?.get('level') || '';
-  const mode = searchParams?.get('mode') || 'normal';
-  const questionParam = parseInt(searchParams?.get('question') || '0', 10) || null;
-  const type = searchParams?.get('type') || '';
 
   // Share toast state
   const [shareToast, setShareToast] = useState<string | null>(null);
@@ -127,7 +135,18 @@ function QuizContent(): JSX.Element {
   const timerMode = isTimerMode ? 'per-question' : undefined;
 
   // Use quiz hook
-  const quiz = useQuiz(subject, chapter, level, timeLimit, timerMode, questionParam);
+  const quiz = useQuiz(
+    subject,
+    chapter,
+    level,
+    timeLimit,
+    timerMode,
+    questionParam,
+    totalParam,
+    mode,
+    type,
+    isSharedLink
+  );
 
   // Redirect to results when completed
   useEffect(() => {
@@ -152,8 +171,12 @@ function QuizContent(): JSX.Element {
   // Share handler
   const handleShare = useCallback(() => {
     if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('question', String(quiz.currentQuestionIndex + 1));
+      url.searchParams.set('total', String(quiz.sessionSize));
+      url.searchParams.set('shared', 'true');
       navigator.clipboard
-        .writeText(window.location.href)
+        .writeText(url.toString())
         .then(() => {
           setShareToast(
             `Link copied! Question ${quiz.currentQuestionIndex + 1} of ${quiz.totalQuestions}`
@@ -165,7 +188,7 @@ function QuizContent(): JSX.Element {
           setTimeout(() => setShareToast(null), 2000);
         });
     }
-  }, [quiz.currentQuestionIndex, quiz.totalQuestions]);
+  }, [quiz.currentQuestionIndex, quiz.totalQuestions, quiz.sessionSize]);
 
   // Get next skipped question index
   const getNextSkippedIndex = useCallback((): number | null => {
@@ -188,6 +211,44 @@ function QuizContent(): JSX.Element {
     const idx = allSkippedIndices[0];
     return idx !== undefined ? idx : null;
   }, [quiz.manuallySkipped, quiz.questions, quiz.currentQuestionIndex]);
+
+  // Resume prompt modal
+  if (isMounted && quiz.showResumePrompt && quiz.pendingResumeState) {
+    const saved = quiz.pendingResumeState;
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+          <h2 className="text-xl font-bold mb-2">Resume Quiz?</h2>
+          <p className="text-gray-600 mb-1">You have an unfinished session from earlier.</p>
+          <p className="text-sm text-gray-500 mb-4">
+            Question <strong>{saved.currentQuestionIndex + 1}</strong> of{' '}
+            <strong>{saved.sessionSize}</strong> —{' '}
+            <strong>{Object.keys(saved.answers).length}</strong> answered
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                quiz.handleStartFresh();
+                setHasStarted(false);
+              }}
+              className="flex-1 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300"
+            >
+              Start Fresh
+            </button>
+            <button
+              onClick={() => {
+                quiz.handleResumeSession();
+                setHasStarted(true);
+              }}
+              className="flex-1 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
+            >
+              Resume Q{saved.currentQuestionIndex + 1}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state
   if (quiz.status === 'loading' || isLoadingSettings) {
@@ -450,15 +511,18 @@ function QuizContent(): JSX.Element {
                 )}
 
                 {/* Unvisited Button - Only shown when arrived via shared link and not dismissed */}
-                {quiz.startFromShare && quiz.startFromShare > 1 && !quiz.dismissedUnvisited && (
-                  <button
-                    onClick={quiz.dismissUnvisited}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-600 transition-colors"
-                  >
-                    <Link2 className="h-3 w-3" />
-                    Unvisited ({(quiz.startFromShare ?? 0) - 1})
-                  </button>
-                )}
+                {isSharedLink &&
+                  quiz.startFromShare &&
+                  quiz.startFromShare > 1 &&
+                  !quiz.dismissedUnvisited && (
+                    <button
+                      onClick={quiz.dismissUnvisited}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-600 transition-colors"
+                    >
+                      <Link2 className="h-3 w-3" />
+                      Unvisited ({(quiz.startFromShare ?? 0) - 1})
+                    </button>
+                  )}
               </div>
 
               {/* Timer Display */}
@@ -713,7 +777,7 @@ function QuizContent(): JSX.Element {
                       )
                     )
                   }
-                  className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
+                  className="h-10 w-20 rounded-lg border border-gray-300 bg-white text-center font-semibold text-gray-700"
                 />
                 <button
                   onClick={() =>

@@ -12,6 +12,13 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Question, QuizSession, QuizState, QuizComputed, UseQuizReturn } from '@/types/quiz';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
 import {
+  saveQuizResume,
+  loadQuizResume,
+  clearQuizResume,
+  isQuizResumeMatch,
+  QuizResumeState,
+} from '@/lib/quiz-resume';
+import {
   getQuestionsBySubject,
   getQuestionsByChapter,
   getRandomQuestions,
@@ -54,14 +61,12 @@ function calculateScore(questions: Question[], answers: Record<string, string>):
     const isOpenEnded = q.level === 'extreme';
 
     if (isOpenEnded) {
-      // Open-ended: compare normalized text
       const userAnswer = answers[q.id]?.toLowerCase().trim() || '';
       const correctAnswer = q.correctAnswer?.toLowerCase().trim() || '';
       if (userAnswer === correctAnswer) {
         score++;
       }
     } else {
-      // MCQ: compare letters
       if (answers[q.id] === q.correctLetter) {
         score++;
       }
@@ -148,18 +153,61 @@ export function useQuiz(
   subject: string,
   chapter: string,
   level: string,
-  timeLimit?: number, // in seconds, undefined = no limit
-  timerMode: 'total' | 'per-question' = 'per-question', // 'total' = whole quiz, 'per-question' = per question
-  startFromShare?: number | null // 1-based question number from URL, null = fresh start
+  timeLimit?: number,
+  timerMode?: 'total' | 'per-question',
+  startFromShare?: number | null,
+  initialTotal?: number | null,
+  mode?: string,
+  type?: string,
+  isSharedLink?: boolean
 ): UseQuizReturn {
-  // Session ref (persists across re-renders)
   const sessionRef = useRef<QuizSession | null>(null);
 
-  // State
+  const startFromShareRef = useRef(startFromShare);
+  const initialTotalRef = useRef(initialTotal || 10);
+
+  const mountDecisionRef = useRef<{
+    resumeSession: QuizResumeState | null;
+    startIndex: number;
+    sessionSize: number;
+    isShared: boolean;
+  } | null>(null);
+
+  if (mountDecisionRef.current === null) {
+    const isShared = isSharedLink ?? false;
+    let resumeSession: QuizResumeState | null = null;
+
+    if (!isShared) {
+      const saved = loadQuizResume();
+      const currentMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+      if (saved && isQuizResumeMatch(saved, subject, chapter, level, currentMode)) {
+        resumeSession = saved;
+      }
+    }
+
+    mountDecisionRef.current = {
+      resumeSession,
+      startIndex: isShared
+        ? startFromShare
+          ? startFromShare - 1
+          : 0
+        : resumeSession
+          ? resumeSession.currentQuestionIndex
+          : 0,
+      sessionSize: isShared ? initialTotal || 10 : resumeSession ? resumeSession.sessionSize : 10,
+      isShared,
+    };
+  }
+
+  const [showResumePrompt, setShowResumePrompt] = useState(
+    () => mountDecisionRef.current?.resumeSession !== null
+  );
+  const [pendingResumeState] = useState(() => mountDecisionRef.current?.resumeSession ?? null);
+
   const [state, setState] = useState<QuizState>({
     questions: [],
     availableQuestions: [],
-    sessionSize: 10,
+    sessionSize: mountDecisionRef.current.sessionSize,
     currentQuestionIndex: 0,
     answers: {},
     score: 0,
@@ -173,114 +221,97 @@ export function useQuiz(
   });
 
   const [originalTotal, setOriginalTotal] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
 
-  // Store initial startFromShare once - never update after
-  const startFromShareRef = useRef(startFromShare);
-
-  // Effect 1: Load questions when subject/chapter/level changes
   useEffect(() => {
+    if (mountDecisionRef.current?.resumeSession) return;
+
     const controller = new AbortController();
 
     const load = async () => {
-      try {
-        const { all, total } = await loadQuestions(subject, chapter, level);
-        if (controller.signal.aborted) return;
+      if (controller.signal.aborted) return;
 
-        setOriginalTotal(total);
+      const { all, total } = await loadQuestions(subject, chapter, level);
+      if (controller.signal.aborted) return;
 
-        if (all.length === 0) {
-          setState((prev) => ({ ...prev, status: 'completed' }));
-          return;
-        }
+      setOriginalTotal(total);
 
-        // Set initial index here where 'all' is already loaded
-        let initialIndex = 0;
-        if (startFromShareRef.current && startFromShareRef.current > 1) {
-          initialIndex = Math.min(startFromShareRef.current - 1, all.length - 1);
-        }
-
-        const initialQuestions = all.slice(0, 10);
-        const initialVisited = new Set<string>();
-        const initQuestion = initialQuestions[initialIndex];
-        if (initQuestion) {
-          initialVisited.add(initQuestion.id);
-        }
-
-        sessionRef.current = {
-          id: generateUUID(),
-          subject,
-          subjectName: await getSubjectName(subject),
-          chapter,
-          level,
-          questions: initialQuestions,
-          answers: {},
-          score: 0,
-          maxScore: initialQuestions.length,
-          startedAt: new Date().toISOString(),
-          timeTaken: 0,
-          status: 'in-progress',
-        };
-
-        const sid = sessionRef.current.id;
-
-        setState((prev) => ({
-          ...prev,
-          availableQuestions: all,
-          questions: initialQuestions,
-          sessionSize: 10,
-          currentQuestionIndex: initialIndex,
-          answers: {},
-          score: 0,
-          timeRemaining: timeLimit || 0,
-          status: 'playing',
-          startTime: Date.now(),
-          sessionId: sid,
-          visited: initialVisited,
-          manuallySkipped: new Set<string>(),
-          dismissedUnvisited: false,
-        }));
-
-        saveCurrentSession(sessionRef.current);
-      } catch {
-        if (controller.signal.aborted) return;
+      if (all.length === 0) {
+        setState((prev) => ({ ...prev, status: 'completed' }));
+        return;
       }
+
+      const decision = mountDecisionRef.current!;
+      const initialQuestions = all.slice(0, decision.sessionSize);
+
+      sessionRef.current = {
+        id: generateUUID(),
+        subject,
+        subjectName: await getSubjectName(subject),
+        chapter,
+        level,
+        questions: initialQuestions,
+        answers: {},
+        score: 0,
+        maxScore: initialQuestions.length,
+        startedAt: new Date().toISOString(),
+        timeTaken: 0,
+        status: 'in-progress',
+      };
+
+      const initialVisited = new Set<string>();
+      const startQ = initialQuestions[decision.startIndex];
+      if (startQ) initialVisited.add(startQ.id);
+
+      setState((prev) => ({
+        ...prev,
+        availableQuestions: all,
+        questions: initialQuestions,
+        sessionSize: decision.sessionSize,
+        currentQuestionIndex: decision.startIndex,
+        answers: {},
+        score: 0,
+        timeRemaining: timeLimit || 0,
+        status: 'playing',
+        startTime: Date.now(),
+        sessionId: sessionRef.current!.id,
+        visited: initialVisited,
+        manuallySkipped: new Set<string>(),
+        dismissedUnvisited: false,
+      }));
+
+      saveCurrentSession(sessionRef.current);
     };
 
     load();
     return () => controller.abort();
-  }, [subject, chapter, level]);
+  }, [subject, chapter, level, resetKey]);
 
-  // Effect 2: Sync timeRemaining when timeLimit changes
   useEffect(() => {
     setState((prev) => ({ ...prev, timeRemaining: timeLimit || 0 }));
   }, [timeLimit]);
 
-  // Timer effect
   useEffect(() => {
     if (state.status !== 'playing' || !timeLimit) return;
 
     const timer = setInterval(() => {
       setState((prev) => {
-        // Don't count down if paused
         if (prev.status === 'paused') return prev;
 
         const newTimeRemaining = prev.timeRemaining - 1;
         if (newTimeRemaining <= 0) {
-          // Time's up
           if (timerMode === 'per-question') {
-            // Auto-move to next question or submit if last
             const isLast = prev.currentQuestionIndex >= prev.questions.length - 1;
             if (isLast) {
               return { ...prev, timeRemaining: 0, status: 'completed' };
             } else {
               return {
                 ...prev,
-                timeRemaining: timeLimit, // Reset timer for next question
+                timeRemaining: timeLimit,
                 currentQuestionIndex: prev.currentQuestionIndex + 1,
               };
             }
           } else {
-            // Total timer - submit quiz
             return { ...prev, timeRemaining: 0, status: 'completed' };
           }
         }
@@ -291,7 +322,6 @@ export function useQuiz(
     return () => clearInterval(timer);
   }, [state.status, timeLimit, timerMode]);
 
-  // Select answer
   const selectAnswer = useCallback((option: string) => {
     setState((prev) => {
       const currentQuestion = prev.questions[prev.currentQuestionIndex];
@@ -300,12 +330,10 @@ export function useQuiz(
       const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
       const newScore = calculateScore(prev.questions, newAnswers);
 
-      // Track visited and remove from manuallySkipped
       const newVisited = new Set(prev.visited).add(currentQuestion.id);
       const newSkipped = new Set(prev.manuallySkipped);
       newSkipped.delete(currentQuestion.id);
 
-      // Update session
       if (sessionRef.current) {
         sessionRef.current.answers = newAnswers;
         sessionRef.current.score = newScore;
@@ -322,7 +350,6 @@ export function useQuiz(
     });
   }, []);
 
-  // Go to previous question
   const goToPrevious = useCallback(() => {
     setState((prev) => {
       const newIndex = Math.max(0, prev.currentQuestionIndex - 1);
@@ -339,7 +366,6 @@ export function useQuiz(
     });
   }, [timerMode, timeLimit]);
 
-  // Go to next question
   const goToNext = useCallback(() => {
     setState((prev) => {
       const newIndex = Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1);
@@ -356,7 +382,6 @@ export function useQuiz(
     });
   }, [timerMode, timeLimit]);
 
-  // Submit quiz
   const submitQuiz = useCallback(() => {
     setState((prev) => {
       const timeTaken = Math.floor((Date.now() - prev.startTime) / 1000);
@@ -368,9 +393,9 @@ export function useQuiz(
         sessionRef.current.score = prev.score;
         sessionRef.current.answers = prev.answers;
 
-        // Save to history and clear current
         saveToHistory(sessionRef.current);
         clearCurrentSession();
+        clearQuizResume();
       }
 
       return {
@@ -380,7 +405,6 @@ export function useQuiz(
     });
   }, []);
 
-  // Auto-save session when timer expires (status becomes 'completed')
   useEffect(() => {
     if (
       state.status === 'completed' &&
@@ -395,13 +419,98 @@ export function useQuiz(
       sessionRef.current.score = state.score;
       sessionRef.current.answers = state.answers;
 
-      // Save to history and clear current
       saveToHistory(sessionRef.current);
       clearCurrentSession();
+      clearQuizResume();
     }
   }, [state.status, state.startTime, state.score, state.answers]);
 
-  // Add more questions to session
+  useEffect(() => {
+    if (state.status !== 'playing') return;
+    if (state.availableQuestions.length === 0) return;
+    if (
+      Object.keys(state.answers).length === 0 &&
+      state.manuallySkipped.size === 0 &&
+      state.currentQuestionIndex === 0
+    )
+      return;
+
+    const currentMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+
+    saveQuizResume({
+      subject,
+      chapter,
+      level,
+      mode: currentMode as QuizResumeState['mode'],
+      currentQuestionIndex: state.currentQuestionIndex,
+      sessionSize: state.sessionSize,
+      answers: state.answers,
+      score: state.score,
+      manuallySkipped: Array.from(state.manuallySkipped),
+      availableQuestions: state.availableQuestions,
+      savedAt: Date.now(),
+      startedAt: new Date(state.startTime).toISOString(),
+    });
+  }, [
+    state.currentQuestionIndex,
+    state.answers,
+    state.manuallySkipped,
+    state.sessionSize,
+    state.status,
+  ]);
+
+  const handleResumeSession = useCallback(() => {
+    const saved = pendingResumeState;
+    if (!saved) return;
+
+    const newId = generateUUID();
+    sessionRef.current = {
+      id: newId,
+      subject: saved.subject,
+      subjectName: saved.subject,
+      chapter: saved.chapter,
+      level: saved.level,
+      questions: saved.availableQuestions.slice(0, saved.sessionSize),
+      answers: saved.answers,
+      score: saved.score,
+      maxScore: saved.sessionSize,
+      startedAt: saved.startedAt,
+      timeTaken: 0,
+      status: 'in-progress',
+    };
+
+    setState((prev) => ({
+      ...prev,
+      availableQuestions: saved.availableQuestions,
+      questions: saved.availableQuestions.slice(0, saved.sessionSize),
+      sessionSize: saved.sessionSize,
+      currentQuestionIndex: saved.currentQuestionIndex,
+      answers: saved.answers,
+      score: saved.score,
+      manuallySkipped: new Set(saved.manuallySkipped),
+      status: 'playing',
+      startTime: Date.now(),
+      sessionId: newId,
+      visited: new Set(Object.keys(saved.answers)),
+      timeRemaining: timeLimit || 0,
+    }));
+
+    setShowResumePrompt(false);
+    saveCurrentSession(sessionRef.current);
+  }, [pendingResumeState, timeLimit]);
+
+  const handleStartFresh = useCallback(() => {
+    clearQuizResume();
+    setShowResumePrompt(false);
+    mountDecisionRef.current = {
+      resumeSession: null,
+      startIndex: 0,
+      sessionSize: 10,
+      isShared: false,
+    };
+    setResetKey((k) => k + 1);
+  }, []);
+
   const addMoreQuestions = useCallback((count: number) => {
     setState((prev) => {
       const newSize = Math.min(prev.sessionSize + count, prev.availableQuestions.length);
@@ -420,17 +529,14 @@ export function useQuiz(
     });
   }, []);
 
-  // Pause quiz
   const pauseQuiz = useCallback(() => {
     setState((prev) => ({ ...prev, status: 'paused' }));
   }, []);
 
-  // Resume quiz
   const resumeQuiz = useCallback(() => {
     setState((prev) => ({ ...prev, status: 'playing' }));
   }, []);
 
-  // Handle skip - track as manually skipped, move to next
   const handleSkip = useCallback(() => {
     setState((prev) => {
       const currentQuestion = prev.questions[prev.currentQuestionIndex];
@@ -453,7 +559,6 @@ export function useQuiz(
     });
   }, [timerMode, timeLimit]);
 
-  // Jump to a specific question index
   const jumpToQuestion = useCallback(
     (index: number) => {
       setState((prev) => {
@@ -473,7 +578,6 @@ export function useQuiz(
     [timerMode, timeLimit]
   );
 
-  // Dismiss unvisited banner - jump to Q1, never show again
   const dismissUnvisited = useCallback(() => {
     setState((prev) => {
       const visitedQuestion = prev.questions[0];
@@ -490,7 +594,6 @@ export function useQuiz(
     });
   }, [timerMode, timeLimit]);
 
-  // Computed values
   const computed: QuizComputed = useMemo(() => {
     const currentQuestion = state.questions[state.currentQuestionIndex] || null;
     const progress =
@@ -531,5 +634,9 @@ export function useQuiz(
     jumpToQuestion,
     dismissUnvisited,
     startFromShare: startFromShareRef.current || null,
+    showResumePrompt,
+    pendingResumeState,
+    handleResumeSession,
+    handleStartFresh,
   };
 }

@@ -97,7 +97,12 @@ export interface QuizComputed {
 }
 
 /** Combined Quiz Hook Return */
-export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed {}
+export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed {
+  showResumePrompt: boolean;
+  pendingResumeState: QuizResumeState | null;
+  handleResumeSession: (saved: QuizResumeState) => void;
+  handleStartFresh: () => void;
+}
 
 /** Quiz Result Summary */
 export interface QuizResult {
@@ -157,4 +162,20 @@ export interface Achievement {
     threshold: number;
   };
   unlockedAt?: string | undefined;
+}
+
+/** Quiz Resume State for session persistence */
+export interface QuizResumeState {
+  subject: string;
+  chapter: string;
+  level: string;
+  mode: 'normal' | 'timer_challenge' | 'practice_challenge';
+  currentQuestionIndex: number;
+  sessionSize: number;
+  answers: Record<string, string>;
+  score: number;
+  manuallySkipped: string[];
+  availableQuestions: Question[];
+  savedAt: number;
+  startedAt: string;
 }
