@@ -107,6 +107,17 @@ export class QuizService {
     return { data, total };
   }
 
+  async findSubjectMeta(slug: string): Promise<{ name: string; emoji: string; slug: string }> {
+    const subject = await this.subjectRepo.findOne({
+      where: { slug },
+      select: ['name', 'emoji', 'slug'],
+    });
+    if (!subject) {
+      throw new NotFoundException(`Subject not found: ${slug}`);
+    }
+    return { name: subject.name, emoji: subject.emoji, slug: subject.slug };
+  }
+
   async findSubjectBySlug(slug: string): Promise<Subject> {
     const subject = await this.subjectRepo.findOne({
       where: { slug },

@@ -18,7 +18,7 @@ import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus, Zap, Link2 } f
 import { useQuiz } from '@/hooks/useQuiz';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz/QuestionCard';
 import { FloatingBackground } from '@/components/quiz/FloatingBackground';
-import { getSubjectBySlug } from '@/lib/quiz-api';
+import { getSubjectMeta } from '@/lib/quiz-api';
 import { SettingsService } from '@/services/settings.service';
 
 // Default time limits per level (in seconds) - fallback if settings not available
@@ -103,7 +103,7 @@ function QuizContent(): JSX.Element {
         return;
       }
       try {
-        const subjectData = await getSubjectBySlug(subject);
+        const subjectData = await getSubjectMeta(subject);
         setSubjectName(subjectData.name);
         setSubjectEmoji(subjectData.emoji);
       } catch (error) {

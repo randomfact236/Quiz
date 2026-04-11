@@ -125,6 +125,15 @@ export async function getSubjects(hasContent: boolean = false): Promise<QuizSubj
   return response.data.data;
 }
 
+export async function getSubjectMeta(
+  slug: string
+): Promise<{ name: string; emoji: string; slug: string }> {
+  const response = await api.get<{ name: string; emoji: string; slug: string }>(
+    `/quiz/subjects/${slug}/meta`
+  );
+  return response.data;
+}
+
 export async function getSubjectBySlug(
   slug: string
 ): Promise<QuizSubject & { chapters: QuizChapter[] }> {

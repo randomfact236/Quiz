@@ -93,6 +93,13 @@ export class QuizController {
     return this.quizService.findAllSubjects(undefined, hasContent === 'true');
   }
 
+  @Get('subjects/:slug/meta')
+  @ApiOperation({ summary: 'Get subject metadata (name, emoji, slug) - lightweight' })
+  @ApiParam({ name: 'slug', example: 'science' })
+  async getSubjectMeta(@Param('slug') slug: string) {
+    return this.quizService.findSubjectMeta(slug);
+  }
+
   @Get('subjects/:slug')
   @ApiOperation({ summary: 'Get subject by slug with chapters' })
   @ApiParam({ name: 'slug', example: 'science' })
