@@ -405,9 +405,16 @@ export function useQuiz(
   const addMoreQuestions = useCallback((count: number) => {
     setState((prev) => {
       const newSize = Math.min(prev.sessionSize + count, prev.availableQuestions.length);
+      const newQuestions = prev.availableQuestions.slice(0, newSize);
+
+      if (sessionRef.current) {
+        sessionRef.current.maxScore = newSize;
+        sessionRef.current.questions = newQuestions;
+      }
+
       return {
         ...prev,
-        questions: prev.availableQuestions.slice(0, newSize),
+        questions: newQuestions,
         sessionSize: newSize,
       };
     });
