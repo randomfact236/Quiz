@@ -461,7 +461,7 @@ export function useQuizFilters() {
   };
 
   const page = parseInt(searchParams.get('page') || '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
 
   const setFilter = useCallback(
     (key: keyof QuizFilters, value: string | undefined) => {
@@ -574,7 +574,7 @@ import { useQuery } from '@tanstack/react-query';
 import { quizApi } from '@/lib/quiz-api';
 import type { QuizFilters } from './useQuizFilters';
 
-export function useQuestions(filters: QuizFilters, page: number = 1, pageSize: number = 20) {
+export function useQuestions(filters: QuizFilters, page: number = 1, pageSize: number = 10) {
   return useQuery({
     queryKey: ['questions', filters, page, pageSize],
     queryFn: () => quizApi.getQuestions(filters, page, pageSize),

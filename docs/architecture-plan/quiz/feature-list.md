@@ -65,7 +65,7 @@
 - URL-driven offset pagination (?page=2)
 - Page number persists in URL
 - Page size persists in URL (?pageSize=50)
-- 20 questions per page default
+- 10 questions per page default
 - Offset calculated as (page - 1) \* pageSize
 - Total count and total pages in response
 - Page buttons (1, 2, 3, ...) with Next/Previous

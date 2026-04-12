@@ -215,13 +215,13 @@
 
 - URL-driven offset pagination for question list
 - Page number stored in URL: `?page=2`
-- Page size stored in URL: `?pageSize=20`
+- Page size stored in URL: `?pageSize=10`
 - Backend receives page and limit parameters
 - Returns slice of questions for that page
 
 ### URL behaviour
 
-1. Initial load: `?page=1&pageSize=20`
+1. Initial load: `?page=1&pageSize=10`
 2. User clicks Next → URL changes to `?page=2`
 3. Component re-renders, reads `page=2` from URL
 4. React Query fetches with `page=2`
@@ -232,13 +232,13 @@
 ### Backend Pagination
 
 ```
-GET /api/v1/quiz/questions?page=2&pageSize=20&status=published&subject=math
+GET /api/v1/quiz/questions?page=2&pageSize=10&status=published&subject=math
 ```
 
 | Parameter  | Default               | Description              |
 | ---------- | --------------------- | ------------------------ |
 | `page`     | 1                     | Page number (1-indexed)  |
-| `pageSize` | 20                    | Items per page (max 100) |
+| `pageSize` | 10                    | Items per page (max 100) |
 | `skip`     | `(page-1) * pageSize` | Calculated internally    |
 
 ### UI Design
