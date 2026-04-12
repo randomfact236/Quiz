@@ -60,12 +60,6 @@ export const metadata: Metadata = {
     title: 'AI Quiz - Interactive Learning Platform',
     description: 'Test your knowledge with interactive quizzes, dad jokes, and riddles!',
   },
-  manifest: '/manifest.json',
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-  },
 };
 
 export const viewport: Viewport = {
