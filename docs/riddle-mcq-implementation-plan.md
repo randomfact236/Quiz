@@ -29,6 +29,93 @@
 
 ---
 
+## Quiz vs Riddle Level Comparison
+
+| Level   | Quiz            | Riddle          |
+| ------- | --------------- | --------------- |
+| Easy    | 2 (True/False)  | 2 (A/B)         |
+| Medium  | 2 (A/B)         | 3 (A/B/C)       |
+| Hard    | 3 (A/B/C)       | 4 (A/B/C/D)     |
+| Expert  | 4 (A/B/C/D)     | 0 (text answer) |
+| Extreme | 0 (text answer) | ❌ Removed      |
+
+---
+
+## Copy Strategy
+
+### Backend (Copy Quiz patterns + Adapt)
+
+| Quiz Concept | Riddle Equivalent |
+| ------------ | ----------------- |
+| Subject      | Category          |
+| Chapter      | Subject           |
+| Question     | Riddle            |
+
+### Frontend - Copy & Rename
+
+| Copy From               | Copy To                      | Changes                         |
+| ----------------------- | ---------------------------- | ------------------------------- |
+| `SubjectModal.tsx`      | `CategoryModal.tsx`          | Remove chapterId, rename fields |
+| `ChapterModal.tsx`      | `SubjectModal.tsx`           | Add categoryId, rename fields   |
+| `useSubjects.ts`        | `useRiddleCategories.ts`     | Rename query key + function     |
+| `useChapters.ts`        | `useRiddleSubjects.ts`       | Rename query key + function     |
+| `useQuestions.ts`       | `useRiddleMcqs.ts`           | Rename query key + function     |
+| `useSubjectMutation.ts` | useRiddleMutations (part of) | Add category mutations          |
+| `FilterPanel.tsx`       | `RiddleFilterPanel.tsx`      | Add category row                |
+| `QuizMcqContainer.tsx`  | `RiddleMcqContainer.tsx`     | Update all imports + hooks      |
+
+### Write Fresh (Cannot Copy)
+
+| File                          | Reason                                                    |
+| ----------------------------- | --------------------------------------------------------- |
+| `RiddleModal.tsx`             | Dynamic options (2/3/4/text) — quiz has fixed 4 options   |
+| `RiddleQuestionManager.tsx`   | Shows category column, hint/explanation indicators        |
+| Options validation in service | Quiz validates True/False, Riddle validates 2/3/4 options |
+
+---
+
+## Per-Feature Verification (Run After Each Feature)
+
+### Step 1: Compile Checks
+
+```bash
+# Backend
+cd apps/backend && npx tsc --noEmit
+
+# Frontend
+cd apps/frontend && npx tsc --noEmit
+```
+
+### Step 2: Backend API Checks (Test in Swagger/Postman)
+
+- [ ] Success case returns correct data shape
+- [ ] Error case returns correct error message
+- [ ] Auth protected endpoints reject without token
+- [ ] Public endpoints work without token
+
+### Step 3: Frontend UI Checks (Test in Browser)
+
+- [ ] Modal opens correctly
+- [ ] Form pre-fills on edit
+- [ ] Form validates required fields
+- [ ] Submit calls correct API
+- [ ] Success closes modal and refreshes list
+- [ ] Error shows error message
+
+### Step 4: Integration Checks (Full Flow)
+
+- [ ] Create from UI → appears in list
+- [ ] Edit from UI → updates in list
+- [ ] Delete from UI → removed from list
+- [ ] Cache invalidates after mutation
+- [ ] Query refetches after mutation
+
+### Step 5: Feature-Specific Checks
+
+See per-feature checklist at end of each feature section.
+
+---
+
 ## FEATURE 1: Category Management
 
 ### Backend
@@ -437,6 +524,42 @@ export function CategoryModal({ open, category, onClose, onSubmit }: CategoryMod
 - [ ] CategoryModal opens for edit with pre-filled data
 - [ ] Category form validates required fields
 - [ ] useRiddleCategories hook fetches and caches data
+
+#### 1.10 Verification Steps - Category
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] GET /riddle-mcq/categories → returns array of categories
+- [ ] GET /riddle-mcq/categories/all → 401 without token, data with token
+- [ ] POST /riddle-mcq/categories → creates category, returns created object
+- [ ] PATCH /riddle-mcq/categories/:id → updates category
+- [ ] DELETE /riddle-mcq/categories/:id → deletes category
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Filter panel shows category chips
+- [ ] Click "+ Add" → CategoryModal opens
+- [ ] Fill form, submit → modal closes, category appears
+- [ ] Click category chip → URL updates, count filters
+
+**Step 4: Integration**
+
+- [ ] Create category from UI → appears in filter chips
+- [ ] Edit category → changes reflect immediately
+- [ ] Delete category → removed from chips, subjects also deleted
+
+**Step 5: Feature-Specific**
+
+- [ ] Create category with emoji "🧩" → shows in filter panel
+- [ ] Create category with order=1 → appears before order=0
+- [ ] Deactivate category → disappears from public endpoint
 
 ---
 
@@ -884,6 +1007,42 @@ export function SubjectModal({ open, subject, categoryId, categories, onClose, o
 - [ ] SubjectModal opens for edit with pre-filled data
 - [ ] Subject form validates required fields
 - [ ] Subject shows category relationship
+
+#### 2.10 Verification Steps - Subject
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] GET /riddle-mcq/subjects → returns array of subjects
+- [ ] GET /riddle-mcq/subjects/:slug → returns subject with category
+- [ ] GET /riddle-mcq/subjects/:slug/meta → returns {name, emoji, slug}
+- [ ] POST /riddle-mcq/subjects → creates subject with categoryId
+- [ ] DELETE /riddle-mcq/subjects/:id → deletes subject + riddles
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Subject chips show under category filter
+- [ ] Click "+ Add" → SubjectModal opens with category pre-selected
+- [ ] Select category → subject linked correctly
+- [ ] Subject shows emoji in chip
+
+**Step 4: Integration**
+
+- [ ] Create subject from UI → appears in subject chips
+- [ ] Assign subject to category → shows under that category
+- [ ] Delete subject → riddles also deleted
+
+**Step 5: Feature-Specific**
+
+- [ ] Subject appears under correct category in filter panel
+- [ ] hasContentOnly=true filters subjects with riddles
+- [ ] Slug auto-generated from name
 
 ---
 
@@ -1597,6 +1756,50 @@ export function RiddleModal({ open, riddle, subjects, categories, onClose, onSub
 - [ ] PATCH /riddle-mcq/mcqs/:id updates riddle
 - [ ] DELETE /riddle-mcq/mcqs/:id deletes riddle
 
+#### 3.9 Verification Steps - Riddle CRUD
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] POST with Easy (2 options, correctLetter=B) → 201 Created
+- [ ] POST with Medium (3 options, correctLetter=C) → 201 Created
+- [ ] POST with Hard (4 options, correctLetter=D) → 201 Created
+- [ ] POST with Expert (answer="piano") → 201 Created
+- [ ] POST Easy with 4 options → 400 Bad Request
+- [ ] POST Medium with correctLetter=D → 400 Bad Request
+- [ ] POST Expert with options → 400 Bad Request
+- [ ] POST Expert without answer → 400 Bad Request
+- [ ] hint and explanation saved correctly
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Select Easy → shows 2 option inputs (A, B), correctLetter dropdown
+- [ ] Select Medium → shows 3 option inputs (A, B, C), correctLetter dropdown
+- [ ] Select Hard → shows 4 option inputs (A, B, C, D), correctLetter dropdown
+- [ ] Select Expert → shows single text input for answer, no options
+- [ ] Switch from Easy to Medium → resets to 3 options, clears invalid correctLetter
+- [ ] Switch to Expert → hides options, shows answer input
+- [ ] hint field (max 500 chars) works
+- [ ] explanation field (max 2000 chars) works
+
+**Step 4: Integration**
+
+- [ ] Create riddle from UI → appears in table
+- [ ] Edit riddle → changes reflect
+- [ ] Switch level on edit → options reset correctly
+
+**Step 5: Feature-Specific**
+
+- [ ] Easy riddle with hint → hint badge shows in table
+- [ ] Expert riddle shows "text" badge instead of options count
+- [ ] level enum does NOT include "extreme"
+
 ---
 
 ## FEATURE 4: Filters + Filter Counts
@@ -2012,6 +2215,42 @@ export function RiddleFilterPanel({
 - [ ] Page resets to 1 on filter change
 - [ ] GET /riddle-mcq/filter-counts returns all counts
 - [ ] useRiddleFilterCounts hook fetches and caches counts
+
+#### 4.7 Verification Steps - Filters
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] GET /riddle-mcq/filter-counts → returns all count objects
+- [ ] GET /riddle-mcq/filter-counts?category=X → filtered counts
+- [ ] GET /riddle-mcq/filter-counts?level=easy → easy counts
+- [ ] GET /riddle-mcq/filter-counts?status=published → published counts
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Filter panel shows 5 rows: Category, Subject, Level, Status, Search
+- [ ] Click category chip → subject resets to "All"
+- [ ] URL shows ?category=slug in address bar
+- [ ] Search input typing → debounced filter
+- [ ] Click "Reset" → clears all URL params
+
+**Step 4: Integration**
+
+- [ ] Filter by category → riddles list updates
+- [ ] Filter by level → counts update in real-time
+- [ ] Change category → subject filter resets to "All"
+
+**Step 5: Feature-Specific**
+
+- [ ] Status dashboard shows Total/Published/Draft/Trash counts
+- [ ] Copy URL with filters → paste in new tab → same filters applied
+- [ ] Page size selector changes items per page
 
 ---
 
@@ -2562,6 +2801,40 @@ export function RiddleQuestionManager({
 - [ ] POST /riddle-mcq/mcqs/bulk-action works
 - [ ] Selection persists across pages
 
+#### 5.6 Verification Steps - Bulk Actions
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] POST /riddle-mcq/mcqs/bulk-action {ids:[], action:"publish"} → success
+- [ ] POST with invalid action → 400 Bad Request
+- [ ] POST with non-existent ids → succeeds with failed count
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Checkbox in table header → selects all on current page
+- [ ] Bulk action bar appears when items selected
+- [ ] Click "Publish" → selected items marked published, bar disappears
+- [ ] Click "Delete" → confirm dialog, then delete
+
+**Step 4: Integration**
+
+- [ ] Bulk publish → status badges update immediately
+- [ ] Bulk delete → rows removed from table
+- [ ] Select some, navigate page, return → selection preserved
+
+**Step 5: Feature-Specific**
+
+- [ ] "Select all" only selects current page, not all pages
+- [ ] Bulk action toolbar shows count: "5 selected"
+- [ ] Delete action shows confirmation before deleting
+
 ---
 
 ## FEATURE 6: Import/Export
@@ -2997,6 +3270,40 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
 - [ ] GET /riddle-mcq/export downloads CSV
 - [ ] POST /riddle-mcq/mcqs/bulk creates riddles
 
+#### 6.6 Verification Steps - Import/Export
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (Swagger/Postman)**
+
+- [ ] GET /riddle-mcq/export → downloads CSV file
+- [ ] CSV has correct headers: question,optionA,optionB,...
+- [ ] POST /riddle-mcq/mcqs/bulk {questions:[]} → creates riddles
+
+**Step 3: Frontend UI (Browser DevTools)**
+
+- [ ] Click "Download Template" → CSV downloads
+- [ ] Upload CSV → preview shows parsed rows
+- [ ] Click "Import" → progress bar shows
+- [ ] Import with errors → error count shown
+
+**Step 4: Integration**
+
+- [ ] Import 10 riddles → table shows 10 new rows
+- [ ] Export filtered results → only filtered riddles in CSV
+- [ ] Import with wrong format → error message
+
+**Step 5: Feature-Specific**
+
+- [ ] CSV export includes: question, options, correctLetter, answer, level, hint, explanation, status
+- [ ] JSON import/export works with {version, riddles: []} format
+- [ ] Import with auto-subject creation works
+
 ---
 
 ## FEATURE 7: Container + Wiring
@@ -3301,6 +3608,51 @@ import { RiddleMcqContainer } from '@/features/riddle-mcq/RiddleMcqContainer';
 - [ ] URL params control filters
 - [ ] Pagination works
 - [ ] All mutations invalidate queries correctly
+
+#### 7.6 Verification Steps - Container (Final Integration)
+
+**Step 1: Compile**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+**Step 2: Backend API (All Endpoints)**
+
+- [ ] All category endpoints work
+- [ ] All subject endpoints work
+- [ ] All riddle endpoints work
+- [ ] Bulk action works
+- [ ] Import/export works
+- [ ] Filter counts work
+
+**Step 3: Frontend UI (Full Page Test)**
+
+- [ ] Page loads at /admin without errors
+- [ ] All 7 features work from single container
+- [ ] No console errors (check DevTools)
+- [ ] Loading states show during fetch
+- [ ] Error states handled gracefully
+
+**Step 4: Integration (End-to-End)**
+
+- [ ] Create category → create subject → create riddle → appears in list
+- [ ] Edit riddle → update reflects immediately
+- [ ] Delete riddle → removed from list
+- [ ] Filter by category → only that category's riddles
+- [ ] Bulk select + publish → status changes
+- [ ] Import CSV → riddles appear
+- [ ] Export CSV → downloads with correct data
+
+**Step 5: Final Checks**
+
+- [ ] Old RiddleMcqSection fully removed from admin/page.tsx
+- [ ] No duplicate imports
+- [ ] No TypeScript errors
+- [ ] No console errors
+- [ ] URL sharing works (copy URL with filters → paste → same state)
+- [ ] Refresh page → state preserved (URL-driven)
 
 ---
 
