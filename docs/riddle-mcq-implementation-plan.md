@@ -74,6 +74,54 @@
 
 ---
 
+## Per-File Implementation Process
+
+Follow this exact process for every backend file:
+
+### Step 1: Remove
+
+- Delete the existing riddle file completely
+
+### Step 2: Copy
+
+- Copy the equivalent quiz file
+- Rename the file to the riddle equivalent
+
+### Step 3: Edit
+
+- Find/replace all naming (Subject→Category, Chapter→Subject, Question→Riddle)
+- Add riddle-specific code from the plan (hint, answer, level validation)
+- Remove quiz-specific code that does not apply
+
+### Step 4: Check
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- Check terminal for errors
+
+### Step 5: Fix
+
+- If errors exist → fix them one by one
+- Run tsc --noEmit again after each fix
+
+### Step 6: Re-check
+
+- Run tsc --noEmit again
+- If errors still exist → go back to Step 5
+- If zero errors → move to next file
+
+### Step 7: Confirm Clean
+
+- ✅ Zero TypeScript errors
+- ✅ Zero lint errors
+- ✅ Backend starts without crash
+- ✅ Only then → move to next file
+
+---
+
 ## Per-Feature Verification (Run After Each Feature)
 
 ### Step 1: Compile Checks
