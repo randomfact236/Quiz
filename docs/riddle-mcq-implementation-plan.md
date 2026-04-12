@@ -611,6 +611,66 @@ cd apps/frontend && npx tsc --noEmit
 
 ---
 
+### Post-Implementation Fix Loop - Category
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] All category endpoints in Swagger
+- [ ] POST returns 201, GET returns 200, DELETE returns 200
+- [ ] Auth-protected endpoints reject without token
+
+**Step 3: Database**
+
+- [ ] Category actually saved in DB
+- [ ] Category update works in DB
+- [ ] Category delete removes from DB
+- [ ] Cascade delete removes subjects and riddles
+
+**Step 4: Frontend Runtime**
+
+- [ ] Frontend builds without errors
+- [ ] Page loads without crash
+- [ ] Zero console errors
+- [ ] Network tab shows correct API calls
+
+**Step 5: UI Behavior**
+
+- [ ] Modal opens and closes correctly
+- [ ] Form pre-fills on edit
+- [ ] Validation shows errors
+- [ ] Success closes modal and refreshes
+
+**Step 6: Data Flow**
+
+- [ ] Create → appears in list immediately
+- [ ] Edit → changes reflect immediately
+- [ ] Delete → removed immediately
+- [ ] Cache invalidates after mutation
+
+**Step 7: Edge Cases**
+
+- [ ] Empty state shows when no categories
+- [ ] Submit empty form → validation error
+- [ ] Delete non-existent → handled gracefully
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 1 complete → Move to Feature 2
+
+---
+
 ## FEATURE 2: Subject Management
 
 ### Backend
@@ -1091,6 +1151,66 @@ cd apps/frontend && npx tsc --noEmit
 - [ ] Subject appears under correct category in filter panel
 - [ ] hasContentOnly=true filters subjects with riddles
 - [ ] Slug auto-generated from name
+
+---
+
+### Post-Implementation Fix Loop - Subject
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] All subject endpoints in Swagger
+- [ ] POST returns 201, GET returns 200, DELETE returns 200
+- [ ] Auth-protected endpoints reject without token
+
+**Step 3: Database**
+
+- [ ] Subject actually saved in DB with categoryId
+- [ ] Subject update works in DB
+- [ ] Subject delete removes from DB
+- [ ] Cascade delete removes riddles
+
+**Step 4: Frontend Runtime**
+
+- [ ] Frontend builds without errors
+- [ ] Page loads without crash
+- [ ] Zero console errors
+- [ ] Network tab shows correct API calls
+
+**Step 5: UI Behavior**
+
+- [ ] Modal opens and closes correctly
+- [ ] Form pre-fills on edit
+- [ ] Category selector works
+- [ ] Validation shows errors
+
+**Step 6: Data Flow**
+
+- [ ] Create → appears in list immediately
+- [ ] Edit → changes reflect immediately
+- [ ] Delete → removed immediately
+- [ ] Cache invalidates after mutation
+
+**Step 7: Edge Cases**
+
+- [ ] Empty state shows when no subjects
+- [ ] Submit without category → validation error
+- [ ] Delete non-existent → handled gracefully
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 2 complete → Move to Feature 3
 
 ---
 
@@ -1850,6 +1970,67 @@ cd apps/frontend && npx tsc --noEmit
 
 ---
 
+### Post-Implementation Fix Loop - Riddle CRUD
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] All riddle endpoints in Swagger
+- [ ] Level validation works: Easy rejects 4 options
+- [ ] Level validation works: Expert rejects options
+- [ ] Level validation works: Expert requires answer
+
+**Step 3: Database**
+
+- [ ] Riddle actually saved with correct options
+- [ ] hint field saved correctly
+- [ ] explanation field saved correctly
+- [ ] answer field saved for Expert level
+
+**Step 4: Frontend Runtime**
+
+- [ ] Frontend builds without errors
+- [ ] Level selector changes option count dynamically
+- [ ] Expert shows text input, not options
+- [ ] Zero console errors
+
+**Step 5: UI Behavior**
+
+- [ ] Options show/hide based on level
+- [ ] correctLetter dropdown matches valid options
+- [ ] Level change resets invalid selections
+- [ ] hint/explanation fields work
+
+**Step 6: Data Flow**
+
+- [ ] Create → riddle appears in table
+- [ ] Edit → changes reflect immediately
+- [ ] Delete → removed from table
+- [ ] Cache invalidates after mutation
+
+**Step 7: Edge Cases**
+
+- [ ] Create with 1 option → validation error
+- [ ] Create Expert without answer → validation error
+- [ ] Switch level on edit → options reset correctly
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 3 complete → Move to Feature 4
+
+---
+
 ## FEATURE 4: Filters + Filter Counts
 
 ### Backend
@@ -2299,6 +2480,60 @@ cd apps/frontend && npx tsc --noEmit
 - [ ] Status dashboard shows Total/Published/Draft/Trash counts
 - [ ] Copy URL with filters → paste in new tab → same filters applied
 - [ ] Page size selector changes items per page
+
+---
+
+### Post-Implementation Fix Loop - Filters
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] filter-counts endpoint returns all counts
+- [ ] filter-counts accepts category, level, status params
+
+**Step 3: Database**
+
+- [ ] Counts are accurate (verify against actual records)
+- [ ] Category count matches riddle count under subjects
+
+**Step 4: Frontend Runtime**
+
+- [ ] Filter panel shows all 5 filter rows
+- [ ] Counts display next to each filter option
+- [ ] Zero console errors
+
+**Step 5: UI Behavior**
+
+- [ ] Category click → subject resets to "All"
+- [ ] Search typing → debounced, updates URL
+- [ ] Reset clears all filters
+
+**Step 6: Data Flow**
+
+- [ ] Filter change → list updates
+- [ ] URL params sync with filter state
+- [ ] Pagination resets to page 1 on filter change
+
+**Step 7: Edge Cases**
+
+- [ ] Empty search → shows all results
+- [ ] Invalid filter value → ignored
+- [ ] No matching results → empty state shown
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 4 complete → Move to Feature 5
 
 ---
 
@@ -2885,6 +3120,61 @@ cd apps/frontend && npx tsc --noEmit
 
 ---
 
+### Post-Implementation Fix Loop - Bulk Actions
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] bulk-action endpoint works for all actions
+- [ ] Invalid action returns 400
+
+**Step 3: Database**
+
+- [ ] Bulk publish updates status in DB
+- [ ] Bulk delete removes records from DB
+- [ ] Bulk trash moves to trash status
+
+**Step 4: Frontend Runtime**
+
+- [ ] Selection checkbox works
+- [ ] Bulk action bar appears with count
+- [ ] Zero console errors
+
+**Step 5: UI Behavior**
+
+- [ ] Select all → selects current page only
+- [ ] Action buttons work (publish, draft, trash, delete)
+- [ ] Confirmation dialog on delete
+
+**Step 6: Data Flow**
+
+- [ ] Bulk action → status updates immediately
+- [ ] Bulk delete → rows removed immediately
+- [ ] Selection clears after action
+
+**Step 7: Edge Cases**
+
+- [ ] Select 0 items → no bulk bar
+- [ ] Navigate pages → selection lost (by design)
+- [ ] Delete already-deleted → handled gracefully
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 5 complete → Move to Feature 6
+
+---
+
 ## FEATURE 6: Import/Export
 
 ### Backend
@@ -3354,6 +3644,61 @@ cd apps/frontend && npx tsc --noEmit
 
 ---
 
+### Post-Implementation Fix Loop - Import/Export
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend server starts without crash
+- [ ] Export downloads CSV file
+- [ ] Bulk create works for multiple riddles
+
+**Step 3: Database**
+
+- [ ] Import creates riddles in DB
+- [ ] Import creates subjects if not exist
+- [ ] Export matches DB records
+
+**Step 4: Frontend Runtime**
+
+- [ ] Import modal opens correctly
+- [ ] Template download works
+- [ ] Preview shows parsed data
+- [ ] Zero console errors
+
+**Step 5: UI Behavior**
+
+- [ ] File upload accepts .csv and .json
+- [ ] Progress bar shows during import
+- [ ] Error count shown after import
+
+**Step 6: Data Flow**
+
+- [ ] Import → riddles appear in table
+- [ ] Export → correct data in file
+
+**Step 7: Edge Cases**
+
+- [ ] Import empty file → error message
+- [ ] Import malformed CSV → error message
+- [ ] Import with invalid level → error message
+
+**Step 8: All Checks Passing?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → Feature 6 complete → Move to Feature 7
+
+---
+
 ## FEATURE 7: Container + Wiring
 
 ### Frontend
@@ -3701,6 +4046,68 @@ cd apps/frontend && npx tsc --noEmit
 - [ ] No console errors
 - [ ] URL sharing works (copy URL with filters → paste → same state)
 - [ ] Refresh page → state preserved (URL-driven)
+
+---
+
+### Post-Implementation Fix Loop - Container (FINAL)
+
+**Step 1: Code Quality**
+
+```bash
+cd apps/backend && npx tsc --noEmit
+cd apps/frontend && npx tsc --noEmit
+```
+
+- [ ] Zero TypeScript errors in backend
+- [ ] Zero TypeScript errors in frontend
+- [ ] Zero ESLint errors
+
+**Step 2: Backend Runtime**
+
+- [ ] Backend starts without crash
+- [ ] All 25+ endpoints registered in Swagger
+- [ ] All endpoints return correct status codes
+- [ ] Auth works correctly
+
+**Step 3: Database**
+
+- [ ] All data persists correctly
+- [ ] Cascade deletes work end-to-end
+- [ ] No orphaned records
+
+**Step 4: Frontend Runtime**
+
+- [ ] Frontend builds without errors
+- [ ] Page loads at /admin
+- [ ] Zero console errors
+- [ ] Zero console warnings
+
+**Step 5: UI Behavior**
+
+- [ ] All modals open/close correctly
+- [ ] All forms validate correctly
+- [ ] All filters work
+- [ ] Pagination works
+
+**Step 6: Data Flow**
+
+- [ ] Complete flow: Category → Subject → Riddle
+- [ ] CRUD operations all work
+- [ ] Bulk actions work
+- [ ] Import/Export work
+- [ ] Cache invalidation works
+
+**Step 7: Edge Cases**
+
+- [ ] Empty state for each entity
+- [ ] Max length validation works
+- [ ] Network failure handled
+- [ ] Invalid data handled
+
+**Step 8: ALL CHECKS PASSING?**
+
+❌ **NO** → Fix → Re-run ALL steps  
+✅ **YES** → 🎉 **ALL 7 FEATURES COMPLETE** 🎉
 
 ---
 
