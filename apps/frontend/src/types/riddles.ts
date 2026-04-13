@@ -67,6 +67,7 @@ export interface RiddleMcq {
   chapter?: RiddleChapter;
   explanation?: string;
   hint?: string;
+  answer?: string;
   status?: 'published' | 'draft' | 'trash';
   createdAt?: string;
   updatedAt?: string;
@@ -213,8 +214,20 @@ export interface RiddleFilters {
 
 export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
   { key: 'easy', label: 'Easy', emoji: '🌱', color: 'from-green-400 to-green-600', timeLimit: 45 },
-  { key: 'medium', label: 'Medium', emoji: '🌿', color: 'from-blue-400 to-blue-600', timeLimit: 30 },
-  { key: 'hard', label: 'Hard', emoji: '🌲', color: 'from-orange-400 to-orange-600', timeLimit: 25 },
+  {
+    key: 'medium',
+    label: 'Medium',
+    emoji: '🌿',
+    color: 'from-blue-400 to-blue-600',
+    timeLimit: 30,
+  },
+  {
+    key: 'hard',
+    label: 'Hard',
+    emoji: '🌲',
+    color: 'from-orange-400 to-orange-600',
+    timeLimit: 25,
+  },
   { key: 'expert', label: 'Expert', emoji: '🔥', color: 'from-red-400 to-red-600', timeLimit: 20 },
 ];
 
@@ -232,7 +245,7 @@ export const DEFAULT_CHAPTER_ICONS: Record<string, string> = {
   'Funny Riddles': '😂',
   'Mystery Riddles': '🕵️',
   'Everyday Objects': '🏺',
-  'Wordplay': '📝',
+  Wordplay: '📝',
   'Pattern Recognition': '🔲',
   'Short & Quick': '⚡',
   'Long Story Riddles': '📚',
@@ -251,7 +264,7 @@ export const DEFAULT_CHAPTER_ICONS: Record<string, string> = {
 export function adaptRiddleMcq(riddle: RiddleMcq): Riddle {
   // Map expert/extreme to 'extreme' for AnswerOptions compatibility (shows text input)
   const isOpenEnded = riddle.level === 'expert' || riddle.level === 'extreme';
-  
+
   return {
     id: riddle.id,
     question: riddle.question,
@@ -273,10 +286,8 @@ export function adaptRiddleMcq(riddle: RiddleMcq): Riddle {
  * Convert backend RiddleChapter to frontend ChapterDisplay format
  */
 export function adaptChapter(chapter: RiddleChapter): ChapterDisplay {
-  const icon = chapter.subject?.emoji || 
-    DEFAULT_CHAPTER_ICONS[chapter.name] || 
-    '📚';
-  
+  const icon = chapter.subject?.emoji || DEFAULT_CHAPTER_ICONS[chapter.name] || '📚';
+
   return {
     id: chapter.id,
     title: chapter.name,
@@ -296,7 +307,7 @@ export function adaptChapter(chapter: RiddleChapter): ChapterDisplay {
  */
 export function toBackendRiddle(riddle: Partial<Riddle>): Partial<RiddleMcq> {
   const result: Partial<RiddleMcq> = {};
-  
+
   if (riddle.id) result.id = riddle.id;
   if (riddle.question) result.question = riddle.question;
   if (riddle.options) result.options = riddle.options;
@@ -305,6 +316,6 @@ export function toBackendRiddle(riddle: Partial<Riddle>): Partial<RiddleMcq> {
   if (riddle.chapterId) result.chapterId = riddle.chapterId;
   if (riddle.hint) result.hint = riddle.hint;
   if (riddle.explanation) result.explanation = riddle.explanation;
-  
+
   return result;
 }

@@ -1,17 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsInt,
-  Min,
-  IsEnum,
-  IsArray,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min, IsEnum, IsBoolean } from 'class-validator';
 
-import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
 import { RiddleStatus } from '../entities/riddle-mcq.entity';
 
 export class RiddleMcqPaginationDto {
@@ -30,86 +20,11 @@ export class RiddleMcqPaginationDto {
   limit?: number;
 }
 
-export class RiddleMcqSearchDto extends RiddleMcqPaginationDto {
-  @ApiPropertyOptional({ description: 'Search in question text' })
-  @IsOptional()
-  @IsString()
-  search?: string;
-
-  @ApiPropertyOptional({ description: 'Filter by level' })
-  @IsOptional()
-  @IsEnum(['easy', 'medium', 'hard', 'expert'])
-  level?: string;
-}
-
-export class CreateRiddleMcqSubjectDto {
-  @ApiPropertyOptional({ example: 'brain-teasers', description: 'Unique slug (auto-generated if not provided)' })
-  @IsOptional()
-  @IsString()
-  slug?: string;
-
-  @ApiProperty({ example: 'Brain Teasers', description: 'Subject name' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @ApiProperty({ example: '🧩', description: 'Subject emoji' })
-  @IsString()
-  @IsNotEmpty()
-  emoji: string;
-
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
-  @IsOptional()
-  @IsString()
-  categoryId?: string | null;
-
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
-
-  @ApiPropertyOptional({ example: 0 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  order?: number;
-}
-
-export class UpdateRiddleMcqSubjectDto {
-  @ApiPropertyOptional({ example: 'brain-teasers' })
-  @IsOptional()
-  @IsString()
-  slug?: string;
-
-  @ApiPropertyOptional({ example: 'Brain Teasers' })
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @ApiPropertyOptional({ example: '🧩' })
-  @IsOptional()
-  @IsString()
-  emoji?: string;
-
-  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000', description: 'Category ID' })
-  @IsOptional()
-  @IsString()
-  categoryId?: string | null;
-
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
-
-  @ApiPropertyOptional({ example: 0 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  order?: number;
-}
-
 export class CreateRiddleCategoryDto {
-  @ApiPropertyOptional({ example: 'logic-puzzles', description: 'Unique slug (auto-generated if not provided)' })
+  @ApiPropertyOptional({
+    example: 'logic-puzzles',
+    description: 'Unique slug (auto-generated if not provided)',
+  })
   @IsOptional()
   @IsString()
   slug?: string;
@@ -124,16 +39,16 @@ export class CreateRiddleCategoryDto {
   @IsNotEmpty()
   emoji: string;
 
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
-
   @ApiPropertyOptional({ example: 0 })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   order?: number;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
 export class UpdateRiddleCategoryDto {
@@ -152,16 +67,91 @@ export class UpdateRiddleCategoryDto {
   @IsString()
   emoji?: string;
 
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+
   @ApiPropertyOptional({ example: true })
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+}
+
+export class CreateRiddleSubjectDto {
+  @ApiPropertyOptional({
+    example: 'brain-teasers',
+    description: 'Unique slug (auto-generated if not provided)',
+  })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiProperty({ example: 'Brain Teasers', description: 'Subject name' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: '🧠', description: 'Subject emoji' })
+  @IsString()
+  @IsNotEmpty()
+  emoji: string;
+
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
+  @IsOptional()
+  @IsString()
+  categoryId?: string | null;
 
   @ApiPropertyOptional({ example: 0 })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   order?: number;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+export class UpdateRiddleSubjectDto {
+  @ApiPropertyOptional({ example: 'brain-teasers' })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @ApiPropertyOptional({ example: 'Brain Teasers' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: '🧠' })
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category ID',
+  })
+  @IsOptional()
+  @IsString()
+  categoryId?: string | null;
+
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  order?: number;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
 export class CreateRiddleMcqDto {
@@ -170,9 +160,8 @@ export class CreateRiddleMcqDto {
   @IsNotEmpty()
   question: string;
 
-  @ApiPropertyOptional({ example: ['A piano', 'A keyboard', 'A map', 'A car'], type: [String] })
+  @ApiPropertyOptional({ example: ['A piano', 'A keyboard', 'A map'], type: [String] })
   @IsOptional()
-  @IsArray()
   @IsString({ each: true })
   options?: string[];
 
@@ -181,23 +170,36 @@ export class CreateRiddleMcqDto {
   @IsString()
   correctLetter?: string;
 
-  @ApiProperty({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
-  @IsEnum(RiddleMcqLevel, {
-    message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
-  })
-  level: RiddleMcqLevel;
+  @ApiProperty({ example: 'medium', description: 'Difficulty level: easy, medium, hard, expert' })
+  @IsString()
+  @IsNotEmpty()
+  level: string;
 
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsString()
   @IsNotEmpty()
   subjectId: string;
 
+  @ApiPropertyOptional({ example: 'Think about something you might find on a desk' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
+
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()
   @IsString()
   explanation?: string;
 
-  @ApiPropertyOptional({ example: RiddleStatus.DRAFT, enum: RiddleStatus, description: 'Riddle status' })
+  @ApiPropertyOptional({ example: 'A piano' })
+  @IsOptional()
+  @IsString()
+  answer?: string;
+
+  @ApiPropertyOptional({
+    example: RiddleStatus.DRAFT,
+    enum: RiddleStatus,
+    description: 'Riddle status',
+  })
   @IsOptional()
   @IsEnum(RiddleStatus)
   status?: RiddleStatus;
@@ -209,9 +211,8 @@ export class UpdateRiddleMcqDto {
   @IsString()
   question?: string;
 
-  @ApiPropertyOptional({ example: ['A piano', 'A keyboard', 'A map', 'A car'], type: [String] })
+  @ApiPropertyOptional({ example: ['A piano', 'A keyboard', 'A map'], type: [String] })
   @IsOptional()
-  @IsArray()
   @IsString({ each: true })
   options?: string[];
 
@@ -220,24 +221,39 @@ export class UpdateRiddleMcqDto {
   @IsString()
   correctLetter?: string;
 
-  @ApiPropertyOptional({ example: RiddleMcqLevel.MEDIUM, enum: RiddleMcqLevel })
-  @IsOptional()
-  @IsEnum(RiddleMcqLevel, {
-    message: `level must be one of: ${Object.values(RiddleMcqLevel).join(', ')}`,
+  @ApiPropertyOptional({
+    example: 'medium',
+    description: 'Difficulty level: easy, medium, hard, expert',
   })
-  level?: RiddleMcqLevel;
+  @IsOptional()
+  @IsString()
+  level?: string;
 
   @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsOptional()
   @IsString()
   subjectId?: string;
 
+  @ApiPropertyOptional({ example: 'Think about something you might find on a desk' })
+  @IsOptional()
+  @IsString()
+  hint?: string;
+
   @ApiPropertyOptional({ example: 'A piano has musical keys but no locks' })
   @IsOptional()
   @IsString()
   explanation?: string;
 
-  @ApiPropertyOptional({ example: RiddleStatus.DRAFT, enum: RiddleStatus, description: 'Riddle status' })
+  @ApiPropertyOptional({ example: 'A piano' })
+  @IsOptional()
+  @IsString()
+  answer?: string;
+
+  @ApiPropertyOptional({
+    example: RiddleStatus.DRAFT,
+    enum: RiddleStatus,
+    description: 'Riddle status',
+  })
   @IsOptional()
   @IsEnum(RiddleStatus)
   status?: RiddleStatus;

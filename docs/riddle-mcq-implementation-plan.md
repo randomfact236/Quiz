@@ -4115,30 +4115,31 @@ cd apps/frontend && npx tsc --noEmit
 
 ### File Actions
 
-| File                        | Action      |
-| --------------------------- | ----------- |
-| `riddle-mcq.entity.ts`      | MODIFY      |
-| `riddle-mcq.service.ts`     | MODIFY      |
-| `riddle-mcq.controller.ts`  | MODIFY      |
-| `riddle-mcq.dto.ts`         | MODIFY      |
-| `riddle-mcq-api.ts`         | MODIFY      |
-| `riddles.ts` (types)        | MODIFY      |
-| `useRiddleFilters.ts`       | WRITE-FRESH |
-| `useRiddleCategories.ts`    | WRITE-FRESH |
-| `useRiddleSubjects.ts`      | WRITE-FRESH |
-| `useRiddleMcqs.ts`          | WRITE-FRESH |
-| `useRiddleFilterCounts.ts`  | WRITE-FRESH |
-| `useRiddleMutations.ts`     | WRITE-FRESH |
-| `hooks/index.ts`            | WRITE-FRESH |
-| `RiddleHeader.tsx`          | WRITE-FRESH |
-| `RiddleFilterPanel.tsx`     | WRITE-FRESH |
-| `RiddleQuestionManager.tsx` | WRITE-FRESH |
-| `CategoryModal.tsx`         | WRITE-FRESH |
-| `SubjectModal.tsx`          | WRITE-FRESH |
-| `RiddleModal.tsx`           | WRITE-FRESH |
-| `ImportModal.tsx`           | WRITE-FRESH |
-| `RiddleMcqContainer.tsx`    | WRITE-FRESH |
-| `admin/page.tsx`            | MODIFY      |
+| File                        | Action                      |
+| --------------------------- | --------------------------- |
+| `riddle-mcq.entity.ts`      | MODIFY                      |
+| `riddle-mcq.service.ts`     | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq.controller.ts`  | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq.dto.ts`         | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq-api.ts`         | DELETE + COPY QUIZ + RENAME |
+| `riddles.ts` (types)        | MODIFY                      |
+| `RiddleMcqSection.tsx`      | DELETE ENTIRELY             |
+| `useRiddleFilters.ts`       | WRITE-FRESH                 |
+| `useRiddleCategories.ts`    | WRITE-FRESH                 |
+| `useRiddleSubjects.ts`      | WRITE-FRESH                 |
+| `useRiddleMcqs.ts`          | WRITE-FRESH                 |
+| `useRiddleFilterCounts.ts`  | WRITE-FRESH                 |
+| `useRiddleMutations.ts`     | WRITE-FRESH                 |
+| `hooks/index.ts`            | WRITE-FRESH                 |
+| `RiddleHeader.tsx`          | WRITE-FRESH                 |
+| `RiddleFilterPanel.tsx`     | WRITE-FRESH                 |
+| `RiddleQuestionManager.tsx` | WRITE-FRESH                 |
+| `CategoryModal.tsx`         | WRITE-FRESH                 |
+| `SubjectModal.tsx`          | WRITE-FRESH                 |
+| `RiddleModal.tsx`           | WRITE-FRESH                 |
+| `ImportModal.tsx`           | WRITE-FRESH                 |
+| `RiddleMcqContainer.tsx`    | WRITE-FRESH                 |
+| `admin/page.tsx`            | MODIFY                      |
 
 ### Order
 

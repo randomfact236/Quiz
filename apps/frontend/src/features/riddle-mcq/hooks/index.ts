@@ -1,0 +1,1 @@
+export { useRiddleCategories } from './useRiddleCategories';

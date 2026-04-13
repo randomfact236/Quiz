@@ -21,18 +21,9 @@ import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { RiddleCategory } from './entities/riddle-category.entity';
-import { RiddleMcq } from './entities/riddle-mcq.entity';
+import { RiddleMcq, RiddleStatus } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
 import { RiddleMcqService } from './riddle-mcq.service';
-import {
-  CreateRiddleCategoryDto,
-  CreateRiddleMcqDto,
-  CreateRiddleMcqSubjectDto,
-  RiddleMcqPaginationDto,
-  UpdateRiddleCategoryDto,
-  UpdateRiddleMcqDto,
-  UpdateRiddleMcqSubjectDto,
-} from './dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ')
 @Controller('riddle-mcq')
@@ -42,7 +33,7 @@ export class RiddleMcqController {
   // ==================== CATEGORIES ====================
 
   @Get('categories')
-  @ApiOperation({ summary: 'Get all active riddle categories' })
+  @ApiOperation({ summary: 'Get all active categories (Public)' })
   async getAllCategories(): Promise<RiddleCategory[]> {
     return this.riddleMcqService.findAllCategories(false);
   }
@@ -57,7 +48,7 @@ export class RiddleMcqController {
   }
 
   @Get('categories/:id')
-  @ApiOperation({ summary: 'Get category by ID' })
+  @ApiOperation({ summary: 'Get category by ID (Public)' })
   async getCategoryById(@Param('id') id: string): Promise<RiddleCategory> {
     return this.riddleMcqService.findCategoryById(id);
   }
@@ -66,8 +57,10 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new riddle category (Admin only)' })
-  async createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
+  @ApiOperation({ summary: 'Create new category (Admin only)' })
+  async createCategory(
+    @Body() dto: { name: string; slug?: string; emoji?: string; order?: number; isActive?: boolean }
+  ): Promise<RiddleCategory> {
     return this.riddleMcqService.createCategory(dto);
   }
 
@@ -75,10 +68,11 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update riddle category (Admin only)' })
+  @ApiOperation({ summary: 'Update category (Admin only)' })
   async updateCategory(
     @Param('id') id: string,
-    @Body() dto: UpdateRiddleCategoryDto,
+    @Body()
+    dto: { name?: string; slug?: string; emoji?: string; order?: number; isActive?: boolean }
   ): Promise<RiddleCategory> {
     return this.riddleMcqService.updateCategory(id, dto);
   }
@@ -88,7 +82,7 @@ export class RiddleMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Delete riddle category (Admin only)' })
+  @ApiOperation({ summary: 'Delete category (Admin only)' })
   async deleteCategory(@Param('id') id: string): Promise<{ message: string }> {
     await this.riddleMcqService.deleteCategory(id);
     return { message: 'Category deleted successfully' };
@@ -97,10 +91,8 @@ export class RiddleMcqController {
   // ==================== SUBJECTS ====================
 
   @Get('subjects')
-  @ApiOperation({ summary: 'Get all active riddle subjects' })
-  async getAllSubjects(
-    @Query('hasContent') hasContent?: string,
-  ): Promise<RiddleSubject[]> {
+  @ApiOperation({ summary: 'Get all active subjects (Public)' })
+  async getAllSubjects(@Query('hasContent') hasContent?: string): Promise<RiddleSubject[]> {
     return this.riddleMcqService.findAllSubjects(false, hasContent === 'true');
   }
 
@@ -114,8 +106,7 @@ export class RiddleMcqController {
   }
 
   @Get('subjects/:slug')
-  @ApiOperation({ summary: 'Get subject by slug' })
-  @ApiParam({ name: 'slug', example: 'brain-teasers' })
+  @ApiOperation({ summary: 'Get subject by slug (Public)' })
   async getSubjectBySlug(@Param('slug') slug: string): Promise<RiddleSubject> {
     return this.riddleMcqService.findSubjectBySlug(slug);
   }
@@ -124,8 +115,18 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new riddle subject (Admin only)' })
-  async createSubject(@Body() dto: CreateRiddleMcqSubjectDto): Promise<RiddleSubject> {
+  @ApiOperation({ summary: 'Create new subject (Admin only)' })
+  async createSubject(
+    @Body()
+    dto: {
+      name: string;
+      slug?: string;
+      emoji?: string;
+      categoryId?: string | null;
+      order?: number;
+      isActive?: boolean;
+    }
+  ): Promise<RiddleSubject> {
     return this.riddleMcqService.createSubject(dto);
   }
 
@@ -133,10 +134,18 @@ export class RiddleMcqController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update riddle subject (Admin only)' })
+  @ApiOperation({ summary: 'Update subject (Admin only)' })
   async updateSubject(
     @Param('id') id: string,
-    @Body() dto: UpdateRiddleMcqSubjectDto,
+    @Body()
+    dto: {
+      name?: string;
+      slug?: string;
+      emoji?: string;
+      categoryId?: string | null;
+      order?: number;
+      isActive?: boolean;
+    }
   ): Promise<RiddleSubject> {
     return this.riddleMcqService.updateSubject(id, dto);
   }
@@ -146,151 +155,196 @@ export class RiddleMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Delete riddle subject (Admin only)' })
+  @ApiOperation({ summary: 'Delete subject (Admin only)' })
   async deleteSubject(@Param('id') id: string): Promise<{ message: string }> {
     await this.riddleMcqService.deleteSubject(id);
     return { message: 'Subject deleted successfully' };
   }
 
-  // ==================== MCQs ====================
+  // ==================== RIDDLES ====================
 
   @Get('all')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all riddle MCQs with filters (Admin only)' })
+  @ApiOperation({ summary: 'Get all riddles with filters (Admin only)' })
   @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
   @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })
   @ApiQuery({ name: 'status', required: false, description: 'Filter by status' })
   @ApiQuery({ name: 'search', required: false, description: 'Search in question text' })
   @ApiQuery({ name: 'page', required: false, description: 'Page number' })
   @ApiQuery({ name: 'limit', required: false, description: 'Items per page' })
-  async getAllRiddleMcqsAdmin(
+  async getAllRiddles(
     @Query('subject') subject?: string,
     @Query('level') level?: string,
     @Query('status') status?: string,
     @Query('search') search?: string,
     @Query('page') page?: string,
-    @Query('limit') limit?: string,
+    @Query('limit') limit?: string
   ): Promise<{ data: RiddleMcq[]; total: number }> {
     const pagination = {
       page: page ? parseInt(page, 10) : 1,
-      limit: limit ? parseInt(limit, 10) : 50,
+      limit: limit ? parseInt(limit, 10) : DEFAULT_PAGE_SIZE,
     };
-    return this.riddleMcqService.findAllRiddleMcqsAdmin(
-      { subject, level, status, search },
-      pagination
-    );
+    return this.riddleMcqService.findAllRiddles({ subject, level, status, search }, pagination);
   }
 
-  @Get('subjects/:subjectId/mcqs')
-  @ApiOperation({ summary: 'Get riddle MCQs by subject ID' })
-  async getRiddleMcqsBySubject(
+  @Get('subjects/:subjectId/riddles')
+  @ApiOperation({ summary: 'Get riddles by subject ID (Public)' })
+  async getRiddlesBySubject(
     @Param('subjectId') subjectId: string,
-    @Query() pagination: RiddleMcqPaginationDto,
-    @Query('level') level?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('level') level?: string
   ): Promise<{ data: RiddleMcq[]; total: number }> {
-    return this.riddleMcqService.findRiddleMcqsBySubject(subjectId, pagination, level);
+    const pagination = {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : DEFAULT_PAGE_SIZE,
+    };
+    return this.riddleMcqService.findRiddlesBySubject(subjectId, pagination, level);
   }
 
   @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed riddle MCQs from all subjects' })
-  async getMixedRiddleMcqs(@Query('count') count?: string): Promise<RiddleMcq[]> {
+  @ApiOperation({ summary: 'Get mixed riddles from all subjects (Public)' })
+  async getMixedRiddles(@Query('count') count?: string): Promise<RiddleMcq[]> {
     const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
-    return this.riddleMcqService.findMixedRiddleMcqs(parsedCount);
+    return this.riddleMcqService.findMixedRiddles(parsedCount);
   }
 
   @Get('random/:level')
-  @ApiOperation({ summary: 'Get random riddle MCQs by difficulty level' })
+  @ApiOperation({ summary: 'Get random riddles by difficulty level (Public)' })
   @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert'] })
-  async getRandomRiddleMcqs(
+  async getRandomRiddles(
     @Param('level') level: string,
-    @Query('count') count?: string,
+    @Query('count') count?: string
   ): Promise<RiddleMcq[]> {
     const parsedCount = this.validateCount(count, 10, 1, 50);
     this.validateDifficulty(level);
-    return this.riddleMcqService.findRandomRiddleMcqs(level, parsedCount);
+    return this.riddleMcqService.findRandomRiddles(level, parsedCount);
   }
 
-  @Post('mcqs')
+  @Post('riddles')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create new riddle MCQ (Admin only)' })
-  async createRiddleMcq(@Body() dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
-    return this.riddleMcqService.createRiddleMcq(dto);
+  @ApiOperation({ summary: 'Create new riddle (Admin only)' })
+  async createRiddle(
+    @Body()
+    dto: {
+      question: string;
+      options?: string[];
+      correctLetter?: string;
+      level: string;
+      subjectId: string;
+      hint?: string;
+      explanation?: string;
+      answer?: string;
+      status?: RiddleStatus;
+    }
+  ): Promise<RiddleMcq> {
+    return this.riddleMcqService.createRiddle(dto);
   }
 
-  @Post('mcqs/bulk')
+  @Post('riddles/bulk')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create riddle MCQs (Admin only)' })
-  async createRiddleMcqsBulk(
-    @Body() dtos: CreateRiddleMcqDto[],
+  @ApiOperation({ summary: 'Bulk create riddles (Admin only)' })
+  async createRiddlesBulk(
+    @Body()
+    dtos: Array<{
+      question: string;
+      options?: string[];
+      correctLetter?: string;
+      level: string;
+      subjectId: string;
+      hint?: string;
+      explanation?: string;
+      answer?: string;
+      status?: RiddleStatus;
+    }>
   ): Promise<{ count: number; errors: string[] }> {
     if (!dtos || dtos.length === 0) {
       throw new BadRequestException('No riddles provided for bulk creation');
     }
-    return this.riddleMcqService.createRiddleMcqsBulk(dtos);
+    return this.riddleMcqService.createRiddlesBulk(dtos);
   }
 
-  @Patch('mcqs/:id')
+  @Patch('riddles/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update riddle MCQ (Admin only)' })
-  async updateRiddleMcq(
+  @ApiOperation({ summary: 'Update riddle (Admin only)' })
+  async updateRiddle(
     @Param('id') id: string,
-    @Body() dto: UpdateRiddleMcqDto,
+    @Body()
+    dto: {
+      question?: string;
+      options?: string[];
+      correctLetter?: string;
+      level?: string;
+      subjectId?: string;
+      hint?: string;
+      explanation?: string;
+      answer?: string;
+      status?: RiddleStatus;
+    }
   ): Promise<RiddleMcq> {
-    return this.riddleMcqService.updateRiddleMcq(id, dto);
+    return this.riddleMcqService.updateRiddle(id, dto);
   }
 
-  @Delete('mcqs/:id')
+  @Delete('riddles/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Delete riddle MCQ (Admin only)' })
-  async deleteRiddleMcq(@Param('id') id: string): Promise<{ message: string }> {
-    await this.riddleMcqService.deleteRiddleMcq(id);
-    return { message: 'Riddle MCQ deleted successfully' };
+  @ApiOperation({ summary: 'Delete riddle (Admin only)' })
+  async deleteRiddle(@Param('id') id: string): Promise<{ message: string }> {
+    await this.riddleMcqService.deleteRiddle(id);
+    return { message: 'Riddle deleted successfully' };
   }
 
   // ==================== BULK ACTIONS ====================
 
-  @Post('mcqs/bulk-action')
+  @Post('riddles/bulk-action')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Execute bulk action on riddle MCQs (Admin only)' })
+  @ApiOperation({ summary: 'Execute bulk action on riddles (Admin only)' })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
-    return this.riddleMcqService.bulkActionRiddleMcqs(dto.ids, dto.action);
+    return this.riddleMcqService.bulkActionRiddles(dto.ids, dto.action);
   }
 
   // ==================== STATS ====================
 
   @Get('stats/overview')
-  @ApiOperation({ summary: 'Get riddle MCQ statistics' })
+  @ApiOperation({ summary: 'Get riddle MCQ statistics (Public)' })
   async getStats(): Promise<{
-    totalRiddleMcqs: number;
+    totalRiddles: number;
     totalSubjects: number;
-    mcqsByLevel: Record<string, number>;
+    totalCategories: number;
+    riddlesByLevel: Record<string, number>;
   }> {
     return this.riddleMcqService.getStats();
   }
 
   @Get('filter-counts')
-  @ApiOperation({ summary: 'Get unified filter counts' })
+  @ApiOperation({ summary: 'Get unified filter counts (Public)' })
   @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
   @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })
   async getFilterCounts(
     @Query('subject') subject?: string,
-    @Query('level') level?: string,
+    @Query('level') level?: string
   ): Promise<{
-    subjectCounts: { id: string; name: string; count: number }[];
+    categoryCounts: { id: string; name: string; emoji: string; count: number }[];
+    subjectCounts: {
+      id: string;
+      name: string;
+      emoji: string;
+      categoryId: string | null;
+      count: number;
+    }[];
     levelCounts: { level: string; count: number }[];
     total: number;
   }> {
@@ -303,7 +357,7 @@ export class RiddleMcqController {
     count: string | undefined,
     defaultValue: number,
     min: number,
-    max: number,
+    max: number
   ): number {
     if (count === undefined || count === '') {
       return defaultValue;
@@ -326,7 +380,7 @@ export class RiddleMcqController {
     const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
     if (!validDifficulties.includes(level)) {
       throw new BadRequestException(
-        `Invalid difficulty level: "${level}". Valid values: ${validDifficulties.join(', ')}`,
+        `Invalid difficulty level: "${level}". Valid values: ${validDifficulties.join(', ')}`
       );
     }
   }

@@ -11,6 +11,8 @@
 import { api, apiRequest } from './api-client';
 import type { RiddleMcq, RiddleSubject } from '@/types/riddles';
 
+export type { RiddleSubject } from '@/types/riddles';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -82,9 +84,10 @@ export interface CreateRiddleMcqDto {
   correctLetter?: string;
   correctAnswer?: string;
   level: 'easy' | 'medium' | 'hard' | 'expert';
-  subjectId: string;  // REQUIRED - no chapterId
+  subjectId: string; // REQUIRED - no chapterId
   hint?: string;
   explanation?: string;
+  answer?: string;
   status?: 'published' | 'draft' | 'trash';
 }
 
@@ -97,6 +100,7 @@ export interface UpdateRiddleMcqDto {
   subjectId?: string;
   hint?: string;
   explanation?: string;
+  answer?: string;
   status?: 'published' | 'draft' | 'trash';
 }
 
@@ -183,7 +187,9 @@ export async function deleteCategory(id: string): Promise<void> {
  * Get all active riddle subjects
  */
 export async function getSubjects(hasContent: boolean = false): Promise<RiddleSubject[]> {
-  const response = await api.get<RiddleSubject[]>(`/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`);
+  const response = await api.get<RiddleSubject[]>(
+    `/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`
+  );
   return response.data;
 }
 
@@ -250,10 +256,7 @@ export async function getRiddlesBySubject(
 /**
  * Get random riddle MCQs by difficulty (Public)
  */
-export async function getRandomRiddles(
-  level: string,
-  count: number = 10
-): Promise<RiddleMcq[]> {
+export async function getRandomRiddles(level: string, count: number = 10): Promise<RiddleMcq[]> {
   const response = await api.get<RiddleMcq[]>(`/riddle-mcq/random/${level}?count=${count}`);
   return response.data;
 }
@@ -275,7 +278,7 @@ export async function getAllRiddles(
   limit: number = 50
 ): Promise<{ data: RiddleMcq[]; total: number }> {
   const queryParams = new URLSearchParams();
-  
+
   if (params.subject && params.subject !== 'all') {
     queryParams.append('subject', params.subject);
   }
@@ -288,10 +291,10 @@ export async function getAllRiddles(
   if (params.search) {
     queryParams.append('search', params.search);
   }
-  
+
   queryParams.append('page', String(page));
   queryParams.append('limit', String(limit));
-  
+
   const url = `/riddle-mcq/all?${queryParams.toString()}`;
   const response = await api.get<{ data: RiddleMcq[]; total: number }>(url);
   return response.data;
@@ -303,9 +306,21 @@ export async function getAllRiddles(
 export async function bulkActionRiddles(
   ids: string[],
   action: 'delete' | 'trash' | 'publish' | 'draft'
-): Promise<{ success: boolean; processed: number; succeeded: number; failed: number; message: string }> {
+): Promise<{
+  success: boolean;
+  processed: number;
+  succeeded: number;
+  failed: number;
+  message: string;
+}> {
   const response = await api.post('/riddle-mcq/mcqs/bulk-action', { ids, action });
-  return response.data as { success: boolean; processed: number; succeeded: number; failed: number; message: string };
+  return response.data as {
+    success: boolean;
+    processed: number;
+    succeeded: number;
+    failed: number;
+    message: string;
+  };
 }
 
 /**
@@ -322,14 +337,20 @@ export async function createRiddle(dto: CreateRiddleMcqDto): Promise<RiddleMcq> 
 export async function bulkCreateRiddles(
   dtos: CreateRiddleMcqDto[]
 ): Promise<{ count: number; errors: string[] }> {
-  const response = await api.post<{ count: number; errors: string[] }>('/riddle-mcq/mcqs/bulk', dtos);
+  const response = await api.post<{ count: number; errors: string[] }>(
+    '/riddle-mcq/mcqs/bulk',
+    dtos
+  );
   return response.data;
 }
 
 /**
  * Update a riddle MCQ (Admin only)
  */
-export async function updateRiddle(id: string, dto: Partial<CreateRiddleMcqDto>): Promise<RiddleMcq> {
+export async function updateRiddle(
+  id: string,
+  dto: Partial<CreateRiddleMcqDto>
+): Promise<RiddleMcq> {
   const response = await api.patch<RiddleMcq>(`/riddle-mcq/mcqs/${id}`, dto);
   return response.data;
 }
@@ -352,14 +373,14 @@ export async function getRiddleFilterCounts(
   params: GetFilterCountsParams = {}
 ): Promise<FilterCounts> {
   const queryParams = new URLSearchParams();
-  
+
   if (params.subject && params.subject !== 'all') {
     queryParams.append('subject', params.subject);
   }
   if (params.level && params.level !== 'all') {
     queryParams.append('level', params.level);
   }
-  
+
   const url = `/riddle-mcq/filter-counts?${queryParams.toString()}`;
   const response = await api.get(url);
   return response.data as FilterCounts;

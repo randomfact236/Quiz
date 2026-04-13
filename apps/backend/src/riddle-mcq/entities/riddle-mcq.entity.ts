@@ -36,6 +36,12 @@ export class RiddleMcq {
   @Column({ type: 'text', nullable: true })
   explanation: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  hint: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  answer: string | null;
+
   @Index()
   @Column({ type: 'enum', enum: RiddleMcqLevel, default: RiddleMcqLevel.EASY })
   level: RiddleMcqLevel;
