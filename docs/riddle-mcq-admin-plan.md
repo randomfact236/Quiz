@@ -30,21 +30,21 @@ Rebuild riddle-mcq admin panel following EXACT same TRUE ideal approach as quiz 
 ```
 apps/frontend/src/features/riddle-mcq/
 ├── RiddleMcqContainer.tsx         (coordinator, ~200 lines)
-├── RiddleHeader.tsx               (title + actions)
-├── RiddleFilterPanel.tsx          (filters - includes category row)
+├── RiddleMcqHeader.tsx               (title + actions)
+├── RiddleMcqFilterPanel.tsx          (filters - includes category row)
 ├── RiddleQuestionManager.tsx       (table + bulk actions)
 ├── hooks/
-│   ├── useRiddleFilters.ts        (URL-driven filters)
-│   ├── useRiddleCategories.ts     (categories data)
-│   ├── useRiddleSubjects.ts       (subjects data)
-│   ├── useRiddleMcqs.ts          (riddles data via React Query)
-│   ├── useRiddleFilterCounts.ts  (filter counts)
+│   ├── useRiddleMcqFilters.ts        (URL-driven filters)
+│   ├── useRiddleMcqCategories.ts     (categories data)
+│   ├── useRiddleMcqSubjects.ts       (subjects data)
+│   ├── useRiddleMcqQuestions.ts          (riddles data via React Query)
+│   ├── useRiddleMcqFilterCounts.ts  (filter counts)
 │   ├── useRiddleMutations.ts     (CRUD operations)
 │   └── index.ts
 └── modals/
-    ├── CategoryModal.tsx           (NEW - quiz has no category level)
-    ├── SubjectModal.tsx           (similar to quiz chapter modal)
-    ├── RiddleModal.tsx            (level-based options)
+    ├── RiddleMcqCategoryModal.tsx           (NEW - quiz has no category level)
+    ├── RiddleMcqSubjectModal.tsx           (similar to quiz chapter modal)
+    ├── RiddleMcqModal.tsx            (level-based options)
     └── ImportModal.tsx
 ```
 
@@ -78,18 +78,18 @@ import { RiddleMcqContainer } from '@/features/riddle-mcq/RiddleMcqContainer';
 ```typescript
 export function RiddleMcqContainer() {
   // 1. Hooks first (ALL before any conditional returns)
-  const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } = useRiddleFilters();
-  const categoriesQuery = useRiddleCategories();
+  const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } = useRiddleMcqFilters();
+  const categoriesQuery = useRiddleMcqCategories();
   const selectedCategory = categoriesQuery.data?.find(c => c.id === filters.category);
-  const subjectsQuery = useRiddleSubjects(selectedCategory?.id);
+  const subjectsQuery = useRiddleMcqSubjects(selectedCategory?.id);
   const selectedSubject = subjectsQuery.data?.find(s => s.slug === filters.subject);
-  const riddlesQuery = useRiddleMcqs(filters, page, pageSize);
-  const filterCountsQuery = useRiddleFilterCounts(filters);
+  const riddlesQuery = useRiddleMcqQuestions(filters, page, pageSize);
+  const filterCountsQuery = useRiddleMcqFilterCounts(filters);
 
   // 2. Modal states
-  const [categoryModal, setCategoryModal] = useState({ open: false, category: undefined });
-  const [subjectModal, setSubjectModal] = useState({ open: false, subject: undefined });
-  const [riddleModal, setRiddleModal] = useState({ open: false, riddle: undefined });
+  const [categoryModal, setRiddleMcqCategoryModal] = useState({ open: false, category: undefined });
+  const [subjectModal, setRiddleMcqSubjectModal] = useState({ open: false, subject: undefined });
+  const [riddleModal, setRiddleMcqModal] = useState({ open: false, riddle: undefined });
   const [importModal, setImportModal] = useState(false);
   const [confirm, setConfirm] = useState({ open: false, ... });
 
@@ -105,12 +105,12 @@ export function RiddleMcqContainer() {
   // 5. Render
   return (
     <div className="space-y-6 p-6">
-      <RiddleHeader ... />
-      <RiddleFilterPanel ... />
+      <RiddleMcqHeader ... />
+      <RiddleMcqFilterPanel ... />
       <RiddleQuestionManager ... />
-      <CategoryModal ... />
-      <SubjectModal ... />
-      <RiddleModal ... />
+      <RiddleMcqCategoryModal ... />
+      <RiddleMcqSubjectModal ... />
+      <RiddleMcqModal ... />
       <ImportModal ... />
       <ConfirmDialog ... />
     </div>
@@ -118,14 +118,14 @@ export function RiddleMcqContainer() {
 }
 ```
 
-### 2.2 RiddleHeader.tsx
+### 2.2 RiddleMcqHeader.tsx
 
 **Responsibility:** Title, action buttons (Add, Import, Export)
 
 **Props:**
 
 ```typescript
-interface RiddleHeaderProps {
+interface RiddleMcqHeaderProps {
   totalRiddles: number;
   onAddRiddle: () => void;
   onImport: () => void;
@@ -135,15 +135,15 @@ interface RiddleHeaderProps {
 
 **Similar to QuizHeader** but with Add Riddle instead of Add Question.
 
-### 2.3 RiddleFilterPanel.tsx
+### 2.3 RiddleMcqFilterPanel.tsx
 
 **Responsibility:** All filter rows - Category, Subject, Level, Status, Search
 
 **Props:**
 
 ```typescript
-interface RiddleFilterPanelProps {
-  filters: ReturnType<typeof useRiddleFilters>['filters'];
+interface RiddleMcqFilterPanelProps {
+  filters: ReturnType<typeof useRiddleMcqFilters>['filters'];
   onFilterChange: (key: string, value: string) => void;
   onReset: () => void;
   categories: RiddleCategory[];
@@ -207,14 +207,14 @@ interface RiddleQuestionManagerProps {
 - Displays Category and Subject columns instead of Chapter
 - Shows hint/explanation indicators
 
-### 2.5 CategoryModal.tsx
+### 2.5 RiddleMcqCategoryModal.tsx
 
 **Responsibility:** Create/Edit category
 
 **Props:**
 
 ```typescript
-interface CategoryModalProps {
+interface RiddleMcqCategoryModalProps {
   open: boolean;
   category?: RiddleCategory; // undefined for create
   onClose: () => void;
@@ -229,14 +229,14 @@ interface CategoryModalProps {
 - order (optional, default 0)
 - isActive (checkbox, default true)
 
-### 2.6 SubjectModal.tsx
+### 2.6 RiddleMcqSubjectModal.tsx
 
 **Responsibility:** Create/Edit subject
 
 **Props:**
 
 ```typescript
-interface SubjectModalProps {
+interface RiddleMcqSubjectModalProps {
   open: boolean;
   subject?: RiddleSubject; // undefined for create
   categoryId?: string; // pre-selected category
@@ -254,14 +254,14 @@ interface SubjectModalProps {
 - order (optional, default 0)
 - isActive (checkbox, default true)
 
-### 2.7 RiddleModal.tsx (KEY DIFFERENCE)
+### 2.7 RiddleMcqModal.tsx (KEY DIFFERENCE)
 
 **Responsibility:** Create/Edit riddle with dynamic options based on level
 
 **Props:**
 
 ```typescript
-interface RiddleModalProps {
+interface RiddleMcqModalProps {
   open: boolean;
   riddle?: Riddle; // undefined for create
   subjects: RiddleSubject[];
@@ -428,14 +428,14 @@ question,optionA,optionB,optionC,optionD,correctLetter,answer,level,subject,cate
 
 ## Step 3: Hook Specifications
 
-### 3.1 useRiddleFilters.ts
+### 3.1 useRiddleMcqFilters.ts
 
 **Responsibility:** URL-driven filter state
 
 **Same pattern as useQuizFilters:**
 
 ```typescript
-export function useRiddleFilters() {
+export function useRiddleMcqFilters() {
   const searchParams = useSearchParams();
 
   // URL keys:
@@ -467,12 +467,12 @@ export function useRiddleFilters() {
 }
 ```
 
-### 3.2 useRiddleCategories.ts
+### 3.2 useRiddleMcqCategories.ts
 
 **Responsibility:** Fetch categories
 
 ```typescript
-export function useRiddleCategories() {
+export function useRiddleMcqCategories() {
   return useQuery({
     queryKey: ['riddle-categories'],
     queryFn: () => getCategories(), // from riddle-mcq-api
@@ -481,12 +481,12 @@ export function useRiddleCategories() {
 }
 ```
 
-### 3.3 useRiddleSubjects.ts
+### 3.3 useRiddleMcqSubjects.ts
 
 **Responsibility:** Fetch subjects (optionally filtered by category)
 
 ```typescript
-export function useRiddleSubjects(categoryId?: string) {
+export function useRiddleMcqSubjects(categoryId?: string) {
   return useQuery({
     queryKey: ['riddle-subjects', categoryId],
     queryFn: () => getSubjects(), // from riddle-mcq-api
@@ -496,12 +496,12 @@ export function useRiddleSubjects(categoryId?: string) {
 }
 ```
 
-### 3.4 useRiddleMcqs.ts
+### 3.4 useRiddleMcqQuestions.ts
 
 **Responsibility:** Fetch riddles with filters (React Query)
 
 ```typescript
-export function useRiddleMcqs(filters: RiddleFilters, page: number, pageSize: number = 10) {
+export function useRiddleMcqQuestions(filters: RiddleFilters, page: number, pageSize: number = 10) {
   return useQuery({
     queryKey: ['riddle-mcqs', filters, page, pageSize],
     queryFn: () => getAllRiddles(filters, page, pageSize),
@@ -554,10 +554,10 @@ export function useRiddleMutations() {
 }
 ```
 
-### 3.6 useRiddleFilterCounts.ts
+### 3.6 useRiddleMcqFilterCounts.ts
 
 ```typescript
-export function useRiddleFilterCounts(filters: RiddleFilters) {
+export function useRiddleMcqFilterCounts(filters: RiddleFilters) {
   return useQuery({
     queryKey: ['riddle-filter-counts', filters],
     queryFn: () => getRiddleFilterCounts(filters),
@@ -674,7 +674,7 @@ export interface GetRiddlesParams {
 
 ---
 
-## Step 6: RiddleModal Level-Based Options Logic
+## Step 6: RiddleMcqModal Level-Based Options Logic
 
 ### 6.1 Level → Options Mapping
 
@@ -790,9 +790,9 @@ interface RiddleExport {
 
 ## Step 8: Implementation Order
 
-1. **Create hooks** - useRiddleFilters, useRiddleCategories, useRiddleSubjects, useRiddleMcqs, useRiddleFilterCounts, useRiddleMutations
-2. **Create modals** - CategoryModal, SubjectModal, RiddleModal, ImportModal
-3. **Create components** - RiddleHeader, RiddleFilterPanel, RiddleQuestionManager
+1. **Create hooks** - useRiddleMcqFilters, useRiddleMcqCategories, useRiddleMcqSubjects, useRiddleMcqQuestions, useRiddleMcqFilterCounts, useRiddleMutations
+2. **Create modals** - RiddleMcqCategoryModal, RiddleMcqSubjectModal, RiddleMcqModal, ImportModal
+3. **Create components** - RiddleMcqHeader, RiddleMcqFilterPanel, RiddleQuestionManager
 4. **Create container** - RiddleMcqContainer
 5. **Wire up in admin page** - Replace current RiddleMcqSection
 6. **Test** - All CRUD operations, filters, pagination, import/export
@@ -803,7 +803,7 @@ interface RiddleExport {
 
 ### Container & Hooks
 
-- [ ] useRiddleFilters reads/writes URL params correctly
+- [ ] useRiddleMcqFilters reads/writes URL params correctly
 - [ ] All React Query hooks fetch and cache data
 - [ ] Mutations invalidate correct query keys
 

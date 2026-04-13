@@ -53,22 +53,22 @@
 
 ### Frontend - Copy & Rename
 
-| Copy From               | Copy To                      | Changes                         |
-| ----------------------- | ---------------------------- | ------------------------------- |
-| `SubjectModal.tsx`      | `CategoryModal.tsx`          | Remove chapterId, rename fields |
-| `ChapterModal.tsx`      | `SubjectModal.tsx`           | Add categoryId, rename fields   |
-| `useSubjects.ts`        | `useRiddleCategories.ts`     | Rename query key + function     |
-| `useChapters.ts`        | `useRiddleSubjects.ts`       | Rename query key + function     |
-| `useQuestions.ts`       | `useRiddleMcqs.ts`           | Rename query key + function     |
-| `useSubjectMutation.ts` | useRiddleMutations (part of) | Add category mutations          |
-| `FilterPanel.tsx`       | `RiddleFilterPanel.tsx`      | Add category row                |
-| `QuizMcqContainer.tsx`  | `RiddleMcqContainer.tsx`     | Update all imports + hooks      |
+| Copy From                   | Copy To                      | Changes                         |
+| --------------------------- | ---------------------------- | ------------------------------- |
+| `RiddleMcqSubjectModal.tsx` | `RiddleMcqCategoryModal.tsx` | Remove chapterId, rename fields |
+| `ChapterModal.tsx`          | `RiddleMcqSubjectModal.tsx`  | Add categoryId, rename fields   |
+| `useSubjects.ts`            | `useRiddleMcqCategories.ts`  | Rename query key + function     |
+| `useChapters.ts`            | `useRiddleMcqSubjects.ts`    | Rename query key + function     |
+| `useQuestions.ts`           | `useRiddleMcqQuestions.ts`   | Rename query key + function     |
+| `useSubjectMutation.ts`     | useRiddleMutations (part of) | Add category mutations          |
+| `FilterPanel.tsx`           | `RiddleMcqFilterPanel.tsx`   | Add category row                |
+| `QuizMcqContainer.tsx`      | `RiddleMcqContainer.tsx`     | Update all imports + hooks      |
 
 ### Write Fresh (Cannot Copy)
 
 | File                          | Reason                                                    |
 | ----------------------------- | --------------------------------------------------------- |
-| `RiddleModal.tsx`             | Dynamic options (2/3/4/text) — quiz has fixed 4 options   |
+| `RiddleMcqModal.tsx`          | Dynamic options (2/3/4/text) — quiz has fixed 4 options   |
 | `RiddleQuestionManager.tsx`   | Shows category column, hint/explanation indicators        |
 | Options validation in service | Quiz validates True/False, Riddle validates 2/3/4 options |
 
@@ -418,7 +418,7 @@ export interface RiddleCategory {
 
 #### 1.7 Hook
 
-**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleCategories.ts`  
+**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqCategories.ts`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -428,7 +428,7 @@ export interface RiddleCategory {
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '@/lib/riddle-mcq-api';
 
-export function useRiddleCategories() {
+export function useRiddleMcqCategories() {
   return useQuery({
     queryKey: ['riddle-categories'],
     queryFn: getCategories,
@@ -437,9 +437,9 @@ export function useRiddleCategories() {
 }
 ```
 
-#### 1.8 CategoryModal Component
+#### 1.8 RiddleMcqCategoryModal Component
 
-**File:** `apps/frontend/src/features/riddle-mcq/modals/CategoryModal.tsx`  
+**File:** `apps/frontend/src/features/riddle-mcq/modals/RiddleMcqCategoryModal.tsx`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -461,14 +461,14 @@ const categorySchema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
-interface CategoryModalProps {
+interface RiddleMcqCategoryModalProps {
   open: boolean;
   category?: RiddleCategory;
   onClose: () => void;
   onSubmit: (dto: CreateCategoryDto) => void;
 }
 
-export function CategoryModal({ open, category, onClose, onSubmit }: CategoryModalProps) {
+export function RiddleMcqCategoryModal({ open, category, onClose, onSubmit }: RiddleMcqCategoryModalProps) {
   const {
     register,
     handleSubmit,
@@ -568,10 +568,10 @@ export function CategoryModal({ open, category, onClose, onSubmit }: CategoryMod
 - [ ] DELETE /riddle-mcq/categories/:id deletes category
 - [ ] Deleting category cascades to delete all subjects
 - [ ] Deleting category cascades to delete all riddles under those subjects
-- [ ] CategoryModal opens for create
-- [ ] CategoryModal opens for edit with pre-filled data
+- [ ] RiddleMcqCategoryModal opens for create
+- [ ] RiddleMcqCategoryModal opens for edit with pre-filled data
 - [ ] Category form validates required fields
-- [ ] useRiddleCategories hook fetches and caches data
+- [ ] useRiddleMcqCategories hook fetches and caches data
 
 #### 1.10 Verification Steps - Category
 
@@ -593,7 +593,7 @@ cd apps/frontend && npx tsc --noEmit
 **Step 3: Frontend UI (Browser DevTools)**
 
 - [ ] Filter panel shows category chips
-- [ ] Click "+ Add" → CategoryModal opens
+- [ ] Click "+ Add" → RiddleMcqCategoryModal opens
 - [ ] Fill form, submit → modal closes, category appears
 - [ ] Click category chip → URL updates, count filters
 
@@ -941,7 +941,7 @@ export interface RiddleSubject {
 
 #### 2.7 Hook
 
-**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleSubjects.ts`  
+**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqSubjects.ts`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -951,7 +951,7 @@ export interface RiddleSubject {
 import { useQuery } from '@tanstack/react-query';
 import { getSubjects } from '@/lib/riddle-mcq-api';
 
-export function useRiddleSubjects(categoryId?: string) {
+export function useRiddleMcqSubjects(categoryId?: string) {
   return useQuery({
     queryKey: ['riddle-subjects', categoryId],
     queryFn: () => getSubjects(),
@@ -960,9 +960,9 @@ export function useRiddleSubjects(categoryId?: string) {
 }
 ```
 
-#### 2.8 SubjectModal Component
+#### 2.8 RiddleMcqSubjectModal Component
 
-**File:** `apps/frontend/src/features/riddle-mcq/modals/SubjectModal.tsx`  
+**File:** `apps/frontend/src/features/riddle-mcq/modals/RiddleMcqSubjectModal.tsx`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -985,7 +985,7 @@ const subjectSchema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
-interface SubjectModalProps {
+interface RiddleMcqSubjectModalProps {
   open: boolean;
   subject?: RiddleSubject;
   categoryId?: string;
@@ -994,7 +994,7 @@ interface SubjectModalProps {
   onSubmit: (dto: CreateSubjectDto) => void;
 }
 
-export function SubjectModal({ open, subject, categoryId, categories, onClose, onSubmit }: SubjectModalProps) {
+export function RiddleMcqSubjectModal({ open, subject, categoryId, categories, onClose, onSubmit }: RiddleMcqSubjectModalProps) {
   const {
     register,
     handleSubmit,
@@ -1111,8 +1111,8 @@ export function SubjectModal({ open, subject, categoryId, categories, onClose, o
 - [ ] PATCH /riddle-mcq/subjects/:id updates subject
 - [ ] DELETE /riddle-mcq/subjects/:id deletes subject
 - [ ] Deleting subject cascades to delete all riddles
-- [ ] SubjectModal opens for create
-- [ ] SubjectModal opens for edit with pre-filled data
+- [ ] RiddleMcqSubjectModal opens for create
+- [ ] RiddleMcqSubjectModal opens for edit with pre-filled data
 - [ ] Subject form validates required fields
 - [ ] Subject shows category relationship
 
@@ -1136,7 +1136,7 @@ cd apps/frontend && npx tsc --noEmit
 **Step 3: Frontend UI (Browser DevTools)**
 
 - [ ] Subject chips show under category filter
-- [ ] Click "+ Add" → SubjectModal opens with category pre-selected
+- [ ] Click "+ Add" → RiddleMcqSubjectModal opens with category pre-selected
 - [ ] Select category → subject linked correctly
 - [ ] Subject shows emoji in chip
 
@@ -1593,7 +1593,7 @@ export interface UpdateRiddleDto extends Partial<CreateRiddleDto> {}
 
 #### 3.6 Riddle Hooks
 
-**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqs.ts`  
+**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqQuestions.ts`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -1604,7 +1604,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllRiddles } from '@/lib/riddle-mcq-api';
 import type { GetRiddlesParams } from '@/types/riddles';
 
-export function useRiddleMcqs(filters: GetRiddlesParams, page: number, pageSize: number = 10) {
+export function useRiddleMcqQuestions(
+  filters: GetRiddlesParams,
+  page: number,
+  pageSize: number = 10
+) {
   return useQuery({
     queryKey: ['riddle-mcqs', filters, page, pageSize],
     queryFn: () => getAllRiddles(filters, page, pageSize),
@@ -1614,9 +1618,9 @@ export function useRiddleMcqs(filters: GetRiddlesParams, page: number, pageSize:
 }
 ```
 
-#### 3.7 RiddleModal Component
+#### 3.7 RiddleMcqModal Component
 
-**File:** `apps/frontend/src/features/riddle-mcq/modals/RiddleModal.tsx`  
+**File:** `apps/frontend/src/features/riddle-mcq/modals/RiddleMcqModal.tsx`  
 **Status:** WRITE-FRESH  
 **Create this file - KEY DIFFERENCE: dynamic options based on level:**
 
@@ -1657,7 +1661,7 @@ const riddleSchema = z.object({
   message: 'Invalid options for level',
 });
 
-interface RiddleModalProps {
+interface RiddleMcqModalProps {
   open: boolean;
   riddle?: Riddle;
   subjects: RiddleSubject[];
@@ -1666,7 +1670,7 @@ interface RiddleModalProps {
   onSubmit: (dto: CreateRiddleDto) => void;
 }
 
-export function RiddleModal({ open, riddle, subjects, categories, onClose, onSubmit }: RiddleModalProps) {
+export function RiddleMcqModal({ open, riddle, subjects, categories, onClose, onSubmit }: RiddleMcqModalProps) {
   const {
     register,
     handleSubmit,
@@ -1917,8 +1921,8 @@ export function RiddleModal({ open, riddle, subjects, categories, onClose, onSub
 - [ ] Expert riddle has no options, no correctLetter, requires answer
 - [ ] hint field saves (max 500 chars)
 - [ ] explanation field saves (max 2000 chars)
-- [ ] RiddleModal shows correct options for each level
-- [ ] RiddleModal switches to text answer for expert level
+- [ ] RiddleMcqModal shows correct options for each level
+- [ ] RiddleMcqModal switches to text answer for expert level
 - [ ] Level change handler resets options correctly
 - [ ] POST /riddle-mcq/mcqs creates riddle
 - [ ] PATCH /riddle-mcq/mcqs/:id updates riddle
@@ -2153,9 +2157,9 @@ async getFilterCounts(filters = {}): Promise<{
 
 ### Frontend
 
-#### 4.3 useRiddleFilters Hook
+#### 4.3 useRiddleMcqFilters Hook
 
-**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleFilters.ts`  
+**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqFilters.ts`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -2164,7 +2168,7 @@ async getFilterCounts(filters = {}): Promise<{
 
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export function useRiddleFilters() {
+export function useRiddleMcqFilters() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -2218,9 +2222,9 @@ export function useRiddleFilters() {
 }
 ```
 
-#### 4.4 useRiddleFilterCounts Hook
+#### 4.4 useRiddleMcqFilterCounts Hook
 
-**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleFilterCounts.ts`  
+**File:** `apps/frontend/src/features/riddle-mcq/hooks/useRiddleMcqFilterCounts.ts`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -2231,7 +2235,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getRiddleFilterCounts } from '@/lib/riddle-mcq-api';
 import type { GetRiddlesParams } from '@/types/riddles';
 
-export function useRiddleFilterCounts(filters: GetRiddlesParams) {
+export function useRiddleMcqFilterCounts(filters: GetRiddlesParams) {
   return useQuery({
     queryKey: ['riddle-filter-counts', filters],
     queryFn: () => getRiddleFilterCounts(filters),
@@ -2242,7 +2246,7 @@ export function useRiddleFilterCounts(filters: GetRiddlesParams) {
 
 #### 4.5 Filter Panel Component
 
-**File:** `apps/frontend/src/features/riddle-mcq/RiddleFilterPanel.tsx`  
+**File:** `apps/frontend/src/features/riddle-mcq/RiddleMcqFilterPanel.tsx`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -2280,7 +2284,7 @@ interface FilterPanelProps {
   onDeleteSubject: (s: RiddleSubject) => void;
 }
 
-export function RiddleFilterPanel({
+export function RiddleMcqFilterPanel({
   filters,
   onFilterChange,
   onReset,
@@ -2443,7 +2447,7 @@ export function RiddleFilterPanel({
 - [ ] URL updates on filter change
 - [ ] Page resets to 1 on filter change
 - [ ] GET /riddle-mcq/filter-counts returns all counts
-- [ ] useRiddleFilterCounts hook fetches and caches counts
+- [ ] useRiddleMcqFilterCounts hook fetches and caches counts
 
 #### 4.7 Verification Steps - Filters
 
@@ -3703,9 +3707,9 @@ cd apps/frontend && npx tsc --noEmit
 
 ### Frontend
 
-#### 7.1 RiddleHeader Component
+#### 7.1 RiddleMcqHeader Component
 
-**File:** `apps/frontend/src/features/riddle-mcq/RiddleHeader.tsx`  
+**File:** `apps/frontend/src/features/riddle-mcq/RiddleMcqHeader.tsx`  
 **Status:** WRITE-FRESH  
 **Create this file:**
 
@@ -3714,14 +3718,14 @@ cd apps/frontend && npx tsc --noEmit
 
 import { Plus, Upload, Download } from 'lucide-react';
 
-interface RiddleHeaderProps {
+interface RiddleMcqHeaderProps {
   totalRiddles: number;
   onAddRiddle: () => void;
   onImport: () => void;
   onExport: () => void;
 }
 
-export function RiddleHeader({ totalRiddles, onAddRiddle, onImport, onExport }: RiddleHeaderProps) {
+export function RiddleMcqHeader({ totalRiddles, onAddRiddle, onImport, onExport }: RiddleMcqHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div>
@@ -3766,36 +3770,36 @@ export function RiddleHeader({ totalRiddles, onAddRiddle, onImport, onExport }: 
 'use client';
 
 import { useState } from 'react';
-import { RiddleHeader } from './RiddleHeader';
-import { RiddleFilterPanel } from './RiddleFilterPanel';
+import { RiddleMcqHeader } from './RiddleMcqHeader';
+import { RiddleMcqFilterPanel } from './RiddleMcqFilterPanel';
 import { RiddleQuestionManager } from './RiddleQuestionManager';
-import { CategoryModal } from './modals/CategoryModal';
-import { SubjectModal } from './modals/SubjectModal';
-import { RiddleModal } from './modals/RiddleModal';
+import { RiddleMcqCategoryModal } from './modals/RiddleMcqCategoryModal';
+import { RiddleMcqSubjectModal } from './modals/RiddleMcqSubjectModal';
+import { RiddleMcqModal } from './modals/RiddleMcqModal';
 import { ImportModal } from './modals/ImportModal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { useRiddleFilters } from './hooks/useRiddleFilters';
-import { useRiddleCategories } from './hooks/useRiddleCategories';
-import { useRiddleSubjects } from './hooks/useRiddleSubjects';
-import { useRiddleMcqs } from './hooks/useRiddleMcqs';
-import { useRiddleFilterCounts } from './hooks/useRiddleFilterCounts';
+import { useRiddleMcqFilters } from './hooks/useRiddleMcqFilters';
+import { useRiddleMcqCategories } from './hooks/useRiddleMcqCategories';
+import { useRiddleMcqSubjects } from './hooks/useRiddleMcqSubjects';
+import { useRiddleMcqQuestions } from './hooks/useRiddleMcqQuestions';
+import { useRiddleMcqFilterCounts } from './hooks/useRiddleMcqFilterCounts';
 import { useRiddleMutations } from './hooks/useRiddleMutations';
 import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
 import type { Riddle, RiddleCategory, RiddleSubject, CreateCategoryDto, CreateSubjectDto, CreateRiddleDto } from '@/types/riddles';
 
 export function RiddleMcqContainer() {
-  const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } = useRiddleFilters();
-  const categoriesQuery = useRiddleCategories();
+  const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } = useRiddleMcqFilters();
+  const categoriesQuery = useRiddleMcqCategories();
   const selectedCategory = categoriesQuery.data?.find((c) => c.slug === filters.category);
-  const subjectsQuery = useRiddleSubjects(selectedCategory?.id);
-  const riddlesQuery = useRiddleMcqs(filters, page, pageSize);
-  const filterCountsQuery = useRiddleFilterCounts(filters);
+  const subjectsQuery = useRiddleMcqSubjects(selectedCategory?.id);
+  const riddlesQuery = useRiddleMcqQuestions(filters, page, pageSize);
+  const filterCountsQuery = useRiddleMcqFilterCounts(filters);
   const mutations = useRiddleMutations();
 
   // Modal states
-  const [categoryModal, setCategoryModal] = useState({ open: false, category: undefined as RiddleCategory | undefined });
-  const [subjectModal, setSubjectModal] = useState({ open: false, subject: undefined as RiddleSubject | undefined, categoryId: undefined as string | undefined });
-  const [riddleModal, setRiddleModal] = useState({ open: false, riddle: undefined as Riddle | undefined });
+  const [categoryModal, setRiddleMcqCategoryModal] = useState({ open: false, category: undefined as RiddleCategory | undefined });
+  const [subjectModal, setRiddleMcqSubjectModal] = useState({ open: false, subject: undefined as RiddleSubject | undefined, categoryId: undefined as string | undefined });
+  const [riddleModal, setRiddleMcqModal] = useState({ open: false, riddle: undefined as Riddle | undefined });
   const [importModal, setImportModal] = useState(false);
   const [confirm, setConfirm] = useState({ open: false, title: '', message: '', onConfirm: () => {} });
 
@@ -3847,14 +3851,14 @@ export function RiddleMcqContainer() {
 
   return (
     <div className="space-y-6 p-6">
-      <RiddleHeader
+      <RiddleMcqHeader
         totalRiddles={total}
-        onAddRiddle={() => setRiddleModal({ open: true, riddle: undefined })}
+        onAddRiddle={() => setRiddleMcqModal({ open: true, riddle: undefined })}
         onImport={() => setImportModal(true)}
         onExport={() => exportRiddlesToCSV(filters)}
       />
 
-      <RiddleFilterPanel
+      <RiddleMcqFilterPanel
         filters={filters}
         onFilterChange={setFilter}
         onReset={resetFilters}
@@ -3862,11 +3866,11 @@ export function RiddleMcqContainer() {
         subjects={subjects}
         filterCounts={filterCountsQuery.data}
         isLoading={categoriesQuery.isLoading}
-        onAddCategory={() => setCategoryModal({ open: true, category: undefined })}
-        onEditCategory={(c) => setCategoryModal({ open: true, category: c })}
+        onAddCategory={() => setRiddleMcqCategoryModal({ open: true, category: undefined })}
+        onEditCategory={(c) => setRiddleMcqCategoryModal({ open: true, category: c })}
         onDeleteCategory={handleDeleteCategory}
-        onAddSubject={() => setSubjectModal({ open: true, subject: undefined, categoryId: selectedCategory?.id })}
-        onEditSubject={(s) => setSubjectModal({ open: true, subject: s, categoryId: s.categoryId })}
+        onAddSubject={() => setRiddleMcqSubjectModal({ open: true, subject: undefined, categoryId: selectedCategory?.id })}
+        onEditSubject={(s) => setRiddleMcqSubjectModal({ open: true, subject: s, categoryId: s.categoryId })}
         onDeleteSubject={handleDeleteSubject}
       />
 
@@ -3880,55 +3884,55 @@ export function RiddleMcqContainer() {
         isFetching={riddlesQuery.isFetching}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
-        onEdit={(r) => setRiddleModal({ open: true, riddle: r })}
+        onEdit={(r) => setRiddleMcqModal({ open: true, riddle: r })}
         onDelete={handleDeleteRiddle}
         onBulkAction={handleBulkAction}
         statusFilter={filters.status}
       />
 
-      <CategoryModal
+      <RiddleMcqCategoryModal
         open={categoryModal.open}
         category={categoryModal.category}
-        onClose={() => setCategoryModal({ open: false, category: undefined })}
+        onClose={() => setRiddleMcqCategoryModal({ open: false, category: undefined })}
         onSubmit={async (dto: CreateCategoryDto) => {
           if (categoryModal.category) {
             await mutations.updateCategory({ id: categoryModal.category.id, dto });
           } else {
             await mutations.createCategory(dto);
           }
-          setCategoryModal({ open: false, category: undefined });
+          setRiddleMcqCategoryModal({ open: false, category: undefined });
         }}
       />
 
-      <SubjectModal
+      <RiddleMcqSubjectModal
         open={subjectModal.open}
         subject={subjectModal.subject}
         categoryId={subjectModal.categoryId}
         categories={categories}
-        onClose={() => setSubjectModal({ open: false, subject: undefined, categoryId: undefined })}
+        onClose={() => setRiddleMcqSubjectModal({ open: false, subject: undefined, categoryId: undefined })}
         onSubmit={async (dto: CreateSubjectDto) => {
           if (subjectModal.subject) {
             await mutations.updateSubject({ id: subjectModal.subject.id, dto });
           } else {
             await mutations.createSubject(dto);
           }
-          setSubjectModal({ open: false, subject: undefined, categoryId: undefined });
+          setRiddleMcqSubjectModal({ open: false, subject: undefined, categoryId: undefined });
         }}
       />
 
-      <RiddleModal
+      <RiddleMcqModal
         open={riddleModal.open}
         riddle={riddleModal.riddle}
         subjects={subjects}
         categories={categories}
-        onClose={() => setRiddleModal({ open: false, riddle: undefined })}
+        onClose={() => setRiddleMcqModal({ open: false, riddle: undefined })}
         onSubmit={async (dto: CreateRiddleDto) => {
           if (riddleModal.riddle) {
             await mutations.updateRiddle({ id: riddleModal.riddle.id, dto });
           } else {
             await mutations.createRiddle(dto);
           }
-          setRiddleModal({ open: false, riddle: undefined });
+          setRiddleMcqModal({ open: false, riddle: undefined });
         }}
       />
 
@@ -3962,11 +3966,11 @@ export function RiddleMcqContainer() {
 **Create this file:**
 
 ```typescript
-export { useRiddleFilters } from './useRiddleFilters';
-export { useRiddleCategories } from './useRiddleCategories';
-export { useRiddleSubjects } from './useRiddleSubjects';
-export { useRiddleMcqs } from './useRiddleMcqs';
-export { useRiddleFilterCounts } from './useRiddleFilterCounts';
+export { useRiddleMcqFilters } from './useRiddleMcqFilters';
+export { useRiddleMcqCategories } from './useRiddleMcqCategories';
+export { useRiddleMcqSubjects } from './useRiddleMcqSubjects';
+export { useRiddleMcqQuestions } from './useRiddleMcqQuestions';
+export { useRiddleMcqFilterCounts } from './useRiddleMcqFilterCounts';
 export { useRiddleMutations } from './useRiddleMutations';
 ```
 
@@ -4115,31 +4119,31 @@ cd apps/frontend && npx tsc --noEmit
 
 ### File Actions
 
-| File                        | Action                      |
-| --------------------------- | --------------------------- |
-| `riddle-mcq.entity.ts`      | MODIFY                      |
-| `riddle-mcq.service.ts`     | DELETE + COPY QUIZ + RENAME |
-| `riddle-mcq.controller.ts`  | DELETE + COPY QUIZ + RENAME |
-| `riddle-mcq.dto.ts`         | DELETE + COPY QUIZ + RENAME |
-| `riddle-mcq-api.ts`         | DELETE + COPY QUIZ + RENAME |
-| `riddles.ts` (types)        | MODIFY                      |
-| `RiddleMcqSection.tsx`      | DELETE ENTIRELY             |
-| `useRiddleFilters.ts`       | WRITE-FRESH                 |
-| `useRiddleCategories.ts`    | WRITE-FRESH                 |
-| `useRiddleSubjects.ts`      | WRITE-FRESH                 |
-| `useRiddleMcqs.ts`          | WRITE-FRESH                 |
-| `useRiddleFilterCounts.ts`  | WRITE-FRESH                 |
-| `useRiddleMutations.ts`     | WRITE-FRESH                 |
-| `hooks/index.ts`            | WRITE-FRESH                 |
-| `RiddleHeader.tsx`          | WRITE-FRESH                 |
-| `RiddleFilterPanel.tsx`     | WRITE-FRESH                 |
-| `RiddleQuestionManager.tsx` | WRITE-FRESH                 |
-| `CategoryModal.tsx`         | WRITE-FRESH                 |
-| `SubjectModal.tsx`          | WRITE-FRESH                 |
-| `RiddleModal.tsx`           | WRITE-FRESH                 |
-| `ImportModal.tsx`           | WRITE-FRESH                 |
-| `RiddleMcqContainer.tsx`    | WRITE-FRESH                 |
-| `admin/page.tsx`            | MODIFY                      |
+| File                          | Action                      |
+| ----------------------------- | --------------------------- |
+| `riddle-mcq.entity.ts`        | MODIFY                      |
+| `riddle-mcq.service.ts`       | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq.controller.ts`    | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq.dto.ts`           | DELETE + COPY QUIZ + RENAME |
+| `riddle-mcq-api.ts`           | DELETE + COPY QUIZ + RENAME |
+| `riddles.ts` (types)          | MODIFY                      |
+| `RiddleMcqSection.tsx`        | DELETE ENTIRELY             |
+| `useRiddleMcqFilters.ts`      | WRITE-FRESH                 |
+| `useRiddleMcqCategories.ts`   | WRITE-FRESH                 |
+| `useRiddleMcqSubjects.ts`     | WRITE-FRESH                 |
+| `useRiddleMcqQuestions.ts`    | WRITE-FRESH                 |
+| `useRiddleMcqFilterCounts.ts` | WRITE-FRESH                 |
+| `useRiddleMutations.ts`       | WRITE-FRESH                 |
+| `hooks/index.ts`              | WRITE-FRESH                 |
+| `RiddleMcqHeader.tsx`         | WRITE-FRESH                 |
+| `RiddleMcqFilterPanel.tsx`    | WRITE-FRESH                 |
+| `RiddleQuestionManager.tsx`   | WRITE-FRESH                 |
+| `RiddleMcqCategoryModal.tsx`  | WRITE-FRESH                 |
+| `RiddleMcqSubjectModal.tsx`   | WRITE-FRESH                 |
+| `RiddleMcqModal.tsx`          | WRITE-FRESH                 |
+| `ImportModal.tsx`             | WRITE-FRESH                 |
+| `RiddleMcqContainer.tsx`      | WRITE-FRESH                 |
+| `admin/page.tsx`              | MODIFY                      |
 
 ### Order
 
