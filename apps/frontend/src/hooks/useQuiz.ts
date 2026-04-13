@@ -164,7 +164,6 @@ export function useQuiz(
   const sessionRef = useRef<QuizSession | null>(null);
 
   const startFromShareRef = useRef(startFromShare);
-  const initialTotalRef = useRef(initialTotal || 10);
 
   const mountDecisionRef = useRef<{
     resumeSession: QuizResumeState | null;

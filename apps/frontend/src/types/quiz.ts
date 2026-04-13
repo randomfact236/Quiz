@@ -100,7 +100,7 @@ export interface QuizComputed {
 export interface UseQuizReturn extends QuizState, QuizActions, QuizComputed {
   showResumePrompt: boolean;
   pendingResumeState: QuizResumeState | null;
-  handleResumeSession: (saved: QuizResumeState) => void;
+  handleResumeSession: () => void;
   handleStartFresh: () => void;
 }
 
