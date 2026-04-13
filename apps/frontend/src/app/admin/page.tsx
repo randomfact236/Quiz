@@ -16,26 +16,30 @@ import {
   Users,
   Home,
   LogOut,
-  BookOpen
+  BookOpen,
 } from 'lucide-react';
 
-import type {
-  Subject,
-  Joke,
-  JokeCategory,
-  MenuSection
-} from './types';
+import type { Subject, Joke, JokeCategory, MenuSection } from './types';
 import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 
 // Status Dashboard & Bulk Actions
-import { ImageRiddlesAdminSection, JokesSection, RiddleMcqSection, SettingsSection, AdminGuard, AdminUsersSection } from './components';
+import {
+  ImageRiddlesAdminSection,
+  JokesSection,
+  SettingsSection,
+  AdminGuard,
+  AdminUsersSection,
+} from './components';
 import { QuizMcqContainer } from '@/features/quiz/components';
+import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
 
 // Helper to check if a string is an emoji
 const isEmoji = (str: string): boolean => {
-  return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(str);
+  return /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2B50}]/u.test(
+    str
+  );
 };
 
 // Storage key for persisting active section
@@ -55,19 +59,45 @@ export default function AdminPage(): JSX.Element {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
-// Use the hook directly for subjects - database only, no fake data
+  // Use the hook directly for subjects - database only, no fake data
   const { subjects: dbSubjects } = useQuizSubjects();
-   
+
   // Helper to normalize subject emojis - preserves custom emojis
   const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
-    const validIconKeys = ['science', 'math', 'history', 'geography', 'english', 'technology', 'puzzle', 'smile', 'image', 'settings', 'users', 'home', 'book-open', 'help-circle', 'graduation-cap', 'briefcase', 'gamepad-2'];
-    return storedSubjects.map(subject => {
-      const isCustomEmoji = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(subject.emoji);
+    const validIconKeys = [
+      'science',
+      'math',
+      'history',
+      'geography',
+      'english',
+      'technology',
+      'puzzle',
+      'smile',
+      'image',
+      'settings',
+      'users',
+      'home',
+      'book-open',
+      'help-circle',
+      'graduation-cap',
+      'briefcase',
+      'gamepad-2',
+    ];
+    return storedSubjects.map((subject) => {
+      const isCustomEmoji =
+        /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]/u.test(
+          subject.emoji
+        );
       if (validIconKeys.includes(subject.emoji) || isCustomEmoji) {
         return subject;
       }
       const slugToIcon: Record<string, string> = {
-        'science': 'science', 'math': 'math', 'history': 'history', 'geography': 'geography', 'english': 'english', 'technology': 'technology',
+        science: 'science',
+        math: 'math',
+        history: 'history',
+        geography: 'geography',
+        english: 'english',
+        technology: 'technology',
       };
       return { ...subject, emoji: slugToIcon[subject.slug] || 'puzzle' };
     });
@@ -75,7 +105,7 @@ export default function AdminPage(): JSX.Element {
 
   // Use sanitized subjects from hook - memoized to prevent infinite re-renders
   const subjects = useMemo(() => sanitizeSubjects(dbSubjects), [dbSubjects, sanitizeSubjects]);
-  
+
   // Other state
   const [allJokes, setAllJokes] = useState<Joke[]>([]);
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>([]);
@@ -85,7 +115,7 @@ export default function AdminPage(): JSX.Element {
   const pathname = usePathname();
   const searchParamsRef = useRef(searchParams);
   searchParamsRef.current = searchParams;
-  
+
   // Get section from URL, default to dashboard
   const urlSection = searchParams.get('section') || 'summary';
 
@@ -95,11 +125,19 @@ export default function AdminPage(): JSX.Element {
     if (hasSetInitialSection.current) return;
     if (subjects.length > 0 || urlSection) {
       // URL section takes priority, but validate if it's a quiz subject
-      if (urlSection === 'riddle-mcq' || urlSection === 'image-riddles' || urlSection === 'jokes' || urlSection === 'users' || urlSection === 'settings' || urlSection === 'summary' || urlSection === 'quiz') {
+      if (
+        urlSection === 'riddle-mcq' ||
+        urlSection === 'image-riddles' ||
+        urlSection === 'jokes' ||
+        urlSection === 'users' ||
+        urlSection === 'settings' ||
+        urlSection === 'summary' ||
+        urlSection === 'quiz'
+      ) {
         setActiveSection(urlSection as MenuSection);
       } else {
         // It's a quiz subject - check if valid
-        const isValidSubject = subjects.some(s => s.slug === urlSection);
+        const isValidSubject = subjects.some((s) => s.slug === urlSection);
         if (isValidSubject) {
           setActiveSection(urlSection as MenuSection);
         } else {
@@ -120,13 +158,21 @@ export default function AdminPage(): JSX.Element {
 
     // Determine the target section
     let targetSection = urlSection;
-    
+
     // Check if it's a special section (riddles, jokes, etc.)
-    const isSpecialSection = ['riddle-mcq', 'image-riddles', 'jokes', 'users', 'settings', 'summary', 'quiz'].includes(urlSection);
-    
+    const isSpecialSection = [
+      'riddle-mcq',
+      'image-riddles',
+      'jokes',
+      'users',
+      'settings',
+      'summary',
+      'quiz',
+    ].includes(urlSection);
+
     if (!isSpecialSection) {
       // It's a quiz subject - check if valid
-      const isValidSubject = subjects.some(s => s.slug === urlSection);
+      const isValidSubject = subjects.some((s) => s.slug === urlSection);
       if (isValidSubject) {
         targetSection = urlSection;
       } else {
@@ -139,36 +185,35 @@ export default function AdminPage(): JSX.Element {
     setActiveSection(targetSection as MenuSection);
   }, [urlSection, subjects]);
 
-
   // URL update helper - replaces localStorage.setItem
-  const updateURL = useCallback((params: { section?: string; subject?: string | null; chapter?: string | null }) => {
-    const currentParams = searchParamsRef.current.toString();
-    const newParams = new URLSearchParams(currentParams);
-    
-    if (params.section) {
-      newParams.set('section', params.section);
-    }
-    if (params.subject !== undefined && params.subject !== null) {
-      newParams.set('subject', params.subject);
-    } else if (params.subject === null) {
-      newParams.delete('subject');
-    }
-    if (params.chapter !== undefined && params.chapter !== null) {
-      newParams.set('chapter', encodeURIComponent(params.chapter));
-    } else if (params.chapter === null) {
-      newParams.delete('chapter');
-    }
-    
-    router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
-  }, [router, pathname]);
+  const updateURL = useCallback(
+    (params: { section?: string; subject?: string | null; chapter?: string | null }) => {
+      const currentParams = searchParamsRef.current.toString();
+      const newParams = new URLSearchParams(currentParams);
+
+      if (params.section) {
+        newParams.set('section', params.section);
+      }
+      if (params.subject !== undefined && params.subject !== null) {
+        newParams.set('subject', params.subject);
+      } else if (params.subject === null) {
+        newParams.delete('subject');
+      }
+      if (params.chapter !== undefined && params.chapter !== null) {
+        newParams.set('chapter', encodeURIComponent(params.chapter));
+      } else if (params.chapter === null) {
+        newParams.delete('chapter');
+      }
+
+      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+    },
+    [router, pathname]
+  );
 
   // Mark as hydrated once after initial mount
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-
-
-
 
   // Show loading state until hydration is complete to avoid section flash
   if (!isHydrated) {
@@ -182,21 +227,29 @@ export default function AdminPage(): JSX.Element {
     );
   }
 
-
-
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-secondary-950">
       {/* Sidebar (Sticky) */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col sticky top-0 h-screen z-20`}>
+      <aside
+        className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col sticky top-0 h-screen z-20`}
+      >
         {/* Logo */}
         <div className="border-b border-gray-800 p-4">
           <div className="flex items-center justify-between">
-            {sidebarOpen && <h1 className="text-xl font-bold flex items-center gap-2"><Gamepad2 className="w-5 h-5" /> Admin Panel</h1>}
+            {sidebarOpen && (
+              <h1 className="text-xl font-bold flex items-center gap-2">
+                <Gamepad2 className="w-5 h-5" /> Admin Panel
+              </h1>
+            )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="rounded-lg p-2 hover:bg-gray-800"
             >
-              {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              {sidebarOpen ? (
+                <ChevronLeft className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
@@ -231,11 +284,19 @@ export default function AdminPage(): JSX.Element {
           >
             {sidebarOpen ? (
               <>
-                <span className="flex items-center gap-2"><Puzzle className="w-4 h-4" /> Other Modules</span>
-                <span className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}><ChevronDown className="w-3 h-3" /></span>
+                <span className="flex items-center gap-2">
+                  <Puzzle className="w-4 h-4" /> Other Modules
+                </span>
+                <span
+                  className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}
+                >
+                  <ChevronDown className="w-3 h-3" />
+                </span>
               </>
             ) : (
-              <span className="flex items-center justify-center w-5 h-5"><Puzzle className="w-4 h-4" /></span>
+              <span className="flex items-center justify-center w-5 h-5">
+                <Puzzle className="w-4 h-4" />
+              </span>
             )}
           </button>
 
@@ -294,7 +355,9 @@ export default function AdminPage(): JSX.Element {
             href="/"
             className="flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 text-gray-300 transition-colors hover:bg-gray-700"
           >
-            <span><Home className="w-5 h-5" /></span>
+            <span>
+              <Home className="w-5 h-5" />
+            </span>
             {sidebarOpen && <span>Back to Site</span>}
           </Link>
         </div>
@@ -306,16 +369,47 @@ export default function AdminPage(): JSX.Element {
         <header className="bg-white shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
           <div className="flex items-center justify-between px-6 py-4">
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
-              {activeSection === 'summary' && <><LayoutDashboard className="w-6 h-6" /> Summary</>}
-              {activeSection === 'jokes' && <><Smile className="w-6 h-6" /> Dad Jokes Management</>}
-              {activeSection === 'riddle-mcq' && <><Puzzle className="w-6 h-6" /> Riddle MCQ Management</>}
-              {activeSection === 'image-riddles' && <><ImageIcon className="w-6 h-6" /> Image Riddles Management</>}
-              {activeSection === 'users' && <><Users className="w-6 h-6" /> Users Management</>}
-              {activeSection === 'settings' && <><Settings className="w-6 h-6" /> Settings</>}
-              {(subjects.some(s => s.slug === activeSection) || activeSection === 'quiz') && (
+              {activeSection === 'summary' && (
                 <>
-                  <span className="text-2xl">{activeSection === 'quiz' ? '📚' : (isEmoji(subjects.find(s => s.slug === activeSection)?.emoji || '') ? subjects.find(s => s.slug === activeSection)?.emoji : '📚')}</span>
-                  <span>{activeSection === 'quiz' ? 'All Subjects' : subjects.find(s => s.slug === activeSection)?.name ?? ''} - Quiz Management</span>
+                  <LayoutDashboard className="w-6 h-6" /> Summary
+                </>
+              )}
+              {activeSection === 'jokes' && (
+                <>
+                  <Smile className="w-6 h-6" /> Dad Jokes Management
+                </>
+              )}
+              {activeSection === 'riddle-mcq' && <RiddleMcqContainer />}
+              {activeSection === 'image-riddles' && (
+                <>
+                  <ImageIcon className="w-6 h-6" /> Image Riddles Management
+                </>
+              )}
+              {activeSection === 'users' && (
+                <>
+                  <Users className="w-6 h-6" /> Users Management
+                </>
+              )}
+              {activeSection === 'settings' && (
+                <>
+                  <Settings className="w-6 h-6" /> Settings
+                </>
+              )}
+              {(subjects.some((s) => s.slug === activeSection) || activeSection === 'quiz') && (
+                <>
+                  <span className="text-2xl">
+                    {activeSection === 'quiz'
+                      ? '📚'
+                      : isEmoji(subjects.find((s) => s.slug === activeSection)?.emoji || '')
+                        ? subjects.find((s) => s.slug === activeSection)?.emoji
+                        : '📚'}
+                  </span>
+                  <span>
+                    {activeSection === 'quiz'
+                      ? 'All Subjects'
+                      : (subjects.find((s) => s.slug === activeSection)?.name ?? '')}{' '}
+                    - Quiz Management
+                  </span>
                 </>
               )}
             </h2>
@@ -336,8 +430,6 @@ export default function AdminPage(): JSX.Element {
           </div>
         </header>
 
-
-
         {/* Content Area */}
         <div className="p-6">
           {activeSection === 'summary' && (
@@ -346,7 +438,7 @@ export default function AdminPage(): JSX.Element {
               <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
             </div>
           )}
-          {(activeSection === 'quiz' || subjects.some(s => s.slug === activeSection)) && (
+          {(activeSection === 'quiz' || subjects.some((s) => s.slug === activeSection)) && (
             <QuizMcqContainer />
           )}
           {activeSection === 'jokes' && (
@@ -357,9 +449,7 @@ export default function AdminPage(): JSX.Element {
               setJokeCategories={setJokeCategories}
             />
           )}
-          {activeSection === 'riddle-mcq' && (
-            <RiddleMcqSection />
-          )}
+          {activeSection === 'riddle-mcq' && <RiddleMcqContainer />}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <AdminUsersSection />}
           {activeSection === 'settings' && <SettingsSection />}
@@ -372,7 +462,13 @@ export default function AdminPage(): JSX.Element {
 }
 
 // Menu Item Component
-function MenuItem({ icon, label, active, expanded, onClick }: {
+function MenuItem({
+  icon,
+  label,
+  active,
+  expanded,
+  onClick,
+}: {
   icon: React.ReactNode;
   label: string;
   active: boolean;
@@ -382,8 +478,9 @@ function MenuItem({ icon, label, active, expanded, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
-        }`}
+      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
+        active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+      }`}
     >
       <span className="flex items-center justify-center w-5 h-5">{icon}</span>
       {expanded && <span>{label}</span>}
@@ -407,8 +504,3 @@ function _downloadFile(content: string, filename: string, type: string): void {
 */
 
 /** Admin Guard component to be used at the end of the page */
-
-
-
-
-
