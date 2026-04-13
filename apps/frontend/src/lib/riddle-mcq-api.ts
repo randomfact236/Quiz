@@ -245,7 +245,7 @@ export async function getRiddlesBySubject(
   limit: number = 50,
   level?: string
 ): Promise<{ data: RiddleMcq[]; total: number }> {
-  let url = `/riddle-mcq/subjects/${subjectId}/mcqs?page=${page}&limit=${limit}`;
+  let url = `/riddle-mcq/subjects/${subjectId}/riddles?page=${page}&limit=${limit}`;
   if (level && level !== 'all') {
     url += `&level=${level}`;
   }
@@ -313,7 +313,7 @@ export async function bulkActionRiddles(
   failed: number;
   message: string;
 }> {
-  const response = await api.post('/riddle-mcq/mcqs/bulk-action', { ids, action });
+  const response = await api.post('/riddle-mcq/riddles/bulk-action', { ids, action });
   return response.data as {
     success: boolean;
     processed: number;
@@ -327,7 +327,7 @@ export async function bulkActionRiddles(
  * Create a new riddle MCQ (Admin only)
  */
 export async function createRiddle(dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
-  const response = await api.post<RiddleMcq>('/riddle-mcq/mcqs', dto);
+  const response = await api.post<RiddleMcq>('/riddle-mcq/riddles', dto);
   return response.data;
 }
 
@@ -338,7 +338,7 @@ export async function bulkCreateRiddles(
   dtos: CreateRiddleMcqDto[]
 ): Promise<{ count: number; errors: string[] }> {
   const response = await api.post<{ count: number; errors: string[] }>(
-    '/riddle-mcq/mcqs/bulk',
+    '/riddle-mcq/riddles/bulk',
     dtos
   );
   return response.data;
@@ -351,7 +351,7 @@ export async function updateRiddle(
   id: string,
   dto: Partial<CreateRiddleMcqDto>
 ): Promise<RiddleMcq> {
-  const response = await api.patch<RiddleMcq>(`/riddle-mcq/mcqs/${id}`, dto);
+  const response = await api.patch<RiddleMcq>(`/riddle-mcq/riddles/${id}`, dto);
   return response.data;
 }
 
@@ -359,7 +359,7 @@ export async function updateRiddle(
  * Delete a riddle MCQ (Admin only)
  */
 export async function deleteRiddle(id: string): Promise<void> {
-  await api.delete(`/riddle-mcq/mcqs/${id}`);
+  await api.delete(`/riddle-mcq/riddles/${id}`);
 }
 
 // ============================================================================
