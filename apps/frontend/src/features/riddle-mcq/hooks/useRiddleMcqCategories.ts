@@ -10,12 +10,12 @@ import {
   type UpdateCategoryDto,
 } from '@/lib/riddle-mcq-api';
 
-const CATEGORIES_KEY = ['riddle-categories'];
-const SUBJECTS_KEY = ['riddle-subjects'];
-const RIDDLES_KEY = ['riddle-riddles'];
-const FILTER_COUNTS_KEY = ['riddle-filter-counts'];
+const CATEGORIES_KEY = ['riddle-mcq-categories'];
+const SUBJECTS_KEY = ['riddle-mcq-subjects'];
+const RIDDLES_KEY = ['riddle-mcq-questions'];
+const FILTER_COUNTS_KEY = ['riddle-mcq-filter-counts'];
 
-export function useRiddleCategories() {
+export function useRiddleMcqCategories() {
   const queryClient = useQueryClient();
 
   const query = useQuery({
@@ -81,4 +81,4 @@ export function useRiddleCategories() {
   };
 }
 
-export default useRiddleCategories;
+export default useRiddleMcqCategories;

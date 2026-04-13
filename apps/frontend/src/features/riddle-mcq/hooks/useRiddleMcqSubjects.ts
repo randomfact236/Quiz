@@ -10,11 +10,11 @@ import {
   type UpdateSubjectDto,
 } from '@/lib/riddle-mcq-api';
 
-const SUBJECTS_KEY = ['riddle-subjects'];
-const RIDDLES_KEY = ['riddle-riddles'];
-const FILTER_COUNTS_KEY = ['riddle-filter-counts'];
+const SUBJECTS_KEY = ['riddle-mcq-subjects'];
+const RIDDLES_KEY = ['riddle-mcq-questions'];
+const FILTER_COUNTS_KEY = ['riddle-mcq-filter-counts'];
 
-export function useRiddleSubjects(hasContentOnly: boolean = false) {
+export function useRiddleMcqSubjects(hasContentOnly: boolean = false) {
   const queryClient = useQueryClient();
 
   const query = useQuery({
@@ -79,4 +79,4 @@ export function useRiddleSubjects(hasContentOnly: boolean = false) {
   };
 }
 
-export default useRiddleSubjects;
+export default useRiddleMcqSubjects;

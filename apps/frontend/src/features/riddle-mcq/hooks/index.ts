@@ -1,3 +1,3 @@
-export { useRiddleCategories } from './useRiddleCategories';
-export { useRiddleSubjects } from './useRiddleSubjects';
-export { useRiddleMcqs } from './useRiddleMcqs';
+export { useRiddleMcqCategories } from './useRiddleMcqCategories';
+export { useRiddleMcqSubjects } from './useRiddleMcqSubjects';
+export { useRiddleMcqQuestions } from './useRiddleMcqQuestions';

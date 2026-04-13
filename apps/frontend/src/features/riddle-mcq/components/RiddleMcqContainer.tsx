@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRiddleCategories } from '../hooks/useRiddleCategories';
-import { useRiddleSubjects } from '../hooks/useRiddleSubjects';
-import { useRiddleMcqs } from '../hooks/useRiddleMcqs';
-import { CategoryModal } from '../modals/CategoryModal';
-import { SubjectModal } from '../modals/SubjectModal';
-import { RiddleModal } from '../modals/RiddleModal';
+import { useRiddleMcqCategories } from '../hooks/useRiddleMcqCategories';
+import { useRiddleMcqSubjects } from '../hooks/useRiddleMcqSubjects';
+import { useRiddleMcqQuestions } from '../hooks/useRiddleMcqQuestions';
+import { RiddleMcqCategoryModal } from '../modals/RiddleMcqCategoryModal';
+import { RiddleMcqSubjectModal } from '../modals/RiddleMcqSubjectModal';
+import { RiddleMcqModal } from '../modals/RiddleMcqModal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
@@ -25,8 +25,8 @@ interface ConfirmState {
 }
 
 export function RiddleMcqContainer() {
-  const categoriesQuery = useRiddleCategories();
-  const subjectsQuery = useRiddleSubjects();
+  const categoriesQuery = useRiddleMcqCategories();
+  const subjectsQuery = useRiddleMcqSubjects();
 
   const [riddleFilters, setRiddleFilters] = useState({
     subject: '',
@@ -36,7 +36,7 @@ export function RiddleMcqContainer() {
   });
   const [riddlePage, setRiddlePage] = useState(1);
 
-  const riddlesQuery = useRiddleMcqs(riddleFilters, riddlePage, 10);
+  const riddlesQuery = useRiddleMcqQuestions(riddleFilters, riddlePage, 10);
 
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
@@ -489,7 +489,7 @@ export function RiddleMcqContainer() {
       </div>
 
       {/* Modals */}
-      <CategoryModal
+      <RiddleMcqCategoryModal
         open={categoryModal.open}
         category={categoryModal.item}
         onClose={() => setCategoryModal({ open: false })}
@@ -497,7 +497,7 @@ export function RiddleMcqContainer() {
         isSubmitting={isPending}
       />
 
-      <SubjectModal
+      <RiddleMcqSubjectModal
         open={subjectModal.open}
         subject={subjectModal.item}
         categories={categories}
@@ -506,7 +506,7 @@ export function RiddleMcqContainer() {
         isSubmitting={isPending}
       />
 
-      <RiddleModal
+      <RiddleMcqModal
         open={riddleModal.open}
         riddle={riddleModal.item}
         subjects={subjects}

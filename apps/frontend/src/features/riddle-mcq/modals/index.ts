@@ -1,3 +1,3 @@
-export { CategoryModal } from './CategoryModal';
-export { SubjectModal } from './SubjectModal';
-export { RiddleModal } from './RiddleModal';
+export { RiddleMcqCategoryModal } from './RiddleMcqCategoryModal';
+export { RiddleMcqSubjectModal } from './RiddleMcqSubjectModal';
+export { RiddleMcqModal } from './RiddleMcqModal';

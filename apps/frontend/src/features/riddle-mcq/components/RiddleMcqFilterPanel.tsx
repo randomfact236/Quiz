@@ -28,7 +28,7 @@ interface RiddleFilterCounts {
   total: number;
 }
 
-interface RiddleFilterPanelProps {
+interface RiddleMcqFilterPanelProps {
   filters: RiddleFilters;
   onFilterChange: (key: keyof RiddleFilters, value: string | undefined) => void;
   onReset: () => void;
@@ -51,7 +51,7 @@ const LEVELS = [
   { value: 'expert', label: 'Expert' },
 ];
 
-export function RiddleFilterPanel({
+export function RiddleMcqFilterPanel({
   filters,
   onFilterChange,
   onReset,
@@ -65,7 +65,7 @@ export function RiddleFilterPanel({
   onAddSubject,
   onEditSubject,
   onDeleteSubject,
-}: RiddleFilterPanelProps) {
+}: RiddleMcqFilterPanelProps) {
   const [searchInput, setSearchInput] = useState(filters.search || '');
 
   const debouncedSearch = useMemo(() => {
@@ -317,4 +317,4 @@ export function RiddleFilterPanel({
   );
 }
 
-export default RiddleFilterPanel;
+export default RiddleMcqFilterPanel;

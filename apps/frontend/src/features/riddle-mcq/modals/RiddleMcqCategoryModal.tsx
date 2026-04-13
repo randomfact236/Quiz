@@ -5,47 +5,43 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X } from 'lucide-react';
-import type { RiddleSubject, RiddleCategory } from '@/lib/riddle-mcq-api';
+import type { RiddleCategory } from '@/lib/riddle-mcq-api';
 
-const subjectSchema = z.object({
+const categorySchema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().optional(),
   emoji: z.string().min(1, 'Emoji is required'),
-  categoryId: z.string().nullable().optional(),
   order: z.number().optional().default(0),
   isActive: z.boolean().optional().default(true),
 });
 
-type SubjectFormData = z.infer<typeof subjectSchema>;
+type CategoryFormData = z.infer<typeof categorySchema>;
 
-interface SubjectModalProps {
+interface RiddleMcqCategoryModalProps {
   open: boolean;
-  subject: RiddleSubject | undefined;
-  categories: RiddleCategory[];
+  category?: RiddleCategory | undefined;
   onClose: () => void;
-  onSubmit: (data: SubjectFormData) => void;
+  onSubmit: (data: CategoryFormData) => void;
   isSubmitting?: boolean;
 }
 
-export function SubjectModal({
+export function RiddleMcqCategoryModal({
   open,
-  subject,
-  categories,
+  category,
   onClose,
   onSubmit,
   isSubmitting = false,
-}: SubjectModalProps) {
+}: RiddleMcqCategoryModalProps) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<SubjectFormData>({
-    resolver: zodResolver(subjectSchema),
+  } = useForm<CategoryFormData>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name: '',
-      emoji: '🧩',
-      categoryId: null,
+      emoji: '',
       order: 0,
       isActive: true,
     },
@@ -54,16 +50,15 @@ export function SubjectModal({
   useEffect(() => {
     if (open) {
       reset(
-        subject || {
+        category || {
           name: '',
-          emoji: '🧩',
-          categoryId: null,
+          emoji: '',
           order: 0,
           isActive: true,
         }
       );
     }
-  }, [open, subject, reset]);
+  }, [open, category, reset]);
 
   if (!open) return null;
 
@@ -72,7 +67,7 @@ export function SubjectModal({
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {subject ? 'Edit Subject' : 'Add Subject'}
+            {category ? 'Edit Category' : 'Add Category'}
           </h2>
           <button
             onClick={onClose}
@@ -104,26 +99,6 @@ export function SubjectModal({
               className="w-full rounded-lg border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             />
             {errors.emoji && <p className="mt-1 text-sm text-red-500">{errors.emoji.message}</p>}
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Category
-            </label>
-            <select
-              {...register('categoryId')}
-              className="w-full rounded-lg border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-            >
-              <option value="">No Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.emoji} {cat.name}
-                </option>
-              ))}
-            </select>
-            {errors.categoryId && (
-              <p className="mt-1 text-sm text-red-500">{errors.categoryId.message}</p>
-            )}
           </div>
 
           <div>
@@ -165,7 +140,7 @@ export function SubjectModal({
               disabled={isSubmitting}
               className="flex-1 rounded-lg bg-indigo-600 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
-              {isSubmitting ? 'Saving...' : subject ? 'Update' : 'Create'}
+              {isSubmitting ? 'Saving...' : category ? 'Update' : 'Create'}
             </button>
           </div>
         </form>
@@ -174,4 +149,4 @@ export function SubjectModal({
   );
 }
 
-export default SubjectModal;
+export default RiddleMcqCategoryModal;

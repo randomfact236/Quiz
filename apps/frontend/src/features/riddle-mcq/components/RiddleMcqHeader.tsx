@@ -1,13 +1,18 @@
 'use client';
 
-interface RiddleHeaderProps {
+interface RiddleMcqHeaderProps {
   totalRiddles: number;
   onAddRiddle: () => void;
   onImport: () => void;
   onExport: () => void;
 }
 
-export function RiddleHeader({ totalRiddles, onAddRiddle, onImport, onExport }: RiddleHeaderProps) {
+export function RiddleMcqHeader({
+  totalRiddles,
+  onAddRiddle,
+  onImport,
+  onExport,
+}: RiddleMcqHeaderProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div>
@@ -41,4 +46,4 @@ export function RiddleHeader({ totalRiddles, onAddRiddle, onImport, onExport }: 
   );
 }
 
-export default RiddleHeader;
+export default RiddleMcqHeader;

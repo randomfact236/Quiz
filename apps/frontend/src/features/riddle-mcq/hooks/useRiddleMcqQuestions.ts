@@ -11,10 +11,10 @@ import {
   type GetRiddlesParams,
 } from '@/lib/riddle-mcq-api';
 
-const RIDDLES_KEY = ['riddle-riddles'];
-const FILTER_COUNTS_KEY = ['riddle-filter-counts'];
+const RIDDLES_KEY = ['riddle-mcq-questions'];
+const FILTER_COUNTS_KEY = ['riddle-mcq-filter-counts'];
 
-export function useRiddleMcqs(
+export function useRiddleMcqQuestions(
   filters: GetRiddlesParams = {},
   page: number = 1,
   pageSize: number = 10
@@ -82,4 +82,4 @@ export function useRiddleMcqs(
   };
 }
 
-export default useRiddleMcqs;
+export default useRiddleMcqQuestions;

@@ -43,7 +43,7 @@ const riddleSchema = z
 
 type RiddleFormData = z.infer<typeof riddleSchema>;
 
-interface RiddleModalProps {
+interface RiddleMcqModalProps {
   open: boolean;
   riddle: RiddleMcq | undefined;
   subjects: RiddleSubject[];
@@ -53,7 +53,7 @@ interface RiddleModalProps {
   isSubmitting?: boolean;
 }
 
-export function RiddleModal({
+export function RiddleMcqModal({
   open,
   riddle,
   subjects,
@@ -61,7 +61,7 @@ export function RiddleModal({
   onClose,
   onSubmit,
   isSubmitting = false,
-}: RiddleModalProps) {
+}: RiddleMcqModalProps) {
   const {
     register,
     handleSubmit,
@@ -355,4 +355,4 @@ export function RiddleModal({
   );
 }
 
-export default RiddleModal;
+export default RiddleMcqModal;
