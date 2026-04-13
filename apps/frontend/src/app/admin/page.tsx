@@ -379,7 +379,11 @@ export default function AdminPage(): JSX.Element {
                   <Smile className="w-6 h-6" /> Dad Jokes Management
                 </>
               )}
-              {activeSection === 'riddle-mcq' && <RiddleMcqContainer />}
+              {activeSection === 'riddle-mcq' && (
+                <>
+                  <Puzzle className="w-6 h-6" /> Riddle MCQ Management
+                </>
+              )}
               {activeSection === 'image-riddles' && (
                 <>
                   <ImageIcon className="w-6 h-6" /> Image Riddles Management
