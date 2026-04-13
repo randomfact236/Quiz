@@ -20,7 +20,7 @@ type SubjectFormData = z.infer<typeof subjectSchema>;
 
 interface SubjectModalProps {
   open: boolean;
-  subject?: RiddleSubject;
+  subject: RiddleSubject | undefined;
   categories: RiddleCategory[];
   onClose: () => void;
   onSubmit: (data: SubjectFormData) => void;
