@@ -296,7 +296,7 @@ export async function getAllRiddles(
   queryParams.append('limit', String(limit));
 
   const url = `/riddle-mcq/all?${queryParams.toString()}`;
-  const response = await api.get<{ data: RiddleMcq[]; total: number }>(url);
+  const response = await api.get<{ data: RiddleMcq[]; total: number }>(url, { isAdmin: true });
   return response.data;
 }
 
