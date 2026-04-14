@@ -37,10 +37,6 @@ export class RiddleSubject {
   @Column({ default: true })
   isActive: boolean;
 
-  @Index()
-  @Column({ type: 'int', default: 0 })
-  order: number;
-
   @OneToMany(() => RiddleMcq, (riddle) => riddle.subject)
   riddles: RiddleMcq[];
 }

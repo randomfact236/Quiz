@@ -11,11 +11,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_DATABASE:-ai_quiz}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,11 +27,11 @@ services:
     restart: unless-stopped
     command: redis-server --appendonly yes
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,12 +39,12 @@ services:
   # Backend API
   api:
     build:
-      context: .
-      target: development
+      context: ../../
+      dockerfile: apps/backend/Dockerfile.dev
     container_name: ai-quiz-api
     restart: unless-stopped
     ports:
-      - "3012:3012"
+      - '3012:3012'
     environment:
       - NODE_ENV=development
       - PORT=3012

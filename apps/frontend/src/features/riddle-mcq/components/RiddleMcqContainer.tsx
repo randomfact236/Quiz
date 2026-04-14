@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRiddleMcqCategories } from '../hooks/useRiddleMcqCategories';
 import { useRiddleMcqSubjects } from '../hooks/useRiddleMcqSubjects';
 import { useRiddleMcqQuestions } from '../hooks/useRiddleMcqQuestions';
+import { useRiddleMcqFilterCounts } from '../hooks/useRiddleMcqFilterCounts';
 import { RiddleMcqHeader } from './RiddleMcqHeader';
 import { RiddleMcqFilterPanel } from './RiddleMcqFilterPanel';
 import { RiddleMcqCategoryModal } from '../modals/RiddleMcqCategoryModal';
@@ -40,6 +41,11 @@ export function RiddleMcqContainer() {
   const [riddlePage, setRiddlePage] = useState(1);
 
   const riddlesQuery = useRiddleMcqQuestions(riddleFilters, riddlePage, 10);
+  const filterCountsQuery = useRiddleMcqFilterCounts(
+    riddleFilters.category,
+    riddleFilters.subject,
+    riddleFilters.level
+  );
 
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
@@ -169,10 +175,13 @@ export function RiddleMcqContainer() {
   return (
     <div className="space-y-4">
       <RiddleMcqHeader
-        totalRiddles={riddlesTotal}
         onAddRiddle={() => setRiddleModal({ open: true })}
-        onImport={() => {}}
-        onExport={() => {}}
+        onImport={() => {
+          /* TODO: Implement in F6 */
+        }}
+        onExport={() => {
+          /* TODO: Implement in F6 */
+        }}
       />
 
       <RiddleMcqFilterPanel
@@ -181,8 +190,8 @@ export function RiddleMcqContainer() {
         onReset={handleResetFilters}
         categories={categories}
         subjects={subjects}
-        filterCounts={undefined}
-        isLoading={riddlesQuery.isLoading}
+        filterCounts={filterCountsQuery.data}
+        isLoading={filterCountsQuery.isLoading}
         onAddCategory={() => setCategoryModal({ open: true })}
         onEditCategory={(c) => setCategoryModal({ open: true, item: c })}
         onDeleteCategory={handleDeleteCategory}

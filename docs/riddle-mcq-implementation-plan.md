@@ -29,6 +29,49 @@
 
 ---
 
+## File Size Rules
+
+### Maximum Line Limits
+
+| File Type        | Max Lines | Action if Exceeded                |
+| ---------------- | --------- | --------------------------------- |
+| Service files    | 300       | Split into private helper methods |
+| Controller files | 200       | Split into separate controllers   |
+| Component files  | 200       | Split into smaller components     |
+| Hook files       | 100       | Split into smaller hooks          |
+| DTO files        | 150       | Split by feature area             |
+
+### How to Split Service Files
+
+When a service method exceeds 50 lines, extract into private helpers:
+
+- Keep public methods slim (under 20 lines)
+- Move query logic into private methods
+- Use `Promise.all` for parallel queries
+- Private helpers are prefixed with `private async`
+
+### How to Split Component Files
+
+When a component exceeds 200 lines:
+
+- Extract sub-components into separate files
+- Extract logic into custom hooks
+- Keep the main component as an orchestrator only
+
+### Check File Sizes After Every Feature
+
+```bash
+# Frontend
+Get-ChildItem -Path "apps\frontend\src\features\riddle-mcq" -Recurse -Include "*.tsx","*.ts" | ForEach-Object { $count = (Get-Content $_.FullName).Count; "$count`t$($_.Name)" } | Sort-Object -Descending
+
+# Backend
+Get-ChildItem -Path "apps\backend\src\riddle-mcq" -Recurse -Include "*.ts" | ForEach-Object { $count = (Get-Content $_.FullName).Count; "$count`t$($_.Name)" } | Sort-Object -Descending
+```
+
+If any file exceeds limit → refactor before moving to next feature.
+
+---
+
 ## Quiz vs Riddle Level Comparison
 
 | Level   | Quiz            | Riddle          |

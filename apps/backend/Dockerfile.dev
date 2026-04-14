@@ -2,10 +2,10 @@ FROM node:20-alpine
 RUN apk add --no-cache python3 make g++ nodejs npm
 WORKDIR /app
 COPY package*.json ./
-COPY apps/backend/package*.json ./apps/backend/
+COPY ./apps/backend/package*.json ./apps/backend/
 RUN npm ci --ignore-scripts
-COPY apps/backend ./apps/backend
-COPY tsconfig.json ./
+COPY ./apps/backend ./apps/backend
+COPY ./tsconfig.json ./
 WORKDIR /app/apps/backend
 RUN node scripts/fix-deps.js && npm rebuild bcrypt
 EXPOSE 3012

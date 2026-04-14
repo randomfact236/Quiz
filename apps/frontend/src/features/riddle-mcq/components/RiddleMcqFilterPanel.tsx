@@ -25,6 +25,7 @@ interface RiddleFilterCounts {
     count: number;
   }[];
   levelCounts: { level: string; count: number }[];
+  statusCounts: { status: string; count: number }[];
   total: number;
 }
 
@@ -90,9 +91,9 @@ export function RiddleMcqFilterPanel({
   const statusCounts = filterCounts
     ? {
         total: filterCounts.total,
-        published: filterCounts.levelCounts.length, // placeholder
-        draft: 0,
-        trash: 0,
+        published: filterCounts.statusCounts?.find((s) => s.status === 'published')?.count ?? 0,
+        draft: filterCounts.statusCounts?.find((s) => s.status === 'draft')?.count ?? 0,
+        trash: filterCounts.statusCounts?.find((s) => s.status === 'trash')?.count ?? 0,
       }
     : { total: 0, published: 0, draft: 0, trash: 0 };
 
@@ -108,22 +109,29 @@ export function RiddleMcqFilterPanel({
     if (!filters.category || filters.category === 'all') {
       return sortedSubjects;
     }
-    return sortedSubjects.filter((s) => s.categoryId === filters.category);
+    return sortedSubjects.filter((s) => s.category?.slug === filters.category);
   }, [sortedSubjects, filters.category]);
 
   const hasActiveFilters = Boolean(
     filters.category ||
     filters.subject ||
     filters.level ||
-    (filters.status && filters.status !== 'all') ||
+    (filters.status && filters.status !== 'all' && filters.status !== '') ||
     filters.search
   );
+
+  const handleCategoryChange = (categorySlug: string | undefined) => {
+    onFilterChange('category', categorySlug);
+    onFilterChange('subject', undefined);
+  };
 
   return (
     <div className="space-y-4">
       <StatusDashboard
         counts={statusCounts}
-        activeFilter={(filters.status as StatusFilter) || 'all'}
+        activeFilter={
+          (filters.status && filters.status !== '' ? filters.status : 'all') as StatusFilter
+        }
         onFilterChange={(filter) => onFilterChange('status', filter === 'all' ? 'all' : filter)}
         loading={isLoading}
       />
@@ -137,7 +145,7 @@ export function RiddleMcqFilterPanel({
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Category:</span>
           <button
-            onClick={() => onFilterChange('category', undefined)}
+            onClick={() => handleCategoryChange(undefined)}
             className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
               !filters.category || filters.category === 'all'
                 ? 'bg-purple-600 text-white'
@@ -149,14 +157,14 @@ export function RiddleMcqFilterPanel({
           {sortedCategories.map((category) => {
             const categoryCount =
               filterCounts?.categoryCounts?.find((c) => c.id === category.id)?.count || 0;
-            const isSelected = filters.category === category.id;
+            const isSelected = filters.category === category.slug;
             return (
               <CategoryFilterRow
                 key={category.id}
                 category={category}
                 isSelected={isSelected}
                 count={categoryCount}
-                onSelect={() => onFilterChange('category', category.id)}
+                onSelect={() => handleCategoryChange(category.slug)}
                 onEdit={() => onEditCategory(category)}
                 onDelete={() => onDeleteCategory(category)}
               />
@@ -186,14 +194,14 @@ export function RiddleMcqFilterPanel({
           {filteredSubjects.map((subject) => {
             const subjectCount =
               filterCounts?.subjectCounts?.find((s) => s.id === subject.id)?.count || 0;
-            const isSelected = filters.subject === subject.id;
+            const isSelected = filters.subject === subject.slug;
             return (
               <RiddleSubjectFilterRow
                 key={subject.id}
                 subject={subject}
                 isSelected={isSelected}
                 count={subjectCount}
-                onSelect={() => onFilterChange('subject', subject.id)}
+                onSelect={() => onFilterChange('subject', subject.slug)}
                 onEdit={() => onEditSubject(subject)}
                 onDelete={() => onDeleteSubject(subject)}
               />
@@ -260,10 +268,10 @@ export function RiddleMcqFilterPanel({
             <span className="text-xs font-medium text-gray-500 uppercase">Active Filters:</span>
             {filters.category && (
               <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full">
-                {categories.find((c) => c.id === filters.category)?.emoji}{' '}
-                {categories.find((c) => c.id === filters.category)?.name}
+                {categories.find((c) => c.slug === filters.category)?.emoji}{' '}
+                {categories.find((c) => c.slug === filters.category)?.name}
                 <button
-                  onClick={() => onFilterChange('category', undefined)}
+                  onClick={() => handleCategoryChange(undefined)}
                   className="hover:text-purple-900"
                 >
                   ×
@@ -272,8 +280,8 @@ export function RiddleMcqFilterPanel({
             )}
             {filters.subject && (
               <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
-                {subjects.find((s) => s.id === filters.subject)?.emoji}{' '}
-                {subjects.find((s) => s.id === filters.subject)?.name}
+                {subjects.find((s) => s.slug === filters.subject)?.emoji}{' '}
+                {subjects.find((s) => s.slug === filters.subject)?.name}
                 <button
                   onClick={() => onFilterChange('subject', undefined)}
                   className="hover:text-blue-900"

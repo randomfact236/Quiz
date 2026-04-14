@@ -28,10 +28,6 @@ export class RiddleCategory {
   @Column({ default: true })
   isActive: boolean;
 
-  @Index()
-  @Column({ type: 'int', default: 0 })
-  order: number;
-
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 

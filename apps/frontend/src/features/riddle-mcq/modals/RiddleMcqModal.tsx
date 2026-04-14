@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -62,6 +62,8 @@ export function RiddleMcqModal({
   onSubmit,
   isSubmitting = false,
 }: RiddleMcqModalProps) {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+
   const {
     register,
     handleSubmit,
@@ -85,14 +87,19 @@ export function RiddleMcqModal({
   });
 
   const currentLevel = watch('level');
-  const currentSubjectId = watch('subjectId');
+  const currentCorrectLetter = watch('correctLetter');
+  const currentStatus = watch('status');
 
-  const currentSubject = subjects.find((s) => s.id === currentSubjectId);
-  const subjectCategoryId = currentSubject?.categoryId;
+  const filteredSubjects = selectedCategoryId
+    ? subjects.filter((s) => s.categoryId === selectedCategoryId)
+    : subjects;
 
   useEffect(() => {
     if (open) {
+      setSelectedCategoryId('');
       if (riddle) {
+        const subject = subjects.find((s) => s.id === riddle.subjectId);
+        setSelectedCategoryId(subject?.categoryId || '');
         reset({
           question: riddle.question,
           level: riddle.level as RiddleFormData['level'],
@@ -117,17 +124,22 @@ export function RiddleMcqModal({
         });
       }
     }
-  }, [open, riddle, reset]);
+  }, [open, riddle, subjects, reset]);
 
   const handleLevelChange = (newLevel: string) => {
-    setValue('level', newLevel as RiddleFormData['level']);
+    const optionCount = LEVEL_OPTIONS[newLevel as keyof typeof LEVEL_OPTIONS]?.optionCount || 2;
+
     if (newLevel === 'expert') {
+      setValue('level', 'expert');
       setValue('options', []);
       setValue('correctLetter', undefined);
     } else {
-      const optionCount = LEVEL_OPTIONS[newLevel as keyof typeof LEVEL_OPTIONS]?.optionCount || 2;
-      const currentOptions = getValues('options') || [];
-      setValue('options', currentOptions.slice(0, optionCount));
+      setValue('level', newLevel as RiddleFormData['level']);
+      const currentOptions = (getValues('options') || []).slice(0, optionCount);
+      while (currentOptions.length < optionCount) {
+        currentOptions.push('');
+      }
+      setValue('options', currentOptions);
       const letter = getValues('correctLetter');
       const validLetters = LEVEL_OPTIONS[newLevel as keyof typeof LEVEL_OPTIONS]?.validLetters || [
         'A',
@@ -137,6 +149,10 @@ export function RiddleMcqModal({
         setValue('correctLetter', validLetters[0]);
       }
     }
+  };
+
+  const handleCorrectAnswerChange = (letter: string) => {
+    setValue('correctLetter', letter);
   };
 
   if (!open) return null;
@@ -165,32 +181,37 @@ export function RiddleMcqModal({
     onSubmit(dto);
   };
 
-  const filteredSubjects = subjectCategoryId
-    ? subjects.filter((s) => s.categoryId === subjectCategoryId)
-    : subjects;
+  const letters = ['A', 'B', 'C', 'D'];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto py-8">
-      <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-hidden">
+      <div className="w-full max-w-2xl max-h-[90vh] rounded-2xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-6 shadow-xl overflow-y-auto">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">{riddle ? 'Edit Riddle' : 'Add Riddle'}</h2>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded" type="button">
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            type="button"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-sm font-medium">Category</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Category
+              </label>
               <select
-                className="w-full rounded-lg border border-gray-300 p-2"
-                value={subjectCategoryId || ''}
-                onChange={() => {
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                value={selectedCategoryId}
+                onChange={(e) => {
+                  setSelectedCategoryId(e.target.value);
                   setValue('subjectId', '');
                 }}
               >
-                <option value="">Select Category</option>
+                <option value="">Select</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.emoji} {cat.name}
@@ -200,13 +221,15 @@ export function RiddleMcqModal({
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium">Subject</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Subject
+              </label>
               <select
                 {...register('subjectId')}
-                className="w-full rounded-lg border border-gray-300 p-2"
-                disabled={!subjectCategoryId && !currentSubjectId}
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                disabled={!selectedCategoryId}
               >
-                <option value="">Select Subject</option>
+                <option value="">Select</option>
                 {filteredSubjects.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.emoji} {s.name}
@@ -214,17 +237,19 @@ export function RiddleMcqModal({
                 ))}
               </select>
               {errors.subjectId && (
-                <p className="text-sm text-red-500">{errors.subjectId.message}</p>
+                <p className="text-xs text-red-500 mt-1">{errors.subjectId.message}</p>
               )}
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Level</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Level
+            </label>
             <select
               value={currentLevel}
               onChange={(e) => handleLevelChange(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 p-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="easy">🌱 Easy (2 options)</option>
               <option value="medium">🌿 Medium (3 options)</option>
@@ -234,117 +259,142 @@ export function RiddleMcqModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Question</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Question
+            </label>
             <textarea
               {...register('question')}
-              rows={3}
-              className="w-full rounded-lg border border-gray-300 p-2"
+              rows={2}
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
-            {errors.question && <p className="text-sm text-red-500">{errors.question.message}</p>}
+            {errors.question && (
+              <p className="text-xs text-red-500 mt-1">{errors.question.message}</p>
+            )}
           </div>
 
           {!isExpert && (
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Options</label>
-              {Array.from({ length: optionCount }).map((_, i) => (
-                <div key={i} className="flex gap-2">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 font-bold">
-                    {String.fromCharCode(65 + i)}
-                  </span>
-                  <input
-                    {...register(`options.${i}`)}
-                    placeholder={`Option ${String.fromCharCode(65 + i)}`}
-                    className="flex-1 rounded-lg border border-gray-300 p-2"
-                  />
-                </div>
-              ))}
-              {errors.options && (
-                <p className="text-sm text-red-500">{errors.options.message as string}</p>
-              )}
-            </div>
-          )}
-
-          {!isExpert && (
             <div>
-              <label className="mb-1 block text-sm font-medium">Correct Answer</label>
-              <select
-                {...register('correctLetter')}
-                className="w-full rounded-lg border border-gray-300 p-2"
-              >
-                {LEVEL_OPTIONS[currentLevel as keyof typeof LEVEL_OPTIONS]?.validLetters.map(
-                  (letter) => (
-                    <option key={letter} value={letter}>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Options
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {letters.slice(0, optionCount).map((letter, i) => (
+                  <div key={letter} className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleCorrectAnswerChange(letter)}
+                      className={`flex items-center justify-center w-8 h-8 rounded border ${
+                        currentCorrectLetter === letter
+                          ? 'bg-green-500 border-green-500 text-white'
+                          : 'border-gray-300 dark:border-gray-600 hover:border-green-400'
+                      }`}
+                    >
+                      {currentCorrectLetter === letter ? '✓' : ''}
+                    </button>
+                    <span className="flex items-center justify-center w-6 h-8 bg-gray-100 dark:bg-gray-700 rounded text-sm font-medium">
                       {letter}
-                    </option>
-                  )
-                )}
-              </select>
+                    </span>
+                    <input
+                      {...register(`options.${i}`)}
+                      placeholder={`Option ${letter}`}
+                      className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                    />
+                  </div>
+                ))}
+              </div>
+              {errors.options && (
+                <p className="text-xs text-red-500 mt-1">{errors.options.message as string}</p>
+              )}
             </div>
           )}
 
           {isExpert && (
             <div>
-              <label className="mb-1 block text-sm font-medium">Answer (required)</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Answer (required)
+              </label>
               <input
                 {...register('answer')}
                 placeholder="Type the correct answer"
-                className="w-full rounded-lg border border-gray-300 p-2"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
-              {errors.answer && <p className="text-sm text-red-500">{errors.answer.message}</p>}
+              {errors.answer && (
+                <p className="text-xs text-red-500 mt-1">{errors.answer.message}</p>
+              )}
             </div>
           )}
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Hint <span className="text-gray-400">(optional, max 500)</span>
-            </label>
-            <input
-              {...register('hint')}
-              placeholder="Show hint before answering"
-              className="w-full rounded-lg border border-gray-300 p-2"
-            />
-            {errors.hint && <p className="text-sm text-red-500">{errors.hint.message}</p>}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Hint <span className="text-gray-400">(optional)</span>
+              </label>
+              <input
+                {...register('hint')}
+                placeholder="Show hint before answering"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Explanation <span className="text-gray-400">(optional)</span>
+              </label>
+              <input
+                {...register('explanation')}
+                placeholder="Explain the answer"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Explanation <span className="text-gray-400">(optional, max 2000)</span>
-            </label>
-            <textarea
-              {...register('explanation')}
-              rows={2}
-              placeholder="Explain the answer after answering"
-              className="w-full rounded-lg border border-gray-300 p-2"
-            />
-            {errors.explanation && (
-              <p className="text-sm text-red-500">{errors.explanation.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">Status</label>
-            <select
-              {...register('status')}
-              className="w-full rounded-lg border border-gray-300 p-2"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-              <option value="trash">Trash</option>
-            </select>
-          </div>
-
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex items-center gap-3 pt-2">
+            <div className="flex rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setValue('status', 'draft')}
+                className={`px-3 py-2 text-sm font-medium ${
+                  currentStatus === 'draft'
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+              >
+                Draft
+              </button>
+              <button
+                type="button"
+                onClick={() => setValue('status', 'published')}
+                className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${
+                  currentStatus === 'published'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+              >
+                Published
+              </button>
+              <button
+                type="button"
+                onClick={() => setValue('status', 'trash')}
+                className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${
+                  currentStatus === 'trash'
+                    ? 'bg-red-500 text-white'
+                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+              >
+                Trash
+              </button>
+            </div>
+            <div className="flex-1" />
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : riddle ? 'Update' : 'Create'}
             </button>

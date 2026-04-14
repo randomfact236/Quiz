@@ -1,24 +1,15 @@
 'use client';
 
 interface RiddleMcqHeaderProps {
-  totalRiddles: number;
   onAddRiddle: () => void;
   onImport: () => void;
   onExport: () => void;
 }
 
-export function RiddleMcqHeader({
-  totalRiddles,
-  onAddRiddle,
-  onImport,
-  onExport,
-}: RiddleMcqHeaderProps) {
+export function RiddleMcqHeader({ onAddRiddle, onImport, onExport }: RiddleMcqHeaderProps) {
   return (
-    <div className="mb-6 flex items-center justify-between">
-      <div>
-        <h3 className="text-lg font-semibold">🧩 Riddle MCQ Management</h3>
-        <p className="text-sm text-gray-500">{totalRiddles} total riddles</p>
-      </div>
+    <div className="mb-4 flex items-center justify-between">
+      <h3 className="text-lg font-semibold">🧩 Riddle MCQ Management</h3>
       <div className="flex gap-2">
         <button
           onClick={onExport}

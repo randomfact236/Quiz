@@ -10,6 +10,15 @@ COPY apps/backend/scripts ./apps/backend/scripts/
 WORKDIR /app/apps/backend
 RUN DOCKER_ENV=true npm run build
 
+FROM node:20-alpine AS development
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+COPY --from=builder /app/apps/backend/package*.json ./apps/backend/
+COPY --from=builder /app/apps/backend/src ./apps/backend/src
+EXPOSE 3012
+CMD ["node", "apps/backend/dist/main.js"]
+
 FROM node:20-alpine AS production
 RUN apk add --no-cache ca-certificates curl
 RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001

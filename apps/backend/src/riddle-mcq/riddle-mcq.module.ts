@@ -6,16 +6,35 @@ import { CacheModule } from '../common/cache/cache.module';
 import { RiddleCategory } from './entities/riddle-category.entity';
 import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleSubject } from './entities/riddle-subject.entity';
-import { RiddleMcqController } from './riddle-mcq.controller';
-import { RiddleMcqService } from './riddle-mcq.service';
+import {
+  RiddleMcqCategoryService,
+  RiddleMcqSubjectService,
+  RiddleMcqQuestionService,
+  RiddleMcqBulkService,
+  RiddleMcqStatsService,
+} from './services';
+import {
+  RiddleMcqCategoryController,
+  RiddleMcqSubjectController,
+  RiddleMcqController,
+} from './controllers';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([RiddleCategory, RiddleSubject, RiddleMcq]),
-    CacheModule,
+  imports: [TypeOrmModule.forFeature([RiddleCategory, RiddleSubject, RiddleMcq]), CacheModule],
+  controllers: [RiddleMcqCategoryController, RiddleMcqSubjectController, RiddleMcqController],
+  providers: [
+    RiddleMcqCategoryService,
+    RiddleMcqSubjectService,
+    RiddleMcqQuestionService,
+    RiddleMcqBulkService,
+    RiddleMcqStatsService,
   ],
-  controllers: [RiddleMcqController],
-  providers: [RiddleMcqService],
-  exports: [RiddleMcqService],
+  exports: [
+    RiddleMcqCategoryService,
+    RiddleMcqSubjectService,
+    RiddleMcqQuestionService,
+    RiddleMcqBulkService,
+    RiddleMcqStatsService,
+  ],
 })
 export class RiddleMcqModule {}

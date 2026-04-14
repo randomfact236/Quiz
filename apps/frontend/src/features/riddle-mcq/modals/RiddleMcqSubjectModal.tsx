@@ -12,7 +12,6 @@ const subjectSchema = z.object({
   slug: z.string().optional(),
   emoji: z.string().min(1, 'Emoji is required'),
   categoryId: z.string().nullable().optional(),
-  order: z.number().optional().default(0),
   isActive: z.boolean().optional().default(true),
 });
 
@@ -46,7 +45,6 @@ export function RiddleMcqSubjectModal({
       name: '',
       emoji: '🧩',
       categoryId: null,
-      order: 0,
       isActive: true,
     },
   });
@@ -58,7 +56,6 @@ export function RiddleMcqSubjectModal({
           name: '',
           emoji: '🧩',
           categoryId: null,
-          order: 0,
           isActive: true,
         }
       );
@@ -124,17 +121,6 @@ export function RiddleMcqSubjectModal({
             {errors.categoryId && (
               <p className="mt-1 text-sm text-red-500">{errors.categoryId.message}</p>
             )}
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Order
-            </label>
-            <input
-              type="number"
-              {...register('order', { valueAsNumber: true })}
-              className="w-full rounded-lg border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-            />
           </div>
 
           <div className="flex items-center gap-2">

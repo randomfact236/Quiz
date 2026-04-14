@@ -83,7 +83,7 @@ export async function apiRequest<T>(
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
+  const timeout = setTimeout(() => controller.abort(), 60000);
 
   try {
     const response = await fetch(url, { ...config, signal: controller.signal });
@@ -96,7 +96,7 @@ export async function apiRequest<T>(
           const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken })
+            body: JSON.stringify({ refreshToken }),
           });
 
           if (refreshRes.ok) {
@@ -166,9 +166,14 @@ export class ApiError extends Error {
 
 // Convenience methods
 export const api = {
-  get: <T>(endpoint: string, options?: { isAdmin?: boolean }) => apiRequest<T>(endpoint, { method: 'GET', ...options }),
-  post: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) => apiRequest<T>(endpoint, { method: 'POST', body, ...options }),
-  put: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) => apiRequest<T>(endpoint, { method: 'PUT', body, ...options }),
-  patch: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) => apiRequest<T>(endpoint, { method: 'PATCH', body, ...options }),
-  delete: <T>(endpoint: string, options?: { isAdmin?: boolean }) => apiRequest<T>(endpoint, { method: 'DELETE', ...options }),
+  get: <T>(endpoint: string, options?: { isAdmin?: boolean }) =>
+    apiRequest<T>(endpoint, { method: 'GET', ...options }),
+  post: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) =>
+    apiRequest<T>(endpoint, { method: 'POST', body, ...options }),
+  put: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) =>
+    apiRequest<T>(endpoint, { method: 'PUT', body, ...options }),
+  patch: <T>(endpoint: string, body: unknown, options?: { isAdmin?: boolean }) =>
+    apiRequest<T>(endpoint, { method: 'PATCH', body, ...options }),
+  delete: <T>(endpoint: string, options?: { isAdmin?: boolean }) =>
+    apiRequest<T>(endpoint, { method: 'DELETE', ...options }),
 };

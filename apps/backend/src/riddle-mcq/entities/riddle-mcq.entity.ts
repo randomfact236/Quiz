@@ -3,12 +3,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  CreateDateColumn,
   UpdateDateColumn,
   Index,
   JoinColumn,
 } from 'typeorm';
 
 import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
+import { RiddleSubject } from './riddle-subject.entity';
 
 export { RiddleMcqLevel };
 
@@ -50,9 +52,9 @@ export class RiddleMcq {
   @Column()
   subjectId: string;
 
-  @ManyToOne('RiddleSubject', 'riddles')
+  @ManyToOne(() => RiddleSubject, 'riddles')
   @JoinColumn({ name: 'subjectId' })
-  subject: any;
+  subject: RiddleSubject;
 
   @Index()
   @Column({
@@ -61,6 +63,9 @@ export class RiddleMcq {
     default: RiddleStatus.DRAFT,
   })
   status: RiddleStatus;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

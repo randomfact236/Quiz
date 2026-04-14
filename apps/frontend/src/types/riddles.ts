@@ -32,7 +32,6 @@ export interface RiddleSubject {
   categoryId?: string | null;
   category?: { id: string; name: string; emoji: string; slug: string };
   isActive: boolean;
-  order: number;
   chapters?: RiddleChapter[];
   riddles?: RiddleMcq[];
   createdAt?: string;

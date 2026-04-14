@@ -93,8 +93,7 @@ export class QuizService {
 
     const query = this.subjectRepo
       .createQueryBuilder('subject')
-      .orderBy('subject.order', 'ASC')
-      .addOrderBy('subject.name', 'ASC')
+      .orderBy('subject.name', 'ASC')
       .skip((page - 1) * limit)
       .take(limit);
 
@@ -186,7 +185,7 @@ export class QuizService {
   async findChaptersBySubject(subjectId: string): Promise<Chapter[]> {
     return this.chapterRepo.find({
       where: { subject: { id: subjectId } },
-      order: { id: 'ASC' },
+      order: { name: 'ASC' },
     });
   }
 

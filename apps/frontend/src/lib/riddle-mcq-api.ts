@@ -41,14 +41,12 @@ export interface CreateCategoryDto {
   name: string;
   slug?: string;
   emoji?: string;
-  order?: number;
 }
 
 export interface UpdateCategoryDto {
   name?: string;
   slug?: string;
   emoji?: string;
-  order?: number;
   isActive?: boolean;
 }
 
@@ -62,7 +60,6 @@ export interface CreateSubjectDto {
   emoji?: string;
   categoryId?: string | null;
   isActive?: boolean;
-  order?: number;
 }
 
 export interface UpdateSubjectDto {
@@ -71,7 +68,6 @@ export interface UpdateSubjectDto {
   emoji?: string;
   categoryId?: string | null;
   isActive?: boolean;
-  order?: number;
 }
 
 // ============================================================================
@@ -116,13 +112,22 @@ export interface GetRiddlesParams {
 }
 
 export interface GetFilterCountsParams {
+  category?: string;
   subject?: string;
   level?: string;
 }
 
 export interface FilterCounts {
-  subjectCounts: { id: string; name: string; count: number }[];
+  categoryCounts: { id: string; name: string; emoji: string; count: number }[];
+  subjectCounts: {
+    id: string;
+    name: string;
+    emoji: string;
+    categoryId: string | null;
+    count: number;
+  }[];
   levelCounts: { level: string; count: number }[];
+  statusCounts: { status: string; count: number }[];
   total: number;
 }
 
@@ -152,7 +157,7 @@ export async function getCategories(): Promise<RiddleCategory[]> {
  * Get all categories including inactive (Admin only)
  */
 export async function getCategoriesAdmin(): Promise<RiddleCategory[]> {
-  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories/all');
+  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories/all', { isAdmin: true });
   return response.data;
 }
 
@@ -160,7 +165,7 @@ export async function getCategoriesAdmin(): Promise<RiddleCategory[]> {
  * Create a new category (Admin only)
  */
 export async function createCategory(dto: CreateCategoryDto): Promise<RiddleCategory> {
-  const response = await api.post<RiddleCategory>('/riddle-mcq/categories', dto);
+  const response = await api.post<RiddleCategory>('/riddle-mcq/categories', dto, { isAdmin: true });
   return response.data;
 }
 
@@ -168,7 +173,9 @@ export async function createCategory(dto: CreateCategoryDto): Promise<RiddleCate
  * Update a category (Admin only)
  */
 export async function updateCategory(id: string, dto: UpdateCategoryDto): Promise<RiddleCategory> {
-  const response = await api.patch<RiddleCategory>(`/riddle-mcq/categories/${id}`, dto);
+  const response = await api.patch<RiddleCategory>(`/riddle-mcq/categories/${id}`, dto, {
+    isAdmin: true,
+  });
   return response.data;
 }
 
@@ -176,7 +183,7 @@ export async function updateCategory(id: string, dto: UpdateCategoryDto): Promis
  * Delete a category (Admin only)
  */
 export async function deleteCategory(id: string): Promise<void> {
-  await api.delete(`/riddle-mcq/categories/${id}`);
+  await api.delete(`/riddle-mcq/categories/${id}`, { isAdmin: true });
 }
 
 // ============================================================================
@@ -205,7 +212,7 @@ export async function getSubjectBySlug(slug: string): Promise<RiddleSubject> {
  * Get all subjects including inactive (Admin only)
  */
 export async function getAllSubjectsAdmin(): Promise<RiddleSubject[]> {
-  const response = await api.get<RiddleSubject[]>('/riddle-mcq/subjects/all');
+  const response = await api.get<RiddleSubject[]>('/riddle-mcq/subjects/all', { isAdmin: true });
   return response.data;
 }
 
@@ -213,7 +220,7 @@ export async function getAllSubjectsAdmin(): Promise<RiddleSubject[]> {
  * Create a new subject (Admin only)
  */
 export async function createSubject(dto: CreateSubjectDto): Promise<RiddleSubject> {
-  const response = await api.post<RiddleSubject>('/riddle-mcq/subjects', dto);
+  const response = await api.post<RiddleSubject>('/riddle-mcq/subjects', dto, { isAdmin: true });
   return response.data;
 }
 
@@ -221,7 +228,9 @@ export async function createSubject(dto: CreateSubjectDto): Promise<RiddleSubjec
  * Update a subject (Admin only)
  */
 export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {
-  const response = await api.patch<RiddleSubject>(`/riddle-mcq/subjects/${id}`, dto);
+  const response = await api.patch<RiddleSubject>(`/riddle-mcq/subjects/${id}`, dto, {
+    isAdmin: true,
+  });
   return response.data;
 }
 
@@ -229,7 +238,7 @@ export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<
  * Delete a subject (Admin only)
  */
 export async function deleteSubject(id: string): Promise<void> {
-  await api.delete(`/riddle-mcq/subjects/${id}`);
+  await api.delete(`/riddle-mcq/subjects/${id}`, { isAdmin: true });
 }
 
 // ============================================================================
@@ -313,7 +322,11 @@ export async function bulkActionRiddles(
   failed: number;
   message: string;
 }> {
-  const response = await api.post('/riddle-mcq/riddles/bulk-action', { ids, action });
+  const response = await api.post(
+    '/riddle-mcq/riddles/bulk-action',
+    { ids, action },
+    { isAdmin: true }
+  );
   return response.data as {
     success: boolean;
     processed: number;
@@ -327,7 +340,7 @@ export async function bulkActionRiddles(
  * Create a new riddle MCQ (Admin only)
  */
 export async function createRiddle(dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
-  const response = await api.post<RiddleMcq>('/riddle-mcq/riddles', dto);
+  const response = await api.post<RiddleMcq>('/riddle-mcq/riddles', dto, { isAdmin: true });
   return response.data;
 }
 
@@ -339,7 +352,8 @@ export async function bulkCreateRiddles(
 ): Promise<{ count: number; errors: string[] }> {
   const response = await api.post<{ count: number; errors: string[] }>(
     '/riddle-mcq/riddles/bulk',
-    dtos
+    dtos,
+    { isAdmin: true }
   );
   return response.data;
 }
@@ -351,7 +365,7 @@ export async function updateRiddle(
   id: string,
   dto: Partial<CreateRiddleMcqDto>
 ): Promise<RiddleMcq> {
-  const response = await api.patch<RiddleMcq>(`/riddle-mcq/riddles/${id}`, dto);
+  const response = await api.patch<RiddleMcq>(`/riddle-mcq/riddles/${id}`, dto, { isAdmin: true });
   return response.data;
 }
 
@@ -359,7 +373,7 @@ export async function updateRiddle(
  * Delete a riddle MCQ (Admin only)
  */
 export async function deleteRiddle(id: string): Promise<void> {
-  await api.delete(`/riddle-mcq/riddles/${id}`);
+  await api.delete(`/riddle-mcq/riddles/${id}`, { isAdmin: true });
 }
 
 // ============================================================================
@@ -374,6 +388,9 @@ export async function getRiddleFilterCounts(
 ): Promise<FilterCounts> {
   const queryParams = new URLSearchParams();
 
+  if (params.category && params.category !== 'all') {
+    queryParams.append('category', params.category);
+  }
   if (params.subject && params.subject !== 'all') {
     queryParams.append('subject', params.subject);
   }
