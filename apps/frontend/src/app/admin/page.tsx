@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, Suspense } from 'react';
 import {
   LayoutDashboard,
   Gamepad2,
@@ -453,7 +453,17 @@ export default function AdminPage(): JSX.Element {
               setJokeCategories={setJokeCategories}
             />
           )}
-          {activeSection === 'riddle-mcq' && <RiddleMcqContainer />}
+          {activeSection === 'riddle-mcq' && (
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center p-8">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              }
+            >
+              <RiddleMcqContainer />
+            </Suspense>
+          )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <AdminUsersSection />}
           {activeSection === 'settings' && <SettingsSection />}

@@ -32,7 +32,8 @@ interface RiddleFilterCounts {
 
 interface RiddleMcqFilterPanelProps {
   filters: RiddleFilters;
-  onFilterChange: (key: keyof RiddleFilters, value: string | undefined) => void;
+  onFilterChange: (key: string, value: string | undefined) => void;
+  onSearchChange: (value: string) => void;
   onReset: () => void;
   categories: RiddleCategory[];
   subjects: RiddleSubject[];
@@ -49,6 +50,7 @@ interface RiddleMcqFilterPanelProps {
 export function RiddleMcqFilterPanel({
   filters,
   onFilterChange,
+  onSearchChange,
   onReset,
   categories,
   subjects,
@@ -110,10 +112,7 @@ export function RiddleMcqFilterPanel({
           onDeleteSubject={onDeleteSubject}
         />
 
-        <SearchInput
-          value={filters.search || ''}
-          onChange={(val) => onFilterChange('search', val)}
-        />
+        <SearchInput value={filters.search || ''} onChange={onSearchChange} />
 
         <ActiveFiltersBadge
           filters={filters}

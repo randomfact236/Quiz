@@ -29,7 +29,10 @@ export function ActiveFiltersBadge({
   onClearAll,
 }: ActiveFiltersBadgeProps) {
   const hasActiveFilters = Boolean(
-    filters.category || filters.subject || filters.level || filters.search
+    (filters.category && filters.category !== 'all') ||
+    (filters.subject && filters.subject !== 'all') ||
+    (filters.level && filters.level !== 'all') ||
+    (filters.search && filters.search !== '')
   );
 
   if (!hasActiveFilters) return null;
@@ -37,7 +40,7 @@ export function ActiveFiltersBadge({
   return (
     <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
       <span className="text-xs font-medium text-gray-500 uppercase">Active Filters:</span>
-      {filters.category && (
+      {filters.category && filters.category !== 'all' && (
         <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full">
           {categories.find((c) => c.slug === filters.category)?.emoji}{' '}
           {categories.find((c) => c.slug === filters.category)?.name}
@@ -46,7 +49,7 @@ export function ActiveFiltersBadge({
           </button>
         </span>
       )}
-      {filters.subject && (
+      {filters.subject && filters.subject !== 'all' && (
         <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
           {subjects.find((s) => s.slug === filters.subject)?.emoji}{' '}
           {subjects.find((s) => s.slug === filters.subject)?.name}
@@ -55,7 +58,7 @@ export function ActiveFiltersBadge({
           </button>
         </span>
       )}
-      {filters.level && (
+      {filters.level && filters.level !== 'all' && (
         <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">
           {filters.level}
           <button onClick={onRemoveLevel} className="hover:text-green-900">

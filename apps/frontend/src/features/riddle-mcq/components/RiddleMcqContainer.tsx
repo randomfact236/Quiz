@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useRiddleMcqCategories } from '../hooks/useRiddleMcqCategories';
 import { useRiddleMcqSubjects } from '../hooks/useRiddleMcqSubjects';
 import { useRiddleMcqQuestions } from '../hooks/useRiddleMcqQuestions';
 import { useRiddleMcqFilterCounts } from '../hooks/useRiddleMcqFilterCounts';
+import { useRiddleMcqFilters } from '../hooks/useRiddleMcqFilters';
 import { RiddleMcqHeader } from './RiddleMcqHeader';
 import { RiddleMcqFilterPanel } from './RiddleMcqFilterPanel';
 import { RiddleMcqCategoryModal } from '../modals/RiddleMcqCategoryModal';
@@ -28,23 +30,20 @@ interface ConfirmState {
 }
 
 export function RiddleMcqContainer() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const categoriesQuery = useRiddleMcqCategories();
   const subjectsQuery = useRiddleMcqSubjects();
 
-  const [riddleFilters, setRiddleFilters] = useState({
-    category: '',
-    subject: '',
-    level: '',
-    status: '',
-    search: '',
-  });
-  const [riddlePage, setRiddlePage] = useState(1);
+  const { filters, setFilter, setSearch, page, setPage, resetFilters } = useRiddleMcqFilters();
+  const isInitialMount = useRef(true);
 
-  const riddlesQuery = useRiddleMcqQuestions(riddleFilters, riddlePage, 10);
+  const riddlesQuery = useRiddleMcqQuestions(filters, page, 10);
   const filterCountsQuery = useRiddleMcqFilterCounts(
-    riddleFilters.category,
-    riddleFilters.subject,
-    riddleFilters.level
+    filters.category,
+    filters.subject,
+    filters.level
   );
 
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
@@ -64,15 +63,36 @@ export function RiddleMcqContainer() {
   const riddlesTotal = riddlesQuery.data?.total ?? 0;
   const riddlesTotalPages = Math.ceil(riddlesTotal / 10);
 
-  const handleFilterChange = (key: string, value: string | undefined) => {
-    setRiddleFilters((prev) => ({ ...prev, [key]: value || '' }));
-    setRiddlePage(1);
-  };
+  const debouncedSetSearch = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout;
+      return (value: string) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setSearch(value);
+        }, 300);
+      };
+    })(),
+    [setSearch]
+  );
 
-  const handleResetFilters = () => {
-    setRiddleFilters({ category: '', subject: '', level: '', status: '', search: '' });
-    setRiddlePage(1);
-  };
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.set('section', 'riddle-mcq');
+    if (filters.category !== 'all') params.set('category', filters.category);
+    if (filters.subject !== 'all') params.set('subject', filters.subject);
+    if (filters.level !== 'all') params.set('level', filters.level);
+    if (filters.status !== 'all') params.set('status', filters.status);
+    if (filters.search) params.set('search', filters.search);
+    params.set('page', String(page));
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [filters, page, pathname, router]);
 
   const handleDeleteCategory = (category: RiddleCategory) => {
     setConfirm({
@@ -176,18 +196,15 @@ export function RiddleMcqContainer() {
     <div className="space-y-4">
       <RiddleMcqHeader
         onAddRiddle={() => setRiddleModal({ open: true })}
-        onImport={() => {
-          /* TODO: Implement in F6 */
-        }}
-        onExport={() => {
-          /* TODO: Implement in F6 */
-        }}
+        onImport={() => {}}
+        onExport={() => {}}
       />
 
       <RiddleMcqFilterPanel
-        filters={riddleFilters}
-        onFilterChange={handleFilterChange}
-        onReset={handleResetFilters}
+        filters={filters}
+        onFilterChange={setFilter}
+        onSearchChange={debouncedSetSearch}
+        onReset={resetFilters}
         categories={categories}
         subjects={subjects}
         filterCounts={filterCountsQuery.data}
@@ -315,19 +332,19 @@ export function RiddleMcqContainer() {
         {riddlesTotalPages > 1 && (
           <div className="px-4 py-3 bg-gray-50 dark:bg-secondary-900 border-t border-gray-200 dark:border-secondary-700 flex items-center justify-between">
             <p className="text-sm text-gray-500 dark:text-secondary-400">
-              Page {riddlePage} of {riddlesTotalPages} ({riddlesTotal} total)
+              Page {page} of {riddlesTotalPages} ({riddlesTotal} total)
             </p>
             <div className="flex gap-2">
               <button
-                onClick={() => setRiddlePage((p) => Math.max(1, p - 1))}
-                disabled={riddlePage === 1}
+                onClick={() => setPage(Math.max(1, page - 1))}
+                disabled={page === 1}
                 className="px-3 py-1.5 text-sm border border-gray-300 dark:border-secondary-600 rounded-md disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-secondary-700"
               >
                 Previous
               </button>
               <button
-                onClick={() => setRiddlePage((p) => Math.min(riddlesTotalPages, p + 1))}
-                disabled={riddlePage === riddlesTotalPages}
+                onClick={() => setPage(Math.min(riddlesTotalPages, page + 1))}
+                disabled={page === riddlesTotalPages}
                 className="px-3 py-1.5 text-sm border border-gray-300 dark:border-secondary-600 rounded-md disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-secondary-700"
               >
                 Next

@@ -1,33 +1,22 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 
 interface SearchInputProps {
   value: string;
-  onChange: (value: string | undefined) => void;
-  debounceMs?: number;
+  onChange: (value: string) => void;
 }
 
-export function SearchInput({ value, onChange, debounceMs = 300 }: SearchInputProps) {
+export function SearchInput({ value, onChange }: SearchInputProps) {
   const [inputValue, setInputValue] = useState(value);
-
-  const debouncedOnChange = useMemo(() => {
-    let timeoutId: NodeJS.Timeout;
-    return (val: string) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        onChange(val || undefined);
-      }, debounceMs);
-    };
-  }, [onChange, debounceMs]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
       setInputValue(val);
-      debouncedOnChange(val);
+      onChange(val);
     },
-    [debouncedOnChange]
+    [onChange]
   );
 
   return (
