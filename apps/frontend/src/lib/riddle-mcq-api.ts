@@ -105,6 +105,7 @@ export interface UpdateRiddleMcqDto {
 // ============================================================================
 
 export interface GetRiddlesParams {
+  category?: string;
   subject?: string;
   level?: string;
   status?: string;
@@ -288,6 +289,9 @@ export async function getAllRiddles(
 ): Promise<{ data: RiddleMcq[]; total: number }> {
   const queryParams = new URLSearchParams();
 
+  if (params.category && params.category !== 'all') {
+    queryParams.append('category', params.category);
+  }
   if (params.subject && params.subject !== 'all') {
     queryParams.append('subject', params.subject);
   }

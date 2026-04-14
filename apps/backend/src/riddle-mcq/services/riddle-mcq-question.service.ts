@@ -65,6 +65,7 @@ export class RiddleMcqQuestionService {
 
   async findAllRiddles(
     filters: {
+      category?: string;
       subject?: string;
       level?: string;
       status?: string;
@@ -77,10 +78,19 @@ export class RiddleMcqQuestionService {
 
     const query = this.riddleMcqRepo
       .createQueryBuilder('riddle')
-      .leftJoinAndSelect('riddle.subject', 'subject');
+      .leftJoinAndSelect('riddle.subject', 'subject')
+      .leftJoinAndSelect('subject.category', 'category');
+
+    if (filters.category && filters.category !== 'all') {
+      query.where('category.slug = :category', { category: filters.category });
+    }
 
     if (filters.subject && filters.subject !== 'all') {
-      query.where('subject.slug = :subject', { subject: filters.subject });
+      if (filters.category && filters.category !== 'all') {
+        query.andWhere('subject.slug = :subject', { subject: filters.subject });
+      } else {
+        query.where('subject.slug = :subject', { subject: filters.subject });
+      }
     }
 
     if (filters.level && filters.level !== 'all') {

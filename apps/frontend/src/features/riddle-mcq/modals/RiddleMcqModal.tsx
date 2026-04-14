@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,6 +8,11 @@ import { X } from 'lucide-react';
 import type { RiddleSubject, RiddleCategory } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
 import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
+
+import { RiddleQuestionForm } from './RiddleQuestionForm';
+import { RiddleAnswerFields } from './RiddleAnswerFields';
+import { RiddleMetaFields } from './RiddleMetaFields';
+import { useRiddleFormReset } from './useRiddleFormReset';
 
 const LEVEL_OPTIONS = {
   easy: { optionCount: 2, validLetters: ['A', 'B'] },
@@ -41,7 +46,7 @@ const riddleSchema = z
     }
   );
 
-type RiddleFormData = z.infer<typeof riddleSchema>;
+export type RiddleFormData = z.infer<typeof riddleSchema>;
 
 interface RiddleMcqModalProps {
   open: boolean;
@@ -87,44 +92,8 @@ export function RiddleMcqModal({
   });
 
   const currentLevel = watch('level');
-  const currentCorrectLetter = watch('correctLetter');
-  const currentStatus = watch('status');
 
-  const filteredSubjects = selectedCategoryId
-    ? subjects.filter((s) => s.categoryId === selectedCategoryId)
-    : subjects;
-
-  useEffect(() => {
-    if (open) {
-      setSelectedCategoryId('');
-      if (riddle) {
-        const subject = subjects.find((s) => s.id === riddle.subjectId);
-        setSelectedCategoryId(subject?.categoryId || '');
-        reset({
-          question: riddle.question,
-          level: riddle.level as RiddleFormData['level'],
-          subjectId: riddle.subjectId || '',
-          options: riddle.options || ['', ''],
-          correctLetter: riddle.correctLetter || 'A',
-          answer: riddle.answer || '',
-          hint: riddle.hint || '',
-          explanation: riddle.explanation || '',
-          status: riddle.status as RiddleFormData['status'],
-        });
-      } else {
-        reset({
-          question: '',
-          level: 'easy',
-          subjectId: '',
-          options: ['', ''],
-          correctLetter: 'A',
-          hint: '',
-          explanation: '',
-          status: 'draft',
-        });
-      }
-    }
-  }, [open, riddle, subjects, reset]);
+  useRiddleFormReset(open, riddle, subjects, setSelectedCategoryId, reset);
 
   const handleLevelChange = (newLevel: string) => {
     const optionCount = LEVEL_OPTIONS[newLevel as keyof typeof LEVEL_OPTIONS]?.optionCount || 2;
@@ -151,14 +120,9 @@ export function RiddleMcqModal({
     }
   };
 
-  const handleCorrectAnswerChange = (letter: string) => {
-    setValue('correctLetter', letter);
-  };
-
   if (!open) return null;
 
   const isExpert = currentLevel === 'expert';
-  const optionCount = LEVEL_OPTIONS[currentLevel as keyof typeof LEVEL_OPTIONS]?.optionCount || 2;
 
   const handleFormSubmit = (data: RiddleFormData) => {
     const dto: CreateRiddleMcqDto = {
@@ -181,7 +145,10 @@ export function RiddleMcqModal({
     onSubmit(dto);
   };
 
-  const letters = ['A', 'B', 'C', 'D'];
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
+    setValue('subjectId', '');
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-hidden">
@@ -198,191 +165,27 @@ export function RiddleMcqModal({
         </div>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Category
-              </label>
-              <select
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                value={selectedCategoryId}
-                onChange={(e) => {
-                  setSelectedCategoryId(e.target.value);
-                  setValue('subjectId', '');
-                }}
-              >
-                <option value="">Select</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.emoji} {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <RiddleQuestionForm
+            register={register}
+            watch={watch}
+            errors={errors}
+            categories={categories}
+            subjects={subjects}
+            selectedCategoryId={selectedCategoryId}
+            onCategoryChange={handleCategoryChange}
+            onLevelChange={handleLevelChange}
+          />
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Subject
-              </label>
-              <select
-                {...register('subjectId')}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
-                disabled={!selectedCategoryId}
-              >
-                <option value="">Select</option>
-                {filteredSubjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.emoji} {s.name}
-                  </option>
-                ))}
-              </select>
-              {errors.subjectId && (
-                <p className="text-xs text-red-500 mt-1">{errors.subjectId.message}</p>
-              )}
-            </div>
-          </div>
+          <RiddleAnswerFields
+            register={register}
+            watch={watch}
+            setValue={setValue}
+            errors={errors}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Level
-            </label>
-            <select
-              value={currentLevel}
-              onChange={(e) => handleLevelChange(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="easy">🌱 Easy (2 options)</option>
-              <option value="medium">🌿 Medium (3 options)</option>
-              <option value="hard">🌲 Hard (4 options)</option>
-              <option value="expert">🔥 Expert (text answer)</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Question
-            </label>
-            <textarea
-              {...register('question')}
-              rows={2}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-            {errors.question && (
-              <p className="text-xs text-red-500 mt-1">{errors.question.message}</p>
-            )}
-          </div>
-
-          {!isExpert && (
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Options
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {letters.slice(0, optionCount).map((letter, i) => (
-                  <div key={letter} className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleCorrectAnswerChange(letter)}
-                      className={`flex items-center justify-center w-8 h-8 rounded border ${
-                        currentCorrectLetter === letter
-                          ? 'bg-green-500 border-green-500 text-white'
-                          : 'border-gray-300 dark:border-gray-600 hover:border-green-400'
-                      }`}
-                    >
-                      {currentCorrectLetter === letter ? '✓' : ''}
-                    </button>
-                    <span className="flex items-center justify-center w-6 h-8 bg-gray-100 dark:bg-gray-700 rounded text-sm font-medium">
-                      {letter}
-                    </span>
-                    <input
-                      {...register(`options.${i}`)}
-                      placeholder={`Option ${letter}`}
-                      className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                    />
-                  </div>
-                ))}
-              </div>
-              {errors.options && (
-                <p className="text-xs text-red-500 mt-1">{errors.options.message as string}</p>
-              )}
-            </div>
-          )}
-
-          {isExpert && (
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Answer (required)
-              </label>
-              <input
-                {...register('answer')}
-                placeholder="Type the correct answer"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              {errors.answer && (
-                <p className="text-xs text-red-500 mt-1">{errors.answer.message}</p>
-              )}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Hint <span className="text-gray-400">(optional)</span>
-              </label>
-              <input
-                {...register('hint')}
-                placeholder="Show hint before answering"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Explanation <span className="text-gray-400">(optional)</span>
-              </label>
-              <input
-                {...register('explanation')}
-                placeholder="Explain the answer"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
+          <RiddleMetaFields register={register} watch={watch} setValue={setValue} />
 
           <div className="flex items-center gap-3 pt-2">
-            <div className="flex rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setValue('status', 'draft')}
-                className={`px-3 py-2 text-sm font-medium ${
-                  currentStatus === 'draft'
-                    ? 'bg-yellow-500 text-white'
-                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-                }`}
-              >
-                Draft
-              </button>
-              <button
-                type="button"
-                onClick={() => setValue('status', 'published')}
-                className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${
-                  currentStatus === 'published'
-                    ? 'bg-green-500 text-white'
-                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-                }`}
-              >
-                Published
-              </button>
-              <button
-                type="button"
-                onClick={() => setValue('status', 'trash')}
-                className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${
-                  currentStatus === 'trash'
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-                }`}
-              >
-                Trash
-              </button>
-            </div>
             <div className="flex-1" />
             <button
               type="button"

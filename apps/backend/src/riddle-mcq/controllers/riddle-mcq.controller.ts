@@ -39,6 +39,7 @@ export class RiddleMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all riddles with filters (Admin only)' })
+  @ApiQuery({ name: 'category', required: false, description: 'Filter by category slug' })
   @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
   @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })
   @ApiQuery({ name: 'status', required: false, description: 'Filter by status' })
@@ -46,6 +47,7 @@ export class RiddleMcqController {
   @ApiQuery({ name: 'page', required: false, description: 'Page number' })
   @ApiQuery({ name: 'limit', required: false, description: 'Items per page' })
   async getAllRiddles(
+    @Query('category') category?: string,
     @Query('subject') subject?: string,
     @Query('level') level?: string,
     @Query('status') status?: string,
@@ -57,7 +59,10 @@ export class RiddleMcqController {
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : DEFAULT_PAGE_SIZE,
     };
-    return this.questionService.findAllRiddles({ subject, level, status, search }, pagination);
+    return this.questionService.findAllRiddles(
+      { category, subject, level, status, search },
+      pagination
+    );
   }
 
   @Get('subjects/:subjectId/riddles')
