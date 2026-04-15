@@ -187,6 +187,18 @@ export class RiddleMcqController {
     return this.bulkService.bulkActionRiddles(dto.ids, dto.action);
   }
 
+  @Get('export')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Export riddles as CSV (Admin only)' })
+  @ApiQuery({ name: 'category', required: false, description: 'Filter by category slug' })
+  async exportRiddles(
+    @Query('category') category?: string
+  ): Promise<{ csv: string; filename: string }> {
+    return this.bulkService.exportRiddlesToCSV({ category });
+  }
+
   @Get('stats/overview')
   @ApiOperation({ summary: 'Get riddle MCQ statistics (Public)' })
   async getStats(): Promise<{

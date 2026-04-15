@@ -64,6 +64,10 @@ export class RiddleMcq {
   })
   status: RiddleStatus;
 
+  @Index()
+  @Column({ type: 'int', nullable: true })
+  importOrder: number | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

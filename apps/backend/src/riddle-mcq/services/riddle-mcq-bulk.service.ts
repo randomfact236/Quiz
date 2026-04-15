@@ -34,6 +34,7 @@ export class RiddleMcqBulkService {
       explanation?: string;
       answer?: string;
       status?: RiddleStatus;
+      importOrder?: number;
     }>
   ): Promise<{ count: number; errors: string[] }> {
     const errors: string[] = [];
@@ -59,6 +60,96 @@ export class RiddleMcqBulkService {
     return { count: totalCreated, errors };
   }
 
+  async exportRiddlesToCSV(filters?: {
+    category?: string;
+  }): Promise<{ csv: string; filename: string }> {
+    const { category } = filters || {};
+
+    let query = this.riddleMcqRepo
+      .createQueryBuilder('riddle')
+      .leftJoinAndSelect('riddle.subject', 'subject')
+      .leftJoinAndSelect('subject.category', 'category');
+
+    if (category && category !== 'all') {
+      query = query.andWhere('category.slug = :category', { category });
+    }
+
+    const riddles = await query
+      .orderBy('category.name', 'ASC')
+      .addOrderBy('subject.name', 'ASC')
+      .addOrderBy('riddle.updatedAt', 'DESC')
+      .getMany();
+
+    const headers = [
+      '#',
+      'question',
+      'optionA',
+      'optionB',
+      'optionC',
+      'optionD',
+      'answer',
+      'level',
+      'subject',
+      'hint',
+      'explanation',
+      'status',
+    ];
+
+    const csvLines: string[] = [];
+    let counter = 0;
+    let currentCategory = '';
+
+    if (category && category !== 'all') {
+      const firstCategoryName = riddles[0]?.subject?.category?.name || category;
+      csvLines.push(`# Category: ${firstCategoryName}`);
+      csvLines.push(headers.join(','));
+    } else {
+      csvLines.push(headers.join(','));
+    }
+
+    for (const r of riddles) {
+      if (!category || category === 'all') {
+        const categoryName = r.subject?.category?.name || 'Uncategorized';
+        if (categoryName !== currentCategory) {
+          currentCategory = categoryName;
+          csvLines.push(`# Category: ${categoryName}`);
+        }
+      }
+
+      counter++;
+      const optionMap: Record<string, number> = { A: 0, B: 1, C: 2, D: 3 };
+      const answerText =
+        r.level === 'expert'
+          ? r.answer || ''
+          : r.correctLetter && optionMap[r.correctLetter] !== undefined
+            ? `${r.correctLetter}. ${r.options?.[optionMap[r.correctLetter]] || ''}`
+            : '';
+
+      csvLines.push(
+        [
+          counter,
+          `"${(r.question || '').replace(/"/g, '""')}"`,
+          `"${(r.options?.[0] || '').replace(/"/g, '""')}"`,
+          `"${(r.options?.[1] || '').replace(/"/g, '""')}"`,
+          `"${(r.options?.[2] || '').replace(/"/g, '""')}"`,
+          `"${(r.options?.[3] || '').replace(/"/g, '""')}"`,
+          `"${answerText.replace(/"/g, '""')}"`,
+          r.level,
+          r.subject?.name || '',
+          `"${(r.hint || '').replace(/"/g, '""')}"`,
+          `"${(r.explanation || '').replace(/"/g, '""')}"`,
+          r.status,
+        ].join(',')
+      );
+    }
+
+    const filename =
+      category && category !== 'all'
+        ? `riddle-mcqs-${category}-${new Date().toISOString().split('T')[0]}.csv`
+        : `riddle-mcqs-${new Date().toISOString().split('T')[0]}.csv`;
+    return { csv: csvLines.join('\n'), filename };
+  }
+
   private async processRiddleChunk(
     dtos: Array<{
       question: string;
@@ -70,6 +161,7 @@ export class RiddleMcqBulkService {
       explanation?: string;
       answer?: string;
       status?: RiddleStatus;
+      importOrder?: number;
     }>,
     errors: string[],
     offset: number
@@ -107,6 +199,7 @@ export class RiddleMcqBulkService {
         riddle.explanation = dto.explanation ?? null;
         riddle.answer = dto.answer ?? null;
         riddle.status = dto.status ?? RiddleStatus.DRAFT;
+        riddle.importOrder = dto.importOrder ?? null;
         riddles.push(riddle);
       }
 

@@ -85,6 +85,7 @@ export interface CreateRiddleMcqDto {
   explanation?: string;
   answer?: string;
   status?: 'published' | 'draft' | 'trash';
+  importOrder?: number;
 }
 
 export interface UpdateRiddleMcqDto {
@@ -360,6 +361,28 @@ export async function bulkCreateRiddles(
     { isAdmin: true }
   );
   return response.data;
+}
+
+/**
+ * Export riddles as CSV (Admin only)
+ */
+export async function exportRiddlesToCSV(filters?: { category?: string }): Promise<void> {
+  const params = new URLSearchParams();
+  if (filters?.category && filters.category !== 'all') {
+    params.append('category', filters.category);
+  }
+  const url = `/riddle-mcq/export${params.toString() ? `?${params.toString()}` : ''}`;
+  const response = await api.get<{ csv: string; filename: string }>(url, {
+    isAdmin: true,
+  });
+
+  const blob = new Blob([response.data.csv], { type: 'text/csv' });
+  const downloadUrl = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = response.data.filename;
+  a.click();
+  window.URL.revokeObjectURL(downloadUrl);
 }
 
 /**

@@ -14,10 +14,12 @@ import { RiddleTable } from './RiddleTable';
 import { RiddleMcqCategoryModal } from '../modals/RiddleMcqCategoryModal';
 import { RiddleMcqSubjectModal } from '../modals/RiddleMcqSubjectModal';
 import { RiddleMcqModal } from '../modals/RiddleMcqModal';
+import { ImportModal } from '../modals/ImportModal';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { StatusFilter, BulkActionType } from '@/types/status.types';
 import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
+import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
 import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
 
@@ -59,6 +61,7 @@ export function RiddleMcqContainer() {
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
   const [riddleModal, setRiddleModal] = useState<ModalState<RiddleMcq>>({ open: false });
+  const [showImportModal, setShowImportModal] = useState(false);
 
   const [confirm, setConfirm] = useState<ConfirmState>({
     open: false,
@@ -251,8 +254,8 @@ export function RiddleMcqContainer() {
     <div className="space-y-4">
       <RiddleMcqHeader
         onAddRiddle={() => setRiddleModal({ open: true })}
-        onImport={() => {}}
-        onExport={() => {}}
+        onImport={() => setShowImportModal(true)}
+        onExport={() => exportRiddlesToCSV({ category: filters.category })}
       />
 
       <RiddleMcqFilterPanel
@@ -336,6 +339,13 @@ export function RiddleMcqContainer() {
         message={confirm.message}
         confirmLabel={confirm.confirmLabel || 'Delete'}
         confirmVariant="danger"
+      />
+
+      <ImportModal
+        open={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onSuccess={() => {}}
+        subjects={subjects}
       />
     </div>
   );
