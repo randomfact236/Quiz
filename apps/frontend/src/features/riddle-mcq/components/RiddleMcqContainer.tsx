@@ -7,12 +7,16 @@ import { useRiddleMcqSubjects } from '../hooks/useRiddleMcqSubjects';
 import { useRiddleMcqQuestions } from '../hooks/useRiddleMcqQuestions';
 import { useRiddleMcqFilterCounts } from '../hooks/useRiddleMcqFilterCounts';
 import { useRiddleMcqFilters } from '../hooks/useRiddleMcqFilters';
+import { useRiddleMutations } from '../hooks/useRiddleMutations';
 import { RiddleMcqHeader } from './RiddleMcqHeader';
 import { RiddleMcqFilterPanel } from './RiddleMcqFilterPanel';
+import { RiddleTable } from './RiddleTable';
 import { RiddleMcqCategoryModal } from '../modals/RiddleMcqCategoryModal';
 import { RiddleMcqSubjectModal } from '../modals/RiddleMcqSubjectModal';
 import { RiddleMcqModal } from '../modals/RiddleMcqModal';
+import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import type { StatusFilter, BulkActionType } from '@/types/status.types';
 import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
 import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
@@ -38,13 +42,18 @@ export function RiddleMcqContainer() {
 
   const { filters, setFilter, setSearch, page, setPage, resetFilters } = useRiddleMcqFilters();
   const isInitialMount = useRef(true);
+  const [pageSize, setPageSize] = useState(10);
 
-  const riddlesQuery = useRiddleMcqQuestions(filters, page, 10);
+  const riddlesQuery = useRiddleMcqQuestions(filters, page, pageSize);
   const filterCountsQuery = useRiddleMcqFilterCounts(
     filters.category,
     filters.subject,
     filters.level
   );
+
+  const { bulkAction, isBulkActionLoading } = useRiddleMutations();
+
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
@@ -61,7 +70,7 @@ export function RiddleMcqContainer() {
   const subjects = subjectsQuery.data ?? [];
   const riddles = riddlesQuery.data?.data ?? [];
   const riddlesTotal = riddlesQuery.data?.total ?? 0;
-  const riddlesTotalPages = Math.ceil(riddlesTotal / 10);
+  const riddlesTotalPages = Math.ceil(riddlesTotal / pageSize);
 
   const debouncedSetSearch = useCallback(
     (() => {
@@ -157,6 +166,50 @@ export function RiddleMcqContainer() {
     setRiddleModal({ open: false });
   };
 
+  const handleSelectOne = useCallback((id: string, checked: boolean) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      if (checked) {
+        setSelectedIds(new Set(riddles.map((r) => r.id)));
+      } else {
+        setSelectedIds(new Set());
+      }
+    },
+    [riddles]
+  );
+
+  const handleBulkAction = useCallback(
+    async (action: BulkActionType) => {
+      if (selectedIds.size === 0) return;
+      try {
+        await bulkAction({ ids: Array.from(selectedIds), action });
+        setSelectedIds(new Set());
+      } catch (error) {
+        console.error('Bulk action failed:', error);
+      }
+    },
+    [selectedIds, bulkAction]
+  );
+
+  const handlePageSizeChange = useCallback(
+    (size: number) => {
+      setPageSize(size);
+      setPage(1);
+    },
+    [setPage]
+  );
+
   const isLoading = categoriesQuery.isLoading || subjectsQuery.isLoading;
   const isError = categoriesQuery.isError || subjectsQuery.isError;
   const error = categoriesQuery.error || subjectsQuery.error;
@@ -217,142 +270,34 @@ export function RiddleMcqContainer() {
         onDeleteSubject={handleDeleteSubject}
       />
 
-      <div className="bg-white dark:bg-secondary-800 rounded-lg border border-gray-200 dark:border-secondary-700 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-secondary-700">
-            <thead className="bg-gray-50 dark:bg-secondary-900">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider">
-                  Question
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider w-24">
-                  Level
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider w-32">
-                  Subject
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider w-24">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider w-24">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-secondary-800 divide-y divide-gray-200 dark:divide-secondary-700">
-              {riddles.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="px-4 py-8 text-center text-gray-500 dark:text-secondary-400"
-                  >
-                    No riddles found. Click &quot;Add Riddle&quot; to create one.
-                  </td>
-                </tr>
-              ) : (
-                riddles.map((riddle) => {
-                  const subject = subjects.find((s) => s.id === riddle.subjectId);
-                  return (
-                    <tr key={riddle.id} className="hover:bg-gray-50 dark:hover:bg-secondary-700">
-                      <td className="px-4 py-3">
-                        <div
-                          className="text-sm text-gray-900 dark:text-secondary-100 line-clamp-2"
-                          title={riddle.question}
-                        >
-                          {riddle.question}
-                        </div>
-                        {riddle.hint && (
-                          <div className="text-xs text-gray-400 dark:text-secondary-500 mt-1">
-                            💡 Hint available
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                            riddle.level === 'easy'
-                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                              : riddle.level === 'medium'
-                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                : riddle.level === 'hard'
-                                  ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
-                                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                          }`}
-                        >
-                          {riddle.level === 'easy' && '🌱 Easy'}
-                          {riddle.level === 'medium' && '🌿 Medium'}
-                          {riddle.level === 'hard' && '🌲 Hard'}
-                          {riddle.level === 'expert' && '🔥 Expert'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="text-sm text-gray-700 dark:text-secondary-300">
-                          {subject ? `${subject.emoji} ${subject.name}` : '-'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                            riddle.status === 'published'
-                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                              : riddle.status === 'draft'
-                                ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                                : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
-                          }`}
-                        >
-                          {riddle.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            onClick={() => setRiddleModal({ open: true, item: riddle })}
-                            className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                            title="Edit"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            onClick={() => handleDeleteRiddle(riddle)}
-                            className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                            title="Delete"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+      {selectedIds.size > 0 && (
+        <BulkActionToolbar
+          selectedIds={Array.from(selectedIds)}
+          totalItems={riddlesTotal}
+          currentFilter={filters.status as StatusFilter}
+          onSelectAll={() => handleSelectAll(true)}
+          onDeselectAll={() => handleSelectAll(false)}
+          onAction={handleBulkAction}
+          onClose={() => setSelectedIds(new Set())}
+          loading={isBulkActionLoading}
+        />
+      )}
 
-        {riddlesTotalPages > 1 && (
-          <div className="px-4 py-3 bg-gray-50 dark:bg-secondary-900 border-t border-gray-200 dark:border-secondary-700 flex items-center justify-between">
-            <p className="text-sm text-gray-500 dark:text-secondary-400">
-              Page {page} of {riddlesTotalPages} ({riddlesTotal} total)
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPage(Math.max(1, page - 1))}
-                disabled={page === 1}
-                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-secondary-600 rounded-md disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-secondary-700"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => setPage(Math.min(riddlesTotalPages, page + 1))}
-                disabled={page === riddlesTotalPages}
-                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-secondary-600 rounded-md disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-secondary-700"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      <RiddleTable
+        riddles={riddles}
+        subjects={subjects}
+        riddlePage={page}
+        riddlesTotalPages={riddlesTotalPages}
+        riddlesTotal={riddlesTotal}
+        pageSize={pageSize}
+        selectedIds={selectedIds}
+        onSelectOne={handleSelectOne}
+        onSelectAll={handleSelectAll}
+        onEditRiddle={(r) => setRiddleModal({ open: true, item: r })}
+        onDeleteRiddle={handleDeleteRiddle}
+        onPageChange={setPage}
+        onPageSizeChange={handlePageSizeChange}
+      />
 
       <RiddleMcqCategoryModal
         open={categoryModal.open}

@@ -318,7 +318,7 @@ export async function getAllRiddles(
  */
 export async function bulkActionRiddles(
   ids: string[],
-  action: 'delete' | 'trash' | 'publish' | 'draft'
+  action: 'delete' | 'trash' | 'publish' | 'draft' | 'restore'
 ): Promise<{
   success: boolean;
   processed: number;

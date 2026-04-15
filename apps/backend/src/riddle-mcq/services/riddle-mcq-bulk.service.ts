@@ -136,17 +136,33 @@ export class RiddleMcqBulkService {
             failed++;
             failures.push({ id, error: 'Not found' });
           }
-        } else if (
-          action === BulkActionType.PUBLISH ||
-          action === BulkActionType.DRAFT ||
-          action === BulkActionType.TRASH
-        ) {
+        } else if (action === BulkActionType.PUBLISH) {
           const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
           if (!riddle) {
             failed++;
             failures.push({ id, error: 'Not found' });
           } else {
-            riddle.status = RiddleStatus[action.toUpperCase() as keyof typeof RiddleStatus];
+            riddle.status = RiddleStatus.PUBLISHED;
+            await this.riddleMcqRepo.save(riddle);
+            succeeded++;
+          }
+        } else if (action === BulkActionType.DRAFT) {
+          const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
+          if (!riddle) {
+            failed++;
+            failures.push({ id, error: 'Not found' });
+          } else {
+            riddle.status = RiddleStatus.DRAFT;
+            await this.riddleMcqRepo.save(riddle);
+            succeeded++;
+          }
+        } else if (action === BulkActionType.TRASH) {
+          const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
+          if (!riddle) {
+            failed++;
+            failures.push({ id, error: 'Not found' });
+          } else {
+            riddle.status = RiddleStatus.TRASH;
             await this.riddleMcqRepo.save(riddle);
             succeeded++;
           }
