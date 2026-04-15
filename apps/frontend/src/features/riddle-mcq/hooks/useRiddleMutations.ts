@@ -121,5 +121,6 @@ export function useRiddleMutations() {
     deleteRiddle: deleteRiddleMutation.mutateAsync,
     bulkAction: bulkActionMutation.mutateAsync,
     isBulkActionLoading: bulkActionMutation.isPending,
+    isUpdateRiddleLoading: updateRiddleMutation.isPending,
   };
 }

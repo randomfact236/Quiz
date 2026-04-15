@@ -12,7 +12,7 @@ interface RiddleTableRowProps {
   isSelected: boolean;
   onSelect: (checked: boolean) => void;
   onEdit: () => void;
-  onDelete: () => void;
+  onTrash: () => void;
 }
 
 function getLevelBadge(level: string) {
@@ -53,7 +53,7 @@ export function RiddleTableRow({
   isSelected,
   onSelect,
   onEdit,
-  onDelete,
+  onTrash,
 }: RiddleTableRowProps) {
   const [showHint, setShowHint] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -128,7 +128,7 @@ export function RiddleTableRow({
 
             {/* Trash button */}
             <button
-              onClick={onDelete}
+              onClick={onTrash}
               className="flex items-center gap-1 text-xs text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400"
             >
               <Trash2 className="w-3 h-3" />

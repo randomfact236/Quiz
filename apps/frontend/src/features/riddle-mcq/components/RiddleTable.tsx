@@ -16,7 +16,7 @@ interface RiddleTableProps {
   onSelectOne: (id: string, checked: boolean) => void;
   onSelectAll: (checked: boolean) => void;
   onEditRiddle: (riddle: RiddleMcq) => void;
-  onDeleteRiddle: (riddle: RiddleMcq) => void;
+  onTrashRiddle: (riddle: RiddleMcq) => void;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
 }
@@ -32,7 +32,7 @@ export function RiddleTable({
   onSelectOne,
   onSelectAll,
   onEditRiddle,
-  onDeleteRiddle,
+  onTrashRiddle,
   onPageChange,
   onPageSizeChange,
 }: RiddleTableProps) {
@@ -142,7 +142,7 @@ export function RiddleTable({
                     isSelected={selectedIds.has(riddle.id)}
                     onSelect={(checked) => onSelectOne(riddle.id, checked)}
                     onEdit={() => onEditRiddle(riddle)}
-                    onDelete={() => onDeleteRiddle(riddle)}
+                    onTrash={() => onTrashRiddle(riddle)}
                   />
                 );
               })

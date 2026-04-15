@@ -30,6 +30,7 @@ interface ConfirmState {
   open: boolean;
   title: string;
   message: string;
+  confirmLabel?: string;
   onConfirm: () => void;
 }
 
@@ -51,7 +52,7 @@ export function RiddleMcqContainer() {
     filters.level
   );
 
-  const { bulkAction, isBulkActionLoading } = useRiddleMutations();
+  const { bulkAction, isBulkActionLoading, updateRiddle } = useRiddleMutations();
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
@@ -127,13 +128,14 @@ export function RiddleMcqContainer() {
     });
   };
 
-  const handleDeleteRiddle = (riddle: RiddleMcq) => {
+  const handleTrashRiddle = (riddle: RiddleMcq) => {
     setConfirm({
       open: true,
-      title: 'Delete Riddle',
-      message: `Delete this riddle?`,
-      onConfirm: () => {
-        riddlesQuery.delete(riddle.id);
+      title: 'Move to Trash',
+      message: `Move "${riddle.question.slice(0, 50)}${riddle.question.length > 50 ? '...' : ''}" to trash?`,
+      confirmLabel: 'Move to Trash',
+      onConfirm: async () => {
+        await updateRiddle({ id: riddle.id, dto: { status: 'trash' } });
         setConfirm((prev) => ({ ...prev, open: false }));
       },
     });
@@ -294,7 +296,7 @@ export function RiddleMcqContainer() {
         onSelectOne={handleSelectOne}
         onSelectAll={handleSelectAll}
         onEditRiddle={(r) => setRiddleModal({ open: true, item: r })}
-        onDeleteRiddle={handleDeleteRiddle}
+        onTrashRiddle={handleTrashRiddle}
         onPageChange={setPage}
         onPageSizeChange={handlePageSizeChange}
       />
@@ -332,7 +334,7 @@ export function RiddleMcqContainer() {
         onConfirm={confirm.onConfirm}
         title={confirm.title}
         message={confirm.message}
-        confirmLabel="Delete"
+        confirmLabel={confirm.confirmLabel || 'Delete'}
         confirmVariant="danger"
       />
     </div>
