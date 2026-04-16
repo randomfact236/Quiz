@@ -138,8 +138,8 @@ export class RiddleMcqQuestionService {
         const [data, total] = await query
           .skip((page - 1) * limit)
           .take(limit)
-          .orderBy('riddle.importOrder', 'ASC')
-          .addOrderBy('riddle.createdAt', 'DESC')
+          .orderBy('riddle.createdAt', 'DESC')
+          .addOrderBy('riddle.importOrder', 'ASC')
           .getManyAndCount();
 
         return { data, total };
