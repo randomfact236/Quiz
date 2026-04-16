@@ -4,9 +4,9 @@ import { Repository, DataSource } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
 
-import { RiddleCategory } from '../entities/riddle-category.entity';
+import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcq } from '../entities/riddle-mcq.entity';
-import { RiddleSubject } from '../entities/riddle-subject.entity';
+import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 
 @Injectable()
 export class RiddleMcqCategoryService {
@@ -19,12 +19,12 @@ export class RiddleMcqCategoryService {
   };
 
   constructor(
-    @InjectRepository(RiddleCategory)
-    private categoryRepo: Repository<RiddleCategory>,
+    @InjectRepository(RiddleMcqCategory)
+    private categoryRepo: Repository<RiddleMcqCategory>,
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,
-    @InjectRepository(RiddleSubject)
-    private subjectRepo: Repository<RiddleSubject>,
+    @InjectRepository(RiddleMcqSubject)
+    private subjectRepo: Repository<RiddleMcqSubject>,
     private cacheService: CacheService,
     private dataSource: DataSource
   ) {}
@@ -40,7 +40,7 @@ export class RiddleMcqCategoryService {
       .replace(/^-|-$/g, '');
   }
 
-  async findAllCategories(includeInactive: boolean = false): Promise<RiddleCategory[]> {
+  async findAllCategories(includeInactive: boolean = false): Promise<RiddleMcqCategory[]> {
     const cacheKey = this.CACHE_KEYS.CATEGORIES(includeInactive);
 
     return this.cacheService.getOrSet(
@@ -60,7 +60,7 @@ export class RiddleMcqCategoryService {
     );
   }
 
-  async findCategoryById(id: string): Promise<RiddleCategory> {
+  async findCategoryById(id: string): Promise<RiddleMcqCategory> {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -73,7 +73,7 @@ export class RiddleMcqCategoryService {
     slug?: string;
     emoji?: string;
     isActive?: boolean;
-  }): Promise<RiddleCategory> {
+  }): Promise<RiddleMcqCategory> {
     if (dto.slug) {
       const existing = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
       if (existing) {
@@ -103,7 +103,7 @@ export class RiddleMcqCategoryService {
       emoji?: string;
       isActive?: boolean;
     }
-  ): Promise<RiddleCategory> {
+  ): Promise<RiddleMcqCategory> {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -145,10 +145,10 @@ export class RiddleMcqCategoryService {
         for (const subject of category.subjects) {
           await queryRunner.manager.delete(RiddleMcq, { subjectId: subject.id });
         }
-        await queryRunner.manager.delete(RiddleSubject, { categoryId: id });
+        await queryRunner.manager.delete(RiddleMcqSubject, { categoryId: id });
       }
 
-      await queryRunner.manager.delete(RiddleCategory, { id });
+      await queryRunner.manager.delete(RiddleMcqCategory, { id });
       await queryRunner.commitTransaction();
       await this.clearRiddleCaches();
     } catch (err) {

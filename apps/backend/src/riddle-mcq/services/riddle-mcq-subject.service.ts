@@ -5,7 +5,7 @@ import { Repository, DataSource } from 'typeorm';
 import { CacheService } from '../../common/cache/cache.service';
 
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
-import { RiddleSubject } from '../entities/riddle-subject.entity';
+import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 
 @Injectable()
 export class RiddleMcqSubjectService {
@@ -18,8 +18,8 @@ export class RiddleMcqSubjectService {
   };
 
   constructor(
-    @InjectRepository(RiddleSubject)
-    private subjectRepo: Repository<RiddleSubject>,
+    @InjectRepository(RiddleMcqSubject)
+    private subjectRepo: Repository<RiddleMcqSubject>,
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,
     private cacheService: CacheService,
@@ -40,7 +40,7 @@ export class RiddleMcqSubjectService {
   async findAllSubjects(
     includeInactive: boolean = false,
     hasContentOnly: boolean = false
-  ): Promise<RiddleSubject[]> {
+  ): Promise<RiddleMcqSubject[]> {
     const cacheKey = this.CACHE_KEYS.SUBJECTS(includeInactive);
 
     return this.cacheService.getOrSet(
@@ -65,7 +65,7 @@ export class RiddleMcqSubjectService {
     );
   }
 
-  async findSubjectBySlug(slug: string): Promise<RiddleSubject> {
+  async findSubjectBySlug(slug: string): Promise<RiddleMcqSubject> {
     const subject = await this.subjectRepo.findOne({
       where: { slug },
       relations: ['category'],
@@ -87,7 +87,7 @@ export class RiddleMcqSubjectService {
     emoji?: string;
     categoryId?: string | null;
     isActive?: boolean;
-  }): Promise<RiddleSubject> {
+  }): Promise<RiddleMcqSubject> {
     if (dto.slug) {
       const existing = await this.subjectRepo.findOne({ where: { slug: dto.slug } });
       if (existing) {
@@ -119,7 +119,7 @@ export class RiddleMcqSubjectService {
       categoryId?: string | null;
       isActive?: boolean;
     }
-  ): Promise<RiddleSubject> {
+  ): Promise<RiddleMcqSubject> {
     const subject = await this.subjectRepo.findOne({ where: { id } });
     if (!subject) {
       throw new NotFoundException('Subject not found');
@@ -162,7 +162,7 @@ export class RiddleMcqSubjectService {
         await queryRunner.manager.delete(RiddleMcq, { subjectId: id });
       }
 
-      await queryRunner.manager.delete(RiddleSubject, { id });
+      await queryRunner.manager.delete(RiddleMcqSubject, { id });
       await queryRunner.commitTransaction();
       await this.clearRiddleCaches();
     } catch (err) {

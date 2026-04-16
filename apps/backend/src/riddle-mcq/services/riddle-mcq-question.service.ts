@@ -7,15 +7,15 @@ import { Repository, In } from 'typeorm';
 import { CacheService } from '../../common/cache/cache.service';
 
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
-import { RiddleSubject } from '../entities/riddle-subject.entity';
+import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 
 @Injectable()
 export class RiddleMcqQuestionService {
   constructor(
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,
-    @InjectRepository(RiddleSubject)
-    private subjectRepo: Repository<RiddleSubject>,
+    @InjectRepository(RiddleMcqSubject)
+    private subjectRepo: Repository<RiddleMcqSubject>,
     private cacheService: CacheService
   ) {}
 

@@ -1,9 +1,9 @@
 'use client';
 
-import type { RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 
-interface RiddleSubjectFilterRowProps {
-  subject: RiddleSubject;
+interface RiddleMcqSubjectFilterRowProps {
+  subject: RiddleMcqSubject;
   isSelected: boolean;
   count: number;
   onSelect: () => void;
@@ -11,14 +11,14 @@ interface RiddleSubjectFilterRowProps {
   onDelete: () => void;
 }
 
-export function RiddleSubjectFilterRow({
+export function RiddleMcqSubjectFilterRow({
   subject,
   isSelected,
   count,
   onSelect,
   onEdit,
   onDelete,
-}: RiddleSubjectFilterRowProps) {
+}: RiddleMcqSubjectFilterRowProps) {
   return (
     <div
       className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${
@@ -63,4 +63,4 @@ export function RiddleSubjectFilterRow({
   );
 }
 
-export default RiddleSubjectFilterRow;
+export default RiddleMcqSubjectFilterRow;

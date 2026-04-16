@@ -16,14 +16,14 @@ export interface RiddleMcqCategory {
   name: string;
   slug: string;
   emoji?: string;
-  subjects?: RiddleSubject[];
+  subjects?: RiddleMcqSubject[];
   riddles?: ClassicRiddle[];
   createdAt?: string;
   updatedAt?: string;
 }
 
 /** Riddle Subject - Backend Entity */
-export interface RiddleSubject {
+export interface RiddleMcqSubject {
   id: string;
   slug: string;
   name: string;
@@ -45,7 +45,7 @@ export interface RiddleChapter {
   slug?: string;
   chapterNumber: number;
   subjectId: string;
-  subject?: RiddleSubject;
+  subject?: RiddleMcqSubject;
   riddles?: RiddleMcq[];
   isActive?: boolean;
   createdAt?: string;
@@ -61,7 +61,7 @@ export interface RiddleMcq {
   correctAnswer: string; // kept for backward compatibility
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   subjectId?: string;
-  subject?: RiddleSubject;
+  subject?: RiddleMcqSubject;
   chapterId?: string;
   chapter?: RiddleChapter;
   explanation?: string;

@@ -1,15 +1,15 @@
 'use client';
 
 import type { UseFormRegister, FieldErrors, UseFormWatch } from 'react-hook-form';
-import type { RiddleSubject, RiddleCategory } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject, RiddleMcqCategory } from '@/lib/riddle-mcq-api';
 import type { RiddleFormData } from './RiddleMcqModal';
 
 interface RiddleQuestionFormProps {
   register: UseFormRegister<RiddleFormData>;
   watch: UseFormWatch<RiddleFormData>;
   errors: FieldErrors<RiddleFormData>;
-  categories: RiddleCategory[];
-  subjects: RiddleSubject[];
+  categories: RiddleMcqCategory[];
+  subjects: RiddleMcqSubject[];
   selectedCategoryId: string;
   onCategoryChange: (categoryId: string) => void;
   onLevelChange: (level: string) => void;

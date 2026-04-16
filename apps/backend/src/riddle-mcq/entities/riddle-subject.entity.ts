@@ -8,11 +8,11 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { RiddleCategory } from './riddle-category.entity';
+import { RiddleMcqCategory } from './riddle-category.entity';
 import { RiddleMcq } from './riddle-mcq.entity';
 
 @Entity('riddle_subjects')
-export class RiddleSubject {
+export class RiddleMcqSubject {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -30,9 +30,9 @@ export class RiddleSubject {
   @Column({ nullable: true })
   categoryId: string | null;
 
-  @ManyToOne(() => RiddleCategory, (category) => category.subjects, { nullable: true })
+  @ManyToOne(() => RiddleMcqCategory, (category) => category.subjects, { nullable: true })
   @JoinColumn({ name: 'categoryId' })
-  category: RiddleCategory | null;
+  category: RiddleMcqCategory | null;
 
   @Column({ default: true })
   isActive: boolean;

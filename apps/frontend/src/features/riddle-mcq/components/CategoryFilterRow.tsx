@@ -1,9 +1,9 @@
 'use client';
 
-import type { RiddleCategory } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqCategory } from '@/lib/riddle-mcq-api';
 
 interface CategoryFilterRowProps {
-  category: RiddleCategory;
+  category: RiddleMcqCategory;
   isSelected: boolean;
   count: number;
   onSelect: () => void;

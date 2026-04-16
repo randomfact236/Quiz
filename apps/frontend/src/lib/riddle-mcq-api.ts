@@ -9,9 +9,9 @@
  */
 
 import { api, apiRequest } from './api-client';
-import type { RiddleMcq, RiddleSubject } from '@/types/riddles';
+import type { RiddleMcq, RiddleMcqSubject } from '@/types/riddles';
 
-export type { RiddleSubject } from '@/types/riddles';
+export type { RiddleMcqSubject } from '@/types/riddles';
 
 // ============================================================================
 // Types
@@ -26,7 +26,7 @@ export interface PaginatedResponse<T> {
 // Category Types
 // ============================================================================
 
-export interface RiddleCategory {
+export interface RiddleMcqCategory {
   id: string;
   slug: string;
   name: string;
@@ -152,32 +152,39 @@ export interface RiddlesStats {
 /**
  * Get all riddle categories
  */
-export async function getCategories(): Promise<RiddleCategory[]> {
-  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories');
+export async function getCategories(): Promise<RiddleMcqCategory[]> {
+  const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories');
   return response.data;
 }
 
 /**
  * Get all categories including inactive (Admin only)
  */
-export async function getCategoriesAdmin(): Promise<RiddleCategory[]> {
-  const response = await api.get<RiddleCategory[]>('/riddle-mcq/categories/all', { isAdmin: true });
+export async function getCategoriesAdmin(): Promise<RiddleMcqCategory[]> {
+  const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories/all', {
+    isAdmin: true,
+  });
   return response.data;
 }
 
 /**
  * Create a new category (Admin only)
  */
-export async function createCategory(dto: CreateCategoryDto): Promise<RiddleCategory> {
-  const response = await api.post<RiddleCategory>('/riddle-mcq/categories', dto, { isAdmin: true });
+export async function createCategory(dto: CreateCategoryDto): Promise<RiddleMcqCategory> {
+  const response = await api.post<RiddleMcqCategory>('/riddle-mcq/categories', dto, {
+    isAdmin: true,
+  });
   return response.data;
 }
 
 /**
  * Update a category (Admin only)
  */
-export async function updateCategory(id: string, dto: UpdateCategoryDto): Promise<RiddleCategory> {
-  const response = await api.patch<RiddleCategory>(`/riddle-mcq/categories/${id}`, dto, {
+export async function updateCategory(
+  id: string,
+  dto: UpdateCategoryDto
+): Promise<RiddleMcqCategory> {
+  const response = await api.patch<RiddleMcqCategory>(`/riddle-mcq/categories/${id}`, dto, {
     isAdmin: true,
   });
   return response.data;
@@ -197,8 +204,8 @@ export async function deleteCategory(id: string): Promise<void> {
 /**
  * Get all active riddle subjects
  */
-export async function getSubjects(hasContent: boolean = false): Promise<RiddleSubject[]> {
-  const response = await api.get<RiddleSubject[]>(
+export async function getSubjects(hasContent: boolean = false): Promise<RiddleMcqSubject[]> {
+  const response = await api.get<RiddleMcqSubject[]>(
     `/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`
   );
   return response.data;
@@ -207,32 +214,32 @@ export async function getSubjects(hasContent: boolean = false): Promise<RiddleSu
 /**
  * Get subject by slug
  */
-export async function getSubjectBySlug(slug: string): Promise<RiddleSubject> {
-  const response = await api.get<RiddleSubject>(`/riddle-mcq/subjects/${slug}`);
+export async function getSubjectBySlug(slug: string): Promise<RiddleMcqSubject> {
+  const response = await api.get<RiddleMcqSubject>(`/riddle-mcq/subjects/${slug}`);
   return response.data;
 }
 
 /**
  * Get all subjects including inactive (Admin only)
  */
-export async function getAllSubjectsAdmin(): Promise<RiddleSubject[]> {
-  const response = await api.get<RiddleSubject[]>('/riddle-mcq/subjects/all', { isAdmin: true });
+export async function getAllSubjectsAdmin(): Promise<RiddleMcqSubject[]> {
+  const response = await api.get<RiddleMcqSubject[]>('/riddle-mcq/subjects/all', { isAdmin: true });
   return response.data;
 }
 
 /**
  * Create a new subject (Admin only)
  */
-export async function createSubject(dto: CreateSubjectDto): Promise<RiddleSubject> {
-  const response = await api.post<RiddleSubject>('/riddle-mcq/subjects', dto, { isAdmin: true });
+export async function createSubject(dto: CreateSubjectDto): Promise<RiddleMcqSubject> {
+  const response = await api.post<RiddleMcqSubject>('/riddle-mcq/subjects', dto, { isAdmin: true });
   return response.data;
 }
 
 /**
  * Update a subject (Admin only)
  */
-export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleSubject> {
-  const response = await api.patch<RiddleSubject>(`/riddle-mcq/subjects/${id}`, dto, {
+export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<RiddleMcqSubject> {
+  const response = await api.patch<RiddleMcqSubject>(`/riddle-mcq/subjects/${id}`, dto, {
     isAdmin: true,
   });
   return response.data;

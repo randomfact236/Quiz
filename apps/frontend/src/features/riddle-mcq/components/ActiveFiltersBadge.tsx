@@ -1,6 +1,6 @@
 'use client';
 
-import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 
 interface ActiveFiltersBadgeProps {
   filters: {
@@ -9,8 +9,8 @@ interface ActiveFiltersBadgeProps {
     level?: string;
     search?: string;
   };
-  categories: RiddleCategory[];
-  subjects: RiddleSubject[];
+  categories: RiddleMcqCategory[];
+  subjects: RiddleMcqSubject[];
   onRemoveCategory: () => void;
   onRemoveSubject: () => void;
   onRemoveLevel: () => void;

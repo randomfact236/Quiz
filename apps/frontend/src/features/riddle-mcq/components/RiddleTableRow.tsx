@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import type { RiddleMcq } from '@/types/riddles';
-import type { RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
 
 interface RiddleTableRowProps {
   riddle: RiddleMcq;
-  subject: RiddleSubject | undefined;
+  subject: RiddleMcqSubject | undefined;
   index: number;
   isSelected: boolean;
   onSelect: (checked: boolean) => void;

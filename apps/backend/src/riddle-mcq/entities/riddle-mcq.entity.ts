@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { RiddleMcqLevel } from '../../common/enums/riddle-mcq-level.enum';
-import { RiddleSubject } from './riddle-subject.entity';
+import { RiddleMcqSubject } from './riddle-subject.entity';
 
 export { RiddleMcqLevel };
 
@@ -52,9 +52,9 @@ export class RiddleMcq {
   @Column()
   subjectId: string;
 
-  @ManyToOne(() => RiddleSubject, 'riddles')
+  @ManyToOne(() => RiddleMcqSubject, 'riddles')
   @JoinColumn({ name: 'subjectId' })
-  subject: RiddleSubject;
+  subject: RiddleMcqSubject;
 
   @Index()
   @Column({

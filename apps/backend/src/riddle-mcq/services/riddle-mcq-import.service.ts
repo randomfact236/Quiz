@@ -4,8 +4,8 @@ import { Repository, DataSource } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
-import { RiddleCategory } from '../entities/riddle-category.entity';
-import { RiddleSubject } from '../entities/riddle-subject.entity';
+import { RiddleMcqCategory } from '../entities/riddle-category.entity';
+import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 import { generateSlug } from '../utils/slug.util';
 
 export interface BulkCreateRiddleDto {
@@ -75,14 +75,14 @@ export class RiddleMcqImportService {
       const uniqueCategories = [
         ...new Set(dtos.map((d) => d.categoryName).filter(Boolean)),
       ] as string[];
-      const categoryMap = new Map<string, RiddleCategory>();
+      const categoryMap = new Map<string, RiddleMcqCategory>();
 
       for (const catName of uniqueCategories) {
-        let category = await transactionalEntityManager.findOne(RiddleCategory, {
+        let category = await transactionalEntityManager.findOne(RiddleMcqCategory, {
           where: { name: catName },
         });
         if (!category) {
-          category = await transactionalEntityManager.save(RiddleCategory, {
+          category = await transactionalEntityManager.save(RiddleMcqCategory, {
             name: catName,
             slug: generateSlug(catName),
             emoji: '📁',
@@ -95,18 +95,18 @@ export class RiddleMcqImportService {
       const uniqueSubjects = [
         ...new Set(dtos.map((d) => d.subjectName).filter(Boolean)),
       ] as string[];
-      const subjectMap = new Map<string, RiddleSubject>();
+      const subjectMap = new Map<string, RiddleMcqSubject>();
 
       for (const subjName of uniqueSubjects) {
         const dtoWithCategory = dtos.find((d) => d.subjectName === subjName);
         const categoryName = dtoWithCategory?.categoryName;
         const category = categoryName ? categoryMap.get(categoryName) : null;
 
-        let subject = await transactionalEntityManager.findOne(RiddleSubject, {
+        let subject = await transactionalEntityManager.findOne(RiddleMcqSubject, {
           where: { name: subjName },
         });
         if (!subject) {
-          subject = await transactionalEntityManager.save(RiddleSubject, {
+          subject = await transactionalEntityManager.save(RiddleMcqSubject, {
             name: subjName,
             slug: generateSlug(subjName),
             emoji: '📚',

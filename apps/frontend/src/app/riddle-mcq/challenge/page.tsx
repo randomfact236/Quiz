@@ -13,31 +13,41 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Timer, Target, Layers, Grid3X3, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
+import {
+  ArrowLeft,
+  Timer,
+  Target,
+  Layers,
+  Grid3X3,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react';
 
 import { getSubjects, getStats, type RiddlesStats } from '@/lib/riddle-mcq-api';
-import type { RiddleSubject } from '@/types/riddles';
+import type { RiddleMcqSubject } from '@/types/riddles';
 
 // Riddle difficulty levels
 const levels = ['Easy', 'Medium', 'Hard', 'Expert'] as const;
 
-type Level = typeof levels[number];
+type Level = (typeof levels)[number];
 
 const levelEmojis: Record<Level, string> = {
-  'Easy': '🌱',
-  'Medium': '🌿',
-  'Hard': '🌲',
-  'Expert': '🔥'
+  Easy: '🌱',
+  Medium: '🌿',
+  Hard: '🌲',
+  Expert: '🔥',
 };
 
 const levelColors: Record<Level, string> = {
-  'Easy': 'from-green-400 to-green-600',
-  'Medium': 'from-blue-400 to-blue-600',
-  'Hard': 'from-orange-400 to-orange-600',
-  'Expert': 'from-red-400 to-red-600'
+  Easy: 'from-green-400 to-green-600',
+  Medium: 'from-blue-400 to-blue-600',
+  Hard: 'from-orange-400 to-orange-600',
+  Expert: 'from-red-400 to-red-600',
 };
 
-interface SubjectWithStats extends RiddleSubject {
+interface SubjectWithStats extends RiddleMcqSubject {
   riddleCount?: number;
 }
 
@@ -46,7 +56,6 @@ interface LevelCount {
   allSubject: Record<string, number>;
   completeMix: number;
 }
-
 
 export default function RiddleChallengePage(): JSX.Element {
   const router = useRouter();
@@ -73,11 +82,11 @@ export default function RiddleChallengePage(): JSX.Element {
 
         // Fetch stats and subjects from backend (only those with content)
         const [statsData, subjectsData] = await Promise.all([
-          getStats().catch(err => {
+          getStats().catch((err) => {
             console.error('Failed to get stats:', err);
             return null;
           }),
-          getSubjects(true) // hasContent = true
+          getSubjects(true), // hasContent = true
         ]);
 
         setStats(statsData);
@@ -98,12 +107,12 @@ export default function RiddleChallengePage(): JSX.Element {
     const counts: LevelCount = {
       subjectWise: {},
       allSubject: { easy: 0, medium: 0, hard: 0, expert: 0 },
-      completeMix: stats?.totalRiddleMcqs || 0
+      completeMix: stats?.totalRiddleMcqs || 0,
     };
 
     // Use stats.mcqsByLevel if available, otherwise distribute evenly
     const mcqsByLevel = stats?.mcqsByLevel || {};
-    
+
     // For now, distribute total across subjects evenly for UI display
     // The actual filtering happens on the backend
     for (const subject of subjects) {
@@ -125,7 +134,6 @@ export default function RiddleChallengePage(): JSX.Element {
     return counts;
   }, [subjects, stats]);
 
-
   const getAllSubjectCount = (level: Level): number => {
     return levelCounts.allSubject[level.toLowerCase()] || 0;
   };
@@ -134,7 +142,6 @@ export default function RiddleChallengePage(): JSX.Element {
     const subjectCounts = levelCounts.subjectWise[subjectName] || {};
     return Object.values(subjectCounts).reduce((sum, count) => sum + count, 0);
   };
-
 
   const handleStartMixForSubject = (subjectId: string) => {
     router.push(`/riddle-mcq/play?subjectId=${encodeURIComponent(subjectId)}&level=all&mode=timer`);
@@ -147,7 +154,6 @@ export default function RiddleChallengePage(): JSX.Element {
   const handleStartCompleteMix = () => {
     router.push(`/riddle-mcq/play?subjectId=all&level=all&mode=timer`);
   };
-
 
   // Loading state
   if (loading) {
@@ -228,10 +234,16 @@ export default function RiddleChallengePage(): JSX.Element {
                 <Target className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">Subject Wise Mix</span>
-                  <span className="text-sm opacity-90">Click a subject to select difficulty level</span>
+                  <span className="text-sm opacity-90">
+                    Click a subject to select difficulty level
+                  </span>
                 </div>
               </div>
-              {subjectWiseOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+              {subjectWiseOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
             </button>
 
             {subjectWiseOpen && (
@@ -282,10 +294,16 @@ export default function RiddleChallengePage(): JSX.Element {
                 <Layers className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">All Subject Level Wise Mix</span>
-                  <span className="text-sm opacity-90">Riddles from all subjects at selected difficulty</span>
+                  <span className="text-sm opacity-90">
+                    Riddles from all subjects at selected difficulty
+                  </span>
                 </div>
               </div>
-              {allSubjectOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+              {allSubjectOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
             </button>
 
             {allSubjectOpen && (
@@ -303,9 +321,7 @@ export default function RiddleChallengePage(): JSX.Element {
                       >
                         <span className="text-2xl mb-1">{levelEmojis[level]}</span>
                         <span className="font-semibold text-sm">{level}</span>
-                        <span className="mt-1 text-xs opacity-90">
-                          {count} riddles
-                        </span>
+                        <span className="mt-1 text-xs opacity-90">{count} riddles</span>
                       </button>
                     );
                   })}
@@ -329,10 +345,16 @@ export default function RiddleChallengePage(): JSX.Element {
                 <Grid3X3 className="h-8 w-8" />
                 <div className="text-left">
                   <span className="text-xl font-bold block">Complete Mix</span>
-                  <span className="text-sm opacity-90">All subjects, all levels - Ultimate challenge!</span>
+                  <span className="text-sm opacity-90">
+                    All subjects, all levels - Ultimate challenge!
+                  </span>
                 </div>
               </div>
-              {completeMixOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+              {completeMixOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
             </button>
 
             {completeMixOpen && (

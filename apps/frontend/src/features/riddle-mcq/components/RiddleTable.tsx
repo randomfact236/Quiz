@@ -1,13 +1,13 @@
 'use client';
 
 import type { RiddleMcq } from '@/types/riddles';
-import type { RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 import { RiddleTableRow } from './RiddleTableRow';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface RiddleTableProps {
   riddles: RiddleMcq[];
-  subjects: RiddleSubject[];
+  subjects: RiddleMcqSubject[];
   riddlePage: number;
   riddlesTotalPages: number;
   riddlesTotal: number;

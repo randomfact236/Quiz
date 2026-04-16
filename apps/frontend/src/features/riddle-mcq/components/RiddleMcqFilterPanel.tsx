@@ -5,7 +5,7 @@ import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { FilterControls } from './FilterControls';
 import { SearchInput } from './SearchInput';
 import { ActiveFiltersBadge } from './ActiveFiltersBadge';
-import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 import type { StatusFilter } from '@/types/status.types';
 
 interface RiddleFilters {
@@ -35,16 +35,16 @@ interface RiddleMcqFilterPanelProps {
   onFilterChange: (key: string, value: string | undefined) => void;
   onSearchChange: (value: string) => void;
   onReset: () => void;
-  categories: RiddleCategory[];
-  subjects: RiddleSubject[];
+  categories: RiddleMcqCategory[];
+  subjects: RiddleMcqSubject[];
   filterCounts: RiddleFilterCounts | undefined;
   isLoading: boolean;
   onAddCategory: () => void;
-  onEditCategory: (category: RiddleCategory) => void;
-  onDeleteCategory: (category: RiddleCategory) => void;
+  onEditCategory: (category: RiddleMcqCategory) => void;
+  onDeleteCategory: (category: RiddleMcqCategory) => void;
   onAddSubject: () => void;
-  onEditSubject: (subject: RiddleSubject) => void;
-  onDeleteSubject: (subject: RiddleSubject) => void;
+  onEditSubject: (subject: RiddleMcqSubject) => void;
+  onDeleteSubject: (subject: RiddleMcqSubject) => void;
 }
 
 export function RiddleMcqFilterPanel({

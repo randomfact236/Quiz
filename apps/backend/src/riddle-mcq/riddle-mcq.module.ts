@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CacheModule } from '../common/cache/cache.module';
 
-import { RiddleCategory } from './entities/riddle-category.entity';
+import { RiddleMcqCategory } from './entities/riddle-category.entity';
 import { RiddleMcq } from './entities/riddle-mcq.entity';
-import { RiddleSubject } from './entities/riddle-subject.entity';
+import { RiddleMcqSubject } from './entities/riddle-subject.entity';
 import {
   RiddleMcqCategoryService,
   RiddleMcqSubjectService,
@@ -22,7 +22,10 @@ import {
 } from './controllers';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RiddleCategory, RiddleSubject, RiddleMcq]), CacheModule],
+  imports: [
+    TypeOrmModule.forFeature([RiddleMcqCategory, RiddleMcqSubject, RiddleMcq]),
+    CacheModule,
+  ],
   controllers: [RiddleMcqCategoryController, RiddleMcqSubjectController, RiddleMcqController],
   providers: [
     RiddleMcqCategoryService,

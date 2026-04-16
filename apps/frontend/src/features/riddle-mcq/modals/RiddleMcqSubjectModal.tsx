@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X } from 'lucide-react';
-import type { RiddleSubject, RiddleCategory } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject, RiddleMcqCategory } from '@/lib/riddle-mcq-api';
 
 const subjectSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -19,8 +19,8 @@ type SubjectFormData = z.infer<typeof subjectSchema>;
 
 interface RiddleMcqSubjectModalProps {
   open: boolean;
-  subject: RiddleSubject | undefined;
-  categories: RiddleCategory[];
+  subject: RiddleMcqSubject | undefined;
+  categories: RiddleMcqCategory[];
   onClose: () => void;
   onSubmit: (data: SubjectFormData) => void;
   isSubmitting?: boolean;

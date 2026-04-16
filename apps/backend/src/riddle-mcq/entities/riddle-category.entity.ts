@@ -8,10 +8,10 @@ import {
   Index,
 } from 'typeorm';
 
-import { RiddleSubject } from './riddle-subject.entity';
+import { RiddleMcqSubject } from './riddle-subject.entity';
 
 @Entity('riddle_categories')
-export class RiddleCategory {
+export class RiddleMcqCategory {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -34,6 +34,6 @@ export class RiddleCategory {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @OneToMany(() => RiddleSubject, (subject) => subject.category)
-  subjects: RiddleSubject[];
+  @OneToMany(() => RiddleMcqSubject, (subject) => subject.category)
+  subjects: RiddleMcqSubject[];
 }

@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import { CategoryFilterRow } from './CategoryFilterRow';
-import { RiddleSubjectFilterRow } from './RiddleSubjectFilterRow';
-import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
+import { RiddleMcqSubjectFilterRow } from './RiddleMcqSubjectFilterRow';
+import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 
 interface FilterControlsProps {
   filters: {
@@ -11,8 +11,8 @@ interface FilterControlsProps {
     subject?: string;
     level?: string;
   };
-  categories: RiddleCategory[];
-  subjects: RiddleSubject[];
+  categories: RiddleMcqCategory[];
+  subjects: RiddleMcqSubject[];
   filterCounts?:
     | {
         categoryCounts?: { id: string; count: number }[];
@@ -24,11 +24,11 @@ interface FilterControlsProps {
   onSubjectChange: (subjectSlug: string | undefined) => void;
   onLevelChange: (level: string | undefined) => void;
   onAddCategory: () => void;
-  onEditCategory: (category: RiddleCategory) => void;
-  onDeleteCategory: (category: RiddleCategory) => void;
+  onEditCategory: (category: RiddleMcqCategory) => void;
+  onDeleteCategory: (category: RiddleMcqCategory) => void;
   onAddSubject: () => void;
-  onEditSubject: (subject: RiddleSubject) => void;
-  onDeleteSubject: (subject: RiddleSubject) => void;
+  onEditSubject: (subject: RiddleMcqSubject) => void;
+  onDeleteSubject: (subject: RiddleMcqSubject) => void;
 }
 
 const LEVELS = [
@@ -125,7 +125,7 @@ export function FilterControls({
             filterCounts?.subjectCounts?.find((s) => s.id === subject.id)?.count || 0;
           const isSelected = filters.subject === subject.slug;
           return (
-            <RiddleSubjectFilterRow
+            <RiddleMcqSubjectFilterRow
               key={subject.id}
               subject={subject}
               isSelected={isSelected}

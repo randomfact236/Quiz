@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
 
-import { RiddleSubject } from '../entities/riddle-subject.entity';
+import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 import { RiddleMcqSubjectService } from '../services/riddle-mcq-subject.service';
 import { CreateRiddleSubjectDto, UpdateRiddleSubjectDto } from '../dto/riddle-mcq.dto';
 
@@ -28,7 +28,7 @@ export class RiddleMcqSubjectController {
 
   @Get()
   @ApiOperation({ summary: 'Get all active subjects (Public)' })
-  async getAllSubjects(@Query('hasContent') hasContent?: string): Promise<RiddleSubject[]> {
+  async getAllSubjects(@Query('hasContent') hasContent?: string): Promise<RiddleMcqSubject[]> {
     return this.subjectService.findAllSubjects(false, hasContent === 'true');
   }
 
@@ -37,13 +37,13 @@ export class RiddleMcqSubjectController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all subjects including inactive (Admin only)' })
-  async getAllSubjectsAdmin(): Promise<RiddleSubject[]> {
+  async getAllSubjectsAdmin(): Promise<RiddleMcqSubject[]> {
     return this.subjectService.findAllSubjects(true);
   }
 
   @Get(':slug')
   @ApiOperation({ summary: 'Get subject by slug (Public)' })
-  async getSubjectBySlug(@Param('slug') slug: string): Promise<RiddleSubject> {
+  async getSubjectBySlug(@Param('slug') slug: string): Promise<RiddleMcqSubject> {
     return this.subjectService.findSubjectBySlug(slug);
   }
 
@@ -52,7 +52,7 @@ export class RiddleMcqSubjectController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new subject (Admin only)' })
-  async createSubject(@Body() dto: CreateRiddleSubjectDto): Promise<RiddleSubject> {
+  async createSubject(@Body() dto: CreateRiddleSubjectDto): Promise<RiddleMcqSubject> {
     return this.subjectService.createSubject(dto);
   }
 
@@ -64,7 +64,7 @@ export class RiddleMcqSubjectController {
   async updateSubject(
     @Param('id') id: string,
     @Body() dto: UpdateRiddleSubjectDto
-  ): Promise<RiddleSubject> {
+  ): Promise<RiddleMcqSubject> {
     return this.subjectService.updateSubject(id, dto);
   }
 

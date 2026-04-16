@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
 
-import { RiddleCategory } from '../entities/riddle-category.entity';
+import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqCategoryService } from '../services/riddle-mcq-category.service';
 import { CreateRiddleCategoryDto, UpdateRiddleCategoryDto } from '../dto/riddle-mcq.dto';
 
@@ -27,7 +27,7 @@ export class RiddleMcqCategoryController {
 
   @Get()
   @ApiOperation({ summary: 'Get all active categories (Public)' })
-  async getAllCategories(): Promise<RiddleCategory[]> {
+  async getAllCategories(): Promise<RiddleMcqCategory[]> {
     return this.categoryService.findAllCategories(false);
   }
 
@@ -36,13 +36,13 @@ export class RiddleMcqCategoryController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all categories including inactive (Admin only)' })
-  async getAllCategoriesAdmin(): Promise<RiddleCategory[]> {
+  async getAllCategoriesAdmin(): Promise<RiddleMcqCategory[]> {
     return this.categoryService.findAllCategories(true);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get category by ID (Public)' })
-  async getCategoryById(@Param('id') id: string): Promise<RiddleCategory> {
+  async getCategoryById(@Param('id') id: string): Promise<RiddleMcqCategory> {
     return this.categoryService.findCategoryById(id);
   }
 
@@ -51,7 +51,7 @@ export class RiddleMcqCategoryController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new category (Admin only)' })
-  async createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
+  async createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleMcqCategory> {
     return this.categoryService.createCategory(dto);
   }
 
@@ -63,7 +63,7 @@ export class RiddleMcqCategoryController {
   async updateCategory(
     @Param('id') id: string,
     @Body() dto: UpdateRiddleCategoryDto
-  ): Promise<RiddleCategory> {
+  ): Promise<RiddleMcqCategory> {
     return this.categoryService.updateCategory(id, dto);
   }
 

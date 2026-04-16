@@ -20,7 +20,7 @@ import { ImportModal } from '../modals/ImportModal';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { StatusFilter } from '@/types/status.types';
-import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
 import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
@@ -61,8 +61,10 @@ export function RiddleMcqContainer() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const { handleBulkAction } = useBulkActions(selectedIds, () => setSelectedIds(new Set()));
 
-  const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
-  const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
+  const [categoryModal, setCategoryModal] = useState<ModalState<RiddleMcqCategory>>({
+    open: false,
+  });
+  const [subjectModal, setSubjectModal] = useState<ModalState<RiddleMcqSubject>>({ open: false });
   const [riddleModal, setRiddleModal] = useState<ModalState<RiddleMcq>>({ open: false });
   const [showImportModal, setShowImportModal] = useState(false);
 
@@ -99,7 +101,7 @@ export function RiddleMcqContainer() {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }, [filters, page, pathname, router]);
 
-  const handleDeleteCategory = (category: RiddleCategory) => {
+  const handleDeleteCategory = (category: RiddleMcqCategory) => {
     setConfirm({
       open: true,
       title: 'Delete Category',
@@ -111,7 +113,7 @@ export function RiddleMcqContainer() {
     });
   };
 
-  const handleDeleteSubject = (subject: RiddleSubject) => {
+  const handleDeleteSubject = (subject: RiddleMcqSubject) => {
     setConfirm({
       open: true,
       title: 'Delete Subject',
