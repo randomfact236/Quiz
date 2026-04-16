@@ -35,6 +35,23 @@ export class RiddleMcqQuestionService {
     return shuffled;
   }
 
+  private readonly CACHE_KEYS = {
+    QUESTIONS: (
+      category: string,
+      subject: string,
+      level: string,
+      status: string,
+      search: string,
+      page: number,
+      limit: number
+    ) =>
+      `riddle-mcq:questions:${category || 'all'}:${subject || 'all'}:${level || 'all'}:${status || 'all'}:${search || 'none'}:${page}:${limit}`,
+  };
+
+  private readonly CACHE_TTL = {
+    QUESTIONS: 600,
+  };
+
   async findRiddlesBySubject(
     subjectId: string,
     pagination: { page?: number; limit?: number } = {},
@@ -76,43 +93,59 @@ export class RiddleMcqQuestionService {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
 
-    const query = this.riddleMcqRepo
-      .createQueryBuilder('riddle')
-      .leftJoinAndSelect('riddle.subject', 'subject')
-      .leftJoinAndSelect('subject.category', 'category');
+    const cacheKey = this.CACHE_KEYS.QUESTIONS(
+      filters.category || 'all',
+      filters.subject || 'all',
+      filters.level || 'all',
+      filters.status || 'all',
+      filters.search || 'none',
+      page,
+      limit
+    );
 
-    if (filters.category && filters.category !== 'all') {
-      query.where('category.slug = :category', { category: filters.category });
-    }
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const query = this.riddleMcqRepo
+          .createQueryBuilder('riddle')
+          .leftJoinAndSelect('riddle.subject', 'subject')
+          .leftJoinAndSelect('subject.category', 'category');
 
-    if (filters.subject && filters.subject !== 'all') {
-      if (filters.category && filters.category !== 'all') {
-        query.andWhere('subject.slug = :subject', { subject: filters.subject });
-      } else {
-        query.where('subject.slug = :subject', { subject: filters.subject });
-      }
-    }
+        if (filters.category && filters.category !== 'all') {
+          query.where('category.slug = :category', { category: filters.category });
+        }
 
-    if (filters.level && filters.level !== 'all') {
-      query.andWhere('riddle.level = :level', { level: filters.level });
-    }
+        if (filters.subject && filters.subject !== 'all') {
+          if (filters.category && filters.category !== 'all') {
+            query.andWhere('subject.slug = :subject', { subject: filters.subject });
+          } else {
+            query.where('subject.slug = :subject', { subject: filters.subject });
+          }
+        }
 
-    if (filters.status && filters.status !== 'all') {
-      query.andWhere('riddle.status = :status', { status: filters.status });
-    }
+        if (filters.level && filters.level !== 'all') {
+          query.andWhere('riddle.level = :level', { level: filters.level });
+        }
 
-    if (filters.search) {
-      query.andWhere('riddle.question ILIKE :search', { search: `%${filters.search}%` });
-    }
+        if (filters.status && filters.status !== 'all') {
+          query.andWhere('riddle.status = :status', { status: filters.status });
+        }
 
-    const [data, total] = await query
-      .skip((page - 1) * limit)
-      .take(limit)
-      .orderBy('riddle.importOrder', 'ASC')
-      .addOrderBy('riddle.createdAt', 'DESC')
-      .getManyAndCount();
+        if (filters.search) {
+          query.andWhere('riddle.question ILIKE :search', { search: `%${filters.search}%` });
+        }
 
-    return { data, total };
+        const [data, total] = await query
+          .skip((page - 1) * limit)
+          .take(limit)
+          .orderBy('riddle.importOrder', 'ASC')
+          .addOrderBy('riddle.createdAt', 'DESC')
+          .getManyAndCount();
+
+        return { data, total };
+      },
+      this.CACHE_TTL.QUESTIONS
+    );
   }
 
   async findRandomRiddles(level: string, count: number): Promise<RiddleMcq[]> {

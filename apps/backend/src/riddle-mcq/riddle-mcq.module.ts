@@ -11,6 +11,8 @@ import {
   RiddleMcqSubjectService,
   RiddleMcqQuestionService,
   RiddleMcqBulkService,
+  RiddleMcqBulkActionsService,
+  RiddleMcqImportService,
   RiddleMcqStatsService,
 } from './services';
 import {
@@ -27,6 +29,8 @@ import {
     RiddleMcqSubjectService,
     RiddleMcqQuestionService,
     RiddleMcqBulkService,
+    RiddleMcqBulkActionsService,
+    RiddleMcqImportService,
     RiddleMcqStatsService,
   ],
   exports: [
@@ -34,6 +38,8 @@ import {
     RiddleMcqSubjectService,
     RiddleMcqQuestionService,
     RiddleMcqBulkService,
+    RiddleMcqBulkActionsService,
+    RiddleMcqImportService,
     RiddleMcqStatsService,
   ],
 })

@@ -19,6 +19,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleSubject } from '../entities/riddle-subject.entity';
 import { RiddleMcqSubjectService } from '../services/riddle-mcq-subject.service';
+import { CreateRiddleSubjectDto, UpdateRiddleSubjectDto } from '../dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ - Subjects')
 @Controller('riddle-mcq/subjects')
@@ -51,16 +52,7 @@ export class RiddleMcqSubjectController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new subject (Admin only)' })
-  async createSubject(
-    @Body()
-    dto: {
-      name: string;
-      slug?: string;
-      emoji?: string;
-      categoryId?: string | null;
-      isActive?: boolean;
-    }
-  ): Promise<RiddleSubject> {
+  async createSubject(@Body() dto: CreateRiddleSubjectDto): Promise<RiddleSubject> {
     return this.subjectService.createSubject(dto);
   }
 
@@ -71,14 +63,7 @@ export class RiddleMcqSubjectController {
   @ApiOperation({ summary: 'Update subject (Admin only)' })
   async updateSubject(
     @Param('id') id: string,
-    @Body()
-    dto: {
-      name?: string;
-      slug?: string;
-      emoji?: string;
-      categoryId?: string | null;
-      isActive?: boolean;
-    }
+    @Body() dto: UpdateRiddleSubjectDto
   ): Promise<RiddleSubject> {
     return this.subjectService.updateSubject(id, dto);
   }

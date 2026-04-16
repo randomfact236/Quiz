@@ -18,6 +18,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqCategoryService } from '../services/riddle-mcq-category.service';
+import { CreateRiddleCategoryDto, UpdateRiddleCategoryDto } from '../dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ - Categories')
 @Controller('riddle-mcq/categories')
@@ -50,9 +51,7 @@ export class RiddleMcqCategoryController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new category (Admin only)' })
-  async createCategory(
-    @Body() dto: { name: string; slug?: string; emoji?: string; isActive?: boolean }
-  ): Promise<RiddleCategory> {
+  async createCategory(@Body() dto: CreateRiddleCategoryDto): Promise<RiddleCategory> {
     return this.categoryService.createCategory(dto);
   }
 
@@ -63,8 +62,7 @@ export class RiddleMcqCategoryController {
   @ApiOperation({ summary: 'Update category (Admin only)' })
   async updateCategory(
     @Param('id') id: string,
-    @Body()
-    dto: { name?: string; slug?: string; emoji?: string; isActive?: boolean }
+    @Body() dto: UpdateRiddleCategoryDto
   ): Promise<RiddleCategory> {
     return this.categoryService.updateCategory(id, dto);
   }

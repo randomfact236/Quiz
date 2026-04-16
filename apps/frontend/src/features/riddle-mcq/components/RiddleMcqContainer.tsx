@@ -8,6 +8,8 @@ import { useRiddleMcqQuestions } from '../hooks/useRiddleMcqQuestions';
 import { useRiddleMcqFilterCounts } from '../hooks/useRiddleMcqFilterCounts';
 import { useRiddleMcqFilters } from '../hooks/useRiddleMcqFilters';
 import { useRiddleMutations } from '../hooks/useRiddleMutations';
+import { useBulkActions } from '../hooks/useBulkActions';
+import { useDebounce } from '../hooks/useDebounce';
 import { RiddleMcqHeader } from './RiddleMcqHeader';
 import { RiddleMcqFilterPanel } from './RiddleMcqFilterPanel';
 import { RiddleTable } from './RiddleTable';
@@ -17,7 +19,7 @@ import { RiddleMcqModal } from '../modals/RiddleMcqModal';
 import { ImportModal } from '../modals/ImportModal';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import type { StatusFilter, BulkActionType } from '@/types/status.types';
+import type { StatusFilter } from '@/types/status.types';
 import type { RiddleCategory, RiddleSubject } from '@/lib/riddle-mcq-api';
 import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
@@ -54,9 +56,10 @@ export function RiddleMcqContainer() {
     filters.level
   );
 
-  const { bulkAction, isBulkActionLoading, updateRiddle } = useRiddleMutations();
+  const { updateRiddle, isBulkActionLoading } = useRiddleMutations();
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const { handleBulkAction } = useBulkActions(selectedIds, () => setSelectedIds(new Set()));
 
   const [categoryModal, setCategoryModal] = useState<ModalState<RiddleCategory>>({ open: false });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleSubject>>({ open: false });
@@ -76,18 +79,7 @@ export function RiddleMcqContainer() {
   const riddlesTotal = riddlesQuery.data?.total ?? 0;
   const riddlesTotalPages = Math.ceil(riddlesTotal / pageSize);
 
-  const debouncedSetSearch = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout;
-      return (value: string) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          setSearch(value);
-        }, 300);
-      };
-    })(),
-    [setSearch]
-  );
+  const debouncedSetSearch = useDebounce(setSearch, 300);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -192,19 +184,6 @@ export function RiddleMcqContainer() {
       }
     },
     [riddles]
-  );
-
-  const handleBulkAction = useCallback(
-    async (action: BulkActionType) => {
-      if (selectedIds.size === 0) return;
-      try {
-        await bulkAction({ ids: Array.from(selectedIds), action });
-        setSelectedIds(new Set());
-      } catch (error) {
-        console.error('Bulk action failed:', error);
-      }
-    },
-    [selectedIds, bulkAction]
   );
 
   const handlePageSizeChange = useCallback(
@@ -345,7 +324,6 @@ export function RiddleMcqContainer() {
         open={showImportModal}
         onClose={() => setShowImportModal(false)}
         onSuccess={() => {}}
-        subjects={subjects}
       />
     </div>
   );

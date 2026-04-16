@@ -10,7 +10,6 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 
@@ -24,10 +23,16 @@ import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqQuestionService } from '../services/riddle-mcq-question.service';
 import { RiddleMcqBulkService } from '../services/riddle-mcq-bulk.service';
 import { RiddleMcqStatsService } from '../services/riddle-mcq-stats.service';
+import { PaginationValidator } from '../validators/pagination.validator';
+import { DifficultyValidator } from '../validators/difficulty.validator';
+import { CreateRiddleMcqDto, UpdateRiddleMcqDto, BulkCreateRiddleDto } from '../dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ')
 @Controller('riddle-mcq')
 export class RiddleMcqController {
+  private readonly paginationValidator = new PaginationValidator();
+  private readonly difficultyValidator = new DifficultyValidator();
+
   constructor(
     private readonly questionService: RiddleMcqQuestionService,
     private readonly bulkService: RiddleMcqBulkService,
@@ -83,7 +88,7 @@ export class RiddleMcqController {
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed riddles from all subjects (Public)' })
   async getMixedRiddles(@Query('count') count?: string): Promise<RiddleMcq[]> {
-    const parsedCount = this.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
+    const parsedCount = this.paginationValidator.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
     return this.questionService.findMixedRiddles(parsedCount);
   }
 
@@ -94,8 +99,8 @@ export class RiddleMcqController {
     @Param('level') level: string,
     @Query('count') count?: string
   ): Promise<RiddleMcq[]> {
-    const parsedCount = this.validateCount(count, 10, 1, 50);
-    this.validateDifficulty(level);
+    const parsedCount = this.paginationValidator.validateCount(count, 10, 1, 50);
+    this.difficultyValidator.validate(level);
     return this.questionService.findRandomRiddles(level, parsedCount);
   }
 
@@ -104,20 +109,7 @@ export class RiddleMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new riddle (Admin only)' })
-  async createRiddle(
-    @Body()
-    dto: {
-      question: string;
-      options?: string[];
-      correctLetter?: string;
-      level: string;
-      subjectId: string;
-      hint?: string;
-      explanation?: string;
-      answer?: string;
-      status?: RiddleStatus;
-    }
-  ): Promise<RiddleMcq> {
+  async createRiddle(@Body() dto: CreateRiddleMcqDto): Promise<RiddleMcq> {
     return this.questionService.createRiddle(dto);
   }
 
@@ -127,18 +119,7 @@ export class RiddleMcqController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create riddles (Admin only)' })
   async createRiddlesBulk(
-    @Body()
-    dtos: Array<{
-      question: string;
-      options?: string[];
-      correctLetter?: string;
-      level: string;
-      subjectId: string;
-      hint?: string;
-      explanation?: string;
-      answer?: string;
-      status?: RiddleStatus;
-    }>
+    @Body() dtos: BulkCreateRiddleDto[]
   ): Promise<{ count: number; errors: string[] }> {
     return this.bulkService.createRiddlesBulk(dtos);
   }
@@ -148,21 +129,7 @@ export class RiddleMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update riddle (Admin only)' })
-  async updateRiddle(
-    @Param('id') id: string,
-    @Body()
-    dto: {
-      question?: string;
-      options?: string[];
-      correctLetter?: string;
-      level?: string;
-      subjectId?: string;
-      hint?: string;
-      explanation?: string;
-      answer?: string;
-      status?: RiddleStatus;
-    }
-  ): Promise<RiddleMcq> {
+  async updateRiddle(@Param('id') id: string, @Body() dto: UpdateRiddleMcqDto): Promise<RiddleMcq> {
     return this.questionService.updateRiddle(id, dto);
   }
 
@@ -232,37 +199,5 @@ export class RiddleMcqController {
     total: number;
   }> {
     return this.statsService.getFilterCounts({ category, subject, level });
-  }
-
-  private validateCount(
-    count: string | undefined,
-    defaultValue: number,
-    min: number,
-    max: number
-  ): number {
-    if (count === undefined || count === '') {
-      return defaultValue;
-    }
-
-    const parsed = parseInt(count, 10);
-    if (isNaN(parsed)) {
-      throw new BadRequestException(`Invalid count parameter: ${count}`);
-    }
-    if (parsed < min) {
-      throw new BadRequestException(`Count must be at least ${min}`);
-    }
-    if (parsed > max) {
-      throw new BadRequestException(`Count must not exceed ${max}`);
-    }
-    return parsed;
-  }
-
-  private validateDifficulty(level: string): void {
-    const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
-    if (!validDifficulties.includes(level)) {
-      throw new BadRequestException(
-        `Invalid difficulty level: "${level}". Valid values: ${validDifficulties.join(', ')}`
-      );
-    }
   }
 }
