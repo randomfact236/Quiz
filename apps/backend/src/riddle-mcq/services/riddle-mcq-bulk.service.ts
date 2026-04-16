@@ -7,6 +7,17 @@ import { BulkActionType } from '../../common/enums/bulk-action.enum';
 import { BulkActionResult } from '../../common/interfaces/bulk-action-result.interface';
 
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
+import { RiddleCategory } from '../entities/riddle-category.entity';
+import { RiddleSubject } from '../entities/riddle-subject.entity';
+
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 @Injectable()
 export class RiddleMcqBulkService {
@@ -29,7 +40,9 @@ export class RiddleMcqBulkService {
       options?: string[];
       correctLetter?: string;
       level: string;
-      subjectId: string;
+      subjectId?: string;
+      subjectName?: string;
+      categoryName?: string;
       hint?: string;
       explanation?: string;
       answer?: string;
@@ -156,7 +169,9 @@ export class RiddleMcqBulkService {
       options?: string[];
       correctLetter?: string;
       level: string;
-      subjectId: string;
+      subjectId?: string;
+      subjectName?: string;
+      categoryName?: string;
       hint?: string;
       explanation?: string;
       answer?: string;
@@ -168,6 +183,51 @@ export class RiddleMcqBulkService {
   ): Promise<{ count: number; errors: string[] }> {
     return this.dataSource.transaction(async (transactionalEntityManager) => {
       const riddles: RiddleMcq[] = [];
+
+      const uniqueCategories = [
+        ...new Set(dtos.map((d) => d.categoryName).filter(Boolean)),
+      ] as string[];
+      const categoryMap = new Map<string, RiddleCategory>();
+
+      for (const catName of uniqueCategories) {
+        let category = await transactionalEntityManager.findOne(RiddleCategory, {
+          where: { name: catName },
+        });
+        if (!category) {
+          category = await transactionalEntityManager.save(RiddleCategory, {
+            name: catName,
+            slug: generateSlug(catName),
+            emoji: '📁',
+            isActive: true,
+          });
+        }
+        categoryMap.set(catName, category);
+      }
+
+      const uniqueSubjects = [
+        ...new Set(dtos.map((d) => d.subjectName).filter(Boolean)),
+      ] as string[];
+      const subjectMap = new Map<string, RiddleSubject>();
+
+      for (const subjName of uniqueSubjects) {
+        const dtoWithCategory = dtos.find((d) => d.subjectName === subjName);
+        const categoryName = dtoWithCategory?.categoryName;
+        const category = categoryName ? categoryMap.get(categoryName) : null;
+
+        let subject = await transactionalEntityManager.findOne(RiddleSubject, {
+          where: { name: subjName },
+        });
+        if (!subject) {
+          subject = await transactionalEntityManager.save(RiddleSubject, {
+            name: subjName,
+            slug: generateSlug(subjName),
+            emoji: '📚',
+            isActive: true,
+            categoryId: category?.id ?? null,
+          });
+        }
+        subjectMap.set(subjName, subject);
+      }
 
       for (let i = 0; i < dtos.length; i++) {
         const dto = dtos[i];
@@ -189,12 +249,27 @@ export class RiddleMcqBulkService {
           continue;
         }
 
+        let subjectId = dto.subjectId;
+        if (!subjectId && dto.subjectName) {
+          const subject = subjectMap.get(dto.subjectName);
+          if (subject) {
+            subjectId = subject.id;
+          }
+        }
+
+        if (!subjectId) {
+          errors.push(
+            `Row ${offset + i + 1}: Subject not found for "${dto.subjectName || dto.subjectId}"`
+          );
+          continue;
+        }
+
         const riddle = new RiddleMcq();
         riddle.question = dto.question;
         riddle.options = isExpert ? null : (dto.options ?? null);
         riddle.correctLetter = isExpert ? null : (dto.correctLetter ?? null);
         riddle.level = dto.level as RiddleMcqLevel;
-        riddle.subjectId = dto.subjectId;
+        riddle.subjectId = subjectId;
         riddle.hint = dto.hint ?? null;
         riddle.explanation = dto.explanation ?? null;
         riddle.answer = dto.answer ?? null;

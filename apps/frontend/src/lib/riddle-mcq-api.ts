@@ -80,7 +80,9 @@ export interface CreateRiddleMcqDto {
   correctLetter?: string;
   correctAnswer?: string;
   level: 'easy' | 'medium' | 'hard' | 'expert';
-  subjectId: string; // REQUIRED - no chapterId
+  subjectId?: string;
+  subjectName?: string;
+  categoryName?: string;
   hint?: string;
   explanation?: string;
   answer?: string;

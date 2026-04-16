@@ -19,6 +19,7 @@ interface ParsedRiddle {
   correctLetter: string;
   level: string;
   subjectName: string;
+  categoryName: string;
   hint: string;
   explanation: string;
   answer: string;
@@ -100,86 +101,95 @@ export function ImportModal({ open, onClose, onSuccess, subjects }: ImportModalP
     [subjects]
   );
 
-  const parseCsvContent = useCallback((content: string): ParsedRiddle[] => {
-    const lines = content.split(/\r?\n/).filter((l) => l.trim());
-    if (lines.length < 2) return [];
+  const parseCsvContent = useCallback(
+    (content: string): { riddles: ParsedRiddle[]; categoryName: string } => {
+      const lines = content.split(/\r?\n/).filter((l) => l.trim());
+      if (lines.length < 2) return { riddles: [], categoryName: '' };
 
-    let headerLineIdx = 0;
-    let dataStartIdx = 1;
+      let headerLineIdx = 0;
+      let dataStartIdx = 1;
+      let categoryName = '';
 
-    if (lines[0]?.startsWith('# Category:')) {
-      headerLineIdx = 1;
-      dataStartIdx = 2;
-    }
-
-    const headers = parseCSVRow(lines[headerLineIdx]!).map((h) => h.toLowerCase().trim());
-    const riddles: ParsedRiddle[] = [];
-
-    for (let i = dataStartIdx; i < lines.length; i++) {
-      const line = lines[i]!.trim();
-      if (!line) continue;
-
-      if (line.startsWith('#')) continue;
-
-      const values = parseCSVRow(line);
-      if (values.length < 2) continue;
-
-      const getValue = (colName: string): string => {
-        const idx = headers.indexOf(colName.toLowerCase());
-        return idx >= 0 && values[idx] ? values[idx].replace(/^"|"$/g, '').trim() : '';
-      };
-
-      const question = getValue('question');
-      if (!question) continue;
-
-      const optA = getValue('optiona');
-      const optB = getValue('optionb');
-      const optC = getValue('optionc');
-      const optD = getValue('optiond');
-
-      const answerRaw = getValue('answer');
-
-      let correctLetter = '';
-      let answerText = '';
-
-      if (answerRaw) {
-        const letterMatch = answerRaw.match(/^([A-D])\.\s*(.*)$/i);
-        if (letterMatch) {
-          correctLetter = letterMatch[1]!.toUpperCase();
-          answerText = letterMatch[2]!.trim();
-        } else {
-          answerText = answerRaw;
-        }
+      if (lines[0]?.startsWith('# Category:')) {
+        categoryName = lines[0]!
+          .replace(/^#\s*Category:\s*/i, '')
+          .replace(/,+$/, '')
+          .trim();
+        headerLineIdx = 1;
+        dataStartIdx = 2;
       }
 
-      let options: string[] = [];
-      if (optA) options.push(optA);
-      if (optB) options.push(optB);
-      if (optC) options.push(optC);
-      if (optD) options.push(optD);
+      const headers = parseCSVRow(lines[headerLineIdx]!).map((h) => h.toLowerCase().trim());
+      const riddles: ParsedRiddle[] = [];
 
-      if (answerText && correctLetter) {
-        const letterIndex = correctLetter.charCodeAt(0) - 65;
-        if (letterIndex >= 0 && letterIndex < options.length) {
-          options[letterIndex] = answerText;
+      for (let i = dataStartIdx; i < lines.length; i++) {
+        const line = lines[i]!.trim();
+        if (!line) continue;
+
+        if (line.startsWith('#')) continue;
+
+        const values = parseCSVRow(line);
+        if (values.length < 2) continue;
+
+        const getValue = (colName: string): string => {
+          const idx = headers.indexOf(colName.toLowerCase());
+          return idx >= 0 && values[idx] ? values[idx].replace(/^"|"$/g, '').trim() : '';
+        };
+
+        const question = getValue('question');
+        if (!question) continue;
+
+        const optA = getValue('optiona');
+        const optB = getValue('optionb');
+        const optC = getValue('optionc');
+        const optD = getValue('optiond');
+
+        const answerRaw = getValue('answer');
+
+        let correctLetter = '';
+        let answerText = '';
+
+        if (answerRaw) {
+          const letterMatch = answerRaw.match(/^([A-D])\.\s*(.*)$/i);
+          if (letterMatch) {
+            correctLetter = letterMatch[1]!.toUpperCase();
+            answerText = letterMatch[2]!.trim();
+          } else {
+            answerText = answerRaw;
+          }
         }
+
+        let options: string[] = [];
+        if (optA) options.push(optA);
+        if (optB) options.push(optB);
+        if (optC) options.push(optC);
+        if (optD) options.push(optD);
+
+        if (answerText && correctLetter) {
+          const letterIndex = correctLetter.charCodeAt(0) - 65;
+          if (letterIndex >= 0 && letterIndex < options.length) {
+            options[letterIndex] = answerText;
+          }
+        }
+
+        riddles.push({
+          question,
+          options,
+          correctLetter,
+          level: getValue('level') || 'easy',
+          subjectName: getValue('subject'),
+          categoryName,
+          hint: getValue('hint'),
+          explanation: getValue('explanation'),
+          answer: answerText || '',
+          status: getValue('status') || 'draft',
+        });
       }
 
-      riddles.push({
-        question,
-        options,
-        correctLetter,
-        level: getValue('level') || 'easy',
-        subjectName: getValue('subject'),
-        hint: getValue('hint'),
-        explanation: getValue('explanation'),
-        answer: answerText || '',
-        status: getValue('status') || 'draft',
-      });
-    }
-
-    return riddles;
-  }, []);
+      return { riddles, categoryName };
+    },
+    []
+  );
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,7 +204,7 @@ export function ImportModal({ open, onClose, onSuccess, subjects }: ImportModalP
       reader.onload = (event) => {
         try {
           const content = event.target?.result as string;
-          const parsed = parseCsvContent(content);
+          const { riddles: parsed } = parseCsvContent(content);
           setAllRiddles(parsed);
           setPreview(parsed.slice(0, 5));
           if (parsed.length === 0) {
@@ -235,10 +245,9 @@ export function ImportModal({ open, onClose, onSuccess, subjects }: ImportModalP
 
     for (let i = 0; i < allRiddles.length; i++) {
       const r = allRiddles[i]!;
-      const subjectId = subjectNameToId(r.subjectName);
 
-      if (!subjectId) {
-        validationErrors.push({ row: i + 2, message: `Subject "${r.subjectName}" not found` });
+      if (!r.subjectName) {
+        validationErrors.push({ row: i + 2, message: 'Subject name is required' });
         continue;
       }
 
@@ -246,10 +255,14 @@ export function ImportModal({ open, onClose, onSuccess, subjects }: ImportModalP
         question: r.question,
         options: r.options.length > 0 ? r.options : [],
         level: r.level as CreateRiddleMcqDto['level'],
-        subjectId,
+        subjectName: r.subjectName,
         status: (r.status as CreateRiddleMcqDto['status']) || 'draft',
         importOrder: i + 1,
       };
+
+      if (r.categoryName) {
+        dto.categoryName = r.categoryName;
+      }
 
       if (r.correctLetter) dto.correctLetter = r.correctLetter;
       if (r.answer && r.level === 'expert') dto.answer = r.answer;
@@ -287,6 +300,8 @@ export function ImportModal({ open, onClose, onSuccess, subjects }: ImportModalP
       } else {
         queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
         queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
+        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
+        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
         setImportResult({ success: true, count: totalCreated });
         setTimeout(() => {
           onSuccess();
