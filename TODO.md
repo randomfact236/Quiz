@@ -19,7 +19,7 @@ Backend:
 - **~~[P1] N-delete loop in `deleteSubject`~~** — FIXED 2026-08-25: cascade uses a single `IN` query inside the same transaction; verified live.
 - **~~[was P1] random/:level + mixed not random~~** — FIXED by Track A/B (random_weight via shared pickRandomByWeight); doc claim now stale.
 - **~~[P1] `GET /quiz-mcq/questions/:chapterId` requires auth despite PUBLIC contract~~** — FIXED 2026-08-25: `@_Public()` added to the route; verified live (no-token → 200, admin routes still 401, PUBLISHED-only filter intact).
-- **[P2] quiz-mcq.md endpoint table still claims `random`/`mixed` are updatedAt-ordered** — stale after Track A/B; refresh when touching this doc next.
+- **~~[P2] quiz-mcq.md endpoint table still claims `random`/`mixed` are updatedAt-ordered~~** — FIXED 2026-08-25: doc refreshed (random_weight pools, fixed-bug sections, roadmap status).
 
 Frontend:
 

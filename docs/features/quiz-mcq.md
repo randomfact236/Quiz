@@ -10,7 +10,7 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `quiz-mcq.module.ts`          | Controller + service, repos for 3 entities, CacheService, BulkActionService; exports QuizMcqService                                                 |
 | `quiz-mcq.controller.ts`      | ~19 endpoints under `/quiz-mcq` (Swagger-tagged)                                                                                                    |
-| `quiz-mcq.service.ts`         | 959 lines: CRUD, bulk import, filter counts, CSV export                                                                                             |
+| `quiz-mcq.service.ts`         | ~650 lines: extends shared ContentServiceBase (common/content); quiz-specific filter counts, CSV export, chapter taxonomy                           |
 | `dto/export-query.dto.ts`     | Export query DTO                                                                                                                                    |
 | `entities/subject.entity.ts`  | `subjects`: unique slug, name, emoji, category, isActive, order                                                                                     |
 | `entities/chapter.entity.ts`  | `chapters`: name, chapterNumber, unique(name+subjectId)                                                                                             |
@@ -18,36 +18,36 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 
 ### Endpoint map
 
-| Method & Path                                             | Auth   | Notes                                             |
-| --------------------------------------------------------- | ------ | ------------------------------------------------- |
-| GET `/quiz-mcq/subjects`                                  | public | optional `?hasContent=true` (`controller:83-89`)  |
-| GET `/quiz-mcq/subjects/:slug/meta`                       | public | lightweight meta (`:91-96`)                       |
-| GET `/quiz-mcq/subjects/:slug`                            | public | with chapters (`:98-103`)                         |
-| GET `/quiz-mcq/subjects/:slug/questions`                  | public | PUBLISHED only, unbounded by default (`:105-121`) |
-| GET `/quiz-mcq/subjects/:slug/status-counts`              | admin  | (`:375-388`)                                      |
-| GET `/quiz-mcq/filter-counts`                             | admin  | unified facet counts (`:123-156`)                 |
-| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`                | admin  | CRUD (`:158-187`)                                 |
-| GET `/quiz-mcq/chapters`, `/quiz-mcq/chapters/:subjectId` | public | (`:191-201`)                                      |
-| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`              | admin  | CRUD (`:203-232`)                                 |
-| GET `/quiz-mcq/questions`                                 | admin  | paginated + filters (`:236-260`)                  |
-| GET `/quiz-mcq/questions/export`                          | admin  | CSV (`:262-277`)                                  |
-| GET `/quiz-mcq/questions/:chapterId`                      | public | PUBLISHED only (`:279-286`)                       |
-| GET `/quiz-mcq/mixed`, `/quiz-mcq/random/:level`          | public | challenge pools (`:302-314`)                      |
-| POST `/quiz-mcq/questions[/bulk]`                         | admin  | single + chunked import (`:316-339`)              |
-| PATCH/DELETE `/quiz-mcq/questions/:id`                    | admin  | (`:341-361`)                                      |
-| POST `/quiz-mcq/bulk-action`                              | admin  | shared BulkActionService (`:365-373`)             |
+| Method & Path                                             | Auth   | Notes                                                                            |
+| --------------------------------------------------------- | ------ | -------------------------------------------------------------------------------- |
+| GET `/quiz-mcq/subjects`                                  | public | optional `?hasContent=true` (`controller:83-89`)                                 |
+| GET `/quiz-mcq/subjects/:slug/meta`                       | public | lightweight meta (`:91-96`)                                                      |
+| GET `/quiz-mcq/subjects/:slug`                            | public | with chapters (`:98-103`)                                                        |
+| GET `/quiz-mcq/subjects/:slug/questions`                  | public | PUBLISHED only, unbounded by default (`:105-121`)                                |
+| GET `/quiz-mcq/subjects/:slug/status-counts`              | admin  | (`:375-388`)                                                                     |
+| GET `/quiz-mcq/filter-counts`                             | admin  | unified facet counts (`:123-156`)                                                |
+| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`                | admin  | CRUD (`:158-187`)                                                                |
+| GET `/quiz-mcq/chapters`, `/quiz-mcq/chapters/:subjectId` | public | (`:191-201`)                                                                     |
+| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`              | admin  | CRUD (`:203-232`)                                                                |
+| GET `/quiz-mcq/questions`                                 | admin  | paginated + filters (`:236-260`)                                                 |
+| GET `/quiz-mcq/questions/export`                          | admin  | CSV (`:262-277`)                                                                 |
+| GET `/quiz-mcq/questions/:chapterId`                      | public | PUBLISHED only (`:279-286`)                                                      |
+| GET `/quiz-mcq/random/:level`, `/quiz-mcq/mixed`          | public | challenge pools — index-seek random via `random_weight` + wrap-around (Track A2) |
+| POST `/quiz-mcq/questions[/bulk]`                         | admin  | single + chunked import (auto subject/chapter creation, unique-slug resolution)  |
+| PATCH/DELETE `/quiz-mcq/questions/:id`                    | admin  | (`:341-361`)                                                                     |
+| POST `/quiz-mcq/bulk-action`                              | admin  | shared BulkActionService (`:365-373`)                                            |
 
 ### Backend status
 
-**Done:** transactional cascade deletes for subjects/chapters (`service:140-172, 229-259`); Redis caching with pattern invalidation (`service:41-73`); parent-cascading filter counts (`getFilterCounts`, `service:332-537`); chunked bulk import with auto-created subjects/chapters and row-level error collection (`service:598-756`); level/type validation on create (`service:569-582`); escaped CSV export (`service:885-958`); public reads hard-filter PUBLISHED.
+**Done:** transactional cascade deletes for subjects/chapters with single-query item cascade; family-scoped cache invalidation (Track B — only `quiz:questions` / `quiz:filter-counts` families cleared, no `quiz:*` sledgehammer); parent-cascading filter counts; chunked bulk import with auto-created subjects/chapters (MAX+1 chapter numbers, collision-free slugs) and row-level error collection; level/type validation on create/update (extreme options nulling works); escaped CSV export; public reads hard-filter PUBLISHED.
 
-**Backend bugs:**
+**Backend bugs — ALL FIXED 2026-08-25:**
 
-1. **Dead logic in `updateQuestion`** — `const level = dto.level != null || question.level;` (`service:776`) is always truthy; the extreme check never works. Fix: `(dto.level ?? question.level) === 'extreme'`.
-2. **`random/:level` and `mixed` are not random** — both return `updatedAt DESC` with no shuffle (`service:539-561`).
-3. Chapter numbering race: `length + 1` (`service:204-205`); imports set `chapterNumber: 0` (`service:681`).
-4. Bulk-import slug collisions ("C++" vs "C") abort a whole 100-row chunk (`service:648-651`).
-5. N-delete loop in subject delete (`service:156-158`).
+1. ~~Dead logic in `updateQuestion`~~ — `(dto.level ?? level) === 'extreme'`; verified live.
+2. ~~`random/:level` and `mixed` not random~~ — replaced by `random_weight` index-seek + wrap-around (Track A2).
+3. ~~Chapter numbering race~~ — MAX(chapterNumber)+1 in createChapter and imports.
+4. ~~Bulk-import slug collisions~~ — `resolveUniqueSubjectSlug` picks next free `-N` suffix.
+5. ~~N-delete loop in subject delete~~ — single `IN` query cascade.
 
 ## B. Frontend — gameplay (`apps/frontend/src/`)
 
@@ -59,8 +59,8 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 | `app/quiz-mcq/play/page.tsx`                                       | Gameplay (849 lines): summary, timer, skip/share, resume, submit+extend modals                                                                           | Done; very large                                             |
 | `app/quiz-mcq/timer-challenge/page.tsx` / `practice-mode/page.tsx` | Challenge hubs (~95% clones)                                                                                                                             | Done; duplicated                                             |
 | `app/quiz-mcq/practice/page.tsx`, `challenge/page.tsx`             | Redirect shims                                                                                                                                           | Done                                                         |
-| `app/quiz-mcq/results/page.tsx`                                    | Results from localStorage history                                                                                                                        | Done; scoring bugs (§D)                                      |
-| `hooks/useQuizMcq.ts`                                              | Engine hook (641 lines): loading, scoring, timers, resume                                                                                                | Done; hotspot                                                |
+| `app/quiz-mcq/results/page.tsx`                                    | Results from localStorage history                                                                                                                        | Done; scoring via shared lib/quiz-mcq-scoring                |
+| `hooks/useQuizMcq.ts`                                              | Engine hook (~550 lines): loading, scoring (shared scorer), timers, resume, progress+achievement wiring                                                  | Done; hotspot                                                |
 | `components/quiz-mcq/*`                                            | QuestionCard, AnswerOptions (level-aware), BubbleEmojiEffect, FloatingBackground, ScoreCard, QuestionReview, ResultsCelebration                          | Done; QuizMcqTimer.tsx + QuizMcqNavigation.tsx **dead code** |
 | `features/quiz-mcq/**`                                             | Admin CRUD: QuizMcqContainer, FilterPanel, QuestionManager/Table, modals (subject/chapter/question/import), TanStack Query hooks with optimistic updates | Done; admin-only consumer                                    |
 
@@ -68,7 +68,7 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 
 **Done:** URL-driven 4-stage wizard with "Coming Soon" zero-question disabling; full engine (MCQ + open-ended scoring, total/per-question timers, visited/skipped sets, resume persistence, shared-link deep start `?shared=true`); results page (grades, breakdown, review, share); timer urgency visuals; complete admin CRUD against backend (optimistic mutations, CSV import/export).
 
-**Partially done:** chapter progress is read but never written (`saveQuizResult` has no callers); achievements never triggered on completion; per-level timers fall back to hardcoded defaults (`play/page.tsx:25-31`); explanations typed but unsupplied; ResultsCelebration tiers unfinished (only `perfect` used).
+**Partially done:** per-level timers fall back to hardcoded defaults (`play/page.tsx:25-31`); explanations typed but unsupplied; ResultsCelebration tiers unfinished (only `perfect` used). Chapter progress + achievements ARE now written on completion (`saveToHistory` → `saveQuizResult()` + `checkAchievements()`).
 
 **Missing (frontend):**
 
@@ -77,7 +77,7 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 - Unanswered-review handling ('N/A' letter never matches)
 - Pagination safety — fetches ALL questions of a subject client-side
 - Accessibility (aria-live feedback, label association in AnswerOptions)
-- Tests for useQuizMcq (zero exist)
+- Scoring regression tests exist (`__tests__/quiz-mcq-scoring.test.ts`, 16 passing); engine-level tests still thin
 
 ## C. How It Works (data flow)
 
@@ -95,25 +95,26 @@ Admin path uses idiomatic React Query with key-based invalidation; gameplay is o
 
 ## D. Known Bugs (frontend)
 
-1. **QuestionReview compares letter vs text** — `isCorrect = userAnswer === question.correctAnswer` (`QuestionReview.tsx:32`) marks almost every MCQ red; should compare `correctLetter`.
-2. **Extreme questions mis-scored in results** — `calculateResult` checks `answers[q.id] === q.correctLetter` (`results/page.tsx:59`); free-text answers always counted wrong though useQuizMcq scored them right.
-3. **Crash risk** — `byDifficulty[q.level]` assumes known levels (`results/page.tsx:61`).
-4. Hub duplication (timer-challenge ≈ practice-mode; level maps declared 3×).
-5. Resume-state bloat — serializes entire `availableQuestions` every change (`useQuizMcq.ts:439-452`); quota blowout silent.
-6. Per-question timer resets on going _back_ (`useQuizMcq.ts:363,379,556,573`) — free time.
-7. Double-completion race — history saved inside setState updater AND effect (`useQuizMcq.ts:384-425`); StrictMode risk.
-8. `router.replace` churn on every answer (`play/page.tsx:159-169`).
-9. ModeSelection perpetual "Loading..." when a chapter has zero questions (`app/quiz-mcq/page.tsx:566`).
-10. Admin coupling — `features/quiz-mcq` hardcodes `isAdmin: true`; misleading naming (admin CRUD called "QuizMcqContainer"); outside tailwind globs.
+Fixed 2026-08-25 (shared scorer + guards, regression-tested in `__tests__/quiz-mcq-scoring.test.ts`): ~~1. QuestionReview letter-vs-text~~ · ~~2. extreme mis-scoring in results~~ · ~~3. crash on unknown difficulty~~.
+
+Still open (refactor-class, tracked in plan/code-quality-plan.md):
+
+1. Hub duplication (timer-challenge ≈ practice-mode; level maps declared 3×).
+2. Resume-state bloat — serializes entire `availableQuestions` every change; quota blowout silent.
+3. Per-question timer resets on going _back_ — free time.
+4. Double-completion race — history saved inside setState updater AND effect; StrictMode risk.
+5. `router.replace` churn on every answer.
+6. ModeSelection perpetual "Loading..." when a chapter has zero questions.
+7. Admin coupling — `features/quiz-mcq` hardcodes `isAdmin: true`; outside tailwind globs.
 
 ## E. Roadmap (prioritized)
 
-1. **P0 correctness**: fix §B-bug1 updateQuestion logic + §D bugs 1–3; add regression tests.
-2. **P0 wiring**: call `saveQuizResult()` + `checkAchievements()` in completion effect.
-3. **P0 backend**: server-side shuffle or rename random/mixed; fix slug collisions.
+1. ~~**P0 correctness**: updateQuestion logic + §D bugs 1–3~~ — DONE 2026-08-25 (shared scorer + tests).
+2. ~~**P0 wiring**: `saveQuizResult()` + `checkAchievements()` in completion effect~~ — DONE 2026-08-25.
+3. ~~**P0 backend**: random/mixed shuffle; slug collisions~~ — DONE via Track A2/Track B.
 4. **P1 refactor**: merge challenge hubs into one parameterized component; extract save-path out of setState updaters; trim resume payload; delete dead components.
 5. **P2**: `POST /quiz-mcq/sessions` for cross-device history; replace client-side count loops with `GET /quiz-mcq/filter-counts`.
-6. **P3**: split play page into subcomponents; rename `features/quiz-mcq` → `features/quiz-mcq-admin`; finish celebration tiers; backfill chapterNumber strategy.
+6. **P3**: split play page into subcomponents; rename `features/quiz-mcq` → `features/quiz-mcq-admin`; finish celebration tiers.
 
 ## Code Quality Notes
 
