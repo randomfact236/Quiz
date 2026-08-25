@@ -255,6 +255,25 @@ export default function AdminPage(): JSX.Element {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-2">
+          {/* Visit Website — top of the menu, opens the public site in a new tab */}
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors text-gray-300 hover:bg-gray-800"
+            title="Open the public website in a new tab"
+          >
+            <span className="flex items-center justify-center w-5 h-5">
+              <ExternalLink className="w-5 h-5" />
+            </span>
+            {sidebarOpen && (
+              <span className="flex items-center gap-2">
+                Visit Website
+                <ExternalLink className="w-3 h-3 opacity-60" />
+              </span>
+            )}
+          </a>
+
           {/* Summary */}
           <MenuItem
             icon={<LayoutDashboard className="w-5 h-5" />}
@@ -346,27 +365,6 @@ export default function AdminPage(): JSX.Element {
             expanded={sidebarOpen}
             onClick={() => updateURL({ section: 'settings' })}
           />
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
-              activeSection === 'visit-website'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-            title="Open the public website in a new tab"
-          >
-            <span className="flex items-center justify-center w-5 h-5">
-              <ExternalLink className="w-5 h-5" />
-            </span>
-            {sidebarOpen && (
-              <span className="flex items-center gap-2">
-                Visit Website
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </span>
-            )}
-          </a>
         </nav>
 
         {/* Visit Website */}
