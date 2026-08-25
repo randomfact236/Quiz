@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In } from 'typeorm';
+import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
-import { BulkQuestionDto, BulkQuestionItemDto } from '../common/dto/bulk-question.dto';
+import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
 import {
@@ -12,54 +12,79 @@ import {
   StatusCountResponse,
 } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
-import { invalidateCacheFamilies } from '../common/content/content-cache.util';
-import { pickRandomByWeight } from '../common/content/random-selection.util';
-import { settings } from '../config/settings';
+import {
+  ContentListFilters,
+  ContentRandomOptions,
+  ContentImportRowTaxonomy,
+  ContentServiceBase,
+} from '../common/content/content.service';
 
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
 import { Subject } from './entities/subject.entity';
 
-@Injectable()
-export class QuizMcqService {
-  private readonly logger = new Logger(QuizMcqService.name);
+type QuestionLevel = 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
 
+const VALID_LEVELS: QuestionLevel[] = ['easy', 'medium', 'hard', 'expert', 'extreme'];
+
+/**
+ * Quiz MCQ content service — Track B reference implementation.
+ *
+ * Shared list/random/create/update/delete/import machinery lives in
+ * ContentServiceBase; everything below is either delegation or quiz-specific
+ * logic (filter counts, chapter taxonomy rules, CSV export).
+ */
+@Injectable()
+export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Question> {
   private readonly CACHE_KEYS = {
     FILTER_COUNTS: (subject: string, chapter: string, level: string, status: string) =>
-      `quiz:filter-counts:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}`,
-    QUESTIONS: (
-      subject: string,
-      chapter: string,
-      level: string,
-      status: string,
-      page: number,
-      limit: number
-    ) =>
-      `quiz:questions:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${status || 'all'}:${page}:${limit}`,
+      `quiz:filter-counts:${subject || 'all'}:${chapter || 'all'}:${level || 'all'}:${
+        status || 'all'
+      }`,
   };
 
-  private readonly CACHE_TTL = {
-    FILTER_COUNTS: 300,
-    QUESTIONS: 600,
-  };
+  private readonly FILTER_COUNTS_TTL_S = 300;
+
+  protected get itemNoun(): string {
+    return 'Question';
+  }
 
   constructor(
     @InjectRepository(Subject)
-    private subjectRepo: Repository<Subject>,
+    subjectRepo: Repository<Subject>,
     @InjectRepository(Chapter)
-    private chapterRepo: Repository<Chapter>,
+    chapterRepo: Repository<Chapter>,
     @InjectRepository(Question)
-    private questionRepo: Repository<Question>,
-    private cacheService: CacheService,
-    private dataSource: DataSource,
+    questionRepo: Repository<Question>,
+    cacheService: CacheService,
+    dataSource: DataSource,
     private bulkActionService: BulkActionService
-  ) {}
+  ) {
+    super({
+      subjectRepo,
+      chapterRepo,
+      itemRepo: questionRepo,
+      dataSource,
+      cacheService,
+      moduleKey: 'quiz',
+      // Track B: family-scoped invalidation (was sledgehammer 'quiz:*').
+      cacheFamilies: ['quiz:questions', 'quiz:filter-counts'],
+      itemAlias: 'question',
+      chaptersRelation: 'chapters',
+      chapterItemsRelation: 'questions',
+      itemsCacheTtlS: 600,
+    });
+  }
 
-  // Track B: family-scoped invalidation (was sledgehammer 'quiz:*').
-  // Subjects list is intentionally uncached, so question/taxonomy writes
-  // only need to clear the two cached families below.
-  private async clearQuizCaches() {
-    await invalidateCacheFamilies(this.cacheService, ['quiz:questions', 'quiz:filter-counts']);
+  /** Legacy key format kept so existing Redis entries stay valid. */
+  protected override listCacheKey(
+    filters: ContentListFilters,
+    page: number,
+    limit: number
+  ): string {
+    return `quiz:questions:${filters.subjectSlug || 'all'}:${filters.chapter || 'all'}:${
+      filters.level || 'all'
+    }:${filters.status || 'all'}:${page}:${limit}`;
   }
 
   // ==================== SUBJECTS ====================
@@ -69,26 +94,11 @@ export class QuizMcqService {
     hasContentOnly: boolean = false
   ): Promise<{ data: Subject[]; total: number }> {
     // NOTE: No caching for subjects list — ensures deletions are immediately reflected.
-    const page = pagination?.page ?? 1;
-    const limit = pagination?.limit ?? 100;
-
-    const query = this.subjectRepo
-      .createQueryBuilder('subject')
-      .orderBy('subject.name', 'ASC')
-      .skip((page - 1) * limit)
-      .take(limit);
-
-    if (hasContentOnly) {
-      // Filter subjects that have at least one chapter with at least one question
-      query.innerJoin('subject.chapters', 'chapter').innerJoin('chapter.questions', 'question');
-    }
-
-    const [data, total] = await query.getManyAndCount();
-    return { data, total };
+    return super.findAllSubjects(pagination, hasContentOnly);
   }
 
   async findSubjectMeta(slug: string): Promise<{ name: string; emoji: string; slug: string }> {
-    const subject = await this.subjectRepo.findOne({
+    const subject = await this.deps.subjectRepo.findOne({
       where: { slug },
       select: ['name', 'emoji', 'slug'],
     });
@@ -99,9 +109,9 @@ export class QuizMcqService {
   }
 
   async findSubjectBySlug(slug: string): Promise<Subject> {
-    const subject = await this.subjectRepo.findOne({
+    const subject = await this.deps.subjectRepo.findOne({
       where: { slug },
-      relations: ['chapters'],
+      relations: [this.deps.chaptersRelation],
     });
     if (!subject) {
       throw new NotFoundException('Subject not found');
@@ -109,99 +119,57 @@ export class QuizMcqService {
     return subject;
   }
 
-  async createSubject(dto: CreateSubjectDto): Promise<Subject> {
-    const subject = this.subjectRepo.create(dto);
-    const saved = await this.subjectRepo.save(subject);
-    await this.clearQuizCaches();
-    return saved;
+  createSubject(dto: CreateSubjectDto) {
+    return super.createSubject(dto);
   }
 
-  async updateSubject(id: string, dto: Partial<CreateSubjectDto>): Promise<Subject> {
-    const subject = await this.subjectRepo.findOne({ where: { id } });
-    if (!subject) {
-      throw new NotFoundException('Subject not found');
-    }
-    Object.assign(subject, dto);
-    const saved = await this.subjectRepo.save(subject);
-    await this.clearQuizCaches();
-    return saved;
+  updateSubject(id: string, dto: Partial<CreateSubjectDto>) {
+    return super.updateSubject(id, dto);
   }
 
-  async deleteSubject(id: string): Promise<void> {
-    const subject = await this.subjectRepo.findOne({
-      where: { id },
-      relations: ['chapters', 'chapters.questions'],
-    });
-
-    if (!subject) {
-      throw new NotFoundException('Subject not found');
-    }
-
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      if (subject.chapters && subject.chapters.length > 0) {
-        for (const chapter of subject.chapters) {
-          await queryRunner.manager.delete(Question, { chapterId: chapter.id });
-        }
-        await queryRunner.manager.delete(Chapter, { subjectId: id });
-      }
-
-      await queryRunner.manager.delete(Subject, { id });
-
-      await queryRunner.commitTransaction();
-      await this.clearQuizCaches();
-    } catch (err) {
-      await queryRunner.rollbackTransaction();
-      throw err;
-    } finally {
-      await queryRunner.release();
-    }
+  deleteSubject(id: string): Promise<void> {
+    return this.deleteSubjectCascade(id);
   }
 
   // ==================== CHAPTERS ====================
 
   async findChaptersBySubject(subjectId: string): Promise<Chapter[]> {
-    return this.chapterRepo.find({
+    return this.deps.chapterRepo.find({
       where: { subject: { id: subjectId } },
       order: { name: 'ASC' },
     });
   }
 
   async findAllChapters(): Promise<Chapter[]> {
-    return this.chapterRepo.find({
+    return this.deps.chapterRepo.find({
       order: { id: 'ASC' },
     });
   }
 
   async createChapter(name: string, subjectId: string): Promise<Chapter> {
-    const subject = await this.subjectRepo.findOne({ where: { id: subjectId } });
+    const subject = await this.deps.subjectRepo.findOne({ where: { id: subjectId } });
     if (!subject) {
       throw new NotFoundException('Subject not found');
     }
 
-    // Check if chapter already exists in this subject
-    const existingChapter = await this.chapterRepo.findOne({
+    const existingChapter = await this.deps.chapterRepo.findOne({
       where: { name, subjectId },
     });
     if (existingChapter) {
       throw new BadRequestException(`Chapter "${name}" already exists in this subject`);
     }
 
-    // Get the next chapter number for this subject
-    const existingChapters = await this.chapterRepo.find({ where: { subjectId } });
+    const existingChapters = await this.deps.chapterRepo.find({ where: { subjectId } });
     const chapterNumber = existingChapters.length + 1;
 
-    const chapter = this.chapterRepo.create({ name, subject, subjectId, chapterNumber });
-    const saved = await this.chapterRepo.save(chapter);
-    await this.clearQuizCaches();
+    const chapter = this.deps.chapterRepo.create({ name, subject, subjectId, chapterNumber });
+    const saved = await this.deps.chapterRepo.save(chapter);
+    await this.invalidateContentCaches();
     return saved;
   }
 
   async updateChapter(id: string, dto: { name?: string; subjectId?: string }): Promise<Chapter> {
-    const chapter = await this.chapterRepo.findOne({ where: { id } });
+    const chapter = await this.deps.chapterRepo.findOne({ where: { id } });
     if (!chapter) {
       throw new NotFoundException('Chapter not found');
     }
@@ -211,13 +179,13 @@ export class QuizMcqService {
     if (dto.subjectId !== undefined) {
       chapter.subjectId = dto.subjectId;
     }
-    const saved = await this.chapterRepo.save(chapter);
-    await this.clearQuizCaches();
+    const saved = await this.deps.chapterRepo.save(chapter);
+    await this.invalidateContentCaches();
     return saved;
   }
 
   async deleteChapter(id: string): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const queryRunner = this.deps.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -230,16 +198,11 @@ export class QuizMcqService {
         throw new NotFoundException('Chapter not found');
       }
 
-      // Delete all questions in chapter first
       await queryRunner.manager.delete(Question, { chapter: { id } });
-
-      // Then delete the chapter
       await queryRunner.manager.delete(Chapter, { id });
 
       await queryRunner.commitTransaction();
-
-      // Clear cache after successful delete
-      await this.clearQuizCaches();
+      await this.invalidateContentCaches();
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
@@ -249,14 +212,16 @@ export class QuizMcqService {
   }
 
   async findAllQuestionsByChapter(chapterId: string): Promise<{ data: Question[]; total: number }> {
-    const data = await this.questionRepo.find({
+    const data = await this.deps.itemRepo.find({
       where: { chapter: { id: chapterId }, status: ContentStatus.PUBLISHED },
       order: { updatedAt: 'DESC' },
     });
     return { data, total: data.length };
   }
 
-  async findAllQuestions(
+  // ==================== QUESTIONS ====================
+
+  findAllQuestions(
     pagination: PaginationDto,
     filters: {
       status?: ContentStatus;
@@ -265,58 +230,99 @@ export class QuizMcqService {
       search?: string;
       subjectSlug?: string;
     }
-  ): Promise<{ data: Question[]; total: number; totalPages: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 0;
+  ) {
+    return this.findItems(pagination, filters);
+  }
 
-    const cacheKey = this.CACHE_KEYS.QUESTIONS(
-      filters.subjectSlug || 'all',
-      filters.chapter || 'all',
-      filters.level || 'all',
-      filters.status || 'all',
-      page,
-      limit
+  findRandomQuestions(opts: {
+    level?: string;
+    chapterId?: string;
+    subjectSlug?: string;
+    count?: number;
+  }) {
+    return this.findRandomItems(opts);
+  }
+
+  async findAllRandomQuestionsByLevel(level: string): Promise<{ data: Question[]; total: number }> {
+    if (!VALID_LEVELS.includes(level as QuestionLevel)) {
+      throw new BadRequestException(`Invalid level: ${level}`);
+    }
+    return this.findRandomItems({ level, count: 50 });
+  }
+
+  async findAllMixedQuestions(limit: number = 50): Promise<{ data: Question[]; total: number }> {
+    return this.findRandomItems({ count: limit });
+  }
+
+  createQuestion(dto: CreateQuestionDto) {
+    return this.createItem(dto as unknown as Record<string, any>);
+  }
+
+  createQuestionsBulkFromImport(dto: BulkQuestionDto) {
+    if (!dto.questions || dto.questions.length === 0) {
+      throw new BadRequestException('No questions provided for bulk creation');
+    }
+    return this.importItems(dto.questions as unknown as Record<string, any>[], dto.subjectName);
+  }
+
+  updateQuestion(id: string, dto: Partial<CreateQuestionDto>) {
+    return this.updateItem(id, dto as Record<string, any>);
+  }
+
+  deleteQuestion(id: string): Promise<void> {
+    return this.deleteItem(id);
+  }
+
+  // ==================== BULK ACTIONS ====================
+
+  async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
+    this.logger.log(`[QuizMcqService] Executing bulk ${action} on ${ids.length} questions`);
+
+    const result = await this.bulkActionService.executeBulkAction(
+      this.deps.itemRepo,
+      this.deps.itemAlias,
+      ids,
+      action
     );
 
-    return this.cacheService.getOrSet(
-      cacheKey,
-      async () => {
-        const query = this.questionRepo
-          .createQueryBuilder('question')
-          .leftJoinAndSelect('question.chapter', 'chapter')
-          .leftJoinAndSelect('chapter.subject', 'subject');
+    if (result.succeeded > 0) {
+      await this.invalidateContentCaches();
+      this.logger.log(`[QuizMcqService] Cache invalidated after bulk ${action}`);
+    }
 
-        if (filters.status != null) {
-          query.andWhere('question.status = :status', { status: filters.status });
-        }
+    return result;
+  }
 
-        if (filters.level) {
-          query.andWhere('question.level = :level', { level: filters.level });
-        }
+  async getStatusCountsBySubject(subjectSlug: string): Promise<StatusCountResponse> {
+    const subject = await this.deps.subjectRepo.findOne({ where: { slug: subjectSlug } });
+    if (!subject) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
 
-        if (filters.chapter) {
-          query.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
-        }
+    const chapters = await this.deps.chapterRepo.find({ where: { subjectId: subject.id } });
+    const chapterIds = chapters.map((c) => c.id);
 
-        if (filters.search) {
-          query.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
-        }
+    if (chapterIds.length === 0) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
 
-        if (filters.subjectSlug) {
-          query.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
-        }
+    const statusCounts = await this.deps.itemRepo
+      .createQueryBuilder('question')
+      .select('question.status', 'status')
+      .addSelect('CAST(COUNT(*) AS INT)', 'count')
+      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
+      .groupBy('question.status')
+      .getRawMany();
 
-        if (limit > 0) {
-          query.skip((page - 1) * limit).take(limit);
-        }
+    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
+    statusCounts.forEach((row: { status: string; count: number }) => {
+      counts.total += row.count;
+      if (row.status in counts) {
+        (counts as any)[row.status] = row.count;
+      }
+    });
 
-        const [data, total] = await query.orderBy('question.updatedAt', 'DESC').getManyAndCount();
-
-        const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
-        return { data, total, totalPages };
-      },
-      this.CACHE_TTL.QUESTIONS
-    );
+    return counts;
   }
 
   async getFilterCounts(filters: {
@@ -346,7 +352,7 @@ export class QuizMcqService {
       filters.status || 'all'
     );
 
-    return this.cacheService.getOrSet(
+    return this.cache.getOrSet(
       cacheKey,
       async () => {
         // Parent-only cascading rule:
@@ -355,7 +361,6 @@ export class QuizMcqService {
         // Level counts: Subject + Chapter filters
         // Status counts: Subject + Chapter + Level filters
 
-        // Helper to apply filters based on hierarchy position
         const applyParentFilters = (
           query: any,
           includeSubject: boolean,
@@ -381,19 +386,11 @@ export class QuizMcqService {
         };
 
         // 1. SUBJECT COUNTS: No parent filters (always show totals)
-        let subjectResults: {
-          id: string;
-          name: string;
-          slug: string;
-          emoji: string;
-          category: string;
-          count: number;
-        }[] = [];
-        const allSubjects = await this.subjectRepo.find();
+        const allSubjects = await this.deps.subjectRepo.find();
         const subjectCountMap = new Map<string, number>();
         allSubjects.forEach((s) => subjectCountMap.set(s.slug, 0));
 
-        const subjectQuery = this.questionRepo
+        const subjectQuery = this.deps.itemRepo
           .createQueryBuilder('question')
           .leftJoin('question.chapter', 'chapter')
           .leftJoin('chapter.subject', 'subject')
@@ -401,13 +398,12 @@ export class QuizMcqService {
           .addSelect('COUNT(*)', 'count')
           .where('subject.slug IS NOT NULL');
 
-        // Subject counts: NO parent filters applied
         const subjectRaw = await subjectQuery.groupBy('subject.slug').getRawMany();
         subjectRaw.forEach((r: { slug: string; count: string }) => {
           subjectCountMap.set(r.slug, parseInt(r.count, 10));
         });
-        // Build full subject data with counts
-        subjectResults = allSubjects.map((s) => ({
+
+        const subjectResults = allSubjects.map((s) => ({
           id: s.id,
           name: s.name,
           slug: s.slug,
@@ -417,21 +413,18 @@ export class QuizMcqService {
         }));
 
         // 2. CHAPTER COUNTS: Subject filter only
-        // Return ALL chapters with their question counts (0 if no questions)
-        let chapterResults: { id: string; name: string; count: number; subjectId: string }[] = [];
-
-        // Get all chapters first
         let chaptersToShow: Chapter[] = [];
         if (filters.subject && filters.subject !== 'all') {
-          const subject = await this.subjectRepo.findOne({ where: { slug: filters.subject } });
+          const subject = await this.deps.subjectRepo.findOne({ where: { slug: filters.subject } });
           if (subject) {
-            chaptersToShow = await this.chapterRepo.find({ where: { subjectId: subject.id } });
+            chaptersToShow = await this.deps.chapterRepo.find({
+              where: { subjectId: subject.id },
+            });
           }
         } else {
-          chaptersToShow = await this.chapterRepo.find({ relations: ['subject'] });
+          chaptersToShow = await this.deps.chapterRepo.find({ relations: ['subject'] });
         }
 
-        // Create a map of all chapters with initial count of 0
         const chapterCountMap = new Map<
           string,
           { name: string; subjectId: string; count: number }
@@ -440,21 +433,17 @@ export class QuizMcqService {
           chapterCountMap.set(c.id, { name: c.name, subjectId: c.subjectId, count: 0 });
         });
 
-        // Get question counts for chapters that have questions
         if (chaptersToShow.length > 0) {
           const chapterIds = chaptersToShow.map((c) => c.id);
-          const chapterQuery = this.questionRepo
+          const chapterQuery = this.deps.itemRepo
             .createQueryBuilder('question')
             .select('question.chapterId', 'id')
             .addSelect('COUNT(*)', 'count')
             .where('question.chapterId IN (:...chapterIds)', { chapterIds });
 
-          // Chapter counts: Subject filter only (no chapter, level, status filters)
           applyParentFilters(chapterQuery, false, false, false, false);
 
           const chapterRaw = await chapterQuery.groupBy('question.chapterId').getRawMany();
-
-          // Update counts for chapters that have questions
           chapterRaw.forEach((r: { id: string; count: string }) => {
             const existing = chapterCountMap.get(r.id);
             if (existing) {
@@ -463,8 +452,7 @@ export class QuizMcqService {
           });
         }
 
-        // Convert map to array
-        chapterResults = Array.from(chapterCountMap.entries()).map(([id, data]) => ({
+        const chapterResults = Array.from(chapterCountMap.entries()).map(([id, data]) => ({
           id,
           name: data.name,
           count: data.count,
@@ -472,33 +460,28 @@ export class QuizMcqService {
         }));
 
         // 3. LEVEL COUNTS: Subject + Chapter filters
-        const levelQuery = this.questionRepo
+        const levelQuery = this.deps.itemRepo
           .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject')
           .select('question.level', 'level')
           .addSelect('COUNT(*)', 'count');
 
-        // Level counts: Subject + Chapter filters only
         applyParentFilters(levelQuery, true, true, false, false);
-
         const levelResults = await levelQuery.groupBy('question.level').getRawMany();
 
         // 4. STATUS COUNTS: Subject + Chapter + Level filters
-        const statusQuery = this.questionRepo
+        const statusQuery = this.deps.itemRepo
           .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject')
           .select('question.status', 'status')
           .addSelect('COUNT(*)', 'count');
 
-        // Status counts: Subject + Chapter + Level filters only
         applyParentFilters(statusQuery, true, true, true, false);
-
         const statusResults = await statusQuery.groupBy('question.status').getRawMany();
 
-        // Calculate total with all filters (for table data count)
-        const totalQuery = this.questionRepo
+        const totalQuery = this.deps.itemRepo
           .createQueryBuilder('question')
           .leftJoinAndSelect('question.chapter', 'chapter')
           .leftJoinAndSelect('chapter.subject', 'subject');
@@ -522,376 +505,8 @@ export class QuizMcqService {
           total,
         };
       },
-      this.CACHE_TTL.FILTER_COUNTS
+      this.FILTER_COUNTS_TTL_S
     );
-  }
-
-  /**
-   * Capacity-plan A2: index-seek random selection via shared
-   * pickRandomByWeight (random_weight column + wrap-around).
-   */
-  async findRandomQuestions(opts: {
-    level?: string;
-    chapterId?: string;
-    subjectSlug?: string;
-    count?: number;
-  }): Promise<{ data: Question[]; total: number }> {
-    const count = Math.min(Math.max(opts.count ?? 20, 1), 50);
-
-    const data = await pickRandomByWeight(this.questionRepo, 'question', {
-      count,
-      filters: (qb) => {
-        qb.leftJoinAndSelect('question.chapter', 'chapter')
-          .leftJoinAndSelect('chapter.subject', 'subject')
-          .where('question.status = :status', { status: ContentStatus.PUBLISHED });
-        if (opts.level) {
-          qb.andWhere('question.level = :level', { level: opts.level });
-        }
-        if (opts.chapterId) {
-          qb.andWhere('question.chapterId = :chapterId', { chapterId: opts.chapterId });
-        }
-        if (opts.subjectSlug) {
-          qb.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
-        }
-      },
-    });
-
-    return { data, total: data.length };
-  }
-
-  async findAllRandomQuestionsByLevel(level: string): Promise<{ data: Question[]; total: number }> {
-    const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
-    if (!validLevels.includes(level)) {
-      throw new BadRequestException(`Invalid level: ${level}`);
-    }
-
-    return this.findRandomQuestions({ level, count: 50 });
-  }
-
-  async findAllMixedQuestions(limit: number = 50): Promise<{ data: Question[]; total: number }> {
-    return this.findRandomQuestions({ count: limit });
-  }
-
-  async createQuestion(dto: CreateQuestionDto): Promise<Question> {
-    const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-    if (!chapter) {
-      throw new NotFoundException('Chapter not found');
-    }
-
-    // Derive question type from level: extreme = open-ended, others = mcq
-    const levelStr = String(dto.level);
-    const isOpenEnded = levelStr === 'extreme';
-
-    // Validate based on level
-    if (!isOpenEnded && !dto.correctLetter) {
-      throw new BadRequestException('MCQ questions require correctLetter (A/B/C/D)');
-    }
-    if (isOpenEnded && dto.correctLetter) {
-      throw new BadRequestException('Open-ended questions must have correctLetter: null');
-    }
-    if (!isOpenEnded && (!dto.options || dto.options.length < 2)) {
-      throw new BadRequestException('MCQ requires at least 2 options');
-    }
-
-    const question = this.questionRepo.create({
-      question: dto.question,
-      correctAnswer: dto.correctAnswer,
-      correctLetter: isOpenEnded ? null : dto.correctLetter,
-      options: isOpenEnded ? null : dto.options || [],
-      level: dto.level,
-      chapter,
-      status: dto.status || ContentStatus.PUBLISHED,
-    });
-    const saved = await this.questionRepo.save(question);
-    await this.clearQuizCaches();
-    return saved;
-  }
-
-  async createQuestionsBulkFromImport(
-    dto: BulkQuestionDto
-  ): Promise<{ count: number; errors: string[] }> {
-    const { subjectName: defaultSubjectName, questions } = dto;
-    const errors: string[] = [];
-
-    if (!questions || questions.length === 0) {
-      throw new BadRequestException('No questions provided for bulk creation');
-    }
-
-    const CHUNK_SIZE = 100;
-    let totalCreated = 0;
-
-    for (let i = 0; i < questions.length; i += CHUNK_SIZE) {
-      const chunk = questions.slice(i, i + CHUNK_SIZE);
-      const result = await this.processBulkImportChunk(chunk, defaultSubjectName, errors, i);
-      totalCreated += result.count;
-    }
-
-    await this.clearQuizCaches();
-    return { count: totalCreated, errors };
-  }
-
-  private async processBulkImportChunk(
-    items: BulkQuestionItemDto[],
-    defaultSubjectName: string | undefined,
-    errors: string[],
-    offset: number
-  ): Promise<{ count: number }> {
-    return await this.dataSource.transaction(async (manager) => {
-      // Filter valid items FIRST to avoid creating empty chapters/subjects
-      const validItems = items.filter((q) => q.question && q.chapterName);
-      const invalidItems = items.filter((q) => !q.question || !q.chapterName);
-
-      // Report errors for invalid items
-      invalidItems.forEach((item, i) => {
-        const originalIndex = items.indexOf(item);
-        errors.push(`Row ${offset + originalIndex + 1}: Missing question or chapter name`);
-      });
-
-      const allSubjectNames = [
-        ...new Set(validItems.map((q) => q.subjectName || defaultSubjectName || 'General')),
-      ];
-      const subjectMap = new Map<string, Subject>();
-
-      for (const name of allSubjectNames) {
-        let subject = await manager.findOne(Subject, { where: { name } });
-        if (!subject) {
-          subject = await manager.save(Subject, {
-            name,
-            slug: name
-              .toLowerCase()
-              .replace(/\s+/g, '-')
-              .replace(/[^a-z0-9-]/g, ''),
-            emoji: '📚',
-            isActive: true,
-          });
-        }
-        subjectMap.set(name, subject);
-      }
-
-      const chapterKeys = [
-        ...new Set(
-          validItems.map(
-            (q) => `${q.chapterName}|${q.subjectName || defaultSubjectName || 'General'}`
-          )
-        ),
-      ];
-      const chapterMap = new Map<string, Chapter>();
-
-      for (const key of chapterKeys) {
-        const [chapterName, subjectName] = key.split('|');
-        const subject = subjectMap.get(subjectName || 'General');
-        if (!subject) continue;
-
-        let chapter = await manager.findOne(Chapter, {
-          where: { name: chapterName, subjectId: subject.id },
-        });
-        if (!chapter) {
-          chapter = await manager.save(Chapter, {
-            name: chapterName,
-            subjectId: subject.id,
-            chapterNumber: 0,
-          });
-        }
-        chapterMap.set(key, chapter);
-      }
-
-      let count = 0;
-      for (let i = 0; i < validItems.length; i++) {
-        const item = validItems[i];
-
-        const subjectName = item.subjectName || defaultSubjectName || 'General';
-        const subject = subjectMap.get(subjectName);
-        const chapterKey = `${item.chapterName}|${subjectName}`;
-        const chapter = chapterMap.get(chapterKey);
-
-        if (!subject || !chapter) {
-          errors.push(`Row ${offset + i + 1}: Could not find/create subject or chapter`);
-          continue;
-        }
-
-        const isExtreme = item.level === 'extreme';
-        const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
-
-        if (item.level && !validLevels.includes(item.level)) {
-          errors.push(`Row ${offset + i + 1}: Invalid level '${item.level}'`);
-          continue;
-        }
-
-        let options: string[] | null = null;
-        let correctLetter: string | null = null;
-        let correctAnswer = '';
-
-        if (!isExtreme) {
-          const letter = item.correctAnswer?.toUpperCase() || 'A';
-          correctLetter = ['A', 'B', 'C', 'D'].includes(letter) ? letter : 'A';
-
-          const opts = [item.optionA, item.optionB, item.optionC, item.optionD].filter(Boolean);
-          options = opts as string[];
-
-          const letterIndex = ['A', 'B', 'C', 'D'].indexOf(correctLetter || '');
-          correctAnswer = options[letterIndex] || options[0] || '';
-        } else {
-          options = null;
-          correctLetter = null;
-          correctAnswer = item.correctAnswer || '';
-        }
-
-        const questionLevel = (item.level || 'easy') as
-          | 'easy'
-          | 'medium'
-          | 'hard'
-          | 'expert'
-          | 'extreme';
-        const questionStatus =
-          item.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
-        const questionOrder = offset + i; // Use row index as order
-
-        try {
-          await manager.save(Question, {
-            question: item.question,
-            options,
-            correctAnswer,
-            correctLetter,
-            level: questionLevel,
-            status: questionStatus,
-            chapterId: chapter.id,
-            order: questionOrder,
-          });
-          count++;
-        } catch (e: any) {
-          errors.push(`Row ${offset + i + 1}: ${e.message}`);
-        }
-      }
-
-      return { count };
-    });
-  }
-
-  async updateQuestion(id: string, dto: Partial<CreateQuestionDto>): Promise<Question> {
-    const question = await this.questionRepo.findOne({ where: { id } });
-    if (!question) {
-      throw new NotFoundException('Question not found');
-    }
-
-    // Update fields with proper empty string handling
-    if (dto.question !== undefined) {
-      question.question = dto.question;
-    }
-    if (dto.correctAnswer !== undefined) {
-      question.correctAnswer = dto.correctAnswer;
-    }
-    if (dto.correctLetter !== undefined) {
-      question.correctLetter = dto.correctLetter || null;
-    }
-    if (dto.options !== undefined) {
-      // Derive from level to determine if open-ended
-      const level = dto.level != null || question.level;
-      question.options = level === 'extreme' ? null : dto.options;
-    }
-    if (dto.level !== undefined) {
-      // Validate level if provided
-      const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
-      if (!validLevels.includes(dto.level)) {
-        throw new BadRequestException(
-          `Invalid level: ${dto.level}. Valid values: ${validLevels.join(', ')}`
-        );
-      }
-      question.level = dto.level;
-      // Also update options based on new level
-      if (String(dto.level) === 'extreme') {
-        question.options = null;
-        question.correctLetter = null;
-      }
-    }
-    if (dto.chapterId !== undefined) {
-      const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (!chapter) {
-        throw new NotFoundException('Chapter not found');
-      }
-      question.chapter = chapter;
-    }
-
-    const saved = await this.questionRepo.save(question);
-    // Invalidate cache after update
-    await this.clearQuizCaches();
-    return saved;
-  }
-
-  async deleteQuestion(id: string): Promise<void> {
-    const result = await this.questionRepo.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Question not found');
-    }
-    // Invalidate cache after delete
-    await this.clearQuizCaches();
-  }
-
-  // ==================== BULK ACTIONS ====================
-
-  /**
-   * Execute bulk action on questions
-   * @param ids - Array of question IDs
-   * @param action - Bulk action type
-   * @returns BulkActionResult with operation results
-   */
-  async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(`[QuizMcqService] Executing bulk ${action} on ${ids.length} questions`);
-
-    const result = await this.bulkActionService.executeBulkAction(
-      this.questionRepo,
-      'question',
-      ids,
-      action
-    );
-
-    // Invalidate cache if any changes were made
-    if (result.succeeded > 0) {
-      await this.clearQuizCaches();
-      this.logger.log(`[QuizMcqService] Cache invalidated after bulk ${action}`);
-    }
-
-    return result;
-  }
-
-  /**
-   * Get status counts for a specific subject
-   * @param subjectSlug - The subject slug
-   * @returns StatusCountResponse with counts by status for the subject
-   */
-  async getStatusCountsBySubject(subjectSlug: string): Promise<StatusCountResponse> {
-    const subject = await this.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const chapters = await this.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map((c) => c.id);
-
-    if (chapterIds.length === 0) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    // Single query with GROUP BY for all status counts
-    const statusCounts = await this.questionRepo
-      .createQueryBuilder('question')
-      .select('question.status', 'status')
-      .addSelect('CAST(COUNT(*) AS INT)', 'count')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('question.status')
-      .getRawMany();
-
-    // Initialize with defaults
-    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
-
-    // Sum up total and populate individual statuses
-    statusCounts.forEach((row: { status: string; count: number }) => {
-      counts.total += row.count;
-      if (row.status in counts) {
-        (counts as any)[row.status] = row.count;
-      }
-    });
-
-    return counts;
   }
 
   async exportQuestionsToCSV(filters: {
@@ -900,7 +515,7 @@ export class QuizMcqService {
     chapter?: string;
     status?: ContentStatus;
   }): Promise<{ csv: string; filename: string }> {
-    const queryBuilder = this.questionRepo
+    const queryBuilder = this.deps.itemRepo
       .createQueryBuilder('question')
       .leftJoinAndSelect('question.chapter', 'chapter')
       .leftJoinAndSelect('chapter.subject', 'subject');
@@ -921,7 +536,8 @@ export class QuizMcqService {
     const questions = await queryBuilder.orderBy('question.order', 'ASC').getMany();
 
     const subjectName = filters.subjectSlug
-      ? (await this.subjectRepo.findOne({ where: { slug: filters.subjectSlug } }))?.name || 'All'
+      ? (await this.deps.subjectRepo.findOne({ where: { slug: filters.subjectSlug } }))?.name ||
+        'All'
       : 'All';
 
     const escapeCsvValue = (val: string): string => {
@@ -967,5 +583,160 @@ export class QuizMcqService {
     const filename = `questions_export_${subjectName.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
 
     return { csv, filename };
+  }
+
+  // ==================== CONTENT-SERVICE HOOKS ====================
+
+  protected applyListFilters(qb: SelectQueryBuilder<any>, filters: ContentListFilters): void {
+    if (filters.status != null) {
+      qb.andWhere('question.status = :status', { status: filters.status });
+    }
+    if (filters.level) {
+      qb.andWhere('question.level = :level', { level: filters.level });
+    }
+    if (filters.chapter) {
+      qb.andWhere('chapter.name = :chapter', { chapter: filters.chapter });
+    }
+    if (filters.search) {
+      qb.andWhere('question.question ILIKE :search', { search: `%${filters.search}%` });
+    }
+    if (filters.subjectSlug) {
+      qb.andWhere('subject.slug = :subjectSlug', { subjectSlug: filters.subjectSlug });
+    }
+  }
+
+  protected applyRandomFilters(qb: SelectQueryBuilder<any>, opts: ContentRandomOptions): void {
+    if (opts.level) {
+      qb.andWhere('question.level = :level', { level: opts.level });
+    }
+    if (opts.chapterId) {
+      qb.andWhere('question.chapterId = :chapterId', { chapterId: opts.chapterId });
+    }
+    if (opts.subjectSlug) {
+      qb.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
+    }
+  }
+
+  protected async validateAndBuildCreate(dto: Record<string, any>): Promise<{
+    data: Record<string, unknown>;
+    chapterId: string;
+  }> {
+    const chapterId = dto.chapterId as string;
+    if (!chapterId) {
+      throw new BadRequestException('chapterId is required');
+    }
+
+    // Derive question type from level: extreme = open-ended, others = mcq
+    const isOpenEnded = String(dto.level) === 'extreme';
+
+    if (!isOpenEnded && !dto.correctLetter) {
+      throw new BadRequestException('MCQ questions require correctLetter (A/B/C/D)');
+    }
+    if (isOpenEnded && dto.correctLetter) {
+      throw new BadRequestException('Open-ended questions must have correctLetter: null');
+    }
+    if (!isOpenEnded && (!dto.options || dto.options.length < 2)) {
+      throw new BadRequestException('MCQ requires at least 2 options');
+    }
+
+    return {
+      chapterId,
+      data: {
+        question: dto.question,
+        correctAnswer: dto.correctAnswer,
+        correctLetter: isOpenEnded ? null : dto.correctLetter,
+        options: isOpenEnded ? null : dto.options || [],
+        level: dto.level,
+        status: dto.status || ContentStatus.PUBLISHED,
+      },
+    };
+  }
+
+  protected async applyUpdate(item: Question, dto: Record<string, any>): Promise<void> {
+    if (dto.question !== undefined) {
+      item.question = dto.question;
+    }
+    if (dto.correctAnswer !== undefined) {
+      item.correctAnswer = dto.correctAnswer;
+    }
+    if (dto.correctLetter !== undefined) {
+      item.correctLetter = dto.correctLetter || null;
+    }
+    if (dto.options !== undefined) {
+      // NOTE: legacy dead-logic preserved verbatim ([P0], see TODO.md backlog):
+      // `dto.level != null || question.level` is always truthy.
+      const level = dto.level != null || item.level;
+      item.options = level === 'extreme' ? null : dto.options;
+    }
+    if (dto.level !== undefined) {
+      if (!VALID_LEVELS.includes(dto.level)) {
+        throw new BadRequestException(
+          `Invalid level: ${dto.level}. Valid values: ${VALID_LEVELS.join(', ')}`
+        );
+      }
+      item.level = dto.level;
+      if (String(dto.level) === 'extreme') {
+        item.options = null;
+        item.correctLetter = null;
+      }
+    }
+  }
+
+  protected getImportRowTaxonomy(
+    row: Record<string, any>,
+    defaultSubjectName?: string
+  ): ContentImportRowTaxonomy | null {
+    if (!row.question || !row.chapterName) {
+      return null;
+    }
+    return {
+      subjectName: row.subjectName || defaultSubjectName || 'General',
+      chapterName: row.chapterName,
+    };
+  }
+
+  protected buildImportItem(
+    row: Record<string, any>,
+    ids: { chapterId: string },
+    order: number
+  ): Record<string, unknown> | string {
+    const isExtreme = row.level === 'extreme';
+
+    if (row.level && !VALID_LEVELS.includes(row.level)) {
+      return `Invalid level '${row.level}'`;
+    }
+
+    let options: string[] | null = null;
+    let correctLetter: string | null = null;
+    let correctAnswer = '';
+
+    if (!isExtreme) {
+      const letter = row.correctAnswer?.toUpperCase() || 'A';
+      correctLetter = ['A', 'B', 'C', 'D'].includes(letter) ? letter : 'A';
+
+      const opts = [row.optionA, row.optionB, row.optionC, row.optionD].filter(Boolean);
+      options = opts as string[];
+
+      const letterIndex = ['A', 'B', 'C', 'D'].indexOf(correctLetter || '');
+      correctAnswer = options[letterIndex] || options[0] || '';
+    } else {
+      options = null;
+      correctLetter = null;
+      correctAnswer = row.correctAnswer || '';
+    }
+
+    const questionLevel = (row.level || 'easy') as QuestionLevel;
+    const questionStatus = row.status === 'draft' ? ContentStatus.DRAFT : ContentStatus.PUBLISHED;
+
+    return {
+      question: row.question,
+      options,
+      correctAnswer,
+      correctLetter,
+      level: questionLevel,
+      status: questionStatus,
+      chapterId: ids.chapterId,
+      order,
+    };
   }
 }
