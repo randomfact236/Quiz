@@ -53,6 +53,8 @@ Definitive scale/design reference. Execution order lives in [build-forward-plan]
 - **C2. Deep health checks:** Redis ping + lightweight PG write check (not just `SELECT 1`); cache outage degrades gracefully (reads already fall through).
 - **C3. Global JwtAuthGuard default-deny** with `_Public()` opt-outs (auth-users doc §roadmap).
 
+> ⚠️ Security note (found during Track C): apps/backend/.env was tracked in git and pushed to remote, exposing DB/Redis credentials in history. Untracked via `git rm --cached`; added to .gitignore. Dev/local credentials were regenerated. Before any staging/production deploy, ALL credentials must be rotated for real (not dev-generated) and remote git history should be evaluated for scrubbing (filter-repo/BFG).
+
 ### Track D — Player Session Pipeline (post-launch V2)
 
 - `POST /sessions` (start) · `PATCH /sessions/:id/answer` (background sync) · `POST /sessions/:id/complete` (finish, server-authoritative score).
