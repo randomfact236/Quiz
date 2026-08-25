@@ -36,6 +36,7 @@ export const STORAGE_KEYS = {
   CURRENT_SESSION: `${PREFIX}current-session`,
   QUIZ_HISTORY: `${PREFIX}quiz-history`,
   QUIZ_RESUME_SESSION: `${PREFIX}quiz-resume-session`,
+  QUIZ_RESUME_QUESTIONS: `${PREFIX}quiz-resume-questions`,
   CHAPTER_PROGRESS: `${PREFIX}chapter-progress`,
   SUBJECT_PROGRESS: `${PREFIX}subject-progress`,
   ACHIEVEMENTS: `${PREFIX}achievements`,

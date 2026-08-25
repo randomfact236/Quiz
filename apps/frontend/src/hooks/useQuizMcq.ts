@@ -22,7 +22,9 @@ import {
   loadQuizResume,
   clearQuizResume,
   isQuizResumeMatch,
-  QuizResumeState,
+  saveQuizResumeQuestions,
+  type QuizResumeState,
+  type QuizResumeIdentity,
 } from '@/lib/quiz-mcq-resume';
 import {
   getRandomQuestions,
@@ -273,6 +275,19 @@ export function useQuizMcq(
       }));
 
       saveCurrentSession(sessionRef.current);
+
+      // Write the immutable question snapshot once (two-key resume: the
+      // lightweight progress key never re-serializes questions).
+      const initialMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+      saveQuizResumeQuestions(
+        {
+          subject,
+          chapter,
+          level,
+          mode: initialMode as QuizResumeIdentity['mode'],
+        },
+        all
+      );
     };
 
     load();
@@ -425,8 +440,6 @@ export function useQuizMcq(
       answers: state.answers,
       score: state.score,
       manuallySkipped: Array.from(state.manuallySkipped),
-      availableQuestions: state.availableQuestions,
-      savedAt: Date.now(),
       startedAt: new Date(state.startTime).toISOString(),
     });
   }, [
