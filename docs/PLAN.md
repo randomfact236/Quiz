@@ -3,6 +3,8 @@
 Starting point: clean `main` (single branch, no baggage), ~78% code-complete, quality C+/B−.
 Full details per area live in [features/](features/README.md) and [platform/](platform/README as needed); this file is the execution order.
 
+> **Parallel quality track:** each phase below has exit criteria in [platform/code-quality-plan.md](platform/code-quality-plan.md) §1 (coverage ratchet, file-size budget, dedup milestones). Feature work and quality work advance together — see Working Rules at the end.
+
 ## Phase 0 — Stabilize the baseline (before any new features)
 
 1. **Commit or deliberately discard the uncommitted source changes** currently in the working tree (backend quiz/riddle-mcq services, admin page, QuizContainer rename) — do not build on an ambiguous base.
@@ -11,16 +13,16 @@ Full details per area live in [features/](features/README.md) and [platform/](pl
 
 ## Phase 1 — P0 correctness bugs (user-visible breakage)
 
-| Bug | Where | Fix reference |
-|---|---|---|
-| MCQ review marks correct answers wrong | QuestionReview.tsx:32 | features/quiz.md §D1 |
-| Extreme answers always scored incorrect | results/page.tsx:59 | features/quiz.md §D2 |
-| Riddle stats swapped/mismatched → counts show 0 | riddle-mcq-stats.service.ts:36-40 | features/riddle-mcq.md §A1 |
-| Subject-wise riddle play broken | play/page.tsx:81 param split | features/riddle-mcq.md §B1 |
-| Drafts leak via by-subject endpoint | question.service.ts:63-81 | features/riddle-mcq.md §A2 |
-| Dead `/users/profile` endpoints | users.controller.ts | features/auth-users.md §3.1 |
-| Guest demographics 404 | missing public endpoint | features/auth-users.md §3.5 |
-| `updateQuestion` extreme logic dead | quiz.service.ts:776 | features/quiz.md §Backend bugs |
+| Bug                                             | Where                             | Fix reference                  |
+| ----------------------------------------------- | --------------------------------- | ------------------------------ |
+| MCQ review marks correct answers wrong          | QuestionReview.tsx:32             | features/quiz.md §D1           |
+| Extreme answers always scored incorrect         | results/page.tsx:59               | features/quiz.md §D2           |
+| Riddle stats swapped/mismatched → counts show 0 | riddle-mcq-stats.service.ts:36-40 | features/riddle-mcq.md §A1     |
+| Subject-wise riddle play broken                 | play/page.tsx:81 param split      | features/riddle-mcq.md §B1     |
+| Drafts leak via by-subject endpoint             | question.service.ts:63-81         | features/riddle-mcq.md §A2     |
+| Dead `/users/profile` endpoints                 | users.controller.ts               | features/auth-users.md §3.1    |
+| Guest demographics 404                          | missing public endpoint           | features/auth-users.md §3.5    |
+| `updateQuestion` extreme logic dead             | quiz.service.ts:776               | features/quiz.md §Backend bugs |
 
 Each fix ships with a regression test (starts the test suite with real content).
 
@@ -30,7 +32,7 @@ Each fix ships with a regression test (starts the test suite with real content).
 2. Refresh tokens: hash at rest, add expiry, rotate on use.
 3. Move OAuth tokens out of redirect URL (one-time code exchange).
 4. Public `POST /guest-users/demographics`; enum-constrained roles; DTO validation on admin payloads.
-Reference: features/auth-users.md roadmap; platform/backend-core.md §3.
+   Reference: features/auth-users.md roadmap; platform/backend-core.md §3.
 
 ## Phase 3 — Integration debt (connect what exists but isn't wired)
 
@@ -53,4 +55,5 @@ Leaderboards/high-scores · JSON import/export · hint tracking · email verific
 
 - One branch per task off `main`; no more backup branches — use commits/tags instead.
 - No commit without green lint/type-check (enforced by Phase 4 CI + husky).
-- New bug found? Add it to the relevant features/*.md doc in the same PR.
+- New bug found? Add it to the relevant features/\*.md doc in the same PR.
+- Quality gates per phase are defined in [platform/code-quality-plan.md](platform/code-quality-plan.md); a phase isn't done until its §1 metrics row passes.

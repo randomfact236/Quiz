@@ -6,35 +6,35 @@ Identity layer: JWT auth, Google OAuth, password reset, user profiles, admin use
 
 ### Backend — auth/
 
-| File | Purpose |
-|---|---|
-| `auth.controller.ts` | `/auth` endpoints: login, register, forgot/reset-password, refresh, demographics, Google OAuth start/callback; @Throttle decorators throughout |
-| `auth.service.ts` | Token generation (JWT + opaque refresh), login with brute-force lockout, registration, Google account linking, hashed reset tokens (SHA-256, 1h expiry) |
-| `brute-force.service.ts` | Redis-backed failed-attempt counter: 5 attempts → 15-min lockout (423), TTL-preserving increments |
-| `jwt.strategy.ts` | Passport JWT from Bearer header, `getOrThrow('JWT_SECRET')`, loads full user per request |
-| `jwt-auth.guard.ts` | Honors `_Public()` decorator override |
-| `google.strategy.ts` | passport-google-oauth20 strategy |
+| File                     | Purpose                                                                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `auth.controller.ts`     | `/auth` endpoints: login, register, forgot/reset-password, refresh, demographics, Google OAuth start/callback; @Throttle decorators throughout          |
+| `auth.service.ts`        | Token generation (JWT + opaque refresh), login with brute-force lockout, registration, Google account linking, hashed reset tokens (SHA-256, 1h expiry) |
+| `brute-force.service.ts` | Redis-backed failed-attempt counter: 5 attempts → 15-min lockout (423), TTL-preserving increments                                                       |
+| `jwt.strategy.ts`        | Passport JWT from Bearer header, `getOrThrow('JWT_SECRET')`, loads full user per request                                                                |
+| `jwt-auth.guard.ts`      | Honors `_Public()` decorator override                                                                                                                   |
+| `google.strategy.ts`     | passport-google-oauth20 strategy                                                                                                                        |
 
 ### Backend — users/ & guest-users/ & admin/users/
 
-| File | Purpose |
-|---|---|
-| `users/users.service.ts` | bcrypt(12) hashing, refresh-token storage/lookup, reset-token helpers, demographics, role update, delete |
-| `users/entities/user.entity.ts` | `users`: unique email, password, name, avatar, role ('user' default), refreshToken, googleId, reset token/expiry, country/sex/ageGroup, lastActive |
-| `users/users.controller.ts` | `/users`: admin list, profile get/update, `:id` get (self-or-admin) |
-| `guest-users/guest-users.service.ts` | findOrCreate by client guestId, demographics, activity touch, count |
-| `guest-users/entities/guest-user.entity.ts` | `guest_users`: unique guestId, demographics, quizAttempts, totalScore |
-| `guest-users/guest-users.controller.ts` | `admin/guest-users` guarded by JwtAuthGuard+AdminGuard |
-| `admin/users/admin-users.controller.ts` | `admin/users`: list, demographics list/update, role change, delete (Jwt+AdminGuard) |
+| File                                        | Purpose                                                                                                                                            |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `users/users.service.ts`                    | bcrypt(12) hashing, refresh-token storage/lookup, reset-token helpers, demographics, role update, delete                                           |
+| `users/entities/user.entity.ts`             | `users`: unique email, password, name, avatar, role ('user' default), refreshToken, googleId, reset token/expiry, country/sex/ageGroup, lastActive |
+| `users/users.controller.ts`                 | `/users`: admin list, profile get/update, `:id` get (self-or-admin)                                                                                |
+| `guest-users/guest-users.service.ts`        | findOrCreate by client guestId, demographics, activity touch, count                                                                                |
+| `guest-users/entities/guest-user.entity.ts` | `guest_users`: unique guestId, demographics, quizAttempts, totalScore                                                                              |
+| `guest-users/guest-users.controller.ts`     | `admin/guest-users` guarded by JwtAuthGuard+AdminGuard                                                                                             |
+| `admin/users/admin-users.controller.ts`     | `admin/users`: list, demographics list/update, role change, delete (Jwt+AdminGuard)                                                                |
 
 ### Frontend
 
-| File | Purpose |
-|---|---|
-| `lib/api-client.ts` | Bearer injection from localStorage, 401→refresh retry (`apps/frontend/src/lib/api-client.ts:16-18` appends `/v1`) |
-| `lib/auth.ts` | authService: login/register/googleLogin/logout/forgot/reset/profile |
-| `components/DemographicsPopup.tsx` | Posts to `/api/v1/auth/demographics` (logged-in) or `/api/v1/guest-users/demographics` (guest) |
-| `contexts/AuthContext` (see `../platform/frontend-core.md`) | Client auth state in localStorage |
+| File                                                        | Purpose                                                                                                           |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `lib/api-client.ts`                                         | Bearer injection from localStorage, 401→refresh retry (`apps/frontend/src/lib/api-client.ts:16-18` appends `/v1`) |
+| `lib/auth.ts`                                               | authService: login/register/googleLogin/logout/forgot/reset/profile                                               |
+| `components/DemographicsPopup.tsx`                          | Posts to `/api/v1/auth/demographics` (logged-in) or `/api/v1/guest-users/demographics` (guest)                    |
+| `contexts/AuthContext` (see `../platform/frontend-core.md`) | Client auth state in localStorage                                                                                 |
 
 ## 2. What Is Done (implemented & working)
 
@@ -70,3 +70,6 @@ Identity layer: JWT auth, Google OAuth, password reset, user profiles, admin use
 3. Refresh-token hardening as a dedicated PR with migration for new columns.
 4. Add unit tests for AuthService (lockout, enumeration, token paths) — zero exist today (see `../platform/testing-quality.md`).
 
+## Code Quality Notes
+
+Standards, budgets, and phase exit criteria: [../platform/code-quality-plan.md](../platform/code-quality-plan.md). Feature-specific debt tracked there in �5.

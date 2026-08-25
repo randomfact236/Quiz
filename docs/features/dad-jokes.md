@@ -4,33 +4,33 @@
 
 ### Backend (`apps/backend/src/dad-jokes/`)
 
-| File | Purpose |
-|---|---|
-| `dad-jokes.module.ts` | Registers 3 controllers, service, TypeORM repos for 5 entities, CacheModule, BulkActionService; module exported for reuse |
-| `dad-jokes.controller.ts` | `@Controller('jokes')` — classic-format endpoints: public list/random/search/categories/vote plus admin CRUD/bulk/bulk-action/status-counts/category CRUD |
-| `dad-jokes-quiz.controller.ts` | `@Controller('jokes')` — quiz-format endpoints: subjects, chapters, per-chapter quiz jokes, random-by-level, mixed; admin CRUD for subjects/chapters/quiz jokes |
-| `dad-jokes-stats.controller.ts` | `GET /jokes/stats/overview` (admin-only) aggregate counts |
-| `dad-jokes-stats.util.ts` | `computeDadJokeStats()` — parallel counts across all five repos |
-| `dad-jokes.service.ts` | All business logic: classic jokes, categories, subjects/chapters/quiz jokes, voting, bulk ops, stats |
-| `entities/dad-joke.entity.ts` | `dad_jokes`: text joke, category FK, ContentStatus (default DRAFT), likes/dislikes counters, timestamps |
-| `entities/joke-category.entity.ts` | `joke_categories`: name, emoji, OneToMany jokes |
-| `entities/joke-subject.entity.ts` | `joke_subjects`: unique slug, name, emoji, description, isActive, order, OneToMany chapters |
-| `entities/joke-chapter.entity.ts` | `joke_chapters`: name, chapterNumber, subject FK, OneToMany quizJokes |
-| `entities/quiz-joke.entity.ts` | `quiz_jokes`: question, options (simple-array), correctAnswer, level enum (easy..extreme), chapter FK, explanation, punchline |
+| File                               | Purpose                                                                                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dad-jokes.module.ts`              | Registers 3 controllers, service, TypeORM repos for 5 entities, CacheModule, BulkActionService; module exported for reuse                                       |
+| `dad-jokes.controller.ts`          | `@Controller('jokes')` — classic-format endpoints: public list/random/search/categories/vote plus admin CRUD/bulk/bulk-action/status-counts/category CRUD       |
+| `dad-jokes-quiz.controller.ts`     | `@Controller('jokes')` — quiz-format endpoints: subjects, chapters, per-chapter quiz jokes, random-by-level, mixed; admin CRUD for subjects/chapters/quiz jokes |
+| `dad-jokes-stats.controller.ts`    | `GET /jokes/stats/overview` (admin-only) aggregate counts                                                                                                       |
+| `dad-jokes-stats.util.ts`          | `computeDadJokeStats()` — parallel counts across all five repos                                                                                                 |
+| `dad-jokes.service.ts`             | All business logic: classic jokes, categories, subjects/chapters/quiz jokes, voting, bulk ops, stats                                                            |
+| `entities/dad-joke.entity.ts`      | `dad_jokes`: text joke, category FK, ContentStatus (default DRAFT), likes/dislikes counters, timestamps                                                         |
+| `entities/joke-category.entity.ts` | `joke_categories`: name, emoji, OneToMany jokes                                                                                                                 |
+| `entities/joke-subject.entity.ts`  | `joke_subjects`: unique slug, name, emoji, description, isActive, order, OneToMany chapters                                                                     |
+| `entities/joke-chapter.entity.ts`  | `joke_chapters`: name, chapterNumber, subject FK, OneToMany quizJokes                                                                                           |
+| `entities/quiz-joke.entity.ts`     | `quiz_jokes`: question, options (simple-array), correctAnswer, level enum (easy..extreme), chapter FK, explanation, punchline                                   |
 
 ### Frontend
 
-| File | Purpose |
-|---|---|
-| `app/jokes/page.tsx` | Entire public jokes page — **localStorage only**; flip cards, vote buttons, Joke of the Day, search/sort/pagination |
-| `app/jokes/layout.tsx` / `loading.tsx` / `error.tsx` | SEO metadata, skeleton, themed error boundary |
-| `lib/jokes-api.ts` | API client (`getJokes`, `getJokeCategories`, `voteJoke`) targeting `/jokes/classic*` — exists but barely used |
-| `components/MobileFooter.tsx` | Only live consumer of `getJokeCategories(true)`; drawer links to `/jokes?category=<id>` |
-| `lib/initial-data.ts:1-23` | 21 hardcoded fallback jokes (setup/punchline shape) |
-| `lib/storage.ts` | Keys: `JOKES`, `JOKE_CATEGORIES`, `JOKE_VOTE_COUNTS`, `VOTED_JOKES` |
-| `app/admin/components/JokesSection.tsx` | Admin joke CRUD UI — localStorage-based via `useAdminData` |
-| `app/admin/components/SettingsSection.tsx:407-441` | Dad-jokes settings tab (category emoji, cache TTL) |
-| `apps/frontend/JOKE_SECTION_AUDIT.md` | Prior audit doc; most items already applied (verified below) |
+| File                                                 | Purpose                                                                                                             |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `app/jokes/page.tsx`                                 | Entire public jokes page — **localStorage only**; flip cards, vote buttons, Joke of the Day, search/sort/pagination |
+| `app/jokes/layout.tsx` / `loading.tsx` / `error.tsx` | SEO metadata, skeleton, themed error boundary                                                                       |
+| `lib/jokes-api.ts`                                   | API client (`getJokes`, `getJokeCategories`, `voteJoke`) targeting `/jokes/classic*` — exists but barely used       |
+| `components/MobileFooter.tsx`                        | Only live consumer of `getJokeCategories(true)`; drawer links to `/jokes?category=<id>`                             |
+| `lib/initial-data.ts:1-23`                           | 21 hardcoded fallback jokes (setup/punchline shape)                                                                 |
+| `lib/storage.ts`                                     | Keys: `JOKES`, `JOKE_CATEGORIES`, `JOKE_VOTE_COUNTS`, `VOTED_JOKES`                                                 |
+| `app/admin/components/JokesSection.tsx`              | Admin joke CRUD UI — localStorage-based via `useAdminData`                                                          |
+| `app/admin/components/SettingsSection.tsx:407-441`   | Dad-jokes settings tab (category emoji, cache TTL)                                                                  |
+| `apps/frontend/JOKE_SECTION_AUDIT.md`                | Prior audit doc; most items already applied (verified below)                                                        |
 
 ## 2. What Is Done (implemented & working)
 
@@ -60,7 +60,7 @@
 - **Admin**: `JokesSection.tsx` manages jokes purely in localStorage via `useAdminData`; no backend admin endpoints called, no JWT auth wiring.
 - **Quiz format has zero frontend**: no pages/routes consume `/jokes/subjects`, `/jokes/chapters/:id`, `/jokes/quiz/:chapterId`, `/jokes/random/:level`, or `/jokes/mixed`. The whole subject/chapter/quiz-joke hierarchy is backend-only from the user perspective.
 - **Audit doc status** (`JOKE_SECTION_AUDIT.md`): several recommendations already implemented â€” VoteButtons extracted (`page.tsx:61-89`), proper Fisher-Yates seeded shuffle replacing the charCode hack (`:35-47`), multi-tab sync (`:224-239`), keyword search (`:344-361`). Still open per the audit: deep linking (`/jokes?id=...`), share buttons, dark mode, server-side prefetch, trending sort (client "Top" sort runs over local data only).
-- **Category param mismatch**: mobile footer links `/jokes?category=<uuid>` but the page filters by category *name* and never reads query params.
+- **Category param mismatch**: mobile footer links `/jokes?category=<uuid>` but the page filters by category _name_ and never reads query params.
 
 ## 4. What Is Missing / Needs To Be Done
 
@@ -87,7 +87,6 @@
 - **Hardcoded categories duplicated**: `defaultJokeCategories` in `page.tsx:26-31` duplicates what should come from the categories API/table (and uses numeric ids vs uuids).
 - **Accessibility note carried from audit**: like/dislike buttons remain nested inside the card's `role="button"` wrapper (`page.tsx:534-600`), the anti-pattern the audit flagged; stopPropagation handles clicks but not the nested-control semantics.
 
-
 ## 6. How It Works (architecture / data flow / API endpoint list)
 
 ### Data flow today
@@ -106,44 +105,43 @@
 
 Classic format (`dad-jokes.controller.ts`):
 
-| Method | Path | Auth | Notes |
-|---|---|---|---|
-| GET | `/jokes/classic?page&limit&status` | public | paginated; status optional (draft-leak risk) |
-| GET | `/jokes/classic/random` | public | random PUBLISHED joke |
-| GET | `/jokes/classic/search?search&categoryId&page&limit` | public | ILIKE on joke text |
-| GET | `/jokes/classic/categories?hasContent=` | public | cached; innerJoin filter |
-| GET | `/jokes/classic/categories/:id` | public | includes jokes relation |
-| GET | `/jokes/classic/category/:id?page&limit` | public | PUBLISHED only |
-| POST | `/jokes/classic/:id/vote` | public | body `{ voteType: like/dislike }`; unauthenticated counter increment |
-| POST | `/jokes/classic`, `/jokes/classic/bulk`, `/jokes/classic/bulk-action`, `/jokes/classic/categories` | admin | create/bulk/bulk-action/category-create |
-| PUT | `/jokes/classic/:id`, `/jokes/classic/categories/:id` | admin | update (DTO cast issue) |
-| DELETE | `/jokes/classic/:id`, `/jokes/classic/categories/:id` | admin | hard delete; category delete cascades jokes |
-| GET | `/jokes/classic/status-counts` | admin | counts by ContentStatus |
+| Method | Path                                                                                               | Auth   | Notes                                                                |
+| ------ | -------------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
+| GET    | `/jokes/classic?page&limit&status`                                                                 | public | paginated; status optional (draft-leak risk)                         |
+| GET    | `/jokes/classic/random`                                                                            | public | random PUBLISHED joke                                                |
+| GET    | `/jokes/classic/search?search&categoryId&page&limit`                                               | public | ILIKE on joke text                                                   |
+| GET    | `/jokes/classic/categories?hasContent=`                                                            | public | cached; innerJoin filter                                             |
+| GET    | `/jokes/classic/categories/:id`                                                                    | public | includes jokes relation                                              |
+| GET    | `/jokes/classic/category/:id?page&limit`                                                           | public | PUBLISHED only                                                       |
+| POST   | `/jokes/classic/:id/vote`                                                                          | public | body `{ voteType: like/dislike }`; unauthenticated counter increment |
+| POST   | `/jokes/classic`, `/jokes/classic/bulk`, `/jokes/classic/bulk-action`, `/jokes/classic/categories` | admin  | create/bulk/bulk-action/category-create                              |
+| PUT    | `/jokes/classic/:id`, `/jokes/classic/categories/:id`                                              | admin  | update (DTO cast issue)                                              |
+| DELETE | `/jokes/classic/:id`, `/jokes/classic/categories/:id`                                              | admin  | hard delete; category delete cascades jokes                          |
+| GET    | `/jokes/classic/status-counts`                                                                     | admin  | counts by ContentStatus                                              |
 
 Quiz format (`dad-jokes-quiz.controller.ts`):
 
-| Method | Path | Auth | Notes |
-|---|---|---|---|
-| GET | `/jokes/subjects` | public | cached, active only, ordered |
-| GET | `/jokes/subjects/:slug` | public | subject + chapters |
-| GET | `/jokes/chapters/:subjectId` | public | chapters by subject |
-| GET | `/jokes/quiz/:chapterId?page&limit` | public | quiz jokes by chapter |
-| GET | `/jokes/random/:level?count=1..50` | public | random quiz jokes by level |
-| GET | `/jokes/mixed?count=1..100` | public | random quiz jokes across chapters |
-| POST/PUT/DELETE | `/jokes/subjects(/:id)`, `/jokes/chapters(/:id)`, `/jokes/quiz(/:id)`, `/jokes/quiz/bulk` | admin | CRUD |
+| Method          | Path                                                                                      | Auth   | Notes                             |
+| --------------- | ----------------------------------------------------------------------------------------- | ------ | --------------------------------- |
+| GET             | `/jokes/subjects`                                                                         | public | cached, active only, ordered      |
+| GET             | `/jokes/subjects/:slug`                                                                   | public | subject + chapters                |
+| GET             | `/jokes/chapters/:subjectId`                                                              | public | chapters by subject               |
+| GET             | `/jokes/quiz/:chapterId?page&limit`                                                       | public | quiz jokes by chapter             |
+| GET             | `/jokes/random/:level?count=1..50`                                                        | public | random quiz jokes by level        |
+| GET             | `/jokes/mixed?count=1..100`                                                               | public | random quiz jokes across chapters |
+| POST/PUT/DELETE | `/jokes/subjects(/:id)`, `/jokes/chapters(/:id)`, `/jokes/quiz(/:id)`, `/jokes/quiz/bulk` | admin  | CRUD                              |
 
 Stats (`dad-jokes-stats.controller.ts`):
 
-| Method | Path | Auth |
-|---|---|---|
-| GET | `/jokes/stats/overview` | admin â€” returns totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters |
+| Method | Path                    | Auth                                                                                               |
+| ------ | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| GET    | `/jokes/stats/overview` | admin â€” returns totalClassicJokes, totalCategories, totalQuizJokes, totalSubjects, totalChapters |
 
 ### Frontend field expectations vs backend responses
 
 - FE `Joke` uses `setup` + `punchline` strings; BE `DadJoke` returns a single `joke` string plus a nested `category` object (not a name string). The page's split-shim (`page.tsx:190-202`) and name-based category filtering would both break against real API payloads.
 - FE categories carry numeric `id` and `description`; BE `JokeCategory` has uuid `id`, no description column (`joke-category.entity.ts`).
 - FE votes read per-joke `likes/dislikes` from localStorage; BE vote response returns the updated DadJoke entity.
-
 
 ## 7. Recommended Process To Proceed (prioritized action plan)
 
@@ -155,4 +153,6 @@ Stats (`dad-jokes-stats.controller.ts`):
 6. **Wire admin JokesSection to the API** (P2): CRUD + bulk import mapped to backend bulk endpoints, with JWT.
 7. **Clean up** (P3): remove legacy `delivery/type` fields and the unused `UpdateDadJokeDto` ambiguity, replace biased `.sort(random)` shuffle with Fisher-Yates, dedupe hardcoded categories, address nested-interactive-element a11y finding from the audit.
 
+## Code Quality Notes
 
+Standards, budgets, and phase exit criteria: [../platform/code-quality-plan.md](../platform/code-quality-plan.md). Feature-specific debt tracked there in �5.

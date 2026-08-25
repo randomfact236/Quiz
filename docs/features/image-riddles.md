@@ -4,47 +4,48 @@
 
 ### Backend — Public module (`apps/backend/src/image-riddles/`)
 
-| File | Purpose |
-|---|---|
-| `image-riddles.controller.ts` | REST controller `@Controller('image-riddles')` — public read endpoints plus admin-guarded CRUD, bulk actions, stats |
-| `image-riddles.service.ts` | Core service: category CRUD, riddle CRUD, random/search/difficulty queries, transactional bulk create, bulk actions, stats |
-| `image-riddles-update.helper.ts` | Pure helpers (`updateBasicFields`, `updateCategory`, `updateActionOptions`) extracted from the update path |
-| `entities/image-riddle.entity.ts` | `image_riddles` table: title, imageUrl, answer, hint, difficulty enum, timerSeconds/showTimer, altText, categoryId FK, isActive, ContentStatus, `actionOptions` JSONB + rich in-entity action logic |
-| `entities/image-riddle-category.entity.ts` | `image_riddle_categories` table: name, emoji, description, OneToMany riddles |
-| `entities/image-riddle-action.entity.ts` | **Not a DB entity** — TS interface/types + `DEFAULT_ACTION_PRESETS`, validation and default-application functions for per-riddle configurable buttons |
-| `index.ts` | Barrel export |
+| File                                       | Purpose                                                                                                                                                                                             |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `image-riddles.controller.ts`              | REST controller `@Controller('image-riddles')` — public read endpoints plus admin-guarded CRUD, bulk actions, stats                                                                                 |
+| `image-riddles.service.ts`                 | Core service: category CRUD, riddle CRUD, random/search/difficulty queries, transactional bulk create, bulk actions, stats                                                                          |
+| `image-riddles-update.helper.ts`           | Pure helpers (`updateBasicFields`, `updateCategory`, `updateActionOptions`) extracted from the update path                                                                                          |
+| `entities/image-riddle.entity.ts`          | `image_riddles` table: title, imageUrl, answer, hint, difficulty enum, timerSeconds/showTimer, altText, categoryId FK, isActive, ContentStatus, `actionOptions` JSONB + rich in-entity action logic |
+| `entities/image-riddle-category.entity.ts` | `image_riddle_categories` table: name, emoji, description, OneToMany riddles                                                                                                                        |
+| `entities/image-riddle-action.entity.ts`   | **Not a DB entity** — TS interface/types + `DEFAULT_ACTION_PRESETS`, validation and default-application functions for per-riddle configurable buttons                                               |
+| `index.ts`                                 | Barrel export                                                                                                                                                                                       |
 
 ### Backend — Admin module (`apps/backend/src/admin/image-riddles/`)
 
-| File | Purpose |
-|---|---|
+| File                                | Purpose                                                                                                                                           |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `admin-image-riddles.controller.ts` | `@Controller('admin/image-riddles')`, JWT+admin guarded; filtered list, CRUD, soft delete, toggle-active, categories CRUD, dashboard stats/recent |
-| `admin-image-riddles.service.ts` | Admin logic: pagination+filters, duplicate-name checks (409), soft delete, toggleActive, dashboard aggregation |
-| `admin-image-riddles.module.ts` | Wires repos + CacheService |
+| `admin-image-riddles.service.ts`    | Admin logic: pagination+filters, duplicate-name checks (409), soft delete, toggleActive, dashboard aggregation                                    |
+| `admin-image-riddles.module.ts`     | Wires repos + CacheService                                                                                                                        |
 
 ### Sample data / setup scripts
 
-| File | Purpose |
-|---|---|
-| `apps/backend/sample-image-riddles.sql` | Seeds 4 categories + 5 riddles via raw SQL |
+| File                                      | Purpose                                                                                                                    |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `apps/backend/sample-image-riddles.sql`   | Seeds 4 categories + 5 riddles via raw SQL                                                                                 |
 | `apps/backend/setup-riddles-database.ps1` | Runs TypeORM migration + seed script — **targets text-riddle tables (`riddle_subjects/chapters/mcqs`), not image riddles** |
 
 ### Frontend (`apps/frontend/src/`)
 
-| File | Purpose |
-|---|---|
-| `app/image-riddles/page.tsx` | Entire public page (grid, filters, modal game) — **localStorage only, no backend calls** |
-| `app/image-riddles/layout.tsx` / `loading.tsx` / `error.tsx` | Metadata, skeleton, error boundary |
-| `components/image-riddles/ActionOptions.tsx` | Configurable action-button renderer (visibility conditions, keyboard shortcuts, tooltips, confirm dialogs, ripple animations) |
-| `lib/initial-data.ts:34-325` | `initialImageRiddles` / `initialImageRiddleCategories` hardcoded fallback arrays |
-| `lib/storage.ts:29-34` | `STORAGE_KEYS.IMAGE_RIDDLES`, `IMAGE_RIDDLE_CATEGORIES`, `IMAGE_RIDDLE_ITEMS` |
-| `app/admin/components/ImageRiddlesAdminSection.tsx` | Admin UI — also localStorage-only |
-| `app/admin/hooks/useAdminData.ts:72-99` | Persists `allImageRiddles` to localStorage |
-| `components/MobileFooter.tsx:24-29,252-265` | Difficulty drawer links (hardcoded, all point at `/image-riddles`) |
+| File                                                         | Purpose                                                                                                                       |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `app/image-riddles/page.tsx`                                 | Entire public page (grid, filters, modal game) — **localStorage only, no backend calls**                                      |
+| `app/image-riddles/layout.tsx` / `loading.tsx` / `error.tsx` | Metadata, skeleton, error boundary                                                                                            |
+| `components/image-riddles/ActionOptions.tsx`                 | Configurable action-button renderer (visibility conditions, keyboard shortcuts, tooltips, confirm dialogs, ripple animations) |
+| `lib/initial-data.ts:34-325`                                 | `initialImageRiddles` / `initialImageRiddleCategories` hardcoded fallback arrays                                              |
+| `lib/storage.ts:29-34`                                       | `STORAGE_KEYS.IMAGE_RIDDLES`, `IMAGE_RIDDLE_CATEGORIES`, `IMAGE_RIDDLE_ITEMS`                                                 |
+| `app/admin/components/ImageRiddlesAdminSection.tsx`          | Admin UI — also localStorage-only                                                                                             |
+| `app/admin/hooks/useAdminData.ts:72-99`                      | Persists `allImageRiddles` to localStorage                                                                                    |
+| `components/MobileFooter.tsx:24-29,252-265`                  | Difficulty drawer links (hardcoded, all point at `/image-riddles`)                                                            |
 
 ## 2. What Is Done (implemented & working)
 
 **Backend (complete and reasonably robust):**
+
 - Full public API: paginated list, by-id, random (offset-based), search (title/answer ILIKE with `%`/`_` sanitization — controller `image-riddles.controller.ts:68-73`, service `image-riddles.service.ts:217-250`), categories list/detail, by-category, by-difficulty with level validation (`controller:100-115`).
 - Stats endpoint aggregating totals, difficulty histogram (single GROUP BY query), average timer (`service:487-540`).
 - Admin API on same controller (JWT + RolesGuard): create/update/delete, bulk create (max 100, transactional, batch category fetch avoids N+1 — `service:305-376`), bulk actions via shared `BulkActionService`, status counts, category CRUD.
@@ -52,7 +53,7 @@
 - Entity model: difficulty enum, nullable timer with `getEffectiveTimer()` (`entity:105-107`), ContentStatus workflow (default DRAFT), soft-disable via `isActive`.
 - Sophisticated action-options system: JSONB column of button descriptors with presets (submit/hint/skip/reveal/timer controls/fullscreen/share/report), validation hook (`validateBeforeSave`, `entity:338-348`), default generation when `useDefaultActions=true` (`entity:132-210`).
 - Cache invalidation via `CacheService.delPattern('image-riddles:*')` on every mutation.
-- Frontend page is functionally complete *as a standalone client-side app*: sticky category sidebar, difficulty filter, search, recent/random sort, pagination (12/page), modal game with countdown timer + progress bar, answer checking, hints, reveal, keyboard nav (arrows/Esc), score header (`page.tsx:131-658`).
+- Frontend page is functionally complete _as a standalone client-side app_: sticky category sidebar, difficulty filter, search, recent/random sort, pagination (12/page), modal game with countdown timer + progress bar, answer checking, hints, reveal, keyboard nav (arrows/Esc), score header (`page.tsx:131-658`).
 - `ActionOptions.tsx` fully implements rendering of the BE `IActionOption` contract including visibility-condition evaluation (`shouldShowAction`, `:179-215`), confirm dialogs, tooltips, loading spinners, ripple animations.
 
 ## 3. What Is Partially Done / In Progress
@@ -74,7 +75,6 @@
 7. Deep links: mobile drawer should pass `/image-riddles?difficulty=...`; page currently ignores query params entirely.
 8. Consolidate the duplicate admin CRUD surface (see issues below) into one canonical module.
 
-
 ## 5. Known Issues, Bugs & Tech Debt
 
 - **Architectural split-brain (biggest issue)**: two parallel implementations of one domain â€” BE API vs FE localStorage â€” that share nothing. Admin-entered data never reaches the DB; API data never reaches users (`page.tsx:19,133-138`; `ImageRiddlesAdminSection.tsx:365-375`).
@@ -91,7 +91,6 @@
 - **Query inefficiency**: `getDashboardStats` runs 4 separate counts plus loads all categories with relations (`admin service:387-405`); `deleteCategory` saves riddles one-by-one in a loop (`admin service:358-361`).
 - **No analytics plumbing**: `analyticsEvent` strings exist but nothing posts them; the `onAnalytics` prop of ActionOptions is never supplied (`page.tsx:611-624`).
 
-
 ## 6. How It Works (architecture / data flow / API endpoint list)
 
 ### Current data flow
@@ -104,35 +103,33 @@ The two halves are not connected. Admin UI writes riddle JSON to browser localSt
 - `ImageRiddle.actionOptions`: JSONB array of `IActionOption` button configs; defaults auto-generated at runtime when empty and `useDefaultActions=true`.
 - `image-riddle-action.entity.ts` contributes types/presets/validation only; maps to no table.
 
-
 ### Public API endpoints (unauthenticated)
 
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/image-riddles?page&limit&status` | paginated; status optional (draft-leak risk) |
-| GET | `/image-riddles/random` | PUBLISHED only |
-| GET | `/image-riddles/search?search&categoryId&difficulty&page&limit` | PUBLISHED only |
-| GET | `/image-riddles/categories` | cached under `image-riddles:categories` |
-| GET | `/image-riddles/categories/:id` | includes riddles relation |
-| GET | `/image-riddles/category/:id?page&limit` | PUBLISHED only |
-| GET | `/image-riddles/difficulty/:level?page&limit` | validates easy/medium/hard/expert |
-| GET | `/image-riddles/stats/overview` | totals + difficulty histogram + avg timer |
-| GET | `/image-riddles/:id` | isActive only, any status |
+| Method | Path                                                            | Notes                                        |
+| ------ | --------------------------------------------------------------- | -------------------------------------------- |
+| GET    | `/image-riddles?page&limit&status`                              | paginated; status optional (draft-leak risk) |
+| GET    | `/image-riddles/random`                                         | PUBLISHED only                               |
+| GET    | `/image-riddles/search?search&categoryId&difficulty&page&limit` | PUBLISHED only                               |
+| GET    | `/image-riddles/categories`                                     | cached under `image-riddles:categories`      |
+| GET    | `/image-riddles/categories/:id`                                 | includes riddles relation                    |
+| GET    | `/image-riddles/category/:id?page&limit`                        | PUBLISHED only                               |
+| GET    | `/image-riddles/difficulty/:level?page&limit`                   | validates easy/medium/hard/expert            |
+| GET    | `/image-riddles/stats/overview`                                 | totals + difficulty histogram + avg timer    |
+| GET    | `/image-riddles/:id`                                            | isActive only, any status                    |
 
 ### Admin API endpoints (JWT + role admin)
 
-| Method | Path |
-|---|---|
-| POST | `/image-riddles`, `/image-riddles/bulk` (max 100, transactional), `/image-riddles/bulk-action`, `/image-riddles/categories` |
-| PUT | `/image-riddles/:id`, `/image-riddles/categories/:id` |
-| DELETE | `/image-riddles/:id` (hard), `/image-riddles/categories/:id` (cascades) |
-| GET | `/image-riddles/status-counts` |
-| GET/POST/PUT/DELETE | `/admin/image-riddles`, `/admin/image-riddles/:id`, `/admin/image-riddles/bulk`, `/admin/image-riddles/categories(/all|/:id)` |
-| POST | `/admin/image-riddles/:id/toggle-active` |
-| GET | `/admin/image-riddles/dashboard/stats`, `/admin/image-riddles/dashboard/recent?limit` |
+| Method              | Path                                                                                                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| POST                | `/image-riddles`, `/image-riddles/bulk` (max 100, transactional), `/image-riddles/bulk-action`, `/image-riddles/categories` |
+| PUT                 | `/image-riddles/:id`, `/image-riddles/categories/:id`                                                                       |
+| DELETE              | `/image-riddles/:id` (hard), `/image-riddles/categories/:id` (cascades)                                                     |
+| GET                 | `/image-riddles/status-counts`                                                                                              |
+| GET/POST/PUT/DELETE | `/admin/image-riddles`, `/admin/image-riddles/:id`, `/admin/image-riddles/bulk`, `/admin/image-riddles/categories(/all      | /:id)` |
+| POST                | `/admin/image-riddles/:id/toggle-active`                                                                                    |
+| GET                 | `/admin/image-riddles/dashboard/stats`, `/admin/image-riddles/dashboard/recent?limit`                                       |
 
 Response shapes: public lists return `{ data, total }`; the admin list returns `{ data, total, page, limit, totalPages }`.
-
 
 ### FE page behavior (`page.tsx`)
 
@@ -155,4 +152,6 @@ Response shapes: public lists return `{ data, total }`; the admin list returns `
 8. **Harden ActionOptions** (P2): remove `new Function` evaluation of `customCondition` or sandbox it; scope keyboard shortcuts so Space/Enter do not leak globally.
 9. **Polish** (P3): unify timer defaults via settings API; support `?difficulty=` / `?category=` query params; adopt `next/image`; batch admin dashboard queries.
 
+## Code Quality Notes
 
+Standards, budgets, and phase exit criteria: [../platform/code-quality-plan.md](../platform/code-quality-plan.md). Feature-specific debt tracked there in �5.
