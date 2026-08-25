@@ -20,13 +20,7 @@ dotenv.config();
 /**
  * Required database environment variables
  */
-const REQUIRED_ENV_VARS = [
-  'DB_HOST',
-  'DB_PORT',
-  'DB_USERNAME',
-  'DB_PASSWORD',
-  'DB_DATABASE',
-];
+const REQUIRED_ENV_VARS = ['DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE'];
 
 /**
  * Validate that all required environment variables are set
@@ -44,7 +38,7 @@ export function validateDatabaseEnv(): void {
   if (missing.length > 0) {
     throw new Error(
       `Missing required database environment variables: ${missing.join(', ')}\n` +
-      `Please ensure all required variables are set in your .env file.`
+        `Please ensure all required variables are set in your .env file.`
     );
   }
 }
@@ -60,7 +54,7 @@ export function getDatabaseConfig(
     logging?: boolean;
     migrations?: string[];
     entities?: string[];
-  } = {},
+  } = {}
 ): DataSourceOptions {
   // Validate environment variables
   validateDatabaseEnv();
@@ -84,7 +78,7 @@ export function getDatabaseConfig(
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_DATABASE!,
     entities: options.entities || ['src/**/*.entity{.ts,.js}'],
-    migrations: options.migrations || ['src/database/migrations/*{.ts,.js}'],
+    migrations: options.migrations || ['src/migrations/**/*{.ts,.js}'],
     synchronize,
     logging,
     poolSize: DB_POOL_SIZE,
@@ -119,7 +113,7 @@ export function getSeedDatabaseConfig(): DataSourceOptions {
   if (nodeEnv === 'production') {
     throw new Error(
       'Seeding is not allowed in production environment.\n' +
-      'If you really need to seed, set NODE_ENV to "development" temporarily.'
+        'If you really need to seed, set NODE_ENV to "development" temporarily.'
     );
   }
 
