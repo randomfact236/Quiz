@@ -91,7 +91,9 @@ export function useQuizMcqFilters() {
 
   const resetFilters = useCallback(() => {
     const params = new URLSearchParams();
-    params.set('section', 'quiz');
+    // Keep the user inside the Quiz MCQ dashboard section (stale 'quiz' id
+    // made the admin page fall back to Summary).
+    params.set('section', 'quiz-mcq');
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [pathname, router]);
 
