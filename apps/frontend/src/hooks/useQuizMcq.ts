@@ -375,46 +375,32 @@ export function useQuizMcq(
   }, [timerMode, timeLimit]);
 
   const submitQuiz = useCallback(() => {
-    setState((prev) => {
-      const timeTaken = Math.floor((Date.now() - prev.startTime) / 1000);
-
-      if (sessionRef.current) {
-        sessionRef.current.status = 'completed';
-        sessionRef.current.completedAt = new Date().toISOString();
-        sessionRef.current.timeTaken = timeTaken;
-        sessionRef.current.score = prev.score;
-        sessionRef.current.answers = prev.answers;
-
-        saveToHistory(sessionRef.current);
-        clearCurrentSession();
-        clearQuizResume();
-      }
-
-      return {
-        ...prev,
-        status: 'completed',
-      };
-    });
+    // Pure state flip only — all save/cleanup side effects live in the single
+    // completion effect below (P1 fix: no side effects inside setState
+    // updaters, no double-completion race between callback and effect).
+    setState((prev) => ({ ...prev, status: 'completed' }));
   }, []);
 
+  // Single completion save path — runs once per completed session.
+  const didSaveCompletionRef = useRef<string | null>(null);
   useEffect(() => {
-    if (
-      state.status === 'completed' &&
-      sessionRef.current &&
-      sessionRef.current.status !== 'completed'
-    ) {
-      const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
+    if (state.status !== 'completed') return;
+    if (!sessionRef.current) return;
+    if (didSaveCompletionRef.current === sessionRef.current.id) return;
 
-      sessionRef.current.status = 'completed';
-      sessionRef.current.completedAt = new Date().toISOString();
-      sessionRef.current.timeTaken = timeTaken;
-      sessionRef.current.score = state.score;
-      sessionRef.current.answers = state.answers;
+    const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
 
-      saveToHistory(sessionRef.current);
-      clearCurrentSession();
-      clearQuizResume();
-    }
+    sessionRef.current.status = 'completed';
+    sessionRef.current.completedAt = new Date().toISOString();
+    sessionRef.current.timeTaken = timeTaken;
+    sessionRef.current.score = state.score;
+    sessionRef.current.answers = state.answers;
+
+    didSaveCompletionRef.current = sessionRef.current.id;
+
+    saveToHistory(sessionRef.current);
+    clearCurrentSession();
+    clearQuizResume();
   }, [state.status, state.startTime, state.score, state.answers]);
 
   useEffect(() => {
@@ -504,22 +490,23 @@ export function useQuizMcq(
   }, []);
 
   const addMoreQuestions = useCallback((count: number) => {
+    // Pure updater — sessionRef sync happens in the effect below.
     setState((prev) => {
       const newSize = Math.min(prev.sessionSize + count, prev.availableQuestions.length);
-      const newQuestions = prev.availableQuestions.slice(0, newSize);
-
-      if (sessionRef.current) {
-        sessionRef.current.maxScore = newSize;
-        sessionRef.current.questions = newQuestions;
-      }
-
       return {
         ...prev,
-        questions: newQuestions,
+        questions: prev.availableQuestions.slice(0, newSize),
         sessionSize: newSize,
       };
     });
   }, []);
+
+  // Keep the mutable session snapshot in sync after size changes.
+  useEffect(() => {
+    if (!sessionRef.current || state.status !== 'playing') return;
+    sessionRef.current.maxScore = state.sessionSize;
+    sessionRef.current.questions = state.questions;
+  }, [state.sessionSize, state.questions, state.status]);
 
   const pauseQuiz = useCallback(() => {
     setState((prev) => ({ ...prev, status: 'paused' }));
