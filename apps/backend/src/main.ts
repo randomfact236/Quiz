@@ -6,11 +6,7 @@ import * as express from 'express';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
-import {
-  SERVER_PORT,
-  FRONTEND_PORT,
-  CORS_MAX_AGE,
-} from './common/constants/app.constants';
+import { SERVER_PORT, FRONTEND_PORT, CORS_MAX_AGE } from './common/constants/app.constants';
 
 /**
  * Setup security middleware
@@ -45,7 +41,7 @@ function setupMiddleware(app: INestApplication): void {
         enableImplicitConversion: true,
       },
       disableErrorMessages: configService.get('NODE_ENV') === 'production',
-    }),
+    })
   );
 
   // API prefix
@@ -71,7 +67,7 @@ function setupSwagger(app: INestApplication): void {
       .setDescription('Enterprise-grade Quiz Platform API with comprehensive features')
       .setVersion('1.0')
       .addBearerAuth()
-      .addTag('Quiz', 'Quiz management endpoints')
+      .addTag('Quiz MCQ', 'Quiz MCQ management endpoints')
       .addTag('Riddle MCQ', 'Riddle MCQ endpoints')
       .addTag('Dad Jokes', 'Dad jokes endpoints')
       .addTag('Image Riddles', 'Image-based riddles and visual puzzles')

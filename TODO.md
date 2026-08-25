@@ -9,11 +9,11 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 - **Status:** deliberately not built (per scope decision).
 - When mass deletions accumulate, weight distribution develops gaps near 1.0 → wrap-around logic covers correctness, but if uniformity matters add a periodic job: `UPDATE <table> SET random_weight = RANDOM()` for questions/riddle_mcqs.
 
-### 2. Quiz — correctness backlog (from features/quiz.md audit; owner-directed logging)
+### 2. Quiz — correctness backlog (from features/quiz-mcq.md audit; owner-directed logging)
 
 Backend:
 
-- **[P0] `updateQuestion` dead extreme-level logic** — `const level = dto.level != null || question.level` (quiz.service.ts, was :776) is always truthy so the extreme check never fires; fix: `(dto.level ?? question.level) === 'extreme'`.
+- **[P0] `updateQuestion` dead extreme-level logic** — `const level = dto.level != null || question.level` (quiz-mcq/quiz-mcq.service.ts, was :776) is always truthy so the extreme check never fires; fix: `(dto.level ?? question.level) === 'extreme'`.
 - **[P1] Chapter numbering race** — `createChapter` sets `chapterNumber = length + 1` under concurrency; bulk imports write `chapterNumber: 0`.
 - **[P1] Bulk-import slug collisions** — sanitization maps distinct names to the same slug ("C++"/"C Basics"), aborting the whole 100-row chunk transaction.
 - **[P1] N-delete loop in `deleteSubject`** — one DELETE per chapter's questions instead of a single IN query.

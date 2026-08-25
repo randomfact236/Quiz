@@ -2,25 +2,31 @@ import Link from 'next/link';
 
 const footerLinks = {
   product: [
-    { href: '/quiz', label: 'Quiz' },
+    { href: '/quiz-mcq', label: 'Quiz' },
     { href: '/jokes', label: 'Dad Jokes' },
     { href: '/riddles', label: 'Riddles' },
   ],
-  company: [
-    { href: '/about', label: 'About Us' },
-  ],
+  company: [{ href: '/about', label: 'About Us' }],
 };
 
 export default function Footer(): JSX.Element {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-secondary-200 bg-white px-4 py-8 dark:border-secondary-800 dark:bg-secondary-900" role="contentinfo" aria-label="Site footer">
+    <footer
+      className="border-t border-secondary-200 bg-white px-4 py-8 dark:border-secondary-800 dark:bg-secondary-900"
+      role="contentinfo"
+      aria-label="Site footer"
+    >
       <div className="container mx-auto">
         <div className="grid gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="text-xl font-bold text-primary-600" aria-label="AI Quiz - Home">
+            <Link
+              href="/"
+              className="text-xl font-bold text-primary-600"
+              aria-label="AI Quiz - Home"
+            >
               AI Quiz
             </Link>
             <p className="mt-2 text-secondary-600 dark:text-secondary-400">

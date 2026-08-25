@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import type { Achievement } from '@/types/quiz';
+import type { Achievement } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 import { getQuizHistory, getTotalStats } from './progress';
 
@@ -126,9 +126,7 @@ export function checkAchievements(): Achievement[] {
         break;
 
       case 'perfect_score': {
-        const perfectQuizzes = history.filter(
-          (s) => s.score === s.maxScore && s.maxScore > 0
-        );
+        const perfectQuizzes = history.filter((s) => s.score === s.maxScore && s.maxScore > 0);
         shouldUnlock = perfectQuizzes.length >= achievement.condition.threshold;
         break;
       }
@@ -142,9 +140,7 @@ export function checkAchievements(): Achievement[] {
       }
 
       case 'chapter_complete': {
-        const perfectChapters = history.filter(
-          (s) => s.score === s.maxScore && s.maxScore > 0
-        );
+        const perfectChapters = history.filter((s) => s.score === s.maxScore && s.maxScore > 0);
         shouldUnlock = perfectChapters.length >= achievement.condition.threshold;
         break;
       }
@@ -158,7 +154,8 @@ export function checkAchievements(): Achievement[] {
       }
 
       case 'accuracy':
-        shouldUnlock = stats.averageScore >= achievement.condition.threshold && history.length >= 10;
+        shouldUnlock =
+          stats.averageScore >= achievement.condition.threshold && history.length >= 10;
         break;
 
       case 'streak':
@@ -199,9 +196,7 @@ export function getAchievementProgress(achievement: Achievement): number {
       return Math.min(100, (history.length / achievement.condition.threshold) * 100);
 
     case 'perfect_score': {
-      const perfectQuizzes = history.filter(
-        (s) => s.score === s.maxScore && s.maxScore > 0
-      );
+      const perfectQuizzes = history.filter((s) => s.score === s.maxScore && s.maxScore > 0);
       return Math.min(100, (perfectQuizzes.length / achievement.condition.threshold) * 100);
     }
 
@@ -213,10 +208,7 @@ export function getAchievementProgress(achievement: Achievement): number {
       const subjectsWithCompletion = new Set(
         history.filter((s) => s.score > 0).map((s) => s.subject)
       );
-      return Math.min(
-        100,
-        (subjectsWithCompletion.size / achievement.condition.threshold) * 100
-      );
+      return Math.min(100, (subjectsWithCompletion.size / achievement.condition.threshold) * 100);
     }
 
     default:
@@ -233,7 +225,7 @@ export interface AchievementWithStatus extends Achievement {
 /** Get all achievements with unlock status */
 export function getAllAchievementsWithStatus(): AchievementWithStatus[] {
   const unlocked = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});
-  
+
   return ACHIEVEMENTS.map((achievement) => ({
     ...achievement,
     unlocked: !!unlocked[achievement.id],
@@ -251,7 +243,7 @@ export function getAchievementStats(): {
   const unlocked = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});
   const total = ACHIEVEMENTS.length;
   const unlockedCount = Object.keys(unlocked).length;
-  
+
   return {
     total,
     unlocked: unlockedCount,

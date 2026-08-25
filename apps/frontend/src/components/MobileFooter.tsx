@@ -5,7 +5,7 @@ import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-reac
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getSubjects } from '@/lib/riddle-mcq-api';
-import { getSubjects as getQuizSubjects, QuizSubject } from '@/lib/quiz-api';
+import { getSubjects as getQuizSubjects, QuizSubject } from '@/lib/quiz-mcq-api';
 import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
 import type { RiddleMcqSubject } from '@/types/riddles';
 
@@ -176,7 +176,7 @@ export default function MobileFooter() {
                   quizSubjects.map((subject) => (
                     <Link
                       key={subject.id}
-                      href={`/quiz?subject=${subject.id}`}
+                      href={`/quiz-mcq?subject=${subject.id}`}
                       onClick={closeDrawer}
                       className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-gray-600"
                     >

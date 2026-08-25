@@ -6,17 +6,28 @@
  * ============================================================================
  */
 
-import type { ContentStatus, Joke, Riddle, ImportResult, ImportExportConfig, ValidationResult } from '../types';
+import type {
+  ContentStatus,
+  Joke,
+  Riddle,
+  ImportResult,
+  ImportExportConfig,
+  ValidationResult,
+} from '../types';
 
 /**
  * Get status badge color class
  */
 export function getStatusBadgeColor(status: ContentStatus): string {
   switch (status) {
-    case 'published': return 'bg-green-100 text-green-800';
-    case 'draft': return 'bg-yellow-100 text-yellow-800';
-    case 'trash': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'published':
+      return 'bg-green-100 text-green-800';
+    case 'draft':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'trash':
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
   }
 }
 
@@ -25,12 +36,18 @@ export function getStatusBadgeColor(status: ContentStatus): string {
  */
 export function getDifficultyColor(difficulty: string): string {
   switch (difficulty) {
-    case 'easy': return 'bg-green-100 text-green-800';
-    case 'medium': return 'bg-yellow-100 text-yellow-800';
-    case 'hard': return 'bg-orange-100 text-orange-800';
-    case 'expert': return 'bg-red-100 text-red-800';
-    case 'extreme': return 'bg-purple-100 text-purple-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'easy':
+      return 'bg-green-100 text-green-800';
+    case 'medium':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'hard':
+      return 'bg-orange-100 text-orange-800';
+    case 'expert':
+      return 'bg-red-100 text-red-800';
+    case 'extreme':
+      return 'bg-purple-100 text-purple-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
   }
 }
 
@@ -42,8 +59,11 @@ export function useJokeFilters(
   filterCategory: string,
   search: string,
   statusFilter: string
-): { filteredJokes: Joke[]; statusCounts: { total: number; published: number; draft: number; trash: number } } {
-  const filteredJokes = allJokes.filter(joke => {
+): {
+  filteredJokes: Joke[];
+  statusCounts: { total: number; published: number; draft: number; trash: number };
+} {
+  const filteredJokes = allJokes.filter((joke) => {
     const matchesCategory = !filterCategory || joke.category === filterCategory;
     const searchText = search.toLowerCase();
     const jokeContent = (joke.setup || '') + ' ' + (joke.punchline || '') + ' ' + (joke.joke || '');
@@ -54,9 +74,9 @@ export function useJokeFilters(
 
   const statusCounts = {
     total: allJokes.length,
-    published: allJokes.filter(j => j.status === 'published').length,
-    draft: allJokes.filter(j => j.status === 'draft').length,
-    trash: allJokes.filter(j => j.status === 'trash').length,
+    published: allJokes.filter((j) => j.status === 'published').length,
+    draft: allJokes.filter((j) => j.status === 'draft').length,
+    trash: allJokes.filter((j) => j.status === 'trash').length,
   };
 
   return { filteredJokes, statusCounts };
@@ -67,14 +87,14 @@ export function useJokeFilters(
  */
 export function jokesToCSV(jokes: Joke[]): string {
   const headers = ['ID', 'Setup', 'Punchline', 'Category', 'Status'];
-  const rows = jokes.map(j => [
+  const rows = jokes.map((j) => [
     j.id,
     `"${(j.setup || '').replace(/"/g, '""')}"`,
     `"${(j.punchline || '').replace(/"/g, '""')}"`,
     j.category,
     j.status,
   ]);
-  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  return [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
 }
 
 /**
@@ -155,14 +175,30 @@ import type { Question } from '../types';
 
 /** Question CSV Config for format: ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter */
 export const questionCSVConfig = {
-  headers: ['ID', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Chapter'],
+  headers: [
+    'ID',
+    'Question',
+    'Option A',
+    'Option B',
+    'Option C',
+    'Option D',
+    'Correct Answer',
+    'Level',
+    'Chapter',
+  ],
 };
 
 /**
  * Parse Question CSV in animals-questions.csv format
  * Handles: comment lines (# Subject: xxx), empty option fields, quoted values
  */
-export function parseQuestionCSV(csvText: string): { success: boolean; imported: Question[]; failed: { row: number; error: string; data: unknown }[]; total: number; subjectName: string } {
+export function parseQuestionCSV(csvText: string): {
+  success: boolean;
+  imported: Question[];
+  failed: { row: number; error: string; data: unknown }[];
+  total: number;
+  subjectName: string;
+} {
   const imported: Question[] = [];
   const failed: { row: number; error: string; data: unknown }[] = [];
 
@@ -190,7 +226,13 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
 
   const headerLine = lines[headerIndex];
   if (headerIndex >= lines.length || !headerLine) {
-    return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0, subjectName: '' };
+    return {
+      success: false,
+      imported: [],
+      failed: [{ row: 0, error: 'No valid header found', data: null }],
+      total: 0,
+      subjectName: '',
+    };
   }
 
   // Parse headers
@@ -199,7 +241,7 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
   // Find column indices (flexible matching)
   const getColumnIndex = (...names: string[]) => {
     for (const name of names) {
-      const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
+      const idx = headers.findIndex((h) => h.toLowerCase().trim() === name.toLowerCase());
       if (idx !== -1) return idx;
     }
     return -1;
@@ -219,15 +261,17 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
 
   // Validate required columns
   const requiredCols = ['question', 'optionA', 'optionB', 'correctAnswer', 'level'];
-  const missingCols = requiredCols.filter(col => colIndex[col as keyof typeof colIndex] === -1);
+  const missingCols = requiredCols.filter((col) => colIndex[col as keyof typeof colIndex] === -1);
 
   if (missingCols.length > 0) {
     return {
       success: false,
       imported: [],
-      failed: [{ row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers }],
+      failed: [
+        { row: 0, error: `Missing required columns: ${missingCols.join(', ')}`, data: headers },
+      ],
       total: 0,
-      subjectName: ''
+      subjectName: '',
     };
   }
 
@@ -241,7 +285,8 @@ export function parseQuestionCSV(csvText: string): { success: boolean; imported:
     const values = parseCSVLine(line);
 
     try {
-      const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
+      const getValue = (idx: number) =>
+        idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
 
       const questionText = getValue(colIndex.question);
       const optionA = getValue(colIndex.optionA);
@@ -328,14 +373,21 @@ export function parseAnimalsQuestionCSV(csvText: string): {
 
   const headerLine = lines[headerIndex];
   if (!headerLine) {
-    return { success: false, imported: [], failed: [{ row: 0, error: 'No valid header found', data: null }], total: 0, subjectName: '', chapters: [] };
+    return {
+      success: false,
+      imported: [],
+      failed: [{ row: 0, error: 'No valid header found', data: null }],
+      total: 0,
+      subjectName: '',
+      chapters: [],
+    };
   }
 
   const headers = parseCSVLine(headerLine);
 
   const getColumnIndex = (...names: string[]) => {
     for (const name of names) {
-      const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
+      const idx = headers.findIndex((h) => h.toLowerCase().trim() === name.toLowerCase());
       if (idx !== -1) return idx;
     }
     return -1;
@@ -357,10 +409,12 @@ export function parseAnimalsQuestionCSV(csvText: string): {
     return {
       success: false,
       imported: [],
-      failed: [{ row: 0, error: 'Missing required columns (Question, Option A, Option B)', data: headers }],
+      failed: [
+        { row: 0, error: 'Missing required columns (Question, Option A, Option B)', data: headers },
+      ],
       total: 0,
       subjectName: '',
-      chapters: []
+      chapters: [],
     };
   }
 
@@ -373,7 +427,8 @@ export function parseAnimalsQuestionCSV(csvText: string): {
     const values = parseCSVLine(line);
 
     try {
-      const getValue = (idx: number) => idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
+      const getValue = (idx: number) =>
+        idx !== -1 && idx < values.length ? (values[idx]?.trim() ?? '') : '';
 
       const questionText = getValue(colIndex.question);
       let optionA = getValue(colIndex.optionA);
@@ -404,7 +459,11 @@ export function parseAnimalsQuestionCSV(csvText: string): {
         finalOptionA = 'True';
         finalOptionB = 'False';
 
-        if (correctAnswerRaw === 'A' || correctAnswerRaw.toUpperCase() === 'TRUE' || correctAnswerRaw.toUpperCase() === 'T') {
+        if (
+          correctAnswerRaw === 'A' ||
+          correctAnswerRaw.toUpperCase() === 'TRUE' ||
+          correctAnswerRaw.toUpperCase() === 'T'
+        ) {
           correctAnswer = 'A';
         } else {
           correctAnswer = 'B';
@@ -449,7 +508,10 @@ export function parseAnimalsQuestionCSV(csvText: string): {
 /**
  * Export questions to CSV format matching animals-questions.csv
  */
-export function exportQuestionsToCSV(questions: Question[], subjectName: string = 'General'): string {
+export function exportQuestionsToCSV(
+  questions: Question[],
+  subjectName: string = 'General'
+): string {
   const lines: string[] = [];
 
   // Add subject comment
@@ -509,7 +571,19 @@ export function downloadFile(content: string, filename: string, type: string): v
 export const riddleConfig: ImportExportConfig<Riddle> = {
   entityName: 'Riddle',
   filePrefix: 'riddles',
-  csvHeaders: ['#', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Level', 'Subject', 'Hint', 'Explanation'],
+  csvHeaders: [
+    '#',
+    'Question',
+    'Option A',
+    'Option B',
+    'Option C',
+    'Option D',
+    'Correct Answer',
+    'Level',
+    'Subject',
+    'Hint',
+    'Explanation',
+  ],
   jsonRootKey: 'riddles',
   validators: {
     required: ['question', 'difficulty'],
@@ -530,7 +604,10 @@ export const riddleConfig: ImportExportConfig<Riddle> = {
  * Enterprise-Grade JSON Validator
  * Validates JSON content structure
  */
-export function validateJSONStructure<T>(jsonText: string, rootKey?: string): ValidationResult<T[]> {
+export function validateJSONStructure<T>(
+  jsonText: string,
+  rootKey?: string
+): ValidationResult<T[]> {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -554,7 +631,7 @@ export function validateJSONStructure<T>(jsonText: string, rootKey?: string): Va
       isValid: errors.length === 0,
       data: dataArray,
       errors,
-      warnings
+      warnings,
     };
   } catch (err) {
     errors.push(`Invalid JSON format: ${(err as Error).message}`);
@@ -576,12 +653,14 @@ export function exportToCSV<T>(
 ): string {
   const headers = config.csvHeaders;
 
-  const rows = items.map(item =>
-    headers.map(header => {
+  const rows = items.map((item) =>
+    headers.map((header) => {
       const key = header.toLowerCase().replace(/\s+/g, '') as keyof T;
       const value = item[key];
 
-      if (value === null || value === undefined) { return ''; }
+      if (value === null || value === undefined) {
+        return '';
+      }
 
       const strValue = String(value);
       // Escape quotes and wrap in quotes if contains comma or newline
@@ -595,10 +674,15 @@ export function exportToCSV<T>(
   // Add metadata header if provided
   let csvContent = '';
   if (metadata) {
-    csvContent += '# ' + Object.entries(metadata).map(([k, v]) => `${k}: ${v}`).join(' | ') + '\n';
+    csvContent +=
+      '# ' +
+      Object.entries(metadata)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(' | ') +
+      '\n';
   }
 
-  csvContent += [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  csvContent += [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
   return csvContent;
 }
 
@@ -642,9 +726,9 @@ export function importFromCSV<T>(
       failed: validationResult.errors.map((err, idx) => ({
         row: idx,
         error: err,
-        data: null
+        data: null,
       })),
-      total: 0
+      total: 0,
     };
   }
 
@@ -658,14 +742,16 @@ export function importFromCSV<T>(
 
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
-    if (!line || line.trim() === '') { continue; }
+    if (!line || line.trim() === '') {
+      continue;
+    }
 
     const values = parseCSVLine(line);
     try {
       const partialData = mapper(values, headers);
 
       // Simple validation - check required fields
-      const missingFields = config.validators.required.filter(field => {
+      const missingFields = config.validators.required.filter((field) => {
         const value = partialData[field];
         return value === undefined || value === null || value === '';
       });
@@ -673,7 +759,11 @@ export function importFromCSV<T>(
       if (missingFields.length === 0) {
         imported.push(partialData as T);
       } else {
-        failed.push({ row: i, error: `Missing fields: ${missingFields.join(', ')}`, data: partialData });
+        failed.push({
+          row: i,
+          error: `Missing fields: ${missingFields.join(', ')}`,
+          data: partialData,
+        });
       }
     } catch (err) {
       failed.push({ row: i, error: (err as Error).message, data: line });
@@ -684,7 +774,7 @@ export function importFromCSV<T>(
     success: failed.length === 0,
     imported,
     failed,
-    total: imported.length + failed.length
+    total: imported.length + failed.length,
   };
 }
 
@@ -704,7 +794,9 @@ function validateCSVStructure(
   }
 
   // Skip comment lines to find the actual header row
-  const firstDataLineIndex = lines.findIndex(line => line.trim() !== '' && !line.trim().startsWith('#'));
+  const firstDataLineIndex = lines.findIndex(
+    (line) => line.trim() !== '' && !line.trim().startsWith('#')
+  );
 
   if (firstDataLineIndex === -1) {
     errors.push('CSV file has no header row or data');
@@ -720,8 +812,8 @@ function validateCSVStructure(
       return { isValid: false, data: null, errors };
     }
     const headers = parseCSVLine(firstLine);
-    const missingHeaders = expectedHeaders.filter(h =>
-      !headers.some(header => header.toLowerCase().includes(h.toLowerCase()))
+    const missingHeaders = expectedHeaders.filter(
+      (h) => !headers.some((header) => header.toLowerCase().includes(h.toLowerCase()))
     );
     if (missingHeaders.length > 0) {
       errors.push(`Missing expected headers: ${missingHeaders.join(', ')}`);
@@ -736,7 +828,7 @@ function validateCSVStructure(
 // ============================================================================
 
 /**
- * Convert riddles to CSV format matching quiz export format
+ * Convert riddles to CSV format matching quiz-mcq export format
  * Headers: #,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Subject,Hint,Explanation
  */
 export function riddlesToCSV(riddles: Riddle[], categoryName?: string): string {
@@ -746,19 +838,21 @@ export function riddlesToCSV(riddles: Riddle[], categoryName?: string): string {
   if (categoryName) {
     lines.push(`# Category: ${categoryName}`);
   }
-  
+
   // Add total count
   lines.push(`# Total: ${riddles.length}`);
 
   // Add headers
-  lines.push('#,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Subject,Hint,Explanation');
+  lines.push(
+    '#,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Subject,Hint,Explanation'
+  );
 
   // Add data rows with sequential numbers
   riddles.forEach((riddle, idx) => {
     const options = riddle.options || [];
 
     const row = [
-      String(idx + 1),  // Sequential row number instead of ID
+      String(idx + 1), // Sequential row number instead of ID
       escapeCSV(riddle.question),
       escapeCSV(options[0] || ''),
       escapeCSV(options[1] || ''),
@@ -811,7 +905,7 @@ export function parseRiddleCSV(csvText: string): ParsedRiddleCSV {
   let category: string | undefined;
   let total: number | undefined;
   const dataLines: string[] = [];
-  
+
   // Parse header comments
   for (const line of lines) {
     if (line.startsWith('#')) {
@@ -827,31 +921,28 @@ export function parseRiddleCSV(csvText: string): ParsedRiddleCSV {
       dataLines.push(line);
     }
   }
-  
+
   // Skip header row if it contains column names
   const firstLine = dataLines[0];
-  const startIndex = firstLine && 
-    (firstLine.toLowerCase().includes('question') || firstLine.startsWith('#')) ? 1 : 0;
-  
+  const startIndex =
+    firstLine && (firstLine.toLowerCase().includes('question') || firstLine.startsWith('#'))
+      ? 1
+      : 0;
+
   // Parse data rows
   const riddles: Riddle[] = dataLines.slice(startIndex).map((line, index) => {
     const values = parseCSVLine(line);
-    
+
     const riddle: Riddle = {
       id: String(Date.now() + index),
       question: values[1] || '',
-      options: [
-        values[2] || '',
-        values[3] || '',
-        values[4] || '',
-        values[5] || '',
-      ].filter(Boolean),
+      options: [values[2] || '', values[3] || '', values[4] || '', values[5] || ''].filter(Boolean),
       correctOption: values[6] || 'A',
       difficulty: (values[7] || 'medium').toLowerCase() as Riddle['difficulty'],
       subject: values[8] || '',
       status: 'published',
     };
-    
+
     // Only add optional fields if they have values
     if (values[9]?.trim()) {
       riddle.hint = values[9].trim();
@@ -859,9 +950,9 @@ export function parseRiddleCSV(csvText: string): ParsedRiddleCSV {
     if (values[10]?.trim()) {
       riddle.explanation = values[10].trim();
     }
-    
+
     return riddle;
   });
-  
+
   return { category, total, riddles };
 }

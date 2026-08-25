@@ -30,10 +30,10 @@ import {
   AdminGuard,
   AdminUsersSection,
 } from './components';
-import { QuizContainer } from '@/features/quiz/components';
+import { QuizMcqContainer } from '@/features/quiz-mcq/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
-import { useQuizSubjects } from '@/hooks/useQuizSubjects';
+import { useQuizMcqSubjects } from '@/hooks/useQuizMcqSubjects';
 
 // Helper to check if a string is an emoji
 const isEmoji = (str: string): boolean => {
@@ -60,7 +60,7 @@ export default function AdminPage(): JSX.Element {
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
-  const { subjects: dbSubjects } = useQuizSubjects();
+  const { subjects: dbSubjects } = useQuizMcqSubjects();
 
   // Helper to normalize subject emojis - preserves custom emojis
   const sanitizeSubjects = useCallback((storedSubjects: Subject[]): Subject[] => {
@@ -132,7 +132,7 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'users' ||
         urlSection === 'settings' ||
         urlSection === 'summary' ||
-        urlSection === 'quiz'
+        urlSection === 'quiz-mcq'
       ) {
         setActiveSection(urlSection as MenuSection);
       } else {
@@ -167,7 +167,7 @@ export default function AdminPage(): JSX.Element {
       'users',
       'settings',
       'summary',
-      'quiz',
+      'quiz-mcq',
     ].includes(urlSection);
 
     if (!isSpecialSection) {
@@ -265,15 +265,15 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'summary' })}
           />
 
-          {/* Quiz Section */}
+          {/* Quiz MCQ Section */}
           <MenuItem
             icon={<BookOpen className="w-5 h-5" />}
-            label="Quiz"
-            active={activeSection === 'quiz'}
+            label="Quiz MCQ"
+            active={activeSection === 'quiz-mcq'}
             expanded={sidebarOpen}
             onClick={() => {
-              setActiveSection('quiz');
-              updateURL({ section: 'quiz' });
+              setActiveSection('quiz-mcq');
+              updateURL({ section: 'quiz-mcq' });
             }}
           />
 
@@ -399,20 +399,20 @@ export default function AdminPage(): JSX.Element {
                   <Settings className="w-6 h-6" /> Settings
                 </>
               )}
-              {(subjects.some((s) => s.slug === activeSection) || activeSection === 'quiz') && (
+              {(subjects.some((s) => s.slug === activeSection) || activeSection === 'quiz-mcq') && (
                 <>
                   <span className="text-2xl">
-                    {activeSection === 'quiz'
+                    {activeSection === 'quiz-mcq'
                       ? '📚'
                       : isEmoji(subjects.find((s) => s.slug === activeSection)?.emoji || '')
                         ? subjects.find((s) => s.slug === activeSection)?.emoji
                         : '📚'}
                   </span>
                   <span>
-                    {activeSection === 'quiz'
+                    {activeSection === 'quiz-mcq'
                       ? 'All Subjects'
                       : (subjects.find((s) => s.slug === activeSection)?.name ?? '')}{' '}
-                    - Quiz Management
+                    - Quiz MCQ Management
                   </span>
                 </>
               )}
@@ -442,8 +442,8 @@ export default function AdminPage(): JSX.Element {
               <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
             </div>
           )}
-          {(activeSection === 'quiz' || subjects.some((s) => s.slug === activeSection)) && (
-            <QuizContainer />
+          {(activeSection === 'quiz-mcq' || subjects.some((s) => s.slug === activeSection)) && (
+            <QuizMcqContainer />
           )}
           {activeSection === 'jokes' && (
             <JokesSection

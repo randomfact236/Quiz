@@ -20,17 +20,17 @@ Priority order, respecting the project's own ≤200-LOC rule (`true-ideal-approa
 
 | File                                             | LOC | Split into                                                                                                                             |
 | ------------------------------------------------ | --- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `apps/backend/src/quiz/quiz.service.ts`          | 959 | SubjectService / ChapterService / QuestionService / QuizImportService / QuizStatsService (mirror riddle-mcq's proven 7-service layout) |
-| `apps/frontend/src/app/quiz/play/page.tsx`       | 849 | PreQuizSummary / GameHeader / SubmitModals / ExtendQuizModal components                                                                |
+| `apps/backend/src/quiz-mcq/quiz-mcq.service.ts`  | 959 | SubjectService / ChapterService / QuestionService / QuizImportService / QuizStatsService (mirror riddle-mcq's proven 7-service layout) |
+| `apps/frontend/src/app/quiz-mcq/play/page.tsx`   | 849 | PreQuizSummary / GameHeader / SubmitModals / ExtendQuizModal components                                                                |
 | `apps/frontend/src/hooks/useQuiz.ts`             | 641 | useQuizScoring / useQuizTimers / useQuizResume / useQuizNavigation                                                                     |
-| `apps/frontend/src/app/quiz/page.tsx`            | 767 | one component per wizard stage (already exists conceptually)                                                                           |
+| `apps/frontend/src/app/quiz-mcq/page.tsx`        | 767 | one component per wizard stage (already exists conceptually)                                                                           |
 | `apps/frontend/src/app/riddle-mcq/play/page.tsx` | 763 | same decomposition as quiz play                                                                                                        |
 
 Rule: **no file may grow past 200 LOC; refactors must leave behavior identical** (covered by tests from Phase 1 before touching).
 
 ## 3. Deduplication: Shared Content-Module Kit
 
-quiz, riddle-mcq, image-riddles and dad-jokes backends each re-implement: pagination+filters, cached list reads, bulk import (chunked transactions), bulk actions, filter-counts aggregation, CSV export, status counts. Extract once into `apps/backend/src/common/content/`:
+quiz-mcq, riddle-mcq, image-riddles and dad-jokes backends each re-implement: pagination+filters, cached list reads, bulk import (chunked transactions), bulk actions, filter-counts aggregation, CSV export, status counts. Extract once into `apps/backend/src/common/content/`:
 
 1. `content-crud.factory.ts` — standard subject/chapter/item repos + cascade delete
 2. `content-import.service.ts` — chunked transactional import with row-error collection
@@ -51,13 +51,13 @@ Sequence: extract only after Phase 1 bugs are fixed and tests exist — never re
 
 ## 5. Per-Feature Quality Debt Index
 
-| Feature                                            | Top debt items                                                                                       |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [quiz](../docs/features/quiz.md)                   | play page + useQuiz monoliths; hub duplication; dead QuizTimer/QuizNavigation; setState side effects |
-| [riddle-mcq](../docs/features/riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                |
-| [image-riddles](../docs/features/image-riddles.md) | two divergent CRUD paths to unify                                                                    |
-| [dad-jokes](../docs/features/dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                               |
-| [auth-users](../docs/features/auth-users.md)       | plaintext refresh tokens; free-text role; untyped admin payloads                                     |
+| Feature                                            | Top debt items                                                                                                |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [quiz-mcq](../docs/features/quiz-mcq.md)           | play page + useQuizMcq monoliths; hub duplication; dead QuizMcqTimer/QuizMcqNavigation; setState side effects |
+| [riddle-mcq](../docs/features/riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                         |
+| [image-riddles](../docs/features/image-riddles.md) | two divergent CRUD paths to unify                                                                             |
+| [dad-jokes](../docs/features/dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                                        |
+| [auth-users](../docs/features/auth-users.md)       | plaintext refresh tokens; free-text role; untyped admin payloads                                              |
 
 ## 6. Enforcement
 

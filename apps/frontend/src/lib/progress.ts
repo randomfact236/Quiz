@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import type { QuizSession, ChapterProgress, SubjectProgress } from '@/types/quiz';
+import type { QuizSession, ChapterProgress, SubjectProgress } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 
 /** Generate compound key for chapter progress */
@@ -33,8 +33,7 @@ export function saveQuizResult(session: QuizSession): void {
     lastScore: session.score,
     averageScore: existing
       ? Math.round(
-          (existing.averageScore * existing.attempts + session.score) /
-            (existing.attempts + 1)
+          (existing.averageScore * existing.attempts + session.score) / (existing.attempts + 1)
         )
       : session.score,
     completed: session.score > 0 || (existing?.completed ?? false),
@@ -56,9 +55,7 @@ function updateSubjectProgress(subjectSlug: string): void {
   );
 
   // Get all chapters for this subject
-  const subjectChapters = Object.values(chapterProgress).filter(
-    (p) => p.subject === subjectSlug
-  );
+  const subjectChapters = Object.values(chapterProgress).filter((p) => p.subject === subjectSlug);
 
   if (subjectChapters.length === 0) return;
 
@@ -68,18 +65,10 @@ function updateSubjectProgress(subjectSlug: string): void {
   const bestScore = Math.max(...subjectChapters.map((p) => p.bestScore), 0);
 
   // Calculate overall accuracy
-  const totalQuestionsAnswered = subjectChapters.reduce(
-    (sum, p) => sum + p.attempts,
-    0
-  );
-  const totalCorrect = subjectChapters.reduce(
-    (sum, p) => sum + p.averageScore * p.attempts,
-    0
-  );
+  const totalQuestionsAnswered = subjectChapters.reduce((sum, p) => sum + p.attempts, 0);
+  const totalCorrect = subjectChapters.reduce((sum, p) => sum + p.averageScore * p.attempts, 0);
   const overallAccuracy =
-    totalQuestionsAnswered > 0
-      ? Math.round(totalCorrect / totalQuestionsAnswered)
-      : 0;
+    totalQuestionsAnswered > 0 ? Math.round(totalCorrect / totalQuestionsAnswered) : 0;
 
   const subjectProgress = getItem<Record<string, SubjectProgress>>(
     STORAGE_KEYS.SUBJECT_PROGRESS,
@@ -99,10 +88,7 @@ function updateSubjectProgress(subjectSlug: string): void {
 }
 
 /** Get chapter progress */
-export function getChapterProgress(
-  subject: string,
-  chapter: string
-): ChapterProgress | null {
+export function getChapterProgress(subject: string, chapter: string): ChapterProgress | null {
   const chapterProgress = getItem<Record<string, ChapterProgress>>(
     STORAGE_KEYS.CHAPTER_PROGRESS,
     {}
@@ -149,13 +135,9 @@ export function getTotalStats(): {
   }
 
   const totalQuizzes = history.length;
-  const totalQuestions = history.reduce(
-    (sum, s) => sum + s.maxScore,
-    0
-  );
+  const totalQuestions = history.reduce((sum, s) => sum + s.maxScore, 0);
   const averageScore = Math.round(
-    history.reduce((sum, s) => sum + (s.score / s.maxScore) * 100, 0) /
-      history.length
+    history.reduce((sum, s) => sum + (s.score / s.maxScore) * 100, 0) / history.length
   );
 
   // Calculate streak (consecutive days with quizzes)
@@ -169,8 +151,7 @@ export function getTotalStats(): {
     } else {
       const prevDate = new Date(dates[i - 1]!);
       const currDate = new Date(dates[i]!);
-      const diffDays =
-        (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
+      const diffDays = (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
 
       if (diffDays === 1) {
         currentStreak++;
@@ -234,7 +215,7 @@ export function exportProgress(): string {
 export function importProgress(jsonString: string): boolean {
   try {
     const data = JSON.parse(jsonString);
-    
+
     if (data.chapterProgress) {
       setItem(STORAGE_KEYS.CHAPTER_PROGRESS, data.chapterProgress);
     }

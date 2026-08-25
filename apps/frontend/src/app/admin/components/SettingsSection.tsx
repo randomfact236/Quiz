@@ -20,8 +20,8 @@ import type { SystemSettings, SettingsTab, SettingsValue } from '@/types/setting
  */
 type NestedSettingsObject = {
   [K in keyof Partial<SystemSettings>]: Partial<SystemSettings>[K] extends object
-  ? Record<string, SettingsValue>
-  : Partial<SystemSettings>[K];
+    ? Record<string, SettingsValue>
+    : Partial<SystemSettings>[K];
 } & Record<string, SettingsValue>;
 
 /**
@@ -29,7 +29,7 @@ type NestedSettingsObject = {
  */
 const SETTINGS_TABS = [
   { id: 'general' as const, label: 'General', emoji: '⚙️' },
-  { id: 'quiz' as const, label: 'Quiz', emoji: '📚' },
+  { id: 'quiz-mcq' as const, label: 'Quiz MCQ', emoji: '📚' },
   { id: 'jokes' as const, label: 'Dad Jokes', emoji: '😂' },
   { id: 'riddles' as const, label: 'Riddles', emoji: '🎭' },
   { id: 'imageRiddles' as const, label: 'Image Riddles', emoji: '🖼️' },
@@ -50,11 +50,16 @@ const DIFFICULTY_LEVELS = [
  */
 function getDefaultTimerValue(level: string): number {
   switch (level) {
-    case 'easy': return 30;
-    case 'medium': return 60;
-    case 'hard': return 90;
-    case 'expert': return 120;
-    default: return 60;
+    case 'easy':
+      return 30;
+    case 'medium':
+      return 60;
+    case 'hard':
+      return 90;
+    case 'expert':
+      return 120;
+    default:
+      return 60;
   }
 }
 
@@ -63,12 +68,18 @@ function getDefaultTimerValue(level: string): number {
  */
 function getDefaultTimerForLevel(level: string): number {
   switch (level) {
-    case 'easy': return 30;
-    case 'medium': return 45;
-    case 'hard': return 60;
-    case 'expert': return 90;
-    case 'extreme': return 120;
-    default: return 30;
+    case 'easy':
+      return 30;
+    case 'medium':
+      return 45;
+    case 'hard':
+      return 60;
+    case 'expert':
+      return 90;
+    case 'extreme':
+      return 120;
+    default:
+      return 30;
   }
 }
 
@@ -77,11 +88,16 @@ function getDefaultTimerForLevel(level: string): number {
  */
 function getDefaultRiddleTimerForLevel(level: string): number {
   switch (level) {
-    case 'easy': return 30;
-    case 'medium': return 60;
-    case 'hard': return 90;
-    case 'expert': return 120;
-    default: return 60;
+    case 'easy':
+      return 30;
+    case 'medium':
+      return 60;
+    case 'hard':
+      return 90;
+    case 'expert':
+      return 120;
+    default:
+      return 60;
   }
 }
 
@@ -146,7 +162,9 @@ export function SettingsSection(): JSX.Element {
 
       for (let i = 0; i < parts.length - 1; i++) {
         const part = parts[i];
-        if (!part) { continue; }
+        if (!part) {
+          continue;
+        }
         if (!current[part]) {
           current[part] = {}; // Create nested object if it doesn't exist
         }
@@ -182,9 +200,7 @@ export function SettingsSection(): JSX.Element {
     <div className="space-y-6">
       {/* Header with Save Button */}
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-          System Settings
-        </h3>
+        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">System Settings</h3>
         <button
           onClick={handleSave}
           disabled={saving}
@@ -198,11 +214,7 @@ export function SettingsSection(): JSX.Element {
 
       {/* Messages */}
       {error && (
-        <div
-          className="rounded-lg bg-red-100 p-4 text-red-700"
-          role="alert"
-          aria-live="assertive"
-        >
+        <div className="rounded-lg bg-red-100 p-4 text-red-700" role="alert" aria-live="assertive">
           {error}
         </div>
       )}
@@ -226,16 +238,19 @@ export function SettingsSection(): JSX.Element {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
-              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-              }`}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === tab.id
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            }`}
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls={`settings-panel-${tab.id}`}
             aria-label={tab.label}
           >
-            <span className="mr-2" aria-hidden="true">{tab.emoji}</span>
+            <span className="mr-2" aria-hidden="true">
+              {tab.emoji}
+            </span>
             {tab.label}
           </button>
         ))}
@@ -251,9 +266,7 @@ export function SettingsSection(): JSX.Element {
         {/* General Settings */}
         {activeTab === 'general' && (
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">
-              Global Configuration
-            </h4>
+            <h4 className="text-lg font-semibold dark:text-gray-200">Global Configuration</h4>
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <label
@@ -266,7 +279,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-default-limit"
                   type="number"
                   value={formData.global?.pagination?.defaultLimit ?? 10}
-                  onChange={(e) => updateField('global.pagination.defaultLimit', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateField('global.pagination.defaultLimit', parseInt(e.target.value))
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   aria-describedby="settings-default-limit-help"
                   min={1}
@@ -287,7 +302,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-max-limit"
                   type="number"
                   value={formData.global?.pagination?.maxLimit ?? 100}
-                  onChange={(e) => updateField('global.pagination.maxLimit', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateField('global.pagination.maxLimit', parseInt(e.target.value))
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   aria-describedby="settings-max-limit-help"
                   min={1}
@@ -322,11 +339,9 @@ export function SettingsSection(): JSX.Element {
         )}
 
         {/* Quiz Settings */}
-        {activeTab === 'quiz' && (
+        {activeTab === 'quiz-mcq' && (
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">
-              Quiz Configuration
-            </h4>
+            <h4 className="text-lg font-semibold dark:text-gray-200">Quiz Configuration</h4>
 
             {/* Level-based Timer Settings */}
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -348,14 +363,29 @@ export function SettingsSection(): JSX.Element {
                     <input
                       id={`settings-timer-${level}`}
                       type="number"
-                      value={formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)}
-                      onChange={(e) => updateField(`quiz.defaults.levelTimers.${level}`, parseInt(e.target.value) || 30)}
+                      value={
+                        formData.quiz?.defaults?.levelTimers?.[level] ??
+                        getDefaultTimerForLevel(level)
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          `quiz.defaults.levelTimers.${level}`,
+                          parseInt(e.target.value) || 30
+                        )
+                      }
                       className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       min={5}
                       max={600}
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      {Math.floor((formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)) / 60)}m {(formData.quiz?.defaults?.levelTimers?.[level] ?? getDefaultTimerForLevel(level)) % 60}s
+                      {Math.floor(
+                        (formData.quiz?.defaults?.levelTimers?.[level] ??
+                          getDefaultTimerForLevel(level)) / 60
+                      )}
+                      m{' '}
+                      {(formData.quiz?.defaults?.levelTimers?.[level] ??
+                        getDefaultTimerForLevel(level)) % 60}
+                      s
                     </p>
                   </div>
                 ))}
@@ -364,9 +394,7 @@ export function SettingsSection(): JSX.Element {
 
             {/* Cache Settings */}
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
-                Cache Settings
-              </h5>
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">Cache Settings</h5>
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <label
@@ -379,7 +407,9 @@ export function SettingsSection(): JSX.Element {
                     id="settings-quiz-cache-ttl"
                     type="number"
                     value={formData.quiz?.cache?.subjectsTtl ?? 3600}
-                    onChange={(e) => updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))
+                    }
                     className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     min={0}
                   />
@@ -407,9 +437,7 @@ export function SettingsSection(): JSX.Element {
         {/* Dad Jokes Settings */}
         {activeTab === 'jokes' && (
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">
-              Dad Jokes Configuration
-            </h4>
+            <h4 className="text-lg font-semibold dark:text-gray-200">Dad Jokes Configuration</h4>
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <label
@@ -438,7 +466,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-jokes-cache-ttl"
                   type="number"
                   value={formData.dadJokes?.cache?.categoriesTtl ?? 3600}
-                  onChange={(e) => updateField('dadJokes.cache.categoriesTtl', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateField('dadJokes.cache.categoriesTtl', parseInt(e.target.value))
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   min={0}
                 />
@@ -450,7 +480,6 @@ export function SettingsSection(): JSX.Element {
         {/* Riddles Settings */}
         {activeTab === 'riddles' && (
           <div className="space-y-6">
-
             {/* Riddle Level-based Timer Settings */}
             <div>
               <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
@@ -471,14 +500,29 @@ export function SettingsSection(): JSX.Element {
                     <input
                       id={`settings-riddle-timer-${level}`}
                       type="number"
-                      value={formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)}
-                      onChange={(e) => updateField(`riddles.defaults.levelTimers.${level}`, parseInt(e.target.value) || 30)}
+                      value={
+                        formData.riddles?.defaults?.levelTimers?.[level] ??
+                        getDefaultRiddleTimerForLevel(level)
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          `riddles.defaults.levelTimers.${level}`,
+                          parseInt(e.target.value) || 30
+                        )
+                      }
                       className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       min={5}
                       max={600}
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      {Math.floor((formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)) / 60)}m {(formData.riddles?.defaults?.levelTimers?.[level] ?? getDefaultRiddleTimerForLevel(level)) % 60}s
+                      {Math.floor(
+                        (formData.riddles?.defaults?.levelTimers?.[level] ??
+                          getDefaultRiddleTimerForLevel(level)) / 60
+                      )}
+                      m{' '}
+                      {(formData.riddles?.defaults?.levelTimers?.[level] ??
+                        getDefaultRiddleTimerForLevel(level)) % 60}
+                      s
                     </p>
                   </div>
                 ))}
@@ -505,7 +549,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-image-default-timer"
                   type="number"
                   value={formData.imageRiddles?.defaults?.timerSeconds ?? 90}
-                  onChange={(e) => updateField('imageRiddles.defaults.timerSeconds', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateField('imageRiddles.defaults.timerSeconds', parseInt(e.target.value))
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   min={0}
                 />
@@ -524,7 +570,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-image-emoji"
                   type="text"
                   value={formData.imageRiddles?.defaults?.categoryEmoji ?? '🖼️'}
-                  onChange={(e) => updateField('imageRiddles.defaults.categoryEmoji', e.target.value)}
+                  onChange={(e) =>
+                    updateField('imageRiddles.defaults.categoryEmoji', e.target.value)
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   maxLength={10}
                 />
@@ -540,7 +588,9 @@ export function SettingsSection(): JSX.Element {
                   id="settings-image-cache-ttl"
                   type="number"
                   value={formData.imageRiddles?.cache?.categoriesTtl ?? 3600}
-                  onChange={(e) => updateField('imageRiddles.cache.categoriesTtl', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateField('imageRiddles.cache.categoriesTtl', parseInt(e.target.value))
+                  }
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   min={0}
                 />
@@ -567,9 +617,7 @@ export function SettingsSection(): JSX.Element {
 
             {/* Difficulty Timers */}
             <div className="col-span-full border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
-              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
-                Difficulty Timers
-              </h5>
+              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">Difficulty Timers</h5>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {DIFFICULTY_LEVELS.map((level) => (
                   <div key={level.key}>
@@ -586,7 +634,9 @@ export function SettingsSection(): JSX.Element {
                         formData.imageRiddles?.timers?.[level.key] ??
                         getDefaultTimerValue(level.key)
                       }
-                      onChange={(e) => updateField(`imageRiddles.timers.${level.key}`, parseInt(e.target.value))}
+                      onChange={(e) =>
+                        updateField(`imageRiddles.timers.${level.key}`, parseInt(e.target.value))
+                      }
                       className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       min={0}
                       aria-label={`${level.label} difficulty timer in seconds`}

@@ -272,7 +272,7 @@ export interface SettingsUpdateResponse {
 /**
  * Settings tab identifiers for admin panel
  */
-export type SettingsTab = 'general' | 'quiz' | 'jokes' | 'riddles' | 'imageRiddles';
+export type SettingsTab = 'general' | 'quiz-mcq' | 'jokes' | 'riddles' | 'imageRiddles';
 
 /**
  * Settings form data type (partial system settings for form handling)
@@ -297,7 +297,7 @@ export type SettingsValue =
 export function isSettingsTab(value: unknown): value is SettingsTab {
   return (
     typeof value === 'string' &&
-    ['general', 'quiz', 'jokes', 'riddles', 'imageRiddles'].includes(value)
+    ['general', 'quiz-mcq', 'jokes', 'riddles', 'imageRiddles'].includes(value)
   );
 }
 

@@ -22,15 +22,15 @@ Migrations are currently orphaned/broken. Before any index/column changes:
 **Bug fixes** (each = small branch + regression test; details in feature docs):
 | # | Bug | Reference |
 |---|---|---|
-| 1 | MCQ review marks correct answers wrong | features/quiz.md |
-| 2 | Extreme answers always scored incorrect | features/quiz.md |
-| 3 | Crash on unknown difficulty | features/quiz.md |
+| 1 | MCQ review marks correct answers wrong | features/quiz-mcq.md |
+| 2 | Extreme answers always scored incorrect | features/quiz-mcq.md |
+| 3 | Crash on unknown difficulty | features/quiz-mcq.md |
 | 4 | Riddle stats swapped → public counts show 0 | features/riddle-mcq.md |
 | 5 | Subject-wise riddle play broken (param split) | features/riddle-mcq.md |
 | 6 | Drafts leak via by-subject endpoint | features/riddle-mcq.md |
 | 7 | Dead `/users/profile` endpoints | features/auth-users.md |
 | 8 | Guest demographics 404 | features/auth-users.md |
-| 9 | `updateQuestion` extreme logic dead | features/quiz.md |
+| 9 | `updateQuestion` extreme logic dead | features/quiz-mcq.md |
 
 **DB foundation** (capacity.md Track A): trigram GIN search indexes (A1), `(status, updatedAt DESC)` composites.
 

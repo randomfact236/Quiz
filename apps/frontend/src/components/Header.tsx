@@ -59,22 +59,63 @@ export default function Header(): JSX.Element {
       <header className="sticky top-0 z-50 glass border-b border-secondary-200 dark:border-secondary-800">
         <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold text-primary-600 hover:text-primary-700" aria-label="AI Quiz Home">
+            <Link
+              href="/"
+              className="text-xl font-bold text-primary-600 hover:text-primary-700"
+              aria-label="AI Quiz Home"
+            >
               AI Quiz
             </Link>
 
             <div className="hidden items-center gap-4 md:flex">
               <ul className="flex items-center gap-6" role="menubar">
-                <li><Link href="/" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}>Home</Link></li>
-                <li><Link href="/quiz" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz') ? 'text-primary-600' : ''}`}>Quiz</Link></li>
-                <li><Link href="/jokes" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}>Dad Jokes</Link></li>
-                <li><Link href="/riddles" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}>Riddles</Link></li>
-                <li><Link href="/about" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}>About</Link></li>
+                <li>
+                  <Link
+                    href="/"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/quiz-mcq"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz-mcq') ? 'text-primary-600' : ''}`}
+                  >
+                    Quiz
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/jokes"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}
+                  >
+                    Dad Jokes
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/riddles"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}
+                  >
+                    Riddles
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}
+                  >
+                    About
+                  </Link>
+                </li>
               </ul>
               <div className="flex items-center gap-3">
                 {isAdminLoggedIn ? (
                   <div className="flex items-center gap-3">
-                    <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Admin</span>
+                    <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
+                      Admin
+                    </span>
                     <button
                       onClick={handleAdminLogout}
                       className="text-sm bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
@@ -96,9 +137,19 @@ export default function Header(): JSX.Element {
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -107,21 +158,56 @@ export default function Header(): JSX.Element {
           {/* Mobile menu */}
           {isMenuOpen && (
             <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
-              <Link href="/" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Home</Link>
-              <Link href="/quiz" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Quiz</Link>
-              <Link href="/jokes" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Dad Jokes</Link>
-              <Link href="/riddles" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Riddles</Link>
-              <Link href="/about" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>About</Link>
+              <Link
+                href="/"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/quiz-mcq"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Quiz
+              </Link>
+              <Link
+                href="/jokes"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Dad Jokes
+              </Link>
+              <Link
+                href="/riddles"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Riddles
+              </Link>
+              <Link
+                href="/about"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
               <div className="border-t border-secondary-200 pt-2 mt-2">
                 {isAdminLoggedIn ? (
                   <button
-                    onClick={() => { handleAdminLogout(); setIsMenuOpen(false); }}
+                    onClick={() => {
+                      handleAdminLogout();
+                      setIsMenuOpen(false);
+                    }}
                     className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                   >
                     Logout
                   </button>
                 ) : (
-                  <span className="block rounded-lg px-4 py-2 text-secondary-500">Admin Portal</span>
+                  <span className="block rounded-lg px-4 py-2 text-secondary-500">
+                    Admin Portal
+                  </span>
                 )}
               </div>
             </div>
@@ -136,21 +222,60 @@ export default function Header(): JSX.Element {
     <header className="sticky top-0 z-50 glass border-b border-secondary-200 dark:border-secondary-800">
       <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-primary-600 hover:text-primary-700" aria-label="AI Quiz Home">
+          <Link
+            href="/"
+            className="text-xl font-bold text-primary-600 hover:text-primary-700"
+            aria-label="AI Quiz Home"
+          >
             AI Quiz
           </Link>
 
           <div className="hidden items-center gap-4 md:flex">
             <ul className="flex items-center gap-6" role="menubar">
-              <li><Link href="/" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}>Home</Link></li>
-              <li><Link href="/quiz" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz') ? 'text-primary-600' : ''}`}>Quiz</Link></li>
-              <li><Link href="/jokes" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}>Dad Jokes</Link></li>
-              <li><Link href="/riddles" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}>Riddles</Link></li>
-              <li><Link href="/about" className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}>About</Link></li>
+              <li>
+                <Link
+                  href="/"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/quiz-mcq"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz-mcq') ? 'text-primary-600' : ''}`}
+                >
+                  Quiz
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/jokes"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}
+                >
+                  Dad Jokes
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/riddles"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}
+                >
+                  Riddles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}
+                >
+                  About
+                </Link>
+              </li>
             </ul>
             <div className="flex items-center gap-3">
               {/* Show logout when user OR admin is logged in */}
-              {(isUserLoggedIn || isAdminLoggedIn) ? (
+              {isUserLoggedIn || isAdminLoggedIn ? (
                 <div className="flex items-center gap-3">
                   {isAdminLoggedIn && (
                     <Link
@@ -164,7 +289,9 @@ export default function Header(): JSX.Element {
                     <span className="text-sm text-secondary-600 dark:text-secondary-300">User</span>
                   )}
                   {isAdminLoggedIn && (
-                    <span className="text-sm bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">Admin</span>
+                    <span className="text-sm bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                      Admin
+                    </span>
                   )}
                   <button
                     onClick={handleLogout}
@@ -192,9 +319,19 @@ export default function Header(): JSX.Element {
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -202,13 +339,43 @@ export default function Header(): JSX.Element {
 
         {isMenuOpen && (
           <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
-            <Link href="/" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link href="/quiz" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Quiz</Link>
-            <Link href="/jokes" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Dad Jokes</Link>
-            <Link href="/riddles" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>Riddles</Link>
-            <Link href="/about" className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800" onClick={() => setIsMenuOpen(false)}>About</Link>
+            <Link
+              href="/"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/quiz-mcq"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Quiz
+            </Link>
+            <Link
+              href="/jokes"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Dad Jokes
+            </Link>
+            <Link
+              href="/riddles"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Riddles
+            </Link>
+            <Link
+              href="/about"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About
+            </Link>
             <div className="border-t border-secondary-200 pt-2 mt-2">
-              {(isUserLoggedIn || isAdminLoggedIn) ? (
+              {isUserLoggedIn || isAdminLoggedIn ? (
                 <>
                   {isAdminLoggedIn && (
                     <Link
@@ -220,7 +387,10 @@ export default function Header(): JSX.Element {
                     </Link>
                   )}
                   <button
-                    onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
                     className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                   >
                     Logout

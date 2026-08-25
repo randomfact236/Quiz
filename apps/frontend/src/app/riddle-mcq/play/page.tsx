@@ -3,7 +3,7 @@
  * Riddle Play Page (Backend Connected)
  * ============================================================================
  * Main gameplay page for riddles - fetches from backend API.
- * Layout mirrors quiz/play/page.tsx exactly.
+ * Layout mirrors quiz-mcq/play/page.tsx exactly.
  * URL: /riddle-mcq/play?chapterId=&level=&mode=
  * ============================================================================
  */
@@ -14,29 +14,21 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowLeft,
-  Timer,
-  AlertCircle,
-  RotateCcw,
-  Save,
-  Pause,
-  Play
-} from 'lucide-react';
+import { ArrowLeft, Timer, AlertCircle, RotateCcw, Save, Pause, Play } from 'lucide-react';
 
 import {
   saveRiddleSession,
   loadRiddleSession,
   clearRiddleSession,
   createRiddleSession,
-  setupNavigationWarning
+  setupNavigationWarning,
 } from '@/lib/riddle-session';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
-import { FloatingBackground } from '@/components/quiz/FloatingBackground';
+import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { formatTimeMMSS } from '@/lib/utils';
 
 // Auto-save interval in milliseconds
@@ -45,7 +37,7 @@ const AUTO_SAVE_INTERVAL = 10000;
 // Default time limit for timer mode (seconds per riddle)
 const DEFAULT_TIME_PER_RIDDLE = 30;
 
-// Loading component — mirrors quiz/play/page.tsx loading state exactly
+// Loading component — mirrors quiz-mcq/play/page.tsx loading state exactly
 function PlayPageLoading(): JSX.Element {
   return (
     <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
@@ -60,14 +52,16 @@ function PlayPageLoading(): JSX.Element {
 // Main page component with Suspense
 export default function RiddlePlayPage(): JSX.Element {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
-          <p className="text-xl font-semibold text-white">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+            <p className="text-xl font-semibold text-white">Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <RiddlePlayPageContent />
     </Suspense>
   );
@@ -128,26 +122,40 @@ function RiddlePlayPageContent(): JSX.Element {
           const timeoutPromise = new Promise((_, reject) =>
             setTimeout(() => reject(new Error('Settings timeout')), 5000)
           );
-          const config = await Promise.race([settingsPromise, timeoutPromise]) as Awaited<ReturnType<typeof SettingsService.getSettings>>;
+          const config = (await Promise.race([settingsPromise, timeoutPromise])) as Awaited<
+            ReturnType<typeof SettingsService.getSettings>
+          >;
           setSettings(config);
-        } catch (err) {
-
-        }
+        } catch (err) {}
 
         let fetchedRiddles: Riddle[] = [];
 
         if (chapterId === 'all') {
-          let mixed: { level?: string; id: string; question: string; options: string[]; correctAnswer: string; chapter?: { name?: string }; chapterId?: string; explanation?: string; hint?: string }[] = [];
+          let mixed: {
+            level?: string;
+            id: string;
+            question: string;
+            options: string[];
+            correctAnswer: string;
+            chapter?: { name?: string };
+            chapterId?: string;
+            explanation?: string;
+            hint?: string;
+          }[] = [];
 
           if (level && level !== 'all') {
             const response = await getRandomRiddles(level, 20);
-            mixed = response.map(r => ({ ...r, level: r.level || level }));
+            mixed = response.map((r) => ({ ...r, level: r.level || level }));
           } else {
             mixed = await getMixedRiddles(20);
           }
 
-          fetchedRiddles = mixed.map(r => adaptRiddleMcq(r as any));
-          setChapterName(level === 'all' ? 'Mixed Subjects' : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`);
+          fetchedRiddles = mixed.map((r) => adaptRiddleMcq(r as any));
+          setChapterName(
+            level === 'all'
+              ? 'Mixed Subjects'
+              : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`
+          );
         } else {
           // Pass level filter to backend API (more efficient than frontend filtering)
           const response = await getRiddlesBySubject(chapterId, 1, 50, level);
@@ -164,14 +172,17 @@ function RiddlePlayPageContent(): JSX.Element {
 
         // Check for existing session
         const existingSession = loadRiddleSession();
-        if (existingSession && existingSession.status === 'in-progress' && existingSession.chapterId === chapterId) {
+        if (
+          existingSession &&
+          existingSession.status === 'in-progress' &&
+          existingSession.chapterId === chapterId
+        ) {
           setShowResumeDialog(true);
           setStatus('paused'); // Exit loading so dialog renders
         } else {
           startNewSession(fetchedRiddles);
         }
       } catch (err) {
-
         setError('Failed to load riddles. Check your connection and try again.');
         setStatus('playing'); // exit loading state so error UI is visible
       }
@@ -181,34 +192,38 @@ function RiddlePlayPageContent(): JSX.Element {
   }, [chapterId, level, isMounted]);
 
   // Start new session
-  const startNewSession = useCallback((riddleList: Riddle[]) => {
-    clearRiddleSession();
+  const startNewSession = useCallback(
+    (riddleList: Riddle[]) => {
+      clearRiddleSession();
 
-    let totalTimeLimit = 0;
-    if (mode === 'timer') {
-      const timers = settings?.riddles?.defaults?.levelTimers;
-      riddleList.forEach(riddle => {
-        const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
-        const perRiddleTime = timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
-        totalTimeLimit += perRiddleTime;
-      });
-    }
+      let totalTimeLimit = 0;
+      if (mode === 'timer') {
+        const timers = settings?.riddles?.defaults?.levelTimers;
+        riddleList.forEach((riddle) => {
+          const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
+          const perRiddleTime =
+            timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
+          totalTimeLimit += perRiddleTime;
+        });
+      }
 
-    const newSession = createRiddleSession(
-      mode,
-      chapterId,
-      chapterName,
-      (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
-      riddleList,
-      totalTimeLimit
-    );
-    setSession(newSession);
-    setAnswers({});
-    setCurrentIndex(0);
-    setTimeRemaining(totalTimeLimit);
-    setStatus('playing');
-    setShowResumeDialog(false);
-  }, [mode, chapterId, chapterName, level, settings]);
+      const newSession = createRiddleSession(
+        mode,
+        chapterId,
+        chapterName,
+        (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
+        riddleList,
+        totalTimeLimit
+      );
+      setSession(newSession);
+      setAnswers({});
+      setCurrentIndex(0);
+      setTimeRemaining(totalTimeLimit);
+      setStatus('playing');
+      setShowResumeDialog(false);
+    },
+    [mode, chapterId, chapterName, level, settings]
+  );
 
   // Resume existing session
   const resumeSession = useCallback(() => {
@@ -230,7 +245,7 @@ function RiddlePlayPageContent(): JSX.Element {
     if (status !== 'playing' || mode !== 'timer') return;
 
     const timer = setInterval(() => {
-      setTimeRemaining(prev => {
+      setTimeRemaining((prev) => {
         if (prev <= 1) {
           handleSubmit();
           return 0;
@@ -244,7 +259,7 @@ function RiddlePlayPageContent(): JSX.Element {
 
   // Toggle pause — mirrors quiz page pauseQuiz/resumeQuiz
   const togglePause = useCallback(() => {
-    setStatus(prev => prev === 'playing' ? 'paused' : 'playing');
+    setStatus((prev) => (prev === 'playing' ? 'paused' : 'playing'));
   }, []);
 
   // Auto-save
@@ -270,7 +285,11 @@ function RiddlePlayPageContent(): JSX.Element {
     if (status !== 'playing') return;
     return setupNavigationWarning(() => {
       if (!session) return null;
-      return { ...session, answers, timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken() };
+      return {
+        ...session,
+        answers,
+        timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken(),
+      };
     });
   }, [status, session, answers, timeRemaining, mode]);
 
@@ -288,23 +307,26 @@ function RiddlePlayPageContent(): JSX.Element {
   useEffect(() => {
     if (mode === 'timer' || status !== 'playing') return;
     const t = setInterval(() => {
-      setPracticeRiddleTime(prev => Math.max(0, prev - 1));
+      setPracticeRiddleTime((prev) => Math.max(0, prev - 1));
     }, 1000);
     return () => clearInterval(t);
   }, [currentIndex, status, mode]);
 
-  const handleAnswerSelect = useCallback((optionLetter: string) => {
-    if (!session || status !== 'playing') return;
-    const currentRiddle = riddles[currentIndex];
-    if (!currentRiddle) return;
-    setAnswers(prev => ({ ...prev, [currentRiddle.id]: optionLetter }));
-  }, [session, status, riddles, currentIndex]);
+  const handleAnswerSelect = useCallback(
+    (optionLetter: string) => {
+      if (!session || status !== 'playing') return;
+      const currentRiddle = riddles[currentIndex];
+      if (!currentRiddle) return;
+      setAnswers((prev) => ({ ...prev, [currentRiddle.id]: optionLetter }));
+    },
+    [session, status, riddles, currentIndex]
+  );
 
   // Navigation handlers — mirrors quiz goToNext/goToPrevious
   const handleNext = useCallback(() => {
     riddleCardRef.current?.clearBubbles();
     if (currentIndex < riddles.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     } else {
       setShowConfirmSubmit(true);
     }
@@ -313,18 +335,24 @@ function RiddlePlayPageContent(): JSX.Element {
   const handlePrevious = useCallback(() => {
     riddleCardRef.current?.clearBubbles();
     if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
     }
   }, [currentIndex]);
 
   // Helper function to check if answer is correct (handles expert/open-ended normalization)
-  const isAnswerCorrect = (riddle: typeof riddles[0], userAnswer: string | undefined): boolean => {
+  const isAnswerCorrect = (
+    riddle: (typeof riddles)[0],
+    userAnswer: string | undefined
+  ): boolean => {
     if (!userAnswer) return false;
     const isExpert = riddle.level === 'extreme' || riddle.difficulty === 'expert';
     if (isExpert) {
       // Expert level: case-insensitive, trim whitespace
       const normalizedUser = userAnswer.toLowerCase().trim();
-      const normalizedCorrect = riddle.correctAnswer?.toLowerCase().trim() || riddle.correctOption?.toLowerCase().trim() || '';
+      const normalizedCorrect =
+        riddle.correctAnswer?.toLowerCase().trim() ||
+        riddle.correctOption?.toLowerCase().trim() ||
+        '';
       return normalizedUser === normalizedCorrect;
     }
     // MCQ level: direct letter comparison
@@ -335,7 +363,7 @@ function RiddlePlayPageContent(): JSX.Element {
     if (!session) return;
 
     let correctCount = 0;
-    riddles.forEach(r => {
+    riddles.forEach((r) => {
       if (isAnswerCorrect(r, answers[r.id])) correctCount++;
     });
 
@@ -361,15 +389,17 @@ function RiddlePlayPageContent(): JSX.Element {
       setShowExtendSession(false);
 
       let newRiddles: Riddle[] = [];
-      const currentIds = new Set(riddles.map(r => r.id));
+      const currentIds = new Set(riddles.map((r) => r.id));
 
       if (chapterId === 'all') {
         if (level && level !== 'all') {
           const response = await getRandomRiddles(level, additionalRiddles + 10);
-          newRiddles = response.map(r => adaptRiddleMcq({ ...r, level: r.level || level } as any));
+          newRiddles = response.map((r) =>
+            adaptRiddleMcq({ ...r, level: r.level || level } as any)
+          );
         } else {
           const response = await getMixedRiddles(additionalRiddles + 10);
-          newRiddles = response.map(r => adaptRiddleMcq(r as any));
+          newRiddles = response.map((r) => adaptRiddleMcq(r as any));
         }
       } else {
         // Pass level filter to backend API (more efficient)
@@ -377,7 +407,7 @@ function RiddlePlayPageContent(): JSX.Element {
         newRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
       }
 
-      const uniqueNew = newRiddles.filter(r => !currentIds.has(r.id)).slice(0, additionalRiddles);
+      const uniqueNew = newRiddles.filter((r) => !currentIds.has(r.id)).slice(0, additionalRiddles);
 
       if (uniqueNew.length === 0) {
         alert('No more unique riddles available for this selection.');
@@ -388,14 +418,14 @@ function RiddlePlayPageContent(): JSX.Element {
       if (mode === 'timer') {
         let extraTime = 0;
         const timers = settings?.riddles?.defaults?.levelTimers;
-        uniqueNew.forEach(riddle => {
+        uniqueNew.forEach((riddle) => {
           const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
           extraTime += timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
         });
-        setTimeRemaining(prev => prev + extraTime);
+        setTimeRemaining((prev) => prev + extraTime);
       }
 
-      setRiddles(prev => [...prev, ...uniqueNew]);
+      setRiddles((prev) => [...prev, ...uniqueNew]);
 
       if (session) {
         const updatedSession = { ...session, riddles: [...session.riddles, ...uniqueNew] };
@@ -430,7 +460,10 @@ function RiddlePlayPageContent(): JSX.Element {
     return (
       <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
         <div className="mx-auto max-w-2xl">
-          <Link href={backPath} className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white hover:bg-white/30">
+          <Link
+            href={backPath}
+            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white hover:bg-white/30"
+          >
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
@@ -492,7 +525,7 @@ function RiddlePlayPageContent(): JSX.Element {
     );
   }
 
-  // Main playing screen — mirrors quiz/play/page.tsx layout exactly
+  // Main playing screen — mirrors quiz-mcq/play/page.tsx layout exactly
   return (
     <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
       {/* Floating Background Emojis */}
@@ -501,7 +534,6 @@ function RiddlePlayPageContent(): JSX.Element {
       {/* Main Content */}
       <div className="relative z-10 flex flex-col flex-1 px-4 py-2">
         <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 justify-center">
-
           {/* Header — compact, mirrors quiz page */}
           <div className="mb-2">
             {/* Exit Button */}
@@ -529,14 +561,17 @@ function RiddlePlayPageContent(): JSX.Element {
               {/* Timer Display */}
               {isTimerMode && (status === 'playing' || status === 'paused') && (
                 <div className="flex items-center gap-2">
-                  <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${status === 'paused'
-                    ? 'bg-yellow-500 text-white'
-                    : timeRemaining <= 10
-                      ? 'bg-red-500 text-white animate-pulse'
-                      : timeRemaining <= 20
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-white/90 text-gray-800'
-                    }`}>
+                  <div
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
+                      status === 'paused'
+                        ? 'bg-yellow-500 text-white'
+                        : timeRemaining <= 10
+                          ? 'bg-red-500 text-white animate-pulse'
+                          : timeRemaining <= 20
+                            ? 'bg-orange-500 text-white'
+                            : 'bg-white/90 text-gray-800'
+                    }`}
+                  >
                     <Timer className="h-4 w-4" />
                     <span>{formatTimeMMSS(timeRemaining)}</span>
                     {status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
@@ -548,7 +583,11 @@ function RiddlePlayPageContent(): JSX.Element {
                     className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
                     title={status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
                   >
-                    {status === 'paused' ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                    {status === 'paused' ? (
+                      <Play className="h-4 w-4" />
+                    ) : (
+                      <Pause className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               )}
@@ -586,13 +625,20 @@ function RiddlePlayPageContent(): JSX.Element {
                   showFeedback={true}
                   disabled={status !== 'playing'}
                   score={Object.entries(answers).reduce((acc, [id, ans]) => {
-                    const riddle = riddles.find(r => r.id === id);
+                    const riddle = riddles.find((r) => r.id === id);
                     return acc + (riddle && ans === riddle.correctOption ? 1 : 0);
                   }, 0)}
                   maxScore={riddles.length}
                   timeUp={isTimeUp}
                   questionTimeRemaining={mode === 'timer' ? timeRemaining : practiceRiddleTime}
-                  questionTimeLimit={mode === 'timer' ? Math.max(1, Math.round(timeRemaining / Math.max(1, riddles.length - currentIndex))) : PRACTICE_RIDDLE_LIMIT}
+                  questionTimeLimit={
+                    mode === 'timer'
+                      ? Math.max(
+                          1,
+                          Math.round(timeRemaining / Math.max(1, riddles.length - currentIndex))
+                        )
+                      : PRACTICE_RIDDLE_LIMIT
+                  }
                 />
               </motion.div>
             )}
@@ -631,7 +677,6 @@ function RiddlePlayPageContent(): JSX.Element {
               <ArrowLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
-
         </div>
       </div>
 
@@ -643,9 +688,7 @@ function RiddlePlayPageContent(): JSX.Element {
             animate={{ scale: 1, opacity: 1 }}
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Submit Riddles?
-            </h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Submit Riddles?</h2>
 
             {answeredCount < riddles.length ? (
               <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
@@ -692,19 +735,16 @@ function RiddlePlayPageContent(): JSX.Element {
             animate={{ scale: 1, opacity: 1 }}
             className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
           >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">
-              Extend Session
-            </h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Session</h2>
 
             <div className="mb-4 space-y-3">
               <p className="text-gray-600">
-                You&apos;ve answered <strong>{answeredCount}</strong> of <strong>{riddles.length}</strong> riddles.
+                You&apos;ve answered <strong>{answeredCount}</strong> of{' '}
+                <strong>{riddles.length}</strong> riddles.
               </p>
 
               <div className="rounded-lg bg-blue-50 p-3">
-                <p className="text-sm text-blue-800">
-                  Add more riddles to keep the session going!
-                </p>
+                <p className="text-sm text-blue-800">Add more riddles to keep the session going!</p>
               </div>
 
               <p className="text-sm text-gray-500">
@@ -724,7 +764,9 @@ function RiddlePlayPageContent(): JSX.Element {
                   min={1}
                   max={20}
                   value={additionalRiddles}
-                  onChange={(e) => setAdditionalRiddles(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
+                  onChange={(e) =>
+                    setAdditionalRiddles(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))
+                  }
                   className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
                 />
                 <button

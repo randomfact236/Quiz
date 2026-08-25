@@ -13,7 +13,7 @@ Definitive scale/design reference. Execution order lives in [build-forward-plan]
 ## 2. Core Architectural Rules ("Golden Rules")
 
 1. **Direct-to-DB extraction** — every endpoint queries the DB via ORM at the SQL level (`WHERE`, `LIMIT`). No API-to-API chaining, no master-API-then-filter patterns.
-2. **Never return unbounded collections** — every list endpoint paginates (`?page&limit`) or caps (`?count=N`). No endpoint returns all questions of a subject or chapter. _(Today's violator: `quiz.service.ts` public subject endpoint.)_
+2. **Never return unbounded collections** — every list endpoint paginates (`?page&limit`) or caps (`?count=N`). No endpoint returns all questions of a subject or chapter. _(Today's violator: `quiz-mcq/quiz-mcq.service.ts` public subject endpoint.)_
 3. **Index-level randomness** — use the `random_weight` column technique (§4 A2), never `ORDER BY random()` on large tables and never shipping full tables to the client to shuffle in JS.
 4. **Stateless backend** — no local file uploads, no in-memory background jobs. Files → S3/R2; jobs → Redis (BullMQ when needed). Any container can be cloned instantly.
 5. **Server is source of truth** — `localStorage` is strictly an optimistic/offline cache. Scores, history, votes must live in the database.
@@ -44,7 +44,7 @@ Definitive scale/design reference. Execution order lives in [build-forward-plan]
 
 ### Track B — Unified Content Pipeline & Caching (= quality-plan §3)
 
-- One shared ContentService (`list/random/create/update/delete/import`) consumed by quiz, riddle-mcq, image-riddles, dad-jokes instead of 4 private copies.
+- One shared ContentService (`list/random/create/update/delete/import`) consumed by quiz-mcq, riddle-mcq, image-riddles, dad-jokes instead of 4 private copies.
 - **Targeted cache invalidation** replacing `delPattern('<module>:*')` sledgehammers — prevents DB stampedes on single-question admin edits.
 
 ### Track C — Security & Concurrency Hardening
