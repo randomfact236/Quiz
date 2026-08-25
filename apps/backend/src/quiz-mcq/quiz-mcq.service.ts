@@ -663,10 +663,10 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       item.correctLetter = dto.correctLetter || null;
     }
     if (dto.options !== undefined) {
-      // NOTE: legacy dead-logic preserved verbatim ([P0], see TODO.md backlog):
-      // `dto.level != null || question.level` is always truthy.
-      const level = dto.level != null || item.level;
-      item.options = level === 'extreme' ? null : dto.options;
+      // P0 fix (TODO.md backlog): was `dto.level != null || item.level`, which
+      // is always truthy, so extreme open-ended questions kept their options.
+      const effectiveLevel = (dto.level ?? item.level) as string;
+      item.options = effectiveLevel === 'extreme' ? null : dto.options;
     }
     if (dto.level !== undefined) {
       if (!VALID_LEVELS.includes(dto.level)) {

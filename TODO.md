@@ -13,7 +13,7 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 Backend:
 
-- **[P0] `updateQuestion` dead extreme-level logic** — `const level = dto.level != null || question.level` (quiz-mcq/quiz-mcq.service.ts, was :776) is always truthy so the extreme check never fires; fix: `(dto.level ?? question.level) === 'extreme'`.
+- **~~[P0] `updateQuestion` dead extreme-level logic~~** — FIXED 2026-08-25: `applyUpdate` now uses `(dto.level ?? level) === 'extreme'`; verified live — PATCH with options+level:'extreme' nulls options (old code kept them).
 - **[P1] Chapter numbering race** — `createChapter` sets `chapterNumber = length + 1` under concurrency; bulk imports write `chapterNumber: 0`.
 - **[P1] Bulk-import slug collisions** — sanitization maps distinct names to the same slug ("C++"/"C Basics"), aborting the whole 100-row chunk transaction.
 - **[P1] N-delete loop in `deleteSubject`** — one DELETE per chapter's questions instead of a single IN query.
@@ -23,9 +23,10 @@ Backend:
 
 Frontend:
 
-- **[P0] QuestionReview marks correct MCQs wrong** — compares stored letter against answer text (`QuestionReview.tsx:32`); must compare `correctLetter`.
-- **[P0] Extreme answers always scored incorrect in results** — `results/page.tsx:59` checks free text against `correctLetter`; unify with useQuiz scorer into one shared util.
-- **[P0] Crash on unknown difficulty level** — `byDifficulty[q.level]` assumes known levels (`results/page.tsx:61`).
+- **~~[P0] QuestionReview marks correct MCQs wrong~~** — FIXED 2026-08-25: compares via shared scorer (`isAnswerCorrect`, letter-based) and highlights correct option by `correctLetter`; was comparing letter against answer text.
+- **~~[P0] Extreme answers always scored incorrect in results~~** — FIXED 2026-08-25: results page now uses the shared scorer (`lib/quiz-mcq-scoring.ts`) — same case-insensitive text matching as play time; score/percentage recomputed from it.
+- **~~[P0] Crash on unknown difficulty level~~** — FIXED 2026-08-25: `calculateResult` guards unknown levels (counted in totals, skipped in grid); regression-tested.
+- Regression tests for all of the above: `src/__tests__/quiz-mcq-scoring.test.ts` (16/16 passing).
 - **[P1] Progress/achievements never written on completion** — `saveQuizResult()`/`checkAchievements()` have no callers; chapter badges stay frozen.
 
 (Refactor-class items — hub duplication, dead components, resume bloat, monolith splits — are tracked in plan/code-quality-plan.md §2/§5, not duplicated here.)

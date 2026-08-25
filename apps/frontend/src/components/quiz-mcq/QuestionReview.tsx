@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, CheckCircle, XCircle } from 'lucide-react';
 import type { Question } from '@/types/quiz-mcq';
+import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 
 interface QuestionReviewProps {
   /** The question */
@@ -29,8 +30,11 @@ export function QuestionReview({
 }: QuestionReviewProps): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const isCorrect = userAnswer === question.correctAnswer;
+  const isCorrect = isAnswerCorrect(question, userAnswer);
   const isExtreme = question.level === 'extreme';
+  // MCQ: correct answer is identified by its letter (correctLetter holds the
+  // text in correctAnswer, which never matches an option key).
+  const correctKey = isExtreme ? null : question.correctLetter;
   const options = [
     { key: 'A', text: question.optionA },
     { key: 'B', text: question.optionB },
@@ -94,7 +98,7 @@ export function QuestionReview({
               <div className="space-y-2">
                 {options.map((opt) => {
                   const isUserChoice = opt.key === userAnswer;
-                  const isCorrectAnswer = opt.key === question.correctAnswer;
+                  const isCorrectAnswer = opt.key === correctKey;
 
                   let style = 'rounded-lg border-2 p-3 ';
                   if (isCorrectAnswer) {

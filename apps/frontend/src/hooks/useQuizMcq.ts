@@ -31,6 +31,7 @@ import {
   getSubjectRandomQuestions,
 } from '@/lib/quiz-mcq-api';
 import type { QuizQuestion } from '@/lib/quiz-mcq-api';
+import { calculateScore } from '@/lib/quiz-mcq-scoring';
 
 /** Capacity-plan A2: fixed session size fetched via capped server-side random endpoint */
 const QUIZ_SESSION_SIZE = 20;
@@ -60,27 +61,6 @@ function convertQuizQuestion(q: QuizQuestion): Question {
     chapter: q.chapterId,
     status: q.status || 'published',
   };
-}
-
-/** Calculate score based on answers */
-function calculateScore(questions: Question[], answers: Record<string, string>): number {
-  let score = 0;
-  questions.forEach((q) => {
-    const isOpenEnded = q.level === 'extreme';
-
-    if (isOpenEnded) {
-      const userAnswer = answers[q.id]?.toLowerCase().trim() || '';
-      const correctAnswer = q.correctAnswer?.toLowerCase().trim() || '';
-      if (userAnswer === correctAnswer) {
-        score++;
-      }
-    } else {
-      if (answers[q.id] === q.correctLetter) {
-        score++;
-      }
-    }
-  });
-  return score;
 }
 
 /** Load questions from API based on subject, chapter, and level */

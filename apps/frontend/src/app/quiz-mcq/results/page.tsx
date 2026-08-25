@@ -28,56 +28,10 @@ import toast from '@/lib/toast';
 
 import type { QuizSession, QuizResult } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
+import { calculateResult } from '@/lib/quiz-mcq-scoring';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { QuestionReview } from '@/components/quiz-mcq/QuestionReview';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';
-
-/** Calculate grade from percentage */
-function calculateGrade(percentage: number): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
-  if (percentage >= 97) return 'A+';
-  if (percentage >= 90) return 'A';
-  if (percentage >= 80) return 'B';
-  if (percentage >= 70) return 'C';
-  if (percentage >= 60) return 'D';
-  return 'F';
-}
-
-/** Calculate result details from session */
-function calculateResult(session: QuizSession): QuizResult {
-  let correctCount = 0;
-  let incorrectCount = 0;
-
-  const byDifficulty = {
-    easy: { correct: 0, total: 0 },
-    medium: { correct: 0, total: 0 },
-    hard: { correct: 0, total: 0 },
-    expert: { correct: 0, total: 0 },
-    extreme: { correct: 0, total: 0 },
-  };
-
-  session.questions.forEach((q) => {
-    const isCorrect = session.answers[q.id] === q.correctLetter;
-
-    byDifficulty[q.level].total++;
-    if (isCorrect) {
-      correctCount++;
-      byDifficulty[q.level].correct++;
-    } else {
-      incorrectCount++;
-    }
-  });
-
-  const percentage = session.maxScore > 0 ? (session.score / session.maxScore) * 100 : 0;
-
-  return {
-    session,
-    correctCount,
-    incorrectCount,
-    percentage,
-    grade: calculateGrade(percentage),
-    byDifficulty,
-  };
-}
 
 function ResultsContent(): JSX.Element {
   const searchParams = useSearchParams();
