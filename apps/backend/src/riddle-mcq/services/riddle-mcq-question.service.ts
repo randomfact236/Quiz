@@ -1,8 +1,6 @@
-import { randomUUID } from 'crypto';
-
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
 
@@ -21,18 +19,6 @@ export class RiddleMcqQuestionService {
 
   private async clearRiddleCaches() {
     await this.cacheService.delPattern(`riddle-mcq:*`);
-  }
-
-  private shuffleArray<T>(array: T[]): T[] {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const uuidPart = randomUUID().replace(/-/g, '').slice(0, 8);
-      const j = Math.floor(parseInt(uuidPart, 16) % (i + 1));
-      const temp = shuffled[j]!;
-      shuffled[j] = shuffled[i]!;
-      shuffled[i] = temp;
-    }
-    return shuffled;
   }
 
   private readonly CACHE_KEYS = {
@@ -148,72 +134,56 @@ export class RiddleMcqQuestionService {
     );
   }
 
+  /**
+   * Capacity-plan A2: index-seek random selection via random_weight with
+   * wrap-around (replaces load-all-ids + in-memory shuffle).
+   */
+  private async findRandomRiddlesInternal(opts: {
+    level?: string;
+    count: number;
+  }): Promise<RiddleMcq[]> {
+    const count = Math.min(Math.max(opts.count, 1), 100);
+    const anchor = Math.random();
+
+    const buildQuery = () => {
+      const query = this.riddleMcqRepo
+        .createQueryBuilder('riddle')
+        .leftJoinAndSelect('riddle.subject', 'subject')
+        .where('riddle.status = :status', { status: RiddleStatus.PUBLISHED });
+      if (opts.level) {
+        query.andWhere('riddle.level = :level', { level: opts.level });
+      }
+      return query;
+    };
+
+    let data = await buildQuery()
+      .andWhere('riddle.random_weight > :anchor', { anchor })
+      .orderBy('riddle.random_weight', 'ASC')
+      .take(count)
+      .getMany();
+
+    if (data.length < count) {
+      const remaining = await buildQuery()
+        .orderBy('riddle.random_weight', 'ASC')
+        .take(count - data.length)
+        .getMany();
+      data = [...data, ...remaining];
+    }
+
+    return data;
+  }
+
   async findRandomRiddles(level: string, count: number): Promise<RiddleMcq[]> {
     const validLevels = ['easy', 'medium', 'hard', 'expert'];
     if (!validLevels.includes(level)) {
       throw new BadRequestException(`Invalid level: ${level}`);
     }
 
-    const totalCount = await this.riddleMcqRepo.count({
-      where: { level: level as RiddleMcqLevel, status: RiddleStatus.PUBLISHED },
-    });
-
-    if (totalCount === 0) {
-      return [];
-    }
-
-    if (count >= totalCount) {
-      return this.riddleMcqRepo.find({
-        where: { level: level as RiddleMcqLevel, status: RiddleStatus.PUBLISHED },
-        relations: ['subject'],
-      });
-    }
-
-    const allIds = await this.riddleMcqRepo
-      .createQueryBuilder('riddle')
-      .select('riddle.id')
-      .where('riddle.level = :level', { level })
-      .andWhere('riddle.status = :status', { status: RiddleStatus.PUBLISHED })
-      .getMany();
-
-    const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map((r) => r.id);
-
-    return this.riddleMcqRepo.find({
-      where: { id: In(selectedIds) },
-      relations: ['subject'],
-    });
+    return this.findRandomRiddlesInternal({ level, count });
   }
 
   async findMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
-    const totalCount = await this.riddleMcqRepo.count({
-      where: { status: RiddleStatus.PUBLISHED },
-    });
-
-    if (totalCount === 0) {
-      return [];
-    }
-
-    if (count >= totalCount) {
-      return this.riddleMcqRepo.find({
-        relations: ['subject'],
-        where: { status: RiddleStatus.PUBLISHED },
-      });
-    }
-
-    const allIds = await this.riddleMcqRepo
-      .createQueryBuilder('riddle')
-      .select('riddle.id')
-      .where('riddle.status = :status', { status: RiddleStatus.PUBLISHED })
-      .getMany();
-
-    const shuffled = this.shuffleArray(allIds).slice(0, count);
-    const selectedIds = shuffled.map((r) => r.id);
-
-    return this.riddleMcqRepo.find({
-      where: { id: In(selectedIds) },
-      relations: ['subject'],
-    });
+    return this.findRandomRiddlesInternal({ count });
   }
 
   async createRiddle(dto: {

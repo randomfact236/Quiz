@@ -224,6 +224,28 @@ export async function getMixedQuestions(): Promise<{ data: QuizQuestion[]; total
   return response.data;
 }
 
+/** Capacity-plan A2: capped, server-side random selection (never fetches the whole bank). */
+export async function getSubjectRandomQuestions(
+  subjectSlug: string,
+  params: { count?: number; level?: string; chapterId?: string } = {}
+): Promise<{ data: QuizQuestion[]; total: number }> {
+  const search = new URLSearchParams();
+  if (params.count) {
+    search.set('count', String(params.count));
+  }
+  if (params.level && params.level !== 'all') {
+    search.set('level', params.level);
+  }
+  if (params.chapterId) {
+    search.set('chapterId', params.chapterId);
+  }
+  const query = search.toString();
+  const response = await api.get<{ data: QuizQuestion[]; total: number }>(
+    `/quiz/subjects/${subjectSlug}/questions/random${query ? `?${query}` : ''}`
+  );
+  return response.data;
+}
+
 export interface QuestionFilters {
   status?: string;
   level?: string;

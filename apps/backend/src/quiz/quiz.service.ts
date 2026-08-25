@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In } from 'typeorm';
@@ -42,19 +40,6 @@ export class QuizService {
     FILTER_COUNTS: 300,
     QUESTIONS: 600,
   };
-
-  private shuffleArray<T>(array: T[]): T[] {
-    // Fisher-Yates shuffle with crypto UUID for better randomness
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const uuidPart = randomUUID().replace(/-/g, '').slice(0, 8);
-      const j = Math.floor(parseInt(uuidPart, 16) % (i + 1));
-      const temp = shuffled[j]!;
-      shuffled[j] = shuffled[i]!;
-      shuffled[i] = temp;
-    }
-    return shuffled;
-  }
 
   constructor(
     @InjectRepository(Subject)
@@ -536,28 +521,68 @@ export class QuizService {
     );
   }
 
+  /**
+   * Capacity-plan A2: index-seek random selection via random_weight.
+   * Picks a random cursor float, returns rows above it; wraps around to
+   * the top of the weight range when the tail has fewer than `count` rows.
+   */
+  async findRandomQuestions(opts: {
+    level?: string;
+    chapterId?: string;
+    subjectSlug?: string;
+    count?: number;
+  }): Promise<{ data: Question[]; total: number }> {
+    const count = Math.min(Math.max(opts.count ?? 20, 1), 50);
+    const anchor = Math.random();
+
+    const buildQuery = () => {
+      const query = this.questionRepo
+        .createQueryBuilder('question')
+        .leftJoinAndSelect('question.chapter', 'chapter')
+        .leftJoinAndSelect('chapter.subject', 'subject')
+        .where('question.status = :status', { status: ContentStatus.PUBLISHED });
+
+      if (opts.level) {
+        query.andWhere('question.level = :level', { level: opts.level });
+      }
+      if (opts.chapterId) {
+        query.andWhere('question.chapterId = :chapterId', { chapterId: opts.chapterId });
+      }
+      if (opts.subjectSlug) {
+        query.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
+      }
+      return query;
+    };
+
+    let data = await buildQuery()
+      .andWhere('question.random_weight > :anchor', { anchor })
+      .orderBy('question.random_weight', 'ASC')
+      .take(count)
+      .getMany();
+
+    // Wrap-around: tail of the weight range had fewer rows than requested
+    if (data.length < count) {
+      const remaining = await buildQuery()
+        .orderBy('question.random_weight', 'ASC')
+        .take(count - data.length)
+        .getMany();
+      data = [...data, ...remaining];
+    }
+
+    return { data, total: data.length };
+  }
+
   async findAllRandomQuestionsByLevel(level: string): Promise<{ data: Question[]; total: number }> {
     const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validLevels.includes(level)) {
       throw new BadRequestException(`Invalid level: ${level}`);
     }
 
-    const data = await this.questionRepo.find({
-      where: { level, status: ContentStatus.PUBLISHED },
-      relations: ['chapter'],
-      order: { updatedAt: 'DESC' },
-    });
-    return { data, total: data.length };
+    return this.findRandomQuestions({ level, count: 50 });
   }
 
-  async findAllMixedQuestions(limit: number = 500): Promise<{ data: Question[]; total: number }> {
-    const data = await this.questionRepo.find({
-      where: { status: ContentStatus.PUBLISHED },
-      relations: ['chapter'],
-      order: { updatedAt: 'DESC' },
-      take: limit,
-    });
-    return { data, total: data.length };
+  async findAllMixedQuestions(limit: number = 50): Promise<{ data: Question[]; total: number }> {
+    return this.findRandomQuestions({ count: limit });
   }
 
   async createQuestion(dto: CreateQuestionDto): Promise<Question> {

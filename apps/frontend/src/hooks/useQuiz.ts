@@ -19,13 +19,15 @@ import {
   QuizResumeState,
 } from '@/lib/quiz-resume';
 import {
-  getQuestionsBySubject,
-  getQuestionsByChapter,
   getRandomQuestions,
   getMixedQuestions,
   getSubjectBySlug,
+  getSubjectRandomQuestions,
 } from '@/lib/quiz-api';
 import type { QuizQuestion } from '@/lib/quiz-api';
+
+/** Capacity-plan A2: fixed session size fetched via capped server-side random endpoint */
+const QUIZ_SESSION_SIZE = 20;
 
 /** Generate UUID for session */
 function generateUUID(): string {
@@ -93,23 +95,21 @@ async function loadQuestions(
         allQuestions = result.data;
       }
     } else {
-      const subjectQuestionsResult = await getQuestionsBySubject(subject, { status: 'published' });
-      const subjectQuestions = subjectQuestionsResult.data;
-
+      // Capacity-plan A2: capped random selection instead of whole-bank fetch.
+      let chapterId: string | undefined;
       if (chapter !== 'all') {
         const subjectData = await getSubjectBySlug(subject);
-        const chapterObj = subjectData.chapters?.find((c) => c.name === chapter);
-        if (chapterObj) {
-          const result = await getQuestionsByChapter(chapterObj.id);
-          allQuestions = result.data || [];
+        const found = subjectData.chapters?.find((c) => c.name === chapter);
+        if (found) {
+          chapterId = found.id;
         }
-      } else {
-        allQuestions = subjectQuestions;
       }
-
-      if (level !== 'all') {
-        allQuestions = allQuestions.filter((q) => q.level === level);
-      }
+      const result = await getSubjectRandomQuestions(subject, {
+        count: QUIZ_SESSION_SIZE,
+        level,
+        ...(chapterId ? { chapterId } : {}),
+      });
+      allQuestions = result.data;
     }
 
     const convertedQuestions = allQuestions.map(convertQuizQuestion);

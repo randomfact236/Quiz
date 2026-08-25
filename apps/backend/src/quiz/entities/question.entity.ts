@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, UpdateDateColumn, Index } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  UpdateDateColumn,
+  Index,
+} from 'typeorm';
 
 import { ContentStatus } from '../../common/enums/content-status.enum';
 
@@ -26,7 +33,7 @@ export class Question {
   @Column({ type: 'enum', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
   level: string;
 
-  @ManyToOne(() => Chapter, chapter => chapter.questions)
+  @ManyToOne(() => Chapter, (chapter) => chapter.questions)
   chapter: Chapter;
 
   @Index()
@@ -43,6 +50,10 @@ export class Question {
 
   @Column({ type: 'int', default: 0 })
   order: number;
+
+  @Index()
+  @Column({ type: 'float8', default: () => 'random()' })
+  random_weight: number;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;

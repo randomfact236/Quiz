@@ -73,4 +73,8 @@ export class RiddleMcq {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @Index()
+  @Column({ type: 'float8', default: () => 'random()' })
+  random_weight: number;
 }
