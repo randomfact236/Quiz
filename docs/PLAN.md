@@ -1,59 +1,66 @@
 # Build-Forward Plan
 
-Starting point: clean `main` (single branch, no baggage), ~78% code-complete, quality C+/B−.
-Full details per area live in [features/](features/README.md) and [platform/](platform/README as needed); this file is the execution order.
+Starting point: clean `main`, ~78% code-complete, quality C+/B−.
+Feature detail: [features/](features/README.md) · Cross-cutting docs: [platform/](platform/) · Scale architecture: [platform/capacity.md](platform/capacity.md) · Quality gates: [platform/code-quality-plan.md](platform/code-quality-plan.md).
 
-> **Parallel quality track:** each phase below has exit criteria in [platform/code-quality-plan.md](platform/code-quality-plan.md) §1 (coverage ratchet, file-size budget, dedup milestones). Feature work and quality work advance together — see Working Rules at the end.
+> **Parallel quality track:** every phase has exit criteria in code-quality-plan §1. A phase isn't done until its metrics row passes.
 
-## Phase 0 — Stabilize the baseline (before any new features)
+## ✅ Phase 0 — Baseline (DONE)
 
-1. **Commit or deliberately discard the uncommitted source changes** currently in the working tree (backend quiz/riddle-mcq services, admin page, QuizContainer rename) — do not build on an ambiguous base.
-2. Fix the recorded type errors (former tsc log): missing exports in `lib/riddle-mcq-api.ts` (`getAllRiddleMcqsAdmin`, `getAllChapters`, `getRiddlesByChapter`, `getChaptersBySubject`), `RiddlesStats.totalChapters` mismatch, implicit anys. Then remove `--no-lint` from the frontend build script.
-3. Tooling repairs (platform/testing-quality.md §4): frontend jest config, husky install, delete-or-implement scanner scripts.
+Tooling verified and gated: type-checks clean per workspace, `--no-lint` removed (production build passes), jest + first tests green, husky pre-commit/pre-push active, dead scanner scripts removed.
 
-## Phase 1 — P0 correctness bugs (user-visible breakage)
+## Phase 0.5 — Migration Baseline (prerequisite for all DB work)
 
-| Bug                                             | Where                             | Fix reference                  |
-| ----------------------------------------------- | --------------------------------- | ------------------------------ |
-| MCQ review marks correct answers wrong          | QuestionReview.tsx:32             | features/quiz.md §D1           |
-| Extreme answers always scored incorrect         | results/page.tsx:59               | features/quiz.md §D2           |
-| Riddle stats swapped/mismatched → counts show 0 | riddle-mcq-stats.service.ts:36-40 | features/riddle-mcq.md §A1     |
-| Subject-wise riddle play broken                 | play/page.tsx:81 param split      | features/riddle-mcq.md §B1     |
-| Drafts leak via by-subject endpoint             | question.service.ts:63-81         | features/riddle-mcq.md §A2     |
-| Dead `/users/profile` endpoints                 | users.controller.ts               | features/auth-users.md §3.1    |
-| Guest demographics 404                          | missing public endpoint           | features/auth-users.md §3.5    |
-| `updateQuestion` extreme logic dead             | quiz.service.ts:776               | features/quiz.md §Backend bugs |
+Migrations are currently orphaned/broken. Before any index/column changes:
 
-Each fix ships with a regression test (starts the test suite with real content).
+1. Rename hand-written migrations to TypeORM's `<timestamp>-<Name>.ts` pattern; rewrite contents against current entities.
+2. Register `migrations` + `migrationsRun` in data-source/AppModule; verify a run with `DB_SYNCHRONIZE=false`.
+3. Generate baseline migration from the current schema.
 
-## Phase 2 — Auth & security hardening
+## Phase 1 — P0 Bug Fixes + DB Query Foundation
 
-1. Register global `APP_GUARD`s: JwtAuthGuard (default-deny + `_Public()`) and ThrottlerGuard (activates existing decorators).
-2. Refresh tokens: hash at rest, add expiry, rotate on use.
-3. Move OAuth tokens out of redirect URL (one-time code exchange).
-4. Public `POST /guest-users/demographics`; enum-constrained roles; DTO validation on admin payloads.
-   Reference: features/auth-users.md roadmap; platform/backend-core.md §3.
+**Bug fixes** (each = small branch + regression test; details in feature docs):
+| # | Bug | Reference |
+|---|---|---|
+| 1 | MCQ review marks correct answers wrong | features/quiz.md |
+| 2 | Extreme answers always scored incorrect | features/quiz.md |
+| 3 | Crash on unknown difficulty | features/quiz.md |
+| 4 | Riddle stats swapped → public counts show 0 | features/riddle-mcq.md |
+| 5 | Subject-wise riddle play broken (param split) | features/riddle-mcq.md |
+| 6 | Drafts leak via by-subject endpoint | features/riddle-mcq.md |
+| 7 | Dead `/users/profile` endpoints | features/auth-users.md |
+| 8 | Guest demographics 404 | features/auth-users.md |
+| 9 | `updateQuestion` extreme logic dead | features/quiz.md |
 
-## Phase 3 — Integration debt (connect what exists but isn't wired)
+**DB foundation** (capacity.md Track A): trigram GIN search indexes (A1), `(status, updatedAt DESC)` composites.
 
-1. Dad jokes: rewire page to real API, wire admin section, build quiz-format frontend (biggest untapped value — backend is done).
-2. Riddle-mcq: unify subjectId params, fix mutation cache keys, consolidate duplicate hooks/filters.
-3. Wire chapter progress writes + achievements on quiz completion.
+## Phase 2 — Unified Content Pipeline
 
-## Phase 4 — Structural quality
+Shared ContentService for all 4 content modules (list/random/create/update/delete/import) + targeted cache invalidation replacing sledgehammer pattern clears — capacity.md Track B / code-quality-plan §3. Includes the `random_weight` random-endpoint technique (A2) with mandatory wrap-around logic, and FE play-flow rewiring to capped endpoints.
 
-1. CI pipeline (GitHub Actions): type-check + lint + tests per PR.
-2. Merge duplicated challenge/practice hubs; extract shared level maps; delete dead components/hooks.
-3. Migration baseline: timestamp-prefix existing migrations, register them, set `DB_SYNCHRONIZE=false`.
-4. Server-side sessions (`POST /quiz/sessions` + riddle equivalent) — unlocks cross-device progress for every feature at once.
+## Phase 3 — Security & Concurrency Hardening
 
-## Phase 5 — New capabilities (only after Phases 0–3)
+capacity.md Track C: ThrottlerModule activation (C1), global JwtAuthGuard default-deny + `_Public()` audit (C3), deep health checks incl. Redis ping (C2), refresh-token hardening, guest demographics endpoint, enum roles + DTO validation.
 
-Leaderboards/high-scores · JSON import/export · hint tracking · email verification · AI question generation (the product's namesake — currently zero AI code exists).
+## Phase 4 — CI/CD & Structural Quality
+
+GitHub Actions (type-check + lint + tests per PR), merge challenge/practice hubs, split monolith files per code-quality-plan §2, coverage ratchets.
+
+## Phase 5 — Player Session Pipeline (V2)
+
+Server-side sessions with idempotent completion + optimistic sync (capacity.md Track D). Unlocks cross-device progress, leaderboards, durable history for every feature at once.
+
+## Deferred Add-Ons (metrics-driven only)
+
+Nginx LB + replicas when >~1k concurrent · PgBouncer on DB CPU ceiling · read replica when read-saturated. All config-only — see capacity.md §5.
+
+## New Capabilities (after Phase 5)
+
+Leaderboards/high-scores · JSON import/export · hint tracking · email verification · AI question generation (the product's namesake — zero AI code exists today).
 
 ## Working Rules Going Forward
 
-- One branch per task off `main`; no more backup branches — use commits/tags instead.
-- No commit without green lint/type-check (enforced by Phase 4 CI + husky).
-- New bug found? Add it to the relevant features/\*.md doc in the same PR.
-- Quality gates per phase are defined in [platform/code-quality-plan.md](platform/code-quality-plan.md); a phase isn't done until its §1 metrics row passes.
+- One branch per task off `main`; no backup branches — use commits/tags instead.
+- No commit without green lint/type-check (husky-enforced now).
+- New bug found? Update the relevant features/\*.md doc in the same PR.
+- Golden Rules in capacity.md §2 govern all new endpoint/code design; PRs violating them need explicit justification.
