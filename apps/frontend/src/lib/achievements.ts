@@ -9,6 +9,7 @@
 import type { Achievement } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 import { getQuizHistory, getTotalStats } from './progress';
+import toast from './toast';
 
 /** Predefined achievements */
 export const ACHIEVEMENTS: Achievement[] = [
@@ -249,4 +250,11 @@ export function getAchievementStats(): {
     unlocked: unlockedCount,
     percentage: Math.round((unlockedCount / total) * 100),
   };
+}
+
+/** Toast notifications for newly unlocked achievements (P1 wiring, see TODO.md) */
+export function toastAchievementUnlocks(newlyUnlocked: Achievement[]): void {
+  newlyUnlocked.forEach((achievement) => {
+    toast.success(`🏆 Achievement unlocked: ${achievement.name}`);
+  });
 }

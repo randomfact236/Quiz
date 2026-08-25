@@ -32,6 +32,8 @@ import {
 } from '@/lib/quiz-mcq-api';
 import type { QuizQuestion } from '@/lib/quiz-mcq-api';
 import { calculateScore } from '@/lib/quiz-mcq-scoring';
+import { saveQuizResult } from '@/lib/progress';
+import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 
 /** Capacity-plan A2: fixed session size fetched via capped server-side random endpoint */
 const QUIZ_SESSION_SIZE = 20;
@@ -111,6 +113,11 @@ function saveToHistory(session: QuizSession): void {
   const history = getItem<QuizSession[]>(STORAGE_KEYS.QUIZ_HISTORY, []);
   history.push(session);
   setItem(STORAGE_KEYS.QUIZ_HISTORY, history);
+
+  // P1 fix (TODO.md backlog): chapter/subject progress and achievements were
+  // never written on completion; both completion paths funnel through here.
+  saveQuizResult(session);
+  toastAchievementUnlocks(checkAchievements());
 }
 
 /** Save current session for resume */

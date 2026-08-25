@@ -159,8 +159,13 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       throw new BadRequestException(`Chapter "${name}" already exists in this subject`);
     }
 
-    const existingChapters = await this.deps.chapterRepo.find({ where: { subjectId } });
-    const chapterNumber = existingChapters.length + 1;
+    // P1 fix (TODO.md backlog): was `existingChapters.length + 1`, which drifts
+    // after deletions; use MAX(chapterNumber) + 1.
+    const lastChapter = await this.deps.chapterRepo.findOne({
+      where: { subjectId },
+      order: { chapterNumber: 'DESC' },
+    });
+    const chapterNumber = (lastChapter?.chapterNumber ?? 0) + 1;
 
     const chapter = this.deps.chapterRepo.create({ name, subject, subjectId, chapterNumber });
     const saved = await this.deps.chapterRepo.save(chapter);

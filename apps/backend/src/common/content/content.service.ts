@@ -12,16 +12,11 @@
  *
  * Cache invalidation is family-scoped (see content-cache.util) — mutations
  * clear only the families a module declares, never '<module>:*'.
- *
- * NOTE: known upstream quirks are intentionally preserved by this base
- * (chapterNumber = length + 1 race, import chapterNumber 0, per-chapter
- * N-delete cascade). They are logged in TODO.md "Quiz MCQ — correctness
- * backlog" and must be fixed there, not silently here.
  * ============================================================================
  */
 
 import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
-import { DataSource, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
+import { DataSource, In, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { PaginationDto } from '../dto/base.dto';
 import { CacheService } from '../cache/cache.service';
@@ -180,12 +175,12 @@ export abstract class ContentServiceBase<
     try {
       const chapters = (subject as any)[this.deps.chaptersRelation] as TChapter[] | undefined;
       if (chapters && chapters.length > 0) {
-        for (const chapter of chapters) {
-          // Legacy per-chapter loop preserved ([P1] N-delete, see TODO.md).
-          await queryRunner.manager.delete(this.deps.itemRepo.target, {
-            chapterId: (chapter as any).id,
-          } as any);
-        }
+        // P1 fix (TODO.md backlog): was one DELETE per chapter (N queries);
+        // now a single IN query inside the same transaction.
+        const chapterIds = chapters.map((c) => (c as any).id);
+        await queryRunner.manager.delete(this.deps.itemRepo.target, {
+          chapterId: In(chapterIds),
+        } as any);
         await queryRunner.manager.delete(this.deps.chapterRepo.target, {
           subjectId: id,
         } as any);
@@ -335,6 +330,59 @@ export abstract class ContentServiceBase<
     return { count: totalCreated, errors };
   }
 
+  /** URL-safe slug for a subject name; falls back to 'subject' when empty. */
+  protected slugify(name: string): string {
+    const base = name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+    return base || 'subject';
+  }
+
+  /**
+   * P1 fix (TODO.md backlog): distinct names ("C++" vs "C Basics") used to
+   * sanitize to identical slugs, so the second save threw a unique violation
+   * and aborted the whole 100-row chunk. Now picks the next free suffix.
+   */
+  protected async resolveUniqueSubjectSlug(
+    manager: DataSource['manager'],
+    name: string
+  ): Promise<string> {
+    const base = this.slugify(name);
+    let slug = base;
+    let suffix = 2;
+    while (
+      (await manager.findOne(this.deps.subjectRepo.target, {
+        where: { slug } as any,
+      })) !== null
+    ) {
+      slug = `${base}-${suffix++}`;
+    }
+    return slug;
+  }
+
+  /**
+   * P1 fix (TODO.md backlog): new chapters were created with chapterNumber 0.
+   * Returns MAX(existing) + 1 per subject; `nextBySubject` carries the counter
+   * across chapters created within the same chunk/transaction.
+   */
+  protected async getNextChapterNumber(
+    manager: DataSource['manager'],
+    subjectId: string,
+    nextBySubject: Map<string, number>
+  ): Promise<number> {
+    if (!nextBySubject.has(subjectId)) {
+      const last = await manager.findOne(this.deps.chapterRepo.target, {
+        where: { subjectId } as any,
+        order: { chapterNumber: 'DESC' } as any,
+      });
+      nextBySubject.set(subjectId, ((last as any)?.chapterNumber ?? 0) + 1);
+    }
+    const next = nextBySubject.get(subjectId)!;
+    nextBySubject.set(subjectId, next + 1);
+    return next;
+  }
+
   private async processImportChunk(
     items: Record<string, any>[],
     defaultSubjectName: string | undefined,
@@ -367,16 +415,15 @@ export abstract class ContentServiceBase<
         if (!subject) {
           subject = (await manager.save(this.deps.subjectRepo.target, {
             name,
-            slug: name
-              .toLowerCase()
-              .replace(/\s+/g, '-')
-              .replace(/[^a-z0-9-]/g, ''),
+            slug: await this.resolveUniqueSubjectSlug(manager, name),
             emoji: '📚',
             isActive: true,
           } as any)) as TSubject;
         }
         subjectMap.set(name, subject);
       }
+
+      const nextChapterNumberBySubject = new Map<string, number>();
 
       const chapterMap = new Map<string, TChapter>();
       const chapterKeys = [
@@ -399,7 +446,11 @@ export abstract class ContentServiceBase<
           chapter = (await manager.save(this.deps.chapterRepo.target, {
             name: chapterName,
             subjectId: (subject as any).id,
-            chapterNumber: 0,
+            chapterNumber: await this.getNextChapterNumber(
+              manager,
+              (subject as any).id,
+              nextChapterNumberBySubject
+            ),
           } as any)) as TChapter;
         }
         chapterMap.set(key, chapter);
