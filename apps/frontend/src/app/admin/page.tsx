@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback, useMemo, useRef, Suspense } from 'react';
 import {
@@ -14,9 +13,9 @@ import {
   Image as ImageIcon,
   Settings,
   Users,
-  Home,
   LogOut,
   BookOpen,
+  ExternalLink,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -349,17 +348,20 @@ export default function AdminPage(): JSX.Element {
           />
         </nav>
 
-        {/* Back to Site */}
+        {/* Visit Website */}
         <div className="border-t border-gray-800 p-4">
-          <Link
+          <a
             href="/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-2 text-gray-300 transition-colors hover:bg-gray-700"
+            title="Open the public website in a new tab"
           >
             <span>
-              <Home className="w-5 h-5" />
+              <ExternalLink className="w-5 h-5" />
             </span>
-            {sidebarOpen && <span>Back to Site</span>}
-          </Link>
+            {sidebarOpen && <span>Visit Website</span>}
+          </a>
         </div>
       </aside>
 
@@ -418,6 +420,16 @@ export default function AdminPage(): JSX.Element {
               )}
             </h2>
             <div className="flex items-center gap-4">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                title="Visit Website"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="hidden sm:inline">Visit Website</span>
+              </a>
               <span className="text-gray-600 dark:text-secondary-400">Welcome, Admin</span>
               <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                 A
