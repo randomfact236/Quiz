@@ -134,15 +134,6 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
-  @_Public()
-  @Get(':id')
-  @ApiOperation({ summary: 'Get image riddle by ID' })
-  @ApiResponse({ status: 200, description: 'Returns image riddle' })
-  @ApiResponse({ status: 404, description: 'Image riddle not found' })
-  findById(@Param('id') id: string): Promise<ImageRiddle> {
-    return this.imageRiddlesService.findRiddleById(id);
-  }
-
   // ==================== ADMIN ENDPOINTS ====================
 
   @Post()
@@ -264,5 +255,16 @@ export class ImageRiddlesController {
     averageTimer: number;
   }> {
     return this.imageRiddlesService.getStats();
+  }
+
+  // NOTE: ':id' route must stay AFTER all literal GET routes (status-counts,
+  // stats/overview) or it shadows them (Express matches in registration order).
+  @_Public()
+  @Get(':id')
+  @ApiOperation({ summary: 'Get image riddle by ID' })
+  @ApiResponse({ status: 200, description: 'Returns image riddle' })
+  @ApiResponse({ status: 404, description: 'Image riddle not found' })
+  findById(@Param('id') id: string): Promise<ImageRiddle> {
+    return this.imageRiddlesService.findRiddleById(id);
   }
 }
