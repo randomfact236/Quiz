@@ -2,7 +2,9 @@
  * ============================================================================
  * Quiz Play Page
  * ============================================================================
- * Main quiz game interface
+ * Main quiz game interface — orchestration only; UI sections live in
+ * ./components/ (PreQuizSummary, GameHeader, SubmitConfirmModal,
+ * ExtendSessionModal, ResumePromptModal).
  * URL: /quiz-mcq/play?subject=X&chapter=Y&level=Z
  * ============================================================================
  */
@@ -13,13 +15,19 @@ import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, AlertCircle, Timer, Pause, Play, Plus, Minus, Zap, Link2 } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 import { useQuizMcq } from '@/hooks/useQuizMcq';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz-mcq/QuestionCard';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { getSubjectMeta } from '@/lib/quiz-mcq-api';
 import { SettingsService } from '@/services/settings.service';
+
+import { ResumePromptModal } from './components/ResumePromptModal';
+import { PreQuizSummary } from './components/PreQuizSummary';
+import { GameHeader } from './components/GameHeader';
+import { SubmitConfirmModal } from './components/SubmitConfirmModal';
+import { ExtendSessionModal } from './components/ExtendSessionModal';
 
 // Default time limits per level (in seconds) - fallback if settings not available
 const DEFAULT_TIME_LIMITS: Record<string, number> = {
@@ -68,6 +76,14 @@ function QuizContent(): JSX.Element {
   // Share toast state
   const [shareToast, setShareToast] = useState<string | null>(null);
 
+  // Back/exit target shared by pre-quiz and in-game headers
+  const backHref =
+    type === 'challenge' && mode === 'practice'
+      ? '/quiz-mcq/practice-mode'
+      : type === 'challenge' && mode === 'timer'
+        ? '/quiz-mcq/timer-challenge'
+        : `/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`;
+
   // Load timer settings from settings
   useEffect(() => {
     const loadTimerSettings = async () => {
@@ -88,7 +104,6 @@ function QuizContent(): JSX.Element {
         }
       } catch (error) {
         console.error('Failed to load timer settings:', error);
-        // Fallback to default time limits
         if (mode === 'timer' && level) {
           setTimeLimit(DEFAULT_TIME_LIMITS[level.toLowerCase()] ?? 30);
         } else {
@@ -216,37 +231,19 @@ function QuizContent(): JSX.Element {
   if (isMounted && quiz.showResumePrompt && quiz.pendingResumeState) {
     const saved = quiz.pendingResumeState;
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-          <h2 className="text-xl font-bold mb-2">Resume Quiz?</h2>
-          <p className="text-gray-600 mb-1">You have an unfinished session from earlier.</p>
-          <p className="text-sm text-gray-500 mb-4">
-            Question <strong>{saved.currentQuestionIndex + 1}</strong> of{' '}
-            <strong>{saved.sessionSize}</strong> —{' '}
-            <strong>{Object.keys(saved.answers).length}</strong> answered
-          </p>
-          <div className="flex gap-3">
-            <button
-              onClick={() => {
-                quiz.handleStartFresh();
-                setHasStarted(false);
-              }}
-              className="flex-1 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300"
-            >
-              Start Fresh
-            </button>
-            <button
-              onClick={() => {
-                quiz.handleResumeSession();
-                setHasStarted(true);
-              }}
-              className="flex-1 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
-            >
-              Resume Q{saved.currentQuestionIndex + 1}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ResumePromptModal
+        currentQuestionIndex={saved.currentQuestionIndex}
+        sessionSize={saved.sessionSize}
+        answeredCount={Object.keys(saved.answers).length}
+        onResume={() => {
+          quiz.handleResumeSession();
+          setHasStarted(true);
+        }}
+        onStartFresh={() => {
+          quiz.handleStartFresh();
+          setHasStarted(false);
+        }}
+      />
     );
   }
 
@@ -305,155 +302,26 @@ function QuizContent(): JSX.Element {
     const availableExtra = totalAvailable - sessionSize;
     const finalQuestionCount = sessionSize + preQuizExtraQuestions;
 
-    const handleStartQuiz = () => {
-      if (preQuizExtraQuestions > 0 && availableExtra > 0) {
-        quiz.addMoreQuestions(preQuizExtraQuestions);
-      }
-      setHasStarted(true);
-    };
-
     return (
-      <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
-        <FloatingBackground count={15} />
-
-        <div className="relative z-10 flex flex-col flex-1 px-3 py-4">
-          <div className="mx-auto w-full max-w-lg">
-            {/* Back Button */}
-            {(() => {
-              const type = searchParams?.get('type');
-              const backUrl =
-                type === 'challenge' && mode === 'practice'
-                  ? '/quiz-mcq/practice-mode'
-                  : type === 'challenge' && mode === 'timer'
-                    ? '/quiz-mcq/timer-challenge'
-                    : `/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`;
-              return (
-                <Link
-                  href={backUrl}
-                  className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Mode Selection
-                </Link>
-              );
-            })()}
-
-            {/* Pre-quiz Summary Card */}
-            <div className="rounded-2xl bg-white/95 p-5 shadow-2xl">
-              <div className="text-center mb-4">
-                <div className="text-5xl mb-2">{subjectEmoji}</div>
-                <h1 className="text-2xl font-bold text-gray-800 mb-1">{subjectName} Quiz</h1>
-                <p className="text-gray-500 text-sm">Ready to test your knowledge?</p>
-              </div>
-
-              {/* Quiz Info Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-indigo-50 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-indigo-600">{finalQuestionCount}</div>
-                  <div className="text-xs text-gray-600">Questions</div>
-                </div>
-                <div className="bg-emerald-50 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-emerald-600">{levelDisplay}</div>
-                  <div className="text-xs text-gray-600">Difficulty</div>
-                </div>
-                <div className="bg-blue-50 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {mode === 'timer' ? '⏱️' : '🎯'}
-                  </div>
-                  <div className="text-xs text-gray-600">{modeDisplay}</div>
-                </div>
-                <div className="bg-orange-50 rounded-lg p-3 text-center">
-                  <div className="text-lg font-bold text-orange-600">{chapter}</div>
-                  <div className="text-xs text-gray-600">Chapter</div>
-                </div>
-              </div>
-
-              {/* Add More Questions Section */}
-              {availableExtra > 0 && (
-                <div className="bg-purple-50 rounded-xl p-3 mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-gray-700 text-sm">Add More Questions:</span>
-                    <span className="text-xs text-purple-600">{availableExtra} more available</span>
-                  </div>
-
-                  {/* Slider */}
-                  <input
-                    type="range"
-                    min={0}
-                    max={Math.min(20, availableExtra)}
-                    value={preQuizExtraQuestions}
-                    onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
-                    className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mb-3"
-                  />
-
-                  {/* Dropdown and +/- Buttons */}
-                  <div className="flex items-center justify-center gap-3">
-                    <button
-                      onClick={() =>
-                        setPreQuizExtraQuestions(Math.max(0, preQuizExtraQuestions - 1))
-                      }
-                      disabled={preQuizExtraQuestions <= 0}
-                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                    >
-                      <Minus className="h-3 w-3" />
-                    </button>
-
-                    <select
-                      value={preQuizExtraQuestions}
-                      onChange={(e) => setPreQuizExtraQuestions(parseInt(e.target.value))}
-                      className="h-8 px-3 rounded-lg border border-purple-300 bg-white text-gray-700 font-semibold text-sm cursor-pointer"
-                    >
-                      {Array.from({ length: Math.min(20, availableExtra) + 1 }, (_, i) => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
-
-                    <button
-                      onClick={() =>
-                        setPreQuizExtraQuestions(
-                          Math.min(Math.min(20, availableExtra), preQuizExtraQuestions + 1)
-                        )
-                      }
-                      disabled={preQuizExtraQuestions >= Math.min(20, availableExtra)}
-                      className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                    >
-                      <Plus className="h-3 w-3" />
-                    </button>
-                  </div>
-
-                  {preQuizExtraQuestions > 0 && (
-                    <p className="text-center text-xs text-purple-600 mt-1">
-                      +{preQuizExtraQuestions} extra question{preQuizExtraQuestions > 1 ? 's' : ''}{' '}
-                      will be added
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Mode Description */}
-              <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                <p className="text-gray-600 text-sm text-center">
-                  {mode === 'timer'
-                    ? '⏱️ You have limited time to answer each question. Think fast!'
-                    : '🎯 Take your time and answer each question carefully.'}
-                </p>
-              </div>
-
-              {/* Start Button */}
-              <button
-                onClick={handleStartQuiz}
-                className="w-full py-3 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-lg font-bold rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all"
-              >
-                {preQuizExtraQuestions > 0
-                  ? `🚀 Start Quiz (${finalQuestionCount} Questions)`
-                  : '🚀 Start Quiz'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PreQuizSummary
+        backHref={backHref}
+        subjectName={subjectName}
+        subjectEmoji={subjectEmoji}
+        chapter={chapter}
+        levelDisplay={levelDisplay}
+        modeDisplay={modeDisplay}
+        mode={mode}
+        finalQuestionCount={finalQuestionCount}
+        availableExtra={availableExtra}
+        extraQuestions={preQuizExtraQuestions}
+        onExtraQuestionsChange={setPreQuizExtraQuestions}
+        onStart={() => {
+          if (preQuizExtraQuestions > 0 && availableExtra > 0) {
+            quiz.addMoreQuestions(preQuizExtraQuestions);
+          }
+          setHasStarted(true);
+        }}
+      />
     );
   }
 
@@ -465,107 +333,27 @@ function QuizContent(): JSX.Element {
       {/* Main Content - Fill available space */}
       <div className="relative z-10 flex flex-col flex-1 px-4 py-2">
         <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 justify-center">
-          {/* Header Section - Minimal spacing */}
-          <div className="mb-2">
-            {/* Exit Button */}
-            <div className="mb-1">
-              <Link
-                href={
-                  type === 'challenge' && mode === 'practice'
-                    ? '/quiz-mcq/practice-mode'
-                    : type === 'challenge' && mode === 'timer'
-                      ? '/quiz-mcq/timer-challenge'
-                      : `/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`
-                }
-                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Exit Quiz
-              </Link>
-            </div>
-
-            {/* Subject & Chapter Info with Timer */}
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                  {subjectName}
-                </span>
-                <span className="text-base text-white/90">{chapter}</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {/* Skipped Button */}
-                {quiz.manuallySkipped.size > 0 && (
-                  <button
-                    onClick={() => {
-                      const nextSkipped = getNextSkippedIndex();
-                      if (nextSkipped !== null) {
-                        quiz.jumpToQuestion(nextSkipped);
-                      }
-                    }}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-orange-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-orange-600 transition-colors"
-                  >
-                    <Zap className="h-3 w-3" />
-                    Skipped ({quiz.manuallySkipped.size})
-                  </button>
-                )}
-
-                {/* Unvisited Button - Only shown when arrived via shared link and not dismissed */}
-                {isSharedLink &&
-                  quiz.startFromShare &&
-                  quiz.startFromShare > 1 &&
-                  !quiz.dismissedUnvisited && (
-                    <button
-                      onClick={quiz.dismissUnvisited}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-600 transition-colors"
-                    >
-                      <Link2 className="h-3 w-3" />
-                      Unvisited ({(quiz.startFromShare ?? 0) - 1})
-                    </button>
-                  )}
-              </div>
-
-              {/* Timer Display */}
-              {isTimerMode && (quiz.status === 'playing' || quiz.status === 'paused') && (
-                <div className="flex items-center gap-2">
-                  {/* Timer Clock */}
-                  <div
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
-                      quiz.status === 'paused'
-                        ? 'bg-yellow-500 text-white'
-                        : quiz.timeRemaining <= 10
-                          ? 'bg-red-500 text-white animate-pulse'
-                          : quiz.timeRemaining <= 20
-                            ? 'bg-orange-500 text-white'
-                            : 'bg-white/90 text-gray-800'
-                    }`}
-                  >
-                    <Timer className="h-4 w-4" />
-                    <span>
-                      {Math.floor(quiz.timeRemaining / 60)}:
-                      {(quiz.timeRemaining % 60).toString().padStart(2, '0')}
-                    </span>
-                    {quiz.status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
-                  </div>
-
-                  {/* Pause/Resume Button */}
-                  <button
-                    onClick={() =>
-                      quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz()
-                    }
-                    className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
-                    title={quiz.status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
-                  >
-                    {quiz.status === 'paused' ? (
-                      <Play className="h-4 w-4" />
-                    ) : (
-                      <Pause className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* Header Section */}
+          <GameHeader
+            backHref={backHref}
+            subjectName={subjectName}
+            chapter={chapter}
+            skippedCount={quiz.manuallySkipped.size}
+            onJumpToSkipped={() => {
+              const nextSkipped = getNextSkippedIndex();
+              if (nextSkipped !== null) {
+                quiz.jumpToQuestion(nextSkipped);
+              }
+            }}
+            unvisitedCount={
+              isSharedLink && quiz.startFromShare ? (quiz.startFromShare ?? 0) - 1 : null
+            }
+            onDismissUnvisited={quiz.dismissUnvisited}
+            isTimerMode={isTimerMode}
+            quizStatus={quiz.status}
+            timeRemaining={quiz.timeRemaining}
+            onPauseToggle={() => (quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz())}
+          />
 
           {/* Question Card */}
           <AnimatePresence mode="wait">
@@ -685,147 +473,37 @@ function QuizContent(): JSX.Element {
 
       {/* Confirm Submit Modal */}
       {showConfirmSubmit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-          >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">Submit Quiz?</h2>
-
-            {quiz.answeredCount < quiz.totalQuestions ? (
-              <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
-                <p className="font-medium">⚠️ Not all questions answered!</p>
-                <p className="text-sm">
-                  You&apos;ve answered {quiz.answeredCount} of {quiz.totalQuestions} questions.
-                </p>
-              </div>
-            ) : (
-              <p className="mb-4 text-gray-600">
-                You&apos;ve answered all questions. Ready to see your results?
-              </p>
-            )}
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setShowConfirmSubmit(false);
-                  setShowExtendQuiz(true);
-                }}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-              >
-                Continue Quiz
-              </button>
-              <button
-                onClick={() => {
-                  quiz.submitQuiz();
-                  setShowConfirmSubmit(false);
-                }}
-                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
-              >
-                Submit
-              </button>
-            </div>
-          </motion.div>
-        </div>
+        <SubmitConfirmModal
+          answeredCount={quiz.answeredCount}
+          totalQuestions={quiz.totalQuestions}
+          onCancel={() => {
+            setShowConfirmSubmit(false);
+            setShowExtendQuiz(true);
+          }}
+          onSubmit={() => {
+            quiz.submitQuiz();
+            setShowConfirmSubmit(false);
+          }}
+        />
       )}
 
       {/* Extend Quiz Modal */}
       {showExtendQuiz && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-          >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Quiz</h2>
-
-            <div className="mb-4 space-y-3">
-              <p className="text-gray-600">
-                You&apos;ve answered <strong>{quiz.answeredCount}</strong> of{' '}
-                <strong>{quiz.totalQuestions}</strong> questions.
-              </p>
-
-              <div className="rounded-lg bg-blue-50 p-3">
-                <p className="text-sm text-blue-800">
-                  <strong>{quiz.availableCount}</strong> more questions available in this level
-                </p>
-              </div>
-
-              <p className="text-sm text-gray-500">
-                How many additional questions would you like to add?
-              </p>
-
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setAdditionalQuestions(Math.max(1, additionalQuestions - 1))}
-                  disabled={additionalQuestions <= 1}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  max={Math.min(20, quiz.availableCount)}
-                  value={additionalQuestions}
-                  onChange={(e) =>
-                    setAdditionalQuestions(
-                      Math.max(
-                        1,
-                        Math.min(Math.min(20, quiz.availableCount), parseInt(e.target.value) || 1)
-                      )
-                    )
-                  }
-                  className="h-10 w-20 rounded-lg border border-gray-300 bg-white text-center font-semibold text-gray-700"
-                />
-                <button
-                  onClick={() =>
-                    setAdditionalQuestions(
-                      Math.min(Math.min(20, quiz.availableCount), additionalQuestions + 1)
-                    )
-                  }
-                  disabled={additionalQuestions >= Math.min(20, quiz.availableCount)}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  +
-                </button>
-              </div>
-
-              <p className="text-xs text-gray-400">
-                New questions will be added without repeating any you&apos;ve already seen.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowExtendQuiz(false)}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-              >
-                {quiz.availableCount > 0 ? 'Cancel' : 'Close'}
-              </button>
-              {quiz.availableCount > 0 ? (
-                <button
-                  onClick={() => {
-                    quiz.addMoreQuestions(additionalQuestions);
-                    setShowExtendQuiz(false);
-                    setTimeout(() => {
-                      quiz.goToNext();
-                    }, 100);
-                  }}
-                  disabled={additionalQuestions > quiz.availableCount}
-                  className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-                >
-                  Add & Continue
-                </button>
-              ) : (
-                <div className="flex-1 rounded-lg bg-red-50 p-2 text-center text-xs font-semibold text-red-600 border border-red-200">
-                  Maximum Limit Reached
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </div>
+        <ExtendSessionModal
+          answeredCount={quiz.answeredCount}
+          totalQuestions={quiz.totalQuestions}
+          availableCount={quiz.availableCount}
+          additionalQuestions={additionalQuestions}
+          onAdditionalQuestionsChange={setAdditionalQuestions}
+          onClose={() => setShowExtendQuiz(false)}
+          onAddAndContinue={(count) => {
+            quiz.addMoreQuestions(count);
+            setShowExtendQuiz(false);
+            setTimeout(() => {
+              quiz.goToNext();
+            }, 100);
+          }}
+        />
       )}
     </div>
   );
