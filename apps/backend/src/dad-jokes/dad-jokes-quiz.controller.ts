@@ -32,14 +32,15 @@ import {
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { DadJokesService } from './dad-jokes.service';
+import { _Public } from '../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 import { JokeChapter } from './entities/joke-chapter.entity';
 import { JokeSubject } from './entities/joke-subject.entity';
 import { QuizJoke } from './entities/quiz-joke.entity';
 
-
 /**
  * Controller for managing quiz format dad jokes
- * 
+ *
  * @description Provides REST API endpoints for quiz format joke operations
  */
 @ApiTags('Dad Jokes - Quiz Format')
@@ -49,6 +50,7 @@ export class DadJokesQuizController {
 
   // ==================== QUIZ FORMAT - PUBLIC ====================
 
+  @_Public()
   @Get('subjects')
   @ApiOperation({ summary: 'Get all joke subjects (Quiz format)' })
   @ApiResponse({ status: 200, description: 'Returns all subjects' })
@@ -56,6 +58,7 @@ export class DadJokesQuizController {
     return this.jokesService.findAllSubjects();
   }
 
+  @_Public()
   @Get('subjects/:slug')
   @ApiOperation({ summary: 'Get subject by slug with chapters (Quiz format)' })
   @ApiParam({ name: 'slug', example: 'dad-jokes' })
@@ -65,6 +68,7 @@ export class DadJokesQuizController {
     return this.jokesService.findSubjectBySlug(slug);
   }
 
+  @_Public()
   @Get('chapters/:subjectId')
   @ApiOperation({ summary: 'Get chapters by subject ID (Quiz format)' })
   @ApiResponse({ status: 200, description: 'Returns chapters' })
@@ -72,27 +76,33 @@ export class DadJokesQuizController {
     return this.jokesService.findChaptersBySubject(subjectId);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('quiz/:chapterId')
   @ApiOperation({ summary: 'Get quiz jokes by chapter ID' })
   @ApiResponse({ status: 200, description: 'Returns quiz jokes' })
   findQuizJokesByChapter(
     @Param('chapterId') chapterId: string,
-    @Query() pagination: PaginationDto,
+    @Query() pagination: PaginationDto
   ): Promise<{ data: QuizJoke[]; total: number }> {
     return this.jokesService.findQuizJokesByChapter(chapterId, pagination);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random quiz jokes by difficulty level' })
   @ApiResponse({ status: 200, description: 'Returns random jokes' })
   getRandomQuizJokes(
     @Param('level') level: string,
-    @Query('count') count?: string,
+    @Query('count') count?: string
   ): Promise<QuizJoke[]> {
     const parsedCount = this.validateCount(count, DEFAULT_RANDOM_JOKES_COUNT, 1, 50);
     return this.jokesService.findRandomQuizJokes(level, parsedCount);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed quiz jokes from all chapters' })
   @ApiResponse({ status: 200, description: 'Returns mixed jokes' })
@@ -117,10 +127,7 @@ export class DadJokesQuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update joke subject (Quiz format, Admin only)' })
-  updateSubject(
-    @Param('id') id: string,
-    @Body() dto: UpdateJokeSubjectDto,
-  ): Promise<JokeSubject> {
+  updateSubject(@Param('id') id: string, @Body() dto: UpdateJokeSubjectDto): Promise<JokeSubject> {
     return this.jokesService.updateSubject(id, dto);
   }
 
@@ -148,10 +155,7 @@ export class DadJokesQuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update joke chapter (Quiz format, Admin only)' })
-  updateChapter(
-    @Param('id') id: string,
-    @Body() dto: UpdateJokeChapterDto,
-  ): Promise<JokeChapter> {
+  updateChapter(@Param('id') id: string, @Body() dto: UpdateJokeChapterDto): Promise<JokeChapter> {
     return this.jokesService.updateChapter(id, dto);
   }
 
@@ -179,7 +183,9 @@ export class DadJokesQuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create quiz jokes (Admin only)' })
-  async createQuizJokesBulk(@Body() dto: CreateQuizJokeDto[]): Promise<{ count: number; errors: string[] }> {
+  async createQuizJokesBulk(
+    @Body() dto: CreateQuizJokeDto[]
+  ): Promise<{ count: number; errors: string[] }> {
     const result = await this.jokesService.createQuizJokesBulk(dto);
     return { count: result.count, errors: result.errors };
   }
@@ -189,10 +195,7 @@ export class DadJokesQuizController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update quiz joke (Admin only)' })
-  updateQuizJoke(
-    @Param('id') id: string,
-    @Body() dto: UpdateQuizJokeDto,
-  ): Promise<QuizJoke> {
+  updateQuizJoke(@Param('id') id: string, @Body() dto: UpdateQuizJokeDto): Promise<QuizJoke> {
     return this.jokesService.updateQuizJoke(id, dto);
   }
 
@@ -215,7 +218,7 @@ export class DadJokesQuizController {
     count: string | undefined,
     defaultValue: number,
     min: number,
-    max: number,
+    max: number
   ): number {
     if (count === undefined || count === '') {
       return defaultValue;

@@ -25,36 +25,45 @@ import {
   SearchJokesDto,
   BulkImportResultDto,
 } from '../common/dto/base.dto';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import {
+  BulkActionDto,
+  BulkActionResponseDto,
+  StatusCountResponseDto,
+  StatusFilterDto,
+} from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { DadJokesService } from './dad-jokes.service';
+import { _Public } from '../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
 
-
 /**
  * Controller for managing classic dad jokes
- * 
+ *
  * @description Provides REST API endpoints for classic dad joke operations
  */
 @ApiTags('Dad Jokes')
 @Controller('jokes')
 export class DadJokesController {
-  constructor(private readonly jokesService: DadJokesService) { }
+  constructor(private readonly jokesService: DadJokesService) {}
 
   // ==================== CLASSIC FORMAT - PUBLIC ====================
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('classic')
   @ApiOperation({ summary: 'Get all classic dad jokes with pagination' })
   @ApiResponse({ status: 200, description: 'Returns paginated dad jokes' })
   findAllClassic(
     @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto,
+    @Query() filter: StatusFilterDto
   ): Promise<{ data: DadJoke[]; total: number }> {
     return this.jokesService.findAllJokes(pagination, filter.status);
   }
 
+  @_Public()
   @Get('classic/random')
   @ApiOperation({ summary: 'Get a random classic dad joke' })
   @ApiResponse({ status: 200, description: 'Returns a random joke' })
@@ -63,6 +72,8 @@ export class DadJokesController {
     return this.jokesService.findRandomJoke();
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('classic/search')
   @ApiOperation({ summary: 'Search classic dad jokes' })
   @ApiResponse({ status: 200, description: 'Returns filtered jokes' })
@@ -70,15 +81,15 @@ export class DadJokesController {
     return this.jokesService.searchJokes(searchDto);
   }
 
+  @_Public()
   @Get('classic/categories')
   @ApiOperation({ summary: 'Get all classic joke categories' })
   @ApiResponse({ status: 200, description: 'Returns all categories' })
-  findCategories(
-    @Query('hasContent') hasContent?: string
-  ): Promise<JokeCategory[]> {
+  findCategories(@Query('hasContent') hasContent?: string): Promise<JokeCategory[]> {
     return this.jokesService.findAllCategories(hasContent === 'true');
   }
 
+  @_Public()
   @Get('classic/categories/:id')
   @ApiOperation({ summary: 'Get category by ID with jokes' })
   @ApiResponse({ status: 200, description: 'Returns category' })
@@ -87,16 +98,19 @@ export class DadJokesController {
     return this.jokesService.findCategoryById(id);
   }
 
+  @_Public()
   @Get('classic/category/:id')
   @ApiOperation({ summary: 'Get jokes by category' })
   @ApiResponse({ status: 200, description: 'Returns jokes in category' })
   findByCategory(
     @Param('id') id: string,
-    @Query() pagination: PaginationDto,
+    @Query() pagination: PaginationDto
   ): Promise<{ data: DadJoke[]; total: number }> {
     return this.jokesService.findJokesByCategory(id, pagination);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
   @Post('classic/:id/vote')
   @ApiOperation({ summary: 'Vote on a classic dad joke (Public, no auth)' })
   @ApiResponse({ status: 200, description: 'Vote recorded successfully' })
@@ -129,7 +143,11 @@ export class DadJokesController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create classic dad jokes (Admin only)' })
-  @ApiResponse({ status: 201, description: 'Jokes created successfully', type: BulkImportResultDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Jokes created successfully',
+    type: BulkImportResultDto,
+  })
   async createClassicBulk(@Body() dto: CreateDadJokeDto[]): Promise<BulkImportResultDto> {
     const result = await this.jokesService.createJokesBulk(dto);
     return { success: result.count, failed: result.errors.length, errors: result.errors };
@@ -196,7 +214,10 @@ export class DadJokesController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a joke category (Admin only)' })
-  updateCategory(@Param('id') id: string, @Body() dto: UpdateJokeCategoryDto): Promise<JokeCategory> {
+  updateCategory(
+    @Param('id') id: string,
+    @Body() dto: UpdateJokeCategoryDto
+  ): Promise<JokeCategory> {
     return this.jokesService.updateCategory(id, dto);
   }
 

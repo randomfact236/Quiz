@@ -18,6 +18,8 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqCategoryService } from '../services/riddle-mcq-category.service';
+import { _Public } from '../../common/decorators/public.decorator';
+
 import { CreateRiddleCategoryDto, UpdateRiddleCategoryDto } from '../dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ - Categories')
@@ -25,12 +27,12 @@ import { CreateRiddleCategoryDto, UpdateRiddleCategoryDto } from '../dto/riddle-
 export class RiddleMcqCategoryController {
   constructor(private readonly categoryService: RiddleMcqCategoryService) {}
 
+  @_Public()
   @Get()
   @ApiOperation({ summary: 'Get all active categories (Public)' })
   async getAllCategories(): Promise<RiddleMcqCategory[]> {
     return this.categoryService.findAllCategories(false);
   }
-
   @Get('all')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -40,6 +42,7 @@ export class RiddleMcqCategoryController {
     return this.categoryService.findAllCategories(true);
   }
 
+  @_Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get category by ID (Public)' })
   async getCategoryById(@Param('id') id: string): Promise<RiddleMcqCategory> {

@@ -21,6 +21,8 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqQuestionService } from '../services/riddle-mcq-question.service';
+import { _Public } from '../../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 import { RiddleMcqBulkService } from '../services/riddle-mcq-bulk.service';
 import { RiddleMcqStatsService } from '../services/riddle-mcq-stats.service';
 import { PaginationValidator } from '../validators/pagination.validator';
@@ -70,6 +72,8 @@ export class RiddleMcqController {
     );
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('subjects/:subjectId/riddles')
   @ApiOperation({ summary: 'Get riddles by subject ID (Public)' })
   async getRiddlesBySubject(
@@ -85,6 +89,8 @@ export class RiddleMcqController {
     return this.questionService.findRiddlesBySubject(subjectId, pagination, level);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed riddles from all subjects (Public)' })
   async getMixedRiddles(@Query('count') count?: string): Promise<RiddleMcq[]> {
@@ -92,6 +98,8 @@ export class RiddleMcqController {
     return this.questionService.findMixedRiddles(parsedCount);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random riddles by difficulty level (Public)' })
   @ApiParam({ name: 'level', enum: ['easy', 'medium', 'hard', 'expert'] })

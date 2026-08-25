@@ -1,4 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
+
+import { _Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
   HealthCheckService,
@@ -30,9 +32,10 @@ export class HealthController {
     private health: HealthCheckService,
     private db: TypeOrmHealthIndicator,
     private memory: MemoryHealthIndicator,
-    private disk: DiskHealthIndicator,
+    private disk: DiskHealthIndicator
   ) {}
 
+  @_Public()
   @Get()
   @HealthCheck()
   @ApiOperation({ summary: 'Check overall health status' })
@@ -43,22 +46,26 @@ export class HealthController {
       () => this.db.pingCheck('database'),
       () => this.memory.checkHeap('memory_heap', MEMORY_HEAP_LIMIT_BYTES),
       () => this.memory.checkRSS('memory_rss', MEMORY_RSS_LIMIT_BYTES),
-      () => this.disk.checkStorage('disk', { path: diskPath, thresholdPercent: DISK_THRESHOLD_PERCENT }),
+      () =>
+        this.disk.checkStorage('disk', {
+          path: diskPath,
+          thresholdPercent: DISK_THRESHOLD_PERCENT,
+        }),
     ]);
   }
 
+  @_Public()
   @Get('liveness')
   @ApiOperation({ summary: 'Kubernetes liveness probe' })
   liveness(): LivenessResponse {
     return { status: 'ok', timestamp: new Date().toISOString() };
   }
 
+  @_Public()
   @Get('readiness')
   @HealthCheck()
   @ApiOperation({ summary: 'Kubernetes readiness probe' })
   readiness(): Promise<HealthCheckResult> {
-    return this.health.check([
-      () => this.db.pingCheck('database'),
-    ]);
+    return this.health.check([() => this.db.pingCheck('database')]);
   }
 }

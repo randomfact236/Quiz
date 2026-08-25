@@ -19,6 +19,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 import { RiddleMcqSubjectService } from '../services/riddle-mcq-subject.service';
+import { _Public } from '../../common/decorators/public.decorator';
 import { CreateRiddleSubjectDto, UpdateRiddleSubjectDto } from '../dto/riddle-mcq.dto';
 
 @ApiTags('Riddle MCQ - Subjects')
@@ -26,6 +27,7 @@ import { CreateRiddleSubjectDto, UpdateRiddleSubjectDto } from '../dto/riddle-mc
 export class RiddleMcqSubjectController {
   constructor(private readonly subjectService: RiddleMcqSubjectService) {}
 
+  @_Public()
   @Get()
   @ApiOperation({ summary: 'Get all active subjects (Public)' })
   async getAllSubjects(@Query('hasContent') hasContent?: string): Promise<RiddleMcqSubject[]> {
@@ -41,6 +43,7 @@ export class RiddleMcqSubjectController {
     return this.subjectService.findAllSubjects(true);
   }
 
+  @_Public()
   @Get(':slug')
   @ApiOperation({ summary: 'Get subject by slug (Public)' })
   async getSubjectBySlug(@Param('slug') slug: string): Promise<RiddleMcqSubject> {

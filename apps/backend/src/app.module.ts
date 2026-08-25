@@ -2,15 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
 import { AdminUsersModule } from './admin/users/admin-users.module';
 import { AuthModule } from './auth/auth.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
-import {
-  DB_PORT,
-  DB_POOL_SIZE,
-} from './common/constants/app.constants';
+import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
 
 // Modules
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
@@ -24,14 +22,15 @@ import { SettingsModule } from './settings/settings.module';
 import { UsersModule } from './users/users.module';
 
 // Common
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 /**
  * Root application module that configures all core dependencies and modules
- * 
+ *
  * @description Configures the NestJS application with database connection,
  * rate limiting, security middleware, and all feature modules.
  * Provides global exception handling, rate limiting, and request logging.
- * 
+ *
  * @class
  * @implements {NestModule}
  * @example
@@ -45,6 +44,14 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+
+    // Capacity-plan C1: global rate limiting (decorators across controllers now enforce)
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60_000,
+        limit: 100,
+      },
+    ]),
 
     // Database
     TypeOrmModule.forRootAsync({
@@ -95,6 +102,16 @@ import { UsersModule } from './users/users.module';
     SettingsModule,
   ],
   providers: [
+    // Capacity-plan C1: rate limiting runs first (cheap) before auth DB lookups
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    // Capacity-plan C3: default-deny JWT auth; routes opt out via @_Public()
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     // Global Exception Filter
     {
       provide: APP_FILTER,
@@ -107,4 +124,4 @@ import { UsersModule } from './users/users.module';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

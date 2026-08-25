@@ -33,12 +33,19 @@ import {
   SearchImageRiddlesDto,
   BulkImportResultDto,
 } from '../common/dto/base.dto';
-import { BulkActionDto, BulkActionResponseDto, StatusCountResponseDto, StatusFilterDto } from '../common/dto/bulk-action.dto';
+import {
+  BulkActionDto,
+  BulkActionResponseDto,
+  StatusCountResponseDto,
+  StatusFilterDto,
+} from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
 import { ImageRiddle } from './entities/image-riddle.entity';
 import { ImageRiddlesService } from './image-riddles.service';
+import { _Public } from '../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('Image Riddles')
 @Controller('image-riddles')
@@ -47,16 +54,20 @@ export class ImageRiddlesController {
 
   // ==================== PUBLIC ENDPOINTS ====================
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get()
   @ApiOperation({ summary: 'Get all image riddles with pagination' })
   @ApiResponse({ status: 200, description: 'Returns paginated image riddles' })
   findAll(
     @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto,
+    @Query() filter: StatusFilterDto
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     return this.imageRiddlesService.findAllRiddles(pagination, filter.status);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('random')
   @ApiOperation({ summary: 'Get a random image riddle' })
   @ApiResponse({ status: 200, description: 'Returns a random image riddle' })
@@ -65,13 +76,18 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findRandomRiddle();
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('search')
   @ApiOperation({ summary: 'Search image riddles' })
   @ApiResponse({ status: 200, description: 'Returns filtered image riddles' })
-  search(@Query() searchDto: SearchImageRiddlesDto): Promise<{ data: ImageRiddle[]; total: number }> {
+  search(
+    @Query() searchDto: SearchImageRiddlesDto
+  ): Promise<{ data: ImageRiddle[]; total: number }> {
     return this.imageRiddlesService.searchRiddles(searchDto);
   }
 
+  @_Public()
   @Get('categories')
   @ApiOperation({ summary: 'Get all image riddle categories' })
   @ApiResponse({ status: 200, description: 'Returns all categories' })
@@ -79,6 +95,7 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findAllCategories();
   }
 
+  @_Public()
   @Get('categories/:id')
   @ApiOperation({ summary: 'Get category by ID with riddles' })
   @ApiResponse({ status: 200, description: 'Returns category' })
@@ -87,22 +104,25 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findCategoryById(id);
   }
 
+  @_Public()
   @Get('category/:id')
   @ApiOperation({ summary: 'Get image riddles by category' })
   @ApiResponse({ status: 200, description: 'Returns image riddles in category' })
   findByCategory(
     @Param('id') id: string,
-    @Query() pagination: PaginationDto,
+    @Query() pagination: PaginationDto
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     return this.imageRiddlesService.findRiddlesByCategory(id, pagination);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('difficulty/:level')
   @ApiOperation({ summary: 'Get image riddles by difficulty level' })
   @ApiResponse({ status: 200, description: 'Returns image riddles by difficulty' })
   findByDifficulty(
     @Param('level') level: string,
-    @Query() pagination: PaginationDto,
+    @Query() pagination: PaginationDto
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     // Validate difficulty level
     const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
@@ -114,6 +134,7 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
+  @_Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get image riddle by ID' })
   @ApiResponse({ status: 200, description: 'Returns image riddle' })
@@ -139,13 +160,17 @@ export class ImageRiddlesController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Bulk create image riddles (Admin only)' })
-  @ApiResponse({ status: 201, description: 'Image riddles created successfully', type: BulkImportResultDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Image riddles created successfully',
+    type: BulkImportResultDto,
+  })
   async createBulk(@Body() dto: CreateImageRiddleDto[]): Promise<BulkImportResultDto> {
     // Validate array is not empty
     if (!dto || dto.length === 0) {
       throw new BadRequestException('No riddles provided for bulk creation');
     }
-    
+
     const result = await this.imageRiddlesService.createRiddlesBulk(dto);
     return { success: result.count, failed: result.errors.length, errors: result.errors };
   }
@@ -211,7 +236,7 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Update an image riddle category (Admin only)' })
   updateCategory(
     @Param('id') id: string,
-    @Body() dto: UpdateImageRiddleCategoryDto,
+    @Body() dto: UpdateImageRiddleCategoryDto
   ): Promise<ImageRiddleCategory> {
     return this.imageRiddlesService.updateCategory(id, dto);
   }
@@ -228,6 +253,7 @@ export class ImageRiddlesController {
 
   // ==================== STATS ====================
 
+  @_Public()
   @Get('stats/overview')
   @ApiOperation({ summary: 'Get image riddles statistics' })
   @ApiResponse({ status: 200, description: 'Returns statistics' })

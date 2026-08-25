@@ -40,6 +40,8 @@ import {
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { ExportQueryDto } from './dto/export-query.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { _Public } from '../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
@@ -80,6 +82,7 @@ export class QuizController {
 
   // ==================== SUBJECTS ====================
 
+  @_Public()
   @Get('subjects')
   @ApiOperation({ summary: 'Get all subjects' })
   async getAllSubjects(
@@ -88,6 +91,7 @@ export class QuizController {
     return this.quizService.findAllSubjects(undefined, hasContent === 'true');
   }
 
+  @_Public()
   @Get('subjects/:slug/meta')
   @ApiOperation({ summary: 'Get subject metadata (name, emoji, slug) - lightweight' })
   @ApiParam({ name: 'slug', example: 'science' })
@@ -95,6 +99,7 @@ export class QuizController {
     return this.quizService.findSubjectMeta(slug);
   }
 
+  @_Public()
   @Get('subjects/:slug')
   @ApiOperation({ summary: 'Get subject by slug with chapters' })
   @ApiParam({ name: 'slug', example: 'science' })
@@ -102,6 +107,8 @@ export class QuizController {
     return this.quizService.findSubjectBySlug(slug);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('subjects/:slug/questions')
   @ApiOperation({
     summary: 'Get questions by subject slug with filters (PUBLIC - always returns PUBLISHED only)',
@@ -188,12 +195,14 @@ export class QuizController {
 
   // ==================== CHAPTERS ====================
 
+  @_Public()
   @Get('chapters')
   @ApiOperation({ summary: 'Get all chapters' })
   async getAllChapters(): Promise<Chapter[]> {
     return this.quizService.findAllChapters();
   }
 
+  @_Public()
   @Get('chapters/:subjectId')
   @ApiOperation({ summary: 'Get chapters by subject ID' })
   async getChaptersBySubject(@Param('subjectId') subjectId: string): Promise<Chapter[]> {
@@ -299,12 +308,39 @@ export class QuizController {
     return parsed;
   }
 
-  @Get('mixed')
-  @ApiOperation({ summary: 'Get mixed questions from all subjects' })
-  async getMixedQuestions(): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findAllMixedQuestions();
+  @Get('subjects/:slug/questions/random')
+  @ApiOperation({
+    summary: 'Get random published questions for a subject (capacity-plan A2, capped at 50)',
+  })
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiParam({ name: 'slug', example: 'science' })
+  async getRandomQuestionsBySubject(
+    @Param('slug') slug: string,
+    @Query('count') count?: string,
+    @Query('level') level?: string,
+    @Query('chapterId') chapterId?: string
+  ): Promise<{ data: Question[]; total: number }> {
+    return this.quizService.findRandomQuestions({
+      subjectSlug: slug,
+      level,
+      chapterId,
+      count: this.validateCount(count, 20),
+    });
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Get('mixed')
+  @ApiOperation({ summary: 'Get mixed questions from all subjects' })
+  async getMixedQuestions(
+    @Query('count') count?: string
+  ): Promise<{ data: Question[]; total: number }> {
+    return this.quizService.findAllMixedQuestions(this.validateCount(count, 20));
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('random/:level')
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
