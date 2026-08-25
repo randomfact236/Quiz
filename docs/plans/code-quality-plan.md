@@ -1,6 +1,6 @@
 # Code Quality Plan
 
-Cross-cutting standards and measurable targets for upgrading code quality across all features. Companion docs: [testing-quality.md](testing-quality.md) (verification infrastructure), [../PLAN.md](../PLAN.md) (execution order), `features/*.md` (where specific debt lives).
+Cross-cutting standards and measurable targets for upgrading code quality across all features. Companion docs: [testing-quality](../platform/testing-quality.md) (verification infrastructure), [build-forward-plan](build-forward-plan.md) (execution order), `features/*.md` (where specific debt lives).
 
 ## 1. Metric Targets by Phase
 

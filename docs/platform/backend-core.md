@@ -4,24 +4,24 @@ Cross-cutting backend infrastructure shared by all feature modules. Complements 
 
 ## 1. Scope & File Inventory
 
-| File | Purpose |
-|---|---|
-| `main.ts` | Bootstrap: helmet, 50mb JSON limit, CORS, global ValidationPipe (whitelist+transform), `/api` prefix + **URI versioning default v1**, Swagger at `/api/docs` (dev only) |
-| `app.module.ts` | ConfigModule(global, `.env`), TypeORM async factory (`getOrThrow` for DB creds, `synchronize` only via env flag), registers all 10 feature modules + global filter & interceptor |
-| `config/settings.ts` | Static defaults object (pagination, cache TTLs, per-module emoji/difficulty/timer presets) consumed by SettingsService |
-| `database/database-config.ts` | Env-validated DataSource factories (runtime / CLI / seed; seed blocked in production) |
-| `database/data-source.ts` | CLI migration data-source used by `migration:*` npm scripts |
-| `database/create-admin.ts`, `seed-*.ts` | Admin bootstrap + question seeding scripts (dev-only) |
-| `migrations/` | 4 migrations: AddQuestionTypeAndCorrectLetter, AddQuizIndexes, AddRiddleCategories, AddRiddleMcqIndexes |
-| `common/cache/cache.service.ts` | ioredis wrapper: get/set(setex)/del/getTTL/delPattern with error-swallowing fallback |
-| `common/services/bulk-action.service.ts` (+strategies) | Shared publish/unpublish/trash/delete executor for all content modules |
-| `common/services/email.service.ts` | Resend integration; logs-only when RESEND_API_KEY missing; password-reset HTML template |
-| `common/guards/admin.guard.ts`, `roles.guard.ts` | Two overlapping admin checks (see §3.4) |
-| `common/filters/http-exception.filter.ts` | Global exception → JSON envelope |
-| `common/interceptors/logging.interceptor.ts` | Global request logging |
-| `common/constants/app.constants.ts` | Ports, pool size, cache TTLs, memory/disk thresholds, page sizes |
-| `settings/` | SystemSetting entity + service merging DB overrides over static defaults (prototype-pollution guard on `__proto__` keys) + controller |
-| `health/health.controller.ts` | Terminus checks: DB ping, heap/RSS, disk (Windows-aware path); liveness + readiness routes |
+| File                                                   | Purpose                                                                                                                                                                          |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `main.ts`                                              | Bootstrap: helmet, 50mb JSON limit, CORS, global ValidationPipe (whitelist+transform), `/api` prefix + **URI versioning default v1**, Swagger at `/api/docs` (dev only)          |
+| `app.module.ts`                                        | ConfigModule(global, `.env`), TypeORM async factory (`getOrThrow` for DB creds, `synchronize` only via env flag), registers all 10 feature modules + global filter & interceptor |
+| `config/settings.ts`                                   | Static defaults object (pagination, cache TTLs, per-module emoji/difficulty/timer presets) consumed by SettingsService                                                           |
+| `database/database-config.ts`                          | Env-validated DataSource factories (runtime / CLI / seed; seed blocked in production)                                                                                            |
+| `database/data-source.ts`                              | CLI migration data-source used by `migration:*` npm scripts                                                                                                                      |
+| `database/create-admin.ts`, `seed-*.ts`                | Admin bootstrap + question seeding scripts (dev-only)                                                                                                                            |
+| `migrations/`                                          | 4 migrations: AddQuestionTypeAndCorrectLetter, AddQuizIndexes, AddRiddleCategories, AddRiddleMcqIndexes                                                                          |
+| `common/cache/cache.service.ts`                        | ioredis wrapper: get/set(setex)/del/getTTL/delPattern with error-swallowing fallback                                                                                             |
+| `common/services/bulk-action.service.ts` (+strategies) | Shared publish/unpublish/trash/delete executor for all content modules                                                                                                           |
+| `common/services/email.service.ts`                     | Resend integration; logs-only when RESEND_API_KEY missing; password-reset HTML template                                                                                          |
+| `common/guards/admin.guard.ts`, `roles.guard.ts`       | Two overlapping admin checks (see §3.4)                                                                                                                                          |
+| `common/filters/http-exception.filter.ts`              | Global exception → JSON envelope                                                                                                                                                 |
+| `common/interceptors/logging.interceptor.ts`           | Global request logging                                                                                                                                                           |
+| `common/constants/app.constants.ts`                    | Ports, pool size, cache TTLs, memory/disk thresholds, page sizes                                                                                                                 |
+| `settings/`                                            | SystemSetting entity + service merging DB overrides over static defaults (prototype-pollution guard on `__proto__` keys) + controller                                            |
+| `health/health.controller.ts`                          | Terminus checks: DB ping, heap/RSS, disk (Windows-aware path); liveness + readiness routes                                                                                       |
 
 ## 2. What Is Done (implemented & working)
 
@@ -56,4 +56,3 @@ Cross-cutting backend infrastructure shared by all feature modules. Complements 
 1. Land the APP_GUARD change behind a smoke test of every public route (home page subjects, riddles, jokes, image-riddles, quiz public reads, auth routes, health) — any 401 regression means a missed `_Public()`.
 2. Then throttler activation with conservative limits.
 3. Migration-baseline work last (needs a maintenance window for dev DBs).
-

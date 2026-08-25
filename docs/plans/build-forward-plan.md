@@ -1,7 +1,7 @@
 # Build-Forward Plan
 
 Starting point: clean `main`, ~78% code-complete, quality C+/B−.
-Feature detail: [features/](features/README.md) · Cross-cutting docs: [platform/](platform/) · Scale architecture: [platform/capacity.md](platform/capacity.md) · Quality gates: [platform/code-quality-plan.md](platform/code-quality-plan.md).
+Feature detail: [../features/](../features/README.md) · Cross-cutting docs: [../platform/](../platform/) · Scale architecture: [capacity-plan.md](capacity-plan.md) · Quality gates: [code-quality-plan](code-quality-plan.md).
 
 > **Parallel quality track:** every phase has exit criteria in code-quality-plan §1. A phase isn't done until its metrics row passes.
 

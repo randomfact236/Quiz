@@ -117,4 +117,4 @@ Admin path uses idiomatic React Query with key-based invalidation; gameplay is o
 
 ## Code Quality Notes
 
-Standards, budgets, and phase exit criteria: [../platform/code-quality-plan.md](../platform/code-quality-plan.md). Feature-specific debt tracked there in �5.
+Standards, budgets, and phase exit criteria: [../plans/code-quality-plan.md](../plans/code-quality-plan.md). Feature-specific debt tracked there in �5.

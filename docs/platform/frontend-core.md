@@ -4,46 +4,46 @@ Analysis of `apps/frontend` core: app shell (layout/providers/home/about), share
 
 ## 1. Scope & File Inventory
 
-| File | Purpose | Status |
-|---|---|---|
-| `src/app/layout.tsx` | Root layout: Inter font, SEO metadata, Header/Footer/MobileFooter/DemographicsPopup, NavigationProgress, Providers | Done |
-| `src/app/providers.tsx` | React Query + ThemeProvider + AuthProvider nesting | Done |
-| `src/app/page.tsx` | Home page — composes TopicsSection, ModeCards, StatsSection over BubbleBackground | Done (minor issues) |
-| `src/app/components/home/BubbleBackground.tsx` | Deterministic animated bubble backdrop (hydration-safe) | Done, simplistic (`animate-pulse`, not the reference bubble-animations.css) |
-| `src/app/components/home/TopicSection.tsx` | Loads subjects + per-subject question counts from API, groups by category into collapsible sections | Done; N+1 request pattern |
-| `src/app/components/home/TopicCard.tsx` | Topic tile with Lucide icon-key fallback map, "Soon" badge when 0 questions | Done |
-| `src/app/components/home/ModeCards.tsx` | 5 mode shortcut cards (timer-challenge, practice-mode, riddles, image-riddles, jokes) | Done but contains a broken link (§5) |
-| `src/app/components/home/StatsSection.tsx` | localStorage-driven stats (quizzes taken, questions answered, avg score, streak) via `getTotalStats()` | Done |
-| `src/app/about/page.tsx` | Static server-rendered About page | Done |
-| `src/components/Header.tsx` | Dual-mode header (admin vs user), login state from localStorage tokens, mobile menu | Done; duplicated nav blocks |
-| `src/components/Footer.tsx`, `MobileFooter.tsx` | Site footers | Present (not deeply reviewed) |
-| `src/components/DemographicsPopup.tsx` | Guest/user demographics collection popup posting to `/auth/demographics` / `/guest-users/demographics` | Done |
-| `src/components/NavigationProgress.tsx` | nprogress-based route progress bar | Present |
-| `src/components/ui/*` | Shared UI kit: Modal, ModalFooter, ConfirmDialog, ToastContainer, ThemeToggle, GoogleLoginButton, FileUploader, StatusDashboard, BulkActionToolbar, ContentManagementSection | Mostly admin-oriented; done |
-| `src/lib/api-client.ts` | fetch wrapper: base URL, Bearer token injection, 401→refresh-token retry, 60s timeout, ApiError class | Done |
-| `src/lib/quiz-api.ts` | Full quiz REST layer (subjects/chapters/questions/bulk/filter-counts/export) | Done |
-| `src/lib/auth.ts` | authService: login/register/googleLogin/logout/forgot/reset/profile | Done |
-| `src/lib/storage.ts` | Typed localStorage/sessionStorage wrapper, `aiquiz:` prefix keys, debounced writes | Done |
-| `src/lib/progress.ts` | Chapter/subject progress + quiz history + total stats in localStorage | Done but **never wired** (§5) |
-| `src/lib/achievements.ts` | 10 achievements, unlock/check/progress logic in localStorage | Partially wired (§3) |
-| `src/lib/quiz-resume.ts` | Save/load/clear/match resumable quiz state (24h expiry) | Done |
-| `src/lib/query-client.ts` | TanStack Query client defaults (staleTime 30s, retry 2) | Done |
-| `src/lib/constants.ts` | Centralized constants (timers, cache TTLs, storage prefix, HTTP codes) | Done; some duplication |
-| `src/lib/utils.ts` | cn(), generateId, debounce, time formatting, safeJsonParse etc. | Done |
-| `src/lib/toast.ts` | Singleton pub/sub toast manager | Done |
-| `src/lib/index.ts` | Barrel re-exporting utils/toast/constants | Done |
-| `src/hooks/useQuiz.ts` | **Core quiz engine hook** (641 lines): load questions, answers, scoring, timer, resume, share | Done; complex (see 02 doc too) |
-| `src/hooks/useQuizSubjects.ts` | Legacy useState-based subject fetcher (admin `Subject` type) | Legacy/duplicative |
-| `src/hooks/useClickOutside.ts`, `index.ts` | Utility hook + barrel | Done |
-| `src/contexts/AuthContext.tsx` | Auth state (user/isLoading/login/logout), token check on mount | Minimal but done |
-| `src/contexts/ThemeContext.tsx` | light/dark/system theme, `dark` class on `<html>`, hydration-safe two-phase value | Done |
-| `src/services/settings.service.ts` | "SettingsService" that only reads/writes **localStorage** mock settings with simulated delay | Stub/mock — not backend-backed |
-| `src/types/index.ts`, `status.types.ts`, `settings.types.ts` | Type barrels for status & settings types | Done |
-| `src/types/quiz.ts` | Question/QuizSession/QuizState/Achievement types | Done |
-| `next.config.mjs` | standalone output, unoptimized images, webpack polling for Docker, NEXT_PUBLIC_API_URL env | Done |
-| `package.json` | Next 15, React 18, TanStack Query 5, framer-motion, zustand, axios, react-hook-form, zod… | Done; unused deps (§5) |
-| `tailwind.config.ts` | primary/secondary/accent palettes, darkMode 'class', animations | **Content globs miss `src/features/**`** (§5) |
-| `tsconfig.json` | extends root, `@/*` path alias, bundler resolution | Done |
+| File                                                         | Purpose                                                                                                                                                                      | Status                                                                      |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `src/app/layout.tsx`                                         | Root layout: Inter font, SEO metadata, Header/Footer/MobileFooter/DemographicsPopup, NavigationProgress, Providers                                                           | Done                                                                        |
+| `src/app/providers.tsx`                                      | React Query + ThemeProvider + AuthProvider nesting                                                                                                                           | Done                                                                        |
+| `src/app/page.tsx`                                           | Home page — composes TopicsSection, ModeCards, StatsSection over BubbleBackground                                                                                            | Done (minor issues)                                                         |
+| `src/app/components/home/BubbleBackground.tsx`               | Deterministic animated bubble backdrop (hydration-safe)                                                                                                                      | Done, simplistic (`animate-pulse`, not the reference bubble-animations.css) |
+| `src/app/components/home/TopicSection.tsx`                   | Loads subjects + per-subject question counts from API, groups by category into collapsible sections                                                                          | Done; N+1 request pattern                                                   |
+| `src/app/components/home/TopicCard.tsx`                      | Topic tile with Lucide icon-key fallback map, "Soon" badge when 0 questions                                                                                                  | Done                                                                        |
+| `src/app/components/home/ModeCards.tsx`                      | 5 mode shortcut cards (timer-challenge, practice-mode, riddles, image-riddles, jokes)                                                                                        | Done but contains a broken link (§5)                                        |
+| `src/app/components/home/StatsSection.tsx`                   | localStorage-driven stats (quizzes taken, questions answered, avg score, streak) via `getTotalStats()`                                                                       | Done                                                                        |
+| `src/app/about/page.tsx`                                     | Static server-rendered About page                                                                                                                                            | Done                                                                        |
+| `src/components/Header.tsx`                                  | Dual-mode header (admin vs user), login state from localStorage tokens, mobile menu                                                                                          | Done; duplicated nav blocks                                                 |
+| `src/components/Footer.tsx`, `MobileFooter.tsx`              | Site footers                                                                                                                                                                 | Present (not deeply reviewed)                                               |
+| `src/components/DemographicsPopup.tsx`                       | Guest/user demographics collection popup posting to `/auth/demographics` / `/guest-users/demographics`                                                                       | Done                                                                        |
+| `src/components/NavigationProgress.tsx`                      | nprogress-based route progress bar                                                                                                                                           | Present                                                                     |
+| `src/components/ui/*`                                        | Shared UI kit: Modal, ModalFooter, ConfirmDialog, ToastContainer, ThemeToggle, GoogleLoginButton, FileUploader, StatusDashboard, BulkActionToolbar, ContentManagementSection | Mostly admin-oriented; done                                                 |
+| `src/lib/api-client.ts`                                      | fetch wrapper: base URL, Bearer token injection, 401→refresh-token retry, 60s timeout, ApiError class                                                                        | Done                                                                        |
+| `src/lib/quiz-api.ts`                                        | Full quiz REST layer (subjects/chapters/questions/bulk/filter-counts/export)                                                                                                 | Done                                                                        |
+| `src/lib/auth.ts`                                            | authService: login/register/googleLogin/logout/forgot/reset/profile                                                                                                          | Done                                                                        |
+| `src/lib/storage.ts`                                         | Typed localStorage/sessionStorage wrapper, `aiquiz:` prefix keys, debounced writes                                                                                           | Done                                                                        |
+| `src/lib/progress.ts`                                        | Chapter/subject progress + quiz history + total stats in localStorage                                                                                                        | Done but **never wired** (§5)                                               |
+| `src/lib/achievements.ts`                                    | 10 achievements, unlock/check/progress logic in localStorage                                                                                                                 | Partially wired (§3)                                                        |
+| `src/lib/quiz-resume.ts`                                     | Save/load/clear/match resumable quiz state (24h expiry)                                                                                                                      | Done                                                                        |
+| `src/lib/query-client.ts`                                    | TanStack Query client defaults (staleTime 30s, retry 2)                                                                                                                      | Done                                                                        |
+| `src/lib/constants.ts`                                       | Centralized constants (timers, cache TTLs, storage prefix, HTTP codes)                                                                                                       | Done; some duplication                                                      |
+| `src/lib/utils.ts`                                           | cn(), generateId, debounce, time formatting, safeJsonParse etc.                                                                                                              | Done                                                                        |
+| `src/lib/toast.ts`                                           | Singleton pub/sub toast manager                                                                                                                                              | Done                                                                        |
+| `src/lib/index.ts`                                           | Barrel re-exporting utils/toast/constants                                                                                                                                    | Done                                                                        |
+| `src/hooks/useQuiz.ts`                                       | **Core quiz engine hook** (641 lines): load questions, answers, scoring, timer, resume, share                                                                                | Done; complex (see 02 doc too)                                              |
+| `src/hooks/useQuizSubjects.ts`                               | Legacy useState-based subject fetcher (admin `Subject` type)                                                                                                                 | Legacy/duplicative                                                          |
+| `src/hooks/useClickOutside.ts`, `index.ts`                   | Utility hook + barrel                                                                                                                                                        | Done                                                                        |
+| `src/contexts/AuthContext.tsx`                               | Auth state (user/isLoading/login/logout), token check on mount                                                                                                               | Minimal but done                                                            |
+| `src/contexts/ThemeContext.tsx`                              | light/dark/system theme, `dark` class on `<html>`, hydration-safe two-phase value                                                                                            | Done                                                                        |
+| `src/services/settings.service.ts`                           | "SettingsService" that only reads/writes **localStorage** mock settings with simulated delay                                                                                 | Stub/mock — not backend-backed                                              |
+| `src/types/index.ts`, `status.types.ts`, `settings.types.ts` | Type barrels for status & settings types                                                                                                                                     | Done                                                                        |
+| `src/types/quiz.ts`                                          | Question/QuizSession/QuizState/Achievement types                                                                                                                             | Done                                                                        |
+| `next.config.mjs`                                            | standalone output, unoptimized images, webpack polling for Docker, NEXT_PUBLIC_API_URL env                                                                                   | Done                                                                        |
+| `package.json`                                               | Next 15, React 18, TanStack Query 5, framer-motion, zustand, axios, react-hook-form, zod…                                                                                    | Done; unused deps (§5)                                                      |
+| `tailwind.config.ts`                                         | primary/secondary/accent palettes, darkMode 'class', animations                                                                                                              | **Content globs miss `src/features/**`\*\* (§5)                             |
+| `tsconfig.json`                                              | extends root, `@/*` path alias, bundler resolution                                                                                                                           | Done                                                                        |
 
 ## 2. What Is Done (implemented & working)
 
@@ -71,9 +71,9 @@ Analysis of `apps/frontend` core: app shell (layout/providers/home/about), share
 - **Wire progress persistence**: call `saveQuizResult(session)` on quiz completion so chapter/subject progress, best scores, and the `/quiz` chapter badges actually work.
 - **Backend-backed settings**: replace mock SettingsService with real NestJS settings endpoints (or delete it and move timer config into constants/backend subject meta).
 - **Fix `/riddles` routing**: no `app/riddles` route exists (routes are `riddle-mcq`, `image-riddles`, `jokes`) and there are no rewrites in next.config.mjs — every "Riddles" nav link 404s.
-- **Tailwind content globs**: add `'./src/features/**/*.{js,ts,jsx,tsx}'` (and consider `./src/lib`, `./src/hooks`) to tailwind.config.ts:4–8; currently any Tailwind class used *only* inside `src/features/**` (e.g., admin QuizContainer feature) risks being purged from production CSS.
+- **Tailwind content globs**: add `'./src/features/**/*.{js,ts,jsx,tsx}'` (and consider `./src/lib`, `./src/hooks`) to tailwind.config.ts:4–8; currently any Tailwind class used _only_ inside `src/features/**` (e.g., admin QuizContainer feature) risks being purged from production CSS.
 - **Port reference styling**: quiz-reference CSS defines `.home-content`, `.section-header` gradients and a real bubble animation system (`bubble-animations.css`); the Next port uses ad-hoc Tailwind and `animate-pulse` circles instead, and page.tsx:15 references the orphan `.home-content` class that has no definition in globals.css.
-- **Remove dead dependencies**: axios, zustand, react-hook-form/@hookform/resolvers/zod, @dnd-kit/*, date-fns are declared in package.json:20–39 but not imported anywhere in the analyzed code (data fetching uses fetch + TanStack Query).
+- **Remove dead dependencies**: axios, zustand, react-hook-form/@hookform/resolvers/zod, @dnd-kit/\*, date-fns are declared in package.json:20–39 but not imported anywhere in the analyzed code (data fetching uses fetch + TanStack Query).
 
 ## 5. Known Issues, Bugs & Tech Debt
 
@@ -94,12 +94,12 @@ Analysis of `apps/frontend` core: app shell (layout/providers/home/about), share
 
 - **Rendering model**: App Router with mostly `'use client'` pages; only `about/page.tsx` is a server component. Global chrome (Header/Footer/DemographicsPopup) mounts once in the root layout inside `Providers`.
 - **State management** is a three-layer hybrid:
-  1. **TanStack Query** for server state in the admin feature area (query-client.ts defaults; features/quiz/hooks/*).
+  1. **TanStack Query** for server state in the admin feature area (query-client.ts defaults; features/quiz/hooks/\*).
   2. **Plain useState/useEffect + module-level fetch functions** (`lib/quiz-api.ts`) for all public pages — no query cache on home/quiz pages, hence the refetch-per-navigation behavior.
   3. **localStorage** (via lib/storage.ts, `aiquiz:` keys) as the persistence backbone for auth tokens, quiz history, resume state, achievements, and (mocked) settings. Cross-tab sync is done manually via `window.storage` events (StatsSection.tsx:55–62).
 - **API flow**: components → `lib/*-api.ts` service functions → `api-client.apiRequest` (adds Bearer token from storage, auto-refreshes on 401 once, normalizes errors to `ApiError`) → NestJS at `NEXT_PUBLIC_API_URL` + `/v1`.
 - **Theme/auth contexts** sit above everything; ThemeContext toggles the `dark` class that tailwind `darkMode: 'class'` expects.
-- **Relationship to quiz-reference**: the vanilla JS/CSS reference (state machine in quiz-feature/*.js, styles in quiz-css/*.css) was used as the behavioral spec; the React port reimplements logic in hooks (useQuiz ≈ quiz-state.js + quiz-timer.js + quiz-storage.js) but only partially ports the visual system.
+- **Relationship to quiz-reference**: the vanilla JS/CSS reference (state machine in quiz-feature/_.js, styles in quiz-css/_.css) was used as the behavioral spec; the React port reimplements logic in hooks (useQuiz ≈ quiz-state.js + quiz-timer.js + quiz-storage.js) but only partially ports the visual system.
 
 ## 7. Recommended Process To Proceed (prioritized)
 
@@ -111,4 +111,3 @@ Analysis of `apps/frontend` core: app shell (layout/providers/home/about), share
 6. **P2 – De-duplicate challenge pages**: extract shared SubjectLevelPicker component from `timer-challenge/page.tsx` and `practice-mode/page.tsx` (files are ~95% identical; see also doc 02 §5).
 7. **P3 – Decide settings strategy**: either implement backend `/settings` endpoints and point SettingsService at them, or remove the mock and encode level timers in `constants.ts`/backend meta.
 8. **P3 – Hygiene pass**: remove unused deps (axios, zustand, dnd-kit, rhf/zod unless planned), delete duplicated constants and `hooks/useQuizSubjects.ts`, split Header into `AdminHeader`/`UserHeader`, and port the reference `bubble-animations.css` or drop the orphan `.home-content` class.
-

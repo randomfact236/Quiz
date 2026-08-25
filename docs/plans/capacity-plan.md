@@ -1,6 +1,6 @@
 # Architecture & Capacity Plan: 50k Questions & 20k Daily Visitors
 
-Definitive scale/design reference. Execution order lives in [../PLAN.md](../PLAN.md); quality standards in [code-quality-plan.md](code-quality-plan.md).
+Definitive scale/design reference. Execution order lives in [build-forward-plan](build-forward-plan.md); quality standards in [code-quality-plan](code-quality-plan.md).
 
 ## 1. Target Scale & System Conditions
 

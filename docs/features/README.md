@@ -20,7 +20,7 @@ One file per product feature, each covering its **backend + frontend + admin sur
 
 1. Every feature's persistence for _player progress_ is localStorage-only — no session/result APIs exist.
 2. All content backends share the same pattern (CRUD + bulk + filter-counts + CSV), so fixes/infra land 4× unless centralized (see `../platform/backend-core.md`).
-3. Zero automated tests across all features (`../platform/testing-quality.md`); quality standards and upgrade targets live in [`../platform/code-quality-plan.md`](../platform/code-quality-plan.md) (each feature file notes its specific debt in "Code Quality Notes").
+3. Zero automated tests across all features (`../platform/testing-quality.md`); quality standards and upgrade targets live in [`../plans/code-quality-plan.md`](../plans/code-quality-plan.md) (each feature file notes its specific debt in "Code Quality Notes").
 4. Known P0 bugs per feature are listed at the top of each roadmap section.
 
 ## Suggested Work Order

@@ -4,20 +4,20 @@ Verification infrastructure: unit/e2e tests, lint/format, type-checking, quality
 
 ## 1. Inventory & Current State
 
-| Area | Config / Location | State |
-|---|---|---|
-| Backend unit tests | `apps/backend/package.json` jest config (rootDir src, `*.spec.ts`) + `@nestjs/testing` | **Config exists; 0 spec files** (verified by recursive search) |
-| Backend e2e tests | `test:e2e` script → `./test/jest-e2e.json` | **Broken**: no `test/` directory exists |
-| Frontend unit tests | `test` script → jest; devDeps @testing-library/* installed | **No jest config block in package.json, no jest.config, 0 test files** — `npm test` finds nothing/fails |
-| Frontend e2e | `test:e2e` → playwright; @playwright/test installed | **No playwright.config.ts, no tests dir** — script fails |
-| Root test orchestration | root `package.json` `test`/`test:coverage` via workspaces | Propagates the emptiness |
-| Lint | root eslint 8 + `.eslintrc.json`; frontend `next lint --max-warnings=1000`; backend eslint with `--fix` baked into `lint` script | Present; frontend threshold of 1000 warnings effectively silences lint |
-| Format | prettier + husky + lint-staged configured at root | `.husky/` directory is **empty** — hooks not installed (`npx husky` never run); pre-commit protection absent |
-| Type-check | root `type-check: tsc --noEmit`, frontend same | Errors recorded in logs (see §2) |
-| Quality scanner | `scan:code*` / `quality:gate` scripts → `scripts/enterprise-code-scanner.ts` | **Script does not exist** (only validate-ports.js, docker-startup.* in scripts/) — all scan commands fail; likely also missing `tsconfig.scanner.json` |
-| Port validation | `scripts/validate-ports.js` + per-app copies run as predev/prestart | Works; part of the 4-port convention (see `devops-deployment.md`) |
-| DB utilities | backend scripts: `validate-port.js`, `fix-deps.js` (postinstall), `migrate.sh`; SQL file `add-riddle-test-data.sql` | Present |
-| CI/CD | `.github/workflows`, gitlab-ci etc. | **None found** |
+| Area                    | Config / Location                                                                                                                | State                                                                                                                                                   |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Backend unit tests      | `apps/backend/package.json` jest config (rootDir src, `*.spec.ts`) + `@nestjs/testing`                                           | **Config exists; 0 spec files** (verified by recursive search)                                                                                          |
+| Backend e2e tests       | `test:e2e` script → `./test/jest-e2e.json`                                                                                       | **Broken**: no `test/` directory exists                                                                                                                 |
+| Frontend unit tests     | `test` script → jest; devDeps @testing-library/\* installed                                                                      | **No jest config block in package.json, no jest.config, 0 test files** — `npm test` finds nothing/fails                                                 |
+| Frontend e2e            | `test:e2e` → playwright; @playwright/test installed                                                                              | **No playwright.config.ts, no tests dir** — script fails                                                                                                |
+| Root test orchestration | root `package.json` `test`/`test:coverage` via workspaces                                                                        | Propagates the emptiness                                                                                                                                |
+| Lint                    | root eslint 8 + `.eslintrc.json`; frontend `next lint --max-warnings=1000`; backend eslint with `--fix` baked into `lint` script | Present; frontend threshold of 1000 warnings effectively silences lint                                                                                  |
+| Format                  | prettier + husky + lint-staged configured at root                                                                                | `.husky/` directory is **empty** — hooks not installed (`npx husky` never run); pre-commit protection absent                                            |
+| Type-check              | root `type-check: tsc --noEmit`, frontend same                                                                                   | Errors recorded in logs (see §2)                                                                                                                        |
+| Quality scanner         | `scan:code*` / `quality:gate` scripts → `scripts/enterprise-code-scanner.ts`                                                     | **Script does not exist** (only validate-ports.js, docker-startup.\* in scripts/) — all scan commands fail; likely also missing `tsconfig.scanner.json` |
+| Port validation         | `scripts/validate-ports.js` + per-app copies run as predev/prestart                                                              | Works; part of the 4-port convention (see `devops-deployment.md`)                                                                                       |
+| DB utilities            | backend scripts: `validate-port.js`, `fix-deps.js` (postinstall), `migrate.sh`; SQL file `add-riddle-test-data.sql`              | Present                                                                                                                                                 |
+| CI/CD                   | `.github/workflows`, gitlab-ci etc.                                                                                              | **None found**                                                                                                                                          |
 
 ## 2. Recorded Error State (stale-log caveat)
 
@@ -31,10 +31,10 @@ These match files touched in recent git history, so they may be partially stale 
 
 ## 3. What Is Done
 
-- Dependency wiring for a full quality stack is *installed*: jest/ts-jest/@nestjs/testing, testing-library, Playwright, eslint/prettier/husky/lint-staged, port validators.
+- Dependency wiring for a full quality stack is _installed_: jest/ts-jest/@nestjs/testing, testing-library, Playwright, eslint/prettier/husky/lint-staged, port validators.
 - Workspace-level orchestration scripts exist for every concern (test/lint/type-check/coverage).
 - Port-safety automation (predev validation + PowerShell enforcers) is genuinely wired and functional.
-- Enterprise scanner *concept* documented in root scripts (thresholds, compare mode).
+- Enterprise scanner _concept_ documented in root scripts (thresholds, compare mode).
 
 ## 4. What Is Broken / Missing
 
@@ -59,4 +59,3 @@ These match files touched in recent git history, so they may be partially stale 
 1. Week 1: tooling fixes + first 10 unit tests + CI skeleton.
 2. Week 2: service-layer coverage for auth + quiz modules; fix any bugs surfaced (several known bugs in `05`/`06` docs make ideal first regression tests).
 3. Ongoing: require green CI before merge; grow coverage with each feature PR rather than a big-bang push.
-
