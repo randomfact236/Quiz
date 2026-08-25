@@ -23,6 +23,11 @@ import {
 } from '@/lib/quiz-mcq-api';
 import { getChapterProgress } from '@/lib/progress';
 import type { QuizSubject } from '@/lib/quiz-mcq-api';
+import {
+  QUIZ_LEVELS as levels,
+  QUIZ_LEVEL_EMOJIS as levelEmojis,
+  QUIZ_LEVEL_COLORS as levelColors,
+} from '@/lib/quiz-mcq-constants';
 
 type SubjectCategory = 'academic' | 'professional' | 'entertainment';
 
@@ -510,21 +515,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   );
 }
 
-const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Extreme'];
-const levelEmojis: Record<string, string> = {
-  Easy: '🌱',
-  Medium: '🌿',
-  Hard: '🌲',
-  Expert: '🔥',
-  Extreme: '💀',
-};
-const levelColors: Record<string, string> = {
-  Easy: 'from-green-400 to-green-600',
-  Medium: 'from-blue-400 to-blue-600',
-  Hard: 'from-orange-400 to-orange-600',
-  Expert: 'from-red-400 to-red-600',
-  Extreme: 'from-purple-500 to-pink-600',
-};
+// Shared level metadata (levels/levelEmojis/levelColors) imported at top.
 
 function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
   const [normalOpen, setNormalOpen] = useState(true);
@@ -675,22 +666,7 @@ function LevelSelection({
   chapter: string;
   mode: 'normal' | 'timer';
 }): JSX.Element {
-  const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Extreme'];
-  const levelEmojis: Record<string, string> = {
-    Easy: '🌱',
-    Medium: '🌿',
-    Hard: '🌲',
-    Expert: '🔥',
-    Extreme: '💀',
-  };
-
-  const levelColors: Record<string, string> = {
-    Easy: 'from-green-400 to-green-600',
-    Medium: 'from-blue-400 to-blue-600',
-    Hard: 'from-orange-400 to-orange-600',
-    Expert: 'from-red-400 to-red-600',
-    Extreme: 'from-purple-500 to-pink-600',
-  };
+  // Uses module-level shared level constants (levels/levelEmojis/levelColors).
 
   return (
     <div>

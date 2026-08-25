@@ -57,7 +57,7 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `app/quiz-mcq/page.tsx`                                            | 767-line wizard: Subject→Chapter→Mode→Level via URL params                                                                                               | Done; monolithic                                             |
 | `app/quiz-mcq/play/page.tsx`                                       | Gameplay (849 lines): summary, timer, skip/share, resume, submit+extend modals                                                                           | Done; very large                                             |
-| `app/quiz-mcq/timer-challenge/page.tsx` / `practice-mode/page.tsx` | Challenge hubs (~95% clones)                                                                                                                             | Done; duplicated                                             |
+| `app/quiz-mcq/timer-challenge/page.tsx` / `practice-mode/page.tsx` | Thin wrappers (~30 lines each) around shared `components/quiz-mcq/ChallengeHub.tsx`                                                                      | Done; deduplicated 2026-08-25                                |
 | `app/quiz-mcq/practice/page.tsx`, `challenge/page.tsx`             | Redirect shims                                                                                                                                           | Done                                                         |
 | `app/quiz-mcq/results/page.tsx`                                    | Results from localStorage history                                                                                                                        | Done; scoring via shared lib/quiz-mcq-scoring                |
 | `hooks/useQuizMcq.ts`                                              | Engine hook (~550 lines): loading, scoring (shared scorer), timers, resume, progress+achievement wiring                                                  | Done; hotspot                                                |
@@ -99,7 +99,7 @@ Fixed 2026-08-25 (shared scorer + guards, regression-tested in `__tests__/quiz-m
 
 Still open (refactor-class, tracked in plan/code-quality-plan.md):
 
-1. Hub duplication (timer-challenge ≈ practice-mode; level maps declared 3×).
+1. ~~Hub duplication~~ — FIXED 2026-08-25: shared `ChallengeHub` component + thin route wrappers; level maps deduped into `lib/quiz-mcq-constants.ts`.
 2. Resume-state bloat — serializes entire `availableQuestions` every change; quota blowout silent.
 3. Per-question timer resets on going _back_ — free time.
 4. Double-completion race — history saved inside setState updater AND effect; StrictMode risk.
@@ -112,7 +112,7 @@ Still open (refactor-class, tracked in plan/code-quality-plan.md):
 1. ~~**P0 correctness**: updateQuestion logic + §D bugs 1–3~~ — DONE 2026-08-25 (shared scorer + tests).
 2. ~~**P0 wiring**: `saveQuizResult()` + `checkAchievements()` in completion effect~~ — DONE 2026-08-25.
 3. ~~**P0 backend**: random/mixed shuffle; slug collisions~~ — DONE via Track A2/Track B.
-4. **P1 refactor**: merge challenge hubs into one parameterized component; extract save-path out of setState updaters; trim resume payload; delete dead components.
+4. **P1 refactor**: ~~merge challenge hubs into one parameterized component~~ DONE 2026-08-25; remaining: extract save-path out of setState updaters; trim resume payload; delete dead components.
 5. **P2**: `POST /quiz-mcq/sessions` for cross-device history; replace client-side count loops with `GET /quiz-mcq/filter-counts`.
 6. **P3**: split play page into subcomponents; rename `features/quiz-mcq` → `features/quiz-mcq-admin`; finish celebration tiers.
 
