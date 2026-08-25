@@ -19,8 +19,6 @@ const FILTER_COUNTS_KEY = 'filter-counts';
 interface QuestionsPage {
   data: QuizQuestion[];
   total: number;
-  nextCursor?: string;
-  hasMore?: boolean;
 }
 
 export function useQuestionMutation() {

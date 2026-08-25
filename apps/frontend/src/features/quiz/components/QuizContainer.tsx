@@ -40,7 +40,7 @@ interface ConfirmState {
   onConfirm: () => void;
 }
 
-export function QuizMcqContainer() {
+export function QuizContainer() {
   const { filters, setFilter, resetFilters, page, pageSize, setPage, setPageSize } =
     useQuizFilters();
 
@@ -263,4 +263,4 @@ export function QuizMcqContainer() {
   );
 }
 
-export default QuizMcqContainer;
+export default QuizContainer;

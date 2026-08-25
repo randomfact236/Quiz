@@ -200,4 +200,19 @@ export class RiddleMcqController {
   }> {
     return this.statsService.getFilterCounts({ category, subject, level });
   }
+
+  @Get('stats/status-counts')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get riddle counts by status for a subject (Admin only)' })
+  @ApiQuery({ name: 'subject', required: true, description: 'Subject slug or ID' })
+  async getStatusCountsBySubject(
+    @Query('subject') subject?: string
+  ): Promise<{ total: number; published: number; draft: number; trash: number }> {
+    if (!subject) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
+    return this.statsService.getStatusCountsBySubject(subject);
+  }
 }

@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
 
 import { RiddleStatus } from '../../entities/riddle-mcq.entity';
+import { RiddleMcqLevel } from '../../../common/enums/riddle-mcq-level.enum';
 
 export class CreateRiddleMcqDto {
   @ApiProperty({ example: 'What has keys but no locks?' })
@@ -19,10 +20,13 @@ export class CreateRiddleMcqDto {
   @IsString()
   correctLetter?: string;
 
-  @ApiProperty({ example: 'medium', description: 'Difficulty level: easy, medium, hard, expert' })
-  @IsString()
-  @IsNotEmpty()
-  level: string;
+  @ApiProperty({
+    example: 'medium',
+    description: 'Difficulty level: easy, medium, hard, expert',
+    enum: RiddleMcqLevel,
+  })
+  @IsEnum(RiddleMcqLevel)
+  level: RiddleMcqLevel;
 
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsString()

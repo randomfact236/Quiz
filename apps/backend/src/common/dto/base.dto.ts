@@ -776,6 +776,11 @@ export class UpdateSubjectDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
 // ==================== IMAGE RIDDLE CATEGORIES ====================

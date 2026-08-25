@@ -145,6 +145,13 @@ export interface RiddlesStats {
   mcqsByLevel: Record<string, number>;
 }
 
+export interface StatusCounts {
+  total: number;
+  published: number;
+  draft: number;
+  trash: number;
+}
+
 // ============================================================================
 // Categories API
 // ============================================================================
@@ -448,5 +455,20 @@ export async function getRiddleFilterCounts(
  */
 export async function getStats(): Promise<RiddlesStats> {
   const response = await api.get<RiddlesStats>('/riddle-mcq/stats/overview');
+  return response.data;
+}
+
+/**
+ * Get riddle counts by status for a subject (Admin only)
+ */
+export async function getStatusCountsBySubject(
+  subjectIdOrSlug: string
+): Promise<StatusCounts> {
+  const params = new URLSearchParams();
+  params.append('subject', subjectIdOrSlug);
+  const response = await api.get<StatusCounts>(
+    `/riddle-mcq/stats/status-counts?${params.toString()}`,
+    { isAdmin: true }
+  );
   return response.data;
 }

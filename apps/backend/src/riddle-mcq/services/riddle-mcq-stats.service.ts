@@ -59,6 +59,46 @@ export class RiddleMcqStatsService {
     };
   }
 
+  /**
+   * Get riddle counts by status for a specific subject
+   * @param subjectIdOrSlug - The subject ID or slug
+   * @returns StatusCountResponse with counts by status for the subject
+   */
+  async getStatusCountsBySubject(
+    subjectIdOrSlug: string
+  ): Promise<{ total: number; published: number; draft: number; trash: number }> {
+    const subject =
+      (await this.subjectService.findSubjectBySlug(subjectIdOrSlug).catch(() => null)) ||
+      (await this.subjectService.findSubjectById(subjectIdOrSlug));
+
+    if (!subject) {
+      return { total: 0, published: 0, draft: 0, trash: 0 };
+    }
+
+    // Single query with GROUP BY for all status counts
+    const statusCounts = await this.riddleRepo
+      .createQueryBuilder('riddle')
+      .select('riddle.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .where('riddle.subjectId = :subjectId', { subjectId: subject.id })
+      .groupBy('riddle.status')
+      .getRawMany();
+
+    // Initialize with defaults
+    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
+
+    // Sum up total and populate individual statuses
+    statusCounts.forEach((row: { status: string; count: string }) => {
+      const count = parseInt(row.count, 10);
+      counts.total += count;
+      if (row.status in counts) {
+        (counts as Record<string, number>)[row.status] = count;
+      }
+    });
+
+    return counts;
+  }
+
   async getFilterCounts(
     filters: {
       category?: string;

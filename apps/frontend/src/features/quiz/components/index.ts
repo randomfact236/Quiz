@@ -1,4 +1,4 @@
-export { QuizMcqContainer } from './QuizMcqContainer';
+export { QuizContainer } from './QuizContainer';
 export { QuizHeader } from './QuizHeader';
 export { FilterPanel } from './FilterPanel';
 export { QuestionManager } from './QuestionManager';

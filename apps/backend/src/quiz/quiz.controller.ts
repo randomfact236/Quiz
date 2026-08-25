@@ -71,11 +71,6 @@ export class QuizQueryDto extends PaginationDto {
   @IsOptional()
   @IsString()
   search?: string;
-
-  @ApiPropertyOptional({ description: 'Cursor for pagination (base64 encoded)' })
-  @IsOptional()
-  @IsString()
-  cursor?: string;
 }
 
 @ApiTags('Quiz')

@@ -30,7 +30,7 @@ import {
   AdminGuard,
   AdminUsersSection,
 } from './components';
-import { QuizMcqContainer } from '@/features/quiz/components';
+import { QuizContainer } from '@/features/quiz/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
 import { useQuizSubjects } from '@/hooks/useQuizSubjects';
@@ -443,7 +443,7 @@ export default function AdminPage(): JSX.Element {
             </div>
           )}
           {(activeSection === 'quiz' || subjects.some((s) => s.slug === activeSection)) && (
-            <QuizMcqContainer />
+            <QuizContainer />
           )}
           {activeSection === 'jokes' && (
             <JokesSection
