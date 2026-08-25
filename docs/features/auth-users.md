@@ -72,4 +72,4 @@ Identity layer: JWT auth, Google OAuth, password reset, user profiles, admin use
 
 ## Code Quality Notes
 
-Standards, budgets, and phase exit criteria: [../plans/code-quality-plan.md](../plans/code-quality-plan.md). Feature-specific debt tracked there in �5.
+Standards, budgets, and phase exit criteria: [../../plan/code-quality-plan.md](../../plan/code-quality-plan.md). Feature-specific debt tracked there in �5.

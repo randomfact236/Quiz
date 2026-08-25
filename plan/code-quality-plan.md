@@ -1,6 +1,6 @@
 # Code Quality Plan
 
-Cross-cutting standards and measurable targets for upgrading code quality across all features. Companion docs: [testing-quality](../platform/testing-quality.md) (verification infrastructure), [build-forward-plan](build-forward-plan.md) (execution order), `features/*.md` (where specific debt lives).
+Cross-cutting standards and measurable targets for upgrading code quality across all features. Companion docs: [testing-quality](../docs/platform/testing-quality.md) (verification infrastructure), [build-forward-plan](build-forward-plan.md) (execution order), `features/*.md` (where specific debt lives).
 
 ## 1. Metric Targets by Phase
 
@@ -51,13 +51,13 @@ Sequence: extract only after Phase 1 bugs are fixed and tests exist — never re
 
 ## 5. Per-Feature Quality Debt Index
 
-| Feature                                       | Top debt items                                                                                       |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [quiz](../features/quiz.md)                   | play page + useQuiz monoliths; hub duplication; dead QuizTimer/QuizNavigation; setState side effects |
-| [riddle-mcq](../features/riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                |
-| [image-riddles](../features/image-riddles.md) | two divergent CRUD paths to unify                                                                    |
-| [dad-jokes](../features/dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                               |
-| [auth-users](../features/auth-users.md)       | plaintext refresh tokens; free-text role; untyped admin payloads                                     |
+| Feature                                            | Top debt items                                                                                       |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [quiz](../docs/features/quiz.md)                   | play page + useQuiz monoliths; hub duplication; dead QuizTimer/QuizNavigation; setState side effects |
+| [riddle-mcq](../docs/features/riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                |
+| [image-riddles](../docs/features/image-riddles.md) | two divergent CRUD paths to unify                                                                    |
+| [dad-jokes](../docs/features/dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                               |
+| [auth-users](../docs/features/auth-users.md)       | plaintext refresh tokens; free-text role; untyped admin payloads                                     |
 
 ## 6. Enforcement
 

@@ -1,6 +1,6 @@
 # Plans
 
-All forward-looking planning documents. Analysis ledgers live in [../features/](../features/) and [../platform/](../platform/); superseded old plans in [../archive/](../archive/).
+All forward-looking planning documents. Analysis ledgers live in [../docs/features/](../docs/features/) and [../docs/platform/](../docs/platform/); superseded old plans in [../archive/](../archive/).
 
 | Plan                                           | Purpose                                                                                                                                                                                  |
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
