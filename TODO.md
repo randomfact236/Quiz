@@ -18,8 +18,8 @@ Backend:
 - **[P1] Bulk-import slug collisions** — sanitization maps distinct names to the same slug ("C++"/"C Basics"), aborting the whole 100-row chunk transaction.
 - **[P1] N-delete loop in `deleteSubject`** — one DELETE per chapter's questions instead of a single IN query.
 - **~~[was P1] random/:level + mixed not random~~** — FIXED by Track A/B (random_weight via shared pickRandomByWeight); doc claim now stale.
-- **[P1] `GET /quiz-mcq/questions/:chapterId` requires auth despite PUBLIC contract** — route lacks `@_Public()` under the default-deny JwtAuthGuard (quiz-mcq.controller.ts), so the documented public endpoint returns 401 unauthenticated; frontend gameplay fetches run authenticated today which masks it. Found during Track B live verification (2026-08-25); logged, not fixed.
-- **[P2] quiz-mcq.md endpoint table still claims `random`/`mixed` are updatedAt-ordered and that `questions/:chapterId` is public** — both rows stale after Track A/B; refresh when touching this doc next.
+- **~~[P1] `GET /quiz-mcq/questions/:chapterId` requires auth despite PUBLIC contract~~** — FIXED 2026-08-25: `@_Public()` added to the route; verified live (no-token → 200, admin routes still 401, PUBLISHED-only filter intact).
+- **[P2] quiz-mcq.md endpoint table still claims `random`/`mixed` are updatedAt-ordered** — stale after Track A/B; refresh when touching this doc next.
 
 Frontend:
 

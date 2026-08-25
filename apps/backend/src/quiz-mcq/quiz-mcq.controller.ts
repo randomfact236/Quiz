@@ -285,6 +285,7 @@ export class QuizMcqController {
     });
   }
 
+  @_Public()
   @Get('questions/:chapterId')
   @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
