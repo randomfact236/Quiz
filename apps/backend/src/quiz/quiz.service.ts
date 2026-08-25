@@ -12,6 +12,8 @@ import {
   StatusCountResponse,
 } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
+import { invalidateCacheFamilies } from '../common/content/content-cache.util';
+import { pickRandomByWeight } from '../common/content/random-selection.util';
 import { settings } from '../config/settings';
 
 import { Chapter } from './entities/chapter.entity';
@@ -53,8 +55,11 @@ export class QuizService {
     private bulkActionService: BulkActionService
   ) {}
 
+  // Track B: family-scoped invalidation (was sledgehammer 'quiz:*').
+  // Subjects list is intentionally uncached, so question/taxonomy writes
+  // only need to clear the two cached families below.
   private async clearQuizCaches() {
-    await this.cacheService.delPattern(`quiz:*`);
+    await invalidateCacheFamilies(this.cacheService, ['quiz:questions', 'quiz:filter-counts']);
   }
 
   // ==================== SUBJECTS ====================
@@ -522,9 +527,8 @@ export class QuizService {
   }
 
   /**
-   * Capacity-plan A2: index-seek random selection via random_weight.
-   * Picks a random cursor float, returns rows above it; wraps around to
-   * the top of the weight range when the tail has fewer than `count` rows.
+   * Capacity-plan A2: index-seek random selection via shared
+   * pickRandomByWeight (random_weight column + wrap-around).
    */
   async findRandomQuestions(opts: {
     level?: string;
@@ -533,41 +537,24 @@ export class QuizService {
     count?: number;
   }): Promise<{ data: Question[]; total: number }> {
     const count = Math.min(Math.max(opts.count ?? 20, 1), 50);
-    const anchor = Math.random();
 
-    const buildQuery = () => {
-      const query = this.questionRepo
-        .createQueryBuilder('question')
-        .leftJoinAndSelect('question.chapter', 'chapter')
-        .leftJoinAndSelect('chapter.subject', 'subject')
-        .where('question.status = :status', { status: ContentStatus.PUBLISHED });
-
-      if (opts.level) {
-        query.andWhere('question.level = :level', { level: opts.level });
-      }
-      if (opts.chapterId) {
-        query.andWhere('question.chapterId = :chapterId', { chapterId: opts.chapterId });
-      }
-      if (opts.subjectSlug) {
-        query.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
-      }
-      return query;
-    };
-
-    let data = await buildQuery()
-      .andWhere('question.random_weight > :anchor', { anchor })
-      .orderBy('question.random_weight', 'ASC')
-      .take(count)
-      .getMany();
-
-    // Wrap-around: tail of the weight range had fewer rows than requested
-    if (data.length < count) {
-      const remaining = await buildQuery()
-        .orderBy('question.random_weight', 'ASC')
-        .take(count - data.length)
-        .getMany();
-      data = [...data, ...remaining];
-    }
+    const data = await pickRandomByWeight(this.questionRepo, 'question', {
+      count,
+      filters: (qb) => {
+        qb.leftJoinAndSelect('question.chapter', 'chapter')
+          .leftJoinAndSelect('chapter.subject', 'subject')
+          .where('question.status = :status', { status: ContentStatus.PUBLISHED });
+        if (opts.level) {
+          qb.andWhere('question.level = :level', { level: opts.level });
+        }
+        if (opts.chapterId) {
+          qb.andWhere('question.chapterId = :chapterId', { chapterId: opts.chapterId });
+        }
+        if (opts.subjectSlug) {
+          qb.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
+        }
+      },
+    });
 
     return { data, total: data.length };
   }
@@ -616,7 +603,7 @@ export class QuizService {
       status: dto.status || ContentStatus.PUBLISHED,
     });
     const saved = await this.questionRepo.save(question);
-    await this.cacheService.delPattern('quiz:*');
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -639,7 +626,7 @@ export class QuizService {
       totalCreated += result.count;
     }
 
-    await this.cacheService.delPattern('quiz:*');
+    await this.clearQuizCaches();
     return { count: totalCreated, errors };
   }
 
@@ -826,7 +813,7 @@ export class QuizService {
 
     const saved = await this.questionRepo.save(question);
     // Invalidate cache after update
-    await this.cacheService.delPattern('quiz:*');
+    await this.clearQuizCaches();
     return saved;
   }
 
@@ -836,7 +823,7 @@ export class QuizService {
       throw new NotFoundException('Question not found');
     }
     // Invalidate cache after delete
-    await this.cacheService.delPattern('quiz:*');
+    await this.clearQuizCaches();
   }
 
   // ==================== BULK ACTIONS ====================
@@ -859,7 +846,7 @@ export class QuizService {
 
     // Invalidate cache if any changes were made
     if (result.succeeded > 0) {
-      await this.cacheService.delPattern('quiz:*');
+      await this.clearQuizCaches();
       this.logger.log(`[QuizService] Cache invalidated after bulk ${action}`);
     }
 

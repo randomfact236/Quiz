@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
+import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
+import { pickRandomByWeight } from '../../common/content/random-selection.util';
 
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
@@ -17,8 +19,13 @@ export class RiddleMcqQuestionService {
     private cacheService: CacheService
   ) {}
 
+  // Track B: family-scoped invalidation (was sledgehammer 'riddle-mcq:*')
   private async clearRiddleCaches() {
-    await this.cacheService.delPattern(`riddle-mcq:*`);
+    await invalidateCacheFamilies(this.cacheService, [
+      'riddle-mcq:questions',
+      'riddle-mcq:filter-counts',
+      'riddle-mcq:stats',
+    ]);
   }
 
   private readonly CACHE_KEYS = {
@@ -135,42 +142,25 @@ export class RiddleMcqQuestionService {
   }
 
   /**
-   * Capacity-plan A2: index-seek random selection via random_weight with
-   * wrap-around (replaces load-all-ids + in-memory shuffle).
+   * Capacity-plan A2 via shared pickRandomByWeight (random_weight + wrap-around;
+   * replaces load-all-ids + in-memory shuffle).
    */
   private async findRandomRiddlesInternal(opts: {
     level?: string;
     count: number;
   }): Promise<RiddleMcq[]> {
-    const count = Math.min(Math.max(opts.count, 1), 100);
-    const anchor = Math.random();
-
-    const buildQuery = () => {
-      const query = this.riddleMcqRepo
-        .createQueryBuilder('riddle')
-        .leftJoinAndSelect('riddle.subject', 'subject')
-        .where('riddle.status = :status', { status: RiddleStatus.PUBLISHED });
-      if (opts.level) {
-        query.andWhere('riddle.level = :level', { level: opts.level });
-      }
-      return query;
-    };
-
-    let data = await buildQuery()
-      .andWhere('riddle.random_weight > :anchor', { anchor })
-      .orderBy('riddle.random_weight', 'ASC')
-      .take(count)
-      .getMany();
-
-    if (data.length < count) {
-      const remaining = await buildQuery()
-        .orderBy('riddle.random_weight', 'ASC')
-        .take(count - data.length)
-        .getMany();
-      data = [...data, ...remaining];
-    }
-
-    return data;
+    return pickRandomByWeight(this.riddleMcqRepo, 'riddle', {
+      count: opts.count,
+      max: 100,
+      filters: (qb) => {
+        qb.leftJoinAndSelect('riddle.subject', 'subject').where('riddle.status = :status', {
+          status: RiddleStatus.PUBLISHED,
+        });
+        if (opts.level) {
+          qb.andWhere('riddle.level = :level', { level: opts.level });
+        }
+      },
+    });
   }
 
   async findRandomRiddles(level: string, count: number): Promise<RiddleMcq[]> {

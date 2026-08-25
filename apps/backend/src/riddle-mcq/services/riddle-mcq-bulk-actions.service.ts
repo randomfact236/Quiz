@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
+import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
 import { BulkActionType } from '../../common/enums/bulk-action.enum';
 import { BulkActionResult } from '../../common/interfaces/bulk-action-result.interface';
 import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
@@ -18,7 +19,11 @@ export class RiddleMcqBulkActionsService {
   ) {}
 
   private async clearCaches(): Promise<void> {
-    await this.cacheService.delPattern(`riddle-mcq:*`);
+    await invalidateCacheFamilies(this.cacheService, [
+      'riddle-mcq:questions',
+      'riddle-mcq:filter-counts',
+      'riddle-mcq:stats',
+    ]);
   }
 
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {

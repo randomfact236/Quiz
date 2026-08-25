@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
+import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
 
 import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcq } from '../entities/riddle-mcq.entity';
@@ -30,7 +31,11 @@ export class RiddleMcqCategoryService {
   ) {}
 
   private async clearRiddleCaches() {
-    await this.cacheService.delPattern(`riddle-mcq:*`);
+    await invalidateCacheFamilies(this.cacheService, [
+      'riddle-mcq:categories',
+      'riddle-mcq:filter-counts',
+      'riddle-mcq:stats',
+    ]);
   }
 
   private generateSlug(name: string): string {

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
+import { invalidateCacheFamilies } from '../common/content/content-cache.util';
 import { DEFAULT_CACHE_TTL_S } from '../common/constants/app.constants';
 import {
   CreateDadJokeDto,
@@ -19,7 +20,10 @@ import {
 } from '../common/dto/base.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import {
+  BulkActionResult,
+  StatusCountResponse,
+} from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { settings } from '../config/settings';
 
@@ -29,7 +33,6 @@ import { JokeCategory } from './entities/joke-category.entity';
 import { JokeChapter } from './entities/joke-chapter.entity';
 import { JokeSubject } from './entities/joke-subject.entity';
 import { QuizJoke } from './entities/quiz-joke.entity';
-
 
 @Injectable()
 export class DadJokesService {
@@ -48,14 +51,14 @@ export class DadJokesService {
     private quizJokeRepo: Repository<QuizJoke>,
     private cacheService: CacheService,
     private dataSource: DataSource,
-    private bulkActionService: BulkActionService,
-  ) { }
+    private bulkActionService: BulkActionService
+  ) {}
 
   // ==================== CLASSIC JOKES ====================
 
   async findAllJokes(
     pagination: PaginationDto,
-    status?: ContentStatus,
+    status?: ContentStatus
   ): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -102,7 +105,7 @@ export class DadJokesService {
 
   async findJokesByCategory(
     categoryId: string,
-    pagination: PaginationDto,
+    pagination: PaginationDto
   ): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -152,7 +155,7 @@ export class DadJokesService {
     }
     const joke = this.jokeRepo.create({ joke: dto.joke, category, status: ContentStatus.DRAFT });
     const saved = await this.jokeRepo.save(joke);
-    await this.cacheService.delPattern('jokes:*');
+    await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
     return saved;
   }
 
@@ -172,13 +175,13 @@ export class DadJokesService {
 
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique category IDs for batch fetch - fixes N+1 query
-      const categoryIds = [...new Set(dto.map(j => j.categoryId))];
+      const categoryIds = [...new Set(dto.map((j) => j.categoryId))];
       const categories = await transactionalEntityManager.find(JokeCategory, {
         where: { id: In(categoryIds) },
       });
 
       // Create a map for quick lookup
-      const categoryMap = new Map(categories.map(c => [c.id, c]));
+      const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
       const jokes: DadJoke[] = [];
       for (let i = 0; i < dto.length; i++) {
@@ -205,7 +208,7 @@ export class DadJokesService {
       const saved = await transactionalEntityManager.save(jokes);
 
       // Only invalidate cache if transaction succeeds
-      await this.cacheService.delPattern('jokes:*');
+      await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
 
       return { count: saved.length, errors };
     });
@@ -227,7 +230,7 @@ export class DadJokesService {
       joke.category = category;
     }
     const saved = await this.jokeRepo.save(joke);
-    await this.cacheService.delPattern('jokes:*');
+    await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
     return saved;
   }
 
@@ -238,7 +241,7 @@ export class DadJokesService {
     }
     joke.status = status;
     const saved = await this.jokeRepo.save(joke);
-    await this.cacheService.delPattern('jokes:*');
+    await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
     return saved;
   }
 
@@ -247,7 +250,7 @@ export class DadJokesService {
     if (result.affected === 0) {
       throw new NotFoundException('Joke not found');
     }
-    await this.cacheService.delPattern('jokes:*');
+    await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
   }
 
   async voteForJoke(id: string, type: 'like' | 'dislike'): Promise<DadJoke> {
@@ -266,8 +269,8 @@ export class DadJokesService {
 
     const saved = await this.jokeRepo.save(joke);
 
-    // Invalidate cache since the joke data changed
-    await this.cacheService.delPattern('jokes:*');
+    // Track B: votes change only like/dislike counters — no cached resource
+    // (taxonomy lists, membership counts) depends on them, so no invalidation.
 
     return saved;
   }
@@ -278,7 +281,8 @@ export class DadJokesService {
     return this.cacheService.getOrSet(
       `jokes:categories:hasContent:${hasContentOnly}`,
       async () => {
-        const query = this.categoryRepo.createQueryBuilder('category')
+        const query = this.categoryRepo
+          .createQueryBuilder('category')
           .orderBy('category.name', 'ASC');
 
         if (hasContentOnly) {
@@ -287,7 +291,7 @@ export class DadJokesService {
 
         return query.getMany();
       },
-      DEFAULT_CACHE_TTL_S,
+      DEFAULT_CACHE_TTL_S
     );
   }
 
@@ -357,7 +361,7 @@ export class DadJokesService {
           relations: ['chapters'],
         });
       },
-      DEFAULT_CACHE_TTL_S,
+      DEFAULT_CACHE_TTL_S
     );
   }
 
@@ -449,7 +453,7 @@ export class DadJokesService {
 
   async findQuizJokesByChapter(
     chapterId: string,
-    pagination: PaginationDto,
+    pagination: PaginationDto
   ): Promise<{ data: QuizJoke[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
@@ -467,7 +471,9 @@ export class DadJokesService {
     // Validate level parameter
     const validLevels = ['easy', 'medium', 'hard', 'expert', 'extreme'];
     if (!validLevels.includes(level)) {
-      throw new BadRequestException(`Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`);
+      throw new BadRequestException(
+        `Invalid level: ${level}. Valid values: ${validLevels.join(', ')}`
+      );
     }
 
     // More efficient random selection
@@ -491,7 +497,7 @@ export class DadJokesService {
 
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map(j => j.id);
+    const selectedIds = shuffled.map((j) => j.id);
 
     return this.quizJokeRepo.find({
       where: { id: In(selectedIds) },
@@ -513,14 +519,11 @@ export class DadJokesService {
     }
 
     // Get all IDs, shuffle, then fetch selected
-    const allIds = await this.quizJokeRepo
-      .createQueryBuilder('joke')
-      .select('joke.id')
-      .getMany();
+    const allIds = await this.quizJokeRepo.createQueryBuilder('joke').select('joke.id').getMany();
 
     // Shuffle and pick count items
     const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map(j => j.id);
+    const selectedIds = shuffled.map((j) => j.id);
 
     return this.quizJokeRepo.find({
       where: { id: In(selectedIds) },
@@ -545,7 +548,9 @@ export class DadJokesService {
     return this.quizJokeRepo.save(joke);
   }
 
-  async createQuizJokesBulk(dto: CreateQuizJokeDto[]): Promise<{ count: number; errors: string[] }> {
+  async createQuizJokesBulk(
+    dto: CreateQuizJokeDto[]
+  ): Promise<{ count: number; errors: string[] }> {
     const errors: string[] = [];
 
     // Validate input
@@ -561,13 +566,13 @@ export class DadJokesService {
 
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique chapter IDs for batch fetch - fixes N+1 query
-      const chapterIds = [...new Set(dto.map(j => j.chapterId))];
+      const chapterIds = [...new Set(dto.map((j) => j.chapterId))];
       const chapters = await transactionalEntityManager.find(JokeChapter, {
         where: { id: In(chapterIds) },
       });
 
       // Create a map for quick lookup
-      const chapterMap = new Map(chapters.map(c => [c.id, c]));
+      const chapterMap = new Map(chapters.map((c) => [c.id, c]));
 
       const jokes: QuizJoke[] = [];
       for (let i = 0; i < dto.length; i++) {
@@ -612,17 +617,30 @@ export class DadJokesService {
     if (joke === null) {
       throw new NotFoundException('Quiz joke not found');
     }
-    const stringFields = ['question', 'correctAnswer', 'level', 'explanation', 'punchline'] as const;
-    stringFields.forEach(field => {
+    const stringFields = [
+      'question',
+      'correctAnswer',
+      'level',
+      'explanation',
+      'punchline',
+    ] as const;
+    stringFields.forEach((field) => {
       const value = dto[field];
-      if (value !== undefined && (field === 'explanation' || field === 'punchline' || value.length > 0)) {
+      if (
+        value !== undefined &&
+        (field === 'explanation' || field === 'punchline' || value.length > 0)
+      ) {
         (joke[field] as string | undefined) = value;
       }
     });
-    if (dto.options !== undefined) {joke.options = dto.options;}
+    if (dto.options !== undefined) {
+      joke.options = dto.options;
+    }
     if (dto.chapterId?.length) {
       const chapter = await this.chapterRepo.findOne({ where: { id: dto.chapterId } });
-      if (chapter === null) {throw new NotFoundException('Chapter not found');}
+      if (chapter === null) {
+        throw new NotFoundException('Chapter not found');
+      }
       joke.chapter = chapter;
     }
     return this.quizJokeRepo.save(joke);
@@ -639,9 +657,14 @@ export class DadJokesService {
 
   async bulkActionClassic(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
     this.logger.log(`[DadJokesService] Executing bulk ${action} on ${ids.length} classic jokes`);
-    const result = await this.bulkActionService.executeBulkAction(this.jokeRepo, 'joke', ids, action);
+    const result = await this.bulkActionService.executeBulkAction(
+      this.jokeRepo,
+      'joke',
+      ids,
+      action
+    );
     if (result.succeeded > 0) {
-      await this.cacheService.delPattern('jokes:*');
+      await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
       this.logger.log(`[DadJokesService] Cache invalidated after bulk ${action}`);
     }
     return result;
@@ -659,7 +682,7 @@ export class DadJokesService {
       this.categoryRepo,
       this.quizJokeRepo,
       this.subjectRepo,
-      this.chapterRepo,
+      this.chapterRepo
     );
   }
 }

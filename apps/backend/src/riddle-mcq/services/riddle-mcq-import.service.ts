@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
+import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
 import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
@@ -35,7 +36,11 @@ export class RiddleMcqImportService {
   ) {}
 
   private async clearCaches(): Promise<void> {
-    await this.cacheService.delPattern(`riddle-mcq:*`);
+    await invalidateCacheFamilies(this.cacheService, [
+      'riddle-mcq:questions',
+      'riddle-mcq:filter-counts',
+      'riddle-mcq:stats',
+    ]);
   }
 
   async createRiddlesBulk(

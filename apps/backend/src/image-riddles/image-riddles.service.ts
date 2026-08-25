@@ -21,18 +21,25 @@ import {
 } from '../common/dto/base.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import { BulkActionResult, StatusCountResponse } from '../common/interfaces/bulk-action-result.interface';
+import {
+  BulkActionResult,
+  StatusCountResponse,
+} from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { settings } from '../config/settings';
 
 import {
   IActionOption,
   applyActionDefaults,
-  validateActionOption
+  validateActionOption,
 } from './entities/image-riddle-action.entity';
 import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
 import { ImageRiddle } from './entities/image-riddle.entity';
-import { updateBasicFields, updateCategory, updateActionOptions } from './image-riddles-update.helper';
+import {
+  updateBasicFields,
+  updateCategory,
+  updateActionOptions,
+} from './image-riddles-update.helper';
 
 @Injectable()
 export class ImageRiddlesService {
@@ -45,8 +52,8 @@ export class ImageRiddlesService {
     private categoryRepo: Repository<ImageRiddleCategory>,
     private cacheService: CacheService,
     private dataSource: DataSource,
-    private bulkActionService: BulkActionService,
-  ) { }
+    private bulkActionService: BulkActionService
+  ) {}
 
   // ==================== CATEGORIES ====================
 
@@ -59,7 +66,7 @@ export class ImageRiddlesService {
           relations: ['riddles'],
         });
       },
-      settings.imageRiddles.cache.categoriesTtl,
+      settings.imageRiddles.cache.categoriesTtl
     );
   }
 
@@ -85,7 +92,10 @@ export class ImageRiddlesService {
     return saved;
   }
 
-  async updateCategory(id: string, dto: UpdateImageRiddleCategoryDto): Promise<ImageRiddleCategory> {
+  async updateCategory(
+    id: string,
+    dto: UpdateImageRiddleCategoryDto
+  ): Promise<ImageRiddleCategory> {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (category === null) {
       throw new NotFoundException('Category not found');
@@ -113,7 +123,11 @@ export class ImageRiddlesService {
       throw new NotFoundException('Category not found');
     }
 
-    if (category.riddles !== undefined && category.riddles !== null && category.riddles.length > 0) {
+    if (
+      category.riddles !== undefined &&
+      category.riddles !== null &&
+      category.riddles.length > 0
+    ) {
       await this.imageRiddleRepo.remove(category.riddles);
     }
 
@@ -125,11 +139,11 @@ export class ImageRiddlesService {
 
   async findAllRiddles(
     pagination: PaginationDto,
-    status?: ContentStatus,
+    status?: ContentStatus
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
-    
+
     const where: FindOptionsWhere<ImageRiddle> = { isActive: true };
     if (status != null) {
       where.status = status;
@@ -161,7 +175,7 @@ export class ImageRiddlesService {
     const count = await this.imageRiddleRepo.count({
       where: { isActive: true, status: ContentStatus.PUBLISHED },
     });
-    
+
     if (count === 0) {
       throw new NotFoundException('No image riddles found');
     }
@@ -175,7 +189,7 @@ export class ImageRiddlesService {
       .skip(randomOffset)
       .take(1)
       .getOne();
-      
+
     if (riddle === null) {
       throw new NotFoundException('No image riddles found');
     }
@@ -184,7 +198,7 @@ export class ImageRiddlesService {
 
   async findRiddlesByCategory(
     categoryId: string,
-    pagination: PaginationDto,
+    pagination: PaginationDto
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
@@ -200,7 +214,7 @@ export class ImageRiddlesService {
 
   async findRiddlesByDifficulty(
     difficulty: string,
-    pagination: PaginationDto,
+    pagination: PaginationDto
   ): Promise<{ data: ImageRiddle[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
@@ -214,7 +228,9 @@ export class ImageRiddlesService {
     return { data, total };
   }
 
-  async searchRiddles(searchDto: SearchImageRiddlesDto): Promise<{ data: ImageRiddle[]; total: number }> {
+  async searchRiddles(
+    searchDto: SearchImageRiddlesDto
+  ): Promise<{ data: ImageRiddle[]; total: number }> {
     const page = searchDto.page ?? 1;
     const limit = searchDto.limit ?? settings.global.pagination.defaultLimit;
 
@@ -237,7 +253,9 @@ export class ImageRiddlesService {
     }
 
     if (searchDto.difficulty !== undefined && searchDto.difficulty.length > 0) {
-      queryBuilder.andWhere('riddle.difficulty = :difficulty', { difficulty: searchDto.difficulty });
+      queryBuilder.andWhere('riddle.difficulty = :difficulty', {
+        difficulty: searchDto.difficulty,
+      });
     }
 
     const [data, total] = await queryBuilder
@@ -266,15 +284,18 @@ export class ImageRiddlesService {
       isActive: true,
       status: ContentStatus.DRAFT,
       actionOptions,
-      useDefaultActions: dto.useDefaultActions ?? (actionOptions === null),
+      useDefaultActions: dto.useDefaultActions ?? actionOptions === null,
     });
     const saved = await this.imageRiddleRepo.save(riddle);
-    await this.cacheService.delPattern('image-riddles:*');
+    // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+    // and riddle-row writes cannot change it (category ops clear it explicitly).
     return saved;
   }
 
   private async resolveCategory(categoryId?: string): Promise<ImageRiddleCategory | undefined> {
-    if (!categoryId?.length) {return undefined;}
+    if (!categoryId?.length) {
+      return undefined;
+    }
     const category = await this.categoryRepo.findOne({ where: { id: categoryId } });
     if (category === null) {
       throw new NotFoundException('Category not found');
@@ -283,9 +304,11 @@ export class ImageRiddlesService {
   }
 
   private processActionOptions(dtoActions?: Partial<IActionOption>[]): IActionOption[] | null {
-    if (!dtoActions?.length) {return null;}
+    if (!dtoActions?.length) {
+      return null;
+    }
 
-    const actionOptions = dtoActions.map(action => ({
+    const actionOptions = dtoActions.map((action) => ({
       ...applyActionDefaults(action),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -302,7 +325,9 @@ export class ImageRiddlesService {
     return actionOptions;
   }
 
-  async createRiddlesBulk(dto: CreateImageRiddleDto[]): Promise<{ count: number; errors: string[] }> {
+  async createRiddlesBulk(
+    dto: CreateImageRiddleDto[]
+  ): Promise<{ count: number; errors: string[] }> {
     const errors: string[] = [];
 
     // Validate input
@@ -318,13 +343,18 @@ export class ImageRiddlesService {
 
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
       // Get all unique category IDs for batch fetch - fixes N+1 query
-      const categoryIds = [...new Set(dto.map(r => r.categoryId).filter((id): id is string => !!id))];
-      const categories = categoryIds.length > 0 
-        ? await transactionalEntityManager.find(ImageRiddleCategory, { where: { id: In(categoryIds) } })
-        : [];
+      const categoryIds = [
+        ...new Set(dto.map((r) => r.categoryId).filter((id): id is string => !!id)),
+      ];
+      const categories =
+        categoryIds.length > 0
+          ? await transactionalEntityManager.find(ImageRiddleCategory, {
+              where: { id: In(categoryIds) },
+            })
+          : [];
 
       // Create a map for quick lookup
-      const categoryMap = new Map(categories.map(c => [c.id, c]));
+      const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
       const riddles: ImageRiddle[] = [];
       for (let i = 0; i < dto.length; i++) {
@@ -367,10 +397,11 @@ export class ImageRiddlesService {
       }
 
       const saved = await transactionalEntityManager.save(riddles);
-      
+
       // Only invalidate cache if transaction succeeds
-      await this.cacheService.delPattern('image-riddles:*');
-      
+      // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+      // and riddle-row writes cannot change it (category ops clear it explicitly).
+
       return { count: saved.length, errors };
     });
   }
@@ -384,18 +415,18 @@ export class ImageRiddlesService {
     if (!url || typeof url !== 'string') {
       return false;
     }
-    
+
     // Allow http, https, and data URLs
     const validProtocols = ['http://', 'https://', 'data:image/'];
-    const hasValidProtocol = validProtocols.some(protocol => url.startsWith(protocol));
-    
+    const hasValidProtocol = validProtocols.some((protocol) => url.startsWith(protocol));
+
     if (!hasValidProtocol) {
       return false;
     }
 
     // Reject javascript: and other dangerous protocols
     const dangerousProtocols = ['javascript:', 'vbscript:', 'data:text/html'];
-    if (dangerousProtocols.some(protocol => url.toLowerCase().startsWith(protocol))) {
+    if (dangerousProtocols.some((protocol) => url.toLowerCase().startsWith(protocol))) {
       return false;
     }
 
@@ -424,7 +455,8 @@ export class ImageRiddlesService {
     updateActionOptions(riddle, dto);
 
     const saved = await this.imageRiddleRepo.save(riddle);
-    await this.cacheService.delPattern('image-riddles:*');
+    // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+    // and riddle-row writes cannot change it (category ops clear it explicitly).
     return saved;
   }
 
@@ -435,7 +467,8 @@ export class ImageRiddlesService {
     }
     riddle.status = status;
     const saved = await this.imageRiddleRepo.save(riddle);
-    await this.cacheService.delPattern('image-riddles:*');
+    // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+    // and riddle-row writes cannot change it (category ops clear it explicitly).
     return saved;
   }
 
@@ -444,7 +477,8 @@ export class ImageRiddlesService {
     if (result.affected === 0) {
       throw new NotFoundException('Image riddle not found');
     }
-    await this.cacheService.delPattern('image-riddles:*');
+    // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+    // and riddle-row writes cannot change it (category ops clear it explicitly).
   }
 
   // ==================== BULK ACTIONS ====================
@@ -456,18 +490,21 @@ export class ImageRiddlesService {
    * @returns BulkActionResult with operation results
    */
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(`[ImageRiddlesService] Executing bulk ${action} on ${ids.length} image riddles`);
-    
+    this.logger.log(
+      `[ImageRiddlesService] Executing bulk ${action} on ${ids.length} image riddles`
+    );
+
     const result = await this.bulkActionService.executeBulkAction(
       this.imageRiddleRepo,
       'image-riddle',
       ids,
-      action,
+      action
     );
 
     // Invalidate cache if any changes were made
     if (result.succeeded > 0) {
-      await this.cacheService.delPattern('image-riddles:*');
+      // Track B: no invalidation needed � only 'image-riddles:categories' is cached
+      // and riddle-row writes cannot change it (category ops clear it explicitly).
       this.logger.log(`[ImageRiddlesService] Cache invalidated after bulk ${action}`);
     }
 
@@ -527,9 +564,7 @@ export class ImageRiddlesService {
       .setParameter('defaultTimer', settings.imageRiddles.defaults.timerSeconds)
       .getRawOne<{ average: string }>();
 
-    const averageTimer = timerResult?.average 
-      ? Math.round(parseFloat(timerResult.average)) 
-      : 0;
+    const averageTimer = timerResult?.average ? Math.round(parseFloat(timerResult.average)) : 0;
 
     return {
       totalRiddles,
