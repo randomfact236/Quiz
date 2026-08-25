@@ -45,12 +45,7 @@
     "ports:status": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action status",
     "ports:setup": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action setup",
     "ports:release": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action release",
-    "scan:code": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts",
-    "scan:code:fix": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --fix",
-    "scan:code:strict": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --threshold 9.5",
-    "scan:code:compare": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --compare",
-    "scan:code:verbose": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --verbose",
-    "quality:gate": "cross-env TS_NODE_PROJECT=tsconfig.scanner.json ts-node --transpile-only scripts/enterprise-code-scanner.ts --threshold 9.0"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
