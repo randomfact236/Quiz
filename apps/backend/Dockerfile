@@ -3,6 +3,8 @@ RUN apk add --no-cache python3 make g++ libc6-compat
 WORKDIR /app
 COPY package*.json ./
 COPY apps/backend/package*.json ./apps/backend/
+# postinstall (fix-deps.js) runs during npm ci via workspaces — must exist first
+COPY apps/backend/scripts ./apps/backend/scripts/
 RUN npm ci
 COPY apps/backend/src ./apps/backend/src
 COPY apps/backend/tsconfig*.json ./apps/backend/

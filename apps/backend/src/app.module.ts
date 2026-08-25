@@ -83,6 +83,11 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
           poolSize: DB_POOL_SIZE,
           // SSL configuration - disabled for Docker
           ssl: false,
+          // Production: schema is owned by migrations; auto-run pending ones on boot
+          ...(isProduction && {
+            migrations: [__dirname + '/migrations/*{.ts,.js}'],
+            migrationsRun: true,
+          }),
         };
       },
       inject: [ConfigService],

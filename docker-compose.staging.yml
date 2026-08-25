@@ -1,0 +1,89 @@
+# Staging deployment — production-like but isolated from dev stack:
+# different container names, ports (backend 3013 / frontend 3011), fresh volume.
+# Validates the full migration path: DB_SYNCHRONIZE=false + migrationsRun on boot.
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: quiz-staging-postgres
+    environment:
+      POSTGRES_USER: aiquiz
+      POSTGRES_PASSWORD: aiquiz_staging_password
+      POSTGRES_DB: aiquiz
+    volumes:
+      - quiz_staging_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiquiz -d aiquiz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - quiz-staging
+
+  redis:
+    image: redis:7-alpine
+    container_name: quiz-staging-redis
+    command: ["redis-server", "--requirepass", "aiquiz_staging_redis_password"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a aiquiz_staging_redis_password ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - quiz-staging
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: quiz-staging-backend
+    environment:
+      NODE_ENV: production
+      PORT: 3012
+      DB_HOST: postgres
+      DB_PORT: '5432'
+      DB_USERNAME: aiquiz
+      DB_PASSWORD: aiquiz_staging_password
+      DB_DATABASE: aiquiz
+      DB_SYNCHRONIZE: 'false'
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      REDIS_PASSWORD: aiquiz_staging_redis_password
+      JWT_SECRET: staging-only-secret-do-not-use-in-prod
+      JWT_EXPIRES_IN: 24h
+      GOOGLE_CLIENT_ID: staging-placeholder.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: staging-placeholder-secret
+      GOOGLE_CALLBACK_URL: http://localhost:3013/api/v1/auth/google/callback
+      CORS_ORIGIN: http://localhost:3011
+    ports:
+      - '3013:3012'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - quiz-staging
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3013/api/v1
+    container_name: quiz-staging-frontend
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://localhost:3013/api/v1
+    ports:
+      - '3011:3010'
+    depends_on:
+      - backend
+    networks:
+      - quiz-staging
+
+networks:
+  quiz-staging:
+    driver: bridge
+
+volumes:
+  quiz_staging_pgdata:
