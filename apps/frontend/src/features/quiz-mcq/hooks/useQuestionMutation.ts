@@ -12,6 +12,7 @@ import {
   type QuizQuestion,
   type BulkQuestionDto,
 } from '@/lib/quiz-mcq-api';
+import { QUIZ_MCQ_PUBLIC_QUERY_PREFIX } from '@/lib/quiz-mcq-constants';
 
 const QUESTIONS_KEY = 'questions';
 const FILTER_COUNTS_KEY = 'filter-counts';
@@ -24,11 +25,15 @@ interface QuestionsPage {
 export function useQuestionMutation() {
   const queryClient = useQueryClient();
 
+  const invalidatePublicQuizCache = () =>
+    queryClient.invalidateQueries({ queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX] });
+
   const createMutation = useMutation({
     mutationFn: (dto: CreateQuestionDto) => createQuestion(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -63,6 +68,7 @@ export function useQuestionMutation() {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -95,6 +101,7 @@ export function useQuestionMutation() {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -103,6 +110,7 @@ export function useQuestionMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
     onError: (error) => {
       console.error('[BulkAction] Delete failed:', error);
@@ -120,6 +128,7 @@ export function useQuestionMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
     onError: (error) => {
       console.error('[BulkAction] Status update failed:', error);
@@ -131,6 +140,7 @@ export function useQuestionMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 

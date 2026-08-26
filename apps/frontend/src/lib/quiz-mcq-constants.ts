@@ -26,3 +26,10 @@ export const QUIZ_LEVEL_COLORS: Record<QuizLevel, string> = {
   Expert: 'from-red-400 to-red-600',
   Extreme: 'from-purple-500 to-pink-600',
 };
+
+/**
+ * React Query key prefix shared by the public quiz-mcq wizard queries
+ * (subjects, question-counts, subject detail, chapter questions). Admin
+ * mutations invalidate this prefix so public pages reflect edits immediately.
+ */
+export const QUIZ_MCQ_PUBLIC_QUERY_PREFIX = 'quiz-mcq';

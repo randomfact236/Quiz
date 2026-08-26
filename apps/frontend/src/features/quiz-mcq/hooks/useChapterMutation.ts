@@ -8,6 +8,7 @@ import {
   type CreateChapterDto,
   type QuizChapter,
 } from '@/lib/quiz-mcq-api';
+import { QUIZ_MCQ_PUBLIC_QUERY_PREFIX } from '@/lib/quiz-mcq-constants';
 
 const CHAPTERS_KEY = 'chapters';
 const QUESTIONS_KEY = 'questions';
@@ -15,6 +16,9 @@ const FILTER_COUNTS_KEY = 'filter-counts';
 
 export function useChapterMutation() {
   const queryClient = useQueryClient();
+
+  const invalidatePublicQuizCache = () =>
+    queryClient.invalidateQueries({ queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX] });
 
   const createMutation = useMutation({
     mutationFn: (dto: CreateChapterDto) => createChapter(dto),
@@ -34,6 +38,7 @@ export function useChapterMutation() {
       });
 
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -46,6 +51,7 @@ export function useChapterMutation() {
       }
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -56,6 +62,7 @@ export function useChapterMutation() {
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, 'all'] });
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 

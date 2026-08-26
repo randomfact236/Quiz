@@ -8,6 +8,7 @@ import {
   type CreateSubjectDto,
   type UpdateSubjectDto,
 } from '@/lib/quiz-mcq-api';
+import { QUIZ_MCQ_PUBLIC_QUERY_PREFIX } from '@/lib/quiz-mcq-constants';
 
 const SUBJECTS_KEY = 'subjects';
 const CHAPTERS_KEY = 'chapters';
@@ -17,11 +18,15 @@ const FILTER_COUNTS_KEY = 'filter-counts';
 export function useSubjectMutation() {
   const queryClient = useQueryClient();
 
+  const invalidatePublicQuizCache = () =>
+    queryClient.invalidateQueries({ queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX] });
+
   const createMutation = useMutation({
     mutationFn: (dto: CreateSubjectDto) => createSubject(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SUBJECTS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -30,6 +35,7 @@ export function useSubjectMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SUBJECTS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 
@@ -40,6 +46,7 @@ export function useSubjectMutation() {
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY] });
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
+      invalidatePublicQuizCache();
     },
   });
 

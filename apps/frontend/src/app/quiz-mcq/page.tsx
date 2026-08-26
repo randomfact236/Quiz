@@ -28,6 +28,7 @@ import {
   QUIZ_LEVELS as levels,
   QUIZ_LEVEL_EMOJIS as levelEmojis,
   QUIZ_LEVEL_COLORS as levelColors,
+  QUIZ_MCQ_PUBLIC_QUERY_PREFIX,
 } from '@/lib/quiz-mcq-constants';
 
 type SubjectCategory = 'academic' | 'professional' | 'entertainment';
@@ -220,7 +221,7 @@ function SubjectSelection(): JSX.Element {
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
 
   const subjectsQuery = useQuery({
-    queryKey: ['quiz-mcq', 'subjects'],
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subjects'],
     queryFn: () => getSubjects(false),
     staleTime: QUIZ_QUERY_STALE_TIME,
   });
@@ -231,7 +232,7 @@ function SubjectSelection(): JSX.Element {
   );
 
   const countsQuery = useQuery({
-    queryKey: ['quiz-mcq', 'question-counts'],
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
     queryFn: async () => {
       const entries = await Promise.all(
         sortedSubjects.map(async (subject) => {
@@ -369,7 +370,7 @@ interface ChapterInfo {
 
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   const subjectQuery = useQuery({
-    queryKey: ['quiz-mcq', 'subject', subject],
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
     queryFn: () => getSubjectBySlug(subject),
     enabled: !!subject && subject !== 'all',
     staleTime: QUIZ_QUERY_STALE_TIME,
@@ -398,7 +399,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 
   const chapterQuestionQueries = useQueries({
     queries: (subjectQuery.data?.chapters ?? []).map((chapter) => ({
-      queryKey: ['quiz-mcq', 'chapter-questions', chapter.id],
+      queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'chapter-questions', chapter.id],
       queryFn: () => getQuestionsByChapter(chapter.id),
       staleTime: QUIZ_QUERY_STALE_TIME,
     })),
@@ -528,7 +529,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   const [timerOpen, setTimerOpen] = useState(true);
 
   const subjectQuery = useQuery({
-    queryKey: ['quiz-mcq', 'subject', subject],
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
     queryFn: () => getSubjectBySlug(subject),
     enabled: !!subject && subject !== 'all',
     staleTime: QUIZ_QUERY_STALE_TIME,
@@ -537,7 +538,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   const foundChapter = subjectQuery.data?.chapters?.find((c) => c.name === chapter);
 
   const questionsQuery = useQuery({
-    queryKey: ['quiz-mcq', 'chapter-questions', foundChapter?.id],
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'chapter-questions', foundChapter?.id],
     queryFn: () => getQuestionsByChapter(foundChapter!.id),
     enabled: !!foundChapter,
     staleTime: QUIZ_QUERY_STALE_TIME,

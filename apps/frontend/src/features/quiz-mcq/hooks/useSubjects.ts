@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getSubjects, deleteSubject, type QuizSubject } from '@/lib/quiz-mcq-api';
+import { QUIZ_MCQ_PUBLIC_QUERY_PREFIX } from '@/lib/quiz-mcq-constants';
 
 const SUBJECTS_KEY = ['subjects'];
 const FILTER_COUNTS_KEY = ['filter-counts'];
@@ -36,11 +37,13 @@ export function useSubjects() {
       }
     },
     onSettled: () => {
-      // Invalidate subjects, chapters, questions, and filter counts
+      // Invalidate subjects, chapters, questions, filter counts, and the
+      // public quiz wizard cache so edits show up without a refresh
       queryClient.invalidateQueries({ queryKey: SUBJECTS_KEY });
       queryClient.invalidateQueries({ queryKey: ['chapters'] });
       queryClient.invalidateQueries({ queryKey: ['questions'] });
       queryClient.invalidateQueries({ queryKey: FILTER_COUNTS_KEY });
+      queryClient.invalidateQueries({ queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX] });
     },
   });
 
