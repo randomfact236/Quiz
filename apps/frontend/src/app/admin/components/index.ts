@@ -1,6 +1,5 @@
 export { ImageRiddlesAdminSection } from './ImageRiddlesAdminSection';
 export { JokesSection } from './JokesSection';
-export { RiddleMcqSection } from './RiddleMcqSection';
 export { AdminGuard } from './AdminGuard';
 export { SettingsSection } from './SettingsSection';
 export { RiddleSidebar } from './RiddleSidebar';
