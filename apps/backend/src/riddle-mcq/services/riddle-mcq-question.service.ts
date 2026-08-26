@@ -1,22 +1,216 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
-import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
-import { pickRandomByWeight } from '../../common/content/random-selection.util';
+import {
+  ContentListFilters,
+  ContentRandomOptions,
+  ContentServiceBase,
+} from '../../common/content/content.service';
 
-import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
+import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 
+/**
+ * Riddle MCQ question service — flat-mode Track B implementation.
+ *
+ * Shared list/random/CRUD machinery lives in ContentServiceBase (flat mode:
+ * Subject -> riddles, no chapter layer). Everything below is delegation or
+ * riddle-specific rules (level option counts, published-only reads).
+ */
 @Injectable()
-export class RiddleMcqQuestionService {
+export class RiddleMcqQuestionService extends ContentServiceBase<
+  RiddleMcqSubject,
+  RiddleMcqSubject,
+  RiddleMcq
+> {
   /** Minimum option count and allowed correct letters per MCQ level (mirrors FE zod schema). */
   private static readonly LEVEL_RULES: Record<string, { minOptions: number; maxLetter: string }> = {
     easy: { minOptions: 2, maxLetter: 'B' },
     medium: { minOptions: 3, maxLetter: 'C' },
     hard: { minOptions: 4, maxLetter: 'D' },
   };
+
+  protected get itemNoun(): string {
+    return 'Riddle';
+  }
+
+  constructor(
+    @InjectRepository(RiddleMcq)
+    riddleMcqRepo: Repository<RiddleMcq>,
+    @InjectRepository(RiddleMcqSubject)
+    subjectRepo: Repository<RiddleMcqSubject>,
+    cacheService: CacheService,
+    dataSource: DataSource
+  ) {
+    super({
+      subjectRepo,
+      // Flat mode has no chapter layer; the repo is required by the deps shape
+      // but never queried.
+      chapterRepo: subjectRepo,
+      itemRepo: riddleMcqRepo,
+      dataSource,
+      cacheService,
+      moduleKey: 'riddle-mcq',
+      // Track B: family-scoped invalidation (was sledgehammer 'riddle-mcq:*').
+      cacheFamilies: ['riddle-mcq:questions', 'riddle-mcq:filter-counts', 'riddle-mcq:stats'],
+      itemAlias: 'riddle',
+      flat: true,
+      randomMax: 100,
+      itemsCacheTtlS: 600,
+    });
+  }
+
+  /** Legacy key format kept so existing Redis entries stay valid. */
+  protected override listCacheKey(
+    filters: ContentListFilters,
+    page: number,
+    limit: number
+  ): string {
+    const category = filters.categorySlug || 'all';
+    const subject = filters.subjectSlug || 'all';
+    const level = filters.level || 'all';
+    const status = filters.status || 'all';
+    const search = filters.search || 'none';
+    return `riddle-mcq:questions:${category}:${subject}:${level}:${status}:${search}:${page}:${limit}`;
+  }
+
+  protected override getListOrder(alias: string): Array<[string, 'ASC' | 'DESC']> {
+    return [
+      [`${alias}.createdAt`, 'DESC'],
+      [`${alias}.id`, 'DESC'],
+    ];
+  }
+
+  // ==================== PUBLIC READS ====================
+
+  async findRiddlesBySubject(
+    subjectId: string,
+    pagination: { page?: number; limit?: number } = {},
+    level?: string
+  ): Promise<{ data: RiddleMcq[]; total: number }> {
+    const page = pagination.page ?? 1;
+    const limit = pagination.limit ?? 10;
+
+    const query = this.deps.itemRepo
+      .createQueryBuilder('riddle')
+      .leftJoinAndSelect('riddle.subject', 'subject')
+      .where('subject.id = :subjectId', { subjectId })
+      .andWhere('subject.isActive = :isActive', { isActive: true })
+      .andWhere('riddle.status = :status', { status: RiddleStatus.PUBLISHED });
+
+    if (level) {
+      query.andWhere('riddle.level = :level', { level });
+    }
+
+    const [data, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('riddle.createdAt', 'DESC')
+      .addOrderBy('riddle.id', 'DESC')
+      .getManyAndCount();
+
+    return { data, total };
+  }
+
+  async findAllRiddles(
+    filters: {
+      category?: string;
+      subject?: string;
+      level?: string;
+      status?: string;
+      search?: string;
+    } = {},
+    pagination: { page?: number; limit?: number } = {}
+  ): Promise<{ data: RiddleMcq[]; total: number }> {
+    const page = pagination.page ?? 1;
+    const limit = pagination.limit ?? 10;
+
+    const result = await this.findItems({ page, limit }, {
+      categorySlug: filters.category,
+      subjectSlug: filters.subject,
+      level: filters.level,
+      status: filters.status as unknown as ContentListFilters['status'],
+      search: filters.search,
+    } as ContentListFilters);
+
+    return { data: result.data, total: result.total };
+  }
+
+  async findRandomRiddles(level: string, count: number): Promise<RiddleMcq[]> {
+    const validLevels = ['easy', 'medium', 'hard', 'expert'];
+    if (!validLevels.includes(level)) {
+      throw new BadRequestException(`Invalid level: ${level}`);
+    }
+    return (await this.findRandomItems({ level, count })).data;
+  }
+
+  async findMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
+    return (await this.findRandomItems({ count })).data;
+  }
+
+  async findRiddleById(id: string): Promise<RiddleMcq> {
+    const riddle = await this.deps.itemRepo.findOne({
+      where: { id },
+      relations: ['subject'],
+    });
+    if (!riddle) {
+      throw new NotFoundException('Riddle not found');
+    }
+    return riddle;
+  }
+
+  /** Public single read — always PUBLISHED only. */
+  async findPublishedRiddleById(id: string): Promise<RiddleMcq> {
+    const riddle = await this.deps.itemRepo.findOne({
+      where: { id, status: RiddleStatus.PUBLISHED },
+      relations: ['subject'],
+    });
+    if (!riddle) {
+      throw new NotFoundException('Riddle not found');
+    }
+    return riddle;
+  }
+
+  // ==================== CRUD (delegation) ====================
+
+  createRiddle(dto: {
+    question: string;
+    options?: string[];
+    correctLetter?: string;
+    level: string;
+    subjectId: string;
+    hint?: string;
+    explanation?: string;
+    answer?: string;
+    status?: RiddleStatus;
+  }): Promise<RiddleMcq> {
+    return this.createItem(dto as unknown as Record<string, any>);
+  }
+
+  updateRiddle(
+    id: string,
+    dto: {
+      question?: string;
+      options?: string[];
+      correctLetter?: string;
+      level?: string;
+      subjectId?: string;
+      hint?: string;
+      explanation?: string;
+      answer?: string;
+      status?: RiddleStatus;
+    }
+  ): Promise<RiddleMcq> {
+    return this.updateItem(id, dto as Record<string, any>);
+  }
+
+  deleteRiddle(id: string): Promise<void> {
+    return this.deleteItem(id);
+  }
+
+  // ==================== LEVEL ANSWER RULES ====================
 
   /**
    * Enforce level-based option/correctLetter/answer rules server-side.
@@ -54,305 +248,110 @@ export class RiddleMcqQuestionService {
     }
   }
 
-  constructor(
-    @InjectRepository(RiddleMcq)
-    private riddleMcqRepo: Repository<RiddleMcq>,
-    @InjectRepository(RiddleMcqSubject)
-    private subjectRepo: Repository<RiddleMcqSubject>,
-    private cacheService: CacheService
-  ) {}
+  // ==================== CONTENT-SERVICE HOOKS ====================
 
-  // Track B: family-scoped invalidation (was sledgehammer 'riddle-mcq:*')
-  private async clearRiddleCaches() {
-    await invalidateCacheFamilies(this.cacheService, [
-      'riddle-mcq:questions',
-      'riddle-mcq:filter-counts',
-      'riddle-mcq:stats',
-    ]);
-  }
-
-  private readonly CACHE_KEYS = {
-    QUESTIONS: (
-      category: string,
-      subject: string,
-      level: string,
-      status: string,
-      search: string,
-      page: number,
-      limit: number
-    ) =>
-      `riddle-mcq:questions:${category || 'all'}:${subject || 'all'}:${level || 'all'}:${status || 'all'}:${search || 'none'}:${page}:${limit}`,
-  };
-
-  private readonly CACHE_TTL = {
-    QUESTIONS: 600,
-  };
-
-  async findRiddlesBySubject(
-    subjectId: string,
-    pagination: { page?: number; limit?: number } = {},
-    level?: string
-  ): Promise<{ data: RiddleMcq[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
-
-    const query = this.riddleMcqRepo
-      .createQueryBuilder('riddle')
-      .leftJoinAndSelect('riddle.subject', 'subject')
-      .where('subject.id = :subjectId', { subjectId })
-      .andWhere('subject.isActive = :isActive', { isActive: true })
-      .andWhere('riddle.status = :status', { status: RiddleStatus.PUBLISHED });
-
-    if (level) {
-      query.andWhere('riddle.level = :level', { level });
+  protected applyListFilters(qb: SelectQueryBuilder<any>, filters: ContentListFilters): void {
+    if (filters.categorySlug && filters.categorySlug !== 'all') {
+      qb.andWhere('category.slug = :category', { category: filters.categorySlug });
     }
 
-    const [data, total] = await query
-      .skip((page - 1) * limit)
-      .take(limit)
-      .orderBy('riddle.createdAt', 'DESC')
-      .addOrderBy('riddle.id', 'DESC')
-      .getManyAndCount();
-
-    return { data, total };
-  }
-
-  async findAllRiddles(
-    filters: {
-      category?: string;
-      subject?: string;
-      level?: string;
-      status?: string;
-      search?: string;
-    } = {},
-    pagination: { page?: number; limit?: number } = {}
-  ): Promise<{ data: RiddleMcq[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
-
-    const cacheKey = this.CACHE_KEYS.QUESTIONS(
-      filters.category || 'all',
-      filters.subject || 'all',
-      filters.level || 'all',
-      filters.status || 'all',
-      filters.search || 'none',
-      page,
-      limit
-    );
-
-    return this.cacheService.getOrSet(
-      cacheKey,
-      async () => {
-        const query = this.riddleMcqRepo
-          .createQueryBuilder('riddle')
-          .leftJoinAndSelect('riddle.subject', 'subject')
-          .leftJoinAndSelect('subject.category', 'category');
-
-        if (filters.category && filters.category !== 'all') {
-          query.where('category.slug = :category', { category: filters.category });
-        }
-
-        if (filters.subject && filters.subject !== 'all') {
-          if (filters.category && filters.category !== 'all') {
-            query.andWhere('subject.slug = :subject', { subject: filters.subject });
-          } else {
-            query.where('subject.slug = :subject', { subject: filters.subject });
-          }
-        }
-
-        if (filters.level && filters.level !== 'all') {
-          query.andWhere('riddle.level = :level', { level: filters.level });
-        }
-
-        if (filters.status && filters.status !== 'all') {
-          query.andWhere('riddle.status = :status', { status: filters.status });
-        }
-
-        if (filters.search) {
-          query.andWhere('riddle.question ILIKE :search', { search: `%${filters.search}%` });
-        }
-
-        const [data, total] = await query
-          .skip((page - 1) * limit)
-          .take(limit)
-          .orderBy('riddle.createdAt', 'DESC')
-          .addOrderBy('riddle.importOrder', 'ASC')
-          .getManyAndCount();
-
-        return { data, total };
-      },
-      this.CACHE_TTL.QUESTIONS
-    );
-  }
-
-  /**
-   * Capacity-plan A2 via shared pickRandomByWeight (random_weight + wrap-around;
-   * replaces load-all-ids + in-memory shuffle).
-   */
-  private async findRandomRiddlesInternal(opts: {
-    level?: string;
-    count: number;
-  }): Promise<RiddleMcq[]> {
-    return pickRandomByWeight(this.riddleMcqRepo, 'riddle', {
-      count: opts.count,
-      max: 100,
-      filters: (qb) => {
-        qb.leftJoinAndSelect('riddle.subject', 'subject').where('riddle.status = :status', {
-          status: RiddleStatus.PUBLISHED,
-        });
-        if (opts.level) {
-          qb.andWhere('riddle.level = :level', { level: opts.level });
-        }
-      },
-    });
-  }
-
-  async findRandomRiddles(level: string, count: number): Promise<RiddleMcq[]> {
-    const validLevels = ['easy', 'medium', 'hard', 'expert'];
-    if (!validLevels.includes(level)) {
-      throw new BadRequestException(`Invalid level: ${level}`);
+    if (filters.subjectSlug && filters.subjectSlug !== 'all') {
+      qb.andWhere('subject.slug = :subject', { subject: filters.subjectSlug });
     }
 
-    return this.findRandomRiddlesInternal({ level, count });
+    if (filters.level && filters.level !== 'all') {
+      qb.andWhere('riddle.level = :level', { level: filters.level });
+    }
+
+    if (filters.status && (filters.status as string) !== 'all') {
+      qb.andWhere('riddle.status = :status', { status: filters.status });
+    }
+
+    if (filters.search) {
+      qb.andWhere('riddle.question ILIKE :search', { search: `%${filters.search}%` });
+    }
   }
 
-  async findMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
-    return this.findRandomRiddlesInternal({ count });
+  protected applyRandomFilters(qb: SelectQueryBuilder<any>, opts: ContentRandomOptions): void {
+    if (opts.level) {
+      qb.andWhere('riddle.level = :level', { level: opts.level });
+    }
+    if (opts.subjectSlug) {
+      qb.andWhere('subject.slug = :subjectSlug', { subjectSlug: opts.subjectSlug });
+    }
   }
 
-  async createRiddle(dto: {
-    question: string;
-    options?: string[];
-    correctLetter?: string;
-    level: string;
-    subjectId: string;
-    hint?: string;
-    explanation?: string;
-    answer?: string;
-    status?: RiddleStatus;
-  }): Promise<RiddleMcq> {
+  protected async validateAndBuildCreate(dto: Record<string, any>): Promise<{
+    data: Record<string, unknown>;
+    subjectId?: string;
+  }> {
     const isExpert = dto.level === 'expert';
 
-    this.validateLevelAnswerRules(dto.level, {
-      options: dto.options,
-      correctLetter: dto.correctLetter,
-      answer: dto.answer,
-    });
-
-    const subject = await this.subjectRepo.findOne({ where: { id: dto.subjectId } });
-    if (!subject) {
-      throw new BadRequestException('Subject not found');
+    if (!dto.question) {
+      throw new BadRequestException('Question is required');
     }
 
-    const riddle = new RiddleMcq();
-    riddle.question = dto.question;
-    riddle.options = isExpert ? null : dto.options || null;
-    riddle.correctLetter = isExpert ? null : dto.correctLetter || null;
-    riddle.level = dto.level as RiddleMcqLevel;
-    riddle.subjectId = dto.subjectId;
-    riddle.hint = dto.hint || null;
-    riddle.explanation = dto.explanation || null;
-    riddle.answer = dto.answer || null;
-    riddle.status = dto.status || RiddleStatus.DRAFT;
+    this.validateLevelAnswerRules(dto.level, dto);
 
-    const saved = await this.riddleMcqRepo.save(riddle);
-    await this.clearRiddleCaches();
-    return saved;
+    if (!dto.subjectId) {
+      throw new BadRequestException('subjectId is required');
+    }
+
+    return {
+      subjectId: dto.subjectId,
+      data: {
+        question: dto.question,
+        options: isExpert ? null : dto.options || null,
+        correctLetter: isExpert ? null : dto.correctLetter || null,
+        level: dto.level,
+        hint: dto.hint || null,
+        explanation: dto.explanation || null,
+        answer: dto.answer || null,
+        status: dto.status || RiddleStatus.DRAFT,
+      },
+    };
   }
 
-  async updateRiddle(
-    id: string,
-    dto: {
-      question?: string;
-      options?: string[];
-      correctLetter?: string;
-      level?: string;
-      subjectId?: string;
-      hint?: string;
-      explanation?: string;
-      answer?: string;
-      status?: RiddleStatus;
-    }
-  ): Promise<RiddleMcq> {
-    const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
-    if (!riddle) {
-      throw new NotFoundException('Riddle not found');
-    }
-
+  protected async applyUpdate(item: RiddleMcq, dto: Record<string, any>): Promise<void> {
     if (
       dto.level !== undefined ||
       dto.options !== undefined ||
       dto.correctLetter !== undefined ||
       dto.answer !== undefined
     ) {
-      this.validateLevelAnswerRules(dto.level ?? riddle.level, {
-        options: dto.options !== undefined ? dto.options : riddle.options,
-        correctLetter: dto.correctLetter !== undefined ? dto.correctLetter : riddle.correctLetter,
-        answer: dto.answer !== undefined ? dto.answer : riddle.answer,
+      this.validateLevelAnswerRules(dto.level ?? item.level, {
+        options: dto.options !== undefined ? dto.options : item.options,
+        correctLetter: dto.correctLetter !== undefined ? dto.correctLetter : item.correctLetter,
+        answer: dto.answer !== undefined ? dto.answer : item.answer,
       });
     }
 
     if (dto.question !== undefined) {
-      riddle.question = dto.question;
+      item.question = dto.question;
     }
     if (dto.correctLetter !== undefined) {
-      riddle.correctLetter = dto.correctLetter || null;
+      item.correctLetter = dto.correctLetter || null;
     }
     if (dto.options !== undefined) {
-      riddle.options = dto.options || null;
+      item.options = dto.options || null;
     }
     if (dto.level !== undefined) {
-      riddle.level = dto.level as RiddleMcqLevel;
-    }
-    if (dto.subjectId !== undefined) {
-      riddle.subjectId = dto.subjectId;
+      item.level = dto.level as RiddleMcq['level'];
     }
     if (dto.hint !== undefined) {
-      riddle.hint = dto.hint || null;
+      item.hint = dto.hint || null;
     }
     if (dto.explanation !== undefined) {
-      riddle.explanation = dto.explanation || null;
+      item.explanation = dto.explanation || null;
     }
     if (dto.answer !== undefined) {
-      riddle.answer = dto.answer || null;
+      item.answer = dto.answer || null;
     }
     if (dto.status !== undefined) {
-      riddle.status = dto.status;
+      item.status = dto.status;
     }
-
-    const saved = await this.riddleMcqRepo.save(riddle);
-    await this.clearRiddleCaches();
-    return saved;
-  }
-
-  async deleteRiddle(id: string): Promise<void> {
-    const result = await this.riddleMcqRepo.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Riddle not found');
+    if (dto.subjectId !== undefined) {
+      item.subjectId = dto.subjectId;
     }
-    await this.clearRiddleCaches();
-  }
-
-  async findRiddleById(id: string): Promise<RiddleMcq> {
-    const riddle = await this.riddleMcqRepo.findOne({
-      where: { id },
-      relations: ['subject'],
-    });
-    if (!riddle) {
-      throw new NotFoundException('Riddle not found');
-    }
-    return riddle;
-  }
-
-  /** Public single read — always PUBLISHED only. */
-  async findPublishedRiddleById(id: string): Promise<RiddleMcq> {
-    const riddle = await this.riddleMcqRepo.findOne({
-      where: { id, status: RiddleStatus.PUBLISHED },
-      relations: ['subject'],
-    });
-    if (!riddle) {
-      throw new NotFoundException('Riddle not found');
-    }
-    return riddle;
   }
 }

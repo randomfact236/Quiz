@@ -31,6 +31,8 @@ export interface ContentListFilters {
   chapter?: string;
   search?: string;
   subjectSlug?: string;
+  /** Flat modules only: category slug filter (e.g. riddle-mcq). */
+  categorySlug?: string;
 }
 
 export interface ContentRandomOptions {
@@ -66,10 +68,19 @@ export interface ContentServiceDeps<
   cacheFamilies: string[];
   /** Query-builder alias for the item entity, e.g. 'question'. */
   itemAlias: string;
-  /** Subject -> chapters relation name on the subject entity. */
-  chaptersRelation: string;
-  /** Chapter -> items relation name on the chapter entity. */
-  chapterItemsRelation: string;
+  /** Subject -> chapters relation name on the subject entity (hierarchical mode). */
+  chaptersRelation?: string;
+  /** Chapter -> items relation name on the chapter entity (hierarchical mode). */
+  chapterItemsRelation?: string;
+  /**
+   * Flat taxonomy mode (e.g. riddle-mcq: Subject -> items, no chapters).
+   * When true, list/random/create/update operate directly on the items'
+   * subject relation instead of the chapter layer; chaptersRelation /
+   * chapterItemsRelation are unused.
+   */
+  flat?: boolean;
+  /** Hard upper bound for random selection count (defaults 50). */
+  randomMax?: number;
   /** TTL (s) for cached paginated item lists. */
   itemsCacheTtlS?: number;
 }
@@ -82,6 +93,7 @@ export abstract class ContentServiceBase<
   protected readonly logger: Logger = new Logger(this.constructor.name);
 
   protected readonly itemsCacheTtlS: number;
+  private readonly randomMax: number;
 
   /** Noun used in not-found messages for items (override per module). */
   protected get itemNoun(): string {
@@ -90,6 +102,7 @@ export abstract class ContentServiceBase<
 
   constructor(protected readonly deps: ContentServiceDeps<TSubject, TChapter, TItem>) {
     this.itemsCacheTtlS = deps.itemsCacheTtlS ?? 600;
+    this.randomMax = deps.randomMax ?? 50;
   }
 
   protected get cache(): CacheService {
@@ -162,7 +175,7 @@ export abstract class ContentServiceBase<
   async deleteSubjectCascade(id: string): Promise<void> {
     const subject = await this.deps.subjectRepo.findOne({
       where: { id } as any,
-      relations: [this.deps.chaptersRelation],
+      relations: [this.deps.chaptersRelation!],
     });
     if (!subject) {
       throw new NotFoundException('Subject not found');
@@ -173,7 +186,7 @@ export abstract class ContentServiceBase<
     await queryRunner.startTransaction();
 
     try {
-      const chapters = (subject as any)[this.deps.chaptersRelation] as TChapter[] | undefined;
+      const chapters = (subject as any)[this.deps.chaptersRelation!] as TChapter[] | undefined;
       if (chapters && chapters.length > 0) {
         // P1 fix (TODO.md backlog): was one DELETE per chapter (N queries);
         // now a single IN query inside the same transaction.
@@ -213,10 +226,17 @@ export abstract class ContentServiceBase<
       cacheKey,
       async () => {
         const alias = this.deps.itemAlias;
-        const query = this.deps.itemRepo
-          .createQueryBuilder(alias)
-          .leftJoinAndSelect(`${alias}.chapter`, 'chapter')
-          .leftJoinAndSelect('chapter.subject', 'subject');
+        const query = this.deps.itemRepo.createQueryBuilder(alias);
+
+        if (this.deps.flat) {
+          query
+            .leftJoinAndSelect(`${alias}.subject`, 'subject')
+            .leftJoinAndSelect('subject.category', 'category');
+        } else {
+          query
+            .leftJoinAndSelect(`${alias}.chapter`, 'chapter')
+            .leftJoinAndSelect('chapter.subject', 'subject');
+        }
 
         this.applyListFilters(query, filters);
 
@@ -224,7 +244,11 @@ export abstract class ContentServiceBase<
           query.skip((page - 1) * limit).take(limit);
         }
 
-        const [data, total] = await query.orderBy(`${alias}.updatedAt`, 'DESC').getManyAndCount();
+        this.getListOrder(alias).forEach(([column, direction], i) =>
+          i === 0 ? query.orderBy(column, direction) : query.addOrderBy(column, direction)
+        );
+
+        const [data, total] = await query.getManyAndCount();
 
         const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
         return { data, total, totalPages };
@@ -233,20 +257,32 @@ export abstract class ContentServiceBase<
     );
   }
 
+  /** ORDER BY clauses for cached lists (first clause is primary). */
+  protected getListOrder(_alias: string): Array<[string, 'ASC' | 'DESC']> {
+    return [[`${_alias}.updatedAt`, 'DESC']];
+  }
+
   /**
    * Capacity-plan A2/B: index-seek random selection via random_weight with
    * wrap-around; PUBLISHED-only by default.
    */
   async findRandomItems(opts: ContentRandomOptions): Promise<{ data: TItem[]; total: number }> {
-    const count = Math.min(Math.max(opts.count ?? 20, 1), 50);
+    const count = Math.min(Math.max(opts.count ?? 20, 1), this.randomMax);
     const alias = this.deps.itemAlias;
 
     const data = await pickRandomByWeight(this.deps.itemRepo, alias, {
       count,
+      max: this.randomMax,
       filters: (qb) => {
-        qb.leftJoinAndSelect(`${alias}.chapter`, 'chapter')
-          .leftJoinAndSelect('chapter.subject', 'subject')
-          .where(`${alias}.status = :status`, { status: ContentStatus.PUBLISHED });
+        if (this.deps.flat) {
+          qb.leftJoinAndSelect(`${alias}.subject`, 'subject');
+        } else {
+          qb.leftJoinAndSelect(`${alias}.chapter`, 'chapter').leftJoinAndSelect(
+            'chapter.subject',
+            'subject'
+          );
+        }
+        qb.where(`${alias}.status = :status`, { status: ContentStatus.PUBLISHED });
         this.applyRandomFilters(qb, opts);
       },
     });
@@ -256,6 +292,27 @@ export abstract class ContentServiceBase<
 
   async createItem(dto: Record<string, any>): Promise<TItem> {
     const built = await this.validateAndBuildCreate(dto);
+
+    if (this.deps.flat) {
+      if (!built.subjectId) {
+        throw new BadRequestException('subjectId is required');
+      }
+      const subject = await this.deps.subjectRepo.findOne({
+        where: { id: built.subjectId } as any,
+      });
+      if (!subject) {
+        throw new NotFoundException('Subject not found');
+      }
+
+      const item = this.deps.itemRepo.create({
+        ...built.data,
+        subjectId: built.subjectId,
+      } as any) as unknown as TItem;
+      const saved = await this.deps.itemRepo.save(item);
+      await this.invalidateContentCaches();
+      return saved;
+    }
+
     const chapter = await this.deps.chapterRepo.findOne({ where: { id: built.chapterId } as any });
     if (!chapter) {
       throw new NotFoundException('Chapter not found');
@@ -277,7 +334,16 @@ export abstract class ContentServiceBase<
       throw new NotFoundException(`${this.itemNoun} not found`);
     }
 
-    if (dto.chapterId !== undefined) {
+    if (this.deps.flat && dto.subjectId !== undefined) {
+      const subject = await this.deps.subjectRepo.findOne({
+        where: { id: dto.subjectId } as any,
+      });
+      if (!subject) {
+        throw new NotFoundException('Subject not found');
+      }
+    }
+
+    if (!this.deps.flat && dto.chapterId !== undefined) {
       const chapter = await this.deps.chapterRepo.findOne({ where: { id: dto.chapterId } as any });
       if (!chapter) {
         throw new NotFoundException('Chapter not found');
@@ -498,24 +564,36 @@ export abstract class ContentServiceBase<
     opts: ContentRandomOptions
   ): void;
 
-  /** Validate create DTO and produce the raw entity payload (+ its chapterId). */
-  protected abstract validateAndBuildCreate(
-    dto: Record<string, any>
-  ): Promise<{ data: Record<string, unknown>; chapterId: string }>;
+  /** Validate create DTO and produce the raw entity payload + its parent id. */
+  protected abstract validateAndBuildCreate(dto: Record<string, any>): Promise<{
+    data: Record<string, unknown>;
+    /** Hierarchical mode: owning chapter id. */
+    chapterId?: string;
+    /** Flat mode: owning subject id. */
+    subjectId?: string;
+  }>;
 
   /** Mutate `item` in place from a partial update DTO. */
   protected abstract applyUpdate(item: any, dto: Record<string, any>): Promise<void>;
 
-  /** Taxonomy for an import row, or null when the row is unusable. */
-  protected abstract getImportRowTaxonomy(
-    row: Record<string, any>,
-    defaultSubjectName?: string
-  ): ContentImportRowTaxonomy | null;
+  /**
+   * Taxonomy for an import row, or null when the row is unusable.
+   * Default implementation rejects everything: modules that don't use the
+   * shared chapter-based importer (flat modules) never call importItems.
+   */
+  protected getImportRowTaxonomy(
+    _row: Record<string, any>,
+    _defaultSubjectName?: string
+  ): ContentImportRowTaxonomy | null {
+    throw new Error('importItems() is not supported by this module (no chapter layer)');
+  }
 
   /** Map an import row to an entity payload; return an error message string to reject. */
-  protected abstract buildImportItem(
-    row: Record<string, any>,
-    ids: { chapterId: string },
-    order: number
-  ): Record<string, unknown> | string;
+  protected buildImportItem(
+    _row: Record<string, any>,
+    _ids: { chapterId: string },
+    _order: number
+  ): Record<string, unknown> | string {
+    throw new Error('importItems() is not supported by this module (no chapter layer)');
+  }
 }

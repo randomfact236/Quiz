@@ -112,7 +112,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
   async findSubjectBySlug(slug: string): Promise<Subject> {
     const subject = await this.deps.subjectRepo.findOne({
       where: { slug },
-      relations: [this.deps.chaptersRelation],
+      relations: [this.deps.chaptersRelation!],
     });
     if (!subject) {
       throw new NotFoundException('Subject not found');
