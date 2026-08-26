@@ -11,6 +11,49 @@ import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 
 @Injectable()
 export class RiddleMcqQuestionService {
+  /** Minimum option count and allowed correct letters per MCQ level (mirrors FE zod schema). */
+  private static readonly LEVEL_RULES: Record<string, { minOptions: number; maxLetter: string }> = {
+    easy: { minOptions: 2, maxLetter: 'B' },
+    medium: { minOptions: 3, maxLetter: 'C' },
+    hard: { minOptions: 4, maxLetter: 'D' },
+  };
+
+  /**
+   * Enforce level-based option/correctLetter/answer rules server-side.
+   * MCQ levels require a minimum option count and an in-range correctLetter;
+   * expert requires a non-empty text answer.
+   */
+  private validateLevelAnswerRules(
+    level: string,
+    values: { options?: string[] | null; correctLetter?: string | null; answer?: string | null }
+  ): void {
+    if (level === 'expert') {
+      if (!values.answer || !values.answer.trim()) {
+        throw new BadRequestException('Expert riddles require a text answer');
+      }
+      return;
+    }
+
+    const rule = RiddleMcqQuestionService.LEVEL_RULES[level];
+    if (!rule) {
+      throw new BadRequestException(`Invalid level: ${level}`);
+    }
+
+    if (!values.options || values.options.length < rule.minOptions) {
+      throw new BadRequestException(`${level} riddles require at least ${rule.minOptions} options`);
+    }
+
+    if (
+      !values.correctLetter ||
+      !/^[A-D]$/.test(values.correctLetter) ||
+      values.correctLetter > rule.maxLetter
+    ) {
+      throw new BadRequestException(
+        `${level} riddles require correctLetter between A and ${rule.maxLetter}`
+      );
+    }
+  }
+
   constructor(
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,
@@ -190,13 +233,11 @@ export class RiddleMcqQuestionService {
   }): Promise<RiddleMcq> {
     const isExpert = dto.level === 'expert';
 
-    if (!isExpert && (!dto.options || dto.options.length < 2)) {
-      throw new BadRequestException('Riddle requires at least 2 options');
-    }
-
-    if (!isExpert && !dto.correctLetter) {
-      throw new BadRequestException('Riddle questions require correctLetter (A/B/C/D)');
-    }
+    this.validateLevelAnswerRules(dto.level, {
+      options: dto.options,
+      correctLetter: dto.correctLetter,
+      answer: dto.answer,
+    });
 
     const subject = await this.subjectRepo.findOne({ where: { id: dto.subjectId } });
     if (!subject) {
@@ -236,6 +277,19 @@ export class RiddleMcqQuestionService {
     const riddle = await this.riddleMcqRepo.findOne({ where: { id } });
     if (!riddle) {
       throw new NotFoundException('Riddle not found');
+    }
+
+    if (
+      dto.level !== undefined ||
+      dto.options !== undefined ||
+      dto.correctLetter !== undefined ||
+      dto.answer !== undefined
+    ) {
+      this.validateLevelAnswerRules(dto.level ?? riddle.level, {
+        options: dto.options !== undefined ? dto.options : riddle.options,
+        correctLetter: dto.correctLetter !== undefined ? dto.correctLetter : riddle.correctLetter,
+        answer: dto.answer !== undefined ? dto.answer : riddle.answer,
+      });
     }
 
     if (dto.question !== undefined) {
