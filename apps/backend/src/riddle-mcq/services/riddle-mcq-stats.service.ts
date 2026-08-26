@@ -175,112 +175,90 @@ export class RiddleMcqStatsService {
     return this.cacheService.getOrSet(
       cacheKey,
       async () => {
-        const [categoryCounts, subjectCounts, levelCounts, statusCounts, total] = await Promise.all(
-          [
-            this.categoryService.getCategoryCounts(),
-            this.subjectService.getSubjectCounts({
-              category: filters.category,
-              level: filters.level,
-            }),
-            this.getLevelCounts(filters),
-            this.getStatusCounts(filters),
-            this.getTotalCount(filters),
-          ]
-        );
+        const [categoryCounts, subjectCounts, levelStatus] = await Promise.all([
+          this.categoryService.getCategoryCounts(),
+          this.subjectService.getSubjectCounts({
+            category: filters.category,
+            level: filters.level,
+          }),
+          this.getLevelAndStatusCounts(filters),
+        ]);
 
-        return { categoryCounts, subjectCounts, levelCounts, statusCounts, total };
+        return {
+          categoryCounts,
+          subjectCounts,
+          levelCounts: levelStatus.levelCounts,
+          statusCounts: levelStatus.statusCounts,
+          total: levelStatus.total,
+        };
       },
       this.CACHE_TTL.FILTER_COUNTS
     );
   }
 
-  private async getLevelCounts(filters: {
+  /**
+   * Level + status + total counts in two grouped queries (was three separate
+   * queries plus a COUNT). Semantics preserved:
+   * - levelCounts ignore the level filter (selecting a level must not
+   *   collapse its own picker);
+   * - statusCounts respect category/subject/level filters;
+   * - total is the sum over those same status rows.
+   */
+  private async getLevelAndStatusCounts(filters: {
     category?: string;
     subject?: string;
     level?: string;
-  }): Promise<{ level: string; count: number }[]> {
-    let levelQuery = this.riddleRepo
-      .createQueryBuilder('riddle')
-      .leftJoin('riddle.subject', 'subject')
-      .leftJoin('subject.category', 'category')
-      .select('riddle.level', 'level')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('riddle.level');
+  }): Promise<{
+    levelCounts: { level: string; count: number }[];
+    statusCounts: { status: string; count: number }[];
+    total: number;
+  }> {
+    const applyTaxonomyFilters = (query: ReturnType<typeof this.riddleRepo.createQueryBuilder>) => {
+      if (filters.category && filters.category !== 'all') {
+        query.andWhere('category.slug = :category', { category: filters.category });
+      }
+      if (filters.subject && filters.subject !== 'all') {
+        query.andWhere('subject.slug = :subject', { subject: filters.subject });
+      }
+      return query;
+    };
 
-    if (filters.category && filters.category !== 'all') {
-      levelQuery = levelQuery.andWhere('category.slug = :category', {
-        category: filters.category,
-      });
-    }
+    const baseQuery = () =>
+      this.riddleRepo
+        .createQueryBuilder('riddle')
+        .leftJoin('riddle.subject', 'subject')
+        .leftJoin('subject.category', 'category');
 
-    if (filters.subject && filters.subject !== 'all') {
-      levelQuery = levelQuery.andWhere('subject.slug = :subject', { subject: filters.subject });
-    }
+    const [levelRows, statusRows] = await Promise.all([
+      applyTaxonomyFilters(baseQuery())
+        .select('riddle.level', 'level')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('riddle.level')
+        .getRawMany(),
+      (() => {
+        let q = applyTaxonomyFilters(baseQuery())
+          .select('riddle.status', 'status')
+          .addSelect('COUNT(*)', 'count')
+          .groupBy('riddle.status');
+        if (filters.level && filters.level !== 'all') {
+          q = q.andWhere('riddle.level = :level', { level: filters.level });
+        }
+        return q.getRawMany();
+      })(),
+    ]);
 
-    const levelResults = await levelQuery.getRawMany();
-    return levelResults.map((r: { level: string; count: string }) => ({
+    const levelCounts = (levelRows as { level: string; count: string }[]).map((r) => ({
       level: r.level,
       count: parseInt(r.count, 10),
     }));
-  }
 
-  private async getStatusCounts(filters: {
-    category?: string;
-    subject?: string;
-    level?: string;
-  }): Promise<{ status: string; count: number }[]> {
-    let statusQuery = this.riddleRepo
-      .createQueryBuilder('riddle')
-      .leftJoin('riddle.subject', 'subject')
-      .leftJoin('subject.category', 'category')
-      .select('riddle.status', 'status')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('riddle.status');
+    let total = 0;
+    const statusCounts = (statusRows as { status: string; count: string }[]).map((r) => {
+      const count = parseInt(r.count, 10);
+      total += count;
+      return { status: r.status, count };
+    });
 
-    if (filters.category && filters.category !== 'all') {
-      statusQuery = statusQuery.andWhere('category.slug = :category', {
-        category: filters.category,
-      });
-    }
-
-    if (filters.subject && filters.subject !== 'all') {
-      statusQuery = statusQuery.andWhere('subject.slug = :subject', {
-        subject: filters.subject,
-      });
-    }
-
-    if (filters.level && filters.level !== 'all') {
-      statusQuery = statusQuery.andWhere('riddle.level = :level', { level: filters.level });
-    }
-
-    const statusResults = await statusQuery.getRawMany();
-    return statusResults.map((r: { status: string; count: string }) => ({
-      status: r.status,
-      count: parseInt(r.count, 10),
-    }));
-  }
-
-  private async getTotalCount(filters: {
-    category?: string;
-    subject?: string;
-    level?: string;
-  }): Promise<number> {
-    let totalQuery = this.riddleRepo.createQueryBuilder('riddle');
-    totalQuery = totalQuery.leftJoin('riddle.subject', 'subject');
-    totalQuery = totalQuery.leftJoin('subject.category', 'category');
-
-    if (filters.category && filters.category !== 'all') {
-      totalQuery = totalQuery.andWhere('category.slug = :category', {
-        category: filters.category,
-      });
-    }
-    if (filters.subject && filters.subject !== 'all') {
-      totalQuery = totalQuery.andWhere('subject.slug = :subject', { subject: filters.subject });
-    }
-    if (filters.level && filters.level !== 'all') {
-      totalQuery = totalQuery.andWhere('riddle.level = :level', { level: filters.level });
-    }
-
-    return totalQuery.getCount();
+    return { levelCounts, statusCounts, total };
   }
 }
