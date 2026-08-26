@@ -16,7 +16,7 @@
 
 import { useEffect } from 'react';
 
-export type RiddlePlayStatus = 'loading' | 'playing' | 'paused' | 'completed';
+export type RiddlePlayStatus = 'loading' | 'ready' | 'playing' | 'paused' | 'completed';
 
 interface UseRiddleTimersParams {
   status: RiddlePlayStatus;

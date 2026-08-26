@@ -11,17 +11,27 @@
 
 'use client';
 
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Timer, AlertCircle, Save, Pause, Play } from 'lucide-react';
+import {
+  ArrowLeft,
+  Timer,
+  AlertCircle,
+  Save,
+  Pause,
+  Play,
+  Share2,
+  SkipForward,
+} from 'lucide-react';
 
 import { useRiddlePlay } from '@/hooks/use-riddle-play/useRiddlePlay';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
 import { ResumePromptModal } from './components/ResumePromptModal';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
+import { PreRiddleSummary } from './components/PreRiddleSummary';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { formatTimeMMSS } from '@/lib/utils';
 
@@ -57,12 +67,24 @@ export default function RiddlePlayPage(): JSX.Element {
 
 function RiddlePlayPageContent(): JSX.Element {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // URL params — subjectId is canonical; chapterId kept as legacy fallback
   const subjectId = searchParams.get('subjectId') || searchParams.get('chapterId') || 'all';
   const level = searchParams.get('level') || 'all';
   const mode = (searchParams.get('mode') || 'practice') as 'timer' | 'practice';
   const chapterNameParam = searchParams.get('chapterName') || '';
+
+  // Guard: no subject scope in the URL at all -> back to the hub
+  const hasScopeParam = searchParams.has('subjectId') || searchParams.has('chapterId');
+  useEffect(() => {
+    if (!hasScopeParam) router.replace('/riddle-mcq');
+  }, [hasScopeParam, router]);
+
+  // Pre-game picker state
+  const [extraRiddles, setExtraRiddles] = useState(0);
+  // Share toast state
+  const [shareToast, setShareToast] = useState<string | null>(null);
 
   const play = useRiddlePlay({ subjectId, level, mode, chapterNameParam });
 
@@ -72,6 +94,21 @@ function RiddlePlayPageContent(): JSX.Element {
 
   // Determine back path
   const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
+
+  // Share current mix config link
+  const handleShare = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        setShareToast(`Link copied! Riddle ${play.currentIndex + 1} of ${play.riddles.length}`);
+        setTimeout(() => setShareToast(null), 2000);
+      })
+      .catch(() => {
+        setShareToast('Failed to copy link');
+        setTimeout(() => setShareToast(null), 2000);
+      });
+  }, [play.currentIndex, play.riddles.length]);
 
   // Guard: not mounted yet
   if (!play.isMounted) {
@@ -114,9 +151,28 @@ function RiddlePlayPageContent(): JSX.Element {
   // Resume dialog
   if (play.showResumeDialog) {
     return (
-      <ResumePromptModal
-        onResume={play.resumeSession}
-        onStartNew={() => play.startNewSession(play.riddles)}
+      <ResumePromptModal onResume={play.resumeSession} onStartNew={() => play.beginSession(0)} />
+    );
+  }
+
+  // Pre-game summary screen
+  if (play.status === 'ready' && !play.hasStarted) {
+    const baseCount = Math.min(10, play.pool.length);
+    const availableExtra = Math.max(0, play.pool.length - 10);
+    return (
+      <PreRiddleSummary
+        backHref={backPath}
+        mixName={play.chapterName}
+        levelDisplay={
+          level === 'all' ? 'All Levels' : level.charAt(0).toUpperCase() + level.slice(1)
+        }
+        modeDisplay={mode === 'timer' ? 'Timer Mode' : 'Normal Mode'}
+        mode={mode}
+        baseCount={baseCount}
+        availableExtra={availableExtra}
+        extraRiddles={extraRiddles}
+        onExtraRiddlesChange={setExtraRiddles}
+        onStart={() => play.beginSession(extraRiddles)}
       />
     );
   }
@@ -145,12 +201,25 @@ function RiddlePlayPageContent(): JSX.Element {
 
             {/* Chapter info row + Timer — mirrors quiz subject + chapter + timer row */}
             <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
                   {play.chapterName}
                 </span>
                 {level && level !== 'all' && (
                   <span className="text-base text-white/90 capitalize">{level}</span>
+                )}
+                {/* Skipped chip — jump back to next skipped riddle */}
+                {play.skippedCount > 0 && (
+                  <button
+                    onClick={() => {
+                      riddleCardRef.current?.clearBubbles();
+                      play.jumpToNextSkipped();
+                    }}
+                    title="Jump to next skipped riddle"
+                    className="rounded-full bg-yellow-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-yellow-500"
+                  >
+                    Skipped ({play.skippedCount})
+                  </button>
                 )}
               </div>
 
@@ -187,6 +256,15 @@ function RiddlePlayPageContent(): JSX.Element {
                   </button>
                 </div>
               )}
+
+              {/* Share button (normal mode keeps the saved indicator slot) */}
+              <button
+                onClick={handleShare}
+                title="Share this riddle mix"
+                className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
+              >
+                <Share2 className="h-4 w-4" />
+              </button>
 
               {/* Auto-save indicator — only shown non-timer when saved */}
               {!play.isTimerMode && play.lastSaved && (
@@ -258,21 +336,55 @@ function RiddlePlayPageContent(): JSX.Element {
               {play.currentIndex + 1} / {play.riddles.length}
             </span>
 
-            <button
-              onClick={() => {
-                riddleCardRef.current?.clearBubbles();
-                if (play.currentIndex >= play.riddles.length - 1) {
-                  play.setShowConfirmSubmit(true);
-                } else {
-                  play.handleNext();
-                }
-              }}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
-            >
-              {play.currentIndex >= play.riddles.length - 1 ? 'Submit' : 'Next'}
-              <ArrowLeft className="h-4 w-4 rotate-180" />
-            </button>
+            <div className="flex gap-2">
+              {/* Skip Button - shown when current riddle is unanswered */}
+              {!play.answers[play.currentRiddle?.id ?? ''] && play.status === 'playing' && (
+                <button
+                  onClick={() => {
+                    riddleCardRef.current?.clearBubbles();
+                    if (play.currentIndex >= play.riddles.length - 1) {
+                      play.setShowConfirmSubmit(true);
+                    } else {
+                      play.handleSkip();
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/20"
+                >
+                  Skip
+                  <SkipForward className="h-3 w-3" />
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  riddleCardRef.current?.clearBubbles();
+                  if (play.currentIndex >= play.riddles.length - 1) {
+                    play.setShowConfirmSubmit(true);
+                  } else {
+                    play.handleNext();
+                  }
+                }}
+                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
+              >
+                {play.currentIndex >= play.riddles.length - 1 ? 'Submit' : 'Next'}
+                <ArrowLeft className="h-4 w-4 rotate-180" />
+              </button>
+            </div>
           </div>
+
+          {/* Share Toast */}
+          <AnimatePresence>
+            {shareToast && (
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-gray-800 px-4 py-2 text-sm text-white shadow-lg"
+              >
+                {shareToast}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 

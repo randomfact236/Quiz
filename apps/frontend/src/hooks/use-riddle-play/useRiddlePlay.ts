@@ -42,6 +42,9 @@ const AUTO_SAVE_INTERVAL = 10000;
 // Default time limit for timer mode (seconds per riddle)
 const DEFAULT_TIME_PER_RIDDLE = 30;
 
+// Base session size shown on the pre-game summary (extras added via picker)
+const BASE_SESSION_SIZE = 10;
+
 export interface UseRiddlePlayParams {
   subjectId: string;
   level: string;
@@ -54,10 +57,13 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
   // State — mirrors quiz page structure
   const [riddles, setRiddles] = useState<Riddle[]>([]);
+  const [pool, setPool] = useState<Riddle[]>([]);
+  const [hasStarted, setHasStarted] = useState(false);
   const [chapterName, setChapterName] = useState<string>(chapterNameParam || 'Mixed Chapters');
   const [session, setSession] = useState<RiddleSession | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [manuallySkipped, setManuallySkipped] = useState<Set<string>>(new Set());
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [status, setStatus] = useState<RiddlePlayStatus>('loading');
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -111,10 +117,11 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           }[] = [];
 
           if (level && level !== 'all') {
-            const response = await getRandomRiddles(level, 20);
+            // Over-fetch so the pre-game picker can offer extras
+            const response = await getRandomRiddles(level, 40);
             mixed = response.map((r) => ({ ...r, level: r.level || level }));
           } else {
-            mixed = await getMixedRiddles(20);
+            mixed = await getMixedRiddles(40);
           }
 
           fetchedRiddles = mixed.map((r) => adaptRiddleMcq(r as any));
@@ -125,7 +132,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           );
         } else {
           // Pass level filter to backend API (more efficient than frontend filtering)
-          const response = await getRiddlesBySubject(subjectId, 1, 50, level);
+          const response = await getRiddlesBySubject(subjectId, 1, 100, level);
           fetchedRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
             const baseName = chapterNameParam || 'Subject';
@@ -135,7 +142,6 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
         // Shuffle for variety (unbiased Fisher-Yates)
         fetchedRiddles = shuffle(fetchedRiddles);
-        setRiddles(fetchedRiddles);
 
         // Check for a resumable session (two-key store: snapshot + progress)
         const resume = loadRiddleResume();
@@ -145,10 +151,13 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           resume.level === level &&
           Object.keys(resume.answers).length > 0
         ) {
+          setPool(fetchedRiddles);
           setShowResumeDialog(true);
           setStatus('paused'); // Exit loading so dialog renders
         } else {
-          startNewSession(fetchedRiddles);
+          // Hold at the pre-game summary; session starts on user action
+          setPool(fetchedRiddles);
+          setStatus('ready');
         }
       } catch (err) {
         setError('Failed to load riddles. Check your connection and try again.');
@@ -193,6 +202,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         startedAt: newSession.startedAt,
       });
       setSession(newSession);
+      setRiddles(riddleList);
       setAnswers({});
       setCurrentIndex(0);
       setTimeRemaining(totalTimeLimit);
@@ -227,6 +237,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setCurrentIndex(Object.keys(resume.answers).length);
       setTimeRemaining(resume.timeRemaining || 0);
       setStatus('playing');
+      setHasStarted(true);
     }
     setShowResumeDialog(false);
   }, [mode, subjectId, level, chapterName, session]);
@@ -290,6 +301,44 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     },
     [session, status, riddles, currentIndex]
   );
+
+  // Start a new session from the pre-game summary with the chosen size
+  const beginSession = useCallback(
+    (extraCount: number) => {
+      const list = pool.slice(0, BASE_SESSION_SIZE + Math.max(0, extraCount));
+      if (list.length === 0) return;
+      setManuallySkipped(new Set());
+      startNewSession(list);
+      setHasStarted(true);
+    },
+    [pool, startNewSession]
+  );
+
+  // Skip current riddle (marks it; jump back later via the header chip)
+  const handleSkip = useCallback(() => {
+    if (!session || status !== 'playing') return;
+    const currentRiddle = riddles[currentIndex];
+    if (!currentRiddle) return;
+    setManuallySkipped((prev) => new Set(prev).add(currentRiddle.id));
+    if (currentIndex >= riddles.length - 1) {
+      setShowConfirmSubmit(true);
+    } else {
+      setCurrentIndex((prev) => prev + 1);
+    }
+  }, [session, status, riddles, currentIndex]);
+
+  // Jump to the next skipped riddle after the current one (wraps around)
+  const jumpToNextSkipped = useCallback(() => {
+    if (manuallySkipped.size === 0) return;
+    const ids = riddles.map((r) => r.id);
+    const skippedIndices = Array.from(manuallySkipped)
+      .map((id) => ids.indexOf(id))
+      .filter((idx) => idx >= 0)
+      .sort((a, b) => a - b);
+    const after = skippedIndices.find((idx) => idx > currentIndex);
+    const target = after !== undefined ? after : skippedIndices[0];
+    if (target !== undefined) setCurrentIndex(target);
+  }, [manuallySkipped, riddles, currentIndex]);
 
   // Navigation handlers — mirrors quiz goToNext/goToPrevious
   const handleNext = useCallback(() => {
@@ -412,6 +461,8 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   return {
     // data / status
     riddles,
+    pool,
+    hasStarted,
     currentRiddle,
     currentIndex,
     answers,
@@ -425,6 +476,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     answeredCount,
     isTimerMode,
     isTimeUp,
+    skippedCount: manuallySkipped.size,
 
     // dialogs
     showResumeDialog,
@@ -436,6 +488,9 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     setAdditionalRiddles,
 
     // actions
+    beginSession,
+    handleSkip,
+    jumpToNextSkipped,
     startNewSession,
     resumeSession,
     togglePause,

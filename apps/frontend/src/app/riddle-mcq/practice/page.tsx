@@ -1,16 +1,14 @@
 /**
  * ============================================================================
- * Riddle Practice Mode Page
+ * Riddle Practice Mode route (kept alive for back-links)
  * ============================================================================
- * Thin wrapper around the shared RiddleChallengeHub (mode = practice).
- * URL: /riddle-mcq/practice
+ * Mode is now chosen inline on the unified hub. This route redirects there
+ * with the Normal card pre-expanded.
  * ============================================================================
  */
 
-'use client';
-
-import { RiddleChallengeHub } from '@/components/riddle-mcq/RiddleChallengeHub';
+import { redirect } from 'next/navigation';
 
 export default function RiddlePracticePage(): JSX.Element {
-  return <RiddleChallengeHub mode="practice" />;
+  redirect('/riddle-mcq?mode=practice');
 }

@@ -1,16 +1,14 @@
 /**
  * ============================================================================
- * Riddle Timer Challenge Mode Page
+ * Riddle Timer Challenge route (kept alive for back-links)
  * ============================================================================
- * Thin wrapper around the shared RiddleChallengeHub (mode = timer).
- * URL: /riddle-mcq/challenge
+ * Mode is now chosen inline on the unified hub. This route redirects there
+ * with the Timer card pre-expanded.
  * ============================================================================
  */
 
-'use client';
-
-import { RiddleChallengeHub } from '@/components/riddle-mcq/RiddleChallengeHub';
+import { redirect } from 'next/navigation';
 
 export default function RiddleChallengePage(): JSX.Element {
-  return <RiddleChallengeHub mode="timer" />;
+  redirect('/riddle-mcq?mode=timer');
 }
