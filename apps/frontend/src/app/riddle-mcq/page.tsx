@@ -22,15 +22,12 @@ import { useSearchParams } from 'next/navigation';
 import { AlertTriangle, ArrowLeft, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 
 import {
-  getStats,
   getSubjects,
   getCategories,
   getPublicLevelCounts,
   type RiddleMcqCategory,
   type RiddleMcqSubject,
 } from '@/lib/riddle-mcq-api';
-import { SettingsService } from '@/services/settings.service';
-import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 
 // ============================================================================
 // Level metadata (riddles have 4 levels)
@@ -53,17 +50,6 @@ interface CategoryWithCount extends RiddleMcqCategory {
 
 function emptyLevelCounts(): Record<Level, number> {
   return { easy: 0, medium: 0, hard: 0, expert: 0 };
-}
-
-/** Format "Per Riddle" stat from real settings timers, falling back to 30s. */
-function formatPerRiddleTime(timers?: Partial<Record<Level, number>>): string {
-  const values = LEVELS.map((l) => timers?.[l.key]).filter(
-    (v): v is number => typeof v === 'number' && v > 0
-  );
-  if (values.length === 0) return '30s';
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  return min === max ? `${min}s` : `${min}–${max}s`;
 }
 
 // ============================================================================
@@ -211,14 +197,11 @@ function RiddlesPageContent(): JSX.Element {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [totalRiddles, setTotalRiddles] = useState(0);
-  const [totalSubjects, setTotalSubjects] = useState(0);
   const [subjects, setSubjects] = useState<RiddleMcqSubject[]>([]);
   const [categories, setCategories] = useState<CategoryWithCount[]>([]);
   const [allSubjectCounts, setAllSubjectCounts] =
     useState<Record<Level, number>>(emptyLevelCounts());
   const [subjectWise, setSubjectWise] = useState<Record<string, Record<string, number>>>({});
-  const [perRiddleTime, setPerRiddleTime] = useState('30s');
 
   useEffect(() => {
     let cancelled = false;
@@ -233,12 +216,6 @@ function RiddlesPageContent(): JSX.Element {
           getPublicLevelCounts(),
           getSubjects(true),
           getCategories(),
-        ]);
-
-        // Non-critical extras — degrade gracefully
-        const [statsResult, settingsResult] = await Promise.allSettled([
-          getStats(),
-          SettingsService.getSettings(),
         ]);
 
         if (cancelled) return;
@@ -268,21 +245,6 @@ function RiddlesPageContent(): JSX.Element {
           .filter((cat) => cat.riddleTotal > 0)
           .sort((a, b) => b.riddleTotal - a.riddleTotal);
         setCategories(withCounts);
-
-        if (statsResult.status === 'fulfilled' && statsResult.value) {
-          setTotalRiddles(statsResult.value.totalRiddleMcqs);
-          setTotalSubjects(statsResult.value.totalSubjects);
-        } else {
-          setTotalRiddles(counts.completeMix || 0);
-          setTotalSubjects(subjectsData.length);
-        }
-
-        if (
-          settingsResult.status === 'fulfilled' &&
-          settingsResult.value?.riddles?.defaults?.levelTimers
-        ) {
-          setPerRiddleTime(formatPerRiddleTime(settingsResult.value.riddles.defaults.levelTimers));
-        }
 
         setLoading(false);
       } catch (err) {
@@ -382,12 +344,6 @@ function RiddlesPageContent(): JSX.Element {
             Challenge your brain with clever puzzles!
           </p>
         </div>
-
-        <RiddleStatsBanner
-          totalRiddles={totalRiddles}
-          totalSubjects={totalSubjects}
-          perRiddleTime={perRiddleTime}
-        />
 
         {/* Mode selection */}
         <section aria-label="Game mode selection" className="mb-12">
