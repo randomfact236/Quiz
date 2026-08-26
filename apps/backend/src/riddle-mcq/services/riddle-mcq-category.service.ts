@@ -8,6 +8,7 @@ import { invalidateCacheFamilies } from '../../common/content/content-cache.util
 import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcq } from '../entities/riddle-mcq.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
+import { generateSlug } from '../utils/slug.util';
 
 @Injectable()
 export class RiddleMcqCategoryService {
@@ -36,13 +37,6 @@ export class RiddleMcqCategoryService {
       'riddle-mcq:filter-counts',
       'riddle-mcq:stats',
     ]);
-  }
-
-  private generateSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
   }
 
   async findAllCategories(includeInactive: boolean = false): Promise<RiddleMcqCategory[]> {
@@ -85,7 +79,7 @@ export class RiddleMcqCategoryService {
         throw new BadRequestException(`Category with slug "${dto.slug}" already exists`);
       }
     } else {
-      dto.slug = this.generateSlug(dto.name);
+      dto.slug = generateSlug(dto.name);
     }
 
     const category = this.categoryRepo.create({

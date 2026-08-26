@@ -23,7 +23,8 @@ import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqQuestionService } from '../services/riddle-mcq-question.service';
 import { _Public } from '../../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
-import { RiddleMcqBulkService } from '../services/riddle-mcq-bulk.service';
+import { RiddleMcqImportService } from '../services/riddle-mcq-import.service';
+import { RiddleMcqBulkActionsService } from '../services/riddle-mcq-bulk-actions.service';
 import { RiddleMcqStatsService } from '../services/riddle-mcq-stats.service';
 import { PaginationValidator } from '../validators/pagination.validator';
 import { DifficultyValidator } from '../validators/difficulty.validator';
@@ -37,7 +38,8 @@ export class RiddleMcqController {
 
   constructor(
     private readonly questionService: RiddleMcqQuestionService,
-    private readonly bulkService: RiddleMcqBulkService,
+    private readonly importService: RiddleMcqImportService,
+    private readonly bulkActionsService: RiddleMcqBulkActionsService,
     private readonly statsService: RiddleMcqStatsService
   ) {}
 
@@ -129,7 +131,7 @@ export class RiddleMcqController {
   async createRiddlesBulk(
     @Body() dtos: BulkCreateRiddleDto[]
   ): Promise<{ count: number; errors: string[] }> {
-    return this.bulkService.createRiddlesBulk(dtos);
+    return this.importService.createRiddlesBulk(dtos);
   }
 
   @Patch('riddles/:id')
@@ -159,7 +161,7 @@ export class RiddleMcqController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Execute bulk action on riddles (Admin only)' })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
-    return this.bulkService.bulkActionRiddles(dto.ids, dto.action);
+    return this.bulkActionsService.bulkAction(dto.ids, dto.action);
   }
 
   @Get('export')
@@ -171,7 +173,7 @@ export class RiddleMcqController {
   async exportRiddles(
     @Query('category') category?: string
   ): Promise<{ csv: string; filename: string }> {
-    return this.bulkService.exportRiddlesToCSV({ category });
+    return this.importService.exportRiddlesToCSV({ category });
   }
 
   @_Public()

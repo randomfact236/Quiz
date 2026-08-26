@@ -7,6 +7,7 @@ import { invalidateCacheFamilies } from '../../common/content/content-cache.util
 
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
+import { generateSlug } from '../utils/slug.util';
 
 @Injectable()
 export class RiddleMcqSubjectService {
@@ -34,13 +35,6 @@ export class RiddleMcqSubjectService {
       'riddle-mcq:filter-counts',
       'riddle-mcq:stats',
     ]);
-  }
-
-  private generateSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
   }
 
   async findAllSubjects(
@@ -111,7 +105,7 @@ export class RiddleMcqSubjectService {
         throw new BadRequestException(`Subject with slug "${dto.slug}" already exists`);
       }
     } else {
-      dto.slug = this.generateSlug(dto.name);
+      dto.slug = generateSlug(dto.name);
     }
 
     const subject = this.subjectRepo.create({
