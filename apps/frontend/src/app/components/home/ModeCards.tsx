@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 interface ContentOption {
   label: string;
@@ -21,7 +19,7 @@ interface ModeCardConfig {
   options: ContentOption[];
 }
 
-/** These two mode cards are accordions — open by default, collapsible by click. */
+/** These two mode cards use the Topics-style section toggle; open by default. */
 const MODE_CARDS: ModeCardConfig[] = [
   {
     id: 'timer',
@@ -76,85 +74,53 @@ const DIRECT_LINKS = [
   { href: '/jokes', emoji: '😂', title: 'Dad Jokes', subtitle: 'Fun Time' },
 ];
 
-export function ModeCards(): JSX.Element {
-  // Accordion state — both cards start open; each toggles independently
-  const [openIds, setOpenIds] = useState<string[]>(MODE_CARDS.map((c) => c.id));
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Clicking anywhere outside the cards collapses all of them
-  useEffect(() => {
-    if (openIds.length === 0) return;
-
-    const handlePointerDown = (e: PointerEvent): void => {
-      const container = containerRef.current;
-      if (!container) return;
-      const target = e.target as HTMLElement | null;
-      if (!target || !container.contains(target)) {
-        setOpenIds([]);
-      }
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [openIds.length]);
-
-  const toggle = (id: string): void => {
-    setOpenIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-  };
+function ModeSection({ card }: { card: ModeCardConfig }): JSX.Element {
+  // Open by default, matching the Topics section behavior
+  const [expanded, setExpanded] = useState(true);
 
   return (
-    <div ref={containerRef} className="grid grid-cols-2 items-start gap-4">
-      {MODE_CARDS.map((card) => {
-        const isOpen = openIds.includes(card.id);
-        return (
-          <div
-            key={card.id}
-            className="overflow-hidden rounded-2xl bg-white/95 shadow-lg transition-shadow hover:bg-white hover:shadow-xl"
-          >
-            {/* Card header — click toggles this card only */}
-            <button
-              onClick={() => toggle(card.id)}
-              aria-expanded={isOpen}
-              className="flex w-full flex-col items-center p-6 text-center transition-colors hover:bg-white"
-            >
-              <span className="text-4xl">{card.emoji}</span>
-              <span className="mt-2 flex items-center gap-1 font-bold text-gray-800">
-                {card.title}
-                <ChevronDown
-                  className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                />
-              </span>
-              <span className="text-sm text-gray-500">{card.subtitle}</span>
-            </button>
+    <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50"
+        aria-label={expanded ? `Collapse ${card.title} section` : `Expand ${card.title} section`}
+        aria-expanded={expanded}
+      >
+        <h2 className="text-xl font-bold text-gray-800">
+          <span className="mr-2">{card.emoji}</span>
+          {card.title}
+          <span className="ml-2 text-sm font-normal text-gray-500">{card.subtitle}</span>
+        </h2>
+        <span className={`text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`}>
+          ▼
+        </span>
+      </button>
 
-            {/* Quiz / Riddle options — one row, always laid out horizontally */}
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-2 gap-2 px-4 pb-4">
-                    {card.options.map((opt) => (
-                      <Link
-                        key={opt.href}
-                        href={opt.href}
-                        className={`flex flex-col items-center rounded-xl bg-gradient-to-r ${opt.gradient} px-3 py-2.5 text-white shadow-md transition-all hover:scale-[1.04] hover:shadow-lg`}
-                      >
-                        <span className="text-xl leading-none">{opt.emoji}</span>
-                        <span className="mt-1 block font-bold">{opt.label}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      })}
+      {expanded && (
+        <div className="grid grid-cols-2 gap-3 p-4 pt-0 sm:gap-4">
+          {card.options.map((opt) => (
+            <Link
+              key={opt.href}
+              href={opt.href}
+              className={`rounded-2xl bg-gradient-to-r ${opt.gradient} p-5 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-xl`}
+            >
+              <span className="mb-1 block text-3xl">{opt.emoji}</span>
+              <span className="block font-bold">{opt.label}</span>
+              <span className="block text-xs text-white/90">{opt.blurb}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function ModeCards(): JSX.Element {
+  return (
+    <div className="grid grid-cols-2 items-start gap-4">
+      {MODE_CARDS.map((card) => (
+        <ModeSection key={card.id} card={card} />
+      ))}
 
       {DIRECT_LINKS.map((mode) => (
         <Link
