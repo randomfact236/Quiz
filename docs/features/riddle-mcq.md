@@ -52,17 +52,26 @@ Merged from former sections 03 (frontend) and 04 (backend). Frontend paths relat
 
 ### Files
 
-| Area       | Files                                                                                                                                                                                                                      |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Pages      | `page.tsx` home, `challenge/page.tsx`, `practice/page.tsx`, `play/page.tsx`, `results/page.tsx`, error/loading                                                                                                             |
-| Components | `RiddleCard.tsx` (reuses shared AnswerOptions/BubbleEmojiEffect), `RiddleReview`, `RiddleStatsBanner`                                                                                                                      |
-| Libs       | `lib/riddle-mcq-api.ts` (typed client incl. `getPublicLevelCounts`), `lib/riddle-scoring.ts` (single `isRiddleAnswerCorrect`), `lib/riddle-session.ts` (autosave/resume/expiry), `types/riddles.ts` (incl. adaptRiddleMcq) |
+| Area       | Files                                                                                                                                                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pages      | `page.tsx` home, `challenge/page.tsx`, `practice/page.tsx`, `play/page.tsx`, `results/page.tsx`, error/loading                                                                                                          |
+| Components | `RiddleCard.tsx` (reuses shared AnswerOptions/BubbleEmojiEffect), `RiddleReview`, `RiddleStatsBanner`                                                                                                                   |
+| Libs       | `lib/riddle-mcq-api.ts` (typed client incl. `getPublicLevelCounts`), `lib/riddle-scoring.ts` (single `isRiddleAnswerCorrect`), `lib/riddle-resume.ts` (two-key resume store), `types/riddles.ts` (incl. adaptRiddleMcq) |
 
 ### Frontend status
 
-**Done:** full game loop backed by real endpoints; session persistence (10s autosave, resume dialog, expiry cleanup); timer + practice modes with extend-session modal; timer auto-submit runs in a dedicated effect (no side effects inside setState updaters); play/results share one scorer (`lib/riddle-scoring.ts`); challenge/practice hubs use real per-subject×level counts from the public `level-counts` endpoint; subject-wise play works end-to-end (`subjectId` param is canonical, `chapterId` accepted as legacy fallback).
+**Done:** full game loop backed by real endpoints; session persistence via a **two-key resume store** (`lib/riddle-resume.ts`: riddle snapshot written once per session start/extend + lightweight progress key per autosave tick — no full-payload re-serialization, stable 10s interval); timer + practice modes with extend-session modal; timer auto-submit in a dedicated effect; play/results/live-score all share one scorer (`lib/riddle-scoring.ts`); challenge/practice hubs deduplicated into `RiddleChallengeHub` fed by real per-subject×level counts; subject-wise play end-to-end (`subjectId` canonical, `chapterId` accepted as legacy fallback).
 
-**Fixed 2026-08-26:**
+### Quality-gate pass 2026-08-26
+
+1. ~~Dead code~~ — chapter-layer remnants (`adaptChapter`, `DEFAULT_CHAPTER_ICONS`, `RiddleChapter`, `ChapterDisplay`, `toBackendRiddle`), unused session helpers (`createAutoSaveInterval`, `getRiddleHistory`, module-level `calculateTimeTaken`), and backend `RiddleMcqPaginationDto` deleted.
+2. ~~Hub duplication~~ — shared `components/riddle-mcq/RiddleChallengeHub.tsx`; challenge/practice pages are thin mode wrappers (~15 lines each).
+3. ~~Play page monolith~~ — modals extracted to `play/components/` (ResumePromptModal, SubmitConfirmModal, ExtendSessionModal).
+4. ~~Resume payload bloat / autosave interval churn~~ — two-key store mirroring `quiz-mcq-resume.ts`; session fields renamed `chapterId/chapterName` → `subjectId/subjectName`.
+5. ~~Live score ignored expert text~~ — computed via the shared scorer in a memo.
+6. ~~Session save-path side effects~~ — none remaining (verified: all setState updaters pure).
+
+**Fixed 2026-08-26 (earlier same day):**
 
 1. ~~Subject-wise play broken end-to-end~~ — hubs sent `?subjectId=` but play read only `chapterId`; unified (results retry link canonicalized too).
 2. ~~Stale mutation invalidation keys~~ — `useRiddleMutations` now invalidates `['riddle-mcq-categories']`/`['riddle-mcq-subjects']`; category delete also clears questions.

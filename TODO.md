@@ -53,6 +53,13 @@ Frontend:
 
 Deferred (owner-accepted 2026-08-26): JSON import/export; targeted stats cache tuning; session history writes + hint/skip tracking; tests backlog (csv-parser/adapter/scoring/e2e).
 
+Quality-gate pass (2026-08-26, mirrors quiz-mcq):
+
+- **~~Dead code~~** � chapter-layer types (daptChapter/RiddleChapter/ChapterDisplay/DEFAULT_CHAPTER_ICONS/ oBackendRiddle), unused session helpers (createAutoSaveInterval, getRiddleHistory, module-level calculateTimeTaken), backend RiddleMcqPaginationDto deleted.
+- **~~Hub duplication~~** � challenge/practice pages deduplicated into shared components/riddle-mcq/RiddleChallengeHub.tsx.
+- **~~Play page monolith~~** � modals split into play/components/ (ResumePrompt/SubmitConfirm/ExtendSession).
+- **~~Resume/session bloat~~** � two-key resume store (lib/riddle-resume.ts: snapshot once + lightweight progress); stable autosave interval; session fields renamed chapterId/chapterName ? subjectId/subjectName; live score moved to the shared scorer.
+
 ## Resolved
 
 ### image-riddles `stats/overview`: public vs admin-only — **RESOLVED: keep public**
