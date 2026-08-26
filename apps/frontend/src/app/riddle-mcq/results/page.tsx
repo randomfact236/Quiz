@@ -107,8 +107,8 @@ function ResultsContent(): JSX.Element {
     const session = getRiddleSessionById(sessionId);
 
     if (!session) {
-      // Session not found, redirect to riddles home
-      router.push('/riddles');
+      // Session not found, redirect to riddle home
+      router.push('/riddle-mcq');
       return;
     }
 
