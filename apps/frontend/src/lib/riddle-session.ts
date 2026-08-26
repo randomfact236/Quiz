@@ -97,8 +97,8 @@ export function hasActiveSession(): boolean {
  */
 export function createRiddleSession(
   mode: 'timer' | 'practice',
-  chapterId: string | 'all',
-  chapterName: string,
+  subjectId: string | 'all',
+  subjectName: string,
   difficulty: 'all' | 'easy' | 'medium' | 'hard' | 'expert',
   riddles: RiddleSession['riddles'],
   timeLimit?: number
@@ -108,8 +108,8 @@ export function createRiddleSession(
   return {
     id: generateSessionId(),
     mode,
-    chapterId,
-    chapterName,
+    subjectId,
+    subjectName,
     difficulty,
     riddles,
     answers: {},

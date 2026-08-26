@@ -18,11 +18,16 @@ import { ArrowLeft, Timer, AlertCircle, RotateCcw, Save, Pause, Play } from 'luc
 
 import {
   saveRiddleSession,
-  loadRiddleSession,
   clearRiddleSession,
   createRiddleSession,
   setupNavigationWarning,
 } from '@/lib/riddle-session';
+import {
+  loadRiddleResume,
+  saveRiddleResume,
+  saveRiddleResumeQuestions,
+  clearRiddleResume,
+} from '@/lib/riddle-resume';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
@@ -171,12 +176,13 @@ function RiddlePlayPageContent(): JSX.Element {
         fetchedRiddles = [...fetchedRiddles].sort(() => Math.random() - 0.5);
         setRiddles(fetchedRiddles);
 
-        // Check for existing session
-        const existingSession = loadRiddleSession();
+        // Check for a resumable session (two-key store: snapshot + progress)
+        const resume = loadRiddleResume();
         if (
-          existingSession &&
-          existingSession.status === 'in-progress' &&
-          existingSession.chapterId === subjectId
+          resume &&
+          resume.subjectId === subjectId &&
+          resume.level === level &&
+          Object.keys(resume.answers).length > 0
         ) {
           setShowResumeDialog(true);
           setStatus('paused'); // Exit loading so dialog renders
@@ -216,6 +222,14 @@ function RiddlePlayPageContent(): JSX.Element {
         riddleList,
         totalTimeLimit
       );
+      // Two-key store: riddle snapshot written once; progress written per tick
+      const identity = { mode, subjectId, level };
+      saveRiddleResumeQuestions(identity, riddleList);
+      saveRiddleResume(identity, {
+        answers: {},
+        timeRemaining: totalTimeLimit,
+        startedAt: newSession.startedAt,
+      });
       setSession(newSession);
       setAnswers({});
       setCurrentIndex(0);
@@ -223,23 +237,37 @@ function RiddlePlayPageContent(): JSX.Element {
       setStatus('playing');
       setShowResumeDialog(false);
     },
-    [mode, subjectId, chapterName, level, settings]
+    [mode, subjectId, level, chapterName, settings]
   );
 
   // Resume existing session
   const resumeSession = useCallback(() => {
-    const existingSession = loadRiddleSession();
-    if (existingSession) {
-      setSession(existingSession);
-      setRiddles(existingSession.riddles);
-      setAnswers(existingSession.answers);
-      setCurrentIndex(Object.keys(existingSession.answers).length);
-      setTimeRemaining(existingSession.timeRemaining || 0);
-      setChapterName(existingSession.chapterName);
+    const resume = loadRiddleResume();
+    if (resume) {
+      const resumedRiddles = (resume.availableRiddles ?? []) as Riddle[];
+      setSession({
+        ...createRiddleSession(
+          mode,
+          subjectId,
+          chapterName,
+          (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
+          resumedRiddles,
+          resume.timeRemaining || 0
+        ),
+        id: session?.id || `riddle_${Date.now()}`,
+        answers: resume.answers,
+        status: 'in-progress',
+        startedAt: resume.startedAt,
+        timeRemaining: resume.timeRemaining,
+      });
+      setRiddles(resumedRiddles);
+      setAnswers(resume.answers);
+      setCurrentIndex(Object.keys(resume.answers).length);
+      setTimeRemaining(resume.timeRemaining || 0);
       setStatus('playing');
     }
     setShowResumeDialog(false);
-  }, []);
+  }, [mode, subjectId, level, chapterName, session]);
 
   // Timer countdown — pure tick, no side effects inside the state updater
   useEffect(() => {
@@ -257,23 +285,30 @@ function RiddlePlayPageContent(): JSX.Element {
     setStatus((prev) => (prev === 'playing' ? 'paused' : 'playing'));
   }, []);
 
-  // Auto-save
+  // Auto-save — lightweight progress key only (riddle snapshot written once at
+  // session start); refs keep the interval from resetting on every answer
+  const progressRef = useRef({ answers, timeRemaining });
+  useEffect(() => {
+    progressRef.current = { answers, timeRemaining };
+  }, [answers, timeRemaining]);
+
   useEffect(() => {
     if (status !== 'playing' || !session) return;
 
     const interval = setInterval(() => {
-      const updatedSession: RiddleSession = {
-        ...session,
-        answers,
-        timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken(),
-        lastSavedAt: new Date().toISOString(),
-      };
-      saveRiddleSession(updatedSession);
+      saveRiddleResume(
+        { mode, subjectId, level },
+        {
+          answers: progressRef.current.answers,
+          timeRemaining: progressRef.current.timeRemaining,
+          startedAt: session.startedAt,
+        }
+      );
       setLastSaved(new Date());
     }, AUTO_SAVE_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [status, session, answers, timeRemaining, mode]);
+  }, [status, mode, subjectId, level, session]);
 
   // Navigation warning
   useEffect(() => {
@@ -353,7 +388,8 @@ function RiddlePlayPageContent(): JSX.Element {
     };
 
     setStatus('completed');
-    saveRiddleSession(completedSession);
+    saveRiddleSession(completedSession); // full payload, one-time, for results
+    clearRiddleResume();
     setShowConfirmSubmit(false);
     router.push(`/riddle-mcq/results?session=${session.id}`);
   }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
@@ -412,7 +448,8 @@ function RiddlePlayPageContent(): JSX.Element {
       if (session) {
         const updatedSession = { ...session, riddles: [...session.riddles, ...uniqueNew] };
         setSession(updatedSession);
-        saveRiddleSession(updatedSession);
+        // Pool grew — rewrite the snapshot so resume has the full set
+        saveRiddleResumeQuestions({ mode, subjectId, level }, updatedSession.riddles);
       }
 
       setCurrentIndex(riddles.length);

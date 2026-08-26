@@ -103,7 +103,7 @@ function ResultsContent(): JSX.Element {
     if (!result) return;
 
     const gameMode = result.session.mode === 'timer' ? 'Challenge' : 'Practice';
-    const text = `I scored ${result.correctCount}/${result.session.riddles.length} (${Math.round(result.percentage)}%) in the ${result.session.chapterName} Riddle ${gameMode}! Grade: ${result.grade}`;
+    const text = `I scored ${result.correctCount}/${result.session.riddles.length} (${Math.round(result.percentage)}%) in the ${result.session.subjectName} Riddle ${gameMode}! Grade: ${result.grade}`;
 
     try {
       await navigator.clipboard.writeText(text);
@@ -130,7 +130,7 @@ function ResultsContent(): JSX.Element {
   const { session, correctCount, incorrectCount, percentage, grade, byDifficulty } = result;
 
   const backPath = session.mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
-  const retryPath = `/riddle-mcq/play?subjectId=${session.chapterId}&level=${session.difficulty}&mode=${session.mode}`;
+  const retryPath = `/riddle-mcq/play?subjectId=${session.subjectId}&level=${session.difficulty}&mode=${session.mode}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">

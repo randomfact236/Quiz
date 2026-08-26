@@ -96,8 +96,8 @@ export interface Riddle {
 export interface RiddleSession {
   id: string; // UUID for the session
   mode: 'timer' | 'practice';
-  chapterId: string | 'all';
-  chapterName: string;
+  subjectId: string | 'all';
+  subjectName: string;
   difficulty: 'all' | 'easy' | 'medium' | 'hard' | 'expert';
   riddles: Riddle[];
   answers: Record<string, string>; // riddleId -> selectedOption (A/B/C/...)
