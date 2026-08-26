@@ -50,7 +50,7 @@ export function JokesSection({
     setIsLoadingData(true);
     try {
       const [jokePage, cats] = await Promise.all([
-        getAllJokesAdmin({}, 1, 500),
+        getAllJokesAdmin(1, 500),
         getJokeCategoriesAdmin(),
       ]);
       setAllJokes(jokePage.data.map(adaptJokeToAdmin));

@@ -60,6 +60,18 @@ export class DadJokesController {
     return this.jokesService.findAllJokes(pagination);
   }
 
+  @Get('classic/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all classic dad jokes (all statuses, Admin only)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated dad jokes (all statuses)' })
+  findAllClassicAll(
+    @Query() pagination: PaginationDto
+  ): Promise<{ data: DadJoke[]; total: number }> {
+    return this.jokesService.findAllJokesAll(pagination);
+  }
+
   @_Public()
   @Get('classic/random')
   @ApiOperation({ summary: 'Get a random classic dad joke' })

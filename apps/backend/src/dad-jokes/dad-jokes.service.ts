@@ -75,6 +75,20 @@ export class DadJokesService {
     return { data, total };
   }
 
+  /** Admin list — all statuses, no filter. */
+  async findAllJokesAll(pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
+    const page = pagination.page ?? 1;
+    const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
+
+    const [data, total] = await this.jokeRepo.findAndCount({
+      relations: ['category'],
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'DESC' },
+    });
+    return { data, total };
+  }
+
   async findRandomJoke(): Promise<DadJoke> {
     // More efficient random selection using offset with count
     const count = await this.jokeRepo.count({

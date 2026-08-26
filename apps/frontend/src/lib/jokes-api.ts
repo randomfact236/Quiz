@@ -173,17 +173,11 @@ export function adaptJokeToAdmin(raw: AdminJoke): Joke {
   };
 }
 
-export async function getAllJokesAdmin(
-  params: { status?: string; search?: string } = {},
-  page = 1,
-  limit = 100
-): Promise<AdminPaginated<AdminJoke>> {
+export async function getAllJokesAdmin(page = 1, limit = 100): Promise<AdminPaginated<AdminJoke>> {
   const qs = new URLSearchParams();
-  if (params.status && params.status !== 'all') qs.append('status', params.status);
-  if (params.search) qs.append('search', params.search);
   qs.append('page', String(page));
   qs.append('limit', String(limit));
-  const response = await api.get<AdminPaginated<AdminJoke>>(`/jokes/classic?${qs.toString()}`, {
+  const response = await api.get<AdminPaginated<AdminJoke>>(`/jokes/classic/all?${qs.toString()}`, {
     isAdmin: true,
   });
   return response.data;
