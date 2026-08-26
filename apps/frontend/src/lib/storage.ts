@@ -43,7 +43,6 @@ export const STORAGE_KEYS = {
   CHALLENGE_HIGH_SCORE: `${PREFIX}challenge-high-score`,
   // Riddle session and progress (Phase 0)
   RIDDLE_SESSION: `${PREFIX}riddle-session`,
-  RIDDLE_HISTORY: `${PREFIX}riddle-history`,
   RIDDLE_FAVORITES: `${PREFIX}riddle-favorites`,
   RIDDLE_STREAK: `${PREFIX}riddle-streak`,
   RIDDLE_ACHIEVEMENTS: `${PREFIX}riddle-achievements`,

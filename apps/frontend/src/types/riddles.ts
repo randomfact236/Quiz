@@ -32,22 +32,7 @@ export interface RiddleMcqSubject {
   categoryId?: string | null;
   category?: { id: string; name: string; emoji: string; slug: string };
   isActive: boolean;
-  chapters?: RiddleChapter[];
   riddles?: RiddleMcq[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-/** Riddle Chapter - Backend Entity */
-export interface RiddleChapter {
-  id: string;
-  name: string;
-  slug?: string;
-  chapterNumber: number;
-  subjectId: string;
-  subject?: RiddleMcqSubject;
-  riddles?: RiddleMcq[];
-  isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -62,8 +47,6 @@ export interface RiddleMcq {
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   subjectId?: string;
   subject?: RiddleMcqSubject;
-  chapterId?: string;
-  chapter?: RiddleChapter;
   explanation?: string;
   hint?: string;
   answer?: string;
@@ -103,20 +86,6 @@ export interface Riddle {
   status: 'published' | 'draft' | 'trash';
   hint?: string;
   explanation?: string;
-}
-
-/** Chapter with display info for frontend */
-export interface ChapterDisplay {
-  id: string;
-  title: string;
-  name: string; // alias for title
-  icon: string;
-  emoji?: string;
-  chapterNumber: number;
-  subjectId: string;
-  subjectName?: string;
-  riddleCount: number;
-  order: number;
 }
 
 // ============================================================================
@@ -168,21 +137,6 @@ export interface RiddleResult {
   timeBonus?: number;
 }
 
-/** Riddle History Entry - Phase 0: Saved in localStorage */
-export interface RiddleHistoryEntry {
-  sessionId: string;
-  mode: 'timer' | 'practice';
-  chapterId: string | 'all';
-  chapterName?: string;
-  difficulty: string;
-  totalRiddles: number;
-  correctCount: number;
-  percentage: number;
-  grade: string;
-  timeTaken: number;
-  completedAt: string;
-}
-
 // ============================================================================
 // Utility Types
 // ============================================================================
@@ -230,29 +184,6 @@ export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
   { key: 'expert', label: 'Expert', emoji: '🔥', color: 'from-red-400 to-red-600', timeLimit: 20 },
 ];
 
-export const DEFAULT_CHAPTER_ICONS: Record<string, string> = {
-  'Trick Questions': '🤔',
-  'Puzzle Stories': '📖',
-  'Logic Puzzles': '🧩',
-  'Word Play': '🔤',
-  'Math Riddles': '🔢',
-  'Mystery Cases': '🔍',
-  'Brain Teasers': '🧠',
-  'Visual Puzzles': '👁️',
-  'Lateral Thinking': '💭',
-  'Classic Riddles': '📜',
-  'Funny Riddles': '😂',
-  'Mystery Riddles': '🕵️',
-  'Everyday Objects': '🏺',
-  Wordplay: '📝',
-  'Pattern Recognition': '🔲',
-  'Short & Quick': '⚡',
-  'Long Story Riddles': '📚',
-  'Kids Riddles': '🧒',
-  'Animal Riddles': '🦁',
-  'Deduction Riddles': '🔎',
-};
-
 // ============================================================================
 // Adapter Functions
 // ============================================================================
@@ -273,48 +204,10 @@ export function adaptRiddleMcq(riddle: RiddleMcq): Riddle {
     correctAnswer: riddle.correctAnswer,
     difficulty: isOpenEnded ? 'expert' : (riddle.level as Riddle['difficulty']),
     level: isOpenEnded ? 'extreme' : riddle.level,
-    chapter: riddle.chapter?.name || riddle.subject?.name || 'General',
-    chapterId: riddle.chapterId || riddle.subjectId || '',
+    chapter: riddle.subject?.name || 'General',
+    chapterId: riddle.subjectId || '',
     status: 'published',
     hint: riddle.hint || '',
     explanation: riddle.explanation || '',
   };
-}
-
-/**
- * Convert backend RiddleChapter to frontend ChapterDisplay format
- */
-export function adaptChapter(chapter: RiddleChapter): ChapterDisplay {
-  const icon = chapter.subject?.emoji || DEFAULT_CHAPTER_ICONS[chapter.name] || '📚';
-
-  return {
-    id: chapter.id,
-    title: chapter.name,
-    name: chapter.name,
-    icon,
-    emoji: icon,
-    chapterNumber: chapter.chapterNumber,
-    subjectId: chapter.subjectId,
-    subjectName: chapter.subject?.name || '',
-    riddleCount: chapter.riddles?.length || 0,
-    order: chapter.chapterNumber,
-  };
-}
-
-/**
- * Convert frontend Riddle back to backend format
- */
-export function toBackendRiddle(riddle: Partial<Riddle>): Partial<RiddleMcq> {
-  const result: Partial<RiddleMcq> = {};
-
-  if (riddle.id) result.id = riddle.id;
-  if (riddle.question) result.question = riddle.question;
-  if (riddle.options) result.options = riddle.options;
-  if (riddle.correctOption) result.correctAnswer = riddle.correctOption;
-  if (riddle.difficulty) result.level = riddle.difficulty;
-  if (riddle.chapterId) result.chapterId = riddle.chapterId;
-  if (riddle.hint) result.hint = riddle.hint;
-  if (riddle.explanation) result.explanation = riddle.explanation;
-
-  return result;
 }
