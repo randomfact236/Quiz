@@ -44,9 +44,9 @@ interface RiddleCardProps {
   /** Ref to track which riddles have shown bubbles */
   shownBubblesRef?: React.MutableRefObject<Set<string>>;
   /** Per-riddle time remaining (seconds) — shows countdown ring when provided */
-  questionTimeRemaining?: number;
+  questionTimeRemaining?: number | undefined;
   /** Per-riddle time limit (seconds) — used to calculate ring progress */
-  questionTimeLimit?: number;
+  questionTimeLimit?: number | undefined;
 }
 
 export interface RiddleCardRef {

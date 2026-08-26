@@ -24,7 +24,6 @@ import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { formatTimeMMSS } from '@/lib/utils';
-import { PRACTICE_RIDDLE_LIMIT } from '@/hooks/use-riddle-play/useRiddleTimers';
 
 // Loading component — mirrors quiz-mcq/play/page.tsx loading state exactly
 function PlayPageLoading(): JSX.Element {
@@ -224,9 +223,7 @@ function RiddlePlayPageContent(): JSX.Element {
                   score={play.liveScore}
                   maxScore={play.riddles.length}
                   timeUp={play.isTimeUp}
-                  questionTimeRemaining={
-                    mode === 'timer' ? play.timeRemaining : play.practiceRiddleTime
-                  }
+                  questionTimeRemaining={mode === 'timer' ? play.timeRemaining : undefined}
                   questionTimeLimit={
                     mode === 'timer'
                       ? Math.max(
@@ -236,7 +233,7 @@ function RiddlePlayPageContent(): JSX.Element {
                               Math.max(1, play.riddles.length - play.currentIndex)
                           )
                         )
-                      : PRACTICE_RIDDLE_LIMIT
+                      : undefined
                   }
                 />
               </motion.div>

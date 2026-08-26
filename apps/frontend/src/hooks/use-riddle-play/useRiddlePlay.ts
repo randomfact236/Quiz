@@ -231,12 +231,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     setShowResumeDialog(false);
   }, [mode, subjectId, level, chapterName, session]);
 
-  const practiceRiddleTime = useRiddleTimers({
-    status,
-    mode,
-    setTimeRemaining,
-    currentIndex,
-  });
+  useRiddleTimers({ status, mode, setTimeRemaining });
 
   // Toggle pause — mirrors quiz page pauseQuiz/resumeQuiz
   const togglePause = useCallback(() => {
@@ -430,7 +425,6 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     answeredCount,
     isTimerMode,
     isTimeUp,
-    practiceRiddleTime,
 
     // dialogs
     showResumeDialog,
