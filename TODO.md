@@ -55,10 +55,17 @@ Deferred (owner-accepted 2026-08-26): JSON import/export; targeted stats cache t
 
 Quality-gate pass (2026-08-26, mirrors quiz-mcq):
 
-- **~~Dead code~~** � chapter-layer types (daptChapter/RiddleChapter/ChapterDisplay/DEFAULT_CHAPTER_ICONS/ oBackendRiddle), unused session helpers (createAutoSaveInterval, getRiddleHistory, module-level calculateTimeTaken), backend RiddleMcqPaginationDto deleted.
-- **~~Hub duplication~~** � challenge/practice pages deduplicated into shared components/riddle-mcq/RiddleChallengeHub.tsx.
-- **~~Play page monolith~~** � modals split into play/components/ (ResumePrompt/SubmitConfirm/ExtendSession).
-- **~~Resume/session bloat~~** � two-key resume store (lib/riddle-resume.ts: snapshot once + lightweight progress); stable autosave interval; session fields renamed chapterId/chapterName ? subjectId/subjectName; live score moved to the shared scorer.
+- **~~Dead code~~** — chapter-layer types (`adaptChapter`/`RiddleChapter`/`ChapterDisplay`/`DEFAULT_CHAPTER_ICONS`/`toBackendRiddle`), unused session helpers (`createAutoSaveInterval`, `getRiddleHistory`, module-level `calculateTimeTaken`), backend `RiddleMcqPaginationDto` deleted.
+- **~~Hub duplication~~** — challenge/practice pages deduplicated into shared `components/riddle-mcq/RiddleChallengeHub.tsx`.
+- **~~Play page monolith~~** — modals split into `play/components/` (ResumePrompt/SubmitConfirm/ExtendSession).
+- **~~Resume/session bloat~~** — two-key resume store (`lib/riddle-resume.ts`: snapshot once + lightweight progress); stable autosave interval; session fields renamed `chapterId/chapterName` → `subjectId/subjectName`; live score moved to the shared scorer.
+
+Optimization pass (2026-08-26):
+
+- **~~[perf] filter-counts query fan-out~~** — 5 GROUP BY queries consolidated to 3; total derived from combined status rows; semantics preserved. Verified live against DB.
+- **~~[fix] biased shuffle~~** — play page uses shared Fisher-Yates `shuffle()` (`lib/utils.ts`) instead of `sort(() => Math.random() - 0.5)`.
+- **~~[refactor] play page orchestration~~** — extracted to `hooks/use-riddle-play/useRiddlePlay.ts` (+ `useRiddleTimers` clocks module); page is render-only at 285 lines (was 787).
+- Open (UX decision): practice per-riddle countdown is visual-only and does not enforce.
 
 ## Resolved
 
