@@ -83,7 +83,7 @@ export async function apiRequest<T>(
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000);
+  const timeout = setTimeout(() => controller.abort(), 15000);
 
   try {
     const response = await fetch(url, { ...config, signal: controller.signal });
