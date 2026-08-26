@@ -18,6 +18,7 @@ interface FilterControlsProps {
         categoryCounts?: { id: string; count: number }[];
         subjectCounts?: { id: string; count: number }[];
         levelCounts?: { level: string; count: number }[];
+        total?: number;
       }
     | undefined;
   onCategoryChange: (categorySlug: string | undefined) => void;
@@ -81,7 +82,7 @@ export function FilterControls({
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
           }`}
         >
-          All
+          All ({filterCounts?.total ?? 0})
         </button>
         {sortedCategories.map((category) => {
           const categoryCount =
@@ -118,7 +119,7 @@ export function FilterControls({
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
           }`}
         >
-          All
+          All ({filterCounts?.total ?? 0})
         </button>
         {filteredSubjects.map((subject) => {
           const subjectCount =
@@ -155,7 +156,7 @@ export function FilterControls({
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          All
+          All ({filterCounts?.total ?? 0})
         </button>
         {LEVELS.map(({ value, label }) => {
           const levelCount = filterCounts?.levelCounts?.find((l) => l.level === value)?.count || 0;
