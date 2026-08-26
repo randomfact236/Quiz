@@ -1,0 +1,417 @@
+'use client';
+
+/**
+ * ============================================================================
+ * Riddle Challenge Hub (shared by challenge + practice routes)
+ * ============================================================================
+ * Deduplicates the former ~90%-identical challenge/practice pages. The mode
+ * prop drives the few real differences: copy, gradients, and the play URL.
+ * Counts come from the cached public `/riddle-mcq/level-counts` endpoint.
+ * ============================================================================
+ */
+
+import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import {
+  ArrowLeft,
+  Timer,
+  Target,
+  Layers,
+  Grid3X3,
+  GraduationCap,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react';
+
+import { getSubjects, getPublicLevelCounts, type RiddleLevelCounts } from '@/lib/riddle-mcq-api';
+import type { RiddleMcqSubject } from '@/types/riddles';
+
+// Riddle difficulty levels
+const levels = ['Easy', 'Medium', 'Hard', 'Expert'] as const;
+
+type Level = (typeof levels)[number];
+
+const levelEmojis: Record<Level, string> = {
+  Easy: '🌱',
+  Medium: '🌿',
+  Hard: '🌲',
+  Expert: '🔥',
+};
+
+const levelColors: Record<Level, string> = {
+  Easy: 'from-green-400 to-green-600',
+  Medium: 'from-blue-400 to-blue-600',
+  Hard: 'from-orange-400 to-orange-600',
+  Expert: 'from-red-400 to-red-600',
+};
+
+interface SubjectWithStats extends RiddleMcqSubject {
+  riddleCount?: number;
+}
+
+interface LevelCount {
+  subjectWise: Record<string, Record<string, number>>;
+  allSubject: Record<string, number>;
+  completeMix: number;
+}
+
+interface HubConfig {
+  title: string;
+  emoji: string;
+  subjectSectionGradient: string;
+  subjectTileHoverBorder: string;
+  completeMixGradient: string;
+  completeMixBadge: string;
+  mixBlurb: string;
+  mixCta: string;
+  StartIcon: typeof Timer;
+}
+
+const HUB_CONFIG: Record<'timer' | 'practice', HubConfig> = {
+  timer: {
+    title: 'Timer Challenge',
+    emoji: '⏱️',
+    subjectSectionGradient: 'from-indigo-500 to-purple-600',
+    subjectTileHoverBorder: 'hover:border-indigo-200',
+    completeMixGradient: 'from-pink-500 to-rose-600',
+    completeMixBadge: 'bg-pink-100 px-4 py-2 text-pink-700',
+    mixBlurb: 'Challenge yourself with riddles from all subjects and all difficulty levels!',
+    mixCta: 'Start Complete Mix Challenge',
+    StartIcon: Timer,
+  },
+  practice: {
+    title: 'Practice Mode',
+    emoji: '📚',
+    subjectSectionGradient: 'from-blue-500 to-indigo-600',
+    subjectTileHoverBorder: 'hover:border-blue-200',
+    completeMixGradient: 'from-purple-500 to-pink-600',
+    completeMixBadge: 'bg-purple-100 px-4 py-2 text-purple-700',
+    mixBlurb: 'Practice with riddles from all subjects and all difficulty levels!',
+    mixCta: 'Start Complete Mix Practice',
+    StartIcon: GraduationCap,
+  },
+};
+
+export function RiddleChallengeHub({ mode }: { mode: 'timer' | 'practice' }): JSX.Element {
+  const router = useRouter();
+  const config = HUB_CONFIG[mode];
+
+  // Loading and error states
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Data states
+  const [subjects, setSubjects] = useState<SubjectWithStats[]>([]);
+  const [countsData, setCountsData] = useState<RiddleLevelCounts | null>(null);
+
+  // Foldable sections state - default expanded
+  const [subjectWiseOpen, setSubjectWiseOpen] = useState(true);
+  const [allSubjectOpen, setAllSubjectOpen] = useState(true);
+  const [completeMixOpen, setCompleteMixOpen] = useState(true);
+
+  // Fetch data from backend
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch published level counts and subjects from backend (only those with content)
+        const [counts, subjectsData] = await Promise.all([
+          getPublicLevelCounts().catch((err) => {
+            console.error('Failed to load level counts:', err);
+            return null;
+          }),
+          getSubjects(true), // hasContent = true
+        ]);
+
+        setCountsData(counts);
+        setSubjects(subjectsData);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Real per-subject×level published counts from the backend (keyed by subject slug)
+  const levelCounts: LevelCount = useMemo(() => {
+    const emptyLevels = { easy: 0, medium: 0, hard: 0, expert: 0 };
+    if (!countsData) {
+      return {
+        subjectWise: {},
+        allSubject: { ...emptyLevels },
+        completeMix: 0,
+      };
+    }
+
+    const allSubject = { ...emptyLevels };
+    Object.entries(countsData.allSubject || {}).forEach(([level, count]) => {
+      allSubject[level as keyof typeof emptyLevels] = count;
+    });
+
+    return {
+      subjectWise: countsData.subjectWise || {},
+      allSubject,
+      completeMix: countsData.completeMix || 0,
+    };
+  }, [countsData]);
+
+  const getAllSubjectCount = (level: Level): number => {
+    return levelCounts.allSubject[level.toLowerCase()] || 0;
+  };
+
+  const getTotalRiddlesForSubject = (subjectSlug: string): number => {
+    const subjectCounts = levelCounts.subjectWise[subjectSlug] || {};
+    return Object.values(subjectCounts).reduce((sum, count) => sum + count, 0);
+  };
+
+  const handleStartMixForSubject = (subjectId: string) => {
+    router.push(
+      `/riddle-mcq/play?subjectId=${encodeURIComponent(subjectId)}&level=all&mode=${mode}`
+    );
+  };
+
+  const handleStartAllSubjectLevelWise = (level: Level) => {
+    router.push(`/riddle-mcq/play?subjectId=all&level=${level.toLowerCase()}&mode=${mode}`);
+  };
+
+  const handleStartCompleteMix = () => {
+    router.push(`/riddle-mcq/play?subjectId=all&level=all&mode=${mode}`);
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+        <div className="mx-auto max-w-4xl flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto mb-4" />
+            <p className="text-gray-600">Loading subjects from backend...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+        <div className="mx-auto max-w-4xl">
+          <Link
+            href="/riddle-mcq"
+            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Riddles
+          </Link>
+
+          <div className="text-center py-20 bg-white/50 rounded-2xl">
+            <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+      <div className="mx-auto max-w-4xl">
+        <Link
+          href="/riddle-mcq"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Riddles
+        </Link>
+
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 text-center text-4xl font-extrabold text-gray-800 tracking-tight"
+        >
+          <span className="mr-3 opacity-80">{config.emoji}</span>
+          {config.title}
+        </motion.h1>
+
+        <div className="space-y-6">
+          {/* Subject Wise Mix */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="rounded-2xl bg-white shadow-lg overflow-hidden"
+          >
+            <button
+              onClick={() => setSubjectWiseOpen(!subjectWiseOpen)}
+              className={`w-full flex items-center justify-between p-6 bg-gradient-to-r ${config.subjectSectionGradient} text-white`}
+            >
+              <div className="flex items-center gap-4">
+                <Target className="h-8 w-8" />
+                <div className="text-left">
+                  <span className="text-xl font-bold block">Subject Wise Mix</span>
+                  <span className="text-sm opacity-90">
+                    Click a subject to select difficulty level
+                  </span>
+                </div>
+              </div>
+              {subjectWiseOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
+            </button>
+
+            {subjectWiseOpen && (
+              <div className="p-6">
+                {/* Subjects as a flat grid - click to play mix directly */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {subjects.map((subject) => {
+                    const totalRiddles = getTotalRiddlesForSubject(subject.slug);
+                    if (totalRiddles === 0) return null;
+                    const subjectIcon = subject.emoji || '📚';
+
+                    return (
+                      <button
+                        key={subject.id}
+                        onClick={() => handleStartMixForSubject(subject.id)}
+                        disabled={totalRiddles === 0}
+                        className={`w-full flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg bg-white border-2 border-gray-200 ${config.subjectTileHoverBorder} disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        <span className="text-3xl mb-1">{subjectIcon}</span>
+                        <span className="font-semibold text-sm text-gray-800">{subject.name}</span>
+                        <span className="text-xs mt-1 text-gray-500">{totalRiddles} riddles</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {subjects.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No subjects available. Please check back later!</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+
+          {/* All Subject Level Wise Mix */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="rounded-2xl bg-white shadow-lg overflow-hidden"
+          >
+            <button
+              onClick={() => setAllSubjectOpen(!allSubjectOpen)}
+              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
+            >
+              <div className="flex items-center gap-4">
+                <Layers className="h-8 w-8" />
+                <div className="text-left">
+                  <span className="text-xl font-bold block">All Subject Level Wise Mix</span>
+                  <span className="text-sm opacity-90">
+                    Riddles from all subjects at selected difficulty
+                  </span>
+                </div>
+              </div>
+              {allSubjectOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
+            </button>
+
+            {allSubjectOpen && (
+              <div className="p-6">
+                <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {levels.map((level) => {
+                    const count = getAllSubjectCount(level);
+                    return (
+                      <button
+                        key={`all-subject-${level}`}
+                        onClick={() => handleStartAllSubjectLevelWise(level)}
+                        disabled={count === 0}
+                        className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        <span className="text-2xl mb-1">{levelEmojis[level]}</span>
+                        <span className="font-semibold text-sm">{level}</span>
+                        <span className="mt-1 text-xs opacity-90">{count} riddles</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Complete Mix */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="rounded-2xl bg-white shadow-lg overflow-hidden"
+          >
+            <button
+              onClick={() => setCompleteMixOpen(!completeMixOpen)}
+              className={`w-full flex items-center justify-between p-6 bg-gradient-to-r ${config.completeMixGradient} text-white`}
+            >
+              <div className="flex items-center gap-4">
+                <Grid3X3 className="h-8 w-8" />
+                <div className="text-left">
+                  <span className="text-xl font-bold block">Complete Mix</span>
+                  <span className="text-sm opacity-90">All subjects, all levels - Ultimate!</span>
+                </div>
+              </div>
+              {completeMixOpen ? (
+                <ChevronUp className="h-6 w-6" />
+              ) : (
+                <ChevronDown className="h-6 w-6" />
+              )}
+            </button>
+
+            {completeMixOpen && (
+              <div className="p-6 text-center">
+                <p className="mb-4 text-gray-600">{config.mixBlurb}</p>
+                <div className="mb-6 flex justify-center gap-4 text-sm">
+                  <span className={`rounded-full ${config.completeMixBadge}`}>
+                    {levelCounts.completeMix} Total Riddles
+                  </span>
+                  <span className="rounded-full bg-rose-100 px-4 py-2 text-rose-700">
+                    4 Difficulty Levels
+                  </span>
+                </div>
+                <button
+                  onClick={handleStartCompleteMix}
+                  disabled={levelCounts.completeMix === 0}
+                  className={`inline-flex items-center gap-2 rounded-xl bg-gradient-to-r ${config.completeMixGradient} px-8 py-4 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  <config.StartIcon className="h-5 w-5" />
+                  {config.mixCta}
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
