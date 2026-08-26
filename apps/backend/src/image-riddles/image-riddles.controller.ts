@@ -1,8 +1,11 @@
 /**
  * ============================================================================
- * Image Riddles Controller - Enterprise Grade
+ * Image Riddles Controller
  * ============================================================================
- * Quality: 10/10 - Production Ready
+ * Public read endpoints plus the shared admin surfaces for status/bulk
+ * operations (bulk-action, status-counts). Canonical CRUD lives in
+ * AdminImageRiddlesController (/admin/image-riddles/*) — see docs/features/
+ * image-riddles.md "De-duplicate admin CRUD".
  * ============================================================================
  */
 
@@ -10,8 +13,6 @@ import {
   Controller,
   Get,
   Post,
-  Put,
-  Delete,
   Body,
   Param,
   Query,
@@ -24,20 +25,11 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import {
-  CreateImageRiddleDto,
-  UpdateImageRiddleDto,
-  CreateImageRiddleCategoryDto,
-  UpdateImageRiddleCategoryDto,
-  PaginationDto,
-  SearchImageRiddlesDto,
-  BulkImportResultDto,
-} from '../common/dto/base.dto';
+import { PaginationDto, SearchImageRiddlesDto } from '../common/dto/base.dto';
 import {
   BulkActionDto,
   BulkActionResponseDto,
   StatusCountResponseDto,
-  StatusFilterDto,
 } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
@@ -57,13 +49,10 @@ export class ImageRiddlesController {
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get()
-  @ApiOperation({ summary: 'Get all image riddles with pagination' })
+  @ApiOperation({ summary: 'Get all published image riddles with pagination' })
   @ApiResponse({ status: 200, description: 'Returns paginated image riddles' })
-  findAll(
-    @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto
-  ): Promise<{ data: ImageRiddle[]; total: number }> {
-    return this.imageRiddlesService.findAllRiddles(pagination, filter.status);
+  findAll(@Query() pagination: PaginationDto): Promise<{ data: ImageRiddle[]; total: number }> {
+    return this.imageRiddlesService.findAllRiddles(pagination);
   }
 
   @_Public()
@@ -134,61 +123,10 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
-  // ==================== ADMIN ENDPOINTS ====================
-
-  @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new image riddle (Admin only)' })
-  @ApiResponse({ status: 201, description: 'Image riddle created successfully' })
-  create(@Body() dto: CreateImageRiddleDto): Promise<ImageRiddle> {
-    return this.imageRiddlesService.createRiddle(dto);
-  }
-
-  @Post('bulk')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Bulk create image riddles (Admin only)' })
-  @ApiResponse({
-    status: 201,
-    description: 'Image riddles created successfully',
-    type: BulkImportResultDto,
-  })
-  async createBulk(@Body() dto: CreateImageRiddleDto[]): Promise<BulkImportResultDto> {
-    // Validate array is not empty
-    if (!dto || dto.length === 0) {
-      throw new BadRequestException('No riddles provided for bulk creation');
-    }
-
-    const result = await this.imageRiddlesService.createRiddlesBulk(dto);
-    return { success: result.count, failed: result.errors.length, errors: result.errors };
-  }
-
-  @Put(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update an image riddle (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Image riddle updated successfully' })
-  @ApiResponse({ status: 404, description: 'Image riddle not found' })
-  update(@Param('id') id: string, @Body() dto: UpdateImageRiddleDto): Promise<ImageRiddle> {
-    return this.imageRiddlesService.updateRiddle(id, dto);
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete an image riddle (Admin only)' })
-  @ApiResponse({ status: 204, description: 'Image riddle deleted successfully' })
-  async remove(@Param('id') id: string): Promise<void> {
-    await this.imageRiddlesService.deleteRiddle(id);
-  }
-
-  // ==================== BULK ACTIONS ====================
+  // ==================== ADMIN: BULK STATUS OPERATIONS ====================
+  // Canonical CRUD (create/update/delete/categories) lives under
+  // /admin/image-riddles/*; these two remain here because they are the single
+  // status-change surface consumed by the admin panel.
 
   @Post('bulk-action')
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -209,37 +147,6 @@ export class ImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
   async getStatusCounts(): Promise<StatusCountResponseDto> {
     return this.imageRiddlesService.getStatusCounts();
-  }
-
-  @Post('categories')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new image riddle category (Admin only)' })
-  createCategory(@Body() dto: CreateImageRiddleCategoryDto): Promise<ImageRiddleCategory> {
-    return this.imageRiddlesService.createCategory(dto);
-  }
-
-  @Put('categories/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update an image riddle category (Admin only)' })
-  updateCategory(
-    @Param('id') id: string,
-    @Body() dto: UpdateImageRiddleCategoryDto
-  ): Promise<ImageRiddleCategory> {
-    return this.imageRiddlesService.updateCategory(id, dto);
-  }
-
-  @Delete('categories/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete an image riddle category and all its riddles (Admin only)' })
-  async removeCategory(@Param('id') id: string): Promise<void> {
-    await this.imageRiddlesService.deleteCategory(id);
   }
 
   // ==================== STATS ====================

@@ -1,75 +1,52 @@
 # ============================================================================
-# Setup Riddle Database Tables
+# Setup Image Riddle Database
 # ============================================================================
-# This script creates the necessary database tables for the riddle system
+# Runs migrations and seeds the IMAGE RIDDLE tables (image_riddle_categories,
+# image_riddles) from sample-image-riddles.sql.
+#
+# Note: the old version of this script seeded the TEXT riddle tables
+# (riddle_subjects/riddle_chapters/riddle_mcqs) — it was rewritten to target
+# image riddles. Text-riddle seeding lives in src/database/seed-riddles.ts.
 # ============================================================================
 
-Write-Host "🗄️  Setting up Riddle Database Tables..." -ForegroundColor Cyan
+Write-Host "🗄️  Setting up Image Riddle Database..." -ForegroundColor Cyan
 Write-Host ""
 
-# Check if node_modules exists
 if (-not (Test-Path "node_modules")) {
     Write-Host "❌ node_modules not found. Please run 'npm install' first." -ForegroundColor Red
     exit 1
 }
 
-# Run TypeORM migration
+# Run TypeORM migration (creates/updates tables from entities)
 Write-Host "📦 Running database migration..." -ForegroundColor Yellow
 try {
     npx typeorm-ts-node-commonjs migration:run -d ./src/database/data-source.ts
     Write-Host "✅ Migration completed successfully!" -ForegroundColor Green
 } catch {
-    Write-Host "⚠️  Migration command failed. Trying alternative approach..." -ForegroundColor Yellow
-    
-    # Try using ts-node directly
-    try {
-        npx ts-node -e "
-        import { DataSource } from 'typeorm';
-        import { CreateRiddleTables1700000000000 } from './src/database/migrations/1700000000000-CreateRiddleTables';
-        
-        const dataSource = new DataSource({
-          type: 'postgres',
-          host: process.env.DB_HOST || 'localhost',
-          port: parseInt(process.env.DB_PORT || '5432'),
-          username: process.env.DB_USERNAME,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_DATABASE,
-          entities: [],
-          synchronize: false,
-        });
-        
-        async function runMigration() {
-          await dataSource.initialize();
-          const migration = new CreateRiddleTables1700000000000();
-          await migration.up(dataSource.createQueryRunner());
-          console.log('Migration completed!');
-          await dataSource.destroy();
-        }
-        
-        runMigration().catch(console.error);
-        "
-    } catch {
-        Write-Host "❌ Migration failed. Please run the SQL manually:" -ForegroundColor Red
-        Write-Host ""
-        Write-Host "SQL to execute:"
-        Write-Host "-------------"
-        Get-Content ./src/database/migrations/1700000000000-CreateRiddleTables.ts | Select-String "CREATE TABLE" -Context 0,5
-    }
+    Write-Host "❌ Migration failed: $_" -ForegroundColor Red
+    exit 1
 }
 
 Write-Host ""
-Write-Host "🌱 Seeding riddle data..." -ForegroundColor Yellow
+Write-Host "🌱 Seeding image riddle data..." -ForegroundColor Yellow
+
+$pgHost = if ($env:DB_HOST) { $env:DB_HOST } else { "localhost" }
+$pgPort = if ($env:DB_PORT) { $env:DB_PORT } else { "5432" }
+$pgUser = $env:DB_USERNAME
+$pgDb   = $env:DB_DATABASE
+
+$env:PGPASSWORD = $env:DB_PASSWORD
 try {
-    npx ts-node ./src/database/seed-riddles.ts
+    Get-Content ./sample-image-riddles.sql | psql -h $pgHost -p $pgPort -U $pgUser -d $pgDb
     Write-Host "✅ Seed completed!" -ForegroundColor Green
 } catch {
-    Write-Host "❌ Seed failed: $_" -ForegroundColor Red
+    Write-Host "❌ Seed failed (is psql on PATH?): $_" -ForegroundColor Red
+    Write-Host "   Apply sample-image-riddles.sql manually against your database." -ForegroundColor Yellow
+} finally {
+    Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue
 }
 
 Write-Host ""
-Write-Host "🎉 Setup complete! The riddle tables should now exist." -ForegroundColor Green
-Write-Host ""
-Write-Host "You can verify by running these SQL queries in your database:" -ForegroundColor Cyan
-Write-Host "  SELECT * FROM riddle_subjects;" -ForegroundColor Gray
-Write-Host "  SELECT * FROM riddle_chapters;" -ForegroundColor Gray
-Write-Host "  SELECT * FROM riddle_mcqs;" -ForegroundColor Gray
+Write-Host "🎉 Setup complete! Verify with:" -ForegroundColor Green
+Write-Host "  SELECT count(*) FROM image_riddle_categories;" -ForegroundColor Gray
+Write-Host "  SELECT title, difficulty, status FROM image_riddles;" -ForegroundColor Gray

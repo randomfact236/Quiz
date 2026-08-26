@@ -43,7 +43,7 @@ export interface Subject {
 export type MenuSection = string;
 
 /** Joke Type - Enterprise Grade */
-export type Joke = import("@/lib/jokes-api").Joke;
+export type Joke = import('@/lib/jokes-api').Joke;
 
 /** Joke Category Type */
 export interface JokeCategory {
@@ -84,6 +84,8 @@ export interface ImageRiddle {
   timerSeconds?: number | null;
   showTimer: boolean;
   isActive: boolean;
+  categoryId?: string | null;
+  altText?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }

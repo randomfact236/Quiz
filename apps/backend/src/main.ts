@@ -1,8 +1,10 @@
 import { ValidationPipe, Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as express from 'express';
+import * as path from 'path';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
@@ -12,7 +14,7 @@ import { SERVER_PORT, FRONTEND_PORT, CORS_MAX_AGE } from './common/constants/app
  * Setup security middleware
  * @param app - NestJS application instance
  */
-function setupMiddleware(app: INestApplication): void {
+function setupMiddleware(app: NestExpressApplication): void {
   const configService = app.get(ConfigService);
 
   // Security: HTTP headers
@@ -51,6 +53,13 @@ function setupMiddleware(app: INestApplication): void {
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
+  });
+
+  // Serve uploaded media library files from <cwd>/public (bypasses the /api prefix).
+  app.useStaticAssets(path.join(process.cwd(), 'public'), {
+    prefix: '/uploads/',
+    maxAge: '7d',
+    immutable: true,
   });
 }
 
@@ -112,7 +121,7 @@ async function startServer(app: INestApplication, port: number): Promise<void> {
  * Bootstrap the application
  */
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   setupMiddleware(app);

@@ -16,35 +16,19 @@
 import Link from 'next/link';
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import ActionOptions, { IActionOption } from '@/components/image-riddles/ActionOptions';
+import {
+  getImageRiddles,
+  getImageRiddleCategories,
+  type ImageRiddle as ApiImageRiddle,
+  type ImageRiddleCategory,
+} from '@/lib/image-riddles-api';
 import { initialImageRiddles, initialImageRiddleCategories } from '@/lib/initial-data';
-import { getItem, STORAGE_KEYS } from '@/lib/storage';
 
 // -----------------------------------------------------------------------------
 // Types & Interfaces
 // -----------------------------------------------------------------------------
 
-interface ImageRiddle {
-  id: string;
-  title: string;
-  imageUrl: string;
-  answer: string;
-  hint: string | null;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  status: 'published' | 'draft' | 'trash';
-  timerSeconds?: number | null; // Added back for display purposes
-  altText: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  actionOptions?: IActionOption[] | null;
-  useDefaultActions?: boolean;
-}
-
-interface ImageRiddleCategory {
-  id: string;
-  name: string;
-  emoji: string;
-  description: string | null;
-}
+type ImageRiddle = ApiImageRiddle;
 
 const ITEMS_PER_PAGE = 12;
 
@@ -66,10 +50,12 @@ const difficultyLabels = {
   expert: '💎 Expert',
 };
 
+// Mirrors backend settings.imageRiddles.timers (RIDDLE_TIMERS) — single
+// source of truth lives there; keep these values in sync.
 const defaultTimers = {
-  easy: 90,
-  medium: 120,
-  hard: 150,
+  easy: 60,
+  medium: 90,
+  hard: 120,
   expert: 180,
 };
 
@@ -84,44 +70,76 @@ const formatTime = (seconds?: number | null, diff?: string): string => {
 
 function createCheckAnswerAction(now: Date): IActionOption {
   return {
-    id: 'check-answer', label: 'Check Answer', type: 'button', style: 'primary', size: 'md',
-    icon: '✓', iconPosition: 'left', ariaLabel: 'Check your answer', keyboardShortcut: 'Enter',
-    isEnabled: true, isVisible: true, position: 'below_question', order: 10,
+    id: 'check-answer',
+    label: 'Check Answer',
+    type: 'button',
+    style: 'primary',
+    size: 'md',
+    icon: '✓',
+    iconPosition: 'left',
+    ariaLabel: 'Check your answer',
+    keyboardShortcut: 'Enter',
+    isEnabled: true,
+    isVisible: true,
+    position: 'below_question',
+    order: 10,
     tooltip: 'Submit your answer (Enter)',
     visibilityConditions: { showWhenAnswerHidden: true },
-    analyticsEvent: 'answer_checked', createdAt: now, updatedAt: now,
+    analyticsEvent: 'answer_checked',
+    createdAt: now,
+    updatedAt: now,
   };
 }
 
 function createHintAction(now: Date): IActionOption {
   return {
-    id: 'show-hint', label: 'Hint', type: 'button', style: 'warning', size: 'md',
-    icon: '💡', iconPosition: 'left', ariaLabel: 'Show hint', keyboardShortcut: 'Alt+H',
-    isEnabled: true, isVisible: true, position: 'below_question', order: 20,
+    id: 'show-hint',
+    label: 'Hint',
+    type: 'button',
+    style: 'warning',
+    size: 'md',
+    icon: '💡',
+    iconPosition: 'left',
+    ariaLabel: 'Show hint',
+    keyboardShortcut: 'Alt+H',
+    isEnabled: true,
+    isVisible: true,
+    position: 'below_question',
+    order: 20,
     tooltip: 'Get a hint (Alt+H)',
     visibilityConditions: { showWhenAnswerHidden: true },
-    analyticsEvent: 'hint_shown', createdAt: now, updatedAt: now,
+    analyticsEvent: 'hint_shown',
+    createdAt: now,
+    updatedAt: now,
   };
 }
 
 function createGiveUpAction(now: Date): IActionOption {
   return {
-    id: 'give-up', label: 'Reveal', type: 'button', style: 'danger', size: 'md',
-    icon: '👁️', iconPosition: 'left', ariaLabel: 'Reveal answer', keyboardShortcut: 'Alt+G',
-    isEnabled: true, isVisible: true, position: 'below_question', order: 30,
+    id: 'give-up',
+    label: 'Reveal',
+    type: 'button',
+    style: 'danger',
+    size: 'md',
+    icon: '👁️',
+    iconPosition: 'left',
+    ariaLabel: 'Reveal answer',
+    keyboardShortcut: 'Alt+G',
+    isEnabled: true,
+    isVisible: true,
+    position: 'below_question',
+    order: 30,
     tooltip: 'Reveal the answer (Alt+G)',
     visibilityConditions: { showWhenAnswerHidden: true },
-    analyticsEvent: 'gave_up', createdAt: now, updatedAt: now,
+    analyticsEvent: 'gave_up',
+    createdAt: now,
+    updatedAt: now,
   };
 }
 
 function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
   const now = new Date();
-  return [
-    createCheckAnswerAction(now),
-    createHintAction(now),
-    createGiveUpAction(now),
-  ];
+  return [createCheckAnswerAction(now), createHintAction(now), createGiveUpAction(now)];
 }
 
 // -----------------------------------------------------------------------------
@@ -129,18 +147,41 @@ function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
 // -----------------------------------------------------------------------------
 
 export default function ImageRiddlesPage(): JSX.Element {
-  // Data State - Lazy initialized from localStorage
-  const [riddles] = useState<ImageRiddle[]>(() =>
-    getItem(STORAGE_KEYS.IMAGE_RIDDLES, initialImageRiddles)
+  // Data State - API-backed, hardcoded arrays only as offline fallback
+  const [riddles, setRiddles] = useState<ImageRiddle[]>(initialImageRiddles as ImageRiddle[]);
+  const [categories, setCategories] = useState<ImageRiddleCategory[]>(
+    initialImageRiddleCategories as ImageRiddleCategory[]
   );
-  const [categories] = useState<ImageRiddleCategory[]>(() =>
-    getItem(STORAGE_KEYS.IMAGE_RIDDLE_CATEGORIES, initialImageRiddleCategories)
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    let cancelled = false;
+
+    const load = async () => {
+      try {
+        const [riddleResult, categoryList] = await Promise.all([
+          getImageRiddles(1, 200),
+          getImageRiddleCategories(),
+        ]);
+        if (cancelled) return;
+        setRiddles(riddleResult.data);
+        if (categoryList.length > 0) setCategories(categoryList);
+        setLoadError(null);
+      } catch {
+        if (!cancelled) setLoadError('Could not load riddles — showing offline samples.');
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Filter, Sort, & Pagination State
@@ -149,6 +190,16 @@ export default function ImageRiddlesPage(): JSX.Element {
   const [sortOrder, setSortOrder] = useState<'recent' | 'random'>('recent');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Deep links: /image-riddles?category=<name>&difficulty=<level>
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('category');
+    const diff = params.get('difficulty');
+    if (cat) setActiveCategory(cat);
+    if (diff && ['easy', 'medium', 'hard', 'expert'].includes(diff)) setDifficulty(diff);
+  }, []);
 
   // UI State
   const [selectedRiddle, setSelectedRiddle] = useState<ImageRiddle | null>(null);
@@ -175,10 +226,22 @@ export default function ImageRiddlesPage(): JSX.Element {
   }, [isTimerActive, modalTimeLeft, showAnswer]);
 
   // Handlers with Pagination Reset
-  const handleCategoryChange = (cat: string | null) => { setActiveCategory(cat); setCurrentPage(1); };
-  const handleDifficultyChange = (d: string) => { setDifficulty(d); setCurrentPage(1); };
-  const handleSortChange = (s: 'recent' | 'random') => { setSortOrder(s); setCurrentPage(1); };
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => { setSearchQuery(e.target.value); setCurrentPage(1); };
+  const handleCategoryChange = (cat: string | null) => {
+    setActiveCategory(cat);
+    setCurrentPage(1);
+  };
+  const handleDifficultyChange = (d: string) => {
+    setDifficulty(d);
+    setCurrentPage(1);
+  };
+  const handleSortChange = (s: 'recent' | 'random') => {
+    setSortOrder(s);
+    setCurrentPage(1);
+  };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
 
   // Reset page-level game state when selecting a new riddle
   const resetRiddleState = useCallback(() => {
@@ -187,35 +250,43 @@ export default function ImageRiddlesPage(): JSX.Element {
     setShowHint(false);
   }, []);
 
-  const handleRiddleClick = useCallback((riddle: ImageRiddle) => {
-    setSelectedRiddle(riddle);
-    resetRiddleState();
-    const totalSeconds = riddle.timerSeconds ?? defaultTimers[riddle.difficulty as keyof typeof defaultTimers] ?? 90;
-    setModalTimeLeft(totalSeconds);
-    setIsTimerActive(true);
-  }, [resetRiddleState]);
+  const handleRiddleClick = useCallback(
+    (riddle: ImageRiddle) => {
+      setSelectedRiddle(riddle);
+      resetRiddleState();
+      const totalSeconds =
+        riddle.timerSeconds ?? defaultTimers[riddle.difficulty as keyof typeof defaultTimers] ?? 90;
+      setModalTimeLeft(totalSeconds);
+      setIsTimerActive(true);
+    },
+    [resetRiddleState]
+  );
 
   const toggleRevealAnswer = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setRevealedAnswers(prev => ({ ...prev, [id]: !prev[id] }));
+    setRevealedAnswers((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   // Filter and Sort Logic
   const filteredRiddles = useMemo(() => {
     // Only show published riddles
-    let result = riddles.filter(r => r.status === 'published');
+    let result = riddles.filter((r) => r.status === 'published');
+
+    // Filter by category name
+    if (activeCategory) {
+      result = result.filter((r) => r.category?.name === activeCategory);
+    }
 
     // Filter by difficulty
     if (difficulty !== 'all') {
-      result = result.filter(r => r.difficulty === difficulty);
+      result = result.filter((r) => r.difficulty === difficulty);
     }
 
     // Filter by search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(r =>
-        r.title.toLowerCase().includes(q) ||
-        r.answer.toLowerCase().includes(q)
+      result = result.filter(
+        (r) => r.title.toLowerCase().includes(q) || r.answer.toLowerCase().includes(q)
       );
     }
 
@@ -228,7 +299,7 @@ export default function ImageRiddlesPage(): JSX.Element {
     }
 
     return result;
-  }, [riddles, difficulty, sortOrder, searchQuery, isMounted]);
+  }, [riddles, activeCategory, difficulty, sortOrder, searchQuery, isMounted]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredRiddles.length / ITEMS_PER_PAGE);
@@ -237,20 +308,23 @@ export default function ImageRiddlesPage(): JSX.Element {
     return filteredRiddles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredRiddles, currentPage]);
 
-  const navigateRiddle = useCallback((direction: 'next' | 'prev') => {
-    if (!selectedRiddle) return;
-    const currentIndex = filteredRiddles.findIndex(r => r.id === selectedRiddle.id);
-    if (currentIndex === -1) return;
+  const navigateRiddle = useCallback(
+    (direction: 'next' | 'prev') => {
+      if (!selectedRiddle) return;
+      const currentIndex = filteredRiddles.findIndex((r) => r.id === selectedRiddle.id);
+      if (currentIndex === -1) return;
 
-    let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
-    if (newIndex >= filteredRiddles.length) newIndex = 0;
-    if (newIndex < 0) newIndex = filteredRiddles.length - 1;
+      let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+      if (newIndex >= filteredRiddles.length) newIndex = 0;
+      if (newIndex < 0) newIndex = filteredRiddles.length - 1;
 
-    const nextRiddle = filteredRiddles[newIndex];
-    if (nextRiddle) {
-      handleRiddleClick(nextRiddle);
-    }
-  }, [selectedRiddle, filteredRiddles, handleRiddleClick]);
+      const nextRiddle = filteredRiddles[newIndex];
+      if (nextRiddle) {
+        handleRiddleClick(nextRiddle);
+      }
+    },
+    [selectedRiddle, filteredRiddles, handleRiddleClick]
+  );
 
   // Keyboard navigation
   useEffect(() => {
@@ -269,45 +343,48 @@ export default function ImageRiddlesPage(): JSX.Element {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedRiddle, navigateRiddle]);
 
-  const handleAction = useCallback((action: IActionOption, riddle: ImageRiddle) => {
-    switch (action.id) {
-      case 'check-answer':
-        setAttempts(prev => ({ ...prev, [riddle.id]: (prev[riddle.id] || 0) + 1 }));
-        if (userAnswer.trim().toLowerCase() === riddle.answer.toLowerCase()) {
+  const handleAction = useCallback(
+    (action: IActionOption, riddle: ImageRiddle) => {
+      switch (action.id) {
+        case 'check-answer':
+          setAttempts((prev) => ({ ...prev, [riddle.id]: (prev[riddle.id] || 0) + 1 }));
+          if (userAnswer.trim().toLowerCase() === riddle.answer.toLowerCase()) {
+            setShowAnswer(true);
+            setRevealedAnswers((prev) => ({ ...prev, [riddle.id]: true }));
+          } else {
+            setShake(true);
+            setTimeout(() => setShake(false), 500);
+          }
+          break;
+        case 'show-hint':
+          setShowHint(true);
+          break;
+        case 'give-up':
           setShowAnswer(true);
-          setRevealedAnswers(prev => ({ ...prev, [riddle.id]: true }));
-        } else {
-          setShake(true);
-          setTimeout(() => setShake(false), 500);
-        }
-        break;
-      case 'show-hint':
-        setShowHint(true);
-        break;
-      case 'give-up':
-        setShowAnswer(true);
-        setRevealedAnswers(prev => ({ ...prev, [riddle.id]: true }));
-        break;
-      default:
-        break;
-    }
-  }, [userAnswer]);
+          setRevealedAnswers((prev) => ({ ...prev, [riddle.id]: true }));
+          break;
+        default:
+          break;
+      }
+    },
+    [userAnswer]
+  );
 
   // Handle timer auto-expiry
   useEffect(() => {
     if (selectedRiddle && isTimerActive && modalTimeLeft === 0 && !showAnswer) {
       setShowAnswer(true);
-      setRevealedAnswers(prev => ({ ...prev, [selectedRiddle.id]: true }));
+      setRevealedAnswers((prev) => ({ ...prev, [selectedRiddle.id]: true }));
     }
   }, [modalTimeLeft, isTimerActive, showAnswer, selectedRiddle]);
 
   // Score Tracking Header stats
   const score = useMemo(() => {
     const revealedCount = Object.keys(revealedAnswers).length;
-    const publishedRiddles = riddles.filter(r => r.status === 'published');
+    const publishedRiddles = riddles.filter((r) => r.status === 'published');
     return {
       played: revealedCount,
-      total: publishedRiddles.length
+      total: publishedRiddles.length,
     };
   }, [revealedAnswers, riddles]);
 
@@ -315,7 +392,10 @@ export default function ImageRiddlesPage(): JSX.Element {
     <main className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] px-4 py-8">
       <div className="mx-auto max-w-7xl">
         {/* Back Button */}
-        <Link href="/" className="mb-6 inline-block rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md">
+        <Link
+          href="/"
+          className="mb-6 inline-block rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md"
+        >
           ← Back
         </Link>
 
@@ -324,7 +404,9 @@ export default function ImageRiddlesPage(): JSX.Element {
           <h1 className="mb-1 text-4xl font-black tracking-tight text-slate-800">
             🖼️ Image Riddles
           </h1>
-          <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Challenge your perception</p>
+          <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">
+            Challenge your perception
+          </p>
         </div>
         {/* Sticky Content Header (Full Width, Above Grid) */}
         <div className="sticky top-4 z-30 mb-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
@@ -337,7 +419,9 @@ export default function ImageRiddlesPage(): JSX.Element {
             </h2>
             <div className="hidden sm:block h-6 w-px bg-slate-200"></div>
             <div className="flex gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-              <span>Score: <span className="text-indigo-600 ml-1">{score.played}</span> / {score.total}</span>
+              <span>
+                Score: <span className="text-indigo-600 ml-1">{score.played}</span> / {score.total}
+              </span>
             </div>
           </div>
 
@@ -351,7 +435,9 @@ export default function ImageRiddlesPage(): JSX.Element {
                 onChange={handleSearchChange}
                 className="w-full sm:w-64 rounded-full border-2 border-slate-200 bg-white py-2.5 pl-5 pr-12 text-sm font-black text-slate-700 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 focus:outline-none transition-all placeholder:text-slate-400"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">🔍</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">
+                🔍
+              </span>
             </div>
 
             {/* 2. Sort Options (Recent/Mix) */}
@@ -384,14 +470,15 @@ export default function ImageRiddlesPage(): JSX.Element {
                 <option value="hard">🔥 Hard</option>
                 <option value="expert">💎 Expert</option>
               </select>
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">▼</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">
+                ▼
+              </span>
             </div>
           </div>
         </div>
 
         {/* Layout: Sidebar + Main Content */}
         <div className="grid gap-10 lg:grid-cols-4 items-start">
-
           {/* Sticky Sidebar: Categories (2 Column Grid) */}
           <div className="lg:col-span-1 sticky top-[104px] z-20">
             <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 px-1 flex items-center gap-2">
@@ -403,7 +490,9 @@ export default function ImageRiddlesPage(): JSX.Element {
                 className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-white border-slate-100 hover:border-slate-300'}`}
               >
                 <span className="text-xl">🌍</span>
-                <span className="text-[10px] uppercase font-black tracking-widest text-slate-700">All</span>
+                <span className="text-[10px] uppercase font-black tracking-widest text-slate-700">
+                  All
+                </span>
               </button>
               {categories.map((cat) => (
                 <button
@@ -413,7 +502,9 @@ export default function ImageRiddlesPage(): JSX.Element {
                   title={cat.name}
                 >
                   <span className="text-xl">{cat.emoji}</span>
-                  <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 line-clamp-1 break-all w-full px-1">{cat.name}</span>
+                  <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 line-clamp-1 break-all w-full px-1">
+                    {cat.name}
+                  </span>
                 </button>
               ))}
             </div>
@@ -421,105 +512,131 @@ export default function ImageRiddlesPage(): JSX.Element {
 
           {/* Main Area: Grid & Pagination */}
           <div className="lg:col-span-3 space-y-6">
-
-            {/* Riddle Grid (3 columns) */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {paginatedRiddles.map((riddle) => (
-                <div
-                  key={riddle.id}
-                  onClick={() => handleRiddleClick(riddle)}
-                  className="group cursor-pointer flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-100"
-                >
-                  {/* Image Container */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-50">
-                    <img
-                      src={riddle.imageUrl}
-                      alt={riddle.altText || riddle.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-
-                    {/* Top Overlay Gradient for readability */}
-                    <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent"></div>
-
-                    {/* Difficulty Badge (Top Left) */}
-                    <div className={`absolute top-4 left-4 rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md ${difficultyColors[riddle.difficulty]} border-none bg-white/90`}>
-                      {difficultyLabels[riddle.difficulty]}
-                    </div>
-
-                    {/* Time Badge (Top Right) */}
-                    <div className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-slate-900/60 shadow-sm px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
-                      ⏱️ {formatTime(riddle.timerSeconds, riddle.difficulty)}
-                    </div>
+            {isLoading ? (
+              <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
+                <span className="text-6xl mb-6 block animate-pulse">🖼️</span>
+                <h3 className="text-xl font-black text-slate-400">Loading riddles...</h3>
+              </div>
+            ) : (
+              <>
+                {loadError && (
+                  <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-700">
+                    {loadError}
                   </div>
+                )}
 
-                  {/* Content */}
-                  <div className="flex flex-col flex-1 p-5">
-                    <h3 className="mb-4 line-clamp-2 text-lg font-black tracking-tight text-slate-800 leading-snug">
-                      {riddle.title}
-                    </h3>
+                {/* Riddle Grid (3 columns) */}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {paginatedRiddles.map((riddle) => (
+                    <div
+                      key={riddle.id}
+                      onClick={() => handleRiddleClick(riddle)}
+                      className="group cursor-pointer flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-100"
+                    >
+                      {/* Image Container */}
+                      <div className="relative aspect-[4/3] overflow-hidden bg-slate-50">
+                        <img
+                          src={riddle.imageUrl}
+                          alt={riddle.altText || riddle.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
 
-                    {/* Answer Reveal Section */}
-                    <div className="mt-auto border-t border-slate-100 pt-4 flex items-center justify-between gap-3">
-                      <div className={`text-sm font-bold transition-all duration-500 overflow-hidden line-clamp-1 ${revealedAnswers[riddle.id] ? 'text-indigo-600 blur-0' : 'text-slate-300 blur-sm select-none'}`}>
-                        {revealedAnswers[riddle.id] ? riddle.answer : 'Answer Hidden'}
+                        {/* Top Overlay Gradient for readability */}
+                        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent"></div>
+
+                        {/* Difficulty Badge (Top Left) */}
+                        <div
+                          className={`absolute top-4 left-4 rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md ${difficultyColors[riddle.difficulty]} border-none bg-white/90`}
+                        >
+                          {difficultyLabels[riddle.difficulty]}
+                        </div>
+
+                        {/* Time Badge (Top Right) */}
+                        <div className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-slate-900/60 shadow-sm px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
+                          ⏱️ {formatTime(riddle.timerSeconds, riddle.difficulty)}
+                        </div>
                       </div>
+
+                      {/* Content */}
+                      <div className="flex flex-col flex-1 p-5">
+                        <h3 className="mb-4 line-clamp-2 text-lg font-black tracking-tight text-slate-800 leading-snug">
+                          {riddle.title}
+                        </h3>
+
+                        {/* Answer Reveal Section */}
+                        <div className="mt-auto border-t border-slate-100 pt-4 flex items-center justify-between gap-3">
+                          <div
+                            className={`text-sm font-bold transition-all duration-500 overflow-hidden line-clamp-1 ${revealedAnswers[riddle.id] ? 'text-indigo-600 blur-0' : 'text-slate-300 blur-sm select-none'}`}
+                          >
+                            {revealedAnswers[riddle.id] ? riddle.answer : 'Answer Hidden'}
+                          </div>
+                          <button
+                            onClick={(e) => toggleRevealAnswer(riddle.id, e)}
+                            className={`flex-shrink-0 flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${revealedAnswers[riddle.id] ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'}`}
+                          >
+                            {revealedAnswers[riddle.id] ? '👁️ Hide' : '🕶️ Reveal'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {filteredRiddles.length === 0 && (
+                  <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
+                    <span className="text-6xl mb-6 block">✨</span>
+                    <h3 className="text-xl font-black text-slate-400 mb-2">
+                      Nothing matches your search...
+                    </h3>
+                    <button
+                      onClick={() => {
+                        handleCategoryChange(null);
+                        handleDifficultyChange('all');
+                        setSearchQuery('');
+                      }}
+                      className="mt-6 rounded-full bg-indigo-600 px-8 py-3 text-xs font-black uppercase tracking-widest text-white shadow-md hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex flex-col items-center justify-center gap-4 pb-12">
+                    <div className="flex items-center gap-2 rounded-2xl bg-white p-2 shadow-sm border border-slate-100">
                       <button
-                        onClick={(e) => toggleRevealAnswer(riddle.id, e)}
-                        className={`flex-shrink-0 flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${revealedAnswers[riddle.id] ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'}`}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
+                        aria-label="Previous page"
                       >
-                        {revealedAnswers[riddle.id] ? '👁️ Hide' : '🕶️ Reveal'}
+                        <span className="text-xl font-bold">‹</span>
+                      </button>
+
+                      <div className="px-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                        <span className="text-slate-800">{currentPage}</span> / {totalPages}
+                      </div>
+
+                      <button
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
+                        aria-label="Next page"
+                      >
+                        <span className="text-xl font-bold">›</span>
                       </button>
                     </div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                      Showing{' '}
+                      {Math.min(filteredRiddles.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)} -{' '}
+                      {Math.min(filteredRiddles.length, currentPage * ITEMS_PER_PAGE)} of{' '}
+                      {filteredRiddles.length}
+                    </p>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {filteredRiddles.length === 0 && (
-              <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
-                <span className="text-6xl mb-6 block">✨</span>
-                <h3 className="text-xl font-black text-slate-400 mb-2">Nothing matches your search...</h3>
-                <button
-                  onClick={() => { handleCategoryChange(null); handleDifficultyChange('all'); setSearchQuery(''); }}
-                  className="mt-6 rounded-full bg-indigo-600 px-8 py-3 text-xs font-black uppercase tracking-widest text-white shadow-md hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95"
-                >
-                  Clear Filters
-                </button>
-              </div>
+                )}
+              </>
             )}
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-8 flex flex-col items-center justify-center gap-4 pb-12">
-                <div className="flex items-center gap-2 rounded-2xl bg-white p-2 shadow-sm border border-slate-100">
-                  <button
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
-                    aria-label="Previous page"
-                  >
-                    <span className="text-xl font-bold">‹</span>
-                  </button>
-
-                  <div className="px-4 text-xs font-black uppercase tracking-widest text-slate-400">
-                    <span className="text-slate-800">{currentPage}</span> / {totalPages}
-                  </div>
-
-                  <button
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
-                    aria-label="Next page"
-                  >
-                    <span className="text-xl font-bold">›</span>
-                  </button>
-                </div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
-                  Showing {Math.min(filteredRiddles.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)} - {Math.min(filteredRiddles.length, currentPage * ITEMS_PER_PAGE)} of {filteredRiddles.length}
-                </p>
-              </div>
-            )}
-
           </div>
         </div>
 
@@ -538,10 +655,24 @@ export default function ImageRiddlesPage(): JSX.Element {
               {/* Navigation Buttons */}
               {filteredRiddles.length > 1 && (
                 <>
-                  <button onClick={(e) => { e.stopPropagation(); navigateRiddle('prev'); }} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95" aria-label="Previous Riddle">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigateRiddle('prev');
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
+                    aria-label="Previous Riddle"
+                  >
                     <span className="text-2xl font-black">‹</span>
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); navigateRiddle('next'); }} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95" aria-label="Next Riddle">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigateRiddle('next');
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
+                    aria-label="Next Riddle"
+                  >
                     <span className="text-2xl font-black">›</span>
                   </button>
                 </>
@@ -551,7 +682,9 @@ export default function ImageRiddlesPage(): JSX.Element {
               <div className="flex flex-col flex-1 min-h-0 p-6 sm:p-10 mx-8">
                 {/* Top Info Row: Difficulty */}
                 <div className="mb-2">
-                  <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} border-none bg-slate-100/50 shadow-sm`}>
+                  <span
+                    className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[selectedRiddle.difficulty]} border-none bg-slate-100/50 shadow-sm`}
+                  >
                     {difficultyLabels[selectedRiddle.difficulty]}
                   </span>
                 </div>
@@ -561,15 +694,22 @@ export default function ImageRiddlesPage(): JSX.Element {
                     {selectedRiddle.title}
                   </h2>
                   <div className="shrink-0 flex flex-col items-end gap-1">
-                    <div className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}>
+                    <div
+                      className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${isTimerActive ? (modalTimeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}
+                    >
                       <span className="text-sm">⏱️</span>
-                      <span>{Math.floor(modalTimeLeft / 60)}:{(modalTimeLeft % 60).toString().padStart(2, '0')}</span>
+                      <span>
+                        {Math.floor(modalTimeLeft / 60)}:
+                        {(modalTimeLeft % 60).toString().padStart(2, '0')}
+                      </span>
                     </div>
                     {/* Visual Progress Bar */}
                     <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-1000 linear ${modalTimeLeft <= 10 ? 'bg-red-500' : 'bg-indigo-500'}`}
-                        style={{ width: `${(modalTimeLeft / (selectedRiddle.timerSeconds ?? defaultTimers[selectedRiddle.difficulty as keyof typeof defaultTimers] ?? 90)) * 100}%` }}
+                        style={{
+                          width: `${(modalTimeLeft / (selectedRiddle.timerSeconds ?? defaultTimers[selectedRiddle.difficulty as keyof typeof defaultTimers] ?? 90)) * 100}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -584,7 +724,9 @@ export default function ImageRiddlesPage(): JSX.Element {
                   {/* Timer Expiry Pulse Overlay */}
                   {modalTimeLeft === 0 && !showAnswer && (
                     <div className="absolute inset-0 bg-red-500/20 backdrop-blur-[2px] animate-pulse flex items-center justify-center z-10">
-                      <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">TIME&apos;S UP!</span>
+                      <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">
+                        TIME&apos;S UP!
+                      </span>
                     </div>
                   )}
                 </div>
@@ -593,7 +735,10 @@ export default function ImageRiddlesPage(): JSX.Element {
                 {!showAnswer ? (
                   <div className="shrink-0 space-y-4">
                     <div>
-                      <label htmlFor="riddle-answer" className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-400">
+                      <label
+                        htmlFor="riddle-answer"
+                        className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-400"
+                      >
                         Your Guess:
                       </label>
                       <input
@@ -601,7 +746,10 @@ export default function ImageRiddlesPage(): JSX.Element {
                         type="text"
                         value={userAnswer}
                         onChange={(e) => setUserAnswer(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') handleAction({ id: 'check-answer' } as IActionOption, selectedRiddle); }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter')
+                            handleAction({ id: 'check-answer' } as IActionOption, selectedRiddle);
+                        }}
                         placeholder="Type your answer..."
                         className={`w-full rounded-2xl border-2 bg-slate-50 px-6 py-4 text-lg font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:outline-none transition-all shadow-inner ${shake ? 'border-red-500 ring-4 ring-red-100 animate-[shake_0.5s_ease-in-out]' : 'border-slate-100 focus:border-indigo-500'}`}
                         autoFocus
@@ -609,7 +757,10 @@ export default function ImageRiddlesPage(): JSX.Element {
                     </div>
 
                     <ActionOptions
-                      actions={selectedRiddle.actionOptions || getDefaultActions(selectedRiddle)}
+                      actions={
+                        (selectedRiddle.actionOptions as unknown as IActionOption[]) ||
+                        getDefaultActions(selectedRiddle)
+                      }
                       gameState={{
                         isTimerRunning: false,
                         isTimerPaused: false,
@@ -636,10 +787,19 @@ export default function ImageRiddlesPage(): JSX.Element {
                   <div className="shrink-0 animate-in zoom-in-95 duration-300 space-y-4">
                     <div className="rounded-[2.5rem] bg-indigo-600 p-6 sm:p-8 text-center text-white shadow-xl relative overflow-hidden">
                       <div className="absolute -top-10 -right-10 text-9xl opacity-10">✨</div>
-                      <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-indigo-200">The Answer is:</p>
-                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">{selectedRiddle.answer}</h3>
+                      <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-indigo-200">
+                        The Answer is:
+                      </p>
+                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">
+                        {selectedRiddle.answer}
+                      </h3>
                       <div className="inline-flex items-center gap-2 bg-indigo-500/50 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-indigo-100">
-                        <span>Guesses made: <span className="text-white ml-1">{attempts[selectedRiddle.id] || 0}</span></span>
+                        <span>
+                          Guesses made:{' '}
+                          <span className="text-white ml-1">
+                            {attempts[selectedRiddle.id] || 0}
+                          </span>
+                        </span>
                       </div>
                     </div>
                     <button

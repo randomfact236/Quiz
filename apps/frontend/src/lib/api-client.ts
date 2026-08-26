@@ -18,6 +18,11 @@ interface ApiOptions {
   isAdmin?: boolean;
 }
 
+/** Type guard: FormData bodies are sent as-is (browser sets multipart headers). */
+function isFormData(body: unknown): body is FormData {
+  return typeof FormData !== 'undefined' && body instanceof FormData;
+}
+
 interface ApiResponse<T> {
   data: T;
   status: number;
@@ -69,17 +74,20 @@ export async function apiRequest<T>(
   const { isAdmin } = options;
   const token = getToken(isAdmin);
 
+  const formData = isFormData(options.body);
   const config: RequestInit = {
     method: options.method || 'GET',
     headers: {
-      'Content-Type': 'application/json',
+      // Never set Content-Type for FormData — the browser adds the multipart
+      // boundary itself; a manual header would break the request.
+      ...(formData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   };
 
   if (options.body) {
-    config.body = JSON.stringify(options.body);
+    config.body = formData ? (options.body as FormData) : JSON.stringify(options.body);
   }
 
   const controller = new AbortController();

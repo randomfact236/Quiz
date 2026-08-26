@@ -16,6 +16,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { DadJokesModule } from './dad-jokes/dad-jokes.module';
 import { HealthModule } from './health/health.module';
 import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
+import { MediaModule } from './media/media.module';
 import { QuizMcqModule } from './quiz-mcq/quiz-mcq.module';
 import { RiddleMcqModule } from './riddle-mcq/riddle-mcq.module';
 import { SettingsModule } from './settings/settings.module';
@@ -99,6 +100,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     RiddleMcqModule,
     ImageRiddlesModule,
     AdminImageRiddlesModule,
+    MediaModule,
     AdminUsersModule,
     GuestUsersModule,
     UsersModule,

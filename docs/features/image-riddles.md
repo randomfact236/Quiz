@@ -58,9 +58,9 @@
 
 ## 3. What Is Partially Done / In Progress
 
-- **FE-BE integration**: backend finished, frontend never calls it. `page.tsx:133-138` hydrates from localStorage with `initial-data.ts` fallbacks. There is no `image-riddles-api.ts`; grep shows zero frontend references to `/image-riddles` endpoints.
+- **FE-BE integration**: ✅ DONE — `lib/image-riddles-api.ts` added; `page.tsx` fetches `GET /image-riddles?limit=200` + `/categories` on mount with `initial-data.ts` kept only as offline fallback (banner shows on failure).
 - **Admin FE vs Admin BE**: `ImageRiddlesAdminSection.tsx` mirrors admin capabilities (CSV/JSON import-export, trash, status filters) but writes to localStorage; none of `/admin/image-riddles/*` endpoints are consumed and no JWT wiring exists for this admin section.
-- **Status workflow half-wired**: BE creates riddles as DRAFT (`service:267`); the public list filters only `isActive=true` and applies the `status` filter only when explicitly passed (`service:133-136`) â€” DRAFT items are publicly listed by default, while random/category/difficulty/search DO enforce PUBLISHED.
+- **Status workflow half-wired**: ✅ FIXED — `findAllRiddles` and `findRiddleById` now hard-filter `status = PUBLISHED` (mirrors riddle-mcq's public-read rule); the public list no longer accepts a `status` query param (admins use `/admin/image-riddles`). Also fixed while rewiring: the public page's category sidebar set `activeCategory` but `filteredRiddles` never applied it — category filtering now works.
 - **Seeding**: `sample-image-riddles.sql` inserts a `points` column that no longer exists on the entity (`:10`) and omits `status`; the setup script seeds the text-riddle system instead. Neither path reliably produces playable image-riddle rows.
 - **Upload/storage approach**: None. Images are external URL strings only (`imageUrl` text column). No upload endpoint, no local/S3 storage, no `next/image` (raw `<img>` at `page.tsx:435,579`). URL validation exists only in the bulk path (`isValidImageUrl`, `service:383-403`), not single-create/update.
 
@@ -142,11 +142,11 @@ Response shapes: public lists return `{ data, total }`; the admin list returns `
 
 ## 7. Recommended Process To Proceed (prioritized action plan)
 
-1. **Connect the public page to the API** (P0): create `lib/image-riddles-api.ts` mirroring `jokes-api.ts`; replace localStorage hydration in `page.tsx` with fetches to `/image-riddles`, `/image-riddles/categories`, `/image-riddles/search`; keep initial-data only as an offline fallback.
-2. **Fix the DRAFT leak** (P0): default `findAllRiddles` to PUBLISHED for the public controller (or split public/admin finders).
-3. **Wire the admin section** (P1): point `ImageRiddlesAdminSection.tsx` at `/admin/image-riddles/*`, add JWT handling, map soft delete/toggle-active/status-counts to existing UI.
-4. **De-duplicate admin CRUD** (P1): remove admin endpoints from `ImageRiddlesController` (or the whole admin module) and keep one canonical surface with consistent soft-delete semantics.
-5. **Repair seeding** (P1): rewrite `sample-image-riddles.sql` against the current entity (drop `points`, set `status='published'`), fix or remove `setup-riddles-database.ps1`.
+1. ✅ DONE — `lib/image-riddles-api.ts` created; `page.tsx` rewired to `GET /image-riddles` + `/categories`; initial-data kept as offline fallback only.
+2. ✅ DONE — public list + by-id hard-filter PUBLISHED; `status` query param removed from the public list.
+3. ✅ DONE — `ImageRiddlesAdminSection.tsx` wired to `/admin/image-riddles/*` with JWT (`adminApi`): server-backed list/categories, create/update/duplicate/import (bulk create + auto category creation), trash/undo via `POST /image-riddles/bulk-action`, hard delete for trashed rows, inline status cycling via bulk-action, reload-from-server replaces localStorage "Sync Source".
+4. ✅ DONE — duplicate admin CRUD removed from `ImageRiddlesController`; `/admin/image-riddles/*` is now the canonical CRUD surface. The public controller keeps reads + `POST /image-riddles/bulk-action` + `GET /image-riddles/status-counts` (the single status-change surface consumed by the admin panel). Orphaned service methods (`createRiddle`/`updateRiddle`/`deleteRiddle`/category CRUD/bulk-create) and `image-riddles-update.helper.ts` were deleted.
+5. ✅ DONE — `sample-image-riddles.sql` rewritten against the current entity (no `points`, `status='published'`, timer/`useDefaultActions` columns); `setup-riddles-database.ps1` now migrates + seeds image-riddle tables instead of text riddles.
 6. **Add view/like tracking** (P2): new `image_riddle_actions` table or counter columns plus `POST /image-riddles/:id/view|like`; wire ActionOptions `onAnalytics` to it.
 7. **Add image upload** (P2): multipart upload endpoint or presigned URLs; validate URL on create/update (reuse `isValidImageUrl`).
 8. **Harden ActionOptions** (P2): remove `new Function` evaluation of `customCondition` or sandbox it; scope keyboard shortcuts so Space/Enter do not leak globally.
