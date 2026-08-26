@@ -10,7 +10,9 @@ import { RiddleStatsBanner } from './components/RiddleStatsBanner';
 export default function RiddlesPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<{ totalSubjects: number, totalRiddleMcqs: number } | null>(null);
+  const [stats, setStats] = useState<{ totalSubjects: number; totalRiddleMcqs: number } | null>(
+    null
+  );
 
   // Fetch stats from backend
   useEffect(() => {
@@ -24,7 +26,9 @@ export default function RiddlesPage(): JSX.Element {
         setStats(statsData);
       } catch (err) {
         console.error('Failed to fetch stats:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load stats. Please try again later.');
+        setError(
+          err instanceof Error ? err.message : 'Failed to load stats. Please try again later.'
+        );
       } finally {
         setLoading(false);
       }
@@ -34,7 +38,6 @@ export default function RiddlesPage(): JSX.Element {
   }, []);
 
   const totalRiddles = stats?.totalRiddleMcqs || 0;
-
 
   if (loading) {
     return (
@@ -54,7 +57,10 @@ export default function RiddlesPage(): JSX.Element {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
         <div className="mx-auto max-w-6xl">
-          <Link href="/" className="mb-6 inline-block rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60">
+          <Link
+            href="/"
+            className="mb-6 inline-block rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60"
+          >
             ← Back to Home
           </Link>
 
@@ -62,8 +68,9 @@ export default function RiddlesPage(): JSX.Element {
             <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
             <p className="text-gray-600 mb-4">{error}</p>
-            <p className="text-sm text-gray-500 mb-6">API URL: {process.env['NEXT_PUBLIC_API_URL']}</p>
-
+            <p className="text-sm text-gray-500 mb-6">
+              API URL: {process.env['NEXT_PUBLIC_API_URL']}
+            </p>
 
             <div className="flex gap-3 justify-center">
               <button
@@ -84,10 +91,12 @@ export default function RiddlesPage(): JSX.Element {
     <main className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
       <div className="mx-auto max-w-6xl">
         {/* Back Button */}
-        <Link href="/" className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md">
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
+        >
           <span className="text-lg">←</span> Back to Home
         </Link>
-
 
         {/* Header */}
         <div className="mb-12 text-center">
@@ -96,21 +105,26 @@ export default function RiddlesPage(): JSX.Element {
             Riddles
             <span className="mx-3 opacity-80 filter grayscale-[0.2]">🎭</span>
           </h1>
-          <p className="text-xl text-gray-500 font-medium">Challenge your brain with clever puzzles!</p>
+          <p className="text-xl text-gray-500 font-medium">
+            Challenge your brain with clever puzzles!
+          </p>
         </div>
 
-        <RiddleStatsBanner
-          totalRiddles={totalRiddles}
-          totalSubjects={stats?.totalSubjects || 0}
-        />
+        <RiddleStatsBanner totalRiddles={totalRiddles} totalSubjects={stats?.totalSubjects || 0} />
 
         {/* Mode Selection Cards */}
-        <div className="mb-12 grid gap-6 sm:grid-cols-2" role="group" aria-label="Game mode selection">
+        <div
+          className="mb-12 grid gap-6 sm:grid-cols-2"
+          role="group"
+          aria-label="Game mode selection"
+        >
           {/* Timer Challenge Card */}
           <Link href="/riddle-mcq/challenge">
             <div className="rounded-2xl bg-white p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer">
               <div className="mb-4 flex justify-center">
-                <span className="text-4xl" aria-hidden="true">⏱️</span>
+                <span className="text-4xl" aria-hidden="true">
+                  ⏱️
+                </span>
               </div>
               <h2 className="mb-2 text-xl font-bold text-gray-800">Timer Challenge</h2>
               <p className="mb-6 text-gray-500">Race against time!</p>
@@ -124,7 +138,9 @@ export default function RiddlesPage(): JSX.Element {
           <Link href="/riddle-mcq/practice">
             <div className="rounded-2xl bg-white p-8 text-center shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer">
               <div className="mb-4 flex justify-center">
-                <span className="text-4xl" aria-hidden="true">♾️</span>
+                <span className="text-4xl" aria-hidden="true">
+                  ♾️
+                </span>
               </div>
               <h2 className="mb-2 text-xl font-bold text-gray-800">Practice Mode</h2>
               <p className="mb-6 text-gray-500">Take your time</p>
@@ -135,6 +151,15 @@ export default function RiddlesPage(): JSX.Element {
           </Link>
         </div>
 
+        {/* Cross-content entry — unified Quiz/Riddle picker */}
+        <div className="mb-12 text-center">
+          <Link
+            href="/play"
+            className="inline-flex items-center gap-2 rounded-xl bg-white/60 px-5 py-3 font-medium text-gray-700 shadow-sm transition-all hover:bg-white hover:shadow-md"
+          >
+            🎮 Not sure? Open the unified game picker (Quiz + Riddles)
+          </Link>
+        </div>
       </div>
     </main>
   );
