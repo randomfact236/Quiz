@@ -92,6 +92,15 @@ export class QuizMcqController {
   }
 
   @_Public()
+  @Get('level-counts')
+  @ApiOperation({
+    summary: 'Public per-level published question counts for challenge hubs (cached)',
+  })
+  async getLevelCounts() {
+    return this.quizService.getPublicLevelCounts();
+  }
+
+  @_Public()
   @Get('subjects/:slug/meta')
   @ApiOperation({ summary: 'Get subject metadata (name, emoji, slug) - lightweight' })
   @ApiParam({ name: 'slug', example: 'science' })

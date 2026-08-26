@@ -27,7 +27,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-import { getSubjects, getQuestionsBySubject } from '@/lib/quiz-mcq-api';
+import { getSubjects, getPublicLevelCounts } from '@/lib/quiz-mcq-api';
 import type { QuizSubject } from '@/lib/quiz-mcq-api';
 import {
   QUIZ_LEVELS,
@@ -103,55 +103,19 @@ export function ChallengeHub({
 
     const loadData = async () => {
       try {
-        const subjectsData = await getSubjects(false);
-        const subjectList = subjectsData.length > 0 ? subjectsData : [];
-        setSubjects(subjectList);
-
-        const counts: LevelCount = {
-          subjectWise: {},
-          allSubject: {},
-          completeMix: 0,
-        };
-
-        QUIZ_LEVELS.forEach((level) => {
-          counts.allSubject[level.toLowerCase()] = 0;
+        const [subjectsData, counts] = await Promise.all([
+          getSubjects(false),
+          getPublicLevelCounts().catch((error) => {
+            console.error('Failed to load level counts:', error);
+            return { subjectWise: {}, allSubject: {}, completeMix: 0 };
+          }),
+        ]);
+        setSubjects(subjectsData.length > 0 ? subjectsData : []);
+        setLevelCounts({
+          subjectWise: counts.subjectWise || {},
+          allSubject: counts.allSubject || {},
+          completeMix: counts.completeMix || 0,
         });
-
-        for (const subject of subjectsData) {
-          counts.subjectWise[subject.slug] = {};
-
-          try {
-            const questionsResult = await getQuestionsBySubject(subject.slug, {
-              status: 'published',
-            });
-            const questions = questionsResult.data;
-
-            questions.forEach((q) => {
-              if (q.level) {
-                const level = q.level.toLowerCase();
-
-                if (!counts.subjectWise[subject.slug]) {
-                  counts.subjectWise[subject.slug] = {};
-                }
-                const subjectCounts = counts.subjectWise[subject.slug]!;
-                if (!subjectCounts[level]) {
-                  subjectCounts[level] = 0;
-                }
-                subjectCounts[level]++;
-
-                if (counts.allSubject[level] !== undefined) {
-                  counts.allSubject[level]++;
-                }
-
-                counts.completeMix++;
-              }
-            });
-          } catch (error) {
-            console.error(`Failed to load questions for subject: ${subject.slug}`, error);
-          }
-        }
-
-        setLevelCounts(counts);
       } catch (error) {
         console.error('Failed to load subjects:', error);
       }

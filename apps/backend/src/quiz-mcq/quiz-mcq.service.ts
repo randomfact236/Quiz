@@ -44,6 +44,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
   };
 
   private readonly FILTER_COUNTS_TTL_S = 300;
+  private readonly PUBLIC_COUNTS_TTL_S = 300;
 
   protected get itemNoun(): string {
     return 'Question';
@@ -68,7 +69,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       cacheService,
       moduleKey: 'quiz',
       // Track B: family-scoped invalidation (was sledgehammer 'quiz:*').
-      cacheFamilies: ['quiz:questions', 'quiz:filter-counts'],
+      cacheFamilies: ['quiz:questions', 'quiz:filter-counts', 'quiz:public-level-counts'],
       itemAlias: 'question',
       chaptersRelation: 'chapters',
       chapterItemsRelation: 'questions',
@@ -129,6 +130,56 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
 
   deleteSubject(id: string): Promise<void> {
     return this.deleteSubjectCascade(id);
+  }
+
+  // ==================== PUBLIC LEVEL COUNTS ====================
+
+  /**
+   * Public per-level published counts for challenge hubs — one grouped query
+   * (replaces the client-side whole-subject fetch loop). Cached; invalidated
+   * with the other quiz families on any mutation.
+   */
+  async getPublicLevelCounts(): Promise<{
+    subjectWise: Record<string, Record<string, number>>;
+    allSubject: Record<string, number>;
+    completeMix: number;
+  }> {
+    return this.cache.getOrSet(
+      'quiz:public-level-counts',
+      async () => {
+        const rows: { slug: string | null; level: string; count: string }[] =
+          await this.deps.itemRepo
+            .createQueryBuilder('question')
+            .leftJoin('question.chapter', 'chapter')
+            .leftJoin('chapter.subject', 'subject')
+            .select('subject.slug', 'slug')
+            .addSelect('question.level', 'level')
+            .addSelect('COUNT(*)', 'count')
+            .where('question.status = :status', { status: ContentStatus.PUBLISHED })
+            .andWhere('subject.slug IS NOT NULL')
+            .groupBy('subject.slug')
+            .addGroupBy('question.level')
+            .getRawMany();
+
+        const subjectWise: Record<string, Record<string, number>> = {};
+        const allSubject: Record<string, number> = {};
+        let completeMix = 0;
+
+        for (const row of rows) {
+          const count = parseInt(row.count, 10);
+          const slug = row.slug as string;
+          const level = row.level.toLowerCase();
+
+          subjectWise[slug] = subjectWise[slug] || {};
+          subjectWise[slug][level] = count;
+          allSubject[level] = (allSubject[level] || 0) + count;
+          completeMix += count;
+        }
+
+        return { subjectWise, allSubject, completeMix };
+      },
+      this.PUBLIC_COUNTS_TTL_S
+    );
   }
 
   // ==================== CHAPTERS ====================

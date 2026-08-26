@@ -125,6 +125,18 @@ export async function getSubjects(hasContent: boolean = false): Promise<QuizSubj
   return response.data.data;
 }
 
+/** Public per-level question counts for challenge hubs (single grouped query, cached). */
+export interface PublicLevelCounts {
+  subjectWise: Record<string, Record<string, number>>;
+  allSubject: Record<string, number>;
+  completeMix: number;
+}
+
+export async function getPublicLevelCounts(): Promise<PublicLevelCounts> {
+  const response = await api.get<PublicLevelCounts>('/quiz-mcq/level-counts');
+  return response.data;
+}
+
 export async function getSubjectMeta(
   slug: string
 ): Promise<{ name: string; emoji: string; slug: string }> {
