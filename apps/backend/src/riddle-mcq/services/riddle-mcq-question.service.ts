@@ -54,7 +54,12 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
       cacheService,
       moduleKey: 'riddle-mcq',
       // Track B: family-scoped invalidation (was sledgehammer 'riddle-mcq:*').
-      cacheFamilies: ['riddle-mcq:questions', 'riddle-mcq:filter-counts', 'riddle-mcq:stats'],
+      cacheFamilies: [
+        'riddle-mcq:questions',
+        'riddle-mcq:subjects',
+        'riddle-mcq:filter-counts',
+        'riddle-mcq:stats',
+      ],
       itemAlias: 'riddle',
       flat: true,
       randomMax: 100,

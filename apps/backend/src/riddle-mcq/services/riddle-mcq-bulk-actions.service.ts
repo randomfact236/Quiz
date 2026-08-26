@@ -21,6 +21,7 @@ export class RiddleMcqBulkActionsService {
   private async clearCaches(): Promise<void> {
     await invalidateCacheFamilies(this.cacheService, [
       'riddle-mcq:questions',
+      'riddle-mcq:subjects',
       'riddle-mcq:filter-counts',
       'riddle-mcq:stats',
     ]);
