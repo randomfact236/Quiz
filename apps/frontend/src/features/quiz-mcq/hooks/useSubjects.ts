@@ -12,7 +12,7 @@ export function useSubjects() {
   // Query
   const query = useQuery({
     queryKey: SUBJECTS_KEY,
-    queryFn: () => getSubjects(),
+    queryFn: () => getSubjects(false, true), // admin surface: include inactive subjects
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

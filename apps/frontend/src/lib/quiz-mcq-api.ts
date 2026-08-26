@@ -118,9 +118,15 @@ export interface BulkQuestionDto {
 // Subjects API
 // ============================================================================
 
-export async function getSubjects(hasContent: boolean = false): Promise<QuizSubject[]> {
+export async function getSubjects(
+  hasContent: boolean = false,
+  includeInactive: boolean = false
+): Promise<QuizSubject[]> {
+  // Visibility: inactive subjects are excluded server-side unless explicitly
+  // requested (admin surfaces).
+  const suffix = includeInactive ? '&includeInactive=true' : '';
   const response = await api.get<{ data: QuizSubject[]; total: number }>(
-    `/quiz-mcq/subjects?hasContent=${hasContent}`
+    `/quiz-mcq/subjects?hasContent=${hasContent}${suffix}`
   );
   return response.data.data;
 }

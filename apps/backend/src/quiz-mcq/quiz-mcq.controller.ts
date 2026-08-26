@@ -85,10 +85,20 @@ export class QuizMcqController {
   @_Public()
   @Get('subjects')
   @ApiOperation({ summary: 'Get all subjects' })
+  @ApiQuery({
+    name: 'includeInactive',
+    required: false,
+    description: 'Admin only in practice: include INACTIVE subjects (default false)',
+  })
   async getAllSubjects(
-    @Query('hasContent') hasContent?: string
+    @Query('hasContent') hasContent?: string,
+    @Query('includeInactive') includeInactive?: string
   ): Promise<{ data: Subject[]; total: number }> {
-    return this.quizService.findAllSubjects(undefined, hasContent === 'true');
+    return this.quizService.findAllSubjects(
+      undefined,
+      hasContent === 'true',
+      includeInactive === 'true'
+    );
   }
 
   @_Public()

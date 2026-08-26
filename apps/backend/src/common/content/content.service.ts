@@ -129,13 +129,22 @@ export abstract class ContentServiceBase<
 
   async findAllSubjects(
     pagination?: PaginationDto,
-    hasContentOnly: boolean = false
+    hasContentOnly: boolean = false,
+    /**
+     * Visibility: public callers should leave this false so INACTIVE subjects
+     * never enter responses; admin surfaces pass true.
+     */
+    includeInactive: boolean = false
   ): Promise<{ data: TSubject[]; total: number }> {
     const page = pagination?.page ?? 1;
     const limit = pagination?.limit ?? 100;
 
     const alias = 'subject';
     const query = this.deps.subjectRepo.createQueryBuilder(alias).orderBy(`${alias}.name`, 'ASC');
+
+    if (!includeInactive) {
+      query.where(`${alias}.isActive = :isActive`, { isActive: true });
+    }
 
     if (hasContentOnly) {
       const ch = `${alias}_chapter`;

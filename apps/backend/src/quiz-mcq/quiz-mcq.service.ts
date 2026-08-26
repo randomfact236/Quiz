@@ -92,10 +92,11 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
 
   async findAllSubjects(
     pagination?: PaginationDto,
-    hasContentOnly: boolean = false
+    hasContentOnly: boolean = false,
+    includeInactive: boolean = false
   ): Promise<{ data: Subject[]; total: number }> {
     // NOTE: No caching for subjects list — ensures deletions are immediately reflected.
-    return super.findAllSubjects(pagination, hasContentOnly);
+    return super.findAllSubjects(pagination, hasContentOnly, includeInactive);
   }
 
   async findSubjectMeta(slug: string): Promise<{ name: string; emoji: string; slug: string }> {
