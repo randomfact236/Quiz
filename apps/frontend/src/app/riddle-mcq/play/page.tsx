@@ -24,6 +24,7 @@ import {
   setupNavigationWarning,
 } from '@/lib/riddle-session';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
+import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
@@ -339,32 +340,12 @@ function RiddlePlayPageContent(): JSX.Element {
     }
   }, [currentIndex]);
 
-  // Helper function to check if answer is correct (handles expert/open-ended normalization)
-  const isAnswerCorrect = (
-    riddle: (typeof riddles)[0],
-    userAnswer: string | undefined
-  ): boolean => {
-    if (!userAnswer) return false;
-    const isExpert = riddle.level === 'extreme' || riddle.difficulty === 'expert';
-    if (isExpert) {
-      // Expert level: case-insensitive, trim whitespace
-      const normalizedUser = userAnswer.toLowerCase().trim();
-      const normalizedCorrect =
-        riddle.correctAnswer?.toLowerCase().trim() ||
-        riddle.correctOption?.toLowerCase().trim() ||
-        '';
-      return normalizedUser === normalizedCorrect;
-    }
-    // MCQ level: direct letter comparison
-    return userAnswer === riddle.correctOption;
-  };
-
   const handleSubmit = useCallback(() => {
     if (!session) return;
 
     let correctCount = 0;
     riddles.forEach((r) => {
-      if (isAnswerCorrect(r, answers[r.id])) correctCount++;
+      if (isRiddleAnswerCorrect(r, answers[r.id])) correctCount++;
     });
 
     const completedSession: RiddleSession = {
