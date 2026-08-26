@@ -101,22 +101,16 @@ Still open (refactor-class, tracked in plan/code-quality-plan.md):
 
 1. ~~Hub duplication~~ — FIXED 2026-08-25: shared `ChallengeHub` component + thin route wrappers; level maps deduped into `lib/quiz-mcq-constants.ts`.
 2. ~~Resume-state bloat~~ — FIXED 2026-08-25: two-key store (`quiz-resume-questions` snapshot written once + lightweight progress key per change).
-3. Per-question timer resets on going _back_ — free time.
+3. ~~Per-question timer resets on going _back_~~ — FIXED 2026-08-25: only forward navigation resets the per-question clock.
 4. ~~Double-completion race~~ — FIXED 2026-08-25: single guarded completion effect (`didSaveRef`); no side effects inside setState updaters.
-5. `router.replace` churn on every answer.
+5. ~~`router.replace` churn on every answer~~ — FIXED 2026-08-25: question-number URL sync uses `history.replaceState`.
 6. ModeSelection perpetual "Loading..." when a chapter has zero questions.
-7. Admin coupling — `features/quiz-mcq` hardcodes `isAdmin: true`; outside tailwind globs.
+7. ~~Admin coupling — hardcoded isAdmin flags~~ — FIXED 2026-08-25: `adminApi` wrapper; tailwind globs include `src/features/**`.
 8. ~~Dead components~~ — QuizMcqTimer/QuizMcqNavigation deleted 2026-08-25.
 9. ~~Engine untested~~ — `__tests__/useQuizMcq.test.tsx` (6 tests): completion idempotence, wiring, resume round-trip, pause/resume, extend clamping.
-
-## E. Roadmap (prioritized)
-
-1. ~~**P0 correctness**: updateQuestion logic + §D bugs 1–3~~ — DONE 2026-08-25 (shared scorer + tests).
-2. ~~**P0 wiring**: `saveQuizResult()` + `checkAchievements()` in completion effect~~ — DONE 2026-08-25.
-3. ~~**P0 backend**: random/mixed shuffle; slug collisions~~ — DONE via Track A2/Track B.
-4. ~~**P1 refactor**: challenge hubs, save-path extraction, resume payload trim, dead components~~ — ALL DONE 2026-08-25 (+ play page split into 5 subcomponents).
-5. **P2**: `POST /quiz-mcq/sessions` for cross-device history; replace client-side count loops with `GET /quiz-mcq/filter-counts`.
-6. **P3**: split play page into subcomponents; rename `features/quiz-mcq` → `features/quiz-mcq-admin`; finish celebration tiers.
+10. ~~Hook monolith / hub N+1 counts~~ — useQuizMcq split into utils/timers/resume modules (~484 lines); hubs use the public cached `/quiz-mcq/level-counts` endpoint.
+11. **P2**: `POST /quiz-mcq/sessions` for cross-device history; replace client-side count loops with `GET /quiz-mcq/filter-counts`.
+12. **P3**: split play page into subcomponents; rename `features/quiz-mcq` → `features/quiz-mcq-admin`; finish celebration tiers.
 
 ## Code Quality Notes
 
