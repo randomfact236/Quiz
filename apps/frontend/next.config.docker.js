@@ -3,15 +3,26 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  
+
   // Output standalone for Docker
   output: 'standalone',
-  
+
+  // Legacy /riddles path moved to /riddle-mcq — keep old links working
+  async redirects() {
+    return [
+      {
+        source: '/riddles',
+        destination: '/riddle-mcq',
+        permanent: true,
+      },
+    ];
+  },
+
   // Disable image optimization in dev
   images: {
     unoptimized: true,
   },
-  
+
   // Webpack configuration for Docker
   webpack: (config, { dev, isServer }) => {
     // Fix for chunk loading issues in Docker
@@ -23,7 +34,7 @@ const nextConfig = {
     }
     return config;
   },
-  
+
   // Environment variables
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3012/api',
