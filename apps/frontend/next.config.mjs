@@ -6,6 +6,17 @@ const nextConfig = {
   
   // Output standalone for Docker
   output: 'standalone',
+
+  // Legacy /riddles path moved to /riddle-mcq — keep old links working
+  async redirects() {
+    return [
+      {
+        source: '/riddles',
+        destination: '/riddle-mcq',
+        permanent: true,
+      },
+    ];
+  },
   
   // Disable image optimization in dev
   images: {

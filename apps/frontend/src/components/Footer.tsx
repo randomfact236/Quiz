@@ -4,7 +4,7 @@ const footerLinks = {
   product: [
     { href: '/quiz-mcq', label: 'Quiz' },
     { href: '/jokes', label: 'Dad Jokes' },
-    { href: '/riddles', label: 'Riddles' },
+    { href: '/riddle-mcq', label: 'Riddles' },
   ],
   company: [{ href: '/about', label: 'About Us' }],
 };

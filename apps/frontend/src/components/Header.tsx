@@ -95,8 +95,8 @@ export default function Header(): JSX.Element {
                 </li>
                 <li>
                   <Link
-                    href="/riddles"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}
+                    href="/riddle-mcq"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddle-mcq') ? 'text-primary-600' : ''}`}
                   >
                     Riddles
                   </Link>
@@ -180,7 +180,7 @@ export default function Header(): JSX.Element {
                 Dad Jokes
               </Link>
               <Link
-                href="/riddles"
+                href="/riddle-mcq"
                 className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -258,8 +258,8 @@ export default function Header(): JSX.Element {
               </li>
               <li>
                 <Link
-                  href="/riddles"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddles') ? 'text-primary-600' : ''}`}
+                  href="/riddle-mcq"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddle-mcq') ? 'text-primary-600' : ''}`}
                 >
                   Riddles
                 </Link>
@@ -361,7 +361,7 @@ export default function Header(): JSX.Element {
               Dad Jokes
             </Link>
             <Link
-              href="/riddles"
+              href="/riddle-mcq"
               className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
               onClick={() => setIsMenuOpen(false)}
             >
