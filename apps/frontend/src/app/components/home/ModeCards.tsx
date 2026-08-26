@@ -86,11 +86,13 @@ function ModeSection({ card }: { card: ModeCardConfig }): JSX.Element {
         aria-label={expanded ? `Collapse ${card.title} section` : `Expand ${card.title} section`}
         aria-expanded={expanded}
       >
-        <h2 className="text-xl font-bold text-gray-800">
-          <span className="mr-2">{card.emoji}</span>
-          {card.title}
-          <span className="ml-2 text-sm font-normal text-gray-500">{card.subtitle}</span>
-        </h2>
+        <div>
+          <h2 className="text-xl font-bold text-gray-800">
+            <span className="mr-2">{card.emoji}</span>
+            {card.title}
+          </h2>
+          <p className="text-sm text-gray-500">{card.subtitle}</p>
+        </div>
         <span className={`text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`}>
           ▼
         </span>
