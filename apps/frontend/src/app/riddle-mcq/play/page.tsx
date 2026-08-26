@@ -432,6 +432,12 @@ function RiddlePlayPageContent(): JSX.Element {
   const isTimerMode = mode === 'timer';
   const isTimeUp = isTimerMode && timeRemaining === 0 && status === 'playing';
 
+  // Live score via the shared scorer — expert open-ended answers included
+  const liveScore = useMemo(
+    () => riddles.reduce((acc, r) => acc + (isRiddleAnswerCorrect(r, answers[r.id]) ? 1 : 0), 0),
+    [riddles, answers]
+  );
+
   // Guard: not mounted yet
   if (!isMounted) {
     return <PlayPageLoading />;
@@ -606,10 +612,7 @@ function RiddlePlayPageContent(): JSX.Element {
                   }}
                   showFeedback={true}
                   disabled={status !== 'playing'}
-                  score={Object.entries(answers).reduce((acc, [id, ans]) => {
-                    const riddle = riddles.find((r) => r.id === id);
-                    return acc + (riddle && ans === riddle.correctOption ? 1 : 0);
-                  }, 0)}
+                  score={liveScore}
                   maxScore={riddles.length}
                   timeUp={isTimeUp}
                   questionTimeRemaining={mode === 'timer' ? timeRemaining : practiceRiddleTime}
