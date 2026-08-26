@@ -1,9 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 interface ContentOption {
   label: string;
@@ -21,8 +18,8 @@ interface ExpandableCardConfig {
   options: ContentOption[];
 }
 
-/** The two mode cards expand accordion-style to reveal Quiz/Riddle targets. */
-const EXPANDABLE_CARDS: ExpandableCardConfig[] = [
+/** The two mode cards always show their Quiz/Riddle options in a row. */
+const MODE_CARDS: ExpandableCardConfig[] = [
   {
     id: 'timer',
     emoji: '⏱️',
@@ -32,14 +29,14 @@ const EXPANDABLE_CARDS: ExpandableCardConfig[] = [
       {
         label: 'Quiz',
         emoji: '🧠',
-        blurb: 'Timed quiz sessions',
+        blurb: 'Timed sessions',
         href: '/quiz-mcq/timer-challenge',
         gradient: 'from-blue-500 to-indigo-600',
       },
       {
         label: 'Riddle',
         emoji: '🧩',
-        blurb: 'Timed riddle sessions',
+        blurb: 'Timed sessions',
         href: '/riddle-mcq/challenge',
         gradient: 'from-purple-500 to-pink-600',
       },
@@ -54,14 +51,14 @@ const EXPANDABLE_CARDS: ExpandableCardConfig[] = [
       {
         label: 'Quiz',
         emoji: '🧠',
-        blurb: 'Practice quizzes',
+        blurb: 'No timer',
         href: '/quiz-mcq/practice-mode',
         gradient: 'from-blue-500 to-indigo-600',
       },
       {
         label: 'Riddle',
         emoji: '🧩',
-        blurb: 'Practice riddles',
+        blurb: 'No timer',
         href: '/riddle-mcq/practice',
         gradient: 'from-purple-500 to-pink-600',
       },
@@ -69,7 +66,7 @@ const EXPANDABLE_CARDS: ExpandableCardConfig[] = [
   },
 ];
 
-/** These stay direct links — no expand behavior. */
+/** These stay direct links. */
 const DIRECT_LINKS = [
   { href: '/riddles', emoji: '🎭', title: 'Riddles', subtitle: 'Brain Teasers' },
   { href: '/image-riddles', emoji: '🖼️', title: 'Image Riddles', subtitle: 'Visual Puzzles' },
@@ -77,85 +74,32 @@ const DIRECT_LINKS = [
 ];
 
 export function ModeCards(): JSX.Element {
-  // Accordion: at most one card open; clicking elsewhere collapses it
-  const [openId, setOpenId] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!openId) return;
-
-    const handlePointerDown = (e: PointerEvent): void => {
-      const container = containerRef.current;
-      if (!container) return;
-      const target = e.target as HTMLElement | null;
-      // Collapse unless the click is inside the currently-open card
-      const openEl = container.querySelector(`[data-card-id="${openId}"]`);
-      if (!openEl || !target || !openEl.contains(target)) {
-        setOpenId(null);
-      }
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [openId]);
-
   return (
-    <div ref={containerRef} className="grid grid-cols-2 items-start gap-4">
-      {EXPANDABLE_CARDS.map((card) => {
-        const isOpen = openId === card.id;
-        return (
-          <div
-            key={card.id}
-            data-card-id={card.id}
-            className="overflow-hidden rounded-2xl bg-white/95 shadow-lg transition-shadow hover:shadow-xl"
-          >
-            {/* Card header — click toggles expansion */}
-            <button
-              onClick={() => setOpenId(isOpen ? null : card.id)}
-              aria-expanded={isOpen}
-              className="flex w-full flex-col items-center p-6 text-center transition-colors hover:bg-white"
-            >
-              <span className="text-4xl">{card.emoji}</span>
-              <span className="mt-2 flex items-center gap-1 font-bold text-gray-800">
-                {card.title}
-                <ChevronDown
-                  className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                />
-              </span>
-              <span className="text-sm text-gray-500">{card.subtitle}</span>
-            </button>
+    <div className="grid grid-cols-2 items-start gap-4">
+      {MODE_CARDS.map((card) => (
+        <div
+          key={card.id}
+          className="rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-shadow hover:bg-white hover:shadow-xl"
+        >
+          <span className="text-4xl">{card.emoji}</span>
+          <span className="mt-2 block font-bold text-gray-800">{card.title}</span>
+          <span className="block text-sm text-gray-500">{card.subtitle}</span>
 
-            {/* Expanded sub-options */}
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="overflow-hidden"
-                >
-                  <div className="space-y-2 px-4 pb-4">
-                    {card.options.map((opt) => (
-                      <Link
-                        key={opt.href}
-                        href={opt.href}
-                        className={`flex items-center gap-3 rounded-xl bg-gradient-to-r ${opt.gradient} p-3 text-white shadow-md transition-all hover:scale-[1.02] hover:shadow-lg`}
-                      >
-                        <span className="text-2xl">{opt.emoji}</span>
-                        <span className="flex-1 text-left">
-                          <span className="block font-bold">{opt.label}</span>
-                          <span className="block text-xs text-white/90">{opt.blurb}</span>
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* Quiz / Riddle options — always visible, one row */}
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            {card.options.map((opt) => (
+              <Link
+                key={opt.href}
+                href={opt.href}
+                className={`flex flex-col items-center rounded-xl bg-gradient-to-r ${opt.gradient} px-3 py-2.5 text-white shadow-md transition-all hover:scale-[1.04] hover:shadow-lg`}
+              >
+                <span className="text-xl leading-none">{opt.emoji}</span>
+                <span className="mt-1 block font-bold">{opt.label}</span>
+              </Link>
+            ))}
           </div>
-        );
-      })}
+        </div>
+      ))}
 
       {DIRECT_LINKS.map((mode) => (
         <Link
