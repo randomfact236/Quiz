@@ -174,13 +174,14 @@ export class RiddleMcqController {
     return this.bulkService.exportRiddlesToCSV({ category });
   }
 
+  @_Public()
   @Get('stats/overview')
   @ApiOperation({ summary: 'Get riddle MCQ statistics (Public)' })
   async getStats(): Promise<{
-    totalRiddles: number;
+    totalRiddleMcqs: number;
     totalSubjects: number;
     totalCategories: number;
-    riddlesByLevel: Record<string, number>;
+    mcqsByLevel: Record<string, number>;
   }> {
     return this.statsService.getStats();
   }

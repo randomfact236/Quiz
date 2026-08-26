@@ -28,15 +28,15 @@ export class RiddleMcqStatsService {
   ) {}
 
   async getStats(): Promise<{
-    totalRiddles: number;
+    totalRiddleMcqs: number;
     totalSubjects: number;
     totalCategories: number;
-    riddlesByLevel: Record<string, number>;
+    mcqsByLevel: Record<string, number>;
   }> {
-    const [totalRiddles, totalSubjects, totalCategories] = await Promise.all([
+    const [totalRiddleMcqs, totalSubjects, totalCategories] = await Promise.all([
       this.riddleRepo.count(),
-      this.categoryService.findAllCategories().then((cats) => cats.length),
       this.subjectService.findAllSubjects().then((subs) => subs.length),
+      this.categoryService.findAllCategories().then((cats) => cats.length),
     ]);
 
     const levelCounts = await this.riddleRepo
@@ -46,16 +46,16 @@ export class RiddleMcqStatsService {
       .groupBy('riddle.level')
       .getRawMany();
 
-    const riddlesByLevel: Record<string, number> = {};
+    const mcqsByLevel: Record<string, number> = {};
     levelCounts.forEach((row: { level: string; count: string }) => {
-      riddlesByLevel[row.level] = parseInt(row.count, 10);
+      mcqsByLevel[row.level] = parseInt(row.count, 10);
     });
 
     return {
-      totalRiddles,
+      totalRiddleMcqs,
       totalSubjects,
       totalCategories,
-      riddlesByLevel,
+      mcqsByLevel,
     };
   }
 
