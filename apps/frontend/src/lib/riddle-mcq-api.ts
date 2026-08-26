@@ -442,7 +442,9 @@ export async function getRiddleFilterCounts(
   }
 
   const url = `/riddle-mcq/filter-counts?${queryParams.toString()}`;
-  const response = await api.get(url);
+  // Admin endpoint (default-deny JWT) — must send the ADMIN token or the
+  // dashboard's status cards silently render empty on 401.
+  const response = await api.get(url, { isAdmin: true });
   return response.data as FilterCounts;
 }
 
