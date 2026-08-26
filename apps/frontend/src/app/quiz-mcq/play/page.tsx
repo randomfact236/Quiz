@@ -170,15 +170,17 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.status, quiz.sessionId, router]);
 
-  // Sync question number to URL - only when quiz has started
+  // Sync question number to URL - only when quiz has started.
+  // Uses history.replaceState directly: high-frequency updates don't need to
+  // round-trip through the Next.js router (no subscriber notifications /
+  // re-render churn per navigation).
   useEffect(() => {
     if (hasStarted && quiz.status === 'playing' && quiz.totalQuestions > 0) {
-      const params = new URLSearchParams(searchParams?.toString() || '');
       const currentQuestionNum = String(quiz.currentQuestionIndex + 1);
-      const existingParam = params.get('question');
-      if (existingParam !== currentQuestionNum) {
-        params.set('question', currentQuestionNum);
-        router.replace(`/quiz-mcq/play?${params.toString()}`, { scroll: false });
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('question') !== currentQuestionNum) {
+        url.searchParams.set('question', currentQuestionNum);
+        window.history.replaceState(null, '', url.toString());
       }
     }
   }, [quiz.currentQuestionIndex, quiz.status, quiz.totalQuestions, hasStarted]);
