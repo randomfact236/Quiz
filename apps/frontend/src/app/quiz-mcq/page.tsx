@@ -228,15 +228,21 @@ function SubjectSelection(): JSX.Element {
         ) as Subject[];
         setSubjects(sortedSubjects);
 
-        const counts: Record<string, number> = {};
-        for (const subject of subjectsData) {
-          try {
-            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
-            if (questions.total > 0) {
-              counts[subject.slug] = questions.total;
+        const entries = await Promise.all(
+          sortedSubjects.map(async (subject) => {
+            try {
+              const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
+              return [subject.slug, questions.total] as const;
+            } catch {
+              console.error(`Failed to load questions for subject: ${subject.slug}`);
+              return null;
             }
-          } catch {
-            console.error(`Failed to load questions for subject: ${subject.slug}`);
+          })
+        );
+        const counts: Record<string, number> = {};
+        for (const entry of entries) {
+          if (entry && entry[1] > 0) {
+            counts[entry[0]] = entry[1];
           }
         }
         setQuestionCounts(counts);
@@ -387,20 +393,22 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
             });
           }
 
-          for (const chapter of subjectData.chapters) {
-            try {
-              const questions = await getQuestionsByChapter(chapter.id);
-              const chapterInfo = chapterMap.get(chapter.id);
-              if (chapterInfo) {
-                chapterInfo.questionCount = questions.data.length;
-                questions.data.forEach((q) => {
-                  chapterInfo.levels.add(q.level);
-                });
+          await Promise.all(
+            subjectData.chapters.map(async (chapter) => {
+              try {
+                const questions = await getQuestionsByChapter(chapter.id);
+                const chapterInfo = chapterMap.get(chapter.id);
+                if (chapterInfo) {
+                  chapterInfo.questionCount = questions.data.length;
+                  questions.data.forEach((q) => {
+                    chapterInfo.levels.add(q.level);
+                  });
+                }
+              } catch (error) {
+                console.error(`Failed to load questions for chapter ${chapter.id}:`, error);
               }
-            } catch (error) {
-              console.error(`Failed to load questions for chapter ${chapter.id}:`, error);
-            }
-          }
+            })
+          );
         }
 
         const chapterArray = Array.from(chapterMap.values()).sort((a, b) =>
