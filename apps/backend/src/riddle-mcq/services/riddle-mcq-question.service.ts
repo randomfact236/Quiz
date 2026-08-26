@@ -57,7 +57,8 @@ export class RiddleMcqQuestionService {
       .createQueryBuilder('riddle')
       .leftJoinAndSelect('riddle.subject', 'subject')
       .where('subject.id = :subjectId', { subjectId })
-      .andWhere('subject.isActive = :isActive', { isActive: true });
+      .andWhere('subject.isActive = :isActive', { isActive: true })
+      .andWhere('riddle.status = :status', { status: RiddleStatus.PUBLISHED });
 
     if (level) {
       query.andWhere('riddle.level = :level', { level });
