@@ -31,6 +31,28 @@ Frontend:
 
 (Refactor-class items — hub duplication, dead components, resume bloat, monolith splits — are tracked in plan/code-quality-plan.md §2/§5, not duplicated here.)
 
+### 3. Riddle MCQ — correctness backlog (from riddle-mcq.md audit; owner-directed logging)
+
+Backend:
+
+- **~~[P0] stats payload mismatch + swapped totalSubjects/totalCategories~~** — FIXED 2026-08-26: payload reshaped to FE contract (`totalRiddleMcqs`/`mcqsByLevel`), swap corrected; `stats/overview` + `filter-counts` restored to `@_Public()` (default-deny JWT had silently locked them). Verified live.
+- **~~[P0] By-subject read leaked drafts/trash~~** — FIXED 2026-08-26: filters `status = PUBLISHED`; verified live.
+- **~~[P1] No server-side level option rules~~** — FIXED 2026-08-26: min options per level (2/3/4), correctLetter range A–B/C/D, expert text answer enforced on create + update; five live probe paths.
+- **~~[P1] Bulk facade / duplicate slug helpers / orphaned migrations~~** — FIXED 2026-08-26 (facade dissolved into import/bulk-actions services; single `utils/slug.util`) and upstream (migrations rebuilt + registered in phase 0.5).
+- **~~[P2] No per-subject×level counts endpoint; no public single-riddle read~~** — DONE 2026-08-26: `@_Public GET /riddle-mcq/level-counts` (one GROUP BY, 300s cache) and `@_Public GET /riddle-mcq/riddles/:id` (PUBLISHED only).
+- **~~ContentServiceBase migration~~** — DONE 2026-08-26: question service extends ContentServiceBase via new opt-in flat-taxonomy mode (Subject→items, no chapter layer); quiz-mcq behavior unchanged (regression-probed).
+
+Frontend:
+
+- **~~[P0] Subject-wise play broken end-to-end~~** — FIXED 2026-08-26: play page reads `subjectId` (canonical) with `chapterId` legacy fallback; results retry link canonicalized.
+- **~~[P0] Results redirect to non-existent `/riddles`~~** — FIXED 2026-08-26: targets `/riddle-mcq`.
+- **~~[P1] Stale mutation invalidation keys~~** — FIXED 2026-08-26: `useRiddleMutations` keys match actual query caches; category delete also clears questions.
+- **~~[P1] Duplicate hooks / duplicated scorer~~** — FIXED 2026-08-26: dead `lib/useRiddleMcqFilters`, `RiddleMcqSection`, `useRiddleMcqModals` deleted; single shared `lib/riddle-scoring.ts`.
+- **~~[P1] Submit fired inside timer's setState updater~~** — FIXED 2026-08-26: pure tick + guarded auto-submit effect.
+- **~~[P2] Fake even distribution of level counts~~** — FIXED 2026-08-26: challenge/practice hubs consume the real cached `level-counts` endpoint.
+
+Deferred (owner-accepted 2026-08-26): JSON import/export; targeted stats cache tuning; session history writes + hint/skip tracking; tests backlog (csv-parser/adapter/scoring/e2e).
+
 ## Resolved
 
 ### image-riddles `stats/overview`: public vs admin-only — **RESOLVED: keep public**
