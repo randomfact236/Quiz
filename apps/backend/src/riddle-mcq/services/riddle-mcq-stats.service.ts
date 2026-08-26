@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
 
-import { RiddleMcq } from '../entities/riddle-mcq.entity';
+import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqCategoryService } from './riddle-mcq-category.service';
 import { RiddleMcqSubjectService } from './riddle-mcq-subject.service';
 
@@ -13,10 +13,12 @@ export class RiddleMcqStatsService {
   private readonly CACHE_KEYS = {
     FILTER_COUNTS: (category: string, subject: string, level: string) =>
       `riddle-mcq:filter-counts:${category || 'all'}:${subject || 'all'}:${level || 'all'}`,
+    PUBLIC_LEVEL_COUNTS: 'riddle-mcq:stats:public-level-counts',
   };
 
   private readonly CACHE_TTL = {
     FILTER_COUNTS: 300,
+    PUBLIC_LEVEL_COUNTS: 300,
   };
 
   constructor(
@@ -57,6 +59,52 @@ export class RiddleMcqStatsService {
       totalCategories,
       mcqsByLevel,
     };
+  }
+
+  /**
+   * Public per-level published counts for the challenge/practice hubs — one
+   * grouped query (replaces the client-side even-distribution hack). Cached;
+   * invalidated with the riddle-mcq:stats family on any mutation.
+   */
+  async getPublicLevelCounts(): Promise<{
+    subjectWise: Record<string, Record<string, number>>;
+    allSubject: Record<string, number>;
+    completeMix: number;
+  }> {
+    return this.cacheService.getOrSet(
+      this.CACHE_KEYS.PUBLIC_LEVEL_COUNTS,
+      async () => {
+        const rows: { slug: string | null; level: string; count: string }[] = await this.riddleRepo
+          .createQueryBuilder('riddle')
+          .leftJoin('riddle.subject', 'subject')
+          .select('subject.slug', 'slug')
+          .addSelect('riddle.level', 'level')
+          .addSelect('COUNT(*)', 'count')
+          .where('riddle.status = :status', { status: RiddleStatus.PUBLISHED })
+          .andWhere('subject.slug IS NOT NULL')
+          .groupBy('subject.slug')
+          .addGroupBy('riddle.level')
+          .getRawMany();
+
+        const subjectWise: Record<string, Record<string, number>> = {};
+        const allSubject: Record<string, number> = {};
+        let completeMix = 0;
+
+        for (const row of rows) {
+          const count = parseInt(row.count, 10);
+          const slug = row.slug as string;
+          const level = row.level.toLowerCase();
+
+          subjectWise[slug] = subjectWise[slug] || {};
+          subjectWise[slug][level] = count;
+          allSubject[level] = (allSubject[level] || 0) + count;
+          completeMix += count;
+        }
+
+        return { subjectWise, allSubject, completeMix };
+      },
+      this.CACHE_TTL.PUBLIC_LEVEL_COUNTS
+    );
   }
 
   /**

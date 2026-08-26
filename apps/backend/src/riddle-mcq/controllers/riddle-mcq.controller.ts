@@ -75,6 +75,15 @@ export class RiddleMcqController {
   }
 
   @_Public()
+  @Get('level-counts')
+  @ApiOperation({
+    summary: 'Public per-level published riddle counts for challenge hubs (cached)',
+  })
+  async getPublicLevelCounts() {
+    return this.statsService.getPublicLevelCounts();
+  }
+
+  @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('subjects/:subjectId/riddles')
   @ApiOperation({ summary: 'Get riddles by subject ID (Public)' })
@@ -112,6 +121,14 @@ export class RiddleMcqController {
     const parsedCount = this.paginationValidator.validateCount(count, 10, 1, 50);
     this.difficultyValidator.validate(level);
     return this.questionService.findRandomRiddles(level, parsedCount);
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Get('riddles/:id')
+  @ApiOperation({ summary: 'Get a single published riddle by ID (Public)' })
+  async getRiddleById(@Param('id') id: string): Promise<RiddleMcq> {
+    return this.questionService.findPublishedRiddleById(id);
   }
 
   @Post('riddles')

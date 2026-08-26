@@ -343,4 +343,16 @@ export class RiddleMcqQuestionService {
     }
     return riddle;
   }
+
+  /** Public single read — always PUBLISHED only. */
+  async findPublishedRiddleById(id: string): Promise<RiddleMcq> {
+    const riddle = await this.riddleMcqRepo.findOne({
+      where: { id, status: RiddleStatus.PUBLISHED },
+      relations: ['subject'],
+    });
+    if (!riddle) {
+      throw new NotFoundException('Riddle not found');
+    }
+    return riddle;
+  }
 }

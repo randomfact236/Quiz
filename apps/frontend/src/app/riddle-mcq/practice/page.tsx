@@ -25,7 +25,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 
-import { getSubjects, getStats, type RiddlesStats } from '@/lib/riddle-mcq-api';
+import { getSubjects, getPublicLevelCounts, type RiddleLevelCounts } from '@/lib/riddle-mcq-api';
 import type { RiddleMcqSubject } from '@/types/riddles';
 
 // Riddle difficulty levels
@@ -66,7 +66,7 @@ export default function RiddlePracticePage(): JSX.Element {
 
   // Data states
   const [subjects, setSubjects] = useState<SubjectWithStats[]>([]);
-  const [stats, setStats] = useState<RiddlesStats | null>(null);
+  const [countsData, setCountsData] = useState<RiddleLevelCounts | null>(null);
 
   // Foldable sections state - default expanded
   const [subjectWiseOpen, setSubjectWiseOpen] = useState(true);
@@ -80,16 +80,16 @@ export default function RiddlePracticePage(): JSX.Element {
         setLoading(true);
         setError(null);
 
-        // Fetch stats and subjects from backend (only those with content)
-        const [statsData, subjectsData] = await Promise.all([
-          getStats().catch((err) => {
-            console.error('Failed to get stats:', err);
+        // Fetch published level counts and subjects from backend (only those with content)
+        const [counts, subjectsData] = await Promise.all([
+          getPublicLevelCounts().catch((err) => {
+            console.error('Failed to load level counts:', err);
             return null;
           }),
           getSubjects(true), // hasContent = true
         ]);
 
-        setStats(statsData);
+        setCountsData(counts);
         setSubjects(subjectsData);
       } catch (err) {
         console.error('Failed to fetch data:', err);
@@ -102,44 +102,35 @@ export default function RiddlePracticePage(): JSX.Element {
     fetchData();
   }, []);
 
-  // Calculate level counts from backend data
+  // Real per-subject×level published counts from the backend (keyed by subject slug)
   const levelCounts: LevelCount = useMemo(() => {
-    const counts: LevelCount = {
-      subjectWise: {},
-      allSubject: { easy: 0, medium: 0, hard: 0, expert: 0 },
-      completeMix: stats?.totalRiddleMcqs || 0,
-    };
-
-    // Use stats.mcqsByLevel if available, otherwise distribute evenly
-    const mcqsByLevel = stats?.mcqsByLevel || {};
-
-    // For now, distribute total across subjects evenly for UI display
-    // The actual filtering happens on the backend
-    for (const subject of subjects) {
-      counts.subjectWise[subject.name] = {
-        easy: Math.floor((mcqsByLevel['easy'] || 0) / Math.max(1, subjects.length)),
-        medium: Math.floor((mcqsByLevel['medium'] || 0) / Math.max(1, subjects.length)),
-        hard: Math.floor((mcqsByLevel['hard'] || 0) / Math.max(1, subjects.length)),
-        expert: Math.floor((mcqsByLevel['expert'] || 0) / Math.max(1, subjects.length)),
+    const emptyLevels = { easy: 0, medium: 0, hard: 0, expert: 0 };
+    if (!countsData) {
+      return {
+        subjectWise: {},
+        allSubject: { ...emptyLevels },
+        completeMix: 0,
       };
     }
 
-    counts.allSubject = {
-      easy: mcqsByLevel['easy'] || 0,
-      medium: mcqsByLevel['medium'] || 0,
-      hard: mcqsByLevel['hard'] || 0,
-      expert: mcqsByLevel['expert'] || 0,
-    };
+    const allSubject = { ...emptyLevels };
+    Object.entries(countsData.allSubject || {}).forEach(([level, count]) => {
+      allSubject[level as keyof typeof emptyLevels] = count;
+    });
 
-    return counts;
-  }, [subjects, stats]);
+    return {
+      subjectWise: countsData.subjectWise || {},
+      allSubject,
+      completeMix: countsData.completeMix || 0,
+    };
+  }, [countsData]);
 
   const getAllSubjectCount = (level: Level): number => {
     return levelCounts.allSubject[level.toLowerCase()] || 0;
   };
 
-  const getTotalRiddlesForSubject = (subjectName: string): number => {
-    const subjectCounts = levelCounts.subjectWise[subjectName] || {};
+  const getTotalRiddlesForSubject = (subjectSlug: string): number => {
+    const subjectCounts = levelCounts.subjectWise[subjectSlug] || {};
     return Object.values(subjectCounts).reduce((sum, count) => sum + count, 0);
   };
 
@@ -253,7 +244,7 @@ export default function RiddlePracticePage(): JSX.Element {
                 {/* Subjects as a flat grid - no category grouping */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                   {subjects.map((subject) => {
-                    const totalRiddles = getTotalRiddlesForSubject(subject.name);
+                    const totalRiddles = getTotalRiddlesForSubject(subject.slug);
                     if (totalRiddles === 0) return null;
                     const subjectIcon = subject.emoji || '📚';
 

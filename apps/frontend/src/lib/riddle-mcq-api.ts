@@ -458,12 +458,22 @@ export async function getStats(): Promise<RiddlesStats> {
   return response.data;
 }
 
+/** Public per-level published riddle counts for challenge hubs (single grouped query, cached). */
+export interface RiddleLevelCounts {
+  subjectWise: Record<string, Record<string, number>>;
+  allSubject: Record<string, number>;
+  completeMix: number;
+}
+
+export async function getPublicLevelCounts(): Promise<RiddleLevelCounts> {
+  const response = await api.get<RiddleLevelCounts>('/riddle-mcq/level-counts');
+  return response.data;
+}
+
 /**
  * Get riddle counts by status for a subject (Admin only)
  */
-export async function getStatusCountsBySubject(
-  subjectIdOrSlug: string
-): Promise<StatusCounts> {
+export async function getStatusCountsBySubject(subjectIdOrSlug: string): Promise<StatusCounts> {
   const params = new URLSearchParams();
   params.append('subject', subjectIdOrSlug);
   const response = await api.get<StatusCounts>(
