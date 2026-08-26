@@ -2,13 +2,16 @@
  * ============================================================================
  * useQuizMcq Hook
  * ============================================================================
- * Core quiz state management hook
+ * Core quiz state management — orchestration only. Pure helpers live in
+ * ./use-quiz-mcq/quiz-engine.utils.ts, timers in useQuizTimers, and the
+ * mount-time resume decision in useQuizResume.
  * ============================================================================
  */
 
 'use client';
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+
 import type {
   Question,
   QuizSession,
@@ -17,55 +20,28 @@ import type {
   UseQuizMcqReturn,
 } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
+import { saveQuizResume, clearQuizResume, type QuizResumeState } from '@/lib/quiz-mcq-resume';
 import {
-  saveQuizResume,
-  loadQuizResume,
-  clearQuizResume,
-  isQuizResumeMatch,
-  saveQuizResumeQuestions,
-  type QuizResumeState,
-  type QuizResumeIdentity,
-} from '@/lib/quiz-mcq-resume';
-import {
-  getRandomQuestions,
-  getMixedQuestions,
   getSubjectBySlug,
   getSubjectRandomQuestions,
+  getMixedQuestions,
+  getRandomQuestions,
 } from '@/lib/quiz-mcq-api';
-import type { QuizQuestion } from '@/lib/quiz-mcq-api';
 import { calculateScore } from '@/lib/quiz-mcq-scoring';
 import { saveQuizResult } from '@/lib/progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
+import { saveQuizResumeQuestions } from '@/lib/quiz-mcq-resume';
 
-/** Capacity-plan A2: fixed session size fetched via capped server-side random endpoint */
-const QUIZ_SESSION_SIZE = 20;
+import {
+  QUIZ_SESSION_SIZE,
+  generateUUID,
+  convertQuizQuestion,
+  navigateTimeRemaining,
+} from './use-quiz-mcq/quiz-engine.utils';
+import { useQuizTimers } from './use-quiz-mcq/useQuizTimers';
+import { useQuizResume } from './use-quiz-mcq/useQuizResume';
 
-/** Generate UUID for session */
-function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
-/** Convert QuizQuestion from API to Question type */
-function convertQuizQuestion(q: QuizQuestion): Question {
-  const options = q.options || [];
-  return {
-    id: q.id,
-    question: q.question,
-    optionA: options[0] || '',
-    optionB: options[1] || '',
-    optionC: options[2] || '',
-    optionD: options[3] || '',
-    correctAnswer: q.correctAnswer,
-    correctLetter: q.correctLetter || null,
-    level: q.level,
-    chapter: q.chapterId,
-    status: q.status || 'published',
-  };
-}
+import type { QuizQuestion } from '@/lib/quiz-mcq-api';
 
 /** Load questions from API based on subject, chapter, and level */
 async function loadQuestions(
@@ -77,13 +53,8 @@ async function loadQuestions(
     let allQuestions: QuizQuestion[] = [];
 
     if (subject === 'all') {
-      if (level === 'all') {
-        const result = await getMixedQuestions();
-        allQuestions = result.data;
-      } else {
-        const result = await getRandomQuestions(level);
-        allQuestions = result.data;
-      }
+      const result = level === 'all' ? await getMixedQuestions() : await getRandomQuestions(level);
+      allQuestions = result.data;
     } else {
       // Capacity-plan A2: capped random selection instead of whole-bank fetch.
       let chapterId: string | undefined;
@@ -137,8 +108,8 @@ function clearCurrentSession(): void {
 /** Get subject name from slug */
 async function getSubjectName(slug: string): Promise<string> {
   try {
-    const subject = await getSubjectBySlug(slug);
-    return subject.name;
+    const meta = await getSubjectBySlug(slug);
+    return meta.name || slug;
   } catch {
     return slug;
   }
@@ -160,48 +131,23 @@ export function useQuizMcq(
 
   const startFromShareRef = useRef(startFromShare);
 
-  const mountDecisionRef = useRef<{
-    resumeSession: QuizResumeState | null;
-    startIndex: number;
-    sessionSize: number;
-    isShared: boolean;
-  } | null>(null);
-
-  if (mountDecisionRef.current === null) {
-    const isShared = isSharedLink ?? false;
-    let resumeSession: QuizResumeState | null = null;
-
-    if (!isShared) {
-      const saved = loadQuizResume();
-      const currentMode = type ? `${mode}_${type}` : (mode ?? 'normal');
-      if (saved && isQuizResumeMatch(saved, subject, chapter, level, currentMode)) {
-        resumeSession = saved;
-      }
-    }
-
-    mountDecisionRef.current = {
-      resumeSession,
-      startIndex: isShared
-        ? startFromShare
-          ? startFromShare - 1
-          : 0
-        : resumeSession
-          ? resumeSession.currentQuestionIndex
-          : 0,
-      sessionSize: isShared ? initialTotal || 10 : resumeSession ? resumeSession.sessionSize : 10,
-      isShared,
-    };
-  }
-
-  const [showResumePrompt, setShowResumePrompt] = useState(
-    () => mountDecisionRef.current?.resumeSession !== null
-  );
-  const [pendingResumeState] = useState(() => mountDecisionRef.current?.resumeSession ?? null);
+  // Mount-time resume decision + prompt state (extracted module)
+  const resumeController = useQuizResume({
+    subject,
+    chapter,
+    level,
+    mode,
+    type,
+    isSharedLink: isSharedLink ?? false,
+    startFromShare: startFromShare ?? null,
+    initialTotal: initialTotal ?? null,
+  });
+  const { showResumePrompt, pendingResumeState } = resumeController;
 
   const [state, setState] = useState<QuizState>({
     questions: [],
     availableQuestions: [],
-    sessionSize: mountDecisionRef.current.sessionSize,
+    sessionSize: resumeController.mountDecision.sessionSize,
     currentQuestionIndex: 0,
     answers: {},
     score: 0,
@@ -218,7 +164,7 @@ export function useQuizMcq(
   const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
-    if (mountDecisionRef.current?.resumeSession) return;
+    if (resumeController.mountDecision.resumeSession) return;
 
     const controller = new AbortController();
 
@@ -235,7 +181,7 @@ export function useQuizMcq(
         return;
       }
 
-      const decision = mountDecisionRef.current!;
+      const decision = resumeController.mountDecision;
       const initialQuestions = all.slice(0, decision.sessionSize);
 
       sessionRef.current = {
@@ -284,7 +230,7 @@ export function useQuizMcq(
           subject,
           chapter,
           level,
-          mode: initialMode as QuizResumeIdentity['mode'],
+          mode: initialMode as QuizResumeState['mode'],
         },
         all
       );
@@ -292,42 +238,11 @@ export function useQuizMcq(
 
     load();
     return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subject, chapter, level, resetKey]);
 
-  useEffect(() => {
-    setState((prev) => ({ ...prev, timeRemaining: timeLimit || 0 }));
-  }, [timeLimit]);
-
-  useEffect(() => {
-    if (state.status !== 'playing' || !timeLimit) return;
-
-    const timer = setInterval(() => {
-      setState((prev) => {
-        if (prev.status === 'paused') return prev;
-
-        const newTimeRemaining = prev.timeRemaining - 1;
-        if (newTimeRemaining <= 0) {
-          if (timerMode === 'per-question') {
-            const isLast = prev.currentQuestionIndex >= prev.questions.length - 1;
-            if (isLast) {
-              return { ...prev, timeRemaining: 0, status: 'completed' };
-            } else {
-              return {
-                ...prev,
-                timeRemaining: timeLimit,
-                currentQuestionIndex: prev.currentQuestionIndex + 1,
-              };
-            }
-          } else {
-            return { ...prev, timeRemaining: 0, status: 'completed' };
-          }
-        }
-        return { ...prev, timeRemaining: newTimeRemaining };
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [state.status, timeLimit, timerMode]);
+  // Timers (extracted module)
+  useQuizTimers(state.status, setState, timeLimit, timerMode);
 
   const selectAnswer = useCallback((option: string) => {
     setState((prev) => {
@@ -368,7 +283,8 @@ export function useQuizMcq(
         ...prev,
         currentQuestionIndex: newIndex,
         visited: newVisited,
-        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+        // UX fix: going BACK must not reset a per-question timer (free time).
+        timeRemaining: navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
       };
     });
   }, [timerMode, timeLimit]);
@@ -384,7 +300,7 @@ export function useQuizMcq(
         ...prev,
         currentQuestionIndex: newIndex,
         visited: newVisited,
-        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+        timeRemaining: navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining),
       };
     });
   }, [timerMode, timeLimit]);
@@ -486,19 +402,13 @@ export function useQuizMcq(
       timeRemaining: timeLimit || 0,
     }));
 
-    setShowResumePrompt(false);
+    resumeController.clearPrompt();
     saveCurrentSession(sessionRef.current);
   }, [pendingResumeState, timeLimit]);
 
   const handleStartFresh = useCallback(() => {
     clearQuizResume();
-    setShowResumePrompt(false);
-    mountDecisionRef.current = {
-      resumeSession: null,
-      startIndex: 0,
-      sessionSize: 10,
-      isShared: false,
-    };
+    resumeController.startFreshReset();
     setResetKey((k) => k + 1);
   }, []);
 
@@ -546,7 +456,7 @@ export function useQuizMcq(
         currentQuestionIndex: newIndex,
         manuallySkipped: newSkipped,
         visited: newVisited,
-        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+        timeRemaining: navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining),
       };
     });
   }, [timerMode, timeLimit]);
@@ -563,7 +473,10 @@ export function useQuizMcq(
           ...prev,
           currentQuestionIndex: newIndex,
           visited: newVisited,
-          timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+          timeRemaining:
+            newIndex >= prev.currentQuestionIndex
+              ? navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining)
+              : navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
         };
       });
     },
@@ -581,7 +494,8 @@ export function useQuizMcq(
         currentQuestionIndex: 0,
         dismissedUnvisited: true,
         visited: newVisited,
-        timeRemaining: timerMode === 'per-question' && timeLimit ? timeLimit : prev.timeRemaining,
+        // Jumping back to Q1 must not grant fresh per-question time.
+        timeRemaining: navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
       };
     });
   }, [timerMode, timeLimit]);
