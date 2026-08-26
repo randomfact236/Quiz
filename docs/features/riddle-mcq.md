@@ -109,6 +109,13 @@ Deferred (owner-accepted 2026-08-26):
 - Tests backlog (csv-parser, adapter, scoring; e2e happy path)
 - Doc claims cleanup for sibling features where stale
 
+### Tests
+
+`src/__tests__/`:
+iddle-scoring.test.ts (14 � shared scorer MCQ/expert/legacy cases + adapter),
+iddle-csv-parser.test.ts (11 � quoted cells, category banner, letter-patching, CRLF, defaults),
+iddle-resume.test.ts (6 � two-key round-trip, identity mismatch, 24h expiry). 52/52 passing frontend-wide.
+
 ## Code Quality Notes
 
 Standards, budgets, and phase exit criteria: [../../plan/code-quality-plan.md](../../plan/code-quality-plan.md). Feature-specific debt tracked there in §5.
