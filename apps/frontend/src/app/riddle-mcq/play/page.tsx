@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback, useMemo, Suspense, useRef } from 'rea
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Timer, AlertCircle, RotateCcw, Save, Pause, Play } from 'lucide-react';
+import { ArrowLeft, Timer, AlertCircle, Save, Pause, Play } from 'lucide-react';
 
 import {
   saveRiddleSession,
@@ -34,6 +34,9 @@ import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles
 import { SettingsService } from '@/services/settings.service';
 import type { SystemSettings } from '@/types/settings.types';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
+import { ResumePromptModal } from './components/ResumePromptModal';
+import { SubmitConfirmModal } from './components/SubmitConfirmModal';
+import { ExtendSessionModal } from './components/ExtendSessionModal';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { formatTimeMMSS } from '@/lib/utils';
 
@@ -516,37 +519,7 @@ function RiddlePlayPageContent(): JSX.Element {
   // Resume dialog
   if (showResumeDialog) {
     return (
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full"
-        >
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <RotateCcw className="h-8 w-8 text-indigo-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Resume Session?</h2>
-            <p className="text-gray-600">
-              You have an unfinished riddle session. Would you like to continue where you left off?
-            </p>
-          </div>
-          <div className="space-y-3">
-            <button
-              onClick={resumeSession}
-              className="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
-            >
-              Resume Session
-            </button>
-            <button
-              onClick={() => startNewSession(riddles)}
-              className="w-full py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-            >
-              Start New Session
-            </button>
-          </div>
-        </motion.div>
-      </div>
+      <ResumePromptModal onResume={resumeSession} onStartNew={() => startNewSession(riddles)} />
     );
   }
 
@@ -704,123 +677,30 @@ function RiddlePlayPageContent(): JSX.Element {
 
       {/* Confirm Submit Modal — mirrors quiz page (2 buttons: Continue + Submit) */}
       {showConfirmSubmit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-          >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">Submit Riddles?</h2>
-
-            {answeredCount < riddles.length ? (
-              <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
-                <p className="font-medium">⚠️ Not all riddles answered!</p>
-                <p className="text-sm">
-                  You&apos;ve answered {answeredCount} of {riddles.length} riddles.
-                </p>
-              </div>
-            ) : (
-              <p className="mb-4 text-gray-600">
-                You&apos;ve answered all riddles. Ready to see your results?
-              </p>
-            )}
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setShowConfirmSubmit(false);
-                  setShowExtendSession(true);
-                }}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-              >
-                Continue
-              </button>
-              <button
-                onClick={() => {
-                  handleSubmit();
-                  setShowConfirmSubmit(false);
-                }}
-                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
-              >
-                Submit
-              </button>
-            </div>
-          </motion.div>
-        </div>
+        <SubmitConfirmModal
+          answeredCount={answeredCount}
+          totalRiddles={riddles.length}
+          onContinue={() => {
+            setShowConfirmSubmit(false);
+            setShowExtendSession(true);
+          }}
+          onSubmit={() => {
+            handleSubmit();
+            setShowConfirmSubmit(false);
+          }}
+        />
       )}
 
       {/* Extend Session Modal — mirrors quiz Extend Quiz modal */}
       {showExtendSession && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-          >
-            <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Session</h2>
-
-            <div className="mb-4 space-y-3">
-              <p className="text-gray-600">
-                You&apos;ve answered <strong>{answeredCount}</strong> of{' '}
-                <strong>{riddles.length}</strong> riddles.
-              </p>
-
-              <div className="rounded-lg bg-blue-50 p-3">
-                <p className="text-sm text-blue-800">Add more riddles to keep the session going!</p>
-              </div>
-
-              <p className="text-sm text-gray-500">
-                How many additional riddles would you like to add?
-              </p>
-
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setAdditionalRiddles(Math.max(1, additionalRiddles - 1))}
-                  disabled={additionalRiddles <= 1}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  max={20}
-                  value={additionalRiddles}
-                  onChange={(e) =>
-                    setAdditionalRiddles(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))
-                  }
-                  className="h-10 w-20 rounded-lg border border-gray-300 text-center font-semibold"
-                />
-                <button
-                  onClick={() => setAdditionalRiddles(Math.min(20, additionalRiddles + 1))}
-                  disabled={additionalRiddles >= 20}
-                  className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
-                >
-                  +
-                </button>
-              </div>
-
-              <p className="text-xs text-gray-400">
-                New riddles will be added without repeating any you&apos;ve already seen.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowExtendSession(false)}
-                className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleExtendSession}
-                className="flex-1 rounded-lg bg-indigo-600 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
-              >
-                Add &amp; Continue
-              </button>
-            </div>
-          </motion.div>
-        </div>
+        <ExtendSessionModal
+          answeredCount={answeredCount}
+          totalRiddles={riddles.length}
+          additionalRiddles={additionalRiddles}
+          onChangeAdditional={setAdditionalRiddles}
+          onCancel={() => setShowExtendSession(false)}
+          onConfirm={handleExtendSession}
+        />
       )}
     </div>
   );
