@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { adminApi } from '@/lib/api-client';
 import type { QuizQuestion } from '@/lib/quiz-mcq-api';
 import type { QuizFilters } from './useQuizMcqFilters';
 
@@ -28,11 +28,11 @@ export function useQuestions(filters: QuizFilters, page: number = 1, pageSize: n
       params.append('page', String(page));
       params.append('limit', String(pageSize));
 
-      const response = await api.get<{
+      const response = await adminApi.get<{
         data: QuizQuestion[];
         total: number;
         totalPages: number;
-      }>(`/quiz-mcq/questions?${params.toString()}`, { isAdmin: true });
+      }>(`/quiz-mcq/questions?${params.toString()}`);
 
       return {
         data: response.data.data,

@@ -428,15 +428,12 @@ export async function executeImportFromParsed(
 
   if (!subjectId) {
     try {
-      const created = await createSubject(
-        {
-          name: subjectName,
-          slug: subjectSlug,
-          emoji: '📚',
-          category: 'academic',
-        },
-        true
-      );
+      const created = await createSubject({
+        name: subjectName,
+        slug: subjectSlug,
+        emoji: '📚',
+        category: 'academic',
+      });
       subjectId = created.id;
     } catch (err) {
       return {
@@ -461,7 +458,7 @@ export async function executeImportFromParsed(
     const key = chapterName.toLowerCase().trim();
     if (!chapterMap.has(key)) {
       try {
-        const newChapter = await createChapter({ name: chapterName, subjectId: subjectId! }, true);
+        const newChapter = await createChapter({ name: chapterName, subjectId: subjectId! });
         // Ensure the chapter has a valid id before adding to map
         if (newChapter && newChapter.id) {
           chapterMap.set(key, newChapter.id);
@@ -478,7 +475,7 @@ export async function executeImportFromParsed(
   // If no chapters were found or created, create a default "General" chapter
   if (chapterMap.size === 0) {
     try {
-      const defaultChapter = await createChapter({ name: 'General', subjectId: subjectId! }, true);
+      const defaultChapter = await createChapter({ name: 'General', subjectId: subjectId! });
       if (defaultChapter && defaultChapter.id) {
         chapterMap.set('general', defaultChapter.id);
         chaptersCreated++;
@@ -577,7 +574,7 @@ export async function executeImportFromParsed(
 
   // 5. Bulk save to database
   try {
-    await createQuestionsBulk(questionsPayload, true);
+    await createQuestionsBulk(questionsPayload);
     return {
       success: true,
       subjectName,

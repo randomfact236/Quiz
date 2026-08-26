@@ -18,7 +18,7 @@ export function useSubjectMutation() {
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
-    mutationFn: (dto: CreateSubjectDto) => createSubject(dto, true),
+    mutationFn: (dto: CreateSubjectDto) => createSubject(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SUBJECTS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -26,8 +26,7 @@ export function useSubjectMutation() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, dto }: { id: string; dto: UpdateSubjectDto }) =>
-      updateSubject(id, dto, true),
+    mutationFn: ({ id, dto }: { id: string; dto: UpdateSubjectDto }) => updateSubject(id, dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SUBJECTS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -35,7 +34,7 @@ export function useSubjectMutation() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteSubject(id, true),
+    mutationFn: (id: string) => deleteSubject(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SUBJECTS_KEY] });
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY] });

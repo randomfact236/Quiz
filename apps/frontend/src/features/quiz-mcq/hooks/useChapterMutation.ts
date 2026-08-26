@@ -17,7 +17,7 @@ export function useChapterMutation() {
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
-    mutationFn: (dto: CreateChapterDto) => createChapter(dto, true),
+    mutationFn: (dto: CreateChapterDto) => createChapter(dto),
     onSuccess: (data, dto) => {
       const subjectKey = dto.subjectId || 'all';
 
@@ -39,7 +39,7 @@ export function useChapterMutation() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, dto }: { id: string; dto: { name?: string; subjectId?: string } }) =>
-      updateChapter(id, dto, true),
+      updateChapter(id, dto),
     onSuccess: (_data, { dto }) => {
       if (dto.subjectId) {
         queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, dto.subjectId] });
@@ -50,7 +50,7 @@ export function useChapterMutation() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: ({ id }: { id: string; subjectId: string }) => deleteChapter(id, true),
+    mutationFn: ({ id }: { id: string; subjectId: string }) => deleteChapter(id),
     onSuccess: (_data, { subjectId }) => {
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, subjectId] });
       queryClient.invalidateQueries({ queryKey: [CHAPTERS_KEY, 'all'] });

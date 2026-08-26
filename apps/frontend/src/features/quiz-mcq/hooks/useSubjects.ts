@@ -18,7 +18,7 @@ export function useSubjects() {
 
   // Delete mutation with optimistic update
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteSubject(id, true),
+    mutationFn: (id: string) => deleteSubject(id),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: SUBJECTS_KEY });
 

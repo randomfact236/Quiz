@@ -7,7 +7,7 @@
  * ============================================================================
  */
 
-import { api } from './api-client';
+import { api, adminApi } from './api-client';
 
 export interface QuizSubject {
   id: string;
@@ -155,25 +155,18 @@ export async function getSubjectBySlug(
   return response.data;
 }
 
-export async function createSubject(
-  dto: CreateSubjectDto,
-  isAdmin: boolean = false
-): Promise<QuizSubject> {
-  const response = await api.post<QuizSubject>('/quiz-mcq/subjects', dto, { isAdmin });
+export async function createSubject(dto: CreateSubjectDto): Promise<QuizSubject> {
+  const response = await adminApi.post<QuizSubject>('/quiz-mcq/subjects', dto);
   return response.data;
 }
 
-export async function updateSubject(
-  id: string,
-  dto: UpdateSubjectDto,
-  isAdmin: boolean = false
-): Promise<QuizSubject> {
-  const response = await api.put<QuizSubject>(`/quiz-mcq/subjects/${id}`, dto, { isAdmin });
+export async function updateSubject(id: string, dto: UpdateSubjectDto): Promise<QuizSubject> {
+  const response = await adminApi.put<QuizSubject>(`/quiz-mcq/subjects/${id}`, dto);
   return response.data;
 }
 
-export async function deleteSubject(id: string, isAdmin: boolean = false): Promise<void> {
-  await api.delete(`/quiz-mcq/subjects/${id}`, { isAdmin });
+export async function deleteSubject(id: string): Promise<void> {
+  await adminApi.delete(`/quiz-mcq/subjects/${id}`);
 }
 
 // ============================================================================
@@ -181,35 +174,29 @@ export async function deleteSubject(id: string, isAdmin: boolean = false): Promi
 // ============================================================================
 
 export async function getAllChapters(): Promise<QuizChapter[]> {
-  const response = await api.get<QuizChapter[]>('/quiz-mcq/chapters', { isAdmin: true });
+  const response = await adminApi.get<QuizChapter[]>('/quiz-mcq/chapters');
   return response.data;
 }
 
 export async function getChaptersBySubject(subjectId: string): Promise<QuizChapter[]> {
-  const response = await api.get<QuizChapter[]>(`/quiz-mcq/chapters/${subjectId}`, {
-    isAdmin: true,
-  });
+  const response = await adminApi.get<QuizChapter[]>(`/quiz-mcq/chapters/${subjectId}`);
   return response.data;
 }
 
-export async function createChapter(
-  dto: CreateChapterDto,
-  isAdmin: boolean = false
-): Promise<QuizChapter> {
-  const response = await api.post<QuizChapter>('/quiz-mcq/chapters', dto, { isAdmin });
+export async function createChapter(dto: CreateChapterDto): Promise<QuizChapter> {
+  const response = await adminApi.post<QuizChapter>('/quiz-mcq/chapters', dto);
   return response.data;
 }
 
-export async function deleteChapter(id: string, isAdmin: boolean = false): Promise<void> {
-  await api.delete(`/quiz-mcq/chapters/${id}`, { isAdmin });
+export async function deleteChapter(id: string): Promise<void> {
+  await adminApi.delete(`/quiz-mcq/chapters/${id}`);
 }
 
 export async function updateChapter(
   id: string,
-  dto: { name?: string; subjectId?: string },
-  isAdmin: boolean = false
+  dto: { name?: string; subjectId?: string }
 ): Promise<QuizChapter> {
-  const response = await api.patch<QuizChapter>(`/quiz-mcq/chapters/${id}`, dto, { isAdmin });
+  const response = await adminApi.patch<QuizChapter>(`/quiz-mcq/chapters/${id}`, dto);
   return response.data;
 }
 
@@ -271,8 +258,7 @@ export interface QuestionFilters {
 
 export async function getQuestionsBySubject(
   subjectSlug: string,
-  filters: QuestionFilters = {},
-  isAdmin: boolean = false
+  filters: QuestionFilters = {}
 ): Promise<{ data: QuizQuestion[]; total: number }> {
   let url = `/quiz-mcq/subjects/${subjectSlug}/questions`;
   if (filters.status) {
@@ -287,7 +273,7 @@ export async function getQuestionsBySubject(
   if (filters.search) {
     url += `${filters.status || filters.level || filters.chapter ? '&' : '?'}search=${encodeURIComponent(filters.search)}`;
   }
-  const response = await api.get<{ data: QuizQuestion[]; total: number }>(url, { isAdmin });
+  const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
   return response.data;
 }
 
@@ -306,7 +292,7 @@ export interface SubjectStatusCounts {
 }
 
 export async function getStatusCountsBySubject(subjectSlug: string): Promise<SubjectStatusCounts> {
-  const response = await api.get<SubjectStatusCounts>(
+  const response = await adminApi.get<SubjectStatusCounts>(
     `/quiz-mcq/subjects/${subjectSlug}/status-counts`
   );
   return response.data;
@@ -327,16 +313,13 @@ export interface FilterCountsResponse {
   total: number;
 }
 
-export async function getFilterCounts(
-  filters: {
-    subject?: string;
-    status?: string;
-    level?: string;
-    chapter?: string;
-    search?: string;
-  },
-  isAdmin: boolean = false
-): Promise<FilterCountsResponse> {
+export async function getFilterCounts(filters: {
+  subject?: string;
+  status?: string;
+  level?: string;
+  chapter?: string;
+  search?: string;
+}): Promise<FilterCountsResponse> {
   const params = new URLSearchParams();
   if (filters.subject) params.append('subject', filters.subject);
   if (filters.status) params.append('status', filters.status);
@@ -344,11 +327,8 @@ export async function getFilterCounts(
   if (filters.chapter) params.append('chapter', filters.chapter);
   if (filters.search) params.append('search', filters.search);
 
-  const response = await api.get<FilterCountsResponse>(
-    `/quiz-mcq/filter-counts?${params.toString()}`,
-    {
-      isAdmin,
-    }
+  const response = await adminApi.get<FilterCountsResponse>(
+    `/quiz-mcq/filter-counts?${params.toString()}`
   );
   return response.data;
 }
@@ -362,8 +342,7 @@ export async function getAllQuestions(
     search?: string;
   } = {},
   page: number = 1,
-  limit: number = 10,
-  isAdmin: boolean = false
+  limit: number = 10
 ): Promise<{
   data: QuizQuestion[];
   total: number;
@@ -378,11 +357,11 @@ export async function getAllQuestions(
   params.append('page', String(page));
   params.append('limit', String(limit));
 
-  const response = await api.get<{
+  const response = await adminApi.get<{
     data: QuizQuestion[];
     total: number;
     totalPages: number;
-  }>(`/quiz-mcq/questions?${params.toString()}`, { isAdmin });
+  }>(`/quiz-mcq/questions?${params.toString()}`);
   return {
     data: response.data.data,
     total: response.data.total,
@@ -390,59 +369,45 @@ export async function getAllQuestions(
   };
 }
 
-export async function createQuestion(
-  dto: CreateQuestionDto,
-  isAdmin: boolean = false
-): Promise<QuizQuestion> {
-  const response = await api.post<QuizQuestion>('/quiz-mcq/questions', dto, { isAdmin });
+export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
+  const response = await adminApi.post<QuizQuestion>('/quiz-mcq/questions', dto);
   return response.data;
 }
 
-export async function createQuestionsBulk(
-  dto: CreateQuestionDto[],
-  isAdmin: boolean = false
-): Promise<BulkCreateResponse> {
-  const response = await api.post<BulkCreateResponse>('/quiz-mcq/questions/bulk', dto, { isAdmin });
+export async function createQuestionsBulk(dto: CreateQuestionDto[]): Promise<BulkCreateResponse> {
+  const response = await adminApi.post<BulkCreateResponse>('/quiz-mcq/questions/bulk', dto);
   return response.data;
 }
 
 export async function createQuestionsBulkFromImport(
-  dto: BulkQuestionDto,
-  isAdmin: boolean = false
+  dto: BulkQuestionDto
 ): Promise<{ count: number; errors: string[] }> {
-  const response = await api.post<{ count: number; errors: string[] }>(
+  const response = await adminApi.post<{ count: number; errors: string[] }>(
     '/quiz-mcq/questions/bulk',
-    dto,
-    { isAdmin }
+    dto
   );
   return response.data;
 }
 
-export async function updateQuestion(
-  id: string,
-  dto: UpdateQuestionDto,
-  isAdmin: boolean = false
-): Promise<QuizQuestion> {
-  const response = await api.patch<QuizQuestion>(`/quiz-mcq/questions/${id}`, dto, { isAdmin });
+export async function updateQuestion(id: string, dto: UpdateQuestionDto): Promise<QuizQuestion> {
+  const response = await adminApi.patch<QuizQuestion>(`/quiz-mcq/questions/${id}`, dto);
   return response.data;
 }
 
-export async function deleteQuestion(id: string, isAdmin: boolean = false): Promise<void> {
-  await api.delete(`/quiz-mcq/questions/${id}`, { isAdmin });
+export async function deleteQuestion(id: string): Promise<void> {
+  await adminApi.delete(`/quiz-mcq/questions/${id}`);
 }
 
 export async function bulkActionQuestions(
   ids: string[],
-  action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore',
-  isAdmin: boolean = false
+  action: 'publish' | 'draft' | 'trash' | 'delete' | 'restore'
 ): Promise<{ success: number; failed: number }> {
-  const response = await api.post<{ success: number; failed: number }>(
+  const response = await adminApi.post<{ success: number; failed: number }>(
     '/quiz-mcq/bulk-action',
     {
       ids,
       action,
-    },
-    { isAdmin }
+    }
   );
   return response.data;
 }
@@ -457,8 +422,7 @@ export async function exportQuestionsFromBackend(
     level?: string;
     chapter?: string;
     status?: string;
-  } = {},
-  isAdmin: boolean = true
+  } = {}
 ): Promise<void> {
   const params = new URLSearchParams();
   if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
@@ -466,9 +430,8 @@ export async function exportQuestionsFromBackend(
   if (filters.chapter && filters.chapter !== 'all') params.append('chapter', filters.chapter);
   if (filters.status && filters.status !== 'all') params.append('status', filters.status);
 
-  const response = await api.get<{ csv: string; filename: string }>(
-    `/quiz-mcq/questions/export?${params.toString()}`,
-    { isAdmin }
+  const response = await adminApi.get<{ csv: string; filename: string }>(
+    `/quiz-mcq/questions/export?${params.toString()}`
   );
 
   const blob = new Blob([response.data.csv], { type: 'text/csv;charset=utf-8;' });

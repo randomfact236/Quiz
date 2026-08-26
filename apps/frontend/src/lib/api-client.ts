@@ -177,3 +177,15 @@ export const api = {
   delete: <T>(endpoint: string, options?: { isAdmin?: boolean }) =>
     apiRequest<T>(endpoint, { method: 'DELETE', ...options }),
 };
+
+/**
+ * Admin-scoped variants — always authenticate with the admin token, so call
+ * sites don't have to remember `{ isAdmin: true }` on every request.
+ */
+export const adminApi = {
+  get: <T>(endpoint: string) => api.get<T>(endpoint, { isAdmin: true }),
+  post: <T>(endpoint: string, body: unknown) => api.post<T>(endpoint, body, { isAdmin: true }),
+  put: <T>(endpoint: string, body: unknown) => api.put<T>(endpoint, body, { isAdmin: true }),
+  patch: <T>(endpoint: string, body: unknown) => api.patch<T>(endpoint, body, { isAdmin: true }),
+  delete: <T>(endpoint: string) => api.delete<T>(endpoint, { isAdmin: true }),
+};

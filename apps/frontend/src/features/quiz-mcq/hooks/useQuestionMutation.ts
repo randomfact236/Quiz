@@ -25,7 +25,7 @@ export function useQuestionMutation() {
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
-    mutationFn: (dto: CreateQuestionDto) => createQuestion(dto, true),
+    mutationFn: (dto: CreateQuestionDto) => createQuestion(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -33,8 +33,7 @@ export function useQuestionMutation() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, dto }: { id: string; dto: UpdateQuestionDto }) =>
-      updateQuestion(id, dto, true),
+    mutationFn: ({ id, dto }: { id: string; dto: UpdateQuestionDto }) => updateQuestion(id, dto),
     onMutate: async ({ id, dto }) => {
       await queryClient.cancelQueries({ queryKey: [QUESTIONS_KEY] });
 
@@ -68,7 +67,7 @@ export function useQuestionMutation() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteQuestion(id, true),
+    mutationFn: (id: string) => deleteQuestion(id),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: [QUESTIONS_KEY] });
       const previous = queryClient.getQueryData([QUESTIONS_KEY]);
@@ -100,7 +99,7 @@ export function useQuestionMutation() {
   });
 
   const bulkDeleteMutation = useMutation({
-    mutationFn: (ids: string[]) => bulkActionQuestions(ids, 'delete', true),
+    mutationFn: (ids: string[]) => bulkActionQuestions(ids, 'delete'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -117,7 +116,7 @@ export function useQuestionMutation() {
     }: {
       ids: string[];
       action: 'publish' | 'draft' | 'trash' | 'restore';
-    }) => bulkActionQuestions(ids, action, true),
+    }) => bulkActionQuestions(ids, action),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
@@ -128,7 +127,7 @@ export function useQuestionMutation() {
   });
 
   const bulkCreateMutation = useMutation({
-    mutationFn: (dto: BulkQuestionDto) => createQuestionsBulkFromImport(dto, true),
+    mutationFn: (dto: BulkQuestionDto) => createQuestionsBulkFromImport(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });

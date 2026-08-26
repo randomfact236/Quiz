@@ -10,15 +10,12 @@ export function useFilterCounts(filters: QuizFilters) {
   return useQuery({
     queryKey: [FILTER_COUNTS_KEY, filters],
     queryFn: async (): Promise<FilterCountsResponse> => {
-      const response = await getFilterCounts(
-        {
-          ...(filters.subject && { subject: filters.subject }),
-          ...(filters.level && { level: filters.level }),
-          ...(filters.chapter && { chapter: filters.chapter }),
-          ...(filters.search && { search: filters.search }),
-        },
-        true // isAdmin
-      );
+      const response = await getFilterCounts({
+        ...(filters.subject && { subject: filters.subject }),
+        ...(filters.level && { level: filters.level }),
+        ...(filters.chapter && { chapter: filters.chapter }),
+        ...(filters.search && { search: filters.search }),
+      });
       return response;
     },
     staleTime: 30 * 1000, // 30 seconds
