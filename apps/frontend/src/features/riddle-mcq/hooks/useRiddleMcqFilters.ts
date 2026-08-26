@@ -7,7 +7,7 @@ const DEFAULT_FILTERS = {
   category: 'all',
   subject: 'all',
   level: 'all',
-  status: 'all',
+  status: 'published',
   search: '',
 };
 
