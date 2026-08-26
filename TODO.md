@@ -65,8 +65,8 @@ Optimization pass (2026-08-26):
 - **~~[perf] filter-counts query fan-out~~** — 5 GROUP BY queries consolidated to 3; total derived from combined status rows; semantics preserved. Verified live against DB.
 - **~~[fix] biased shuffle~~** — play page uses shared Fisher-Yates `shuffle()` (`lib/utils.ts`) instead of `sort(() => Math.random() - 0.5)`.
 - **~~[refactor] play page orchestration~~** — extracted to `hooks/use-riddle-play/useRiddlePlay.ts` (+ `useRiddleTimers` clocks module); page is render-only at 285 lines (was 787).
-- ~~Open: cosmetic practice countdown~~ � REMOVED 2026-08-26 per owner decision (no enforcement existed; challenge ring unaffected).
-- DONE 2026-08-26 � unified Quiz/Riddle picker built at /play: content-type step then mode step, routed into existing quiz/riddle flows; linked from riddles home.
+- ~~Open: cosmetic practice countdown~~ — REMOVED 2026-08-26 per owner decision (no enforcement existed; challenge ring unaffected).
+- DONE 2026-08-26 — unified Quiz/Riddle picker built at `/play`: content-type step then mode step, routed into existing quiz/riddle flows; linked from riddles home.
 
 ## Resolved
 
