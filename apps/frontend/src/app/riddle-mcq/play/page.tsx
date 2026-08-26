@@ -4,7 +4,7 @@
  * ============================================================================
  * Main gameplay page for riddles - fetches from backend API.
  * Layout mirrors quiz-mcq/play/page.tsx exactly.
- * URL: /riddle-mcq/play?chapterId=&level=&mode=
+ * URL: /riddle-mcq/play?subjectId=&level=&mode=
  * ============================================================================
  */
 
@@ -71,8 +71,8 @@ function RiddlePlayPageContent(): JSX.Element {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // URL params
-  const chapterId = searchParams.get('chapterId') || 'all';
+  // URL params — subjectId is canonical; chapterId kept as legacy fallback
+  const subjectId = searchParams.get('subjectId') || searchParams.get('chapterId') || 'all';
   const level = searchParams.get('level') || 'all';
   const mode = (searchParams.get('mode') || 'practice') as 'timer' | 'practice';
   const chapterNameParam = searchParams.get('chapterName') || '';
@@ -130,7 +130,7 @@ function RiddlePlayPageContent(): JSX.Element {
 
         let fetchedRiddles: Riddle[] = [];
 
-        if (chapterId === 'all') {
+        if (subjectId === 'all') {
           let mixed: {
             level?: string;
             id: string;
@@ -158,7 +158,7 @@ function RiddlePlayPageContent(): JSX.Element {
           );
         } else {
           // Pass level filter to backend API (more efficient than frontend filtering)
-          const response = await getRiddlesBySubject(chapterId, 1, 50, level);
+          const response = await getRiddlesBySubject(subjectId, 1, 50, level);
           fetchedRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
           if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
             const baseName = chapterNameParam || 'Subject';
@@ -175,7 +175,7 @@ function RiddlePlayPageContent(): JSX.Element {
         if (
           existingSession &&
           existingSession.status === 'in-progress' &&
-          existingSession.chapterId === chapterId
+          existingSession.chapterId === subjectId
         ) {
           setShowResumeDialog(true);
           setStatus('paused'); // Exit loading so dialog renders
@@ -189,7 +189,7 @@ function RiddlePlayPageContent(): JSX.Element {
     }
 
     fetchRiddles();
-  }, [chapterId, level, isMounted]);
+  }, [subjectId, level, isMounted]);
 
   // Start new session
   const startNewSession = useCallback(
@@ -209,7 +209,7 @@ function RiddlePlayPageContent(): JSX.Element {
 
       const newSession = createRiddleSession(
         mode,
-        chapterId,
+        subjectId,
         chapterName,
         (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
         riddleList,
@@ -222,7 +222,7 @@ function RiddlePlayPageContent(): JSX.Element {
       setStatus('playing');
       setShowResumeDialog(false);
     },
-    [mode, chapterId, chapterName, level, settings]
+    [mode, subjectId, chapterName, level, settings]
   );
 
   // Resume existing session
@@ -391,7 +391,7 @@ function RiddlePlayPageContent(): JSX.Element {
       let newRiddles: Riddle[] = [];
       const currentIds = new Set(riddles.map((r) => r.id));
 
-      if (chapterId === 'all') {
+      if (subjectId === 'all') {
         if (level && level !== 'all') {
           const response = await getRandomRiddles(level, additionalRiddles + 10);
           newRiddles = response.map((r) =>
@@ -403,7 +403,7 @@ function RiddlePlayPageContent(): JSX.Element {
         }
       } else {
         // Pass level filter to backend API (more efficient)
-        const response = await getRiddlesBySubject(chapterId, 1, 100, level);
+        const response = await getRiddlesBySubject(subjectId, 1, 100, level);
         newRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
       }
 
@@ -440,7 +440,7 @@ function RiddlePlayPageContent(): JSX.Element {
       alert('Failed to load more riddles. Please try again.');
       setStatus('playing');
     }
-  }, [riddles, chapterId, level, additionalRiddles, mode, settings, session]);
+  }, [riddles, subjectId, level, additionalRiddles, mode, settings, session]);
 
   // Determine back path
   const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';

@@ -149,7 +149,7 @@ function ResultsContent(): JSX.Element {
   const { session, correctCount, incorrectCount, percentage, grade, byDifficulty } = result;
 
   const backPath = session.mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
-  const retryPath = `/riddle-mcq/play?chapterId=${session.chapterId}&level=${session.difficulty}&mode=${session.mode}`;
+  const retryPath = `/riddle-mcq/play?subjectId=${session.chapterId}&level=${session.difficulty}&mode=${session.mode}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
