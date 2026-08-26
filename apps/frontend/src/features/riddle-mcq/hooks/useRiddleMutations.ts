@@ -21,7 +21,7 @@ export function useRiddleMutations() {
   const createCategoryMutation = useMutation({
     mutationFn: (dto: CreateCategoryDto) => createCategory(dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
   });
@@ -30,7 +30,7 @@ export function useRiddleMutations() {
     mutationFn: ({ id, dto }: { id: string; dto: Partial<CreateCategoryDto> }) =>
       updateCategory(id, dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
   });
@@ -38,8 +38,9 @@ export function useRiddleMutations() {
   const deleteCategoryMutation = useMutation({
     mutationFn: (id: string) => deleteCategory(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-categories'] });
-      queryClient.invalidateQueries({ queryKey: ['riddle-subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
   });
@@ -47,7 +48,7 @@ export function useRiddleMutations() {
   const createSubjectMutation = useMutation({
     mutationFn: (dto: CreateSubjectDto) => createSubject(dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
   });
@@ -56,7 +57,7 @@ export function useRiddleMutations() {
     mutationFn: ({ id, dto }: { id: string; dto: Partial<CreateSubjectDto> }) =>
       updateSubject(id, dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
   });
@@ -64,7 +65,7 @@ export function useRiddleMutations() {
   const deleteSubjectMutation = useMutation({
     mutationFn: (id: string) => deleteSubject(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['riddle-subjects'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
       queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
     },
