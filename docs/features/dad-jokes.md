@@ -149,9 +149,9 @@ Stats (`dad-jokes-stats.controller.ts`):
 2. ✅ DONE — public `GET /jokes/classic` hard-filters `PUBLISHED`; `status` query param removed from the public list endpoint.
 3. ✅ DONE — `page.tsx` reads `?category=<uuid>` from the URL on mount; category sidebar filters by `categoryId` matching the API's UUID IDs; MobileFooter's jokes drawer already linked with `cat.id` from the real API.
 4. ✅ DONE — cache invalidation fixed: `createCategory`/`updateCategory`/`deleteCategory` now clear both `jokes:categories:hasContent:true` and `false` via `invalidateCacheFamilies` (matching the cached key format); biased `.sort(Math.random)` shuffled replaced with Fisher-Yates in `findRandomQuizJokes` and `findMixedQuizJokes`; null-categoryId crash in `createJokesBulk` fixed with `.filter(id => id != null && id.length > 0)`.
-5. **Ship a minimal quiz-format UI** (P2): `/jokes/quiz/[slug]` chapter listing plus a play view using `/jokes/quiz/:chapterId` and `/jokes/random/:level`.
-6. **Wire admin JokesSection to the API** (P2): CRUD + bulk import mapped to backend bulk endpoints, with JWT.
-7. **Clean up** (P3): remove legacy `delivery/type` fields and the unused `UpdateDadJokeDto` ambiguity, replace biased `.sort(random)` shuffle with Fisher-Yates, dedupe hardcoded categories, address nested-interactive-element a11y finding from the audit.
+5. ✅ DONE — `sample-dad-jokes.sql` seed created: 4 categories +15 published jokes across Classic/Programming/Parenting/Office, with pre-seeded likes/dislikes.
+6. ✅ DONE — `JokesSection.tsx` wired to API: mount-time fetch from `GET /jokes/classic` + `/categories`; CRUD via `POST/PUT/DELETE /jokes/classic`; bulk actions via `POST /jokes/classic/bulk-action`; category CRUD via `/jokes/classic/categories`; import via `POST /jokes/classic/bulk` with category auto-resolution.
+7. ✅ DONE — dead code cleanup: legacy `type`/`delivery` fields removed from `Joke` type; `PUT /jokes/classic/:id` now uses proper `UpdateDadJokeDto` instead of mis-cast `UpdateJokeCategoryDto`; a11y fix: card `role="button"` changed to `role="article"` so vote buttons are no longer nested inside an interactive parent; hardcoded fallback categories deduped (description field removed).
 
 ## Code Quality Notes
 

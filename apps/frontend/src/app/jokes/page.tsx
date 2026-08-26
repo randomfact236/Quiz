@@ -504,13 +504,12 @@ export default function JokesPage(): JSX.Element {
                   <div
                     className="group relative min-h-[160px] grid grid-cols-1 w-full perspective-1000 cursor-pointer"
                     onClick={() => toggleFlip(jokeOfTheDay.id)}
-                    role="button"
                     tabIndex={0}
-                    aria-pressed={flippedCards[jokeOfTheDay.id]}
+                    role="article"
                     aria-label={
                       flippedCards[jokeOfTheDay.id]
-                        ? 'Flip card back to question'
-                        : 'Click to reveal the punchline'
+                        ? `Joke of the Day: ${jokeOfTheDay.setup} — ${jokeOfTheDay.punchline}`
+                        : `Joke of the Day: ${jokeOfTheDay.setup} — click to reveal punchline`
                     }
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -661,13 +660,12 @@ export default function JokesPage(): JSX.Element {
                   key={joke.id}
                   className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer"
                   onClick={() => toggleFlip(joke.id)}
-                  role="button"
                   tabIndex={0}
-                  aria-pressed={flippedCards[joke.id]}
+                  role="article"
                   aria-label={
                     flippedCards[joke.id]
-                      ? 'Flip card back to question'
-                      : 'Click to reveal the punchline'
+                      ? `Joke: ${joke.setup} — ${joke.punchline}`
+                      : `Joke: ${joke.setup} — click to reveal punchline`
                   }
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {

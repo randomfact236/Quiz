@@ -20,6 +20,7 @@ import { Roles } from '../common/decorators/roles.decorator';
 import {
   CreateDadJokeDto,
   CreateJokeCategoryDto,
+  UpdateDadJokeDto,
   UpdateJokeCategoryDto,
   PaginationDto,
   SearchJokesDto,
@@ -156,10 +157,8 @@ export class DadJokesController {
   @ApiOperation({ summary: 'Update a classic dad joke (Admin only)' })
   @ApiResponse({ status: 200, description: 'Joke updated successfully' })
   @ApiResponse({ status: 404, description: 'Joke not found' })
-  updateClassic(@Param('id') id: string, @Body() dto: UpdateJokeCategoryDto): Promise<DadJoke> {
-    // Using UpdateJokeCategoryDto as a safe update DTO (only allows specific fields)
-    // The service method handles field mapping
-    return this.jokesService.updateJoke(id, dto as Partial<CreateDadJokeDto>);
+  updateClassic(@Param('id') id: string, @Body() dto: UpdateDadJokeDto): Promise<DadJoke> {
+    return this.jokesService.updateJoke(id, dto);
   }
 
   @Delete('classic/:id')

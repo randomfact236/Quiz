@@ -59,8 +59,6 @@ export interface Joke {
   likes?: number;
   dislikes?: number;
   status?: string;
-  type?: string;
-  delivery?: string;
 }
 
 // ============================================================================
@@ -119,6 +117,142 @@ export async function getJokeCategories(hasContent = false): Promise<JokeCategor
 export async function voteJoke(id: string, type: 'like' | 'dislike'): Promise<unknown> {
   const response = await api.post(`/jokes/classic/${id}/vote`, { voteType: type });
   return response.data;
+}
+
+// ============================================================================
+// Admin API — for the admin panel (JWT required)
+// ============================================================================
+
+export interface AdminJoke {
+  id: string;
+  joke: string;
+  category: JokeCategory;
+  categoryId: string;
+  status: string;
+  likes: number;
+  dislikes: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AdminPaginated<T> {
+  data: T[];
+  total: number;
+}
+
+export interface CreateJokeAdminDto {
+  joke: string;
+  categoryId: string;
+}
+
+export interface UpdateJokeAdminDto {
+  joke?: string;
+  categoryId?: string;
+}
+
+export type JokeBulkAction = 'publish' | 'draft' | 'trash' | 'restore' | 'delete';
+
+export interface BulkActionResult {
+  success: boolean;
+  processed: number;
+  succeeded: number;
+  failed: number;
+  message?: string;
+}
+
+/** Adapt a raw admin joke to the shape the JokesSection component expects. */
+export function adaptJokeToAdmin(raw: AdminJoke): Joke {
+  return {
+    id: raw.id,
+    joke: raw.joke,
+    category: raw.category?.name ?? 'Uncategorized',
+    categoryId: raw.categoryId,
+    likes: raw.likes,
+    dislikes: raw.dislikes,
+    status: raw.status,
+  };
+}
+
+export async function getAllJokesAdmin(
+  params: { status?: string; search?: string } = {},
+  page = 1,
+  limit = 100
+): Promise<AdminPaginated<AdminJoke>> {
+  const qs = new URLSearchParams();
+  if (params.status && params.status !== 'all') qs.append('status', params.status);
+  if (params.search) qs.append('search', params.search);
+  qs.append('page', String(page));
+  qs.append('limit', String(limit));
+  const response = await api.get<AdminPaginated<AdminJoke>>(`/jokes/classic?${qs.toString()}`, {
+    isAdmin: true,
+  });
+  return response.data;
+}
+
+export async function createJokeAdmin(dto: CreateJokeAdminDto): Promise<AdminJoke> {
+  const response = await api.post<AdminJoke>('/jokes/classic', dto, { isAdmin: true });
+  return response.data;
+}
+
+export async function updateJokeAdmin(id: string, dto: UpdateJokeAdminDto): Promise<AdminJoke> {
+  const response = await api.put<AdminJoke>(`/jokes/classic/${id}`, dto, { isAdmin: true });
+  return response.data;
+}
+
+export async function deleteJokeAdmin(id: string): Promise<void> {
+  await api.delete(`/jokes/classic/${id}`, { isAdmin: true });
+}
+
+export async function bulkActionJokes(
+  ids: string[],
+  action: JokeBulkAction
+): Promise<BulkActionResult> {
+  const response = await api.post<BulkActionResult>(
+    '/jokes/classic/bulk-action',
+    { ids, action },
+    { isAdmin: true }
+  );
+  return response.data;
+}
+
+export async function bulkCreateJokesAdmin(
+  dtos: CreateJokeAdminDto[]
+): Promise<{ count: number; errors: string[] }> {
+  const response = await api.post<{ count: number; errors: string[] }>(
+    '/jokes/classic/bulk',
+    dtos,
+    { isAdmin: true }
+  );
+  return response.data;
+}
+
+export async function getJokeCategoriesAdmin(): Promise<JokeCategory[]> {
+  const response = await api.get<JokeCategory[]>('/jokes/classic/categories', { isAdmin: true });
+  return response.data;
+}
+
+export async function createJokeCategoryAdmin(dto: {
+  name: string;
+  emoji?: string;
+}): Promise<JokeCategory> {
+  const response = await api.post<JokeCategory>('/jokes/classic/categories', dto, {
+    isAdmin: true,
+  });
+  return response.data;
+}
+
+export async function updateJokeCategoryAdmin(
+  id: string,
+  dto: { name?: string; emoji?: string }
+): Promise<JokeCategory> {
+  const response = await api.put<JokeCategory>(`/jokes/classic/categories/${id}`, dto, {
+    isAdmin: true,
+  });
+  return response.data;
+}
+
+export async function deleteJokeCategoryAdmin(id: string): Promise<void> {
+  await api.delete(`/jokes/classic/categories/${id}`, { isAdmin: true });
 }
 
 // ============================================================================
