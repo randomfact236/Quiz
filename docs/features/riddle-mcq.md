@@ -23,17 +23,18 @@ Merged from former sections 03 (frontend) and 04 (backend). Frontend paths relat
 
 ### Endpoint map
 
-| Method & Path                                                                         | Auth   | Notes                                                                    |
-| ------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------ |
-| GET `/riddle-mcq/all?...filters`                                                      | admin  | paginated cached list (`controller:46`)                                  |
-| GET `/riddle-mcq/level-counts`                                                        | public | per-subject×level published counts, one GROUP BY, 300s cache (`:78`)     |
-| GET `/riddle-mcq/subjects/:subjectId/riddles`                                         | public | PUBLISHED only (`:88`)                                                   |
-| GET `/riddle-mcq/mixed?count<=100`, `/random/:level?count<=50`                        | public | index-seek random via `random_weight` + wrap-around (`:105-114`)         |
-| GET `/riddle-mcq/riddles/:id`                                                         | public | single read, PUBLISHED only (`:128`)                                     |
-| POST/PATCH/DELETE `/riddle-mcq/riddles[/:id]`, `/bulk`, `/bulk-action`, GET `/export` | admin  | (`:134-184`)                                                             |
-| GET `/riddle-mcq/stats/overview`, `/filter-counts`                                    | public | FE contract `{totalRiddleMcqs, totalSubjects, mcqsByLevel}` (`:197-208`) |
-| GET `/riddle-mcq/stats/status-counts?subject`                                         | admin  | (`:232`)                                                                 |
-| Categories & subjects full CRUD (`/all`, `?hasContent=true`, `/:slug`)                | mixed  |                                                                          |
+| Method & Path                                                                         | Auth   | Notes                                                                |
+| ------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
+| GET `/riddle-mcq/all?...filters`                                                      | admin  | paginated cached list (`controller:46`)                              |
+| GET `/riddle-mcq/level-counts`                                                        | public | per-subject×level published counts, one GROUP BY, 300s cache (`:78`) |
+| GET `/riddle-mcq/subjects/:subjectId/riddles`                                         | public | PUBLISHED only (`:88`)                                               |
+| GET `/riddle-mcq/mixed?count<=100`, `/random/:level?count<=50`                        | public | index-seek random via `random_weight` + wrap-around (`:105-114`)     |
+| GET `/riddle-mcq/riddles/:id`                                                         | public | single read, PUBLISHED only (`:128`)                                 |
+| POST/PATCH/DELETE `/riddle-mcq/riddles[/:id]`, `/bulk`, `/bulk-action`, GET `/export` | admin  | (`:134-184`)                                                         |
+| GET `/riddle-mcq/stats/overview`                                                      | public | FE contract `{totalRiddleMcqs, totalSubjects, mcqsByLevel}`          |
+| GET `/riddle-mcq/filter-counts`                                                       | admin  | facet counts for the admin filter panel (requires JWT)               |
+| GET `/riddle-mcq/stats/status-counts?subject`                                         | admin  | (`:232`)                                                             |
+| Categories & subjects full CRUD (`/all`, `?hasContent=true`, `/:slug`)                | mixed  |                                                                      |
 
 ### Backend status
 
@@ -41,7 +42,7 @@ Merged from former sections 03 (frontend) and 04 (backend). Frontend paths relat
 
 **Backend bugs/gaps — ALL FIXED 2026-08-25/26:**
 
-1. ~~Stats payload mismatch + swapped totalSubjects/totalCategories~~ — returns the FE contract with correct values; `stats/overview` + `filter-counts` restored to public via `@_Public()` (default-deny JWT had silently locked them). Verified live.
+1. ~~Stats payload mismatch + swapped totalSubjects/totalCategories~~ — returns the FE contract with correct values; `stats/overview` restored to public via `@_Public()` (default-deny JWT had locked it); note: `filter-counts` remains ADMIN � earlier doc line claiming it was public was wrong. Verified live.
 2. ~~By-subject endpoint leaked unpublished content~~ — filters `status = PUBLISHED`; verified live.
 3. ~~Orphaned/broken migrations~~ — rebuilt as timestamped baseline + scale-index migrations, registered in app.module (`migrationsRun`). Done upstream in phase 0.5.
 4. ~~Dead code~~ — `findRiddleById()` now exposed via public `GET riddles/:id`; bulk facade deleted (commit `2b5caff` removed an earlier facade; the re-introduced thin facade was dissolved into import/bulk-actions services).
