@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
+import { useQuery, useQueries } from '@tanstack/react-query';
 import {
   GraduationCap,
   Briefcase,
@@ -21,8 +22,8 @@ import {
   getSubjectBySlug,
   getQuestionsByChapter,
 } from '@/lib/quiz-mcq-api';
+import type { QuizSubject, QuizQuestion } from '@/lib/quiz-mcq-api';
 import { getChapterProgress } from '@/lib/progress';
-import type { QuizSubject } from '@/lib/quiz-mcq-api';
 import {
   QUIZ_LEVELS as levels,
   QUIZ_LEVEL_EMOJIS as levelEmojis,
@@ -213,48 +214,47 @@ function getCategoryDesign(categoryName: string) {
   };
 }
 
+const QUIZ_QUERY_STALE_TIME = 60 * 1000;
+
 function SubjectSelection(): JSX.Element {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
-  const [isLoading, setIsLoading] = useState(true);
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const subjectsData = await getSubjects(false);
-        const sortedSubjects = subjectsData.sort(
-          (a, b) => (a.order ?? 0) - (b.order ?? 0)
-        ) as Subject[];
-        setSubjects(sortedSubjects);
+  const subjectsQuery = useQuery({
+    queryKey: ['quiz-mcq', 'subjects'],
+    queryFn: () => getSubjects(false),
+    staleTime: QUIZ_QUERY_STALE_TIME,
+  });
 
-        const entries = await Promise.all(
-          sortedSubjects.map(async (subject) => {
-            try {
-              const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
-              return [subject.slug, questions.total] as const;
-            } catch {
-              console.error(`Failed to load questions for subject: ${subject.slug}`);
-              return null;
-            }
-          })
-        );
-        const counts: Record<string, number> = {};
-        for (const entry of entries) {
-          if (entry && entry[1] > 0) {
-            counts[entry[0]] = entry[1];
+  const sortedSubjects = useMemo(
+    () => ((subjectsQuery.data ?? []) as Subject[]).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    [subjectsQuery.data]
+  );
+
+  const countsQuery = useQuery({
+    queryKey: ['quiz-mcq', 'question-counts'],
+    queryFn: async () => {
+      const entries = await Promise.all(
+        sortedSubjects.map(async (subject) => {
+          try {
+            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
+            return [subject.slug, questions.total] as const;
+          } catch {
+            console.error(`Failed to load questions for subject: ${subject.slug}`);
+            return null;
           }
+        })
+      );
+      const counts: Record<string, number> = {};
+      for (const entry of entries) {
+        if (entry && entry[1] > 0) {
+          counts[entry[0]] = entry[1];
         }
-        setQuestionCounts(counts);
-      } catch (error) {
-        console.error('Failed to load subjects:', error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    loadData();
-  }, []);
+      return counts;
+    },
+    enabled: sortedSubjects.length > 0,
+    staleTime: QUIZ_QUERY_STALE_TIME,
+  });
 
   const toggleCategory = (categoryName: string) => {
     setOpenCategories((prev) => {
@@ -272,7 +272,7 @@ function SubjectSelection(): JSX.Element {
   const subjectsByCategory = useMemo(() => {
     const grouped: Record<string, Subject[]> = {};
 
-    subjects.forEach((subject) => {
+    sortedSubjects.forEach((subject) => {
       const category = subject.category || 'Other';
       if (!grouped[category]) {
         grouped[category] = [];
@@ -281,7 +281,7 @@ function SubjectSelection(): JSX.Element {
     });
 
     return grouped;
-  }, [subjects]);
+  }, [sortedSubjects]);
 
   const sortedCategories = Object.keys(subjectsByCategory).sort();
 
@@ -291,6 +291,9 @@ function SubjectSelection(): JSX.Element {
       setOpenCategories(new Set(sortedCategories));
     }
   }, [sortedCategories]);
+
+  const questionCounts = countsQuery.data ?? {};
+  const isLoading = subjectsQuery.isPending || countsQuery.isPending;
 
   if (isLoading) {
     return (
@@ -365,69 +368,64 @@ interface ChapterInfo {
 }
 
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
-  const [chapters, setChapters] = useState<ChapterInfo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const subjectQuery = useQuery({
+    queryKey: ['quiz-mcq', 'subject', subject],
+    queryFn: () => getSubjectBySlug(subject),
+    enabled: !!subject && subject !== 'all',
+    staleTime: QUIZ_QUERY_STALE_TIME,
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const loadChapters = async () => {
-      if (!subject || subject === 'all') return;
-
-      try {
-        const subjectData = await getSubjectBySlug(subject);
-        if (controller.signal.aborted) return;
-
-        const chapterMap = new Map<string, ChapterInfo>();
-
-        if (subjectData.chapters && subjectData.chapters.length > 0) {
-          for (const chapter of subjectData.chapters) {
-            const progress = getChapterProgress(subject, chapter.name);
-            chapterMap.set(chapter.id, {
+  const chapterList = useMemo(
+    () =>
+      (subjectQuery.data?.chapters ?? [])
+        .map((chapter) => {
+          const progress = getChapterProgress(subject, chapter.name);
+          return {
+            id: chapter.id,
+            info: {
               name: chapter.name,
               questionCount: 0,
-              levels: new Set(),
+              levels: new Set<string>(),
               isCompleted: progress?.completed ?? false,
               bestScore: progress?.bestScore ?? 0,
               attempts: progress?.attempts ?? 0,
-            });
-          }
+            } satisfies ChapterInfo,
+          };
+        })
+        .sort((a, b) => a.info.name.localeCompare(b.info.name)),
+    [subjectQuery.data, subject]
+  );
 
-          await Promise.all(
-            subjectData.chapters.map(async (chapter) => {
-              try {
-                const questions = await getQuestionsByChapter(chapter.id);
-                const chapterInfo = chapterMap.get(chapter.id);
-                if (chapterInfo) {
-                  chapterInfo.questionCount = questions.data.length;
-                  questions.data.forEach((q) => {
-                    chapterInfo.levels.add(q.level);
-                  });
-                }
-              } catch (error) {
-                console.error(`Failed to load questions for chapter ${chapter.id}:`, error);
-              }
-            })
-          );
-        }
+  const chapterQuestionQueries = useQueries({
+    queries: (subjectQuery.data?.chapters ?? []).map((chapter) => ({
+      queryKey: ['quiz-mcq', 'chapter-questions', chapter.id],
+      queryFn: () => getQuestionsByChapter(chapter.id),
+      staleTime: QUIZ_QUERY_STALE_TIME,
+    })),
+  });
 
-        const chapterArray = Array.from(chapterMap.values()).sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
-
-        setChapters(chapterArray);
-      } catch (error) {
-        console.error('Failed to load chapters:', error);
-      } finally {
-        setIsLoading(false);
+  const chapters = useMemo<ChapterInfo[]>(() => {
+    const dataById = new Map<string, { data: QuizQuestion[] }>();
+    (subjectQuery.data?.chapters ?? []).forEach((chapter, index) => {
+      const result = chapterQuestionQueries[index]?.data;
+      if (result) {
+        dataById.set(chapter.id, result);
       }
-    };
+    });
+    return chapterList.map(({ id, info }) => {
+      const questions = dataById.get(id);
+      if (!questions) return info;
+      return {
+        ...info,
+        questionCount: questions.data.length,
+        levels: new Set(questions.data.map((q) => q.level)),
+      };
+    });
+  }, [chapterList, chapterQuestionQueries, subjectQuery.data]);
 
-    loadChapters();
-    return () => controller.abort();
-  }, [subject]);
+  const isLoading = subjectQuery.isPending || chapterQuestionQueries.some((q) => q.isPending);
 
-  if (isLoading) {
+  if (isLoading && chapters.length === 0) {
     return (
       <div>
         <div className="flex gap-2 mb-6">
@@ -528,41 +526,37 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
   const [normalOpen, setNormalOpen] = useState(true);
   const [timerOpen, setTimerOpen] = useState(true);
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({});
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const subjectQuery = useQuery({
+    queryKey: ['quiz-mcq', 'subject', subject],
+    queryFn: () => getSubjectBySlug(subject),
+    enabled: !!subject && subject !== 'all',
+    staleTime: QUIZ_QUERY_STALE_TIME,
+  });
 
-    const loadQuestions = async () => {
-      if (!subject || subject === 'all') return;
+  const foundChapter = subjectQuery.data?.chapters?.find((c) => c.name === chapter);
 
-      try {
-        const subjectData = await getSubjectBySlug(subject);
-        if (controller.signal.aborted) return;
+  const questionsQuery = useQuery({
+    queryKey: ['quiz-mcq', 'chapter-questions', foundChapter?.id],
+    queryFn: () => getQuestionsByChapter(foundChapter!.id),
+    enabled: !!foundChapter,
+    staleTime: QUIZ_QUERY_STALE_TIME,
+  });
 
-        const foundChapter = subjectData.chapters?.find((c) => c.name === chapter);
+  const questionCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const questions = questionsQuery.data?.data;
+    if (!questions) return counts;
+    levels.forEach((level) => {
+      counts[level] = questions.filter(
+        (q) => q.level === level.toLowerCase() && q.status === 'published'
+      ).length;
+    });
+    return counts;
+  }, [questionsQuery.data]);
 
-        if (foundChapter) {
-          const questions = await getQuestionsByChapter(foundChapter.id);
-
-          const counts: Record<string, number> = {};
-          levels.forEach((level) => {
-            counts[level] = questions.data.filter(
-              (q) => q.level === level.toLowerCase() && q.status === 'published'
-            ).length;
-          });
-          setQuestionCounts(counts);
-        }
-      } catch (error) {
-        console.error('Failed to load questions:', error);
-      }
-    };
-
-    loadQuestions();
-    return () => controller.abort();
-  }, [subject, chapter]);
-
-  const isLoading = Object.keys(questionCounts).length === 0;
+  const isLoading =
+    subjectQuery.isPending || (foundChapter !== undefined && questionsQuery.isPending);
 
   return (
     <div>
