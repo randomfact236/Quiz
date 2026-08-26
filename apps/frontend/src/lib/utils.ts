@@ -57,7 +57,9 @@ export function formatNumber(value: number): string {
  * @returns Percentage (0-100)
  */
 export function calculatePercentage(value: number, total: number): number {
-  if (total === 0) {return 0;}
+  if (total === 0) {
+    return 0;
+  }
   return Math.min(MAX_PERCENTAGE, Math.max(MIN_PERCENTAGE, (value / total) * MAX_PERCENTAGE));
 }
 
@@ -89,11 +91,19 @@ export function formatRelativeTime(date: Date | string | number): string {
   const then = new Date(date);
   const diffInSeconds = Math.floor((now.getTime() - then.getTime()) / ONE_SECOND_MS);
 
-  if (diffInSeconds < SECONDS_PER_MINUTE) {return 'just now';}
-  if (diffInSeconds < SECONDS_PER_HOUR) {return `${Math.floor(diffInSeconds / SECONDS_PER_MINUTE)}m ago`;}
-  if (diffInSeconds < SECONDS_PER_DAY) {return `${Math.floor(diffInSeconds / SECONDS_PER_HOUR)}h ago`;}
-  if (diffInSeconds < SECONDS_PER_WEEK) {return `${Math.floor(diffInSeconds / SECONDS_PER_DAY)}d ago`;}
-  
+  if (diffInSeconds < SECONDS_PER_MINUTE) {
+    return 'just now';
+  }
+  if (diffInSeconds < SECONDS_PER_HOUR) {
+    return `${Math.floor(diffInSeconds / SECONDS_PER_MINUTE)}m ago`;
+  }
+  if (diffInSeconds < SECONDS_PER_DAY) {
+    return `${Math.floor(diffInSeconds / SECONDS_PER_HOUR)}h ago`;
+  }
+  if (diffInSeconds < SECONDS_PER_WEEK) {
+    return `${Math.floor(diffInSeconds / SECONDS_PER_DAY)}d ago`;
+  }
+
   return then.toLocaleDateString();
 }
 
@@ -127,7 +137,9 @@ export function sleep(ms: number): Promise<void> {
  * @returns Truncated text
  */
 export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {return text;}
+  if (text.length <= maxLength) {
+    return text;
+  }
   return `${text.slice(0, maxLength - TRUNCATION_ELLIPSIS_LENGTH)}...`;
 }
 
@@ -141,4 +153,19 @@ export function formatTimeCompact(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return `${mins}m ${secs}s`;
+}
+
+/**
+ * Unbiased Fisher-Yates shuffle. Returns a new array; the input is untouched.
+ * (`arr.sort(() => Math.random() - 0.5)` is distribution-biased — never use it.)
+ */
+export function shuffle<T>(input: readonly T[]): T[] {
+  const arr = [...input];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i] as T;
+    arr[i] = arr[j] as T;
+    arr[j] = tmp;
+  }
+  return arr;
 }

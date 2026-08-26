@@ -38,7 +38,7 @@ import { ResumePromptModal } from './components/ResumePromptModal';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
-import { formatTimeMMSS } from '@/lib/utils';
+import { formatTimeMMSS, shuffle } from '@/lib/utils';
 
 // Auto-save interval in milliseconds
 const AUTO_SAVE_INTERVAL = 10000;
@@ -175,8 +175,8 @@ function RiddlePlayPageContent(): JSX.Element {
           }
         }
 
-        // Shuffle for variety
-        fetchedRiddles = [...fetchedRiddles].sort(() => Math.random() - 0.5);
+        // Shuffle for variety (unbiased Fisher-Yates)
+        fetchedRiddles = shuffle(fetchedRiddles);
         setRiddles(fetchedRiddles);
 
         // Check for a resumable session (two-key store: snapshot + progress)
