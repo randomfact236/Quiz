@@ -53,16 +53,22 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 
 ### File inventory
 
-| File                                                               | Purpose                                                                                                                                                  | Status                                                       |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `app/quiz-mcq/page.tsx`                                            | 767-line wizard: Subject→Chapter→Mode→Level via URL params                                                                                               | Done; monolithic                                             |
-| `app/quiz-mcq/play/page.tsx`                                       | Gameplay (849 lines): summary, timer, skip/share, resume, submit+extend modals                                                                           | Done; very large                                             |
-| `app/quiz-mcq/timer-challenge/page.tsx` / `practice-mode/page.tsx` | Thin wrappers (~30 lines each) around shared `components/quiz-mcq/ChallengeHub.tsx`                                                                      | Done; deduplicated 2026-08-25                                |
-| `app/quiz-mcq/practice/page.tsx`, `challenge/page.tsx`             | Redirect shims                                                                                                                                           | Done                                                         |
-| `app/quiz-mcq/results/page.tsx`                                    | Results from localStorage history                                                                                                                        | Done; scoring via shared lib/quiz-mcq-scoring                |
-| `hooks/useQuizMcq.ts`                                              | Engine hook (~550 lines): loading, scoring (shared scorer), timers, resume, progress+achievement wiring                                                  | Done; hotspot                                                |
-| `components/quiz-mcq/*`                                            | QuestionCard, AnswerOptions (level-aware), BubbleEmojiEffect, FloatingBackground, ScoreCard, QuestionReview, ResultsCelebration                          | Done; QuizMcqTimer.tsx + QuizMcqNavigation.tsx **dead code** |
-| `features/quiz-mcq/**`                                             | Admin CRUD: QuizMcqContainer, FilterPanel, QuestionManager/Table, modals (subject/chapter/question/import), TanStack Query hooks with optimistic updates | Done; admin-only consumer                                    |
+| File                                                               | Purpose                                                                                                                                                    | Status                                                      |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `app/quiz-mcq/page.tsx`                                            | 674-line wizard: Subject→Chapter→Mode→Level via URL params; uses shared level constants                                                                    | Done; still large                                           |
+| `app/quiz-mcq/play/page.tsx` + `play/components/*`                 | Gameplay orchestration (486 lines) + 5 subcomponents: PreQuizSummary, GameHeader, SubmitConfirmModal, ExtendSessionModal, ResumePromptModal                | Done; split 2026-08-25                                      |
+| `app/quiz-mcq/timer-challenge/page.tsx` / `practice-mode/page.tsx` | Thin wrappers (~30 lines each) around shared `components/quiz-mcq/ChallengeHub.tsx`; counts via cached public `/quiz-mcq/level-counts`                     | Done; deduplicated 2026-08-25                               |
+| `app/quiz-mcq/practice/page.tsx`, `challenge/page.tsx`             | Redirect shims                                                                                                                                             | Done                                                        |
+| `app/quiz-mcq/results/page.tsx`                                    | Results from localStorage history                                                                                                                          | Done; scoring via shared lib/quiz-mcq-scoring               |
+| `hooks/useQuizMcq.ts` (484 lines) + `hooks/use-quiz-mcq/*`         | Engine orchestration + extracted modules: `quiz-engine.utils` (UUID/conversion/loader/timer-nav), `useQuizTimers`, `useQuizResume`                         | Done; split 2026-08-25                                      |
+| `lib/quiz-mcq-scoring.ts`                                          | Single source of truth: isAnswerCorrect / calculateScore / calculateResult / calculateGrade (16 regression tests)                                          | Done                                                        |
+| `lib/quiz-mcq-constants.ts`                                        | Shared QUIZ_LEVELS / emojis / colors (was declared 4×)                                                                                                     | Done                                                        |
+| `components/quiz-mcq/*`                                            | ChallengeHub (shared hub), QuestionCard, AnswerOptions (level-aware), BubbleEmojiEffect, FloatingBackground, ScoreCard, QuestionReview, ResultsCelebration | Done; dead QuizMcqTimer/Navigation deleted 2026-08-25       |
+| `features/quiz-mcq/**`                                             | Admin CRUD: QuizMcqContainer, FilterPanel, QuestionManager/Table, modals (subject/chapter/question/import), TanStack Query hooks with optimistic updates   | Done; admin-only consumer; adminApi auth (no isAdmin flags) |
+
+### Tests
+
+`src/__tests__/`: `quiz-mcq-scoring.test.ts` (16) + `useQuizMcq.test.tsx` (6 — completion idempotence, progress/achievements wiring, resume round-trip, pause/resume, extend clamping). 22/22 passing.
 
 ### Frontend status
 
@@ -77,7 +83,7 @@ Merged from former sections 02 (frontend) and 05 (backend). Frontend paths relat
 - Unanswered-review handling ('N/A' letter never matches)
 - Pagination safety — fetches ALL questions of a subject client-side
 - Accessibility (aria-live feedback, label association in AnswerOptions)
-- Scoring regression tests exist (`__tests__/quiz-mcq-scoring.test.ts`, 16 passing); engine-level tests still thin
+- Scoring + engine regression tests exist (`__tests__/quiz-mcq-scoring.test.ts` ×16, `__tests__/useQuizMcq.test.tsx` ×6); component-level tests not yet covered
 
 ## C. How It Works (data flow)
 
