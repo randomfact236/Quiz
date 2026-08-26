@@ -29,7 +29,6 @@ import {
   BulkActionDto,
   BulkActionResponseDto,
   StatusCountResponseDto,
-  StatusFilterDto,
 } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
@@ -54,13 +53,10 @@ export class DadJokesController {
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('classic')
-  @ApiOperation({ summary: 'Get all classic dad jokes with pagination' })
+  @ApiOperation({ summary: 'Get all published classic dad jokes with pagination' })
   @ApiResponse({ status: 200, description: 'Returns paginated dad jokes' })
-  findAllClassic(
-    @Query() pagination: PaginationDto,
-    @Query() filter: StatusFilterDto
-  ): Promise<{ data: DadJoke[]; total: number }> {
-    return this.jokesService.findAllJokes(pagination, filter.status);
+  findAllClassic(@Query() pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
+    return this.jokesService.findAllJokes(pagination);
   }
 
   @_Public()

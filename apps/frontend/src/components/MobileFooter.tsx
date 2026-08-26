@@ -253,7 +253,7 @@ export default function MobileFooter() {
                 IMAGE_RIDDLE_LEVELS.map((level) => (
                   <Link
                     key={level.id}
-                    href="/image-riddles" // Assuming filter is client side for now
+                    href={`/image-riddles?difficulty=${level.id}`}
                     onClick={closeDrawer}
                     className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-teal-50 dark:bg-gray-700 dark:hover:bg-gray-600"
                   >

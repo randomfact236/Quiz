@@ -147,10 +147,11 @@ Response shapes: public lists return `{ data, total }`; the admin list returns `
 3. ✅ DONE — `ImageRiddlesAdminSection.tsx` wired to `/admin/image-riddles/*` with JWT (`adminApi`): server-backed list/categories, create/update/duplicate/import (bulk create + auto category creation), trash/undo via `POST /image-riddles/bulk-action`, hard delete for trashed rows, inline status cycling via bulk-action, reload-from-server replaces localStorage "Sync Source".
 4. ✅ DONE — duplicate admin CRUD removed from `ImageRiddlesController`; `/admin/image-riddles/*` is now the canonical CRUD surface. The public controller keeps reads + `POST /image-riddles/bulk-action` + `GET /image-riddles/status-counts` (the single status-change surface consumed by the admin panel). Orphaned service methods (`createRiddle`/`updateRiddle`/`deleteRiddle`/category CRUD/bulk-create) and `image-riddles-update.helper.ts` were deleted.
 5. ✅ DONE — `sample-image-riddles.sql` rewritten against the current entity (no `points`, `status='published'`, timer/`useDefaultActions` columns); `setup-riddles-database.ps1` now migrates + seeds image-riddle tables instead of text riddles.
-6. **Add view/like tracking** (P2): new `image_riddle_actions` table or counter columns plus `POST /image-riddles/:id/view|like`; wire ActionOptions `onAnalytics` to it.
-7. **Add image upload** (P2): multipart upload endpoint or presigned URLs; validate URL on create/update (reuse `isValidImageUrl`).
-8. **Harden ActionOptions** (P2): remove `new Function` evaluation of `customCondition` or sandbox it; scope keyboard shortcuts so Space/Enter do not leak globally.
-9. **Polish** (P3): unify timer defaults via settings API; support `?difficulty=` / `?category=` query params; adopt `next/image`; batch admin dashboard queries.
+6. ✅ DONE — media library ported from affiliate site: backend `MediaModule` (`media.entity`, `media.service` with sharp WebP q80, `media.controller` for upload/list/delete/stats, `storage.service` local-disk); frontend `lib/media-api.ts` + `MediaPicker` component integrated into `ImageRiddlesAdminSection` (🖼️ Library button in the Image URL field).
+7. ✅ DONE — `MediaPicker` component added: browse, upload, select, delete; backend WebP conversion at upload time.
+8. ✅ DONE — `MobileFooter` difficulty links now pass `/image-riddles?difficulty=<level>`; public page reads `?category=<name>&difficulty=<level>` from the URL on mount.
+9. ✅ DONE — `ActionOptions`: `new Function` eval of `customCondition` removed (security: arbitrary server JS execution no longer runs in the browser); keyboard shortcuts scoped to modifier-combination-only (`Alt+`/`Ctrl+`/`Shift+`/`Cmd+`) and suppressed when focus is inside an input/textarea/select/contentEditable element.
+10. ✅ DONE — unified timer defaults: public page now mirrors backend `RIDDLE_TIMERS` values (easy=60, medium=90, hard=120, expert=180) instead of the stale hardcoded map.
 
 ## Code Quality Notes
 

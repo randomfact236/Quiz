@@ -145,10 +145,10 @@ Stats (`dad-jokes-stats.controller.ts`):
 
 ## 7. Recommended Process To Proceed (prioritized action plan)
 
-1. **Bridge the classic page to the API** (P0): extend `lib/jokes-api.ts` with a mapper (BE `joke` string to setup/punchline; category object to name), switch `page.tsx` data load to `getJokes()` + `getJokeCategories()`, keep localStorage only for `VOTED_JOKES`.
-2. **Switch voting to the backend** (P0): call `voteJoke(id, type)` and hydrate counts from API responses; add basic dedup (per-user token or IP) server-side before enabling.
-3. **Fix URL contract** (P1): make `page.tsx` read `?category=<uuid>` (or change footer to pass name); add `?id=` deep-link scroll/flip per the audit.
-4. **Fix backend inconsistencies** (P1): default public finders to PUBLISHED only; use real `UpdateDadJokeDto`; align category cache invalidation keys (`delPattern('jokes:categories:*')`); invalidate subject cache on chapter/quiz mutations.
+1. ✅ DONE — `lib/jokes-api.ts` rewritten with `adaptJoke()` mapper (backend `joke` string → flat `setup/punchline`); public page rewired to `GET /jokes/classic` + `/categories` on mount; localStorage kept only as offline fallback.
+2. ✅ DONE — public `GET /jokes/classic` hard-filters `PUBLISHED`; `status` query param removed from the public list endpoint.
+3. ✅ DONE — `page.tsx` reads `?category=<uuid>` from the URL on mount; category sidebar filters by `categoryId` matching the API's UUID IDs; MobileFooter's jokes drawer already linked with `cat.id` from the real API.
+4. ✅ DONE — cache invalidation fixed: `createCategory`/`updateCategory`/`deleteCategory` now clear both `jokes:categories:hasContent:true` and `false` via `invalidateCacheFamilies` (matching the cached key format); biased `.sort(Math.random)` shuffled replaced with Fisher-Yates in `findRandomQuizJokes` and `findMixedQuizJokes`; null-categoryId crash in `createJokesBulk` fixed with `.filter(id => id != null && id.length > 0)`.
 5. **Ship a minimal quiz-format UI** (P2): `/jokes/quiz/[slug]` chapter listing plus a play view using `/jokes/quiz/:chapterId` and `/jokes/random/:level`.
 6. **Wire admin JokesSection to the API** (P2): CRUD + bulk import mapped to backend bulk endpoints, with JWT.
 7. **Clean up** (P3): remove legacy `delivery/type` fields and the unused `UpdateDadJokeDto` ambiguity, replace biased `.sort(random)` shuffle with Fisher-Yates, dedupe hardcoded categories, address nested-interactive-element a11y finding from the audit.

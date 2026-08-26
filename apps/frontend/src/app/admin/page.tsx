@@ -283,19 +283,7 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'summary' })}
           />
 
-          {/* Quiz MCQ Section */}
-          <MenuItem
-            icon={<BookOpen className="w-5 h-5" />}
-            label="Quiz MCQ"
-            active={activeSection === 'quiz-mcq'}
-            expanded={sidebarOpen}
-            onClick={() => {
-              setActiveSection('quiz-mcq');
-              updateURL({ section: 'quiz-mcq' });
-            }}
-          />
-
-          {/* Other Modules Header */}
+          {/* All Modules Header */}
           <button
             onClick={() => setOtherModulesExpanded(!otherModulesExpanded)}
             className="w-full flex items-center justify-between px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:bg-gray-800 transition-colors"
@@ -303,7 +291,7 @@ export default function AdminPage(): JSX.Element {
             {sidebarOpen ? (
               <>
                 <span className="flex items-center gap-2">
-                  <Puzzle className="w-4 h-4" /> Other Modules
+                  <Puzzle className="w-4 h-4" /> All Modules
                 </span>
                 <span
                   className={`transition-transform ${otherModulesExpanded ? 'rotate-180' : ''}`}
@@ -318,15 +306,18 @@ export default function AdminPage(): JSX.Element {
             )}
           </button>
 
-          {/* Dad Jokes & Riddles */}
+          {/* All Module Items */}
           {otherModulesExpanded && (
             <>
               <MenuItem
-                icon={<Smile className="w-5 h-5" />}
-                label="Dad Jokes"
-                active={activeSection === 'jokes'}
+                icon={<BookOpen className="w-5 h-5" />}
+                label="Quiz MCQ"
+                active={activeSection === 'quiz-mcq'}
                 expanded={sidebarOpen}
-                onClick={() => updateURL({ section: 'jokes' })}
+                onClick={() => {
+                  setActiveSection('quiz-mcq');
+                  updateURL({ section: 'quiz-mcq' });
+                }}
               />
               <MenuItem
                 icon={<Puzzle className="w-5 h-5" />}
@@ -341,6 +332,13 @@ export default function AdminPage(): JSX.Element {
                 active={activeSection === 'image-riddles'}
                 expanded={sidebarOpen}
                 onClick={() => updateURL({ section: 'image-riddles' })}
+              />
+              <MenuItem
+                icon={<Smile className="w-5 h-5" />}
+                label="Dad Jokes"
+                active={activeSection === 'jokes'}
+                expanded={sidebarOpen}
+                onClick={() => updateURL({ section: 'jokes' })}
               />
             </>
           )}

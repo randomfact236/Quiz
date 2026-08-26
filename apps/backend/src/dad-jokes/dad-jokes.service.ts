@@ -56,17 +56,14 @@ export class DadJokesService {
 
   // ==================== CLASSIC JOKES ====================
 
-  async findAllJokes(
-    pagination: PaginationDto,
-    status?: ContentStatus
-  ): Promise<{ data: DadJoke[]; total: number }> {
+  /** Public list — always PUBLISHED only (admins use admin endpoints for all statuses). */
+  async findAllJokes(pagination: PaginationDto): Promise<{ data: DadJoke[]; total: number }> {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? settings.global.pagination.defaultLimit;
 
-    const where: FindOptionsWhere<DadJoke> = {};
-    if (status != null) {
-      where.status = status;
-    }
+    const where: FindOptionsWhere<DadJoke> = {
+      status: ContentStatus.PUBLISHED,
+    };
 
     const [data, total] = await this.jokeRepo.findAndCount({
       where,
@@ -174,8 +171,13 @@ export class DadJokesService {
     }
 
     return await this.dataSource.transaction(async (transactionalEntityManager) => {
-      // Get all unique category IDs for batch fetch - fixes N+1 query
-      const categoryIds = [...new Set(dto.map((j) => j.categoryId))];
+      // Get all unique non-null category IDs for batch fetch — fixes N+1
+      // and prevents In([null]) crash from rows missing categoryId.
+      const categoryIds = [
+        ...new Set(
+          dto.map((j) => j.categoryId).filter((id): id is string => id != null && id.length > 0)
+        ),
+      ];
       const categories = await transactionalEntityManager.find(JokeCategory, {
         where: { id: In(categoryIds) },
       });
@@ -312,7 +314,11 @@ export class DadJokesService {
       emoji: dto.emoji ?? settings.dadJokes.defaults.categoryEmoji,
     });
     const saved = await this.categoryRepo.save(category);
-    await this.cacheService.del('jokes:categories');
+    // Track B: clear both hasContent variants so stale category list is avoided.
+    await invalidateCacheFamilies(this.cacheService, [
+      'jokes:categories:hasContent:true',
+      'jokes:categories:hasContent:false',
+    ]);
     return saved;
   }
 
@@ -328,7 +334,10 @@ export class DadJokesService {
       category.emoji = dto.emoji;
     }
     const saved = await this.categoryRepo.save(category);
-    await this.cacheService.del('jokes:categories');
+    await invalidateCacheFamilies(this.cacheService, [
+      'jokes:categories:hasContent:true',
+      'jokes:categories:hasContent:false',
+    ]);
     return saved;
   }
 
@@ -346,7 +355,10 @@ export class DadJokesService {
     }
 
     await this.categoryRepo.remove(category);
-    await this.cacheService.del('jokes:categories');
+    await invalidateCacheFamilies(this.cacheService, [
+      'jokes:categories:hasContent:true',
+      'jokes:categories:hasContent:false',
+    ]);
   }
 
   // ==================== QUIZ FORMAT - SUBJECTS ====================
@@ -488,16 +500,18 @@ export class DadJokesService {
       return this.quizJokeRepo.find({ where: { level } });
     }
 
-    // Use Fisher-Yates shuffle approach: get all IDs, shuffle, then fetch selected
+    // Fisher-Yates shuffle for unbiased O(n) random selection
     const allIds = await this.quizJokeRepo
       .createQueryBuilder('joke')
       .select('joke.id')
       .where('joke.level = :level', { level })
       .getMany();
 
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map((j) => j.id);
+    for (let i = allIds.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allIds[i], allIds[j]] = [allIds[j], allIds[i]];
+    }
+    const selectedIds = allIds.slice(0, count).map((j) => j.id);
 
     return this.quizJokeRepo.find({
       where: { id: In(selectedIds) },
@@ -518,12 +532,14 @@ export class DadJokesService {
       return this.quizJokeRepo.find({ relations: ['chapter'] });
     }
 
-    // Get all IDs, shuffle, then fetch selected
+    // Fisher-Yates shuffle for unbiased O(n) random selection
     const allIds = await this.quizJokeRepo.createQueryBuilder('joke').select('joke.id').getMany();
 
-    // Shuffle and pick count items
-    const shuffled = allIds.sort(() => Math.random() - 0.5).slice(0, count);
-    const selectedIds = shuffled.map((j) => j.id);
+    for (let i = allIds.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allIds[i], allIds[j]] = [allIds[j], allIds[i]];
+    }
+    const selectedIds = allIds.slice(0, count).map((j) => j.id);
 
     return this.quizJokeRepo.find({
       where: { id: In(selectedIds) },

@@ -3,7 +3,7 @@
  * IMAGE RIDDLE ACTION OPTIONS COMPONENT - ENTERPRISE GRADE
  * ============================================================================
  * Quality Standards: 10/10 - Production Ready
- * 
+ *
  * Features:
  * - Type-safe action option rendering
  * - Multiple action types support
@@ -176,39 +176,53 @@ const BADGE_CLASSES: Record<string, string> = {
 /**
  * Check if action should be visible based on game state
  */
-function shouldShowAction(action: IActionOption, gameState: ActionOptionsProps['gameState']): boolean {
-  if (!action.isVisible || !action.isEnabled) { return false; }
-
-  const conditions = action.visibilityConditions;
-  if (!conditions) { return true; }
-
-  if (conditions.showWhenTimerRunning !== undefined && conditions.showWhenTimerRunning !== gameState.isTimerRunning) {
+function shouldShowAction(
+  action: IActionOption,
+  gameState: ActionOptionsProps['gameState']
+): boolean {
+  if (!action.isVisible || !action.isEnabled) {
     return false;
   }
-  if (conditions.showWhenTimerPaused !== undefined && conditions.showWhenTimerPaused !== gameState.isTimerPaused) {
+
+  const conditions = action.visibilityConditions;
+  if (!conditions) {
+    return true;
+  }
+
+  if (
+    conditions.showWhenTimerRunning !== undefined &&
+    conditions.showWhenTimerRunning !== gameState.isTimerRunning
+  ) {
+    return false;
+  }
+  if (
+    conditions.showWhenTimerPaused !== undefined &&
+    conditions.showWhenTimerPaused !== gameState.isTimerPaused
+  ) {
     return false;
   }
   if (conditions.showWhenTimeUp !== undefined && conditions.showWhenTimeUp !== gameState.isTimeUp) {
     return false;
   }
-  if (conditions.showWhenAnswerRevealed !== undefined && conditions.showWhenAnswerRevealed !== gameState.isAnswerRevealed) {
+  if (
+    conditions.showWhenAnswerRevealed !== undefined &&
+    conditions.showWhenAnswerRevealed !== gameState.isAnswerRevealed
+  ) {
     return false;
   }
-  if (conditions.showWhenAnswerHidden !== undefined && conditions.showWhenAnswerHidden === gameState.isAnswerRevealed) {
+  if (
+    conditions.showWhenAnswerHidden !== undefined &&
+    conditions.showWhenAnswerHidden === gameState.isAnswerRevealed
+  ) {
     return false;
   }
 
-  // Custom conditions could be evaluated here with a safe evaluator
+  // SECURITY: never evaluate arbitrary strings — customCondition is ignored;
+  // callers must use the structured visibility booleans instead.
   if (conditions.customCondition) {
-    // For security, custom conditions should be evaluated in a sandbox
-    // This is a simplified implementation
-    try {
-      // eslint-disable-next-line no-new-func
-      const evaluator = new Function('state', `return ${conditions.customCondition}`);
-      return evaluator(gameState);
-    } catch {
-      return true; // Show by default if evaluation fails
-    }
+    // Treat customCondition as "show by default" — the old new Function
+    // sandboxed nothing and allowed server-controlled JS execution in the
+    // browser. Structured booleans above are the supported surface.
   }
 
   return true;
@@ -247,14 +261,7 @@ const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ size = 'sm' }
       fill="none"
       viewBox="0 0 24 24"
     >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
         fill="currentColor"
@@ -274,7 +281,9 @@ const Tooltip: React.FC<{
   y: number;
   visible: boolean;
 }> = ({ text, shortcut, x, y, visible }) => {
-  if (!visible) { return null; }
+  if (!visible) {
+    return null;
+  }
 
   return (
     <div
@@ -282,9 +291,7 @@ const Tooltip: React.FC<{
       style={{ left: x, top: y - 30 }}
     >
       <span>{text}</span>
-      {shortcut && (
-        <span className="ml-1 text-gray-400">({formatKeyboardShortcut(shortcut)})</span>
-      )}
+      {shortcut && <span className="ml-1 text-gray-400">({formatKeyboardShortcut(shortcut)})</span>}
     </div>
   );
 };
@@ -298,7 +305,9 @@ const ConfirmDialog: React.FC<{
   onConfirm: () => void;
   onCancel: () => void;
 }> = ({ isOpen, action, onConfirm, onCancel }) => {
-  if (!isOpen || !action?.confirmDialog?.enabled) { return null; }
+  if (!isOpen || !action?.confirmDialog?.enabled) {
+    return null;
+  }
 
   const { confirmDialog } = action;
 
@@ -343,30 +352,38 @@ const ActionButton: React.FC<{
   const buttonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    // Add ripple effect
-    if (action.animation?.click === 'ripple' && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const id = Date.now();
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Add ripple effect
+      if (action.animation?.click === 'ripple' && buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const id = Date.now();
 
-      setRipples(prev => [...prev, { x, y, id }]);
-      setTimeout(() => {
-        setRipples(prev => prev.filter(r => r.id !== id));
-      }, 600);
-    }
+        setRipples((prev) => [...prev, { x, y, id }]);
+        setTimeout(() => {
+          setRipples((prev) => prev.filter((r) => r.id !== id));
+        }, 600);
+      }
 
-    onClick(e);
-  }, [action.animation?.click, onClick]);
+      onClick(e);
+    },
+    [action.animation?.click, onClick]
+  );
 
   const styleClasses = STYLE_CLASSES[action.style];
   const sizeClasses = SIZE_CLASSES[action.size];
   const hoverAnimation = action.animation?.hover === 'pulse' ? 'hover:animate-pulse' : '';
   const hoverScale = action.animation?.hover === 'scale' ? 'hover:scale-105' : '';
-  const entranceAnimation = action.animation?.entrance === 'fade' ? 'animate-fadeIn' :
-    action.animation?.entrance === 'slideUp' ? 'animate-slideUp' :
-      action.animation?.entrance === 'scale' ? 'animate-scale' : '';
+  const entranceAnimation =
+    action.animation?.entrance === 'fade'
+      ? 'animate-fadeIn'
+      : action.animation?.entrance === 'slideUp'
+        ? 'animate-slideUp'
+        : action.animation?.entrance === 'scale'
+          ? 'animate-scale'
+          : '';
 
   const content = (
     <>
@@ -379,9 +396,7 @@ const ActionButton: React.FC<{
       )}
 
       {/* Label */}
-      {action.iconPosition !== 'only' && (
-        <span className="font-medium">{action.label}</span>
-      )}
+      {action.iconPosition !== 'only' && <span className="font-medium">{action.label}</span>}
 
       {/* Loading Spinner */}
       {isLoading && action.loading?.showSpinner && (
@@ -389,13 +404,13 @@ const ActionButton: React.FC<{
       )}
 
       {/* Loading Text */}
-      {isLoading && action.loading?.text && (
-        <span className="ml-1">{action.loading.text}</span>
-      )}
+      {isLoading && action.loading?.text && <span className="ml-1">{action.loading.text}</span>}
 
       {/* Badge */}
       {action.badge && (
-        <span className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${BADGE_CLASSES[action.badge.style]}`}>
+        <span
+          className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${BADGE_CLASSES[action.badge.style]}`}
+        >
           {action.badge.count !== undefined && action.badge.count > 0
             ? action.badge.count > (action.badge.maxCount || 99)
               ? `${action.badge.maxCount || 99}+`
@@ -405,7 +420,7 @@ const ActionButton: React.FC<{
       )}
 
       {/* Ripple Effects */}
-      {ripples.map(ripple => (
+      {ripples.map((ripple) => (
         <span
           key={ripple.id}
           className="absolute bg-white/30 rounded-full animate-ripple pointer-events-none"
@@ -500,62 +515,90 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
   // Filter and sort actions
   const filteredActions = React.useMemo(() => {
     return actions
-      .filter(action => action.position === position)
-      .filter(action => shouldShowAction(action, gameState))
+      .filter((action) => action.position === position)
+      .filter((action) => shouldShowAction(action, gameState))
       .sort((a, b) => a.order - b.order);
   }, [actions, position, gameState]);
 
   // Execute action
-  const executeAction = useCallback((action: IActionOption, event: React.MouseEvent | null) => {
-    // Set loading state
-    if (action.loading?.showSpinner || action.loading?.text) {
-      setLoadingActions(prev => new Set(prev).add(action.id));
-    }
+  const executeAction = useCallback(
+    (action: IActionOption, event: React.MouseEvent | null) => {
+      // Set loading state
+      if (action.loading?.showSpinner || action.loading?.text) {
+        setLoadingActions((prev) => new Set(prev).add(action.id));
+      }
 
-    // Track analytics
-    if (action.analyticsEvent && onAnalytics) {
-      onAnalytics(action.analyticsEvent, {
-        actionId: action.id,
-        ...action.analyticsMetadata,
-      });
-    }
+      // Track analytics
+      if (action.analyticsEvent && onAnalytics) {
+        onAnalytics(action.analyticsEvent, {
+          actionId: action.id,
+          ...action.analyticsMetadata,
+        });
+      }
 
-    // Call the action handler
-    if (event) {
-      onAction(action, event);
-    }
+      // Call the action handler
+      if (event) {
+        onAction(action, event);
+      }
 
-    // Clear loading after a short delay (actual loading should be managed by parent)
-    setTimeout(() => {
-      setLoadingActions(prev => {
-        const next = new Set(prev);
-        next.delete(action.id);
-        return next;
-      });
-    }, 500);
-  }, [onAction, onAnalytics]);
+      // Clear loading after a short delay (actual loading should be managed by parent)
+      setTimeout(() => {
+        setLoadingActions((prev) => {
+          const next = new Set(prev);
+          next.delete(action.id);
+          return next;
+        });
+      }, 500);
+    },
+    [onAction, onAnalytics]
+  );
 
   // Handle action click
-  const handleActionClick = useCallback((action: IActionOption, event: React.MouseEvent | null) => {
-    // Check if confirmation dialog is needed
-    if (action.confirmDialog?.enabled) {
-      setConfirmDialog({ isOpen: true, action });
-      return;
-    }
+  const handleActionClick = useCallback(
+    (action: IActionOption, event: React.MouseEvent | null) => {
+      // Check if confirmation dialog is needed
+      if (action.confirmDialog?.enabled) {
+        setConfirmDialog({ isOpen: true, action });
+        return;
+      }
 
-    executeAction(action, event);
-  }, [executeAction]);
+      executeAction(action, event);
+    },
+    [executeAction]
+  );
 
-  // Handle keyboard shortcuts
+  // Handle keyboard shortcuts — scoped to modifier-based combos only,
+  // and suppressed when the user is typing in a form control.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const shortcut = [];
-      if (e.altKey) { shortcut.push('Alt'); }
-      if (e.ctrlKey) { shortcut.push('Ctrl'); }
-      if (e.shiftKey) { shortcut.push('Shift'); }
-      if (e.metaKey) { shortcut.push('Cmd'); }
+      // Never capture shortcuts inside inputs, textareas, selects, or
+      // contentEditable regions — those elements own Enter/Space/typing.
+      const tag = document.activeElement?.tagName;
+      const isFormControl =
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        tag === 'SELECT' ||
+        (document.activeElement as HTMLElement)?.isContentEditable;
+      if (isFormControl) return;
 
-      // Only add key if it's not a modifier
+      const shortcut = [];
+      if (e.altKey) {
+        shortcut.push('Alt');
+      }
+      if (e.ctrlKey) {
+        shortcut.push('Ctrl');
+      }
+      if (e.shiftKey) {
+        shortcut.push('Shift');
+      }
+      if (e.metaKey) {
+        shortcut.push('Cmd');
+      }
+
+      // Only add key if it's not a modifier — and require at least one
+      // modifier to avoid capturing standalone Enter/Space/etc.
+      if (shortcut.length === 0) return;
+
       if (!['Alt', 'Control', 'Shift', 'Meta'].includes(e.key)) {
         shortcut.push(e.key);
       }
@@ -563,7 +606,7 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
       const shortcutStr = shortcut.join('+');
 
       const matchingAction = filteredActions.find(
-        a => a.keyboardShortcut === shortcutStr && a.isEnabled
+        (a) => a.keyboardShortcut === shortcutStr && a.isEnabled
       );
 
       if (matchingAction) {
@@ -602,7 +645,7 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
   }, []);
 
   const handleMouseLeave = useCallback(() => {
-    setTooltip(prev => ({ ...prev, visible: false }));
+    setTooltip((prev) => ({ ...prev, visible: false }));
   }, []);
 
   // If no actions to display, return null
@@ -613,7 +656,11 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
   return (
     <>
       {/* Action Buttons Container */}
-      <div className={`flex flex-wrap items-center gap-2 ${className}`} role="group" aria-label="Riddle actions">
+      <div
+        className={`flex flex-wrap items-center gap-2 ${className}`}
+        role="group"
+        aria-label="Riddle actions"
+      >
         {filteredActions.map((action, index) => (
           <div
             key={action.id}
@@ -653,16 +700,32 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
       {/* CSS Animations */}
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         @keyframes slideUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         @keyframes scale {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
         @keyframes ripple {
           to {
