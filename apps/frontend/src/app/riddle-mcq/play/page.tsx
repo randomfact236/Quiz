@@ -241,18 +241,12 @@ function RiddlePlayPageContent(): JSX.Element {
     setShowResumeDialog(false);
   }, []);
 
-  // Timer countdown
+  // Timer countdown — pure tick, no side effects inside the state updater
   useEffect(() => {
     if (status !== 'playing' || mode !== 'timer') return;
 
     const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTimeRemaining((prev) => Math.max(0, prev - 1));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -363,6 +357,13 @@ function RiddlePlayPageContent(): JSX.Element {
     setShowConfirmSubmit(false);
     router.push(`/riddle-mcq/results?session=${session.id}`);
   }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
+
+  // Time-up auto-submit — single side-effect path outside the timer's state updater
+  useEffect(() => {
+    if (mode !== 'timer' || status !== 'playing' || !session) return;
+    if (timeRemaining > 0) return;
+    handleSubmit();
+  }, [mode, status, session, timeRemaining, handleSubmit]);
 
   const handleExtendSession = useCallback(async () => {
     try {
