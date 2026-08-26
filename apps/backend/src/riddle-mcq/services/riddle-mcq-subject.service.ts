@@ -56,7 +56,11 @@ export class RiddleMcqSubjectService {
         }
 
         if (hasContentOnly) {
-          query.innerJoin('subject.riddles', 'riddle');
+          // Visibility: only subjects with at least one PUBLISHED riddle belong
+          // in public lists — draft-only/trash-only subjects stay hidden.
+          query.innerJoin('subject.riddles', 'riddle', 'riddle.status = :status', {
+            status: RiddleStatus.PUBLISHED,
+          });
         }
 
         return query.getMany();
