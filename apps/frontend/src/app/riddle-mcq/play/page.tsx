@@ -3,48 +3,28 @@
  * Riddle Play Page (Backend Connected)
  * ============================================================================
  * Main gameplay page for riddles - fetches from backend API.
- * Layout mirrors quiz-mcq/play/page.tsx exactly.
+ * Gameplay orchestration lives in hooks/use-riddle-play/useRiddlePlay.ts;
+ * this file is render-only.
  * URL: /riddle-mcq/play?subjectId=&level=&mode=
  * ============================================================================
  */
 
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, Suspense, useRef } from 'react';
+import { Suspense, useRef } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Timer, AlertCircle, Save, Pause, Play } from 'lucide-react';
 
-import {
-  saveRiddleSession,
-  clearRiddleSession,
-  createRiddleSession,
-  setupNavigationWarning,
-} from '@/lib/riddle-session';
-import {
-  loadRiddleResume,
-  saveRiddleResume,
-  saveRiddleResumeQuestions,
-  clearRiddleResume,
-} from '@/lib/riddle-resume';
-import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
-import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
-import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
-import { SettingsService } from '@/services/settings.service';
-import type { SystemSettings } from '@/types/settings.types';
+import { useRiddlePlay } from '@/hooks/use-riddle-play/useRiddlePlay';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
 import { ResumePromptModal } from './components/ResumePromptModal';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
-import { formatTimeMMSS, shuffle } from '@/lib/utils';
-
-// Auto-save interval in milliseconds
-const AUTO_SAVE_INTERVAL = 10000;
-
-// Default time limit for timer mode (seconds per riddle)
-const DEFAULT_TIME_PER_RIDDLE = 30;
+import { formatTimeMMSS } from '@/lib/utils';
+import { PRACTICE_RIDDLE_LIMIT } from '@/hooks/use-riddle-play/useRiddleTimers';
 
 // Loading component — mirrors quiz-mcq/play/page.tsx loading state exactly
 function PlayPageLoading(): JSX.Element {
@@ -78,7 +58,6 @@ export default function RiddlePlayPage(): JSX.Element {
 
 function RiddlePlayPageContent(): JSX.Element {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   // URL params — subjectId is canonical; chapterId kept as legacy fallback
   const subjectId = searchParams.get('subjectId') || searchParams.get('chapterId') || 'all';
@@ -86,405 +65,22 @@ function RiddlePlayPageContent(): JSX.Element {
   const mode = (searchParams.get('mode') || 'practice') as 'timer' | 'practice';
   const chapterNameParam = searchParams.get('chapterName') || '';
 
-  // State — mirrors quiz page structure
-  const [riddles, setRiddles] = useState<Riddle[]>([]);
-  const [chapterName, setChapterName] = useState<string>(chapterNameParam || 'Mixed Chapters');
-  const [session, setSession] = useState<RiddleSession | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [timeRemaining, setTimeRemaining] = useState(0);
-  const [status, setStatus] = useState<'loading' | 'playing' | 'paused' | 'completed'>('loading');
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [showResumeDialog, setShowResumeDialog] = useState(false);
-  const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
-  const [showExtendSession, setShowExtendSession] = useState(false);
-  const [additionalRiddles, setAdditionalRiddles] = useState(5);
-  const [error, setError] = useState<string | null>(null);
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const play = useRiddlePlay({ subjectId, level, mode, chapterNameParam });
 
-  // Per-riddle timer for practice mode (visual only — doesn't auto-advance)
-  const PRACTICE_RIDDLE_LIMIT = 60;
-  const [practiceRiddleTime, setPracticeRiddleTime] = useState(PRACTICE_RIDDLE_LIMIT);
-
-  // Refs for RiddleCard animations — mirrors quiz page
+  // Refs for RiddleCard animations — UI concern, stays in the page
   const riddleCardRef = useRef<RiddleCardRef>(null);
   const shownBubblesRef = useRef<Set<string>>(new Set());
-
-  // Mount guard to prevent hydration mismatch
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Fetch riddles from backend — mirrors quiz page's loadTimerSettings + fetch pattern
-  useEffect(() => {
-    if (!isMounted) return;
-
-    async function fetchRiddles() {
-      try {
-        setStatus('loading');
-        setError(null);
-
-        // Load settings (with timeout, same as before)
-        try {
-          const settingsPromise = SettingsService.getSettings();
-          const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Settings timeout')), 5000)
-          );
-          const config = (await Promise.race([settingsPromise, timeoutPromise])) as Awaited<
-            ReturnType<typeof SettingsService.getSettings>
-          >;
-          setSettings(config);
-        } catch (err) {}
-
-        let fetchedRiddles: Riddle[] = [];
-
-        if (subjectId === 'all') {
-          let mixed: {
-            level?: string;
-            id: string;
-            question: string;
-            options: string[];
-            correctAnswer: string;
-            chapter?: { name?: string };
-            chapterId?: string;
-            explanation?: string;
-            hint?: string;
-          }[] = [];
-
-          if (level && level !== 'all') {
-            const response = await getRandomRiddles(level, 20);
-            mixed = response.map((r) => ({ ...r, level: r.level || level }));
-          } else {
-            mixed = await getMixedRiddles(20);
-          }
-
-          fetchedRiddles = mixed.map((r) => adaptRiddleMcq(r as any));
-          setChapterName(
-            level === 'all'
-              ? 'Mixed Subjects'
-              : `${level.charAt(0).toUpperCase() + level.slice(1)} Level Mix`
-          );
-        } else {
-          // Pass level filter to backend API (more efficient than frontend filtering)
-          const response = await getRiddlesBySubject(subjectId, 1, 50, level);
-          fetchedRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
-          if (fetchedRiddles.length > 0 && fetchedRiddles[0]) {
-            const baseName = chapterNameParam || 'Subject';
-            setChapterName(level === 'all' ? baseName : `${baseName} (${level})`);
-          }
-        }
-
-        // Shuffle for variety (unbiased Fisher-Yates)
-        fetchedRiddles = shuffle(fetchedRiddles);
-        setRiddles(fetchedRiddles);
-
-        // Check for a resumable session (two-key store: snapshot + progress)
-        const resume = loadRiddleResume();
-        if (
-          resume &&
-          resume.subjectId === subjectId &&
-          resume.level === level &&
-          Object.keys(resume.answers).length > 0
-        ) {
-          setShowResumeDialog(true);
-          setStatus('paused'); // Exit loading so dialog renders
-        } else {
-          startNewSession(fetchedRiddles);
-        }
-      } catch (err) {
-        setError('Failed to load riddles. Check your connection and try again.');
-        setStatus('playing'); // exit loading state so error UI is visible
-      }
-    }
-
-    fetchRiddles();
-  }, [subjectId, level, isMounted]);
-
-  // Start new session
-  const startNewSession = useCallback(
-    (riddleList: Riddle[]) => {
-      clearRiddleSession();
-
-      let totalTimeLimit = 0;
-      if (mode === 'timer') {
-        const timers = settings?.riddles?.defaults?.levelTimers;
-        riddleList.forEach((riddle) => {
-          const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
-          const perRiddleTime =
-            timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
-          totalTimeLimit += perRiddleTime;
-        });
-      }
-
-      const newSession = createRiddleSession(
-        mode,
-        subjectId,
-        chapterName,
-        (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
-        riddleList,
-        totalTimeLimit
-      );
-      // Two-key store: riddle snapshot written once; progress written per tick
-      const identity = { mode, subjectId, level };
-      saveRiddleResumeQuestions(identity, riddleList);
-      saveRiddleResume(identity, {
-        answers: {},
-        timeRemaining: totalTimeLimit,
-        startedAt: newSession.startedAt,
-      });
-      setSession(newSession);
-      setAnswers({});
-      setCurrentIndex(0);
-      setTimeRemaining(totalTimeLimit);
-      setStatus('playing');
-      setShowResumeDialog(false);
-    },
-    [mode, subjectId, level, chapterName, settings]
-  );
-
-  // Resume existing session
-  const resumeSession = useCallback(() => {
-    const resume = loadRiddleResume();
-    if (resume) {
-      const resumedRiddles = (resume.availableRiddles ?? []) as Riddle[];
-      setSession({
-        ...createRiddleSession(
-          mode,
-          subjectId,
-          chapterName,
-          (level as 'all' | 'easy' | 'medium' | 'hard' | 'expert') || 'all',
-          resumedRiddles,
-          resume.timeRemaining || 0
-        ),
-        id: session?.id || `riddle_${Date.now()}`,
-        answers: resume.answers,
-        status: 'in-progress',
-        startedAt: resume.startedAt,
-        timeRemaining: resume.timeRemaining,
-      });
-      setRiddles(resumedRiddles);
-      setAnswers(resume.answers);
-      setCurrentIndex(Object.keys(resume.answers).length);
-      setTimeRemaining(resume.timeRemaining || 0);
-      setStatus('playing');
-    }
-    setShowResumeDialog(false);
-  }, [mode, subjectId, level, chapterName, session]);
-
-  // Timer countdown — pure tick, no side effects inside the state updater
-  useEffect(() => {
-    if (status !== 'playing' || mode !== 'timer') return;
-
-    const timer = setInterval(() => {
-      setTimeRemaining((prev) => Math.max(0, prev - 1));
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [status, mode]);
-
-  // Toggle pause — mirrors quiz page pauseQuiz/resumeQuiz
-  const togglePause = useCallback(() => {
-    setStatus((prev) => (prev === 'playing' ? 'paused' : 'playing'));
-  }, []);
-
-  // Auto-save — lightweight progress key only (riddle snapshot written once at
-  // session start); refs keep the interval from resetting on every answer
-  const progressRef = useRef({ answers, timeRemaining });
-  useEffect(() => {
-    progressRef.current = { answers, timeRemaining };
-  }, [answers, timeRemaining]);
-
-  useEffect(() => {
-    if (status !== 'playing' || !session) return;
-
-    const interval = setInterval(() => {
-      saveRiddleResume(
-        { mode, subjectId, level },
-        {
-          answers: progressRef.current.answers,
-          timeRemaining: progressRef.current.timeRemaining,
-          startedAt: session.startedAt,
-        }
-      );
-      setLastSaved(new Date());
-    }, AUTO_SAVE_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, [status, mode, subjectId, level, session]);
-
-  // Navigation warning
-  useEffect(() => {
-    if (status !== 'playing') return;
-    return setupNavigationWarning(() => {
-      if (!session) return null;
-      return {
-        ...session,
-        answers,
-        timeRemaining: mode === 'timer' ? timeRemaining : calculateTimeTaken(),
-      };
-    });
-  }, [status, session, answers, timeRemaining, mode]);
-
-  const calculateTimeTaken = useCallback(() => {
-    if (!session) return 0;
-    return Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 1000);
-  }, [session]);
-
-  // Practice mode per-riddle countdown — resets when navigating to a new riddle
-  useEffect(() => {
-    if (mode === 'timer') return;
-    setPracticeRiddleTime(PRACTICE_RIDDLE_LIMIT);
-  }, [currentIndex, mode]);
-
-  useEffect(() => {
-    if (mode === 'timer' || status !== 'playing') return;
-    const t = setInterval(() => {
-      setPracticeRiddleTime((prev) => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(t);
-  }, [currentIndex, status, mode]);
-
-  const handleAnswerSelect = useCallback(
-    (optionLetter: string) => {
-      if (!session || status !== 'playing') return;
-      const currentRiddle = riddles[currentIndex];
-      if (!currentRiddle) return;
-      setAnswers((prev) => ({ ...prev, [currentRiddle.id]: optionLetter }));
-    },
-    [session, status, riddles, currentIndex]
-  );
-
-  // Navigation handlers — mirrors quiz goToNext/goToPrevious
-  const handleNext = useCallback(() => {
-    riddleCardRef.current?.clearBubbles();
-    if (currentIndex < riddles.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-    } else {
-      setShowConfirmSubmit(true);
-    }
-  }, [currentIndex, riddles.length]);
-
-  const handlePrevious = useCallback(() => {
-    riddleCardRef.current?.clearBubbles();
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  }, [currentIndex]);
-
-  const handleSubmit = useCallback(() => {
-    if (!session) return;
-
-    let correctCount = 0;
-    riddles.forEach((r) => {
-      if (isRiddleAnswerCorrect(r, answers[r.id])) correctCount++;
-    });
-
-    const completedSession: RiddleSession = {
-      ...session,
-      answers,
-      score: correctCount,
-      timeTaken: calculateTimeTaken(),
-      timeRemaining: mode === 'timer' ? timeRemaining : 0,
-      status: 'completed',
-      completedAt: new Date().toISOString(),
-    };
-
-    setStatus('completed');
-    saveRiddleSession(completedSession); // full payload, one-time, for results
-    clearRiddleResume();
-    setShowConfirmSubmit(false);
-    router.push(`/riddle-mcq/results?session=${session.id}`);
-  }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
-
-  // Time-up auto-submit — single side-effect path outside the timer's state updater
-  useEffect(() => {
-    if (mode !== 'timer' || status !== 'playing' || !session) return;
-    if (timeRemaining > 0) return;
-    handleSubmit();
-  }, [mode, status, session, timeRemaining, handleSubmit]);
-
-  const handleExtendSession = useCallback(async () => {
-    try {
-      setStatus('loading');
-      setShowExtendSession(false);
-
-      let newRiddles: Riddle[] = [];
-      const currentIds = new Set(riddles.map((r) => r.id));
-
-      if (subjectId === 'all') {
-        if (level && level !== 'all') {
-          const response = await getRandomRiddles(level, additionalRiddles + 10);
-          newRiddles = response.map((r) =>
-            adaptRiddleMcq({ ...r, level: r.level || level } as any)
-          );
-        } else {
-          const response = await getMixedRiddles(additionalRiddles + 10);
-          newRiddles = response.map((r) => adaptRiddleMcq(r as any));
-        }
-      } else {
-        // Pass level filter to backend API (more efficient)
-        const response = await getRiddlesBySubject(subjectId, 1, 100, level);
-        newRiddles = response.data.map((r: any) => adaptRiddleMcq(r as any));
-      }
-
-      const uniqueNew = newRiddles.filter((r) => !currentIds.has(r.id)).slice(0, additionalRiddles);
-
-      if (uniqueNew.length === 0) {
-        alert('No more unique riddles available for this selection.');
-        setStatus('playing');
-        return;
-      }
-
-      if (mode === 'timer') {
-        let extraTime = 0;
-        const timers = settings?.riddles?.defaults?.levelTimers;
-        uniqueNew.forEach((riddle) => {
-          const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
-          extraTime += timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
-        });
-        setTimeRemaining((prev) => prev + extraTime);
-      }
-
-      setRiddles((prev) => [...prev, ...uniqueNew]);
-
-      if (session) {
-        const updatedSession = { ...session, riddles: [...session.riddles, ...uniqueNew] };
-        setSession(updatedSession);
-        // Pool grew — rewrite the snapshot so resume has the full set
-        saveRiddleResumeQuestions({ mode, subjectId, level }, updatedSession.riddles);
-      }
-
-      setCurrentIndex(riddles.length);
-      setStatus('playing');
-    } catch (err) {
-      console.error('Failed to extend session:', err);
-      alert('Failed to load more riddles. Please try again.');
-      setStatus('playing');
-    }
-  }, [riddles, subjectId, level, additionalRiddles, mode, settings, session]);
 
   // Determine back path
   const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
 
-  const currentRiddle = riddles[currentIndex];
-  const answeredCount = Object.keys(answers).length;
-  const isTimerMode = mode === 'timer';
-  const isTimeUp = isTimerMode && timeRemaining === 0 && status === 'playing';
-
-  // Live score via the shared scorer — expert open-ended answers included
-  const liveScore = useMemo(
-    () => riddles.reduce((acc, r) => acc + (isRiddleAnswerCorrect(r, answers[r.id]) ? 1 : 0), 0),
-    [riddles, answers]
-  );
-
   // Guard: not mounted yet
-  if (!isMounted) {
+  if (!play.isMounted) {
     return <PlayPageLoading />;
   }
 
   // Error state
-  if (error) {
+  if (play.error) {
     return (
       <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
         <div className="mx-auto max-w-2xl">
@@ -498,7 +94,7 @@ function RiddlePlayPageContent(): JSX.Element {
           <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
             <AlertCircle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
             <h1 className="mb-2 text-2xl font-bold text-gray-800">Failed to Load</h1>
-            <p className="mb-4 text-gray-600">{error}</p>
+            <p className="mb-4 text-gray-600">{play.error}</p>
             <button
               onClick={() => window.location.reload()}
               className="inline-block rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
@@ -512,14 +108,17 @@ function RiddlePlayPageContent(): JSX.Element {
   }
 
   // Loading state
-  if (status === 'loading') {
+  if (play.status === 'loading') {
     return <PlayPageLoading />;
   }
 
   // Resume dialog
-  if (showResumeDialog) {
+  if (play.showResumeDialog) {
     return (
-      <ResumePromptModal onResume={resumeSession} onStartNew={() => startNewSession(riddles)} />
+      <ResumePromptModal
+        onResume={play.resumeSession}
+        onStartNew={() => play.startNewSession(play.riddles)}
+      />
     );
   }
 
@@ -549,7 +148,7 @@ function RiddlePlayPageContent(): JSX.Element {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                  {chapterName}
+                  {play.chapterName}
                 </span>
                 {level && level !== 'all' && (
                   <span className="text-base text-white/90 capitalize">{level}</span>
@@ -557,31 +156,31 @@ function RiddlePlayPageContent(): JSX.Element {
               </div>
 
               {/* Timer Display */}
-              {isTimerMode && (status === 'playing' || status === 'paused') && (
+              {play.isTimerMode && (play.status === 'playing' || play.status === 'paused') && (
                 <div className="flex items-center gap-2">
                   <div
                     className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
-                      status === 'paused'
+                      play.status === 'paused'
                         ? 'bg-yellow-500 text-white'
-                        : timeRemaining <= 10
+                        : play.timeRemaining <= 10
                           ? 'bg-red-500 text-white animate-pulse'
-                          : timeRemaining <= 20
+                          : play.timeRemaining <= 20
                             ? 'bg-orange-500 text-white'
                             : 'bg-white/90 text-gray-800'
                     }`}
                   >
                     <Timer className="h-4 w-4" />
-                    <span>{formatTimeMMSS(timeRemaining)}</span>
-                    {status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
+                    <span>{formatTimeMMSS(play.timeRemaining)}</span>
+                    {play.status === 'paused' && <span className="ml-1 text-xs">(PAUSED)</span>}
                   </div>
 
                   {/* Pause/Resume Button */}
                   <button
-                    onClick={togglePause}
+                    onClick={play.togglePause}
                     className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
-                    title={status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
+                    title={play.status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
                   >
-                    {status === 'paused' ? (
+                    {play.status === 'paused' ? (
                       <Play className="h-4 w-4" />
                     ) : (
                       <Pause className="h-4 w-4" />
@@ -591,7 +190,7 @@ function RiddlePlayPageContent(): JSX.Element {
               )}
 
               {/* Auto-save indicator — only shown non-timer when saved */}
-              {!isTimerMode && lastSaved && (
+              {!play.isTimerMode && play.lastSaved && (
                 <div className="hidden sm:flex items-center gap-1 text-xs text-white/60">
                   <Save className="h-3 w-3" />
                   Saved
@@ -602,9 +201,9 @@ function RiddlePlayPageContent(): JSX.Element {
 
           {/* Riddle Card */}
           <AnimatePresence mode="wait">
-            {currentRiddle && (
+            {play.currentRiddle && (
               <motion.div
-                key={currentRiddle.id}
+                key={play.currentRiddle.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -613,24 +212,29 @@ function RiddlePlayPageContent(): JSX.Element {
                 <RiddleCard
                   ref={riddleCardRef}
                   shownBubblesRef={shownBubblesRef}
-                  riddle={currentRiddle}
-                  riddleNumber={currentIndex + 1}
-                  totalRiddles={riddles.length}
-                  selectedAnswer={answers[currentRiddle.id] || null}
+                  riddle={play.currentRiddle}
+                  riddleNumber={play.currentIndex + 1}
+                  totalRiddles={play.riddles.length}
+                  selectedAnswer={play.answers[play.currentRiddle.id] || null}
                   onSelectAnswer={(answer) => {
-                    handleAnswerSelect(answer);
+                    play.handleAnswerSelect(answer);
                   }}
                   showFeedback={true}
-                  disabled={status !== 'playing'}
-                  score={liveScore}
-                  maxScore={riddles.length}
-                  timeUp={isTimeUp}
-                  questionTimeRemaining={mode === 'timer' ? timeRemaining : practiceRiddleTime}
+                  disabled={play.status !== 'playing'}
+                  score={play.liveScore}
+                  maxScore={play.riddles.length}
+                  timeUp={play.isTimeUp}
+                  questionTimeRemaining={
+                    mode === 'timer' ? play.timeRemaining : play.practiceRiddleTime
+                  }
                   questionTimeLimit={
                     mode === 'timer'
                       ? Math.max(
                           1,
-                          Math.round(timeRemaining / Math.max(1, riddles.length - currentIndex))
+                          Math.round(
+                            play.timeRemaining /
+                              Math.max(1, play.riddles.length - play.currentIndex)
+                          )
                         )
                       : PRACTICE_RIDDLE_LIMIT
                   }
@@ -644,9 +248,9 @@ function RiddlePlayPageContent(): JSX.Element {
             <button
               onClick={() => {
                 riddleCardRef.current?.clearBubbles();
-                handlePrevious();
+                play.handlePrevious();
               }}
-              disabled={currentIndex === 0}
+              disabled={play.currentIndex === 0}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -654,21 +258,21 @@ function RiddlePlayPageContent(): JSX.Element {
             </button>
 
             <span className="text-sm text-white/70">
-              {currentIndex + 1} / {riddles.length}
+              {play.currentIndex + 1} / {play.riddles.length}
             </span>
 
             <button
               onClick={() => {
                 riddleCardRef.current?.clearBubbles();
-                if (currentIndex >= riddles.length - 1) {
-                  setShowConfirmSubmit(true);
+                if (play.currentIndex >= play.riddles.length - 1) {
+                  play.setShowConfirmSubmit(true);
                 } else {
-                  handleNext();
+                  play.handleNext();
                 }
               }}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
             >
-              {currentIndex >= riddles.length - 1 ? 'Submit' : 'Next'}
+              {play.currentIndex >= play.riddles.length - 1 ? 'Submit' : 'Next'}
               <ArrowLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
@@ -676,30 +280,30 @@ function RiddlePlayPageContent(): JSX.Element {
       </div>
 
       {/* Confirm Submit Modal — mirrors quiz page (2 buttons: Continue + Submit) */}
-      {showConfirmSubmit && (
+      {play.showConfirmSubmit && (
         <SubmitConfirmModal
-          answeredCount={answeredCount}
-          totalRiddles={riddles.length}
+          answeredCount={play.answeredCount}
+          totalRiddles={play.riddles.length}
           onContinue={() => {
-            setShowConfirmSubmit(false);
-            setShowExtendSession(true);
+            play.setShowConfirmSubmit(false);
+            play.setShowExtendSession(true);
           }}
           onSubmit={() => {
-            handleSubmit();
-            setShowConfirmSubmit(false);
+            play.handleSubmit();
+            play.setShowConfirmSubmit(false);
           }}
         />
       )}
 
       {/* Extend Session Modal — mirrors quiz Extend Quiz modal */}
-      {showExtendSession && (
+      {play.showExtendSession && (
         <ExtendSessionModal
-          answeredCount={answeredCount}
-          totalRiddles={riddles.length}
-          additionalRiddles={additionalRiddles}
-          onChangeAdditional={setAdditionalRiddles}
-          onCancel={() => setShowExtendSession(false)}
-          onConfirm={handleExtendSession}
+          answeredCount={play.answeredCount}
+          totalRiddles={play.riddles.length}
+          additionalRiddles={play.additionalRiddles}
+          onChangeAdditional={play.setAdditionalRiddles}
+          onCancel={() => play.setShowExtendSession(false)}
+          onConfirm={play.handleExtendSession}
         />
       )}
     </div>
