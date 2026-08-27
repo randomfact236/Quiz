@@ -9,7 +9,7 @@ import { DadJokesService } from './dad-jokes.service';
 
 /**
  * Controller for dad jokes statistics
- * 
+ *
  * @description Provides REST API endpoints for dad jokes statistics
  */
 @ApiTags('Dad Jokes - Stats')
@@ -19,11 +19,11 @@ export class DadJokesStatsController {
 
   /**
    * Get dad jokes statistics
-   * 
-   * @description Returns aggregated statistics about all dad joke content
-   * including counts of classic jokes, categories, quiz jokes, subjects, and chapters.
-   * 
-   * @returns {Promise<Object>} Statistics object with various counts
+   *
+   * @description Returns aggregated statistics about dad joke content
+   * including counts of jokes and categories.
+   *
+   * @returns {Promise<Object>} Statistics object with joke and category counts
    */
   @Get('stats/overview')
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,11 +32,8 @@ export class DadJokesStatsController {
   @ApiOperation({ summary: 'Get dad jokes statistics' })
   @ApiResponse({ status: 200, description: 'Returns statistics' })
   getStats(): Promise<{
-    totalClassicJokes: number;
+    totalJokes: number;
     totalCategories: number;
-    totalQuizJokes: number;
-    totalSubjects: number;
-    totalChapters: number;
   }> {
     return this.jokesService.getStats();
   }

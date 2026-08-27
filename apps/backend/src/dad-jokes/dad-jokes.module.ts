@@ -4,32 +4,27 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '../common/cache/cache.module';
 import { BulkActionService } from '../common/services/bulk-action.service';
 
-import { DadJokesQuizController } from './dad-jokes-quiz.controller';
 import { DadJokesStatsController } from './dad-jokes-stats.controller';
 import { DadJokesController } from './dad-jokes.controller';
 import { DadJokesService } from './dad-jokes.service';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
-import { JokeChapter } from './entities/joke-chapter.entity';
-import { JokeSubject } from './entities/joke-subject.entity';
-import { QuizJoke } from './entities/quiz-joke.entity';
-
 
 /**
- * Dad Jokes module for managing classic and quiz format jokes
- * 
- * @description Provides functionality for dad jokes in both classic (setup/punchline)
- * and quiz (multiple choice) formats. Includes TypeORM entities for jokes, categories,
- * subjects, chapters, and quiz-format jokes. Integrates with caching and bulk action services.
- * 
+ * Dad Jokes module for managing classic (setup/punchline) jokes
+ *
+ * @description Provides REST API endpoints for classic dad joke CRUD,
+ * categories, voting, bulk operations, and stats. Integrates with
+ * caching and bulk action services.
+ *
  * @class
  * @example
  * // Import in AppModule or other modules
  * imports: [DadJokesModule]
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([DadJoke, JokeCategory, JokeSubject, JokeChapter, QuizJoke]), CacheModule],
-  controllers: [DadJokesController, DadJokesQuizController, DadJokesStatsController],
+  imports: [TypeOrmModule.forFeature([DadJoke, JokeCategory]), CacheModule],
+  controllers: [DadJokesController, DadJokesStatsController],
   providers: [DadJokesService, BulkActionService],
   exports: [DadJokesService],
 })
