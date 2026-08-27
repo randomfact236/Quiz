@@ -103,6 +103,14 @@ export default function Header(): JSX.Element {
                 </li>
                 <li>
                   <Link
+                    href="/image-riddles"
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/image-riddles') ? 'text-primary-600' : ''}`}
+                  >
+                    Image Riddles
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/about"
                     className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}
                   >
@@ -187,6 +195,13 @@ export default function Header(): JSX.Element {
                 Riddles
               </Link>
               <Link
+                href="/image-riddles"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Image Riddles
+              </Link>
+              <Link
                 href="/about"
                 className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                 onClick={() => setIsMenuOpen(false)}
@@ -262,6 +277,14 @@ export default function Header(): JSX.Element {
                   className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddle-mcq') ? 'text-primary-600' : ''}`}
                 >
                   Riddles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/image-riddles"
+                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/image-riddles') ? 'text-primary-600' : ''}`}
+                >
+                  Image Riddles
                 </Link>
               </li>
               <li>
@@ -366,6 +389,13 @@ export default function Header(): JSX.Element {
               onClick={() => setIsMenuOpen(false)}
             >
               Riddles
+            </Link>
+            <Link
+              href="/image-riddles"
+              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Image Riddles
             </Link>
             <Link
               href="/about"

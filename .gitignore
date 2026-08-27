@@ -34,3 +34,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Runtime upload directory (media library local storage)
+apps/backend/public/

@@ -11,6 +11,7 @@ import {
   Smile,
   Puzzle,
   Image as ImageIcon,
+  ImagePlus,
   Settings,
   Users,
   LogOut,
@@ -28,6 +29,7 @@ import {
   SettingsSection,
   AdminGuard,
   AdminUsersSection,
+  MediaLibrarySection,
 } from './components';
 import { QuizMcqContainer } from '@/features/quiz-mcq/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
@@ -131,7 +133,8 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'users' ||
         urlSection === 'settings' ||
         urlSection === 'summary' ||
-        urlSection === 'quiz-mcq'
+        urlSection === 'quiz-mcq' ||
+        urlSection === 'media'
       ) {
         setActiveSection(urlSection as MenuSection);
       } else {
@@ -167,6 +170,7 @@ export default function AdminPage(): JSX.Element {
       'settings',
       'summary',
       'quiz-mcq',
+      'media',
     ].includes(urlSection);
 
     if (!isSpecialSection) {
@@ -357,6 +361,13 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'users' })}
           />
           <MenuItem
+            icon={<ImagePlus className="w-5 h-5" />}
+            label="Media"
+            active={activeSection === 'media'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'media' })}
+          />
+          <MenuItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"
             active={activeSection === 'settings'}
@@ -495,6 +506,7 @@ export default function AdminPage(): JSX.Element {
           )}
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <AdminUsersSection />}
+          {activeSection === 'media' && <MediaLibrarySection />}
           {activeSection === 'settings' && <SettingsSection />}
         </div>
       </main>

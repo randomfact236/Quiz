@@ -7,7 +7,13 @@
  * ============================================================================
  */
 
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as path from 'path';
@@ -15,6 +21,7 @@ import sharp from 'sharp';
 
 import { QueryMediaDto, ConversionStats, MediaListResponse } from './dto/media.dto';
 import { Media, MediaConversionStatus } from './entities/media.entity';
+import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
 import { StorageService } from './storage.service';
 
 /** Allowed upload MIME types — anything else is rejected before decoding. */
@@ -31,6 +38,8 @@ export class MediaService {
   constructor(
     @InjectRepository(Media)
     private readonly mediaRepo: Repository<Media>,
+    @InjectRepository(ImageRiddle)
+    private readonly imageRiddleRepo: Repository<ImageRiddle>,
     private readonly storageService: StorageService
   ) {}
 
@@ -113,9 +122,28 @@ export class MediaService {
     return this.mediaRepo.save(media);
   }
 
+  /** Check if a media asset is referenced by any image riddle. */
+  async getUsageCount(mediaUrl: string): Promise<number> {
+    // Match by the relative path portion (e.g. /uploads/filename.webp)
+    // since image_riddles.imageUrl may store either the relative path or
+    // a fully-resolved absolute URL depending on how it was inserted.
+    return this.imageRiddleRepo
+      .createQueryBuilder('riddle')
+      .where('riddle.imageUrl LIKE :pattern', { pattern: `%${mediaUrl}` })
+      .getCount();
+  }
+
   /** DB record first, then best-effort file cleanup. */
   async remove(id: string): Promise<void> {
     const media = await this.findOne(id);
+
+    const usageCount = await this.getUsageCount(media.url);
+    if (usageCount > 0) {
+      throw new ConflictException(
+        `Cannot delete media "${media.filename}": it is used by ${usageCount} image riddle(s). Remove the riddle(s) first or update their image URL.`
+      );
+    }
+
     await this.mediaRepo.delete(id);
     this.storageService.deleteFile(media.url);
   }

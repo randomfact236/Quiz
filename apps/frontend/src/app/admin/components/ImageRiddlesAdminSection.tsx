@@ -461,7 +461,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [showDeleteCategoryConfirm, setShowDeleteCategoryConfirm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ImageRiddleCategory | null>(null);
-  const [categoryForm, setCategoryForm] = useState({ name: '', emoji: '🔍' });
+  const [categoryForm, setCategoryForm] = useState({ name: '', emoji: '' });
 
   // Filter states
   const [filterDifficulty, setFilterDifficulty] = useState<string>('');
@@ -534,15 +534,15 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     try {
       const created = await createImageRiddleCategory({
         name: categoryForm.name.trim(),
-        emoji: categoryForm.emoji || '🔍',
+        ...(categoryForm.emoji ? { emoji: categoryForm.emoji } : {}),
       });
       setCategories((prev) => [
         ...prev,
         { id: created.id, name: created.name, emoji: created.emoji, count: 0 },
       ]);
       setShowAddCategoryModal(false);
-      setCategoryForm({ name: '', emoji: '🔍' });
-      toast.success('📁 Category created!');
+      setCategoryForm({ name: '', emoji: '' });
+      toast.success('Category created!');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to create category');
     }
@@ -1348,7 +1348,7 @@ export function ImageRiddlesAdminSection(): JSX.Element {
 
           <button
             onClick={() => {
-              setCategoryForm({ name: '', emoji: '🔍' });
+              setCategoryForm({ name: '', emoji: '' });
               setShowAddCategoryModal(true);
             }}
             className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-200 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-all flex items-center gap-1.5"
