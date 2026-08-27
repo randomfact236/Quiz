@@ -5,19 +5,23 @@ import { Trash2, Upload, Search, Image as ImageIcon } from 'lucide-react';
 
 import {
   deleteMedia,
+  formatFileSize,
+  getDisplayFileSize,
+  getErrorMessage,
   getMediaStats,
+  getSavingsPercent,
   listMedia,
   resolveMediaUrl,
   uploadMedia,
   type MediaAsset,
   type MediaStats,
 } from '@/lib/media-api';
+import { toast } from '@/lib/toast';
 
 export function MediaLibrarySection() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [stats, setStats] = useState<MediaStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,7 +30,6 @@ export function MediaLibrarySection() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError('');
     try {
       const [list, s] = await Promise.all([
         listMedia({ search: search || undefined, page, limit: 24 }),
@@ -35,8 +38,8 @@ export function MediaLibrarySection() {
       setAssets(list.data);
       setTotalPages(list.totalPages);
       setStats(s);
-    } catch {
-      setError('Failed to load media library. Is the backend running?');
+    } catch (err) {
+      toast.error(getErrorMessage(err) || 'Failed to load media library.');
     } finally {
       setLoading(false);
     }
@@ -50,32 +53,28 @@ export function MediaLibrarySection() {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    setError('');
     try {
       await uploadMedia(file);
+      toast.success('Image uploaded and converted to WebP');
       await load();
-    } catch {
-      setError('Upload failed. Allowed: JPEG/PNG/WebP/GIF up to 5 MB.');
+    } catch (err) {
+      toast.error(getErrorMessage(err) || 'Upload failed. Allowed: JPEG/PNG/WebP/GIF up to 5 MB.');
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (asset: MediaAsset) => {
     if (!confirm('Delete this media asset?')) return;
     try {
-      await deleteMedia(id);
+      await deleteMedia(asset.id);
+      toast.success('Media asset deleted');
       await load();
-    } catch {
-      setError('Failed to delete asset — it may still be in use by an image riddle.');
+    } catch (err) {
+      // e.g. 409 — backend message names the referencing image riddles.
+      toast.error(getErrorMessage(err) || 'Failed to delete asset.');
     }
-  };
-
-  const formatSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / 1048576).toFixed(1)} MB`;
   };
 
   return (
@@ -102,19 +101,13 @@ export function MediaLibrarySection() {
         />
       </div>
 
-      {error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: 'Total Assets', value: stats.total },
             { label: 'Converted', value: stats.converted },
             { label: 'Pending', value: stats.pending },
-            { label: 'Storage Saved', value: formatSize(stats.storageSavedBytes) },
+            { label: 'Storage Saved', value: formatFileSize(stats.storageSavedBytes) },
           ].map((s) => (
             <div key={s.label} className="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 text-center">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{s.value}</div>
@@ -139,7 +132,20 @@ export function MediaLibrarySection() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Loading...</div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-lg overflow-hidden border dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+            >
+              <div className="aspect-square bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              <div className="p-2 space-y-1.5">
+                <div className="h-2.5 w-3/4 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                <div className="h-2 w-1/3 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : assets.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
           <ImageIcon className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -157,6 +163,8 @@ export function MediaLibrarySection() {
                 <img
                   src={resolveMediaUrl(a.url)}
                   alt={a.alt || a.filename}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -165,13 +173,25 @@ export function MediaLibrarySection() {
                   {a.filename}
                 </p>
                 <p className="text-[10px] text-gray-400 mt-0.5">
-                  {formatSize(a.fileSize)}
+                  {formatFileSize(getDisplayFileSize(a))}
+                  {(() => {
+                    const pct = getSavingsPercent(a);
+                    return pct ? (
+                      <span
+                        className="ml-1 rounded bg-green-100 px-1 font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300"
+                        title={`WebP conversion saved ${pct}% vs the original upload`}
+                      >
+                        -{pct}%
+                      </span>
+                    ) : null;
+                  })()}
                   {a.width && a.height ? ` · ${a.width}×${a.height}` : ''}
                 </p>
               </div>
               <button
-                onClick={() => handleDelete(a.id)}
-                className="absolute top-1 right-1 bg-red-600 text-white rounded p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleDelete(a)}
+                aria-label={`Delete asset ${a.filename}`}
+                className="absolute top-1 right-1 bg-red-600 text-white rounded p-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300 transition-opacity"
                 title="Delete"
               >
                 <Trash2 className="w-3 h-3" />

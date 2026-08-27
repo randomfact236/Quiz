@@ -27,6 +27,33 @@ export function resolveMediaUrl(url: string): string {
   return `${SERVER_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
+/** Human-readable byte size, e.g. `66.1 KB`. */
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1048576).toFixed(1)} MB`;
+}
+
+type SizeSource = Pick<MediaAsset, 'fileSize' | 'variants'>;
+
+/** Size to display for an asset: converted WebP bytes when available, else original. */
+export function getDisplayFileSize(asset: SizeSource): number {
+  return asset.variants?.['webp']?.fileSize ?? asset.fileSize;
+}
+
+/** Percentage saved by WebP conversion (1–99), or null when unknown/no gain. */
+export function getSavingsPercent(asset: SizeSource): number | null {
+  const webp = asset.variants?.['webp']?.fileSize;
+  if (!webp || !asset.fileSize || webp >= asset.fileSize) return null;
+  const pct = Math.round((1 - webp / asset.fileSize) * 100);
+  return pct > 0 ? pct : null;
+}
+
+/** Extract a user-presentable message from an unknown thrown value. */
+export function getErrorMessage(err: unknown): string {
+  return err instanceof Error && err.message ? err.message : 'Unexpected error';
+}
+
 export interface MediaAsset {
   id: string;
   filename: string;

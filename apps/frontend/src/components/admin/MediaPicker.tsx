@@ -16,22 +16,21 @@ import { X } from 'lucide-react';
 
 import {
   deleteMedia,
+  formatFileSize,
+  getDisplayFileSize,
+  getErrorMessage,
+  getSavingsPercent,
   listMedia,
   resolveMediaUrl,
   uploadMedia,
   type MediaAsset,
 } from '@/lib/media-api';
+import { toast } from '@/lib/toast';
 
 export interface MediaPickerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect: (asset: { id: string; url: string; filename: string }) => void;
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export function MediaPicker({
@@ -46,13 +45,11 @@ export function MediaPicker({
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string>('');
-  const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(
     async (targetPage = page, searchTerm = search) => {
       setIsLoading(true);
-      setError('');
       try {
         const result = await listMedia({
           search: searchTerm || undefined,
@@ -62,8 +59,8 @@ export function MediaPicker({
         setAssets(result.data);
         setTotal(result.total);
         setPage(result.page);
-      } catch {
-        setError('Failed to load media library.');
+      } catch (err) {
+        toast.error(getErrorMessage(err) || 'Failed to load media library.');
       } finally {
         setIsLoading(false);
       }
@@ -86,9 +83,12 @@ export function MediaPicker({
       try {
         await uploadMedia(file);
         setUploadProgress('Converting to WebP...');
+        toast.success('Image uploaded and converted to WebP');
         await load(1, search);
-      } catch {
-        setError('Upload failed. Allowed: JPEG/PNG/WebP/GIF up to 5 MB.');
+      } catch (err) {
+        toast.error(
+          getErrorMessage(err) || 'Upload failed. Allowed: JPEG/PNG/WebP/GIF up to 5 MB.'
+        );
       } finally {
         setIsUploading(false);
         setUploadProgress('');
@@ -98,13 +98,15 @@ export function MediaPicker({
     [load, search]
   );
 
-  const handleDelete = useCallback(async (id: string) => {
+  const handleDelete = useCallback(async (asset: MediaAsset) => {
     try {
-      await deleteMedia(id);
-      setAssets((prev) => prev.filter((a) => a.id !== id));
+      await deleteMedia(asset.id);
+      setAssets((prev) => prev.filter((a) => a.id !== asset.id));
       setTotal((t) => Math.max(0, t - 1));
-    } catch {
-      setError('Failed to delete asset.');
+      toast.success('Media asset deleted');
+    } catch (err) {
+      // e.g. 409 — backend message names the referencing image riddles.
+      toast.error(getErrorMessage(err) || 'Failed to delete asset.');
     }
   }, []);
 
@@ -173,16 +175,20 @@ export function MediaPicker({
           </button>
         </div>
 
-        {error && (
-          <p className="mx-6 mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
-            {error}
-          </p>
-        )}
-
         {/* Grid */}
         <div className="flex-1 overflow-y-auto p-6">
           {isLoading && !isUploading ? (
-            <p className="py-12 text-center text-sm font-bold text-gray-400">Loading...</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="overflow-hidden rounded-xl border border-gray-100">
+                  <div className="h-28 bg-gray-200 animate-pulse" />
+                  <div className="space-y-1.5 bg-white px-2 py-1.5">
+                    <div className="h-2 w-3/4 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-1.5 w-1/3 rounded bg-gray-200 animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : assets.length === 0 ? (
             <div className="py-12 text-center text-sm text-gray-400">
               No images yet. Upload one to get started.
@@ -210,20 +216,33 @@ export function MediaPicker({
                     <img
                       src={resolveMediaUrl(asset.url)}
                       alt={asset.alt ?? asset.filename}
+                      loading="lazy"
+                      decoding="async"
                       className="h-28 w-full object-cover transition-transform group-hover:scale-105"
                     />
                   </button>
                   <div className="bg-white px-2 py-1.5">
                     <p className="truncate text-[10px] font-bold text-gray-700">{asset.filename}</p>
                     <p className="text-[9px] text-gray-400">
-                      {formatBytes(asset.variants?.['webp']?.fileSize ?? asset.fileSize)}
+                      {formatFileSize(getDisplayFileSize(asset))}
+                      {(() => {
+                        const pct = getSavingsPercent(asset);
+                        return pct ? (
+                          <span
+                            className="ml-1 rounded bg-green-100 px-1 font-semibold text-green-700"
+                            title={`WebP conversion saved ${pct}% vs the original upload`}
+                          >
+                            -{pct}%
+                          </span>
+                        ) : null;
+                      })()}
                       {asset.width && asset.height ? ` · ${asset.width}×${asset.height}` : ''}
                     </p>
                   </div>
                   <button
-                    onClick={() => void handleDelete(asset.id)}
+                    onClick={() => void handleDelete(asset)}
                     aria-label={`Delete ${asset.filename}`}
-                    className="absolute right-1 top-1 hidden rounded-full bg-black/60 px-1.5 py-0.5 text-[10px] font-bold text-white group-hover:block hover:bg-red-500"
+                    className="absolute right-1 top-1 rounded-full bg-black/60 px-1.5 py-0.5 text-[10px] font-bold text-white opacity-0 transition-opacity hover:bg-red-500 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300 group-hover:opacity-100 group-focus-within:opacity-100"
                   >
                     ✕
                   </button>
