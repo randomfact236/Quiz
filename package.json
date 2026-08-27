@@ -18,8 +18,9 @@
     "libs/*"
   ],
   "scripts": {
-    "predev": "npm run validate:ports",
+    "predev": "npm run validate:ports && rimraf apps/frontend/.next",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:clean": "rimraf apps/frontend/.next && npm run dev",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "dev:backend": "npm run start:dev --workspace=apps/backend",
     "build": "npm run build --workspaces",
