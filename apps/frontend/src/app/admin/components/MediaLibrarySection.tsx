@@ -64,8 +64,12 @@ export function MediaLibrarySection() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this media asset?')) return;
-    await deleteMedia(id);
-    await load();
+    try {
+      await deleteMedia(id);
+      await load();
+    } catch {
+      setError('Failed to delete asset — it may still be in use by an image riddle.');
+    }
   };
 
   const formatSize = (bytes: number) => {

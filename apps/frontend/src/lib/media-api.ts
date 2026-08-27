@@ -10,8 +10,11 @@
 import { apiRequest } from './api-client';
 
 const RAW_BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
-/** Server origin (strips a trailing /api) — where /uploads files are hosted. */
-const SERVER_ORIGIN = RAW_BASE.replace(/\/api\/?$/, '');
+/**
+ * Server origin — strips the entire API path (`/api`, `/api/v1`, etc.) so that
+ * `/uploads/...` files are resolved against the host root, not the API prefix.
+ */
+const SERVER_ORIGIN = RAW_BASE.replace(/\/api(\/v[0-9]+)?\/?.*$/, '');
 
 /**
  * Resolve a stored media path to an absolute URL.

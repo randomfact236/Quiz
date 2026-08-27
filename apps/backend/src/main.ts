@@ -55,8 +55,10 @@ function setupMiddleware(app: NestExpressApplication): void {
     defaultVersion: '1',
   });
 
-  // Serve uploaded media library files from <cwd>/public (bypasses the /api prefix).
-  app.useStaticAssets(path.join(process.cwd(), 'public'), {
+  // Serve uploaded media library files. Files live in <cwd>/public/uploads and
+  // are referenced as /uploads/<file>; mount the static root at public/uploads so
+  // the /uploads/ prefix strips to the correct directory (bypasses the /api prefix).
+  app.useStaticAssets(path.join(process.cwd(), 'public', 'uploads'), {
     prefix: '/uploads/',
     maxAge: '7d',
     immutable: true,
