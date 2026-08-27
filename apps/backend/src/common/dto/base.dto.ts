@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -37,9 +37,11 @@ export class PaginationDto {
   @ApiPropertyOptional({ description: 'Items per page', default: DEFAULT_PAGE_SIZE })
   @IsOptional()
   @Type(() => Number)
-  @IsInt()
-  @Min(MIN_PAGE_NUMBER)
-  @Max(MAX_PAGE_SIZE)
+  @Transform(({ value }: { value: unknown }) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return undefined;
+    return Math.min(MAX_PAGE_SIZE, Math.max(MIN_PAGE_NUMBER, Math.floor(n)));
+  })
   limit?: number;
 }
 

@@ -206,7 +206,7 @@ export default function JokesPage(): JSX.Element {
     let cancelled = false;
     const load = async () => {
       try {
-        const [apiJokes, apiCats] = await Promise.all([getJokes(1, 500), getJokeCategories()]);
+        const [apiJokes, apiCats] = await Promise.all([getJokes(1, 100), getJokeCategories()]);
         if (cancelled) return;
 
         // Merge API counts with locally-voted counts (local wins if higher)

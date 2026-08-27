@@ -50,7 +50,7 @@ export function JokesSection({
     setIsLoadingData(true);
     try {
       const [jokePage, cats] = await Promise.all([
-        getAllJokesAdmin(1, 500),
+        getAllJokesAdmin(1, 100),
         getJokeCategoriesAdmin(),
       ]);
       setAllJokes(jokePage.data.map(adaptJokeToAdmin));
@@ -87,7 +87,7 @@ export function JokesSection({
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [selectedCategoryForEdit, setSelectedCategoryForEdit] = useState<JokeCategory | null>(null);
-  const [categoryForm, setCategoryForm] = useState({ name: '', emoji: '📚', description: '' });
+  const [categoryForm, setCategoryForm] = useState({ name: '', emoji: '', description: '' });
 
   // Soft-delete pending state (no auto-timer — requires manual confirmation)
   const [pendingCategoryDelete, setPendingCategoryDelete] = useState<{
@@ -597,7 +597,7 @@ export function JokesSection({
           {/* Add Category chip */}
           <button
             onClick={() => {
-              setCategoryForm({ name: '', emoji: '📚', description: '' });
+              setCategoryForm({ name: '', emoji: '', description: '' });
               setShowAddCategoryModal(true);
             }}
             className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-300 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
@@ -1113,7 +1113,7 @@ export function JokesSection({
                 <button
                   onClick={() => {
                     setShowAddCategoryModal(false);
-                    setCategoryForm({ name: '', emoji: '📚', description: '' });
+                    setCategoryForm({ name: '', emoji: '', description: '' });
                   }}
                   className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
                 >
@@ -1125,15 +1125,15 @@ export function JokesSection({
                     try {
                       const created = await createJokeCategoryAdmin({
                         name: categoryForm.name.trim(),
-                        emoji: categoryForm.emoji || '📚',
+                        ...(categoryForm.emoji ? { emoji: categoryForm.emoji } : {}),
                       });
                       setJokeCategories((prev) => [
                         ...prev,
                         { id: created.id, name: created.name, emoji: created.emoji },
                       ]);
                       setShowAddCategoryModal(false);
-                      setCategoryForm({ name: '', emoji: '📚', description: '' });
-                      toast.success('📁 Category created!');
+                      setCategoryForm({ name: '', emoji: '', description: '' });
+                      toast.success('Category created!');
                     } catch (err) {
                       toast.error(err instanceof Error ? err.message : 'Failed to create category');
                     }
@@ -1208,7 +1208,7 @@ export function JokesSection({
                     try {
                       await updateJokeCategoryAdmin(String(selectedCategoryForEdit.id), {
                         name: categoryForm.name.trim(),
-                        emoji: categoryForm.emoji || '📚',
+                        ...(categoryForm.emoji ? { emoji: categoryForm.emoji } : {}),
                       });
                       setJokeCategories((prev) =>
                         prev.map((cat) =>
@@ -1216,7 +1216,7 @@ export function JokesSection({
                             ? {
                                 ...cat,
                                 name: categoryForm.name.trim(),
-                                emoji: categoryForm.emoji || '📚',
+                                emoji: categoryForm.emoji || cat.emoji,
                               }
                             : cat
                         )
