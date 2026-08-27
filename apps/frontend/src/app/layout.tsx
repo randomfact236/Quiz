@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
-import DemographicsPopup from '@/components/DemographicsPopup';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { Providers } from './providers';
 import './globals.css';
@@ -95,7 +94,6 @@ export default function RootLayout({
           <main className="flex flex-col flex-1">{children}</main>
           <Footer />
           <MobileFooter />
-          <DemographicsPopup />
         </Providers>
       </body>
     </html>
