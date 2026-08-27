@@ -58,10 +58,17 @@ function setupMiddleware(app: NestExpressApplication): void {
   // Serve uploaded media library files. Files live in <cwd>/public/uploads and
   // are referenced as /uploads/<file>; mount the static root at public/uploads so
   // the /uploads/ prefix strips to the correct directory (bypasses the /api prefix).
+  // CORP override: helmet sets `Cross-Origin-Resource-Policy: same-origin`, which
+  // makes browsers refuse to render these images when embedded in the frontend
+  // app (localhost:3010) — a cross-origin context relative to the API (3012).
+  // Static media must be embeddable, so relax CORP just for uploads.
   app.useStaticAssets(path.join(process.cwd(), 'public', 'uploads'), {
     prefix: '/uploads/',
     maxAge: '7d',
     immutable: true,
+    setHeaders: (res: express.Response) => {
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
   });
 }
 
