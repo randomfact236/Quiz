@@ -229,15 +229,28 @@ function shouldShowAction(
 }
 
 /**
+ * Detect Apple platforms so shortcut hints show ⌘/⌥ symbols only where
+ * the Cmd/Option keys actually exist; Windows/Linux get plain key names.
+ */
+function isApplePlatform(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const platform = navigator.platform || '';
+  return /Mac|iPhone|iPad|iPod/i.test(platform);
+}
+
+/**
  * Parse keyboard shortcut for display
  */
 function formatKeyboardShortcut(shortcut: string): string {
-  return shortcut
-    .replace('Alt', '⌥')
-    .replace('Ctrl', '⌃')
-    .replace('Shift', '⇧')
-    .replace('Cmd', '⌘')
-    .replace(/\+/g, ' ');
+  if (isApplePlatform()) {
+    return shortcut
+      .replace('Alt', '⌥')
+      .replace('Ctrl', '⌃')
+      .replace('Shift', '⇧')
+      .replace('Cmd', '⌘')
+      .replace(/\+/g, ' ');
+  }
+  return shortcut.replace('Cmd', 'Ctrl').replace(/\+/g, ' + ');
 }
 
 // =============================================================================

@@ -6,12 +6,26 @@
  * ============================================================================
  */
 
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BeforeInsert, BeforeUpdate, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { ContentStatus } from '../../common/enums/content-status.enum';
 import { settings } from '../../config/settings';
 
-import { IActionOption, applyActionDefaults, validateActionOption, DEFAULT_ACTION_PRESETS } from './image-riddle-action.entity';
+import {
+  IActionOption,
+  applyActionDefaults,
+  validateActionOption,
+  DEFAULT_ACTION_PRESETS,
+} from './image-riddle-action.entity';
 import { ImageRiddleCategory } from './image-riddle-category.entity';
 
 /**
@@ -31,6 +45,13 @@ export class ImageRiddle {
 
   @Column({ type: 'text' })
   answer: string;
+
+  /**
+   * Alternative accepted answers (synonyms) — checked in addition to `answer`
+   * when validating a player's guess
+   */
+  @Column({ type: 'jsonb', nullable: true, default: null })
+  alternativeAnswers: string[] | null;
 
   @Column({ type: 'text', nullable: true })
   hint: string | null;
@@ -54,7 +75,10 @@ export class ImageRiddle {
   @Column({ type: 'boolean', default: true })
   showTimer: boolean;
 
-  @ManyToOne(() => ImageRiddleCategory, category => category.riddles, { onDelete: 'SET NULL', nullable: true })
+  @ManyToOne(() => ImageRiddleCategory, (category) => category.riddles, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   @JoinColumn({ name: 'categoryId' })
   category: ImageRiddleCategory | null;
 
@@ -221,12 +245,15 @@ export class ImageRiddle {
   } {
     const errors: string[] = [];
     const warnings: string[] = [];
-    const actionResults = new Map<string, { isValid: boolean; errors: string[]; warnings: string[] }>();
+    const actionResults = new Map<
+      string,
+      { isValid: boolean; errors: string[]; warnings: string[] }
+    >();
 
     const actions = this.actionOptions || [];
 
     // Check for duplicate IDs
-    const ids = actions.map(a => a.id);
+    const ids = actions.map((a) => a.id);
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
     if (duplicates.length > 0) {
       errors.push(`Duplicate action IDs found: ${[...new Set(duplicates)].join(', ')}`);
@@ -261,7 +288,7 @@ export class ImageRiddle {
     const validated = applyActionDefaults(action);
 
     // Check for duplicate ID
-    const existing = this.actionOptions?.find(a => a.id === validated.id);
+    const existing = this.actionOptions?.find((a) => a.id === validated.id);
     if (existing !== undefined) {
       throw new Error(`Action with ID '${validated.id}' already exists`);
     }
@@ -284,7 +311,7 @@ export class ImageRiddle {
       return null;
     }
 
-    const index = this.actionOptions.findIndex(a => a.id === id);
+    const index = this.actionOptions.findIndex((a) => a.id === id);
     if (index === -1) {
       return null;
     }
@@ -311,7 +338,7 @@ export class ImageRiddle {
     }
 
     const initialLength = this.actionOptions.length;
-    this.actionOptions = this.actionOptions.filter(a => a.id !== id);
+    this.actionOptions = this.actionOptions.filter((a) => a.id !== id);
 
     return this.actionOptions.length < initialLength;
   }
@@ -324,10 +351,10 @@ export class ImageRiddle {
       return;
     }
 
-    const actionMap = new Map(this.actionOptions.map(a => [a.id, a]));
+    const actionMap = new Map(this.actionOptions.map((a) => [a.id, a]));
 
     this.actionOptions = orderedIds
-      .filter(id => actionMap.has(id))
+      .filter((id) => actionMap.has(id))
       .map((id, index) => ({
         ...actionMap.get(id)!,
         order: index * 10,

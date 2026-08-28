@@ -791,6 +791,15 @@ export class CreateImageRiddleDto {
   @IsNotEmpty()
   answer: string;
 
+  @ApiPropertyOptional({
+    example: ['a hidden face', 'face in tree'],
+    description: 'Alternative accepted answers (synonyms)',
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  alternativeAnswers?: string[];
+
   @ApiPropertyOptional({ example: 'Look closely at the branches' })
   @IsOptional()
   @IsString()
@@ -864,6 +873,15 @@ export class UpdateImageRiddleDto {
   @IsOptional()
   @IsString()
   answer?: string;
+
+  @ApiPropertyOptional({
+    example: ['a hidden face', 'face in tree'],
+    description: 'Alternative accepted answers (synonyms)',
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  alternativeAnswers?: string[];
 
   @ApiPropertyOptional({ example: 'Look closely at the branches' })
   @IsOptional()

@@ -28,6 +28,9 @@ export const STORAGE_KEYS = {
   RIDDLES: `${PREFIX}riddles`,
   IMAGE_RIDDLES: `${PREFIX}image-riddles`,
   IMAGE_RIDDLE_CATEGORIES: `${PREFIX}image-riddle-categories`,
+  // Image riddle game progress (solved vs revealed answers)
+  IMAGE_RIDDLE_SOLVED: `${PREFIX}image-riddle-solved`,
+  IMAGE_RIDDLE_REVEALED: `${PREFIX}image-riddle-revealed`,
   JOKE_ITEMS: `${PREFIX}joke-items`,
   RIDDLE_ITEMS: `${PREFIX}riddle-items`,
   QUIZ_ITEMS: `${PREFIX}quiz-items`,

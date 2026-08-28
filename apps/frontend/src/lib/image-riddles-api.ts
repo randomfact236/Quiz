@@ -44,6 +44,8 @@ export interface ImageRiddle {
   title: string;
   imageUrl: string;
   answer: string;
+  /** Alternative accepted answers (synonyms) checked in addition to `answer` */
+  alternativeAnswers?: string[] | null;
   hint: string | null;
   difficulty: ImageRiddleDifficulty;
   status: ImageRiddleStatus;
@@ -92,9 +94,9 @@ export async function getImageRiddles(
  * Search published riddles by title/answer text.
  */
 export async function searchImageRiddles(params: {
-  search?: string;
-  categoryId?: string;
-  difficulty?: string;
+  search?: string | undefined;
+  categoryId?: string | undefined;
+  difficulty?: string | undefined;
   page?: number;
   limit?: number;
 }): Promise<Paginated<ImageRiddle>> {
@@ -174,6 +176,7 @@ export interface CreateImageRiddleDto {
   title: string;
   imageUrl: string;
   answer: string;
+  alternativeAnswers?: string[] | null;
   hint?: string | undefined;
   difficulty: ImageRiddleDifficulty;
   timerSeconds?: number | null;

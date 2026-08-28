@@ -95,7 +95,7 @@
 
 ### Current data flow
 
-The two halves are not connected. Admin UI writes riddle JSON to browser localStorage; the public page reads that same key (falling back to hardcoded arrays in `initial-data.ts`). Both backend modules serve PostgreSQL-backed REST APIs that no frontend code consumes.
+Fully API-backed. The public page fetches `GET /image-riddles?limit=200` + `GET /image-riddles/categories` on mount (hardcoded arrays in `initial-data.ts` are a cold-start/offline fallback only, surfaced with an amber banner when the API fails). Admin UI (`ImageRiddlesAdminSection`) writes via `/admin/image-riddles/*` with the admin JWT; both paths share the PostgreSQL tables through TypeORM.
 
 ### Entity relationships
 
@@ -133,12 +133,13 @@ Response shapes: public lists return `{ data, total }`; the admin list returns `
 
 ### FE page behavior (`page.tsx`)
 
-1. On mount, read riddles/categories from localStorage, falling back to hardcoded arrays.
-2. Client-side filter (published status, difficulty, search), then sort (recent or random shuffle).
-3. Paginate to 12 cards per page; render card grid with difficulty badge top-left and timer badge top-right.
-4. Clicking a card opens a modal: countdown timer starts, user types a guess, Enter or "Check Answer" compares against `riddle.answer` (case-insensitive); wrong answers shake the input, timeout auto-reveals the answer.
-5. Actions render via `ActionOptions` using per-riddle `actionOptions` from data or three locally-defined defaults (check/hint/give-up).
-6. Arrow keys navigate prev/next within the filtered list; Escape closes the modal.
+1. On mount, fetch riddles/categories from the API (offline fallback arrays + amber failure banner); restore persisted score progress from localStorage (`aiquiz:image-riddle-solved` / `aiquiz:image-riddle-revealed`).
+2. Client-side filter (published status, difficulty, search), then sort (recent, or a seeded deterministic "Mix" shuffle that stays stable while filtering).
+3. Paginate to 12 cards per page; render card grid with difficulty badge top-left (difficulty-coded colors), timer badge top-right (hidden when `showTimer=false`), and a non-blurred "Answer Hidden" placeholder (answer text only mounted once revealed).
+4. Clicking a card opens a modal: countdown timer starts (untimed when `showTimer=false`); user types a guess, Enter or "Check Answer" compares via the normalized matcher (`lib/image-riddle-answer.ts` — case/whitespace/article/punctuation tolerant, plus `alternativeAnswers` synonyms); wrong answers shake the input and show an inline "Not quite — try again!" with a live Attempts chip; on timeout the player chooses "Reveal Answer" or "Keep Trying" (no auto-reveal).
+5. Actions render via `ActionOptions` using per-riddle `actionOptions` from data or three locally-defined defaults (check/hint/give-up); the Hint action is filtered out when the riddle has no hint. A toggleable letter-count chip ("8 letters") sits next to the guess input (default on for hard/expert).
+6. The answer panel is green with a celebration burst on a correct guess; neutral indigo with "The answer was:" copy for give-up/time-out reveals.
+7. Arrow keys navigate prev/next within the filtered list; Escape closes the modal. Correct guesses (solved) and reveals are tracked separately in the header ("Solved X · Revealed Y · of Z") and persist across reloads.
 
 ## 7. Recommended Process To Proceed (prioritized action plan)
 

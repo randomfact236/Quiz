@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, Logger, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Logger,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, IsNull } from 'typeorm';
 
@@ -25,7 +31,7 @@ export class AdminImageRiddlesService {
     private readonly riddleRepo: Repository<ImageRiddle>,
     @InjectRepository(ImageRiddleCategory)
     private readonly categoryRepo: Repository<ImageRiddleCategory>,
-    private readonly cacheService: CacheService,
+    private readonly cacheService: CacheService
   ) {}
 
   // ============================================================================
@@ -43,7 +49,7 @@ export class AdminImageRiddlesService {
       categoryId?: string;
       isActive?: boolean;
       search?: string;
-    },
+    }
   ): Promise<{
     data: ImageRiddle[];
     total: number;
@@ -127,6 +133,7 @@ export class AdminImageRiddlesService {
       title: dto.title,
       imageUrl: dto.imageUrl,
       answer: dto.answer,
+      alternativeAnswers: dto.alternativeAnswers ?? null,
       hint: dto.hint ?? null,
       difficulty: dto.difficulty,
       timerSeconds: dto.timerSeconds ?? null,
@@ -136,7 +143,7 @@ export class AdminImageRiddlesService {
       isActive: true,
     });
 
-    const saved = await this.riddleRepo.save(riddle);
+    const saved = await this.saveRiddleSafely(riddle);
     this.logger.log(`Created riddle: ${saved.id}`);
 
     await this.invalidateCache();
@@ -147,7 +154,7 @@ export class AdminImageRiddlesService {
    * Bulk create riddles
    */
   async createRiddlesBulk(
-    dtos: CreateImageRiddleDto[],
+    dtos: CreateImageRiddleDto[]
   ): Promise<{ created: number; failed: number; errors: string[] }> {
     const errors: string[] = [];
     let created = 0;
@@ -195,6 +202,9 @@ export class AdminImageRiddlesService {
     if (dto.answer !== undefined) {
       riddle.answer = dto.answer;
     }
+    if (dto.alternativeAnswers !== undefined) {
+      riddle.alternativeAnswers = dto.alternativeAnswers;
+    }
     if (dto.hint !== undefined) {
       riddle.hint = dto.hint ?? null;
     }
@@ -217,11 +227,33 @@ export class AdminImageRiddlesService {
       riddle.isActive = dto.isActive;
     }
 
-    const saved = await this.riddleRepo.save(riddle);
+    const saved = await this.saveRiddleSafely(riddle);
     this.logger.log(`Updated riddle: ${id}`);
 
     await this.invalidateCache();
     return saved;
+  }
+
+  /**
+   * Save a riddle, mapping entity-level validation failures (action option
+   * structure/duplicate IDs raised in BeforeInsert/BeforeUpdate hooks) to
+   * 400 responses instead of bare 500s.
+   */
+  private async saveRiddleSafely(riddle: ImageRiddle): Promise<ImageRiddle> {
+    try {
+      return await this.riddleRepo.save(riddle);
+    } catch (error) {
+      if (error instanceof Error && this.isEntityValidationMessage(error.message)) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
+    }
+  }
+
+  private isEntityValidationMessage(message: string): boolean {
+    return (
+      message.startsWith('Action options validation failed') || message.startsWith('Action with ID')
+    );
   }
 
   /**
@@ -314,7 +346,7 @@ export class AdminImageRiddlesService {
    */
   async updateCategory(
     id: string,
-    dto: UpdateImageRiddleCategoryDto,
+    dto: UpdateImageRiddleCategoryDto
   ): Promise<ImageRiddleCategory> {
     const category = await this.findCategoryById(id);
 
@@ -351,18 +383,27 @@ export class AdminImageRiddlesService {
   async deleteCategory(id: string): Promise<void> {
     const category = await this.findCategoryById(id);
 
-    // Check if category has active riddles
-    const activeRiddles = category.riddles?.filter((r) => r.isActive) ?? [];
-    if (activeRiddles.length > 0) {
-      // Soft delete all riddles in this category
-      for (const riddle of activeRiddles) {
-        riddle.isActive = false;
-        await this.riddleRepo.save(riddle);
-      }
-      this.logger.log(`Soft deleted ${activeRiddles.length} riddles in category: ${id}`);
-    }
+    const activeRiddleCount = category.riddles?.filter((r) => r.isActive).length ?? 0;
 
-    await this.categoryRepo.remove(category);
+    // Entity FK is SET NULL, so deleting the category is safe; the only extra
+    // work is soft-deleting its active riddles. Done as a single bulk UPDATE
+    // inside a transaction instead of a per-row save loop.
+    await this.riddleRepo.manager.transaction(async (manager) => {
+      if (activeRiddleCount > 0) {
+        await manager
+          .getRepository(ImageRiddle)
+          .createQueryBuilder()
+          .update(ImageRiddle)
+          .set({ isActive: false })
+          .where('"categoryId" = :id AND "isActive" = true', { id })
+          .execute();
+      }
+      await manager.remove(category);
+    });
+
+    if (activeRiddleCount > 0) {
+      this.logger.log(`Soft deleted ${activeRiddleCount} riddles in category: ${id}`);
+    }
     this.logger.log(`Deleted category: ${id}`);
 
     await this.invalidateCache();
