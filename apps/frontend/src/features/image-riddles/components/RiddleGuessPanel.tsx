@@ -16,6 +16,7 @@ import { countAnswerLetters } from '@/lib/image-riddle-answer';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 import type { ImageRiddleGame } from '../hooks/useImageRiddleGame';
+import { trackImageRiddleEvent } from '../lib/analytics';
 
 export interface RiddleGuessPanelProps {
   riddle: ImageRiddle;
@@ -84,6 +85,9 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
         }}
         position="below_question"
         onAction={game.handleAction}
+        onAnalytics={(event, metadata) =>
+          trackImageRiddleEvent(event, { riddleId: riddle.id, ...metadata })
+        }
         className="justify-center gap-4"
       />
 

@@ -1,7 +1,11 @@
 # Image Riddles — Analysis, Comparison & Upgrade Plan
 
-Companion docs: [features/image-riddles.md](../docs/features/image-riddles.md), [code-quality-plan.md](code-quality-plan.md).
-Verified against source on 2026-08-27.
+> **Status: ALL PLANNED PHASES (P0/P1/P2) IMPLEMENTED — 2026-08-28.** Only the
+> Deferred section below remains open (owner decision). Per-item status markers
+> are inline in §3.
+>
+> Companion docs: [features/image-riddles.md](../docs/features/image-riddles.md), [code-quality-plan.md](code-quality-plan.md).
+> Verified against source on 2026-08-27.
 
 ## 1. Current State (verified)
 
@@ -68,10 +72,10 @@ split before enhancing when a change touches an existing monolith.
 
 ### Phase P2 — Polish & parity
 
-8. **A3** — supply `onAnalytics` from a small `useAnalytics` shim posting events (answer_checked/hint_shown/gave_up) to any sink that exists repo-wide; if none exists, log via console.debug behind a flag and document — remove the dead string constants instead.
-9. **A4** — swap `<img>` for `next/image` (remote patterns config for media host) with mandatory `altText`.
-10. **A7** — `getDashboardStats` into ≤3 grouped queries (one GROUP BY difficulty, one per-category count join); derive `averageTimer` via `AVG(timerSeconds)` instead of hardcoded 90.
-11. **A10 (finish)** — component/hook smoke tests for extracted hooks; add csv-parser tests only if the admin import path shares shape with riddle-mcq's parser.
+8. **A3** — ✅ DONE 2026-08-28 — no analytics sink exists repo-wide, so events route through `features/image-riddles/lib/analytics.ts` (`trackImageRiddleEvent`), which logs via console.debug behind the `image-riddles:analytics-debug` localStorage flag; wired as `onAnalytics` on `RiddleGuessPanel`'s ActionOptions with `riddleId` context. Swap the shim body for a real sink without touching call sites.
+9. **A4** — ✅ DONE 2026-08-27 (commit 7e0c8c1) — `next/image` swap with remote patterns config for the media host, mandatory alt fallback.
+10. **A7** — ✅ DONE 2026-08-28 — `getDashboardStats` now uses one GROUP BY difficulty query, one JOIN+GROUP BY per-category count (no relations load), and `AVG(COALESCE(timerSeconds, 90))` for `averageTimer`; total/active/category counts and recent riddles run in one Promise.all.
+11. **A10 (finish)** — ✅ DONE 2026-08-27/28 (commits 7e0c8c1, 5145de7, 5c0ceca) — answer/game/admin/keyboard/url-sync suites included in the FE count.
 
 ### Deferred (owner decision)
 

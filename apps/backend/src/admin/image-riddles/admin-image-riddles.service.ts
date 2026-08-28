@@ -18,6 +18,9 @@ import {
 import { ImageRiddleCategory } from '../../image-riddles/entities/image-riddle-category.entity';
 import { ImageRiddle } from '../../image-riddles/entities/image-riddle.entity';
 
+/** Mirrors settings.imageRiddles.defaults.timerSeconds (entity getDefaultTimer). */
+const DEFAULT_TIMER_SECONDS = 90;
+
 /**
  * Admin Image Riddles Service
  * Enterprise-grade service for admin operations
@@ -425,29 +428,57 @@ export class AdminImageRiddlesService {
     recentRiddles: ImageRiddle[];
     averageTimer: number;
   }> {
-    const [totalRiddles, activeRiddles, totalCategories] = await Promise.all([
+    const [totalRiddles, activeRiddles, totalCategories, recentRiddles] = await Promise.all([
       this.riddleRepo.count(),
       this.riddleRepo.count({ where: { isActive: true } }),
       this.categoryRepo.count(),
+      this.getRecentRiddles(5),
     ]);
 
-    const riddlesByDifficulty: Record<string, number> = {
-      easy: await this.riddleRepo.count({ where: { difficulty: 'easy' } }),
-      medium: await this.riddleRepo.count({ where: { difficulty: 'medium' } }),
-      hard: await this.riddleRepo.count({ where: { difficulty: 'hard' } }),
-      expert: await this.riddleRepo.count({ where: { difficulty: 'expert' } }),
-    };
+    // Single GROUP BY per dimension instead of one COUNT query per difficulty.
+    const difficultyRows = await this.riddleRepo
+      .createQueryBuilder('riddle')
+      .select('riddle.difficulty', 'difficulty')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('riddle.difficulty')
+      .getRawMany<{ difficulty: string; count: string }>();
 
-    const categories = await this.categoryRepo.find({ relations: ['riddles'] });
-    const riddlesByCategory = categories.map((cat) => ({
-      categoryId: cat.id,
-      categoryName: cat.name,
-      count: cat.riddles?.length ?? 0,
+    const riddlesByDifficulty: Record<string, number> = {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      expert: 0,
+    };
+    for (const row of difficultyRows) {
+      riddlesByDifficulty[row.difficulty] = Number(row.count);
+    }
+
+    // Count via JOIN + GROUP BY so categories load without their riddle relations.
+    const categoryRows = await this.categoryRepo
+      .createQueryBuilder('category')
+      .leftJoin('category.riddles', 'riddle')
+      .select('category.id', 'categoryId')
+      .addSelect('category.name', 'categoryName')
+      .addSelect('COUNT(riddle.id)', 'count')
+      .groupBy('category.id')
+      .addGroupBy('category.name')
+      .getRawMany<{ categoryId: string; categoryName: string; count: string }>();
+
+    const riddlesByCategory = categoryRows.map((row) => ({
+      categoryId: row.categoryId,
+      categoryName: row.categoryName,
+      count: Number(row.count),
     }));
 
-    const recentRiddles = await this.getRecentRiddles(5);
+    // AVG over the effective timer: custom value when set, otherwise the
+    // settings default (entity `getDefaultTimer()` mirror).
+    const timerRow = await this.riddleRepo
+      .createQueryBuilder('riddle')
+      .select('AVG(COALESCE(riddle.timerSeconds, :defaultTimer))', 'avg')
+      .setParameter('defaultTimer', DEFAULT_TIMER_SECONDS)
+      .getRawOne<{ avg: string | null }>();
 
-    const averageTimer = 90; // All riddles default to 90s
+    const averageTimer = timerRow?.avg ? Math.round(Number(timerRow.avg)) : DEFAULT_TIMER_SECONDS;
 
     return {
       totalRiddles,
