@@ -11,6 +11,7 @@
 'use client';
 
 import ActionOptions from '@/components/image-riddles/ActionOptions';
+import { Lightbulb } from 'lucide-react';
 import { countAnswerLetters } from '@/lib/image-riddle-answer';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
@@ -95,7 +96,7 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
       {game.showHint && riddle.hint && (
         <div className="animate-in slide-in-from-top-4 duration-300 rounded-2xl bg-amber-50 p-5 border border-amber-100 shadow-sm">
           <p className="flex items-center gap-2 text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">
-            <span className="text-base">💡</span> Hint
+            <Lightbulb className="h-4 w-4" aria-hidden="true" /> Hint
           </p>
           <p className="text-amber-900 font-bold">{riddle.hint}</p>
         </div>

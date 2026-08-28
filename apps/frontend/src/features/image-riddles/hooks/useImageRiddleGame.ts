@@ -8,7 +8,7 @@
 
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { IActionOption } from '@/components/image-riddles/ActionOptions';
 import { isImageRiddleAnswerCorrect } from '@/lib/image-riddle-answer';
@@ -60,20 +60,50 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     setShareMessage(null);
   }, []);
 
+  // #18: modal history integration. Opening the modal pushes a history entry
+  // so browser Back closes the modal instead of leaving the page; closing
+  // via the UI (✕/Escape/Next) pops that entry via history.back(). The ref
+  // tracks whether the current modal session pushed an entry so popstate
+  // (fired by our own back()) never pops a second one.
+  const modalHistoryRef = useRef(false);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      modalHistoryRef.current = false; // pushed entry consumed by this pop
+      setSelectedRiddle(null);
+      stopTimer();
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [stopTimer]);
+
   const openRiddle = useCallback(
     (riddle: ImageRiddle) => {
+      // Only the closed → open transition pushes a history entry; in-modal
+      // navigation (next/prev) reuses it.
+      if (!selectedRiddle) {
+        window.history.pushState({ imageRiddleModal: true }, '');
+        modalHistoryRef.current = true;
+      }
       setSelectedRiddle(riddle);
       resetTransientState();
       // Untimed riddles (showTimer=false) start with an inactive clock.
       startTimer(riddle.showTimer !== false ? resolveTimerSeconds(riddle) : 0);
       setShowLetterCount(riddle.difficulty === 'hard' || riddle.difficulty === 'expert');
     },
-    [resetTransientState, startTimer]
+    [selectedRiddle, resetTransientState, startTimer]
   );
 
   const closeRiddle = useCallback(() => {
     setSelectedRiddle(null);
     stopTimer();
+    if (modalHistoryRef.current) {
+      modalHistoryRef.current = false;
+      // Pops the pushed entry; the resulting popstate clears state again
+      // (no-op). If the user reopens before the pop lands, the popstate
+      // simply closes that fresh modal — the entry accounting stays correct.
+      window.history.back();
+    }
   }, [stopTimer]);
 
   const navigateRiddle = useCallback(

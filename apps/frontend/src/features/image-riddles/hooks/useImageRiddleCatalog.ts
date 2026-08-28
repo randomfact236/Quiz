@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
   getImageRiddleCategories,
+  getImageRiddlesStats,
   searchImageRiddles,
   type ImageRiddle,
   type ImageRiddleCategory,
@@ -73,12 +74,13 @@ export function useImageRiddleCatalog({
     };
   }, []);
 
-  // Published total for the honest score denominator.
+  // Published total for the honest score denominator (#19: from the
+  // /stats/overview endpoint instead of a probe search call).
   useEffect(() => {
     let cancelled = false;
-    searchImageRiddles({ page: 1, limit: 1 })
-      .then((r) => {
-        if (!cancelled) setTotalPublished(r.total);
+    getImageRiddlesStats()
+      .then((stats) => {
+        if (!cancelled) setTotalPublished(stats.totalRiddles);
       })
       .catch(() => {
         if (!cancelled) {

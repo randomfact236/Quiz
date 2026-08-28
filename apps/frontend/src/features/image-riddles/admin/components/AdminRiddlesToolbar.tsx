@@ -6,6 +6,7 @@
 
 'use client';
 
+import { Download, Plus, RefreshCw, Search, Undo2, Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 import { useClickOutside } from '@/hooks/useClickOutside';
@@ -45,14 +46,20 @@ export default function AdminRiddlesToolbar({
   return (
     <div className="rounded-xl bg-white p-4 shadow-md">
       <div className="flex flex-wrap items-center gap-3">
-        <input
-          type="text"
-          placeholder="Search riddles..."
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
-          aria-label="Search riddles by keyword"
-        />
+        <div className="relative">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            placeholder="Search riddles..."
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="rounded-lg border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none"
+            aria-label="Search riddles by keyword"
+          />
+        </div>
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
@@ -70,7 +77,8 @@ export default function AdminRiddlesToolbar({
             aria-label="Export riddles"
             aria-expanded={showExportDropdown}
           >
-            📥 Export
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Export
           </button>
           {showExportDropdown && (
             <div className="absolute right-0 z-10 mt-2 w-40 rounded-lg border bg-white shadow-lg">
@@ -102,30 +110,34 @@ export default function AdminRiddlesToolbar({
           className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-600"
           aria-label="Import riddles"
         >
-          📤 Import
+          <Upload className="h-4 w-4" aria-hidden="true" />
+          Import
         </button>
         <button
           onClick={onReload}
           className="flex items-center gap-2 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
           aria-label="Reload from server"
         >
-          🔄 Reload
+          <RefreshCw className="h-4 w-4" aria-hidden="true" />
+          Reload
         </button>
         <button
           onClick={onUndo}
           disabled={!canUndo}
-          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
           aria-label="Undo last delete"
           title="Undo last delete"
         >
-          ⟲ Undo
+          <Undo2 className="h-4 w-4" aria-hidden="true" />
+          Undo
         </button>
         <button
           onClick={onOpenAdd}
-          className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+          className="flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
           aria-label="Add new riddle"
         >
-          + Add Riddle
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Add Riddle
         </button>
       </div>
     </div>

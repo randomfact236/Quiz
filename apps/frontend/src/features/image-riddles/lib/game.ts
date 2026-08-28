@@ -7,6 +7,8 @@
  * ============================================================================
  */
 
+import { Flame, Gem, Leaf, Star, type LucideIcon } from 'lucide-react';
+
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 export const ITEMS_PER_PAGE = 12;
@@ -18,12 +20,36 @@ export const difficultyColors: Record<string, string> = {
   expert: 'bg-red-100 text-red-700 border-red-200',
 };
 
-export const difficultyLabels: Record<string, string> = {
-  easy: '🌱 Easy',
-  medium: '⭐ Medium',
-  hard: '🔥 Hard',
-  expert: '💎 Expert',
+// C2 #21: difficulty chips use lucide icons (consistent cross-platform) plus
+// plain text — emoji render differently per OS/browser.
+export const difficultyIcons: Record<string, LucideIcon> = {
+  easy: Leaf,
+  medium: Star,
+  hard: Flame,
+  expert: Gem,
 };
+
+export const difficultyLabels: Record<string, string> = {
+  easy: 'Easy',
+  medium: 'Medium',
+  hard: 'Hard',
+  expert: 'Expert',
+};
+
+/**
+ * Shared low-res blur placeholder for next/image (`placeholder="blur"`) —
+ * no per-image blur hash exists in the backend, so every card image gets
+ * this neutral slate shimmer block while loading.
+ */
+export const CARD_BLUR_DATA_URL =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'>` +
+      `<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>` +
+      `<stop offset='0' stop-color='#e2e8f0'/><stop offset='1' stop-color='#f1f5f9'/>` +
+      `</linearGradient></defs>` +
+      `<rect width='8' height='6' fill='url(#g)'/></svg>`
+  );
 
 // Mirrors backend settings.imageRiddles.timers (RIDDLE_TIMERS) — single
 // source of truth lives there; keep these values in sync.

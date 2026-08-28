@@ -9,6 +9,8 @@
 
 'use client';
 
+import { Folder, Globe } from 'lucide-react';
+
 import type { ImageRiddleCategory } from '@/lib/image-riddles-api';
 
 export interface CategorySidebarProps {
@@ -27,14 +29,14 @@ export default function CategorySidebar({
   return (
     <div className="lg:col-span-1 sticky top-[104px] z-20">
       <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 px-1 flex items-center gap-2">
-        <span className="text-indigo-400">📁</span> Topics
+        <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" /> Topics
       </h2>
       <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
         <button
           onClick={() => onSelect(null)}
           className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-white border-slate-100 hover:border-slate-300'}`}
         >
-          <span className="text-xl">🌍</span>
+          <Globe className="h-5 w-5 text-slate-600" aria-hidden="true" />
           <span className="text-[10px] uppercase font-black tracking-widest text-slate-700">
             All
           </span>

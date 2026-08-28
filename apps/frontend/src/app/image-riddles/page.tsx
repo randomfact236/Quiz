@@ -14,12 +14,14 @@
 'use client';
 
 import Link from 'next/link';
+import { Sparkles } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 
 import {
   CategorySidebar,
   PaginationControls,
   RiddleCard,
+  RiddleCardSkeleton,
   RiddleModal,
   RiddlesToolbar,
 } from '@/features/image-riddles/components';
@@ -29,7 +31,7 @@ import {
   useImageRiddleGame,
   useImageRiddleScore,
 } from '@/features/image-riddles/hooks';
-import { applyMixSort } from '@/features/image-riddles/lib/game';
+import { ITEMS_PER_PAGE, applyMixSort } from '@/features/image-riddles/lib/game';
 
 export default function ImageRiddlesPage(): JSX.Element {
   const filters = useImageRiddleFilters();
@@ -97,9 +99,12 @@ export default function ImageRiddlesPage(): JSX.Element {
           {/* Main Area: Grid & Pagination */}
           <div className="lg:col-span-3 space-y-6">
             {catalog.isLoading ? (
-              <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
-                <span className="text-6xl mb-6 block animate-pulse">🖼️</span>
-                <h3 className="text-xl font-black text-slate-400">Loading riddles...</h3>
+              // C2 #20: per-card skeletons matching the card layout, instead
+              // of a single full-page loading state.
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+                {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
+                  <RiddleCardSkeleton key={`skeleton-${i}`} />
+                ))}
               </div>
             ) : (
               <>
@@ -127,7 +132,10 @@ export default function ImageRiddlesPage(): JSX.Element {
 
                 {catalog.totalFiltered === 0 && (
                   <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
-                    <span className="text-6xl mb-6 block">✨</span>
+                    <Sparkles
+                      className="mx-auto mb-6 h-14 w-14 text-slate-300"
+                      aria-hidden="true"
+                    />
                     <h3 className="text-xl font-black text-slate-400 mb-2">
                       Nothing matches your search...
                     </h3>

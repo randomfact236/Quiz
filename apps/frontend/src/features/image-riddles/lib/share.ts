@@ -18,11 +18,15 @@ export const SHARE_MESSAGES: Record<ShareResult, string | null> = {
 };
 
 export async function shareRiddleContent(riddle: ImageRiddle): Promise<ShareResult> {
+  // #18/#19: with URL sync, the current URL already reflects the active
+  // filters (category/difficulty/search) — share it so recipients land in
+  // exactly the same filtered view. Falls back to a category-only deep link
+  // outside the browser.
   const category = riddle.category?.name ?? '';
   const url =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/image-riddles?category=${encodeURIComponent(category)}`
-      : '/image-riddles';
+      ? window.location.href
+      : `/image-riddles?category=${encodeURIComponent(category)}`;
   const text = `Can you solve this image riddle: "${riddle.title}"?`;
 
   if (typeof navigator !== 'undefined' && navigator.share) {

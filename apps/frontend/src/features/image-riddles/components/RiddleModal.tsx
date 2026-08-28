@@ -12,11 +12,19 @@
 'use client';
 
 import Image from 'next/image';
+import { Clock, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 import type { ImageRiddleGame } from '../hooks/useImageRiddleGame';
-import { difficultyColors, difficultyLabels, resolveTimerSeconds } from '../lib/game';
+import {
+  CARD_BLUR_DATA_URL,
+  difficultyColors,
+  difficultyIcons,
+  difficultyLabels,
+  resolveTimerSeconds,
+} from '../lib/game';
 import RiddleAnswerPanel from './RiddleAnswerPanel';
 import RiddleGuessPanel from './RiddleGuessPanel';
 
@@ -28,6 +36,14 @@ export interface RiddleModalProps {
   canNavigate: boolean;
 }
 
+/** Focusable-element selector used by the focus trap (C3). */
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getFocusable(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+}
+
 export default function RiddleModal({
   riddle,
   game,
@@ -37,16 +53,77 @@ export default function RiddleModal({
 }: RiddleModalProps) {
   const timerEnabled = riddle.showTimer !== false;
   const totalSeconds = resolveTimerSeconds(riddle);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // C3: capture the triggering element (the card that opened the modal) as
+  // early as possible — during first render, BEFORE the guess input's
+  // autoFocus moves focus — so it can be restored on unmount.
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  if (returnFocusRef.current === null && typeof document !== 'undefined') {
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+  }
+
+  // C3: on mount, if focus did not land inside the modal (the guess input's
+  // autoFocus normally handles it), move focus to the first focusable
+  // element. On unmount, return focus to the triggering card.
+  useEffect(() => {
+    const container = modalRef.current;
+    if (container && !container.contains(document.activeElement)) {
+      const first = getFocusable(container)[0];
+      (first ?? container).focus();
+    }
+    const toRestore = returnFocusRef.current;
+    return () => {
+      toRestore?.focus?.();
+    };
+  }, []);
+
+  // C3: focus trap — Tab/Shift+Tab cycle only within the modal. When focus
+  // is at the last element, Tab wraps to the first (and vice versa); if
+  // focus somehow escaped the modal, pull it back to the first element.
+  const handleTrapKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+    const container = modalRef.current;
+    if (!container) return;
+    const focusables = getFocusable(container);
+    if (focusables.length === 0) return;
+
+    const first = focusables[0]!;
+    const last = focusables[focusables.length - 1]!;
+    const active = document.activeElement as HTMLElement | null;
+
+    if (e.shiftKey) {
+      if (!active || !container.contains(active) || active === first) {
+        e.preventDefault();
+        last.focus();
+      }
+      return;
+    }
+    if (!active || !container.contains(active) || active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="relative max-h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300">
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300"
+      onKeyDown={handleTrapKeyDown}
+    >
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={riddle.title}
+        tabIndex={-1}
+        className="relative max-h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300"
+      >
         <button
           onClick={game.closeRiddle}
-          className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
+          className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
           aria-label="Close modal"
         >
-          ✕
+          <X className="h-5 w-5" aria-hidden="true" />
         </button>
 
         {/* Navigation Buttons */}
@@ -80,8 +157,14 @@ export default function RiddleModal({
           {/* Top Info Row: Difficulty */}
           <div className="mb-2">
             <span
-              className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[riddle.difficulty]} shadow-sm`}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${difficultyColors[riddle.difficulty]} shadow-sm`}
             >
+              {(() => {
+                const DifficultyIcon = difficultyIcons[riddle.difficulty];
+                return DifficultyIcon ? (
+                  <DifficultyIcon className="h-3 w-3" aria-hidden="true" />
+                ) : null;
+              })()}
               {difficultyLabels[riddle.difficulty]}
             </span>
           </div>
@@ -95,7 +178,7 @@ export default function RiddleModal({
                 <div
                   className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${game.isTimerActive ? (game.timeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}
                 >
-                  <span className="text-sm">⏱️</span>
+                  <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>
                     {Math.floor(game.timeLeft / 60)}:
                     {(game.timeLeft % 60).toString().padStart(2, '0')}
@@ -127,6 +210,8 @@ export default function RiddleModal({
                 alt={riddle.altText || riddle.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 640px"
+                placeholder="blur"
+                blurDataURL={CARD_BLUR_DATA_URL}
                 onError={() => onImageError(riddle.id)}
                 className="object-contain p-2"
               />

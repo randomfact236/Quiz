@@ -10,6 +10,7 @@
 'use client';
 
 import Image from 'next/image';
+import { ImagePlus } from 'lucide-react';
 
 import type { RiddleFormState } from '../lib/form';
 import type { AdminImageRiddleCategory } from '../hooks/useAdminImageRiddleData';
@@ -71,7 +72,8 @@ export default function RiddleFormFields({
             className="whitespace-nowrap rounded-lg bg-indigo-500 px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-indigo-600"
             aria-label="Choose image from media library"
           >
-            🖼️ Library
+            <ImagePlus className="h-4 w-4" aria-hidden="true" />
+            Library
           </button>
         </div>
         {form.imageUrl && (

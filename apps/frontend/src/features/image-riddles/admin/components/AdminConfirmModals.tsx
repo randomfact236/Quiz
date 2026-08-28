@@ -6,7 +6,7 @@
 
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import { RefreshCw, Trash2 } from 'lucide-react';
 
 import type { ImageRiddle } from '@/app/admin/types';
 
@@ -117,7 +117,7 @@ export function SyncConfirmModal({
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-          <span className="text-2xl">🔄</span>
+          <RefreshCw className="h-6 w-6" aria-hidden="true" />
         </div>
         <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Reload from Server?</h3>
         <p className="mb-6 text-sm text-gray-600">

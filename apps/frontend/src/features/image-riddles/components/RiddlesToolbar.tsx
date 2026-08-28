@@ -10,14 +10,16 @@
 
 'use client';
 
+import { ChevronDown, Search } from 'lucide-react';
+
 import type { ImageRiddleFilters } from '../hooks/useImageRiddleFilters';
 import type { ImageRiddleScore } from '../hooks/useImageRiddleScore';
 
 const DIFFICULTY_OPTIONS: Array<{ value: string; label: string }> = [
-  { value: 'easy', label: '🌱 Easy' },
-  { value: 'medium', label: '⭐ Medium' },
-  { value: 'hard', label: '🔥 Hard' },
-  { value: 'expert', label: '💎 Expert' },
+  { value: 'easy', label: 'Easy' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'hard', label: 'Hard' },
+  { value: 'expert', label: 'Expert' },
 ];
 
 export interface RiddlesToolbarProps {
@@ -65,15 +67,16 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
           {filters.searchInput.length > 0 ? (
             <button
               onClick={() => filters.changeSearchInput('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 transition-all hover:bg-red-100 hover:text-red-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-all hover:bg-red-100 hover:text-red-600"
               aria-label="Clear search"
             >
               ✕
             </button>
           ) : (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">
-              🔍
-            </span>
+            <Search
+              className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"
+              aria-hidden="true"
+            />
           )}
         </div>
 
@@ -108,9 +111,10 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
               </option>
             ))}
           </select>
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">
-            ▼
-          </span>
+          <ChevronDown
+            className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none h-4 w-4 text-slate-400"
+            aria-hidden="true"
+          />
         </div>
       </div>
     </div>
