@@ -1,6 +1,18 @@
 # Dad Jokes — Improvement Plan
 
 > Created: 2026-08-28
+> **Status: Workstreams A, B and C ALL IMPLEMENTED — 2026-08-28.** Nothing pending from this plan.
+> Implementation notes / deviations:
+>
+> - **A1+B1**: `POST /jokes/classic/:id/vote` accepts `remove?: boolean` (service clamps counts at 0). Frontend is optimistic-local-first, then fire-and-forget backend sync; server counts replace local on success. Vote dedup stays per-device (localStorage `VOTED_JOKES`). Un-vote = clicking your active vote button again; the other button stays locked.
+> - **B6 (count inflation)**: resolved as a side effect — the online path no longer merges `Math.max(api, local)`; the server is the source of truth. Local `JOKE_VOTE_COUNTS` only matter in the offline fallback path. Caveat: votes cast while offline are lost on next online load (vote marker remains, so the user can re-vote).
+> - **A2**: `createdAt` mapped into `RawJoke`/`AdaptedJoke` (default epoch when absent); Newest sort uses `Date.parse(createdAt)`.
+> - **A3**: new `getAllJokes()` walks all pages of `GET /jokes/classic` (limit 100/page, `Promise.all`) using the returned `total`.
+> - **A5**: `AdaptedJoke.isOneLiner` flag; front hint becomes "One-liner 😜", back restates the joke + "😂 Ba-dum-tss!" (no empty orange card). Same treatment applied to Joke of the Day.
+> - **B7**: header height measured via `ResizeObserver` on `document.querySelector('header')`; drives the sticky section bar, sidebar sticky offset, and `scrollToGrid()`.
+> - **B5**: reduced-motion CSS in `globals.css` neutralizes the 3D transforms; card faces cross-fade via opacity toggles (which also work in normal 3D mode — backface-visibility still does the hiding there).
+> - Verified: `tsc --noEmit` clean on both apps; eslint clean on modified frontend files.
+
 > Scope: Public `/jokes` page + vote pipeline + small backend touch-ups
 > Related files:
 >
@@ -156,7 +168,7 @@ click 👍/👎 (or click again to un-vote)
 
 ---
 
-## 3. Workstream A — Functional Fixes (bugs)
+## 3. Workstream A — Functional Fixes (bugs) ✅ IMPLEMENTED
 
 ### A1. Wire votes to the backend (fixes B1, B6)
 
@@ -203,7 +215,7 @@ real server pagination.
 
 ---
 
-## 4. Workstream B — Cosmetics / UX Polish
+## 4. Workstream B — Cosmetics / UX Polish ✅ IMPLEMENTED
 
 ### B1. Vote buttons: distinguishable + toggleable
 
@@ -254,7 +266,17 @@ real server pagination.
 
 ---
 
-## 5. Workstream C — Seen-Joke Tracking (New Feature)
+## 5. Workstream C — Seen-Joke Tracking (New Feature) ✅ IMPLEMENTED
+
+> Workstream C implementation notes (2026-08-28):
+>
+> - `SEEN_JOKES` storage key added (`lib/storage.ts`); map of jokeId → ISO timestamp.
+> - `toggleFlip(id, countAsSeen = true)` records the timestamp on first flip only; un-flipping does not un-see. Joke of the Day passes `false` — its flips never mark seen and the card carries no badge (per §5.4 edge cases).
+> - Grid card fronts of seen jokes render at `opacity-80` with a muted gray border (`border-gray-200`, hover `group-hover:border-gray-300`) instead of the orange hover, plus a `✓ Seen` chip (emerald-50/600, top-left).
+> - Fourth sort option `Unseen` added (Newest | Unseen | 🔥 Top | Shuffle): stable two-pass sort — newest first, then unseen before seen, preserving Newest order within each group. `seenJokes` joined the `displayedJokes` memo deps, so flipping a card under this sort moves it to the seen group on the next render (accepted per plan).
+> - Progress block in the Topics sidebar: "😄 You've seen X of Y jokes" + thin progress bar (role="progressbar") + "Reset seen history" button with `window.confirm`.
+> - Multi-tab sync extended to `SEEN_JOKES` in the existing `storage` event listener (clear events reset to `{}`).
+> - Joke of the Day and sidebar category counts are untouched by seen state (per §5.4).
 
 > Not a bug fix — new capability. There is currently **no "seen" state at all**:
 > `VOTED_JOKES` tracks votes only, and Joke of the Day is date-deterministic (same for

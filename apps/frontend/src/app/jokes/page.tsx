@@ -150,7 +150,7 @@ function SkeletonCards({ count }: { count: number }) {
 export default function JokesPage(): JSX.Element {
   const [jokes, setJokes] = useState<Joke[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [sortOrder, setSortOrder] = useState<'newest' | 'random' | 'top'>('newest');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'unseen' | 'random' | 'top'>('newest');
   const [randomSeed, setRandomSeed] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
@@ -159,6 +159,10 @@ export default function JokesPage(): JSX.Element {
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(defaultJokeCategories);
   const [loading, setLoading] = useState(true);
+
+  // Seen-joke tracking (improvement plan Workstream C): jokeId → ISO timestamp
+  // of first flip. Device-local by design; Joke of the Day is excluded.
+  const [seenJokes, setSeenJokes] = useState<Record<string, string>>({});
 
   // Voting state — use a ref for in-flight guard to avoid stale-closure race condition
   const [votedJokes, setVotedJokes] = useState<Record<string, 'like' | 'dislike'>>({});
@@ -204,8 +208,23 @@ export default function JokesPage(): JSX.Element {
     setCurrentPage(1);
   }, [activeCategory, sortOrder, searchQuery]);
 
-  const toggleFlip = (id: string) => {
+  const toggleFlip = (id: string, countAsSeen = true) => {
     setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+    if (!countAsSeen) return;
+    // First flip only — un-flipping does not un-see
+    setSeenJokes((prev) => {
+      if (prev[id]) return prev;
+      const next = { ...prev, [id]: new Date().toISOString() };
+      setItem(STORAGE_KEYS.SEEN_JOKES, next);
+      return next;
+    });
+  };
+
+  const handleResetSeen = () => {
+    if (!window.confirm('Clear your seen-joke history?')) return;
+    setSeenJokes({});
+    setItem(STORAGE_KEYS.SEEN_JOKES, {});
+    showToast('Seen history cleared');
   };
 
   // Voting — optimistic local update first (instant UI, offline-safe), then
@@ -266,6 +285,7 @@ export default function JokesPage(): JSX.Element {
   useEffect(() => {
     const savedVotes = getItem<Record<string, 'like' | 'dislike'>>(STORAGE_KEYS.VOTED_JOKES, {});
     setVotedJokes(savedVotes);
+    setSeenJokes(getItem<Record<string, string>>(STORAGE_KEYS.SEEN_JOKES, {}));
 
     let cancelled = false;
     const load = async () => {
@@ -373,6 +393,13 @@ export default function JokesPage(): JSX.Element {
           /* ignore */
         }
       }
+      if (e.key === STORAGE_KEYS.SEEN_JOKES) {
+        try {
+          setSeenJokes(e.newValue ? JSON.parse(e.newValue) : {});
+        } catch {
+          /* ignore */
+        }
+      }
     };
     window.addEventListener('storage', onStorageChange);
     return () => window.removeEventListener('storage', onStorageChange);
@@ -403,12 +430,22 @@ export default function JokesPage(): JSX.Element {
       result.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
     } else if (sortOrder === 'top') {
       result.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    } else if (sortOrder === 'unseen') {
+      // Unseen first, Newest order preserved within each group (stable sort)
+      result.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+      result.sort((a, b) => Number(Boolean(seenJokes[a.id])) - Number(Boolean(seenJokes[b.id])));
     } else if (sortOrder === 'random') {
       result = seededShuffle(result, randomSeed);
     }
 
     return result;
-  }, [jokes, activeCategory, searchQuery, sortOrder, randomSeed]);
+  }, [jokes, activeCategory, searchQuery, sortOrder, randomSeed, seenJokes]);
+
+  // Seen progress: how much of the current catalog has been revealed
+  const seenCount = useMemo(
+    () => jokes.reduce((n, j) => (seenJokes[j.id] ? n + 1 : n), 0),
+    [jokes, seenJokes]
+  );
 
   // Memoized: category joke counts for sidebar display (keyed by categoryId)
   const categoryCounts = useMemo(() => {
@@ -518,6 +555,13 @@ export default function JokesPage(): JSX.Element {
                     Newest
                   </button>
                   <button
+                    onClick={() => setSortOrder('unseen')}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'unseen' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
+                    title="Jokes you haven't revealed yet, newest first"
+                  >
+                    Unseen
+                  </button>
+                  <button
                     onClick={() => setSortOrder('top')}
                     className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'top' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
                   >
@@ -566,7 +610,7 @@ export default function JokesPage(): JSX.Element {
                 {jokeOfTheDay && (
                   <div
                     className="group relative min-h-[160px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                    onClick={() => toggleFlip(jokeOfTheDay.id)}
+                    onClick={() => toggleFlip(jokeOfTheDay.id, false)}
                     tabIndex={0}
                     role="article"
                     aria-label={
@@ -577,7 +621,7 @@ export default function JokesPage(): JSX.Element {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        toggleFlip(jokeOfTheDay.id);
+                        toggleFlip(jokeOfTheDay.id, false);
                       }
                     }}
                   >
@@ -659,6 +703,35 @@ export default function JokesPage(): JSX.Element {
                   </span>{' '}
                   Topics
                 </h2>
+                {/* Seen-joke progress (Workstream C) — excludes Joke of the Day flips */}
+                {!loading && jokes.length > 0 && (
+                  <div className="rounded-xl bg-white p-4 shadow-sm">
+                    <p className="mb-2 text-sm font-semibold text-gray-700">
+                      😄 You&apos;ve seen{' '}
+                      <span className="font-bold text-orange-500">{seenCount}</span> of{' '}
+                      {jokes.length} jokes
+                    </p>
+                    <div
+                      className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200"
+                      role="progressbar"
+                      aria-valuenow={seenCount}
+                      aria-valuemin={0}
+                      aria-valuemax={jokes.length}
+                      aria-label="Seen jokes progress"
+                    >
+                      <div
+                        className="h-full rounded-full bg-orange-400 transition-all duration-500"
+                        style={{ width: `${Math.round((seenCount / jokes.length) * 100)}%` }}
+                      />
+                    </div>
+                    <button
+                      onClick={handleResetSeen}
+                      className="mt-2 text-xs font-semibold text-gray-400 underline transition-colors hover:text-red-500"
+                    >
+                      Reset seen history
+                    </button>
+                  </div>
+                )}
                 <div className="flex flex-col gap-3" role="list" aria-label="Joke categories">
                   {/* "All Jokes" — now has aria-pressed and onKeyDown (was missing both) */}
                   <div
@@ -742,111 +815,120 @@ export default function JokesPage(): JSX.Element {
               {loading ? (
                 <SkeletonCards count={6} />
               ) : (
-                paginatedJokes.map((joke) => (
-                  <div
-                    key={joke.id}
-                    className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                    onClick={() => toggleFlip(joke.id)}
-                    tabIndex={0}
-                    role="article"
-                    aria-label={
-                      flippedCards[joke.id]
-                        ? `Joke: ${joke.setup} — ${joke.punchline}`
-                        : `Joke: ${joke.setup} — click to reveal punchline`
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        toggleFlip(joke.id);
-                      }
-                    }}
-                  >
+                paginatedJokes.map((joke) => {
+                  const seen = Boolean(seenJokes[joke.id]);
+                  return (
                     <div
-                      className={`col-start-1 row-start-1 grid grid-cols-1 relative transition-all duration-500 transform-style-3d shadow-md hover:shadow-xl ${flippedCards[joke.id] ? 'rotate-y-180' : ''}`}
+                      key={joke.id}
+                      className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+                      onClick={() => toggleFlip(joke.id)}
+                      tabIndex={0}
+                      role="article"
+                      aria-label={
+                        flippedCards[joke.id]
+                          ? `Joke: ${joke.setup} — ${joke.punchline}`
+                          : `Joke: ${joke.setup} — click to reveal punchline`
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleFlip(joke.id);
+                        }
+                      }}
                     >
-                      {/* Front of card (Setup) */}
                       <div
-                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden border-2 border-transparent group-hover:border-orange-100 transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-0' : 'opacity-100'}`}
+                        className={`col-start-1 row-start-1 grid grid-cols-1 relative transition-all duration-500 transform-style-3d shadow-md hover:shadow-xl ${flippedCards[joke.id] ? 'rotate-y-180' : ''}`}
                       >
-                        {/* aria-hidden: SVG is decorative, screen readers should skip it */}
-                        <span className="absolute top-4 right-4 text-gray-300" aria-hidden="true">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M21 2v6h-6"></path>
-                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-                            <path d="M3 22v-6h6"></path>
-                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
-                          </svg>
-                        </span>
-                        <p className="text-base font-bold text-gray-800 balance-text">
-                          {joke.setup}
-                        </p>
-
-                        <div className="mt-auto pt-6 flex flex-col items-center gap-3 w-full">
-                          <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100">
-                            {joke.category}
+                        {/* Front of card (Setup) */}
+                        <div
+                          className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden border-2 transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-0' : seen ? 'border-gray-200 opacity-80 group-hover:border-gray-300' : 'border-transparent opacity-100 group-hover:border-orange-100'}`}
+                        >
+                          {/* Seen chip — muted gray-green, front face only (Workstream C) */}
+                          {seen && (
+                            <span className="absolute top-4 left-4 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 ring-1 ring-emerald-100">
+                              ✓ Seen
+                            </span>
+                          )}
+                          {/* aria-hidden: SVG is decorative, screen readers should skip it */}
+                          <span className="absolute top-4 right-4 text-gray-300" aria-hidden="true">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M21 2v6h-6"></path>
+                              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                              <path d="M3 22v-6h6"></path>
+                              <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                            </svg>
                           </span>
-                          <VoteButtons
-                            jokeId={joke.id}
-                            likes={joke.likes || 0}
-                            dislikes={joke.dislikes || 0}
-                            votedJokes={votedJokes}
-                            onVote={handleVote}
-                            variant="light"
-                          />
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-orange-400 opacity-60">
-                            {joke.isOneLiner ? 'One-liner 😜' : 'Click to flip'}
+                          <p className="text-base font-bold text-gray-800 balance-text">
+                            {joke.setup}
                           </p>
-                        </div>
-                      </div>
 
-                      {/* Back of card (Punchline) */}
-                      <div
-                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-inner transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-100' : 'opacity-0'}`}
-                      >
-                        <p className="text-base font-bold italic drop-shadow-sm balance-text">
-                          {joke.isOneLiner ? joke.setup : joke.punchline}
-                        </p>
-                        {joke.isOneLiner && (
-                          <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/80">
-                            😂 Ba-dum-tss!
-                          </p>
-                        )}
-                        <div className="mt-4 flex flex-col gap-3 w-full">
-                          <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
-                            {joke.category}
-                          </span>
-                          <button
-                            onClick={(e) => handleCopy(e, joke)}
-                            className="self-center rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
-                            aria-label="Copy joke to clipboard"
-                          >
-                            📋 Copy
-                          </button>
-                          <div className="pt-2 border-t border-white/20">
+                          <div className="mt-auto pt-6 flex flex-col items-center gap-3 w-full">
+                            <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100">
+                              {joke.category}
+                            </span>
                             <VoteButtons
                               jokeId={joke.id}
                               likes={joke.likes || 0}
                               dislikes={joke.dislikes || 0}
                               votedJokes={votedJokes}
                               onVote={handleVote}
-                              variant="dark"
+                              variant="light"
                             />
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-400 opacity-60">
+                              {joke.isOneLiner ? 'One-liner 😜' : 'Click to flip'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Back of card (Punchline) */}
+                        <div
+                          className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-inner transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-100' : 'opacity-0'}`}
+                        >
+                          <p className="text-base font-bold italic drop-shadow-sm balance-text">
+                            {joke.isOneLiner ? joke.setup : joke.punchline}
+                          </p>
+                          {joke.isOneLiner && (
+                            <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/80">
+                              😂 Ba-dum-tss!
+                            </p>
+                          )}
+                          <div className="mt-4 flex flex-col gap-3 w-full">
+                            <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
+                              {joke.category}
+                            </span>
+                            <button
+                              onClick={(e) => handleCopy(e, joke)}
+                              className="self-center rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
+                              aria-label="Copy joke to clipboard"
+                            >
+                              📋 Copy
+                            </button>
+                            <div className="pt-2 border-t border-white/20">
+                              <VoteButtons
+                                jokeId={joke.id}
+                                likes={joke.likes || 0}
+                                dislikes={joke.dislikes || 0}
+                                votedJokes={votedJokes}
+                                onVote={handleVote}
+                                variant="dark"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
 

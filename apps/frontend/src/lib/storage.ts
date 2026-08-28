@@ -25,6 +25,8 @@ export const STORAGE_KEYS = {
   JOKE_CATEGORIES: `${PREFIX}joke-categories`,
   VOTED_JOKES: `${PREFIX}voted-jokes`,
   JOKE_VOTE_COUNTS: `${PREFIX}joke-vote-counts`,
+  // Seen-joke tracking (dad-jokes Workstream C): jokeId → ISO timestamp of first flip
+  SEEN_JOKES: `${PREFIX}seen-jokes`,
   RIDDLES: `${PREFIX}riddles`,
   IMAGE_RIDDLES: `${PREFIX}image-riddles`,
   IMAGE_RIDDLE_CATEGORIES: `${PREFIX}image-riddle-categories`,
