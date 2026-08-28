@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
 
-import { getJokes, getJokeCategories, type AdaptedJoke } from '@/lib/jokes-api';
+import { getAllJokes, getJokeCategories, voteJoke, type AdaptedJoke } from '@/lib/jokes-api';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -78,27 +78,33 @@ function VoteButtons({
       : 'bg-black/10 text-white hover:bg-black/20';
   const dislikeActive =
     variant === 'light'
-      ? 'bg-orange-100 text-orange-600 shadow-sm ring-1 ring-orange-400 scale-105'
-      : 'bg-white text-orange-500 shadow-md scale-105';
+      ? 'bg-red-100 text-red-600 shadow-sm ring-1 ring-red-400 scale-105'
+      : 'bg-white text-red-500 shadow-md scale-105';
   const dislikeInactive =
     variant === 'light'
       ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
       : 'bg-black/10 text-white hover:bg-black/20';
 
+  // Only the *other* button locks after voting — clicking your own vote toggles it off
+  const likeLocked = disabled || (!!voted && voted !== 'like');
+  const dislikeLocked = disabled || (!!voted && voted !== 'dislike');
+
   return (
     <div className="flex items-center justify-center gap-3">
       <button
         onClick={(e) => onVote(e, jokeId, 'like')}
-        disabled={!!voted || disabled}
-        className={`${base} ${voted === 'like' ? likeActive : likeInactive} ${!!voted || disabled ? 'opacity-50' : ''}`}
+        disabled={likeLocked}
+        aria-pressed={voted === 'like'}
+        className={`${base} ${voted === 'like' ? likeActive : likeInactive} ${likeLocked ? 'opacity-50' : ''}`}
         aria-label={`Like this joke. ${likes} likes`}
       >
         <span className="text-sm">👍</span> {likes}
       </button>
       <button
         onClick={(e) => onVote(e, jokeId, 'dislike')}
-        disabled={!!voted || disabled}
-        className={`${base} ${voted === 'dislike' ? dislikeActive : dislikeInactive} ${!!voted || disabled ? 'opacity-50' : ''}`}
+        disabled={dislikeLocked}
+        aria-pressed={voted === 'dislike'}
+        className={`${base} ${voted === 'dislike' ? dislikeActive : dislikeInactive} ${dislikeLocked ? 'opacity-50' : ''}`}
         aria-label={`Dislike this joke. ${dislikes} dislikes`}
       >
         <span className="text-sm">👎</span> {dislikes}
@@ -123,6 +129,22 @@ function VoteToast({ message, visible }: { message: string; visible: boolean }) 
   );
 }
 
+// ─── Skeleton loading placeholders ─────────────────────────────────────────────
+
+function SkeletonCards({ count }: { count: number }) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="min-h-[120px] animate-pulse rounded-2xl bg-white/70 shadow-md"
+          aria-hidden="true"
+        />
+      ))}
+    </>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function JokesPage(): JSX.Element {
@@ -136,6 +158,7 @@ export default function JokesPage(): JSX.Element {
   const [jokeOfTheDay, setJokeOfTheDay] = useState<Joke | null>(null);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [jokeCategories, setJokeCategories] = useState<JokeCategory[]>(defaultJokeCategories);
+  const [loading, setLoading] = useState(true);
 
   // Voting state — use a ref for in-flight guard to avoid stale-closure race condition
   const [votedJokes, setVotedJokes] = useState<Record<string, 'like' | 'dislike'>>({});
@@ -151,6 +174,31 @@ export default function JokesPage(): JSX.Element {
     toastTimer.current = setTimeout(() => setToast((t) => ({ ...t, visible: false })), 2000);
   };
 
+  // Measured site-header height drives sticky offsets (replaces magic numbers)
+  const [headerHeight, setHeaderHeight] = useState(73);
+  useEffect(() => {
+    const header = document.querySelector('header');
+    if (!header) return;
+    const update = () => setHeaderHeight(header.getBoundingClientRect().height);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleCopy = (e: React.MouseEvent, joke: Joke) => {
+    e.stopPropagation(); // Prevent card from flipping
+    const text = joke.isOneLiner ? joke.setup : `${joke.setup} — ${joke.punchline}`;
+    if (!navigator.clipboard) {
+      showToast('Copy not supported');
+      return;
+    }
+    void navigator.clipboard
+      .writeText(text)
+      .then(() => showToast('📋 Copied!'))
+      .catch(() => showToast('Copy failed'));
+  };
+
   // Reset to first page when filtering, sorting, or searching
   useEffect(() => {
     setCurrentPage(1);
@@ -160,39 +208,55 @@ export default function JokesPage(): JSX.Element {
     setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Voting — synchronous (no async needed, all ops are localStorage I/O)
+  // Voting — optimistic local update first (instant UI, offline-safe), then
+  // fire-and-forget backend sync. Clicking the already-voted button removes the vote.
   const handleVote = (e: React.MouseEvent, jokeId: string, type: 'like' | 'dislike') => {
     e.stopPropagation(); // Prevent card from flipping
-    // Ref-based guard: avoids stale-closure race condition on rapid double-clicks
-    if (votedJokes[jokeId] || inFlightVotes.current.has(jokeId)) return;
+    if (inFlightVotes.current.has(jokeId)) return;
     inFlightVotes.current.add(jokeId);
 
     try {
-      const voteKey = type === 'like' ? 'likes' : 'dislikes'; // Extract key once, not twice
+      const voteKey = type === 'like' ? 'likes' : 'dislikes';
       const storedCounts = getItem<Record<string, { likes: number; dislikes: number }>>(
         STORAGE_KEYS.JOKE_VOTE_COUNTS,
         {}
       );
       const current = storedCounts[jokeId] || { likes: 0, dislikes: 0 };
-      const updated = { ...current, [voteKey]: current[voteKey] + 1 };
+      const isRemove = votedJokes[jokeId] === type;
+      const updated = {
+        ...current,
+        [voteKey]: Math.max(0, isRemove ? current[voteKey] - 1 : current[voteKey] + 1),
+      };
       setItem(STORAGE_KEYS.JOKE_VOTE_COUNTS, { ...storedCounts, [jokeId]: updated });
 
-      // Update jokes list with functional setter (no stale closure)
-      setJokes((curr) =>
-        curr.map((j) =>
-          j.id === jokeId ? { ...j, likes: updated.likes, dislikes: updated.dislikes } : j
-        )
-      );
+      // Optimistic updates with functional setters (no stale closure)
+      setJokes((curr) => curr.map((j) => (j.id === jokeId ? { ...j, ...updated } : j)));
+      setJokeOfTheDay((prev) => (prev?.id === jokeId ? { ...prev, ...updated } : prev));
 
-      // Update Joke of the Day with functional setter (no stale closure)
-      setJokeOfTheDay((prev) =>
-        prev?.id === jokeId ? { ...prev, likes: updated.likes, dislikes: updated.dislikes } : prev
-      );
-
-      const newVotedState = { ...votedJokes, [jokeId]: type };
+      const newVotedState = { ...votedJokes };
+      if (isRemove) delete newVotedState[jokeId];
+      else newVotedState[jokeId] = type;
       setVotedJokes(newVotedState);
       setItem(STORAGE_KEYS.VOTED_JOKES, newVotedState);
-      showToast(type === 'like' ? '👍 Liked!' : '👎 Disliked!');
+      showToast(isRemove ? 'Vote removed' : type === 'like' ? '👍 Liked!' : '👎 Disliked!');
+
+      // Backend sync: server counts win on success so devices converge
+      void voteJoke(jokeId, type, isRemove)
+        .then((synced) => {
+          const s = synced as { likes?: number; dislikes?: number } | undefined;
+          if (typeof s?.likes !== 'number' || typeof s?.dislikes !== 'number') return;
+          const serverCounts = { likes: s.likes, dislikes: s.dislikes };
+          setJokes((curr) => curr.map((j) => (j.id === jokeId ? { ...j, ...serverCounts } : j)));
+          setJokeOfTheDay((prev) => (prev?.id === jokeId ? { ...prev, ...serverCounts } : prev));
+          const latest = getItem<Record<string, { likes: number; dislikes: number }>>(
+            STORAGE_KEYS.JOKE_VOTE_COUNTS,
+            {}
+          );
+          setItem(STORAGE_KEYS.JOKE_VOTE_COUNTS, { ...latest, [jokeId]: serverCounts });
+        })
+        .catch(() => {
+          /* offline — keep the optimistic local counts */
+        });
     } finally {
       inFlightVotes.current.delete(jokeId);
     }
@@ -206,33 +270,18 @@ export default function JokesPage(): JSX.Element {
     let cancelled = false;
     const load = async () => {
       try {
-        const [apiJokes, apiCats] = await Promise.all([getJokes(1, 100), getJokeCategories()]);
+        // Fetch every page of published jokes (server is the vote-count source of truth)
+        const [apiJokes, apiCats] = await Promise.all([getAllJokes(), getJokeCategories()]);
         if (cancelled) return;
 
-        // Merge API counts with locally-voted counts (local wins if higher)
-        const storedCounts = getItem<Record<string, { likes: number; dislikes: number }>>(
-          STORAGE_KEYS.JOKE_VOTE_COUNTS,
-          {}
-        );
-        const mergedJokes = apiJokes.map((j) => {
-          const local = storedCounts[j.id];
-          return local
-            ? {
-                ...j,
-                likes: Math.max(j.likes, local.likes),
-                dislikes: Math.max(j.dislikes, local.dislikes),
-              }
-            : j;
-        });
-
-        setJokes(mergedJokes);
+        setJokes(apiJokes);
         if (apiCats.length > 0) setJokeCategories(apiCats);
 
         // Deterministic Joke of the Day
-        if (mergedJokes.length > 0) {
+        if (apiJokes.length > 0) {
           const today = new Date();
           const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-          setJokeOfTheDay(mergedJokes[seed % mergedJokes.length] ?? mergedJokes[0] ?? null);
+          setJokeOfTheDay(apiJokes[seed % apiJokes.length] ?? apiJokes[0] ?? null);
         }
       } catch {
         // Offline fallback — read from localStorage / hardcoded data
@@ -241,7 +290,9 @@ export default function JokesPage(): JSX.Element {
 
         const allJokes = getItem(STORAGE_KEYS.JOKES, []);
         const processedJokes = (allJokes as Joke[]).map((j) => {
-          if (j.setup && j.punchline) return j;
+          if (j.setup && j.punchline) {
+            return { ...j, isOneLiner: false, createdAt: j.createdAt ?? new Date(0).toISOString() };
+          }
           const fullJoke = j.setup || '';
           let setup = fullJoke,
             punchline = '';
@@ -254,7 +305,13 @@ export default function JokesPage(): JSX.Element {
             setup = (parts[0] ?? '').trim();
             punchline = 'Because ' + parts.slice(1).join('Because').trim();
           }
-          return { ...j, setup, punchline };
+          return {
+            ...j,
+            setup,
+            punchline,
+            isOneLiner: punchline.length === 0,
+            createdAt: j.createdAt ?? new Date(0).toISOString(),
+          };
         });
 
         const storedCounts = getItem<Record<string, { likes: number; dislikes: number }>>(
@@ -274,7 +331,7 @@ export default function JokesPage(): JSX.Element {
           setJokeOfTheDay(hydratedJokes[seed % hydratedJokes.length] ?? hydratedJokes[0] ?? null);
         }
       } finally {
-        // loading state no longer tracked (data is ready or error shown)
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -341,9 +398,9 @@ export default function JokesPage(): JSX.Element {
       );
     }
 
-    // Sort: numeric subtraction for IDs, not lexicographic localeCompare
+    // Newest uses the real createdAt timestamp (ids are UUIDs, not numeric)
     if (sortOrder === 'newest') {
-      result.sort((a, b) => Number(b.id) - Number(a.id));
+      result.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
     } else if (sortOrder === 'top') {
       result.sort((a, b) => (b.likes || 0) - (a.likes || 0));
     } else if (sortOrder === 'random') {
@@ -369,10 +426,10 @@ export default function JokesPage(): JSX.Element {
     currentPage * ITEMS_PER_PAGE
   );
 
-  // Scroll to the top of the grid using the element's actual position
+  // Scroll to the top of the grid, clearing the site header + sticky section bar
   const scrollToGrid = () => {
     const el = document.getElementById('jokes-grid');
-    if (el) window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' });
+    if (el) window.scrollTo({ top: el.offsetTop - (headerHeight + 60), behavior: 'smooth' });
   };
 
   return (
@@ -394,7 +451,10 @@ export default function JokesPage(): JSX.Element {
         </p>
 
         {/* Synchronized Header Row (Sticky) */}
-        <div className="sticky top-[73px] md:top-[61px] z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 py-4 bg-yellow-50/80 backdrop-blur-md -mx-4 px-4 transition-shadow">
+        <div
+          className="sticky z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 py-4 bg-yellow-50/80 backdrop-blur-md -mx-4 px-4 transition-shadow"
+          style={{ top: headerHeight }}
+        >
           {/* Sidebar Header Portion */}
           <div className="lg:col-span-1">
             <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -497,12 +557,15 @@ export default function JokesPage(): JSX.Element {
         <div className="grid gap-10 lg:grid-cols-4">
           {/* Combined Sidebar (Sticky) */}
           <div className="lg:col-span-1">
-            <div className="sticky top-[180px] md:top-[160px] space-y-10 max-h-[calc(100vh-12rem)] overflow-y-auto pr-2 custom-scrollbar">
+            <div
+              className="sticky space-y-10 max-h-[calc(100vh-12rem)] overflow-y-auto pr-2 custom-scrollbar"
+              style={{ top: headerHeight + 104 }}
+            >
               {/* Joke of the Day */}
               <div className="space-y-4">
                 {jokeOfTheDay && (
                   <div
-                    className="group relative min-h-[160px] grid grid-cols-1 w-full perspective-1000 cursor-pointer"
+                    className="group relative min-h-[160px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
                     onClick={() => toggleFlip(jokeOfTheDay.id)}
                     tabIndex={0}
                     role="article"
@@ -522,7 +585,9 @@ export default function JokesPage(): JSX.Element {
                       className={`col-start-1 row-start-1 grid grid-cols-1 relative transition-all duration-500 transform-style-3d shadow-xl hover:shadow-2xl ${flippedCards[jokeOfTheDay.id] ? 'rotate-y-180' : ''}`}
                     >
                       {/* Front of card (Setup) */}
-                      <div className="col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden ring-1 ring-orange-100">
+                      <div
+                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden ring-1 ring-orange-100 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-0' : 'opacity-100'}`}
+                      >
                         {/* Fixed: was <h2> — broken heading hierarchy. Now a <p> with visual styling. */}
                         <p className="mb-4 text-sm font-bold text-gray-400 uppercase tracking-widest">
                           Joke of the Day
@@ -543,16 +608,30 @@ export default function JokesPage(): JSX.Element {
                             variant="light"
                           />
                           <p className="text-[10px] font-bold uppercase tracking-widest text-orange-400 animate-pulse">
-                            Click to Reveal
+                            {jokeOfTheDay.isOneLiner ? 'One-liner 😜' : 'Click to Reveal'}
                           </p>
                         </div>
                       </div>
 
                       {/* Back of card (Punchline) */}
-                      <div className="col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180">
+                      <div
+                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-100' : 'opacity-0'}`}
+                      >
                         <p className="text-lg font-bold italic drop-shadow-md balance-text">
-                          {jokeOfTheDay.punchline}
+                          {jokeOfTheDay.isOneLiner ? jokeOfTheDay.setup : jokeOfTheDay.punchline}
                         </p>
+                        {jokeOfTheDay.isOneLiner && (
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/80">
+                            😂 Ba-dum-tss!
+                          </p>
+                        )}
+                        <button
+                          onClick={(e) => handleCopy(e, jokeOfTheDay)}
+                          className="mt-4 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors hover:bg-white/30"
+                          aria-label="Copy joke to clipboard"
+                        >
+                          📋 Copy
+                        </button>
                         <div className="mt-6 flex items-center justify-between w-full px-2">
                           <span className="rounded-full bg-white/25 px-3 py-1 text-[10px] font-bold backdrop-blur-md border border-white/20 uppercase tracking-wider">
                             {jokeOfTheDay.category}
@@ -607,37 +686,42 @@ export default function JokesPage(): JSX.Element {
                       </p>
                     </div>
                   </div>
-                  {jokeCategories.map((category) => {
-                    const isActive = activeCategory === category.id;
-                    const count = categoryCounts[category.id] || 0;
-                    return (
-                      <div
-                        key={category.id}
-                        onClick={() => setActiveCategory(isActive ? null : category.id)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            setActiveCategory(isActive ? null : category.id);
-                          }
-                        }}
-                        className={`cursor-pointer rounded-xl bg-white p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${isActive ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
-                        role="button"
-                        tabIndex={0}
-                        aria-pressed={isActive}
-                        aria-label={`Filter by ${category.name}. ${count} jokes`}
-                      >
-                        <span className="text-3xl" aria-hidden="true">
-                          {category.emoji}
-                        </span>
-                        <div>
-                          <h3 className="text-base font-semibold text-gray-800">{category.name}</h3>
-                          <p className="text-xs text-gray-500 line-clamp-1">
-                            <span className="font-bold text-orange-500">{count}</span> jokes
-                          </p>
+                  {/* Hide empty categories so the sidebar never shows broken "0 jokes" rows */}
+                  {jokeCategories
+                    .filter((c) => (categoryCounts[c.id] || 0) > 0)
+                    .map((category) => {
+                      const isActive = activeCategory === category.id;
+                      const count = categoryCounts[category.id] || 0;
+                      return (
+                        <div
+                          key={category.id}
+                          onClick={() => setActiveCategory(isActive ? null : category.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setActiveCategory(isActive ? null : category.id);
+                            }
+                          }}
+                          className={`cursor-pointer rounded-xl bg-white p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${isActive ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
+                          role="button"
+                          tabIndex={0}
+                          aria-pressed={isActive}
+                          aria-label={`Filter by ${category.name}. ${count} jokes`}
+                        >
+                          <span className="text-3xl" aria-hidden="true">
+                            {category.emoji}
+                          </span>
+                          <div>
+                            <h3 className="text-base font-semibold text-gray-800">
+                              {category.name}
+                            </h3>
+                            <p className="text-xs text-gray-500 line-clamp-1">
+                              <span className="font-bold text-orange-500">{count}</span> jokes
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -649,99 +733,124 @@ export default function JokesPage(): JSX.Element {
             {searchQuery.trim() && (
               <p className="text-sm text-gray-500 -mb-4">
                 {displayedJokes.length === 0
-                  ? `No jokes found for &ldquo;${searchQuery}&rdquo;`
-                  : `${displayedJokes.length} joke${displayedJokes.length !== 1 ? 's' : ''} found for &ldquo;${searchQuery}&rdquo;`}
+                  ? `No jokes found for “${searchQuery}”`
+                  : `${displayedJokes.length} joke${displayedJokes.length !== 1 ? 's' : ''} found for “${searchQuery}”`}
               </p>
             )}
 
             <div id="jokes-grid" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {paginatedJokes.map((joke) => (
-                <div
-                  key={joke.id}
-                  className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer"
-                  onClick={() => toggleFlip(joke.id)}
-                  tabIndex={0}
-                  role="article"
-                  aria-label={
-                    flippedCards[joke.id]
-                      ? `Joke: ${joke.setup} — ${joke.punchline}`
-                      : `Joke: ${joke.setup} — click to reveal punchline`
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      toggleFlip(joke.id);
-                    }
-                  }}
-                >
+              {loading ? (
+                <SkeletonCards count={6} />
+              ) : (
+                paginatedJokes.map((joke) => (
                   <div
-                    className={`col-start-1 row-start-1 grid grid-cols-1 relative transition-all duration-500 transform-style-3d shadow-md hover:shadow-xl ${flippedCards[joke.id] ? 'rotate-y-180' : ''}`}
+                    key={joke.id}
+                    className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+                    onClick={() => toggleFlip(joke.id)}
+                    tabIndex={0}
+                    role="article"
+                    aria-label={
+                      flippedCards[joke.id]
+                        ? `Joke: ${joke.setup} — ${joke.punchline}`
+                        : `Joke: ${joke.setup} — click to reveal punchline`
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleFlip(joke.id);
+                      }
+                    }}
                   >
-                    {/* Front of card (Setup) */}
-                    <div className="col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden border-2 border-transparent group-hover:border-orange-100">
-                      {/* aria-hidden: SVG is decorative, screen readers should skip it */}
-                      <span className="absolute top-4 right-4 text-gray-300" aria-hidden="true">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 2v6h-6"></path>
-                          <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-                          <path d="M3 22v-6h6"></path>
-                          <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
-                        </svg>
-                      </span>
-                      <p className="text-base font-bold text-gray-800 balance-text">{joke.setup}</p>
-
-                      <div className="mt-auto pt-6 flex flex-col items-center gap-3 w-full">
-                        <VoteButtons
-                          jokeId={joke.id}
-                          likes={joke.likes || 0}
-                          dislikes={joke.dislikes || 0}
-                          votedJokes={votedJokes}
-                          onVote={handleVote}
-                          variant="light"
-                        />
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-400 opacity-60">
-                          Click to flip
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Back of card (Punchline) */}
-                    <div className="col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-inner">
-                      <p className="text-base font-bold italic drop-shadow-sm balance-text">
-                        {joke.punchline}
-                      </p>
-                      <div className="mt-4 flex flex-col gap-3 w-full">
-                        <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
-                          {joke.category}
+                    <div
+                      className={`col-start-1 row-start-1 grid grid-cols-1 relative transition-all duration-500 transform-style-3d shadow-md hover:shadow-xl ${flippedCards[joke.id] ? 'rotate-y-180' : ''}`}
+                    >
+                      {/* Front of card (Setup) */}
+                      <div
+                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden border-2 border-transparent group-hover:border-orange-100 transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-0' : 'opacity-100'}`}
+                      >
+                        {/* aria-hidden: SVG is decorative, screen readers should skip it */}
+                        <span className="absolute top-4 right-4 text-gray-300" aria-hidden="true">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M21 2v6h-6"></path>
+                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                            <path d="M3 22v-6h6"></path>
+                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                          </svg>
                         </span>
-                        <div className="pt-2 border-t border-white/20">
+                        <p className="text-base font-bold text-gray-800 balance-text">
+                          {joke.setup}
+                        </p>
+
+                        <div className="mt-auto pt-6 flex flex-col items-center gap-3 w-full">
+                          <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100">
+                            {joke.category}
+                          </span>
                           <VoteButtons
                             jokeId={joke.id}
                             likes={joke.likes || 0}
                             dislikes={joke.dislikes || 0}
                             votedJokes={votedJokes}
                             onVote={handleVote}
-                            variant="dark"
+                            variant="light"
                           />
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-orange-400 opacity-60">
+                            {joke.isOneLiner ? 'One-liner 😜' : 'Click to flip'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Back of card (Punchline) */}
+                      <div
+                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-inner transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-100' : 'opacity-0'}`}
+                      >
+                        <p className="text-base font-bold italic drop-shadow-sm balance-text">
+                          {joke.isOneLiner ? joke.setup : joke.punchline}
+                        </p>
+                        {joke.isOneLiner && (
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/80">
+                            😂 Ba-dum-tss!
+                          </p>
+                        )}
+                        <div className="mt-4 flex flex-col gap-3 w-full">
+                          <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
+                            {joke.category}
+                          </span>
+                          <button
+                            onClick={(e) => handleCopy(e, joke)}
+                            className="self-center rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
+                            aria-label="Copy joke to clipboard"
+                          >
+                            📋 Copy
+                          </button>
+                          <div className="pt-2 border-t border-white/20">
+                            <VoteButtons
+                              jokeId={joke.id}
+                              likes={joke.likes || 0}
+                              dislikes={joke.dislikes || 0}
+                              votedJokes={votedJokes}
+                              onVote={handleVote}
+                              variant="dark"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
-            {paginatedJokes.length === 0 && (
+            {!loading && paginatedJokes.length === 0 && (
               <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-white/50 py-16 text-center col-span-full">
                 <span className="text-4xl mb-4 block" aria-hidden="true">
                   🏜️
@@ -763,8 +872,8 @@ export default function JokesPage(): JSX.Element {
               </div>
             )}
 
-            {/* Pagination Controls with ellipsis collapse */}
-            {totalPages > 1 && (
+            {/* Pagination Controls With ellipsis collapse */}
+            {!loading && totalPages > 1 && (
               <div
                 className="mt-12 flex items-center justify-center gap-2 flex-wrap"
                 role="navigation"

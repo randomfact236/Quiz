@@ -254,16 +254,17 @@ export class DadJokesService {
     await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
   }
 
-  async voteForJoke(id: string, type: 'like' | 'dislike'): Promise<DadJoke> {
+  async voteForJoke(id: string, type: 'like' | 'dislike', remove = false): Promise<DadJoke> {
     const joke = await this.jokeRepo.findOne({ where: { id } });
     if (!joke) {
       throw new NotFoundException('Joke not found');
     }
 
+    const delta = remove ? -1 : 1;
     if (type === 'like') {
-      joke.likes = (joke.likes || 0) + 1;
+      joke.likes = Math.max(0, (joke.likes || 0) + delta);
     } else if (type === 'dislike') {
-      joke.dislikes = (joke.dislikes || 0) + 1;
+      joke.dislikes = Math.max(0, (joke.dislikes || 0) + delta);
     } else {
       throw new BadRequestException('Invalid vote type. Must be "like" or "dislike".');
     }

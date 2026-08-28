@@ -127,12 +127,12 @@ export class DadJokesController {
   @ApiResponse({ status: 400, description: 'Invalid vote type' })
   voteClassic(
     @Param('id') id: string,
-    @Body() body: { voteType: 'like' | 'dislike' }
+    @Body() body: { voteType: 'like' | 'dislike'; remove?: boolean }
   ): Promise<DadJoke> {
     if (!body?.voteType) {
       throw new BadRequestException('voteType is required');
     }
-    return this.jokesService.voteForJoke(id, body.voteType);
+    return this.jokesService.voteForJoke(id, body.voteType, body.remove === true);
   }
 
   // ==================== CLASSIC FORMAT - ADMIN ====================

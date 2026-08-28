@@ -146,6 +146,16 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+
+  /* Reduced motion: skip the 3D rotation — cards cross-fade via face opacity instead */
+  @media (prefers-reduced-motion: reduce) {
+    .rotate-y-180 {
+      transform: none;
+    }
+    .perspective-1000 {
+      perspective: none;
+    }
+  }
 }
 
 #nprogress .bar {

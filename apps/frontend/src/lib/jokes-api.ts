@@ -31,6 +31,7 @@ export interface RawJoke {
   likes?: number;
   dislikes?: number;
   status?: string;
+  createdAt?: string;
 }
 
 /** Shape the public page uses — flat strings. */
@@ -38,11 +39,14 @@ export interface AdaptedJoke {
   id: string;
   setup: string;
   punchline: string;
+  /** True when the joke has no question/because structure — nothing to reveal on the back. */
+  isOneLiner: boolean;
   category: string;
   categoryId: string;
   likes: number;
   dislikes: number;
   status: string;
+  createdAt: string;
 }
 
 /**
@@ -88,11 +92,13 @@ export function adaptJoke(raw: RawJoke): AdaptedJoke {
     id: raw.id,
     setup,
     punchline,
+    isOneLiner: punchline.length === 0,
     category: raw.category?.name ?? 'Uncategorized',
     categoryId: raw.categoryId,
     likes: raw.likes ?? 0,
     dislikes: raw.dislikes ?? 0,
     status: raw.status ?? 'published',
+    createdAt: raw.createdAt ?? new Date(0).toISOString(),
   };
 }
 
@@ -107,6 +113,33 @@ export async function getJokes(page = 1, limit = 200): Promise<AdaptedJoke[]> {
   return (response.data.data ?? []).map(adaptJoke);
 }
 
+const ALL_JOKES_PAGE_SIZE = 100;
+
+/**
+ * Fetch every published joke by walking all pages of GET /jokes/classic.
+ * The public page does its filtering/sorting client-side, so it needs the full set.
+ */
+export async function getAllJokes(): Promise<AdaptedJoke[]> {
+  const first = await api.get<{ data: RawJoke[]; total: number }>(
+    `/jokes/classic?page=1&limit=${ALL_JOKES_PAGE_SIZE}`
+  );
+  const total = first.data.total ?? first.data.data.length;
+  const totalPages = Math.max(1, Math.ceil(total / ALL_JOKES_PAGE_SIZE));
+
+  let raws = first.data.data ?? [];
+  if (totalPages > 1) {
+    const rest = await Promise.all(
+      Array.from({ length: totalPages - 1 }, (_, i) =>
+        api.get<{ data: RawJoke[]; total: number }>(
+          `/jokes/classic?page=${i + 2}&limit=${ALL_JOKES_PAGE_SIZE}`
+        )
+      )
+    );
+    raws = [...raws, ...rest.flatMap((r) => r.data.data ?? [])];
+  }
+  return raws.map(adaptJoke);
+}
+
 export async function getJokeCategories(hasContent = false): Promise<JokeCategory[]> {
   const response = await api.get<JokeCategory[]>(
     `/jokes/classic/categories${hasContent ? '?hasContent=true' : ''}`
@@ -114,8 +147,13 @@ export async function getJokeCategories(hasContent = false): Promise<JokeCategor
   return response.data;
 }
 
-export async function voteJoke(id: string, type: 'like' | 'dislike'): Promise<unknown> {
-  const response = await api.post(`/jokes/classic/${id}/vote`, { voteType: type });
+/** Vote on a joke. `remove: true` undoes a previous vote of the same type. */
+export async function voteJoke(
+  id: string,
+  type: 'like' | 'dislike',
+  remove = false
+): Promise<unknown> {
+  const response = await api.post(`/jokes/classic/${id}/vote`, { voteType: type, remove });
   return response.data;
 }
 
