@@ -83,6 +83,37 @@ split before enhancing when a change touches an existing monolith.
 - Session resume store across modal reloads
 - Image upload UX parity beyond current MediaPicker
 
+## 5. New Feature Workstream — Guess Feed & Comments (added 2026-08-28)
+
+> ⬜ PENDING — full spec lives in [comments-system-plan.md](comments-system-plan.md)
+> (shared module also serving dad jokes). Summary here for traceability.
+
+**Share status note:** share is already implemented and live —
+`features/image-riddles/lib/share.ts` wraps the Web Share API with clipboard
+fallback (P0 item A2's share branch). The enhancement below extends it to the
+result moment.
+
+1. **Guess-as-comment feed** — every submitted guess lands in the riddle's
+   public feed (rendered in/below `RiddleModal`); wrong guesses display
+   verbatim, correct guesses are spoiler-masked server-side as
+   "Someone solved it 🔓". Users can delete their own entries via `guestId`
+   ownership (guest_users table already exists).
+2. **Tap-chip-to-reveal** — `Reveal Answer` with zero prior guesses opens
+   "How close were you? 😏" chip picker (🤯 / 😑 / 🙃); one tap posts a
+   structured reaction and reveals. No free-text gates anywhere: forced
+   typing was explicitly rejected (junk-quality collapse). Already-guessed
+   users reveal free; reveal never blocks on a failed POST.
+3. **Aggregates as content** — chip tallies ("🤯 ×14"), "N guesses today"
+   social-proof line; chips double as sentiment analytics.
+4. **Share-the-result (enhancement to existing share)** — after reveal or
+   correct solve, the share payload includes the outcome ("I gave up on
+   this one 🤯" / "Solved in 12s ⏱️") reusing `lib/share.ts`; native sheet
+   or clipboard fallback as today.
+
+Exit criteria for this workstream: feed never exposes correct answer text via
+any endpoint response field; delete-own impossible for other guests' comments
+(ownership enforced server-side); reveal path completes with the backend down.
+
 ## 4. Exit Criteria
 
 - No file in `app/image-riddles/**`, `components/image-riddles/**`, `features/image-riddles/**` > 200 LOC (repo rule); exceptions documented in PR.

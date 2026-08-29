@@ -1,10 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { Bookmark } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 
 import { getAllJokes, getJokeCategories, voteJoke, type AdaptedJoke } from '@/lib/jokes-api';
+import { getCommentCounts } from '@/lib/comments-api';
+import { useSavedItems } from '@/hooks/useSavedItems';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
+import JokeCommentsModal from '@/components/jokes/JokeCommentsModal';
+import ShareMenu from '@/components/share/ShareMenu';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -113,6 +118,34 @@ function VoteButtons({
   );
 }
 
+// ─── Comments chip (sits beside the vote buttons) ────────────────────────────
+
+function CommentsChip({
+  jokeId,
+  count,
+  onOpen,
+  variant = 'light',
+}: {
+  jokeId: string;
+  count: number;
+  onOpen: (e: React.MouseEvent, jokeId: string) => void;
+  variant?: 'light' | 'dark';
+}) {
+  return (
+    <button
+      onClick={(e) => onOpen(e, jokeId)}
+      aria-label={`View comments. ${count} comments`}
+      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+        variant === 'light'
+          ? 'bg-gray-100 text-gray-500 hover:bg-orange-100 hover:text-orange-600'
+          : 'bg-black/10 text-white hover:bg-black/20'
+      }`}
+    >
+      <span className="text-sm">💬</span> {count}
+    </button>
+  );
+}
+
 // ─── Toast sub-component ──────────────────────────────────────────────────────
 
 function VoteToast({ message, visible }: { message: string; visible: boolean }) {
@@ -168,6 +201,19 @@ export default function JokesPage(): JSX.Element {
   const [votedJokes, setVotedJokes] = useState<Record<string, 'like' | 'dislike'>>({});
   const inFlightVotes = useRef<Set<string>>(new Set());
 
+  // Comments (comments-system plan §4): 💬 counts for card chips + open modal
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  const [commentsModalJokeId, setCommentsModalJokeId] = useState<string | null>(null);
+
+  // 🔖 Save — device-local bookmarks, chip on the card corner (stays in sync
+  // with the share menu's Save via the saved-items event)
+  const { savedMap: savedJokes, toggle: toggleSavedJoke } = useSavedItems('jokes');
+  const handleSaveChip = (e: React.MouseEvent, jokeId: string) => {
+    e.stopPropagation(); // Prevent card from flipping
+    const nowSaved = toggleSavedJoke(jokeId);
+    showToast(nowSaved ? '🔖 Saved!' : 'Removed from saved');
+  };
+
   // Toast state
   const [toast, setToast] = useState({ message: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -190,17 +236,12 @@ export default function JokesPage(): JSX.Element {
     return () => observer.disconnect();
   }, []);
 
-  const handleCopy = (e: React.MouseEvent, joke: Joke) => {
+  // Share opens the explicit ShareMenu (FB / X / WhatsApp / LinkedIn /
+  // Copy Link / Save) — desktop browsers have no native share sheet.
+  const [shareJokeId, setShareJokeId] = useState<string | null>(null);
+  const openShare = (e: React.MouseEvent, jokeId: string) => {
     e.stopPropagation(); // Prevent card from flipping
-    const text = joke.isOneLiner ? joke.setup : `${joke.setup} — ${joke.punchline}`;
-    if (!navigator.clipboard) {
-      showToast('Copy not supported');
-      return;
-    }
-    void navigator.clipboard
-      .writeText(text)
-      .then(() => showToast('📋 Copied!'))
-      .catch(() => showToast('Copy failed'));
+    setShareJokeId(jokeId);
   };
 
   // Reset to first page when filtering, sorting, or searching
@@ -369,6 +410,32 @@ export default function JokesPage(): JSX.Element {
     if (catId) setActiveCategory(catId);
   }, []);
 
+  // 💬 comment counts for the card chips (comments-system plan §4) — batched
+  // one request for the whole set; silently empty offline.
+  useEffect(() => {
+    if (jokes.length === 0) return;
+    let cancelled = false;
+    getCommentCounts(jokes.map((j) => j.id))
+      .then((counts) => {
+        if (!cancelled && Object.keys(counts).length > 0) setCommentCounts(counts);
+      })
+      .catch(() => {
+        /* offline — chips simply stay at zero */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [jokes]);
+
+  const openComments = (e: React.MouseEvent, jokeId: string) => {
+    e.stopPropagation(); // Prevent card from flipping
+    setCommentsModalJokeId(jokeId);
+  };
+
+  const bumpCommentCount = (jokeId: string) => {
+    setCommentCounts((prev) => ({ ...prev, [jokeId]: (prev[jokeId] ?? 0) + 1 }));
+  };
+
   // Multi-tab sync: propagate vote changes from other browser tabs in real-time
   useEffect(() => {
     const onStorageChange = (e: StorageEvent) => {
@@ -472,6 +539,41 @@ export default function JokesPage(): JSX.Element {
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50 px-4 py-8">
       <VoteToast message={toast.message} visible={toast.visible} />
+
+      {/* 💬 comments modal (comments-system plan §4) */}
+      {commentsModalJokeId !== null &&
+        (() => {
+          const modalJoke = jokes.find((j) => j.id === commentsModalJokeId);
+          if (!modalJoke) return null;
+          return (
+            <JokeCommentsModal
+              jokeId={modalJoke.id}
+              jokeSetup={modalJoke.setup}
+              onPosted={() => bumpCommentCount(modalJoke.id)}
+              onClose={() => setCommentsModalJokeId(null)}
+            />
+          );
+        })()}
+
+      {/* 🔗 share menu (FB / X / WhatsApp / LinkedIn / Copy Link / Save) */}
+      {shareJokeId !== null &&
+        (() => {
+          const shareJoke = jokes.find((j) => j.id === shareJokeId);
+          if (!shareJoke) return null;
+          return (
+            <ShareMenu
+              title={shareJoke.setup}
+              text={
+                shareJoke.isOneLiner
+                  ? shareJoke.setup
+                  : `${shareJoke.setup} — ${shareJoke.punchline}`
+              }
+              saveNamespace="jokes"
+              saveId={shareJoke.id}
+              onClose={() => setShareJokeId(null)}
+            />
+          );
+        })()}
 
       <div className="mx-auto max-w-7xl">
         {/* Back Button */}
@@ -632,6 +734,23 @@ export default function JokesPage(): JSX.Element {
                       <div
                         className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden ring-1 ring-orange-100 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-0' : 'opacity-100'}`}
                       >
+                        {/* 🔖 Save chip (front face — flips with the card) */}
+                        <button
+                          onClick={(e) => handleSaveChip(e, jokeOfTheDay.id)}
+                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-orange-100 transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                          aria-pressed={Boolean(savedJokes[jokeOfTheDay.id])}
+                          aria-label={
+                            savedJokes[jokeOfTheDay.id]
+                              ? 'Remove from saved'
+                              : 'Save joke of the day'
+                          }
+                          title={savedJokes[jokeOfTheDay.id] ? 'Saved — tap to remove' : 'Save'}
+                        >
+                          <Bookmark
+                            className={`h-4 w-4 transition-colors ${savedJokes[jokeOfTheDay.id] ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
+                            aria-hidden="true"
+                          />
+                        </button>
                         {/* Fixed: was <h2> — broken heading hierarchy. Now a <p> with visual styling. */}
                         <p className="mb-4 text-sm font-bold text-gray-400 uppercase tracking-widest">
                           Joke of the Day
@@ -643,14 +762,21 @@ export default function JokesPage(): JSX.Element {
                           &ldquo;{jokeOfTheDay.setup}&rdquo;
                         </blockquote>
                         <div className="mt-auto w-full px-2 flex flex-col items-center gap-4">
-                          <VoteButtons
-                            jokeId={jokeOfTheDay.id}
-                            likes={jokeOfTheDay.likes || 0}
-                            dislikes={jokeOfTheDay.dislikes || 0}
-                            votedJokes={votedJokes}
-                            onVote={handleVote}
-                            variant="light"
-                          />
+                          <div className="flex items-center justify-center gap-3">
+                            <VoteButtons
+                              jokeId={jokeOfTheDay.id}
+                              likes={jokeOfTheDay.likes || 0}
+                              dislikes={jokeOfTheDay.dislikes || 0}
+                              votedJokes={votedJokes}
+                              onVote={handleVote}
+                              variant="light"
+                            />
+                            <CommentsChip
+                              jokeId={jokeOfTheDay.id}
+                              count={commentCounts[jokeOfTheDay.id] ?? 0}
+                              onOpen={openComments}
+                            />
+                          </div>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-orange-400 animate-pulse">
                             {jokeOfTheDay.isOneLiner ? 'One-liner 😜' : 'Click to Reveal'}
                           </p>
@@ -661,6 +787,23 @@ export default function JokesPage(): JSX.Element {
                       <div
                         className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-100' : 'opacity-0'}`}
                       >
+                        {/* 🔖 Save chip (back face — flips with the card) */}
+                        <button
+                          onClick={(e) => handleSaveChip(e, jokeOfTheDay.id)}
+                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                          aria-pressed={Boolean(savedJokes[jokeOfTheDay.id])}
+                          aria-label={
+                            savedJokes[jokeOfTheDay.id]
+                              ? 'Remove from saved'
+                              : 'Save joke of the day'
+                          }
+                          title={savedJokes[jokeOfTheDay.id] ? 'Saved — tap to remove' : 'Save'}
+                        >
+                          <Bookmark
+                            className={`h-4 w-4 transition-colors ${savedJokes[jokeOfTheDay.id] ? 'fill-amber-300 text-amber-300' : 'text-white/70'}`}
+                            aria-hidden="true"
+                          />
+                        </button>
                         <p className="text-lg font-bold italic drop-shadow-md balance-text">
                           {jokeOfTheDay.isOneLiner ? jokeOfTheDay.setup : jokeOfTheDay.punchline}
                         </p>
@@ -669,13 +812,21 @@ export default function JokesPage(): JSX.Element {
                             😂 Ba-dum-tss!
                           </p>
                         )}
-                        <button
-                          onClick={(e) => handleCopy(e, jokeOfTheDay)}
-                          className="mt-4 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors hover:bg-white/30"
-                          aria-label="Copy joke to clipboard"
-                        >
-                          📋 Copy
-                        </button>
+                        <div className="mt-4 flex items-center justify-center gap-2 w-full">
+                          <CommentsChip
+                            jokeId={jokeOfTheDay.id}
+                            count={commentCounts[jokeOfTheDay.id] ?? 0}
+                            onOpen={openComments}
+                            variant="dark"
+                          />
+                          <button
+                            onClick={(e) => openShare(e, jokeOfTheDay.id)}
+                            className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors hover:bg-white/30"
+                            aria-label="Share joke"
+                          >
+                            🔗 Share
+                          </button>
+                        </div>
                         <div className="mt-6 flex items-center justify-between w-full px-2">
                           <span className="rounded-full bg-white/25 px-3 py-1 text-[10px] font-bold backdrop-blur-md border border-white/20 uppercase tracking-wider">
                             {jokeOfTheDay.category}
@@ -850,7 +1001,10 @@ export default function JokesPage(): JSX.Element {
                             </span>
                           )}
                           {/* aria-hidden: SVG is decorative, screen readers should skip it */}
-                          <span className="absolute top-4 right-4 text-gray-300" aria-hidden="true">
+                          <span
+                            className="absolute top-4 right-12 text-gray-300"
+                            aria-hidden="true"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="16"
@@ -868,6 +1022,19 @@ export default function JokesPage(): JSX.Element {
                               <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
                             </svg>
                           </span>
+                          {/* 🔖 Save chip (front face — flips with the card) */}
+                          <button
+                            onClick={(e) => handleSaveChip(e, joke.id)}
+                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-gray-100 transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                            aria-pressed={Boolean(savedJokes[joke.id])}
+                            aria-label={savedJokes[joke.id] ? 'Remove from saved' : 'Save joke'}
+                            title={savedJokes[joke.id] ? 'Saved — tap to remove' : 'Save'}
+                          >
+                            <Bookmark
+                              className={`h-4 w-4 transition-colors ${savedJokes[joke.id] ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
+                              aria-hidden="true"
+                            />
+                          </button>
                           <p className="text-base font-bold text-gray-800 balance-text">
                             {joke.setup}
                           </p>
@@ -876,14 +1043,21 @@ export default function JokesPage(): JSX.Element {
                             <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100">
                               {joke.category}
                             </span>
-                            <VoteButtons
-                              jokeId={joke.id}
-                              likes={joke.likes || 0}
-                              dislikes={joke.dislikes || 0}
-                              votedJokes={votedJokes}
-                              onVote={handleVote}
-                              variant="light"
-                            />
+                            <div className="flex items-center justify-center gap-3">
+                              <VoteButtons
+                                jokeId={joke.id}
+                                likes={joke.likes || 0}
+                                dislikes={joke.dislikes || 0}
+                                votedJokes={votedJokes}
+                                onVote={handleVote}
+                                variant="light"
+                              />
+                              <CommentsChip
+                                jokeId={joke.id}
+                                count={commentCounts[joke.id] ?? 0}
+                                onOpen={openComments}
+                              />
+                            </div>
                             <p className="text-[10px] font-bold uppercase tracking-wider text-orange-400 opacity-60">
                               {joke.isOneLiner ? 'One-liner 😜' : 'Click to flip'}
                             </p>
@@ -894,6 +1068,19 @@ export default function JokesPage(): JSX.Element {
                         <div
                           className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 p-6 text-center text-white backface-hidden rotate-y-180 shadow-inner transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-100' : 'opacity-0'}`}
                         >
+                          {/* 🔖 Save chip (back face — flips with the card) */}
+                          <button
+                            onClick={(e) => handleSaveChip(e, joke.id)}
+                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                            aria-pressed={Boolean(savedJokes[joke.id])}
+                            aria-label={savedJokes[joke.id] ? 'Remove from saved' : 'Save joke'}
+                            title={savedJokes[joke.id] ? 'Saved — tap to remove' : 'Save'}
+                          >
+                            <Bookmark
+                              className={`h-4 w-4 transition-colors ${savedJokes[joke.id] ? 'fill-amber-300 text-amber-300' : 'text-white/70'}`}
+                              aria-hidden="true"
+                            />
+                          </button>
                           <p className="text-base font-bold italic drop-shadow-sm balance-text">
                             {joke.isOneLiner ? joke.setup : joke.punchline}
                           </p>
@@ -902,18 +1089,11 @@ export default function JokesPage(): JSX.Element {
                               😂 Ba-dum-tss!
                             </p>
                           )}
-                          <div className="mt-4 flex flex-col gap-3 w-full">
+                          <div className="mt-4 flex flex-col items-center gap-3 w-full">
                             <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
                               {joke.category}
                             </span>
-                            <button
-                              onClick={(e) => handleCopy(e, joke)}
-                              className="self-center rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
-                              aria-label="Copy joke to clipboard"
-                            >
-                              📋 Copy
-                            </button>
-                            <div className="pt-2 border-t border-white/20">
+                            <div className="flex items-center justify-center gap-3 w-full">
                               <VoteButtons
                                 jokeId={joke.id}
                                 likes={joke.likes || 0}
@@ -922,7 +1102,20 @@ export default function JokesPage(): JSX.Element {
                                 onVote={handleVote}
                                 variant="dark"
                               />
+                              <CommentsChip
+                                jokeId={joke.id}
+                                count={commentCounts[joke.id] ?? 0}
+                                onOpen={openComments}
+                                variant="dark"
+                              />
                             </div>
+                            <button
+                              onClick={(e) => openShare(e, joke.id)}
+                              className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
+                              aria-label="Share joke"
+                            >
+                              🔗 Share
+                            </button>
                           </div>
                         </div>
                       </div>

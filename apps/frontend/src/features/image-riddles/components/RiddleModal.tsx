@@ -16,6 +16,7 @@ import { Clock, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
+import ShareMenu from '@/components/share/ShareMenu';
 
 import type { ImageRiddleGame } from '../hooks/useImageRiddleGame';
 import {
@@ -27,6 +28,8 @@ import {
 } from '../lib/game';
 import RiddleAnswerPanel from './RiddleAnswerPanel';
 import RiddleGuessPanel from './RiddleGuessPanel';
+import ChipRevealStep from './ChipRevealStep';
+import GuessFeed from './GuessFeed';
 
 export interface RiddleModalProps {
   riddle: ImageRiddle;
@@ -110,6 +113,16 @@ export default function RiddleModal({
       className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm animate-in fade-in duration-300"
       onKeyDown={handleTrapKeyDown}
     >
+      {/* 🔗 share menu (FB / X / WhatsApp / LinkedIn / Copy Link / Save) */}
+      {game.shareOpen && (
+        <ShareMenu
+          title={riddle.title}
+          text={`Can you solve this image riddle: "${riddle.title}"?`}
+          saveNamespace="image-riddles"
+          saveId={riddle.id}
+          onClose={game.closeShare}
+        />
+      )}
       <div
         ref={modalRef}
         role="dialog"
@@ -240,16 +253,26 @@ export default function RiddleModal({
             )}
           </div>
 
-          {/* Game Logic */}
-          {!game.showAnswer ? (
-            <RiddleGuessPanel riddle={riddle} game={game} />
+          {/* Game Logic — chip-to-reveal step sits between guess and reveal
+              when the player gives up with zero prior guesses (plan §3.2);
+              the guess wall is visible pre-reveal too (masked solves only) */}
+          {!game.showAnswer && game.chipPrompt ? (
+            <ChipRevealStep onChooseChip={game.chooseChip} onSkip={game.skipChipPrompt} />
+          ) : !game.showAnswer ? (
+            <>
+              <RiddleGuessPanel riddle={riddle} game={game} />
+              <GuessFeed riddleId={riddle.id} />
+            </>
           ) : (
-            <RiddleAnswerPanel
-              answer={riddle.answer}
-              revealSource={game.revealSource}
-              attemptCount={game.attempts[riddle.id] || 0}
-              onNext={() => game.navigateRiddle('next')}
-            />
+            <>
+              <RiddleAnswerPanel
+                answer={riddle.answer}
+                revealSource={game.revealSource}
+                attemptCount={game.attempts[riddle.id] || 0}
+                onNext={() => game.navigateRiddle('next')}
+              />
+              <GuessFeed riddleId={riddle.id} />
+            </>
           )}
         </div>
       </div>

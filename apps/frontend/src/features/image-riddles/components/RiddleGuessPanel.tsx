@@ -91,12 +91,6 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
         className="justify-center gap-4"
       />
 
-      {game.shareMessage && (
-        <p className="text-center text-xs font-bold text-slate-500 animate-in fade-in duration-300">
-          {game.shareMessage}
-        </p>
-      )}
-
       {game.showHint && riddle.hint && (
         <div className="animate-in slide-in-from-top-4 duration-300 rounded-2xl bg-amber-50 p-5 border border-amber-100 shadow-sm">
           <p className="flex items-center gap-2 text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">

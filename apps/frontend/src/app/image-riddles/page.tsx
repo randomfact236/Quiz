@@ -32,6 +32,7 @@ import {
   useImageRiddleScore,
 } from '@/features/image-riddles/hooks';
 import { ITEMS_PER_PAGE, applyMixSort } from '@/features/image-riddles/lib/game';
+import { useSavedItems } from '@/hooks/useSavedItems';
 
 export default function ImageRiddlesPage(): JSX.Element {
   const filters = useImageRiddleFilters();
@@ -44,6 +45,10 @@ export default function ImageRiddlesPage(): JSX.Element {
     shuffleSeed: filters.shuffleSeed,
   });
   const score = useImageRiddleScore(catalog.totalPublished);
+
+  // 🔖 Save — device-local bookmarks, chip on the card corner (stays in sync
+  // with the share menu's Save via the saved-items event)
+  const { savedMap: savedRiddles, toggle: toggleRiddleSave } = useSavedItems('image-riddles');
 
   const [erroredImages, setErroredImages] = useState<Record<string, boolean>>({});
   const handleImageError = useCallback((id: string) => {
@@ -123,6 +128,8 @@ export default function ImageRiddlesPage(): JSX.Element {
                       isRevealed={Boolean(score.revealedIds[riddle.id])}
                       isSolved={Boolean(score.solvedIds[riddle.id])}
                       hasImageError={Boolean(erroredImages[riddle.id])}
+                      isSaved={Boolean(savedRiddles[riddle.id])}
+                      onToggleSave={toggleRiddleSave}
                       onOpen={game.openRiddle}
                       onToggleReveal={score.toggleRevealed}
                       onImageError={handleImageError}

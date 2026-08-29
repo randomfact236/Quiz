@@ -12,7 +12,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Clock, Eye, EyeOff } from 'lucide-react';
+import { Bookmark, Clock, Eye, EyeOff } from 'lucide-react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
@@ -30,6 +30,8 @@ export interface RiddleCardProps {
   isRevealed: boolean;
   isSolved: boolean;
   hasImageError: boolean;
+  isSaved?: boolean;
+  onToggleSave?: (id: string) => void;
   onOpen: (riddle: ImageRiddle) => void;
   onToggleReveal: (id: string) => void;
   onImageError: (id: string) => void;
@@ -40,6 +42,8 @@ export default function RiddleCard({
   isRevealed,
   isSolved,
   hasImageError,
+  isSaved,
+  onToggleSave,
   onOpen,
   onToggleReveal,
   onImageError,
@@ -96,12 +100,33 @@ export default function RiddleCard({
           {difficultyLabels[riddle.difficulty]}
         </div>
 
-        {/* Time Badge (Top Right) */}
+        {/* Time Badge (shifted left of the save chip) */}
         {riddle.showTimer !== false && (
-          <div className="absolute top-4 right-4 flex items-center justify-center gap-1 rounded-full bg-slate-900/60 shadow-sm px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
+          <div
+            className={`absolute top-4 flex items-center justify-center gap-1 rounded-full bg-slate-900/60 shadow-sm px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md ${onToggleSave ? 'right-14' : 'right-4'}`}
+          >
             <Clock className="h-3 w-3" aria-hidden="true" />
             {formatTime(resolveTimerSeconds(riddle))}
           </div>
+        )}
+
+        {/* 🔖 Save chip (Top Right corner) */}
+        {onToggleSave && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Don't open the riddle modal
+              onToggleSave(riddle.id);
+            }}
+            className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-md transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            aria-pressed={Boolean(isSaved)}
+            aria-label={isSaved ? 'Remove riddle from saved' : 'Save riddle'}
+            title={isSaved ? 'Saved — tap to remove' : 'Save'}
+          >
+            <Bookmark
+              className={`h-4 w-4 transition-colors ${isSaved ? 'fill-amber-500 text-amber-500' : 'text-slate-400'}`}
+              aria-hidden="true"
+            />
+          </button>
         )}
       </div>
 

@@ -1,7 +1,9 @@
 # Dad Jokes — Improvement Plan
 
 > Created: 2026-08-28
-> **Status: Workstreams A, B and C ALL IMPLEMENTED — 2026-08-28.** Nothing pending from this plan.
+> **Status: Workstreams A, B and C ALL IMPLEMENTED — 2026-08-28. Workstream D
+> (social layer) IMPLEMENTED 2026-08-29 except the 🔥 Hot badge (D2), which
+> remains pending.** Comments backend lives in [comments-system-plan.md](comments-system-plan.md).
 > Implementation notes / deviations:
 >
 > - **A1+B1**: `POST /jokes/classic/:id/vote` accepts `remove?: boolean` (service clamps counts at 0). Frontend is optimistic-local-first, then fire-and-forget backend sync; server counts replace local on success. Vote dedup stays per-device (localStorage `VOTED_JOKES`). Un-vote = clicking your active vote button again; the other button stays locked.
@@ -332,7 +334,63 @@ multi-tab `storage` sync).
 
 ---
 
-## 6. Suggested Implementation Order
+## 6. Workstream D — Social Layer: Share, Hot Badge & Comments
+
+> Added 2026-08-28 after the social-layer design discussion. Comments reuse the
+> shared module spec'd in [comments-system-plan.md](comments-system-plan.md).
+
+### D1. Share ✅ IMPLEMENTED (2026-08-29, superseded design)
+
+- The per-card 📋 Copy button was **removed entirely** (owner: unnecessary) and
+  replaced with a **🔗 Share button** on card backs and Joke of the Day.
+- Design evolved beyond the original `navigator.share` idea: desktop browsers
+  rarely have a native share sheet, so a silent clipboard fallback felt broken.
+  Share now opens a **`ShareMenu`** popup (`components/share/ShareMenu.tsx`)
+  with explicit targets: **Facebook, X (Twitter), WhatsApp, LinkedIn, Copy
+  Link, and 🔖 Save** (device-local bookmark via `lib/saved-items.ts`).
+- `stopPropagation` kept so the card doesn't flip.
+
+### D2. 🔥 Hot badge (derived, not a button) ⬜ PENDING
+
+- A third reaction _button_ was explicitly rejected (overlaps like, needs a
+  new counter column, crowds the card).
+- Instead: automatic badge on jokes that earn it — `likes >= 10` OR score
+  (likes − dislikes) in the top decile, whichever is cheaper to compute
+  client-side from data already fetched. Rendered on the card front beside
+  the category chip. Zero backend change.
+- Can later feed a "🔥 Hot" sort option using the same derived value.
+
+### D3. Comments ✅ IMPLEMENTED (2026-08-29)
+
+- 💬 count chips now sit **beside the like/dislike buttons on BOTH card faces**
+  (owner-requested layout — stronger social proof than a back-only chip),
+  plus on Joke of the Day's front. Click opens `JokeCommentsModal`
+  (`components/jokes/JokeCommentsModal.tsx`): text input, flat feed, optimistic
+  post, delete-own via guestId.
+- `contentType: 'joke'` against the shared `/comments` endpoints; no
+  guess/chip semantics for jokes — `kind: 'comment'` only.
+- Counts for all cards load in one batched request (`GET /comments/counts?ids=`).
+- Backend note: the shared controller initially shipped without `@_Public()`
+  decorators so every comments route 401'd under the default-deny JWT guard —
+  fixed and verified live (feed/POST/delete/counts all 200).
+- Rate limiting, moderation, and the polymorphic schema all live in the
+  shared module — nothing jokes-specific beyond the modal UI.
+
+### D4. 🔖 Save bookmarks (added 2026-08-29, owner request)
+
+- Device-local bookmarks via `lib/saved-items.ts` + `hooks/useSavedItems.ts`
+  (localStorage `aiquiz:saved-items`, namespaced per section: `jokes`,
+  `image-riddles`).
+- A 🔖 chip sits on each card **face** (front + back) so it flips naturally
+  with the 3D card animation; tapping toggles save without flipping the card.
+- The ShareMenu's Save row and the card chips stay in sync through a
+  `aiquiz:saved-changed` window event.
+- A synced/cross-device "Saved" collection is out of scope until real auth
+  (same deferral as seen-sync).
+
+---
+
+## 7. Suggested Implementation Order
 
 1. **A4** (2-line entity fix) — trivial, ship first
 2. **A2** (`createdAt` mapping + sort) — small, unblocks honest "Newest"
@@ -343,10 +401,12 @@ multi-tab `storage` sync).
 6. **B2–B8** — polish batch, any order
 7. **C (seen-joke tracking)** — self-contained; can start anytime after A2 since it
    builds on the sort-control segment UI
+8. ~~D1 + D2 (share upgrade, hot badge)~~ — D1 done 2026-08-29 (as ShareMenu, see §6); **D2 hot badge remains**
+9. ~~D3 (joke comments)~~ — done 2026-08-29 alongside the shared comments module
 
 ---
 
-## 7. Out of Scope (for now)
+## 8. Out of Scope (for now)
 
 - Authenticated voting / dedup per user (vote endpoint is anonymous; localStorage is the
   per-device guard)

@@ -1,4 +1,6 @@
 export { default as CategorySidebar } from './CategorySidebar';
+export { default as ChipRevealStep } from './ChipRevealStep';
+export { default as GuessFeed } from './GuessFeed';
 export { default as PaginationControls } from './PaginationControls';
 export { default as RiddleCard } from './RiddleCard';
 export { default as RiddleCardSkeleton } from './RiddleCardSkeleton';

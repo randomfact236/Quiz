@@ -80,9 +80,35 @@ function createGiveUpAction(now: Date): IActionOption {
   };
 }
 
+function createShareAction(now: Date): IActionOption {
+  return {
+    id: 'share',
+    label: 'Share',
+    type: 'button',
+    style: 'secondary',
+    size: 'md',
+    icon: '🔗',
+    iconPosition: 'left',
+    ariaLabel: 'Share this riddle',
+    isEnabled: true,
+    isVisible: true,
+    position: 'below_question',
+    order: 40,
+    tooltip: 'Share this riddle',
+    analyticsEvent: 'riddle_shared',
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
 export function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
   const now = new Date();
-  return [createCheckAnswerAction(now), createHintAction(now), createGiveUpAction(now)];
+  return [
+    createCheckAnswerAction(now),
+    createHintAction(now),
+    createGiveUpAction(now),
+    createShareAction(now),
+  ];
 }
 
 /**

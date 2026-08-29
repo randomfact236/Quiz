@@ -7,6 +7,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddles.module';
 import { AdminUsersModule } from './admin/users/admin-users.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentsModule } from './comments/comments.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
 
@@ -100,6 +101,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     RiddleMcqModule,
     ImageRiddlesModule,
     AdminImageRiddlesModule,
+    CommentsModule,
     MediaModule,
     AdminUsersModule,
     GuestUsersModule,

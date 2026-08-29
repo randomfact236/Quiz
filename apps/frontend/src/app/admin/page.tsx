@@ -17,6 +17,7 @@ import {
   LogOut,
   BookOpen,
   ExternalLink,
+  MessageSquare,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -26,6 +27,7 @@ import { removeItem, STORAGE_KEYS } from '@/lib/storage';
 import {
   ImageRiddlesAdminSection,
   JokesSection,
+  CommentsSection,
   SettingsSection,
   AdminGuard,
   AdminUsersSection,
@@ -134,7 +136,8 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'settings' ||
         urlSection === 'summary' ||
         urlSection === 'quiz-mcq' ||
-        urlSection === 'media'
+        urlSection === 'media' ||
+        urlSection === 'comments'
       ) {
         setActiveSection(urlSection as MenuSection);
       } else {
@@ -171,6 +174,7 @@ export default function AdminPage(): JSX.Element {
       'summary',
       'quiz-mcq',
       'media',
+      'comments',
     ].includes(urlSection);
 
     if (!isSpecialSection) {
@@ -368,6 +372,13 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'media' })}
           />
           <MenuItem
+            icon={<MessageSquare className="w-5 h-5" />}
+            label="Comments"
+            active={activeSection === 'comments'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'comments' })}
+          />
+          <MenuItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"
             active={activeSection === 'settings'}
@@ -422,6 +433,11 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'users' && (
                 <>
                   <Users className="w-6 h-6" /> Users Management
+                </>
+              )}
+              {activeSection === 'comments' && (
+                <>
+                  <MessageSquare className="w-6 h-6" /> Comments Moderation
                 </>
               )}
               {activeSection === 'settings' && (
@@ -507,6 +523,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'image-riddles' && <ImageRiddlesAdminSection />}
           {activeSection === 'users' && <AdminUsersSection />}
           {activeSection === 'media' && <MediaLibrarySection />}
+          {activeSection === 'comments' && <CommentsSection />}
           {activeSection === 'settings' && <SettingsSection />}
         </div>
       </main>

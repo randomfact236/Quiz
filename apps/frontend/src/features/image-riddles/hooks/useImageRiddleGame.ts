@@ -4,6 +4,11 @@
  * matcher), attempts/feedback, reveal sources, timeout choices, navigation,
  * and the action-id → handler wiring (A2: share + skip implemented,
  * unsupported presets dropped at render time).
+ *
+ * Comments integration (comments-system plan §3): every submitted guess is
+ * posted to the riddle's feed (fire-and-forget), and Reveal Answer with zero
+ * prior guesses opens the chip-to-reveal picker ("How close were you?")
+ * before revealing — already-guessed users reveal directly.
  */
 
 'use client';
@@ -11,12 +16,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { IActionOption } from '@/components/image-riddles/ActionOptions';
+import { postCommentOptimistic, type CommentChipValue } from '@/lib/comments-api';
 import { isImageRiddleAnswerCorrect } from '@/lib/image-riddle-answer';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 import { resolveTimerSeconds } from '../lib/game';
 import { selectModalActions } from '../lib/default-actions';
-import { SHARE_MESSAGES, shareRiddleContent } from '../lib/share';
 
 import { useImageRiddleTimers } from './useImageRiddleTimers';
 import { useRiddleKeyboardNav } from './useRiddleKeyboardNav';
@@ -41,7 +46,8 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const [showLetterCount, setShowLetterCount] = useState(false);
   const [shake, setShake] = useState(false);
   const [attempts, setAttempts] = useState<Record<string, number>>({});
-  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [chipPrompt, setChipPrompt] = useState(false);
 
   const {
     timeLeft,
@@ -57,7 +63,8 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     setWrongAnswer(false);
     setRevealSource(null);
     setTimedOut(false);
-    setShareMessage(null);
+    setShareOpen(false);
+    setChipPrompt(false);
   }, []);
 
   // #18: modal history integration. Opening the modal pushes a history entry
@@ -123,6 +130,17 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const checkAnswer = useCallback(() => {
     if (!selectedRiddle || showAnswer) return;
     setAttempts((prev) => ({ ...prev, [selectedRiddle.id]: (prev[selectedRiddle.id] || 0) + 1 }));
+    // Every submitted guess lands in the riddle's feed (plan §1). The server
+    // recomputes correctness — the local check only drives gameplay UX.
+    const guessText = userAnswer.trim();
+    if (guessText.length > 0) {
+      postCommentOptimistic({
+        contentType: 'image-riddle',
+        contentId: selectedRiddle.id,
+        kind: 'guess',
+        text: guessText,
+      });
+    }
     const isCorrect = isImageRiddleAnswerCorrect({
       answer: selectedRiddle.answer,
       alternativeAnswers: selectedRiddle.alternativeAnswers,
@@ -141,13 +159,45 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     }
   }, [selectedRiddle, showAnswer, userAnswer, onSolved, onRevealed]);
 
-  const revealAnswer = useCallback(() => {
+  const performReveal = useCallback(() => {
     if (!selectedRiddle) return;
     setShowAnswer(true);
     setRevealSource('revealed');
     setWrongAnswer(false);
     onRevealed(selectedRiddle.id);
   }, [selectedRiddle, onRevealed]);
+
+  /** Give-up reveal: zero submitted guesses → chip picker first (plan §3.2). */
+  const revealAnswer = useCallback(() => {
+    if (!selectedRiddle) return;
+    if ((attempts[selectedRiddle.id] || 0) === 0) {
+      setChipPrompt(true);
+      return;
+    }
+    performReveal();
+  }, [selectedRiddle, attempts, performReveal]);
+
+  /** Chip tap: post (optimistic) then reveal — never blocks on the network. */
+  const chooseChip = useCallback(
+    (chip: CommentChipValue) => {
+      if (!selectedRiddle) return;
+      postCommentOptimistic({
+        contentType: 'image-riddle',
+        contentId: selectedRiddle.id,
+        kind: 'chip',
+        chip,
+      });
+      setChipPrompt(false);
+      performReveal();
+    },
+    [selectedRiddle, performReveal]
+  );
+
+  /** Escape hatch from the chip picker — reveal without a confession. */
+  const skipChipPrompt = useCallback(() => {
+    setChipPrompt(false);
+    performReveal();
+  }, [performReveal]);
   const revealAfterTimeout = useCallback(() => {
     setTimedOut(false);
     revealAnswer();
@@ -158,12 +208,6 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     setUserAnswer(value);
     setWrongAnswer(false);
   }, []);
-
-  /** Web Share with clipboard fallback (upgrade plan A2). */
-  const shareRiddle = useCallback(async () => {
-    if (!selectedRiddle) return;
-    setShareMessage(SHARE_MESSAGES[await shareRiddleContent(selectedRiddle)]);
-  }, [selectedRiddle]);
 
   // Map every supported action id (local defaults + backend presets) to a
   // handler so every rendered button does something (upgrade plan A2).
@@ -184,14 +228,14 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
         case 'skip': // move to the next riddle without revealing
           navigateRiddle('next');
           break;
-        case 'share':
-          void shareRiddle();
+        case 'share': // open the explicit share menu (FB/X/WhatsApp/LinkedIn/Copy/Save)
+          setShareOpen(true);
           break;
         default:
           break;
       }
     },
-    [checkAnswer, revealAnswer, navigateRiddle, shareRiddle]
+    [checkAnswer, revealAnswer, navigateRiddle]
   );
 
   const modalActions = useMemo(
@@ -213,7 +257,8 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     showLetterCount,
     shake,
     attempts,
-    shareMessage,
+    shareOpen,
+    chipPrompt,
     timeLeft,
     isTimerActive: isActive,
     modalActions,
@@ -225,6 +270,9 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     handleAction,
     revealAfterTimeout,
     keepTryingAfterTimeout,
+    chooseChip,
+    skipChipPrompt,
+    closeShare: () => setShareOpen(false),
     toggleLetterCount: () => setShowLetterCount((prev) => !prev),
   };
 }
