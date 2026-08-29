@@ -10,6 +10,7 @@
  */
 
 const GUEST_ID_KEY = 'aiquiz:guest-id';
+const GUEST_NAME_KEY = 'aiquiz:guest-name';
 
 function generateGuestId(): string {
   return (
@@ -28,4 +29,19 @@ export function getGuestId(): string {
     window.localStorage.setItem(GUEST_ID_KEY, guestId);
   }
   return guestId;
+}
+
+/**
+ * Display name for comments — set once by the visitor (any name they like)
+ * and reused for every comment from this device. Empty string when unset
+ * (feeds render those entries as "Guest").
+ */
+export function getGuestName(): string {
+  if (typeof window === 'undefined') return '';
+  return window.localStorage.getItem(GUEST_NAME_KEY) ?? '';
+}
+
+export function setGuestName(name: string): void {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(GUEST_NAME_KEY, name.trim().slice(0, 50));
 }

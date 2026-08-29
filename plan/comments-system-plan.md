@@ -151,3 +151,45 @@ ChipRevealStep}.tsx`, `components/jokes/JokeCommentsModal.tsx`, plus the
    `app/admin/components/CommentsSection.tsx`: status/contentType filters,
    paginated moderation list, and per-row Publish / Hide (trash = soft-hide) /
    Delete actions, all through `/admin/comments*` with the admin JWT.
+
+## 8. Implementation Notes — Iteration 2 (2026-08-29)
+
+Follow-up round driven by live-use feedback:
+
+1. **`@_Public()` fix** — the public controller originally shipped without the
+   decorator, so the default-deny JWT guard 401'd every comments route. All
+   guest-facing routes (feed, my, counts, POST, DELETE) are now `@_Public()`;
+   `/admin/comments*` correctly stays JWT-only. Verified live.
+2. **Display names** — new nullable `authorName` column (migration
+   `1788200000000-AddCommentAuthorName`, 50-char cap, server-trimmed). Guests
+   type any name once (`aiquiz:guest-name` localStorage; editor in the guess
+   wall header and the jokes modal); every post sends it. Feeds render
+   name-above-comment; masked solves read "**Ravi** solved it 🔓" when the
+   solver gave a name, otherwise "Someone/Guest". Logged-in real names are
+   deferred until the profile is cached client-side (tokens only today).
+3. **Blog-style feeds** — entries show name · relative time (`lib/time-ago.ts`);
+   the guess wall collapses to the newest 4 entries with a "View all N
+   comments" expander, and the scrollbar only appears once expanded.
+   Collapsed cards show just the 💬 count.
+4. **Card-level social row (image riddles)** — 💬 (inline expandable guess
+   wall, spoiler-safe via masking) + 🔗 Share under the Answer/Reveal row.
+   Card "Reveal" now routes through the modal so zero-guess reveals always
+   pass the chip-to-reveal step (inline reveal previously bypassed it).
+5. **Counts endpoint** — `GET /comments/counts` takes `contentType` (was
+   hardcoded to jokes) so the riddles grid uses the same batched call.
+   Fixed a cache bug: the counts key lacked a suffix segment, so the family
+   invalidation `comments:{type}:counts:*` never matched and stale counts
+   survived writes — key is now `…:counts:all`.
+6. **Modal fixes (image riddles)** — the image container used `flex-1
+min-h-0` and collapsed to zero height on shorter viewports (riddle
+   rendered without its image); fixed with a guaranteed height. Added a
+   direct 🔖 save button next to the modal's close ✕, synced with the card
+   chip + ShareMenu via the saved-changed event.
+7. **Dad jokes parity** — 💬 chip sits beside the vote buttons on both card
+   faces (owner-requested layout); 📋 Copy removed in favor of the ShareMenu
+   (Facebook / X / WhatsApp / LinkedIn / Copy Link / 🔖 Save); 🔖 bookmark
+   chips on each card face flip with the 3D card.
+8. **Moderation policy (agreed)** — auto-publish for all kinds; chips are
+   pre-approved by allow-list; free text stays auto-published with
+   hide-later moderation (rate limit + length cap + admin panel). Manual
+   approval and auto-rejection were considered and rejected.

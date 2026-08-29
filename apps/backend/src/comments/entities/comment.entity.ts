@@ -51,6 +51,10 @@ export class Comment {
   @Column({ type: 'varchar', length: 64 })
   guestId: string;
 
+  /** Optional display name (guest-typed); null renders as "Guest" client-side. */
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  authorName: string | null;
+
   @Column({ type: 'enum', enum: CommentKind })
   kind: CommentKind;
 

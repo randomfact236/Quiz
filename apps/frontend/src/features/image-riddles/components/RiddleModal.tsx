@@ -12,11 +12,12 @@
 'use client';
 
 import Image from 'next/image';
-import { Clock, X } from 'lucide-react';
+import { Bookmark, Clock, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 import ShareMenu from '@/components/share/ShareMenu';
+import { useSavedItems } from '@/hooks/useSavedItems';
 
 import type { ImageRiddleGame } from '../hooks/useImageRiddleGame';
 import {
@@ -57,6 +58,10 @@ export default function RiddleModal({
   const timerEnabled = riddle.showTimer !== false;
   const totalSeconds = resolveTimerSeconds(riddle);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // 🔖 Save — same device-local store as the card chip and ShareMenu; the
+  // saved-changed event keeps all three in sync.
+  const { savedMap: savedRiddles, toggle: toggleSavedRiddle } = useSavedItems('image-riddles');
 
   // C3: capture the triggering element (the card that opened the modal) as
   // early as possible — during first render, BEFORE the guess input's
@@ -131,6 +136,19 @@ export default function RiddleModal({
         tabIndex={-1}
         className="relative max-h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300"
       >
+        {/* 🔖 Save — direct bookmark (same store as the card chip + ShareMenu) */}
+        <button
+          onClick={() => toggleSavedRiddle(riddle.id)}
+          className="absolute right-16 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 transition-all hover:bg-amber-50 hover:shadow-sm active:scale-90"
+          aria-pressed={Boolean(savedRiddles[riddle.id])}
+          aria-label={savedRiddles[riddle.id] ? 'Remove riddle from saved' : 'Save riddle'}
+          title={savedRiddles[riddle.id] ? 'Saved — tap to remove' : 'Save'}
+        >
+          <Bookmark
+            className={`h-5 w-5 transition-colors ${savedRiddles[riddle.id] ? 'fill-amber-500 text-amber-500' : 'text-slate-400'}`}
+            aria-hidden="true"
+          />
+        </button>
         <button
           onClick={game.closeRiddle}
           className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
@@ -208,8 +226,9 @@ export default function RiddleModal({
             )}
           </div>
 
-          {/* Image */}
-          <div className="relative flex-1 min-h-0 mb-6 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
+          {/* Image — fixed height (never collapses): flex-1/min-h-0 let the
+              guess panel squeeze the image to zero on shorter viewports */}
+          <div className="relative mb-6 h-64 sm:h-80 shrink-0 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
             {hasImageError ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-300">
                 <span className="text-6xl">🖼️</span>

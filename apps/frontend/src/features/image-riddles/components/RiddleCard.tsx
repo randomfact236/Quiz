@@ -12,9 +12,12 @@
 'use client';
 
 import Image from 'next/image';
-import { Bookmark, Clock, Eye, EyeOff } from 'lucide-react';
+import { Bookmark, ChevronDown, Clock, Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
+
+import GuessFeed from './GuessFeed';
 
 import {
   CARD_BLUR_DATA_URL,
@@ -32,6 +35,10 @@ export interface RiddleCardProps {
   hasImageError: boolean;
   isSaved?: boolean;
   onToggleSave?: (id: string) => void;
+  /** Published guess-wall entry count (💬 chip hidden when 0). */
+  commentCount?: number;
+  /** Card-level share (opens the ShareMenu via the page). */
+  onShare?: (riddle: ImageRiddle) => void;
   onOpen: (riddle: ImageRiddle) => void;
   onToggleReveal: (id: string) => void;
   onImageError: (id: string) => void;
@@ -44,10 +51,15 @@ export default function RiddleCard({
   hasImageError,
   isSaved,
   onToggleSave,
+  commentCount,
+  onShare,
   onOpen,
   onToggleReveal,
   onImageError,
 }: RiddleCardProps) {
+  // Inline guess-wall expansion — lets people lurk the comments straight from
+  // the card without opening the gameplay modal (masked entries = spoiler-safe).
+  const [showComments, setShowComments] = useState(false);
   return (
     <div
       role="button"
@@ -158,6 +170,55 @@ export default function RiddleCard({
             {isRevealed ? 'Hide' : 'Reveal'}
           </button>
         </div>
+
+        {/* Social row: 💬 guess wall (expandable inline) + 🔗 share */}
+        <div className="mt-3 flex items-center justify-center gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Don't open the riddle modal
+              setShowComments((prev) => !prev);
+            }}
+            aria-expanded={showComments}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+              showComments
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'
+            }`}
+            aria-label={
+              showComments
+                ? 'Hide the guess wall'
+                : `View the guess wall${(commentCount ?? 0) > 0 ? `. ${commentCount} guesses` : ''}`
+            }
+            title={showComments ? 'Hide the guess wall' : 'View the guess wall'}
+          >
+            <span aria-hidden="true">💬</span>
+            {(commentCount ?? 0) > 0 ? commentCount : 'Comments'}
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform ${showComments ? 'rotate-180' : ''}`}
+              aria-hidden="true"
+            />
+          </button>
+          {onShare && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onShare(riddle);
+              }}
+              className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600"
+              aria-label="Share riddle"
+              title="Share this riddle"
+            >
+              <span aria-hidden="true">🔗</span> Share
+            </button>
+          )}
+        </div>
+
+        {/* Inline guess wall (spoiler-safe: correct solves are masked) */}
+        {showComments && (
+          <div className="mt-3" onClick={(e) => e.stopPropagation()}>
+            <GuessFeed riddleId={riddle.id} />
+          </div>
+        )}
       </div>
     </div>
   );

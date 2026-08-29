@@ -15,6 +15,8 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 
 import { deleteMyComment, getComments, postComment, type Comment } from '@/lib/comments-api';
+import { getGuestName, setGuestName } from '@/lib/guest-id';
+import { timeAgo } from '@/lib/time-ago';
 
 const MAX_LENGTH = 280;
 
@@ -34,8 +36,13 @@ export default function JokeCommentsModal({
 }: JokeCommentsModalProps) {
   const [items, setItems] = useState<Comment[] | null>(null);
   const [text, setText] = useState('');
+  const [name, setName] = useState('');
   const [posting, setPosting] = useState(false);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setName(getGuestName());
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,6 +79,7 @@ export default function JokeCommentsModal({
         kind: 'comment',
         text: trimmed,
         chip: null,
+        authorName: name.trim() || null,
         masked: false,
         createdAt: new Date().toISOString(),
         mine: true,
@@ -83,6 +91,7 @@ export default function JokeCommentsModal({
         contentId: jokeId,
         kind: 'comment',
         text: trimmed,
+        ...(name.trim() ? { authorName: name.trim() } : {}),
       });
       setPosting(false);
       if (saved) {
@@ -93,7 +102,7 @@ export default function JokeCommentsModal({
         onPosted?.();
       }
     },
-    [text, posting, jokeId, onPosted]
+    [text, posting, jokeId, onPosted, name]
   );
 
   const handleDelete = useCallback(async (id: string) => {
@@ -159,9 +168,12 @@ export default function JokeCommentsModal({
                 className="flex items-start justify-between gap-3 rounded-2xl bg-orange-50/60 px-4 py-3"
               >
                 <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    {item.authorName || 'Guest'}
+                  </p>
                   <p className="text-sm font-semibold text-gray-800 break-words">{item.text}</p>
                   <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    {new Date(item.createdAt).toLocaleDateString()}
+                    {timeAgo(item.createdAt)}
                   </p>
                 </div>
                 {item.mine && (
@@ -181,6 +193,18 @@ export default function JokeCommentsModal({
         </div>
 
         <form onSubmit={(e) => void handlePost(e)} className="border-t border-orange-100 p-4">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setGuestName(e.target.value);
+            }}
+            maxLength={50}
+            placeholder="Your name (shows with your reply)"
+            className="mb-2 w-full rounded-full border-2 border-gray-100 bg-gray-50 px-4 py-1.5 text-xs font-bold text-gray-700 placeholder:text-gray-300 focus:border-orange-300 focus:bg-white focus:outline-none transition-colors"
+            aria-label="Your display name"
+          />
           <div className="flex items-center gap-2">
             <input
               type="text"

@@ -65,8 +65,7 @@ export class CommentsController {
       .filter((id) => id.length > 0)
       .slice(0, 500);
     return this.commentsService.countByContentIds(
-      // The counts endpoint backs the jokes grid; extend per-UI if needed.
-      CommentContentType.JOKE,
+      query.contentType ?? CommentContentType.JOKE,
       ids
     );
   }

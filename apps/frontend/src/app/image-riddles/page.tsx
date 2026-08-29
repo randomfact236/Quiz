@@ -15,7 +15,9 @@
 
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 import {
   CategorySidebar,
@@ -33,6 +35,8 @@ import {
 } from '@/features/image-riddles/hooks';
 import { ITEMS_PER_PAGE, applyMixSort } from '@/features/image-riddles/lib/game';
 import { useSavedItems } from '@/hooks/useSavedItems';
+import { getCommentCounts } from '@/lib/comments-api';
+import ShareMenu from '@/components/share/ShareMenu';
 
 export default function ImageRiddlesPage(): JSX.Element {
   const filters = useImageRiddleFilters();
@@ -49,6 +53,30 @@ export default function ImageRiddlesPage(): JSX.Element {
   // 🔖 Save — device-local bookmarks, chip on the card corner (stays in sync
   // with the share menu's Save via the saved-items event)
   const { savedMap: savedRiddles, toggle: toggleRiddleSave } = useSavedItems('image-riddles');
+
+  // 💬 guess-wall counts for the card chips — batched, one request per render
+  // set; silently empty offline.
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  useEffect(() => {
+    if (catalog.riddles.length === 0) return;
+    let cancelled = false;
+    getCommentCounts(
+      'image-riddle',
+      catalog.riddles.map((r) => r.id)
+    )
+      .then((counts) => {
+        if (!cancelled && Object.keys(counts).length > 0) setCommentCounts(counts);
+      })
+      .catch(() => {
+        /* offline — chips simply stay hidden */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [catalog.riddles]);
+
+  // 🔗 card-level share menu
+  const [shareRiddle, setShareRiddle] = useState<ImageRiddle | null>(null);
 
   const [erroredImages, setErroredImages] = useState<Record<string, boolean>>({});
   const handleImageError = useCallback((id: string) => {
@@ -68,6 +96,25 @@ export default function ImageRiddlesPage(): JSX.Element {
     onSolved: score.recordSolved,
     onRevealed: score.recordRevealed,
   });
+
+  /**
+   * Card "Reveal" request — routed through the MODAL, never inline. Showing
+   * the answer straight on the card would bypass the chip-to-reveal flow
+   * (zero-guess reveals must go through the "How close were you?" step).
+   * "Hide" on an already-revealed card still toggles locally.
+   */
+  const handleCardReveal = useCallback(
+    (id: string) => {
+      if (score.revealedIds[id]) {
+        score.toggleRevealed(id);
+        return;
+      }
+      const riddle =
+        visibleRiddles.find((r) => r.id === id) ?? catalog.riddles.find((r) => r.id === id);
+      if (riddle) game.openRiddle(riddle);
+    },
+    [score.revealedIds, score.toggleRevealed, visibleRiddles, catalog.riddles, game.openRiddle]
+  );
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] px-4 py-8">
@@ -130,8 +177,10 @@ export default function ImageRiddlesPage(): JSX.Element {
                       hasImageError={Boolean(erroredImages[riddle.id])}
                       isSaved={Boolean(savedRiddles[riddle.id])}
                       onToggleSave={toggleRiddleSave}
+                      commentCount={commentCounts[riddle.id] ?? 0}
+                      onShare={setShareRiddle}
                       onOpen={game.openRiddle}
-                      onToggleReveal={score.toggleRevealed}
+                      onToggleReveal={handleCardReveal}
                       onImageError={handleImageError}
                     />
                   ))}
@@ -174,6 +223,17 @@ export default function ImageRiddlesPage(): JSX.Element {
             hasImageError={Boolean(erroredImages[game.selectedRiddle.id])}
             onImageError={handleImageError}
             canNavigate={visibleRiddles.length > 1}
+          />
+        )}
+
+        {/* 🔗 card-level share menu (FB / X / WhatsApp / LinkedIn / Copy Link / Save) */}
+        {shareRiddle && !game.selectedRiddle && (
+          <ShareMenu
+            title={shareRiddle.title}
+            text={`Can you solve this image riddle: "${shareRiddle.title}"?`}
+            saveNamespace="image-riddles"
+            saveId={shareRiddle.id}
+            onClose={() => setShareRiddle(null)}
           />
         )}
       </div>

@@ -415,7 +415,10 @@ export default function JokesPage(): JSX.Element {
   useEffect(() => {
     if (jokes.length === 0) return;
     let cancelled = false;
-    getCommentCounts(jokes.map((j) => j.id))
+    getCommentCounts(
+      'joke',
+      jokes.map((j) => j.id)
+    )
       .then((counts) => {
         if (!cancelled && Object.keys(counts).length > 0) setCommentCounts(counts);
       })

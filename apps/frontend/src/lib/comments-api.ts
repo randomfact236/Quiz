@@ -9,7 +9,7 @@
  */
 
 import { adminApi, api } from './api-client';
-import { getGuestId } from './guest-id';
+import { getGuestId, getGuestName } from './guest-id';
 
 // ============================================================================
 // Types — mirror the backend PublicComment shape
@@ -25,6 +25,8 @@ export interface Comment {
   /** null when masked (correct guess) or when the entry is a chip tap. */
   text: string | null;
   chip: string | null;
+  /** Display name; null renders as "Guest". */
+  authorName: string | null;
   masked: boolean;
   createdAt: string;
   mine?: boolean;
@@ -45,6 +47,7 @@ export interface PostCommentInput {
   kind: CommentKind;
   text?: string;
   chip?: CommentChipValue;
+  authorName?: string;
 }
 
 // ============================================================================
@@ -86,6 +89,8 @@ export async function postComment(input: PostCommentInput): Promise<Comment | nu
   try {
     const response = await api.post<Comment>('/comments', {
       ...input,
+      // Attach the saved display name unless the caller supplied one.
+      authorName: input.authorName ?? (getGuestName() || undefined),
       guestId: getGuestId(),
     });
     return response.data;
@@ -112,11 +117,14 @@ export async function deleteMyComment(id: string): Promise<boolean> {
   }
 }
 
-/** Comment counts per content ID (💬 chips on the jokes grid). */
-export async function getCommentCounts(contentIds: string[]): Promise<Record<string, number>> {
+/** Comment counts per content ID (💬 chips on the jokes/riddles grids). */
+export async function getCommentCounts(
+  contentType: CommentContentType,
+  contentIds: string[]
+): Promise<Record<string, number>> {
   if (contentIds.length === 0) return {};
   const response = await api.get<Record<string, number>>(
-    `/comments/counts?ids=${encodeURIComponent(contentIds.join(','))}`
+    `/comments/counts?contentType=${contentType}&ids=${encodeURIComponent(contentIds.join(','))}`
   );
   return response.data;
 }

@@ -51,6 +51,12 @@ export class CreateCommentDto {
   @IsOptional()
   @IsEnum(CommentChip)
   chip?: CommentChip;
+
+  @ApiPropertyOptional({ description: 'Display name (guest-typed); shown on the feed' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  authorName?: string;
 }
 
 export class CommentFeedQueryDto extends PaginationDto {
@@ -78,6 +84,11 @@ export class MyCommentsQueryDto {
 }
 
 export class CommentCountsQueryDto {
+  @ApiPropertyOptional({ enum: CommentContentType, default: CommentContentType.JOKE })
+  @IsOptional()
+  @IsEnum(CommentContentType)
+  contentType?: CommentContentType;
+
   @ApiProperty({ description: 'Comma-separated content IDs to count comments for' })
   @IsString()
   @IsNotEmpty()

@@ -370,6 +370,9 @@ multi-tab `storage` sync).
 - `contentType: 'joke'` against the shared `/comments` endpoints; no
   guess/chip semantics for jokes — `kind: 'comment'` only.
 - Counts for all cards load in one batched request (`GET /comments/counts?ids=`).
+- Display names (2026-08-29): guests type any name once (field in the modal,
+  stored per device); replies render name-above-comment with relative
+  timestamps (`lib/time-ago.ts`).
 - Backend note: the shared controller initially shipped without `@_Public()`
   decorators so every comments route 401'd under the default-deny JWT guard —
   fixed and verified live (feed/POST/delete/counts all 200).

@@ -48,6 +48,8 @@ export interface PublicComment {
   /** null when masked (correct guess) or when the entry is a chip tap. */
   text: string | null;
   chip: string | null;
+  /** Display name (guest-typed or logged-in user); null renders as "Guest". */
+  authorName: string | null;
   masked: boolean;
   createdAt: string;
   /** Present on the caller's own entries (via guestId-scoped queries). */
@@ -177,6 +179,7 @@ export class CommentsService {
       kind: comment.kind,
       text: opts.masked ? null : comment.text,
       chip: comment.chip,
+      authorName: comment.authorName ?? null,
       masked: opts.masked,
       createdAt: comment.createdAt.toISOString(),
       ...(opts.mine !== undefined ? { mine: opts.mine } : {}),
@@ -193,6 +196,7 @@ export class CommentsService {
       kind: CommentKind;
       text?: string;
       chip?: CommentChip;
+      authorName?: string;
     }
   ): Promise<PublicComment> {
     this.validateKindForContentType(dto.contentType, dto.kind);
@@ -237,6 +241,7 @@ export class CommentsService {
       kind: dto.kind,
       text: dto.kind === CommentKind.CHIP ? null : text,
       chip: dto.kind === CommentKind.CHIP ? chip : null,
+      authorName: dto.authorName?.trim() || null,
       isCorrect,
       status: ContentStatus.PUBLISHED,
     });
@@ -344,6 +349,7 @@ export class CommentsService {
         kind: row.kind,
         text: row.isCorrect ? null : row.text,
         chip: row.chip,
+        authorName: row.authorName ?? null,
         masked: row.isCorrect,
         isCorrect: row.isCorrect,
         status: row.status,
@@ -383,7 +389,9 @@ export class CommentsService {
     if (contentIds.length === 0) return counts;
 
     return this.cacheService.getOrSet(
-      `${FEED_CACHE_FAMILY}:${contentType}:counts`,
+      // NOTE: the `:all` suffix matters — family invalidation clears
+      // `comments:{type}:counts:*`, which must match this key.
+      `${FEED_CACHE_FAMILY}:${contentType}:counts:all`,
       async () => {
         const rows = await this.commentRepo
           .createQueryBuilder('comment')
