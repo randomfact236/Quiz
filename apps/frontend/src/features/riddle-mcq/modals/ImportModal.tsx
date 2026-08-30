@@ -10,7 +10,8 @@ import { parseCsvContent, type ParsedRiddle, type ImportError } from './csv-pars
 interface ImportModalProps {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  /** Called once after a fully successful import, with the number of riddles created. */
+  onSuccess?: (importedCount: number) => void;
 }
 
 interface ImportResult {
@@ -161,7 +162,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
         queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
         setImportResult({ success: true, count: totalCreated });
         setTimeout(() => {
-          onSuccess();
+          onSuccess?.(totalCreated);
           onClose();
         }, 1500);
       }

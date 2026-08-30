@@ -19,6 +19,9 @@ import { RiddleMcqModal } from '../modals/RiddleMcqModal';
 import { ImportModal } from '../modals/ImportModal';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ToastContainer } from '@/components/ui/ToastContainer';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from '@/lib/toast';
 import type { StatusFilter } from '@/types/status.types';
 import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
 import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
@@ -41,6 +44,7 @@ interface ConfirmState {
 export function RiddleMcqContainer() {
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
 
   const categoriesQuery = useRiddleMcqCategories();
   const subjectsQuery = useRiddleMcqSubjects();
@@ -233,6 +237,7 @@ export function RiddleMcqContainer() {
 
   return (
     <div className="space-y-4">
+      <ToastContainer />
       <RiddleMcqHeader
         onAddRiddle={() => setRiddleModal({ open: true })}
         onImport={() => setShowImportModal(true)}
@@ -325,7 +330,13 @@ export function RiddleMcqContainer() {
       <ImportModal
         open={showImportModal}
         onClose={() => setShowImportModal(false)}
-        onSuccess={() => {}}
+        onSuccess={(importedCount) => {
+          queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
+          queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
+          queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
+          queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
+          toast.success(`Imported ${importedCount} riddle${importedCount === 1 ? '' : 's'}`);
+        }}
       />
     </div>
   );
