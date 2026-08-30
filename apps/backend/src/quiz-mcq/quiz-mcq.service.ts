@@ -22,6 +22,8 @@ import {
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
 import { Subject } from './entities/subject.entity';
+import { QuizSession } from './entities/quiz-session.entity';
+import { CreateQuizSessionDto } from './dto/create-quiz-session.dto';
 
 type QuestionLevel = 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
 
@@ -57,6 +59,8 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     chapterRepo: Repository<Chapter>,
     @InjectRepository(Question)
     questionRepo: Repository<Question>,
+    @InjectRepository(QuizSession)
+    private readonly quizSessionRepo: Repository<QuizSession>,
     cacheService: CacheService,
     dataSource: DataSource,
     private bulkActionService: BulkActionService
@@ -850,5 +854,76 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       chapterId: ids.chapterId,
       order,
     };
+  }
+  // ==========================================================================
+  // Server-side session persistence (plan/02-mcq-quiz.md P1 #1)
+  // ==========================================================================
+
+  /** Stores a completed session, attributed to the logged-in user and/or guestId. */
+  async createQuizSession(dto: CreateQuizSessionDto, userId?: string | null): Promise<QuizSession> {
+    if (dto.correctCount > dto.totalQuestions) {
+      throw new BadRequestException('correctCount cannot exceed totalQuestions');
+    }
+    if (dto.score > dto.maxScore) {
+      throw new BadRequestException('score cannot exceed maxScore');
+    }
+    const session = this.quizSessionRepo.create({
+      userId: userId ?? null,
+      guestId: dto.guestId ?? null,
+      subjectSlug: dto.subjectSlug ?? null,
+      subjectName: dto.subjectName ?? null,
+      chapterName: dto.chapterName ?? null,
+      level: dto.level ?? null,
+      mode: dto.mode ?? null,
+      totalQuestions: dto.totalQuestions,
+      correctCount: dto.correctCount,
+      score: dto.score,
+      maxScore: dto.maxScore,
+      durationSeconds: dto.durationSeconds ?? null,
+    });
+    return this.quizSessionRepo.save(session);
+  }
+
+  /** Latest completed sessions for a user (by token) or guest (by client-issued id). */
+  async getQuizSessionHistory(identity: {
+    userId?: string | null;
+    guestId?: string | null;
+  }): Promise<QuizSession[]> {
+    if (!identity.userId && !identity.guestId) return [];
+    return this.quizSessionRepo.find({
+      where: identity.userId ? { userId: identity.userId } : { guestId: identity.guestId! },
+      order: { completedAt: 'DESC' },
+      take: 50,
+    });
+  }
+
+  /** Best score per subject for a user or guest — high-score board. */
+  async getQuizSessionHighScores(identity: { userId?: string | null; guestId?: string | null }) {
+    if (!identity.userId && !identity.guestId) return [];
+    const qb = this.quizSessionRepo
+      .createQueryBuilder('session')
+      .select('session.subjectSlug', 'subjectSlug')
+      .addSelect('MAX(session.subjectName)', 'subjectName')
+      .addSelect('MAX(session.score)', 'bestScore')
+      .addSelect('MAX(session.maxScore)', 'maxScore')
+      .addSelect('COUNT(*)', 'sessions')
+      .where(identity.userId ? 'session.userId = :id' : 'session.guestId = :id', {
+        id: identity.userId ?? identity.guestId,
+      })
+      .groupBy('session.subjectSlug');
+    const rows = await qb.getRawMany<{
+      subjectSlug: string | null;
+      subjectName: string | null;
+      bestScore: string;
+      maxScore: string;
+      sessions: string;
+    }>();
+    return rows.map((r) => ({
+      subjectSlug: r.subjectSlug,
+      subjectName: r.subjectName,
+      bestScore: Number(r.bestScore),
+      maxScore: Number(r.maxScore),
+      sessions: Number(r.sessions),
+    }));
   }
 }

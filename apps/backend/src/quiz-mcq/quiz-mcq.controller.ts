@@ -8,6 +8,7 @@ import {
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -39,8 +40,10 @@ import {
 } from '../common/dto/bulk-action.dto';
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { ExportQueryDto } from './dto/export-query.dto';
+import { CreateQuizSessionDto } from './dto/create-quiz-session.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { _Public } from '../common/decorators/public.decorator';
+import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
 import { Throttle } from '@nestjs/throttler';
 
 import { Chapter } from './entities/chapter.entity';
@@ -79,6 +82,51 @@ export class QuizMcqQueryDto extends PaginationDto {
 @Controller('quiz-mcq')
 export class QuizMcqController {
   constructor(private readonly quizService: QuizMcqService) {}
+
+  // ==================== SESSIONS (server-side persistence) ====================
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Post('sessions')
+  @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
+  @ApiOperation({ summary: 'Persist a completed quiz session (user or guest attributed)' })
+  async createQuizSession(@Body() dto: CreateQuizSessionDto, @Req() req: any) {
+    const userId = req.user?.id ?? null;
+    if (!userId && !dto.guestId) {
+      // Nothing to attribute the session to — accept but don't store orphans.
+      return { recorded: false };
+    }
+    const session = await this.quizService.createQuizSession(dto, userId);
+    return { recorded: true, session: { id: session.id, completedAt: session.completedAt } };
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('sessions/history')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({ summary: 'Latest 50 completed sessions for the caller (token or guestId)' })
+  async getQuizSessionHistory(@Req() req: any, @Query('guestId') guestId?: string) {
+    const history = await this.quizService.getQuizSessionHistory({
+      userId: req.user?.id ?? null,
+      guestId: guestId ?? null,
+    });
+    return { data: history, total: history.length };
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('sessions/high-scores')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({ summary: 'Best score per subject for the caller (token or guestId)' })
+  async getQuizSessionHighScores(@Req() req: any, @Query('guestId') guestId?: string) {
+    return {
+      data: await this.quizService.getQuizSessionHighScores({
+        userId: req.user?.id ?? null,
+        guestId: guestId ?? null,
+      }),
+    };
+  }
 
   // ==================== SUBJECTS ====================
 

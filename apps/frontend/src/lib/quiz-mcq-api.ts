@@ -461,3 +461,80 @@ export async function exportQuestionsFromBackend(
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+// ============================================================================
+// Server-side session persistence (plan/02-mcq-quiz.md P1 #1)
+// ============================================================================
+
+export interface QuizSessionPayload {
+  guestId?: string;
+  subjectSlug?: string;
+  subjectName?: string;
+  chapterName?: string;
+  level?: string;
+  mode?: string;
+  totalQuestions: number;
+  correctCount: number;
+  score: number;
+  maxScore: number;
+  durationSeconds?: number;
+}
+
+export interface QuizSessionRecord {
+  id: string;
+  subjectSlug: string | null;
+  subjectName: string | null;
+  chapterName: string | null;
+  level: string | null;
+  mode: string | null;
+  totalQuestions: number;
+  correctCount: number;
+  score: number;
+  maxScore: number;
+  durationSeconds: number | null;
+  completedAt: string;
+}
+
+export interface QuizHighScore {
+  subjectSlug: string | null;
+  subjectName: string | null;
+  bestScore: number;
+  maxScore: number;
+  sessions: number;
+}
+
+/** Persist a completed session. Fire-and-forget at call sites — never blocks the UI. */
+export async function saveQuizSession(payload: QuizSessionPayload): Promise<boolean> {
+  try {
+    const response = await api.post<{ recorded: boolean }>('/quiz-mcq/sessions', payload);
+    return response.data.recorded;
+  } catch {
+    return false;
+  }
+}
+
+/** Latest 50 completed sessions for the caller (token-bound, else guestId). */
+export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessionRecord[]> {
+  const params = guestId ? `?guestId=${encodeURIComponent(guestId)}` : '';
+  try {
+    const response = await api.get<{ data: QuizSessionRecord[] }>(
+      `/quiz-mcq/sessions/history${params}`
+    );
+    return response.data.data;
+  } catch {
+    return [];
+  }
+}
+
+/** Best score per subject for the caller (token-bound, else guestId). */
+export async function getQuizSessionHighScores(guestId?: string): Promise<QuizHighScore[]> {
+  const params = guestId ? `?guestId=${encodeURIComponent(guestId)}` : '';
+  try {
+    const response = await api.get<{ data: QuizHighScore[] }>(
+      `/quiz-mcq/sessions/high-scores${params}`
+    );
+    return response.data.data;
+  } catch {
+    return [];
+  }
+}

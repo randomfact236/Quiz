@@ -30,6 +30,8 @@ import {
 } from '@/lib/quiz-mcq-api';
 import { calculateScore, calculateResult } from '@/lib/quiz-mcq-scoring';
 import { saveQuizResult } from '@/lib/progress';
+import { saveQuizSession } from '@/lib/quiz-mcq-api';
+import { getGuestId } from '@/lib/guest-id';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { track } from '@/lib/analytics';
 import { saveQuizResumeQuestions } from '@/lib/quiz-mcq-resume';
@@ -105,6 +107,24 @@ function saveToHistory(session: QuizSession): void {
       { module: 'quiz-mcq', sessionId: session.id }
     )
   );
+
+  // Server-side persistence (plan/02-mcq-quiz.md P1 #1): completed sessions are
+  // stored for the logged-in user (token auto-attached by api-client) or the
+  // client-issued guestId, so results survive browser/device loss.
+  if (session.status === 'completed') {
+    void saveQuizSession({
+      guestId: getGuestId(),
+      subjectSlug: session.subject,
+      subjectName: session.subjectName,
+      chapterName: session.chapter,
+      level: session.level,
+      totalQuestions: session.questions.length,
+      correctCount: calculateResult(session).correctCount,
+      score: session.score,
+      maxScore: session.maxScore,
+      durationSeconds: session.timeTaken,
+    }).catch(() => undefined);
+  }
 }
 
 /** Save current session for resume */

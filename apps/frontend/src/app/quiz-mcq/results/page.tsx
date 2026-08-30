@@ -29,6 +29,8 @@ import toast from '@/lib/toast';
 import type { QuizSession, QuizResult } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { calculateResult } from '@/lib/quiz-mcq-scoring';
+import { getQuizSessionHighScores, type QuizHighScore } from '@/lib/quiz-mcq-api';
+import { getGuestId } from '@/lib/guest-id';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { QuestionReview } from '@/components/quiz-mcq/QuestionReview';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';
@@ -42,6 +44,7 @@ function ResultsContent(): JSX.Element {
   const [showReview, setShowReview] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [personalBest, setPersonalBest] = useState<QuizHighScore | null>(null);
 
   // Load session from history
   useEffect(() => {
@@ -56,6 +59,12 @@ function ResultsContent(): JSX.Element {
 
     setResult(calculateResult(session));
     setShowCelebration(true);
+
+    // Server-side high score (plan/02-mcq-quiz.md P1 #1) — survives browser loss.
+    getQuizSessionHighScores(getGuestId()).then((scores) => {
+      const match = scores.find((s) => s.subjectSlug === session.subject);
+      setPersonalBest(match ?? null);
+    });
   }, [sessionId, router]);
 
   // Share results
@@ -184,6 +193,18 @@ function ResultsContent(): JSX.Element {
             timeTaken={session.timeTaken}
           />
         </div>
+
+        {/* Server-side personal best for this subject (may not exist yet) */}
+        {personalBest && personalBest.bestScore >= session.score && (
+          <div className="mb-6 rounded-2xl bg-white/90 p-4 text-center shadow-lg">
+            <p className="text-sm font-medium text-gray-700">
+              <Trophy className="mr-1 inline h-4 w-4 text-yellow-500" />
+              Your best on {personalBest.subjectName || 'this subject'}: {personalBest.bestScore}/
+              {personalBest.maxScore} across {personalBest.sessions} saved session
+              {personalBest.sessions === 1 ? '' : 's'}
+            </p>
+          </div>
+        )}
 
         {/* Performance Breakdown */}
         <motion.div
