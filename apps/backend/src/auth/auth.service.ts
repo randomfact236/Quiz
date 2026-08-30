@@ -9,8 +9,12 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { BruteForceService } from './brute-force.service';
+import { CacheService } from '../common/cache/cache.service';
 import { EmailService } from '../common/services/email.service';
 import { AnalyticsService } from '../analytics/analytics.service';
+
+/** One-time OAuth codes live 60 seconds and are deleted on first use. */
+const OAUTH_CODE_TTL_S = 60;
 
 @Injectable()
 export class AuthService {
@@ -18,6 +22,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private bruteForceService: BruteForceService,
+    private cacheService: CacheService,
     private emailService: EmailService,
     private analyticsService: AnalyticsService
   ) {}
@@ -134,6 +139,42 @@ export class AuthService {
 
   async validateUser(id: string): Promise<User | null> {
     return this.usersService.findById(id);
+  }
+
+  /**
+   * OAuth login results are handed to the browser as a single-use,
+   * 60-second code instead of token-in-URL (plan/01-user-accounts.md P1 #2).
+   * The code is stored hashed; the raw value only ever appears in the
+   * one redirect URL and is consumed by exchangeOAuthCode().
+   */
+  async createOAuthCode(result: {
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }): Promise<string> {
+    const code = crypto.randomBytes(32).toString('hex');
+    const key = `oauth:code:${crypto.createHash('sha256').update(code).digest('hex')}`;
+    await this.cacheService.set(key, result, OAUTH_CODE_TTL_S);
+    return code;
+  }
+
+  async exchangeOAuthCode(code: string): Promise<{
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }> {
+    const key = `oauth:code:${crypto.createHash('sha256').update(code).digest('hex')}`;
+    const cached = await this.cacheService.get<{
+      user: { id: string; email: string; name: string; role: string };
+      token: string;
+      refreshToken: string;
+    }>(key);
+    // Single-use: consume before validating so a replay always misses.
+    await this.cacheService.del(key);
+    if (!cached) {
+      throw new UnauthorizedException('Invalid or expired OAuth code');
+    }
+    return cached;
   }
 
   async googleLogin(googleData: {

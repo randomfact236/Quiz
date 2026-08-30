@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto, RefreshDto, LogoutDto } from './dto/auth.dto';
+import { LoginDto, RegisterDto, RefreshDto, LogoutDto, OAuthExchangeDto } from './dto/auth.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { _Public } from '../common/decorators/public.decorator';
@@ -102,6 +102,17 @@ export class AuthController {
   }
 
   @_Public()
+  @Post('oauth/exchange')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Exchange a one-time OAuth code for tokens' })
+  @ApiResponse({ status: 200, description: 'Tokens issued' })
+  @ApiResponse({ status: 401, description: 'Invalid, expired, or already-used code' })
+  async exchangeOAuthCode(@Body() dto: OAuthExchangeDto): Promise<AuthResponse> {
+    return this.authService.exchangeOAuthCode(dto.code);
+  }
+
+  @_Public()
   @Get('google')
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Initiate Google OAuth login' })
@@ -117,9 +128,11 @@ export class AuthController {
     const googleData = req.user;
     const result = await this.authService.googleLogin(googleData);
 
+    // Tokens never go in the URL (they leak to browser history/referrer logs).
+    // The frontend exchanges this short-lived one-time code via POST /auth/oauth/exchange.
+    const code = await this.authService.createOAuthCode(result);
     const frontendUrl = process.env['FRONTEND_URL'] || 'http://localhost:3010';
-    const redirectUrl = `${frontendUrl}/login?token=${result.token}&refreshToken=${result.refreshToken}&user=${encodeURIComponent(JSON.stringify(result.user))}`;
 
-    return res.redirect(redirectUrl);
+    return res.redirect(`${frontendUrl}/login?oauth_code=${code}`);
   }
 }

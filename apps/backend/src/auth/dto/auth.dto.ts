@@ -57,3 +57,13 @@ export class LogoutDto {
   @IsNotEmpty({ message: 'Refresh token is required' })
   refreshToken: string;
 }
+
+/**
+ * DTO for exchanging a one-time OAuth code for tokens
+ */
+export class OAuthExchangeDto {
+  @ApiProperty({ description: 'Single-use code from the OAuth callback redirect' })
+  @IsString()
+  @IsNotEmpty({ message: 'OAuth code is required' })
+  code: string;
+}

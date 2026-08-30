@@ -1,6 +1,6 @@
 /**
- * AuthService unit tests — refresh-token expiry/rotation and logout revocation
- * (plan/01-user-accounts.md P1 refresh-token hardening), plus the
+ * AuthService unit tests — refresh-token expiry/rotation, logout revocation,
+ * one-time OAuth code exchange (plan/01-user-accounts.md P1), and the
  * anti-enumeration guarantee on forgotPassword.
  */
 
@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
 import { BruteForceService } from './brute-force.service';
+import { CacheService } from '../common/cache/cache.service';
 import { EmailService } from '../common/services/email.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { UsersService } from '../users/users.service';
@@ -45,6 +46,7 @@ describe('AuthService — refresh/logout', () => {
       usersService,
       jwtService,
       bruteForceService,
+      { get: jest.fn(), set: jest.fn(), del: jest.fn() } as unknown as CacheService,
       emailService,
       analyticsService
     );
@@ -79,6 +81,57 @@ describe('AuthService — refresh/logout', () => {
   });
 });
 
+describe('AuthService — one-time OAuth code exchange', () => {
+  const makeCache = (store: Map<string, unknown>) =>
+    ({
+      get: jest.fn(async (key: string) => (store.has(key) ? store.get(key) : null)),
+      set: jest.fn(async (key: string, value: unknown) => {
+        store.set(key, value);
+      }),
+      del: jest.fn(async (key: string) => {
+        store.delete(key);
+      }),
+    }) as unknown as CacheService;
+
+  const setupOAuth = (store: Map<string, unknown>) => {
+    const usersService = {} as UsersService;
+    return new AuthService(
+      usersService,
+      { sign: jest.fn(() => 'access-token') } as unknown as JwtService,
+      {} as BruteForceService,
+      makeCache(store),
+      {} as EmailService,
+      { record: jest.fn() } as unknown as AnalyticsService
+    );
+  };
+
+  it('createOAuthCode stores the payload under a hashed key, not the raw code', async () => {
+    const store = new Map<string, unknown>();
+    const service = setupOAuth(store);
+    const payload = { user: { id: 'u1' }, token: 't', refreshToken: 'r' };
+    const code = await service.createOAuthCode(payload as any);
+    expect(code).toMatch(/^[a-f0-9]{64}$/);
+    // No cache entry keyed by the raw code; exactly one entry exists.
+    expect(store.size).toBe(1);
+    expect([...store.keys()][0]).not.toContain(code);
+  });
+
+  it('exchangeOAuthCode returns the payload and consumes the code (single use)', async () => {
+    const store = new Map<string, unknown>();
+    const service = setupOAuth(store);
+    const payload = { user: { id: 'u1' }, token: 't', refreshToken: 'r' };
+    const code = await service.createOAuthCode(payload as any);
+    await expect(service.exchangeOAuthCode(code)).resolves.toEqual(payload);
+    expect(store.size).toBe(0);
+    await expect(service.exchangeOAuthCode(code)).rejects.toThrow(UnauthorizedException);
+  });
+
+  it('exchangeOAuthCode rejects unknown codes', async () => {
+    const service = setupOAuth(new Map());
+    await expect(service.exchangeOAuthCode('nope')).rejects.toThrow(UnauthorizedException);
+  });
+});
+
 describe('AuthService — forgotPassword anti-enumeration', () => {
   it('returns the same message whether or not the account exists', async () => {
     const usersService = {
@@ -90,6 +143,7 @@ describe('AuthService — forgotPassword anti-enumeration', () => {
       usersService,
       { sign: jest.fn() } as unknown as JwtService,
       {} as BruteForceService,
+      { get: jest.fn(), set: jest.fn(), del: jest.fn() } as unknown as CacheService,
       {} as EmailService,
       { record: jest.fn() } as unknown as AnalyticsService
     );

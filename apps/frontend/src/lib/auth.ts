@@ -36,6 +36,15 @@ export const authService = {
     window.location.href = `${apiUrl}/auth/google`;
   },
 
+  /** Exchanges the single-use code from the OAuth redirect for tokens and stores them. */
+  exchangeOAuthCode: async (code: string, remember: boolean): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/oauth/exchange', { code });
+    const { token, refreshToken } = response.data;
+    setItem(STORAGE_KEYS.AUTH_TOKEN, token, remember);
+    setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, remember);
+    return response.data;
+  },
+
   logout: (): void => {
     // Revoke the refresh token server-side before clearing local storage.
     // Fire-and-forget: logout must succeed even if the API call fails.
