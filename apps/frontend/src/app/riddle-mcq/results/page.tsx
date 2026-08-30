@@ -275,7 +275,7 @@ function ResultsContent(): JSX.Element {
                 <RiddleReview
                   key={r.id}
                   riddle={r}
-                  userAnswer={session.answers[r.id] || 'N/A'}
+                  userAnswer={session.answers[r.id] || ''}
                   riddleNumber={index + 1}
                 />
               ))}
