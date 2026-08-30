@@ -1,7 +1,7 @@
 import { ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 
 /**
- * Capacity-plan Track A2/B: index-seek random selection via the random_weight
+ * plan/STANDARDS.md Track A2/B: index-seek random selection via the random_weight
  * column, shared by all content modules (previously duplicated in quiz and
  * riddle-mcq services).
  *

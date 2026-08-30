@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Shared Content Service Base — capacity-plan Track B
+ * Shared Content Service Base — plan/STANDARDS.md Track B
  * ============================================================================
  * One shared implementation of list/random/create/update/delete/import for
  * the four content modules (quiz-mcq, riddle-mcq, image-riddles, dad-jokes),
@@ -272,7 +272,7 @@ export abstract class ContentServiceBase<
   }
 
   /**
-   * Capacity-plan A2/B: index-seek random selection via random_weight with
+   * plan/STANDARDS.md Track A2/B: index-seek random selection via random_weight with
    * wrap-around; PUBLISHED-only by default.
    */
   async findRandomItems(opts: ContentRandomOptions): Promise<{ data: TItem[]; total: number }> {

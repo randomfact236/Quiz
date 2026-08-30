@@ -3,7 +3,7 @@
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
-> This is the same convention used in `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`.
+> See `plan/STANDARDS.md` §1.
 >
 > Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/auth-users.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —
@@ -68,7 +68,7 @@ Frontend (`apps/frontend/src/`):
 
 **Fixed since the archived doc** (old items #1, #2, #5, #6 are closed):
 
-- **Global guards are live**: `ThrottlerGuard` runs first (rate limiting works everywhere), then a **default-deny `JwtAuthGuard` as APP_GUARD** with `@_Public()` opt-out — profile endpoints are reachable and everything else is protected by default (capacity-plan C1/C3).
+- **Global guards are live**: `ThrottlerGuard` runs first (rate limiting works everywhere), then a **default-deny `JwtAuthGuard` as APP_GUARD** with `@_Public()` opt-out — profile endpoints are reachable and everything else is protected by default (STANDARDS C1/C3).
 - The guest public endpoint now exists (`POST /guest-users/activity`) with a validated, throttled DTO.
 - Demographics (the old doc's #5/#6 subject) was **removed from the codebase entirely** on 2026-08-30, including the entity columns and a drop migration.
 

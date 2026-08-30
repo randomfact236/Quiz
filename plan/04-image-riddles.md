@@ -3,7 +3,7 @@
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
-> This is the same convention used in `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`.
+> See `plan/STANDARDS.md` §1.
 >
 > Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/image-riddles.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —

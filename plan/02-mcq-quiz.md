@@ -3,7 +3,7 @@
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
-> This is the same convention used in `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`.
+> See `plan/STANDARDS.md` §1.
 >
 > Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/quiz-mcq.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim below re-checked against code —
@@ -45,27 +45,27 @@ Frontend (`apps/frontend/src/`):
 
 ## 2. Endpoint map (verified against controller 2026-08-30)
 
-| Method & Path                                    | Auth   | Notes                                                            |
-| ------------------------------------------------ | ------ | ---------------------------------------------------------------- |
-| GET `/quiz-mcq/subjects`                         | public | `?hasContent=true`, `?includeInactive`                           |
-| GET `/quiz-mcq/level-counts`                     | public | cached per-level published counts (challenge hubs)               |
-| GET `/quiz-mcq/question-counts`                  | public | cached per-subject/chapter counts with level breakdown (wizard)  |
-| GET `/quiz-mcq/subjects/:slug/meta`              | public | lightweight meta                                                 |
-| GET `/quiz-mcq/subjects/:slug`                   | public | with chapters                                                    |
-| GET `/quiz-mcq/subjects/:slug/questions`         | public | PUBLISHED only, throttled 60/min, unbounded if no `limit`        |
-| GET `/quiz-mcq/filter-counts`                    | admin  | unified facet counts                                             |
-| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`       | admin  | CRUD with cascade deletes                                        |
-| GET `/quiz-mcq/chapters`, `/chapters/:subjectId` | public | list                                                             |
-| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`     | admin  | CRUD                                                             |
-| GET `/quiz-mcq/questions`                        | admin  | paginated + filters                                              |
-| GET `/quiz-mcq/questions/export`                 | admin  | CSV                                                              |
-| GET `/quiz-mcq/questions/:chapterId`             | public | PUBLISHED only                                                   |
-| GET `/quiz-mcq/subjects/:slug/questions/random`  | public | capped random (`count`, `level`, `chapterId`) — capacity-plan A2 |
-| GET `/quiz-mcq/mixed`, `/quiz-mcq/random/:level` | public | challenge pools via `random_weight` index-seek                   |
-| POST `/quiz-mcq/questions`, `/questions/bulk`    | admin  | single + chunked import (auto subject/chapter creation)          |
-| PATCH/DELETE `/quiz-mcq/questions/:id`           | admin  | draft→published→trash lifecycle                                  |
-| POST `/quiz-mcq/bulk-action`                     | admin  | shared BulkActionService                                         |
-| GET `/quiz-mcq/subjects/:slug/status-counts`     | admin  | per-status counts                                                |
+| Method & Path                                    | Auth   | Notes                                                           |
+| ------------------------------------------------ | ------ | --------------------------------------------------------------- |
+| GET `/quiz-mcq/subjects`                         | public | `?hasContent=true`, `?includeInactive`                          |
+| GET `/quiz-mcq/level-counts`                     | public | cached per-level published counts (challenge hubs)              |
+| GET `/quiz-mcq/question-counts`                  | public | cached per-subject/chapter counts with level breakdown (wizard) |
+| GET `/quiz-mcq/subjects/:slug/meta`              | public | lightweight meta                                                |
+| GET `/quiz-mcq/subjects/:slug`                   | public | with chapters                                                   |
+| GET `/quiz-mcq/subjects/:slug/questions`         | public | PUBLISHED only, throttled 60/min, unbounded if no `limit`       |
+| GET `/quiz-mcq/filter-counts`                    | admin  | unified facet counts                                            |
+| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`       | admin  | CRUD with cascade deletes                                       |
+| GET `/quiz-mcq/chapters`, `/chapters/:subjectId` | public | list                                                            |
+| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`     | admin  | CRUD                                                            |
+| GET `/quiz-mcq/questions`                        | admin  | paginated + filters                                             |
+| GET `/quiz-mcq/questions/export`                 | admin  | CSV                                                             |
+| GET `/quiz-mcq/questions/:chapterId`             | public | PUBLISHED only                                                  |
+| GET `/quiz-mcq/subjects/:slug/questions/random`  | public | capped random (`count`, `level`, `chapterId`) — STANDARDS A2    |
+| GET `/quiz-mcq/mixed`, `/quiz-mcq/random/:level` | public | challenge pools via `random_weight` index-seek                  |
+| POST `/quiz-mcq/questions`, `/questions/bulk`    | admin  | single + chunked import (auto subject/chapter creation)         |
+| PATCH/DELETE `/quiz-mcq/questions/:id`           | admin  | draft→published→trash lifecycle                                 |
+| POST `/quiz-mcq/bulk-action`                     | admin  | shared BulkActionService                                        |
+| GET `/quiz-mcq/subjects/:slug/status-counts`     | admin  | per-status counts                                               |
 
 ## 3. Current status (verified)
 

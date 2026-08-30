@@ -48,7 +48,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       envFilePath: '.env',
     }),
 
-    // Capacity-plan C1: global rate limiting (decorators across controllers now enforce)
+    // STANDARDS (capacity) C1: global rate limiting (decorators across controllers now enforce)
     ThrottlerModule.forRoot([
       {
         ttl: 60_000,
@@ -113,12 +113,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     SettingsModule,
   ],
   providers: [
-    // Capacity-plan C1: rate limiting runs first (cheap) before auth DB lookups
+    // STANDARDS (capacity) C1: rate limiting runs first (cheap) before auth DB lookups
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
-    // Capacity-plan C3: default-deny JWT auth; routes opt out via @_Public()
+    // STANDARDS (capacity) C3: default-deny JWT auth; routes opt out via @_Public()
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

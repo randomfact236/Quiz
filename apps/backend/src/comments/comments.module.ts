@@ -4,7 +4,7 @@
  * ============================================================================
  * Polymorphic comment/guess feed shared by image riddles (guesses-as-
  * comments + chip-to-reveal) and dad jokes (💬 replies). See
- * plan/comments-system-plan.md.
+ * plan/07-comments.md.
  * ============================================================================
  */
 

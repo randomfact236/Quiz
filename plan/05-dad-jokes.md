@@ -3,7 +3,7 @@
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
-> This is the same convention used in `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`.
+> See `plan/STANDARDS.md` §1.
 >
 > Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/dad-jokes.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —
@@ -92,6 +92,7 @@ No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/
 - [ ] `defaultJokeCategories` hardcoded fallback duplicates API data (numeric ids vs backend UUIDs).
 - [ ] `page.tsx` is 1253 lines — extract the sort/filter/pagination logic into `features/jokes/` hooks (mirroring the image-riddles refactor).
 - [ ] Trending sort (audit-doc leftover) and share buttons.
+- [ ] Server-side search + true server pagination (deferred until >500 jokes — former improvement-plan item, owner-accepted).
 
 ## 5. Cross-feature touchpoints
 

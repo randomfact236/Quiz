@@ -3,10 +3,10 @@
 > **Phase basis (applies to all feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
-> Same convention as `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`.
+> See `plan/STANDARDS.md` §1.
 >
 > Verified against the live codebase: 2026-08-30. No archived ledger doc existed for this feature —
-> built from current code plus `plan/comments-system-plan.md`. This file was added after the initial
+> built from current code (plus the since-removed `comments-system-plan`). This file was added after the initial
 > 9-file pass (user request); the feature previously appeared only as cross-feature touchpoints.
 
 ---

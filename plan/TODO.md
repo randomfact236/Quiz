@@ -5,7 +5,7 @@
 > **Cross-feature launch items** (spanning several features, with priority/effort/execution order) are
 > consolidated in **[BUILD-BACKLOG.md](BUILD-BACKLOG.md)** — start there when planning work.
 > **Phase basis for every file:** P0 = critical/broken · P1 = major gaps · P2 = integration/quality · P3 = polish/tech debt
-> (same convention as `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`, stated at the top of each file).
+> (defined in `plan/STANDARDS.md` §1, stated at the top of each file).
 >
 > Old feature ledgers from `docs/features/` were archived to `docs/features/archive/` on 2026-08-30 via `git mv`
 > (history preserved). Each was diffed against its last committed git version before archiving — all matched; nothing

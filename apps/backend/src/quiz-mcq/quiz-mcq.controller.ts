@@ -340,7 +340,7 @@ export class QuizMcqController {
 
   @Get('subjects/:slug/questions/random')
   @ApiOperation({
-    summary: 'Get random published questions for a subject (capacity-plan A2, capped at 50)',
+    summary: 'Get random published questions for a subject (STANDARDS A2, capped at 50)',
   })
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })

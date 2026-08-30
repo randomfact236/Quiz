@@ -29,7 +29,7 @@ Frontend:
 - Regression tests for all of the above: `src/__tests__/quiz-mcq-scoring.test.ts` (16/16 passing).
 - **~~[P1] Progress/achievements never written on completion~~** — FIXED 2026-08-25: both completion paths funnel through `saveToHistory`, which now calls `saveQuizResult()` + `checkAchievements()` (+ unlock toasts).
 
-(Refactor-class items — hub duplication, dead components, resume bloat, monolith splits — are tracked in plan/code-quality-plan.md §2/§5, not duplicated here.)
+(Refactor-class items — hub duplication, dead components, resume bloat, monolith splits — are tracked in plan/STANDARDS.md §3, not duplicated here.)
 
 ### 3. Riddle MCQ — correctness backlog (from riddle-mcq.md audit; owner-directed logging)
 
@@ -86,4 +86,4 @@ Optimization pass (2026-08-26):
 ## Done
 
 - [x] 2026-08-25 — image-riddles route shadowing fixed: `GET :id` moved below literal routes (`status-counts`, `stats/overview`). Verified live: status-counts → 401 unauthenticated (was unreachable/shadowed), stats → 200, `:id` lookups unaffected. Commit: see git log "image-riddles route order".
-- [x] 2026-08-25 — apps/backend/.env untracked (credential exposure); rotation of dev creds done; prod rotation pending before any deploy (see plan/capacity-plan.md Track C security note).
+- [x] 2026-08-25 — apps/backend/.env untracked (credential exposure); rotation of dev creds done; prod rotation pending before any deploy (see plan/STANDARDS.md §6 security note).

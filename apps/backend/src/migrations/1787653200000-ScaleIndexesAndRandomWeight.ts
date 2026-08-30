@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
- * Capacity-plan Track A (plan/capacity-plan.md):
+ * STANDARDS Track A (plan/STANDARDS.md):
  * - A1: pg_trgm GIN indexes for ILIKE admin search over 50k+ rows,
  *       plus (status, updatedAt DESC) composites for deep-page pagination.
  * - A2: indexed random_weight column for O(1) index-seek random selection.
