@@ -28,7 +28,8 @@ import {
   getMixedQuestions,
   getRandomQuestions,
 } from '@/lib/quiz-mcq-api';
-import { calculateScore, calculateResult } from '@/lib/quiz-mcq-scoring';
+import { calculateScore, calculateResult, isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import { recordChallengeAnswer, resetChallengeStreak } from '@/lib/challenge-streak';
 import { saveQuizResult } from '@/lib/progress';
 import { saveQuizSession } from '@/lib/quiz-mcq-api';
 import { getGuestId } from '@/lib/guest-id';
@@ -112,18 +113,21 @@ function saveToHistory(session: QuizSession): void {
   // stored for the logged-in user (token auto-attached by api-client) or the
   // client-issued guestId, so results survive browser/device loss.
   if (session.status === 'completed') {
-    void saveQuizSession({
-      guestId: getGuestId(),
-      subjectSlug: session.subject,
-      subjectName: session.subjectName,
-      chapterName: session.chapter,
-      level: session.level,
-      totalQuestions: session.questions.length,
-      correctCount: calculateResult(session).correctCount,
-      score: session.score,
-      maxScore: session.maxScore,
-      durationSeconds: session.timeTaken,
-    }).catch(() => undefined);
+    // Promise.resolve keeps this safe when saveQuizSession is mocked/sync.
+    void Promise.resolve(
+      saveQuizSession({
+        guestId: getGuestId(),
+        subjectSlug: session.subject,
+        subjectName: session.subjectName,
+        chapterName: session.chapter,
+        level: session.level,
+        totalQuestions: session.questions.length,
+        correctCount: calculateResult(session).correctCount,
+        score: session.score,
+        maxScore: session.maxScore,
+        durationSeconds: session.timeTaken,
+      })
+    ).catch(() => undefined);
   }
 }
 
@@ -237,6 +241,11 @@ export function useQuizMcq(
       const startQ = initialQuestions[decision.startIndex];
       if (startQ) initialVisited.add(startQ.id);
 
+      // Fresh streak window per challenge session (best is preserved).
+      if (type === 'challenge') {
+        resetChallengeStreak();
+      }
+
       setState((prev) => ({
         ...prev,
         availableQuestions: all,
@@ -292,33 +301,42 @@ export function useQuizMcq(
   // Timers (extracted module)
   useQuizTimers(state.status, setState, timeLimit, timerMode);
 
-  const selectAnswer = useCallback((option: string) => {
-    setState((prev) => {
-      const currentQuestion = prev.questions[prev.currentQuestionIndex];
-      if (!currentQuestion) return prev;
+  const selectAnswer = useCallback(
+    (option: string) => {
+      setState((prev) => {
+        const currentQuestion = prev.questions[prev.currentQuestionIndex];
+        if (!currentQuestion) return prev;
 
-      const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
-      const newScore = calculateScore(prev.questions, newAnswers);
+        const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
+        const newScore = calculateScore(prev.questions, newAnswers);
 
-      const newVisited = new Set(prev.visited).add(currentQuestion.id);
-      const newSkipped = new Set(prev.manuallySkipped);
-      newSkipped.delete(currentQuestion.id);
+        // Challenge streak (plan/02-mcq-quiz.md P1 #2): consecutive correct
+        // answers in challenge mode feed the 'streak' achievement condition.
+        if (type === 'challenge') {
+          recordChallengeAnswer(isAnswerCorrect(currentQuestion, option));
+        }
 
-      if (sessionRef.current) {
-        sessionRef.current.answers = newAnswers;
-        sessionRef.current.score = newScore;
-        saveCurrentSession(sessionRef.current);
-      }
+        const newVisited = new Set(prev.visited).add(currentQuestion.id);
+        const newSkipped = new Set(prev.manuallySkipped);
+        newSkipped.delete(currentQuestion.id);
 
-      return {
-        ...prev,
-        answers: newAnswers,
-        score: newScore,
-        visited: newVisited,
-        manuallySkipped: newSkipped,
-      };
-    });
-  }, []);
+        if (sessionRef.current) {
+          sessionRef.current.answers = newAnswers;
+          sessionRef.current.score = newScore;
+          saveCurrentSession(sessionRef.current);
+        }
+
+        return {
+          ...prev,
+          answers: newAnswers,
+          score: newScore,
+          visited: newVisited,
+          manuallySkipped: newSkipped,
+        };
+      });
+    },
+    [type]
+  );
 
   const goToPrevious = useCallback(() => {
     setState((prev) => {

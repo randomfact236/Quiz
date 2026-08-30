@@ -8,6 +8,7 @@
 
 import type { Achievement } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
+import { getChallengeStreak } from './challenge-streak';
 import { getQuizHistory, getTotalStats } from './progress';
 import toast from './toast';
 
@@ -160,8 +161,9 @@ export function checkAchievements(): Achievement[] {
         break;
 
       case 'streak':
-        // This would need to be tracked during challenge mode
-        // For now, we'll skip it or check from challenge sessions
+        // Challenge-mode tracker (plan/02-mcq-quiz.md P1 #2): consecutive
+        // correct answers recorded by lib/challenge-streak.ts.
+        shouldUnlock = getChallengeStreak().best >= achievement.condition.threshold;
         break;
 
       case 'retry': {
