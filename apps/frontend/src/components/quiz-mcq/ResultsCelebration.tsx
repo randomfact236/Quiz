@@ -57,8 +57,10 @@ export function ResultsCelebration({
       return;
     }
 
-    const emojiSet = CELEBRATION_EMOJIS.perfect;
-    const count = 15;
+    // Tiered sets (plan/02-mcq-quiz.md P3): 71-89% = good, 90-99% = great band
+    // reuses `good` plus celebration staples, 100% = perfect.
+    const emojiSet = percentage >= 100 ? CELEBRATION_EMOJIS.perfect : CELEBRATION_EMOJIS.good;
+    const count = percentage >= 100 ? 20 : 12;
 
     // Generate celebration emojis
     const newEmojis: CelebrationEmoji[] = Array.from({ length: count }, (_, i) => ({

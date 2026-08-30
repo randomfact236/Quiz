@@ -81,25 +81,25 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps
 
-- [ ] Server-side session/result persistence: `POST /quiz-mcq/sessions` (+ history/high-score reads) so progress survives device/browser loss.
-- [ ] Challenge streak tracking: implement the tracker feeding the existing `streak` achievement condition (currently a dead `case` in `lib/achievements.ts`).
-- [ ] Distinct "unanswered" state in results review (currently indistinguishable from incorrect).
-- [ ] Explanations end-to-end: add `explanation` column + admin authoring field + API payload (review UI already renders it).
+- [x] **Server-side session/result persistence** — DONE 2026-08-30 (commit `7525d9f`): `quiz_sessions` table (migration 1788800000000), `POST /quiz-mcq/sessions` (optional JWT + guestId attribution, DTO-validated), `GET /quiz-mcq/sessions/history` + `/sessions/high-scores`; frontend saves completed sessions fire-and-forget and the results page shows a server-backed personal best. Verified live.
+- [x] **Challenge streak tracking** — DONE 2026-08-30 (commit `7b57f2f`): `lib/challenge-streak.ts` tracker (consecutive correct, per-session window, persistent best); wired into `selectAnswer` (challenge mode only) and the previously-dead `streak` achievement case. 4 tracker tests.
+- [x] **Distinct "unanswered" state** — DONE 2026-08-30 (commit `c8b2d4b`): `calculateResult` classifies missing/empty answers as `unansweredCount` (excluded from incorrect); results summary + QuestionReview render an amber "Not Answered" state.
+- [x] **Explanations end-to-end** — DONE 2026-08-30 (commit `6492377`): `questions.explanation` column (migration 1788900000000), Create/Update DTO fields, admin `QuestionModal` textarea, play-time conversion passes it to `QuestionReview`. Round-trip verified live.
 
 ### P2 — integration / quality
 
-- [ ] Achievement condition audit: fix `chapter_complete` (checks perfect quizzes, not chapters) and clarify `subject_explore` semantics (score > 0 counts as "explored").
-- [ ] Analytics parity: commit the 6 `track()` calls in `useQuizMcq.ts` once the analytics feature is revisited (paused by decision 2026-08-30 — do not build out further for now).
-- [ ] Component-level tests for `AnswerOptions` (level-format forcing) and `QuestionReview`.
-- [ ] Accessibility: aria-live answer feedback + label association in `AnswerOptions`.
-- [ ] Rename `features/quiz-mcq` → `features/quiz-mcq-admin` to match its admin-only consumer role.
+- [x] **Achievement condition audit** — DONE 2026-08-30 (commit `88f1964`): `chapter_complete` now counts DISTINCT chapters with a perfect session (was counting perfect quizzes, duplicating `perfect_score`); `subject_explore` semantics documented (any positive-score session explores the subject, matching its description). 3 condition tests.
+- [ ] Analytics parity: commit the 6 `track()` calls in `useQuizMcq.ts` once the analytics feature is revisited (**deferred by owner decision 2026-08-30 — the calls already exist in code and are functional; do not build out further for now**).
+- [x] **Component-level tests for `AnswerOptions` and `QuestionReview`** — DONE 2026-08-30 (commit `281e8ed`): 10 tests — level-format forcing (True/False fallback, 2/3/4 slicing, extreme input+submit) and review states (correct/incorrect/unanswered/explanation).
+- [x] **Accessibility in `AnswerOptions`** — DONE 2026-08-30 (commit `281e8ed`): sr-only aria-live region announces the graded outcome; per-option aria-labels include the letter, text, and feedback role.
+- [x] **Rename `features/quiz-mcq` → `features/quiz-mcq-admin`** — DONE 2026-08-30 (commit `38d1745`): `git mv` (history preserved); sole import site updated.
 
 ### P3 — polish / tech debt
 
-- [ ] Finish `ResultsCelebration` tiers (wire `great`/`good` emoji sets by score band).
-- [ ] Delete legacy redirect shims `app/quiz-mcq/practice` + `challenge` once external links are updated.
-- [ ] Consolidate day-streak calc in `lib/progress.ts` with the challenge-streak tracker from P1.
-- [ ] `quiz-mcq.service.ts` is 854 lines — evaluate splitting counts/export/random logic into helpers when next touched.
+- [x] **`ResultsCelebration` tiers** — DONE 2026-08-30: tiered sets now wired — 71–99% uses the `good` set (12 emojis), 100% uses `perfect` (20). The `tryAgain` set remains intentionally unused (≤70% launches no emojis).
+- [x] **Delete legacy redirect shims** — DONE 2026-08-30: `app/quiz-mcq/practice` + `app/quiz-mcq/challenge` removed; repo-wide grep shows no remaining references (verified before deletion).
+- [x] **Day-streak vs challenge-streak consolidation** — REVIEWED 2026-08-30, keeping both: `lib/progress.ts` `bestStreak` measures consecutive _days_ with any quiz; `lib/challenge-streak.ts` measures consecutive _correct answers_ within challenge sessions. Different metrics with different consumers — merging them would corrupt both. Documented here per the "consolidate" intent.
+- [x] **`quiz-mcq.service.ts` split evaluation** — EVALUATED 2026-08-30 (service touched for sessions work): the file is cohesive — a ContentServiceBase subclass where the extra lines are quiz-specific counts/export/import logic mirroring the riddle-mcq service. A split now would touch the shared base contract for symmetry reasons alone; revisit only if quiz-specific logic diverges further or a second consumer needs the pieces.
 
 ## 5. Cross-feature touchpoints
 

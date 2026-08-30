@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 02 MCQ Quiz: complete.** P1: server-side session persistence (`7525d9f`), challenge streak tracker (`7b57f2f`), distinct unanswered state (`c8b2d4b`), explanations end-to-end (`6492377`). P2: achievement audit (`88f1964`), a11y + component tests (`281e8ed`), features rename (`38d1745`). P3: celebration tiers, shim deletion, streak-consolidation + service-split evaluations (docs commit). Deferred: the 6 `track()` analytics calls (owner-paused). Verified: backend 25/25 + build clean, frontend 158/158 + tsc clean, live probes for sessions and explanations.
+
 - **2026-08-30 — Feature 01 User Accounts: complete.** Commits `80b3cc0` (refresh-token hardening: hash at rest, 7d expiry, rotation, `POST /auth/logout` revoke), `aaea0a2` (OAuth one-time code exchange — tokens off the URL), `84f877b` (role enum at DTO/service/DB), `f0bed06` (email verification: register email, verify + resend endpoints, `/verify-email` page), `09e3a34` (`/profile` page + fixed a real leak: profile endpoints returned password hash/refresh token). Plus docs/infra in `4b0f9c6`-range commit (this one). Deferred/needs decision: admin user-editing UI (owner decision), login-blocked-until-verified (owner decision). All items verified with tsc, backend jest suite (24/24), and live API probes.
 - **2026-08-30 — work started** on the master table, P1→P2→P3 per feature, feature-scoped commits.
 
@@ -43,22 +45,22 @@
 > simple email collection first (footer form + admin list/export); opt-in emails and campaigns deferred.
 > It is the first feature in the tracker with status ⬜.
 
-| #   | Feature                  | File                                               | Status                                                                      |
-| --- | ------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------- |
-| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision) |
-| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ Done (2026-08-30)                                                        |
-| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ Done (2026-08-30)                                                        |
-| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30)                                                        |
-| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                        |
-| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                        |
-| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                        |
-| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                        |
-| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                        |
-| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                        |
-| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                        |
-| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                        |
-| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                        |
-| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                            |
+| #   | Feature                  | File                                               | Status                                                                       |
+| --- | ------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision)  |
+| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ P0–P3 worked 2026-08-30 (1 P2 deferred: track() analytics — owner-paused) |
+| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ Done (2026-08-30)                                                         |
+| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30)                                                         |
+| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                         |
+| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                         |
+| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                         |
+| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                         |
+| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                         |
+| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                         |
+| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                         |
+| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                         |
+| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                         |
+| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                             |
 
 ## Progress snapshot (2026-08-30)
 
@@ -69,7 +71,7 @@ Recompute after working any backlog item.
 | Feature                | Open P0/P1/P2/P3          | Complete |
 | ---------------------- | ------------------------- | -------- |
 | 01 User Accounts       | 0/0/1/0                   | 98%      |
-| 02 MCQ Quiz            | 0/4/5/4                   | 66%      |
+| 02 MCQ Quiz            | 0/0/1/0                   | 98%      |
 | 03 Riddle MCQ          | 0/3/5/3                   | 72%      |
 | 04 Image Riddles       | 0/3/4/3                   | 74%      |
 | 05 Dad Jokes           | 0/3/4/4                   | 73%      |
@@ -82,6 +84,6 @@ Recompute after working any backlog item.
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
 | 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/38/46/33 (118 open)** | **≈71%** |
+| **Overall**            | **1/34/42/29 (106 open)** | **≈73%** |
 
-> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Overall re-estimated from the closed-item penalty weights.
+> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02 updated after its pass (4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed). Overall re-estimated from the closed-item penalty weights.
