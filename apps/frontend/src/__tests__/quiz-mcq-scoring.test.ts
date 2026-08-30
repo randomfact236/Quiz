@@ -12,6 +12,7 @@
 
 import {
   isAnswerCorrect,
+  normalizeExtremeAnswer,
   calculateScore,
   calculateGrade,
   calculateResult,
@@ -76,6 +77,29 @@ describe('isAnswerCorrect', () => {
     expect(isAnswerCorrect(q, '  PARIS  ')).toBe(true);
     expect(isAnswerCorrect(q, 'London')).toBe(false);
     expect(isAnswerCorrect(q, '')).toBe(false);
+  });
+
+  it('normalizes extreme answers: articles, punctuation, quotes, whitespace', () => {
+    const q = extreme({ correctAnswer: 'The Sun' });
+    // Article / case variants
+    expect(isAnswerCorrect(q, 'sun')).toBe(true);
+    expect(isAnswerCorrect(q, 'THE SUN')).toBe(true);
+    expect(isAnswerCorrect(q, 'a sun')).toBe(true);
+    // Trailing punctuation and surrounding quotes
+    expect(isAnswerCorrect(q, 'The Sun.')).toBe(true);
+    expect(isAnswerCorrect(q, '"sun"')).toBe(true);
+    // Collapsed internal whitespace
+    expect(isAnswerCorrect(q, 'the   sun')).toBe(true);
+    // Still rejects genuinely different answers
+    expect(isAnswerCorrect(q, 'moon')).toBe(false);
+    // Words containing an article substring are not stripped mid-string
+    expect(isAnswerCorrect(q, 'sunbeam')).toBe(false);
+  });
+
+  it('normalizeExtremeAnswer matches the grading rule exactly', () => {
+    expect(normalizeExtremeAnswer('  The   Eiffel  Tower! ')).toBe('eiffel tower');
+    expect(normalizeExtremeAnswer('"An Apple"')).toBe('apple');
+    expect(normalizeExtremeAnswer('')).toBe('');
   });
 });
 

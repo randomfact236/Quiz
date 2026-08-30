@@ -15,6 +15,7 @@ import { motion } from 'framer-motion';
 import { Share2 } from 'lucide-react';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
+import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 import type { Question } from '@/types/quiz-mcq';
 
 interface QuestionCardProps {
@@ -178,9 +179,8 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   const isOpenEnded = question.level === 'extreme';
   const correctLetter = question.correctLetter || null;
 
-  const isCorrect = isOpenEnded
-    ? selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toLowerCase().trim()
-    : selectedAnswer === correctLetter;
+  // Single grading path — the shared scorer (normalizes extreme free text).
+  const isCorrect = selectedAnswer ? isAnswerCorrect(question, selectedAnswer) : false;
 
   const isWrong = selectedAnswer && !isCorrect;
 

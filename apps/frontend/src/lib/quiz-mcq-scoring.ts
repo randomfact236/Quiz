@@ -6,12 +6,28 @@
  *
  * Rules:
  *  - MCQ levels: user answer is a letter (A/B/C/D) compared to correctLetter.
- *  - extreme (open-ended): case-insensitive, trimmed text comparison against
- *    correctAnswer.
+ *  - extreme (open-ended): normalized text comparison against correctAnswer
+ *    (case, whitespace, quotes, trailing punctuation, leading articles).
  * ============================================================================
  */
 
 import type { Question, QuizResult, QuizSession } from '@/types/quiz-mcq';
+
+/**
+ * Normalize a free-text (extreme) answer for comparison: lowercase, collapse
+ * whitespace, strip surrounding quotes and trailing punctuation, and drop a
+ * leading article so "The Sun", "the sun." and "sun" all grade as equal.
+ */
+export function normalizeExtremeAnswer(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/["“”'']/g, '')
+    .replace(/[.!?]+\s*$/, '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/^(the|a|an)\s+/i, '')
+    .trim();
+}
 
 /** Whether a single user answer is correct for the given question. */
 export function isAnswerCorrect(question: Question, userAnswer: string | undefined): boolean {
@@ -19,7 +35,9 @@ export function isAnswerCorrect(question: Question, userAnswer: string | undefin
 
   const isOpenEnded = question.level === 'extreme';
   if (isOpenEnded) {
-    return userAnswer.toLowerCase().trim() === (question.correctAnswer || '').toLowerCase().trim();
+    return (
+      normalizeExtremeAnswer(userAnswer) === normalizeExtremeAnswer(question.correctAnswer || '')
+    );
   }
 
   return question.correctLetter != null && userAnswer === question.correctLetter;

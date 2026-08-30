@@ -113,28 +113,61 @@ export function AnswerOptions({
     return 'grid-cols-1';
   };
 
-  // Extreme mode - text input
+  // Extreme mode - text input with explicit submit.
+  // The answer only locks on the Submit button / Enter key — typing alone
+  // never fires onSelect, so a half-typed answer can't be scored by a timer.
   if (level === 'extreme') {
+    const submitted = hasSelection;
+    const canSubmit = extremeAnswer.trim().length > 0 && !submitted && !disabled;
+
+    const submitExtremeAnswer = () => {
+      if (!canSubmit) return;
+      onSelect(extremeAnswer.trim());
+    };
+
     return (
       <div className="space-y-4">
         <div className="rounded-2xl border-2 border-gray-200 bg-gray-50 p-6">
-          <label className="mb-2 block text-sm font-medium text-gray-600">Type your answer:</label>
+          <label
+            htmlFor="extreme-answer-input"
+            className="mb-2 block text-sm font-medium text-gray-600"
+          >
+            Type your answer:
+          </label>
           <input
+            id="extreme-answer-input"
             type="text"
-            value={extremeAnswer}
-            onChange={(e) => {
-              setExtremeAnswer(e.target.value);
-              if (e.target.value.trim()) {
-                onSelect(e.target.value);
+            value={submitted ? (selectedKey ?? '') : extremeAnswer}
+            onChange={(e) => setExtremeAnswer(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                submitExtremeAnswer();
               }
             }}
-            disabled={disabled}
+            disabled={disabled || submitted}
             placeholder="Enter your answer here..."
+            aria-label="Type your answer"
             className="w-full rounded-xl border-2 border-gray-200 bg-white p-4 text-lg focus:border-indigo-400 focus:outline-none disabled:bg-gray-100"
           />
+          {!submitted && (
+            <button
+              onClick={submitExtremeAnswer}
+              disabled={!canSubmit}
+              className="mt-3 w-full rounded-xl bg-indigo-600 py-3 text-base font-semibold text-white transition-all hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+            >
+              Submit Answer
+            </button>
+          )}
         </div>
-        {showFeedback && hasSelection && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+        {showFeedback && submitted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center"
+            role="status"
+            aria-live="polite"
+          >
             <span className="text-sm text-gray-500">Correct answer: {correctKey || 'N/A'}</span>
           </motion.div>
         )}
