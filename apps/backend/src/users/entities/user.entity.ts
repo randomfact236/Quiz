@@ -26,17 +26,21 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ nullable: true })
-  refreshToken: string;
+  /** SHA-256 hash of the opaque refresh token — the raw token never touches the DB. */
+  @Column({ nullable: true, type: 'varchar' })
+  refreshToken: string | null;
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  refreshTokenExpiresAt: Date | null;
 
   @Column({ nullable: true })
   googleId: string;
 
-  @Column({ nullable: true })
-  passwordResetToken: string;
+  @Column({ nullable: true, type: 'varchar' })
+  passwordResetToken: string | null;
 
-  @Column({ nullable: true })
-  passwordResetExpires: Date;
+  @Column({ nullable: true, type: 'timestamp' })
+  passwordResetExpires: Date | null;
 
   @Column({ nullable: true })
   lastActive: Date;

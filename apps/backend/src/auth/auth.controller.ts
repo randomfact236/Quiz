@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto, RefreshDto } from './dto/auth.dto';
+import { LoginDto, RegisterDto, RefreshDto, LogoutDto } from './dto/auth.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { _Public } from '../common/decorators/public.decorator';
@@ -89,6 +89,16 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refresh(@Body() dto: RefreshDto): Promise<AuthResponse> {
     return this.authService.refresh(dto.refreshToken);
+  }
+
+  @_Public()
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Revoke the presented refresh token' })
+  @ApiResponse({ status: 200, description: 'Refresh token revoked (always succeeds)' })
+  async logout(@Body() dto: LogoutDto): Promise<{ message: string }> {
+    return this.authService.logout(dto.refreshToken);
   }
 
   @_Public()

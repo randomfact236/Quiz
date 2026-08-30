@@ -1,5 +1,5 @@
 import { api } from './api-client';
-import { setItem, removeItem, STORAGE_KEYS } from './storage';
+import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
 
 export interface AuthUser {
   id: string;
@@ -37,6 +37,12 @@ export const authService = {
   },
 
   logout: (): void => {
+    // Revoke the refresh token server-side before clearing local storage.
+    // Fire-and-forget: logout must succeed even if the API call fails.
+    const refreshToken = getItem<string | null>(STORAGE_KEYS.REFRESH_TOKEN, null);
+    if (refreshToken) {
+      api.post('/auth/logout', { refreshToken }).catch(() => undefined);
+    }
     removeItem(STORAGE_KEYS.AUTH_TOKEN);
     removeItem(STORAGE_KEYS.REFRESH_TOKEN);
   },
@@ -47,7 +53,10 @@ export const authService = {
   },
 
   resetPassword: async (token: string, newPassword: string): Promise<{ message: string }> => {
-    const response = await api.post<{ message: string }>('/auth/reset-password', { token, newPassword });
+    const response = await api.post<{ message: string }>('/auth/reset-password', {
+      token,
+      newPassword,
+    });
     return response.data;
   },
 

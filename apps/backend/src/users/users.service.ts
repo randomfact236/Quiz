@@ -1,9 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import * as crypto from 'crypto';
+import { MoreThan, Repository } from 'typeorm';
 
 import { User } from './entities/user.entity';
+
+/** Refresh tokens live 7 days from issue; rotation on use resets the clock. */
+export const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class UsersService {
@@ -57,12 +61,36 @@ export class UsersService {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 
+  private hashToken(token: string): string {
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+
+  /** Stores only the SHA-256 hash of the refresh token, with a 7-day expiry. */
   async updateRefreshToken(id: string, refreshToken: string | null): Promise<void> {
-    await this.userRepo.update(id, { refreshToken: refreshToken as any });
+    if (refreshToken === null) {
+      await this.userRepo.update(id, {
+        refreshToken: null,
+        refreshTokenExpiresAt: null,
+      });
+      return;
+    }
+    await this.userRepo.update(id, {
+      refreshToken: this.hashToken(refreshToken),
+      refreshTokenExpiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
+    });
   }
 
   async findByRefreshToken(refreshToken: string): Promise<User | null> {
-    return this.userRepo.findOne({ where: { refreshToken } });
+    return this.userRepo.findOne({
+      where: {
+        refreshToken: this.hashToken(refreshToken),
+        refreshTokenExpiresAt: MoreThan(new Date()),
+      },
+    });
+  }
+
+  async revokeRefreshToken(id: string): Promise<void> {
+    await this.updateRefreshToken(id, null);
   }
 
   async findByGoogleId(googleId: string): Promise<User | null> {
@@ -114,8 +142,8 @@ export class UsersService {
 
   async clearPasswordResetToken(id: string): Promise<void> {
     await this.userRepo.update(id, {
-      passwordResetToken: null as any,
-      passwordResetExpires: null as any,
+      passwordResetToken: null,
+      passwordResetExpires: null,
     });
   }
 

@@ -101,22 +101,35 @@ export class AuthService {
     };
   }
 
-  async refresh(
-    refreshToken: string
-  ): Promise<{
+  async refresh(refreshToken: string): Promise<{
     user: { id: string; email: string; name: string; role: string };
     token: string;
     refreshToken: string;
   }> {
     const user = await this.usersService.findByRefreshToken(refreshToken);
     if (!user) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
+    // Rotation: issuing a new pair invalidates the presented token (it is
+    // overwritten in the DB), so a replayed token fails the lookup above.
     const tokens = await this.generateTokens(user);
+    void this.usersService.updateLastActive(user.id).catch(() => undefined);
     return {
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
       ...tokens,
     };
+  }
+
+  /**
+   * Server-side revocation for logout. Idempotent: an unknown token still
+   * returns success so logout never leaks whether a token was valid.
+   */
+  async logout(refreshToken: string): Promise<{ message: string }> {
+    const user = await this.usersService.findByRefreshToken(refreshToken);
+    if (user) {
+      await this.usersService.revokeRefreshToken(user.id);
+    }
+    return { message: 'Logged out' };
   }
 
   async validateUser(id: string): Promise<User | null> {
