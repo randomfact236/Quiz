@@ -25,6 +25,9 @@
 > picker, health endpoints, shared UI kit — the last unowned code), shifting Site Settings→11,
 > Admin Dashboard→12, Analytics→13. Cross-references inside every file were updated to match — file numbers
 > are now stable.
+> On the same day, **Newsletter was added as feature 14 (0% — new feature to build)** per owner decision:
+> simple email collection first (footer form + admin list/export); opt-in emails and campaigns deferred.
+> It is the first feature in the tracker with status ⬜.
 
 | #   | Feature                  | File                                               | Status               |
 | --- | ------------------------ | -------------------------------------------------- | -------------------- |
@@ -41,11 +44,12 @@
 | 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30) |
 | 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30) |
 | 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30) |
+| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build     |
 
 ## Progress snapshot (2026-08-30)
 
 Completion = 100 minus a priority-weighted penalty for open tasks (P0 = −10, P1 = −5, P2 = −2, P3 = −1 each).
-All 13 features are built and verified; the percentages measure remaining tracked work, not missing features.
+13 features are built and verified; feature 14 (Newsletter) is a new build at 0%. Percentages measure remaining tracked work.
 Recompute after working any backlog item.
 
 | Feature                | Open P0/P1/P2/P3          | Complete |
@@ -63,4 +67,5 @@ Recompute after working any backlog item.
 | 11 Site Settings       | 0/4/3/2                   | 72%      |
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
-| **Overall**            | **1/41/49/35 (126 open)** | **≈73%** |
+| 14 Newsletter          | 0/3/0/1                   | 0% (new) |
+| **Overall**            | **1/44/49/36 (138 open)** | **≈68%** |
