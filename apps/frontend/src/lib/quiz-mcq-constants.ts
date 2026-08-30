@@ -33,3 +33,10 @@ export const QUIZ_LEVEL_COLORS: Record<QuizLevel, string> = {
  * mutations invalidate this prefix so public pages reflect edits immediately.
  */
 export const QUIZ_MCQ_PUBLIC_QUERY_PREFIX = 'quiz-mcq';
+
+/**
+ * Cap on stored quiz sessions (QUIZ_HISTORY). Sessions are localStorage-only;
+ * without a cap the array grows unbounded and every write re-serializes the
+ * whole history with full question payloads. Oldest entries are pruned.
+ */
+export const QUIZ_HISTORY_MAX = 50;

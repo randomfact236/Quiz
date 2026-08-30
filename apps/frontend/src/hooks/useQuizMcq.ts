@@ -20,6 +20,7 @@ import type {
   UseQuizMcqReturn,
 } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
+import { QUIZ_HISTORY_MAX } from '@/lib/quiz-mcq-constants';
 import { saveQuizResume, clearQuizResume, type QuizResumeState } from '@/lib/quiz-mcq-resume';
 import {
   getSubjectBySlug,
@@ -27,9 +28,10 @@ import {
   getMixedQuestions,
   getRandomQuestions,
 } from '@/lib/quiz-mcq-api';
-import { calculateScore } from '@/lib/quiz-mcq-scoring';
+import { calculateScore, calculateResult } from '@/lib/quiz-mcq-scoring';
 import { saveQuizResult } from '@/lib/progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
+import { track } from '@/lib/analytics';
 import { saveQuizResumeQuestions } from '@/lib/quiz-mcq-resume';
 
 import {
@@ -81,10 +83,13 @@ async function loadQuestions(
   }
 }
 
-/** Save quiz session to history */
+/** Save quiz session to history (capped — oldest entries pruned) */
 function saveToHistory(session: QuizSession): void {
   const history = getItem<QuizSession[]>(STORAGE_KEYS.QUIZ_HISTORY, []);
   history.push(session);
+  if (history.length > QUIZ_HISTORY_MAX) {
+    history.splice(0, history.length - QUIZ_HISTORY_MAX);
+  }
   setItem(STORAGE_KEYS.QUIZ_HISTORY, history);
 
   // P1 fix (TODO.md backlog): chapter/subject progress and achievements were
