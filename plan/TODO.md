@@ -16,6 +16,6 @@
 | 4   | Dad Jokes       | [04-dad-jokes.md](04-dad-jokes.md)             | ✅ Done (2026-08-30) |
 | 5   | Achievements    | [05-achievements.md](05-achievements.md)       | ✅ Done (2026-08-30) |
 | 6   | User Accounts   | [06-user-accounts.md](06-user-accounts.md)     | ✅ Done (2026-08-30) |
-| 7   | Admin Dashboard | [07-admin-dashboard.md](07-admin-dashboard.md) | ⬜ Not started       |
+| 7   | Admin Dashboard | [07-admin-dashboard.md](07-admin-dashboard.md) | ✅ Done (2026-08-30) |
 | 8   | Site Settings   | [08-site-settings.md](08-site-settings.md)     | ⬜ Not started       |
 | 9   | Analytics       | [09-analytics.md](09-analytics.md)             | ⬜ Not started       |
