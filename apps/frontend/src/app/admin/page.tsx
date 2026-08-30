@@ -35,7 +35,7 @@ import {
   MediaLibrarySection,
   AnalyticsSection,
 } from './components';
-import { QuizMcqContainer } from '@/features/quiz-mcq/components';
+import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
 import { useQuizMcqSubjects } from '@/hooks/useQuizMcqSubjects';
