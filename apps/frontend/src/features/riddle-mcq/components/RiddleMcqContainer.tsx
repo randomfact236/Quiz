@@ -23,10 +23,17 @@ import { ToastContainer } from '@/components/ui/ToastContainer';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/lib/toast';
 import type { StatusFilter } from '@/types/status.types';
-import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
+import type {
+  RiddleMcqCategory,
+  RiddleMcqSubject,
+  CreateCategoryDto,
+  UpdateCategoryDto,
+  CreateSubjectDto,
+  UpdateSubjectDto,
+  CreateRiddleMcqDto,
+} from '@/lib/riddle-mcq-api';
 import { exportRiddlesToCSV } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
-import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
 
 interface ModalState<T> {
   open: boolean;
@@ -142,7 +149,7 @@ export function RiddleMcqContainer() {
     });
   };
 
-  const handleCategorySubmit = async (data: any) => {
+  const handleCategorySubmit = async (data: CreateCategoryDto & UpdateCategoryDto) => {
     if (categoryModal.item) {
       await categoriesQuery.updateAsync({ id: categoryModal.item.id, dto: data });
     } else {
@@ -151,7 +158,7 @@ export function RiddleMcqContainer() {
     setCategoryModal({ open: false });
   };
 
-  const handleSubjectSubmit = async (data: any) => {
+  const handleSubjectSubmit = async (data: CreateSubjectDto & UpdateSubjectDto) => {
     if (subjectModal.item) {
       await subjectsQuery.updateAsync({ id: subjectModal.item.id, dto: data });
     } else {

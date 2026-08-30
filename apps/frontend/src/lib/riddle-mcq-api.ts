@@ -39,15 +39,15 @@ export interface RiddleMcqCategory {
 
 export interface CreateCategoryDto {
   name: string;
-  slug?: string;
-  emoji?: string;
+  slug?: string | undefined;
+  emoji?: string | undefined;
 }
 
 export interface UpdateCategoryDto {
-  name?: string;
-  slug?: string;
-  emoji?: string;
-  isActive?: boolean;
+  name?: string | undefined;
+  slug?: string | undefined;
+  emoji?: string | undefined;
+  isActive?: boolean | undefined;
 }
 
 // ============================================================================
@@ -56,18 +56,18 @@ export interface UpdateCategoryDto {
 
 export interface CreateSubjectDto {
   name: string;
-  slug?: string;
-  emoji?: string;
-  categoryId?: string | null;
-  isActive?: boolean;
+  slug?: string | undefined;
+  emoji?: string | undefined;
+  categoryId?: string | null | undefined;
+  isActive?: boolean | undefined;
 }
 
 export interface UpdateSubjectDto {
-  name?: string;
-  slug?: string;
-  emoji?: string;
-  categoryId?: string | null;
-  isActive?: boolean;
+  name?: string | undefined;
+  slug?: string | undefined;
+  emoji?: string | undefined;
+  categoryId?: string | null | undefined;
+  isActive?: boolean | undefined;
 }
 
 // ============================================================================
