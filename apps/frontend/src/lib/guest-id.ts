@@ -3,7 +3,7 @@
  * guest-id.ts — client-issued guest identity
  * ============================================================================
  * Single source of truth for the guest identity used by guest-scoped
- * endpoints (comments, demographics). The id is generated once per browser
+ * endpoints (comments, activity heartbeat). The id is generated once per browser
  * and persisted in localStorage; the backend upserts the guest_users row
  * on first write (findOrCreate), so no bootstrap round-trip is needed.
  * ============================================================================

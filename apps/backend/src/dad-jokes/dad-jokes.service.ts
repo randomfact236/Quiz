@@ -19,6 +19,7 @@ import {
   StatusCountResponse,
 } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 import { settings } from '../config/settings';
 
 import { computeDadJokeStats, DadJokesStats } from './dad-jokes-stats.util';
@@ -36,7 +37,8 @@ export class DadJokesService {
     private categoryRepo: Repository<JokeCategory>,
     private cacheService: CacheService,
     private dataSource: DataSource,
-    private bulkActionService: BulkActionService
+    private bulkActionService: BulkActionService,
+    private analyticsService: AnalyticsService
   ) {}
 
   // ==================== CLASSIC JOKES ====================
@@ -273,6 +275,14 @@ export class DadJokesService {
 
     // Track B: votes change only like/dislike counters — no cached resource
     // (taxonomy lists, membership counts) depends on them, so no invalidation.
+
+    // Analytics plan §5.2: persist the vote as an event (columns stay the
+    // public counters; the event adds actor/time context for dashboards).
+    void this.analyticsService.record({
+      eventName: 'joke_voted',
+      module: 'jokes',
+      properties: { jokeId: id, voteType: type, remove },
+    });
 
     return saved;
   }

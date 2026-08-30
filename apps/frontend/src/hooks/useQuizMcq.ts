@@ -95,7 +95,16 @@ function saveToHistory(session: QuizSession): void {
   // P1 fix (TODO.md backlog): chapter/subject progress and achievements were
   // never written on completion; both completion paths funnel through here.
   saveQuizResult(session);
-  toastAchievementUnlocks(checkAchievements());
+  const unlocked = checkAchievements();
+  toastAchievementUnlocks(unlocked);
+  // Analytics plan §4.4: sync achievement unlocks as events.
+  unlocked.forEach((achievement) =>
+    track(
+      'achievement_unlocked',
+      { achievementId: achievement.id, name: achievement.name },
+      { module: 'quiz-mcq', sessionId: session.id }
+    )
+  );
 }
 
 /** Save current session for resume */
@@ -230,6 +239,20 @@ export function useQuizMcq(
       // Write the immutable question snapshot once (two-key resume: the
       // lightweight progress key never re-serializes questions).
       const initialMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+
+      // Analytics plan §4.1: session_started with setup dimensions.
+      track(
+        'session_started',
+        {
+          mode: initialMode,
+          subject,
+          chapter,
+          level,
+          questionCount: initialQuestions.length,
+        },
+        { module: 'quiz-mcq', sessionId: sessionRef.current.id }
+      );
+
       saveQuizResumeQuestions(
         {
           subject,
@@ -335,9 +358,71 @@ export function useQuizMcq(
     didSaveCompletionRef.current = sessionRef.current.id;
 
     saveToHistory(sessionRef.current);
+
+    // Analytics plan §4.1: session_completed with score + grade breakdown.
+    const session = sessionRef.current;
+    const result = calculateResult(session);
+    const completedMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+    track(
+      'session_completed',
+      {
+        mode: completedMode,
+        subject: session.subject,
+        chapter: session.chapter,
+        level: session.level,
+        questionCount: session.questions.length,
+        score: session.score,
+        maxScore: session.maxScore,
+        percentage: result.percentage,
+        grade: result.grade,
+        correctCount: result.correctCount,
+        incorrectCount: result.incorrectCount,
+        answeredCount: Object.keys(session.answers).length,
+        timeTaken,
+      },
+      { module: 'quiz-mcq', sessionId: session.id }
+    );
+
     clearCurrentSession();
     clearQuizResume();
   }, [state.status, state.startTime, state.score, state.answers]);
+
+  // Analytics plan §4.2: per-answer + manual-skip events. Effect-based (not
+  // inside setState updaters) so React StrictMode double-invocation can't
+  // double-emit; the ref makes each question tracked exactly once.
+  const trackedAnswersRef = useRef<Set<string>>(new Set());
+  const trackedSkipsRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!sessionRef.current) return;
+    const sessionId = sessionRef.current.id;
+    for (const q of state.questions) {
+      const selected = state.answers[q.id];
+      if (selected && !trackedAnswersRef.current.has(q.id)) {
+        trackedAnswersRef.current.add(q.id);
+        track(
+          'question_answered',
+          {
+            questionId: q.id,
+            subject: sessionRef.current.subject,
+            chapter: sessionRef.current.chapter,
+            level: sessionRef.current.level,
+            selectedOption: selected,
+            correct: selected === q.correctAnswer,
+          },
+          { module: 'quiz-mcq', sessionId }
+        );
+      }
+      if (state.manuallySkipped.has(q.id) && !trackedSkipsRef.current.has(q.id)) {
+        trackedSkipsRef.current.add(q.id);
+        track(
+          'question_skipped',
+          { questionId: q.id, manual: true },
+          { module: 'quiz-mcq', sessionId }
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.answers, state.manuallySkipped, state.questions]);
 
   useEffect(() => {
     if (state.status !== 'playing') return;
@@ -409,6 +494,18 @@ export function useQuizMcq(
 
     resumeController.clearPrompt();
     saveCurrentSession(sessionRef.current);
+
+    // Analytics plan §4.1: session_resumed with saved progress.
+    track(
+      'session_resumed',
+      {
+        subject: saved.subject,
+        chapter: saved.chapter,
+        level: saved.level,
+        progressAtSave: Object.keys(saved.answers).length,
+      },
+      { module: 'quiz-mcq', sessionId: newId }
+    );
   }, [pendingResumeState, timeLimit]);
 
   const handleStartFresh = useCallback(() => {

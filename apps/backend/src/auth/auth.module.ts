@@ -6,6 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '../common/cache/cache.module';
 import { UsersModule } from '../users/users.module';
 import { EmailService } from '../common/services/email.service';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -17,6 +18,7 @@ import { GoogleStrategy } from './google.strategy';
   imports: [
     UsersModule,
     CacheModule,
+    AnalyticsModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

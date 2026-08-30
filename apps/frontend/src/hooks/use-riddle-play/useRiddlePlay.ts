@@ -29,6 +29,7 @@ import {
 } from '@/lib/riddle-resume';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
+import { track } from '@/lib/analytics';
 import { shuffle } from '@/lib/utils';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
@@ -208,6 +209,19 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setTimeRemaining(totalTimeLimit);
       setStatus('playing');
       setShowResumeDialog(false);
+
+      // Analytics plan §4.1: session_started with setup dimensions.
+      track(
+        'session_started',
+        {
+          mode,
+          subject: subjectId,
+          chapter: chapterName,
+          level: level || 'all',
+          questionCount: riddleList.length,
+        },
+        { module: 'riddle-mcq', sessionId: newSession.id }
+      );
     },
     [mode, subjectId, level, chapterName, settings]
   );
@@ -238,6 +252,17 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setTimeRemaining(resume.timeRemaining || 0);
       setStatus('playing');
       setHasStarted(true);
+
+      // Analytics plan §4.1: session_resumed with saved progress.
+      track(
+        'session_resumed',
+        {
+          mode,
+          subject: subjectId,
+          progressAtSave: Object.keys(resume.answers).length,
+        },
+        { module: 'riddle-mcq', sessionId: session?.id }
+      );
     }
     setShowResumeDialog(false);
   }, [mode, subjectId, level, chapterName, session]);
@@ -297,6 +322,20 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       if (!session || status !== 'playing') return;
       const currentRiddle = riddles[currentIndex];
       if (!currentRiddle) return;
+      // Analytics plan §4.2: question_answered (before the state flip, using
+      // the shared scorer so correctness matches results-page logic).
+      track(
+        'question_answered',
+        {
+          questionId: currentRiddle.id,
+          subject: session.subjectId,
+          chapter: session.subjectName,
+          level: session.difficulty,
+          selectedOption: optionLetter,
+          correct: isRiddleAnswerCorrect(currentRiddle, optionLetter),
+        },
+        { module: 'riddle-mcq', sessionId: session.id }
+      );
       setAnswers((prev) => ({ ...prev, [currentRiddle.id]: optionLetter }));
     },
     [session, status, riddles, currentIndex]
@@ -319,6 +358,12 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     if (!session || status !== 'playing') return;
     const currentRiddle = riddles[currentIndex];
     if (!currentRiddle) return;
+    // Analytics plan §4.2: manual skip.
+    track(
+      'question_skipped',
+      { questionId: currentRiddle.id, manual: true },
+      { module: 'riddle-mcq', sessionId: session.id }
+    );
     setManuallySkipped((prev) => new Set(prev).add(currentRiddle.id));
     if (currentIndex >= riddles.length - 1) {
       setShowConfirmSubmit(true);
@@ -375,10 +420,34 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
     setStatus('completed');
     saveRiddleSession(completedSession); // full payload, one-time, for results
+
+    // Analytics plan §4.1: session_completed (both manual submit and the
+    // time-up auto-submit funnel through here).
+    track(
+      'session_completed',
+      {
+        mode,
+        subject: session.subjectId,
+        chapter: session.subjectName,
+        level: session.difficulty,
+        questionCount: riddles.length,
+        score: correctCount,
+        maxScore: riddles.length,
+        percentage: riddles.length > 0 ? Math.round((correctCount / riddles.length) * 100) : 0,
+        correctCount,
+        incorrectCount: riddles.length - correctCount,
+        answeredCount: Object.keys(answers).length,
+        skippedCount: manuallySkipped.size,
+        hintsUsed: session.hintsUsed ?? 0,
+        timeTaken: completedSession.timeTaken,
+      },
+      { module: 'riddle-mcq', sessionId: session.id }
+    );
+
     clearRiddleResume();
     setShowConfirmSubmit(false);
     router.push(`/riddle-mcq/results?session=${session.id}`);
-  }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, router]);
+  }, [session, answers, riddles, calculateTimeTaken, mode, timeRemaining, manuallySkipped, router]);
 
   // Time-up auto-submit — single side-effect path outside the timer's state updater
   useEffect(() => {

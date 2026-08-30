@@ -1,15 +1,9 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { GuestUsersService } from './guest-users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminGuard } from '../common/guards/admin.guard';
-
-class UpdateDemographicsDto {
-  country?: string;
-  sex?: 'male' | 'female';
-  ageGroup?: string;
-}
 
 @ApiTags('Guest Users')
 @Controller('admin/guest-users')
@@ -30,14 +24,5 @@ export class GuestUsersController {
   @ApiOperation({ summary: 'Get guest user by ID' })
   async getOne(@Param('guestId') guestId: string) {
     return this.guestUsersService.findByGuestId(guestId);
-  }
-
-  @Post()
-  @ApiOperation({ summary: 'Update guest user demographics' })
-  async updateDemographics(
-    @Body() dto: UpdateDemographicsDto & { guestId: string },
-  ) {
-    const { guestId, ...data } = dto;
-    return this.guestUsersService.updateDemographics(guestId, data);
   }
 }

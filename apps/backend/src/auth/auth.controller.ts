@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
@@ -8,9 +18,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshDto } from './dto/auth.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { UpdateDemographicsDto } from './dto/update-demographics.dto';
 import { _Public } from '../common/decorators/public.decorator';
-import { _CurrentUser } from '../common/decorators/current-user.decorator';
 
 interface AuthResponse {
   user: {
@@ -25,7 +33,7 @@ interface AuthResponse {
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @_Public()
   @Post('login')
@@ -72,20 +80,6 @@ export class AuthController {
     return this.authService.resetPassword(dto.token, dto.newPassword);
   }
 
-  @Post('demographics')
-  @UseGuards(AuthGuard('jwt'))
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Update user demographics' })
-  @ApiResponse({ status: 200, description: 'Demographics updated successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async updateDemographics(
-    @Body() dto: UpdateDemographicsDto,
-    @_CurrentUser('id') userId: string,
-  ): Promise<{ message: string }> {
-    await this.authService.updateDemographics(userId, dto);
-    return { message: 'Demographics updated successfully' };
-  }
-
   @_Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
@@ -112,10 +106,10 @@ export class AuthController {
   async googleAuthCallback(@Req() req: any, @Res() res: Response) {
     const googleData = req.user;
     const result = await this.authService.googleLogin(googleData);
-    
+
     const frontendUrl = process.env['FRONTEND_URL'] || 'http://localhost:3010';
     const redirectUrl = `${frontendUrl}/login?token=${result.token}&refreshToken=${result.refreshToken}&user=${encodeURIComponent(JSON.stringify(result.user))}`;
-    
+
     return res.redirect(redirectUrl);
   }
 }

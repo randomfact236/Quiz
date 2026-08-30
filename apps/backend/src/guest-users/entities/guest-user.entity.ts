@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('guest_users')
 export class GuestUser {
@@ -7,15 +13,6 @@ export class GuestUser {
 
   @Column({ unique: true })
   guestId: string;
-
-  @Column({ nullable: true })
-  country: string;
-
-  @Column({ nullable: true })
-  sex: 'male' | 'female';
-
-  @Column({ nullable: true })
-  ageGroup: string;
 
   @Column({ nullable: true, default: 0 })
   quizAttempts: number;

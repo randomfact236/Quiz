@@ -9,8 +9,8 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepo: Repository<User>,
-  ) { }
+    private userRepo: Repository<User>
+  ) {}
 
   async create(email: string, password: string, name: string): Promise<User> {
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -28,12 +28,16 @@ export class UsersService {
 
   async findById(id: string): Promise<User> {
     const user = await this.userRepo.findOne({ where: { id } });
-    if (!user) {throw new NotFoundException('User not found');}
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     return user;
   }
 
   async getAll(): Promise<User[]> {
-    return this.userRepo.find({ select: ['id', 'email', 'name', 'role', 'createdAt'] });
+    return this.userRepo.find({
+      select: ['id', 'email', 'name', 'role', 'createdAt', 'lastActive'],
+    });
   }
 
   async updateProfile(id: string, data: { name?: string; avatar?: string }): Promise<User> {
@@ -65,7 +69,12 @@ export class UsersService {
     return this.userRepo.findOne({ where: { googleId } });
   }
 
-  async createWithGoogle(email: string, name: string, googleId: string, avatar?: string): Promise<User> {
+  async createWithGoogle(
+    email: string,
+    name: string,
+    googleId: string,
+    avatar?: string
+  ): Promise<User> {
     const user = this.userRepo.create({
       email,
       name,
@@ -114,22 +123,7 @@ export class UsersService {
     await this.userRepo.delete(id);
   }
 
-  async updateDemographics(
-    id: string,
-    data: { country?: string; sex?: 'male' | 'female'; ageGroup?: string },
-  ): Promise<User> {
-    await this.userRepo.update(id, data);
-    return this.findById(id);
-  }
-
   async updateLastActive(id: string): Promise<void> {
     await this.userRepo.update(id, { lastActive: new Date() });
-  }
-
-  async getAllWithDemographics(): Promise<User[]> {
-    return this.userRepo.find({
-      order: { createdAt: 'DESC' },
-      select: ['id', 'email', 'name', 'role', 'country', 'sex', 'ageGroup', 'createdAt', 'lastActive'],
-    });
   }
 }

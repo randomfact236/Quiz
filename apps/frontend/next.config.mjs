@@ -3,7 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  
+
+  // Overridable so a CI/verification build can run beside a live dev server
+  // (which locks .next/trace on Windows).
+  distDir: process.env['NEXT_DIST_DIR'] || '.next',
+
   // Output standalone for Docker
   output: 'standalone',
 

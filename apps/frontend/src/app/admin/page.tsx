@@ -18,6 +18,7 @@ import {
   BookOpen,
   ExternalLink,
   MessageSquare,
+  BarChart3,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -32,6 +33,7 @@ import {
   AdminGuard,
   AdminUsersSection,
   MediaLibrarySection,
+  AnalyticsSection,
 } from './components';
 import { QuizMcqContainer } from '@/features/quiz-mcq/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
@@ -137,7 +139,8 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'summary' ||
         urlSection === 'quiz-mcq' ||
         urlSection === 'media' ||
-        urlSection === 'comments'
+        urlSection === 'comments' ||
+        urlSection === 'analytics'
       ) {
         setActiveSection(urlSection as MenuSection);
       } else {
@@ -175,6 +178,7 @@ export default function AdminPage(): JSX.Element {
       'quiz-mcq',
       'media',
       'comments',
+      'analytics',
     ].includes(urlSection);
 
     if (!isSpecialSection) {
@@ -365,6 +369,13 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'users' })}
           />
           <MenuItem
+            icon={<BarChart3 className="w-5 h-5" />}
+            label="Analytics"
+            active={activeSection === 'analytics'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'analytics' })}
+          />
+          <MenuItem
             icon={<ImagePlus className="w-5 h-5" />}
             label="Media"
             active={activeSection === 'media'}
@@ -443,6 +454,11 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'settings' && (
                 <>
                   <Settings className="w-6 h-6" /> Settings
+                </>
+              )}
+              {activeSection === 'analytics' && (
+                <>
+                  <BarChart3 className="w-6 h-6" /> Analytics
                 </>
               )}
               {(subjects.some((s) => s.slug === activeSection) || activeSection === 'quiz-mcq') && (
@@ -525,6 +541,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'media' && <MediaLibrarySection />}
           {activeSection === 'comments' && <CommentsSection />}
           {activeSection === 'settings' && <SettingsSection />}
+          {activeSection === 'analytics' && <AnalyticsSection />}
         </div>
       </main>
 

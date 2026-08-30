@@ -1,10 +1,16 @@
 import * as crypto from 'crypto';
-import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { BruteForceService } from './brute-force.service';
 import { EmailService } from '../common/services/email.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +19,8 @@ export class AuthService {
     private jwtService: JwtService,
     private bruteForceService: BruteForceService,
     private emailService: EmailService,
-  ) { }
+    private analyticsService: AnalyticsService
+  ) {}
 
   private async generateTokens(user: Partial<User>) {
     const payload = { id: user.id, email: user.email, role: user.role };
@@ -23,53 +30,111 @@ export class AuthService {
     return { token, refreshToken };
   }
 
-  async register(email: string, password: string, name: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+  async register(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<{
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }> {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
     const user = await this.usersService.create(email, password, name);
     const tokens = await this.generateTokens(user);
-    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+    // Analytics plan §2.2 — no PII, userId only. record() swallows its own errors.
+    void this.analyticsService.record({
+      eventName: 'user_registered',
+      module: 'site',
+      userId: user.id,
+      properties: { method: 'email' },
+    });
+    return {
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      ...tokens,
+    };
   }
 
-  async login(email: string, password: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+  async login(
+    email: string,
+    password: string
+  ): Promise<{
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }> {
     if (await this.bruteForceService.isLockedOut(email)) {
+      void this.analyticsService.record({ eventName: 'login_locked', module: 'site' });
       throw new UnauthorizedException(`Account locked. Too many failed attempts. Try again later.`);
     }
 
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       await this.bruteForceService.recordFailedAttempt(email);
+      void this.analyticsService.record({ eventName: 'login_failed', module: 'site' });
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isValid = await this.usersService.validatePassword(password, user.password);
     if (!isValid) {
       await this.bruteForceService.recordFailedAttempt(email);
+      void this.analyticsService.record({ eventName: 'login_failed', module: 'site' });
       throw new UnauthorizedException('Invalid credentials');
     }
 
     await this.bruteForceService.recordSuccess(email);
     const tokens = await this.generateTokens(user);
-    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+    // lastActive was persisted but never updated anywhere (plan audit §2.1).
+    void this.usersService.updateLastActive(user.id).catch(() => undefined);
+    void this.analyticsService.record({
+      eventName: 'user_login',
+      module: 'site',
+      userId: user.id,
+      properties: { method: 'email' },
+    });
+    return {
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      ...tokens,
+    };
   }
 
-  async refresh(refreshToken: string): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+  async refresh(
+    refreshToken: string
+  ): Promise<{
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }> {
     const user = await this.usersService.findByRefreshToken(refreshToken);
     if (!user) {
       throw new UnauthorizedException('Invalid refresh token');
     }
     const tokens = await this.generateTokens(user);
-    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+    return {
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      ...tokens,
+    };
   }
 
   async validateUser(id: string): Promise<User | null> {
     return this.usersService.findById(id);
   }
 
-  async googleLogin(googleData: { googleId: string; email: string; name: string; avatar?: string }): Promise<{ user: { id: string; email: string; name: string; role: string }; token: string; refreshToken: string }> {
+  async googleLogin(googleData: {
+    googleId: string;
+    email: string;
+    name: string;
+    avatar?: string;
+  }): Promise<{
+    user: { id: string; email: string; name: string; role: string };
+    token: string;
+    refreshToken: string;
+  }> {
     let user = await this.usersService.findByGoogleId(googleData.googleId);
+    let isNewUser = false;
 
     if (!user) {
       const existingEmailUser = await this.usersService.findByEmail(googleData.email);
@@ -81,23 +146,40 @@ export class AuthService {
           googleData.email,
           googleData.name,
           googleData.googleId,
-          googleData.avatar,
+          googleData.avatar
         );
+        isNewUser = true;
       }
     }
 
     const tokens = await this.generateTokens(user);
-    return { user: { id: user.id, email: user.email, name: user.name, role: user.role }, ...tokens };
+    void this.analyticsService.record({
+      eventName: isNewUser ? 'user_registered' : 'user_login',
+      module: 'site',
+      userId: user.id,
+      properties: { method: 'google' },
+    });
+    return {
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      ...tokens,
+    };
   }
 
   async forgotPassword(email: string): Promise<{ message: string }> {
     const user = await this.usersService.findByEmail(email);
-    
+
     // Always return success to prevent email enumeration attacks
     // Even if user doesn't exist, we don't reveal it
     if (!user) {
-      return { message: 'If an account with that email exists, we have sent a password reset link.' };
+      return {
+        message: 'If an account with that email exists, we have sent a password reset link.',
+      };
     }
+    void this.analyticsService.record({
+      eventName: 'password_reset_requested',
+      module: 'site',
+      userId: user.id,
+    });
 
     // Generate reset token (valid for 1 hour)
     const resetToken = crypto.randomBytes(32).toString('hex');
@@ -111,7 +193,7 @@ export class AuthService {
     const result = await this.emailService.sendPasswordResetEmail(
       user.email,
       resetToken,
-      user.name,
+      user.name
     );
 
     if (!result.success) {
@@ -126,7 +208,7 @@ export class AuthService {
 
     // Find user with this reset token that hasn't expired
     const user = await this.usersService.findByPasswordResetToken(hashedToken);
-    
+
     if (!user) {
       throw new BadRequestException('Invalid or expired reset token');
     }
@@ -142,13 +224,14 @@ export class AuthService {
     // Clear reset token
     await this.usersService.clearPasswordResetToken(user.id);
 
-    return { message: 'Password has been reset successfully. You can now login with your new password.' };
-  }
+    void this.analyticsService.record({
+      eventName: 'password_reset_completed',
+      module: 'site',
+      userId: user.id,
+    });
 
-  async updateDemographics(
-    userId: string,
-    data: { country?: string; sex?: 'male' | 'female'; ageGroup?: string },
-  ): Promise<User> {
-    return this.usersService.updateDemographics(userId, data);
+    return {
+      message: 'Password has been reset successfully. You can now login with your new password.',
+    };
   }
 }

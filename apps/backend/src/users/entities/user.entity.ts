@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -31,15 +37,6 @@ export class User {
 
   @Column({ nullable: true })
   passwordResetExpires: Date;
-
-  @Column({ nullable: true })
-  country: string;
-
-  @Column({ nullable: true })
-  sex: 'male' | 'female';
-
-  @Column({ nullable: true })
-  ageGroup: string;
 
   @Column({ nullable: true })
   lastActive: Date;

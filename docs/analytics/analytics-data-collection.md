@@ -228,3 +228,60 @@ Common properties on every event:
 4. **Phase 4 — Dashboards:** admin analytics page (reuse existing stats-service +
    CacheService pattern): DAU, accuracy heatmaps, retention cohorts, content leaderboard.
 5. **Phase 5 — Optional third-party:** self-hosted Plausible/PostHog or GA4 behind consent banner.
+
+---
+
+## 11. Implementation Status (2026-08-30)
+
+Phases 1–4 are implemented; Phase 5 (third-party) intentionally not started.
+
+**Backend (`apps/backend/src/analytics/`)**
+
+- `analytics_events` wide event table — entity + idempotent migration
+  `1788300000000-CreateAnalyticsEventsTable.ts` (indexed on eventName / module /
+  userId / guestId / serverTs).
+- `POST /analytics/events` — public, throttled (30/min), batch ingest (≤50/batch).
+  `OptionalJwtAuthGuard` resolves the Bearer token softly so logged-in users'
+  events carry the real `userId` while guests stay anonymous.
+- `GET /analytics/summary` — public per-module completion counts (StatsSection source, §5.3).
+- Admin (JwtAuthGuard + AdminGuard): `GET /admin/analytics/overview` (DAU/WAU/MAU,
+  completions per module, per-module answer accuracy, 30-day daily series, top
+  events/pages, joke vote tallies, demographics funnel — 60s cache),
+  `GET /admin/analytics/retention` (weekly first-seen cohorts), `GET /admin/analytics/events`
+  (raw event browser).
+- Server-side hooks (§2.2): `user_registered` / `user_login` / `login_failed` /
+  `login_locked` / `password_reset_requested` / `password_reset_completed` from
+  `auth.service`; `joke_voted` from `dad-jokes.service.voteForJoke`;
+  `users.updateLastActive` finally wired to login.
+- Guest counters (§2.3): `session_completed` events with a guestId atomically
+  upsert `quizAttempts` / `totalScore` / `lastActive` (`GuestUsersService.recordSessionCompletion`).
+- **Broken guest endpoint fixed:** new public `POST /guest-users/demographics` and
+  `POST /guest-users/activity` (was admin-only → every guest submission failed).
+
+**Frontend (`apps/frontend`)**
+
+- `lib/analytics.ts` — batched tracker (10s flush / 20-event threshold, bounded
+  queue, sendBeacon exit flush) with the §8 common envelope.
+- `components/AnalyticsProvider.tsx` (mounted in `app/providers.tsx`) — init,
+  `page_viewed` per route, Web Vitals via `useReportWebVitals`.
+- Quiz MCQ (`hooks/useQuizMcq.ts`): `session_started` / `session_resumed` /
+  `session_completed` (score, grade, counts, timeTaken) + effect-based
+  `question_answered` / `question_skipped` (StrictMode-safe) + achievement unlocks (§4.4).
+- Riddle MCQ (`hooks/use-riddle-play/useRiddlePlay.ts`): same session lifecycle +
+  per-answer/skip events; time-up auto-submit funnels through the same completion path.
+- Image riddles: `features/image-riddles/lib/analytics.ts` shim now forwards the
+  preset action events (`answer_submitted`, `hint_revealed`, `answer_revealed`,
+  `riddle_skipped`, `share_opened`, …) as `image_riddle_*` events.
+- Admin dashboard: new "Analytics" section in `app/admin` (`components/AnalyticsSection.tsx`)
+  rendering overview stats, 30-day event bars, per-module completions/accuracy,
+  top events/pages, and retention cohorts (CSS bars, no chart dep).
+
+**Not yet covered (follow-ups)**
+
+- `session_abandoned` / `session_extended` events (no abandon handler exists in the
+  engines yet; ExtendSessionModal exists on riddles only).
+- Riddle `hint_used` events and joke-quiz module (surface doesn't exist — plan §4 notes).
+- Timer pause/reset/resume + fullscreen + issue-report image-riddle actions
+  (`UNSUPPORTED_ACTION_IDS` in `features/image-riddles/lib/game.ts` still inert).
+- Event retention/purge job (plan §9 suggests 13 months raw).
+- Consent banner before any third-party SDK (Phase 5).

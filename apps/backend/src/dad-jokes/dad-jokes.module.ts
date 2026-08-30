@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CacheModule } from '../common/cache/cache.module';
 import { BulkActionService } from '../common/services/bulk-action.service';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 import { DadJokesStatsController } from './dad-jokes-stats.controller';
 import { DadJokesController } from './dad-jokes.controller';
@@ -23,7 +24,7 @@ import { JokeCategory } from './entities/joke-category.entity';
  * imports: [DadJokesModule]
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([DadJoke, JokeCategory]), CacheModule],
+  imports: [TypeOrmModule.forFeature([DadJoke, JokeCategory]), CacheModule, AnalyticsModule],
   controllers: [DadJokesController, DadJokesStatsController],
   providers: [DadJokesService, BulkActionService],
   exports: [DadJokesService],

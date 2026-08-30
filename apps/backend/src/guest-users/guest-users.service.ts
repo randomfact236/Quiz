@@ -8,7 +8,7 @@ import { GuestUser } from './entities/guest-user.entity';
 export class GuestUsersService {
   constructor(
     @InjectRepository(GuestUser)
-    private guestUserRepo: Repository<GuestUser>,
+    private guestUserRepo: Repository<GuestUser>
   ) {}
 
   async findByGuestId(guestId: string): Promise<GuestUser | null> {
@@ -28,19 +28,28 @@ export class GuestUsersService {
     return guest;
   }
 
-  async updateDemographics(
-    guestId: string,
-    data: { country?: string; sex?: 'male' | 'female'; ageGroup?: string },
-  ): Promise<GuestUser> {
-    const guest = await this.findOrCreate(guestId);
-    Object.assign(guest, data);
-    return this.guestUserRepo.save(guest);
-  }
-
   async updateActivity(guestId: string): Promise<GuestUser> {
     const guest = await this.findOrCreate(guestId);
     guest.lastActive = new Date();
     return this.guestUserRepo.save(guest);
+  }
+
+  /**
+   * Wire the previously-idle counters (analytics plan §2.3): increment
+   * quizAttempts / totalScore and bump lastActive on each completed session.
+   * Atomic upsert on the unique guestId avoids lost updates under
+   * concurrency and creates the row on first sight.
+   */
+  async recordSessionCompletion(guestId: string, score: number): Promise<void> {
+    await this.guestUserRepo.query(
+      `INSERT INTO guest_users ("guestId", "quizAttempts", "totalScore", "lastActive")
+       VALUES ($1, 1, $2, now())
+       ON CONFLICT ("guestId") DO UPDATE SET
+         "quizAttempts" = guest_users."quizAttempts" + 1,
+         "totalScore" = guest_users."totalScore" + $2,
+         "lastActive" = now()`,
+      [guestId, score]
+    );
   }
 
   async getAll(): Promise<GuestUser[]> {
