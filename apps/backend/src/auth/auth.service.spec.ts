@@ -132,6 +132,60 @@ describe('AuthService — one-time OAuth code exchange', () => {
   });
 });
 
+describe('AuthService — email verification', () => {
+  const setupVerification = (existing: any) => {
+    const usersService = {
+      findByEmailVerificationToken: jest.fn(async () => existing),
+      markEmailVerified: jest.fn(async () => undefined),
+      findByEmail: jest.fn(async () => existing),
+      updateEmailVerificationToken: jest.fn(async () => undefined),
+    } as unknown as UsersService;
+    const emailService = {
+      sendVerificationEmail: jest.fn(async () => ({ success: true, message: 'ok' })),
+    } as unknown as EmailService;
+    const service = new AuthService(
+      usersService,
+      { sign: jest.fn() } as unknown as JwtService,
+      {} as BruteForceService,
+      { get: jest.fn(), set: jest.fn(), del: jest.fn() } as unknown as CacheService,
+      emailService,
+      { record: jest.fn() } as unknown as AnalyticsService
+    );
+    return { service, usersService, emailService };
+  };
+
+  it('verifyEmail flips emailVerified and clears the token', async () => {
+    const { service, usersService } = setupVerification({
+      id: 'u1',
+      emailVerified: false,
+      emailVerificationExpires: new Date(Date.now() + 60_000),
+    } as any);
+    await expect(service.verifyEmail('good-token')).resolves.toMatchObject({
+      message: expect.stringMatching(/verified/i),
+    });
+    expect(usersService.markEmailVerified).toHaveBeenCalledWith('u1');
+  });
+
+  it('verifyEmail rejects unknown tokens without touching any user', async () => {
+    const { service, usersService } = setupVerification(null);
+    await expect(service.verifyEmail('bad-token')).rejects.toThrow(/Invalid or expired/i);
+    expect(usersService.markEmailVerified).not.toHaveBeenCalled();
+  });
+
+  it('resendVerificationEmail keeps the same response for unknown emails', async () => {
+    const { service } = setupVerification(null);
+    await expect(service.resendVerificationEmail('nobody@example.com')).resolves.toMatchObject({
+      message: expect.stringMatching(/unverified/),
+    });
+  });
+
+  it('resendVerificationEmail skips sending for already-verified accounts', async () => {
+    const { service, emailService } = setupVerification({ id: 'u1', emailVerified: true } as any);
+    await service.resendVerificationEmail('real@example.com');
+    expect(emailService.sendVerificationEmail).not.toHaveBeenCalled();
+  });
+});
+
 describe('AuthService — forgotPassword anti-enumeration', () => {
   it('returns the same message whether or not the account exists', async () => {
     const usersService = {

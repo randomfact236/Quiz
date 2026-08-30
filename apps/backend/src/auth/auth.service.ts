@@ -50,6 +50,9 @@ export class AuthService {
     }
     const user = await this.usersService.create(email, password, name);
     const tokens = await this.generateTokens(user);
+    // Verification link goes out asynchronously; registration never blocks on
+    // email delivery (the link is logged in dev when Resend is unconfigured).
+    void this.sendVerificationEmail(user).catch(() => undefined);
     // Analytics plan §2.2 — no PII, userId only. record() swallows its own errors.
     void this.analyticsService.record({
       eventName: 'user_registered',
@@ -135,6 +138,51 @@ export class AuthService {
       await this.usersService.revokeRefreshToken(user.id);
     }
     return { message: 'Logged out' };
+  }
+
+  private async sendVerificationEmail(user: User): Promise<void> {
+    const token = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    await this.usersService.updateEmailVerificationToken(user.id, hashedToken, expires);
+    const result = await this.emailService.sendVerificationEmail(user.email, token, user.name);
+    if (!result.success) {
+      throw new BadRequestException('Failed to send verification email');
+    }
+  }
+
+  /** Consumes a hashed one-time token and flips emailVerified. */
+  async verifyEmail(token: string): Promise<{ message: string }> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await this.usersService.findByEmailVerificationToken(hashedToken);
+    if (!user) {
+      throw new BadRequestException('Invalid or expired verification token');
+    }
+    if (user.emailVerificationExpires && new Date() > user.emailVerificationExpires) {
+      throw new BadRequestException('Verification token has expired. Please request a new one.');
+    }
+    await this.usersService.markEmailVerified(user.id);
+    return { message: 'Email verified successfully' };
+  }
+
+  /** Anti-enumeration: same response whether or not the account exists. */
+  async resendVerificationEmail(email: string): Promise<{ message: string }> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user || user.emailVerified) {
+      return {
+        message:
+          'If an account with that email exists and is unverified, a verification link has been sent.',
+      };
+    }
+    try {
+      await this.sendVerificationEmail(user);
+    } catch {
+      // Swallow send failures to keep the response uniform (anti-enumeration).
+    }
+    return {
+      message:
+        'If an account with that email exists and is unverified, a verification link has been sent.',
+    };
   }
 
   async validateUser(id: string): Promise<User | null> {

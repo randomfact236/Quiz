@@ -158,4 +158,33 @@ export class UsersService {
   async updateLastActive(id: string): Promise<void> {
     await this.userRepo.update(id, { lastActive: new Date() });
   }
+
+  async updateEmailVerificationToken(id: string, token: string, expires: Date): Promise<void> {
+    await this.userRepo.update(id, {
+      emailVerificationToken: token,
+      emailVerificationExpires: expires,
+    });
+  }
+
+  async findByEmailVerificationToken(token: string): Promise<User | null> {
+    return this.userRepo.findOne({
+      where: { emailVerificationToken: token },
+      select: [
+        'id',
+        'email',
+        'name',
+        'emailVerified',
+        'emailVerificationToken',
+        'emailVerificationExpires',
+      ],
+    });
+  }
+
+  async markEmailVerified(id: string): Promise<void> {
+    await this.userRepo.update(id, {
+      emailVerified: true,
+      emailVerificationToken: null,
+      emailVerificationExpires: null,
+    });
+  }
 }

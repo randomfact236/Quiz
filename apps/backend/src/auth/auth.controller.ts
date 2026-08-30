@@ -18,6 +18,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshDto, LogoutDto, OAuthExchangeDto } from './dto/auth.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailDto, ResendVerificationDto } from './dto/verify-email.dto';
 import { _Public } from '../common/decorators/public.decorator';
 
 interface AuthResponse {
@@ -78,6 +79,30 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid or expired token' })
   async resetPassword(@Body() dto: ResetPasswordDto): Promise<{ message: string }> {
     return this.authService.resetPassword(dto.token, dto.newPassword);
+  }
+
+  @_Public()
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Verify an email address with a one-time token' })
+  @ApiResponse({ status: 200, description: 'Email verified' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired token' })
+  async verifyEmail(@Body() dto: VerifyEmailDto): Promise<{ message: string }> {
+    return this.authService.verifyEmail(dto.token);
+  }
+
+  @_Public()
+  @Post('resend-verification')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @ApiOperation({ summary: 'Resend the email verification link' })
+  @ApiResponse({
+    status: 200,
+    description: 'Verification email sent if applicable (anti-enumeration)',
+  })
+  async resendVerification(@Body() dto: ResendVerificationDto): Promise<{ message: string }> {
+    return this.authService.resendVerificationEmail(dto.email);
   }
 
   @_Public()

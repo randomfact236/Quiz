@@ -48,6 +48,16 @@ export class User {
   @Column({ nullable: true, type: 'timestamp' })
   passwordResetExpires: Date | null;
 
+  /** Set by POST /auth/verify-email using the emailed one-time token. */
+  @Column({ default: false })
+  emailVerified: boolean;
+
+  @Column({ nullable: true, type: 'varchar' })
+  emailVerificationToken: string | null;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  emailVerificationExpires: Date | null;
+
   @Column({ nullable: true })
   lastActive: Date;
 
