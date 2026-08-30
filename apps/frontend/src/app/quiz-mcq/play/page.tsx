@@ -514,7 +514,7 @@ function QuizContent(): JSX.Element {
                 disabled={!quiz.hasAnsweredCurrent}
                 className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${
                   quiz.hasAnsweredCurrent
-                    ? 'bg-white text-indigo-600 shadow-lg scale-105'
+                    ? 'animate-pulse bg-white text-indigo-600 shadow-lg scale-105'
                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                 }`}
               >

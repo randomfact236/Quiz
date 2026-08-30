@@ -65,8 +65,8 @@ export function AnswerOptions({
         // Wrong selection - red
         return baseStyle + 'border-red-500 bg-red-50 text-red-800';
       }
-      // Not selected - muted
-      return baseStyle + 'border-gray-200 bg-gray-50 text-gray-400 opacity-60';
+      // Locked affordance: unselected options dim further once an answer is in
+      return baseStyle + 'border-gray-200 bg-gray-50 text-gray-400 opacity-40';
     }
 
     // No selection yet - lightly visible
