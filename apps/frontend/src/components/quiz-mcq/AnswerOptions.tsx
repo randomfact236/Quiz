@@ -3,7 +3,7 @@
  * Answer Options Component
  * ============================================================================
  * Displays answer options based on difficulty level:
- * - Easy: True/False (2 options)
+ * - Easy: stored options when authored, else True/False fallback
  * - Medium: 2 options
  * - Hard: 3 options
  * - Expert: 4 options
@@ -33,6 +33,12 @@ interface AnswerOptionsProps {
   /** Difficulty level to determine number of options */
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
 }
+
+/** Fallback pair for easy questions authored without stored options */
+const TRUE_FALSE_OPTIONS = [
+  { key: 'A', text: 'True' },
+  { key: 'B', text: 'False' },
+];
 
 export function AnswerOptions({
   options,
@@ -77,13 +83,15 @@ export function AnswerOptions({
 
   // Get options based on difficulty level
   const getOptionsForLevel = () => {
+    // Easy: prefer the stored options when the question actually has them;
+    // fall back to True/False only for legacy questions authored blank.
+    const hasStoredOptions = options
+      .slice(0, 2)
+      .every((option) => option.text && option.text.trim().length > 0);
+
     switch (level) {
       case 'easy':
-        // True/False
-        return [
-          { key: 'A', text: 'True' },
-          { key: 'B', text: 'False' },
-        ];
+        return hasStoredOptions ? options.slice(0, 2) : TRUE_FALSE_OPTIONS;
       case 'medium':
         // 2 options
         return options.slice(0, 2);
