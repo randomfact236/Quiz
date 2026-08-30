@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState, useMemo } from 'react';
-import { useQuery, useQueries } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   GraduationCap,
   Briefcase,
@@ -16,13 +16,8 @@ import {
   BookOpen,
   Puzzle,
 } from 'lucide-react';
-import {
-  getSubjects,
-  getQuestionsBySubject,
-  getSubjectBySlug,
-  getQuestionsByChapter,
-} from '@/lib/quiz-mcq-api';
-import type { QuizSubject, QuizQuestion } from '@/lib/quiz-mcq-api';
+import { getSubjects, getSubjectBySlug, getQuestionCounts } from '@/lib/quiz-mcq-api';
+import type { QuizSubject } from '@/lib/quiz-mcq-api';
 import { getChapterProgress } from '@/lib/progress';
 import {
   QUIZ_LEVELS as levels,
@@ -231,29 +226,10 @@ function SubjectSelection(): JSX.Element {
     [subjectsQuery.data]
   );
 
+  // Single cached counts request — replaces the per-subject full-list fetch loop.
   const countsQuery = useQuery({
     queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
-    queryFn: async () => {
-      const entries = await Promise.all(
-        sortedSubjects.map(async (subject) => {
-          try {
-            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
-            return [subject.slug, questions.total] as const;
-          } catch {
-            console.error(`Failed to load questions for subject: ${subject.slug}`);
-            return null;
-          }
-        })
-      );
-      const counts: Record<string, number> = {};
-      for (const entry of entries) {
-        if (entry && entry[1] > 0) {
-          counts[entry[0]] = entry[1];
-        }
-      }
-      return counts;
-    },
-    enabled: sortedSubjects.length > 0,
+    queryFn: getQuestionCounts,
     staleTime: QUIZ_QUERY_STALE_TIME,
   });
 
@@ -293,7 +269,7 @@ function SubjectSelection(): JSX.Element {
     }
   }, [sortedCategories]);
 
-  const questionCounts = countsQuery.data ?? {};
+  const questionCounts = countsQuery.data?.bySubject ?? {};
   const isLoading = subjectsQuery.isPending || countsQuery.isPending;
 
   if (isLoading) {
@@ -397,34 +373,35 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
     [subjectQuery.data, subject]
   );
 
-  const chapterQuestionQueries = useQueries({
-    queries: (subjectQuery.data?.chapters ?? []).map((chapter) => ({
-      queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'chapter-questions', chapter.id],
-      queryFn: () => getQuestionsByChapter(chapter.id),
-      staleTime: QUIZ_QUERY_STALE_TIME,
-    })),
+  // Single cached counts request covers every chapter (count + level breakdown)
+  // — replaces the per-chapter full question-list fetches.
+  const countsQuery = useQuery({
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
+    queryFn: getQuestionCounts,
+    staleTime: QUIZ_QUERY_STALE_TIME,
   });
 
+  // Order level chips canonically (easy → extreme) instead of raw key order.
+  const levelOrder = (a: string, b: string): number => {
+    const lower = levels.map((l) => l.toLowerCase());
+    return lower.indexOf(a) - lower.indexOf(b);
+  };
+
   const chapters = useMemo<ChapterInfo[]>(() => {
-    const dataById = new Map<string, { data: QuizQuestion[] }>();
-    (subjectQuery.data?.chapters ?? []).forEach((chapter, index) => {
-      const result = chapterQuestionQueries[index]?.data;
-      if (result) {
-        dataById.set(chapter.id, result);
-      }
-    });
+    const countsById = countsQuery.data?.byChapter;
     return chapterList.map(({ id, info }) => {
-      const questions = dataById.get(id);
-      if (!questions) return info;
+      const stats = countsById?.[id];
+      if (!stats) return info;
       return {
         ...info,
-        questionCount: questions.data.length,
-        levels: new Set(questions.data.map((q) => q.level)),
+        questionCount: stats.count,
+        levels: new Set(Object.keys(stats.levels).sort(levelOrder)),
       };
     });
-  }, [chapterList, chapterQuestionQueries, subjectQuery.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chapterList, countsQuery.data]);
 
-  const isLoading = subjectQuery.isPending || chapterQuestionQueries.some((q) => q.isPending);
+  const isLoading = subjectQuery.isPending || countsQuery.isPending;
 
   if (isLoading && chapters.length === 0) {
     return (
@@ -537,27 +514,26 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
   const foundChapter = subjectQuery.data?.chapters?.find((c) => c.name === chapter);
 
-  const questionsQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'chapter-questions', foundChapter?.id],
-    queryFn: () => getQuestionsByChapter(foundChapter!.id),
-    enabled: !!foundChapter,
+  // Per-level counts from the shared counts endpoint — no full question fetch.
+  const countsQuery = useQuery({
+    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
+    queryFn: getQuestionCounts,
     staleTime: QUIZ_QUERY_STALE_TIME,
   });
 
   const questionCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    const questions = questionsQuery.data?.data;
-    if (!questions) return counts;
+    const chapterLevels = foundChapter
+      ? countsQuery.data?.byChapter[foundChapter.id]?.levels
+      : undefined;
+    if (!chapterLevels) return counts;
     levels.forEach((level) => {
-      counts[level] = questions.filter(
-        (q) => q.level === level.toLowerCase() && q.status === 'published'
-      ).length;
+      counts[level] = chapterLevels[level.toLowerCase()] ?? 0;
     });
     return counts;
-  }, [questionsQuery.data]);
+  }, [countsQuery.data, foundChapter]);
 
-  const isLoading =
-    subjectQuery.isPending || (foundChapter !== undefined && questionsQuery.isPending);
+  const isLoading = subjectQuery.isPending || countsQuery.isPending;
 
   return (
     <div>

@@ -143,6 +143,17 @@ export async function getPublicLevelCounts(): Promise<PublicLevelCounts> {
   return response.data;
 }
 
+/** Public per-subject + per-chapter published counts (single grouped query, cached). */
+export interface PublicQuestionCounts {
+  bySubject: Record<string, number>;
+  byChapter: Record<string, { count: number; levels: Record<string, number> }>;
+}
+
+export async function getQuestionCounts(): Promise<PublicQuestionCounts> {
+  const response = await api.get<PublicQuestionCounts>('/quiz-mcq/question-counts');
+  return response.data;
+}
+
 export async function getSubjectMeta(
   slug: string
 ): Promise<{ name: string; emoji: string; slug: string }> {

@@ -183,6 +183,61 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     );
   }
 
+  /**
+   * Public published-question counts in one grouped query — per subject and
+   * per chapter (with per-level breakdown). Feeds the landing page and the
+   * chapter/mode pickers without any full question-list fetches. Cached.
+   */
+  async getPublicQuestionCounts(): Promise<{
+    bySubject: Record<string, number>;
+    byChapter: Record<string, { count: number; levels: Record<string, number> }>;
+  }> {
+    return this.cache.getOrSet(
+      'quiz:public-question-counts',
+      async () => {
+        const rows: {
+          slug: string | null;
+          chapterId: string | null;
+          level: string;
+          count: string;
+        }[] = await this.deps.itemRepo
+          .createQueryBuilder('question')
+          .leftJoin('question.chapter', 'chapter')
+          .leftJoin('chapter.subject', 'subject')
+          .select('subject.slug', 'slug')
+          .addSelect('chapter.id', 'chapterId')
+          .addSelect('question.level', 'level')
+          .addSelect('COUNT(*)', 'count')
+          .where('question.status = :status', { status: ContentStatus.PUBLISHED })
+          .andWhere('subject.slug IS NOT NULL')
+          .groupBy('subject.slug')
+          .addGroupBy('chapter.id')
+          .addGroupBy('question.level')
+          .getRawMany();
+
+        const bySubject: Record<string, number> = {};
+        const byChapter: Record<string, { count: number; levels: Record<string, number> }> = {};
+
+        for (const row of rows) {
+          const count = parseInt(row.count, 10);
+          const slug = row.slug as string;
+          const level = row.level.toLowerCase();
+
+          bySubject[slug] = (bySubject[slug] || 0) + count;
+
+          if (row.chapterId) {
+            byChapter[row.chapterId] = byChapter[row.chapterId] || { count: 0, levels: {} };
+            byChapter[row.chapterId].count += count;
+            byChapter[row.chapterId].levels[level] = count;
+          }
+        }
+
+        return { bySubject, byChapter };
+      },
+      this.PUBLIC_COUNTS_TTL_S
+    );
+  }
+
   // ==================== CHAPTERS ====================
 
   async findChaptersBySubject(subjectId: string): Promise<Chapter[]> {
