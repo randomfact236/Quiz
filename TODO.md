@@ -68,6 +68,14 @@ Optimization pass (2026-08-26):
 - ~~Open: cosmetic practice countdown~~ — REMOVED 2026-08-26 per owner decision (no enforcement existed; challenge ring unaffected).
 - DONE 2026-08-26 — unified Quiz/Riddle picker built at `/play`: content-type step then mode step, routed into existing quiz/riddle flows; linked from riddles home.
 
+### 4. ToastContainer is mounted nowhere — repo-wide toast gap
+
+- **Status:** OPEN — logged 2026-08-30 during the riddle-mcq P0 pass.
+- **Problem:** every `toast.success()/error()/...` call (singleton `lib/toast.ts#toastManager`) renders nothing because the subscribing UI, `components/ui/ToastContainer.tsx`, is not mounted anywhere in the app tree (verified by repo-wide grep 2026-08-30). Affected surfaces include quiz-mcq results (`app/quiz-mcq/results/page.tsx:70-74`), admin sections (JokesSection, MediaLibrarySection, ImageRiddlesAdminSection, CommentsSection), and others.
+- **Fix:** mount `<ToastContainer />` once in `app/providers.tsx` (inside `QueryClientProvider`). **Blocked:** `providers.tsx` is currently being edited by the concurrent analytics session — do it once that session lands.
+- **Interim workaround:** riddle-mcq admin mounts `ToastContainer` locally inside `RiddleMcqContainer` (commit `2834b54`) so its import toast works. Remove the local mount when the global one lands.
+- Note: `lib/toast.ts` has no DOM fallback; without a mounted container, toasts fire and silently auto-dismiss.
+
 ## Resolved
 
 ### image-riddles `stats/overview`: public vs admin-only — **RESOLVED: keep public**
