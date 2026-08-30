@@ -142,12 +142,22 @@ export function checkAchievements(): Achievement[] {
       }
 
       case 'chapter_complete': {
-        const perfectChapters = history.filter((s) => s.score === s.maxScore && s.maxScore > 0);
-        shouldUnlock = perfectChapters.length >= achievement.condition.threshold;
+        // Distinct chapters with a perfect session (plan/02-mcq-quiz.md P2
+        // audit): previously counted perfect quizzes, which duplicated the
+        // perfect_score condition instead of measuring chapters.
+        const perfectChapters = new Set(
+          history
+            .filter((s) => s.score === s.maxScore && s.maxScore > 0)
+            .map((s) => `${s.subject}:${s.chapter}`)
+        );
+        shouldUnlock = perfectChapters.size >= achievement.condition.threshold;
         break;
       }
 
       case 'subject_explore': {
+        // Semantics (clarified per plan/02-mcq-quiz.md P2 audit): any session
+        // with a positive score counts as having "explored" that subject —
+        // chapter completion is not required (the description matches this).
         const subjectsWithCompletion = new Set(
           history.filter((s) => s.score > 0).map((s) => s.subject)
         );
