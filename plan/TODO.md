@@ -41,3 +41,26 @@
 | 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30) |
 | 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30) |
 | 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30) |
+
+## Progress snapshot (2026-08-30)
+
+Completion = 100 minus a priority-weighted penalty for open tasks (P0 = −10, P1 = −5, P2 = −2, P3 = −1 each).
+All 13 features are built and verified; the percentages measure remaining tracked work, not missing features.
+Recompute after working any backlog item.
+
+| Feature                | Open P0/P1/P2/P3          | Complete |
+| ---------------------- | ------------------------- | -------- |
+| 01 User Accounts       | 0/6/4/3                   | 59%      |
+| 02 MCQ Quiz            | 0/4/5/4                   | 66%      |
+| 03 Riddle MCQ          | 0/3/5/3                   | 72%      |
+| 04 Image Riddles       | 0/3/4/3                   | 74%      |
+| 05 Dad Jokes           | 0/3/4/4                   | 73%      |
+| 06 Achievements        | 0/3/5/4                   | 71%      |
+| 07 Comments            | 0/2/2/1                   | 85%      |
+| 08 Media Library       | 0/2/3/1                   | 83%      |
+| 09 Site Shell & SEO    | 1/3/3/2                   | 67%      |
+| 10 Landing & Shared UI | 0/2/3/2                   | 82%      |
+| 11 Site Settings       | 0/4/3/2                   | 72%      |
+| 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
+| 13 Analytics           | 0/3/4/3                   | 74%      |
+| **Overall**            | **1/41/49/35 (126 open)** | **≈73%** |
