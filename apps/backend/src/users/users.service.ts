@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { MoreThan, Repository } from 'typeorm';
 
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 
 /** Refresh tokens live 7 days from issue; rotation on use resets the clock. */
 export const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -117,7 +117,11 @@ export class UsersService {
     await this.userRepo.update(userId, { googleId });
   }
 
-  async updateRole(id: string, role: string): Promise<void> {
+  async updateRole(id: string, role: UserRole | string): Promise<void> {
+    // Defense in depth alongside the DTO validation and the DB CHECK constraint.
+    if (role !== UserRole.USER && role !== UserRole.ADMIN) {
+      throw new BadRequestException(`role must be one of: ${UserRole.USER}, ${UserRole.ADMIN}`);
+    }
     await this.userRepo.update(id, { role });
   }
 

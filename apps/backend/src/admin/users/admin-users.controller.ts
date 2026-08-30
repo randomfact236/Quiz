@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { UsersService } from '../../users/users.service';
 import { AdminGuard } from '../../common/guards/admin.guard';
+import { UpdateUserDto } from '../../users/dto/update-user.dto';
 
 @ApiTags('Admin - Users')
 @Controller('admin/users')
@@ -32,14 +33,12 @@ export class AdminUsersController {
   @Put(':id')
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 200, description: 'User updated successfully' })
-  async updateUser(
-    @Param('id') id: string,
-    @Body() data: { name?: string; role?: string; avatar?: string }
-  ) {
-    if (data.role) {
-      await this.usersService.updateRole(id, data.role);
+  @ApiResponse({ status: 400, description: 'Validation failed (e.g. invalid role)' })
+  async updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    if (dto.role) {
+      await this.usersService.updateRole(id, dto.role);
     }
-    return this.usersService.updateProfile(id, { name: data.name, avatar: data.avatar });
+    return this.usersService.updateProfile(id, { name: dto.name, avatar: dto.avatar });
   }
 
   @Delete(':id')

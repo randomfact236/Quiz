@@ -6,6 +6,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -23,8 +28,9 @@ export class User {
   @Column({ nullable: true })
   avatar: string;
 
-  @Column({ default: 'user' })
-  role: string;
+  /** Constrained to ('user' | 'admin') by users_role_check (migration 1788600000000). */
+  @Column({ default: UserRole.USER })
+  role: UserRole | string;
 
   /** SHA-256 hash of the opaque refresh token — the raw token never touches the DB. */
   @Column({ nullable: true, type: 'varchar' })
