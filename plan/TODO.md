@@ -14,7 +14,7 @@
 | 2   | Riddle MCQ      | [02-riddle-mcq.md](02-riddle-mcq.md)           | ✅ Done (2026-08-30) |
 | 3   | Image Riddles   | [03-image-riddles.md](03-image-riddles.md)     | ✅ Done (2026-08-30) |
 | 4   | Dad Jokes       | [04-dad-jokes.md](04-dad-jokes.md)             | ✅ Done (2026-08-30) |
-| 5   | Achievements    | [05-achievements.md](05-achievements.md)       | ⬜ Not started       |
+| 5   | Achievements    | [05-achievements.md](05-achievements.md)       | ✅ Done (2026-08-30) |
 | 6   | User Accounts   | [06-user-accounts.md](06-user-accounts.md)     | ⬜ Not started       |
 | 7   | Admin Dashboard | [07-admin-dashboard.md](07-admin-dashboard.md) | ⬜ Not started       |
 | 8   | Site Settings   | [08-site-settings.md](08-site-settings.md)     | ⬜ Not started       |
