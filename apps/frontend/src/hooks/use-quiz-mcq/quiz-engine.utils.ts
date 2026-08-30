@@ -31,6 +31,7 @@ export function convertQuizQuestion(q: QuizQuestion): Question {
     optionD: options[3] || '',
     correctAnswer: q.correctAnswer,
     correctLetter: q.correctLetter || null,
+    explanation: q.explanation || null,
     level: q.level,
     chapter: q.chapterId,
     status: q.status || 'published',

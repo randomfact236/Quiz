@@ -21,8 +21,8 @@ export interface Question {
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapter: string;
   status?: ContentStatus;
-  /** Optional explanation shown after answering (future) */
-  explanation?: string;
+  /** Optional explanation shown after answering (plan/02-mcq-quiz.md P1 #4) */
+  explanation?: string | null;
 }
 
 /** Quiz Session State */

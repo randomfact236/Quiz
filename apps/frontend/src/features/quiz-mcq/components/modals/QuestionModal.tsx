@@ -34,6 +34,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctLetter, setCorrectLetter] = useState('A');
   const [openEndedAnswer, setOpenEndedAnswer] = useState('');
+  const [explanation, setExplanation] = useState('');
 
   const isExtreme = level === 'extreme';
 
@@ -50,6 +51,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
   useEffect(() => {
     if (open && question) {
       setQuestionText(question.question);
+      setExplanation(question.explanation || '');
       setChapterId(question.chapterId);
       setLevel(question.level);
       setStatus(
@@ -70,6 +72,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       }
     } else if (open) {
       setQuestionText('');
+      setExplanation('');
       setSubjectId('');
       setChapterId('');
       setLevel('easy');
@@ -116,6 +119,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
         options: null,
         correctAnswer: openEndedAnswer.trim(),
         correctLetter: null,
+        explanation: explanation.trim() || null,
       };
     } else {
       data = {
@@ -126,6 +130,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
         options: options.filter((o) => o.trim()),
         correctLetter: correctLetter,
         correctAnswer: options[CORRECT_LETTERS.indexOf(correctLetter)] || '',
+        explanation: explanation.trim() || null,
       };
     }
 
@@ -174,6 +179,19 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
               className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
               placeholder="Enter the question..."
               required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Explanation <span className="text-gray-400">(optional — shown in review)</span>
+            </label>
+            <textarea
+              value={explanation}
+              onChange={(e) => setExplanation(e.target.value)}
+              rows={2}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              placeholder="Why is the correct answer right?"
             />
           </div>
 

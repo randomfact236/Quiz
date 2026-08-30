@@ -33,6 +33,10 @@ export class Question {
   @Column({ type: 'enum', enum: ['easy', 'medium', 'hard', 'expert', 'extreme'] })
   level: string;
 
+  /** Optional rationale shown in the review UI after answering. */
+  @Column({ type: 'text', nullable: true })
+  explanation: string | null;
+
   @ManyToOne(() => Chapter, (chapter) => chapter.questions)
   chapter: Chapter;
 

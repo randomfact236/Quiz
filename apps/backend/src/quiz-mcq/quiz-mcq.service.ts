@@ -764,6 +764,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
         options: isOpenEnded ? null : dto.options || [],
         level: dto.level,
         status: dto.status || ContentStatus.PUBLISHED,
+        explanation: dto.explanation ?? null,
       },
     };
   }
@@ -771,6 +772,9 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
   protected async applyUpdate(item: Question, dto: Record<string, any>): Promise<void> {
     if (dto.question !== undefined) {
       item.question = dto.question;
+    }
+    if (dto.explanation !== undefined) {
+      item.explanation = dto.explanation || null;
     }
     if (dto.correctAnswer !== undefined) {
       item.correctAnswer = dto.correctAnswer;

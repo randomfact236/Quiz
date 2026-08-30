@@ -30,6 +30,7 @@ export interface QuizChapter {
 export interface QuizQuestion {
   id: string;
   question: string;
+  explanation?: string | null;
   options: string[] | null;
   correctAnswer: string;
   correctLetter: string | null;
@@ -64,6 +65,7 @@ export interface CreateQuestionDto {
   correctAnswer: string;
   correctLetter?: string | null;
   options: string[] | null;
+  explanation?: string | null;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapterId: string;
   status?: 'published' | 'draft' | undefined;
@@ -74,6 +76,7 @@ export interface UpdateQuestionDto {
   correctAnswer?: string;
   correctLetter?: string | null;
   options?: string[] | null;
+  explanation?: string | null;
   level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapterId?: string;
   status?: 'published' | 'draft' | 'trash' | undefined;

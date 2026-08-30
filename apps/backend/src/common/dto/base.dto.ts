@@ -10,6 +10,7 @@ import {
   IsEnum,
   IsBoolean,
   IsArray,
+  MaxLength,
 } from 'class-validator';
 
 import {
@@ -491,6 +492,12 @@ export class CreateQuestionDto {
   @IsString({ each: true })
   options?: string[] | null;
 
+  @ApiPropertyOptional({ description: 'Optional rationale shown in the review UI' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(4000)
+  explanation?: string | null;
+
   @ApiProperty({ example: 'easy', enum: QuestionLevel })
   @IsEnum(QuestionLevel)
   level: QuestionLevel;
@@ -520,6 +527,12 @@ export class UpdateQuestionDto {
   @IsOptional()
   @IsString()
   question?: string;
+
+  @ApiPropertyOptional({ description: 'Optional rationale shown in the review UI' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(4000)
+  explanation?: string | null;
 
   @ApiPropertyOptional({ example: 'Paris' })
   @IsOptional()
