@@ -96,7 +96,15 @@ function ResultsContent(): JSX.Element {
     );
   }
 
-  const { session, correctCount, incorrectCount, percentage, grade, byDifficulty } = result;
+  const {
+    session,
+    correctCount,
+    incorrectCount,
+    unansweredCount,
+    percentage,
+    grade,
+    byDifficulty,
+  } = result;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-3 py-4">
@@ -264,7 +272,9 @@ function ResultsContent(): JSX.Element {
           transition={{ delay: 0.3 }}
           className="mb-6 rounded-2xl bg-white p-6 shadow-lg"
         >
-          <div className="grid grid-cols-2 gap-6 text-center">
+          <div
+            className={`grid gap-6 text-center ${unansweredCount > 0 ? 'grid-cols-3' : 'grid-cols-2'}`}
+          >
             <div>
               <p className="text-3xl font-bold text-green-600">{correctCount}</p>
               <p className="text-sm text-gray-500">Correct Answers</p>
@@ -273,6 +283,12 @@ function ResultsContent(): JSX.Element {
               <p className="text-3xl font-bold text-red-600">{incorrectCount}</p>
               <p className="text-sm text-gray-500">Incorrect Answers</p>
             </div>
+            {unansweredCount > 0 && (
+              <div>
+                <p className="text-3xl font-bold text-amber-500">{unansweredCount}</p>
+                <p className="text-sm text-gray-500">Not Answered</p>
+              </div>
+            )}
           </div>
         </motion.div>
 

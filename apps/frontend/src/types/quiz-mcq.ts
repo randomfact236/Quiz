@@ -109,6 +109,7 @@ export interface QuizResult {
   session: QuizSession;
   correctCount: number;
   incorrectCount: number;
+  unansweredCount: number;
   percentage: number;
   grade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
   byDifficulty: {

@@ -77,6 +77,7 @@ export function calculateGrade(percentage: number): 'A+' | 'A' | 'B' | 'C' | 'D'
 export function calculateResult(session: QuizSession): QuizResult {
   let correctCount = 0;
   let incorrectCount = 0;
+  let unansweredCount = 0;
 
   const byDifficulty: Record<(typeof DIFFICULTY_LEVELS)[number], DifficultyBucket> = {
     easy: { correct: 0, total: 0 },
@@ -87,7 +88,19 @@ export function calculateResult(session: QuizSession): QuizResult {
   };
 
   session.questions.forEach((q) => {
-    const isCorrect = isAnswerCorrect(q, session.answers[q.id]);
+    const given = session.answers[q.id];
+    // Distinct "unanswered" state (plan/02-mcq-quiz.md P1 #3): a missing or
+    // empty answer is neither correct nor incorrect.
+    if (given === undefined || given === null || given.trim() === '') {
+      unansweredCount++;
+      const bucket = (DIFFICULTY_LEVELS as readonly string[]).includes(q.level)
+        ? byDifficulty[q.level as (typeof DIFFICULTY_LEVELS)[number]]
+        : null;
+      if (bucket) bucket.total++;
+      return;
+    }
+
+    const isCorrect = isAnswerCorrect(q, given);
 
     if (isCorrect) {
       correctCount++;
@@ -117,6 +130,7 @@ export function calculateResult(session: QuizSession): QuizResult {
     session,
     correctCount,
     incorrectCount,
+    unansweredCount,
     percentage,
     grade: calculateGrade(percentage),
     byDifficulty,

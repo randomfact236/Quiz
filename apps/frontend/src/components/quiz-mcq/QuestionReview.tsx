@@ -10,7 +10,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, CheckCircle, XCircle } from 'lucide-react';
+import { ChevronDown, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
 import type { Question } from '@/types/quiz-mcq';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 
@@ -30,7 +30,8 @@ export function QuestionReview({
 }: QuestionReviewProps): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const isCorrect = isAnswerCorrect(question, userAnswer);
+  const isAnswered = userAnswer !== undefined && userAnswer !== null && userAnswer.trim() !== '';
+  const isCorrect = isAnswered && isAnswerCorrect(question, userAnswer);
   const isExtreme = question.level === 'extreme';
   // MCQ: correct answer is identified by its letter (correctLetter holds the
   // text in correctAnswer, which never matches an option key).
@@ -47,7 +48,11 @@ export function QuestionReview({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-xl border-2 p-4 ${
-        isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+        isCorrect
+          ? 'border-green-200 bg-green-50'
+          : isAnswered
+            ? 'border-red-200 bg-red-50'
+            : 'border-amber-200 bg-amber-50'
       }`}
     >
       {/* Header - Always visible */}
@@ -69,8 +74,10 @@ export function QuestionReview({
           {/* Status Icon */}
           {isCorrect ? (
             <CheckCircle className="h-6 w-6 text-green-500" />
-          ) : (
+          ) : isAnswered ? (
             <XCircle className="h-6 w-6 text-red-500" />
+          ) : (
+            <MinusCircle className="h-6 w-6 text-amber-500" />
           )}
 
           {/* Expand Icon */}
@@ -146,7 +153,7 @@ export function QuestionReview({
                   }`}
                 >
                   <p className="text-sm font-medium">Your answer:</p>
-                  <p className="text-lg">{userAnswer || '(no answer)'}</p>
+                  <p className="text-lg">{isAnswered ? userAnswer : '(not answered)'}</p>
                   <p className="mt-2 text-sm font-medium">Correct answer:</p>
                   <p className="text-lg font-semibold">{question.correctAnswer}</p>
                 </div>
