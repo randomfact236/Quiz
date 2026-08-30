@@ -1,0 +1,28 @@
+# Build Backlog — Cross-Feature Launch Items
+
+> This is the **execution list**: the open work that spans feature files or blocks "website complete."
+> Each item links to its owning feature file, where the full detail and acceptance criteria live —
+> update status in both places when working an item. Phase basis: same P0–P3 convention as the
+> feature TODO files (see [TODO.md](TODO.md)).
+>
+> Last reviewed: 2026-08-30.
+
+| #   | Item                                                                                                                                                                                   | Priority | Effort       | Owning feature(s)                                                                                                                                | Depends on                                                                     |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| 1   | **Mount `<ToastContainer />`** — the component exists but no layout renders it; every toast (achievement unlocks, vote/save/media feedback) is silently invisible                      | P0       | One line     | [09 Site Shell & SEO](09-site-shell-seo.md)                                                                                                      | —                                                                              |
+| 2   | **Server-side sessions/results** — history, resume, high-scores are localStorage-only and lost on device switch; needs a sessions table + API + client migration off localStorage keys | P1       | **Large**    | [01 User Accounts](01-user-accounts.md), [02 MCQ Quiz](02-mcq-quiz.md), [03 Riddle MCQ](03-riddle-mcq.md), [06 Achievements](06-achievements.md) | DB migration; design once, all games adopt                                     |
+| 3   | **Site Settings split-brain** — admin UI saves to a localStorage mock; backend `GET/PATCH /settings` unconsumed; gameplay timers use hardcoded fallbacks                               | P1       | Medium       | [11 Site Settings](11-site-settings.md)                                                                                                          | —                                                                              |
+| 4   | **SEO basics** — sitemap, robots, OG/Twitter metadata; decide server-rendering for SEO-relevant content (Joke-of-the-Day, subject pages)                                               | P1       | Small–medium | [09 Site Shell & SEO](09-site-shell-seo.md)                                                                                                      | —                                                                              |
+| 5   | **Newsletter** — subscribe endpoint + footer form + admin export; nothing exists today                                                                                                 | P1       | Medium       | [09 Site Shell & SEO](09-site-shell-seo.md)                                                                                                      | Email delivery exists (Resend, used by password reset)                         |
+| 6   | **Profile page UI** — `GET/PUT /users/profile` exists but there is no page to view/edit name or avatar                                                                                 | P1       | Small        | [01 User Accounts](01-user-accounts.md)                                                                                                          | —                                                                              |
+| 7   | **Legal pages** — privacy policy, terms, contact page; none exist                                                                                                                      | P1       | Small        | [09 Site Shell & SEO](09-site-shell-seo.md)                                                                                                      | —                                                                              |
+| 8   | **Achievements for all games** — only quiz-mcq play can unlock achievements; riddle/image-riddle completions feed nothing                                                              | P1       | Small–medium | [06 Achievements](06-achievements.md)                                                                                                            | Benefits from #2 but not blocked by it (localStorage stats are readable today) |
+| 9   | **Engagement counters & explanations** — no persisted views/likes for image riddles; no `explanation` column/authoring for quiz questions (review UI already renders it)               | P1/P2    | Medium       | [04 Image Riddles](04-image-riddles.md), [02 MCQ Quiz](02-mcq-quiz.md)                                                                           | —                                                                              |
+
+## Suggested execution order
+
+1 → 6 → 7 (quick wins, days) → 4 → 3 → 8 → 5 → 2 → 9 (largest last, since #2's design reshapes how history is stored and #9 adds columns/tables).
+
+## Done
+
+- (empty — move items here with a date as they ship)

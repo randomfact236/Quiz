@@ -92,6 +92,7 @@ Frontend (`apps/frontend/src/`):
 - [ ] **OAuth callback**: replace token-in-URL with a short-lived one-time code exchanged via POST (tokens leak to browser history/referrer logs today).
 - [ ] **Constrain role to an enum** ('user' \| 'admin') at the DTO and DB level.
 - [ ] **Email verification** before public launch (absent entirely).
+- [ ] **End-user profile page**: `GET/PUT /users/profile` exist but there is no page to view/edit name or avatar — build `/profile` (also listed in plan/BUILD-BACKLOG.md #6).
 - [ ] Commit the auth-event analytics records in `auth.service.ts` when the analytics feature is revisited (paused by decision 2026-08-30).
 
 ### P2 — integration / quality

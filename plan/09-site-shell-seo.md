@@ -50,6 +50,7 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 
 - [ ] **SEO basics**: add `app/sitemap.ts` (static routes + published subjects/chapters/categories from the public APIs), `app/robots.ts`, and OpenGraph/Twitter metadata in the root layout. Decide server-rendering strategy for SEO-relevant content (Joke-of-the-Day, subject pages) — currently client-fetched.
 - [ ] **Newsletter (new feature)**: subscribe endpoint (email capture, double opt-in, throttled) + footer form + admin export. Depends on nothing else; pair the storage decision with User Accounts if subscribers may later become users.
+- [ ] **Legal pages**: privacy policy, terms of service, and a contact page — none exist anywhere in the app.
 
 ### P2 — integration / quality
 

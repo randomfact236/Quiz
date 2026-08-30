@@ -1,7 +1,9 @@
 # Feature TODO System — Master Tracker
 
 > One TODO file per feature in `plan/`, in **dependency/build order** (identity first, then content,
-> then engagement, infrastructure, configuration, management, measurement):
+> then engagement, infrastructure, configuration, management, measurement).
+> **Cross-feature launch items** (spanning several features, with priority/effort/execution order) are
+> consolidated in **[BUILD-BACKLOG.md](BUILD-BACKLOG.md)** — start there when planning work.
 > **Phase basis for every file:** P0 = critical/broken · P1 = major gaps · P2 = integration/quality · P3 = polish/tech debt
 > (same convention as `plan/quiz-mcq-analysis-plan.md` and `plan/riddle-mcq-analysis-plan.md`, stated at the top of each file).
 >
