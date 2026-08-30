@@ -28,6 +28,7 @@ import {
   type RiddleMcqCategory,
   type RiddleMcqSubject,
 } from '@/lib/riddle-mcq-api';
+import { parseModeParam, type RiddlePlayMode as Mode } from '@/lib/riddle-mode-param';
 
 // ============================================================================
 // Level metadata (riddles have 4 levels)
@@ -42,7 +43,7 @@ const LEVELS: { key: Level; label: string; emoji: string; color: string }[] = [
   { key: 'expert', label: 'Expert', emoji: '🔥', color: 'from-red-400 to-red-600' },
 ];
 
-type Mode = 'practice' | 'timer';
+// Mode parsing lives in @/lib/riddle-mode-param (page modules can't export helpers).
 
 interface CategoryWithCount extends RiddleMcqCategory {
   riddleTotal: number;
@@ -111,9 +112,15 @@ function HubError({ message }: { message: string }): JSX.Element {
 // Shared mode + level picker (used at top level and inside categories)
 // ============================================================================
 
-function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Element {
-  const [normalOpen, setNormalOpen] = useState(true);
-  const [timerOpen, setTimerOpen] = useState(true);
+function ModeLevelPicker({
+  counts,
+  defaultMode,
+}: {
+  counts: Record<Level, number>;
+  defaultMode?: Mode | null;
+}): JSX.Element {
+  const [normalOpen, setNormalOpen] = useState(!defaultMode || defaultMode === 'practice');
+  const [timerOpen, setTimerOpen] = useState(defaultMode === 'timer');
 
   const grid = (mode: Mode) => (
     <div className="p-6">
@@ -194,6 +201,7 @@ function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Ele
 function RiddlesPageContent(): JSX.Element {
   const searchParams = useSearchParams();
   const categorySlug = searchParams?.get('category') || '';
+  const mode = parseModeParam(searchParams?.get('mode'));
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -312,7 +320,7 @@ function RiddlesPageContent(): JSX.Element {
             <p className="font-medium text-white/90">Pick a mode and difficulty to start playing</p>
           </div>
 
-          <ModeLevelPicker counts={categoryCounts} />
+          <ModeLevelPicker counts={categoryCounts} defaultMode={mode} />
         </div>
       </main>
     );
@@ -347,7 +355,7 @@ function RiddlesPageContent(): JSX.Element {
 
         {/* Mode selection */}
         <section aria-label="Game mode selection" className="mb-12">
-          <ModeLevelPicker counts={allSubjectCounts} />
+          <ModeLevelPicker counts={allSubjectCounts} defaultMode={mode} />
         </section>
 
         {/* Categories — subject-listing tile style */}
