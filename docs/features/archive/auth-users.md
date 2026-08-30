@@ -1,3 +1,5 @@
+> **OBSOLETE (2026-08-30)** — superseded by `plan/01-user-accounts.md`, which re-verified every claim against the current code. This ledger is kept only for history and is **safe to delete**; all references elsewhere in the repo now point at the new file.
+
 # Auth, Users & Guest Users (`apps/backend/src/auth|users|guest-users/` + frontend auth)
 
 Identity layer: JWT auth, Google OAuth, password reset, user profiles, admin user management, and anonymous guest tracking. All backend paths relative to `apps/backend/src/`.

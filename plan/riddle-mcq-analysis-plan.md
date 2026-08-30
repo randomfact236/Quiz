@@ -1,6 +1,6 @@
 # Riddle MCQ — Feature Analysis, Format Review & Cosmetic Plan
 
-Companion docs: [features/riddle-mcq.md](../docs/features/riddle-mcq.md), [code-quality-plan.md](code-quality-plan.md), [image-riddles-upgrade-plan.md](image-riddles-upgrade-plan.md).
+Companion docs: [03-riddle-mcq.md](03-riddle-mcq.md), [code-quality-plan.md](code-quality-plan.md), [image-riddles-upgrade-plan.md](image-riddles-upgrade-plan.md).
 Verified against source on 2026-08-28.
 
 ## 1. What the feature has (verified inventory)
@@ -151,16 +151,16 @@ Caveats (format-level, not bugs):
 
 ## 4. Findings — functional/consistency issues
 
-| #   | Issue                                                                                                                                                                                                                                                 | Location                                                                       |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| R1  | `challenge`/`practice` routes redirect to `/riddle-mcq?mode=…` claiming the mode card will be "pre-expanded", but the hub only reads the `category` param — `mode` is silently dropped                                                                | `app/riddle-mcq/challenge/page.tsx:13`, `practice/page.tsx:13`, `page.tsx:196` |
-| R2  | Dead component: `RiddleStatsBanner` is imported nowhere (docs still list it as a hub element)                                                                                                                                                         | `app/riddle-mcq/components/RiddleStatsBanner.tsx`                              |
-| R3  | `RiddleReview` bypasses the shared scorer (`userAnswer === riddle.correctOption` inline) and renders an empty option list for expert text riddles; results passes `'N/A'` as userAnswer for unanswered                                                | `app/riddle-mcq/components/RiddleReview.tsx:32-39`, `results/page.tsx:278`     |
-| R4  | The per-riddle countdown ring is not a real per-riddle timer: the play page passes the **session** remaining seconds and fabricates a "per-riddle limit" by dividing remaining time across remaining riddles — the ring jumps back up after each Next | `play/page.tsx:304-315`, `RiddleCard.tsx:259-263`                              |
-| R5  | `ImportModal` gets `onSuccess={() => {}}` — import success relies entirely on internal invalidation; the prop is dead weight and the container gives no success feedback                                                                              | `features/riddle-mcq/components/RiddleMcqContainer.tsx:325-329`                |
-| R6  | Doc drift: docs reference `components/riddle-mcq/RiddleChallengeHub.tsx` and a stats banner on the hub — neither exists; challenge/practice are now redirects                                                                                         | `docs/features/riddle-mcq.md:69`                                               |
-| R7  | Hub data fetching uses `useState`/`useEffect` + `Promise.all` while every other surface uses React Query — no caching, no retry, duplicated loading/error shells                                                                                      | `app/riddle-mcq/page.tsx:206-264`                                              |
-| R8  | Container submit handlers typed `any` (`handleCategorySubmit(data: any)` etc.)                                                                                                                                                                        | `RiddleMcqContainer.tsx:141,150`                                               |
+| #   | Issue                                                                                                                                                                                                                                                 | Location                                                                           |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| R1  | `challenge`/`practice` routes redirect to `/riddle-mcq?mode=…` claiming the mode card will be "pre-expanded", but the hub only reads the `category` param — `mode` is silently dropped                                                                | `app/riddle-mcq/challenge/page.tsx:13`, `practice/page.tsx:13`, `page.tsx:196`     |
+| R2  | Dead component: `RiddleStatsBanner` is imported nowhere (docs still list it as a hub element)                                                                                                                                                         | `app/riddle-mcq/components/RiddleStatsBanner.tsx`                                  |
+| R3  | `RiddleReview` bypasses the shared scorer (`userAnswer === riddle.correctOption` inline) and renders an empty option list for expert text riddles; results passes `'N/A'` as userAnswer for unanswered                                                | `app/riddle-mcq/components/RiddleReview.tsx:32-39`, `results/page.tsx:278`         |
+| R4  | The per-riddle countdown ring is not a real per-riddle timer: the play page passes the **session** remaining seconds and fabricates a "per-riddle limit" by dividing remaining time across remaining riddles — the ring jumps back up after each Next | `play/page.tsx:304-315`, `RiddleCard.tsx:259-263`                                  |
+| R5  | `ImportModal` gets `onSuccess={() => {}}` — import success relies entirely on internal invalidation; the prop is dead weight and the container gives no success feedback                                                                              | `features/riddle-mcq/components/RiddleMcqContainer.tsx:325-329`                    |
+| R6  | Doc drift: docs reference `components/riddle-mcq/RiddleChallengeHub.tsx` and a stats banner on the hub — neither exists; challenge/practice are now redirects                                                                                         | `docs/features/archive/riddle-mcq.md` (obsolete; superseded by `03-riddle-mcq.md`) |
+| R7  | Hub data fetching uses `useState`/`useEffect` + `Promise.all` while every other surface uses React Query — no caching, no retry, duplicated loading/error shells                                                                                      | `app/riddle-mcq/page.tsx:206-264`                                                  |
+| R8  | Container submit handlers typed `any` (`handleCategorySubmit(data: any)` etc.)                                                                                                                                                                        | `RiddleMcqContainer.tsx:141,150`                                                   |
 
 ## 5. Cosmetic improvements (the ask)
 
@@ -243,7 +243,7 @@ Rule inherited from code-quality-plan §2: refactors leave behavior identical; s
 ### Phase P3 — Type hygiene & docs
 
 16. **R8+C21** — typed submit handlers in the admin container.
-17. **R6** — update `docs/features/riddle-mcq.md`: remove RiddleChallengeHub/stats-banner claims, note the redirect routes.
+17. **R6** — superseded — `03-riddle-mcq.md` §3 documents the unified hub and redirect routes.
 18. **Riddle format decision (owner)** — expert answer aliases / normalized matching; needs product input before implementation.
 
 ### Deferred (consistent with prior owner decisions)

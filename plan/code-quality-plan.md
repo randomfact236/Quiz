@@ -51,13 +51,13 @@ Sequence: extract only after Phase 1 bugs are fixed and tests exist — never re
 
 ## 5. Per-Feature Quality Debt Index
 
-| Feature                                            | Top debt items                                                                                                |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| [quiz-mcq](../docs/features/quiz-mcq.md)           | play page + useQuizMcq monoliths; hub duplication; dead QuizMcqTimer/QuizMcqNavigation; setState side effects |
-| [riddle-mcq](../docs/features/riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                         |
-| [image-riddles](../docs/features/image-riddles.md) | two divergent CRUD paths to unify                                                                             |
-| [dad-jokes](../docs/features/dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                                        |
-| [auth-users](../docs/features/auth-users.md)       | plaintext refresh tokens; free-text role; untyped admin payloads                                              |
+| Feature                              | Top debt items                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| [quiz-mcq](02-mcq-quiz.md)           | play page + useQuizMcq monoliths; hub duplication; dead QuizMcqTimer/QuizMcqNavigation; setState side effects |
+| [riddle-mcq](03-riddle-mcq.md)       | duplicate hooks/filters; dead modal hook; legacy chapter naming layer; biased shuffle                         |
+| [image-riddles](04-image-riddles.md) | two divergent CRUD paths to unify                                                                             |
+| [dad-jokes](05-dad-jokes.md)         | full FE rewrite against API (removes ~400 lines of localStorage logic)                                        |
+| [user accounts](01-user-accounts.md) | plaintext refresh tokens; free-text role; untyped admin payloads                                              |
 
 ## 6. Enforcement
 

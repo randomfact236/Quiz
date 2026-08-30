@@ -4,8 +4,8 @@
  * ============================================================================
  * Public read endpoints plus the shared admin surfaces for status/bulk
  * operations (bulk-action, status-counts). Canonical CRUD lives in
- * AdminImageRiddlesController (/admin/image-riddles/*) — see docs/features/
- * image-riddles.md "De-duplicate admin CRUD".
+ * AdminImageRiddlesController (/admin/image-riddles/*) — see
+ * plan/04-image-riddles.md "De-duplicate admin CRUD".
  * ============================================================================
  */
 

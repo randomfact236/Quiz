@@ -1,6 +1,6 @@
 # Plans
 
-All forward-looking planning documents. Analysis ledgers live in [../docs/features/](../docs/features/) and [../docs/platform/](../docs/platform/); superseded old plans in [../archive/](../archive/).
+All forward-looking planning documents. Per-feature analysis ledgers are consolidated into the TODO files indexed in [TODO.md](TODO.md); [../docs/platform/](../docs/platform/) holds cross-cutting docs; superseded old plans in [../archive/](../archive/) and legacy feature ledgers in [../docs/features/archive/](../docs/features/archive/) (obsolete — safe to delete).
 
 | Plan                                           | Purpose                                                                                                                                                                                  |
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

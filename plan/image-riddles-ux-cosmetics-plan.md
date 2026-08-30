@@ -1,7 +1,7 @@
 # Image Riddles — Feature & UX/Cosmetics Review
 
 Companion docs: [image-riddles-upgrade-plan.md](image-riddles-upgrade-plan.md) (code-quality debt — not duplicated here),
-[features/image-riddles.md](../docs/features/image-riddles.md).
+[04-image-riddles.md](04-image-riddles.md).
 Verified against source on 2026-08-28. Scope: **what the feature does, whether the game format/layout is good, and cosmetics worth implementing.**
 
 ## 1. What the feature is today (verified)
@@ -99,7 +99,7 @@ Key facts about this flow:
 | C10 | Image zoom `group-hover:scale-110` over 700ms is heavy/janky-feeling on large cards.                                                                                                                                                                                                                                                      | `page.tsx:541`                                      |
 | C11 | Search input lacks a visible clear (✕) affordance; `type="search"` provides a native one only in some browsers.                                                                                                                                                                                                                           | `page.tsx:431-441`                                  |
 | C12 | Emoji-only iconography (🖼️🔍📁👁️🕶️✨) renders inconsistently across OS/browser; a small icon set would be more uniform. Taste call — current look is internally consistent.                                                                                                                                                               | throughout                                          |
-| C13 | Stale/duplicated header comment ("Pagination (12 Items per Page)" twice) and doc drift — `docs/features/image-riddles.md` still describes the page as localStorage-only in places.                                                                                                                                                        | `page.tsx:9-10`, docs §6                            |
+| C13 | Stale/duplicated header comment ("Pagination (12 Items per Page)" twice) and doc drift — `docs/features/archive/image-riddles.md` (obsolete ledger) described the page as localStorage-only in places; superseded by `04-image-riddles.md`.                                                                                               | `page.tsx:9-10`, docs §6                            |
 
 ## 5. Cosmetic improvement plan
 
@@ -113,7 +113,7 @@ Rule: UX changes are behavior-visible, so each item should be a small, individua
 4. **C4** — card answer: render `Answer Hidden` placeholder when unrevealed instead of blurred real text; only mount the answer string once revealed.
 5. **C5** — platform-aware shortcut display (`navigator.platform` gate for ⌘/⌥) and remove the bogus `keyboardShortcut: 'Enter'` from the Check Answer action (modal already handles Enter).
 6. **C11** — visible clear button on search.
-7. **C13** — fix header comment; refresh `docs/features/image-riddles.md` §6 to describe the API-backed flow.
+7. **C13** — fix header comment; the ledger claim was superseded by `04-image-riddles.md` §3 (API-backed flow).
 8. **C2 (partial)** — add `loading="lazy"` + `onError` placeholder to both `<img>` usages now; full `next/image` stays with A4.
 
 ### Phase C1 — Game feel (small state changes)

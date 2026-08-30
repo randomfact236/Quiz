@@ -9,6 +9,12 @@
 > (history preserved). Each was diffed against its last committed git version before archiving — all matched; nothing
 > had been silently altered.
 >
+> **Archive status (2026-08-30): the archived ledgers are OBSOLETE and safe to delete.** Every reference in the
+> repo (plan docs, `docs/archive/README.md`, backend code comments in `image-riddles.controller.ts` /
+> `image-riddles.service.ts`) has been consolidated to point at the new `plan/0X-*.md` files, and each archived
+> file carries an OBSOLETE banner naming its replacement. Deleting `docs/features/archive/` breaks nothing —
+> the content remains recoverable from git history if ever needed.
+>
 > Numbering note: files were renumbered on 2026-08-30 from a first-draft order into the dependency order
 > below (user accounts 6→1, site settings 8→7, admin dashboard 7→8, analytics stays last). Cross-references
 > inside every file were updated to match — file numbers are now stable.

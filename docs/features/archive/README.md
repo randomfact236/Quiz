@@ -1,3 +1,5 @@
+> **OBSOLETE (2026-08-30)** — superseded by `plan/TODO.md (master index of the per-feature TODO files)`, which re-verified every claim against the current code. This ledger is kept only for history and is **safe to delete**; all references elsewhere in the repo now point at the new file.
+
 # Features — Full-Stack Analysis Index
 
 One file per product feature, each covering its **backend + frontend + admin surface + integration gaps + bugs + roadmap**. Cross-cutting concerns (app shell, platform core, testing, devops, docs) live in [`../platform/`](../platform/).

@@ -4,7 +4,7 @@
 > Deferred section below remains open (owner decision). Per-item status markers
 > are inline in §3.
 >
-> Companion docs: [features/image-riddles.md](../docs/features/image-riddles.md), [code-quality-plan.md](code-quality-plan.md).
+> Companion docs: [04-image-riddles.md](04-image-riddles.md), [code-quality-plan.md](code-quality-plan.md).
 > Verified against source on 2026-08-27.
 
 ## 1. Current State (verified)

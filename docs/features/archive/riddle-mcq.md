@@ -1,3 +1,5 @@
+> **OBSOLETE (2026-08-30)** — superseded by `plan/03-riddle-mcq.md`, which re-verified every claim against the current code. This ledger is kept only for history and is **safe to delete**; all references elsewhere in the repo now point at the new file.
+
 # Feature: Riddle MCQ (Full Stack)
 
 Merged from former sections 03 (frontend) and 04 (backend). Frontend paths relative to `apps/frontend/`, backend to `apps/backend/src/riddle-mcq/`.

@@ -4,7 +4,7 @@
  * ============================================================================
  * Public read queries + shared bulk status operations + stats. Canonical
  * CRUD (create/update/delete/categories) lives in AdminImageRiddlesService
- * (/admin/image-riddles/*) — see docs/features/image-riddles.md.
+ * (/admin/image-riddles/*) — see plan/04-image-riddles.md.
  * ============================================================================
  */
 

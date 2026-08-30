@@ -1,3 +1,5 @@
+> **OBSOLETE (2026-08-30)** — superseded by `plan/05-dad-jokes.md`, which re-verified every claim against the current code. This ledger is kept only for history and is **safe to delete**; all references elsewhere in the repo now point at the new file.
+
 # Dad Jokes (Full Stack)
 
 ## 1. Scope & File Inventory
