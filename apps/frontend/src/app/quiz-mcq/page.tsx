@@ -25,6 +25,7 @@ import {
   QUIZ_LEVEL_COLORS as levelColors,
   QUIZ_MCQ_PUBLIC_QUERY_PREFIX,
 } from '@/lib/quiz-mcq-constants';
+import QuizCardSkeleton from '@/components/quiz-mcq/QuizCardSkeleton';
 
 type SubjectCategory = 'academic' | 'professional' | 'entertainment';
 
@@ -274,8 +275,41 @@ function SubjectSelection(): JSX.Element {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-2xl text-white">Loading...</div>
+      <div>
+        {/* Special Quiz Modes */}
+        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          <Link
+            href="/"
+            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          >
+            <Home className="mb-2 h-8 w-8" />
+            <span className="font-bold">Back to Home</span>
+          </Link>
+
+          <Link
+            href="/quiz-mcq/timer-challenge"
+            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          >
+            <Puzzle className="mb-2 h-8 w-8" />
+            <span className="font-bold">Timer Challenge</span>
+          </Link>
+
+          <Link
+            href="/quiz-mcq/practice-mode"
+            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          >
+            <BookOpen className="mb-2 h-8 w-8" />
+            <span className="font-bold">Practice Mode</span>
+          </Link>
+        </div>
+
+        {/* Subject card skeletons (categories unknown until load) */}
+        <h1 className="mb-6 text-center text-3xl font-bold text-white">📚 Choose a Subject</h1>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
+          {Array.from({ length: 9 }, (_, i) => (
+            <QuizCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -420,8 +454,24 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
             ← Back to Subjects
           </Link>
         </div>
-        <div className="flex h-64 items-center justify-center">
-          <div className="text-2xl text-white">Loading chapters...</div>
+        {/* Chapter card skeletons */}
+        <h1 className="mb-8 text-center text-3xl font-bold text-white">
+          📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
+        </h1>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div
+              key={i}
+              aria-hidden="true"
+              className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg"
+            >
+              <div className="h-12 w-12 shrink-0 rounded-full bg-gray-200 animate-pulse" />
+              <div className="flex-1">
+                <div className="h-4 w-2/3 rounded bg-gray-200 animate-pulse" />
+                <div className="mt-2 h-3 w-1/2 rounded bg-gray-100 animate-pulse" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
