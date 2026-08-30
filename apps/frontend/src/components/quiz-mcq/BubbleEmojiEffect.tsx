@@ -11,7 +11,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface BubbleEmoji {
   id: number;
@@ -87,6 +87,7 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
   function BubbleEmojiEffect({ trigger, type, count = 60 }, ref): JSX.Element {
     const [bubbles, setBubbles] = useState<BubbleEmoji[]>([]);
     const [isActive, setIsActive] = useState(false);
+    const prefersReducedMotion = useReducedMotion();
 
     const clearBubbles = useCallback(() => {
       setBubbles([]);
@@ -119,10 +120,11 @@ export const BubbleEmojiEffect = forwardRef<BubbleEmojiEffectRef, BubbleEmojiEff
     }, [type, count]);
 
     useEffect(() => {
-      if (trigger && !isActive) {
+      // prefers-reduced-motion: skip the 60-particle burst entirely
+      if (trigger && !isActive && !prefersReducedMotion) {
         createBubbles();
       }
-    }, [trigger, isActive, createBubbles]);
+    }, [trigger, isActive, createBubbles, prefersReducedMotion]);
 
     return (
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[9999]">

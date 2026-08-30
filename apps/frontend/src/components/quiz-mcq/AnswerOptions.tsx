@@ -184,7 +184,7 @@ export function AnswerOptions({
   }
 
   return (
-    <div className={`grid gap-4 ${getGridClass()}`}>
+    <div className={`grid gap-4 ${getGridClass()}`} role="radiogroup" aria-label="Answer choices">
       {displayOptions.map((option) => {
         const isSelected = selectedKey === option.key;
         const isCorrect = showFeedback && correctKey === option.key;
@@ -197,6 +197,8 @@ export function AnswerOptions({
             whileHover={!disabled && !hasSelection ? { scale: 1.02 } : {}}
             whileTap={!disabled && !hasSelection ? { scale: 0.98 } : {}}
             disabled={disabled || hasSelection}
+            role="radio"
+            aria-checked={isSelected}
             className={getOptionStyle(option.key, hasSelection)}
           >
             {/* Option Text */}

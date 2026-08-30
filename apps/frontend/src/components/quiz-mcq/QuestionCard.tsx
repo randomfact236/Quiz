@@ -11,7 +11,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Share2 } from 'lucide-react';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
@@ -175,6 +175,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
   // Get 2 related emojis
   const relatedEmojis = getRelatedEmojis(subjectEmoji);
 
+  // Respect prefers-reduced-motion: skip decorative loops and bubbles
+  const prefersReducedMotion = useReducedMotion();
+
   // Derive question type from level: extreme = open-ended, others = mcq
   const isOpenEnded = question.level === 'extreme';
   const correctLetter = question.correctLetter || null;
@@ -288,20 +291,22 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           </h2>
         </div>
 
-        {/* Floating Emojis - Below Question */}
+        {/* Floating Emojis - Below Question (static under reduced motion) */}
         <div className="mb-4 flex items-center justify-center gap-4">
           {relatedEmojis.map((emoji, index) => (
             <motion.span
               key={index}
-              animate={{
-                y: [0, -8, 0],
-              }}
-              transition={{
-                duration: 2,
-                delay: index * 0.3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
+              animate={prefersReducedMotion ? {} : { y: [0, -8, 0] }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      duration: 2,
+                      delay: index * 0.3,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }
+              }
               className="text-3xl"
             >
               {emoji}
@@ -346,12 +351,14 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           </div>
         </div>
 
-        {/* Feedback Text - Randomized with Emoji */}
+        {/* Feedback Text - Randomized with Emoji (announced to screen readers) */}
         {selectedAnswer && showFeedback && feedback && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="mb-4 text-center"
+            role="status"
+            aria-live="polite"
           >
             <span
               className={`text-base font-semibold ${isCorrect ? 'text-green-600' : 'text-red-500'}`}

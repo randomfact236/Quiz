@@ -9,7 +9,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface FloatingItem {
   id: number;
@@ -33,9 +33,10 @@ const DEFAULT_EMOJIS = ['❓', '❔', '🔢', '1', '2', '3', '4', '?', '!'];
 export function FloatingBackground({
   count = 15,
   emojis = DEFAULT_EMOJIS,
-}: FloatingBackgroundProps): JSX.Element {
+}: FloatingBackgroundProps): JSX.Element | null {
   const [items, setItems] = useState<FloatingItem[]>([]);
   const hasInitialized = useRef(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     // Prevent infinite re-renders - only initialize once
@@ -52,6 +53,9 @@ export function FloatingBackground({
     }));
     setItems(generated);
   }, []); // Empty dependency array - only run once on mount
+
+  // prefers-reduced-motion: skip the infinite float loop entirely
+  if (prefersReducedMotion) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden">

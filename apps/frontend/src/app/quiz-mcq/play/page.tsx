@@ -170,6 +170,73 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.status, quiz.sessionId, router]);
 
+  // Keyboard shortcuts: 1-4 / A-D select an option, Enter = Next/Submit.
+  // Skipped while typing in the extreme input or when a modal is open.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (quiz.status !== 'playing') return;
+      if (showConfirmSubmit || showExtendQuiz) return;
+
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
+      if (target?.isContentEditable) return;
+
+      const isTimeUp = isTimerMode && quiz.timeRemaining === 0;
+      if (isTimeUp) return;
+
+      const optionCount =
+        level === 'easy' || level === 'medium'
+          ? 2
+          : level === 'hard'
+            ? 3
+            : level === 'expert'
+              ? 4
+              : 0;
+
+      const letters = ['a', 'b', 'c', 'd'];
+      const key = e.key.toLowerCase();
+      const letterIndex = letters.indexOf(key);
+      const numberIndex = ['1', '2', '3', '4'].indexOf(key);
+      const optionIndex = letterIndex >= 0 ? letterIndex : numberIndex;
+
+      if (
+        optionCount > 0 &&
+        !quiz.hasAnsweredCurrent &&
+        optionIndex >= 0 &&
+        optionIndex < optionCount
+      ) {
+        e.preventDefault();
+        quiz.selectAnswer(letters[optionIndex]!);
+        return;
+      }
+
+      if (e.key === 'Enter' && quiz.hasAnsweredCurrent) {
+        e.preventDefault();
+        if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+          setShowConfirmSubmit(true);
+        } else {
+          quiz.goToNext();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [
+    quiz.status,
+    quiz.hasAnsweredCurrent,
+    quiz.currentQuestionIndex,
+    quiz.totalQuestions,
+    quiz.timeRemaining,
+    quiz.selectAnswer,
+    quiz.goToNext,
+    level,
+    isTimerMode,
+    showConfirmSubmit,
+    showExtendQuiz,
+  ]);
+
   // Sync question number to URL - only when quiz has started.
   // Uses history.replaceState directly: high-frequency updates don't need to
   // round-trip through the Next.js router (no subscriber notifications /
