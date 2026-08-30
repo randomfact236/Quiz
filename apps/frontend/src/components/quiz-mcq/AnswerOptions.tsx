@@ -183,37 +183,55 @@ export function AnswerOptions({
     );
   }
 
+  // Announce the graded outcome for screen readers (plan/02-mcq-quiz.md P2 a11y).
+  const feedbackAnnouncement = (() => {
+    if (!showFeedback || !hasSelection) return null;
+    if (correctKey && selectedKey === correctKey) return 'Correct!';
+    if (correctKey) {
+      const correctText = displayOptions.find((o) => o.key === correctKey)?.text;
+      return `Incorrect. The correct answer is ${correctKey}${correctText ? `: ${correctText}` : ''}`;
+    }
+    return 'Answer locked in.';
+  })();
+
   return (
-    <div className={`grid gap-4 ${getGridClass()}`} role="radiogroup" aria-label="Answer choices">
-      {displayOptions.map((option) => {
-        const isSelected = selectedKey === option.key;
-        const isCorrect = showFeedback && correctKey === option.key;
-        const isWrong = showFeedback && isSelected && correctKey !== option.key;
+    <div className="space-y-3">
+      {/* Screen-reader announcement of the graded outcome */}
+      <span role="status" aria-live="polite" className="sr-only">
+        {feedbackAnnouncement ?? ''}
+      </span>
+      <div className={`grid gap-4 ${getGridClass()}`} role="radiogroup" aria-label="Answer choices">
+        {displayOptions.map((option) => {
+          const isSelected = selectedKey === option.key;
+          const isCorrect = showFeedback && correctKey === option.key;
+          const isWrong = showFeedback && isSelected && correctKey !== option.key;
 
-        return (
-          <motion.button
-            key={option.key}
-            onClick={() => !disabled && !hasSelection && onSelect(option.key)}
-            whileHover={!disabled && !hasSelection ? { scale: 1.02 } : {}}
-            whileTap={!disabled && !hasSelection ? { scale: 0.98 } : {}}
-            disabled={disabled || hasSelection}
-            role="radio"
-            aria-checked={isSelected}
-            className={getOptionStyle(option.key, hasSelection)}
-          >
-            {/* Option Text */}
-            <span className="text-lg font-medium">{option.text}</span>
+          return (
+            <motion.button
+              key={option.key}
+              onClick={() => !disabled && !hasSelection && onSelect(option.key)}
+              whileHover={!disabled && !hasSelection ? { scale: 1.02 } : {}}
+              whileTap={!disabled && !hasSelection ? { scale: 0.98 } : {}}
+              disabled={disabled || hasSelection}
+              role="radio"
+              aria-checked={isSelected}
+              aria-label={`${option.key}. ${option.text}${isCorrect ? ' — correct answer' : isWrong ? ' — your incorrect answer' : ''}`}
+              className={getOptionStyle(option.key, hasSelection)}
+            >
+              {/* Option Text */}
+              <span className="text-lg font-medium">{option.text}</span>
 
-            {/* Status Icon for Feedback */}
-            {showFeedback && hasSelection && (
-              <span className="absolute right-4 top-1/2 -translate-y-1/2">
-                {isCorrect && <span className="text-2xl text-green-600">✓</span>}
-                {isWrong && <span className="text-2xl text-red-500">✕</span>}
-              </span>
-            )}
-          </motion.button>
-        );
-      })}
+              {/* Status Icon for Feedback */}
+              {showFeedback && hasSelection && (
+                <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                  {isCorrect && <span className="text-2xl text-green-600">✓</span>}
+                  {isWrong && <span className="text-2xl text-red-500">✕</span>}
+                </span>
+              )}
+            </motion.button>
+          );
+        })}
+      </div>
     </div>
   );
 }
