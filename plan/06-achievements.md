@@ -1,4 +1,4 @@
-# Feature 05 — Achievements (TODO & Status)
+# Feature 06 — Achievements (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
@@ -60,7 +60,7 @@ Frontend (`apps/frontend/src/`):
 
 - [ ] Wire riddle-mcq (and image-riddles) completions into `checkAchievements` — currently only quiz-mcq play can ever unlock anything.
 - [ ] Implement the streak tracker feeding "Streak Master" (condition exists, evaluator is a no-op — the achievement is unobtainable).
-- [ ] Server-side persistence: unlocks live in `localStorage` only — lost on browser reset, invisible to Admin Dashboard, no user linkage. Needs an achievements table + sync endpoint (pairs with the deferred session-persistence work in features 01–04).
+- [ ] Server-side persistence: unlocks live in `localStorage` only — lost on browser reset, invisible to Admin Dashboard, no user linkage. Needs an achievements table + sync endpoint (pairs with the deferred session-persistence work in features 02–05).
 
 ### P2 — integration / quality
 

@@ -1,4 +1,4 @@
-# Feature 07 — Admin Dashboard (TODO & Status)
+# Feature 08 — Admin Dashboard (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
@@ -30,7 +30,7 @@ Frontend (`apps/frontend/src/app/admin/`):
 | `components/JokesSection.tsx`                                                                         | Joke CRUD/import — receives `allJokes`/categories as **props from `hooks/useAdminData.ts`**, which persists them to localStorage (hybrid pattern; API-wired underneath)          |
 | `components/MediaLibrarySection.tsx`                                                                  | Media library: upload/list/delete/stats via `lib/media-api`                                                                                                                      |
 | `components/RiddleSidebar.tsx`, `SubjectList.tsx`, `SubjectEmptyState.tsx`, `SubjectLoadingState.tsx` | Sidebar/quiz subject tree helpers                                                                                                                                                |
-| `components/SettingsSection.tsx`                                                                      | Site settings UI (feature 08)                                                                                                                                                    |
+| `components/SettingsSection.tsx`                                                                      | Site settings UI (feature 07)                                                                                                                                                    |
 | `hooks/useAdminData.ts`                                                                               | Page-level joke/category state + localStorage persistence                                                                                                                        |
 | `utils/quiz-mcq-importer.ts`, `utils/index.ts`                                                        | CSV import helper                                                                                                                                                                |
 
@@ -78,9 +78,9 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 
 ## 4. Cross-feature touchpoints
 
-- **User Accounts (06)** — admin login page + admin token storage variants; AdminGuard role check mirrors the backend `AdminGuard`.
-- **Features 01–04** — one management section each; content features 01–03 moved their admin implementations into `features/*/admin` trees, jokes remains inline.
+- **User Accounts (01)** — admin login page + admin token storage variants; AdminGuard role check mirrors the backend `AdminGuard`.
+- **Features 02–05** — one management section each; content features 02–04 moved their admin implementations into `features/*/admin` trees, jokes remains inline.
 - **Analytics (09)** — AnalyticsSection is an admin dashboard section fed by `/admin/analytics/*`.
-- **Site Settings (08)** — SettingsSection is an admin dashboard section.
+- **Site Settings (07)** — SettingsSection is an admin dashboard section.
 - **Media** — MediaLibrarySection + `lib/media-api` over the JWT-guarded media module; used by the image-riddles form.
 - **Comments** — CommentsSection moderation over `lib/comments-api`.

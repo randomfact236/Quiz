@@ -1,4 +1,4 @@
-# Feature 03 — Image Riddles (TODO & Status)
+# Feature 04 — Image Riddles (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·

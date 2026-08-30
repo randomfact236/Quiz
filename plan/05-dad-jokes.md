@@ -1,4 +1,4 @@
-# Feature 04 — Dad Jokes (TODO & Status)
+# Feature 05 — Dad Jokes (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
@@ -35,7 +35,7 @@ Frontend (`apps/frontend/src/`):
 | `lib/jokes-api.ts`                                   | API client with `adaptJoke()` mapper + `voteJoke(id, type, remove)` targeting `/jokes/classic*`                                                                                                      |
 | `components/MobileFooter.tsx`                        | Consumes `getJokeCategories(true)`; drawer links to `/jokes?category=<uuid>`                                                                                                                         |
 | `app/admin/components/JokesSection.tsx`              | Admin joke CRUD — wired to backend API with auth (CRUD/bulk/CSV+JSON import)                                                                                                                         |
-| `app/admin/components/SettingsSection.tsx`           | Dad-jokes settings tab (category emoji, cache TTL) — see feature 08                                                                                                                                  |
+| `app/admin/components/SettingsSection.tsx`           | Dad-jokes settings tab (category emoji, cache TTL) — see feature 07                                                                                                                                  |
 
 No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/`).
 
