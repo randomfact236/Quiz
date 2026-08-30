@@ -67,5 +67,5 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 - **All content features (02–05)** — the shell frames their pages; MobileFooter deep links feed them query params.
 - **User Accounts (01)** — Header carries login/register state; AuthContext lives beside ThemeContext.
 - **Achievements (06)** — achievement unlock toasts are among the notifications currently invisible (P0).
-- **Site Settings (10)** — future home for SEO/newsletter configuration if it becomes dynamic.
-- **Analytics (12)** — `page_viewed` fires on every route change the shell renders.
+- **Site Settings (11)** — future home for SEO/newsletter configuration if it becomes dynamic.
+- **Analytics (13)** — `page_viewed` fires on every route change the shell renders.

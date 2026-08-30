@@ -71,5 +71,5 @@ Frontend (`apps/frontend/src/`):
 ## 5. Cross-feature touchpoints
 
 - **Image Riddles (04)** — primary consumer: `MediaPicker` in the admin form; public page renders the stored URLs.
-- **Admin Dashboard (11)** — MediaLibrarySection + `lib/media-api` (whose error helper CommentsSection also reuses).
-- **Site Settings (10)** — storage backend choice would belong there if object storage lands.
+- **Admin Dashboard (12)** — MediaLibrarySection + `lib/media-api` (whose error helper CommentsSection also reuses).
+- **Site Settings (11)** — storage backend choice would belong there if object storage lands.
