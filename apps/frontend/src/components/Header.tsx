@@ -309,7 +309,12 @@ export default function Header(): JSX.Element {
                     </Link>
                   )}
                   {isUserLoggedIn && (
-                    <span className="text-sm text-secondary-600 dark:text-secondary-300">User</span>
+                    <Link
+                      href="/profile"
+                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium dark:text-indigo-400 dark:hover:text-indigo-300"
+                    >
+                      Profile
+                    </Link>
                   )}
                   {isAdminLoggedIn && (
                     <span className="text-sm bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
@@ -414,6 +419,15 @@ export default function Header(): JSX.Element {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Admin Panel
+                    </Link>
+                  )}
+                  {isUserLoggedIn && (
+                    <Link
+                      href="/profile"
+                      className="block rounded-lg px-4 py-2 text-indigo-600 hover:bg-secondary-100 dark:text-indigo-400"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Profile
                     </Link>
                   )}
                   <button

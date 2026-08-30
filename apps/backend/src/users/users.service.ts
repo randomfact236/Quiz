@@ -38,6 +38,23 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * Public-safe profile view — never expose the password hash, refresh token,
+   * or password-reset/verification tokens through user-facing endpoints.
+   */
+  toProfile(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      role: user.role,
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt,
+      lastActive: user.lastActive,
+    };
+  }
+
   async getAll(): Promise<User[]> {
     return this.userRepo.find({
       select: ['id', 'email', 'name', 'role', 'createdAt', 'lastActive'],
