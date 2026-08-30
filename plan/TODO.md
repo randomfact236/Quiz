@@ -1,5 +1,19 @@
 # Feature TODO System — Master Tracker
 
+## Feature progress log (append-only, newest first)
+
+- **2026-08-30 — Feature 01 User Accounts: complete.** Commits `80b3cc0` (refresh-token hardening: hash at rest, 7d expiry, rotation, `POST /auth/logout` revoke), `aaea0a2` (OAuth one-time code exchange — tokens off the URL), `84f877b` (role enum at DTO/service/DB), `f0bed06` (email verification: register email, verify + resend endpoints, `/verify-email` page), `09e3a34` (`/profile` page + fixed a real leak: profile endpoints returned password hash/refresh token). Plus docs/infra in `4b0f9c6`-range commit (this one). Deferred/needs decision: admin user-editing UI (owner decision), login-blocked-until-verified (owner decision). All items verified with tsc, backend jest suite (24/24), and live API probes.
+- **2026-08-30 — work started** on the master table, P1→P2→P3 per feature, feature-scoped commits.
+
+## Anomalies & environment notes
+
+- **No external file modifications detected.** Before each item, `git status`/`git log` confirmed the working tree matched my commits; nothing was edited by another session. (Root `TODO.md`'s "concurrent analytics session" note re `providers.tsx` appears stale — no uncommitted changes exist.)
+- **Backend dev server auto-respawns.** After killing the listener on :3012, a new process reappeared within seconds (port monitor scripts in the repo root are the likely cause). Not treated as a lock/block; I restarted the backend myself when I needed new code live.
+- **Blocked (retry before feature 02 ends): frontend `next build`** fails with `EPERM` on `.next/trace` — the lock is held by the running `next dev` server (PID on :3010). Per safety rules I did not force-kill it; `tsc --noEmit` (clean) is the verification of record for frontend changes. Retry `npm run build` in `apps/frontend` when the dev server is next stopped.
+- **CAPTCHA:** none encountered in any automated verification step; nothing was disabled. (No CAPTCHA exists in the codebase.)
+- **Migrations run manually in dev** (`npm run migration:run`): `migrationsRun: true` is production-only in `app.module.ts`. Applied 2026-08-30: `1788500000000-HashRefreshTokens` (clears legacy plaintext tokens — one-time re-login), `1788600000000-ConstrainUserRole`, `1788700000000-AddEmailVerification`.
+- **Backend health endpoint reports 503 (disk usage threshold)** on this machine — environment issue, not code; DB/Redis are up.
+
 > One TODO file per feature in `plan/`, in **dependency/build order** (identity first, then content,
 > then engagement, infrastructure, configuration, management, measurement).
 > **Cross-feature launch items** (spanning several features, with priority/effort/execution order) are
@@ -29,22 +43,22 @@
 > simple email collection first (footer form + admin list/export); opt-in emails and campaigns deferred.
 > It is the first feature in the tracker with status ⬜.
 
-| #   | Feature                  | File                                               | Status               |
-| --- | ------------------------ | -------------------------------------------------- | -------------------- |
-| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ Done (2026-08-30) |
-| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ Done (2026-08-30) |
-| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ Done (2026-08-30) |
-| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30) |
-| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30) |
-| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30) |
-| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30) |
-| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30) |
-| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30) |
-| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30) |
-| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30) |
-| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30) |
-| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30) |
-| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build     |
+| #   | Feature                  | File                                               | Status                                                                      |
+| --- | ------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision) |
+| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ Done (2026-08-30)                                                        |
+| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ Done (2026-08-30)                                                        |
+| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30)                                                        |
+| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                        |
+| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                        |
+| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                        |
+| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                        |
+| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                        |
+| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                        |
+| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                        |
+| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                        |
+| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                        |
+| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                            |
 
 ## Progress snapshot (2026-08-30)
 
@@ -54,7 +68,7 @@ Recompute after working any backlog item.
 
 | Feature                | Open P0/P1/P2/P3          | Complete |
 | ---------------------- | ------------------------- | -------- |
-| 01 User Accounts       | 0/6/4/3                   | 59%      |
+| 01 User Accounts       | 0/0/1/0                   | 98%      |
 | 02 MCQ Quiz            | 0/4/5/4                   | 66%      |
 | 03 Riddle MCQ          | 0/3/5/3                   | 72%      |
 | 04 Image Riddles       | 0/3/4/3                   | 74%      |
@@ -68,4 +82,6 @@ Recompute after working any backlog item.
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
 | 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/44/49/36 (138 open)** | **≈68%** |
+| **Overall**            | **1/38/46/33 (118 open)** | **≈71%** |
+
+> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Overall re-estimated from the closed-item penalty weights.

@@ -74,10 +74,10 @@ Frontend (`apps/frontend/src/`):
 
 **Still open (old items #3, #4, #7, re-verified in code):**
 
-- **Refresh tokens stored in plaintext** (`users.service.ts:60-65`) with no expiry and no rotation-on-reuse detection.
-- **OAuth callback puts tokens in the URL query** (`auth.controller.ts:111` → `/login?token=...&refreshToken=...`).
-- **Role is free text** — `PUT /admin/users/:id` accepts any role string; no enum/check.
-- **Email verification on registration is absent entirely.**
+- **~~Refresh tokens stored in plaintext~~** — FIXED 2026-08-30: hashed at rest (SHA-256), 7-day expiry (`refreshTokenExpiresAt`), rotation on use, `POST /auth/logout` revokes server-side. Migration 1788500000000 also cleared legacy plaintext tokens (one-time re-login).
+- **~~OAuth callback puts tokens in the URL query~~** — FIXED 2026-08-30: callback now redirects with a 60-second single-use code (stored hashed in cache); frontend exchanges it via `POST /auth/oauth/exchange` (replay-safe, delete-before-validate).
+- **~~Role is free text~~** — FIXED 2026-08-30: `UserRole` enum ('user' | 'admin') enforced at DTO (`UpdateUserDto` + `@IsIn`), service, and DB (`users_role_check` CHECK constraint, migration 1788600000000).
+- **~~Email verification on registration is absent entirely~~** — BUILT 2026-08-30: hashed 24h one-time token emailed on registration; `POST /auth/verify-email` + `POST /auth/resend-verification` (anti-enumeration); frontend `/verify-email` page. **Open product question (needs owner decision):** whether login should be _blocked_ until verified — currently non-blocking (verification is enforced nowhere; the mechanism exists and can be tightened to a hard gate on owner instruction).
 - Brute-force protection is CacheService-backed (the old doc said "Redis-backed" — it goes through the shared cache service, not a direct Redis client).
 
 ## 4. Task breakdown
@@ -88,25 +88,25 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps (security-weighted)
 
-- [ ] **Refresh-token hardening**: hash at rest, add `refreshTokenExpiresAt`, rotate on use, revoke on logout server-side (logout currently clears client storage only — the token stays valid).
-- [ ] **OAuth callback**: replace token-in-URL with a short-lived one-time code exchanged via POST (tokens leak to browser history/referrer logs today).
-- [ ] **Constrain role to an enum** ('user' \| 'admin') at the DTO and DB level.
-- [ ] **Email verification** before public launch (absent entirely).
-- [ ] **End-user profile page**: `GET/PUT /users/profile` exist but there is no page to view/edit name or avatar — build `/profile` (also listed in plan/BUILD-BACKLOG.md #6).
-- [ ] Commit the auth-event analytics records in `auth.service.ts` when the analytics feature is revisited (paused by decision 2026-08-30).
+- [x] **Refresh-token hardening** — DONE 2026-08-30 (commit `80b3cc0`): hash at rest (SHA-256), `refreshTokenExpiresAt` (7 days), rotation on use (replay fails), `POST /auth/logout` revokes server-side; frontend logout calls it fire-and-forget. Verified live: rotate → replay 401 → logout → refresh 401 → idempotent logout 200.
+- [x] **OAuth callback** — DONE 2026-08-30 (commit `aaea0a2`): one-time 60s code (hashed in cache) + `POST /auth/oauth/exchange`; tokens never in the URL. Live probe of the exchange 401-path + unit coverage of create/consume/replay.
+- [x] **Constrain role to an enum** — DONE 2026-08-30 (commit `84f877b`): DTO + service + DB CHECK. Verified live: 'moderator' → 400; 'user'/'admin' → 200.
+- [x] **Email verification** — BUILT 2026-08-30 (commit `f0bed06`): 24h hashed token emailed on register (non-blocking), verify + resend endpoints (anti-enumeration), `/verify-email` page. **Needs owner decision:** hard-gate login until verified or keep non-blocking.
+- [x] **End-user profile page** — DONE 2026-08-30 (commit `09e3a34`): `/profile` page (name/avatar edit, verified badge + resend), header links. Security fix en route: `GET/PUT /users/profile` + `GET /users/:id` returned the full entity (password hash + refresh token) — now whitelisted via `toProfile()`.
+- [x] **Auth-event analytics records** — verified 2026-08-30: the records in `auth.service.ts` (user*registered / user_login / login_failed / login_locked / password_reset*\*) are committed and live (analytics feature 13 shipped); nothing further outstanding.
 
 ### P2 — integration / quality
 
-- [ ] Unit tests for AuthService (lockout, anti-enumeration, token paths) — zero exist.
-- [ ] Admin user management UI: the admin views are read-only lists today; role change and delete exist as endpoints but check whether `JokesSection`-style editing UI is wanted (role changes currently require raw API calls).
-- [ ] Logout should call a server-side revoke endpoint once refresh tokens are expiring/rotating.
-- [ ] Unify the two token stores (user vs admin variants in `lib/api-client.ts`) or document why they diverge.
+- [x] **Unit tests for AuthService** — DONE 2026-08-30: `auth.service.spec.ts` (12 tests incl. lockout-adjacent paths, anti-enumeration, refresh rotation, logout revocation, OAuth code exchange) + `users.service.spec.ts` (3 tests, hashing/expiry/revocation). Full backend suite green.
+- [ ] **Admin user management UI** — the admin views are read-only lists today; role change and delete exist as endpoints but check whether `JokesSection`-style editing UI is wanted (role changes currently require raw API calls). **Needs owner decision: build an admin user-editing UI?**
+- [x] **Logout calls a server-side revoke endpoint** — DONE 2026-08-30 (with P1 #1): `POST /auth/logout`.
+- [x] **Unify the two token stores** — RESOLVED 2026-08-30 by documenting (the plan offered "or document why they diverge"): admin vs user token pairs are deliberately separate so both sessions can coexist in one browser; rationale recorded at the top of `lib/api-client.ts`.
 
 ### P3 — polish / tech debt
 
-- [ ] Refresh token column cleanup: `as any` casts in `users.service.ts` (typeorm update typing).
-- [ ] Guest display-name flow (`lib/guest-id.ts` `getGuestName`) is comments-only — fine, but document the boundary in the entity comments.
-- [ ] Consider consolidating `users.controller` and `admin/users` (two admin surfaces for the same entity).
+- [x] **Refresh token column cleanup: `as any` casts in `users.service.ts`** — DONE 2026-08-30: nullable entity columns are properly typed (`string | null` / `Date | null` with explicit column types); casts removed.
+- [x] **Guest display-name flow boundary** — DONE 2026-08-30: boundary documented in `guest-user.entity.ts` (client-issued `lib/guest-id.ts`; display name is a comments-only convention, no PII column).
+- [x] **Consolidate `users.controller` and `admin/users`** — REVIEWED 2026-08-30, keeping both: `/admin/users` is the AdminGuard-gated surface consumed by the admin dashboard (feature 12); `/users` serves self-profile reads. No consolidation without a deprecation pass — revisit if a third admin surface appears.
 
 ## 5. Cross-feature touchpoints
 

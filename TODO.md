@@ -4,6 +4,11 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### 0. Needs owner decision — from the feature-01 pass (2026-08-30)
+
+- **Needs owner decision: block login until email verified?** Feature 01 P1 built the full email-verification mechanism (commit `f0bed06`): registration emails a 24h one-time link, `POST /auth/verify-email` flips the flag, resend endpoint is anti-enumeration, `/verify-email` page handles the flow. The plan did not specify whether unverified users are locked out of login. **Currently non-blocking** (least-surprise; nobody gets locked out). If you want a hard gate, say so and login will 403 with a "verify your email" pointer until `emailVerified` is true.
+- **Needs owner decision: build an admin user-editing UI?** Feature 01 P2 (`plan/01-user-accounts.md`): role change and delete exist as endpoints (`PUT/DELETE /admin/users/:id`, role now enum-constrained) but admin views are read-only lists — changes require raw API calls. Building a `JokesSection`-style editing UI was flagged in the plan as "check whether wanted".
+
 ### 1. BullMQ reshuffle job for `random_weight`
 
 - **Status:** deliberately not built (per scope decision).

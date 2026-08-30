@@ -12,6 +12,16 @@ export const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
 
 import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';
 
+/**
+ * Why two token stores: the admin token pair (ADMIN_TOKEN / ADMIN_REFRESH_TOKEN)
+ * is deliberately separate from the user pair (AUTH_TOKEN / REFRESH_TOKEN) so an
+ * admin session in the admin panel can coexist with a regular user session in
+ * the same browser without either login overwriting the other. Call sites opt in
+ * via `{ isAdmin: true }` (or the `adminApi` helpers); everything else defaults
+ * to the user pair. Do NOT merge them — one store would log the other side out
+ * on every admin/user switch.
+ */
+
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   headers?: Record<string, string>;
