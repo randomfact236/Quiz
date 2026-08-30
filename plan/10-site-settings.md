@@ -1,4 +1,4 @@
-# Feature 07 — Site Settings (TODO & Status)
+# Feature 10 — Site Settings (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
@@ -80,7 +80,7 @@ That is the entire surface. There is **no public settings endpoint** — gamepla
 
 ## 5. Cross-feature touchpoints
 
-- **Admin Dashboard (08)** — SettingsSection is a dashboard section; the only UI surface for settings.
+- **Admin Dashboard (11)** — SettingsSection is a dashboard section; the only UI surface for settings.
 - **MCQ Quiz (02)** — quiz play reads (mock) settings for per-level timers; falls back to hardcoded constants.
 - **Riddle MCQ (03)** — `useRiddlePlay` reads (mock) settings for riddle config.
 - **Image Riddles (04)** — backend defaults define `imageRiddles.defaults.timerSeconds: 90` and action presets; the entity's `getEffectiveTimer` reads the settings-shaped object, though the settings service itself is not injected into the image-riddles module.

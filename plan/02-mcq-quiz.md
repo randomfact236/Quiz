@@ -69,7 +69,7 @@ Frontend (`apps/frontend/src/`):
 
 ## 3. Current status (verified)
 
-**Done:** full gameplay loop (wizard → play → results); level-aware answer formats (easy=True/False, medium=2, hard=3, expert=4, extreme=free-text); capped server-side random session fetch (`QUIZ_SESSION_SIZE = 20`); shared scorer with regression tests; two-key resume; chapter progress + achievements written on completion; complete admin CRUD with optimistic mutations and CSV import/export; **per-level timers: `play/page.tsx` attempts to read `quiz.defaults.levelTimers` from settings, but the frontend settings service is a localStorage mock that never defines `levelTimers`, so the hardcoded `DEFAULT_TIME_LIMITS` fallback is the effective behavior** (correction of the earlier 'reads from Site Settings' claim — see feature 07 for the settings split-brain); wizard + hubs run on cached public count endpoints (no N+1 loops).
+**Done:** full gameplay loop (wizard → play → results); level-aware answer formats (easy=True/False, medium=2, hard=3, expert=4, extreme=free-text); capped server-side random session fetch (`QUIZ_SESSION_SIZE = 20`); shared scorer with regression tests; two-key resume; chapter progress + achievements written on completion; complete admin CRUD with optimistic mutations and CSV import/export; **per-level timers: `play/page.tsx` attempts to read `quiz.defaults.levelTimers` from settings, but the frontend settings service is a localStorage mock that never defines `levelTimers`, so the hardcoded `DEFAULT_TIME_LIMITS` fallback is the effective behavior** (correction of the earlier 'reads from Site Settings' claim — see feature 10 for the settings split-brain); wizard + hubs run on cached public count endpoints (no N+1 loops).
 
 **Not done / corrected claims:** no server-side session persistence (all history/resume/high-scores in localStorage only); no explanation content (frontend type + `QuestionReview` render it, but the backend entity has **no** `explanation` column and no admin authoring field); `ResultsCelebration` defines tiers but only the `perfect` emoji set is ever used; achievement `streak` condition exists but its evaluator is a no-op; `chapter_complete` condition actually checks _perfect quizzes_, not chapter completion (verified in `lib/achievements.ts:139-145`); unanswered questions grade as incorrect everywhere (no distinct review state).
 
@@ -103,7 +103,7 @@ Frontend (`apps/frontend/src/`):
 
 ## 5. Cross-feature touchpoints
 
-- **Site Settings** — `play/page.tsx` reads `quiz.defaults.levelTimers` via the mock `SettingsService`; the mock never supplies `levelTimers`, so the hardcoded fallback always applies until feature 07's split-brain is fixed.
+- **Site Settings** — `play/page.tsx` reads `quiz.defaults.levelTimers` via the mock `SettingsService`; the mock never supplies `levelTimers`, so the hardcoded fallback always applies until feature 10's split-brain is fixed.
 - **Achievements** — completion writes `saveQuizResult()` + `checkAchievements()`; unlock toasts + (uncommitted) analytics events.
 - **Analytics** — 6 instrumented events in the engine (module `quiz-mcq`); dashboard renders quiz-mcq rows in module breakdowns.
 - **Admin Dashboard** — gameplay content managed via `features/quiz-mcq` under the admin shell.

@@ -1,4 +1,4 @@
-# Feature 09 — Analytics (TODO & Status)
+# Feature 12 — Analytics (TODO & Status)
 
 > **Phase basis (applies to all 9 feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
@@ -81,5 +81,5 @@ Frontend (`apps/frontend/src/`) — **client + provider uncommitted**:
 
 - **Features 02–05** — instrumentation sources (quiz 6 events, riddle 5, image-riddles presets, joke_voted); all uncommitted.
 - **Achievements (06)** — `achievement_unlocked` events from the quiz engine (uncommitted).
-- **Admin Dashboard (08)** — AnalyticsSection is a dashboard section; the events endpoint is admin-only.
+- **Admin Dashboard (11)** — AnalyticsSection is a dashboard section; the events endpoint is admin-only.
 - **Guest Users (01)** — `session_completed` events drive guest `quizAttempts`/`totalScore` counter upserts; ingest resolves userId vs guestId via the optional JWT guard.
