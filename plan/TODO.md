@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 05 Dad Jokes: complete (code-complete; live probe pending DB restore).** P1: per-voter vote persistence (migration `1789100000000` `joke_votes` + voteForJoke semantics + guestId from frontend; 8 tests). P2: joke_voted verified already committed, stats/overview consumed in the admin header, category delete now TRASHes jokes. P3: fallback kept, extraction deferred as tech debt. Owner decisions logged: saved-jokes feature, JotD SSR, trending/share surfaces.
+
 - **2026-08-30 — Feature 04 Image Riddles: complete (code-complete; live probes pending DB restore).** P1: engagement counters (migration `1789000000000` + `POST /image-riddles/:id/engage` + dashboard aggregate + frontend wiring; likes counter needs owner decision on a like UI), `@IsImageUrl` DTO validator (12 tests). P2: preset audit clean, query-efficiency claims verified stale, comments parity verified. P3: next/image already in place, offline fallback kept, MobileFooter accepted. Environment note: dev DB on :5432 died mid-session — migration `1789000000000` and live probes are pending its return (see anomalies).
 
 - **2026-08-30 — Feature 03 Riddle MCQ: complete (buildable items).** P1: achievements/progress integration (`ea2098e` — riddle completions now feed Achievements via combined history). P2: persistence consolidation (`95fc0d1` — one `lib/riddle-persistence.ts`), hook/component tests (`eabbdab` — auto-submit, resume round-trip, RiddleCard formats). P3: service-split + legacy-param evaluations documented. Owner-deferred items left open per prior decisions: server-side riddle sessions, JSON import/export, track() analytics parity, cache tuning, hint/skip tracking. Verified: frontend 172/172, both tsc clean.
@@ -57,7 +59,7 @@
 | 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ P0–P3 worked 2026-08-30 (1 P2 deferred: track() analytics — owner-paused)    |
 | 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ P0–P3 worked 2026-08-30 (5 items owner-deferred, logged)                     |
 | 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ P0–P3 worked 2026-08-30 (1 build pending DB restore; likes → owner decision) |
-| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                            |
+| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ P0–P3 worked 2026-08-30 (3 owner decisions logged; probe pending DB)         |
 | 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                            |
 | 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                            |
 | 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                            |
@@ -80,7 +82,7 @@ Recompute after working any backlog item.
 | 02 MCQ Quiz            | 0/0/1/0                   | 98%      |
 | 03 Riddle MCQ          | 0/2/1/1                   | 91%      |
 | 04 Image Riddles       | 0/1/0/0                   | 95%      |
-| 05 Dad Jokes           | 0/3/4/4                   | 73%      |
+| 05 Dad Jokes           | 0/0/0/1                   | 97%      |
 | 06 Achievements        | 0/3/5/4                   | 71%      |
 | 07 Comments            | 0/2/2/1                   | 85%      |
 | 08 Media Library       | 0/2/3/1                   | 83%      |
@@ -90,6 +92,6 @@ Recompute after working any backlog item.
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
 | 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/35/40/26 (102 open)** | **≈74%** |
+| **Overall**            | **1/34/39/26 (100 open)** | **≈74%** |
 
 > Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.

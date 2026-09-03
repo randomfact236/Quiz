@@ -10,7 +10,8 @@
  * ============================================================================
  */
 
-import { api } from './api-client';
+import { api, adminApi } from './api-client';
+import { getGuestId } from './guest-id';
 
 // ============================================================================
 // Types — match the backend response shape
@@ -153,7 +154,14 @@ export async function voteJoke(
   type: 'like' | 'dislike',
   remove = false
 ): Promise<unknown> {
-  const response = await api.post(`/jokes/classic/${id}/vote`, { voteType: type, remove });
+  // Per-voter persistence (plan/05-dad-jokes.md P1 #1): the guest id lets the
+  // backend dedup votes across reloads/tabs for anonymous visitors.
+  const guestId = getGuestId();
+  const response = await api.post(`/jokes/classic/${id}/vote`, {
+    voteType: type,
+    remove,
+    guestId,
+  });
   return response.data;
 }
 
@@ -285,4 +293,18 @@ export async function updateJokeCategoryAdmin(
 
 export async function deleteJokeCategoryAdmin(id: string): Promise<void> {
   await api.delete(`/jokes/classic/categories/${id}`, { isAdmin: true });
+}
+
+/**
+ * Dad-jokes aggregate stats (plan/05-dad-jokes.md P2): consumed by the admin
+ * JokesSection header instead of dropping the endpoint.
+ */
+export interface JokesStatsOverview {
+  totalJokes: number;
+  totalCategories: number;
+}
+
+export async function getJokesStatsOverview(): Promise<JokesStatsOverview> {
+  const response = await adminApi.get<JokesStatsOverview>('/jokes/stats/overview');
+  return response.data;
 }

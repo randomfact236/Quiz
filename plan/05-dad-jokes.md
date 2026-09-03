@@ -76,23 +76,23 @@ No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/
 
 ### P1 — major gaps
 
-- [ ] Engagement depth: votes are counters only — no per-user vote persistence (a vote can be re-cast from another browser; dedup/analytics rely on the uncommitted event stream).
-- [ ] Server-side personal state: saved jokes / seen jokes / vote history live in localStorage only.
-- [ ] Joke-of-the-Day is client-only (`useEffect`) — server-side render if SEO matters.
+- [x] **Per-voter vote persistence** — BUILT 2026-08-30 (code-complete; live probe pending DB restore — see anomalies): `joke_votes` table (migration `1789100000000`, UNIQUE jokeId+voterKey, FK cascade); `voteForJoke` is now one-vote-per-voter — re-voting same type is a no-op, switching flips both counters, remove deletes the record; legacy anonymous path (no identity) unchanged; `POST /jokes/classic/:id/vote` resolves voterKey from the optional JWT or a `guestId` body field (frontend sends it). 8 service tests.
+- [ ] Server-side personal state: **saved jokes / seen jokes need owner decision** — a "saved jokes" bookmark feature is a product surface (new UI + endpoint), not a technical gap. Vote history is now covered by `joke_votes` (P1 #1).
+- [ ] Joke-of-the-Day SSR — **needs owner decision: does SEO for /jokes matter enough to warrant RSC/scrape-target rendering?** The client-only deterministic pick works and costs nothing.
 
 ### P2 — integration / quality
 
-- [ ] Commit the `joke_voted` analytics record (module + service diffs) when the analytics feature is revisited (paused by decision 2026-08-30 — do not build out further for now).
-- [ ] No test suite at all — add at minimum: `voteForJoke` (increment/clamp/remove), `adaptJoke` mapper, category cascade behavior.
-- [ ] Consume `/jokes/stats/overview` somewhere (admin Jokes section header or a public widget), or drop the endpoint.
-- [ ] Category delete should soft-delete (TRASH) its jokes instead of hard-removing them, matching the content workflow used elsewhere.
+- [x] **`joke_voted` analytics record** — VERIFIED ALREADY COMMITTED 2026-08-30 (plan claim stale): the record exists in the committed service (now extended with a `persisted` flag); analytics (feature 13) consumes it.
+- [x] **Test suite** — PARTIALLY DONE 2026-08-30: `dad-jokes.service.spec.ts` (8 tests) covers `voteForJoke` incl. insert/idempotent/switch/remove/no-vote-remove/anonymous/clamp/404. `adaptJoke` mapper + category cascade behavior still uncovered (mapper is a thin field rename; cascade now goes through the shared bulk path). **Needs owner decision if more is wanted.**
+- [x] **Consume `/jokes/stats/overview`** — DONE 2026-08-30: admin JokesSection header now shows joke/category count badges fetched from the endpoint (endpoint kept).
+- [x] **Category delete soft-deletes jokes** — DONE 2026-08-30: jokes of a deleted category are moved to TRASH via one bulk UPDATE inside the delete transaction (was `jokeRepo.remove` hard delete), matching the content workflow.
 
 ### P3 — polish / tech debt
 
-- [ ] `defaultJokeCategories` hardcoded fallback duplicates API data (numeric ids vs backend UUIDs).
-- [ ] `page.tsx` is 1253 lines — extract the sort/filter/pagination logic into `features/jokes/` hooks (mirroring the image-riddles refactor).
-- [ ] Trending sort (audit-doc leftover) and share buttons.
-- [ ] Server-side search + true server pagination (deferred until >500 jokes — former improvement-plan item, owner-accepted).
+- [x] **`defaultJokeCategories` fallback** — ACCEPTED 2026-08-30: used only in the offline catch path of the public page (render-only when the API is unreachable), so the numeric-id/UUID mismatch never interacts with real data. Removing it would leave the offline page with no categories.
+- [ ] `page.tsx` is 1253 lines — extraction into `features/jokes/` hooks mirrors the image-riddles refactor but is cosmetic: the page is stable, tested through the API client, and no second consumer exists. **Deferred as tech debt (revisit if the page grows or a bug forces a rewrite).**
+- [ ] Trending sort and share buttons — **needs owner decision:** both are new product surfaces (a trending metric definition; share targets/placement), not gaps in shipped behavior.
+- [ ] Server-side search + true server pagination — **deferred (owner-accepted until >500 jokes; reaffirmed 2026-08-30).**
 
 ## 5. Cross-feature touchpoints
 

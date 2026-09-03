@@ -25,6 +25,7 @@ import { settings } from '../config/settings';
 import { computeDadJokeStats, DadJokesStats } from './dad-jokes-stats.util';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
+import { JokeVote, VoterKey } from './entities/joke-vote.entity';
 
 @Injectable()
 export class DadJokesService {
@@ -35,6 +36,8 @@ export class DadJokesService {
     private jokeRepo: Repository<DadJoke>,
     @InjectRepository(JokeCategory)
     private categoryRepo: Repository<JokeCategory>,
+    @InjectRepository(JokeVote)
+    private jokeVoteRepo: Repository<JokeVote>,
     private cacheService: CacheService,
     private dataSource: DataSource,
     private bulkActionService: BulkActionService,
@@ -256,19 +259,61 @@ export class DadJokesService {
     await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
   }
 
-  async voteForJoke(id: string, type: 'like' | 'dislike', remove = false): Promise<DadJoke> {
+  /**
+   * Vote on a joke (plan/05-dad-jokes.md P1 #1). With a voterKey the vote is
+   * persisted one-per-voter (UNIQUE jokeId+voterKey): re-voting the same type
+   * is a no-op, switching flips both counters, remove deletes the record.
+   * Without a voterKey the legacy counter-only path applies (no dedup).
+   */
+  async voteForJoke(
+    id: string,
+    type: 'like' | 'dislike',
+    remove = false,
+    voterKey?: VoterKey
+  ): Promise<DadJoke> {
+    if (type !== 'like' && type !== 'dislike') {
+      throw new BadRequestException('Invalid vote type. Must be "like" or "dislike".');
+    }
+
     const joke = await this.jokeRepo.findOne({ where: { id } });
     if (!joke) {
       throw new NotFoundException('Joke not found');
     }
 
-    const delta = remove ? -1 : 1;
-    if (type === 'like') {
-      joke.likes = Math.max(0, (joke.likes || 0) + delta);
-    } else if (type === 'dislike') {
-      joke.dislikes = Math.max(0, (joke.dislikes || 0) + delta);
+    const applyDelta = (field: 'like' | 'dislike', delta: number) => {
+      const column = field === 'like' ? 'likes' : 'dislikes';
+      joke[column] = Math.max(0, (joke[column] || 0) + delta);
+    };
+
+    const existing = voterKey
+      ? await this.jokeVoteRepo.findOne({ where: { jokeId: id, voterKey } })
+      : null;
+
+    if (voterKey && existing) {
+      if (remove) {
+        if (existing.voteType === type) {
+          await this.jokeVoteRepo.remove(existing);
+          applyDelta(type, -1);
+        }
+        // Removing a vote of the other type is a no-op.
+      } else if (existing.voteType === type) {
+        // Double vote — idempotent, no counter change.
+      } else {
+        const previousType = existing.voteType;
+        existing.voteType = type;
+        await this.jokeVoteRepo.save(existing);
+        applyDelta(previousType, -1);
+        applyDelta(type, 1);
+      }
+    } else if (voterKey && !existing) {
+      if (!remove) {
+        await this.jokeVoteRepo.insert({ jokeId: id, voterKey, voteType: type });
+        applyDelta(type, 1);
+      }
+      // Remove with no stored vote — nothing to do.
     } else {
-      throw new BadRequestException('Invalid vote type. Must be "like" or "dislike".');
+      // Legacy anonymous path: counter-only, clamped at 0.
+      applyDelta(type, remove ? -1 : 1);
     }
 
     const saved = await this.jokeRepo.save(joke);
@@ -281,7 +326,7 @@ export class DadJokesService {
     void this.analyticsService.record({
       eventName: 'joke_voted',
       module: 'jokes',
-      properties: { jokeId: id, voteType: type, remove },
+      properties: { jokeId: id, voteType: type, remove, persisted: Boolean(voterKey) },
     });
 
     return saved;
@@ -360,11 +405,26 @@ export class DadJokesService {
       throw new NotFoundException('Category not found');
     }
 
-    if (category.jokes !== undefined && category.jokes !== null && category.jokes.length > 0) {
-      await this.jokeRepo.remove(category.jokes);
-    }
+    // Soft-delete the category's jokes (TRASH) instead of hard-removing them,
+    // matching the content workflow used everywhere else
+    // (plan/05-dad-jokes.md P2): one bulk UPDATE in a transaction.
+    const jokeCount = category.jokes?.length ?? 0;
+    await this.jokeRepo.manager.transaction(async (manager) => {
+      if (jokeCount > 0) {
+        await manager
+          .getRepository(DadJoke)
+          .createQueryBuilder()
+          .update(DadJoke)
+          .set({ status: ContentStatus.TRASH })
+          .where('"categoryId" = :id', { id })
+          .execute();
+      }
+      await manager.remove(category);
+    });
 
-    await this.categoryRepo.remove(category);
+    if (jokeCount > 0) {
+      this.logger.log(`Trashed ${jokeCount} jokes of deleted category: ${id}`);
+    }
     await invalidateCacheFamilies(this.cacheService, [
       'jokes:categories:hasContent:true',
       'jokes:categories:hasContent:false',

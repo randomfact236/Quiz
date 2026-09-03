@@ -18,7 +18,9 @@ import {
   updateJokeCategoryAdmin,
   deleteJokeCategoryAdmin,
   adaptJokeToAdmin,
+  getJokesStatsOverview,
   type JokeBulkAction,
+  type JokesStatsOverview,
 } from '@/lib/jokes-api';
 import type { Joke, JokeCategory, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import {
@@ -43,6 +45,7 @@ export function JokesSection({
   setJokeCategories,
 }: JokesSectionProps): JSX.Element {
   const [_isLoadingData, setIsLoadingData] = useState(true);
+  const [stats, setStats] = useState<JokesStatsOverview | null>(null);
   const [_isSaving, setIsSaving] = useState(false);
 
   /** Load jokes + categories from the backend API. */
@@ -64,7 +67,12 @@ export function JokesSection({
 
   useEffect(() => {
     void loadData();
-  }, [loadData]);
+    // Header stat badges (plan/05-dad-jokes.md P2): consumes /jokes/stats/overview.
+    getJokesStatsOverview()
+      .then(setStats)
+      .catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [jokeFilterCategory, _setJokeFilterCategory] = useState<string>('');
   const [jokeSearch, _setJokeSearch] = useState<string>('');
   const [jokePage, setJokePage] = useState(1);
@@ -423,6 +431,16 @@ export function JokesSection({
           <h3 className="text-xl font-bold">Manage Dad Jokes</h3>
           <p className="text-sm text-gray-500">
             Create, edit, and organize the dad jokes collection.
+            {stats && (
+              <span className="ml-2 inline-flex gap-2 align-middle">
+                <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                  {stats.totalJokes} jokes
+                </span>
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                  {stats.totalCategories} categories
+                </span>
+              </span>
+            )}
           </p>
         </div>
         <div className="flex gap-2">

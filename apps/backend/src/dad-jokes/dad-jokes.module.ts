@@ -10,6 +10,7 @@ import { DadJokesController } from './dad-jokes.controller';
 import { DadJokesService } from './dad-jokes.service';
 import { DadJoke } from './entities/dad-joke.entity';
 import { JokeCategory } from './entities/joke-category.entity';
+import { JokeVote } from './entities/joke-vote.entity';
 
 /**
  * Dad Jokes module for managing classic (setup/punchline) jokes
@@ -24,7 +25,11 @@ import { JokeCategory } from './entities/joke-category.entity';
  * imports: [DadJokesModule]
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([DadJoke, JokeCategory]), CacheModule, AnalyticsModule],
+  imports: [
+    TypeOrmModule.forFeature([DadJoke, JokeCategory, JokeVote]),
+    CacheModule,
+    AnalyticsModule,
+  ],
   controllers: [DadJokesController, DadJokesStatsController],
   providers: [DadJokesService, BulkActionService],
   exports: [DadJokesService],
