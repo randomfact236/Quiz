@@ -41,7 +41,7 @@ Frontend (`apps/frontend/src/`):
 
 ## 3. Current status
 
-**0% — nothing built.** Everything in §1/§2 is a specification, not implementation.
+**BUILT 2026-08-30 (code-complete; live probes pending dev-DB restore — see plan/TODO.md anomalies).** Backend module (subscribe/unsubscribe/list/export), migration, footer form; 6 service tests. Live verification (migration run + endpoint probes) is queued as soon as the dev database returns.
 
 ## 4. Task breakdown
 
@@ -51,19 +51,19 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps (= the build itself)
 
-- [ ] Migration: `newsletter_subscribers` table (unique lowercased email, source, unsubscribed flag).
-- [ ] Backend module: subscribe endpoint (throttled, idempotent, email-validated) + admin list + CSV export.
-- [ ] Footer `SubscribeForm` (feature 09 mounts it) with pending / success / "already subscribed" / error states.
+- [x] **Migration** — DONE 2026-08-30: `newsletter_subscribers` with UNIQUE lowercased email, `source`, `unsubscribed`, timestamps (`1789400000000` — run pending DB restore).
+- [x] **Backend module** — DONE 2026-08-30: `POST /newsletter/subscribe` (public, 30/min, DTO-validated, idempotent — duplicates are a silent success, re-subscribe re-activates), `GET /newsletter` (admin, paginated, source/unsubscribed filters), `GET /newsletter/export` (admin CSV of active subscribers).
+- [x] **Footer `SubscribeForm`** — DONE 2026-08-30: mounted in the Footer under the brand blurb; pending/success/error states, light-theme styling, honeypot field, privacy-consent line linking `/privacy`.
 
 ### P2 — integration / quality
 
-- [ ] Simple unsubscribe: `POST /newsletter/unsubscribe` (email + token-less, or a signed link) + flag filter on export.
-- [ ] Anti-spam: honeypot field; consent line under the form (privacy policy link — feature 09's legal pages).
-- [ ] Unit tests: idempotent duplicate handling, invalid email rejection, export contents.
+- [x] **Unsubscribe** — DONE 2026-08-30: `POST /newsletter/unsubscribe` (public, throttled, idempotent) flags the row; exports exclude unsubscribed addresses.
+- [x] **Anti-spam** — DONE 2026-08-30: hidden `website` honeypot (filled = fake success, nothing stored) + consent line under the form linking the privacy page.
+- [x] **Unit tests** — DONE 2026-08-30: `newsletter.service.spec.ts` (6 tests) — lowercase/trim normalization, idempotent duplicates, honeypot discard, unsubscribe flag + export exclusion, re-subscribe re-activation, unknown-email unsubscribe.
 
 ### P3 — polish / tech debt
 
-- [ ] Normalize emails to lowercase on write; trim inputs.
+- [x] **Email normalization** — DONE 2026-08-30: trim + lowercase applied in the service on both subscribe and unsubscribe.
 
 ## 5. Cross-feature touchpoints
 

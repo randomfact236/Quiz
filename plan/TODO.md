@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 14 Newsletter: BUILT (code-complete; live probes pending DB restore).** Full stack per plan: `newsletter_subscribers` migration + entity, public idempotent subscribe/unsubscribe (honeypot, lowercase normalization, 30/min throttle), admin list + CSV export, footer `SubscribeForm` with consent line (feature 09 legal page). 6 service tests. Owner-deferred items remain: double opt-in, campaigns, subscriber↔user linkage. **ALL 14 FEATURES NOW WORKED.**
+
 - **2026-08-30 — Feature 13 Analytics: complete.** P1: all "commit the work" items verified already committed; homepage summary verified done in F10; new EventsBrowser UI (filters + pagination) inside AnalyticsSection. P2: privacy review documented (no IP/UA columns; retention indefinite — purge job is an owner decision); funnels/accuracy joins/retention-tests deferred (need live-DB verification or a DB test harness). P3: MODULE_LABELS consolidated beside the module union; sendBeacon verified pre-existing.
 
 - **2026-08-30 — Feature 12 Admin Dashboard: complete.** P1: SummarySection replaces "Coming Soon" (totals, DAU/WAU/MAU, per-module completions, quick links); user row actions (role select + guarded delete) added, closing the feature-01 owner decision; `/admin/users` is now a redirect shim to the canonical dashboard section. P2: 401-intercept redirects expired admin sessions to /admin/login?expired=1. P3: dead code removed, AdminGuard indentation normalized. Deferred with rationale: JokesSection data-pattern migration, importer unification, focus-trap.
@@ -84,7 +86,7 @@
 | 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ P0–P3 worked 2026-08-30 (probe pending DB)                                   |
 | 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ P0–P3 worked 2026-08-30 (2 deferrals with rationale)                         |
 | 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ P0–P3 worked 2026-08-30 (deferrals with rationale)                           |
-| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                                |
+| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ✅ Built 2026-08-30 (probe pending DB; campaigns deferred per owner)            |
 
 ## Progress snapshot (2026-08-30)
 
@@ -107,7 +109,7 @@ Recompute after working any backlog item.
 | 11 Site Settings       | 0/0/0/0                   | 100%     |
 | 12 Admin Dashboard     | 0/0/2/0                   | 95%      |
 | 13 Analytics           | 0/0/3/0                   | 94%      |
-| 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **0/34/42/25 (101 open)** | **≈80%** |
+| 14 Newsletter          | 0/0/0/0                   | 100%     |
+| **Overall**            | **0/34/42/24 (100 open)** | **≈81%** |
 
 > Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.

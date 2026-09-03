@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
+
 import { NAV_ITEMS } from '@/lib/nav-config';
 
 const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
@@ -32,6 +34,14 @@ export default function Footer(): JSX.Element {
             <p className="mt-2 text-secondary-600 dark:text-secondary-400">
               Enterprise-grade interactive quiz platform. Test your knowledge and have fun!
             </p>
+            <div className="mt-4 max-w-sm">
+              <h3 className="font-semibold text-secondary-900 dark:text-secondary-100">
+                Get new quizzes in your inbox
+              </h3>
+              <div className="mt-2">
+                <SubscribeForm />
+              </div>
+            </div>
           </div>
 
           {/* Product Links */}
