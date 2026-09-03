@@ -20,6 +20,7 @@ import { HealthModule } from './health/health.module';
 import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
 import { MediaModule } from './media/media.module';
 import { QuizMcqModule } from './quiz-mcq/quiz-mcq.module';
+import { AchievementsModule } from './achievements/achievements.module';
 import { RiddleMcqModule } from './riddle-mcq/riddle-mcq.module';
 import { SettingsModule } from './settings/settings.module';
 import { UsersModule } from './users/users.module';
@@ -98,6 +99,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
     // Feature Modules
     QuizMcqModule,
+    AchievementsModule,
     DadJokesModule,
     RiddleMcqModule,
     ImageRiddlesModule,

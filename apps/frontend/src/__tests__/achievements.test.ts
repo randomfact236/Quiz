@@ -4,7 +4,7 @@
  * any perfect quiz), and subject_explore counts subjects with score > 0.
  */
 
-import { checkAchievements } from '@/lib/achievements';
+import { checkAchievements, getAchievementProgress, ACHIEVEMENTS } from '@/lib/achievements';
 import { STORAGE_KEYS, setItem } from '@/lib/storage';
 import type { QuizSession } from '@/types/quiz-mcq';
 
@@ -61,5 +61,50 @@ describe('achievement conditions (audit)', () => {
     ]);
     const unlocked = checkAchievements().map((a) => a.id);
     expect(unlocked).not.toContain('subject-explorer'); // threshold 5
+  });
+});
+
+describe('achievement progress math (plan/06-achievements.md P2)', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  const condition = (type: string, threshold: number) => {
+    const achievement = ACHIEVEMENTS.find((a) => a.condition.type === type)!;
+    return { ...achievement, condition: { type, threshold } as typeof achievement.condition };
+  };
+
+  it('quiz_count scales with sessions', () => {
+    seed([makeSession(), makeSession({ id: 'b' })]);
+    expect(getAchievementProgress(condition('quiz_count', 4))).toBe(50);
+  });
+
+  it('speed_run is 100 when a run beats the threshold', () => {
+    seed([makeSession({ timeTaken: 10 })]);
+    expect(getAchievementProgress(condition('speed_run', 30))).toBe(100);
+  });
+
+  it('speed_run partial progress reflects fastest run vs target', () => {
+    seed([makeSession({ timeTaken: 60 })]);
+    expect(getAchievementProgress(condition('speed_run', 30))).toBe(50);
+  });
+
+  it('streak reflects the tracker best', () => {
+    const { recordChallengeAnswer } = require('@/lib/challenge-streak');
+    [true, true, true, true, true].forEach((ok: boolean) => recordChallengeAnswer(ok));
+    expect(getAchievementProgress(condition('streak', 10))).toBe(50);
+  });
+
+  it('retry reflects the most-attempted chapter', () => {
+    seed([
+      makeSession({ id: 'a', chapter: 'algebra' }),
+      makeSession({ id: 'b', chapter: 'algebra' }),
+      makeSession({ id: 'c', chapter: 'geometry' }),
+    ]);
+    expect(getAchievementProgress(condition('retry', 3))).toBeCloseTo(100 * (2 / 3));
+  });
+
+  it('locked achievements with no data show 0', () => {
+    expect(getAchievementProgress(condition('chapter_complete', 1))).toBe(0);
   });
 });

@@ -58,24 +58,24 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps
 
-- [ ] Wire riddle-mcq (and image-riddles) completions into `checkAchievements` — currently only quiz-mcq play can ever unlock anything.
-- [ ] Implement the streak tracker feeding "Streak Master" (condition exists, evaluator is a no-op — the achievement is unobtainable).
-- [ ] Server-side persistence: unlocks live in `localStorage` only — lost on browser reset, invisible to Admin Dashboard, no user linkage. Needs an achievements table + sync endpoint (pairs with the deferred session-persistence work in features 02–05).
+- [x] **Riddle-mcq completions wired into `checkAchievements`** — DONE in the feature-03 pass (commit `ea2098e`): combined quiz+riddle history feeds the evaluator; chapter-scoped conditions skip blank-chapter riddles. **Image-riddles: needs owner decision** — a solved image riddle is not a scored quiz session; feeding them as 1-question perfect sessions would cheapen quiz_count/perfect_score. Wire once the semantics are decided.
+- [x] **Streak tracker** — DONE in the feature-02 pass (commit `7b57f2f`): `lib/challenge-streak.ts` (consecutive correct in challenge mode, persistent best) feeds the previously-dead `streak` case.
+- [x] **Server-side persistence** — BUILT 2026-08-30 (code-complete; live probe pending DB restore — see anomalies): `user_achievements` table (migration `1789200000000`, UNIQUE attribution+achievementId), new `AchievementsModule` with `POST /achievements/sync` (idempotent upsert, earlier timestamps win) + `GET /achievements/unlocks`; `unlockAchievement` mirrors unlocks fire-and-forget (guestId or user attribution).
 
 ### P2 — integration / quality
 
-- [ ] Fix `chapter_complete` evaluator (it duplicates Perfect Score exactly); decide the real semantics (chapter completion exists in `lib/progress.ts` via `isChapterCompleted`).
-- [ ] Tighten `subject_explore` to require chapter completion, matching its description.
-- [ ] Add progress math for speed_run / chapter_complete / streak / retry so locked cards show meaningful progress bars.
-- [ ] Commit the `achievement_unlocked` `track()` call in `useQuizMcq.ts` when the analytics feature is revisited (paused by decision 2026-08-30 — do not build out further for now).
-- [ ] Dedicated test suite for the evaluator (none exists; only a mocked assertion via useQuizMcq tests).
+- [x] **`chapter_complete` evaluator fixed** — DONE in the feature-02 pass (commit `88f1964`): counts DISTINCT chapters with a perfect session (was an exact Perfect Score duplicate).
+- [x] **`subject_explore` semantics** — VERIFIED ALREADY MATCHES 2026-08-30: the description says "complete at least one chapter", and `saveQuizResult` defines chapter completion as `score > 0` — so counting subjects with any positive-score session IS chapter-completion counting. Documented in the evaluator; no behavior change available to make.
+- [x] **Progress math for every condition** — DONE 2026-08-30: `getAchievementProgress` now computes speed_run (fastest run vs target), chapter_complete (distinct perfect chapters), streak (tracker best), retry (max attempts per chapter) on the combined history; 6 new tests.
+- [ ] Commit the `achievement_unlocked` `track()` call in `useQuizMcq.ts` — **deferred (owner decision 2026-08-30, mirrored from features 02/03)**: the call already exists and runs.
+- [x] **Dedicated evaluator tests** — DONE 2026-08-30: `__tests__/achievements.test.ts` (9 tests: conditions + progress math) plus riddle-integration cases in `riddle-progress.test.ts`.
 
 ### P3 — polish / tech debt
 
-- [ ] Remove or implement the unused `RIDDLE_ACHIEVEMENTS` storage key.
-- [ ] "Accuracy Expert" description says "maintain 90%+ across 10 quizzes" but the check is all-time average — align one with the other.
-- [ ] Chapter Champion is currently an exact duplicate of Perfect Score (after the P2 fix they diverge; until then consider removing one).
-- [ ] Achievements list is hardcoded — if gamification grows, move definitions to Site Settings or backend config.
+- [x] **`RIDDLE_ACHIEVEMENTS` key removed** — DONE 2026-08-30 (was unreferenced outside `lib/storage.ts`).
+- [x] **Accuracy Expert description aligned** — DONE 2026-08-30: now reads "Keep a 90%+ all-time average over 10 quizzes", matching the all-time-average check.
+- [x] **Chapter Champion vs Perfect Score** — RESOLVED by the P2 fix (they diverge: distinct perfect chapters vs any perfect quiz); both stay.
+- [x] **Hardcoded achievements list** — ACCEPTED 2026-08-30: 9 stable definitions; a backend-config move only pays off with per-tenant or frequently-tuned gamification. Revisit if gamification grows.
 
 ## 5. Cross-feature touchpoints
 

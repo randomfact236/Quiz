@@ -53,7 +53,6 @@ export const STORAGE_KEYS = {
   RIDDLE_RESUME_QUESTIONS: `${PREFIX}riddle-resume-questions`,
   RIDDLE_FAVORITES: `${PREFIX}riddle-favorites`,
   RIDDLE_STREAK: `${PREFIX}riddle-streak`,
-  RIDDLE_ACHIEVEMENTS: `${PREFIX}riddle-achievements`,
   RIDDLE_SETTINGS: `${PREFIX}riddle-settings`,
   RIDDLE_HISTORY: `${PREFIX}riddle-history`,
 } as const;

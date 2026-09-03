@@ -11,6 +11,8 @@ import { STORAGE_KEYS, getItem, setItem } from './storage';
 import { getChallengeStreak } from './challenge-streak';
 import { getQuizHistory, getTotalStats } from './progress';
 import { getRiddleHistory } from './riddle-progress';
+import { api } from './api-client';
+import { getGuestId } from './guest-id';
 import toast from './toast';
 
 /** Predefined achievements */
@@ -81,7 +83,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'accuracy-expert',
     name: 'Accuracy Expert',
-    description: 'Maintain 90%+ accuracy across 10 quizzes',
+    description: 'Keep a 90%+ all-time average over 10 quizzes',
     icon: '🎓',
     condition: { type: 'accuracy', threshold: 90 },
   },
@@ -103,26 +105,35 @@ export function isAchievementUnlocked(achievementId: string): boolean {
 export function unlockAchievement(achievement: Achievement): boolean {
   if (isAchievementUnlocked(achievement.id)) return false;
 
+  const unlockedAt = new Date().toISOString();
   const unlocked = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});
   unlocked[achievement.id] = {
     ...achievement,
-    unlockedAt: new Date().toISOString(),
+    unlockedAt,
   };
   setItem(STORAGE_KEYS.ACHIEVEMENTS, unlocked);
+
+  // Server-side mirror (plan/06-achievements.md P1 #3): fire-and-forget so the
+  // unlock survives browser resets. The backend is idempotent per identity.
+  void api
+    .post('/achievements/sync', {
+      guestId: getGuestId(),
+      unlocks: [{ achievementId: achievement.id, unlockedAt }],
+    })
+    .catch(() => undefined);
+
   return true;
 }
 
-/** Check and update achievements - returns newly unlocked achievements */
-export function checkAchievements(): Achievement[] {
-  const newlyUnlocked: Achievement[] = [];
-  // Combined view: quiz-mcq sessions + riddle completions (P1 #1). Riddles
-  // have no chapter, so chapter-keyed conditions skip entries with a blank
-  // chapter to stay chapter-scoped.
-  const quizHistory = getQuizHistory();
-  const riddleHistory = getRiddleHistory();
-  const history = [
-    ...quizHistory,
-    ...riddleHistory.map((r) => ({
+/**
+ * Combined completion history (plan/06-achievements.md P1 #1): quiz-mcq
+ * sessions + riddle completions. Riddles have no chapter (blank chapter), so
+ * chapter-keyed conditions skip them to stay chapter-scoped.
+ */
+function getCombinedHistory() {
+  return [
+    ...getQuizHistory(),
+    ...getRiddleHistory().map((r) => ({
       id: r.id,
       subject: r.subjectId,
       subjectName: r.subjectName,
@@ -137,6 +148,12 @@ export function checkAchievements(): Achievement[] {
       status: 'completed' as const,
     })),
   ];
+}
+
+/** Check and update achievements - returns newly unlocked achievements */
+export function checkAchievements(): Achievement[] {
+  const newlyUnlocked: Achievement[] = [];
+  const history = getCombinedHistory();
   const stats = getTotalStats();
 
   ACHIEVEMENTS.forEach((achievement) => {
@@ -223,30 +240,70 @@ export function checkAchievements(): Achievement[] {
   return newlyUnlocked;
 }
 
-/** Get achievement progress (0-100) */
+/**
+ * Achievement progress (0-100) — every condition type now has meaningful math
+ * (plan/06-achievements.md P2): locked cards show real progress bars.
+ */
 export function getAchievementProgress(achievement: Achievement): number {
-  const history = getQuizHistory();
+  const history = getCombinedHistory();
   const stats = getTotalStats();
+  const pct = (value: number, threshold: number) =>
+    Math.min(100, threshold > 0 ? (value / threshold) * 100 : 0);
 
   switch (achievement.condition.type) {
     case 'quiz_count':
-      return Math.min(100, (history.length / achievement.condition.threshold) * 100);
+      return pct(history.length, achievement.condition.threshold);
 
     case 'perfect_score': {
       const perfectQuizzes = history.filter((s) => s.score === s.maxScore && s.maxScore > 0);
-      return Math.min(100, (perfectQuizzes.length / achievement.condition.threshold) * 100);
+      return pct(perfectQuizzes.length, achievement.condition.threshold);
+    }
+
+    case 'speed_run': {
+      // Progress = how close the fastest run is to the target time.
+      const times = history.filter((s) => s.maxScore > 0).map((s) => s.timeTaken);
+      if (times.length === 0) return 0;
+      const fastest = Math.min(...times);
+      if (fastest <= achievement.condition.threshold) return 100;
+      return pct(achievement.condition.threshold, fastest);
+    }
+
+    case 'chapter_complete': {
+      const perfectChapters = new Set(
+        history
+          .filter((s) => s.chapter && s.score === s.maxScore && s.maxScore > 0)
+          .map((s) => `${s.subject}:${s.chapter}`)
+      );
+      return pct(perfectChapters.size, achievement.condition.threshold);
+    }
+
+    case 'subject_explore': {
+      // Chapter completion in lib/progress.ts is defined as a session with a
+      // positive score (saveQuizResult: completed = score > 0), so "subjects
+      // with a positive-score session" == "subjects with a completed chapter".
+      const subjectsWithCompletion = new Set(
+        history.filter((s) => s.score > 0).map((s) => s.subject)
+      );
+      return pct(subjectsWithCompletion.size, achievement.condition.threshold);
+    }
+
+    case 'streak':
+      return pct(getChallengeStreak().best, achievement.condition.threshold);
+
+    case 'retry': {
+      const chapterAttempts = new Map<string, number>();
+      history.forEach((s) => {
+        if (!s.chapter) return;
+        const key = `${s.subject}:${s.chapter}`;
+        chapterAttempts.set(key, (chapterAttempts.get(key) || 0) + 1);
+      });
+      const maxAttempts = Math.max(0, ...chapterAttempts.values());
+      return pct(maxAttempts, achievement.condition.threshold);
     }
 
     case 'accuracy':
       if (history.length < 10) return Math.min(100, (history.length / 10) * 50);
       return Math.min(100, (stats.averageScore / achievement.condition.threshold) * 100);
-
-    case 'subject_explore': {
-      const subjectsWithCompletion = new Set(
-        history.filter((s) => s.score > 0).map((s) => s.subject)
-      );
-      return Math.min(100, (subjectsWithCompletion.size / achievement.condition.threshold) * 100);
-    }
 
     default:
       return isAchievementUnlocked(achievement.id) ? 100 : 0;

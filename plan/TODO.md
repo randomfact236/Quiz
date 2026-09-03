@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 06 Achievements: complete (code-complete; live probe pending DB restore).** P1: riddle wiring + streak tracker were already delivered by the F02/F03 passes; new `AchievementsModule` (`user_achievements`, migration `1789200000000`, sync + unlocks endpoints, frontend fire-and-forget mirror). P2: chapter_complete fixed and subject_explore verified equivalent in earlier passes; full progress math for every condition (6 tests). P3: dead storage key removed, Accuracy Expert description aligned, both duplicate-removal questions resolved. Owner decision logged: image-riddle solves → achievements semantics.
+
 - **2026-08-30 — Feature 05 Dad Jokes: complete (code-complete; live probe pending DB restore).** P1: per-voter vote persistence (migration `1789100000000` `joke_votes` + voteForJoke semantics + guestId from frontend; 8 tests). P2: joke_voted verified already committed, stats/overview consumed in the admin header, category delete now TRASHes jokes. P3: fallback kept, extraction deferred as tech debt. Owner decisions logged: saved-jokes feature, JotD SSR, trending/share surfaces.
 
 - **2026-08-30 — Feature 04 Image Riddles: complete (code-complete; live probes pending DB restore).** P1: engagement counters (migration `1789000000000` + `POST /image-riddles/:id/engage` + dashboard aggregate + frontend wiring; likes counter needs owner decision on a like UI), `@IsImageUrl` DTO validator (12 tests). P2: preset audit clean, query-efficiency claims verified stale, comments parity verified. P3: next/image already in place, offline fallback kept, MobileFooter accepted. Environment note: dev DB on :5432 died mid-session — migration `1789000000000` and live probes are pending its return (see anomalies).
@@ -60,7 +62,7 @@
 | 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ P0–P3 worked 2026-08-30 (5 items owner-deferred, logged)                     |
 | 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ P0–P3 worked 2026-08-30 (1 build pending DB restore; likes → owner decision) |
 | 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ P0–P3 worked 2026-08-30 (3 owner decisions logged; probe pending DB)         |
-| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                            |
+| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ P0–P3 worked 2026-08-30 (1 owner decision logged; probe pending DB)          |
 | 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                            |
 | 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                            |
 | 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                            |
@@ -76,22 +78,22 @@ Completion = 100 minus a priority-weighted penalty for open tasks (P0 = −10, P
 13 features are built and verified; feature 14 (Newsletter) is a new build at 0%. Percentages measure remaining tracked work.
 Recompute after working any backlog item.
 
-| Feature                | Open P0/P1/P2/P3          | Complete |
-| ---------------------- | ------------------------- | -------- |
-| 01 User Accounts       | 0/0/1/0                   | 98%      |
-| 02 MCQ Quiz            | 0/0/1/0                   | 98%      |
-| 03 Riddle MCQ          | 0/2/1/1                   | 91%      |
-| 04 Image Riddles       | 0/1/0/0                   | 95%      |
-| 05 Dad Jokes           | 0/0/0/1                   | 97%      |
-| 06 Achievements        | 0/3/5/4                   | 71%      |
-| 07 Comments            | 0/2/2/1                   | 85%      |
-| 08 Media Library       | 0/2/3/1                   | 83%      |
-| 09 Site Shell & SEO    | 1/3/3/2                   | 67%      |
-| 10 Landing & Shared UI | 0/2/3/2                   | 82%      |
-| 11 Site Settings       | 0/4/3/2                   | 72%      |
-| 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
-| 13 Analytics           | 0/3/4/3                   | 74%      |
-| 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/34/39/26 (100 open)** | **≈74%** |
+| Feature                | Open P0/P1/P2/P3         | Complete |
+| ---------------------- | ------------------------ | -------- |
+| 01 User Accounts       | 0/0/1/0                  | 98%      |
+| 02 MCQ Quiz            | 0/0/1/0                  | 98%      |
+| 03 Riddle MCQ          | 0/2/1/1                  | 91%      |
+| 04 Image Riddles       | 0/1/0/0                  | 95%      |
+| 05 Dad Jokes           | 0/0/0/1                  | 97%      |
+| 06 Achievements        | 0/0/0/0                  | 100%     |
+| 07 Comments            | 0/2/2/1                  | 85%      |
+| 08 Media Library       | 0/2/3/1                  | 83%      |
+| 09 Site Shell & SEO    | 1/3/3/2                  | 67%      |
+| 10 Landing & Shared UI | 0/2/3/2                  | 82%      |
+| 11 Site Settings       | 0/4/3/2                  | 72%      |
+| 12 Admin Dashboard     | 0/3/4/3                  | 74%      |
+| 13 Analytics           | 0/3/4/3                  | 74%      |
+| 14 Newsletter          | 0/3/0/1                  | 0% (new) |
+| **Overall**            | **1/34/38/25 (98 open)** | **≈74%** |
 
 > Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.
