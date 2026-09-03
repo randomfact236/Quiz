@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 import { BarChart3, RefreshCw } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
+import { MODULE_LABELS as sharedModuleLabels } from '@/lib/analytics';
+import { EventsBrowser } from './EventsBrowser';
 
 interface AdminOverview {
   totals: {
@@ -39,11 +41,7 @@ interface RetentionCohort {
 }
 
 const MODULE_LABELS: Record<string, string> = {
-  'quiz-mcq': 'Quiz MCQ',
-  'riddle-mcq': 'Riddle MCQ',
-  jokes: 'Dad Jokes',
-  'image-riddles': 'Image Riddles',
-  site: 'Site/Auth',
+  ...sharedModuleLabels,
   unknown: 'Unattributed',
 };
 
@@ -311,6 +309,8 @@ export function AnalyticsSection() {
           </div>
         )}
       </Panel>
+      {/* Raw events browser (plan/13-analytics.md P1 #3) */}
+      <EventsBrowser />
     </div>
   );
 }

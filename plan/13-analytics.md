@@ -60,22 +60,22 @@ Frontend (`apps/frontend/src/`) — **client + provider uncommitted**:
 
 ### P1 — major gaps (when the pause ends)
 
-- [ ] **Commit and ship the existing work** (backend module + migration, client/provider, admin section, and the per-feature instrumentation already written in features 02–05) — until then the dashboard shows only client-emitted `page_viewed`/`web_vitals`.
-- [ ] Consume `GET /analytics/summary` on the public homepage ("X sessions completed") — the endpoint exists and is public.
-- [ ] Raw-events browser UI over `GET /admin/analytics/events` (filter by eventName/module, paginated table) for debugging content/accuracy questions.
+- [x] **Existing work committed and shipped** — VERIFIED 2026-08-30 (plan premise stale): the backend module, migration, client/provider, admin section, and per-feature instrumentation (quiz 6, riddle 5, image-riddles shim, joke_voted) are all in the committed tree; the dashboard shows the full picture.
+- [x] **`GET /analytics/summary` consumed on the homepage** — DONE in the feature-10 pass (StatsSection site-wide cards, local fallback).
+- [x] **Raw-events browser UI** — DONE 2026-08-30: new `EventsBrowser` inside AnalyticsSection — eventName/module filters, paginated table over `GET /admin/analytics/events`, with per-row property details.
 
 ### P2 — integration / quality
 
-- [ ] Funnel views: session_started → question_answered → session_completed per module (data is already collected; needs aggregation + UI).
-- [ ] Accuracy join to content: `question_answered` properties carry per-question outcomes — surface per-question/per-chapter accuracy in the content admin sections.
-- [ ] Retention tests: the cohort SQL is the most complex query in the codebase — add fixture-based tests before extending.
-- [ ] Privacy review: confirm no IP/UA persistence, document the retention window for `analytics_events` (purge job or document indefinite).
+- [ ] Funnel views — **deferred**: aggregation endpoints + UI need live-DB verification (dev DB outage 2026-08-30); data collection is already in place, so this is additive when picked up.
+- [ ] Accuracy join to content — **deferred** for the same reason (surfacing needs verified aggregation against live data).
+- [ ] Retention tests — **deferred with rationale**: the cohort logic is raw SQL; fixture tests would only mock the query away. Proper coverage needs a DB-backed test harness (e.g. testcontainers) — an infrastructure decision.
+- [x] **Privacy review** — DONE 2026-08-30: the `analytics_events` entity persists eventName, module, userId/guestId, page, properties, clientTs/serverTs — **no IP or user-agent columns exist**. Retention window is currently **indefinite**; a purge job is an owner decision if required.
 
 ### P3 — polish / tech debt
 
-- [ ] CSV export of overview/cohorts for stakeholders.
-- [ ] Consider `sendBeacon` on page unload to reduce tail-loss of the last batch.
-- [ ] Module labels (`MODULE_LABELS` in AnalyticsSection) and the `AnalyticsModuleName` union drift-prone — derive one from the other.
+- [ ] CSV export of overview/cohorts — **deferred** (stakeholder need not yet expressed).
+- [x] **`sendBeacon` on unload** — VERIFIED ALREADY IMPLEMENTED (plan stale): `flushOnExit()` fires on tab hide/close via navigator.sendBeacon; documented that beacon rows are guest-attributed (no auth header possible).
+- [x] **Module labels consolidated** — DONE 2026-08-30: `MODULE_LABELS` moved into `lib/analytics.ts` beside the `AnalyticsModuleName` union and typed `Record<AnalyticsModuleName, string>`, so adding a module forces the label update in the same file; AnalyticsSection layers `unknown: 'Unattributed'` on top.
 
 ## 5. Cross-feature touchpoints
 

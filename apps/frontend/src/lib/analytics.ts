@@ -19,6 +19,15 @@ import { getGuestId } from './guest-id';
 
 export type AnalyticsModuleName = 'quiz-mcq' | 'riddle-mcq' | 'jokes' | 'image-riddles' | 'site';
 
+/** Display labels — kept beside the union so a new module must update both (plan/13-analytics.md P3). */
+export const MODULE_LABELS: Record<AnalyticsModuleName, string> = {
+  'quiz-mcq': 'Quiz MCQ',
+  'riddle-mcq': 'Riddle MCQ',
+  jokes: 'Dad Jokes',
+  'image-riddles': 'Image Riddles',
+  site: 'Site',
+};
+
 interface AnalyticsPayload {
   eventName: string;
   module?: string | undefined;
