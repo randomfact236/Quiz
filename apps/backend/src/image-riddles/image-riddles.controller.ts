@@ -38,6 +38,7 @@ import { ImageRiddle } from './entities/image-riddle.entity';
 import { ImageRiddlesService } from './image-riddles.service';
 import { _Public } from '../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
+import { EngagementDto } from './dto/engagement.dto';
 
 @ApiTags('Image Riddles')
 @Controller('image-riddles')
@@ -121,6 +122,20 @@ export class ImageRiddlesController {
       );
     }
     return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 30, ttl: 60000 } })
+  @Post(':id/engage')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Record an engagement event (view / attempt / solve)' })
+  @ApiResponse({ status: 200, description: 'Counter incremented (PUBLISHED riddles only)' })
+  async recordEngagement(
+    @Param('id') id: string,
+    @Body() dto: EngagementDto
+  ): Promise<{ recorded: boolean }> {
+    await this.imageRiddlesService.recordEngagement(id, dto.type);
+    return { recorded: true };
   }
 
   // ==================== ADMIN: BULK STATUS OPERATIONS ====================

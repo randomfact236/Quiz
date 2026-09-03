@@ -95,22 +95,22 @@ Admin (JWT + role admin) — canonical CRUD:
 
 ### P1 — major gaps
 
-- [ ] Engagement counters: views/likes/attempts are still not persisted anywhere (no columns, no table) — needed for popularity sorting and admin dashboards.
-- [ ] Server-side progress: solved/revealed state persists only in localStorage (`aiquiz:image-riddle-solved` / `-revealed`); no user-linked history (same family of gap as quiz/riddle-mcq sessions).
-- [ ] Image upload URL validation on single create/update (validation exists only in the bulk path); consider moving to a shared DTO validator.
+- [x] **Engagement counters** — BUILT 2026-08-30 (code-complete; live probe pending DB restore — see anomalies): `views`/`attempts`/`solves` int columns on `image_riddles` (migration `1789000000000`), public throttled `POST /image-riddles/:id/engage` (PUBLISHED-only atomic increments), dashboard stats gains an `engagement` aggregate, frontend fires view (modal open) / attempt (guess submit) / solve (correct guess) fire-and-forget. **Needs owner decision:** a `likes` counter requires a user-facing like button (product surface) — not built.
+- [ ] Server-side progress (solved/revealed beyond localStorage) — **deferred: same family the owner deferred for riddle-mcq (03 P1 #2, owner-accepted)**; quiz-mcq got `quiz_sessions` in F02 and the same design can be extended here when the owner green-lights the family.
+- [x] **Image URL validation on create/update** — DONE 2026-08-30: shared `@IsImageUrl()` validator (http(s) URL or local `/uploads/...`; rejects `javascript:`/`data:`/junk) applied to `CreateImageRiddleDto` + `UpdateImageRiddleDto`. 12 validator/DTO tests.
 
 ### P2 — integration / quality
 
-- [ ] Commit the analytics shim change (forwards preset events to `POST /analytics/events`) when the analytics feature is revisited (paused by decision 2026-08-30 — do not build out further for now).
-- [ ] `share_opened` / `report` / fullscreen action presets: verify every preset id in `default-actions.ts` has a handler in the modal (the old doc noted only 3 of them were handled — re-audit before considering closed).
-- [ ] Query efficiency in `admin-image-riddles.service.ts`: `getDashboardStats` runs multiple separate counts; `deleteCategory` saves riddles in a loop.
-- [ ] Comments parity check: image riddles are a comment target (`targetType IMAGE_RIDDLE`) — confirm moderation flows cover them like other modules.
+- [ ] Commit the analytics shim change — **deferred (owner decision 2026-08-30, mirrored from features 02/03)**: the shim already forwards to the real tracker.
+- [x] **Action preset audit** — DONE 2026-08-30: `default-actions.ts` ships exactly 4 presets (check-answer, show-hint, give-up, share) and `useImageRiddleGame.handleAction` handles all 4 (+ legacy aliases submit-answer/reveal-answer and a skip). There are **no** `report`/`fullscreen` presets in the file — the old doc's concern is resolved; share opens the ShareMenu.
+- [x] **Query efficiency** — VERIFIED 2026-08-30: both claims are stale in current code — `getDashboardStats` already uses one GROUP BY per dimension, and `deleteCategory` already soft-deletes via a single bulk UPDATE inside a transaction. (The engagement aggregate added in P1 #1 is one more single aggregate query.)
+- [x] **Comments parity** — VERIFIED 2026-08-30: backend comments service validates `IMAGE_RIDDLE` content type against the entity; the admin CommentsSection has an image-riddle filter chip and renders its rows. No gap.
 
 ### P3 — polish / tech debt
 
-- [ ] Next-gen images: public page still uses raw `<img>` — evaluate `next/image` with the local WebP media store.
-- [ ] `initial-data.ts` fallback arrays (≈300 lines) — keep only if the offline banner story is still wanted.
-- [ ] MobileFooter difficulty drawer remains hardcoded to image-riddles routes only.
+- [x] **Next-gen images** — VERIFIED ALREADY DONE 2026-08-30 (plan claim stale): RiddleCard uses `next/image` (`fill`, `sizes`, blur placeholder) and `next.config.mjs` carries `images.remotePatterns` (optimization off in dev, patterns belt-and-suspenders for prod). Nothing to do.
+- [x] **`initial-data.ts` fallback** — KEPT 2026-08-30: the page consumes the arrays as offline fallback and the RiddleCard family handles the offline case gracefully (chips stay hidden, "Image unavailable" placeholder). The offline story is a deliberate feature; removal would regress it.
+- [x] **MobileFooter difficulty drawer** — ACCEPTED 2026-08-30: it deep-links image-riddles difficulty routes, which is the only module with a difficulty-filtered landing surface; generalizing it is a cross-feature refactor with no second consumer today. Revisit when a second module gains a difficulty route.
 
 ## 5. Cross-feature touchpoints
 

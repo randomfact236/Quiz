@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { IActionOption } from '@/components/image-riddles/ActionOptions';
 import { postCommentOptimistic, type CommentChipValue } from '@/lib/comments-api';
 import { isImageRiddleAnswerCorrect } from '@/lib/image-riddle-answer';
+import { recordImageRiddleEngagement } from '@/lib/image-riddles-api';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 import { resolveTimerSeconds } from '../lib/game';
@@ -89,6 +90,9 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
       // Only the closed → open transition pushes a history entry; in-modal
       // navigation (next/prev) reuses it.
       if (!selectedRiddle) {
+        // Engagement counter (plan/04-image-riddles.md P1 #1): one view per
+        // modal opening (in-modal next/prev navigations are not new views).
+        void recordImageRiddleEngagement(riddle.id, 'view');
         window.history.pushState({ imageRiddleModal: true }, '');
         modalHistoryRef.current = true;
       }
@@ -130,6 +134,8 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const checkAnswer = useCallback(() => {
     if (!selectedRiddle || showAnswer) return;
     setAttempts((prev) => ({ ...prev, [selectedRiddle.id]: (prev[selectedRiddle.id] || 0) + 1 }));
+    // Engagement counters (plan/04-image-riddles.md P1 #1).
+    void recordImageRiddleEngagement(selectedRiddle.id, 'attempt');
     // Every submitted guess lands in the riddle's feed (plan §1). The server
     // recomputes correctness — the local check only drives gameplay UX.
     const guessText = userAnswer.trim();
@@ -152,6 +158,7 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
       setWrongAnswer(false);
       onSolved(selectedRiddle.id);
       onRevealed(selectedRiddle.id);
+      void recordImageRiddleEngagement(selectedRiddle.id, 'solve');
     } else {
       setWrongAnswer(true);
       setShake(true);

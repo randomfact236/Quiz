@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 04 Image Riddles: complete (code-complete; live probes pending DB restore).** P1: engagement counters (migration `1789000000000` + `POST /image-riddles/:id/engage` + dashboard aggregate + frontend wiring; likes counter needs owner decision on a like UI), `@IsImageUrl` DTO validator (12 tests). P2: preset audit clean, query-efficiency claims verified stale, comments parity verified. P3: next/image already in place, offline fallback kept, MobileFooter accepted. Environment note: dev DB on :5432 died mid-session — migration `1789000000000` and live probes are pending its return (see anomalies).
+
 - **2026-08-30 — Feature 03 Riddle MCQ: complete (buildable items).** P1: achievements/progress integration (`ea2098e` — riddle completions now feed Achievements via combined history). P2: persistence consolidation (`95fc0d1` — one `lib/riddle-persistence.ts`), hook/component tests (`eabbdab` — auto-submit, resume round-trip, RiddleCard formats). P3: service-split + legacy-param evaluations documented. Owner-deferred items left open per prior decisions: server-side riddle sessions, JSON import/export, track() analytics parity, cache tuning, hint/skip tracking. Verified: frontend 172/172, both tsc clean.
 
 - **2026-08-30 — Feature 02 MCQ Quiz: complete.** P1: server-side session persistence (`7525d9f`), challenge streak tracker (`7b57f2f`), distinct unanswered state (`c8b2d4b`), explanations end-to-end (`6492377`). P2: achievement audit (`88f1964`), a11y + component tests (`281e8ed`), features rename (`38d1745`). P3: celebration tiers, shim deletion, streak-consolidation + service-split evaluations (docs commit). Deferred: the 6 `track()` analytics calls (owner-paused). Verified: backend 25/25 + build clean, frontend 158/158 + tsc clean, live probes for sessions and explanations.
@@ -10,6 +12,8 @@
 - **2026-08-30 — work started** on the master table, P1→P2→P3 per feature, feature-scoped commits.
 
 ## Anomalies & environment notes
+
+- **2026-08-30 (mid-session): dev Postgres on localhost:5432 went down**, together with the :3012 backend and :3010 frontend processes (the user's monitor stack appears to have exited). The 5432 listener was a native (Reallusion-bundled) postgres.exe — not the project's `ai-quiz-postgres` docker container, which exited cleanly 3 days earlier and holds stale data. Per safety rules I did NOT start the stale container (it would point the app at a different data state) or manipulate the unknown native install. **Pending when DB returns:** run `npm run migration:run` in apps/backend (migration `1789000000000-AddImageRiddleCounters`), restart the backend, and live-probe `POST /image-riddles/:id/engage` + dashboard `engagement`. Unit tests (37 backend / 172 frontend) cover the new code in the meantime.
 
 - **No external file modifications detected.** Before each item, `git status`/`git log` confirmed the working tree matched my commits; nothing was edited by another session. (Root `TODO.md`'s "concurrent analytics session" note re `providers.tsx` appears stale — no uncommitted changes exist.)
 - **Backend dev server auto-respawns.** After killing the listener on :3012, a new process reappeared within seconds (port monitor scripts in the repo root are the likely cause). Not treated as a lock/block; I restarted the backend myself when I needed new code live.
@@ -47,22 +51,22 @@
 > simple email collection first (footer form + admin list/export); opt-in emails and campaigns deferred.
 > It is the first feature in the tracker with status ⬜.
 
-| #   | Feature                  | File                                               | Status                                                                       |
-| --- | ------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision)  |
-| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ P0–P3 worked 2026-08-30 (1 P2 deferred: track() analytics — owner-paused) |
-| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ P0–P3 worked 2026-08-30 (5 items owner-deferred, logged)                  |
-| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30)                                                         |
-| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                         |
-| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                         |
-| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                         |
-| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                         |
-| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                         |
-| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                         |
-| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                         |
-| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                         |
-| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                         |
-| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                             |
+| #   | Feature                  | File                                               | Status                                                                          |
+| --- | ------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------- |
+| 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision)     |
+| 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ P0–P3 worked 2026-08-30 (1 P2 deferred: track() analytics — owner-paused)    |
+| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ P0–P3 worked 2026-08-30 (5 items owner-deferred, logged)                     |
+| 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ P0–P3 worked 2026-08-30 (1 build pending DB restore; likes → owner decision) |
+| 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                            |
+| 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                            |
+| 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ Done (2026-08-30)                                                            |
+| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                            |
+| 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                            |
+| 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                            |
+| 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                            |
+| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                            |
+| 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                            |
+| 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                                |
 
 ## Progress snapshot (2026-08-30)
 
@@ -75,7 +79,7 @@ Recompute after working any backlog item.
 | 01 User Accounts       | 0/0/1/0                   | 98%      |
 | 02 MCQ Quiz            | 0/0/1/0                   | 98%      |
 | 03 Riddle MCQ          | 0/2/1/1                   | 91%      |
-| 04 Image Riddles       | 0/3/4/3                   | 74%      |
+| 04 Image Riddles       | 0/1/0/0                   | 95%      |
 | 05 Dad Jokes           | 0/3/4/4                   | 73%      |
 | 06 Achievements        | 0/3/5/4                   | 71%      |
 | 07 Comments            | 0/2/2/1                   | 85%      |
@@ -86,6 +90,6 @@ Recompute after working any backlog item.
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
 | 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/36/43/30 (110 open)** | **≈73%** |
+| **Overall**            | **1/35/40/26 (102 open)** | **≈74%** |
 
-> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02 updated after its pass (4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed). Feature 03: 1×P1, 2×P2, 2×P3 closed; 2×P1 + 2×P2 + 1×P3 stay open under prior owner-accepted deferrals (now explicitly marked). Overall re-estimated from the closed-item penalty weights.
+> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.

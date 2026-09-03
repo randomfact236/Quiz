@@ -95,6 +95,19 @@ export class ImageRiddle {
   })
   status: ContentStatus;
 
+  /**
+   * Engagement counters (plan/04-image-riddles.md P1 #1) — incremented via
+   * POST /image-riddles/:id/engage. No per-user attribution (aggregate only).
+   */
+  @Column({ type: 'int', default: 0 })
+  views: number;
+
+  @Column({ type: 'int', default: 0 })
+  attempts: number;
+
+  @Column({ type: 'int', default: 0 })
+  solves: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

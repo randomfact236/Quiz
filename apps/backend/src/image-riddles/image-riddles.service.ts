@@ -270,4 +270,17 @@ export class ImageRiddlesService {
       averageTimer,
     };
   }
+  /**
+   * Engagement counters (plan/04-image-riddles.md P1 #1). Atomic increments;
+   * only PUBLISHED riddles count. Unknown types are rejected by the DTO.
+   */
+  async recordEngagement(id: string, type: 'view' | 'attempt' | 'solve'): Promise<void> {
+    const column = type === 'view' ? 'views' : type === 'attempt' ? 'attempts' : 'solves';
+    await this.imageRiddleRepo
+      .createQueryBuilder()
+      .update(ImageRiddle)
+      .set({ [column]: () => `${column} + 1` })
+      .where('"id" = :id AND "status" = :status', { id, status: ContentStatus.PUBLISHED })
+      .execute();
+  }
 }

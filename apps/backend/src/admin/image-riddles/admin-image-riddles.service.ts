@@ -427,6 +427,7 @@ export class AdminImageRiddlesService {
     riddlesByCategory: Array<{ categoryId: string; categoryName: string; count: number }>;
     recentRiddles: ImageRiddle[];
     averageTimer: number;
+    engagement: { views: number; attempts: number; solves: number };
   }> {
     const [totalRiddles, activeRiddles, totalCategories, recentRiddles] = await Promise.all([
       this.riddleRepo.count(),
@@ -480,6 +481,14 @@ export class AdminImageRiddlesService {
 
     const averageTimer = timerRow?.avg ? Math.round(Number(timerRow.avg)) : DEFAULT_TIMER_SECONDS;
 
+    // Engagement totals (plan/04-image-riddles.md P1 #1) — one aggregate query.
+    const engagementRow = await this.riddleRepo
+      .createQueryBuilder('riddle')
+      .select('COALESCE(SUM(riddle.views), 0)', 'views')
+      .addSelect('COALESCE(SUM(riddle.attempts), 0)', 'attempts')
+      .addSelect('COALESCE(SUM(riddle.solves), 0)', 'solves')
+      .getRawOne<{ views: string; attempts: string; solves: string }>();
+
     return {
       totalRiddles,
       activeRiddles,
@@ -488,6 +497,11 @@ export class AdminImageRiddlesService {
       riddlesByCategory,
       recentRiddles,
       averageTimer,
+      engagement: {
+        views: Number(engagementRow?.views ?? 0),
+        attempts: Number(engagementRow?.attempts ?? 0),
+        solves: Number(engagementRow?.solves ?? 0),
+      },
     };
   }
 

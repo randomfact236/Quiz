@@ -368,6 +368,7 @@ export interface ImageRiddlesDashboardStats {
   riddlesByCategory: Array<{ categoryId: string; categoryName: string; count: number }>;
   recentRiddles: ImageRiddle[];
   averageTimer: number;
+  engagement?: { views: number; attempts: number; solves: number };
 }
 
 /**
@@ -390,4 +391,19 @@ export async function getRecentImageRiddles(limit: number = 10): Promise<ImageRi
     { isAdmin: true }
   );
   return response.data;
+}
+
+/**
+ * Record an engagement event (plan/04-image-riddles.md P1 #1).
+ * Fire-and-forget at call sites — never blocks gameplay.
+ */
+export async function recordImageRiddleEngagement(
+  id: string,
+  type: 'view' | 'attempt' | 'solve'
+): Promise<void> {
+  try {
+    await api.post(`/image-riddles/${id}/engage`, { type });
+  } catch {
+    // Counters are best-effort; failures are swallowed by design.
+  }
 }

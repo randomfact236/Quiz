@@ -24,6 +24,7 @@ import {
   MAX_TIMER_SECONDS,
 } from '../constants/app.constants';
 import { ContentStatus } from '../enums/content-status.enum';
+import { IsImageUrl } from '../validators/image-url.validator';
 
 // ==================== PAGINATION ====================
 
@@ -795,8 +796,7 @@ export class CreateImageRiddleDto {
   title: string;
 
   @ApiProperty({ example: 'https://example.com/image.jpg', description: 'Image URL' })
-  @IsString()
-  @IsNotEmpty()
+  @IsImageUrl()
   imageUrl: string;
 
   @ApiProperty({ example: 'A hidden face in the tree' })
@@ -879,7 +879,7 @@ export class UpdateImageRiddleDto {
 
   @ApiPropertyOptional({ example: 'https://example.com/image.jpg' })
   @IsOptional()
-  @IsString()
+  @IsImageUrl()
   imageUrl?: string;
 
   @ApiPropertyOptional({ example: 'A hidden face in the tree' })
