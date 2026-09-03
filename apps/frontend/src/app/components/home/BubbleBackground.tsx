@@ -9,7 +9,7 @@ export function BubbleBackground(): JSX.Element {
       {bubbles.map((size, i) => (
         <div
           key={i}
-          className="absolute animate-pulse rounded-full bg-white/10"
+          className="absolute animate-pulse rounded-full bg-white/10 motion-reduce:animate-none"
           style={{
             width: `${size}px`,
             height: `${size + 10}px`,

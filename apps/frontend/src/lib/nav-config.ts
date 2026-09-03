@@ -10,6 +10,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: '/', label: 'Home' },
+  { href: '/play', label: 'Play Hub' },
   { href: '/quiz-mcq', label: 'Quiz' },
   { href: '/jokes', label: 'Dad Jokes' },
   { href: '/riddle-mcq', label: 'Riddles' },

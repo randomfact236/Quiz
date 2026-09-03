@@ -51,19 +51,19 @@ Backend (`apps/backend/src/health/`):
 
 ### P1 — major gaps
 
-- [ ] **Wire StatsSection to `GET /analytics/summary`** (public, cached) so homepage stats are real; falls back gracefully if the endpoint fails.
-- [ ] Verify homepage topic/mode cards are generated from live subject/category APIs (or explicitly document the hardcoded set) so new subjects appear without a code change.
+- [x] **StatsSection wired to `GET /analytics/summary`** — DONE 2026-08-30: site-wide cards (sessions completed, active quizzers 30d, quiz/riddle session counts by module) with graceful fallback to the visitor's local stats when the API fails.
+- [x] **Topic/mode cards live-data check** — VERIFIED 2026-08-30: `TopicSection` fetches subjects + per-subject question counts from the public APIs at runtime; nothing hardcoded (mode cards are the game's fixed modes by design).
 
 ### P2 — integration / quality
 
-- [ ] Ensure `/play` is linked from the main nav and footer (currently a direct-URL entry; feature 09 owns the nav audit).
-- [ ] Landing page SEO: it is the most crawled page — metadata/OG + server-rendered headline content (pairs with feature 09's SEO items).
-- [ ] Health endpoints: document expected response shape and add a DB-check depth variant for deploys.
+- [x] **`/play` linked from nav** — DONE 2026-08-30: added to `lib/nav-config.ts` ("Play Hub"), so Header (both variants) and Footer menus all carry it.
+- [x] **Landing SEO** — VERIFIED 2026-08-30: the home route inherits the root layout's OG/Twitter metadata and is included in `app/sitemap.ts` (priority 1). Server-rendered headline content pairs with the JotD SSR owner decision (feature 09).
+- [x] **Health endpoints documented** — the DB-depth variant already exists (`GET /health/readiness` = DB-only ping; `GET /health/liveness` = process-only `{status:'ok',timestamp}`; `GET /health` = full check with `{status, info:{database,memory_heap,memory_rss,disk}, error, details}` — 503 when any indicator is down, e.g. the disk-threshold trip seen on this dev machine).
 
 ### P3 — polish / tech debt
 
-- [ ] `components/ui` kit has no tests/storybook; fine while small — revisit if it grows.
-- [ ] Landing animations (BubbleBackground) — verify reduced-motion preference is respected.
+- [x] **`components/ui` kit tests** — ACCEPTED as-is 2026-08-30 (small, stable; revisit on growth — per plan's own bar).
+- [x] **Reduced motion** — DONE 2026-08-30: BubbleBackground bubbles carry `motion-reduce:animate-none`; framer-motion sections respect the OS setting via the library's built-in reduced-motion handling.
 
 ## 4. Cross-feature touchpoints
 
