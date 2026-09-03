@@ -223,6 +223,13 @@ export function MediaPicker({
                   </button>
                   <div className="bg-white px-2 py-1.5">
                     <p className="truncate text-[10px] font-bold text-gray-700">{asset.filename}</p>
+                    {asset.alt ? (
+                      <p className="truncate text-[9px] italic text-gray-500" title={asset.alt}>
+                        {asset.alt}
+                      </p>
+                    ) : (
+                      <p className="text-[9px] text-amber-500">No alt text</p>
+                    )}
                     <p className="text-[9px] text-gray-400">
                       {formatFileSize(getDisplayFileSize(asset))}
                       {(() => {

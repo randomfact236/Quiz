@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 08 Media Library: complete.** P1 reference safety verified already implemented (409-on-referenced-delete; regression-tested). P2: 5 upload/delete tests added (MIME + undecodable rejection, WebP re-encode, reference safety); next/image verified; picker-as-standard accepted. P3: alt text surfaced in picker cards. Owner decisions logged: S3 swap (pre-deploy), required alt text on upload.
+
 - **2026-08-30 — Feature 07 Comments: complete (code-complete; live probe pending DB restore).** P1: logged-in attribution (`comments.userId`, migration `1789300000000`, identity-aware my/delete paths). P2: public flag path built (`POST /comments/:id/flag` + admin flagged filter — plan premise that the column existed was wrong), count-refresh accepted. P3: authorName policy accepted. Owner decision logged: exposing comments on quiz/riddle-mcq surfaces.
 
 - **2026-08-30 — Feature 06 Achievements: complete (code-complete; live probe pending DB restore).** P1: riddle wiring + streak tracker were already delivered by the F02/F03 passes; new `AchievementsModule` (`user_achievements`, migration `1789200000000`, sync + unlocks endpoints, frontend fire-and-forget mirror). P2: chapter_complete fixed and subject_explore verified equivalent in earlier passes; full progress math for every condition (6 tests). P3: dead storage key removed, Accuracy Expert description aligned, both duplicate-removal questions resolved. Owner decision logged: image-riddle solves → achievements semantics.
@@ -66,7 +68,7 @@
 | 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ P0–P3 worked 2026-08-30 (3 owner decisions logged; probe pending DB)         |
 | 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ P0–P3 worked 2026-08-30 (1 owner decision logged; probe pending DB)          |
 | 7   | Comments                 | [07-comments.md](07-comments.md)                   | ✅ P0–P3 worked 2026-08-30 (1 owner decision; probe pending DB)                 |
-| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ Done (2026-08-30)                                                            |
+| 8   | Media Library            | [08-media.md](08-media.md)                         | ✅ P0–P3 worked 2026-08-30 (2 owner decisions logged)                           |
 | 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ Done (2026-08-30)                                                            |
 | 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ Done (2026-08-30)                                                            |
 | 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ Done (2026-08-30)                                                            |
@@ -89,13 +91,13 @@ Recompute after working any backlog item.
 | 05 Dad Jokes           | 0/0/0/1                  | 97%      |
 | 06 Achievements        | 0/0/0/0                  | 100%     |
 | 07 Comments            | 0/0/0/0                  | 100%     |
-| 08 Media Library       | 0/2/3/1                  | 83%      |
+| 08 Media Library       | 0/0/0/0                  | 100%     |
 | 09 Site Shell & SEO    | 1/3/3/2                  | 67%      |
 | 10 Landing & Shared UI | 0/2/3/2                  | 82%      |
 | 11 Site Settings       | 0/4/3/2                  | 72%      |
 | 12 Admin Dashboard     | 0/3/4/3                  | 74%      |
 | 13 Analytics           | 0/3/4/3                  | 74%      |
 | 14 Newsletter          | 0/3/0/1                  | 0% (new) |
-| **Overall**            | **1/34/38/25 (98 open)** | **≈75%** |
+| **Overall**            | **1/34/38/25 (98 open)** | **≈76%** |
 
 > Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.

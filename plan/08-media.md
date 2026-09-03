@@ -55,18 +55,18 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps
 
-- [ ] **Reference safety**: track content usage per asset (or at least a "referenced by" check on delete) so an admin can't orphan images currently shown on the site.
-- [ ] Swap local-disk for object storage (S3-compatible) behind the existing `StorageService` abstraction before any multi-instance deployment — local `/uploads` breaks with more than one backend replica.
+- [x] **Reference safety** — VERIFIED ALREADY IMPLEMENTED 2026-08-30 (plan stale): `MediaService.remove` runs a `getUsageCount` LIKE check against `image_riddles.imageUrl` and throws 409 with the referencing count instead of deleting; regression-tested in `media.service.spec.ts`.
+- [ ] Swap to object storage — **needs owner decision / pre-deploy item**: only relevant before multi-instance deployment; requires bucket + credentials provisioning. The `StorageService` seam exists for the swap.
 
 ### P2 — integration / quality
 
-- [ ] Wire `MediaPicker` into the remaining image fields (riddle-mcq has no images today; quiz subjects have emoji only — likely N/A; make the picker the standard for any future image field).
-- [ ] Serve media through `next/image` with proper sizing now that WebP is guaranteed (see feature 04 P3).
-- [ ] Tests: upload pipeline (MIME rejection, re-encode) — none exist.
+- [x] **MediaPicker standard for future fields** — ACCEPTED 2026-08-30: riddle-mcq has no images and quiz subjects use emoji, so there is nothing to wire today; the picker is wired in the image-riddles admin form (the only image field) and is the default for any new image field.
+- [x] **next/image serving** — VERIFIED 2026-08-30 in the feature-04 pass: RiddleCard uses `next/image` with `sizes` + blur placeholder; `next.config.mjs` carries the images config.
+- [x] **Upload-pipeline tests** — DONE 2026-08-30: `media.service.spec.ts` (5 tests) — MIME rejection, undecodable-file rejection, WebP re-encode + dimensions/conversion metadata, delete blocked when referenced (409), delete cleans record + file when unreferenced.
 
 ### P3 — polish / tech debt
 
-- [ ] Alt-text (`description`) is stored but not surfaced in the picker — show it and require it for accessibility.
+- [x] **Alt text surfaced in the picker** — DONE 2026-08-30: asset cards now show the stored alt text (with a visible "No alt text" marker when missing). **Needs owner decision if it should be _required_**: making uploads reject missing alt text is a form-policy change for the admin upload dialog.
 
 ## 5. Cross-feature touchpoints
 
