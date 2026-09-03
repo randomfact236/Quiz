@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
+import { NAV_ITEMS } from '@/lib/nav-config';
+
+const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
+
 const footerLinks = {
-  product: [
-    { href: '/quiz-mcq', label: 'Quiz' },
-    { href: '/jokes', label: 'Dad Jokes' },
-    { href: '/riddle-mcq', label: 'Riddles' },
-  ],
+  product: ['/quiz-mcq', '/jokes', '/riddle-mcq'].map(byHref),
   company: [{ href: '/about', label: 'About Us' }],
 };
 

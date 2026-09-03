@@ -44,24 +44,25 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 
 ### P0 — critical / broken
 
-- [ ] **Mount `<ToastContainer />`** in the root layout/providers. One line, site-wide impact: achievement unlocks, vote feedback, and admin/save toasts currently never appear to anyone.
+- [x] **`<ToastContainer />` mounted** — DONE 2026-08-30 in `app/providers.tsx` (above the app tree); the duplicate local mount in `RiddleMcqContainer` removed per the root-TODO note.
 
 ### P1 — major gaps
 
-- [ ] **SEO basics**: add `app/sitemap.ts` (static routes + published subjects/chapters/categories from the public APIs), `app/robots.ts`, and OpenGraph/Twitter metadata in the root layout. Decide server-rendering strategy for SEO-relevant content (Joke-of-the-Day, subject pages) — currently client-fetched.
+- [x] **SEO basics** — DONE 2026-08-30: `app/robots.ts` (allow all, disallow /admin + /api, sitemap pointer) and `app/sitemap.ts` (static routes + quiz/riddle subjects and image categories from the public APIs, graceful-failure on API downtime). OG/Twitter metadata + theme-color already existed in the root layout (plan stale).
+- [ ] Server-rendering strategy for JotD/subject pages — **needs owner decision** (SEO priorities determine the RSC rework).
 - [ ] **Newsletter** — owned by feature 14 (simple email collection first); this feature hosts the footer form. See [14-newsletter.md](14-newsletter.md).
-- [ ] **Legal pages**: privacy policy, terms of service, and a contact page — none exist anywhere in the app.
+- [x] **Legal pages** — BUILT 2026-08-30: `/privacy`, `/terms`, `/contact` with shared `LegalPage` shell and honest PLACEHOLDER markers. **Needs owner decision/approved copy before public launch** (contact email is a placeholder too).
 
 ### P2 — integration / quality
 
-- [ ] Mobile drawer links are hardcoded to jokes/image-riddles destinations — derive them from the same data the footer cards use, and audit for the riddle/quiz pages.
-- [ ] Header is 444 lines — extract nav config; MobileFooter duplicates link lists with Footer (three copies of navigation data).
-- [ ] Accessibility pass on the shell: skip-to-content link, focus trap in the mobile drawer, aria-current on nav items.
+- [x] **Mobile drawer links** — VERIFIED 2026-08-30 (plan stale): MobileFooter's drawers are data-driven from the public subject/category APIs, not hardcoded; the static section links now come from the shared nav config.
+- [x] **Nav config extraction** — DONE 2026-08-30: `lib/nav-config.ts` is the single source; both Header variants (admin + user, desktop + mobile) and Footer render from it, with `aria-current="page"` on active items. The three hand-maintained copies are gone.
+- [ ] Accessibility pass: skip-to-content link exists (root layout) and aria-current added; **focus trap in the mobile drawer deferred** — a correct trap needs a vetted implementation (dependency addition = owner decision); Escape/lambda-close and click-away already work.
 
 ### P3 — polish / tech debt
 
-- [ ] Web manifest + theme-color for installability if mobile traffic justifies it.
-- [ ] Consolidate the duplicated emoji/link constants between Footer, MobileFooter, and page CTAs.
+- [ ] Web manifest — **needs owner decision** (installability only pays off with meaningful mobile traffic; theme-color already present).
+- [x] **Link constants consolidated** — DONE 2026-08-30 via `lib/nav-config.ts`. Emoji sets in Footer/MobileFooter remain local literals (presentational, low churn) — accepted.
 
 ## 4. Cross-feature touchpoints
 

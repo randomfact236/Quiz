@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { NAV_ITEMS, NAV_MENU_ITEMS } from '@/lib/nav-config';
 import { useState, useEffect } from 'react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -69,54 +70,17 @@ export default function Header(): JSX.Element {
 
             <div className="hidden items-center gap-4 md:flex">
               <ul className="flex items-center gap-6" role="menubar">
-                <li>
-                  <Link
-                    href="/"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/quiz-mcq"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz-mcq') ? 'text-primary-600' : ''}`}
-                  >
-                    Quiz
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/jokes"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}
-                  >
-                    Dad Jokes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/riddle-mcq"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddle-mcq') ? 'text-primary-600' : ''}`}
-                  >
-                    Riddles
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/image-riddles"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/image-riddles') ? 'text-primary-600' : ''}`}
-                  >
-                    Image Riddles
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}
-                  >
-                    About
-                  </Link>
-                </li>
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={isActive(item.href) ? 'page' : undefined}
+                      className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive(item.href) ? 'text-primary-600' : ''}`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
               <div className="flex items-center gap-3">
                 {isAdminLoggedIn ? (
@@ -166,48 +130,17 @@ export default function Header(): JSX.Element {
           {/* Mobile menu */}
           {isMenuOpen && (
             <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
-              <Link
-                href="/"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href="/quiz-mcq"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Quiz
-              </Link>
-              <Link
-                href="/jokes"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Dad Jokes
-              </Link>
-              <Link
-                href="/riddle-mcq"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Riddles
-              </Link>
-              <Link
-                href="/image-riddles"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Image Riddles
-              </Link>
-              <Link
-                href="/about"
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
-              </Link>
+              {NAV_MENU_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
               <div className="border-t border-secondary-200 pt-2 mt-2">
                 {isAdminLoggedIn ? (
                   <button
@@ -247,54 +180,17 @@ export default function Header(): JSX.Element {
 
           <div className="hidden items-center gap-4 md:flex">
             <ul className="flex items-center gap-6" role="menubar">
-              <li>
-                <Link
-                  href="/"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/') ? 'text-primary-600' : ''}`}
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/quiz-mcq"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/quiz-mcq') ? 'text-primary-600' : ''}`}
-                >
-                  Quiz
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/jokes"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/jokes') ? 'text-primary-600' : ''}`}
-                >
-                  Dad Jokes
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/riddle-mcq"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/riddle-mcq') ? 'text-primary-600' : ''}`}
-                >
-                  Riddles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/image-riddles"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/image-riddles') ? 'text-primary-600' : ''}`}
-                >
-                  Image Riddles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive('/about') ? 'text-primary-600' : ''}`}
-                >
-                  About
-                </Link>
-              </li>
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive(item.href) ? 'text-primary-600' : ''}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <div className="flex items-center gap-3">
               {/* Show logout when user OR admin is logged in */}
@@ -367,48 +263,17 @@ export default function Header(): JSX.Element {
 
         {isMenuOpen && (
           <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
-            <Link
-              href="/"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/quiz-mcq"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Quiz
-            </Link>
-            <Link
-              href="/jokes"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Dad Jokes
-            </Link>
-            <Link
-              href="/riddle-mcq"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Riddles
-            </Link>
-            <Link
-              href="/image-riddles"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Image Riddles
-            </Link>
-            <Link
-              href="/about"
-              className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
+            {NAV_MENU_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
             <div className="border-t border-secondary-200 pt-2 mt-2">
               {isUserLoggedIn || isAdminLoggedIn ? (
                 <>

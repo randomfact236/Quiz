@@ -19,7 +19,6 @@ import { RiddleMcqModal } from '../modals/RiddleMcqModal';
 import { ImportModal } from '../modals/ImportModal';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { ToastContainer } from '@/components/ui/ToastContainer';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/lib/toast';
 import type { StatusFilter } from '@/types/status.types';
@@ -244,7 +243,6 @@ export function RiddleMcqContainer() {
 
   return (
     <div className="space-y-4">
-      <ToastContainer />
       <RiddleMcqHeader
         onAddRiddle={() => setRiddleModal({ open: true })}
         onImport={() => setShowImportModal(true)}
