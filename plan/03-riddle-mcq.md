@@ -89,23 +89,23 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps
 
-- [ ] Achievements/progress integration: riddle completions currently feed nothing — wire `saveQuizResult`-equivalent + `checkAchievements` (or a riddle-aware stats source) so the Achievements feature sees riddle play.
-- [ ] Server-side session/result persistence (localStorage-only, deferred owner-accepted) — same gap as quiz-mcq; ideally share one design/sessions table.
-- [ ] JSON import/export both sides (CSV-only today; deferred owner-accepted).
+- [x] **Achievements/progress integration** — DONE 2026-08-30 (commit `ea2098e`): new `lib/riddle-progress.ts` (capped completion history + stats); `getTotalStats` and `checkAchievements` evaluate a combined quiz+riddle history (chapter-scoped conditions skip blank-chapter riddles); riddle submit records the completion and toasts unlocks. 5 tests.
+- [ ] Server-side session/result persistence — **deferred (owner-accepted 2026-08-26, reaffirmed 2026-08-30)**. Note: quiz-mcq now has `quiz_sessions` (feature 02, commit `7525d9f`); extending the same design to riddles is ready to copy when the owner green-lights it.
+- [ ] JSON import/export both sides — **deferred (owner-accepted 2026-08-26, reaffirmed 2026-08-30)**.
 
 ### P2 — integration / quality
 
-- [ ] Commit the 5 `track()` calls in `useRiddlePlay.ts` when the analytics feature is revisited (paused by decision 2026-08-30 — do not build out further for now).
-- [ ] Consolidate `lib/riddle-session.ts` and `lib/riddle-resume.ts` into one persistence module (results page still reads the legacy single-key store).
-- [ ] Component/hook tests: `useRiddlePlay` (resume round-trip, auto-submit) and `RiddleCard` level-format behavior — only scoring/csv/resume/mode-param suites exist.
-- [ ] Targeted cache-invalidation tuning for stats/filter counts (deferred owner-accepted).
-- [ ] Doc consistency: keep this file in sync when the pending riddle-mcq review fixes (C3/R5/R8 commits) land in a release.
+- [ ] Commit the 5 `track()` calls in `useRiddlePlay.ts` — **deferred (owner decision 2026-08-30, mirrored from feature 02)**: the calls already exist and run; do not build out further for now.
+- [x] **Consolidate riddle persistence** — DONE 2026-08-30 (commit `95fc0d1`): `lib/riddle-session.ts` + `lib/riddle-resume.ts` merged into `lib/riddle-persistence.ts` (one module, shared 24h expiry, storage layouts unchanged); results page + engine + tests updated; old files removed.
+- [x] **Component/hook tests** — DONE 2026-08-30 (commits `eabbdab`, `8db4432`-range): `useRiddlePlay` (timer auto-submit → single results redirect; resume round-trip restoring saved answers) and `RiddleCard` (level-format slicing, expert→extreme input, selection routing, ref) + `adaptRiddleMcq` mapping. Frontend suite 172/172.
+- [ ] Targeted cache-invalidation tuning for stats/filter counts — **deferred (owner-accepted 2026-08-26, reaffirmed 2026-08-30)**.
+- [x] **Doc consistency** — this file updated in the same pass (persistence module references, inventory notes).
 
 ### P3 — polish / tech debt
 
-- [ ] Hint/skip tracking (needs product decision, deferred).
-- [ ] `riddle-mcq-question.service.ts` (362 lines) — split level-rule validation out if it grows.
-- [ ] Remove the legacy `chapterId` fallback param handling once certain no old links use it.
+- [ ] Hint/skip tracking — **needs product decision (owner); deferred.**
+- [x] **`riddle-mcq-question.service.ts` split evaluation** — EVALUATED 2026-08-30: still 362 lines and stable (no growth since the audit); the level-rule validation is cohesive with the create/update paths it guards. Split only if it grows or a second consumer needs the rules.
+- [x] **Legacy `chapterId` fallback** — REVIEWED 2026-08-30, keeping it: all in-repo link generators use `subjectId` (hub, results retry, MobileFooter), but old external links (bookmarks/search index) can't be audited; the 2-line fallback maps them to the same play flow at zero cost. Revisit only if param handling gets rewritten.
 
 ## 5. Cross-feature touchpoints
 

@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 03 Riddle MCQ: complete (buildable items).** P1: achievements/progress integration (`ea2098e` — riddle completions now feed Achievements via combined history). P2: persistence consolidation (`95fc0d1` — one `lib/riddle-persistence.ts`), hook/component tests (`eabbdab` — auto-submit, resume round-trip, RiddleCard formats). P3: service-split + legacy-param evaluations documented. Owner-deferred items left open per prior decisions: server-side riddle sessions, JSON import/export, track() analytics parity, cache tuning, hint/skip tracking. Verified: frontend 172/172, both tsc clean.
+
 - **2026-08-30 — Feature 02 MCQ Quiz: complete.** P1: server-side session persistence (`7525d9f`), challenge streak tracker (`7b57f2f`), distinct unanswered state (`c8b2d4b`), explanations end-to-end (`6492377`). P2: achievement audit (`88f1964`), a11y + component tests (`281e8ed`), features rename (`38d1745`). P3: celebration tiers, shim deletion, streak-consolidation + service-split evaluations (docs commit). Deferred: the 6 `track()` analytics calls (owner-paused). Verified: backend 25/25 + build clean, frontend 158/158 + tsc clean, live probes for sessions and explanations.
 
 - **2026-08-30 — Feature 01 User Accounts: complete.** Commits `80b3cc0` (refresh-token hardening: hash at rest, 7d expiry, rotation, `POST /auth/logout` revoke), `aaea0a2` (OAuth one-time code exchange — tokens off the URL), `84f877b` (role enum at DTO/service/DB), `f0bed06` (email verification: register email, verify + resend endpoints, `/verify-email` page), `09e3a34` (`/profile` page + fixed a real leak: profile endpoints returned password hash/refresh token). Plus docs/infra in `4b0f9c6`-range commit (this one). Deferred/needs decision: admin user-editing UI (owner decision), login-blocked-until-verified (owner decision). All items verified with tsc, backend jest suite (24/24), and live API probes.
@@ -49,7 +51,7 @@
 | --- | ------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------------- |
 | 1   | User Accounts            | [01-user-accounts.md](01-user-accounts.md)         | ✅ P0–P3 worked 2026-08-30 (1 P2 open: admin user-edit UI — owner decision)  |
 | 2   | MCQ Quiz                 | [02-mcq-quiz.md](02-mcq-quiz.md)                   | ✅ P0–P3 worked 2026-08-30 (1 P2 deferred: track() analytics — owner-paused) |
-| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ Done (2026-08-30)                                                         |
+| 3   | Riddle MCQ               | [03-riddle-mcq.md](03-riddle-mcq.md)               | ✅ P0–P3 worked 2026-08-30 (5 items owner-deferred, logged)                  |
 | 4   | Image Riddles            | [04-image-riddles.md](04-image-riddles.md)         | ✅ Done (2026-08-30)                                                         |
 | 5   | Dad Jokes                | [05-dad-jokes.md](05-dad-jokes.md)                 | ✅ Done (2026-08-30)                                                         |
 | 6   | Achievements             | [06-achievements.md](06-achievements.md)           | ✅ Done (2026-08-30)                                                         |
@@ -72,7 +74,7 @@ Recompute after working any backlog item.
 | ---------------------- | ------------------------- | -------- |
 | 01 User Accounts       | 0/0/1/0                   | 98%      |
 | 02 MCQ Quiz            | 0/0/1/0                   | 98%      |
-| 03 Riddle MCQ          | 0/3/5/3                   | 72%      |
+| 03 Riddle MCQ          | 0/2/1/1                   | 91%      |
 | 04 Image Riddles       | 0/3/4/3                   | 74%      |
 | 05 Dad Jokes           | 0/3/4/4                   | 73%      |
 | 06 Achievements        | 0/3/5/4                   | 71%      |
@@ -84,6 +86,6 @@ Recompute after working any backlog item.
 | 12 Admin Dashboard     | 0/3/4/3                   | 74%      |
 | 13 Analytics           | 0/3/4/3                   | 74%      |
 | 14 Newsletter          | 0/3/0/1                   | 0% (new) |
-| **Overall**            | **1/34/42/29 (106 open)** | **≈73%** |
+| **Overall**            | **1/36/43/30 (110 open)** | **≈73%** |
 
-> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02 updated after its pass (4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed). Overall re-estimated from the closed-item penalty weights.
+> Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02 updated after its pass (4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed). Feature 03: 1×P1, 2×P2, 2×P3 closed; 2×P1 + 2×P2 + 1×P3 stay open under prior owner-accepted deferrals (now explicitly marked). Overall re-estimated from the closed-item penalty weights.
