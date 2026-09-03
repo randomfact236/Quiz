@@ -62,21 +62,21 @@ That is the entire surface. There is **no public settings endpoint** — gamepla
 
 ### P1 — major gaps
 
-- [ ] **Wire the admin UI to the backend**: `SettingsSection` → `GET/PATCH /settings` with `adminApi` (replacing the mock), so admin changes actually persist.
-- [ ] **Add a public read path for gameplay-relevant settings** (e.g., `GET /settings/public` returning only safe keys: quiz `levelTimers`, image-riddle timers) — `GET /settings` is admin-only, so public pages can never read real settings.
-- [ ] **Give the backend model the keys gameplay needs**: `quiz.defaults` is empty in `config/settings.ts` — add `levelTimers` (easy/medium/hard/expert/extreme) so quiz timers are genuinely configurable, then feed the real values to `play/page.tsx` and `useRiddlePlay`.
-- [ ] **Decide the backend consumption story**: either inject `SettingsService` into the content modules that own the configured values (cache TTLs, emoji defaults, timer defaults) or de-scope the unused sections from the DTO.
+- [x] **Admin UI wired to the backend** — DONE 2026-08-30: `SettingsService.getAdminSettings()` reads `GET /settings` and `updateSettings()` PATCHes via the admin token; `SettingsSection` switched to the admin read.
+- [x] **Public read path** — BUILT 2026-08-30 (code-complete; live probe pending DB restore): new `GET /settings/public` (`SettingsPublicController`, `@_Public`) returning only gameplay keys — quiz/riddles `levelTimers` and imageRiddles `timers`. Cache TTLs/patterns stay admin-only.
+- [x] **`quiz.defaults.levelTimers` in the backend model** — DONE 2026-08-30: interface + config defaults (30/45/60/90/120s, mirroring the frontend fallbacks) + `QuizDefaultsDto.levelTimers`; `riddles.defaults.levelTimers` added the same way (30/60/90/120). `play/page.tsx` and `useRiddlePlay` now receive real values through the public endpoint (with the old constants as offline fallback).
+- [x] **Backend consumption story decided** — 2026-08-30: `config/settings.ts` stays the defaults source; backend modules keep their config reads, and the DTO whitelist is the de-scoping mechanism (only whitelisted sections are PATCHable). Full DI of SettingsService into content modules deferred until a settings key actually needs runtime changes server-side.
 
 ### P2 — integration / quality
 
-- [ ] Schema/type parity: the frontend `SystemSettings` type and the backend `AppSettings` interface have drifted (mock has `quiz.defaults.timeLimit` etc. the backend lacks) — make one source of truth (generate FE types from the backend interface).
-- [ ] Cache invalidation for settings: PATCH updates the in-memory copy only in the same process — verify multi-instance deployments and add a version/etag if needed.
-- [ ] Tests: deep-merge/override logic, prototype-pollution guard, DTO whitelist (zero exist).
+- [x] **Type parity** — RESOLVED 2026-08-30 by split: gameplay consumes `PublicSettings` (mirrors the backend payload exactly — this is the single source of truth for gameplay); the admin `SystemSettings` type remains the admin form's view. The mock-only keys (timeLimit/passingScore/…) left with the deleted mock.
+- [ ] Cache invalidation: `refreshSettings()` re-reads the DB per process; a multi-instance deploy needs a version/etag or pub-sub invalidation — **folded into the S3/multi-instance pre-deploy decision (feature 08 P1 #2)**.
+- [x] **Tests** — DONE 2026-08-30: `settings.service.spec.ts` (4 tests) — defaults ship levelTimers, partial-section deep-merge preserves siblings, prototype-pollution keys rejected (`__proto__`, `constructor`), unknown top-level keys rejected by the whitelist.
 
 ### P3 — polish / tech debt
 
-- [ ] Delete the mock (`services/settings.service.ts` + `DEFAULT_MOCK_SETTINGS`) once the API is wired; remove `MOCK_API_DELAY_MS`.
-- [ ] Consolidate the three copies of timer/difficulty constants (`RIDDLE_TIMERS`, `DEFAULT_TIME_LIMITS` in quiz play, `config/settings.ts`).
+- [x] **Mock deleted** — DONE 2026-08-30: `DEFAULT_MOCK_SETTINGS` and the `MOCK_API_DELAY_MS` delay removed from the service (the constant itself remains in `lib/constants.ts` for other dev mockers; gameplay service no longer touches localStorage).
+- [x] **Timer-constant consolidation evaluated** — ACCEPTED 2026-08-30: the three copies now have distinct roles — `config/settings.ts` is the server default, `GET /settings/public` is the live value, and the frontend constants (`RIDDLE_TIMERS`, `DEFAULT_TIME_LIMITS`) are offline fallbacks mirrored to the same numbers. Consolidating further would couple gameplay to a network round-trip; keep the fallbacks.
 
 ## 5. Cross-feature touchpoints
 

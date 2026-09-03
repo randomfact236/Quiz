@@ -1,5 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsOptional, ValidateNested, IsNumber, IsString, IsBoolean, IsArray, IsIn } from 'class-validator';
+import {
+  IsOptional,
+  ValidateNested,
+  IsNumber,
+  IsString,
+  IsBoolean,
+  IsArray,
+  IsIn,
+} from 'class-validator';
 
 /**
  * Pagination configuration DTO
@@ -203,8 +211,38 @@ class ImageRiddlesSettingsDto {
 /**
  * Quiz defaults DTO
  */
+class QuizLevelTimersDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  easy?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  medium?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  hard?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  expert?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  extreme?: number;
+}
+
 class QuizDefaultsDto {
-  // Add fields as needed
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => QuizLevelTimersDto)
+  levelTimers?: QuizLevelTimersDto;
 }
 
 /**
@@ -244,6 +282,28 @@ class QuizSettingsDto {
 /**
  * Riddles defaults DTO
  */
+class RiddlesLevelTimersDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  easy?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  medium?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  hard?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  expert?: number;
+}
+
 class RiddlesDefaultsDto {
   @IsOptional()
   @IsString()
@@ -253,6 +313,11 @@ class RiddlesDefaultsDto {
   @IsString()
   @IsIn(['easy', 'medium', 'hard'])
   difficulty?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => RiddlesLevelTimersDto)
+  levelTimers?: RiddlesLevelTimersDto;
 }
 
 /**
@@ -296,7 +361,7 @@ class RiddlesSettingsDto {
 
 /**
  * Settings update DTO with validation
- * 
+ *
  * @description Validates all incoming settings updates to ensure
  * only valid configuration values are accepted. Prevents injection
  * of invalid keys or malicious values.
@@ -340,7 +405,7 @@ export const ALLOWED_SETTING_KEYS = [
   'riddles',
 ] as const;
 
-export type AllowedSettingKey = typeof ALLOWED_SETTING_KEYS[number];
+export type AllowedSettingKey = (typeof ALLOWED_SETTING_KEYS)[number];
 
 /**
  * Check if a key is in the allowed settings whitelist

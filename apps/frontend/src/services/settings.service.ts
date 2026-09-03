@@ -1,85 +1,119 @@
-import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
-import {
-    ONE_HOUR_S,
-    ONE_DAY_S,
-    RIDDLE_TIMERS,
-    DEFAULT_QUIZ_TIME_LIMIT,
-    DEFAULT_PASSING_SCORE,
-    DEFAULT_QUESTIONS_PER_QUIZ,
-    MOCK_API_DELAY_MS,
-} from '@/lib/constants';
-import type {
-    SystemSettings,
-    QuizDefaults,
-} from '@/types/settings.types';
+/**
+ * ============================================================================
+ * Settings Service (API-backed — plan/11-site-settings.md P1 #1/#2, P3 #1)
+ * ============================================================================
+ * - getSettings(): gameplay-relevant settings from the public
+ *   `GET /settings/public` endpoint (timers only). Falls back to the same
+ *   defaults the backend ships with when the API is unreachable, so gameplay
+ *   never breaks offline.
+ * - getAdminSettings() / updateSettings(): full read/write via the admin-only
+ *   `GET|PATCH /settings` endpoints (admin token required).
+ *
+ * The former localStorage mock (DEFAULT_MOCK_SETTINGS + MOCK_API_DELAY_MS) is
+ * gone — the backend's config/settings.ts is the single defaults source.
+ * ============================================================================
+ */
+
+import { adminApi, api } from '@/lib/api-client';
+import { RIDDLE_TIMERS } from '@/lib/constants';
+import type { SystemSettings } from '@/types/settings.types';
 
 // Re-export SystemSettings for backward compatibility
 export type { SystemSettings };
 
-/**
- * Default quiz configuration values
- */
-const DEFAULT_QUIZ_DEFAULTS: QuizDefaults = {
-    timeLimit: DEFAULT_QUIZ_TIME_LIMIT,
-    passingScore: DEFAULT_PASSING_SCORE,
-    showResults: true,
-    allowRetries: true,
-    questionsPerQuiz: DEFAULT_QUESTIONS_PER_QUIZ,
-    shuffleQuestions: true,
-    showExplanations: true,
+/** Gameplay-visible settings shape returned by GET /settings/public. */
+export interface PublicSettings {
+  quiz: {
+    defaults: {
+      levelTimers: {
+        easy: number;
+        medium: number;
+        hard: number;
+        expert: number;
+        extreme: number;
+      };
+    };
+  };
+  riddles: {
+    defaults: {
+      categoryEmoji: string;
+      difficulty: string;
+      levelTimers: {
+        easy: number;
+        medium: number;
+        hard: number;
+        expert: number;
+      };
+    };
+  };
+  imageRiddles: {
+    timers: {
+      easy: number;
+      medium: number;
+      hard: number;
+      expert: number;
+    };
+  };
+}
+
+/** Mirrors the backend's config/settings.ts defaults (single-source parity). */
+export const FALLBACK_PUBLIC_SETTINGS: PublicSettings = {
+  quiz: {
+    defaults: {
+      levelTimers: { easy: 30, medium: 45, hard: 60, expert: 90, extreme: 120 },
+    },
+  },
+  riddles: {
+    defaults: {
+      categoryEmoji: '🧩',
+      difficulty: 'medium',
+      levelTimers: {
+        easy: RIDDLE_TIMERS.EASY,
+        medium: RIDDLE_TIMERS.MEDIUM,
+        hard: RIDDLE_TIMERS.HARD,
+        expert: RIDDLE_TIMERS.EXPERT,
+      },
+    },
+  },
+  imageRiddles: {
+    timers: {
+      easy: RIDDLE_TIMERS.EASY,
+      medium: RIDDLE_TIMERS.MEDIUM,
+      hard: RIDDLE_TIMERS.HARD,
+      expert: RIDDLE_TIMERS.EXPERT,
+    },
+  },
 };
 
-const DEFAULT_MOCK_SETTINGS: SystemSettings = {
-    global: {
-        pagination: { defaultLimit: 10, maxLimit: 50 },
-        cache: { defaultTtl: ONE_HOUR_S }
-    },
-    dadJokes: {
-        defaults: { categoryEmoji: '😂' },
-        cache: { categoriesTtl: ONE_DAY_S, pattern: 'jokes:*' }
-    },
-    imageRiddles: {
-        defaults: { categoryEmoji: '🖼️', timerSeconds: 30, showTimer: true },
-        timers: { easy: RIDDLE_TIMERS.EASY, medium: RIDDLE_TIMERS.MEDIUM, hard: RIDDLE_TIMERS.HARD, expert: RIDDLE_TIMERS.EXPERT },
-        cache: { categoriesTtl: ONE_DAY_S, pattern: 'image-riddles:*' }
-    },
-    quiz: {
-        defaults: DEFAULT_QUIZ_DEFAULTS,
-        difficulties: ['easy', 'medium', 'hard'],
-        cache: { subjectsTtl: ONE_DAY_S, allSubjectsKey: 'quiz:subjects' }
-    },
-    riddles: {
-        defaults: {
-            categoryEmoji: '🧩',
-            difficulty: 'medium',
-            levelTimers: {
-                easy: RIDDLE_TIMERS.EASY,
-                medium: RIDDLE_TIMERS.MEDIUM,
-                hard: RIDDLE_TIMERS.HARD,
-                expert: RIDDLE_TIMERS.EXPERT
-            }
-        },
-        difficulties: ['easy', 'medium', 'hard', 'expert'],
-        cache: { categoriesTtl: ONE_DAY_S, subjectsTtl: ONE_DAY_S, pattern: 'riddles:*' }
-    }
-};
+// Simple in-process cache — settings change rarely.
+let cache: { data: PublicSettings; fetchedAt: number } | null = null;
+const CACHE_TTL_MS = 60_000;
 
 export const SettingsService = {
-    async getSettings(): Promise<SystemSettings> {
-        // Simulate network delay for realism
-        await new Promise(resolve => setTimeout(resolve, MOCK_API_DELAY_MS));
-        return getItem(STORAGE_KEYS.SETTINGS, DEFAULT_MOCK_SETTINGS);
-    },
+  /** Gameplay settings (public endpoint). Falls back to defaults offline. */
+  async getSettings(): Promise<PublicSettings> {
+    if (cache && Date.now() - cache.fetchedAt < CACHE_TTL_MS) {
+      return cache.data;
+    }
+    try {
+      const response = await api.get<PublicSettings>('/settings/public');
+      cache = { data: response.data, fetchedAt: Date.now() };
+      return response.data;
+    } catch {
+      return FALLBACK_PUBLIC_SETTINGS;
+    }
+  },
 
-    async updateSettings(updates: Partial<SystemSettings>): Promise<SystemSettings> {
-        await new Promise(resolve => setTimeout(resolve, MOCK_API_DELAY_MS));
-        const current = getItem(STORAGE_KEYS.SETTINGS, DEFAULT_MOCK_SETTINGS);
+  /** Full settings for the admin UI (admin token). */
+  async getAdminSettings(): Promise<SystemSettings> {
+    const response = await adminApi.get<SystemSettings>('/settings');
+    return response.data;
+  },
 
-        // Shallow merge is sufficient as the settings UI typically sends full sections
-        // or we can rely on the fact that we're replacing sections.
-        const updated = { ...current, ...updates };
-
-        setItem(STORAGE_KEYS.SETTINGS, updated);
-        return updated;
-    },
+  /** Persist admin changes (admin token). */
+  async updateSettings(updates: Partial<SystemSettings>): Promise<SystemSettings> {
+    const response = await adminApi.patch<SystemSettings>('/settings', updates);
+    cache = null; // gameplay cache may now be stale
+    return response.data;
+  },
 };

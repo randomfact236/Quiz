@@ -104,10 +104,21 @@ export interface ImageRiddlesSettings {
 }
 
 /**
+ * Quiz per-level timer settings (seconds)
+ */
+export interface QuizLevelTimers {
+  easy: number;
+  medium: number;
+  hard: number;
+  expert: number;
+  extreme: number;
+}
+
+/**
  * Quiz default settings
  */
 export interface QuizDefaults {
-  // Default values if needed
+  levelTimers: QuizLevelTimers;
 }
 
 /**
@@ -130,9 +141,17 @@ export interface QuizSettings {
 /**
  * Riddles default settings
  */
+export interface RiddlesLevelTimers {
+  easy: number;
+  medium: number;
+  hard: number;
+  expert: number;
+}
+
 export interface RiddlesDefaults {
   categoryEmoji: string;
   difficulty: string;
+  levelTimers: RiddlesLevelTimers;
 }
 
 /**

@@ -124,7 +124,7 @@ export function SettingsSection(): JSX.Element {
     try {
       setLoading(true);
       setError('');
-      const data = await SettingsService.getSettings();
+      const data = await SettingsService.getAdminSettings();
       setSettings(data);
       setFormData(JSON.parse(JSON.stringify(data))); // Deep copy for form
     } catch (err) {

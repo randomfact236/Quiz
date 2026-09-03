@@ -33,7 +33,7 @@ import { track } from '@/lib/analytics';
 import { shuffle } from '@/lib/utils';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
-import type { SystemSettings } from '@/types/settings.types';
+import type { PublicSettings } from '@/services/settings.service';
 
 import { useRiddleTimers, type RiddlePlayStatus } from './useRiddleTimers';
 
@@ -73,7 +73,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   const [showExtendSession, setShowExtendSession] = useState(false);
   const [additionalRiddles, setAdditionalRiddles] = useState(5);
   const [error, setError] = useState<string | null>(null);
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
+  const [settings, setSettings] = useState<PublicSettings | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   // Mount guard to prevent hydration mismatch
