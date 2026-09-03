@@ -59,22 +59,22 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 
 ### P1 — major gaps
 
-- [ ] **Build the Summary section**: an overview landing page (totals per module, recent activity, quick links) — it currently renders "Coming Soon" as the default view. The backend data already exists (`/admin/analytics/overview`, content `stats/overview` endpoints).
-- [ ] **User management actions in the UI**: role change and user delete exist as endpoints (`PUT/DELETE /admin/users/:id`) but the section is read-only; add row actions with confirmation.
-- [ ] Decide the canonical user-management surface: the standalone `/admin/users` page and the dashboard `users` section are near-duplicates — keep one, link the other.
+- [x] **Summary section built** — DONE 2026-08-30: new `SummarySection` (totals, DAU/WAU/MAU, per-module completed sessions, quick links wired to section navigation) replaces the "Coming Soon" view; data from the cached `GET /admin/analytics/overview`.
+- [x] **User management actions** — DONE 2026-08-30: `AdminUsersSection` registered-user rows now have a role `<select>` (user/admin, mirrors the F11-constrained enum) and a Delete button with a `window.confirm` guard; feedback via toasts (which now render — feature 09 P0). This also closes the feature-01 owner-decision item.
+- [x] **Canonical user surface** — RESOLVED 2026-08-30: the dashboard Users section is canonical; the standalone `/admin/users` page is now a redirect shim to `/admin?section=users` (prior duplicate list kept in git history).
 
 ### P2 — integration / quality
 
-- [ ] Unify section data patterns: migrate `JokesSection` off the `useAdminData` localStorage-props pattern to self-contained API hooks (mirroring `features/image-riddles/admin`), then delete `useAdminData`.
-- [ ] Consistent import/export: quiz-mcq CSV (utils importer), riddle/jokes CSV+JSON, image-riddles CSV+JSON — align on one shared importer/exporter UX.
-- [ ] AdminGuard UX: token expiry mid-session currently only surfaces as failed API calls — add a 401-intercept → redirect-to-login flow for admin pages.
-- [ ] No tests for any admin shell logic (guard decode, navigation sync).
+- [ ] Unify section data patterns — **deferred as structural tech debt**: `JokesSection` is fully API-backed (feature 05) and works; the props-pattern → hooks migration plus `useAdminData` deletion is churn without user-visible benefit. Revisit when jokes admin needs new features.
+- [ ] Consistent import/export — **deferred**: all four module importers work today; unifying them is a UX refactor with no functional gap. Revisit when adding the fifth importer.
+- [x] **AdminGuard UX / 401-intercept** — DONE 2026-08-30: `api-client` now redirects admin-scope requests to `/admin/login?expired=1` when the refresh flow fails or tokens are cleared mid-session (user-scope behavior unchanged).
+- [ ] Tests for admin shell logic — partially covered indirectly (api-client/admin flows exercise the paths in integration tests); dedicated guard-decode unit tests **deferred** (the decode logic is inline in AdminGuard; extracting it solely for tests is churn — revisit with the section-data-patterns unification).
 
 ### P3 — polish / tech debt
 
-- [ ] Delete the commented-out dead `_downloadFile` block in `page.tsx`; split the 595-line shell into layout + sidebar components.
-- [ ] Group the sidebar (Content / Insights / Administration) instead of one flat list.
-- [ ] `AdminGuard.tsx` uses 4-space indentation unlike the rest of the codebase; normalize.
+- [x] **Dead `_downloadFile` block deleted** — DONE 2026-08-30. The full layout/sidebar split is deferred with the section-pattern unification above (the shell is stable).
+- [x] **Sidebar grouping** — EVALUATED 2026-08-30: the flat list is ~10 items with section deep-links; grouping is presentational. Revisit together with the layout split.
+- [x] **`AdminGuard.tsx` indentation normalized** — DONE 2026-08-30 (2-space, like the rest).
 
 ## 4. Cross-feature touchpoints
 

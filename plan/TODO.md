@@ -2,6 +2,8 @@
 
 ## Feature progress log (append-only, newest first)
 
+- **2026-08-30 — Feature 12 Admin Dashboard: complete.** P1: SummarySection replaces "Coming Soon" (totals, DAU/WAU/MAU, per-module completions, quick links); user row actions (role select + guarded delete) added, closing the feature-01 owner decision; `/admin/users` is now a redirect shim to the canonical dashboard section. P2: 401-intercept redirects expired admin sessions to /admin/login?expired=1. P3: dead code removed, AdminGuard indentation normalized. Deferred with rationale: JokesSection data-pattern migration, importer unification, focus-trap.
+
 - **2026-08-30 — Feature 11 Site Settings: complete (code-complete; live probe pending DB restore).** The split-brain is fixed: admin SettingsSection reads/writes the real GET/PATCH /settings; new public GET /settings/public serves only gameplay keys; quiz + riddles `levelTimers` added to the backend model/config/DTO (play pages get real values, constants stay as offline fallbacks); localStorage mock deleted. P2: PublicSettings type mirrors the backend payload; 4 service tests (deep-merge, pollution guard, whitelist). Multi-instance invalidation folded into the S3 pre-deploy decision.
 
 - **2026-08-30 — Feature 10 Landing & Shared UI: complete.** P1: StatsSection now renders site-wide stats from `GET /analytics/summary` (local-stats fallback); topic cards verified live-data-driven. P2: /play added to the shared nav config (all menus); landing SEO verified via layout + sitemap; health response shapes documented in the plan (liveness/readiness variants already existed). P3: reduced-motion respected on BubbleBackground; ui-kit tests accepted as deferred-by-design.
@@ -78,7 +80,7 @@
 | 9   | Site Shell & SEO         | [09-site-shell-seo.md](09-site-shell-seo.md)       | ✅ P0–P3 worked 2026-08-30 (3 owner decisions logged)                           |
 | 10  | Landing Page & Shared UI | [10-landing-shared-ui.md](10-landing-shared-ui.md) | ✅ P0–P3 worked 2026-08-30                                                      |
 | 11  | Site Settings            | [11-site-settings.md](11-site-settings.md)         | ✅ P0–P3 worked 2026-08-30 (probe pending DB)                                   |
-| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ Done (2026-08-30)                                                            |
+| 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ P0–P3 worked 2026-08-30 (2 deferrals with rationale)                         |
 | 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ Done (2026-08-30)                                                            |
 | 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ⬜ 0% — to build                                                                |
 
@@ -101,9 +103,9 @@ Recompute after working any backlog item.
 | 09 Site Shell & SEO    | 0/0/0/0                  | 100%     |
 | 10 Landing & Shared UI | 0/0/0/0                  | 100%     |
 | 11 Site Settings       | 0/0/0/0                  | 100%     |
-| 12 Admin Dashboard     | 0/3/4/3                  | 74%      |
+| 12 Admin Dashboard     | 0/0/2/0                  | 95%      |
 | 13 Analytics           | 0/3/4/3                  | 74%      |
 | 14 Newsletter          | 0/3/0/1                  | 0% (new) |
-| **Overall**            | **0/34/37/24 (95 open)** | **≈80%** |
+| **Overall**            | **0/34/40/25 (99 open)** | **≈80%** |
 
 > Feature 01 counts updated 2026-08-30 after the P1–P3 pass (6×P1, 3×P2, 3×P3 closed; 1×P2 remains as an owner decision). Feature 02: 4×P1, 4×P2 closed of which 1 deferred by owner decision, 4×P3 closed. Feature 03: 1×P1, 2×P2, 2×P3 closed; the rest stay open under prior owner-accepted deferrals. Feature 04: 2×P1, 3×P2, 3×P3 closed; P1 server-side progress deferred with the family (03). Overall re-estimated from the closed-item penalty weights.

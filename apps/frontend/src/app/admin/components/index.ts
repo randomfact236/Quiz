@@ -7,3 +7,5 @@ export { RiddleSidebar } from './RiddleSidebar';
 export { AdminUsersSection } from './AdminUsersSection';
 export { MediaLibrarySection } from './MediaLibrarySection';
 export { AnalyticsSection } from './AnalyticsSection';
+
+export * from './SummarySection';

@@ -1,11 +1,15 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { Trash2 } from 'lucide-react';
+import { toast } from '@/lib/toast';
+import { adminApi } from '@/lib/api-client';
 
 interface User {
   id: string;
   email: string;
   name: string;
+  role?: string;
   createdAt: string;
   lastActive?: string;
 }
@@ -76,6 +80,34 @@ export function AdminUsersSection(): JSX.Element {
   }, [filteredUsers, currentPage]);
 
   const totalPages = Math.ceil(filteredUsers.length / 10);
+
+  const changeRole = async (user: User, role: string) => {
+    try {
+      await adminApi.put(`/admin/users/${user.id}`, { role });
+      setRegisteredUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, role } : u)));
+      toast.success(`Role updated to ${role}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Role change failed');
+    }
+  };
+
+  const deleteUser = async (user: User) => {
+    // Confirmation guard (plan/12-admin-dashboard.md P1 #2)
+    if (
+      !window.confirm(
+        `Delete ${user.email}? This permanently removes the account and cannot be undone.`
+      )
+    ) {
+      return;
+    }
+    try {
+      await adminApi.delete(`/admin/users/${user.id}`);
+      setRegisteredUsers((prev) => prev.filter((u) => u.id !== user.id));
+      toast.success('User deleted');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Delete failed');
+    }
+  };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '-';
@@ -168,6 +200,12 @@ export function AdminUsersSection(): JSX.Element {
                   <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">
                     Last Active
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">
+                    Role
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">
+                    Actions
+                  </th>
                 </>
               ) : (
                 <>
@@ -187,7 +225,7 @@ export function AdminUsersSection(): JSX.Element {
           <tbody className="divide-y divide-slate-200">
             {isLoading ? (
               <tr>
-                <td colSpan={3} className="px-6 py-12 text-center">
+                <td colSpan={5} className="px-6 py-12 text-center">
                   <div className="flex justify-center">
                     <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
                   </div>
@@ -195,7 +233,7 @@ export function AdminUsersSection(): JSX.Element {
               </tr>
             ) : filteredUsers.length === 0 ? (
               <tr>
-                <td colSpan={3} className="px-6 py-12 text-center text-slate-500">
+                <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
                   No users found
                 </td>
               </tr>
@@ -230,6 +268,30 @@ export function AdminUsersSection(): JSX.Element {
                   <td className="px-6 py-4 text-sm text-slate-600">
                     {formatDate(user.lastActive)}
                   </td>
+                  {'email' in user ? (
+                    <>
+                      <td className="px-6 py-4">
+                        <select
+                          value={user.role ?? 'user'}
+                          onChange={(e) => changeRole(user, e.target.value)}
+                          className="rounded-md border border-slate-300 px-2 py-1 text-sm"
+                          aria-label={`Role for ${user.email}`}
+                        >
+                          <option value="user">user</option>
+                          <option value="admin">admin</option>
+                        </select>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => deleteUser(user)}
+                          className="flex items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
+                          aria-label={`Delete ${user.email}`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Delete
+                        </button>
+                      </td>
+                    </>
+                  ) : null}
                 </tr>
               ))
             )}

@@ -34,6 +34,7 @@ import {
   AdminUsersSection,
   MediaLibrarySection,
   AnalyticsSection,
+  SummarySection,
 } from './components';
 import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
@@ -508,12 +509,7 @@ export default function AdminPage(): JSX.Element {
 
         {/* Content Area */}
         <div className="p-6">
-          {activeSection === 'summary' && (
-            <div className="rounded-xl bg-white p-8 shadow-md text-center">
-              <p className="text-gray-500 font-medium">Summary</p>
-              <p className="text-gray-400 text-sm mt-1">Coming Soon</p>
-            </div>
-          )}
+          {activeSection === 'summary' && <SummarySection onNavigate={setActiveSection} />}
           {(activeSection === 'quiz-mcq' || subjects.some((s) => s.slug === activeSection)) && (
             <QuizMcqContainer />
           )}
@@ -576,20 +572,5 @@ function MenuItem({
     </button>
   );
 }
-
-/*
-// Download file helper - Prefixed with underscore as it's not currently used
-function _downloadFile(content: string, filename: string, type: string): void {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-*/
 
 /** Admin Guard component to be used at the end of the page */

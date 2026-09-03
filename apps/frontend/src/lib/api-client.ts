@@ -135,11 +135,33 @@ export async function apiRequest<T>(
               ok: retryRes.ok,
             };
           }
+          // Refresh failed — the session is over. Send admin sessions back to
+          // the admin login instead of leaving failed calls everywhere
+          // (plan/12-admin-dashboard.md P2).
+          if (isAdmin && typeof window !== 'undefined') {
+            const { pathname } = window.location;
+            if (!pathname.startsWith('/admin/login')) {
+              window.location.assign('/admin/login?expired=1');
+            }
+          }
         } catch (e) {
           clearTokens(isAdmin);
+          if (isAdmin && typeof window !== 'undefined') {
+            const { pathname } = window.location;
+            if (!pathname.startsWith('/admin/login')) {
+              window.location.assign('/admin/login?expired=1');
+            }
+          }
         }
       } else {
+        const hadTokens = Boolean(getToken(isAdmin));
         clearTokens(isAdmin);
+        if (isAdmin && hadTokens && typeof window !== 'undefined') {
+          const { pathname } = window.location;
+          if (!pathname.startsWith('/admin/login')) {
+            window.location.assign('/admin/login?expired=1');
+          }
+        }
       }
     }
 
