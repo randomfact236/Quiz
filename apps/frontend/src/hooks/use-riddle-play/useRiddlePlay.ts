@@ -5,7 +5,7 @@
  * Extracted from app/riddle-mcq/play/page.tsx (quality-gate split). Owns the
  * fetch/resume/autosave/submit flow; the page is render-only.
  *
- * Persistence: two-key resume store (lib/riddle-resume.ts) — snapshot written
+ * Persistence: consolidated module (lib/riddle-persistence.ts) — two-key resume (snapshot written
  * once per session start/extend, lightweight progress per autosave tick.
  * ============================================================================
  */
@@ -20,13 +20,11 @@ import {
   clearRiddleSession,
   createRiddleSession,
   setupNavigationWarning,
-} from '@/lib/riddle-session';
-import {
   loadRiddleResume,
   saveRiddleResume,
   saveRiddleResumeQuestions,
   clearRiddleResume,
-} from '@/lib/riddle-resume';
+} from '@/lib/riddle-persistence';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';

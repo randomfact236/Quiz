@@ -16,7 +16,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, RotateCcw, Share2, Home, Trophy } from 'lucide-react';
 
 import type { RiddleSession, RiddleResult } from '@/types/riddles';
-import { getRiddleSessionById } from '@/lib/riddle-session';
+import { getRiddleSessionById } from '@/lib/riddle-persistence';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';

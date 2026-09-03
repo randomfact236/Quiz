@@ -1,17 +1,34 @@
 /**
  * ============================================================================
- * Riddle Session Persistence
+ * Riddle Persistence (consolidated module — plan/03-riddle-mcq.md P2)
  * ============================================================================
- * Phase 0: Auto-save riddle session to localStorage every 10 seconds
- * Provides session recovery and prevents data loss on refresh
+ * One module, two concerns, three storage keys:
+ *
+ * 1. In-flight session (single key, 10s autosave): `saveRiddleSession` /
+ *    `loadRiddleSession` / `clearRiddleSession` / `createRiddleSession` /
+ *    `hasActiveSession` / `hasUnsavedProgress` / `setupNavigationWarning`.
+ *    Also hands the *completed* session to the results page via
+ *    `getRiddleSessionById` (raw single read — completed sessions are skipped
+ *    by the recovery path but still readable once for results).
+ *
+ * 2. Two-key resume (mirrors lib/quiz-mcq-resume.ts): `saveRiddleResumeQuestions`
+ *    (immutable snapshot, written once per start/extend) + `saveRiddleResume`
+ *    (lightweight progress, every tick). `loadRiddleResume` merges only when
+ *    both keys exist and their identity matches.
+ *
+ * Both sub-stores share the 24h expiry constant defined here.
  * ============================================================================
  */
 
 import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
 import type { RiddleSession } from '@/types/riddles';
 
-// Session expiry time (24 hours - sessions older than this are considered stale)
+// Session/resume expiry (24 hours — older records are considered stale).
 const SESSION_EXPIRY_MS = 24 * 60 * 60 * 1000;
+
+// ==========================================================================
+// In-flight session store (single key, autosave payload)
+// ==========================================================================
 
 // ============================================================================
 // Session Management
@@ -165,4 +182,99 @@ export function setupNavigationWarning(sessionGetter: () => RiddleSession | null
   return () => {
     window.removeEventListener('beforeunload', handleBeforeUnload);
   };
+}
+
+// ==========================================================================
+// Two-key resume store (snapshot once + lightweight progress)
+// ==========================================================================
+const PROGRESS_KEY = STORAGE_KEYS.RIDDLE_RESUME_PROGRESS;
+const QUESTIONS_KEY = STORAGE_KEYS.RIDDLE_RESUME_QUESTIONS;
+
+/** Identity fields shared by both keys — used to bind snapshot ↔ progress. */
+export interface RiddleResumeIdentity {
+  mode: 'timer' | 'practice';
+  subjectId: string;
+  level: string;
+}
+
+/** Lightweight per-change progress payload (no riddles). */
+export interface RiddleResumeProgress {
+  answers: Record<string, string>;
+  timeRemaining: number;
+  startedAt: string;
+}
+
+interface StoredResumeProgress extends RiddleResumeIdentity, RiddleResumeProgress {
+  savedAt: number;
+}
+
+interface StoredResumeQuestions extends RiddleResumeIdentity {
+  // Stored untyped on purpose: the snapshot is the adapted frontend Riddle[]
+  // written once by the play page; consumers cast back via adaptRiddleMcq's
+  // output type.
+  availableRiddles: unknown[];
+}
+
+/** Merged state handed to consumers. */
+export interface RiddleResumeState extends RiddleResumeIdentity, RiddleResumeProgress {
+  availableRiddles: unknown[];
+  savedAt: number;
+}
+
+/** Write the immutable riddle snapshot — call once per session start/extend. */
+export function saveRiddleResumeQuestions(
+  identity: RiddleResumeIdentity,
+  availableRiddles: unknown[]
+): void {
+  const payload: StoredResumeQuestions = { ...identity, availableRiddles };
+  setItem(QUESTIONS_KEY, payload);
+}
+
+/** Write lightweight progress — safe to call on every autosave tick. */
+export function saveRiddleResume(
+  identity: RiddleResumeIdentity,
+  progress: Omit<RiddleResumeProgress, 'startedAt'> & { startedAt?: string }
+): void {
+  const stored: StoredResumeProgress = {
+    ...identity,
+    answers: progress.answers,
+    timeRemaining: progress.timeRemaining,
+    startedAt: progress.startedAt ?? '',
+    savedAt: Date.now(),
+  };
+  setItem(PROGRESS_KEY, stored);
+}
+
+export function loadRiddleResume(): RiddleResumeState | null {
+  const progress = getItem<StoredResumeProgress | null>(PROGRESS_KEY, null);
+  if (!progress || !progress.startedAt) return null;
+  if (isExpired(progress.savedAt)) {
+    clearRiddleResume();
+    return null;
+  }
+
+  const snapshot = getItem<StoredResumeQuestions | null>(QUESTIONS_KEY, null);
+  if (
+    !snapshot ||
+    snapshot.subjectId !== progress.subjectId ||
+    snapshot.level !== progress.level ||
+    snapshot.mode !== progress.mode
+  ) {
+    // Snapshot missing or belongs to another session — cannot resume safely.
+    return null;
+  }
+
+  return {
+    ...progress,
+    availableRiddles: snapshot.availableRiddles,
+  };
+}
+
+export function clearRiddleResume(): void {
+  removeItem(PROGRESS_KEY);
+  removeItem(QUESTIONS_KEY);
+}
+
+function isExpired(savedAt: number): boolean {
+  return Date.now() - savedAt > SESSION_EXPIRY_MS;
 }

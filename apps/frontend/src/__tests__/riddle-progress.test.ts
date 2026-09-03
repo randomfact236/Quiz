@@ -7,7 +7,6 @@
 
 import { checkAchievements } from '@/lib/achievements';
 import { saveRiddleResult, getRiddleHistory, getRiddleStats } from '@/lib/riddle-progress';
-import { setItem, STORAGE_KEYS } from '@/lib/storage';
 import type { RiddleSession } from '@/types/riddles';
 
 const makeRiddleSession = (overrides: Partial<RiddleSession> = {}): RiddleSession =>
