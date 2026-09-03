@@ -7,10 +7,12 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 ### Run summary — master tracker pass complete (2026-08-30)
 
 All 14 features worked in table order (P0 → P1 → P2 → P3, feature-scoped commits, pushed).
-**Blocked items:** dev Postgres on :5432 died mid-session (see plan/TODO.md anomalies) — migrations
-`1789000000000` (image-riddle counters), `1789100000000` (joke_votes), `1789200000000` (user_achievements),
-`1789300000000` (comment userId/flagged), `1789400000000` (newsletter) are committed but NOT YET APPLIED;
-run `npm run migration:run` in apps/backend when the DB returns, then restart the backend.
+**RESOLVED 2026-09-03:** the project's own `ai-quiz-postgres` / `ai-quiz-redis` Docker containers (credentials match
+`apps/backend/.env`; volume `backend_postgres_data` holds the full current schema) were started via `docker start`,
+all five pending migrations applied, the backend rebuilt (F11–F14 code) and restarted, and the frontend dev server
+brought back up on :3010. Live probes passed: newsletter subscribe/duplicate/honeypot/unsubscribe/400,
+`GET /settings/public` levelTimers, image-riddle engage, quiz session create + history. Probe rows cleaned up.
+Remaining known environment quirk: `/health` reports 503 on the disk-usage threshold (machine-level, not code).
 **Owner decisions logged below (§0) and in each plan file.**
 
 ### 0. Needs owner decision — from the feature-01 pass (2026-08-30)
