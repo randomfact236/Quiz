@@ -61,17 +61,17 @@ Tests: `__tests__/image-riddle-comments.test.tsx` (frontend) + backend `comments
 
 ### P1 — major gaps
 
-- [ ] **Logged-in attribution**: link comments to `userId` (nullable, alongside guestId) so registered users get identity, editing, and cross-device deletion; today a logged-in user and an anonymous visitor are indistinguishable.
-- [ ] Extend coverage to the remaining content types if desired (quiz questions, riddle-mcq) — the `contentType` enum and UI components make this additive, not structural.
+- [x] **Logged-in attribution** — BUILT 2026-08-30 (code-complete; live probe pending DB restore — see anomalies): nullable `comments.userId` (migration `1789300000000`, indexed); create() stores it via the optional JWT; `GET /comments/my` matches either identity; `DELETE /comments/:id` deletes by userId for logged-in owners (guest path unchanged).
+- [ ] Extend coverage to quiz/riddle-mcq content types — **needs owner decision** ("if desired" per plan): the enum/UI are additive-ready, but whether those surfaces should expose comments is a product call.
 
 ### P2 — integration / quality
 
-- [ ] Admin moderation: `flagged` exists on the entity — verify there is a report/flag path from the public UI (or add one), otherwise the flag can never be set.
-- [ ] Notifications: comment counts refresh via fetch-on-mount only; consider invalidation or polling on the jokes page chips.
+- [x] **Flag path** — BUILT 2026-08-30: the plan's premise was wrong — no `flagged` column existed anywhere. Added it (same migration), plus public throttled `POST /comments/:id/flag` (idempotent) and an admin `flagged=true` filter on the moderation list.
+- [x] **Comment-count refresh** — REVIEWED 2026-08-30, fetch-on-mount accepted: chips are an ambient signal; polling/invalidation would add requests for marginal freshness. Revisit if counts ever drive gameplay.
 
 ### P3 — polish / tech debt
 
-- [ ] `authorName` is free text (max 50) — consider profanity/length policy if moderation burden grows.
+- [x] **`authorName` policy** — ACCEPTED 2026-08-30: 50-char cap enforced; moderation already hides (mask) + allows TRASH of any comment, and the new flag path gives users a raise-to-moderation channel. Automated profanity filtering only if burden materializes.
 
 ## 5. Cross-feature touchpoints
 

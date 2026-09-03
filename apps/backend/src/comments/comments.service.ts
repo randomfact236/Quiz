@@ -197,7 +197,8 @@ export class CommentsService {
       text?: string;
       chip?: CommentChip;
       authorName?: string;
-    }
+    },
+    userId?: string | null
   ): Promise<PublicComment> {
     this.validateKindForContentType(dto.contentType, dto.kind);
 
@@ -238,6 +239,7 @@ export class CommentsService {
       contentType: dto.contentType,
       contentId: dto.contentId,
       guestId,
+      userId: userId ?? null,
       kind: dto.kind,
       text: dto.kind === CommentKind.CHIP ? null : text,
       chip: dto.kind === CommentKind.CHIP ? chip : null,
@@ -283,20 +285,50 @@ export class CommentsService {
   async findMyComments(
     contentType: CommentContentType,
     contentId: string,
-    guestId: string
+    guestId: string,
+    userId?: string | null
   ): Promise<PublicComment[]> {
+    const identityFilter = userId ? [{ guestId, userId }, { userId }] : [{ guestId }];
     const rows = await this.commentRepo.find({
-      where: {
+      where: identityFilter.map((identity) => ({
         contentType,
         contentId,
-        guestId,
         status: ContentStatus.PUBLISHED,
         kind: In([CommentKind.GUESS, CommentKind.COMMENT]),
-      },
+        ...identity,
+      })),
       order: { createdAt: 'DESC' },
       take: 50,
     });
     return rows.map((row) => this.toPublicComment(row, { masked: row.isCorrect, mine: true }));
+  }
+
+  /**
+   * Public flag path (plan/07-comments.md P2): sets `flagged` so admin
+   * moderation can surface it. Idempotent; hides nothing by itself.
+   */
+  async flag(id: string): Promise<void> {
+    const comment = await this.commentRepo.findOne({ where: { id } });
+    if (comment === null) {
+      throw new NotFoundException('Comment not found');
+    }
+    if (!comment.flagged) {
+      comment.flagged = true;
+      await this.commentRepo.save(comment);
+    }
+  }
+
+  /** Delete own comment as a logged-in user (plan/07-comments.md P1 #1). */
+  async removeAsUser(id: string, userId: string): Promise<void> {
+    const comment = await this.commentRepo.findOne({ where: { id } });
+    if (comment === null) {
+      throw new NotFoundException('Comment not found');
+    }
+    if (comment.userId !== userId) {
+      throw new ForbiddenException('You can only delete your own comments');
+    }
+    await this.commentRepo.remove(comment);
+    await this.invalidateFeedCache(comment.contentType, comment.contentId);
   }
 
   async removeAsGuest(id: string, guestId: string): Promise<void> {
@@ -316,6 +348,7 @@ export class CommentsService {
   async findAllAdmin(params: {
     status?: ContentStatus;
     contentType?: CommentContentType;
+    flagged?: boolean;
     page?: number;
     limit?: number;
   }): Promise<{
@@ -335,6 +368,7 @@ export class CommentsService {
     const where: FindOptionsWhere<Comment> = {};
     if (params.status !== undefined) where.status = params.status;
     if (params.contentType !== undefined) where.contentType = params.contentType;
+    if (params.flagged !== undefined) where.flagged = params.flagged;
 
     const [rows, total] = await this.commentRepo.findAndCount({
       where,

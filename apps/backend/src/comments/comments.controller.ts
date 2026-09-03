@@ -24,6 +24,8 @@ import { Throttle } from '@nestjs/throttler';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { _Public } from '../common/decorators/public.decorator';
+import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
+import { UseGuards, Req } from '@nestjs/common';
 
 import {
   CommentCountsQueryDto,
@@ -51,8 +53,14 @@ export class CommentsController {
   @Get('my')
   @_Public()
   @ApiOperation({ summary: "List the caller's own comments on one content item" })
-  findMine(@Query() query: MyCommentsQueryDto): Promise<PublicComment[]> {
-    return this.commentsService.findMyComments(query.contentType, query.contentId, query.guestId);
+  @UseGuards(OptionalJwtAuthGuard)
+  findMine(@Query() query: MyCommentsQueryDto, @Req() req: any): Promise<PublicComment[]> {
+    return this.commentsService.findMyComments(
+      query.contentType,
+      query.contentId,
+      query.guestId,
+      req.user?.id ?? null
+    );
   }
 
   @Get('counts')
@@ -95,18 +103,39 @@ export class CommentsController {
 
   @Post()
   @_Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
-  @ApiOperation({ summary: 'Post a guess / chip tap / comment (guest, 20/min)' })
-  create(@Body() dto: CreateCommentDto & { guestId: string }): Promise<PublicComment> {
-    return this.commentsService.create(dto.guestId, dto);
+  @ApiOperation({ summary: 'Post a guess / chip tap / comment (guest or logged-in, 20/min)' })
+  create(
+    @Body() dto: CreateCommentDto & { guestId: string },
+    @Req() req: any
+  ): Promise<PublicComment> {
+    return this.commentsService.create(dto.guestId, dto, req.user?.id ?? null);
+  }
+
+  @Post(':id/flag')
+  @_Public()
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Flag a comment for moderator review (idempotent)' })
+  async flag(@Param('id') id: string): Promise<{ flagged: boolean }> {
+    await this.commentsService.flag(id);
+    return { flagged: true };
   }
 
   @Delete(':id')
   @_Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
-  @ApiOperation({ summary: 'Delete own comment by guestId (admins use /admin/comments)' })
-  remove(@Param('id') id: string, @Query() query: { guestId?: string }): Promise<void> {
-    // Missing guestId simply fails the ownership check (403).
+  @ApiOperation({ summary: 'Delete own comment (guestId query or logged-in identity)' })
+  remove(
+    @Param('id') id: string,
+    @Query() query: { guestId?: string },
+    @Req() req: any
+  ): Promise<void> {
+    // Logged-in owners delete by userId; guests by guestId (missing identity 403s).
+    if (req.user?.id) {
+      return this.commentsService.removeAsUser(id, req.user.id);
+    }
     return this.commentsService.removeAsGuest(id, query.guestId ?? '');
   }
 }

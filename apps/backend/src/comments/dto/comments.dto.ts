@@ -19,6 +19,7 @@ import {
   IsUUID,
   MaxLength,
   Min,
+  IsBoolean,
 } from 'class-validator';
 
 import { PaginationDto } from '../../common/dto/base.dto';
@@ -106,6 +107,11 @@ export class AdminCommentListQueryDto extends PaginationDto {
   @IsOptional()
   @IsEnum(CommentContentType)
   contentType?: CommentContentType;
+
+  @ApiPropertyOptional({ description: 'Only flagged comments when true' })
+  @IsOptional()
+  @IsBoolean()
+  flagged?: boolean;
 }
 
 /** Feed pagination default used by the service when query params are absent. */

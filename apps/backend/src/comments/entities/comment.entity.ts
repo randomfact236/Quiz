@@ -51,6 +51,14 @@ export class Comment {
   @Column({ type: 'varchar', length: 64 })
   guestId: string;
 
+  /** Set when the author was logged in (plan/07-comments.md P1 #1). */
+  @Column({ type: 'uuid', nullable: true })
+  userId: string | null;
+
+  /** Raised by the public flag path; surfaced for admin moderation. */
+  @Column({ default: false })
+  flagged: boolean;
+
   /** Optional display name (guest-typed); null renders as "Guest" client-side. */
   @Column({ type: 'varchar', length: 50, nullable: true })
   authorName: string | null;
