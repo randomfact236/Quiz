@@ -28,6 +28,8 @@ import {
   clearRiddleResume,
 } from '@/lib/riddle-resume';
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
+import { saveRiddleResult } from '@/lib/riddle-progress';
+import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { track } from '@/lib/analytics';
 import { shuffle } from '@/lib/utils';
@@ -420,6 +422,12 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
     setStatus('completed');
     saveRiddleSession(completedSession); // full payload, one-time, for results
+
+    // Achievements/progress integration (plan/03-riddle-mcq.md P1 #1): riddles
+    // previously fed nothing. Record the completion, then evaluate unlocks.
+    saveRiddleResult(completedSession);
+    const unlocked = checkAchievements();
+    toastAchievementUnlocks(unlocked);
 
     // Analytics plan §4.1: session_completed (both manual submit and the
     // time-up auto-submit funnel through here).

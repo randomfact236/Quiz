@@ -10,6 +10,7 @@ import type { Achievement } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 import { getChallengeStreak } from './challenge-streak';
 import { getQuizHistory, getTotalStats } from './progress';
+import { getRiddleHistory } from './riddle-progress';
 import toast from './toast';
 
 /** Predefined achievements */
@@ -114,7 +115,28 @@ export function unlockAchievement(achievement: Achievement): boolean {
 /** Check and update achievements - returns newly unlocked achievements */
 export function checkAchievements(): Achievement[] {
   const newlyUnlocked: Achievement[] = [];
-  const history = getQuizHistory();
+  // Combined view: quiz-mcq sessions + riddle completions (P1 #1). Riddles
+  // have no chapter, so chapter-keyed conditions skip entries with a blank
+  // chapter to stay chapter-scoped.
+  const quizHistory = getQuizHistory();
+  const riddleHistory = getRiddleHistory();
+  const history = [
+    ...quizHistory,
+    ...riddleHistory.map((r) => ({
+      id: r.id,
+      subject: r.subjectId,
+      subjectName: r.subjectName,
+      chapter: '',
+      level: r.level,
+      questions: [] as never[],
+      answers: {},
+      score: r.score,
+      maxScore: r.maxScore,
+      startedAt: r.startedAt,
+      timeTaken: r.timeTaken,
+      status: 'completed' as const,
+    })),
+  ];
   const stats = getTotalStats();
 
   ACHIEVEMENTS.forEach((achievement) => {
@@ -144,10 +166,11 @@ export function checkAchievements(): Achievement[] {
       case 'chapter_complete': {
         // Distinct chapters with a perfect session (plan/02-mcq-quiz.md P2
         // audit): previously counted perfect quizzes, which duplicated the
-        // perfect_score condition instead of measuring chapters.
+        // perfect_score condition instead of measuring chapters. Riddles
+        // (blank chapter) are excluded from this chapter-scoped condition.
         const perfectChapters = new Set(
           history
-            .filter((s) => s.score === s.maxScore && s.maxScore > 0)
+            .filter((s) => s.chapter && s.score === s.maxScore && s.maxScore > 0)
             .map((s) => `${s.subject}:${s.chapter}`)
         );
         shouldUnlock = perfectChapters.size >= achievement.condition.threshold;
@@ -177,9 +200,10 @@ export function checkAchievements(): Achievement[] {
         break;
 
       case 'retry': {
-        // Check for chapters with 3+ attempts
+        // Check for chapters with 3+ attempts (riddles have no chapter -> skip)
         const chapterAttempts = new Map<string, number>();
         history.forEach((s) => {
+          if (!s.chapter) return;
           const key = `${s.subject}:${s.chapter}`;
           chapterAttempts.set(key, (chapterAttempts.get(key) || 0) + 1);
         });

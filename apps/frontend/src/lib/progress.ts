@@ -8,6 +8,7 @@
 
 import type { QuizSession, ChapterProgress, SubjectProgress } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
+import { getRiddleHistory } from './riddle-progress';
 
 /** Generate compound key for chapter progress */
 function getChapterKey(subject: string, chapter: string): string {
@@ -123,7 +124,24 @@ export function getTotalStats(): {
   averageScore: number;
   bestStreak: number;
 } {
-  const history = getQuizHistory();
+  // Merge quiz + riddle completion history so the Achievements feature sees
+  // riddle play too (plan/03-riddle-mcq.md P1 #1).
+  const quiz = getQuizHistory();
+  const riddle = getRiddleHistory().map((r) => ({
+    id: r.id,
+    subject: r.subjectId,
+    subjectName: r.subjectName,
+    chapter: '',
+    level: r.level,
+    questions: [] as never[],
+    answers: {},
+    score: r.score,
+    maxScore: r.maxScore,
+    startedAt: r.startedAt,
+    timeTaken: r.timeTaken,
+    status: 'completed' as const,
+  }));
+  const history = [...quiz, ...riddle];
 
   if (history.length === 0) {
     return {

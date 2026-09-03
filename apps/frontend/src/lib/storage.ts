@@ -55,6 +55,7 @@ export const STORAGE_KEYS = {
   RIDDLE_STREAK: `${PREFIX}riddle-streak`,
   RIDDLE_ACHIEVEMENTS: `${PREFIX}riddle-achievements`,
   RIDDLE_SETTINGS: `${PREFIX}riddle-settings`,
+  RIDDLE_HISTORY: `${PREFIX}riddle-history`,
 } as const;
 
 // ─── Core API ────────────────────────────────────────────────────────────────
