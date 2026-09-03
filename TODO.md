@@ -4,6 +4,15 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — master tracker pass complete (2026-08-30)
+
+All 14 features worked in table order (P0 → P1 → P2 → P3, feature-scoped commits, pushed).
+**Blocked items:** dev Postgres on :5432 died mid-session (see plan/TODO.md anomalies) — migrations
+`1789000000000` (image-riddle counters), `1789100000000` (joke_votes), `1789200000000` (user_achievements),
+`1789300000000` (comment userId/flagged), `1789400000000` (newsletter) are committed but NOT YET APPLIED;
+run `npm run migration:run` in apps/backend when the DB returns, then restart the backend.
+**Owner decisions logged below (§0) and in each plan file.**
+
 ### 0. Needs owner decision — from the feature-01 pass (2026-08-30)
 
 - **Needs owner decision: block login until email verified?** Feature 01 P1 built the full email-verification mechanism (commit `f0bed06`): registration emails a 24h one-time link, `POST /auth/verify-email` flips the flag, resend endpoint is anti-enumeration, `/verify-email` page handles the flow. The plan did not specify whether unverified users are locked out of login. **Currently non-blocking** (least-surprise; nobody gets locked out). If you want a hard gate, say so and login will 403 with a "verify your email" pointer until `emailVerified` is true.
@@ -75,7 +84,7 @@ Optimization pass (2026-08-26):
 
 ### 4. ToastContainer is mounted nowhere — repo-wide toast gap
 
-- **Status:** OPEN — logged 2026-08-30 during the riddle-mcq P0 pass.
+- **Status:** RESOLVED 2026-08-30 — `<ToastContainer />` mounted globally in `app/providers.tsx` (feature 09 P0, commit `f6d6847`); the riddle-mcq admin's local interim mount removed as instructed. Item kept for history.
 - **Problem:** every `toast.success()/error()/...` call (singleton `lib/toast.ts#toastManager`) renders nothing because the subscribing UI, `components/ui/ToastContainer.tsx`, is not mounted anywhere in the app tree (verified by repo-wide grep 2026-08-30). Affected surfaces include quiz-mcq results (`app/quiz-mcq/results/page.tsx:70-74`), admin sections (JokesSection, MediaLibrarySection, ImageRiddlesAdminSection, CommentsSection), and others.
 - **Fix:** mount `<ToastContainer />` once in `app/providers.tsx` (inside `QueryClientProvider`). **Blocked:** `providers.tsx` is currently being edited by the concurrent analytics session — do it once that session lands.
 - **Interim workaround:** riddle-mcq admin mounts `ToastContainer` locally inside `RiddleMcqContainer` (commit `2834b54`) so its import toast works. Remove the local mount when the global one lands.
