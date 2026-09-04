@@ -106,3 +106,74 @@ export function descriptionStatus(description: string): 'ok' | 'warn' | 'fail' {
   if (!description) return 'fail';
   return description.length >= 110 && description.length <= 165 ? 'ok' : 'warn';
 }
+
+// ==================== Dashboard grouping (plan/15 SEO Dashboard) ====================
+
+/** Content groups shown as breakdown cards + filter chips on the dashboard. */
+export type SeoGroup = 'quiz' | 'riddles' | 'images' | 'jokes' | 'static';
+
+export const SEO_GROUPS: { id: SeoGroup; label: string; emoji: string }[] = [
+  { id: 'quiz', label: 'Quiz MCQ', emoji: '📚' },
+  { id: 'riddles', label: 'Riddle MCQ', emoji: '🧩' },
+  { id: 'images', label: 'Image Riddles', emoji: '🖼️' },
+  { id: 'jokes', label: 'Dad Jokes', emoji: '😄' },
+  { id: 'static', label: 'Static Pages', emoji: '📄' },
+];
+
+export function classifyRoute(path: string): SeoGroup {
+  if (path.startsWith('/quiz-mcq')) return 'quiz';
+  if (path.startsWith('/riddle-mcq')) return 'riddles';
+  if (path.startsWith('/image-riddles')) return 'images';
+  if (path.startsWith('/jokes')) return 'jokes';
+  return 'static';
+}
+
+/** Cap the dynamic (query-param) URLs so the dashboard crawl stays bounded. */
+const MAX_DYNAMIC_URLS = 30;
+
+/**
+ * Audit targets = the canonical landing routes + the dynamic subject/category
+ * URLs found in the sitemap (deduped, capped). Group is attached for the
+ * dashboard breakdown cards.
+ */
+export function buildAuditTargets(sitemapPaths: Set<string> | null): {
+  path: string;
+  label: string;
+  group: SeoGroup;
+}[] {
+  const targets = AUDIT_ROUTES.map((r) => ({ ...r, group: classifyRoute(r.path) }));
+  if (sitemapPaths) {
+    const known = new Set(targets.map((t) => t.path));
+    for (const p of sitemapPaths) {
+      if (targets.length >= AUDIT_ROUTES.length + MAX_DYNAMIC_URLS) break;
+      if (known.has(p) || !p.includes('?')) continue;
+      known.add(p);
+      const group = classifyRoute(p);
+      const label = decodeURIComponent(p.split('?')[1] ?? '').slice(0, 40);
+      targets.push({ path: p, label, group });
+    }
+  }
+  return targets;
+}
+
+/** Concrete issues for a row — rendered as "Missing Fields" chips. */
+export function rowIssues(row: SeoAuditRow): string[] {
+  const issues: string[] = [];
+  if (row.noindex) issues.push('Noindex');
+  if (!row.title) issues.push('Title');
+  else if (titleStatus(row.title) === 'warn') issues.push('Title length');
+  if (!row.description) issues.push('Description');
+  else if (descriptionStatus(row.description) === 'warn') issues.push('Description length');
+  if (!row.ogImage) issues.push('OG Image');
+  if (!row.jsonLd) issues.push('JSON-LD');
+  if (row.inSitemap === false) issues.push('Sitemap');
+  return issues;
+}
+
+export type SeoHealth = 'healthy' | 'warning' | 'critical';
+
+export function rowHealth(row: SeoAuditRow): SeoHealth {
+  const n = rowIssues(row).length;
+  if (n === 0) return 'healthy';
+  return n === 1 ? 'warning' : 'critical';
+}

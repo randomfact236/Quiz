@@ -38,6 +38,7 @@ import {
   AnalyticsSection,
   ANALYTICS_TABS,
   SeoSection,
+  SEO_TABS,
   SummarySection,
   NewsletterSection,
 } from './components';
@@ -71,6 +72,8 @@ export default function AdminPage(): JSX.Element {
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
   // Analytics sub-menu (dashboard tabs) — expanded by default, collapsible.
   const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
+  // SEO sub-menu (dashboard tabs) — expanded by default, collapsible.
+  const [seoExpanded, setSeoExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
   const { subjects: dbSubjects } = useQuizMcqSubjects();
@@ -221,9 +224,11 @@ export default function AdminPage(): JSX.Element {
 
       if (params.section) {
         newParams.set('section', params.section);
-        // The analytics tab deep-link only means something inside analytics —
-        // leaving it on other sections would re-open that tab later.
-        if (params.section !== 'analytics') newParams.delete('tab');
+        // Deep-link tab params are only meaningful inside the sections that
+        // consume them — leaving them elsewhere would re-open that tab later.
+        if (params.section !== 'analytics' && params.section !== 'seo') {
+          newParams.delete('tab');
+        }
       }
       if (params.tab !== undefined && params.tab !== null) {
         newParams.set('tab', params.tab);
@@ -452,14 +457,47 @@ export default function AdminPage(): JSX.Element {
               })}
             </div>
           )}
-          {/* SEO — sits between Analytics and Settings */}
+          {/* SEO + collapsible dashboard-tab sub-menu (deep-links ?tab=) */}
           <MenuItem
             icon={<Search className="w-5 h-5" />}
             label="SEO"
             active={activeSection === 'seo'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'seo' })}
+            onClick={() => {
+              setSeoExpanded(true);
+              updateURL({ section: 'seo', tab: 'dashboard' });
+            }}
+            trailing={
+              <ChevronDown
+                className={`w-3 h-3 transition-transform ${seoExpanded ? 'rotate-180' : ''}`}
+              />
+            }
+            onTrailingClick={() => setSeoExpanded((v) => !v)}
           />
+          {sidebarOpen && seoExpanded && (
+            <div className="mb-1 ml-11 mr-2 space-y-0.5 border-l border-gray-800 pl-3">
+              {SEO_TABS.map((t) => {
+                const activeSeoTab = searchParams.get('tab') ?? 'dashboard';
+                const isActive = activeSection === 'seo' && activeSeoTab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => updateURL({ section: 'seo', tab: t.id })}
+                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${
+                      isActive
+                        ? 'bg-gray-800 font-semibold text-emerald-300'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                    }`}
+                  >
+                    <span aria-hidden="true" className="mr-1.5">
+                      {t.emoji}
+                    </span>
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
           <MenuItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"

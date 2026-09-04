@@ -8,6 +8,6 @@ export { AdminUsersSection } from './AdminUsersSection';
 export { NewsletterSection } from './NewsletterSection';
 export { MediaLibrarySection } from './MediaLibrarySection';
 export { AnalyticsSection, ANALYTICS_TABS } from './AnalyticsSection';
-export { SeoSection } from './SeoSection';
+export { SeoSection, SEO_TABS } from './SeoSection';
 
 export * from './SummarySection';

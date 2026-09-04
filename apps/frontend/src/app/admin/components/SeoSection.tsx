@@ -2,38 +2,42 @@
 
 /**
  * ============================================================================
- * SeoSection — full SEO admin (plan/15-seo.md)
+ * SeoSection — SEO Dashboard (plan/15-seo.md)
  * ============================================================================
- * Tabs:
- *   General        — site metadata (consumed by the root layout's generateMetadata)
- *   Social Sharing — default OG/Twitter fallbacks + per-platform overrides with
- *                    character budgets (Facebook 60/110, Twitter 70/200, Google 155).
- *                    Fallback chain: page content → platform override → global
- *                    fallback → auto-generated image (app/opengraph-image.tsx).
- *   Pages          — live audit table: crawls the key routes and reports
- *                    title/description quality, robots, OG image, JSON-LD and
- *                    sitemap membership.
- *   Technical      — robots.txt / sitemap.xml reachability.
+ * Dark dashboard in the AnalyticsSection style:
+ *   Dashboard       — hero with live SEO-score ring, GSC status panel, KPI
+ *                     cards, per-module breakdown cards, filterable audit
+ *                     table (missing-field chips) and SEO tools links.
+ *   General         — site metadata (consumed by generateMetadata).
+ *   Social Sharing  — default OG/Twitter fallbacks + per-platform overrides
+ *                     with character budgets; fallback chain: page content →
+ *                     platform override → global fallback → auto-generated image.
+ *   Technical       — robots.txt / sitemap.xml reachability.
+ * The active tab deep-links through ?section=seo&tab=… so the sidebar
+ * sub-menu lands directly on it (mirrors the Analytics pattern).
  * All edits persist through PATCH /settings { seo } (admin-only).
  * ============================================================================
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Globe, Play, RefreshCw, Save } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { AlertTriangle, CheckCircle2, ExternalLink, Globe, RefreshCw, Save } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
 import {
-  AUDIT_ROUTES,
+  SEO_GROUPS,
   auditRoute,
-  descriptionStatus,
+  buildAuditTargets,
   loadSitemapPaths,
-  titleStatus,
+  rowHealth,
+  rowIssues,
   type SeoAuditRow,
+  type SeoGroup,
 } from '@/lib/seo-audit';
 import { getErrorMessage, resolveMediaUrl, uploadMedia } from '@/lib/media-api';
 import type { SeoSettings, SeoSocialOverride } from '@/types/settings.types';
 
-/** Character budgets per platform (plan/15 Social Sharing). */
+/** Character budgets per platform. */
 const LIMITS = {
   title: { facebook: 60, twitter: 70 },
   description: { facebook: 110, twitter: 200, google: 155 },
@@ -94,19 +98,30 @@ function toForm(seo: Partial<SeoSettings> | undefined): FormState {
   };
 }
 
-type SeoTab = 'general' | 'social' | 'pages' | 'technical';
-const TABS: { id: SeoTab; label: string; emoji: string }[] = [
+type SeoTab = 'dashboard' | 'general' | 'social' | 'technical';
+
+/** Tabs — single source of truth, mirrored by the sidebar SEO sub-menu. */
+export const SEO_TABS: { id: SeoTab; label: string; emoji: string }[] = [
+  { id: 'dashboard', label: 'Dashboard', emoji: '📊' },
   { id: 'general', label: 'General', emoji: '⚙️' },
   { id: 'social', label: 'Social Sharing', emoji: '📱' },
-  { id: 'pages', label: 'Pages', emoji: '📄' },
   { id: 'technical', label: 'Technical', emoji: '🛠️' },
 ];
 
-// ==================== Pages audit ====================
+type AuditRow = SeoAuditRow & { group: SeoGroup };
 
-interface AuditRow extends SeoAuditRow {}
+// ==================== Small UI atoms (dark) ====================
 
-// ==================== Small UI atoms ====================
+const inputCls =
+  'w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
+
+function Label({ children }: { children: React.ReactNode }): JSX.Element {
+  return (
+    <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+      {children}
+    </span>
+  );
+}
 
 function CharCounts({
   value,
@@ -120,7 +135,7 @@ function CharCounts({
       {limits.map(({ platform, max }) => {
         const over = value.length > max;
         return (
-          <span key={platform} className={over ? 'font-semibold text-red-500' : 'text-gray-400'}>
+          <span key={platform} className={over ? 'font-semibold text-rose-400' : 'text-gray-500'}>
             {value.length}/{max} {platform}
           </span>
         );
@@ -129,14 +144,91 @@ function CharCounts({
   );
 }
 
-const inputCls =
-  'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100';
-
-function Label({ children }: { children: React.ReactNode }): JSX.Element {
+function KpiCard({
+  label,
+  value,
+  tone,
+  icon,
+}: {
+  label: string;
+  value: string | number;
+  tone: 'cyan' | 'green' | 'amber' | 'rose';
+  icon: React.ReactNode;
+}): JSX.Element {
+  const toneCls = {
+    cyan: 'text-cyan-300',
+    green: 'text-emerald-400',
+    amber: 'text-amber-400',
+    rose: 'text-rose-400',
+  }[tone];
+  const chipCls = {
+    cyan: 'bg-cyan-500/10 text-cyan-400',
+    green: 'bg-emerald-500/10 text-emerald-400',
+    amber: 'bg-amber-500/10 text-amber-400',
+    rose: 'bg-rose-500/10 text-rose-400',
+  }[tone];
   return (
-    <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
-      {children}
-    </span>
+    <div className="rounded-xl bg-gray-900 p-4 ring-1 ring-gray-800 transition-colors hover:ring-gray-600">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</p>
+          <p className={`mt-1 text-3xl font-bold ${toneCls}`}>{value}</p>
+        </div>
+        <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${chipCls}`}>
+          {icon}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function GroupCard(
+  props: {
+    total: number;
+    healthy: number;
+    warning: number;
+    critical: number;
+  } & {
+    id: SeoGroup;
+    label: string;
+    emoji: string;
+  }
+): JSX.Element {
+  const { label, emoji, total, healthy, warning, critical } = props;
+  const pct = total > 0 ? Math.round((healthy / total) * 100) : 0;
+  return (
+    <div className="rounded-xl bg-gray-900 p-4 ring-1 ring-gray-800 transition-colors hover:ring-gray-600">
+      <h5 className="mb-3 flex items-center gap-2 font-semibold text-gray-200">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-base">
+          {emoji}
+        </span>
+        {label}
+      </h5>
+      <dl className="space-y-1.5 text-sm">
+        <div className="flex justify-between">
+          <dt className="text-gray-500">Total</dt>
+          <dd className="font-semibold text-gray-200">{total}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-gray-500">Healthy</dt>
+          <dd className="font-semibold text-emerald-400">{healthy}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-gray-500">Warning (1 issue)</dt>
+          <dd className="font-semibold text-amber-400">{warning}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-gray-500">Critical (2+ issues)</dt>
+          <dd className="font-semibold text-rose-400">{critical}</dd>
+        </div>
+      </dl>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-800">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -191,7 +283,7 @@ function ImageField({
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          className="shrink-0 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+          className="shrink-0 rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-300 hover:bg-gray-800 disabled:opacity-50"
         >
           {uploading ? 'Uploading…' : 'Choose'}
         </button>
@@ -199,7 +291,7 @@ function ImageField({
           <button
             type="button"
             onClick={() => onChange('')}
-            className="shrink-0 rounded-lg px-2 py-2 text-sm text-gray-400 hover:text-red-500"
+            className="shrink-0 rounded-lg px-2 py-2 text-sm text-gray-500 hover:text-rose-400"
             aria-label="Clear image"
           >
             ✕
@@ -211,11 +303,11 @@ function ImageField({
         <img
           src={value}
           alt="Share preview"
-          className="mt-2 h-20 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
+          className="mt-2 h-20 rounded-lg border border-gray-800 object-cover"
         />
       )}
-      {fallbackNote && <span className="mt-1 block text-xs text-gray-400">{fallbackNote}</span>}
-      {error && <span className="mt-1 block text-xs text-red-500">{error}</span>}
+      {fallbackNote && <span className="mt-1 block text-xs text-gray-500">{fallbackNote}</span>}
+      {error && <span className="mt-1 block text-xs text-rose-400">{error}</span>}
     </div>
   );
 }
@@ -223,7 +315,11 @@ function ImageField({
 // ==================== Main section ====================
 
 export function SeoSection(): JSX.Element {
-  const [tab, setTab] = useState<SeoTab>('general');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [tab, setTab] = useState<SeoTab>(
+    (SEO_TABS.find((t) => t.id === searchParams.get('tab'))?.id ?? 'dashboard') as SeoTab
+  );
   const [form, setForm] = useState<FormState>(FALLBACK);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -232,9 +328,30 @@ export function SeoSection(): JSX.Element {
   const [robotsStatus, setRobotsStatus] = useState<'checking' | 'ok' | 'fail' | null>(null);
   const [sitemapStatus, setSitemapStatus] = useState<'checking' | 'ok' | 'fail' | null>(null);
 
-  // Pages audit state
   const [auditRows, setAuditRows] = useState<AuditRow[] | null>(null);
   const [auditing, setAuditing] = useState(false);
+  const [groupFilter, setGroupFilter] = useState<SeoGroup | 'all'>('all');
+  const [healthFilter, setHealthFilter] = useState<'all' | 'issues' | 'healthy'>('all');
+
+  // Sidebar sub-menu deep-links change only the ?tab= param while this section
+  // is already mounted — follow the URL so the dashboard shows that tab.
+  const urlTab = searchParams.get('tab');
+  useEffect(() => {
+    const match = SEO_TABS.find((t) => t.id === urlTab)?.id as SeoTab | undefined;
+    if (match && match !== tab) setTab(match);
+  }, [urlTab, tab]);
+
+  /** Switch tab and keep the URL deep-link in sync (sidebar highlight follows). */
+  const changeTab = useCallback(
+    (next: SeoTab): void => {
+      setTab(next);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('section', 'seo');
+      params.set('tab', next);
+      router.replace(`/admin?${params.toString()}`, { scroll: false });
+    },
+    [router, searchParams]
+  );
 
   const load = useCallback(async (): Promise<void> => {
     setLoading(true);
@@ -250,9 +367,31 @@ export function SeoSection(): JSX.Element {
     }
   }, []);
 
+  const runAudit = useCallback(async (): Promise<void> => {
+    setAuditing(true);
+    setError(null);
+    try {
+      const sitemapPaths = await loadSitemapPaths();
+      const targets = buildAuditTargets(sitemapPaths);
+      const rows = await Promise.all(
+        targets.map(async (t) => ({
+          ...(await auditRoute(t.path, t.label, sitemapPaths)),
+          group: t.group,
+        }))
+      );
+      setAuditRows(rows);
+    } finally {
+      setAuditing(false);
+    }
+  }, []);
+
+  const refreshAll = useCallback(async (): Promise<void> => {
+    await Promise.all([load(), runAudit()]);
+  }, [load, runAudit]);
+
   useEffect(() => {
-    void load();
-  }, [load]);
+    void refreshAll();
+  }, [refreshAll]);
 
   useEffect(() => {
     let cancelled = false;
@@ -288,10 +427,7 @@ export function SeoSection(): JSX.Element {
     key: keyof SocialForm,
     value: string
   ): void => {
-    setForm((prev) => ({
-      ...prev,
-      [platform]: { ...prev[platform], [key]: value },
-    }));
+    setForm((prev) => ({ ...prev, [platform]: { ...prev[platform], [key]: value } }));
     setSuccess(null);
   };
 
@@ -333,103 +469,139 @@ export function SeoSection(): JSX.Element {
     }
   };
 
-  const runAudit = useCallback(async (): Promise<void> => {
-    setAuditing(true);
-    setError(null);
-    try {
-      const sitemapPaths = await loadSitemapPaths();
-      const rows = await Promise.all(
-        AUDIT_ROUTES.map((r) => auditRoute(r.path, r.label, sitemapPaths))
-      );
-      setAuditRows(rows);
-    } finally {
-      setAuditing(false);
-    }
-  }, []);
+  // Dashboard aggregates
+  const stats = useMemo(() => {
+    const rows = auditRows ?? [];
+    const healthy = rows.filter((r) => rowHealth(r) === 'healthy').length;
+    const warning = rows.filter((r) => rowHealth(r) === 'warning').length;
+    const critical = rows.filter((r) => rowHealth(r) === 'critical').length;
+    const score = rows.length > 0 ? Math.round((healthy / rows.length) * 100) : 0;
+    const perGroup = SEO_GROUPS.map((g) => {
+      const groupRows = rows.filter((r) => r.group === g.id);
+      return {
+        ...g,
+        total: groupRows.length,
+        healthy: groupRows.filter((r) => rowHealth(r) === 'healthy').length,
+        warning: groupRows.filter((r) => rowHealth(r) === 'warning').length,
+        critical: groupRows.filter((r) => rowHealth(r) === 'critical').length,
+      };
+    });
+    return { total: rows.length, healthy, warning, critical, score, perGroup };
+  }, [auditRows]);
 
-  // Auto-run the audit the first time the Pages tab opens.
-  useEffect(() => {
-    if (tab === 'pages' && auditRows === null && !auditing) void runAudit();
-  }, [tab, auditRows, auditing, runAudit]);
+  const filteredRows = useMemo(() => {
+    let rows = auditRows ?? [];
+    if (groupFilter !== 'all') rows = rows.filter((r) => r.group === groupFilter);
+    if (healthFilter === 'issues') rows = rows.filter((r) => rowHealth(r) !== 'healthy');
+    if (healthFilter === 'healthy') rows = rows.filter((r) => rowHealth(r) === 'healthy');
+    return rows;
+  }, [auditRows, groupFilter, healthFilter]);
 
-  if (loading) {
-    return (
-      <div className="flex h-48 items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-blue-500" />
-      </div>
-    );
-  }
-
-  const summary = auditRows
-    ? {
-        ok: auditRows.filter(
-          (r) =>
-            !r.noindex &&
-            r.title.length >= 30 &&
-            r.title.length <= 65 &&
-            r.description.length >= 110 &&
-            r.description.length <= 165 &&
-            r.ogImage &&
-            r.jsonLd &&
-            r.inSitemap !== false
-        ).length,
-        warn: auditRows.filter((r) => {
-          const ok =
-            !r.noindex &&
-            r.title.length >= 30 &&
-            r.title.length <= 65 &&
-            r.description.length >= 110 &&
-            r.description.length <= 165 &&
-            r.ogImage &&
-            r.jsonLd &&
-            r.inSitemap !== false;
-          return !ok && (r.title || r.description);
-        }).length,
-        fail: auditRows.filter((r) => !r.title || !r.description).length,
-      }
-    : null;
+  const groupCount = (id: SeoGroup | 'all'): number =>
+    (auditRows ?? []).filter((r) => id === 'all' || r.group === id).length;
 
   const statusBadge = (status: 'checking' | 'ok' | 'fail' | null): JSX.Element => {
     if (status === 'ok') {
       return (
-        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-400">
+        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-400 ring-1 ring-emerald-500/30">
           Reachable
         </span>
       );
     }
     if (status === 'fail') {
       return (
-        <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-900/40 dark:text-red-400">
+        <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-400 ring-1 ring-rose-500/30">
           Unreachable
         </span>
       );
     }
     return (
-      <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+      <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-400">
         Checking…
       </span>
     );
   };
 
+  const healthBadge = (health: 'healthy' | 'warning' | 'critical'): JSX.Element => {
+    const map = {
+      healthy: { label: 'Healthy', cls: 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/30' },
+      warning: { label: 'Warning', cls: 'bg-amber-500/10 text-amber-400 ring-amber-500/30' },
+      critical: { label: 'Critical', cls: 'bg-rose-500/10 text-rose-400 ring-rose-500/30' },
+    }[health];
+    return (
+      <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ${map.cls}`}>
+        {map.label}
+      </span>
+    );
+  };
+
+  if (loading && !auditRows) {
+    return (
+      <div className="flex h-48 items-center justify-center rounded-xl bg-gray-950 ring-1 ring-gray-800">
+        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-cyan-500" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
-      {/* Header with Save */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">SEO</h3>
-        {tab !== 'pages' && tab !== 'technical' && (
-          <button
-            onClick={() => void handleSave()}
-            disabled={saving}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
-            <Save className="h-4 w-4" /> {saving ? 'Saving…' : 'Save Changes'}
-          </button>
-        )}
+    <div className="space-y-5 rounded-xl bg-gray-950 p-5 ring-1 ring-gray-800">
+      {/* ============ Hero ============ */}
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 p-5">
+        {/* decorative blobs */}
+        <div className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-28 right-48 h-52 w-52 rounded-full bg-cyan-300/20 blur-2xl" />
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="flex items-center gap-2 text-2xl font-bold text-white">
+              <Globe className="h-6 w-6" /> SEO Dashboard
+            </h3>
+            <p className="mt-0.5 text-sm text-white/85">
+              Monitor SEO health across all your pages — titles, descriptions, structured data and
+              images.
+            </p>
+          </div>
+          <div className="flex items-center gap-4 self-start">
+            {/* live score ring */}
+            <div className="relative h-20 w-20" title={`SEO Score ${stats.score}%`}>
+              <svg viewBox="0 0 36 36" className="h-20 w-20 -rotate-90">
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="15.5"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="3.5"
+                />
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="15.5"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  pathLength={100}
+                  strokeDasharray={`${stats.score} ${100 - stats.score}`}
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
+                {stats.score}%
+              </span>
+            </div>
+            <button
+              onClick={() => void refreshAll()}
+              disabled={auditing || loading}
+              className="flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/30 hover:bg-white/25 disabled:opacity-50"
+            >
+              <RefreshCw className={`h-4 w-4 ${auditing ? 'animate-spin' : ''}`} /> Refresh
+            </button>
+          </div>
+        </div>
       </div>
 
       {error && (
         <div
-          className="rounded-lg bg-red-100 p-4 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+          className="rounded-lg bg-rose-500/10 p-4 text-sm text-rose-300 ring-1 ring-rose-500/30"
           role="alert"
         >
           {error}
@@ -437,40 +609,285 @@ export function SeoSection(): JSX.Element {
       )}
       {success && (
         <div
-          className="rounded-lg bg-green-100 p-4 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+          className="rounded-lg bg-emerald-500/10 p-4 text-sm text-emerald-300 ring-1 ring-emerald-500/30"
           role="status"
         >
           {success}
         </div>
       )}
 
-      {/* Tabs */}
+      {/* ============ Tabs ============ */}
       <div
-        className="flex gap-1 overflow-x-auto rounded-lg bg-gray-100 p-1 dark:bg-gray-800/60"
+        className="flex gap-1 overflow-x-auto rounded-lg bg-gray-900/70 p-1"
         role="tablist"
         aria-label="SEO tabs"
       >
-        {TABS.map((t) => (
+        {SEO_TABS.map((t) => (
           <button
             key={t.id}
-            onClick={() => setTab(t.id)}
+            onClick={() => changeTab(t.id)}
             className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${
               tab === t.id
-                ? 'bg-white text-gray-900 shadow dark:bg-gray-900 dark:text-white'
-                : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
+                ? 'bg-gray-800 text-white shadow'
+                : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
             }`}
             role="tab"
             aria-selected={tab === t.id}
           >
-            <span aria-hidden="true">{t.emoji}</span> {t.label}
+            <span aria-hidden="true" className="mr-1.5">
+              {t.emoji}
+            </span>
+            {t.label}
           </button>
         ))}
       </div>
 
+      {/* ==================== DASHBOARD ==================== */}
+      {tab === 'dashboard' && (
+        <div className="space-y-5">
+          {/* GSC panel — honest placeholder until the P3 integration lands */}
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h4 className="font-semibold text-gray-100">Google Search Console — Top Queries</h4>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  What people searched on Google when they found your site.
+                </p>
+              </div>
+              <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-400">
+                Not connected
+              </span>
+            </div>
+            <div className="mt-3 rounded-lg bg-amber-500/5 p-4 ring-1 ring-amber-500/30">
+              <p className="flex items-center gap-2 text-sm font-semibold text-amber-300">
+                <AlertTriangle className="h-4 w-4" /> Search Console data unavailable
+              </p>
+              <p className="mt-1 text-xs text-amber-200/70">
+                No GSC service account is linked to this site. Once connected (plan/15 P3), this
+                panel shows the top queries, clicks and impressions for your pages.
+              </p>
+            </div>
+            <p className="mt-3 text-xs text-gray-600">
+              Data source: Google Search Console API · property: not linked ·{' '}
+              <a
+                href="https://search.google.com/search-console"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan-400 hover:underline"
+              >
+                open GSC ↗
+              </a>
+            </p>
+          </div>
+
+          {/* KPI cards */}
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <KpiCard
+              label="Total Pages"
+              value={stats.total}
+              tone="cyan"
+              icon={<Globe className="h-6 w-6" />}
+            />
+            <KpiCard
+              label="SEO Healthy"
+              value={stats.healthy}
+              tone="green"
+              icon={<CheckCircle2 className="h-6 w-6" />}
+            />
+            <KpiCard
+              label="Needs Attention"
+              value={stats.warning + stats.critical}
+              tone="amber"
+              icon={<AlertTriangle className="h-6 w-6" />}
+            />
+            <KpiCard
+              label="SEO Score"
+              value={`${stats.score}%`}
+              tone={stats.score >= 80 ? 'green' : stats.score >= 50 ? 'amber' : 'rose'}
+              icon={<Globe className="h-6 w-6" />}
+            />
+          </div>
+
+          {/* Per-group breakdown */}
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            {stats.perGroup.map((g) => (
+              <GroupCard
+                key={g.id}
+                id={g.id}
+                label={g.label}
+                emoji={g.emoji}
+                total={g.total}
+                healthy={g.healthy}
+                warning={g.warning}
+                critical={g.critical}
+              />
+            ))}
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap gap-2">
+              {(['all', ...SEO_GROUPS.map((g) => g.id)] as const).map((id) => {
+                const label =
+                  id === 'all' ? 'All' : (SEO_GROUPS.find((g) => g.id === id)?.label ?? id);
+                const active = groupFilter === id;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => setGroupFilter(id)}
+                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                      active
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-gray-900 text-gray-400 ring-1 ring-gray-800 hover:text-gray-200'
+                    }`}
+                  >
+                    {label} ({groupCount(id)})
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex gap-1 rounded-lg bg-gray-900 p-1 ring-1 ring-gray-800">
+              {(['all', 'issues', 'healthy'] as const).map((id) => (
+                <button
+                  key={id}
+                  onClick={() => setHealthFilter(id)}
+                  className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    healthFilter === id
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-400 hover:text-gray-200'
+                  }`}
+                >
+                  {id === 'all' ? 'All' : id === 'issues' ? 'Issues Only' : 'Healthy Only'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Audit table */}
+          <div className="overflow-x-auto rounded-xl bg-gray-900 ring-1 ring-gray-800">
+            {auditing && auditRows === null ? (
+              <div className="flex h-32 items-center justify-center">
+                <RefreshCw className="h-6 w-6 animate-spin text-gray-500" />
+              </div>
+            ) : (
+              <table className="w-full min-w-[820px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-800 bg-gray-950/60 text-xs uppercase tracking-wide text-gray-500">
+                    <th className="px-4 py-3">#</th>
+                    <th className="px-4 py-3">Page</th>
+                    <th className="px-4 py-3">Type</th>
+                    <th className="px-4 py-3">Health</th>
+                    <th className="px-4 py-3">Missing Fields</th>
+                    <th className="px-4 py-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredRows.map((row, i) => {
+                    const health = rowHealth(row);
+                    const issues = rowIssues(row);
+                    return (
+                      <tr
+                        key={row.path}
+                        className="border-b border-gray-800/60 transition-colors last:border-0 hover:bg-gray-950/60"
+                      >
+                        <td className="px-4 py-3 text-gray-500">{i + 1}</td>
+                        <td className="px-4 py-3">
+                          <a
+                            href={row.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-gray-200 hover:text-cyan-400"
+                          >
+                            {row.label}
+                          </a>
+                          <span className="block max-w-[260px] truncate text-xs text-gray-500">
+                            {row.path}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-300">
+                            {SEO_GROUPS.find((g) => g.id === row.group)?.emoji}{' '}
+                            {SEO_GROUPS.find((g) => g.id === row.group)?.label ?? row.group}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">{healthBadge(health)}</td>
+                        <td className="px-4 py-3">
+                          {issues.length === 0 ? (
+                            <span className="text-xs text-emerald-400">None ✓</span>
+                          ) : (
+                            <span className="flex flex-wrap gap-1.5">
+                              {issues.map((issue) => (
+                                <span
+                                  key={issue}
+                                  className="rounded-full bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-400 ring-1 ring-rose-500/30"
+                                >
+                                  {issue}
+                                </span>
+                              ))}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <a
+                            href={row.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-400 hover:underline"
+                          >
+                            open <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {filteredRows.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
+                        No pages match the current filters.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          {/* SEO tools */}
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <h4 className="mb-3 font-semibold text-gray-100">SEO Tools &amp; Resources</h4>
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              {[
+                { label: 'Schema Validator', href: 'https://validator.schema.org/' },
+                { label: 'Rich Results Test', href: 'https://search.google.com/test/rich-results' },
+                { label: 'OpenGraph Debugger', href: 'https://www.opengraph.xyz/url/' },
+                { label: 'View Sitemap', href: '/sitemap.xml' },
+                { label: 'View robots.txt', href: '/robots.txt' },
+              ].map((tool) => (
+                <a
+                  key={tool.label}
+                  href={tool.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
+                >
+                  {tool.label} <ExternalLink className="h-3 w-3 opacity-50" />
+                </a>
+              ))}
+              <button
+                onClick={() => changeTab('social')}
+                className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
+              >
+                Social Sharing Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ==================== GENERAL ==================== */}
       {tab === 'general' && (
-        <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-          <h4 className="mb-4 font-semibold text-gray-800 dark:text-gray-100">
+        <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <h4 className="mb-4 font-semibold text-gray-100">
             Site metadata{' '}
             <span className="text-xs font-normal text-gray-500">
               (rendered into every page&apos;s meta tags)
@@ -564,17 +981,14 @@ export function SeoSection(): JSX.Element {
 
       {/* ==================== SOCIAL SHARING ==================== */}
       {tab === 'social' && (
-        <div className="space-y-6">
-          <p className="rounded-lg bg-blue-50 px-4 py-3 text-xs text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
+        <div className="space-y-5">
+          <p className="rounded-lg bg-cyan-500/5 px-4 py-3 text-xs text-cyan-200 ring-1 ring-cyan-500/30">
             Fallback chain: page content → platform override → global fallback → auto-generated
             image. Pages with their own content use it directly.
           </p>
 
-          {/* Default fallbacks */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-            <h4 className="mb-1 font-semibold text-gray-800 dark:text-gray-100">
-              Default Fallbacks
-            </h4>
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <h4 className="mb-1 font-semibold text-gray-100">Default Fallbacks</h4>
             <p className="mb-4 text-xs text-gray-500">
               Used when a platform-specific override isn&apos;t set and the page doesn&apos;t have
               its own content.
@@ -631,8 +1045,8 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Facebook */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-            <h4 className="font-semibold text-gray-800 dark:text-gray-100">Facebook</h4>
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <h4 className="font-semibold text-gray-100">Facebook</h4>
             <p className="mb-4 text-xs text-gray-500">
               Optional overrides. Leave empty to use global defaults.
             </p>
@@ -682,8 +1096,8 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Twitter / X */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-            <h4 className="font-semibold text-gray-800 dark:text-gray-100">Twitter / X</h4>
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <h4 className="font-semibold text-gray-100">Twitter / X</h4>
             <p className="mb-4 text-xs text-gray-500">
               Optional overrides. Leave empty to use global defaults.
             </p>
@@ -733,12 +1147,12 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Google */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-            <h4 className="font-semibold text-gray-800 dark:text-gray-100">Google</h4>
+          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+            <h4 className="font-semibold text-gray-100">Google</h4>
             <p className="mb-4 text-xs text-gray-500">
               Optional overrides. Leave empty to use global defaults.
             </p>
-            <label className="block sm:col-span-2">
+            <label className="block">
               <Label>Description Override</Label>
               <textarea
                 className={`${inputCls} min-h-[72px]`}
@@ -758,176 +1172,28 @@ export function SeoSection(): JSX.Element {
         </div>
       )}
 
-      {/* ==================== PAGES (audit table) ==================== */}
-      {tab === 'pages' && (
-        <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-          <div className="mb-4 flex items-center justify-between">
-            <h4 className="font-semibold text-gray-800 dark:text-gray-100">Pages overview</h4>
-            <button
-              onClick={() => void runAudit()}
-              disabled={auditing}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              {auditing ? (
-                <RefreshCw className="h-3 w-3 animate-spin" />
-              ) : (
-                <Play className="h-3 w-3" />
-              )}
-              {auditing ? 'Auditing…' : 'Run audit'}
-            </button>
-          </div>
-
-          {summary && (
-            <p className="mb-3 text-xs text-gray-500">
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                {summary.ok} fully optimized
-              </span>
-              {' · '}
-              <span className="font-semibold text-amber-600 dark:text-amber-400">
-                {summary.warn} with warnings
-              </span>
-              {' · '}
-              <span className="font-semibold text-red-500">{summary.fail} failing</span>
-              {' · '}Title 30–65 chars, description 110–165 chars, OG image, JSON-LD, in sitemap.
-            </p>
-          )}
-
-          {auditing && auditRows === null ? (
-            <div className="flex h-32 items-center justify-center">
-              <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
-            </div>
-          ) : auditRows ? (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-700">
-                    <th className="py-2 pr-3">Page</th>
-                    <th className="py-2 pr-3">Title</th>
-                    <th className="py-2 pr-3">Description</th>
-                    <th className="py-2 pr-3">Robots</th>
-                    <th className="py-2 pr-3">OG image</th>
-                    <th className="py-2 pr-3">JSON-LD</th>
-                    <th className="py-2">In sitemap</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {auditRows.map((row) => {
-                    const titleOk = titleStatus(row.title) === 'ok';
-                    const descOk = descriptionStatus(row.description) === 'ok';
-                    return (
-                      <tr
-                        key={row.path}
-                        className="border-b border-gray-100 align-top dark:border-gray-800"
-                      >
-                        <td className="py-2 pr-3">
-                          <a
-                            href={row.path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold text-gray-700 hover:text-blue-600 dark:text-gray-200"
-                          >
-                            {row.label}
-                          </a>
-                          <span className="block text-xs text-gray-400">{row.path}</span>
-                        </td>
-                        <td className="py-2 pr-3">
-                          {row.title ? (
-                            <>
-                              <span
-                                className={
-                                  titleOk
-                                    ? 'text-gray-700 dark:text-gray-200'
-                                    : 'text-amber-600 dark:text-amber-400'
-                                }
-                              >
-                                {row.title}
-                              </span>
-                              <span
-                                className={`block text-xs ${titleOk ? 'text-gray-400' : 'text-amber-500'}`}
-                              >
-                                {row.title.length} chars {titleOk ? '✓' : '(aim 30–65)'}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="font-semibold text-red-500">missing</span>
-                          )}
-                        </td>
-                        <td className="py-2 pr-3">
-                          {row.description ? (
-                            <>
-                              <span
-                                className={`block max-w-[240px] truncate ${descOk ? 'text-gray-600 dark:text-gray-300' : 'text-amber-600 dark:text-amber-400'}`}
-                              >
-                                {row.description}
-                              </span>
-                              <span
-                                className={`block text-xs ${descOk ? 'text-gray-400' : 'text-amber-500'}`}
-                              >
-                                {row.description.length} chars {descOk ? '✓' : '(aim 110–165)'}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="font-semibold text-red-500">missing</span>
-                          )}
-                        </td>
-                        <td className="py-2 pr-3">
-                          {row.noindex ? (
-                            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                              noindex
-                            </span>
-                          ) : (
-                            <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-400">
-                              index
-                            </span>
-                          )}
-                        </td>
-                        <td className="py-2 pr-3">{row.ogImage ? '✅' : '⚠️'}</td>
-                        <td className="py-2 pr-3">{row.jsonLd ? '✅' : '⚠️'}</td>
-                        <td className="py-2">
-                          {row.inSitemap === null ? '—' : row.inSitemap ? '✅' : '⚠️'}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="py-8 text-center text-sm text-gray-400">
-              Press “Run audit” to crawl the key routes.
-            </p>
-          )}
-        </div>
-      )}
-
       {/* ==================== TECHNICAL ==================== */}
       {tab === 'technical' && (
-        <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900/50">
-          <h4 className="mb-4 flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-100">
-            <Globe className="h-4 w-4" /> Technical SEO
+        <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <h4 className="mb-4 flex items-center gap-2 font-semibold text-gray-100">
+            <Globe className="h-4 w-4 text-cyan-400" /> Technical SEO
           </h4>
           <div className="grid gap-3 sm:grid-cols-2">
             <a
               href="/robots.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-sm transition-colors hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:ring-cyan-500/40"
             >
-              <span className="flex items-center gap-2 text-gray-700 dark:text-gray-200">
-                robots.txt <span className="opacity-50">↗</span>
-              </span>
-              {statusBadge(robotsStatus)}
+              robots.txt {statusBadge(robotsStatus)}
             </a>
             <a
               href="/sitemap.xml"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-sm transition-colors hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:ring-cyan-500/40"
             >
-              <span className="flex items-center gap-2 text-gray-700 dark:text-gray-200">
-                sitemap.xml <span className="opacity-50">↗</span>
-              </span>
-              {statusBadge(sitemapStatus)}
+              sitemap.xml {statusBadge(sitemapStatus)}
             </a>
           </div>
           <p className="mt-3 text-xs text-gray-500">
@@ -936,10 +1202,23 @@ export function SeoSection(): JSX.Element {
             from the live APIs.
           </p>
           <button
-            onClick={() => window.location.reload()}
-            className="mt-3 flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            onClick={() => void refreshAll()}
+            className="mt-3 flex items-center gap-1.5 rounded-lg border border-gray-700 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-800"
           >
             <RefreshCw className="h-3 w-3" /> Re-check status
+          </button>
+        </div>
+      )}
+
+      {/* Save bar for editing tabs */}
+      {(tab === 'general' || tab === 'social') && (
+        <div className="flex justify-end">
+          <button
+            onClick={() => void handleSave()}
+            disabled={saving}
+            className="flex items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2 font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" /> {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>
       )}

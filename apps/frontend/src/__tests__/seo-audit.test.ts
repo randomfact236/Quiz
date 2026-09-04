@@ -11,8 +11,12 @@
 import {
   AUDIT_ROUTES,
   auditRoute,
+  buildAuditTargets,
+  classifyRoute,
   descriptionStatus,
   loadSitemapPaths,
+  rowHealth,
+  rowIssues,
   titleStatus,
 } from '@/lib/seo-audit';
 
@@ -111,5 +115,57 @@ describe('AUDIT_ROUTES', () => {
     expect(paths).toContain('/quiz-mcq');
     expect(paths).not.toContain('/login');
     expect(paths).not.toContain('/quiz-mcq/play');
+  });
+});
+
+describe('dashboard grouping (SEO Dashboard)', () => {
+  it('classifies routes into content groups', () => {
+    expect(classifyRoute('/quiz-mcq')).toBe('quiz');
+    expect(classifyRoute('/quiz-mcq?subject=science')).toBe('quiz');
+    expect(classifyRoute('/riddle-mcq?subject=x')).toBe('riddles');
+    expect(classifyRoute('/image-riddles?category=1')).toBe('images');
+    expect(classifyRoute('/jokes')).toBe('jokes');
+    expect(classifyRoute('/about')).toBe('static');
+  });
+
+  it('builds audit targets from static routes + sitemap query URLs (capped)', () => {
+    const sitemap = new Set(['/quiz-mcq?subject=science', '/riddle-mcq?subject=logic', '/']);
+    const targets = buildAuditTargets(sitemap);
+    const paths = targets.map((t) => t.path);
+    expect(paths).toContain('/');
+    expect(paths).toContain('/quiz-mcq?subject=science');
+    expect(paths).toContain('/riddle-mcq?subject=logic');
+    // static routes are not duplicated
+    expect(paths.filter((p) => p === '/')).toHaveLength(1);
+    expect(targets.every((t) => t.group)).toBe(true);
+  });
+
+  it('caps dynamic targets to keep the crawl bounded', () => {
+    const many = new Set(Array.from({ length: 80 }, (_, i) => `/quiz-mcq?subject=s${i}`));
+    const targets = buildAuditTargets(many);
+    expect(targets.length).toBeLessThanOrEqual(AUDIT_ROUTES.length + 30);
+  });
+
+  it('computes issues + health from an audit row', () => {
+    const healthy = {
+      path: '/',
+      label: 'Home',
+      title: 'a'.repeat(40),
+      description: 'd'.repeat(140),
+      noindex: false,
+      ogImage: true,
+      jsonLd: true,
+      inSitemap: true,
+    };
+    expect(rowIssues(healthy)).toEqual([]);
+    expect(rowHealth(healthy)).toBe('healthy');
+
+    const warn = { ...healthy, title: 'short' };
+    expect(rowIssues(warn)).toEqual(['Title length']);
+    expect(rowHealth(warn)).toBe('warning');
+
+    const critical = { ...healthy, title: '', description: '', ogImage: false };
+    expect(rowIssues(critical)).toEqual(['Title', 'Description', 'OG Image']);
+    expect(rowHealth(critical)).toBe('critical');
   });
 });
