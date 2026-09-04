@@ -4,6 +4,19 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — SEO Dashboard redesign (2026-09-05)
+
+- Owner showed a reference "SEO Dashboard" and asked for it instead of the plain SeoSection.
+  SeoSection now opens on a dark **Dashboard** tab: gradient hero + Refresh, GSC Top Queries panel
+  (honest "not connected" placeholder — real integration is plan/15 P3), 4 KPI cards (Total Pages /
+  SEO Healthy / Needs Attention / SEO Score %), 5 per-module breakdown cards with progress bars,
+  group+health filter chips, and the audit table with Missing-Field chips / health badges / open
+  actions. Audit rows now include sitemap query-param URLs (subjects/categories, capped at 30).
+- `lib/seo-audit.ts` extended (classifyRoute / buildAuditTargets / rowIssues / rowHealth), +4 tests.
+- **Verified live:** 11 rows crawled, KPIs populated (11 total / 4 healthy / 7 attention / 36% score),
+  filters + tools card render. tsc clean, frontend **193/193**.
+- **Uncommitted.**
+
 ### Run summary — SEO social overrides + Pages audit table (2026-09-05)
 
 - **Social Sharing:** `seo` settings gained per-platform overrides (facebook/twitter: image+title+

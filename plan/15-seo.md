@@ -73,6 +73,17 @@
       indexable routes: title/description lengths with 30–65/110–165 budgets, robots, OG image,
       JSON-LD, sitemap membership, plus an "N fully optimized · warnings · failing" summary), Technical.
       Audit logic extracted to `lib/seo-audit.ts` with 8 unit tests (suite 189/189).
+- [x] **SEO Dashboard redesign** — BUILT 2026-09-05 (owner showed a reference dashboard and asked
+      for this instead of the plain layout): SeoSection now opens on a dark **Dashboard** tab
+      matching the AnalyticsSection style — gradient hero with Refresh, a GSC "Top Queries" panel
+      with an honest not-connected placeholder (P3 integration pending), four KPI cards (Total
+      Pages / SEO Healthy / Needs Attention / SEO Score %), five per-module breakdown cards
+      (Quiz/Riddle/Images/Jokes/Static with Total-Healthy-Warning-Critical + progress bars), group + health filter chips (All / per module / Issues Only / Healthy Only), the audit table with
+      Missing-Field chips and health badges (rows now include sitemap query-param URLs, capped at
+      30), and an SEO Tools & Resources card (Schema Validator, Rich Results Test, OG debugger,
+      sitemap/robots, Social Sharing shortcut). Audit lib extended with
+      `classifyRoute`/`buildAuditTargets`/`rowIssues`/`rowHealth` (+4 tests, suite 193/193).
+      Verified live: 11 rows crawled, KPIs populated from real pages.
 
 ### P2 — integration / quality (next tier; needs the RSC decision or new routes)
 
