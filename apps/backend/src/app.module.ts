@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { AdminImageRiddlesModule } from './admin/image-riddles/admin-image-riddl
 import { AdminUsersModule } from './admin/users/admin-users.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AuthModule } from './auth/auth.module';
+import { OAuthPlatformMiddleware } from './auth/oauth-platform.middleware';
 import { CommentsModule } from './comments/comments.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
@@ -139,4 +140,17 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // Mark OAuth initiations from the mobile app (?platform=mobile) so the
+    // Google callback can redirect the one-time code to aiquiz://auth/callback
+    // (mobile-app plan §6 gap #1).
+    consumer.apply(OAuthPlatformMiddleware).forRoutes(
+      // with global prefix 'api' + URI versioning, the middleware matcher
+      // sees 'v1/auth/google'; extra forms cover other nest versions
+      { path: 'v1/auth/google', method: RequestMethod.GET },
+      { path: 'auth/google', method: RequestMethod.GET },
+      { path: 'api/v1/auth/google', method: RequestMethod.GET }
+    );
+  }
+}

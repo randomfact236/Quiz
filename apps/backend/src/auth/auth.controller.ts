@@ -158,6 +158,14 @@ export class AuthController {
     const code = await this.authService.createOAuthCode(result);
     const frontendUrl = process.env['FRONTEND_URL'] || 'http://localhost:3010';
 
+    // Mobile app flow (mobile-app plan §6 gap #1): the initiation middleware
+    // marked the request with an oauth_platform cookie — hand the one-time code
+    // to the app via its deep link; the app exchanges it the same way as web.
+    const isMobile = /(?:^|;\s*)oauth_platform=mobile(?:;|$)/.test(req.headers.cookie ?? '');
+    if (isMobile) {
+      return res.redirect(`aiquiz://auth/callback?code=${code}`);
+    }
+
     return res.redirect(`${frontendUrl}/login?oauth_code=${code}`);
   }
 }
