@@ -5,7 +5,9 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/dad-jokes.md`
+> Verified against the live codebase: **2026-09-05** (previous audit 2026-08-30; analytics-related
+> "(uncommitted)" markers from that audit are resolved — everything landed in `7d20864`/`ecd2eac`).
+> Supersedes `docs/features/archive/dad-jokes.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —
 > stale claims from the old doc were dropped or corrected).
 
@@ -15,15 +17,15 @@
 
 Backend (`apps/backend/src/dad-jokes/`):
 
-| File                               | Purpose                                                                                                                                                   | Size (verified) |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `dad-jokes.module.ts`              | 2 controllers + service; repos for 2 entities; CacheModule; **uncommitted:** now imports AnalyticsModule                                                  | 32 lines        |
-| `dad-jokes.controller.ts`          | `/jokes` — public list/random/search/categories/vote + admin CRUD/bulk/bulk-action/category CRUD                                                          | 240 lines       |
-| `dad-jokes-stats.controller.ts`    | `GET /jokes/stats/overview` (admin-only)                                                                                                                  | —               |
-| `dad-jokes-stats.util.ts`          | `computeDadJokeStats()` — parallel counts across joke + category repos                                                                                    | 38 lines        |
-| `dad-jokes.service.ts`             | All business logic: jokes, categories, voting (with toggle/remove), bulk ops, stats. **Uncommitted:** records `joke_voted` analytics events on every vote | 400 lines       |
-| `entities/dad-joke.entity.ts`      | `dad_jokes`: joke text, category FK, ContentStatus (default DRAFT), likes/dislikes counters                                                               | —               |
-| `entities/joke-category.entity.ts` | `joke_categories`: name, emoji, OneToMany jokes                                                                                                           | —               |
+| File                               | Purpose                                                                                                                                                        | Size (verified) |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `dad-jokes.module.ts`              | 2 controllers + service; repos for 2 entities; CacheModule; imports AnalyticsModule                                                                            | 32 lines        |
+| `dad-jokes.controller.ts`          | `/jokes` — public list/random/search/categories/vote + admin CRUD/bulk/bulk-action/category CRUD                                                               | 240 lines       |
+| `dad-jokes-stats.controller.ts`    | `GET /jokes/stats/overview` (admin-only)                                                                                                                       | —               |
+| `dad-jokes-stats.util.ts`          | `computeDadJokeStats()` — parallel counts across joke + category repos                                                                                         | 38 lines        |
+| `dad-jokes.service.ts`             | All business logic: jokes, categories, voting (with toggle/remove), bulk ops, stats. Records `joke_voted` analytics events on every vote (committed `ecd2eac`) | 400 lines       |
+| `entities/dad-joke.entity.ts`      | `dad_jokes`: joke text, category FK, ContentStatus (default DRAFT), likes/dislikes counters                                                                    | —               |
+| `entities/joke-category.entity.ts` | `joke_categories`: name, emoji, OneToMany jokes                                                                                                                | —               |
 
 Frontend (`apps/frontend/src/`):
 
@@ -31,13 +33,15 @@ Frontend (`apps/frontend/src/`):
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `app/jokes/page.tsx`                                 | Public jokes page (1253 lines) — flip cards, vote buttons with toggle-off, Joke of the Day, search/sort/pagination, comments modal; API-backed with localStorage offline fallback + vote-state cache |
 | `app/jokes/layout.tsx` / `loading.tsx` / `error.tsx` | Metadata, skeleton, themed error boundary                                                                                                                                                            |
-| `components/jokes/JokeCommentsModal.tsx`             | Per-joke comments modal (new since the archived doc)                                                                                                                                                 |
+| `components/jokes/JokeCommentsModal.tsx`             | Per-joke comments modal (new since the archived doc); since 2026-09-05 carries an optional `jokePunchline` prop with a "Show punchline" header reveal (one-liners omit it)                           |
 | `lib/jokes-api.ts`                                   | API client with `adaptJoke()` mapper + `voteJoke(id, type, remove)` targeting `/jokes/classic*`                                                                                                      |
 | `components/MobileFooter.tsx`                        | Consumes `getJokeCategories(true)`; drawer links to `/jokes?category=<uuid>`                                                                                                                         |
 | `app/admin/components/JokesSection.tsx`              | Admin joke CRUD — wired to backend API with auth (CRUD/bulk/CSV+JSON import)                                                                                                                         |
 | `app/admin/components/SettingsSection.tsx`           | Dad-jokes settings tab (category emoji, cache TTL) — see feature 11                                                                                                                                  |
 
-No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/`).
+Frontend tests: `joke-comments-modal.test.tsx` (3 tests — punchline reveal on demand, one-liner
+suppression, fresh-mount reset; added 2026-09-05). Backend: `dad-jokes.service.spec.ts` (8 vote
+tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin field rename).
 
 ## 2. Endpoint map (verified against controllers 2026-08-30)
 
@@ -59,7 +63,7 @@ No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/
 
 ## 3. Current status (verified)
 
-**Done:** fully API-backed public page and admin section; PUBLISHED hard-filtering; **voting is fully wired** — `handleVote` calls `voteJoke()` fire-and-forget with localStorage vote-state, double-click guard, cross-tab sync, and toggle-off (`remove` flag decrements counters; backend clamps at 0). **Uncommitted backend work:** `joke_voted` analytics events recorded on every vote (module `jokes`), surfaced in the admin analytics dashboard's Joke-votes panel. "Newest" sort now uses real `createdAt` (old `Number(uuid)` bug fixed). Comments are integrated on the public page via `JokeCommentsModal` (comments module `targetType: 'joke'`). Admin section: CRUD, bulk actions, CSV/JSON import with category auto-resolution; dead setters cleaned; a11y fix applied.
+**Done:** fully API-backed public page and admin section; PUBLISHED hard-filtering; **voting is fully wired** — `handleVote` calls `voteJoke()` fire-and-forget with localStorage vote-state, double-click guard, cross-tab sync, and toggle-off (`remove` flag decrements counters; backend clamps at 0). `joke_voted` analytics events are recorded on every vote (module `jokes`, committed in `ecd2eac`), surfaced in the admin analytics dashboard's Joke-votes panel. "Newest" sort now uses real `createdAt` (old `Number(uuid)` bug fixed). Comments are integrated on the public page via `JokeCommentsModal` (comments module `targetType: 'joke'`), which since 2026-09-05 offers a "Show punchline" header reveal so commenters can check the answer without closing the modal and flipping the card (commit `15adb1f`). Admin section: CRUD, bulk actions, CSV/JSON import with category auto-resolution; dead setters cleaned; a11y fix applied.
 
 **Corrected/stale vs the archived doc:**
 
@@ -83,7 +87,8 @@ No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/
 ### P2 — integration / quality
 
 - [x] **`joke_voted` analytics record** — VERIFIED ALREADY COMMITTED 2026-08-30 (plan claim stale): the record exists in the committed service (now extended with a `persisted` flag); analytics (feature 13) consumes it.
-- [x] **Test suite** — PARTIALLY DONE 2026-08-30: `dad-jokes.service.spec.ts` (8 tests) covers `voteForJoke` incl. insert/idempotent/switch/remove/no-vote-remove/anonymous/clamp/404. `adaptJoke` mapper + category cascade behavior still uncovered (mapper is a thin field rename; cascade now goes through the shared bulk path). **Needs owner decision if more is wanted.**
+- [x] **Comments-modal punchline reveal** — DONE 2026-09-05 (commit `15adb1f`): `JokeCommentsModal` takes an optional `jokePunchline` and renders a "Show punchline" header reveal; `jokes/page.tsx` passes it for non-one-liners only. The modal is conditionally mounted per joke, so the reveal state resets on every open. Covered by `joke-comments-modal.test.tsx` (3 tests); frontend suite 181/181, tsc clean.
+- [x] **Test suite** — PARTIALLY DONE 2026-08-30, EXTENDED 2026-09-05: `dad-jokes.service.spec.ts` (8 tests) covers `voteForJoke` incl. insert/idempotent/switch/remove/no-vote-remove/anonymous/clamp/404; `joke-comments-modal.test.tsx` (3 tests) covers the modal reveal behavior. `adaptJoke` mapper + category cascade behavior still uncovered (mapper is a thin field rename; cascade now goes through the shared bulk path). **Needs owner decision if more is wanted.**
 - [x] **Consume `/jokes/stats/overview`** — DONE 2026-08-30: admin JokesSection header now shows joke/category count badges fetched from the endpoint (endpoint kept).
 - [x] **Category delete soft-deletes jokes** — DONE 2026-08-30: jokes of a deleted category are moved to TRASH via one bulk UPDATE inside the delete transaction (was `jokeRepo.remove` hard delete), matching the content workflow.
 
@@ -96,8 +101,8 @@ No dedicated test suite exists for dad-jokes (no `*joke*.test.ts` in `__tests__/
 
 ## 5. Cross-feature touchpoints
 
-- **Comments** — jokes are a comment target (`targetType: 'joke'`); `JokeCommentsModal` on the public page.
-- **Analytics** — `joke_voted` events (uncommitted) feed the admin analytics dashboard's Joke-votes panel.
+- **Comments** — jokes are a comment target (`targetType: 'joke'`); `JokeCommentsModal` on the public page (with the punchline reveal since 2026-09-05).
+- **Analytics** — server `joke_voted` (commit `ecd2eac`) + client `joke_viewed`/`joke_shared` events feed the admin analytics dashboard's Jokes tab (feature 13).
 - **Site Settings** — SettingsSection "Dad Jokes" tab (category emoji, cache TTL).
 - **Admin Dashboard** — `JokesSection` under the admin shell; shared BulkActionService + CacheService patterns.
 - **Guest users** — public voting and comments work without an account (guest-id convention).
