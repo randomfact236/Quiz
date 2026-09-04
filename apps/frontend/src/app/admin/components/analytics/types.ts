@@ -7,6 +7,7 @@ export interface ModuleDashboard {
   sessionsStarted: number;
   sessionsResumed: number;
   sessionsCompleted: number;
+  sessionsAbandoned: number;
   questionsAnswered: number;
   correct: number;
   accuracyPct: number | null;

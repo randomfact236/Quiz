@@ -4,6 +4,30 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — analytics gap pass: abandonment, error telemetry, event filters (2026-09-05)
+
+- Owner gave the go-ahead on plan/13 §4b; implemented pickup-order steps 1–2 (+ same-file wins):
+  **A1** `session_abandoned` from both engines (pagehide via new `registerExitHook` in
+  `lib/analytics.ts` — the event joins the exit beacon batch — plus SPA-unmount cleanup, which
+  covers the in-app Exit links; submit clears the snapshot so completion never races
+  abandonment), **A2** `session_extended`, **A3** `hint_used` with a real counter (the
+  `session.hintsUsed` field was dead — always 0; RiddleCard's hint button now reports up via an
+  `onHintShown` prop), **A6** `client_error` + `api_failed` (new `lib/error-tracking.ts`:
+  window error/unhandledrejection + error-boundary digest + `onApiFailure` hook in api-client;
+  capped 20/session, deduped, `/analytics/*` excluded so a failing flush can't feed itself),
+  **A7** `signup_completed` on password registration (Google OAuth remainder noted in plan),
+  **B4** events endpoint + browser date-range/actor filters (actor matches userId/guestId/
+  sessionId; userId cast to text to dodge uuid-cast errors) with an Actor column in the UI.
+- Dashboard: quiz/riddle module tabs gained a "Sessions abandoned" funnel row
+  (`ModuleDashboard.sessionsAbandoned`, frontend `types.ts` mirrored).
+- Plan/13 refreshed: new audit findings recorded (A10 resume-prompt gap, C4 ingest retry
+  duplication note), §4b checkboxes flipped, inventory/event list/endpoint map updated.
+- **Verified:** both apps tsc clean; frontend **193/193**, backend **60/60**; backend build
+  clean; eslint shows no new warnings (pre-existing baseline diffed via stash).
+- **Uncommitted.** NOTE: unrelated mobile-OAuth WIP (`app.module.ts`, `auth.controller.ts`,
+  `oauth-platform.middleware.ts`) sits uncommitted in the tree from another session — left
+  untouched, NOT part of this pass.
+
 ### Run summary — SEO Dashboard redesign (2026-09-05)
 
 - Owner showed a reference "SEO Dashboard" and asked for it instead of the plain SeoSection.

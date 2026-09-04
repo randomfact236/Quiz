@@ -45,11 +45,17 @@ export class AdminAnalyticsController {
   }
 
   @Get('events')
-  @ApiOperation({ summary: 'Raw event browser (filter by eventName/module, paginated)' })
+  @ApiOperation({
+    summary:
+      'Raw event browser (filter by eventName/module/date range/actor — userId, guestId or sessionId)',
+  })
   getEvents(@Query() query: AdminEventsQueryDto) {
     return this.analyticsService.listEvents({
       eventName: query.eventName,
       module: query.module,
+      from: query.from,
+      to: query.to,
+      actor: query.actor,
       page: query.page ?? 1,
       limit: query.limit ?? 50,
     });

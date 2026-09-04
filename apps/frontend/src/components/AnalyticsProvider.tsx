@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useReportWebVitals } from 'next/web-vitals';
 
 import { initAnalytics, track } from '@/lib/analytics';
+import { initErrorTracking } from '@/lib/error-tracking';
 
 /**
  * Analytics bootstrap (analytics plan Phase 3): attaches flush listeners,
- * emits `page_viewed` on every route change (plan §6.2 route popularity)
- * and reports Web Vitals (plan §6.2). Mounted once from Providers.
+ * emits `page_viewed` on every route change (plan §6.2 route popularity),
+ * reports Web Vitals (plan §6.2) and client error telemetry (plan §4b A6).
+ * Mounted once from Providers.
  */
 export function AnalyticsProvider() {
   const pathname = usePathname();
@@ -17,6 +19,7 @@ export function AnalyticsProvider() {
 
   useEffect(() => {
     initAnalytics();
+    initErrorTracking();
   }, []);
 
   useEffect(() => {

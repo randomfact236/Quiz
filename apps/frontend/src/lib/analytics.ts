@@ -55,6 +55,23 @@ let flushing = false;
 let initialized = false;
 
 /**
+ * Exit hooks run inside flushOnExit BEFORE the queue is beaconed, so events
+ * they queue (e.g. session_abandoned) join the same exit batch. Engines
+ * register one per mount and unregister on cleanup — registration order is
+ * otherwise racy against initAnalytics's own visibilitychange/pagehide
+ * listeners, which is exactly the ordering abandonment depends on.
+ */
+type ExitReason = 'hidden' | 'pagehide';
+const exitHooks = new Set<(reason: ExitReason) => void>();
+
+export function registerExitHook(hook: (reason: ExitReason) => void): () => void {
+  exitHooks.add(hook);
+  return () => {
+    exitHooks.delete(hook);
+  };
+}
+
+/**
  * Track an event. Safe to call anywhere (client-only, never throws).
  * Events are batched and flushed every 10s, or immediately at 20 queued.
  */
@@ -119,7 +136,15 @@ export async function flush(): Promise<void> {
  * survive navigation. The beacon can't carry the Authorization header, so
  * these rows are guest-attributed (guestId still identifies the device).
  */
-function flushOnExit(): void {
+function flushOnExit(reason: ExitReason): void {
+  // Hooks first so anything they track rides the same beacon batch.
+  for (const hook of exitHooks) {
+    try {
+      hook(reason);
+    } catch {
+      // An analytics hook must never break the exit flush.
+    }
+  }
   if (queue.length === 0 || typeof navigator === 'undefined') return;
   const events = queue;
   queue = [];
@@ -138,7 +163,7 @@ export function initAnalytics(): void {
   if (initialized || typeof window === 'undefined') return;
   initialized = true;
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') flushOnExit();
+    if (document.visibilityState === 'hidden') flushOnExit('hidden');
   });
-  window.addEventListener('pagehide', flushOnExit);
+  window.addEventListener('pagehide', () => flushOnExit('pagehide'));
 }

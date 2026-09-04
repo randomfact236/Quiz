@@ -34,7 +34,7 @@ import { saveQuizResult } from '@/lib/progress';
 import { saveQuizSession } from '@/lib/quiz-mcq-api';
 import { getGuestId } from '@/lib/guest-id';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
-import { track } from '@/lib/analytics';
+import { registerExitHook, track } from '@/lib/analytics';
 import { saveQuizResumeQuestions } from '@/lib/quiz-mcq-resume';
 
 import {
@@ -301,6 +301,68 @@ export function useQuizMcq(
   // Timers (extracted module)
   useQuizTimers(state.status, setState, timeLimit, timerMode);
 
+  // ==================== Abandonment (analytics plan §4b A1) ====================
+  // Snapshot of the in-flight session for exit-time `session_abandoned` events.
+  // Kept fresh while playing/paused, cleared the moment the user submits (in
+  // submitQuiz, synchronously) or completes — a submitted quiz must never be
+  // reported as abandoned by a racing unmount.
+  const exitSnapshotRef = useRef<{
+    sessionId: string;
+    subject: string;
+    chapter: string;
+    level: string;
+    mode: string;
+    startTime: number;
+    total: number;
+    answered: number;
+    lastIndex: number;
+    paused: boolean;
+  } | null>(null);
+  const abandonedSessionsRef = useRef<Set<string>>(new Set());
+
+  const emitAbandon = useCallback(() => {
+    const snap = exitSnapshotRef.current;
+    if (!snap || abandonedSessionsRef.current.has(snap.sessionId)) return;
+    abandonedSessionsRef.current.add(snap.sessionId);
+    track(
+      'session_abandoned',
+      {
+        mode: snap.mode,
+        subject: snap.subject,
+        chapter: snap.chapter,
+        level: snap.level,
+        questionCount: snap.total,
+        answeredCount: snap.answered,
+        lastQuestionIndex: snap.lastIndex,
+        timeTaken: Math.max(0, Math.floor((Date.now() - snap.startTime) / 1000)),
+        statusBefore: snap.paused ? 'paused' : 'playing',
+      },
+      { module: 'quiz-mcq', sessionId: snap.sessionId }
+    );
+  }, []);
+
+  // True page exits (close/refresh/external nav) ride the analytics exit hook
+  // so the abandon event joins the exit beacon batch; in-app SPA exits (the
+  // Exit link unmounts this hook) emit on cleanup. Same event, both paths.
+  useEffect(() => {
+    const unregister = registerExitHook((reason) => {
+      if (reason === 'pagehide') emitAbandon();
+    });
+    return () => {
+      unregister();
+      emitAbandon();
+    };
+  }, [emitAbandon]);
+
+  const submitQuiz = useCallback(() => {
+    // Completion wins over abandonment even if unmount races the effects.
+    exitSnapshotRef.current = null;
+    // Pure state flip only — all save/cleanup side effects live in the single
+    // completion effect below (P1 fix: no side effects inside setState
+    // updaters, no double-completion race between callback and effect).
+    setState((prev) => ({ ...prev, status: 'completed' }));
+  }, []);
+
   const selectAnswer = useCallback(
     (option: string) => {
       setState((prev) => {
@@ -370,13 +432,6 @@ export function useQuizMcq(
       };
     });
   }, [timerMode, timeLimit]);
-
-  const submitQuiz = useCallback(() => {
-    // Pure state flip only — all save/cleanup side effects live in the single
-    // completion effect below (P1 fix: no side effects inside setState
-    // updaters, no double-completion race between callback and effect).
-    setState((prev) => ({ ...prev, status: 'completed' }));
-  }, []);
 
   // Single completion save path — runs once per completed session.
   const didSaveCompletionRef = useRef<string | null>(null);
@@ -461,6 +516,38 @@ export function useQuizMcq(
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.answers, state.manuallySkipped, state.questions]);
+
+  // Keep the abandonment snapshot in sync with the live session (§4b A1).
+  useEffect(() => {
+    if (state.status === 'playing' || state.status === 'paused') {
+      exitSnapshotRef.current = {
+        sessionId: state.sessionId,
+        subject,
+        chapter,
+        level,
+        mode: type ? `${mode}_${type}` : (mode ?? 'normal'),
+        startTime: state.startTime,
+        total: state.questions.length,
+        answered: Object.keys(state.answers).length,
+        lastIndex: state.currentQuestionIndex,
+        paused: state.status === 'paused',
+      };
+    } else if (state.status === 'completed') {
+      exitSnapshotRef.current = null;
+    }
+  }, [
+    state.status,
+    state.sessionId,
+    state.startTime,
+    state.questions.length,
+    state.answers,
+    state.currentQuestionIndex,
+    subject,
+    chapter,
+    level,
+    mode,
+    type,
+  ]);
 
   useEffect(() => {
     if (state.status !== 'playing') return;

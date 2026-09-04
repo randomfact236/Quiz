@@ -314,6 +314,7 @@ function RiddlePlayPageContent(): JSX.Element {
                         )
                       : undefined
                   }
+                  onHintShown={play.handleHintShown}
                 />
               </motion.div>
             )}

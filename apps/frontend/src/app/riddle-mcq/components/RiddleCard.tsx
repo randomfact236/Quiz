@@ -47,6 +47,8 @@ interface RiddleCardProps {
   questionTimeRemaining?: number | undefined;
   /** Per-riddle time limit (seconds) — used to calculate ring progress */
   questionTimeLimit?: number | undefined;
+  /** Fired when the player reveals this riddle's hint (analytics §4b A3) */
+  onHintShown?: () => void;
 }
 
 export interface RiddleCardRef {
@@ -145,6 +147,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     shownBubblesRef,
     questionTimeRemaining,
     questionTimeLimit,
+    onHintShown,
   },
   ref
 ): JSX.Element {
@@ -293,7 +296,10 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           <div className="mb-4">
             {!showHint ? (
               <button
-                onClick={() => setShowHint(true)}
+                onClick={() => {
+                  setShowHint(true);
+                  onHintShown?.();
+                }}
                 className="mx-auto flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-200 transition-colors"
               >
                 <span>💡</span>

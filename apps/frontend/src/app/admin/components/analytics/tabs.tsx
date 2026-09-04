@@ -211,6 +211,12 @@ export function ModuleTab({
               accent="bg-violet-500/80"
             />
             <FunnelRow
+              label="Sessions abandoned"
+              value={m.sessionsAbandoned}
+              max={Math.max(1, m.sessionsStarted)}
+              accent="bg-rose-500/80"
+            />
+            <FunnelRow
               label="Sessions completed"
               value={m.sessionsCompleted}
               max={Math.max(1, m.sessionsStarted)}

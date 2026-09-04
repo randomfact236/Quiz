@@ -29,7 +29,7 @@ import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/ri
 import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
-import { track } from '@/lib/analytics';
+import { registerExitHook, track } from '@/lib/analytics';
 import { shuffle } from '@/lib/utils';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
@@ -209,6 +209,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setTimeRemaining(totalTimeLimit);
       setStatus('playing');
       setShowResumeDialog(false);
+      hintsUsedRef.current = 0;
 
       // Analytics plan §4.1: session_started with setup dimensions.
       track(
@@ -252,6 +253,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setTimeRemaining(resume.timeRemaining || 0);
       setStatus('playing');
       setHasStarted(true);
+      hintsUsedRef.current = 0;
 
       // Analytics plan §4.1: session_resumed with saved progress.
       track(
@@ -268,6 +270,99 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   }, [mode, subjectId, level, chapterName, session]);
 
   useRiddleTimers({ status, mode, setTimeRemaining });
+
+  // ==================== Abandonment (analytics plan §4b A1) ====================
+  // Snapshot of the in-flight session for exit-time `session_abandoned`
+  // events. Cleared synchronously in handleSubmit so a submitted session is
+  // never reported as abandoned by the router.push unmount racing effects.
+  const exitSnapshotRef = useRef<{
+    sessionId: string;
+    subject: string;
+    chapter: string;
+    level: string;
+    mode: 'timer' | 'practice';
+    startedAt: number;
+    total: number;
+    answered: number;
+    lastIndex: number;
+    paused: boolean;
+  } | null>(null);
+  const abandonedSessionsRef = useRef<Set<string>>(new Set());
+
+  // Analytics plan §4b A3: hints were a dead metric — session.hintsUsed was
+  // initialized to 0 and never incremented (RiddleCard kept hint state local).
+  const hintsUsedRef = useRef(0);
+
+  const emitAbandon = useCallback(() => {
+    const snap = exitSnapshotRef.current;
+    if (!snap || abandonedSessionsRef.current.has(snap.sessionId)) return;
+    abandonedSessionsRef.current.add(snap.sessionId);
+    track(
+      'session_abandoned',
+      {
+        mode: snap.mode,
+        subject: snap.subject,
+        chapter: snap.chapter,
+        level: snap.level,
+        questionCount: snap.total,
+        answeredCount: snap.answered,
+        lastQuestionIndex: snap.lastIndex,
+        timeTaken: Math.max(0, Math.floor((Date.now() - snap.startedAt) / 1000)),
+        statusBefore: snap.paused ? 'paused' : 'playing',
+      },
+      { module: 'riddle-mcq', sessionId: snap.sessionId }
+    );
+  }, []);
+
+  // True page exits ride the analytics exit hook so the abandon event joins
+  // the exit beacon batch; SPA exits (Exit link unmount) emit on cleanup.
+  useEffect(() => {
+    const unregister = registerExitHook((reason) => {
+      if (reason === 'pagehide') emitAbandon();
+    });
+    return () => {
+      unregister();
+      emitAbandon();
+    };
+  }, [emitAbandon]);
+
+  // Keep the abandonment snapshot in sync with the live session.
+  useEffect(() => {
+    if (session && hasStarted && (status === 'playing' || status === 'paused')) {
+      exitSnapshotRef.current = {
+        sessionId: session.id,
+        subject: session.subjectId,
+        chapter: session.subjectName,
+        level: session.difficulty,
+        mode,
+        startedAt: new Date(session.startedAt).getTime(),
+        total: riddles.length,
+        answered: Object.keys(answers).length,
+        lastIndex: currentIndex,
+        paused: status === 'paused',
+      };
+    } else if (status === 'completed') {
+      exitSnapshotRef.current = null;
+    }
+  }, [session, hasStarted, status, mode, riddles.length, answers, currentIndex]);
+
+  // Analytics plan §4b A3: hint_used with a real per-session counter.
+  const handleHintShown = useCallback(() => {
+    if (!session) return;
+    const currentRiddle = riddles[currentIndex];
+    if (!currentRiddle) return;
+    hintsUsedRef.current += 1;
+    track(
+      'hint_used',
+      {
+        questionId: currentRiddle.id,
+        subject: session.subjectId,
+        level: session.difficulty,
+        hintNumber: hintsUsedRef.current,
+      },
+      { module: 'riddle-mcq', sessionId: session.id }
+    );
+  }, [session, riddles, currentIndex]);
 
   // Toggle pause — mirrors quiz page pauseQuiz/resumeQuiz
   const togglePause = useCallback(() => {
@@ -403,6 +498,10 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   const handleSubmit = useCallback(() => {
     if (!session) return;
 
+    // Completion wins over abandonment even if the router.push unmount races
+    // the snapshot-sync effect.
+    exitSnapshotRef.current = null;
+
     let correctCount = 0;
     riddles.forEach((r) => {
       if (isRiddleAnswerCorrect(r, answers[r.id])) correctCount++;
@@ -444,7 +543,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         incorrectCount: riddles.length - correctCount,
         answeredCount: Object.keys(answers).length,
         skippedCount: manuallySkipped.size,
-        hintsUsed: session.hintsUsed ?? 0,
+        hintsUsed: hintsUsedRef.current,
         timeTaken: completedSession.timeTaken,
       },
       { module: 'riddle-mcq', sessionId: session.id }
@@ -494,6 +593,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         return;
       }
 
+      let extraTimeSeconds = 0;
       if (mode === 'timer') {
         let extraTime = 0;
         const timers = settings?.riddles?.defaults?.levelTimers;
@@ -501,6 +601,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           const riddleLevel = riddle.difficulty?.toLowerCase() || 'medium';
           extraTime += timers?.[riddleLevel as keyof typeof timers] || DEFAULT_TIME_PER_RIDDLE;
         });
+        extraTimeSeconds = extraTime;
         setTimeRemaining((prev) => prev + extraTime);
       }
 
@@ -512,6 +613,19 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         // Pool grew — rewrite the snapshot so resume has the full set
         saveRiddleResumeQuestions({ mode, subjectId, level }, updatedSession.riddles);
       }
+
+      // Analytics plan §4b A2: extend-session usage was untracked.
+      track(
+        'session_extended',
+        {
+          mode,
+          subject: subjectId,
+          level: level || 'all',
+          addedCount: uniqueNew.length,
+          timeAddedSeconds: extraTimeSeconds,
+        },
+        { module: 'riddle-mcq', sessionId: session?.id }
+      );
 
       setCurrentIndex(riddles.length);
       setStatus('playing');
@@ -574,5 +688,6 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     handlePrevious,
     handleSubmit,
     handleExtendSession,
+    handleHintShown,
   };
 }

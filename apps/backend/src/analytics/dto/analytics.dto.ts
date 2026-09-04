@@ -102,6 +102,25 @@ export class AdminEventsQueryDto {
   @MaxLength(32)
   module?: string;
 
+  @ApiPropertyOptional({ description: 'Only events at/after this ISO timestamp' })
+  @IsOptional()
+  @IsDateString()
+  from?: string;
+
+  @ApiPropertyOptional({ description: 'Only events at/before this ISO timestamp' })
+  @IsOptional()
+  @IsDateString()
+  to?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Trace one actor: userId, guestId, or sessionId (matches any of the three columns)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  actor?: string;
+
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()
   @Type(() => Number)

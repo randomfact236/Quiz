@@ -56,6 +56,7 @@ export interface ModuleDashboard {
   sessionsStarted: number;
   sessionsResumed: number;
   sessionsCompleted: number;
+  sessionsAbandoned: number;
   questionsAnswered: number;
   correct: number;
   accuracyPct: number | null;
@@ -387,49 +388,55 @@ export class AnalyticsService {
     const prev = `"serverTs" > now() - (2 * $1::int * interval '1 day') AND "serverTs" <= now() - ($1::int * interval '1 day')`;
 
     const moduleDashboard = async (module: string): Promise<ModuleDashboard> => {
-      const [started, resumed, completed, answered, byLevel, avgScore] = await Promise.all([
-        this.scalarN(
-          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_started' AND module = $2 AND ${win}`,
-          [days, module]
-        ),
-        this.scalarN(
-          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_resumed' AND module = $2 AND ${win}`,
-          [days, module]
-        ),
-        this.scalarN(
-          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}`,
-          [days, module]
-        ),
-        repo.query(
-          `SELECT COUNT(*)::int AS answered,
+      const [started, resumed, completed, abandoned, answered, byLevel, avgScore] =
+        await Promise.all([
+          this.scalarN(
+            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_started' AND module = $2 AND ${win}`,
+            [days, module]
+          ),
+          this.scalarN(
+            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_resumed' AND module = $2 AND ${win}`,
+            [days, module]
+          ),
+          this.scalarN(
+            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}`,
+            [days, module]
+          ),
+          this.scalarN(
+            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_abandoned' AND module = $2 AND ${win}`,
+            [days, module]
+          ),
+          repo.query(
+            `SELECT COUNT(*)::int AS answered,
                   SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
            FROM analytics_events
            WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}`,
-          [days, module]
-        ),
-        repo.query(
-          `SELECT COALESCE(properties->>'level', 'unknown') AS level,
+            [days, module]
+          ),
+          repo.query(
+            `SELECT COALESCE(properties->>'level', 'unknown') AS level,
                   COUNT(*)::int AS answered,
                   SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
            FROM analytics_events
            WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
            GROUP BY 1 ORDER BY answered DESC`,
-          [days, module]
-        ),
-        repo.query(
-          `SELECT AVG((properties->>'percentage')::float)::float AS pct
+            [days, module]
+          ),
+          repo.query(
+            `SELECT AVG((properties->>'percentage')::float)::float AS pct
            FROM analytics_events
            WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}
              AND properties->>'percentage' IS NOT NULL`,
-          [days, module]
-        ),
-      ]);
+            [days, module]
+          ),
+        ]);
       const answeredN = Number(answered[0]?.answered ?? 0);
       const correctN = Number(answered[0]?.correct ?? 0);
       return {
         sessionsStarted: started,
         sessionsResumed: resumed,
         sessionsCompleted: completed,
+        sessionsAbandoned: abandoned,
         questionsAnswered: answeredN,
         correct: correctN,
         accuracyPct: answeredN > 0 ? Math.round((correctN / answeredN) * 100) : null,
@@ -739,12 +746,30 @@ export class AnalyticsService {
   async listEvents(opts: {
     eventName?: string;
     module?: string;
+    from?: string;
+    to?: string;
+    actor?: string;
     page: number;
     limit: number;
   }): Promise<{ data: AnalyticsEvent[]; total: number; page: number; limit: number }> {
     const qb = this.eventRepo.createQueryBuilder('e');
     if (opts.eventName) qb.andWhere('e.eventName = :eventName', { eventName: opts.eventName });
     if (opts.module) qb.andWhere('e.module = :module', { module: opts.module });
+    if (opts.from) qb.andWhere('e.serverTs >= :from', { from: opts.from });
+    if (opts.to) {
+      // Date-only "to" means the whole day (the UI sends YYYY-MM-DD).
+      const to = /^\d{4}-\d{2}-\d{2}$/.test(opts.to) ? `${opts.to}T23:59:59.999Z` : opts.to;
+      qb.andWhere('e.serverTs <= :to', { to });
+    }
+    if (opts.actor) {
+      // Trace one visitor journey: match the actor id against any identity
+      // column. userId is a uuid — cast to text so guest/session ids compare
+      // without a Postgres uuid cast error.
+      qb.andWhere(
+        '(CAST(e.userId AS TEXT) = :actor OR e.guestId = :actor OR e.sessionId = :actor)',
+        { actor: opts.actor }
+      );
+    }
 
     const total = await qb.getCount();
     const data = await qb

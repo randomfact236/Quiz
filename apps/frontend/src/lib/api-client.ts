@@ -40,6 +40,32 @@ interface ApiResponse<T> {
   ok: boolean;
 }
 
+/**
+ * API-failure observers (analytics `api_failed`, plan/13 §4b A6). A listener
+ * list keeps api-client dependency-free — error-tracking subscribes to it, so
+ * a failing request can be reported without api-client importing analytics
+ * (which would loop: analytics itself posts through this client).
+ */
+type ApiFailureListener = (endpoint: string, status: number) => void;
+const apiFailureListeners = new Set<ApiFailureListener>();
+
+export function onApiFailure(listener: ApiFailureListener): () => void {
+  apiFailureListeners.add(listener);
+  return () => {
+    apiFailureListeners.delete(listener);
+  };
+}
+
+function notifyApiFailure(endpoint: string, status: number): void {
+  for (const listener of apiFailureListeners) {
+    try {
+      listener(endpoint, status);
+    } catch {
+      // Observers must never break the failing call's error path.
+    }
+  }
+}
+
 function getToken(isAdmin?: boolean): string | null {
   if (isAdmin) {
     return getItem<string | null>(STORAGE_KEYS.ADMIN_TOKEN, null);
@@ -187,7 +213,11 @@ export async function apiRequest<T>(
     };
   } catch (err) {
     clearTimeout(timeout);
-    if (err instanceof ApiError) throw err;
+    if (err instanceof ApiError) {
+      notifyApiFailure(endpoint, err.status);
+      throw err;
+    }
+    notifyApiFailure(endpoint, 0);
     throw new ApiError(0, err instanceof Error ? err.message : 'Network error');
   }
 }

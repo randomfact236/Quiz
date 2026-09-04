@@ -80,7 +80,10 @@ jest.mock('@/hooks/use-riddle-play/useRiddleTimers', () => {
   };
 });
 
-jest.mock('@/lib/analytics', () => ({ track: jest.fn() }));
+jest.mock('@/lib/analytics', () => ({
+  track: jest.fn(),
+  registerExitHook: jest.fn(() => () => undefined),
+}));
 jest.mock('@/lib/achievements', () => ({
   checkAchievements: jest.fn(() => []),
   toastAchievementUnlocks: jest.fn(),
