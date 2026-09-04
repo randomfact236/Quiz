@@ -5,7 +5,8 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. No archived ledger doc existed for this feature —
+> Verified against the live codebase: **2026-09-05** (SEO surface re-audited when the admin SEO
+> section shipped; previous audit 2026-08-30). No archived ledger doc existed for this feature —
 > built from current code. This file was added after the initial 9-file pass (user request) to own the
 > cross-page UI shell, SEO, and the **Newsletter** roadmap item, which previously had no home.
 
@@ -49,6 +50,7 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 ### P1 — major gaps
 
 - [x] **SEO basics** — DONE 2026-08-30: `app/robots.ts` (allow all, disallow /admin + /api, sitemap pointer) and `app/sitemap.ts` (static routes + quiz/riddle subjects and image categories from the public APIs, graceful-failure on API downtime). OG/Twitter metadata + theme-color already existed in the root layout (plan stale).
+- [x] **Admin SEO surface** — DONE 2026-09-05: new "SEO" section in the admin dashboard (System group, between Analytics and Settings). Edits the new `seo` settings group (site name, default title, title template, description, keywords, OG image, Twitter handle, Google verification) via `PATCH /settings`; the root layout's `generateMetadata` consumes it through `GET /settings/public` (5-min server cache, full fallback to built-ins on backend failure — verified live: PATCH → metadata change → revert). SeoSection also shows robots.txt/sitemap.xml reachability badges. Backend: `seo` added to settings defaults, update DTO whitelist, and the public-settings payload (settings specs 60/60 green; backend restarted on the new build).
 - [ ] Server-rendering strategy for JotD/subject pages — **needs owner decision** (SEO priorities determine the RSC rework).
 - [ ] **Newsletter** — owned by feature 14 (simple email collection first); this feature hosts the footer form. See [14-newsletter.md](14-newsletter.md).
 - [x] **Legal pages** — BUILT 2026-08-30: `/privacy`, `/terms`, `/contact` with shared `LegalPage` shell and honest PLACEHOLDER markers. **Needs owner decision/approved copy before public launch** (contact email is a placeholder too).
@@ -69,5 +71,5 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 - **All content features (02–05)** — the shell frames their pages; MobileFooter deep links feed them query params.
 - **User Accounts (01)** — Header carries login/register state; AuthContext lives beside ThemeContext.
 - **Achievements (06)** — achievement unlock toasts are among the notifications currently invisible (P0).
-- **Site Settings (11)** — future home for SEO/newsletter configuration if it becomes dynamic.
+- **Site Settings (11)** — SEO metadata is now dynamic: the `seo` settings group (built 2026-09-05) lives in the settings system and is editable from the admin SeoSection; newsletter configuration remains future work.
 - **Analytics (13)** — `page_viewed` fires on every route change the shell renders.

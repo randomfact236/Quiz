@@ -4,6 +4,58 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — SEO social overrides + Pages audit table (2026-09-05)
+
+- **Social Sharing:** `seo` settings gained per-platform overrides (facebook/twitter: image+title+
+  description; google: description) end-to-end — backend defaults/DTO/public payload, frontend
+  types, and `generateMetadata` fallback chain (page → platform override → global → auto image).
+  E2E-probed with a minted admin JWT: PATCH a Facebook title override → homepage `og:title` flips
+  (after the 5-min metadata fetch cache) → reverted clean.
+- **SeoSection reworked into 4 tabs** (General / Social Sharing / Pages / Technical): character
+  budgets on every title/description field (FB 60/110, TW 70/200, Google 155), share-image
+  "Choose" uploads through the media library, and a live **Pages audit table** crawling the 11
+  indexable routes (title/description quality vs 30–65/110–165 budgets, robots, OG image, JSON-LD,
+  sitemap membership + summary counts). Audit helpers in `lib/seo-audit.ts`, 8 new unit tests.
+- **Verified:** backend rebuilt + restarted (public payload includes the overrides); tsc clean
+  both apps; tests 60/60 backend, **189/189** frontend; audit table live in the dashboard
+  (11 rows, "4 fully optimized · 7 with warnings · 0 failing" against real pages).
+- **Uncommitted** with today's SEO work.
+
+### Run summary — full-SEO plan created + P1 implemented (2026-09-05)
+
+- **Plan:** new `plan/15-seo.md` owns the SEO roadmap (baseline inventory, target architecture,
+  P0–P3). P2 (RSC conversion, per-subject route segments, content JSON-LD, per-page OG) is gated
+  on the plan/09 server-rendering owner decision; P3 (Search Console integration, audit panel,
+  organic segmentation) needs owner input on external accounts.
+- **P1 implemented + verified live:** JSON-LD `WebSite`+`Organization` graph injected site-wide
+  (fed by the `seo` settings group, `</script>`-safe escaping); `BreadcrumbList` builders ready in
+  `lib/seo.ts` with module meta presets; dynamic OG image `app/opengraph-image.tsx`
+  (ImageResponse 1200×630, 200 image/png, inherited site-wide); metadata coverage for
+  play/achievements/riddle-mcq/quiz-mcq (client pages get server layouts); 14 noindex layouts for
+  auth/gameplay-state/profile routes; sitemap drops auth pages, adds /achievements, lastmod from
+  content updatedAt, rebalanced priorities.
+- **Probed:** home HTML carries the JSON-LD graph + og:image; login renders
+  `noindex, follow`; quiz/riddle/play/achievements titles all flow through the title template;
+  sitemap has no /login, has /achievements. tsc clean; frontend 181/181.
+- **Uncommitted** with the rest of today's SEO work.
+
+### Run summary — admin SEO section + sidebar reorder (2026-09-05)
+
+- **SEO menu built:** new "SEO" section in the admin dashboard, placed between Analytics and
+  Settings (also the previous request's reorder: Analytics now sits directly before Settings,
+  with its dashboard tabs as a collapsible sidebar sub-menu that deep-links `?section=analytics&tab=…`).
+- **SEO section scope:** edits the new `seo` settings group (site name, default title, title
+  template, description, keywords, OG image, Twitter handle, Google Search Console token) via
+  `PATCH /settings`, and shows robots.txt/sitemap.xml reachability badges. Backend: `seo` added to
+  settings defaults (`config/settings.ts`), update-DTO whitelist, and `GET /settings/public`
+  (public-safe — it renders into public meta tags anyway). Frontend root layout now uses
+  `generateMetadata` reading `/settings/public` (5-min server cache, full fallback to built-ins).
+- **Verified live:** backend rebuilt + restarted; `PATCH /settings {seo}` with a locally minted
+  admin JWT → public payload reflects it → reverted (200s); homepage `<title>`/description now
+  served from generateMetadata; SeoSection renders the saved values with robots/sitemap both
+  Reachable; sidebar order confirmed via DOM. tsc clean both apps; backend tests 60/60, frontend 181/181.
+- **Plan docs:** plan/09 P1 updated with the new done item; plan/13 + docs banner unchanged from earlier today.
+
 ### Run summary — jokes comments modal: punchline reveal completed (2026-09-05)
 
 - **Finished the leftover WIP** in the working tree: `JokeCommentsModal` gained an optional
