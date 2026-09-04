@@ -3,6 +3,12 @@
 > Inventory of everything this site CAN collect for analytics, mapped to where the
 > data currently lives (or should live). Based on full codebase audit (frontend:
 > Next.js `apps/frontend`, backend: NestJS `apps/backend`).
+>
+> **⚠️ Staleness note (2026-09-05):** §11 is the accurate implementation ledger. Sections
+> 1–7 partly predate it: the demographics feature was removed 2026-08-30 (§2.1
+> country/sex/ageGroup columns and §3 no longer exist — migration `1788400000000`),
+> and §1's "broken endpoint / never-emitted events / idle votes" rows are all fixed.
+> Current gaps are tracked in `plan/13-analytics.md` §4b.
 
 ---
 
