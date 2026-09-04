@@ -31,7 +31,9 @@ describe('NewsletterService', () => {
       find: jest.fn(async () => rows.filter((r) => !r.unsubscribed)),
       createQueryBuilder: jest.fn(),
     } as never as any;
-    const service = new NewsletterService(subscriberRepo);
+    const service = new NewsletterService(subscriberRepo, {
+      record: jest.fn(async () => undefined),
+    } as never);
     return { service, rows, subscriberRepo };
   };
 

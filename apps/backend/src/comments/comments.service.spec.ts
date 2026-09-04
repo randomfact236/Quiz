@@ -74,6 +74,7 @@ describe('CommentsService', () => {
       delPattern: jest.fn(async () => undefined),
     };
     const bulkActionService = { executeBulkAction: jest.fn(), getStatusCounts: jest.fn() };
+    const analyticsService = { record: jest.fn(async () => undefined) };
 
     const service = new CommentsService(
       commentRepo as unknown as never,
@@ -81,7 +82,8 @@ describe('CommentsService', () => {
       jokeRepo as unknown as never,
       guestUsersService as unknown as GuestUsersService,
       cacheService as unknown as CacheService,
-      bulkActionService as unknown as BulkActionService
+      bulkActionService as unknown as BulkActionService,
+      analyticsService as unknown as never
     );
     return { service, commentRepo, imageRiddleRepo, cacheService };
   };

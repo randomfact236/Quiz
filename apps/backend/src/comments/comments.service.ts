@@ -34,6 +34,7 @@ import {
   StatusCountResponse,
 } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 import { GuestUsersService } from '../guest-users/guest-users.service';
 import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
@@ -87,7 +88,8 @@ export class CommentsService {
     private jokeRepo: Repository<DadJoke>,
     private guestUsersService: GuestUsersService,
     private cacheService: CacheService,
-    private bulkActionService: BulkActionService
+    private bulkActionService: BulkActionService,
+    private analyticsService: AnalyticsService
   ) {}
 
   // ==================== PUBLIC FEED ====================
@@ -249,6 +251,16 @@ export class CommentsService {
     });
     const saved = await this.commentRepo.save(comment);
     await this.invalidateFeedCache(dto.contentType, dto.contentId);
+
+    void this.analyticsService.record({
+      eventName: 'comment_posted',
+      module: 'site',
+      properties: {
+        contentType: dto.contentType,
+        kind: dto.kind,
+        isCorrect,
+      },
+    });
 
     return this.toPublicComment(saved, { masked: saved.isCorrect });
   }

@@ -15,6 +15,7 @@ import { CacheService } from '../common/cache/cache.service';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { GuestUsersModule } from '../guest-users/guest-users.module';
+import { AnalyticsModule } from '../analytics/analytics.module';
 import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
 
 import { Comment } from './entities/comment.entity';
@@ -23,7 +24,11 @@ import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment, ImageRiddle, DadJoke]), GuestUsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Comment, ImageRiddle, DadJoke]),
+    GuestUsersModule,
+    AnalyticsModule,
+  ],
   controllers: [CommentsController, CommentsAdminController],
   providers: [CommentsService, CacheService, BulkActionService],
   exports: [CommentsService],

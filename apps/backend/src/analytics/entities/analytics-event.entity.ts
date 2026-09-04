@@ -39,6 +39,36 @@ export class AnalyticsEvent {
   @Column({ type: 'jsonb', nullable: true })
   properties: Record<string, unknown> | null;
 
+  /**
+   * Request context, enriched server-side at ingest from the HTTP request
+   * (geo via IP lookup, device/browser/OS via UA parse). Raw IPs are never
+   * stored — `ipAnon` keeps a /24 (v4) or /48 (v6) truncated copy so geo
+   * counts can dedupe visitors without storing identifying addresses.
+   */
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  country: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  region: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  city: string | null;
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  deviceType: string | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  browser: string | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  os: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  referrerDomain: string | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  ipAnon: string | null;
+
   @Column({ type: 'timestamptz', nullable: true })
   clientTs: Date | null;
 

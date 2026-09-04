@@ -20,6 +20,7 @@ import { GuestUsersService } from '../guest-users/guest-users.service';
 
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { AnalyticsEventDto } from './dto/analytics.dto';
+import { RequestContext } from './request-context';
 
 /** Free-form properties payload cap (plan §9 data minimization). */
 const MAX_PROPERTIES_JSON_BYTES = 8192;
@@ -29,6 +30,10 @@ const OVERVIEW_CACHE_TTL_S = 60;
 
 const PUBLIC_SUMMARY_CACHE_KEY = 'analytics:public-summary';
 const PUBLIC_SUMMARY_CACHE_TTL_S = 300;
+
+const DASHBOARD_CACHE_TTL_S = 60;
+/** Max look-back window the dashboard accepts (bounds query cost). */
+export const DASHBOARD_MAX_DAYS = 365;
 
 export interface AdminOverview {
   totals: {
@@ -44,6 +49,71 @@ export interface AdminOverview {
   topEvents: { eventName: string; count: number }[];
   topPages: { page: string; count: number }[];
   jokeVotes: { likes: number; dislikes: number };
+}
+
+/** Per-game drill-down (quiz / riddle share the shape). */
+export interface ModuleDashboard {
+  sessionsStarted: number;
+  sessionsResumed: number;
+  sessionsCompleted: number;
+  questionsAnswered: number;
+  correct: number;
+  accuracyPct: number | null;
+  skipped: number;
+  avgScorePct: number | null;
+  byLevel: { level: string; answered: number; correct: number; accuracyPct: number | null }[];
+  achievementsUnlocked: number | null;
+}
+
+export interface AdminDashboard {
+  range: { days: number };
+  kpis: {
+    events: number;
+    eventsPrev: number;
+    pageViews: number;
+    dau: number;
+    sessionsCompleted: number;
+    registeredUsers: number;
+    guestUsers: number;
+    newGuests: number;
+    achievementsUnlocked: number;
+    jokeLikes: number;
+    jokeDislikes: number;
+    newsletterSubscribers: number;
+    newsletterNew: number;
+    commentsTotal: number;
+    avgQuizScorePct: number | null;
+    avgQuizSeconds: number | null;
+  };
+  dailySeries: { day: string; events: number; pageViews: number; activeUsers: number }[];
+  topPages: { label: string; count: number }[];
+  topEvents: { label: string; count: number }[];
+  topReferrers: { label: string; count: number }[];
+  geo: {
+    byCountry: { label: string; events: number; visitors: number }[];
+    byCity: { label: string; count: number }[];
+  };
+  devices: {
+    byType: { label: string; count: number }[];
+    byBrowser: { label: string; count: number }[];
+    byOs: { label: string; count: number }[];
+  };
+  webVitals: { metric: string; avg: number; p75: number; samples: number }[];
+  users: {
+    signupsByDay: { day: string; count: number }[];
+    loginsByDay: { day: string; count: number }[];
+  };
+  modules: {
+    'quiz-mcq': ModuleDashboard;
+    'riddle-mcq': ModuleDashboard;
+    'image-riddles': {
+      answerChecked: number;
+      hintShown: number;
+      gaveUp: number;
+      shared: number;
+    };
+    jokes: { viewed: number; liked: number; disliked: number; shared: number };
+  };
 }
 
 @Injectable()
@@ -65,7 +135,8 @@ export class AnalyticsService {
    */
   async ingest(
     dtos: AnalyticsEventDto[],
-    userId: string | null
+    userId: string | null,
+    context?: RequestContext
   ): Promise<{ accepted: number; rejected: number }> {
     const rows: AnalyticsEvent[] = [];
     let rejected = 0;
@@ -90,6 +161,7 @@ export class AnalyticsService {
       row.page = dto.page ?? null;
       row.properties = properties ?? null;
       row.clientTs = dto.clientTs ? new Date(dto.clientTs) : null;
+      this.applyContext(row, context);
       rows.push(row);
     }
 
@@ -135,6 +207,18 @@ export class AnalyticsService {
         `analytics record(${input.eventName}) failed: ${err instanceof Error ? err.message : err}`
       );
     }
+  }
+
+  private applyContext(row: AnalyticsEvent, context?: RequestContext): void {
+    if (!context) return;
+    row.country = context.country;
+    row.region = context.region;
+    row.city = context.city;
+    row.deviceType = context.deviceType;
+    row.browser = context.browser;
+    row.os = context.os;
+    row.referrerDomain = context.referrerDomain;
+    row.ipAnon = context.ipAnon;
   }
 
   /** Guest counter wiring (analytics plan §2.3): attempts/score/lastActive. */
@@ -277,6 +361,347 @@ export class AnalyticsService {
         dislikes: Number(jokeVotes?.dislikes ?? 0),
       },
     };
+  }
+
+  // ==================== DASHBOARD (tabbed UI) ====================
+
+  /**
+   * Everything the tabbed analytics dashboard renders, in one payload, for a
+   * look-back of `days`. Short-TTL cached per range. All breakdowns are
+   * scoped to the window; lifetime counters (users, subscribers) are noted
+   * as such in the UI.
+   */
+  async getDashboard(days: number): Promise<AdminDashboard> {
+    const clamped = Math.min(Math.max(Math.floor(days) || 30, 1), DASHBOARD_MAX_DAYS);
+    return this.cacheService.getOrSet(
+      `analytics:dashboard:${clamped}`,
+      () => this.computeDashboard(clamped),
+      DASHBOARD_CACHE_TTL_S
+    );
+  }
+
+  private async computeDashboard(days: number): Promise<AdminDashboard> {
+    const repo = this.eventRepo;
+    const actor = `COALESCE("userId"::text, "guestId")`;
+    const win = `"serverTs" > now() - ($1::int * interval '1 day')`;
+    const prev = `"serverTs" > now() - (2 * $1::int * interval '1 day') AND "serverTs" <= now() - ($1::int * interval '1 day')`;
+
+    const moduleDashboard = async (module: string): Promise<ModuleDashboard> => {
+      const [started, resumed, completed, answered, byLevel, avgScore] = await Promise.all([
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_started' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_resumed' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        repo.query(
+          `SELECT COUNT(*)::int AS answered,
+                  SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
+           FROM analytics_events
+           WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        repo.query(
+          `SELECT COALESCE(properties->>'level', 'unknown') AS level,
+                  COUNT(*)::int AS answered,
+                  SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
+           FROM analytics_events
+           WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+           GROUP BY 1 ORDER BY answered DESC`,
+          [days, module]
+        ),
+        repo.query(
+          `SELECT AVG((properties->>'percentage')::float)::float AS pct
+           FROM analytics_events
+           WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}
+             AND properties->>'percentage' IS NOT NULL`,
+          [days, module]
+        ),
+      ]);
+      const answeredN = Number(answered[0]?.answered ?? 0);
+      const correctN = Number(answered[0]?.correct ?? 0);
+      return {
+        sessionsStarted: started,
+        sessionsResumed: resumed,
+        sessionsCompleted: completed,
+        questionsAnswered: answeredN,
+        correct: correctN,
+        accuracyPct: answeredN > 0 ? Math.round((correctN / answeredN) * 100) : null,
+        skipped: await this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'question_skipped' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        avgScorePct: avgScore[0]?.pct != null ? Math.round(Number(avgScore[0].pct)) : null,
+        byLevel: byLevel.map((r: { level: string; answered: number; correct: number }) => ({
+          level: r.level,
+          answered: Number(r.answered),
+          correct: Number(r.correct ?? 0),
+          accuracyPct:
+            Number(r.answered) > 0
+              ? Math.round((Number(r.correct ?? 0) / Number(r.answered)) * 100)
+              : null,
+        })),
+        achievementsUnlocked:
+          module === 'quiz-mcq'
+            ? await this.scalarN(
+                `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'achievement_unlocked' AND ${win}`,
+                [days]
+              )
+            : null,
+      };
+    };
+
+    const [
+      events,
+      eventsPrev,
+      pageViews,
+      dau,
+      registeredUsers,
+      guestUsers,
+      newGuests,
+      jokeVotes,
+      jokeViews,
+      jokeShares,
+      newsletterSubscribers,
+      newsletterNew,
+      commentsTotal,
+      quizMeta,
+      daily,
+      topPages,
+      topEvents,
+      topReferrers,
+      byCountry,
+      byCity,
+      byType,
+      byBrowser,
+      byOs,
+      webVitals,
+      signupsByDay,
+      loginsByDay,
+      imageRiddles,
+      quiz,
+      riddle,
+    ] = await Promise.all([
+      this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${win}`, [days]),
+      this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${prev}`, [days]),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'page_viewed' AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(DISTINCT ${actor})::int AS n FROM analytics_events WHERE "serverTs" > now() - interval '1 day'`
+      ),
+      this.scalarN(`SELECT COUNT(*)::int AS n FROM users WHERE role != 'admin'`),
+      this.scalarN(`SELECT COUNT(*)::int AS n FROM guest_users`),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM guest_users WHERE "createdAt" > now() - ($1::int * interval '1 day')`,
+        [days]
+      ),
+      repo.query(
+        `SELECT
+           SUM(CASE WHEN properties->>'voteType' = 'like' THEN 1 ELSE 0 END)::int AS likes,
+           SUM(CASE WHEN properties->>'voteType' = 'dislike' THEN 1 ELSE 0 END)::int AS dislikes
+         FROM analytics_events WHERE "eventName" = 'joke_voted' AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'joke_viewed' AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'joke_shared' AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM newsletter_subscribers WHERE unsubscribed = false`
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM newsletter_subscribers WHERE "createdAt" > now() - ($1::int * interval '1 day')`,
+        [days]
+      ),
+      this.scalarN(`SELECT COUNT(*)::int AS n FROM comments`),
+      repo.query(
+        `SELECT AVG((properties->>'percentage')::float)::float AS pct,
+                AVG((properties->>'timeTaken')::float)::float AS secs
+         FROM analytics_events
+         WHERE "eventName" = 'session_completed' AND module = 'quiz-mcq' AND ${win}`,
+        [days]
+      ),
+      repo.query(
+        `SELECT to_char(d.day, 'YYYY-MM-DD') AS day,
+                COALESCE(ev.events, 0)::int AS events,
+                COALESCE(ev.views, 0)::int AS "pageViews",
+                COALESCE(ev.actors, 0)::int AS "activeUsers"
+         FROM generate_series(CURRENT_DATE - (($1::int - 1) * interval '1 day'), CURRENT_DATE, interval '1 day') AS d(day)
+         LEFT JOIN (
+           SELECT date_trunc('day', "serverTs") AS day,
+                  COUNT(*)::int AS events,
+                  COUNT(*) FILTER (WHERE "eventName" = 'page_viewed')::int AS views,
+                  COUNT(DISTINCT ${actor})::int AS actors
+           FROM analytics_events
+           WHERE ${win}
+           GROUP BY 1
+         ) ev ON ev.day = d.day
+         ORDER BY d.day`,
+        [days]
+      ),
+      repo.query(
+        `SELECT page AS label, COUNT(*)::int AS count FROM analytics_events
+         WHERE page IS NOT NULL AND ${win} GROUP BY 1 ORDER BY count DESC LIMIT 10`,
+        [days]
+      ),
+      repo.query(
+        `SELECT "eventName" AS label, COUNT(*)::int AS count FROM analytics_events
+         WHERE ${win} GROUP BY 1 ORDER BY count DESC LIMIT 15`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE("referrerDomain", 'direct/none') AS label, COUNT(*)::int AS count
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY count DESC LIMIT 10`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE(country, 'Unknown') AS label, COUNT(*)::int AS events,
+                COUNT(DISTINCT ${actor})::int AS visitors
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY events DESC LIMIT 15`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE(country, 'Unknown') || ' / ' || COALESCE(city, 'Unknown') AS label,
+                COUNT(*)::int AS count
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY count DESC LIMIT 15`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE("deviceType", 'unknown') AS label, COUNT(*)::int AS count
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY count DESC`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE("browser", 'Unknown') AS label, COUNT(*)::int AS count
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY count DESC LIMIT 10`,
+        [days]
+      ),
+      repo.query(
+        `SELECT COALESCE("os", 'Unknown') AS label, COUNT(*)::int AS count
+         FROM analytics_events WHERE ${win} GROUP BY 1 ORDER BY count DESC LIMIT 10`,
+        [days]
+      ),
+      repo.query(
+        `SELECT properties->>'metric' AS metric,
+                AVG((properties->>'value')::float)::float AS avg,
+                percentile_cont(0.75) WITHIN GROUP (ORDER BY (properties->>'value')::float) AS p75,
+                COUNT(*)::int AS samples
+         FROM analytics_events
+         WHERE "eventName" = 'web_vitals' AND properties->>'metric' IS NOT NULL AND ${win}
+         GROUP BY 1`,
+        [days]
+      ),
+      repo.query(
+        `SELECT to_char(d.day, 'YYYY-MM-DD') AS day, COALESCE(s.n, 0)::int AS count
+         FROM generate_series(CURRENT_DATE - (($1::int - 1) * interval '1 day'), CURRENT_DATE, interval '1 day') AS d(day)
+         LEFT JOIN (
+           SELECT date_trunc('day', "serverTs") AS day, COUNT(*)::int AS n
+           FROM analytics_events
+           WHERE "eventName" = 'user_registered' AND ${win} GROUP BY 1
+         ) s ON s.day = d.day ORDER BY d.day`,
+        [days]
+      ),
+      repo.query(
+        `SELECT to_char(d.day, 'YYYY-MM-DD') AS day, COALESCE(l.n, 0)::int AS count
+         FROM generate_series(CURRENT_DATE - (($1::int - 1) * interval '1 day'), CURRENT_DATE, interval '1 day') AS d(day)
+         LEFT JOIN (
+           SELECT date_trunc('day', "serverTs") AS day, COUNT(*)::int AS n
+           FROM analytics_events
+           WHERE "eventName" = 'user_login' AND ${win} GROUP BY 1
+         ) l ON l.day = d.day ORDER BY d.day`,
+        [days]
+      ),
+      repo.query(
+        `SELECT "eventName", COUNT(*)::int AS count FROM analytics_events
+         WHERE module = 'image-riddles' AND ${win} GROUP BY 1`,
+        [days]
+      ),
+      moduleDashboard('quiz-mcq'),
+      moduleDashboard('riddle-mcq'),
+    ]);
+
+    const irEvents = new Map(
+      (imageRiddles as { eventName: string; count: number }[]).map((r) => [
+        r.eventName,
+        Number(r.count),
+      ])
+    );
+    const votes = jokeVotes[0] ?? {};
+
+    return {
+      range: { days },
+      kpis: {
+        events,
+        eventsPrev,
+        pageViews,
+        dau,
+        sessionsCompleted: quiz.sessionsCompleted + riddle.sessionsCompleted,
+        registeredUsers,
+        guestUsers,
+        newGuests,
+        achievementsUnlocked: quiz.achievementsUnlocked ?? 0,
+        jokeLikes: Number(votes.likes ?? 0),
+        jokeDislikes: Number(votes.dislikes ?? 0),
+        newsletterSubscribers,
+        newsletterNew,
+        commentsTotal,
+        avgQuizScorePct: quizMeta[0]?.pct != null ? Math.round(Number(quizMeta[0].pct)) : null,
+        avgQuizSeconds: quizMeta[0]?.secs != null ? Math.round(Number(quizMeta[0].secs)) : null,
+      },
+      dailySeries: daily,
+      topPages: topPages,
+      topEvents: topEvents,
+      topReferrers: topReferrers,
+      geo: { byCountry, byCity },
+      devices: { byType, byBrowser, byOs },
+      webVitals: (webVitals as { metric: string; avg: number; p75: number; samples: number }[]).map(
+        (r) => ({
+          metric: r.metric,
+          avg: Math.round(Number(r.avg ?? 0)),
+          p75: Math.round(Number(r.p75 ?? 0)),
+          samples: Number(r.samples ?? 0),
+        })
+      ),
+      users: {
+        signupsByDay: signupsByDay,
+        loginsByDay: loginsByDay,
+      },
+      modules: {
+        'quiz-mcq': quiz,
+        'riddle-mcq': riddle,
+        'image-riddles': {
+          answerChecked: irEvents.get('image_riddle_answer_checked') ?? 0,
+          hintShown: irEvents.get('image_riddle_hint_shown') ?? 0,
+          gaveUp: irEvents.get('image_riddle_gave_up') ?? 0,
+          shared: irEvents.get('image_riddle_riddle_shared') ?? 0,
+        },
+        jokes: {
+          viewed: jokeViews,
+          liked: Number(votes.likes ?? 0),
+          disliked: Number(votes.dislikes ?? 0),
+          shared: jokeShares,
+        },
+      },
+    };
+  }
+
+  /** scalar() variant with query parameters. */
+  private async scalarN(sql: string, params: unknown[] = []): Promise<number> {
+    const res = await this.eventRepo.query(sql, params);
+    const val = Array.isArray(res) ? res[0]?.[Object.keys(res[0] ?? {})[0]] : undefined;
+    return Number(val ?? 0);
   }
 
   async getPublicSummary(): Promise<{

@@ -2,315 +2,201 @@
 
 /**
  * ============================================================================
- * AnalyticsSection — admin analytics dashboard (analytics plan Phase 4)
+ * AnalyticsSection — tabbed admin analytics dashboard
  * ============================================================================
- * Reads GET /admin/analytics/overview (+ /retention) via the adminApi client.
- * Charts are hand-rolled CSS bars — no chart library dependency (matches the
- * StatsSection approach on the public site).
+ * Dark full-dashboard UI (tabs per game module + audience/geo + retention +
+ * raw events) fed by GET /admin/analytics/dashboard and /retention. Range
+ * selector (24h/7d/30d/90d) re-fetches; the active tab deep-links through the
+ * admin URL (?section=analytics&tab=…). CSV export is client-side from the
+ * loaded payload.
  * ============================================================================
  */
 
-import { useEffect, useState } from 'react';
-import { BarChart3, RefreshCw } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { BarChart3, Download, RefreshCw } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
-import { MODULE_LABELS as sharedModuleLabels } from '@/lib/analytics';
 import { EventsBrowser } from './EventsBrowser';
+import { downloadCsv } from './analytics/csv';
+import {
+  exportRowsForTab,
+  AudienceTab,
+  ImageRiddlesTab,
+  JokesTab,
+  ModuleTab,
+  OverviewTab,
+  RetentionTab,
+  UsersTab,
+} from './analytics/tabs';
+import type { AdminDashboard, RetentionCohort } from './analytics/types';
 
-interface AdminOverview {
-  totals: {
-    events: number;
-    eventsLast24h: number;
-    registeredUsers: number;
-    guestUsers: number;
-  };
-  activeUsers: { dau: number; wau: number; mau: number };
-  sessionsCompletedByModule: { module: string; count: number }[];
-  questionAccuracy: { module: string; answered: number; correct: number; accuracyPct: number }[];
-  dailySeries: { day: string; events: number; activeUsers: number }[];
-  topEvents: { eventName: string; count: number }[];
-  topPages: { page: string; count: number }[];
-  jokeVotes: { likes: number; dislikes: number };
-}
+const TABS = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'quiz-mcq', label: 'Quiz MCQ' },
+  { id: 'riddle-mcq', label: 'Riddle MCQ' },
+  { id: 'image-riddles', label: 'Image Riddles' },
+  { id: 'jokes', label: 'Dad Jokes' },
+  { id: 'users', label: 'Users' },
+  { id: 'audience', label: 'Audience & Geo' },
+  { id: 'retention', label: 'Retention' },
+  { id: 'events', label: 'Raw Events' },
+] as const;
 
-interface RetentionCohort {
-  cohortWeek: string;
-  size: number;
-  returned: number;
-  retentionPct: number;
-}
+type TabId = (typeof TABS)[number]['id'];
 
-const MODULE_LABELS: Record<string, string> = {
-  ...sharedModuleLabels,
-  unknown: 'Unattributed',
-};
-
-function StatCard({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string | number;
-  hint?: string;
-}) {
-  return (
-    <div className="rounded-xl bg-white p-4 shadow dark:bg-secondary-900">
-      <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-secondary-400">
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-bold text-gray-800 dark:text-secondary-100">{value}</p>
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
-    </div>
-  );
-}
-
-function BarList({
-  rows,
-  formatLabel,
-}: {
-  rows: { label: string; value: number }[];
-  formatLabel?: (label: string) => string;
-}) {
-  const max = Math.max(1, ...rows.map((r) => r.value));
-  if (rows.length === 0) {
-    return <p className="text-sm text-gray-400">No data yet.</p>;
-  }
-  return (
-    <div className="space-y-2">
-      {rows.map((row) => (
-        <div key={row.label}>
-          <div className="mb-0.5 flex items-center justify-between text-xs text-gray-600 dark:text-secondary-300">
-            <span className="truncate">{formatLabel ? formatLabel(row.label) : row.label}</span>
-            <span className="ml-2 shrink-0 font-medium">{row.value.toLocaleString()}</span>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
-            <div
-              className="h-full rounded-full bg-indigo-500"
-              style={{ width: `${Math.max(2, (row.value / max) * 100)}%` }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl bg-white p-5 shadow dark:bg-secondary-900">
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
-}
+const RANGES = [
+  { id: '1', label: '24h' },
+  { id: '7', label: '7d' },
+  { id: '30', label: '30d' },
+  { id: '90', label: '90d' },
+] as const;
 
 export function AnalyticsSection() {
-  const [overview, setOverview] = useState<AdminOverview | null>(null);
-  const [retention, setRetention] = useState<RetentionCohort[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const load = async () => {
+  const [tab, setTab] = useState<TabId>(
+    (TABS.find((t) => t.id === searchParams.get('tab'))?.id ?? 'overview') as TabId
+  );
+  const [days, setDays] = useState<number>(30);
+  const [data, setData] = useState<AdminDashboard | null>(null);
+  const [retention, setRetention] = useState<RetentionCohort[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async (rangeDays: number) => {
     setLoading(true);
     setError(null);
     try {
-      const [overviewRes, retentionRes] = await Promise.all([
-        adminApi.get<AdminOverview>('/admin/analytics/overview'),
+      const [dashboardRes, retentionRes] = await Promise.all([
+        adminApi.get<AdminDashboard>(`/admin/analytics/dashboard?days=${rangeDays}`),
         adminApi.get<RetentionCohort[]>('/admin/analytics/retention?weeks=8'),
       ]);
-      setOverview(overviewRes.data);
+      setData(dashboardRes.data);
       setRetention(Array.isArray(retentionRes.data) ? retentionRes.data : []);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to load analytics');
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    void load();
   }, []);
 
-  if (loading && !overview) {
-    return (
-      <div className="rounded-xl bg-white p-8 text-center shadow dark:bg-secondary-900">
-        <div className="mx-auto h-10 w-10 animate-spin rounded-full border-b-2 border-indigo-500" />
-        <p className="mt-3 text-sm text-gray-500">Loading analytics…</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    void load(days);
+  }, [days, load]);
 
-  if (error) {
-    return (
-      <div className="rounded-xl bg-white p-8 text-center shadow dark:bg-secondary-900">
-        <p className="text-sm text-red-500">{error}</p>
-        <button
-          onClick={() => void load()}
-          className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  const changeTab = (next: TabId) => {
+    setTab(next);
+    // Deep-link the tab without triggering a section-level navigation.
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('section', 'analytics');
+    params.set('tab', next);
+    router.replace(`/admin?${params.toString()}`, { scroll: false });
+  };
 
-  if (!overview) return null;
-
-  const maxDaily = Math.max(1, ...overview.dailySeries.map((d) => d.events));
+  const exportCsv = () => {
+    if (!data) return;
+    downloadCsv(`analytics-${tab}`, exportRowsForTab(tab, data, retention));
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="rounded-xl bg-gray-950 shadow-lg ring-1 ring-gray-800">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-secondary-100">
-          <BarChart3 className="h-5 w-5" /> Analytics
-        </h2>
-        <button
-          onClick={() => void load()}
-          className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 dark:border-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-800"
-          disabled={loading}
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
-        </button>
+      <div className="flex flex-col gap-3 px-5 pt-5 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+            <BarChart3 className="h-5 w-5 text-cyan-400" /> Analytics
+          </h2>
+          <p className="mt-0.5 text-xs text-gray-500">
+            Traffic, engagement and performance across every module
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="rounded-lg border border-gray-800 bg-gray-900 px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+            aria-label="Date range"
+          >
+            {RANGES.map((r) => (
+              <option key={r.id} value={r.id}>
+                Last {r.label}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={exportCsv}
+            disabled={!data}
+            className="flex items-center gap-1.5 rounded-lg border border-gray-800 bg-gray-900 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800 disabled:opacity-50"
+          >
+            <Download className="h-4 w-4" /> CSV
+          </button>
+          <button
+            onClick={() => void load(days)}
+            disabled={loading}
+            className="flex items-center gap-1.5 rounded-lg bg-cyan-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
+          </button>
+        </div>
       </div>
 
-      {/* Top-line stats */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-        <StatCard label="Events (24h)" value={overview.totals.eventsLast24h.toLocaleString()} />
-        <StatCard label="Events (all)" value={overview.totals.events.toLocaleString()} />
-        <StatCard label="DAU" value={overview.activeUsers.dau.toLocaleString()} />
-        <StatCard label="WAU" value={overview.activeUsers.wau.toLocaleString()} />
-        <StatCard label="Registered" value={overview.totals.registeredUsers.toLocaleString()} />
-        <StatCard label="Guests" value={overview.totals.guestUsers.toLocaleString()} />
-      </div>
-
-      {/* Daily events chart (last 30 days) */}
-      <Panel title="Events per day (30d)">
-        <div className="flex h-32 items-end gap-[3px]">
-          {overview.dailySeries.map((d) => (
-            <div
-              key={d.day}
-              title={`${d.day}: ${d.events} events, ${d.activeUsers} active users`}
-              className="flex-1 rounded-t bg-indigo-500/80 hover:bg-indigo-400"
-              style={{ height: `${Math.max(2, (d.events / maxDaily) * 100)}%` }}
-            />
+      {/* Tab strip — sticky within the admin scroll area */}
+      <div className="sticky top-0 z-10 mt-4 bg-gray-950/95 px-5 pb-2 pt-1 backdrop-blur">
+        <div className="flex gap-1 overflow-x-auto rounded-lg bg-gray-900/70 p-1">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => changeTab(t.id)}
+              className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
+                tab === t.id
+                  ? 'bg-gray-800 font-medium text-white shadow'
+                  : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+              }`}
+            >
+              {t.label}
+            </button>
           ))}
         </div>
-        <div className="mt-2 flex justify-between text-xs text-gray-400">
-          <span>{overview.dailySeries[0]?.day}</span>
-          <span>{overview.dailySeries[overview.dailySeries.length - 1]?.day}</span>
-        </div>
-      </Panel>
-
-      {/* Completions + accuracy */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Panel title="Completed sessions by module">
-          <BarList
-            rows={overview.sessionsCompletedByModule.map((r) => ({
-              label: r.module,
-              value: r.count,
-            }))}
-            formatLabel={(l) => MODULE_LABELS[l] ?? l}
-          />
-        </Panel>
-        <Panel title="Answer accuracy by module">
-          {overview.questionAccuracy.length === 0 ? (
-            <p className="text-sm text-gray-400">No answers tracked yet.</p>
-          ) : (
-            <div className="space-y-3">
-              {overview.questionAccuracy.map((row) => (
-                <div key={row.module}>
-                  <div className="mb-1 flex items-center justify-between text-xs text-gray-600 dark:text-secondary-300">
-                    <span>{MODULE_LABELS[row.module] ?? row.module}</span>
-                    <span className="font-medium">
-                      {row.accuracyPct}% ({row.correct.toLocaleString()}/
-                      {row.answered.toLocaleString()})
-                    </span>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
-                    <div
-                      className={`h-full rounded-full ${
-                        row.accuracyPct >= 70
-                          ? 'bg-emerald-500'
-                          : row.accuracyPct >= 40
-                            ? 'bg-amber-500'
-                            : 'bg-rose-500'
-                      }`}
-                      style={{ width: `${Math.max(2, row.accuracyPct)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </Panel>
       </div>
 
-      {/* Engagement + funnel */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Panel title="Top events">
-          <BarList rows={overview.topEvents.map((r) => ({ label: r.eventName, value: r.count }))} />
-        </Panel>
-        <Panel title="Top pages">
-          <BarList rows={overview.topPages.map((r) => ({ label: r.page, value: r.count }))} />
-        </Panel>
-        <Panel title="Joke votes">
-          <div className="space-y-2 text-sm text-gray-600 dark:text-secondary-300">
-            <div className="flex justify-between">
-              <span>Likes 👍</span>
-              <span className="font-medium">{overview.jokeVotes.likes.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Dislikes 👎</span>
-              <span className="font-medium">{overview.jokeVotes.dislikes.toLocaleString()}</span>
-            </div>
+      {/* Content */}
+      <div className="p-5">
+        {loading && !data ? (
+          <div className="flex h-64 flex-col items-center justify-center gap-3">
+            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-cyan-500" />
+            <p className="text-sm text-gray-500">Loading analytics…</p>
           </div>
-        </Panel>
+        ) : error && !data ? (
+          <div className="flex h-64 flex-col items-center justify-center gap-3">
+            <p className="text-sm text-rose-400">{error}</p>
+            <button
+              onClick={() => void load(days)}
+              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500"
+            >
+              Retry
+            </button>
+          </div>
+        ) : data ? (
+          <>
+            {error && (
+              <p className="mb-4 rounded-lg border border-amber-800/50 bg-amber-500/10 px-3 py-2 text-xs text-amber-400">
+                Refresh failed ({error}) — showing the last loaded data.
+              </p>
+            )}
+            {tab === 'overview' && <OverviewTab data={data} />}
+            {tab === 'quiz-mcq' && <ModuleTab data={data} moduleKey="quiz-mcq" />}
+            {tab === 'riddle-mcq' && <ModuleTab data={data} moduleKey="riddle-mcq" />}
+            {tab === 'image-riddles' && <ImageRiddlesTab data={data} />}
+            {tab === 'jokes' && <JokesTab data={data} />}
+            {tab === 'users' && <UsersTab data={data} />}
+            {tab === 'audience' && <AudienceTab data={data} />}
+            {tab === 'retention' && <RetentionTab cohorts={retention} />}
+            {tab === 'events' && <EventsBrowser />}
+          </>
+        ) : null}
       </div>
-
-      {/* Retention cohorts */}
-      <Panel title="Weekly retention cohorts (returned in a later week)">
-        {retention.length === 0 ? (
-          <p className="text-sm text-gray-400">Not enough history yet — check back next week.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="text-left text-xs uppercase tracking-wide text-gray-400">
-                  <th className="pb-2 pr-4">Cohort week</th>
-                  <th className="pb-2 pr-4">New actors</th>
-                  <th className="pb-2 pr-4">Returned</th>
-                  <th className="pb-2">Retention</th>
-                </tr>
-              </thead>
-              <tbody>
-                {retention.map((c) => (
-                  <tr
-                    key={c.cohortWeek}
-                    className="border-t border-gray-100 dark:border-secondary-800"
-                  >
-                    <td className="py-2 pr-4 text-gray-600 dark:text-secondary-300">
-                      {c.cohortWeek}
-                    </td>
-                    <td className="py-2 pr-4 text-gray-600 dark:text-secondary-300">{c.size}</td>
-                    <td className="py-2 pr-4 text-gray-600 dark:text-secondary-300">
-                      {c.returned}
-                    </td>
-                    <td className="py-2 font-medium text-gray-800 dark:text-secondary-100">
-                      {c.retentionPct}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Panel>
-      {/* Raw events browser (plan/13-analytics.md P1 #3) */}
-      <EventsBrowser />
     </div>
   );
 }

@@ -10,7 +10,7 @@
  * ============================================================================
  */
 
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -20,6 +20,7 @@ import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
 
 import { AnalyticsService } from './analytics.service';
 import { IngestEventsDto } from './dto/analytics.dto';
+import { buildRequestContext } from './request-context';
 
 @ApiTags('Analytics')
 @Controller('analytics')
@@ -31,8 +32,14 @@ export class AnalyticsController {
   @UseGuards(OptionalJwtAuthGuard)
   @Throttle({ default: { limit: 30, ttl: 60000 } })
   @ApiOperation({ summary: 'Batch-ingest client analytics events (max 50/batch)' })
-  async ingest(@Body() dto: IngestEventsDto, @_CurrentUser('id') userId?: string) {
-    return this.analyticsService.ingest(dto.events, userId ?? null);
+  async ingest(
+    @Body() dto: IngestEventsDto,
+    @Req() req: { headers: Record<string, string | string[] | undefined>; ip?: string },
+    @_CurrentUser('id') userId?: string
+  ) {
+    // Geo/device/referrer enrichment comes from the request itself — the
+    // client is never trusted for these fields.
+    return this.analyticsService.ingest(dto.events, userId ?? null, buildRequestContext(req));
   }
 
   @Get('summary')

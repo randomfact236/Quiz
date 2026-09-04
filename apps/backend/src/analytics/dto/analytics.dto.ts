@@ -117,3 +117,13 @@ export class AdminEventsQueryDto {
   @Max(200)
   limit?: number;
 }
+
+export class AdminDashboardQueryDto {
+  @ApiPropertyOptional({ description: 'Look-back window in days', default: 30, maximum: 365 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(365)
+  days?: number;
+}

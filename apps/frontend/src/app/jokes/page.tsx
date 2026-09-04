@@ -8,6 +8,7 @@ import { getAllJokes, getJokeCategories, voteJoke, type AdaptedJoke } from '@/li
 import { getCommentCounts } from '@/lib/comments-api';
 import { useSavedItems } from '@/hooks/useSavedItems';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
+import { track } from '@/lib/analytics';
 import JokeCommentsModal from '@/components/jokes/JokeCommentsModal';
 import ShareMenu from '@/components/share/ShareMenu';
 
@@ -241,6 +242,7 @@ export default function JokesPage(): JSX.Element {
   const [shareJokeId, setShareJokeId] = useState<string | null>(null);
   const openShare = (e: React.MouseEvent, jokeId: string) => {
     e.stopPropagation(); // Prevent card from flipping
+    track('joke_shared', { jokeId }, { module: 'jokes' });
     setShareJokeId(jokeId);
   };
 
@@ -257,6 +259,7 @@ export default function JokesPage(): JSX.Element {
       if (prev[id]) return prev;
       const next = { ...prev, [id]: new Date().toISOString() };
       setItem(STORAGE_KEYS.SEEN_JOKES, next);
+      track('joke_viewed', { jokeId: id }, { module: 'jokes' });
       return next;
     });
   };

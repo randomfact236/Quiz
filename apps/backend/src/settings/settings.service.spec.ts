@@ -30,7 +30,11 @@ describe('SettingsService', () => {
         cb({ getRepository: () => txRepo })
       ),
     };
-    const service = new SettingsService(settingsRepo as never, dataSource as never);
+    const service = new SettingsService(
+      settingsRepo as never,
+      dataSource as never,
+      { record: jest.fn(async () => undefined) } as never
+    );
     return { service, settingsRepo, txRepo };
   };
 

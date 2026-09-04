@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { AnalyticsService } from '../analytics/analytics.service';
 import { NewsletterSubscriber, NewsletterSource } from './entities/subscriber.entity';
 
 @Injectable()
@@ -10,7 +11,8 @@ export class NewsletterService {
 
   constructor(
     @InjectRepository(NewsletterSubscriber)
-    private readonly subscriberRepo: Repository<NewsletterSubscriber>
+    private readonly subscriberRepo: Repository<NewsletterSubscriber>,
+    private readonly analyticsService: AnalyticsService
   ) {}
 
   /**
@@ -37,12 +39,22 @@ export class NewsletterService {
         existing.unsubscribed = false;
         existing.source = source;
         await this.subscriberRepo.save(existing);
+        void this.analyticsService.record({
+          eventName: 'newsletter_subscribed',
+          module: 'site',
+          properties: { source, resubscribe: true },
+        });
       }
       // Either way: already (or again) subscribed — same response, no leak.
       return { subscribed: true };
     }
 
     await this.subscriberRepo.insert({ email, source });
+    void this.analyticsService.record({
+      eventName: 'newsletter_subscribed',
+      module: 'site',
+      properties: { source },
+    });
     return { subscribed: true };
   }
 
@@ -50,6 +62,7 @@ export class NewsletterService {
   async unsubscribe(rawEmail: string): Promise<{ unsubscribed: boolean }> {
     const email = rawEmail.trim().toLowerCase();
     await this.subscriberRepo.update({ email }, { unsubscribed: true });
+    void this.analyticsService.record({ eventName: 'newsletter_unsubscribed', module: 'site' });
     return { unsubscribed: true };
   }
 

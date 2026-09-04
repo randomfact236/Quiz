@@ -4,6 +4,30 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — tabbed analytics dashboard + geo/device capture (2026-09-04)
+
+- **Built:** admin Analytics reworked into a dark tabbed dashboard (Overview / Quiz MCQ / Riddle MCQ /
+  Image Riddles / Dad Jokes / Users / Audience & Geo / Retention / Raw Events), fed by the new
+  `GET /admin/analytics/dashboard?days=` endpoint (60s cache). Range selector (24h/7d/30d/90d),
+  per-tab client-side CSV export, `?tab=` deep links. Events enriched server-side at ingest with
+  country/region/city (geoip-lite), device/browser/OS (ua-parser-js) and referrer domain; raw IPs are
+  never stored — `ipAnon` keeps a /24 truncation (migration `AddAnalyticsGeoDevice1789500000000`).
+- **New events tracked:** `joke_viewed` / `joke_shared` (client, jokes page), `newsletter_subscribed`
+  / `newsletter_unsubscribed` (server), `comment_posted` (server), `settings_updated` (server).
+  Dashboard aggregates signups/logins per day, web vitals avg+p75, geo breakdowns, device mix and
+  per-module funnels/accuracy-by-level.
+- **Verified live:** dashboard/overview/retention probed with a locally minted admin JWT (all 200,
+  real aggregates); ingest enrichment confirmed in DB (Chrome/Windows/desktop + google.com referrer
+  - truncated IP); backend type-check + build clean; backend tests 20/20 (newsletter/settings/
+    comments specs updated for the new constructor arg); frontend tests 178/178.
+- **Environment note:** the frontend dev server (:3010) was wedged (500 on every route, including
+  untouched ones) after the backend `npm install` mutated the hoisted root `node_modules` under it —
+  restarted, all routes 200 again. `next build` cannot run while the dev server holds `.next/trace`
+  (EPERM); stop the dev server first if a prod build is needed.
+- **Known limits:** geo stays null for local/private IPs (loopback has no country) — populates with
+  real traffic. Web-vitals p75 for CLS is on the ×1000 integer scale. Dashboard cache is per-range
+  (`analytics:dashboard:<days>`, 60s TTL).
+
 ### Run summary — master tracker pass complete (2026-08-30)
 
 All 14 features worked in table order (P0 → P1 → P2 → P3, feature-scoped commits, pushed).

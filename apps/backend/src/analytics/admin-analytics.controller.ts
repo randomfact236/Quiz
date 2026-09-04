@@ -14,7 +14,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminGuard } from '../common/guards/admin.guard';
 
 import { AnalyticsService } from './analytics.service';
-import { AdminEventsQueryDto } from './dto/analytics.dto';
+import { AdminDashboardQueryDto, AdminEventsQueryDto } from './dto/analytics.dto';
 
 @ApiTags('Analytics (admin)')
 @ApiBearerAuth()
@@ -27,6 +27,15 @@ export class AdminAnalyticsController {
   @ApiOperation({ summary: 'Dashboard overview: totals, DAU/WAU/MAU, accuracy, daily series' })
   getOverview() {
     return this.analyticsService.getAdminOverview();
+  }
+
+  @Get('dashboard')
+  @ApiOperation({
+    summary:
+      'Tabbed-dashboard payload: KPIs, daily series, geo, devices, referrers, web vitals, per-module drill-downs',
+  })
+  getDashboard(@Query() query: AdminDashboardQueryDto) {
+    return this.analyticsService.getDashboard(query.days ?? 30);
   }
 
   @Get('retention')
