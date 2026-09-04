@@ -555,6 +555,7 @@ export default function JokesPage(): JSX.Element {
             <JokeCommentsModal
               jokeId={modalJoke.id}
               jokeSetup={modalJoke.setup}
+              jokePunchline={modalJoke.isOneLiner ? undefined : modalJoke.punchline}
               onPosted={() => bumpCommentCount(modalJoke.id)}
               onClose={() => setCommentsModalJokeId(null)}
             />

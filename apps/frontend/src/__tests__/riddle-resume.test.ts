@@ -3,7 +3,7 @@ import {
   loadRiddleResume,
   saveRiddleResume,
   saveRiddleResumeQuestions,
-} from '@/lib/riddle-resume';
+} from '@/lib/riddle-persistence';
 import { STORAGE_KEYS, getItem, setItem } from '@/lib/storage';
 import type { Riddle } from '@/types/riddles';
 

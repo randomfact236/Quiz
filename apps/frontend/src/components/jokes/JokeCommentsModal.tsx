@@ -23,6 +23,12 @@ const MAX_LENGTH = 280;
 export interface JokeCommentsModalProps {
   jokeId: string;
   jokeSetup: string;
+  /**
+   * The punchline, when the joke has a separate one (one-liners omit it).
+   * Shown via a header reveal so commenters can look at the answer without
+   * closing the modal and flipping the card.
+   */
+  jokePunchline?: string | undefined;
   /** Called after a successful post so the card's 💬 chip can update. */
   onPosted?: () => void;
   onClose: () => void;
@@ -31,6 +37,7 @@ export interface JokeCommentsModalProps {
 export default function JokeCommentsModal({
   jokeId,
   jokeSetup,
+  jokePunchline,
   onPosted,
   onClose,
 }: JokeCommentsModalProps) {
@@ -39,6 +46,7 @@ export default function JokeCommentsModal({
   const [name, setName] = useState('');
   const [posting, setPosting] = useState(false);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [punchlineShown, setPunchlineShown] = useState(false);
 
   useEffect(() => {
     setName(getGuestName());
@@ -141,6 +149,17 @@ export default function JokeCommentsModal({
               💬 Joke replies
             </p>
             <p className="truncate text-sm font-bold text-gray-800">{jokeSetup}</p>
+            {jokePunchline &&
+              (punchlineShown ? (
+                <p className="truncate text-xs font-semibold text-orange-500">🎬 {jokePunchline}</p>
+              ) : (
+                <button
+                  onClick={() => setPunchlineShown(true)}
+                  className="text-xs font-bold text-orange-400 transition-colors hover:text-orange-500 hover:underline"
+                >
+                  Show punchline
+                </button>
+              ))}
           </div>
           <button
             onClick={onClose}

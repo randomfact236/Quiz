@@ -4,6 +4,23 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — jokes comments modal: punchline reveal completed (2026-09-05)
+
+- **Finished the leftover WIP** in the working tree: `JokeCommentsModal` gained an optional
+  `jokePunchline` prop with a "Show punchline" header reveal, so commenters can see the answer
+  without closing the modal and flipping the card; `jokes/page.tsx` passes it for non-one-liners
+  only (`isOneLiner ? undefined : punchline`). The modal is conditionally mounted per joke, so the
+  reveal state resets on every open.
+- **New test** `joke-comments-modal.test.tsx` (3 cases): reveal on demand, one-liners offer no
+  reveal, fresh mount starts hidden. Also fixed the stale `@/lib/riddle-resume` import in
+  `riddle-resume.test.ts` (module is now `@/lib/riddle-persistence`).
+- **Verified:** frontend `tsc` clean; jest 181/181 (was 178); `/jokes` renders on the dev server
+  and the jokes API probed 200. Browser-side modal click-through was attempted via the in-app
+  browser but abandoned — the IAB kept resetting tabs to about:blank mid-flow (flaky localhost
+  goto + intermittent localStorage denials in fresh tabs); the Jest coverage above pins the
+  behavior deterministically instead.
+- **Uncommitted** (feature-scoped): the two jokes files + both touched tests.
+
 ### Run summary — stale-backlog closeout: Newsletter admin tab (2026-09-05)
 
 - **Built:** `NewsletterSection` admin tab (sidebar: Newsletter, `?section=newsletter`) —
