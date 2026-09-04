@@ -31,7 +31,8 @@ import {
 } from './analytics/tabs';
 import type { AdminDashboard, RetentionCohort } from './analytics/types';
 
-const TABS = [
+/** Dashboard tabs — single source of truth, mirrored by the sidebar sub-menu. */
+export const ANALYTICS_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'quiz-mcq', label: 'Quiz MCQ' },
   { id: 'riddle-mcq', label: 'Riddle MCQ' },
@@ -42,6 +43,8 @@ const TABS = [
   { id: 'retention', label: 'Retention' },
   { id: 'events', label: 'Raw Events' },
 ] as const;
+
+const TABS = ANALYTICS_TABS;
 
 type TabId = (typeof TABS)[number]['id'];
 
@@ -60,6 +63,15 @@ export function AnalyticsSection() {
     (TABS.find((t) => t.id === searchParams.get('tab'))?.id ?? 'overview') as TabId
   );
   const [days, setDays] = useState<number>(30);
+
+  // Sidebar sub-menu deep-links change only the ?tab= param while this section
+  // is already mounted — follow the URL so the dashboard shows that tab.
+  const urlTab = searchParams.get('tab');
+  useEffect(() => {
+    if (!urlTab) return;
+    const match = TABS.find((t) => t.id === urlTab)?.id as TabId | undefined;
+    if (match && match !== tab) setTab(match);
+  }, [urlTab, tab]);
   const [data, setData] = useState<AdminDashboard | null>(null);
   const [retention, setRetention] = useState<RetentionCohort[]>([]);
   const [loading, setLoading] = useState(true);

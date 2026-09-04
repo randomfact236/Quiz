@@ -20,6 +20,7 @@ import {
   MessageSquare,
   BarChart3,
   Mail,
+  Search,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -35,6 +36,8 @@ import {
   AdminUsersSection,
   MediaLibrarySection,
   AnalyticsSection,
+  ANALYTICS_TABS,
+  SeoSection,
   SummarySection,
   NewsletterSection,
 } from './components';
@@ -66,6 +69,8 @@ export default function AdminPage(): JSX.Element {
   const [isHydrated, setIsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [otherModulesExpanded, setOtherModulesExpanded] = useState(true);
+  // Analytics sub-menu (dashboard tabs) — expanded by default, collapsible.
+  const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
   const { subjects: dbSubjects } = useQuizMcqSubjects();
@@ -144,6 +149,7 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'media' ||
         urlSection === 'comments' ||
         urlSection === 'newsletter' ||
+        urlSection === 'seo' ||
         urlSection === 'analytics'
       ) {
         setActiveSection(urlSection as MenuSection);
@@ -183,6 +189,7 @@ export default function AdminPage(): JSX.Element {
       'media',
       'comments',
       'newsletter',
+      'seo',
       'analytics',
     ].includes(urlSection);
 
@@ -203,12 +210,25 @@ export default function AdminPage(): JSX.Element {
 
   // URL update helper - replaces localStorage.setItem
   const updateURL = useCallback(
-    (params: { section?: string; subject?: string | null; chapter?: string | null }) => {
+    (params: {
+      section?: string;
+      subject?: string | null;
+      chapter?: string | null;
+      tab?: string | null;
+    }) => {
       const currentParams = searchParamsRef.current.toString();
       const newParams = new URLSearchParams(currentParams);
 
       if (params.section) {
         newParams.set('section', params.section);
+        // The analytics tab deep-link only means something inside analytics —
+        // leaving it on other sections would re-open that tab later.
+        if (params.section !== 'analytics') newParams.delete('tab');
+      }
+      if (params.tab !== undefined && params.tab !== null) {
+        newParams.set('tab', params.tab);
+      } else if (params.tab === null) {
+        newParams.delete('tab');
       }
       if (params.subject !== undefined && params.subject !== null) {
         newParams.set('subject', params.subject);
@@ -374,13 +394,6 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'users' })}
           />
           <MenuItem
-            icon={<BarChart3 className="w-5 h-5" />}
-            label="Analytics"
-            active={activeSection === 'analytics'}
-            expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'analytics' })}
-          />
-          <MenuItem
             icon={<ImagePlus className="w-5 h-5" />}
             label="Media"
             active={activeSection === 'media'}
@@ -400,6 +413,52 @@ export default function AdminPage(): JSX.Element {
             active={activeSection === 'newsletter'}
             expanded={sidebarOpen}
             onClick={() => updateURL({ section: 'newsletter' })}
+          />
+          {/* Analytics + collapsible dashboard-tab sub-menu (deep-links ?tab=) */}
+          <MenuItem
+            icon={<BarChart3 className="w-5 h-5" />}
+            label="Analytics"
+            active={activeSection === 'analytics'}
+            expanded={sidebarOpen}
+            onClick={() => {
+              setAnalyticsExpanded(true);
+              updateURL({ section: 'analytics', tab: 'overview' });
+            }}
+            trailing={
+              <ChevronDown
+                className={`w-3 h-3 transition-transform ${analyticsExpanded ? 'rotate-180' : ''}`}
+              />
+            }
+            onTrailingClick={() => setAnalyticsExpanded((v) => !v)}
+          />
+          {sidebarOpen && analyticsExpanded && (
+            <div className="mb-1 ml-11 mr-2 space-y-0.5 border-l border-gray-800 pl-3">
+              {ANALYTICS_TABS.map((t) => {
+                const activeAnalyticsTab = searchParams.get('tab') ?? 'overview';
+                const isActive = activeSection === 'analytics' && activeAnalyticsTab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => updateURL({ section: 'analytics', tab: t.id })}
+                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${
+                      isActive
+                        ? 'bg-gray-800 font-semibold text-cyan-300'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {/* SEO — sits between Analytics and Settings */}
+          <MenuItem
+            icon={<Search className="w-5 h-5" />}
+            label="SEO"
+            active={activeSection === 'seo'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'seo' })}
           />
           <MenuItem
             icon={<Settings className="w-5 h-5" />}
@@ -478,6 +537,11 @@ export default function AdminPage(): JSX.Element {
                   <BarChart3 className="w-6 h-6" /> Analytics
                 </>
               )}
+              {activeSection === 'seo' && (
+                <>
+                  <Search className="w-6 h-6" /> SEO
+                </>
+              )}
               {(subjects.some((s) => s.slug === activeSection) || activeSection === 'quiz-mcq') && (
                 <>
                   <span className="text-2xl">
@@ -553,6 +617,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'media' && <MediaLibrarySection />}
           {activeSection === 'comments' && <CommentsSection />}
           {activeSection === 'newsletter' && <NewsletterSection />}
+          {activeSection === 'seo' && <SeoSection />}
           {activeSection === 'settings' && <SettingsSection />}
           {activeSection === 'analytics' && <AnalyticsSection />}
         </div>
@@ -570,12 +635,18 @@ function MenuItem({
   active,
   expanded,
   onClick,
+  trailing,
+  onTrailingClick,
 }: {
   icon: React.ReactNode;
   label: string;
   active: boolean;
   expanded: boolean;
   onClick: () => void;
+  /** Optional right-aligned affordance (e.g. expand chevron). Rendered only when expanded. */
+  trailing?: React.ReactNode;
+  /** Invoked when the trailing affordance is activated (stops propagation — the row click still navigates). */
+  onTrailingClick?: () => void;
 }): JSX.Element {
   return (
     <button
@@ -586,6 +657,30 @@ function MenuItem({
     >
       <span className="flex items-center justify-center w-5 h-5">{icon}</span>
       {expanded && <span>{label}</span>}
+      {expanded && trailing && onTrailingClick && (
+        <span
+          role="button"
+          tabIndex={0}
+          aria-label={`Toggle ${label} sub-menu`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTrailingClick();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.stopPropagation();
+              e.preventDefault();
+              onTrailingClick();
+            }
+          }}
+          className="ml-auto rounded p-1 hover:bg-gray-700"
+        >
+          {trailing}
+        </span>
+      )}
+      {expanded && trailing && !onTrailingClick && (
+        <span className="ml-auto flex items-center">{trailing}</span>
+      )}
     </button>
   );
 }
