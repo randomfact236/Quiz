@@ -4,6 +4,19 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — stale-backlog closeout: Newsletter admin tab (2026-09-05)
+
+- **Built:** `NewsletterSection` admin tab (sidebar: Newsletter, `?section=newsletter`) —
+  subscriber list with active/unsubscribed/all filters, email search, pagination and CSV
+  export via `GET /newsletter/export`. Consumes the previously-unused newsletter admin
+  endpoints; this closes the last unfinished item from the "already done" backlog audit.
+- **BACKLOG.md rewritten** (now committed) to match verified code state: done items moved to a
+  closed checklist; the true remaining backlog is riddle server-side sessions, achievements for
+  image-riddles/jokes (needs owner decision on definitions), JokesSection pattern unification,
+  CSV import/export consistency, sidebar grouping, retention tests, per-question accuracy join.
+- **Verified:** tsc clean; `/admin?section=newsletter` compiles via dev server; list + export
+  endpoints probed live with an admin JWT (real rows + CSV returned).
+
 ### Run summary — tabbed analytics dashboard + geo/device capture (2026-09-04)
 
 - **Built:** admin Analytics reworked into a dark tabbed dashboard (Overview / Quiz MCQ / Riddle MCQ /

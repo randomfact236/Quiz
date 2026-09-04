@@ -5,6 +5,7 @@ export { AdminGuard } from './AdminGuard';
 export { SettingsSection } from './SettingsSection';
 export { RiddleSidebar } from './RiddleSidebar';
 export { AdminUsersSection } from './AdminUsersSection';
+export { NewsletterSection } from './NewsletterSection';
 export { MediaLibrarySection } from './MediaLibrarySection';
 export { AnalyticsSection } from './AnalyticsSection';
 

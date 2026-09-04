@@ -19,6 +19,7 @@ import {
   ExternalLink,
   MessageSquare,
   BarChart3,
+  Mail,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -35,6 +36,7 @@ import {
   MediaLibrarySection,
   AnalyticsSection,
   SummarySection,
+  NewsletterSection,
 } from './components';
 import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
@@ -141,6 +143,7 @@ export default function AdminPage(): JSX.Element {
         urlSection === 'quiz-mcq' ||
         urlSection === 'media' ||
         urlSection === 'comments' ||
+        urlSection === 'newsletter' ||
         urlSection === 'analytics'
       ) {
         setActiveSection(urlSection as MenuSection);
@@ -179,6 +182,7 @@ export default function AdminPage(): JSX.Element {
       'quiz-mcq',
       'media',
       'comments',
+      'newsletter',
       'analytics',
     ].includes(urlSection);
 
@@ -391,6 +395,13 @@ export default function AdminPage(): JSX.Element {
             onClick={() => updateURL({ section: 'comments' })}
           />
           <MenuItem
+            icon={<Mail className="w-5 h-5" />}
+            label="Newsletter"
+            active={activeSection === 'newsletter'}
+            expanded={sidebarOpen}
+            onClick={() => updateURL({ section: 'newsletter' })}
+          />
+          <MenuItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"
             active={activeSection === 'settings'}
@@ -450,6 +461,11 @@ export default function AdminPage(): JSX.Element {
               {activeSection === 'comments' && (
                 <>
                   <MessageSquare className="w-6 h-6" /> Comments Moderation
+                </>
+              )}
+              {activeSection === 'newsletter' && (
+                <>
+                  <Mail className="w-6 h-6" /> Newsletter Subscribers
                 </>
               )}
               {activeSection === 'settings' && (
@@ -536,6 +552,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'users' && <AdminUsersSection />}
           {activeSection === 'media' && <MediaLibrarySection />}
           {activeSection === 'comments' && <CommentsSection />}
+          {activeSection === 'newsletter' && <NewsletterSection />}
           {activeSection === 'settings' && <SettingsSection />}
           {activeSection === 'analytics' && <AnalyticsSection />}
         </div>
