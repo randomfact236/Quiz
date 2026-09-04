@@ -102,4 +102,31 @@ export const settings = {
       pattern: 'riddles:*',
     },
   },
+  seo: {
+    // Site-wide metadata consumed by the frontend root layout (generateMetadata).
+    // Empty strings mean "not set" — the frontend falls back to its built-ins.
+    siteName: 'AI Quiz',
+    titleDefault: 'AI Quiz - Interactive Learning Platform',
+    titleTemplate: '%s | AI Quiz',
+    description:
+      'Enterprise-grade interactive quiz platform with science quizzes, dad jokes, riddles, and more. Test your knowledge and have fun!',
+    keywords: [
+      'quiz',
+      'trivia',
+      'science quiz',
+      'dad jokes',
+      'riddles',
+      'learning',
+      'education',
+      'interactive',
+    ],
+    ogImageUrl: '',
+    twitterHandle: '',
+    googleSiteVerification: '',
+    // Per-platform social-card overrides — the fallback chain is
+    // page content → platform override → global fallback → auto-generated image.
+    facebook: { image: '', title: '', description: '' },
+    twitter: { image: '', title: '', description: '' },
+    google: { description: '' },
+  },
 };

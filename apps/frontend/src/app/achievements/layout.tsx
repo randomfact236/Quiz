@@ -2,17 +2,14 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
-import { breadcrumbJsonLd } from '@/lib/seo';
+import { breadcrumbJsonLd, MODULE_META } from '@/lib/seo';
 
 const BREADCRUMBS = [
   { name: 'Home', path: '/' },
-  { name: 'Image Riddles', path: '/image-riddles' },
+  { name: 'Achievements', path: '/achievements' },
 ];
 
-export const metadata: Metadata = {
-  title: 'Image Riddles - AI Quiz Platform',
-  description: 'Challenge your visual perception with image-based riddles and puzzles!',
-};
+export const metadata: Metadata = MODULE_META['achievements'];
 
 export default function Layout({ children }: { children: ReactNode }): JSX.Element {
   return (

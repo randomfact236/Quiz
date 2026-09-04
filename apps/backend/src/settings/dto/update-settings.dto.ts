@@ -360,6 +360,82 @@ class RiddlesSettingsDto {
 }
 
 /**
+ * Per-platform social-card override DTO (empty string = use global fallback)
+ */
+class SeoPlatformOverrideDto {
+  @IsOptional()
+  @IsString()
+  image?: string;
+
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+class SeoGoogleOverrideDto {
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+/**
+ * SEO metadata settings DTO
+ */
+class SeoSettingsDto {
+  @IsOptional()
+  @IsString()
+  siteName?: string;
+
+  @IsOptional()
+  @IsString()
+  titleDefault?: string;
+
+  @IsOptional()
+  @IsString()
+  titleTemplate?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywords?: string[];
+
+  @IsOptional()
+  @IsString()
+  ogImageUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  twitterHandle?: string;
+
+  @IsOptional()
+  @IsString()
+  googleSiteVerification?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SeoPlatformOverrideDto)
+  facebook?: SeoPlatformOverrideDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SeoPlatformOverrideDto)
+  twitter?: SeoPlatformOverrideDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SeoGoogleOverrideDto)
+  google?: SeoGoogleOverrideDto;
+}
+
+/**
  * Settings update DTO with validation
  *
  * @description Validates all incoming settings updates to ensure
@@ -391,6 +467,11 @@ export class UpdateSettingsDto {
   @ValidateNested()
   @Type(() => RiddlesSettingsDto)
   riddles?: RiddlesSettingsDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SeoSettingsDto)
+  seo?: SeoSettingsDto;
 }
 
 /**
@@ -403,6 +484,7 @@ export const ALLOWED_SETTING_KEYS = [
   'imageRiddles',
   'quiz',
   'riddles',
+  'seo',
 ] as const;
 
 export type AllowedSettingKey = (typeof ALLOWED_SETTING_KEYS)[number];

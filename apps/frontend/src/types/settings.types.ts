@@ -221,6 +221,49 @@ export interface RiddlesSettings {
 }
 
 /**
+ * Per-platform social-card override (empty strings = use the global fallback)
+ */
+export interface SeoSocialOverride {
+  /** Absolute or /uploads/... image URL */
+  image: string;
+  title: string;
+  description: string;
+}
+
+/**
+ * Google shows only a description (title comes from the page's <title>)
+ */
+export interface SeoGoogleOverride {
+  description: string;
+}
+
+/**
+ * Site-wide SEO metadata (consumed by the root layout's generateMetadata)
+ */
+export interface SeoSettings {
+  /** Brand name used in OG siteName and fallbacks */
+  siteName: string;
+  /** Homepage <title> */
+  titleDefault: string;
+  /** Next.js title template, `%s` is the page title */
+  titleTemplate: string;
+  /** Default meta description */
+  description: string;
+  /** Meta keywords */
+  keywords: string[];
+  /** Absolute URL to the social-share image; empty = none */
+  ogImageUrl: string;
+  /** Twitter @handle without the @; empty = none */
+  twitterHandle: string;
+  /** Google Search Console verification token; empty = none */
+  googleSiteVerification: string;
+  /** Per-platform overrides (fallback chain: page → override → global → auto image) */
+  facebook: SeoSocialOverride;
+  twitter: SeoSocialOverride;
+  google: SeoGoogleOverride;
+}
+
+/**
  * Complete system settings structure
  */
 export interface SystemSettings {
@@ -234,6 +277,8 @@ export interface SystemSettings {
   quiz: QuizSettings;
   /** Riddles module settings */
   riddles: RiddlesSettings;
+  /** Site-wide SEO metadata */
+  seo: SeoSettings;
 }
 
 /**
@@ -273,7 +318,6 @@ export interface SettingsUpdateResponse {
  * Settings tab identifiers for admin panel
  */
 export type SettingsTab = 'general' | 'quiz-mcq' | 'jokes' | 'riddles' | 'imageRiddles';
-
 /**
  * Settings form data type (partial system settings for form handling)
  */

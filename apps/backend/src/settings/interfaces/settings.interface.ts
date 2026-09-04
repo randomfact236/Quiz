@@ -173,6 +173,43 @@ export interface RiddlesSettings {
 }
 
 /**
+ * Per-platform social-card override; empty strings mean "use the global fallback"
+ */
+export interface SeoPlatformOverride {
+  image: string;
+  title: string;
+  description: string;
+}
+
+/**
+ * Google shows only a description (title comes from the page's <title>)
+ */
+export interface SeoGoogleOverride {
+  description: string;
+}
+
+/**
+ * Site-wide SEO metadata (rendered into the root layout's meta tags)
+ */
+export interface SeoSettings {
+  siteName: string;
+  titleDefault: string;
+  /** Next.js title template, `%s` is the page title */
+  titleTemplate: string;
+  description: string;
+  keywords: string[];
+  /** Absolute URL to the social-share image; empty = none */
+  ogImageUrl: string;
+  /** @handle without the @; empty = none */
+  twitterHandle: string;
+  /** Google Search Console verification token; empty = none */
+  googleSiteVerification: string;
+  facebook: SeoPlatformOverride;
+  twitter: SeoPlatformOverride;
+  google: SeoGoogleOverride;
+}
+
+/**
  * Complete application settings structure
  */
 export interface AppSettings {
@@ -181,6 +218,7 @@ export interface AppSettings {
   imageRiddles: ImageRiddlesSettings;
   quiz: QuizSettings;
   riddles: RiddlesSettings;
+  seo: SeoSettings;
   [key: string]: unknown;
 }
 
