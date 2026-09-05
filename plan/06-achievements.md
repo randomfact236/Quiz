@@ -5,15 +5,21 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. **No archived ledger doc existed for this feature**
+> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (unlocks seeded via the sync endpoint for guest `e2e-achiever`). **No archived ledger doc existed for this feature**
 > (`docs/features/archive/` has no achievements file) — this file is built entirely from current code.
 
 ---
 
 ## 1. File inventory
 
-Backend: **none**. There is no achievements module, table, or endpoint anywhere in
-`apps/backend/src` (verified by grep). Achievements are a pure frontend feature.
+Backend (apps/backend/src/achievements/) — **BUILT 2026-08-30, re-verified 2026-09-05** (the original 'backend: none' claim predates P1 #3):
+
+| File                                                    | Purpose                                                                                                                                                                |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `achievements.module.ts` + `achievements.controller.ts` | `POST /achievements/sync` (idempotent upsert, optional JWT/guest attribution, 20/min) + `GET /achievements/unlocks`                                                    |
+| `achievements.service.ts`                               | Upsert with earlier-timestamp-wins; **2026-09-05: drops unknown achievement ids** against a mirror of the client id list (buggy clients can't accumulate garbage rows) |
+| `entities/achievement-unlock.entity.ts`                 | `user_achievements`: UNIQUE (userId                                                                                                                                    | guestId, achievementId), unlockedAt |
+| `dto/sync-achievements.dto.ts`                          | Batch (max 100) of {achievementId, unlockedAt} + guestId                                                                                                               |
 
 Frontend (`apps/frontend/src/`):
 
@@ -46,9 +52,9 @@ Frontend (`apps/frontend/src/`):
 
 ## 3. Current status (verified)
 
-**Done:** complete client-side unlock store with timestamps; 10 achievements defined; evaluation + toast wiring on quiz-mcq completion; `/achievements` page with progress bars and locked/unlocked styling; (uncommitted) `achievement_unlocked` analytics events emitted per unlock with module `quiz-mcq`.
+**Done:** complete client-side unlock store with timestamps; 10 achievements defined; evaluation + toast wiring on quiz-mcq AND riddle-mcq completion; `/achievements` page with progress bars and locked/unlocked styling; committed `achievement_unlocked` analytics events per unlock; **server-side sync built and verified** (idempotent upsert with user/guest attribution + unlocks readback).
 
-**Gaps:** achievements are evaluated **only** from quiz-mcq history — riddle-mcq and image-riddles completions never reach the system (riddle-mcq has no `checkAchievements` call at all, verified). Everything is localStorage-only: no user linkage, no cross-device sync, no backend. The `aiquiz:riddle-achievements` storage key suggests planned riddle achievements that were never built.
+**Remaining gaps (2026-09-05):** image-riddles completions still don't feed achievements (owner decision on semantics — see P1 #1); localStorage remains the live source of truth with the server as a fire-and-forget mirror (no read-back/re-hydration path yet — unlocks synced from another device won't appear locally).
 
 ## 4. Task breakdown
 
@@ -67,7 +73,7 @@ Frontend (`apps/frontend/src/`):
 - [x] **`chapter_complete` evaluator fixed** — DONE in the feature-02 pass (commit `88f1964`): counts DISTINCT chapters with a perfect session (was an exact Perfect Score duplicate).
 - [x] **`subject_explore` semantics** — VERIFIED ALREADY MATCHES 2026-08-30: the description says "complete at least one chapter", and `saveQuizResult` defines chapter completion as `score > 0` — so counting subjects with any positive-score session IS chapter-completion counting. Documented in the evaluator; no behavior change available to make.
 - [x] **Progress math for every condition** — DONE 2026-08-30: `getAchievementProgress` now computes speed_run (fastest run vs target), chapter_complete (distinct perfect chapters), streak (tracker best), retry (max attempts per chapter) on the combined history; 6 new tests.
-- [ ] Commit the `achievement_unlocked` `track()` call in `useQuizMcq.ts` — **deferred (owner decision 2026-08-30, mirrored from features 02/03)**: the call already exists and runs.
+- [x] Analytics parity — RESOLVED 2026-09-05 (supersedes the deferral): `achievement_unlocked` is committed in both engines.
 - [x] **Dedicated evaluator tests** — DONE 2026-08-30: `__tests__/achievements.test.ts` (9 tests: conditions + progress math) plus riddle-integration cases in `riddle-progress.test.ts`.
 
 ### P3 — polish / tech debt
@@ -79,7 +85,18 @@ Frontend (`apps/frontend/src/`):
 
 ## 5. Cross-feature touchpoints
 
-- **MCQ Quiz** — sole unlock trigger today (`useQuizMcq.saveToHistory`); also the source of the (uncommitted) analytics events.
-- **Riddle MCQ / Image Riddles** — no wiring (P1 gap); `RIDDLE_ACHIEVEMENTS` key is an unused placeholder.
-- **Analytics** — `achievement_unlocked` events (uncommitted) with module `quiz-mcq`.
-- **User Accounts** — none: achievements are anonymous/local; linking them to accounts depends on the P1 server-persistence work.
+- **MCQ Quiz + Riddle MCQ** — unlock triggers (`saveToHistory` / riddle submit); source of the committed `achievement_unlocked` events.
+- **Riddle MCQ** — wired (combined evaluator); **Image Riddles** — not wired (owner decision on semantics, P1 #1).
+- **Analytics** — `achievement_unlocked` events (committed) with module `quiz-mcq`.
+- **User Accounts** — server-side attribution exists: unlocks attribute to the JWT user or the guest id, synced via `POST /achievements/sync`. Cross-device re-hydration (server → localStorage) is not built.
+
+## 6. Extras (2026-09-05 audit — noted, not acted on)
+
+- **Seeded test data:** guest `e2e-achiever` holds first-steps, speed-demon, accuracy-expert
+  (synced via the endpoint) — kept for manual checks. Two underscore-id junk rows from a bad
+  probe were deleted; the sync now drops unknown ids server-side (new allowlist mirrors the
+  client list — keep the two in sync if achievements ever change).
+- **Server→client re-hydration not built:** the sync is one-way (client → server). If
+  cross-device continuity matters, `GET /achievements/unlocks` should merge into localStorage on
+  login — small follow-up, needs an owner nod.
+- **Image-riddles semantics decision still open** (P1 #1) — the last unwired content module.

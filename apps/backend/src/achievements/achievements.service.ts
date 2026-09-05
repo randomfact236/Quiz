@@ -7,6 +7,25 @@ import type { SyncAchievementsDto } from './dto/sync-achievements.dto';
 
 @Injectable()
 export class AchievementsService {
+  /**
+   * Mirror of the client-side achievement ids (lib/achievements.ts — 9 stable
+   * definitions, hardcoded by design per plan/06 P3). Unknown ids are dropped
+   * so buggy/rogue clients can't accumulate garbage rows that would never
+   * match a real unlock.
+   */
+  private static readonly KNOWN_ACHIEVEMENT_IDS = new Set([
+    'first-steps',
+    'quiz-enthusiast',
+    'quiz-master',
+    'perfect-score',
+    'speed-demon',
+    'chapter-champion',
+    'subject-explorer',
+    'streak-master',
+    'persistence',
+    'accuracy-expert',
+  ]);
+
   constructor(
     @InjectRepository(AchievementUnlock)
     private readonly unlockRepo: Repository<AchievementUnlock>
@@ -24,6 +43,9 @@ export class AchievementsService {
 
     let synced = 0;
     for (const unlock of dto.unlocks) {
+      if (!AchievementsService.KNOWN_ACHIEVEMENT_IDS.has(unlock.achievementId)) {
+        continue;
+      }
       const existing = await this.unlockRepo.findOne({
         where: {
           achievementId: unlock.achievementId,
