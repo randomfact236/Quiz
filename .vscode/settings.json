@@ -2,5 +2,11 @@
     "chat.tools.terminal.autoApprove": {
         "Test-NetConnection": true,
         "Get-NetFirewallRule": true
+    },
+    "livePreview.defaultPreviewPath": "/designs/index.html",
+    "livePreview.openPreviewTarget": "Embedded Preview",
+    "workbench.startupEditor": "none",
+    "files.associations": {
+        "*.html": "html"
     }
 }

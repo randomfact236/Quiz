@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Quiz — Landing Design Concepts</title>
+<style>
+  :root{--bg:#101423;--card:#1a2036;--stroke:#2c3352;--text:#e8ecff;--muted:#9aa5d1}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  .wrap{max-width:1150px;margin:0 auto;padding:40px 24px 70px}
+  h1{font-size:2.2rem;margin-bottom:8px}
+  .logo span{background:linear-gradient(90deg,#22d3ee,#7c6cff,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);margin-bottom:36px;line-height:1.6;max-width:640px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+  a.tile{display:block;background:var(--card);border:1px solid var(--stroke);border-radius:18px;overflow:hidden;text-decoration:none;color:var(--text);transition:transform .2s,border-color .2s}
+  a.tile:hover{transform:translateY(-5px);border-color:#7c6cff}
+  .preview{height:190px;display:flex;align-items:center;justify-content:center;font-size:3.4rem;border-bottom:1px solid var(--stroke)}
+  .p1{background:radial-gradient(circle at 30% 40%,#7c6cff33,#070b1a),#070b1a}
+  .p2{background:repeating-linear-gradient(45deg,#ffd6f5 0 24px,#fff3c4 24px 48px)}
+  .p3{background:linear-gradient(135deg,#ffd6f5,#d4f0ff)}
+  .p4{background:radial-gradient(circle at 60% 40%,#ff2ec42e,#0b031c),#0b031c}
+  .p5{background:linear-gradient(160deg,#faf9f6,#f1efe9)}
+  .meta{padding:20px 22px}
+  .meta .no{font-size:.72rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase}
+  .meta h2{font-size:1.25rem;margin:6px 0 8px}
+  .meta p{color:var(--muted);font-size:.9rem;line-height:1.55}
+  .howto{margin-top:44px;border:1px dashed var(--stroke);border-radius:14px;padding:22px;color:var(--muted);font-size:.92rem;line-height:1.7}
+  .howto b{color:var(--text)}
+  code{background:var(--card);padding:2px 8px;border-radius:6px;font-size:.85rem}
+  a{color:#7cc8ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AI Quiz — <span class="logo">Landing design concepts</span></h1>
+  <p class="sub">Five self-contained design directions for the quiz website homepage. Each file is a single, dependency-free HTML page with inline CSS — open any of them directly in the IDE preview or a browser.</p>
+
+  <div class="grid">
+    <a class="tile" href="01-aurora-glass.html">
+      <div class="preview p1">🌌</div>
+      <div class="meta">
+        <div class="no">Design 01</div>
+        <h2>Aurora Glass</h2>
+        <p>Dark glassmorphism with animated aurora blobs, gradient headline, glass game cards and neon stats. Premium night-mode feel.</p>
+      </div>
+    </a>
+    <a class="tile" href="02-neo-brutalist.html">
+      <div class="preview p2">🟥</div>
+      <div class="meta">
+        <div class="no">Design 02</div>
+        <h2>Neo Brutalist</h2>
+        <p>Chunky black borders, hard shadows, sticker emojis, scrolling marquee. Loud, playful and impossible to ignore.</p>
+      </div>
+    </a>
+    <a class="tile" href="03-pastel-playful.html">
+      <div class="preview p3">🌸</div>
+      <div class="meta">
+        <div class="no">Design 03</div>
+        <h2>Pastel Playful</h2>
+        <p>Soft pastel blobs, rounded cards, gentle shadows and a friendly wave. Approachable and kid-safe feeling.</p>
+      </div>
+    </a>
+    <a class="tile" href="04-retro-arcade.html">
+      <div class="preview p4">🕹️</div>
+      <div class="meta">
+        <div class="no">Design 04</div>
+        <h2>Retro Arcade</h2>
+        <p>CRT scanlines, starfield, neon glow text, INSERT COIN energy and per-game high scores. Full 80s cabinet vibe.</p>
+      </div>
+    </a>
+    <a class="tile" href="05-editorial-minimal.html">
+      <div class="preview p5">📰</div>
+      <div class="meta">
+        <div class="no">Design 05</div>
+        <h2>Editorial Minimal</h2>
+        <p>Serif italic headlines, numbered sections, hairline rules, generous whitespace. Quiet, confident, premium.</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="howto">
+    <b>How to use these:</b> every file is standalone HTML + CSS (no build step). Open any file in the IDE and hit
+    <code>Alt+D</code> / right-click → <i>Open in browser</i>, or just double-click it. All five share the same
+    real site content (Quiz MCQ · Riddle MCQ · Image Riddles · Dad Jokes · live stats · Joke of the Day), so they're
+    drop-in comparisons for redesigning <code>app/page.tsx</code>.
+  </div>
+</div>
+</body>
+</html>
