@@ -5,7 +5,7 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. **No archived ledger doc existed for this feature**
+> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (role-aware single login landed; all sections swept in the browser). **No archived ledger doc existed for this feature**
 > (`docs/features/archive/` has no admin-dashboard file) — this file is built entirely from current code.
 > Note: the per-content admin CRUD surfaces have their own files (01–04); this file covers the shell,
 > navigation, guard, and the non-content sections.
@@ -49,7 +49,7 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 
 **Done:** full section navigation (10 sections) with URL sync; separate admin login; client-side role gate; every content feature has a working management UI (quiz-mcq incl. per-subject views, riddle-mcq, image-riddles, jokes); moderation (comments), media library, users, settings, analytics sections all render live data from their APIs; backend enforces admin on every surface (client JWT decode is convenience, not the security boundary).
 
-**Gaps:** the **Summary landing section is a "Coming Soon" placeholder** — the dashboard opens on an empty page; user administration (role change, delete) has endpoints but no editing UI (the users section is read-only lists); the standalone `/admin/users` page and the in-dashboard users section are two copies of the same thing; jokes management uses a different data pattern (localStorage-backed props) than every other section.
+**Remaining gaps (2026-09-05):** the jokes management data pattern (props + useAdminData localStorage hybrid) still differs from every other section (P2 deferral stands); admin-shell unit tests remain deferred; **auth flow updated 2026-09-05** — admins logging in on the main /login land straight here (role-aware single login), and /admin with no admin session bounces instantly to /admin/login.
 
 ## 3. Task breakdown
 
@@ -84,3 +84,18 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 - **Site Settings (11)** — SettingsSection is an admin dashboard section.
 - **Media** — MediaLibrarySection + `lib/media-api` over the JWT-guarded media module; used by the image-riddles form.
 - **Comments** — CommentsSection moderation over `lib/comments-api`.
+
+## 6. Extras (2026-09-05 F12 five-step pass — noted, not acted on)
+
+- **Step 1 (seed) is N/A** — the dashboard manages other features' content, which was seeded in
+  the F02–F05 and F08 passes (Test Science, Brain Teasers, E2E Test category, 20 media assets,
+  20 test users).
+- **Browser section sweep (all render):** Summary, Quiz MCQ (per-subject tree), Users (21+
+  rows incl. the 20 seeded test users), Media Library (20 E2E assets), Settings, Comments,
+  Analytics (incl. the new Journey/Click Analysis tabs in the owner-chosen order). Admin
+  session restored via /admin/login with the reset dev credential (plan/01 §6).
+- **Analytics tab order is owner-set** (Overview / Users / Audience & Geo / Journey / Click
+  Analysis / Retention / per-game / Raw Events) — mirrored by the sidebar via ANALYTICS_TABS.
+- **Three orphan components removed** (SubjectList / SubjectEmptyState / SubjectLoadingState,
+  zero importers after the quiz-tree rebuild) — flagged ambiguous? No: confirmed zero
+  references repo-wide before deletion; git history preserves them.
