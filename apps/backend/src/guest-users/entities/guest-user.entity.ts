@@ -26,6 +26,14 @@ export class GuestUser {
   @Column({ nullable: true, default: 0 })
   totalScore: number;
 
+  /** Nickname shown in duels and the online players list (plan/17). */
+  @Column({ type: 'varchar', length: 32, nullable: true })
+  displayName: string | null;
+
+  /** Opt-out toggle for the challengeable-players list (default on). */
+  @Column({ default: true })
+  showInList: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

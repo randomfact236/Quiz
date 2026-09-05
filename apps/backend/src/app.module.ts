@@ -17,6 +17,7 @@ import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { DadJokesModule } from './dad-jokes/dad-jokes.module';
+import { DuelsModule } from './duels/duels.module';
 import { HealthModule } from './health/health.module';
 import { ImageRiddlesModule } from './image-riddles/image-riddles.module';
 import { MediaModule } from './media/media.module';
@@ -114,6 +115,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     GuestUsersModule,
     UsersModule,
     AuthModule,
+    DuelsModule,
     HealthModule,
     SettingsModule,
   ],
