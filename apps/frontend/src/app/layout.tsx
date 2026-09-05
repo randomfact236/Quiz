@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { Suspense } from 'react';
 
 import Footer from '@/components/Footer';
+import { HideOnAdmin } from '@/components/HideOnAdmin';
 import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
 import { NavigationProgress } from '@/components/NavigationProgress';
@@ -140,6 +141,16 @@ export default async function RootLayout({
   const seo = await getSeoSettings();
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* Apply the saved theme before first paint — the ThemeContext effect
+            would otherwise leave dark-mode users with a light flash. Mirrors
+            ThemeContext's resolution (stored | system). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('ai-quiz-theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="flex min-h-screen flex-col bg-white dark:bg-secondary-900 font-sans antialiased transition-colors duration-300">
         <JsonLd data={siteJsonLd(seo ?? {})} />
         <Suspense fallback={null}>
@@ -154,8 +165,10 @@ export default async function RootLayout({
           </a>
           <Header />
           <main className="flex flex-col flex-1">{children}</main>
-          <Footer />
-          <MobileFooter />
+          <HideOnAdmin>
+            <Footer />
+            <MobileFooter />
+          </HideOnAdmin>
         </Providers>
       </body>
     </html>
