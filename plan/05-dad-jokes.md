@@ -106,3 +106,16 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 - **Site Settings** — SettingsSection "Dad Jokes" tab (category emoji, cache TTL).
 - **Admin Dashboard** — `JokesSection` under the admin shell; shared BulkActionService + CacheService patterns.
 - **Guest users** — public voting and comments work without an account (guest-id convention).
+
+## 6. Extras (2026-09-05 F05 five-step pass — noted, not acted on)
+
+- **Seeded test content:** category **"E2E Test"** + 20 published dad jokes (classic one-liners)
+  via `POST /jokes/classic/bulk` — kept in the dev DB.
+- **Jokes bulk import has no `status` field** (CreateDadJokeDto) — bulk-created jokes land as
+  DRAFT and need `POST /jokes/classic/bulk-action` → publish. Same gap as image-riddles
+  (plan/04 §6); quiz and riddle imports DO accept `status`. Cross-module consistency candidate
+  if one-shot published imports are wanted.
+- **Voting contract re-verified live 2026-09-05** with a guest identity: like (+1), re-like
+  (no-op), switch (like −1 / dislike +1), remove (−1) — all four paths behave per P1 #1.
+- **Voting data note:** the pre-existing seed jokes carry large counters (e.g. the scarecrow
+  joke at 38 likes) from earlier bulk seeding — cosmetic.
