@@ -5,7 +5,7 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. No archived ledger doc existed for this feature —
+> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (20 assets seeded via the upload endpoint). No archived ledger doc existed for this feature —
 > built from current code. This file was added after the initial 9-file pass (user request); the
 > backend module was previously documented only as a fragment inside features 04 and 11.
 
@@ -43,7 +43,7 @@ Frontend (`apps/frontend/src/`):
 
 ## 3. Current status (verified)
 
-**Done:** working upload→convert→store→browse pipeline; local-disk storage with on-disk WebP; admin library UI with stats; picker integrated into the image-riddle form ("🖼️ Library" button in the Image URL field).
+**Done:** working upload→convert→store→browse pipeline (re-verified 2026-09-05 with 20 seeded uploads); local-disk storage; **original kept + WebP variant stored in `variants` JSONB** (url serves the variant; stats report storage savings from the conversion); admin library UI with stats and alt-text cards; picker integrated into the image-riddle form. Upload multipart contract is **file + alt only** (no name/description fields).
 
 **Gaps:** `imageUrl` on content is still a plain URL string — the DB has no FK to the media table, so nothing prevents deleting an asset that content still references; local disk storage only (no S3/presigned path); the picker is wired into **one** form only.
 
@@ -73,3 +73,14 @@ Frontend (`apps/frontend/src/`):
 - **Image Riddles (04)** — primary consumer: `MediaPicker` in the admin form; public page renders the stored URLs.
 - **Admin Dashboard (12)** — MediaLibrarySection + `lib/media-api` (whose error helper CommentsSection also reuses).
 - **Site Settings (11)** — storage backend choice would belong there if object storage lands.
+
+## 6. Extras (2026-09-05 F08 five-step pass — noted, not acted on)
+
+- **Seeded test content:** 20 uploads ("E2E test image N", alt text set) generated with sharp and
+  uploaded via the endpoint — kept in the dev DB (storage savings stats now reflect them).
+- **Upload multipart contract is `file` + `alt` only** — extra form fields (name/description) are
+  silently ignored; alt text is the only metadata an upload can carry (edited nowhere today).
+- **Delete E2E verified:** 20 nameless uploads deleted (204 each); stats dropped accordingly; the
+  referenced-asset 409 path stays covered by `media.service.spec.ts`.
+- **First probe gotcha:** the stats `total` counts all rows (drafts/status don't exist here), while
+  the plan's earlier "originalName/name/description" fields no longer exist — updated §1.
