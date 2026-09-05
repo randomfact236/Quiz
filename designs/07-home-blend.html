@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Quiz — Design 7: Current Home × Category Banners (Blend)</title>
+<style>
+  :root{
+    --ink:#3d3564; --muted:#7d76a0;
+    --g-top:#a5a3e4; --g-bottom:#bf7076;
+    --bar1:#c3b9f5; --bar2:#a79bf0;
+    --grad1:linear-gradient(135deg,#6d5bd0,#8f7bff);
+    --grad2:linear-gradient(135deg,#f062b6,#ff8ac2);
+    --grad3:linear-gradient(135deg,#38bdf8,#67e8f9);
+    --grad4:linear-gradient(135deg,#4ade80,#86efac);
+    --grad5:linear-gradient(135deg,#fb923c,#fbbf24);
+    --grad6:linear-gradient(135deg,#312e81,#4c1d95);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;
+    background:linear-gradient(180deg,var(--g-top) 0%,#b78fc9 45%,var(--g-bottom) 100%);
+    position:relative;overflow-x:hidden;
+  }
+  /* floating bubbles (current homepage) */
+  .bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.14);animation:rise 16s linear infinite;z-index:0}
+  .bubble:nth-child(1){width:120px;height:120px;left:6%;animation-duration:18s}
+  .bubble:nth-child(2){width:60px;height:60px;left:24%;animation-duration:12s;animation-delay:-4s}
+  .bubble:nth-child(3){width:90px;height:90px;right:10%;animation-duration:15s;animation-delay:-7s}
+  .bubble:nth-child(4){width:40px;height:40px;right:28%;animation-duration:11s;animation-delay:-2s}
+  .bubble:nth-child(5){width:150px;height:150px;left:45%;top:60%;animation-duration:22s;animation-delay:-9s;opacity:.5}
+  @keyframes rise{from{transform:translateY(40vh)}to{transform:translateY(-120vh)}}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+  .logo{font-weight:800;font-size:1.35rem;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.15)}
+  nav ul{display:flex;gap:22px;list-style:none;flex-wrap:wrap}
+  nav a{color:#fff;text-decoration:none;font-weight:600;font-size:.94rem;text-shadow:0 1px 4px rgba(0,0,0,.15)}
+  nav a:hover{opacity:.85}
+  .btn{display:inline-block;padding:10px 24px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-white{background:rgba(255,255,255,.92);color:#6d5bd0;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+
+  header{text-align:center;padding:46px 0 40px}
+  h1{font-size:clamp(2rem,4.5vw,3rem);color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.18);margin-bottom:10px}
+  h1 span{color:#ffe9a8}
+  .sub{color:rgba(255,255,255,.92);font-size:1.08rem;max-width:540px;margin:0 auto}
+
+  section{padding:20px 0 30px}
+  .card-shell{background:rgba(255,255,255,.96);border-radius:20px;padding:28px;box-shadow:0 12px 30px rgba(40,25,90,.22)}
+
+  /* ===== Category banners (design 06) inside white shell ===== */
+  .cat-shell{background:rgba(255,255,255,.96);border-radius:20px;padding:28px 28px 24px;box-shadow:0 12px 30px rgba(40,25,90,.22)}
+  .cat-title{font-size:1.5rem;font-weight:800;margin-bottom:2px}
+  .cat-title small{font-weight:600;color:var(--muted);font-size:.95rem}
+  .banner{
+    display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;
+    background:linear-gradient(90deg,var(--bar1),var(--bar2),var(--bar1));
+    border-radius:14px;padding:12px 24px;margin:22px 0 20px;
+    box-shadow:0 6px 16px rgba(109,91,208,.28);
+  }
+  .banner .line{flex:1;height:2px;background:rgba(255,255,255,.8);border-radius:2px}
+  .banner h3{font-size:1.12rem;letter-spacing:2px;text-transform:uppercase;color:#fff;white-space:nowrap;
+    text-shadow:0 2px 6px rgba(60,45,140,.45);font-weight:800}
+  .banner .chev{color:#fff;font-size:.95rem;transition:transform .25s}
+  .banner.closed .chev{transform:rotate(-90deg)}
+  .banner .count{background:#fff;color:#6d5bd0;font-size:.72rem;font-weight:800;border-radius:99px;padding:2px 10px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:18px}
+  .scard{
+    position:relative;border-radius:16px;min-height:112px;padding:12px 10px 11px;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;
+    color:#fff;text-align:center;text-decoration:none;
+    box-shadow:0 8px 18px rgba(61,53,100,.20);transition:transform .18s,box-shadow .18s;
+  }
+  .scard:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 14px 26px rgba(61,53,100,.3)}
+  .scard .emo{font-size:2.1rem;filter:drop-shadow(0 3px 4px rgba(0,0,0,.25));margin-bottom:auto;margin-top:6px}
+  .scard .name{font-weight:800;font-size:.98rem;text-shadow:0 2px 5px rgba(0,0,0,.3);line-height:1.2}
+  .scard .meta{font-size:.7rem;opacity:.88;font-weight:600}
+  .g1{background:var(--grad1)} .g2{background:var(--grad2)} .g3{background:var(--grad3)}
+  .g4{background:var(--grad4)} .g5{background:var(--grad5)} .g6{background:var(--grad6)}
+  .coming{cursor:default}
+  .coming .name,.coming .emo{opacity:.55}
+  .badge{position:absolute;top:9px;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);
+    font-size:.7rem;font-weight:800;padding:3px 11px;border-radius:99px;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.15)}
+  .dummy{outline:3px dashed rgba(255,255,255,.6);outline-offset:-7px}
+  .dummyTag{position:absolute;top:8px;right:8px;background:#ffe600;color:#3d3564;font-size:.65rem;font-weight:900;padding:2px 9px;border-radius:99px}
+
+  /* ===== Mode cards (current homepage) ===== */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+  .mode{background:rgba(255,255,255,.96);border-radius:20px;padding:26px;box-shadow:0 12px 30px rgba(40,25,90,.22)}
+  .mode h3{font-size:1.25rem;font-weight:800}
+  .mode .msub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .modeBtns{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .mbtn{border-radius:16px;padding:24px 12px;text-align:center;color:#fff;text-decoration:none;transition:transform .18s;box-shadow:0 8px 20px rgba(40,25,90,.25)}
+  .mbtn:hover{transform:translateY(-3px) scale(1.02)}
+  .mbtn .ico{font-size:1.8rem;display:block;margin-bottom:6px}
+  .mbtn b{font-size:1.15rem;display:block}
+  .mbtn small{font-size:.78rem;opacity:.9}
+  .qb{background:linear-gradient(135deg,#4f46e5,#7c3aed)}
+  .rb{background:linear-gradient(135deg,#c026d3,#db2777)}
+
+  /* ===== Stats (current homepage, livelier colors) ===== */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px}
+  .stat{border-radius:18px;padding:22px;text-align:center;color:#fff;box-shadow:0 8px 20px rgba(40,25,90,.2)}
+  .stat b{font-size:1.9rem;display:block}
+  .stat small{font-size:.78rem;font-weight:700;opacity:.92}
+  .s1{background:linear-gradient(135deg,#f59e0b,#f97316)}
+  .s2{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+  .s3{background:linear-gradient(135deg,#10b981,#34d399)}
+  .s4{background:linear-gradient(135deg,#3b82f6,#60a5fa)}
+
+  footer{margin-top:36px;background:rgba(255,255,255,.96);border-radius:20px 20px 0 0;padding:28px;box-shadow:0 -8px 24px rgba(40,25,90,.15)}
+  .fgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
+  .fgrid h4{font-weight:800;margin-bottom:10px}
+  .fgrid p{color:var(--muted);font-size:.92rem;line-height:1.55;margin-bottom:14px}
+  .subRow{display:flex;gap:10px}
+  .subRow input{flex:1;padding:11px 14px;border:1px solid #d8d4ee;border-radius:12px;font-size:.9rem;outline:none}
+  .subRow button{background:#8b5cf6;color:#fff;border:none;border-radius:12px;padding:11px 20px;font-weight:700;cursor:pointer}
+  .fgrid a{display:block;color:var(--ink);text-decoration:none;margin-bottom:8px;font-size:.92rem}
+  .fgrid a:hover{color:#6d5bd0}
+  .copy{text-align:center;color:var(--muted);font-size:.8rem;padding:16px 0 4px}
+</style>
+</head>
+<body>
+<div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+<div class="wrap">
+  <nav>
+    <div class="logo">AI Quiz</div>
+    <ul><li><a href="#">Home</a></li><li><a href="#">Play Hub</a></li><li><a href="#">Quiz</a></li><li><a href="#">Dad Jokes</a></li><li><a href="#">Riddles</a></li><li><a href="#">Image Riddles</a></li></ul>
+    <a class="btn btn-white" style="padding:8px 20px" href="#">Login</a>
+  </nav>
+
+  <header>
+    <h1>Explore <span>every subject</span></h1>
+    <p class="sub">Three worlds of quizzes — academic, professional, and pure fun. Pick a card and jump straight in.</p>
+  </header>
+
+  <!-- ============ CATEGORY BANNERS (design 06) ============ -->
+  <section>
+    <div class="cat-shell">
+      <div class="cat-title">🗂️ Topics <small>— grouped by world</small></div>
+
+      <div class="banner" onclick="toggle(this,'g-academic')">
+        <span class="line"></span><h3>Academic</h3><span class="line"></span>
+        <span class="count">6</span><span class="chev">▼</span>
+      </div>
+      <div class="grid" id="g-academic">
+        <a class="scard g1" href="#"><span class="emo">🔬</span><span class="name">Science</span><span class="meta">46 questions</span></a>
+        <a class="scard g2" href="#"><span class="emo">🔢</span><span class="name">Math</span><span class="meta">32 questions</span></a>
+        <a class="scard g3" href="#"><span class="emo">📜</span><span class="name">History</span><span class="meta">18 questions</span></a>
+        <a class="scard g4" href="#"><span class="emo">🌍</span><span class="name">Geography &amp; Travel</span><span class="meta">12 questions</span></a>
+        <a class="scard g6" href="#"><span class="emo">🌱</span><span class="name">Environment &amp; Ecosystem</span><span class="meta">coming soon</span></a>
+        <a class="scard g1 dummy" href="#"><span class="dummyTag">DUMMY</span><span class="emo">🎬</span><span class="name">Movies &amp; TV <small>(sample)</small></span><span class="meta">6 questions</span></a>
+      </div>
+
+      <div class="banner" onclick="toggle(this,'g-prof')">
+        <span class="line"></span><h3>Professional &amp; Life</h3><span class="line"></span>
+        <span class="count">4</span><span class="chev">▼</span>
+      </div>
+      <div class="grid" id="g-prof">
+        <a class="scard g1" href="#"><span class="emo">💻</span><span class="name">Technology</span><span class="meta">28 questions</span></a>
+        <a class="scard g2" href="#"><span class="emo">💼</span><span class="name">Business</span><span class="meta">16 questions</span></a>
+        <a class="scard g3" href="#"><span class="emo">💪</span><span class="name">Health &amp; Fitness</span><span class="meta">14 questions</span></a>
+        <a class="scard g4" href="#"><span class="emo">👶</span><span class="name">Parenting</span><span class="meta">9 questions</span></a>
+      </div>
+
+      <div class="banner" onclick="toggle(this,'g-ent')">
+        <span class="line"></span><h3>Entertainment &amp; Culture</h3><span class="line"></span>
+        <span class="count">5</span><span class="chev">▼</span>
+      </div>
+      <div class="grid" id="g-ent">
+        <a class="scard g1 coming" href="#"><span class="badge">Coming Soon</span><span class="emo">🐾</span><span class="name">Animal &amp; Wildlife</span></a>
+        <a class="scard g2 coming" href="#"><span class="badge">Coming Soon</span><span class="emo">🎬</span><span class="name">Movies &amp; TV</span></a>
+        <a class="scard g3 coming" href="#"><span class="badge">Coming Soon</span><span class="emo">🏆</span><span class="name">Sports</span></a>
+        <a class="scard g4 coming" href="#"><span class="badge">Coming Soon</span><span class="emo">🍔</span><span class="name">Food &amp; Drinks</span></a>
+        <a class="scard g5 coming" href="#"><span class="badge">Coming Soon</span><span class="emo">🎨</span><span class="name">Art &amp; Culture</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODE CARDS (current homepage) ============ -->
+  <section>
+    <div class="modes">
+      <div class="mode">
+        <h3>⏱️ Timer Challenges</h3>
+        <div class="msub">Mix — All Subjects</div>
+        <div class="modeBtns">
+          <a class="mbtn qb" href="#"><span class="ico">🧠</span><b>Quiz</b><small>Timed sessions</small></a>
+          <a class="mbtn rb" href="#"><span class="ico">🧩</span><b>Riddle</b><small>Timed sessions</small></a>
+        </div>
+      </div>
+      <div class="mode">
+        <h3>🎯 Practice Mode</h3>
+        <div class="msub">Mix — No Timer</div>
+        <div class="modeBtns">
+          <a class="mbtn qb" href="#"><span class="ico">🧠</span><b>Quiz</b><small>No timer</small></a>
+          <a class="mbtn rb" href="#"><span class="ico">🧩</span><b>Riddle</b><small>No timer</small></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS (current homepage, livelier) ============ -->
+  <section>
+    <div class="stats">
+      <div class="stat s1"><b>3</b><small>Sessions Completed (site-wide)</small></div>
+      <div class="stat s2"><b>2</b><small>Active Quizzers (30 days)</small></div>
+      <div class="stat s3"><b>2</b><small>Quiz Sessions</small></div>
+      <div class="stat s4"><b>1</b><small>Riddle Sessions</small></div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER (current homepage) ============ -->
+  <footer>
+    <div class="fgrid">
+      <div>
+        <h4>AI Quiz</h4>
+        <p>Enterprise-grade interactive quiz platform. Test your knowledge and have fun!</p>
+        <h4>Get new quizzes in your inbox</h4>
+        <div class="subRow">
+          <input type="email" placeholder="you@example.com">
+          <button>Subscribe</button>
+        </div>
+        <p style="font-size:.75rem;margin-top:8px">By subscribing you agree to our privacy policy. Unsubscribe anytime.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="#">Quiz</a><a href="#">Dad Jokes</a><a href="#">Riddles</a>
+      </div>
+    </div>
+    <div class="copy">© 2026 AI Quiz Platform. All rights reserved.</div>
+  </footer>
+</div>
+
+<script>
+  function toggle(banner, gridId) {
+    banner.classList.toggle('closed');
+    const grid = document.getElementById(gridId);
+    grid.style.display = banner.classList.contains('closed') ? 'none' : 'grid';
+  }
+</script>
+</body>
+</html>
