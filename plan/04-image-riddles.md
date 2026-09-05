@@ -5,7 +5,7 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/image-riddles.md`
+> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (20 image riddles seeded via the admin bulk endpoint + a seeded category). Supersedes `docs/features/archive/image-riddles.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —
 > stale claims from the old doc were dropped or corrected).
 
@@ -35,19 +35,19 @@ Setup: `apps/backend/sample-image-riddles.sql` (rewritten against current entity
 
 Frontend (`apps/frontend/src/`):
 
-| File / dir                                                                      | Purpose                                                                                                                                                                                                                                                                                                        |
-| ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/image-riddles/page.tsx`                                                    | Public page shell; fetches `GET /image-riddles?limit=200` + `/categories` (initial-data arrays are offline fallback only); reads `?category=` / `?difficulty=` URL params                                                                                                                                      |
-| `features/image-riddles/components/*`                                           | Public UI: RiddleCard, RiddleModal, RiddleGuessPanel, RiddleAnswerPanel, GuessFeed, ChipRevealStep, CategorySidebar, RiddlesToolbar, PaginationControls, skeletons                                                                                                                                             |
-| `features/image-riddles/hooks/*`                                                | Public game hooks: useImageRiddleCatalog, Filters, Game, Score, Timers, useRiddleKeyboardNav                                                                                                                                                                                                                   |
-| `features/image-riddles/lib/analytics.ts`                                       | **Uncommitted:** analytics sink shim now forwards preset action events (`answer_submitted`, `hint_revealed`, `riddle_skipped`, `answer_revealed`, `share_opened`, …) to the shared tracker (`lib/analytics.ts` → `POST /analytics/events`); console.debug kept behind the `image-riddles:analytics-debug` flag |
-| `features/image-riddles/lib/game.ts`, `default-actions.ts`                      | Game logic + action presets (`analyticsEvent` names)                                                                                                                                                                                                                                                           |
-| `features/image-riddles/admin/**`                                               | Full admin implementation (structural refactor of the former 2090-LOC monolith): `components/` (table, rows, toolbar, filters, modals incl. ImportModal), `hooks/` (8 React Query hooks: data, filters, form, mutations, bulk, delete, categories, import), `lib/` (csv, json, import-export, filters, form)   |
-| `app/admin/components/ImageRiddlesAdminSection.tsx`                             | Thin 200-line composition layer wiring the feature hooks/components; consumed by the admin dashboard                                                                                                                                                                                                           |
-| `components/image-riddles/ActionOptions.tsx`                                    | Configurable action-button renderer (visibility conditions, **modifier-only** keyboard shortcuts, tooltips, confirm dialogs, ripples)                                                                                                                                                                          |
-| `lib/image-riddles-api.ts`, `lib/image-riddle-answer.ts`, `lib/initial-data.ts` | Typed API client; normalized answer matcher (case/whitespace/article/punctuation tolerant + `alternativeAnswers`); offline fallback data                                                                                                                                                                       |
-| `lib/media-api.ts` + `MediaPicker`                                              | Media-library integration (upload/browse/select in the Image URL field)                                                                                                                                                                                                                                        |
-| `__tests__/image-riddle-*.test.tsx` (6) + `useAdminImageRiddleHooks.test.tsx`   | **85/85 passing (verified 2026-08-30)** — admin, answer matching, comments, game, keyboard, URL sync, admin hooks                                                                                                                                                                                              |
+| File / dir                                                                      | Purpose                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/image-riddles/page.tsx`                                                    | Public page shell; fetches `GET /image-riddles?limit=200` + `/categories` (initial-data arrays are offline fallback only); reads `?category=` / `?difficulty=` URL params                                                                                                                                    |
+| `features/image-riddles/components/*`                                           | Public UI: RiddleCard, RiddleModal, RiddleGuessPanel, RiddleAnswerPanel, GuessFeed, ChipRevealStep, CategorySidebar, RiddlesToolbar, PaginationControls, skeletons                                                                                                                                           |
+| `features/image-riddles/hooks/*`                                                | Public game hooks: useImageRiddleCatalog, Filters, Game, Score, Timers, useRiddleKeyboardNav                                                                                                                                                                                                                 |
+| `features/image-riddles/lib/analytics.ts`                                       | **Committed:** analytics sink shim now forwards preset action events (`answer_submitted`, `hint_revealed`, `riddle_skipped`, `answer_revealed`, `share_opened`, …) to the shared tracker (`lib/analytics.ts` → `POST /analytics/events`); console.debug kept behind the `image-riddles:analytics-debug` flag |
+| `features/image-riddles/lib/game.ts`, `default-actions.ts`                      | Game logic + action presets (`analyticsEvent` names)                                                                                                                                                                                                                                                         |
+| `features/image-riddles/admin/**`                                               | Full admin implementation (structural refactor of the former 2090-LOC monolith): `components/` (table, rows, toolbar, filters, modals incl. ImportModal), `hooks/` (8 React Query hooks: data, filters, form, mutations, bulk, delete, categories, import), `lib/` (csv, json, import-export, filters, form) |
+| `app/admin/components/ImageRiddlesAdminSection.tsx`                             | Thin 200-line composition layer wiring the feature hooks/components; consumed by the admin dashboard                                                                                                                                                                                                         |
+| `components/image-riddles/ActionOptions.tsx`                                    | Configurable action-button renderer (visibility conditions, **modifier-only** keyboard shortcuts, tooltips, confirm dialogs, ripples)                                                                                                                                                                        |
+| `lib/image-riddles-api.ts`, `lib/image-riddle-answer.ts`, `lib/initial-data.ts` | Typed API client; normalized answer matcher (case/whitespace/article/punctuation tolerant + `alternativeAnswers`); offline fallback data                                                                                                                                                                     |
+| `lib/media-api.ts` + `MediaPicker`                                              | Media-library integration (upload/browse/select in the Image URL field)                                                                                                                                                                                                                                      |
+| `__tests__/image-riddle-*.test.tsx` (6) + `useAdminImageRiddleHooks.test.tsx`   | **85/85 passing (verified 2026-08-30)** — admin, answer matching, comments, game, keyboard, URL sync, admin hooks                                                                                                                                                                                            |
 
 ## 2. Endpoint map (verified against controllers 2026-08-30)
 
@@ -85,7 +85,7 @@ Admin (JWT + role admin) — canonical CRUD:
 - The "500 instead of 400" issue is **moot** — the create/update path moved to the admin service (the public service no longer validates actions), and no bare `throw new Error` remains in it.
 - The old doc's file inventory is stale: the frontend was refactored into `features/image-riddles/**` (public + admin sub-trees), with `ImageRiddlesAdminSection.tsx` reduced to a thin composition layer.
 - View/like/attempt counters still do **not** exist anywhere (no columns, no table).
-- Analytics: the shim now forwards to the real tracker (uncommitted) — the old doc's "no analytics plumbing" is no longer true.
+- Analytics: the shim forwards to the real tracker (committed).
 
 ## 4. Task breakdown
 
@@ -101,7 +101,7 @@ Admin (JWT + role admin) — canonical CRUD:
 
 ### P2 — integration / quality
 
-- [ ] Commit the analytics shim change — **deferred (owner decision 2026-08-30, mirrored from features 02/03)**: the shim already forwards to the real tracker.
+- [x] Analytics parity — RESOLVED 2026-09-05 (supersedes the deferral): the shim is committed and forwards preset action events to the shared tracker.
 - [x] **Action preset audit** — DONE 2026-08-30: `default-actions.ts` ships exactly 4 presets (check-answer, show-hint, give-up, share) and `useImageRiddleGame.handleAction` handles all 4 (+ legacy aliases submit-answer/reveal-answer and a skip). There are **no** `report`/`fullscreen` presets in the file — the old doc's concern is resolved; share opens the ShareMenu.
 - [x] **Query efficiency** — VERIFIED 2026-08-30: both claims are stale in current code — `getDashboardStats` already uses one GROUP BY per dimension, and `deleteCategory` already soft-deletes via a single bulk UPDATE inside a transaction. (The engagement aggregate added in P1 #1 is one more single aggregate query.)
 - [x] **Comments parity** — VERIFIED 2026-08-30: backend comments service validates `IMAGE_RIDDLE` content type against the entity; the admin CommentsSection has an image-riddle filter chip and renders its rows. No gap.
@@ -117,5 +117,26 @@ Admin (JWT + role admin) — canonical CRUD:
 - **Admin Dashboard** — `ImageRiddlesAdminSection` (thin layer over `features/image-riddles/admin`) under the admin shell; dashboard stats/recent endpoints feed the section.
 - **Media** — upload pipeline shared with admin: `MediaModule` (JWT-guarded `POST /media/upload`, WebP conversion) + `MediaPicker` in the riddle form.
 - **Comments** — image riddles are a first-class comment target (`targetType: 'image-riddle'` in the comments module).
-- **Analytics** — preset action events forwarded via the (uncommitted) shim; dashboard module breakdowns label `image-riddles`.
+- **Analytics** — preset action events forwarded via the committed shim; dashboard module breakdowns label `image-riddles`.
 - **MCQ / Riddle MCQ** — shares the shared UI kit (AnswerOptions heritage, BubbleEmojiEffect), BulkActionService, CacheService patterns, and ContentStatus workflow.
+
+## 6. Extras (2026-09-05 audit — noted, not acted on)
+
+- **P0 fixed during this pass:** creating an image riddle **without** `actionOptions` crashed on
+  insert (`validateBeforeSave` checked `!== null` while TypeORM leaves the property `undefined`)
+  — every API/bulk create without the field failed with a TypeError. Guard now uses
+  `Array.isArray`; the same latent hole on `hint` hardened to `!= null`. The admin UI masked it
+  (its form always sends the field) — bulk import and raw API creates did not.
+- **`GET /admin/image-riddles` without `page` returned 500** ("Provided skip value is not a
+  number") — the controller now coerces page/limit defensively (NaN → defaults, limit capped
+  100). Fixed in this pass.
+- **`CreateImageRiddleDto` has no `status` field** — bulk-imported riddles always land as DRAFT
+  and must be published via `POST /image-riddles/bulk-action` (the seed flow for this pass did
+  exactly that). Consider accepting `status` in the bulk DTO for parity with quiz/riddle
+  imports if owner wants one-shot published imports.
+- **Seeded test content:** category **"E2E Test"** + 20 published riddles ("E2E …" titles,
+  picsum placeholder images, hints included) — kept in the dev DB.
+- **plan/13 A4 downgraded:** the `UNSUPPORTED_ACTION_IDS` set in `game.ts` is a defensive
+  filter for DB-configured per-riddle `actionOptions`; `default-actions.ts` ships only the 4
+  supported presets, and the DB contains zero riddles referencing unsupported ids. Verified
+  non-issue.

@@ -63,7 +63,7 @@ export class AdminImageRiddlesController {
     @Query('difficulty') difficulty?: string,
     @Query('categoryId') categoryId?: string,
     @Query('isActive') isActive?: string,
-    @Query('search') search?: string,
+    @Query('search') search?: string
   ): Promise<{
     data: ImageRiddle[];
     total: number;
@@ -72,7 +72,12 @@ export class AdminImageRiddlesController {
     totalPages: number;
   }> {
     this.logger.debug(`Fetching riddles - page: ${page}, limit: ${limit}`);
-    
+
+    // Coerce defensively: a missing page/limit must never reach TypeORM as a
+    // NaN skip/take ("Provided skip value is not a number" 500).
+    const pageNum = Number(page) > 0 ? Math.floor(Number(page)) : 1;
+    const limitNum = Number(limit) > 0 ? Math.min(Math.floor(Number(limit)), 100) : 20;
+
     const filters = {
       difficulty,
       categoryId,
@@ -80,20 +85,14 @@ export class AdminImageRiddlesController {
       search,
     };
 
-    return this.adminService.findAllRiddles(
-      Number(page),
-      Number(limit),
-      filters,
-    );
+    return this.adminService.findAllRiddles(pageNum, limitNum, filters);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get single image riddle by ID' })
   @ApiResponse({ status: 200, description: 'Returns riddle' })
   @ApiResponse({ status: 404, description: 'Riddle not found' })
-  async findRiddleById(
-    @Param('id') id: string,
-  ): Promise<ImageRiddle> {
+  async findRiddleById(@Param('id') id: string): Promise<ImageRiddle> {
     this.logger.debug(`Fetching riddle: ${id}`);
     return this.adminService.findRiddleById(id);
   }
@@ -103,9 +102,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Create new image riddle' })
   @ApiResponse({ status: 201, description: 'Riddle created successfully' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async createRiddle(
-    @Body() dto: CreateImageRiddleDto,
-  ): Promise<ImageRiddle> {
+  async createRiddle(@Body() dto: CreateImageRiddleDto): Promise<ImageRiddle> {
     this.logger.log(`Creating new riddle: ${dto.title}`);
     return this.adminService.createRiddle(dto);
   }
@@ -115,7 +112,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Bulk create image riddles' })
   @ApiResponse({ status: 201, description: 'Riddles created successfully' })
   async createRiddlesBulk(
-    @Body() dtos: CreateImageRiddleDto[],
+    @Body() dtos: CreateImageRiddleDto[]
   ): Promise<{ created: number; failed: number; errors: string[] }> {
     this.logger.log(`Bulk creating ${dtos.length} riddles`);
     return this.adminService.createRiddlesBulk(dtos);
@@ -128,7 +125,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 404, description: 'Riddle not found' })
   async updateRiddle(
     @Param('id') id: string,
-    @Body() dto: UpdateImageRiddleDto,
+    @Body() dto: UpdateImageRiddleDto
   ): Promise<ImageRiddle> {
     this.logger.log(`Updating riddle: ${id}`);
     return this.adminService.updateRiddle(id, dto);
@@ -139,9 +136,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Delete image riddle (soft delete)' })
   @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
   @ApiResponse({ status: 404, description: 'Riddle not found' })
-  async deleteRiddle(
-    @Param('id') id: string,
-  ): Promise<void> {
+  async deleteRiddle(@Param('id') id: string): Promise<void> {
     this.logger.log(`Deleting riddle: ${id}`);
     await this.adminService.deleteRiddle(id);
   }
@@ -149,9 +144,7 @@ export class AdminImageRiddlesController {
   @Post(':id/toggle-active')
   @ApiOperation({ summary: 'Toggle riddle active status' })
   @ApiResponse({ status: 200, description: 'Status toggled successfully' })
-  async toggleActive(
-    @Param('id') id: string,
-  ): Promise<{ isActive: boolean }> {
+  async toggleActive(@Param('id') id: string): Promise<{ isActive: boolean }> {
     this.logger.log(`Toggling active status for riddle: ${id}`);
     return this.adminService.toggleActive(id);
   }
@@ -172,9 +165,7 @@ export class AdminImageRiddlesController {
   @ApiOperation({ summary: 'Get category by ID' })
   @ApiResponse({ status: 200, description: 'Returns category' })
   @ApiResponse({ status: 404, description: 'Category not found' })
-  async findCategoryById(
-    @Param('id') id: string,
-  ): Promise<ImageRiddleCategory> {
+  async findCategoryById(@Param('id') id: string): Promise<ImageRiddleCategory> {
     this.logger.debug(`Fetching category: ${id}`);
     return this.adminService.findCategoryById(id);
   }
@@ -183,9 +174,7 @@ export class AdminImageRiddlesController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @ApiOperation({ summary: 'Create new category' })
   @ApiResponse({ status: 201, description: 'Category created successfully' })
-  async createCategory(
-    @Body() dto: CreateImageRiddleCategoryDto,
-  ): Promise<ImageRiddleCategory> {
+  async createCategory(@Body() dto: CreateImageRiddleCategoryDto): Promise<ImageRiddleCategory> {
     this.logger.log(`Creating category: ${dto.name}`);
     return this.adminService.createCategory(dto);
   }
@@ -196,7 +185,7 @@ export class AdminImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Category updated successfully' })
   async updateCategory(
     @Param('id') id: string,
-    @Body() dto: UpdateImageRiddleCategoryDto,
+    @Body() dto: UpdateImageRiddleCategoryDto
   ): Promise<ImageRiddleCategory> {
     this.logger.log(`Updating category: ${id}`);
     return this.adminService.updateCategory(id, dto);
@@ -206,9 +195,7 @@ export class AdminImageRiddlesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete category' })
   @ApiResponse({ status: 204, description: 'Category deleted successfully' })
-  async deleteCategory(
-    @Param('id') id: string,
-  ): Promise<void> {
+  async deleteCategory(@Param('id') id: string): Promise<void> {
     this.logger.log(`Deleting category: ${id}`);
     await this.adminService.deleteCategory(id);
   }
@@ -237,9 +224,7 @@ export class AdminImageRiddlesController {
   @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Number of recent items' })
   @ApiOperation({ summary: 'Get recently created/updated riddles' })
   @ApiResponse({ status: 200, description: 'Returns recent riddles' })
-  async getRecentRiddles(
-    @Query('limit') limit: number = 10,
-  ): Promise<ImageRiddle[]> {
+  async getRecentRiddles(@Query('limit') limit: number = 10): Promise<ImageRiddle[]> {
     this.logger.debug(`Fetching ${limit} recent riddles`);
     return this.adminService.getRecentRiddles(Number(limit));
   }

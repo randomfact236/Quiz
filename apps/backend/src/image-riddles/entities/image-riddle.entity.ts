@@ -148,8 +148,10 @@ export class ImageRiddle {
    * Returns custom actions if set, otherwise generates defaults
    */
   getEffectiveActionOptions(): IActionOption[] {
-    // If custom actions are defined, use them
-    if (this.actionOptions !== null && this.actionOptions.length > 0) {
+    // If custom actions are defined, use them. Array.isArray (not !== null):
+    // TypeORM leaves the property undefined on freshly created entities, and
+    // an undefined check here crashed every create without actionOptions.
+    if (Array.isArray(this.actionOptions) && this.actionOptions.length > 0) {
       return this.actionOptions;
     }
 
@@ -177,8 +179,8 @@ export class ImageRiddle {
       updatedAt: now,
     });
 
-    // 2. Show Hint (if hint exists)
-    if (this.hint !== null && this.hint.length > 0) {
+    // 2. Show Hint (if hint exists) — != null covers undefined AND null
+    if (this.hint != null && this.hint.length > 0) {
       actions.push({
         ...applyActionDefaults(DEFAULT_ACTION_PRESETS.showHint),
         createdAt: now,
@@ -378,8 +380,11 @@ export class ImageRiddle {
   @BeforeInsert()
   @BeforeUpdate()
   validateBeforeSave(): void {
-    // Auto-validate action options before save
-    if (this.actionOptions !== null && this.actionOptions.length > 0) {
+    // Auto-validate action options before save. Array.isArray (not !== null):
+    // the property is undefined (not null) on entities created without the
+    // field, which crashed every create with a TypeError (P0, found in the
+    // 14-feature pass while bulk-importing).
+    if (Array.isArray(this.actionOptions) && this.actionOptions.length > 0) {
       const validation = this.validateActionOptions();
       if (!validation.isValid) {
         throw new Error(`Action options validation failed: ${validation.errors.join('; ')}`);
