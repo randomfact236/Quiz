@@ -23,12 +23,12 @@
     position:relative;overflow-x:hidden;
   }
   /* floating bubbles (current homepage) */
-  .bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.14);animation:rise 16s linear infinite;z-index:0}
+  .bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.09);animation:rise 16s linear infinite;z-index:0}
   .bubble:nth-child(1){width:120px;height:120px;left:6%;animation-duration:18s}
   .bubble:nth-child(2){width:60px;height:60px;left:24%;animation-duration:12s;animation-delay:-4s}
   .bubble:nth-child(3){width:90px;height:90px;right:10%;animation-duration:15s;animation-delay:-7s}
   .bubble:nth-child(4){width:40px;height:40px;right:28%;animation-duration:11s;animation-delay:-2s}
-  .bubble:nth-child(5){width:150px;height:150px;left:45%;top:60%;animation-duration:22s;animation-delay:-9s;opacity:.5}
+  .bubble:nth-child(5){width:150px;height:150px;left:45%;top:60%;animation-duration:22s;animation-delay:-9s;opacity:.3}
   @keyframes rise{from{transform:translateY(40vh)}to{transform:translateY(-120vh)}}
 
   .wrap{max-width:1080px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
@@ -44,7 +44,14 @@
   header{text-align:center;padding:46px 0 40px}
   h1{font-size:clamp(2rem,4.5vw,3rem);color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.18);margin-bottom:10px}
   h1 span{color:#ffe9a8}
-  .sub{color:rgba(255,255,255,.92);font-size:1.08rem;max-width:540px;margin:0 auto}
+  .sub{color:rgba(255,255,255,.92);font-size:1.08rem;max-width:540px;margin:0 auto 26px}
+  .heroBtns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+  .btn{display:inline-block;padding:13px 30px;border-radius:14px;font-weight:800;font-size:1rem;
+    text-decoration:none;transition:transform .15s,box-shadow .15s;border:none;cursor:pointer}
+  .btn-play{background:#fff;color:#6d5bd0;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+  .btn-play:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.28)}
+  .btn-ghost{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.55)}
+  .btn-ghost:hover{background:rgba(255,255,255,.3)}
 
   section{padding:20px 0 30px}
   .card-shell{background:rgba(255,255,255,.96);border-radius:20px;padding:28px;box-shadow:0 12px 30px rgba(40,25,90,.22)}
@@ -134,10 +141,14 @@
   <header>
     <h1>Explore <span>every subject</span></h1>
     <p class="sub">Three worlds of quizzes — academic, professional, and pure fun. Pick a card and jump straight in.</p>
+    <div class="heroBtns">
+      <a class="btn btn-play" href="#topics">▶ Start Playing</a>
+      <a class="btn btn-ghost" href="#topics">Browse Topics</a>
+    </div>
   </header>
 
   <!-- ============ CATEGORY BANNERS (design 06) ============ -->
-  <section>
+  <section id="topics">
     <div class="cat-shell">
       <div class="cat-title">🗂️ Topics <small>— grouped by world</small></div>
 
