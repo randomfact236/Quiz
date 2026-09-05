@@ -3,10 +3,11 @@
         "Test-NetConnection": true,
         "Get-NetFirewallRule": true
     },
-    "livePreview.defaultPreviewPath": "/designs/index.html",
+    "livePreview.defaultPreviewPath": "/designs/07-home-blend.html",
     "livePreview.openPreviewTarget": "Embedded Preview",
     "workbench.startupEditor": "none",
     "files.associations": {
         "*.html": "html"
-    }
+    },
+    "livePreview.autoRefreshPreview": "On Changes to Any File"
 }
