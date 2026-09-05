@@ -85,6 +85,9 @@ export interface AdminDashboard {
     commentsTotal: number;
     avgQuizScorePct: number | null;
     avgQuizSeconds: number | null;
+    clientErrors: number;
+    securityEvents: number;
+    commentEvents: number;
   };
   dailySeries: { day: string; events: number; pageViews: number; activeUsers: number }[];
   topPages: { label: string; count: number }[];
@@ -115,6 +118,12 @@ export interface AdminDashboard {
     };
     jokes: { viewed: number; liked: number; disliked: number; shared: number };
   };
+}
+
+/** Conversion funnel (plan/13 §4b B1): distinct actors per journey stage. */
+export interface ConversionFunnel {
+  range: { days: number };
+  stages: { key: string; label: string; actors: number }[];
 }
 
 @Injectable()
@@ -494,6 +503,9 @@ export class AnalyticsService {
       imageRiddles,
       quiz,
       riddle,
+      clientErrors,
+      securityEvents,
+      commentEvents,
     ] = await Promise.all([
       this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${win}`, [days]),
       this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${prev}`, [days]),
@@ -637,6 +649,20 @@ export class AnalyticsService {
       ),
       moduleDashboard('quiz-mcq'),
       moduleDashboard('riddle-mcq'),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events
+         WHERE "eventName" IN ('client_error', 'api_failed') AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events
+         WHERE "eventName" IN ('login_failed', 'login_locked') AND ${win}`,
+        [days]
+      ),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'comment_posted' AND ${win}`,
+        [days]
+      ),
     ]);
 
     const irEvents = new Map(
@@ -666,6 +692,9 @@ export class AnalyticsService {
         commentsTotal,
         avgQuizScorePct: quizMeta[0]?.pct != null ? Math.round(Number(quizMeta[0].pct)) : null,
         avgQuizSeconds: quizMeta[0]?.secs != null ? Math.round(Number(quizMeta[0].secs)) : null,
+        clientErrors,
+        securityEvents,
+        commentEvents,
       },
       dailySeries: daily,
       topPages: topPages,
@@ -749,6 +778,7 @@ export class AnalyticsService {
     from?: string;
     to?: string;
     actor?: string;
+    order?: 'asc' | 'desc';
     page: number;
     limit: number;
   }): Promise<{ data: AnalyticsEvent[]; total: number; page: number; limit: number }> {
@@ -773,12 +803,71 @@ export class AnalyticsService {
 
     const total = await qb.getCount();
     const data = await qb
-      .orderBy('e.serverTs', 'DESC')
+      .orderBy('e.serverTs', opts.order === 'asc' ? 'ASC' : 'DESC')
       .skip((opts.page - 1) * opts.limit)
       .take(opts.limit)
       .getMany();
 
     return { data, total, page: opts.page, limit: opts.limit };
+  }
+
+  /**
+   * Conversion funnel (plan/13 §4b B1): distinct actors per journey stage
+   * within the window — visit → signup → first session → completed →
+   * returned on a later day. The guest→user join is approximate: visitor
+   * stages count distinct guestIds/userIds, signup counts new user_registered
+   * actors, so a guest who registers may appear in both as separate actors
+   * until the A7 anchor accumulates signup_completed rows.
+   */
+  async getFunnel(days: number): Promise<ConversionFunnel> {
+    const clamped = Math.min(Math.max(Math.floor(days) || 30, 1), DASHBOARD_MAX_DAYS);
+    return this.cacheService.getOrSet(
+      `analytics:funnel:${clamped}`,
+      () => this.computeFunnel(clamped),
+      DASHBOARD_CACHE_TTL_S
+    );
+  }
+
+  private async computeFunnel(days: number): Promise<ConversionFunnel> {
+    const actor = `COALESCE("userId"::text, "guestId")`;
+    const win = `"serverTs" > now() - ($1::int * interval '1 day')`;
+    const distinctActors = async (extra: string, params: unknown[] = [days]): Promise<number> =>
+      this.scalarN(
+        `SELECT COUNT(DISTINCT ${actor})::int AS n FROM analytics_events
+         WHERE ${actor} IS NOT NULL AND ${win} AND ${extra}`,
+        params
+      );
+
+    const [visitors, signedUp, played, completed, returned] = await Promise.all([
+      distinctActors('TRUE'),
+      this.scalarN(
+        `SELECT COUNT(DISTINCT "userId")::int AS n FROM analytics_events
+         WHERE "eventName" = 'user_registered' AND "userId" IS NOT NULL AND ${win}`,
+        [days]
+      ),
+      distinctActors(`"eventName" = 'session_started'`),
+      distinctActors(`"eventName" = 'session_completed'`),
+      this.scalarN(
+        `SELECT COUNT(*)::int AS n FROM (
+           SELECT ${actor} AS a
+           FROM analytics_events
+           WHERE ${actor} IS NOT NULL AND ${win}
+           GROUP BY 1 HAVING COUNT(DISTINCT date_trunc('day', "serverTs")) >= 2
+         ) t`,
+        [days]
+      ),
+    ]);
+
+    return {
+      range: { days },
+      stages: [
+        { key: 'visitors', label: 'Visitors', actors: visitors },
+        { key: 'signed_up', label: 'Signed up', actors: signedUp },
+        { key: 'played', label: 'Played a session', actors: played },
+        { key: 'completed', label: 'Completed a session', actors: completed },
+        { key: 'returned', label: 'Returned (2+ days)', actors: returned },
+      ],
+    };
   }
 
   /**

@@ -263,17 +263,23 @@ export function FunnelRow({
   value,
   max,
   accent,
+  meta,
 }: {
   label: string;
   value: number;
   max: number;
   accent: string;
+  /** Optional stage-to-stage conversion hint (e.g. "34%"). */
+  meta?: string | undefined;
 }) {
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div>
       <div className="mb-1 flex items-center justify-between text-xs">
-        <span className="text-gray-400">{label}</span>
+        <span className="text-gray-400">
+          {label}
+          {meta && <span className="ml-2 font-normal text-gray-500">· {meta} of previous</span>}
+        </span>
         <span className="font-medium text-gray-200">
           {value.toLocaleString()} <span className="font-normal text-gray-500">({pct}%)</span>
         </span>
@@ -303,6 +309,96 @@ export function DarkTable({ headers, children }: { headers: string[]; children: 
         </thead>
         <tbody>{children}</tbody>
       </table>
+    </div>
+  );
+}
+
+// ==================== Journey flow (owner reference 2026-09-05) ====================
+// Vertical per-module journey columns under a shared TOTAL node: header card →
+// stage cards with progress bars → "-N dropped" annotations → conversion %.
+
+export interface JourneyStage {
+  label: string;
+  value: number;
+}
+
+interface JourneyAccent {
+  border: string;
+  text: string;
+  bar: string;
+}
+
+/**
+ * One journey column: `title` header card (count + share of total), then a
+ * stage card per entry — bar filled as value/first-stage, pct under the bar,
+ * "-N dropped" between stages that shrink. Ends with the stage-to-stage
+ * conversion (last ÷ first).
+ */
+export function JourneyColumn({
+  title,
+  total,
+  stages,
+  accent,
+}: {
+  title: string;
+  total: number;
+  stages: JourneyStage[];
+  accent: JourneyAccent;
+}) {
+  const top = stages[0]?.value ?? 0;
+  const last = stages[stages.length - 1]?.value ?? 0;
+  const sharePct = total > 0 ? Math.round((top / total) * 100) : 0;
+  const convPct = top > 0 ? Math.round((last / top) * 100) : 0;
+
+  return (
+    <div className="flex min-w-0 flex-1 flex-col items-center">
+      {/* Column header card */}
+      <div
+        className={`w-full rounded-lg border bg-gray-900/60 px-3 py-3 text-center ${accent.border}`}
+      >
+        <p className={`text-xs font-semibold uppercase tracking-wide ${accent.text}`}>{title}</p>
+        <p className="mt-1 text-2xl font-bold text-white">{top.toLocaleString()}</p>
+        <p className={`text-xs ${accent.text}`}>{sharePct}% of total</p>
+      </div>
+
+      {/* Connector into the first stage */}
+      <span className={`my-1 h-4 w-px ${accent.bar}`} aria-hidden />
+
+      {/* Stage cards */}
+      {stages.map((s, i) => {
+        const pct = top > 0 ? Math.round((s.value / top) * 100) : 0;
+        const prev = i > 0 ? stages[i - 1] : undefined;
+        const dropped = prev ? Math.max(0, prev.value - s.value) : 0;
+        return (
+          <div key={s.label} className="w-full">
+            {i > 0 && (
+              <>
+                {dropped > 0 && (
+                  <p className="mb-0.5 text-center text-xs font-medium text-rose-400">
+                    -{dropped.toLocaleString()} dropped
+                  </p>
+                )}
+                <span className={`mx-auto mb-0.5 block h-4 w-px ${accent.bar}`} aria-hidden />
+              </>
+            )}
+            <div className="rounded-lg bg-gray-900/80 px-3 py-2.5 text-center">
+              <p className="text-xs text-gray-400">{s.label}</p>
+              <p className="text-lg font-bold text-white">{s.value.toLocaleString()}</p>
+              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-800">
+                <div
+                  className={`h-full rounded-full ${accent.bar}`}
+                  style={{ width: `${Math.min(100, Math.max(3, pct))}%` }}
+                />
+              </div>
+              <p className={`mt-1 text-xs ${accent.text}`}>{pct}%</p>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Conversion footer */}
+      <p className="mt-2 text-xs text-gray-500">Conversion</p>
+      <p className="text-lg font-bold text-amber-400">{convPct}%</p>
     </div>
   );
 }

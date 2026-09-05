@@ -24,23 +24,27 @@ import {
   AudienceTab,
   ImageRiddlesTab,
   JokesTab,
+  JourneyTab,
   ModuleTab,
   OverviewTab,
   RetentionTab,
   UsersTab,
 } from './analytics/tabs';
-import type { AdminDashboard, RetentionCohort } from './analytics/types';
+import type { AdminDashboard, RetentionCohort, ConversionFunnel } from './analytics/types';
 
-/** Dashboard tabs — single source of truth, mirrored by the sidebar sub-menu. */
+/** Dashboard tabs — single source of truth, mirrored by the sidebar sub-menu.
+ *  Owner-ordered 2026-09-05: Overview first, then the cross-module tabs
+ *  (Users / Audience & Geo / Journey / Retention), then per-game tabs. */
 export const ANALYTICS_TABS = [
   { id: 'overview', label: 'Overview' },
+  { id: 'users', label: 'Users' },
+  { id: 'audience', label: 'Audience & Geo' },
+  { id: 'journey', label: 'Journey' },
+  { id: 'retention', label: 'Retention' },
   { id: 'quiz-mcq', label: 'Quiz MCQ' },
   { id: 'riddle-mcq', label: 'Riddle MCQ' },
   { id: 'image-riddles', label: 'Image Riddles' },
   { id: 'jokes', label: 'Dad Jokes' },
-  { id: 'users', label: 'Users' },
-  { id: 'audience', label: 'Audience & Geo' },
-  { id: 'retention', label: 'Retention' },
   { id: 'events', label: 'Raw Events' },
 ] as const;
 
@@ -60,7 +64,10 @@ export function AnalyticsSection() {
   const searchParams = useSearchParams();
 
   const [tab, setTab] = useState<TabId>(
-    (TABS.find((t) => t.id === searchParams.get('tab'))?.id ?? 'overview') as TabId
+    (TABS.find((t) => t.id === searchParams.get('tab'))?.id ??
+      // No deep link → open on the leading (combined-data) tab.
+      TABS[0]?.id ??
+      'journey') as TabId
   );
   const [days, setDays] = useState<number>(30);
 
@@ -74,6 +81,7 @@ export function AnalyticsSection() {
   }, [urlTab, tab]);
   const [data, setData] = useState<AdminDashboard | null>(null);
   const [retention, setRetention] = useState<RetentionCohort[]>([]);
+  const [funnel, setFunnel] = useState<ConversionFunnel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,12 +89,14 @@ export function AnalyticsSection() {
     setLoading(true);
     setError(null);
     try {
-      const [dashboardRes, retentionRes] = await Promise.all([
+      const [dashboardRes, retentionRes, funnelRes] = await Promise.all([
         adminApi.get<AdminDashboard>(`/admin/analytics/dashboard?days=${rangeDays}`),
         adminApi.get<RetentionCohort[]>('/admin/analytics/retention?weeks=8'),
+        adminApi.get<ConversionFunnel>(`/admin/analytics/funnel?days=${rangeDays}`),
       ]);
       setData(dashboardRes.data);
       setRetention(Array.isArray(retentionRes.data) ? retentionRes.data : []);
+      setFunnel(funnelRes.data ?? null);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to load analytics');
     } finally {
@@ -109,7 +119,7 @@ export function AnalyticsSection() {
 
   const exportCsv = () => {
     if (!data) return;
-    downloadCsv(`analytics-${tab}`, exportRowsForTab(tab, data, retention));
+    downloadCsv(`analytics-${tab}`, exportRowsForTab(tab, data, retention, funnel));
   };
 
   return (
@@ -205,6 +215,7 @@ export function AnalyticsSection() {
             {tab === 'users' && <UsersTab data={data} />}
             {tab === 'audience' && <AudienceTab data={data} />}
             {tab === 'retention' && <RetentionTab cohorts={retention} />}
+            {tab === 'journey' && <JourneyTab data={data} funnel={funnel} />}
             {tab === 'events' && <EventsBrowser />}
           </>
         ) : null}

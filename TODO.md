@@ -4,6 +4,29 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — journey visual pass + analytics incident (2026-09-05)
+
+- **Journey tab reshaped to the owner's reference image:** vertical flow with a "Total activity"
+  node on top, then color-coded columns per module — Quiz (violet) / Riddle (sky) / Image Riddle
+  (orange) / Jokes (emerald) / **Other** (gray: Pages viewed → Sign ups → Logins → Client errors)
+  — each a stacked funnel with progress bars, "-N dropped" annotations and a final conversion %.
+  Below: **Pages visitors see** (top-routes BarList) and **Beyond the journeys** KPI cards for
+  raw-event families with no column (achievements, security events, comments, newsletter,
+  client errors, web-vital samples). Backend dashboard payload gained `clientErrors`,
+  `securityEvents`, `commentEvents` KPIs.
+- **Raw Events made visual (owner: "difficult to look in raw"):** dark theme matching the
+  dashboard, color-coded event badges per family, property **detail chips** replacing raw JSON
+  (✓ correct / ✗ wrong highlighted); journey timeline renders the same chips.
+- Tab order set by owner: Overview / Users / Audience & Geo / Journey / Retention / per-game /
+  Raw Events (Overview is the default landing tab).
+- **Incident:** the "Failed to fetch" on the analytics dashboard was the backend process being
+  down (port 3012 not listening); restarted it (one `nest --watch` instance). NOTE: `/health`
+  returns 503 — disk check over threshold, C: drive 98% full (~8 GB free). Machine-level issue,
+  app unaffected (readiness OK).
+- **Verified:** both apps tsc clean; frontend **193/193**; eslint clean on touched files;
+  funnel + asc-events endpoints probed live with a minted 5-min admin JWT.
+- Owner asked to commit and push (this commit).
+
 ### Run summary — analytics gap pass: abandonment, error telemetry, event filters (2026-09-05)
 
 - Owner gave the go-ahead on plan/13 §4b; implemented pickup-order steps 1–2 (+ same-file wins):

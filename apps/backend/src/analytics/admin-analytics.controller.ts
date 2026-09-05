@@ -44,6 +44,14 @@ export class AdminAnalyticsController {
     return this.analyticsService.getRetentionCohorts(Number(weeks) || 6);
   }
 
+  @Get('funnel')
+  @ApiOperation({
+    summary: 'Conversion funnel: visitors → signups → played → completed → returned',
+  })
+  getFunnel(@Query() query: AdminDashboardQueryDto) {
+    return this.analyticsService.getFunnel(query.days ?? 30);
+  }
+
   @Get('events')
   @ApiOperation({
     summary:
@@ -56,6 +64,7 @@ export class AdminAnalyticsController {
       from: query.from,
       to: query.to,
       actor: query.actor,
+      order: query.order,
       page: query.page ?? 1,
       limit: query.limit ?? 50,
     });

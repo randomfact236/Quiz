@@ -36,6 +36,9 @@ export interface AdminDashboard {
     commentsTotal: number;
     avgQuizScorePct: number | null;
     avgQuizSeconds: number | null;
+    clientErrors: number;
+    securityEvents: number;
+    commentEvents: number;
   };
   dailySeries: { day: string; events: number; pageViews: number; activeUsers: number }[];
   topPages: { label: string; count: number }[];
@@ -68,4 +71,10 @@ export interface RetentionCohort {
   size: number;
   returned: number;
   retentionPct: number;
+}
+
+/** Mirror of the backend ConversionFunnel payload (analytics.service.ts). */
+export interface ConversionFunnel {
+  range: { days: number };
+  stages: { key: string; label: string; actors: number }[];
 }

@@ -14,6 +14,7 @@ import {
   ArrayMaxSize,
   IsArray,
   IsDateString,
+  IsIn,
   IsInt,
   IsObject,
   IsOptional,
@@ -120,6 +121,11 @@ export class AdminEventsQueryDto {
   @IsString()
   @MaxLength(64)
   actor?: string;
+
+  @ApiPropertyOptional({ enum: ['asc', 'desc'], default: 'desc' })
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  order?: 'asc' | 'desc';
 
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()
