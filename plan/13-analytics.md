@@ -137,10 +137,11 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 ### B — Aggregation / dashboard gaps
 
 - [x] **B1. Funnel + conversion views** — DONE 2026-09-05 (both surfaces, owner-approved): (a) **Journey tab** rendering the owner's reference layout — "Total activity" node over color-coded per-module funnel columns (Quiz violet / Riddle sky / Image Riddle orange / Jokes emerald / **Other** gray: Pages viewed → Sign ups → Logins → Client errors), each with progress bars, "-N dropped" annotations and a conversion %; below it a **Pages visitors see** BarList, a **Beyond the journeys** KPI grid for raw-event families with no column (achievements, security events, comments, newsletter, client errors, web-vital samples — backend payload gained `clientErrors`/`securityEvents`/`commentEvents`), and the site-wide visitor funnel from `GET /admin/analytics/funnel?days`; (b) **actor timeline** in Raw Events — click an Actor cell for a visitor's chronological events grouped per session (events endpoint gained `order=asc`). Note: guest→user identity is still approximate (a registering guest counts in two stages) until signup_completed anchoring accumulates — see A7.
-- [ ] **B2. Content drill-downs** — per-subject/chapter/question accuracy and hardest/easiest questions: data already lands (`questionId`, `subject`, `chapter` in properties), needs dashboard queries + a UI home (P2 carry-over).
-- [ ] **B3. Per-joke leaderboard** — `joke_voted` stores `jokeId` but the Jokes tab aggregates only global like/dislike totals; a top-jokes table (and joke-level like ratio) is query-only.
+- [x] **B2. Content drill-downs** — DONE 2026-09-05: per-subject accuracy and hardest questions aggregate from `question_answered` (`subject`, `questionId` in properties). `ModuleDashboard` gained `bySubject` + `hardestQuestions` (questions with ≥3 answers, lowest accuracy first); Quiz/Riddle tabs render an "Accuracy by subject" bar panel and a "Hardest questions" table.
+- [x] **B3. Per-joke leaderboard** — DONE 2026-09-05: `joke_voted` events grouped by `properties->>'jokeId'`, LEFT JOINed to `dad_jokes.joke` for the text (deleted jokes render "(deleted joke)"); dashboard payload `jokes.top` (top 5 by votes with like %) is the Jokes-tab leaderboard table and its CSV export.
 - [x] **B4. Events browser filters** — DONE 2026-09-05. `GET /admin/analytics/events` accepts `from`/`to` (ISO; date-only `to` widened to end-of-day) and `actor` (matches userId, guestId, or sessionId — userId cast to text to avoid uuid-cast errors). EventsBrowser: date pickers, actor input, eventName free-text with a datalist covering all known client+server events, and an Actor column (`u:`/`g:`/`s:` prefixes, full ids in the tooltip) for journey tracing.
-- [ ] **B5. Security events surfaced nowhere** — `login_failed` / `login_locked` are recorded but the Users tab charts only signups/logins; a failed-logins/lockouts panel would close the loop on the brute-force data already collected.
+- [x] **B5. Security events surfaced** — DONE 2026-09-05: Users tab gained a "Security" panel — failed-logins-per-day series (`users.failedLoginsByDay`) plus the in-window `securityEvents` KPI (failed logins + lockouts), closing the loop on the brute-force data already collected.
+- [x] **B8. Per-feature click breakdowns** — DONE 2026-09-05 (owner ask: "click data analysis section for each feature"): `ModuleDashboard.eventMix` (per-eventName counts scoped to the module + window) renders as a "Click analysis" bar panel on the Quiz and Riddle tabs; Image Riddles already had its action mix, Jokes its vote mix.
 - [ ] **B6. Retention depth** — cohorts are weekly first-seen only; no D1/D7/D30 numbers and no segments (country, acquisition source). Fine for now; revisit once traffic justifies it (plan docs §7).
 - [ ] **B7. Backend ops metrics** (plan docs §6.1) — endpoint latency percentiles, error rates by route, cache hit rate, throttler rejections: none exist (Winston logs them only as text). A small `GET /admin/analytics/ops` or a dashboard panel would cover it; larger scope than the rest of section B.
 
@@ -159,10 +160,10 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 
 1. ~~**A1 + A6** (abandonment + client errors)~~ — **DONE 2026-09-05** (plus A2/A3, same-file wins).
 2. ~~**B4** (events browser date/actor filters)~~ — **DONE 2026-09-05**.
-3. **A7 remainder + B1** (Google-OAuth signup anchor → funnel views) — the main business question the data still can't fully answer.
-4. **B2 + B3** (content drill-downs, joke leaderboard) — query-only wins over already-collected data.
-5. **C1 + C2** (purge decision, tests) — hygiene before traffic grows; new events are unit-test candidates too.
-6. Remainder (A4–A5, A8–A10, B5–B7) as needed.
+3. ~~**A7 + B1** (conversion anchor → funnel views)~~ — **B1 DONE 2026-09-05** (Journey tab + actor timeline); A7 remainder (Google-OAuth signup anchor) still open.
+4. ~~**B2 + B3 + B5 + B8** (content drill-downs, joke leaderboard, security panel, per-feature click breakdowns)~~ — **DONE 2026-09-05**.
+5. **C1 + C2** (purge decision, tests) — hygiene before traffic grows; needs owner input on C1.
+6. Remainder (A4–A5, A8–A10, B6–B7, C3–C4, D1) as needed.
 
 ## 5. Cross-feature touchpoints
 

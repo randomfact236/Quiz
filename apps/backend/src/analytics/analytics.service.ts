@@ -63,6 +63,11 @@ export interface ModuleDashboard {
   skipped: number;
   avgScorePct: number | null;
   byLevel: { level: string; answered: number; correct: number; accuracyPct: number | null }[];
+  bySubject: { subject: string; answered: number; correct: number; accuracyPct: number | null }[];
+  /** Lowest-accuracy questions with a minimum sample (content drill-down, B2). */
+  hardestQuestions: { questionId: string; answers: number; accuracyPct: number }[];
+  /** Per-eventName click counts scoped to this module + window (B8). */
+  eventMix: { eventName: string; count: number }[];
   achievementsUnlocked: number | null;
 }
 
@@ -106,6 +111,7 @@ export interface AdminDashboard {
   users: {
     signupsByDay: { day: string; count: number }[];
     loginsByDay: { day: string; count: number }[];
+    failedLoginsByDay: { day: string; count: number }[];
   };
   modules: {
     'quiz-mcq': ModuleDashboard;
@@ -116,7 +122,13 @@ export interface AdminDashboard {
       gaveUp: number;
       shared: number;
     };
-    jokes: { viewed: number; liked: number; disliked: number; shared: number };
+    jokes: {
+      viewed: number;
+      liked: number;
+      disliked: number;
+      shared: number;
+      top: { jokeId: string; label: string; votes: number; likePct: number }[];
+    };
   };
 }
 
@@ -397,48 +409,86 @@ export class AnalyticsService {
     const prev = `"serverTs" > now() - (2 * $1::int * interval '1 day') AND "serverTs" <= now() - ($1::int * interval '1 day')`;
 
     const moduleDashboard = async (module: string): Promise<ModuleDashboard> => {
-      const [started, resumed, completed, abandoned, answered, byLevel, avgScore] =
-        await Promise.all([
-          this.scalarN(
-            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_started' AND module = $2 AND ${win}`,
-            [days, module]
-          ),
-          this.scalarN(
-            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_resumed' AND module = $2 AND ${win}`,
-            [days, module]
-          ),
-          this.scalarN(
-            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}`,
-            [days, module]
-          ),
-          this.scalarN(
-            `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_abandoned' AND module = $2 AND ${win}`,
-            [days, module]
-          ),
-          repo.query(
-            `SELECT COUNT(*)::int AS answered,
+      const [
+        started,
+        resumed,
+        completed,
+        abandoned,
+        answered,
+        byLevel,
+        avgScore,
+        bySubject,
+        hardest,
+        eventMix,
+      ] = await Promise.all([
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_started' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_resumed' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        this.scalarN(
+          `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'session_abandoned' AND module = $2 AND ${win}`,
+          [days, module]
+        ),
+        repo.query(
+          `SELECT COUNT(*)::int AS answered,
                   SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
            FROM analytics_events
            WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}`,
-            [days, module]
-          ),
-          repo.query(
-            `SELECT COALESCE(properties->>'level', 'unknown') AS level,
+          [days, module]
+        ),
+        repo.query(
+          `SELECT COALESCE(properties->>'level', 'unknown') AS level,
                   COUNT(*)::int AS answered,
                   SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
            FROM analytics_events
            WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
            GROUP BY 1 ORDER BY answered DESC`,
-            [days, module]
-          ),
-          repo.query(
-            `SELECT AVG((properties->>'percentage')::float)::float AS pct
+          [days, module]
+        ),
+        repo.query(
+          `SELECT AVG((properties->>'percentage')::float)::float AS pct
            FROM analytics_events
            WHERE "eventName" = 'session_completed' AND module = $2 AND ${win}
              AND properties->>'percentage' IS NOT NULL`,
-            [days, module]
-          ),
-        ]);
+          [days, module]
+        ),
+        // B2: per-subject accuracy (question_answered carries `subject`).
+        repo.query(
+          `SELECT COALESCE(properties->>'subject', 'unknown') AS subject,
+                    COUNT(*)::int AS answered,
+                    SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END)::int AS correct
+           FROM analytics_events
+           WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+           GROUP BY 1 ORDER BY answered DESC`,
+          [days, module]
+        ),
+        // B2: hardest questions — min sample of 3 answers, worst accuracy first.
+        repo.query(
+          `SELECT COALESCE(properties->>'questionId', 'unknown') AS q,
+                    COUNT(*)::int AS answers,
+                    ROUND(100.0 * SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END) / COUNT(*))::int AS accuracy
+           FROM analytics_events
+           WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+           GROUP BY 1 HAVING COUNT(*) >= 3
+           ORDER BY accuracy ASC, answers DESC
+           LIMIT 5`,
+          [days, module]
+        ),
+        // B8: per-eventName click mix for this module.
+        repo.query(
+          `SELECT "eventName", COUNT(*)::int AS count FROM analytics_events
+           WHERE module = $2 AND ${win} GROUP BY 1 ORDER BY count DESC`,
+          [days, module]
+        ),
+      ]);
       const answeredN = Number(answered[0]?.answered ?? 0);
       const correctN = Number(answered[0]?.correct ?? 0);
       return {
@@ -462,6 +512,24 @@ export class AnalyticsService {
             Number(r.answered) > 0
               ? Math.round((Number(r.correct ?? 0) / Number(r.answered)) * 100)
               : null,
+        })),
+        bySubject: bySubject.map((r: { subject: string; answered: number; correct: number }) => ({
+          subject: r.subject,
+          answered: Number(r.answered),
+          correct: Number(r.correct ?? 0),
+          accuracyPct:
+            Number(r.answered) > 0
+              ? Math.round((Number(r.correct ?? 0) / Number(r.answered)) * 100)
+              : null,
+        })),
+        hardestQuestions: hardest.map((r: { q: string; answers: number; accuracy: number }) => ({
+          questionId: r.q,
+          answers: Number(r.answers),
+          accuracyPct: Number(r.accuracy ?? 0),
+        })),
+        eventMix: eventMix.map((r: { eventName: string; count: number }) => ({
+          eventName: r.eventName,
+          count: Number(r.count),
         })),
         achievementsUnlocked:
           module === 'quiz-mcq'
@@ -506,6 +574,8 @@ export class AnalyticsService {
       clientErrors,
       securityEvents,
       commentEvents,
+      jokeTop,
+      failedLoginsByDay,
     ] = await Promise.all([
       this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${win}`, [days]),
       this.scalarN(`SELECT COUNT(*)::int AS n FROM analytics_events WHERE ${prev}`, [days]),
@@ -663,6 +733,29 @@ export class AnalyticsService {
         `SELECT COUNT(*)::int AS n FROM analytics_events WHERE "eventName" = 'comment_posted' AND ${win}`,
         [days]
       ),
+      // B3: per-joke leaderboard — votes from joke_voted, text joined for readability.
+      repo.query(
+        `SELECT e.properties->>'jokeId' AS "jokeId",
+                COALESCE(LEFT(d.joke, 80), '(deleted joke)') AS label,
+                COUNT(*)::int AS votes,
+                COALESCE(SUM(CASE WHEN e.properties->>'voteType' = 'like' THEN 1 ELSE 0 END), 0)::int AS likes
+         FROM analytics_events e
+         LEFT JOIN dad_jokes d ON d.id::text = e.properties->>'jokeId'
+         WHERE e."eventName" = 'joke_voted' AND ${win} AND e.properties->>'jokeId' IS NOT NULL
+         GROUP BY 1, 2 ORDER BY votes DESC LIMIT 5`,
+        [days]
+      ),
+      // B5: failed logins per day for the Users-tab security panel.
+      repo.query(
+        `SELECT to_char(d.day, 'YYYY-MM-DD') AS day, COALESCE(f.n, 0)::int AS count
+         FROM generate_series(CURRENT_DATE - (($1::int - 1) * interval '1 day'), CURRENT_DATE, interval '1 day') AS d(day)
+         LEFT JOIN (
+           SELECT date_trunc('day', "serverTs") AS day, COUNT(*)::int AS n
+           FROM analytics_events
+           WHERE "eventName" = 'login_failed' AND ${win} GROUP BY 1
+         ) f ON f.day = d.day ORDER BY d.day`,
+        [days]
+      ),
     ]);
 
     const irEvents = new Map(
@@ -713,6 +806,7 @@ export class AnalyticsService {
       users: {
         signupsByDay: signupsByDay,
         loginsByDay: loginsByDay,
+        failedLoginsByDay: failedLoginsByDay,
       },
       modules: {
         'quiz-mcq': quiz,
@@ -728,6 +822,17 @@ export class AnalyticsService {
           liked: Number(votes.likes ?? 0),
           disliked: Number(votes.dislikes ?? 0),
           shared: jokeShares,
+          top: (jokeTop as { jokeId: string; label: string; votes: number; likes: number }[]).map(
+            (r) => ({
+              jokeId: r.jokeId,
+              label: r.label,
+              votes: Number(r.votes ?? 0),
+              likePct:
+                Number(r.votes) > 0
+                  ? Math.round((Number(r.likes ?? 0) / Number(r.votes)) * 100)
+                  : 0,
+            })
+          ),
         },
       },
     };

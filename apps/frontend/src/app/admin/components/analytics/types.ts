@@ -14,6 +14,9 @@ export interface ModuleDashboard {
   skipped: number;
   avgScorePct: number | null;
   byLevel: { level: string; answered: number; correct: number; accuracyPct: number | null }[];
+  bySubject: { subject: string; answered: number; correct: number; accuracyPct: number | null }[];
+  hardestQuestions: { questionId: string; answers: number; accuracyPct: number }[];
+  eventMix: { eventName: string; count: number }[];
   achievementsUnlocked: number | null;
 }
 
@@ -57,12 +60,19 @@ export interface AdminDashboard {
   users: {
     signupsByDay: { day: string; count: number }[];
     loginsByDay: { day: string; count: number }[];
+    failedLoginsByDay: { day: string; count: number }[];
   };
   modules: {
     'quiz-mcq': ModuleDashboard;
     'riddle-mcq': ModuleDashboard;
     'image-riddles': { answerChecked: number; hintShown: number; gaveUp: number; shared: number };
-    jokes: { viewed: number; liked: number; disliked: number; shared: number };
+    jokes: {
+      viewed: number;
+      liked: number;
+      disliked: number;
+      shared: number;
+      top: { jokeId: string; label: string; votes: number; likePct: number }[];
+    };
   };
 }
 

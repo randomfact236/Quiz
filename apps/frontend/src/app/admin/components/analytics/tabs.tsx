@@ -243,6 +243,60 @@ export function ModuleTab({
         </Panel>
       </div>
 
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Panel title="Accuracy by subject" hint="Which content areas play hardest (B2)">
+          <BarList
+            rows={m.bySubject.map((s) => ({
+              label: s.subject,
+              value: s.answered,
+              ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
+            }))}
+            accent="bg-violet-500/70"
+            emptyText="No answers tracked in this window."
+          />
+        </Panel>
+        <Panel title="Click analysis" hint="Every tracked interaction in this module (B8)">
+          <BarList
+            rows={m.eventMix.map((e) => ({ label: e.eventName, value: e.count }))}
+            accent="bg-cyan-500/70"
+            emptyText="No interactions in this window."
+          />
+        </Panel>
+      </div>
+
+      <Panel title="Hardest questions" hint="Lowest accuracy with at least 3 answers (B2)">
+        {m.hardestQuestions.length === 0 ? (
+          <p className="text-sm text-gray-600">Not enough answers yet to rank questions.</p>
+        ) : (
+          <DarkTable headers={['Question', 'Answers', 'Accuracy']}>
+            {m.hardestQuestions.map((q) => (
+              <tr key={q.questionId} className="border-t border-gray-800">
+                <td
+                  className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-300"
+                  title={q.questionId}
+                >
+                  {q.questionId}
+                </td>
+                <td className="py-2 pr-4 text-gray-400">{n(q.answers)}</td>
+                <td className="py-2">
+                  <span
+                    className={`font-medium ${
+                      q.accuracyPct < 40
+                        ? 'text-rose-400'
+                        : q.accuracyPct < 70
+                          ? 'text-amber-400'
+                          : 'text-emerald-400'
+                    }`}
+                  >
+                    {q.accuracyPct}%
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </DarkTable>
+        )}
+      </Panel>
+
       {moduleKey === 'quiz-mcq' && data.kpis.avgQuizScorePct !== null && (
         <Panel title="Average final score">
           <AccuracyBar pct={data.kpis.avgQuizScorePct} label="Across all completed quiz sessions" />
@@ -306,6 +360,36 @@ export function JokesTab({ data }: TabProps) {
           <p className="text-sm text-gray-600">No votes in this window.</p>
         )}
       </Panel>
+      <Panel title="Top jokes" hint="Most-voted jokes in the window (B3)">
+        {m.top.length === 0 ? (
+          <p className="text-sm text-gray-600">No votes in this window yet.</p>
+        ) : (
+          <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
+            {m.top.map((j, i) => (
+              <tr key={j.jokeId} className="border-t border-gray-800">
+                <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
+                <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
+                  {j.label}
+                </td>
+                <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
+                <td className="py-2">
+                  <span
+                    className={`font-medium ${
+                      j.likePct >= 60
+                        ? 'text-emerald-400'
+                        : j.likePct >= 40
+                          ? 'text-amber-400'
+                          : 'text-rose-400'
+                    }`}
+                  >
+                    {j.likePct}%
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </DarkTable>
+        )}
+      </Panel>
     </div>
   );
 }
@@ -354,6 +438,18 @@ export function UsersTab({ data }: TabProps) {
           <MiniBars series={users.loginsByDay} accent="bg-emerald-500/80" />
         </Panel>
       </div>
+      <Panel title="Security" hint="Failed logins per day — brute-force radar (B5)">
+        <div className="mb-3">
+          <KpiCard
+            label="Security events"
+            value={n(kpis.securityEvents)}
+            icon={Lock}
+            accent="rose"
+            hint="failed logins + lockouts in window"
+          />
+        </div>
+        <MiniBars series={users.failedLoginsByDay} accent="bg-rose-500/80" />
+      </Panel>
     </div>
   );
 }
@@ -663,6 +759,14 @@ export function exportRowsForTab(
     }
     case 'jokes': {
       const m = data.modules.jokes;
+      if (m.top.length > 0) {
+        return m.top.map((j) => ({
+          jokeId: j.jokeId,
+          joke: j.label,
+          votes: j.votes,
+          likePct: j.likePct,
+        }));
+      }
       return [
         { metric: 'viewed', count: m.viewed },
         { metric: 'liked', count: m.liked },
