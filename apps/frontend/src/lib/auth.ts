@@ -56,6 +56,18 @@ export const authService = {
     removeItem(STORAGE_KEYS.REFRESH_TOKEN);
   },
 
+  logoutAdmin: (): void => {
+    // Same server-side revocation for the separate admin token pair (the
+    // deliberate two-store design — see lib/api-client.ts). The endpoint is
+    // public and idempotent, so this is safe even if the token is stale.
+    const refreshToken = getItem<string | null>(STORAGE_KEYS.ADMIN_REFRESH_TOKEN, null);
+    if (refreshToken) {
+      api.post('/auth/logout', { refreshToken }).catch(() => undefined);
+    }
+    removeItem(STORAGE_KEYS.ADMIN_TOKEN);
+    removeItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN);
+  },
+
   forgotPassword: async (email: string): Promise<{ message: string }> => {
     const response = await api.post<{ message: string }>('/auth/forgot-password', { email });
     return response.data;

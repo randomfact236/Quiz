@@ -255,6 +255,13 @@ export class EmailService {
 
       if (error) {
         this.logger.error(`Failed to send email: ${error.message}`);
+        // Dev-gated fallback: outside production a failed send must not break
+        // the reset flow (the token is already stored; the reset URL is in
+        // the server log above). Production still reports the failure.
+        if (this.configService.get<string>('NODE_ENV') !== 'production') {
+          this.logger.warn('DEV ONLY — treating send failure as success (link logged, not sent)');
+          return { success: true, message: 'DEV: email not sent; reset link in server logs' };
+        }
         return { success: false, message: error.message };
       }
 
@@ -262,6 +269,10 @@ export class EmailService {
       return { success: true, message: 'Email sent successfully' };
     } catch (error) {
       this.logger.error(`Error sending email: ${error}`);
+      if (this.configService.get<string>('NODE_ENV') !== 'production') {
+        this.logger.warn('DEV ONLY — treating send exception as success (link logged, not sent)');
+        return { success: true, message: 'DEV: email not sent; reset link in server logs' };
+      }
       return { success: false, message: 'Failed to send email' };
     }
   }

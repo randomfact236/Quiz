@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
@@ -18,6 +19,7 @@ const OAUTH_CODE_TTL_S = 60;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -299,7 +301,12 @@ export class AuthService {
     );
 
     if (!result.success) {
-      throw new BadRequestException('Failed to send reset email. Please try again later.');
+      // NEVER surface send failures differentially — a 400 here would let
+      // attackers enumerate registered emails (nonexistent addresses always
+      // get the success message below). Log server-side and stay constant.
+      this.logger.error(
+        `Password reset email failed for an existing account (token was stored; user can retry)`
+      );
     }
 
     return { message: 'If an account with that email exists, we have sent a password reset link.' };

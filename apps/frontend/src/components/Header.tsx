@@ -6,7 +6,8 @@ import { NAV_ITEMS, NAV_MENU_ITEMS } from '@/lib/nav-config';
 import { useState, useEffect } from 'react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { getItem, removeItem, STORAGE_KEYS } from '@/lib/storage';
+import { getItem, STORAGE_KEYS } from '@/lib/storage';
+import { authService } from '@/lib/auth';
 
 export default function Header(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,15 +26,14 @@ export default function Header(): JSX.Element {
   }, [pathname]);
 
   const handleUserLogout = () => {
-    removeItem(STORAGE_KEYS.AUTH_TOKEN);
-    removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    // Server-side revocation + local cleanup (plan/01 P1: logout must revoke).
+    authService.logout();
     setIsUserLoggedIn(false);
     router.push('/');
   };
 
   const handleAdminLogout = () => {
-    removeItem(STORAGE_KEYS.ADMIN_TOKEN);
-    removeItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN);
+    authService.logoutAdmin();
     setIsAdminLoggedIn(false);
     router.push('/');
   };

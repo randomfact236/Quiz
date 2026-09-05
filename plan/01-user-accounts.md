@@ -5,7 +5,9 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. Supersedes `docs/features/archive/auth-users.md`
+> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (20 test
+> users seeded via the register flow — `testuser01-20@example.com` / `TestPass123!`, kept in the
+> dev DB for manual testing). Supersedes `docs/features/archive/auth-users.md`
 > (archived 2026-08-30 via `git mv`, history preserved; every claim re-checked against code —
 > stale claims from the old doc were dropped or corrected). Demographics collection was removed
 > from this feature entirely on 2026-08-30 (see commit history).
@@ -16,22 +18,22 @@
 
 Backend (`apps/backend/src/`):
 
-| File                                           | Purpose                                                                                                                                                                                                        | Size (verified) |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `auth/auth.controller.ts`                      | `/auth`: login, register, forgot/reset-password, refresh, Google OAuth start/callback — throttled                                                                                                              | 115 lines       |
-| `auth/auth.service.ts`                         | JWT access tokens + opaque 32-byte refresh tokens, brute-force lockout on login, SHA-256-hashed reset tokens (1h expiry), Google account linking by email, **(uncommitted)** analytics records for auth events | 237 lines       |
-| `auth/brute-force.service.ts`                  | Failed-attempt counter via CacheService: 5 attempts → 15-min lockout (423), TTL-preserving                                                                                                                     | —               |
-| `auth/jwt.strategy.ts` / `jwt-auth.guard.ts`   | Passport JWT from Bearer; guard honors `@_Public()`                                                                                                                                                            | —               |
-| `auth/optional-jwt-auth.guard.ts`              | Soft guard: valid token → `req.user`, anything else → anonymous (analytics ingest + guest routes)                                                                                                              | 46 lines        |
-| `auth/google.strategy.ts`                      | passport-google-oauth20                                                                                                                                                                                        | —               |
-| `auth/dto/`                                    | `auth.dto.ts` (login/register/refresh), `forgot-password.dto.ts`, `reset-password.dto.ts`                                                                                                                      | —               |
-| `users/users.controller.ts`                    | `/users`: admin list (Jwt+Roles), profile get/update, `:id` (self-or-admin via ForbiddenException)                                                                                                             | —               |
-| `users/users.service.ts`                       | bcrypt(12), refresh-token storage/lookup (plaintext), reset-token helpers, role update, delete, lastActive; **demographics methods removed**                                                                   | 129 lines       |
-| `users/entities/user.entity.ts`                | `users`: unique email, password, name, avatar, role (free-text, default 'user'), refreshToken (plaintext), googleId, hashed reset token/expiry, lastActive; **country/sex/ageGroup dropped**                   | —               |
-| `guest-users/guest-users-public.controller.ts` | Public `POST /guest-users/activity` heartbeat (guestId DTO, throttled) — demographics endpoint removed                                                                                                         | —               |
-| `guest-users/guest-users.controller.ts`        | `admin/guest-users` list + by-id (Jwt+AdminGuard); update POST removed with demographics                                                                                                                       | —               |
-| `guest-users/entities/guest-user.entity.ts`    | `guest_users`: unique guestId, quizAttempts, totalScore, lastActive; **demographics columns dropped**                                                                                                          | —               |
-| `admin/users/admin-users.controller.ts`        | `admin/users`: list (now includes lastActive), get/update/delete; **demographics endpoints removed**                                                                                                           | —               |
+| File                                           | Purpose                                                                                                                                                                                                                  | Size (verified) |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `auth/auth.controller.ts`                      | `/auth`: login, register, forgot/reset-password, refresh, Google OAuth start/callback — throttled                                                                                                                        | 115 lines       |
+| `auth/auth.service.ts`                         | JWT access tokens + opaque 32-byte refresh tokens, brute-force lockout on login, SHA-256-hashed reset tokens (1h expiry), Google account linking by email, analytics records for auth events (committed — see P1 #6)     | 237 lines       |
+| `auth/brute-force.service.ts`                  | Failed-attempt counter via CacheService: 5 attempts → 15-min lockout (423), TTL-preserving                                                                                                                               | —               |
+| `auth/jwt.strategy.ts` / `jwt-auth.guard.ts`   | Passport JWT from Bearer; guard honors `@_Public()`                                                                                                                                                                      | —               |
+| `auth/optional-jwt-auth.guard.ts`              | Soft guard: valid token → `req.user`, anything else → anonymous (analytics ingest + guest routes)                                                                                                                        | 46 lines        |
+| `auth/google.strategy.ts`                      | passport-google-oauth20                                                                                                                                                                                                  | —               |
+| `auth/dto/`                                    | `auth.dto.ts` (login/register/refresh), `forgot-password.dto.ts`, `reset-password.dto.ts`                                                                                                                                | —               |
+| `users/users.controller.ts`                    | `/users`: admin list (Jwt+Roles), profile get/update, `:id` (self-or-admin via ForbiddenException)                                                                                                                       | —               |
+| `users/users.service.ts`                       | bcrypt(12), refresh-token storage/lookup (**SHA-256-hashed at rest** + 7-day expiry — fixed 2026-08-30, see §3), reset-token helpers, role update, delete, lastActive; **demographics methods removed**                  | 129 lines       |
+| `users/entities/user.entity.ts`                | `users`: unique email, password, name, avatar, role (`UserRole` enum + `users_role_check` DB CHECK), **hashed** refreshToken + expiry, googleId, hashed reset token/expiry, lastActive; **country/sex/ageGroup dropped** | —               |
+| `guest-users/guest-users-public.controller.ts` | Public `POST /guest-users/activity` heartbeat (guestId DTO, throttled) — demographics endpoint removed                                                                                                                   | —               |
+| `guest-users/guest-users.controller.ts`        | `admin/guest-users` list + by-id (Jwt+AdminGuard); update POST removed with demographics                                                                                                                                 | —               |
+| `guest-users/entities/guest-user.entity.ts`    | `guest_users`: unique guestId, quizAttempts, totalScore, lastActive; **demographics columns dropped**                                                                                                                    | —               |
+| `admin/users/admin-users.controller.ts`        | `admin/users`: list (now includes lastActive), get/update/delete; **demographics endpoints removed**                                                                                                                     | —               |
 
 Frontend (`apps/frontend/src/`):
 
@@ -48,21 +50,25 @@ Frontend (`apps/frontend/src/`):
 
 ## 2. Endpoint map (verified against controllers 2026-08-30)
 
-| Method & Path                               | Auth                | Notes                                                     |
-| ------------------------------------------- | ------------------- | --------------------------------------------------------- |
-| POST `/auth/login`                          | public              | brute-force lockout (423) after 5 fails/15 min            |
-| POST `/auth/register`                       | public              | forces role 'user'                                        |
-| POST `/auth/forgot-password`                | public              | anti-enumeration constant message                         |
-| POST `/auth/reset-password`                 | public              | SHA-256-hashed token, 1h expiry                           |
-| POST `/auth/refresh`                        | public              | rotated access token from opaque refresh token            |
-| GET `/auth/google`, `/auth/google/callback` | public              | OAuth; callback redirects with tokens in URL (see P1)     |
-| GET `/users`                                | Jwt+Roles           | admin list (id, email, name, role, createdAt, lastActive) |
-| GET/PUT `/users/profile`                    | global JwtAuthGuard | profile read/update (name/avatar whitelist)               |
-| GET `/users/:id`                            | Jwt                 | self-or-admin                                             |
-| GET `/admin/users`                          | Jwt+Admin           | full list                                                 |
-| GET/PUT/DELETE `/admin/users/:id`           | Jwt+Admin           | update name/role/avatar; delete                           |
-| GET `/admin/guest-users`, `/:guestId`       | Jwt+Admin           | guest listing                                             |
-| POST `/guest-users/activity`                | public              | guestId heartbeat (lastActive), throttled                 |
+| Method & Path                               | Auth                | Notes                                                       |
+| ------------------------------------------- | ------------------- | ----------------------------------------------------------- |
+| POST `/auth/login`                          | public              | brute-force lockout (423) after 5 fails/15 min              |
+| POST `/auth/register`                       | public              | forces role 'user'                                          |
+| POST `/auth/forgot-password`                | public              | anti-enumeration constant message                           |
+| POST `/auth/reset-password`                 | public              | SHA-256-hashed token, 1h expiry                             |
+| POST `/auth/refresh`                        | public              | rotated access token from opaque refresh token              |
+| POST `/auth/logout`                         | Jwt                 | server-side refresh-token revocation (idempotent)           |
+| POST `/auth/verify-email`                   | public              | 24h hashed one-time token (anti-enumeration resend)         |
+| POST `/auth/resend-verification`            | public              | anti-enumeration constant message                           |
+| POST `/auth/oauth/exchange`                 | public              | single-use 60s OAuth code → tokens (delete-before-validate) |
+| GET `/auth/google`, `/auth/google/callback` | public              | OAuth; callback redirects with a one-time code (see P1)     |
+| GET `/users`                                | Jwt+Roles           | admin list (id, email, name, role, createdAt, lastActive)   |
+| GET/PUT `/users/profile`                    | global JwtAuthGuard | profile read/update (name/avatar whitelist)                 |
+| GET `/users/:id`                            | Jwt                 | self-or-admin                                               |
+| GET `/admin/users`                          | Jwt+Admin           | full list                                                   |
+| GET/PUT/DELETE `/admin/users/:id`           | Jwt+Admin           | update name/role/avatar; delete                             |
+| GET `/admin/guest-users`, `/:guestId`       | Jwt+Admin           | guest listing                                               |
+| POST `/guest-users/activity`                | public              | guestId heartbeat (lastActive), throttled                   |
 
 ## 3. Current status (verified)
 
@@ -112,5 +118,21 @@ Frontend (`apps/frontend/src/`):
 
 - **All content features** — comments, votes, and guest play attribute to either a JWT user or a client `guestId`; the optional JWT guard resolves identity softly for public routes.
 - **Admin Dashboard** — user/guest management views; role check gates every admin route (`AdminGuard` + default-deny global guard).
-- **Analytics** — events carry real `userId` when logged in, `guestId` otherwise; auth events (uncommitted) recorded server-side.
+- **Analytics** — events carry real `userId` when logged in, `guestId` otherwise; auth events (`user_registered` / `user_login` / `login_failed` / `login_locked` / `password_reset_*`) recorded server-side (committed and live — feature 13).
 - **Achievements** — anonymous/localStorage only today; linking achievements to accounts depends on the refresh-token/sessions work above.
+
+## 6. Extras (2026-09-05 audit — noted, not acted on)
+
+- **Register throttle is 10/min per IP** (ThrottlerGuard) — hit it while seeding 20 users; fine
+  for production, just remember for any bulk-user seeding (space requests ~8s apart).
+- **Owner decision still open (from §3/P1):** hard-gate login until email verified, or keep
+  non-blocking. Mechanism is built; a one-line policy change whenever decided.
+- **Owner decision still open (from §4/P2):** build an admin user-editing UI (role changes
+  currently need raw API calls).
+- **Verification emails depend on Resend** (`RESEND_API_KEY`); in dev the key may be a dummy —
+  registration succeeds regardless (verification is non-blocking), but verify-email E2E needs a
+  real key or reading the token from the DB.
+- **`/guest-users/activity` heartbeat appears to have no frontend caller** — the endpoint exists
+  (public, throttled) but nothing in the frontend seems to POST it; guest rows are created by
+  gameplay counters instead. Either wire a heartbeat or accept the endpoint as API-only (not
+  removed — could be intended for the mobile client).
