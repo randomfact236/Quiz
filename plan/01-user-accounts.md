@@ -123,6 +123,10 @@ Frontend (`apps/frontend/src/`):
 
 ## 6. Extras (2026-09-05 audit — noted, not acted on)
 
+- **Dev admin login (reset 2026-09-05):** `admin@aiquiz.com` / `Admin@Dev2026!`. The original
+  password was custom (the `admin123` example in DEPLOYMENT.md uses a different bcrypt hash
+  than this DB), so it was reset via a bcrypt hash update in the dev DB for the 14-feature
+  manual-testing pass. **Dev database only — do not reuse in production.**
 - **Register throttle is 10/min per IP** (ThrottlerGuard) — hit it while seeding 20 users; fine
   for production, just remember for any bulk-user seeding (space requests ~8s apart).
 - **Owner decision still open (from §3/P1):** hard-gate login until email verified, or keep
