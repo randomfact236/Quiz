@@ -4,6 +4,22 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — first analytics data analysis + findings resolved (2026-09-05)
+
+- Pulled every analytics surface (dashboard 90d, funnel, retention, clicks ×4 modules) plus
+  direct SQL (error breakdown, weekly trend, question keying). Full report delivered in chat;
+  findings recorded in plan/13 §3 so they aren't re-chased:
+  - api_failed clusters (29× quiz-subjects, 19× jokes) = backend **restart windows** from
+    same-day deploys, not slow queries — warm responses ~210ms. No endpoint fix needed.
+  - `featureNames is not defined` client error = transient intermediate build, already fixed.
+  - Twice-missed "Elephants/mice" question is **correctly keyed** (player picked the myth).
+  - Web-vital averages skewed by dev-compile outliers — trust p75; re-measure in production.
+  - Funnel "signed up" = admin accounts only; **0 real registered users** — conversion
+    unmeasured until public traffic exists.
+- Real actions carried forward: get one public visitor (unblocks geo/referrer/SEO/retention
+  meaning); watch jokes voting engagement; re-measure vitals on prod build.
+- No code defects found to fix — docs only. tsc/eslint untouched.
+
 ### Run summary — journey visual pass + analytics incident (2026-09-05)
 
 - **Journey tab reshaped to the owner's reference image:** vertical flow with a "Total activity"

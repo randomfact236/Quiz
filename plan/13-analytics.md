@@ -87,6 +87,22 @@ backend build green; no new lint warnings.
 cache is per-range, 60s TTL. In-app SPA exits emit abandonment via hook cleanup; a hard tab
 kill without pagehide is only visible later as started-but-never-completed.
 
+**2026-09-05 first data analysis — findings resolved (do not re-chase):**
+
+- **`api_failed` clusters (29× `/quiz-mcq/subjects`, 19× jokes, 13× admin analytics)** are
+  backend-restart windows from same-day deployments, NOT slow queries — failures bucket into
+  the exact hours code was redeployed, and warm responses all measure ~210ms. No endpoint fix
+  needed; re-measure only under real traffic.
+- **`featureNames is not defined` (1× client_error)** was a transient intermediate build state,
+  fixed in the shipped code (compiles clean).
+- **Quiz "option B" suspicion cleared:** the twice-missed question
+  (`46f1b4b9…`, "Elephants are afraid of mice", options FALSE/TRUE) is correctly keyed —
+  `correctAnswer = FALSE`; the player picked the myth (TRUE). No data fix.
+- **Web-vital averages (LCP avg 89s, FCP avg 71s) are dev-compile outliers** — trust the p75
+  columns (TTFB p75 ≈ 4.1s, CLS p75 ≈ 0.05); re-measure on a production build.
+- Funnel "Signed up" stage counts admin registrations (4); **real registered non-admin users
+  currently = 0** — signup conversion is unmeasured until real visitors arrive.
+
 ## 4. Task breakdown (carried from earlier passes)
 
 ### P0 — critical / broken
