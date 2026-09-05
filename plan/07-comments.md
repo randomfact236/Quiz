@@ -79,3 +79,18 @@ Tests: `__tests__/image-riddle-comments.test.tsx` (frontend) + backend `comments
 - **Image Riddles (04)** — comments double as the guess feed (`GUESS`) and chip-reveal (`CHIP`) gameplay data.
 - **User Accounts (01)** — guest identity via `guest_users`; `findOrCreate` is called on comment write. No `userId` linkage yet (P1).
 - **Admin Dashboard (12)** — CommentsSection moderation over `/admin/comments`.
+
+## 6. Extras (2026-09-05 F07 five-step pass — noted, not acted on)
+
+- **Seeded test content:** 20 comments via the public endpoint (10 joke comments from 4 guest
+  identities + 8 image-riddle guesses + 2 chip taps on the E2E panda riddle) — kept in the dev DB.
+- **Content-type values are kebab-case** (`image-riddle`, `joke`) — snake_case probes 404/500.
+  The DB enum is fine; just a tooling gotcha.
+- **`DELETE /comments/:id` reads guestId from the QUERY string** (`?guestId=…`), not the body or
+  a header — tooling callers should match. Wrong-guest deletes return 404 (existence not
+  revealed); missing identity 403s.
+- **Fixed in this pass:** the admin moderation list filtered by `flagged=true` correctly but the
+  serialized items omitted the `flagged` field — moderators could not SEE which rows were
+  flagged. `findAllAdmin` now includes it.
+- **Dead export removed:** `getMyComments` in `lib/comments-api.ts` had zero references
+  (the delete-own UI uses `getMyComments`-style data via the feed + `mine` flag instead).

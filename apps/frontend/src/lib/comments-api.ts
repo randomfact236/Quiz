@@ -67,19 +67,6 @@ export async function getComments(
   return response.data;
 }
 
-/** Get the caller's own comments on one content item (delete-own UI). */
-export async function getMyComments(
-  contentType: CommentContentType,
-  contentId: string
-): Promise<Comment[]> {
-  const guestId = getGuestId();
-  if (!guestId) return [];
-  const response = await api.get<Comment[]>(
-    `/comments/my?contentType=${contentType}&contentId=${contentId}&guestId=${encodeURIComponent(guestId)}`
-  );
-  return response.data;
-}
-
 /**
  * Post a guess / chip tap / comment. Fire-and-forget friendly by design:
  * callers must never block the reveal on this (plan rule: content first),
