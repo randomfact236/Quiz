@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
-import { removeItem, STORAGE_KEYS } from '@/lib/storage';
+import { getItem, removeItem, STORAGE_KEYS } from '@/lib/storage';
 
 // Status Dashboard & Bulk Actions
 import {
@@ -255,6 +255,14 @@ export default function AdminPage(): JSX.Element {
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // No admin session → go straight to the admin login instead of rendering
+  // the shell and letting every API call 401-bounce (plan/01 §6 single-login flow).
+  useEffect(() => {
+    if (!getItem(STORAGE_KEYS.ADMIN_TOKEN, null)) {
+      router.replace('/admin/login');
+    }
+  }, [router]);
 
   // Show loading state until hydration is complete to avoid section flash
   if (!isHydrated) {

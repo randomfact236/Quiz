@@ -20,6 +20,14 @@ export const authService = {
     const { token, refreshToken } = response.data;
     setItem(STORAGE_KEYS.AUTH_TOKEN, token, true);
     setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, true);
+    // Role-aware single login (plan/01 §6): an admin signing in on the main
+    // page gets the admin session too, so the Admin Panel is one click away —
+    // no separate /admin/login roundtrip. /admin/login remains the fallback
+    // for expired sessions.
+    if (response.data.user?.role === 'admin') {
+      setItem(STORAGE_KEYS.ADMIN_TOKEN, token, true);
+      setItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN, refreshToken, true);
+    }
     return response.data;
   },
 

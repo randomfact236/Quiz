@@ -73,8 +73,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await authService.login(email, password);
-      router.push('/');
+      const auth = await authService.login(email, password);
+      // Role-aware single login (plan/01 §6): admins land straight in the
+      // panel — authService.login already stored the admin session.
+      router.push(auth.user?.role === 'admin' ? '/admin' : '/');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || 'Authentication failed');

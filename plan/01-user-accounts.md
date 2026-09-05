@@ -106,7 +106,7 @@ Frontend (`apps/frontend/src/`):
 - [x] **Unit tests for AuthService** — DONE 2026-08-30: `auth.service.spec.ts` (12 tests incl. lockout-adjacent paths, anti-enumeration, refresh rotation, logout revocation, OAuth code exchange) + `users.service.spec.ts` (3 tests, hashing/expiry/revocation). Full backend suite green.
 - [ ] **Admin user management UI** — the admin views are read-only lists today; role change and delete exist as endpoints but check whether `JokesSection`-style editing UI is wanted (role changes currently require raw API calls). **Needs owner decision: build an admin user-editing UI?**
 - [x] **Logout calls a server-side revoke endpoint** — DONE 2026-08-30 (with P1 #1): `POST /auth/logout`.
-- [x] **Unify the two token stores** — RESOLVED 2026-08-30 by documenting (the plan offered "or document why they diverge"): admin vs user token pairs are deliberately separate so both sessions can coexist in one browser; rationale recorded at the top of `lib/api-client.ts`.
+- [x] **Unify the two token stores** — RESOLVED 2026-08-30 by documenting, **then superseded 2026-09-05 (owner decision, role-aware single login):** the main `/login` now stores the admin token pair too when the account's role is `admin` (see `lib/auth.ts` login), and admins land straight on `/admin` after logging in — no separate `/admin/login` roundtrip. `/admin/login` remains the fallback/expiry door, and `/admin` bounces straight to it when no admin session exists. Rationale for keeping two stores (rather than one): a non-admin user session and an admin session can still coexist for _different_ accounts in one browser. Caveat recorded in §6.
 
 ### P3 — polish / tech debt
 
@@ -127,6 +127,13 @@ Frontend (`apps/frontend/src/`):
   password was custom (the `admin123` example in DEPLOYMENT.md uses a different bcrypt hash
   than this DB), so it was reset via a bcrypt hash update in the dev DB for the 14-feature
   manual-testing pass. **Dev database only — do not reuse in production.**
+- **Role-aware single login caveat (2026-09-05):** when an admin logs in on `/login`, the SAME
+  token pair is stored under both stores — the backend keeps one refresh token per user
+  (`users.refreshToken` single column), so whichever session refreshes first rotates the token
+  and the other copy's refresh will fail once (the access token stays valid until expiry;
+  api-client clears the dead pair on the 401). Fine in practice; the proper long-term fix is a
+  per-session refresh-token table (multi-device support) — worth a plan item if multi-device
+  admin workflows matter.
 - **Register throttle is 10/min per IP** (ThrottlerGuard) — hit it while seeding 20 users; fine
   for production, just remember for any bulk-user seeding (space requests ~8s apart).
 - **Owner decision still open (from §3/P1):** hard-gate login until email verified, or keep
