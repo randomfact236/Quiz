@@ -71,3 +71,16 @@ Backend (`apps/backend/src/health/`):
 - **Site Shell & SEO (09)** — the landing renders inside the shell; SEO metadata strategy is shared.
 - **Analytics (13)** — `GET /analytics/summary` is this page's natural data source (P1 wiring).
 - **Admin Dashboard (12)** — health endpoints are ops-facing; probes used by deployment tooling.
+
+## 6. Extras (2026-09-05 F10 five-step pass — verification only, no defects)
+
+- **E2E re-verified live:** homepage renders the seeded "Test Science" topic card (live subject
+  fetch), mode cards, and the StatsSection consuming `GET /analytics/summary`; `/play` picker
+  lists all four game modes; `/play` remains in the nav config for header/footer.
+- **Step 1 (seed) note:** the landing has no own content unit — its data is the subjects seeded
+  during the F02–F05 passes (Test Science / Brain Teasers / E2E Test category), which is exactly
+  what the live TopicSection now displays.
+- **Dead-code audit clean:** all home components, BubbleBackground, and `RIDDLE_TIMERS` are
+  referenced; no orphan exports found in the shared kit.
+- The remaining "gaps" bullets in §2 were rewritten by earlier passes and are now historical;
+  the two §2 bullets that remain (topics drift check, /play nav coverage) are closed by P2 items.
