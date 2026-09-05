@@ -114,6 +114,8 @@ Frontend (`apps/frontend/src/`):
 - **Admin Dashboard** — content managed via `features/riddle-mcq` under the admin shell; ImportModal invalidates lists on success.
 - **MCQ Quiz** — shares the content-kit base (`ContentServiceBase` flat mode), shared UI components (AnswerOptions, BubbleEmojiEffect), and the two-key resume pattern; deliberately no shared session persistence yet.
 
+- **Sample import file:** `plan/imports/riddle-mcq-lateral-thinking.csv` (+ `.json` for the bulk API) — 20 'Lateral Thinking' riddles ready for the Import modal.
+
 ## 6. Extras (2026-09-05 audit — noted, not acted on)
 
 - **Seeded test content:** 20 published riddles via the bulk-import endpoint (subject

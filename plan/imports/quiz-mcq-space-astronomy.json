@@ -1,0 +1,247 @@
+{
+  "subjectName": "Space & Astronomy",
+  "questions": [
+    {
+      "question": "The Sun is a star.",
+      "optionA": "TRUE",
+      "optionB": "FALSE",
+      "optionC": null,
+      "optionD": null,
+      "correctAnswer": "TRUE",
+      "level": "easy",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Mercury is the closest planet to the Sun.",
+      "optionA": "TRUE",
+      "optionB": "FALSE",
+      "optionC": null,
+      "optionD": null,
+      "correctAnswer": "TRUE",
+      "level": "easy",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "The Moon produces its own light.",
+      "optionA": "TRUE",
+      "optionB": "FALSE",
+      "optionC": null,
+      "optionD": null,
+      "correctAnswer": "FALSE",
+      "level": "easy",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "A day on Venus is longer than its year.",
+      "optionA": "TRUE",
+      "optionB": "FALSE",
+      "optionC": null,
+      "optionD": null,
+      "correctAnswer": "TRUE",
+      "level": "easy",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "optionA": "Mars",
+      "optionB": "Venus",
+      "optionC": "Jupiter",
+      "optionD": null,
+      "correctAnswer": "Mars",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "What is the closest star to Earth?",
+      "optionA": "The Sun",
+      "optionB": "Sirius",
+      "optionC": "Proxima Centauri",
+      "optionD": null,
+      "correctAnswer": "The Sun",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Which planet has the most moons?",
+      "optionA": "Saturn",
+      "optionB": "Jupiter",
+      "optionC": "Uranus",
+      "optionD": null,
+      "correctAnswer": "Saturn",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "The Great Red Spot is a storm on Jupiter.",
+      "optionA": "TRUE",
+      "optionB": "FALSE",
+      "optionC": null,
+      "optionD": null,
+      "correctAnswer": "TRUE",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Which planet spins on its side?",
+      "optionA": "Uranus",
+      "optionB": "Neptune",
+      "optionC": "Pluto",
+      "optionD": null,
+      "correctAnswer": "Uranus",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "What percentage of Earth is covered by water?",
+      "optionA": "About 71%",
+      "optionB": "About 50%",
+      "optionC": "About 85%",
+      "optionD": "About 60%",
+      "correctAnswer": "About 71%",
+      "level": "medium",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Which two planets have no moons?",
+      "optionA": "Mercury and Venus",
+      "optionB": "Mars and Venus",
+      "optionC": "Earth and Mars",
+      "optionD": null,
+      "correctAnswer": "Mercury and Venus",
+      "level": "hard",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "What is the Kuiper Belt?",
+      "optionA": "A region of icy bodies beyond Neptune",
+      "optionB": "A band of asteroids near Mars",
+      "optionC": "A cloud of comets around the Sun",
+      "optionD": null,
+      "correctAnswer": "A region of icy bodies beyond Neptune",
+      "level": "hard",
+      "chapterName": "Stars & Galaxies",
+      "status": "published"
+    },
+    {
+      "question": "How long does sunlight take to reach Earth?",
+      "optionA": "About 8 minutes",
+      "optionB": "About 8 seconds",
+      "optionC": "About 8 hours",
+      "optionD": null,
+      "correctAnswer": "About 8 minutes",
+      "level": "hard",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "Which is the largest volcano in the solar system?",
+      "optionA": "Olympus Mons",
+      "optionB": "Mauna Loa",
+      "optionC": "Everest",
+      "optionD": null,
+      "correctAnswer": "Olympus Mons",
+      "level": "hard",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "What protects Earth from solar wind?",
+      "optionA": "The magnetosphere",
+      "optionB": "The ozone layer",
+      "optionC": "The atmosphere",
+      "optionD": null,
+      "correctAnswer": "The magnetosphere",
+      "level": "hard",
+      "chapterName": "Solar System",
+      "status": "published"
+    },
+    {
+      "question": "What galaxy do we live in?",
+      "optionA": "The Milky Way",
+      "optionB": "Andromeda",
+      "optionC": "Triangulum",
+      "optionD": "Whirlpool",
+      "correctAnswer": "The Milky Way",
+      "level": "expert",
+      "chapterName": "Stars & Galaxies",
+      "status": "published"
+    },
+    {
+      "question": "What is a light-year?",
+      "optionA": "The distance light travels in a year",
+      "optionB": "The time light takes to orbit a star",
+      "optionC": "A unit of brightness",
+      "optionD": "A telescope range",
+      "correctAnswer": "The distance light travels in a year",
+      "level": "expert",
+      "chapterName": "Stars & Galaxies",
+      "status": "published"
+    },
+    {
+      "question": "Who first used a telescope for astronomy?",
+      "optionA": "Galileo Galilei",
+      "optionB": "Copernicus",
+      "optionC": "Kepler",
+      "optionD": "Newton",
+      "correctAnswer": "Galileo Galilei",
+      "level": "expert",
+      "chapterName": "Space History",
+      "status": "published"
+    },
+    {
+      "question": "What was the first artificial satellite?",
+      "optionA": "Sputnik 1",
+      "optionB": "Explorer 1",
+      "optionC": "Vostok 1",
+      "optionD": "Apollo 1",
+      "correctAnswer": "Sputnik 1",
+      "level": "expert",
+      "chapterName": "Space History",
+      "status": "published"
+    },
+    {
+      "question": "Who was the first human in space?",
+      "optionA": "Yuri Gagarin",
+      "optionB": "Neil Armstrong",
+      "optionC": "Alan Shepard",
+      "optionD": "John Glenn",
+      "correctAnswer": "Yuri Gagarin",
+      "level": "expert",
+      "chapterName": "Space History",
+      "status": "published"
+    },
+    {
+      "question": "Which mission first landed humans on the Moon?",
+      "optionA": "Apollo 11",
+      "optionB": "Gemini 4",
+      "optionC": "Apollo 13",
+      "optionD": "Vostok 6",
+      "correctAnswer": "Apollo 11",
+      "level": "expert",
+      "chapterName": "Space History",
+      "status": "published"
+    },
+    {
+      "question": "What is the approximate age of the universe?",
+      "optionA": "13.8 billion years",
+      "optionB": "4.6 billion years",
+      "optionC": "1 billion years",
+      "optionD": "100 billion years",
+      "correctAnswer": "13.8 billion years",
+      "level": "expert",
+      "chapterName": "Stars & Galaxies",
+      "status": "published"
+    }
+  ]
+}

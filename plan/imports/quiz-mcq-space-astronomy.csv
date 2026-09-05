@@ -1,0 +1,26 @@
+# Subject: Space & Astronomy
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,The Sun is a star.,TRUE,FALSE,,,A,easy,Solar System
+2,Mercury is the closest planet to the Sun.,TRUE,FALSE,,,A,easy,Solar System
+3,The Moon produces its own light.,TRUE,FALSE,,,B,easy,Solar System
+4,A day on Venus is longer than its year.,TRUE,FALSE,,,A,easy,Solar System
+5,Which planet is known as the Red Planet?,Mars,Venus,Jupiter,Mars,B,medium,Solar System
+6,What is the closest star to Earth?,The Sun,Sirius,Proxima Centauri,The Sun,A,medium,Solar System
+7,Which planet has the most moons?,Saturn,Jupiter,Uranus,Neptune,Saturn,A,medium,Solar System
+8,The Great Red Spot is a storm on Jupiter.,TRUE,FALSE,,,A,medium,Solar System
+9,Which planet spins on its side?,Uranus,Neptune,Pluto,Mercury,Uranus,A,medium,Solar System
+10,What percentage of Earth is covered by water?,About 71%,About 50%,About 85%,About 60%,About 71%,A,medium,Solar System
+11,Which two planets have no moons?,Mercury and Venus,Mars and Venus,Earth and Mars,Jupiter and Saturn,Mercury and Venus,B,hard,Solar System
+12,What is the Kuiper Belt?,A region of icy bodies beyond Neptune,A band of asteroids near Mars,A cloud of comets around the Sun,A layer of Saturn,A region of icy bodies beyond Neptune,A,hard,Stars & Galaxies
+13,How long does sunlight take to reach Earth?,About 8 minutes,About 8 seconds,About 8 hours,Instantly,About 8 minutes,A,hard,Solar System
+14,Which is the largest volcano in the solar system?,Olympus Mons,Mauna Loa,Everest,Tharsis Tholus,Olympus Mons,A,hard,Solar System
+15,What protects Earth from solar wind?,The magnetosphere,The ozone layer,The atmosphere,The moon,The magnetosphere,A,hard,Solar System
+16,What galaxy do we live in?,The Milky Way,Andromeda,Triangulum,Whirlpool,The Milky Way,A,expert,Stars & Galaxies
+17,What is a light-year?,The distance light travels in a year,The time light takes to orbit a star,A unit of brightness,A telescope range,The distance light travels in a year,A,expert,Stars & Galaxies
+18,Who first used a telescope for astronomy?,Galileo Galilei,Copernicus,Kepler,Newton,Galileo Galilei,A,expert,Space History
+19,What was the first artificial satellite?,Sputnik 1,Explorer 1,Vostok 1,Apollo 1,Sputnik 1,A,expert,Space History
+20,Who was the first human in space?,Yuri Gagarin,Neil Armstrong,Alan Shepard,John Glenn,Yuri Gagarin,A,expert,Space History
+21,Which mission first landed humans on the Moon?,Apollo 11,Gemini 4,Apollo 13,Vostok 6,Apollo 11,A,expert,Space History
+22,What is the approximate age of the universe?,13.8 billion years,4.6 billion years,1 billion years,100 billion years,13.8 billion years,A,expert,Stars & Galaxies
+23,What is the name of the first human on the Moon?,Neil Armstrong,Buzz Aldrin,Michael Collins,Yuri Gagarin,Neil Armstrong,extreme,Space History
+24,How many moons does Mars have?,2,1,0,4,2,extreme,Solar System

@@ -114,6 +114,8 @@ missing from earlier revisions; added during the F02 audit.)_
 - **Analytics** — 7 instrumented events in the engine (module `quiz-mcq`); dashboard renders quiz-mcq rows in module breakdowns.
 - **Admin Dashboard** — gameplay content managed via `features/quiz-mcq-admin` under the admin shell.
 
+- **Sample import file:** `plan/imports/quiz-mcq-space-astronomy.csv` (+ `.json` for the bulk API) — 24 'Space & Astronomy' questions ready for the Import modal.
+
 ## 6. Extras (2026-09-05 audit — noted, not acted on)
 
 - **Seeded test content:** subject **"Test Science"** (slug `test-science`, chapters Biology /

@@ -107,6 +107,8 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 - **Admin Dashboard** — `JokesSection` under the admin shell; shared BulkActionService + CacheService patterns.
 - **Guest users** — public voting and comments work without an account (guest-id convention).
 
+- **Sample import file:** `plan/imports/dad-jokes-food-and-animals.csv` — 20 food/animal/tech jokes ready for the CSV import.
+
 ## 6. Extras (2026-09-05 F05 five-step pass — noted, not acted on)
 
 - **Seeded test content:** category **"E2E Test"** + 20 published dad jokes (classic one-liners)
