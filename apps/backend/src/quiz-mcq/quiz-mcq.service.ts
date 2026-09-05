@@ -137,6 +137,30 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     return this.deleteSubjectCascade(id);
   }
 
+  // ============ PUBLIC SUBJECT POPULARITY (plan/13 §4b auto-ordering) ============
+
+  /**
+   * Per-subject play counts (session_started events) for the homepage
+   * "Quiz Topics" auto-ordering — highest clicked first. Cached 60s like
+   * the other public count endpoints.
+   */
+  async getSubjectPopularity(): Promise<{ subject: string; clicks: number }[]> {
+    return this.cache.getOrSet(
+      'quiz-mcq:subject-popularity',
+      async () => {
+        const rows = (await this.deps.subjectRepo.manager.query(
+          `SELECT properties->>'subject' AS subject, COUNT(*)::int AS clicks
+         FROM analytics_events
+         WHERE "eventName" = 'session_started' AND module = 'quiz-mcq'
+           AND properties->>'subject' IS NOT NULL
+         GROUP BY 1 ORDER BY clicks DESC`
+        )) as { subject: string; clicks: number }[];
+        return rows.map((r) => ({ subject: String(r.subject), clicks: Number(r.clicks) }));
+      },
+      60
+    );
+  }
+
   // ==================== PUBLIC LEVEL COUNTS ====================
 
   /**

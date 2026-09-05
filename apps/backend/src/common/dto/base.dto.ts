@@ -599,6 +599,14 @@ export class UpdateSubjectDto {
   @IsString()
   name?: string;
 
+  @ApiPropertyOptional({
+    example: 'Academic',
+    description: 'Homepage world: Academic / Professional & Life / Entertainment & Culture',
+  })
+  @IsOptional()
+  @IsString()
+  category?: string;
+
   @ApiPropertyOptional({ example: 'Math fundamentals and advanced topics' })
   @IsOptional()
   @IsString()

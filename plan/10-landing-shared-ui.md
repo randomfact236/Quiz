@@ -84,3 +84,19 @@ Backend (`apps/backend/src/health/`):
   referenced; no orphan exports found in the shared kit.
 - The remaining "gaps" bullets in §2 were rewritten by earlier passes and are now historical;
   the two §2 bullets that remain (topics drift check, /play nav coverage) are closed by P2 items.
+
+## 7. Quiz Topics categorized redesign (2026-09-06 — implemented, owner design)
+
+- Homepage Topics section rebuilt as **"🗂️ Quiz Topics"** (owner design 07 blend): three purple
+  gradient banner headers — **Academic / Professional & Life / Entertainment & Culture** — with
+  decorative lines, subject-count pill and collapsible chevron; subjects render as colorful
+  gradient cards (emoji + question count), zero-question subjects show **Coming Soon**; empty
+  worlds show an "assignable in admin" ghost card.
+- **Auto-ordering by clicks (owner request):** new public `GET /quiz-mcq/subject-clicks`
+  (per-subject `session_started` counts, cached 60s) — worlds sort by total clicks and cards by
+  clicks within each world, highest first; graceful fallback to order-field when the feed fails.
+- **Admin assignment:** new `SubjectCategoryManager` panel in Admin → Quiz MCQ — the three world
+  headings with per-subject selects; persists via subject `category` (UpdateSubjectDto now
+  accepts it). `UpdateSubjectDto` category field added (backend, 1-line DTO change).
+- Dummy subject **"Movies & TV"** (Entertainment & Culture, 3 published questions) seeded via
+  bulk import to demo the design.

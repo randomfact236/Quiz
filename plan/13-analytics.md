@@ -206,3 +206,10 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
   JourneyTab, ClickAnalysisTab consumed by AnalyticsSection; csv helpers by the export button).
 - **Step 5 (E2E):** overview / dashboard / retention / funnel / clicks (quiz + jokes) / events
   all 200 live with the current build; events endpoint correctly 400s unknown params.
+
+## 8. Analytics-driven homepage ordering (2026-09-06)
+
+- New public cached endpoint `GET /quiz-mcq/subject-clicks` exposes per-subject
+  `session_started` counts (analytics_events) so the homepage Quiz Topics section can auto-order
+  worlds and cards by clicks — highest first (owner request). Analytics now directly drive UI
+  ordering, closing the loop between collection (§1) and presentation.

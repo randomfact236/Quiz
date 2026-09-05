@@ -407,6 +407,14 @@ export class QuizMcqController {
     });
   }
 
+  @Get('subject-clicks')
+  @ApiOperation({ summary: 'Per-subject play counts (session_started) for Topics auto-ordering' })
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  async getSubjectClicks(): Promise<{ subject: string; clicks: number }[]> {
+    return this.quizService.getSubjectPopularity();
+  }
+
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('mixed')
