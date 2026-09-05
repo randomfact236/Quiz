@@ -765,6 +765,14 @@ const CLICK_ACCENTS: Record<ClickFeatureId, string> = {
   jokes: 'bg-emerald-500/70',
 };
 
+const FEATURE_NAMES: Record<string, string> = {
+  overview: 'Overview',
+  'quiz-mcq': 'Quiz MCQ',
+  'riddle-mcq': 'Riddle MCQ',
+  'image-riddles': 'Image Riddles',
+  jokes: 'Dad Jokes',
+};
+
 /** Sub-tab pills inside the Click Analysis tab (overview + one per feature). */
 function FeatureSwitcher({
   feature,
@@ -837,8 +845,15 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
   const [clicks, setClicks] = useState<ClickAnalysis | null>(null);
   // Overview sub-tab: all four feature payloads fetched in parallel.
   const [overview, setOverview] = useState<ClickAnalysis[] | null>(null);
+  // Drill-down: subject (quiz/riddle) or category (jokes) for the details panels.
+  const [drill, setDrill] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
+
+  const pickFeature = (f: ClickFeatureId): void => {
+    setFeature(f);
+    setDrill(undefined);
+  };
 
   useEffect(() => {
     let stale = false;
@@ -865,8 +880,11 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
         stale = true;
       };
     }
+    const params = new URLSearchParams({ module: feature, days: String(days) });
+    if ((feature === 'quiz-mcq' || feature === 'riddle-mcq') && drill) params.set('subject', drill);
+    if (feature === 'jokes' && drill) params.set('category', drill);
     adminApi
-      .get<ClickAnalysis>(`/admin/analytics/clicks?module=${feature}&days=${days}`)
+      .get<ClickAnalysis>(`/admin/analytics/clicks?${params.toString()}`)
       .then((res) => {
         if (!stale) setClicks(res.data);
       })
@@ -879,7 +897,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
     return () => {
       stale = true;
     };
-  }, [feature, days]);
+  }, [feature, days, drill]);
 
   const headline = clicks ? clickHeadline(feature, clicks) : [];
   const topEvent = clicks?.eventMix[0];
@@ -889,7 +907,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
     if (loading && !overview) {
       return (
         <div className="space-y-5">
-          <FeatureSwitcher feature={feature} onPick={setFeature} />
+          <FeatureSwitcher feature={feature} onPick={pickFeature} />
           <div className="flex h-48 flex-col items-center justify-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
             <p className="text-sm text-gray-500">Loading click overview…</p>
@@ -900,7 +918,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
     if (failed && !overview) {
       return (
         <div className="space-y-5">
-          <FeatureSwitcher feature={feature} onPick={setFeature} />
+          <FeatureSwitcher feature={feature} onPick={pickFeature} />
           <Panel title="Click overview">
             <p className="text-sm text-rose-400">Could not load the click overview. Try Refresh.</p>
           </Panel>
@@ -920,16 +938,10 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
       0
     );
     const correct = overview.reduce((a, c) => a + (c.correctWrong?.correct ?? 0), 0);
-    const featureNames: Record<string, string> = {
-      'quiz-mcq': 'Quiz MCQ',
-      'riddle-mcq': 'Riddle MCQ',
-      'image-riddles': 'Image Riddles',
-      jokes: 'Dad Jokes',
-    };
 
     return (
       <div className="space-y-5">
-        <FeatureSwitcher feature={feature} onPick={setFeature} />
+        <FeatureSwitcher feature={feature} onPick={pickFeature} />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
           <KpiCard
             label="Total clicks"
@@ -941,7 +953,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           {overview.map((c) => (
             <KpiCard
               key={c.module}
-              label={featureNames[c.module] ?? c.module}
+              label={FEATURE_NAMES[c.module] ?? c.module}
               value={n(c.totalClicks)}
               icon={Activity}
               accent="violet"
@@ -956,7 +968,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           <Panel title="Share of clicks" hint="Which feature gets the interaction">
             <BarList
               rows={overview.map((c) => ({
-                label: featureNames[c.module] ?? c.module,
+                label: FEATURE_NAMES[c.module] ?? c.module,
                 value: c.totalClicks,
               }))}
               accent="bg-violet-500/70"
@@ -988,7 +1000,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
   // ---- Per-feature sub-tabs ----
   const headlineBlock = (
     <>
-      <FeatureSwitcher feature={feature} onPick={setFeature} />
+      <FeatureSwitcher feature={feature} onPick={pickFeature} />
       {loading && !clicks ? (
         <div className="flex h-48 flex-col items-center justify-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
@@ -1003,11 +1015,20 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
   );
   if (!clicks || loading || failed) return <div className="space-y-5">{headlineBlock}</div>;
 
+  const isQuizLikeFeature = feature === 'quiz-mcq' || feature === 'riddle-mcq';
+  const subjectPills =
+    (isQuizLikeFeature ? clicks.bySubject?.map((s) => s.label) : undefined) ??
+    (feature === 'jokes' ? clicks.byCategory?.map((c) => c.label) : undefined) ??
+    [];
+
   return (
     <div className="space-y-5">
       {headlineBlock}
       <>
-        {/* Headline stats */}
+        {/* ==================== Feature overview (top summary) ==================== */}
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+          {FEATURE_NAMES[feature]} overview
+        </p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
           <KpiCard
             label="Total clicks"
@@ -1043,8 +1064,48 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           </Panel>
         </div>
 
-        {/* Feature-specific depth */}
-        {(feature === 'quiz-mcq' || feature === 'riddle-mcq') && clicks.correctWrong && (
+        {/* ==================== Subject/category-wise details ==================== */}
+        {subjectPills.length > 0 && (
+          <>
+            <p className="pt-2 text-xs font-semibold uppercase tracking-widest text-gray-500">
+              {feature === 'jokes' ? 'Category-wise details' : 'Subject-wise details'}
+            </p>
+            <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
+              <button
+                onClick={() => setDrill(undefined)}
+                className={`whitespace-nowrap rounded-md px-3 py-1 text-xs transition-colors ${
+                  !drill
+                    ? 'bg-gray-800 font-medium text-white shadow'
+                    : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+                }`}
+              >
+                All {feature === 'jokes' ? 'categories' : 'subjects'}
+              </button>
+              {subjectPills.map((label) => (
+                <button
+                  key={label}
+                  onClick={() => setDrill(drill === label ? undefined : label)}
+                  className={`whitespace-nowrap rounded-md px-3 py-1 text-xs capitalize transition-colors ${
+                    drill === label
+                      ? 'bg-gray-800 font-medium text-white shadow'
+                      : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {drill && (
+              <p className="text-xs text-gray-500">
+                Filtered to <span className="font-medium text-gray-300">{drill}</span> — pick
+                &ldquo;All&rdquo; to go back.
+              </p>
+            )}
+          </>
+        )}
+
+        {/* Feature-specific depth (subject/category-filtered where applicable) */}
+        {isQuizLikeFeature && clicks.correctWrong && (
           <div className="grid gap-4 lg:grid-cols-2">
             <Panel title="Correct vs wrong" hint="Across all question_answered events">
               <AccuracyBar
@@ -1100,6 +1161,39 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
             </Panel>
           </div>
         )}
+
+        {/* Hardest questions inside the selected subject */}
+        {clicks.hardestQuestions && clicks.hardestQuestions.length > 0 && (
+          <Panel title={`Hardest questions in ${drill}`} hint="At least 2 answers · worst first">
+            <DarkTable headers={['Question', 'Answers', 'Accuracy']}>
+              {clicks.hardestQuestions.map((q) => (
+                <tr key={q.questionId} className="border-t border-gray-800">
+                  <td
+                    className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-300"
+                    title={q.questionId}
+                  >
+                    {q.questionId}
+                  </td>
+                  <td className="py-2 pr-4 text-gray-400">{n(q.answers)}</td>
+                  <td className="py-2">
+                    <span
+                      className={`font-medium ${
+                        q.accuracyPct < 40
+                          ? 'text-rose-400'
+                          : q.accuracyPct < 70
+                            ? 'text-amber-400'
+                            : 'text-emerald-400'
+                      }`}
+                    >
+                      {q.accuracyPct}%
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </DarkTable>
+          </Panel>
+        )}
+
         {clicks.byCategory && (
           <Panel title="Clicks by category" hint="Views + votes + shares per joke category">
             <BarList

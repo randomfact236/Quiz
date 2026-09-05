@@ -103,4 +103,6 @@ export interface ClickAnalysis {
   byChapter: { label: string; events: number; accuracyPct: number | null }[] | null;
   byCategory: { label: string; events: number }[] | null;
   topRiddles: { label: string; events: number }[] | null;
+  hardestQuestions: { questionId: string; answers: number; accuracyPct: number }[] | null;
+  topJokes: { jokeId: string; label: string; events: number }[] | null;
 }

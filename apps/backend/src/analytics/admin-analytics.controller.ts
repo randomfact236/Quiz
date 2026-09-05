@@ -62,7 +62,12 @@ export class AdminAnalyticsController {
       'Deep click analysis per feature: event mix, per-day rhythm, correct/wrong, option distribution, vote split',
   })
   getClicks(@Query() query: AdminClicksQueryDto) {
-    return this.analyticsService.getClickAnalysis(query.module, query.days ?? 30);
+    return this.analyticsService.getClickAnalysis(
+      query.module,
+      query.days ?? 30,
+      query.subject,
+      query.category
+    );
   }
 
   @Get('events')

@@ -165,4 +165,18 @@ export class AdminClicksQueryDto {
   @Min(1)
   @Max(365)
   days?: number;
+
+  @ApiPropertyOptional({
+    description: 'Quiz/riddle drill-down: filter answer panels to one subject',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  subject?: string;
+
+  @ApiPropertyOptional({ description: 'Jokes drill-down: filter to one category name' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  category?: string;
 }

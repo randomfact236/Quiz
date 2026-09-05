@@ -158,6 +158,10 @@ export interface ClickAnalysis {
   byCategory: { label: string; events: number }[] | null;
   /** image-riddles: most-interacted riddles. */
   topRiddles: { label: string; events: number }[] | null;
+  /** quiz/riddle: hardest questions within the selected subject (null = all subjects). */
+  hardestQuestions: { questionId: string; answers: number; accuracyPct: number }[] | null;
+  /** jokes: most-clicked jokes within the selected category (null = all categories). */
+  topJokes: { jokeId: string; label: string; events: number }[] | null;
 }
 
 @Injectable()
@@ -904,22 +908,37 @@ export class AnalyticsService {
   /** Modules the click-analysis endpoint accepts. */
   static readonly CLICK_MODULES = ['quiz-mcq', 'riddle-mcq', 'image-riddles', 'jokes'] as const;
 
-  async getClickAnalysis(module: string, days: number): Promise<ClickAnalysis> {
+  async getClickAnalysis(
+    module: string,
+    days: number,
+    subject?: string,
+    category?: string
+  ): Promise<ClickAnalysis> {
     if (!(AnalyticsService.CLICK_MODULES as readonly string[]).includes(module)) {
       throw new BadRequestException(`Unsupported module "${module}" for click analysis`);
     }
     const clamped = Math.min(Math.max(Math.floor(days) || 30, 1), DASHBOARD_MAX_DAYS);
+    const subj = subject?.trim() || undefined;
+    const cat = category?.trim() || undefined;
     return this.cacheService.getOrSet(
-      `analytics:clicks:${module}:${clamped}`,
-      () => this.computeClickAnalysis(module, clamped),
+      `analytics:clicks:${module}:${clamped}:${subj ?? 'all'}:${cat ?? 'all'}`,
+      () => this.computeClickAnalysis(module, clamped, subj, cat),
       DASHBOARD_CACHE_TTL_S
     );
   }
 
-  private async computeClickAnalysis(module: string, days: number): Promise<ClickAnalysis> {
+  private async computeClickAnalysis(
+    module: string,
+    days: number,
+    subject?: string,
+    category?: string
+  ): Promise<ClickAnalysis> {
     const win = `"serverTs" > now() - ($1::int * interval '1 day')`;
     const isQuizLike = module === 'quiz-mcq' || module === 'riddle-mcq';
     const isJokes = module === 'jokes';
+    // Subject-scoped drill-down (owner ask): filters the answer-level panels.
+    const subjectFilter = subject ? ` AND COALESCE(properties->>'subject', 'unknown') = $3` : '';
+    const qp = (): unknown[] => (subject ? [days, module, subject] : [days, module]);
 
     const [
       eventMix,
@@ -931,6 +950,8 @@ export class AnalyticsService {
       byChapter,
       byCategory,
       topRiddles,
+      hardestQuestions,
+      topJokes,
     ] = await Promise.all([
       this.eventRepo.query(
         `SELECT "eventName", COUNT(*)::int AS count FROM analytics_events
@@ -951,17 +972,17 @@ export class AnalyticsService {
             `SELECT COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0)::int AS correct,
                     COUNT(*)::int AS answered
              FROM analytics_events
-             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}`,
-            [days, module]
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}${subjectFilter}`,
+            qp()
           )
         : Promise.resolve([]),
       isQuizLike
         ? this.eventRepo.query(
             `SELECT COALESCE(properties->>'selectedOption', '?') AS option, COUNT(*)::int AS count
              FROM analytics_events
-             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}${subjectFilter}
              GROUP BY 1 ORDER BY count DESC`,
-            [days, module]
+            qp()
           )
         : Promise.resolve([]),
       isJokes
@@ -991,9 +1012,9 @@ export class AnalyticsService {
                       COUNT(*)::int AS events,
                       ROUND(100.0 * COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0) / COUNT(*))::int AS accuracy
              FROM analytics_events
-             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}${subjectFilter}
              GROUP BY 1 ORDER BY events DESC LIMIT 10`,
-            [days, module]
+            qp()
           )
         : Promise.resolve([]),
       // jokes: clicks per category (jokeId → dad_jokes → joke_categories).
@@ -1017,6 +1038,37 @@ export class AnalyticsService {
              WHERE module = 'image-riddles' AND ${win} AND properties->>'riddleId' IS NOT NULL
              GROUP BY 1 ORDER BY events DESC LIMIT 5`,
             [days]
+          )
+        : Promise.resolve([]),
+      // Subject drill-down: hardest questions inside the selected subject.
+      isQuizLike && subject
+        ? this.eventRepo.query(
+            `SELECT COALESCE(properties->>'questionId', 'unknown') AS q,
+                    COUNT(*)::int AS answers,
+                    ROUND(100.0 * COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0) / COUNT(*))::int AS accuracy
+             FROM analytics_events
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+               AND COALESCE(properties->>'subject', 'unknown') = $3
+             GROUP BY 1 HAVING COUNT(*) >= 2
+             ORDER BY accuracy ASC, answers DESC
+             LIMIT 5`,
+            [days, module, subject]
+          )
+        : Promise.resolve([]),
+      // Category drill-down: most-clicked jokes (within category when selected).
+      isJokes
+        ? this.eventRepo.query(
+            `SELECT e.properties->>'jokeId' AS "jokeId",
+                    COALESCE(LEFT(d.joke, 80), '(deleted joke)') AS label,
+                    COUNT(*)::int AS events
+             FROM analytics_events e
+             LEFT JOIN dad_jokes d ON d.id::text = e.properties->>'jokeId'
+             LEFT JOIN joke_categories c ON c.id = d."categoryId"
+             WHERE e."eventName" IN ('joke_viewed', 'joke_voted', 'joke_shared')
+               AND e.module = 'jokes' AND ${win}
+               ${category ? "AND COALESCE(c.name, 'uncategorized') = $2" : ''}
+             GROUP BY 1, 2 ORDER BY events DESC LIMIT 5`,
+            category ? [days, category] : [days]
           )
         : Promise.resolve([]),
     ]);
@@ -1077,6 +1129,21 @@ export class AnalyticsService {
               events: Number(r.events),
             }))
           : null,
+      hardestQuestions:
+        isQuizLike && subject
+          ? (hardestQuestions as { q: string; answers: number; accuracy: number }[]).map((r) => ({
+              questionId: r.q,
+              answers: Number(r.answers),
+              accuracyPct: Number(r.accuracy ?? 0),
+            }))
+          : null,
+      topJokes: isJokes
+        ? (topJokes as { jokeId: string; label: string; events: number }[]).map((r) => ({
+            jokeId: r.jokeId,
+            label: r.label,
+            events: Number(r.events),
+          }))
+        : null,
     };
   }
 
