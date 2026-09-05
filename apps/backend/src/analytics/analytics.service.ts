@@ -11,7 +11,7 @@
  * ============================================================================
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -136,6 +136,21 @@ export interface AdminDashboard {
 export interface ConversionFunnel {
   range: { days: number };
   stages: { key: string; label: string; actors: number }[];
+}
+
+/** Deep per-module click analysis (plan/13 §4b B9). */
+export interface ClickAnalysis {
+  range: { days: number };
+  module: string;
+  totalClicks: number;
+  eventMix: { eventName: string; count: number }[];
+  perDay: { day: string; count: number }[];
+  /** quiz/riddle only: answered correct vs wrong. */
+  correctWrong: { correct: number; wrong: number } | null;
+  /** quiz/riddle only: which option letter players picked. */
+  options: { option: string; count: number }[] | null;
+  /** jokes only: like vs dislike in the window. */
+  voteTypes: { likes: number; dislikes: number } | null;
 }
 
 @Injectable()
@@ -875,6 +890,104 @@ export class AnalyticsService {
       },
       PUBLIC_SUMMARY_CACHE_TTL_S
     );
+  }
+
+  // ==================== CLICK ANALYSIS (per feature, plan §4b B9) ====================
+
+  /** Modules the click-analysis endpoint accepts. */
+  static readonly CLICK_MODULES = ['quiz-mcq', 'riddle-mcq', 'image-riddles', 'jokes'] as const;
+
+  async getClickAnalysis(module: string, days: number): Promise<ClickAnalysis> {
+    if (!(AnalyticsService.CLICK_MODULES as readonly string[]).includes(module)) {
+      throw new BadRequestException(`Unsupported module "${module}" for click analysis`);
+    }
+    const clamped = Math.min(Math.max(Math.floor(days) || 30, 1), DASHBOARD_MAX_DAYS);
+    return this.cacheService.getOrSet(
+      `analytics:clicks:${module}:${clamped}`,
+      () => this.computeClickAnalysis(module, clamped),
+      DASHBOARD_CACHE_TTL_S
+    );
+  }
+
+  private async computeClickAnalysis(module: string, days: number): Promise<ClickAnalysis> {
+    const win = `"serverTs" > now() - ($1::int * interval '1 day')`;
+    const isQuizLike = module === 'quiz-mcq' || module === 'riddle-mcq';
+    const isJokes = module === 'jokes';
+
+    const [eventMix, perDay, correctWrong, options, voteTypes] = await Promise.all([
+      this.eventRepo.query(
+        `SELECT "eventName", COUNT(*)::int AS count FROM analytics_events
+         WHERE module = $2 AND ${win} GROUP BY 1 ORDER BY count DESC`,
+        [days, module]
+      ),
+      this.eventRepo.query(
+        `SELECT to_char(d.day, 'YYYY-MM-DD') AS day, COALESCE(e.n, 0)::int AS count
+         FROM generate_series(CURRENT_DATE - (($1::int - 1) * interval '1 day'), CURRENT_DATE, interval '1 day') AS d(day)
+         LEFT JOIN (
+           SELECT date_trunc('day', "serverTs") AS day, COUNT(*)::int AS n
+           FROM analytics_events WHERE module = $2 AND ${win} GROUP BY 1
+         ) e ON e.day = d.day ORDER BY d.day`,
+        [days, module]
+      ),
+      isQuizLike
+        ? this.eventRepo.query(
+            `SELECT COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0)::int AS correct,
+                    COUNT(*)::int AS answered
+             FROM analytics_events
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}`,
+            [days, module]
+          )
+        : Promise.resolve([]),
+      isQuizLike
+        ? this.eventRepo.query(
+            `SELECT COALESCE(properties->>'selectedOption', '?') AS option, COUNT(*)::int AS count
+             FROM analytics_events
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+             GROUP BY 1 ORDER BY count DESC`,
+            [days, module]
+          )
+        : Promise.resolve([]),
+      isJokes
+        ? this.eventRepo.query(
+            `SELECT
+               COALESCE(SUM(CASE WHEN properties->>'voteType' = 'like' THEN 1 ELSE 0 END), 0)::int AS likes,
+               COALESCE(SUM(CASE WHEN properties->>'voteType' = 'dislike' THEN 1 ELSE 0 END), 0)::int AS dislikes
+             FROM analytics_events WHERE "eventName" = 'joke_voted' AND module = 'jokes' AND ${win}`,
+            [days]
+          )
+        : Promise.resolve([]),
+    ]);
+
+    const mix = (eventMix as { eventName: string; count: number }[]).map((r) => ({
+      eventName: r.eventName,
+      count: Number(r.count),
+    }));
+
+    return {
+      range: { days },
+      module,
+      totalClicks: mix.reduce((a, e) => a + e.count, 0),
+      eventMix: mix,
+      perDay: perDay as { day: string; count: number }[],
+      correctWrong: isQuizLike
+        ? {
+            correct: Number(correctWrong[0]?.correct ?? 0),
+            wrong: Math.max(
+              0,
+              Number(correctWrong[0]?.answered ?? 0) - Number(correctWrong[0]?.correct ?? 0)
+            ),
+          }
+        : null,
+      options: isQuizLike
+        ? (options as { option: string; count: number }[]).map((r) => ({
+            option: r.option,
+            count: Number(r.count),
+          }))
+        : null,
+      voteTypes: isJokes
+        ? { likes: Number(voteTypes[0]?.likes ?? 0), dislikes: Number(voteTypes[0]?.dislikes ?? 0) }
+        : null,
+    };
   }
 
   async listEvents(opts: {

@@ -152,3 +152,17 @@ export class AdminDashboardQueryDto {
   @Max(365)
   days?: number;
 }
+
+export class AdminClicksQueryDto {
+  @ApiProperty({ enum: ['quiz-mcq', 'riddle-mcq', 'image-riddles', 'jokes'] })
+  @IsIn(['quiz-mcq', 'riddle-mcq', 'image-riddles', 'jokes'])
+  module: string;
+
+  @ApiPropertyOptional({ description: 'Look-back window in days', default: 30, maximum: 365 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(365)
+  days?: number;
+}

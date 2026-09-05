@@ -88,3 +88,15 @@ export interface ConversionFunnel {
   range: { days: number };
   stages: { key: string; label: string; actors: number }[];
 }
+
+/** Mirror of the backend ClickAnalysis payload (analytics.service.ts, B9). */
+export interface ClickAnalysis {
+  range: { days: number };
+  module: string;
+  totalClicks: number;
+  eventMix: { eventName: string; count: number }[];
+  perDay: { day: string; count: number }[];
+  correctWrong: { correct: number; wrong: number } | null;
+  options: { option: string; count: number }[] | null;
+  voteTypes: { likes: number; dislikes: number } | null;
+}

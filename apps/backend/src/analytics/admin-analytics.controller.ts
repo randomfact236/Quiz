@@ -14,7 +14,11 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminGuard } from '../common/guards/admin.guard';
 
 import { AnalyticsService } from './analytics.service';
-import { AdminDashboardQueryDto, AdminEventsQueryDto } from './dto/analytics.dto';
+import {
+  AdminClicksQueryDto,
+  AdminDashboardQueryDto,
+  AdminEventsQueryDto,
+} from './dto/analytics.dto';
 
 @ApiTags('Analytics (admin)')
 @ApiBearerAuth()
@@ -50,6 +54,15 @@ export class AdminAnalyticsController {
   })
   getFunnel(@Query() query: AdminDashboardQueryDto) {
     return this.analyticsService.getFunnel(query.days ?? 30);
+  }
+
+  @Get('clicks')
+  @ApiOperation({
+    summary:
+      'Deep click analysis per feature: event mix, per-day rhythm, correct/wrong, option distribution, vote split',
+  })
+  getClicks(@Query() query: AdminClicksQueryDto) {
+    return this.analyticsService.getClickAnalysis(query.module, query.days ?? 30);
   }
 
   @Get('events')

@@ -5,10 +5,13 @@
  * Tab content components for the analytics dashboard.
  * ============================================================================
  * One component per admin tab. All data comes from the single dashboard
- * payload (`AdminDashboard`) + the retention endpoint; each tab also exposes
- * its primary dataset for the header's CSV export via `getExportRows`.
+ * payload (`AdminDashboard`) + the retention/funnel/clicks endpoints; each tab
+ * also exposes its primary dataset for the header's CSV export via
+ * `exportRowsForTab`.
  * ============================================================================
  */
+
+import { useEffect, useState } from 'react';
 
 import {
   Activity,
@@ -20,6 +23,7 @@ import {
   ListChecks,
   Lock,
   MapPin,
+  MousePointerClick,
   Send,
   Sparkles,
   ThumbsDown,
@@ -30,7 +34,15 @@ import {
   Users,
 } from 'lucide-react';
 
-import type { AdminDashboard, ModuleDashboard, RetentionCohort, ConversionFunnel } from './types';
+import { adminApi } from '@/lib/api-client';
+
+import type {
+  AdminDashboard,
+  ModuleDashboard,
+  RetentionCohort,
+  ConversionFunnel,
+  ClickAnalysis,
+} from './types';
 import {
   AccuracyBar,
   BarList,
@@ -733,6 +745,233 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
   );
 }
 
+// ==================== Click Analysis (per-feature deep view, B9) ====================
+
+const CLICK_FEATURES = [
+  { id: 'quiz-mcq', label: 'Quiz MCQ' },
+  { id: 'riddle-mcq', label: 'Riddle MCQ' },
+  { id: 'image-riddles', label: 'Image Riddles' },
+  { id: 'jokes', label: 'Dad Jokes' },
+] as const;
+
+type ClickFeatureId = (typeof CLICK_FEATURES)[number]['id'];
+
+const CLICK_ACCENTS: Record<ClickFeatureId, string> = {
+  'quiz-mcq': 'bg-violet-500/70',
+  'riddle-mcq': 'bg-sky-500/70',
+  'image-riddles': 'bg-orange-500/70',
+  jokes: 'bg-emerald-500/70',
+};
+
+/** Headline stats per feature, read off the event mix. */
+function clickHeadline(
+  feature: ClickFeatureId,
+  c: ClickAnalysis
+): { label: string; value: string }[] {
+  const count = (name: string): number => c.eventMix.find((e) => e.eventName === name)?.count ?? 0;
+  if (feature === 'quiz-mcq' || feature === 'riddle-mcq') {
+    const accuracy =
+      c.correctWrong && c.correctWrong.correct + c.correctWrong.wrong > 0
+        ? `${Math.round((c.correctWrong.correct / (c.correctWrong.correct + c.correctWrong.wrong)) * 100)}%`
+        : '—';
+    return [
+      { label: 'Answers', value: n(count('question_answered')) },
+      { label: 'Accuracy', value: accuracy },
+      { label: 'Sessions started', value: n(count('session_started')) },
+      { label: 'Abandoned', value: n(count('session_abandoned')) },
+    ];
+  }
+  if (feature === 'image-riddles') {
+    const checks = count('image_riddle_answer_checked');
+    const gaveUp = count('image_riddle_gave_up');
+    const giveUpRate = checks > 0 ? `${Math.round((gaveUp / checks) * 100)}%` : '—';
+    return [
+      { label: 'Answers checked', value: n(checks) },
+      { label: 'Hints shown', value: n(count('image_riddle_hint_shown')) },
+      { label: 'Gave up', value: n(gaveUp) },
+      { label: 'Give-up rate', value: giveUpRate },
+    ];
+  }
+  const votes = c.voteTypes ? c.voteTypes.likes + c.voteTypes.dislikes : 0;
+  const likePct =
+    votes > 0 && c.voteTypes ? `${Math.round((c.voteTypes.likes / votes) * 100)}%` : '—';
+  return [
+    { label: 'Jokes viewed', value: n(count('joke_viewed')) },
+    { label: 'Votes cast', value: n(votes) },
+    { label: 'Like ratio', value: likePct },
+    { label: 'Shares', value: n(count('joke_shared')) },
+  ];
+}
+
+export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard: AdminDashboard }) {
+  const [feature, setFeature] = useState<ClickFeatureId>('quiz-mcq');
+  const [clicks, setClicks] = useState<ClickAnalysis | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let stale = false;
+    setLoading(true);
+    setFailed(false);
+    adminApi
+      .get<ClickAnalysis>(`/admin/analytics/clicks?module=${feature}&days=${days}`)
+      .then((res) => {
+        if (!stale) setClicks(res.data);
+      })
+      .catch(() => {
+        if (!stale) setFailed(true);
+      })
+      .finally(() => {
+        if (!stale) setLoading(false);
+      });
+    return () => {
+      stale = true;
+    };
+  }, [feature, days]);
+
+  const headline = clicks ? clickHeadline(feature, clicks) : [];
+  const topEvent = clicks?.eventMix[0];
+
+  return (
+    <div className="space-y-5">
+      {/* Feature switcher */}
+      <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
+        {CLICK_FEATURES.map((f) => (
+          <button
+            key={f.id}
+            onClick={() => setFeature(f.id)}
+            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
+              feature === f.id
+                ? 'bg-gray-800 font-medium text-white shadow'
+                : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {loading && !clicks ? (
+        <div className="flex h-48 flex-col items-center justify-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
+          <p className="text-sm text-gray-500">Loading click analysis…</p>
+        </div>
+      ) : failed && !clicks ? (
+        <Panel title="Click analysis">
+          <p className="text-sm text-rose-400">Could not load click analysis. Try Refresh.</p>
+        </Panel>
+      ) : clicks ? (
+        <>
+          {/* Headline stats */}
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+            <KpiCard
+              label="Total clicks"
+              value={n(clicks.totalClicks)}
+              icon={MousePointerClick}
+              accent="cyan"
+              hint={`last ${days}d`}
+            />
+            {headline.map((h) => (
+              <KpiCard
+                key={h.label}
+                label={h.label}
+                value={h.value}
+                icon={Activity}
+                accent="violet"
+              />
+            ))}
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Panel title="Clicks per day" hint={`Interaction rhythm · last ${days}d`}>
+              <MiniBars series={clicks.perDay} accent={CLICK_ACCENTS[feature]} />
+            </Panel>
+            <Panel
+              title="Event mix"
+              hint={topEvent ? `Top: ${topEvent.eventName}` : 'All tracked events'}
+            >
+              <BarList
+                rows={clicks.eventMix.map((e) => ({ label: e.eventName, value: e.count }))}
+                accent={CLICK_ACCENTS[feature]}
+                emptyText="No interactions in this window."
+              />
+            </Panel>
+          </div>
+
+          {/* Feature-specific depth */}
+          {(feature === 'quiz-mcq' || feature === 'riddle-mcq') && clicks.correctWrong && (
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Panel title="Correct vs wrong" hint="Across all question_answered events">
+                <AccuracyBar
+                  pct={
+                    clicks.correctWrong.correct + clicks.correctWrong.wrong > 0
+                      ? Math.round(
+                          (clicks.correctWrong.correct /
+                            (clicks.correctWrong.correct + clicks.correctWrong.wrong)) *
+                            100
+                        )
+                      : 0
+                  }
+                  label={`${n(clicks.correctWrong.correct)} correct · ${n(clicks.correctWrong.wrong)} wrong`}
+                />
+              </Panel>
+              <Panel title="Options picked" hint="Which letter players choose when guessing">
+                <BarList
+                  rows={(clicks.options ?? []).map((o) => ({
+                    label: `Option ${o.option}`,
+                    value: o.count,
+                  }))}
+                  accent={CLICK_ACCENTS[feature]}
+                  emptyText="No answers in this window."
+                />
+              </Panel>
+            </div>
+          )}
+
+          {feature === 'jokes' && clicks.voteTypes && (
+            <Panel title="Vote split" hint="Likes vs dislikes in the window">
+              <AccuracyBar
+                pct={
+                  clicks.voteTypes.likes + clicks.voteTypes.dislikes > 0
+                    ? Math.round(
+                        (clicks.voteTypes.likes /
+                          (clicks.voteTypes.likes + clicks.voteTypes.dislikes)) *
+                          100
+                      )
+                    : 0
+                }
+                label={`${n(clicks.voteTypes.likes)} 👍 / ${n(clicks.voteTypes.dislikes)} 👎`}
+              />
+            </Panel>
+          )}
+
+          {feature === 'jokes' && dashboard.modules.jokes.top.length > 0 && (
+            <Panel title="Most-voted jokes" hint="Top 5 in the window">
+              <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
+                {dashboard.modules.jokes.top.map((j, i) => (
+                  <tr key={j.jokeId} className="border-t border-gray-800">
+                    <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
+                    <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
+                      {j.label}
+                    </td>
+                    <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
+                    <td className="py-2 text-emerald-400">{j.likePct}%</td>
+                  </tr>
+                ))}
+              </DarkTable>
+            </Panel>
+          )}
+
+          <p className="text-xs text-gray-600">
+            These are aggregates. Individual click-by-click rows — with visitor, session and full
+            properties — are in Raw Events (filter to {feature}, or click any Actor cell).
+          </p>
+        </>
+      ) : null}
+    </div>
+  );
+}
+
 // ==================== CSV export rows per tab ====================
 
 export function exportRowsForTab(
@@ -782,6 +1021,23 @@ export function exportRowsForTab(
       return cohorts as unknown as Record<string, unknown>[];
     case 'journey':
       return (funnel?.stages ?? []).map((s) => ({ stage: s.label, visitors: s.actors }));
+    case 'clicks': {
+      const mix = [
+        ...data.modules['quiz-mcq'].eventMix.map((e) => ({
+          module: 'quiz-mcq',
+          event: e.eventName,
+          count: e.count,
+        })),
+        ...data.modules['riddle-mcq'].eventMix.map((e) => ({
+          module: 'riddle-mcq',
+          event: e.eventName,
+          count: e.count,
+        })),
+      ];
+      return mix.length > 0
+        ? mix
+        : [{ note: 'per-feature mixes for Image Riddles / Jokes live on their tabs' }];
+    }
     default:
       return [];
   }

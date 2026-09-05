@@ -22,6 +22,7 @@ import { downloadCsv } from './analytics/csv';
 import {
   exportRowsForTab,
   AudienceTab,
+  ClickAnalysisTab,
   ImageRiddlesTab,
   JokesTab,
   JourneyTab,
@@ -34,12 +35,13 @@ import type { AdminDashboard, RetentionCohort, ConversionFunnel } from './analyt
 
 /** Dashboard tabs — single source of truth, mirrored by the sidebar sub-menu.
  *  Owner-ordered 2026-09-05: Overview first, then the cross-module tabs
- *  (Users / Audience & Geo / Journey / Retention), then per-game tabs. */
+ *  (Users / Audience & Geo / Journey / Clicks / Retention), then per-game tabs. */
 export const ANALYTICS_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'users', label: 'Users' },
   { id: 'audience', label: 'Audience & Geo' },
   { id: 'journey', label: 'Journey' },
+  { id: 'clicks', label: 'Click Analysis' },
   { id: 'retention', label: 'Retention' },
   { id: 'quiz-mcq', label: 'Quiz MCQ' },
   { id: 'riddle-mcq', label: 'Riddle MCQ' },
@@ -216,6 +218,7 @@ export function AnalyticsSection() {
             {tab === 'audience' && <AudienceTab data={data} />}
             {tab === 'retention' && <RetentionTab cohorts={retention} />}
             {tab === 'journey' && <JourneyTab data={data} funnel={funnel} />}
+            {tab === 'clicks' && <ClickAnalysisTab days={days} dashboard={data} />}
             {tab === 'events' && <EventsBrowser />}
           </>
         ) : null}
