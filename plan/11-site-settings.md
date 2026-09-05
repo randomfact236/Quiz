@@ -5,15 +5,13 @@
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
 >
-> Verified against the live codebase: 2026-08-30. **No archived ledger doc existed for this feature** —
-> built entirely from current code. Headline finding: **the feature is a double split-brain** — a real
-> backend settings module nobody consumes, and a frontend mock the admin UI saves into. Details below.
+> Verified against the live codebase: 2026-08-30 (headline finding then: a double split-brain); **re-audited + E2E-tested 2026-09-05** — the split-brain is fully closed (P1 #1–#3): the admin UI reads/writes the backend, a public endpoint serves gameplay, and the mock is deleted. Details in §3.
 
 ---
 
 ## 1. File inventory
 
-Backend (`apps/backend/src/settings/`) — **real and complete, but consumed by nothing**:
+Backend (`apps/backend/src/settings/`) — **real, complete, and now the single source of truth** (admin UI + gameplay read from it):
 
 | File                                | Purpose                                                                                                                                                                                                                                             | Size (verified) |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
@@ -21,16 +19,16 @@ Backend (`apps/backend/src/settings/`) — **real and complete, but consumed by 
 | `settings.service.ts`               | `onModuleInit` refresh (graceful fallback to defaults if the table is missing), deep-merge DB overrides over `config/settings.ts` defaults, prototype-pollution guards (`__proto__`/`constructor`/`prototype`), in-memory `effectiveSettings` cache | 248 lines       |
 | `entities/system-setting.entity.ts` | `system_settings`: `key` (primary), `value` jsonb, description                                                                                                                                                                                      | —               |
 | `dto/update-settings.dto.ts`        | Whitelist DTO (`forbidNonWhitelisted`), typed nested config DTOs                                                                                                                                                                                    | —               |
-| `interfaces/settings.interface.ts`  | `AppSettings` = `global` (pagination/cache) + `dadJokes` + `imageRiddles` (timerSeconds, action presets) + `quiz` + `riddles`                                                                                                                       | —               |
+| `interfaces/settings.interface.ts`  | `AppSettings` = `global` (pagination/cache) + `dadJokes` + `imageRiddles` + `quiz` (incl. `defaults.levelTimers`) + `riddles` (incl. `defaults.levelTimers`) + `seo` (added 2026-09-05)                                                             | —               |
 | `config/settings.ts`                | Default settings tree (quiz `defaults` is **empty**; imageRiddles has `timerSeconds: 90` + action presets incl. fullscreen/share/report)                                                                                                            | —               |
 
-Frontend (`apps/frontend/src/`) — **a mock, not the API**:
+Frontend (`apps/frontend/src/`) — **wired to the backend since 2026-08-30** (the localStorage mock was deleted):
 
-| File                                       | Purpose                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `services/settings.service.ts`             | `getSettings()` reads localStorage (`aiquiz:settings`) with a **simulated network delay**; `updateSettings` shallow-merges into localStorage. No HTTP call exists. Ships `DEFAULT_MOCK_SETTINGS` (quiz defaults: timeLimit/passingScore/questionsPerQuiz/shuffle…, riddles `levelTimers` from `RIDDLE_TIMERS` constants) |
-| `app/admin/components/SettingsSection.tsx` | Admin settings UI (tabs per settings section) — reads/writes the **mock**                                                                                                                                                                                                                                                |
-| Consumers                                  | `app/quiz-mcq/play/page.tsx` (reads `quiz.defaults.levelTimers` — never supplied by the mock → hardcoded fallback wins), `hooks/use-riddle-play/useRiddlePlay.ts` (reads riddle config), `types/settings.types.ts`                                                                                                       |
+| File                                       | Purpose                                                                                                                                                                                                                             |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `services/settings.service.ts`             | `getAdminSettings()` → `GET /settings` (admin token); `updateSettings()` → `PATCH /settings`; `getPublicSettings()` → `GET /settings/public` with the frontend constants as offline fallback. **The localStorage mock is deleted.** |
+| `app/admin/components/SettingsSection.tsx` | Admin settings UI (tabs per settings section) — reads/writes the **backend**; the SEO tab edits the `seo` group (feature 09)                                                                                                        |
+| Consumers                                  | `app/quiz-mcq/play/page.tsx` + `hooks/use-riddle-play/useRiddlePlay.ts` (real `levelTimers` via the public endpoint, constants as offline fallback), `types/settings.types.ts`, SEO Dashboard (feature 09)                          |
 
 No test suite exists for settings (backend merge logic, DTO, or the frontend service).
 
@@ -41,7 +39,7 @@ No test suite exists for settings (backend merge logic, DTO, or the frontend ser
 | GET `/settings`   | Jwt + admin | returns effective settings (defaults + DB overrides)     |
 | PATCH `/settings` | Jwt + admin | whitelist-validated deep merge; prototype-pollution-safe |
 
-That is the entire surface. There is **no public settings endpoint** — gameplay pages (public, no auth) can never read real settings even if the frontend were wired.
+Plus `GET /settings/public` (`@_Public`) — gameplay keys only; cache TTLs/patterns stay admin-only.
 
 ## 3. Current status (verified)
 
@@ -81,7 +79,20 @@ That is the entire surface. There is **no public settings endpoint** — gamepla
 ## 5. Cross-feature touchpoints
 
 - **Admin Dashboard (12)** — SettingsSection is a dashboard section; the only UI surface for settings.
-- **MCQ Quiz (02)** — quiz play reads (mock) settings for per-level timers; falls back to hardcoded constants.
-- **Riddle MCQ (03)** — `useRiddlePlay` reads (mock) settings for riddle config.
+- **MCQ Quiz (02)** — quiz play reads real `quiz.defaults.levelTimers` from the public endpoint (constants as offline fallback).
+- **Riddle MCQ (03)** — `useRiddlePlay` reads real riddle `levelTimers` from the public endpoint (constants as offline fallback).
 - **Image Riddles (04)** — backend defaults define `imageRiddles.defaults.timerSeconds: 90` and action presets; the entity's `getEffectiveTimer` reads the settings-shaped object, though the settings service itself is not injected into the image-riddles module.
-- **Dad Jokes (05)** — `dadJokes` settings section (category emoji, cache TTL) exists in both mock and backend; the admin "Dad Jokes" settings tab edits the mock.
+- **Dad Jokes (05)** — the `dadJokes` settings group (category emoji, cache TTL) is edited by the admin Settings tab against the backend.
+
+## 6. Extras (2026-09-05 F11 five-step pass
+
+## 6. Extras (2026-09-05 F11 five-step pass — noted, not acted on)
+
+- **Settings E2E re-verified live:** admin GET 200 -> PATCH distinctive quiz levelTimers
+  (33/44/66/99/111) -> `GET /settings/public` reflects them -> restored to defaults. The
+  prototype-pollution guard engages on `__proto__` payloads (spec-covered).
+- **Seeded test data:** none kept — the PATCH probe restored the default timers deliberately
+  (gameplay timing stays predictable for the remaining feature passes).
+- **Cross-module import-status inconsistency:** quiz bulk import accepts `status: 'published'`
+  while riddle/joke/image-riddle imports land DRAFT (see plan/05 + plan/04 Extras).
+- **Cache invalidation (P2 open)** stays folded into the multi-instance/S3 pre-deploy decision.

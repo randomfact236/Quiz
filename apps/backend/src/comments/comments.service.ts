@@ -399,6 +399,8 @@ export class CommentsService {
         masked: row.isCorrect,
         isCorrect: row.isCorrect,
         status: row.status,
+        // Moderators must SEE the flag, not just filter by it (plan/07 P2).
+        flagged: row.flagged ?? false,
         guestId: row.guestId,
         contentType: row.contentType,
         contentId: row.contentId,
