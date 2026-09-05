@@ -748,6 +748,7 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
 // ==================== Click Analysis (per-feature deep view, B9) ====================
 
 const CLICK_FEATURES = [
+  { id: 'overview', label: 'Overview' },
   { id: 'quiz-mcq', label: 'Quiz MCQ' },
   { id: 'riddle-mcq', label: 'Riddle MCQ' },
   { id: 'image-riddles', label: 'Image Riddles' },
@@ -757,11 +758,39 @@ const CLICK_FEATURES = [
 type ClickFeatureId = (typeof CLICK_FEATURES)[number]['id'];
 
 const CLICK_ACCENTS: Record<ClickFeatureId, string> = {
+  overview: 'bg-cyan-500/70',
   'quiz-mcq': 'bg-violet-500/70',
   'riddle-mcq': 'bg-sky-500/70',
   'image-riddles': 'bg-orange-500/70',
   jokes: 'bg-emerald-500/70',
 };
+
+/** Sub-tab pills inside the Click Analysis tab (overview + one per feature). */
+function FeatureSwitcher({
+  feature,
+  onPick,
+}: {
+  feature: ClickFeatureId;
+  onPick: (f: ClickFeatureId) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
+      {CLICK_FEATURES.map((f) => (
+        <button
+          key={f.id}
+          onClick={() => onPick(f.id)}
+          className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
+            feature === f.id
+              ? 'bg-gray-800 font-medium text-white shadow'
+              : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
+          }`}
+        >
+          {f.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 /** Headline stats per feature, read off the event mix. */
 function clickHeadline(
@@ -804,8 +833,10 @@ function clickHeadline(
 }
 
 export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard: AdminDashboard }) {
-  const [feature, setFeature] = useState<ClickFeatureId>('quiz-mcq');
+  const [feature, setFeature] = useState<ClickFeatureId>('overview');
   const [clicks, setClicks] = useState<ClickAnalysis | null>(null);
+  // Overview sub-tab: all four feature payloads fetched in parallel.
+  const [overview, setOverview] = useState<ClickAnalysis[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
 
@@ -813,6 +844,27 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
     let stale = false;
     setLoading(true);
     setFailed(false);
+    if (feature === 'overview') {
+      Promise.all(
+        CLICK_FEATURES.filter((f) => f.id !== 'overview').map((f) =>
+          adminApi
+            .get<ClickAnalysis>(`/admin/analytics/clicks?module=${f.id}&days=${days}`)
+            .then((r) => r.data)
+        )
+      )
+        .then((res) => {
+          if (!stale) setOverview(res);
+        })
+        .catch(() => {
+          if (!stale) setFailed(true);
+        })
+        .finally(() => {
+          if (!stale) setLoading(false);
+        });
+      return () => {
+        stale = true;
+      };
+    }
     adminApi
       .get<ClickAnalysis>(`/admin/analytics/clicks?module=${feature}&days=${days}`)
       .then((res) => {
@@ -832,25 +884,111 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
   const headline = clicks ? clickHeadline(feature, clicks) : [];
   const topEvent = clicks?.eventMix[0];
 
-  return (
-    <div className="space-y-5">
-      {/* Feature switcher */}
-      <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
-        {CLICK_FEATURES.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => setFeature(f.id)}
-            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
-              feature === f.id
-                ? 'bg-gray-800 font-medium text-white shadow'
-                : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
+  // ---- Overview sub-tab (all features combined) ----
+  if (feature === 'overview') {
+    if (loading && !overview) {
+      return (
+        <div className="space-y-5">
+          <FeatureSwitcher feature={feature} onPick={setFeature} />
+          <div className="flex h-48 flex-col items-center justify-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
+            <p className="text-sm text-gray-500">Loading click overview…</p>
+          </div>
+        </div>
+      );
+    }
+    if (failed && !overview) {
+      return (
+        <div className="space-y-5">
+          <FeatureSwitcher feature={feature} onPick={setFeature} />
+          <Panel title="Click overview">
+            <p className="text-sm text-rose-400">Could not load the click overview. Try Refresh.</p>
+          </Panel>
+        </div>
+      );
+    }
+    if (!overview) return null;
 
+    const grandTotal = overview.reduce((a, c) => a + c.totalClicks, 0);
+    const perDay: { day: string; count: number }[] =
+      overview[0]?.perDay.map((d, i) => ({
+        day: d.day,
+        count: overview.reduce((a, c) => a + (c.perDay[i]?.count ?? 0), 0),
+      })) ?? [];
+    const answers = overview.reduce(
+      (a, c) => a + (c.correctWrong ? c.correctWrong.correct + c.correctWrong.wrong : 0),
+      0
+    );
+    const correct = overview.reduce((a, c) => a + (c.correctWrong?.correct ?? 0), 0);
+    const featureNames: Record<string, string> = {
+      'quiz-mcq': 'Quiz MCQ',
+      'riddle-mcq': 'Riddle MCQ',
+      'image-riddles': 'Image Riddles',
+      jokes: 'Dad Jokes',
+    };
+
+    return (
+      <div className="space-y-5">
+        <FeatureSwitcher feature={feature} onPick={setFeature} />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+          <KpiCard
+            label="Total clicks"
+            value={n(grandTotal)}
+            icon={MousePointerClick}
+            accent="cyan"
+            hint={`all features · last ${days}d`}
+          />
+          {overview.map((c) => (
+            <KpiCard
+              key={c.module}
+              label={featureNames[c.module] ?? c.module}
+              value={n(c.totalClicks)}
+              icon={Activity}
+              accent="violet"
+            />
+          ))}
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Panel title="Clicks per day" hint={`All features combined · last ${days}d`}>
+            <MiniBars series={perDay} accent="bg-cyan-500/70" />
+          </Panel>
+          <Panel title="Share of clicks" hint="Which feature gets the interaction">
+            <BarList
+              rows={overview.map((c) => ({
+                label: featureNames[c.module] ?? c.module,
+                value: c.totalClicks,
+              }))}
+              accent="bg-violet-500/70"
+              emptyText="No clicks in this window."
+            />
+          </Panel>
+        </div>
+
+        {answers > 0 && (
+          <Panel
+            title="Combined answer accuracy"
+            hint="Quiz + Riddle answered events in the window"
+          >
+            <AccuracyBar
+              pct={Math.round((correct / answers) * 100)}
+              label={`${n(correct)} correct · ${n(answers - correct)} wrong`}
+            />
+          </Panel>
+        )}
+
+        <p className="text-xs text-gray-600">
+          Pick a feature above for its deep view — subject/chapter breakdowns (Quiz, Riddle), option
+          choices, joke categories, most-clicked riddles, and the per-day rhythm.
+        </p>
+      </div>
+    );
+  }
+
+  // ---- Per-feature sub-tabs ----
+  const headlineBlock = (
+    <>
+      <FeatureSwitcher feature={feature} onPick={setFeature} />
       {loading && !clicks ? (
         <div className="flex h-48 flex-col items-center justify-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
@@ -860,159 +998,165 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
         <Panel title="Click analysis">
           <p className="text-sm text-rose-400">Could not load click analysis. Try Refresh.</p>
         </Panel>
-      ) : clicks ? (
-        <>
-          {/* Headline stats */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+      ) : null}
+    </>
+  );
+  if (!clicks || loading || failed) return <div className="space-y-5">{headlineBlock}</div>;
+
+  return (
+    <div className="space-y-5">
+      {headlineBlock}
+      <>
+        {/* Headline stats */}
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+          <KpiCard
+            label="Total clicks"
+            value={n(clicks.totalClicks)}
+            icon={MousePointerClick}
+            accent="cyan"
+            hint={`last ${days}d`}
+          />
+          {headline.map((h) => (
             <KpiCard
-              label="Total clicks"
-              value={n(clicks.totalClicks)}
-              icon={MousePointerClick}
-              accent="cyan"
-              hint={`last ${days}d`}
+              key={h.label}
+              label={h.label}
+              value={h.value}
+              icon={Activity}
+              accent="violet"
             />
-            {headline.map((h) => (
-              <KpiCard
-                key={h.label}
-                label={h.label}
-                value={h.value}
-                icon={Activity}
-                accent="violet"
-              />
-            ))}
-          </div>
+          ))}
+        </div>
 
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Panel title="Clicks per day" hint={`Interaction rhythm · last ${days}d`}>
+            <MiniBars series={clicks.perDay} accent={CLICK_ACCENTS[feature]} />
+          </Panel>
+          <Panel
+            title="Event mix"
+            hint={topEvent ? `Top: ${topEvent.eventName}` : 'All tracked events'}
+          >
+            <BarList
+              rows={clicks.eventMix.map((e) => ({ label: e.eventName, value: e.count }))}
+              accent={CLICK_ACCENTS[feature]}
+              emptyText="No interactions in this window."
+            />
+          </Panel>
+        </div>
+
+        {/* Feature-specific depth */}
+        {(feature === 'quiz-mcq' || feature === 'riddle-mcq') && clicks.correctWrong && (
           <div className="grid gap-4 lg:grid-cols-2">
-            <Panel title="Clicks per day" hint={`Interaction rhythm · last ${days}d`}>
-              <MiniBars series={clicks.perDay} accent={CLICK_ACCENTS[feature]} />
-            </Panel>
-            <Panel
-              title="Event mix"
-              hint={topEvent ? `Top: ${topEvent.eventName}` : 'All tracked events'}
-            >
-              <BarList
-                rows={clicks.eventMix.map((e) => ({ label: e.eventName, value: e.count }))}
-                accent={CLICK_ACCENTS[feature]}
-                emptyText="No interactions in this window."
-              />
-            </Panel>
-          </div>
-
-          {/* Feature-specific depth */}
-          {(feature === 'quiz-mcq' || feature === 'riddle-mcq') && clicks.correctWrong && (
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Panel title="Correct vs wrong" hint="Across all question_answered events">
-                <AccuracyBar
-                  pct={
-                    clicks.correctWrong.correct + clicks.correctWrong.wrong > 0
-                      ? Math.round(
-                          (clicks.correctWrong.correct /
-                            (clicks.correctWrong.correct + clicks.correctWrong.wrong)) *
-                            100
-                        )
-                      : 0
-                  }
-                  label={`${n(clicks.correctWrong.correct)} correct · ${n(clicks.correctWrong.wrong)} wrong`}
-                />
-              </Panel>
-              <Panel title="Options picked" hint="Which letter players choose when guessing">
-                <BarList
-                  rows={(clicks.options ?? []).map((o) => ({
-                    label: `Option ${o.option}`,
-                    value: o.count,
-                  }))}
-                  accent={CLICK_ACCENTS[feature]}
-                  emptyText="No answers in this window."
-                />
-              </Panel>
-            </div>
-          )}
-
-          {/* Where clicks land — subject / chapter / category / riddle dims */}
-          {(clicks.bySubject || clicks.byChapter) && (
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Panel title="Clicks by subject" hint="Answers per subject · % correct">
-                <BarList
-                  rows={(clicks.bySubject ?? []).map((s) => ({
-                    label: s.label,
-                    value: s.events,
-                    ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
-                  }))}
-                  accent={CLICK_ACCENTS[feature]}
-                  emptyText="No answers in this window."
-                />
-              </Panel>
-              <Panel title="Clicks by chapter" hint="Answers per chapter · % correct">
-                <BarList
-                  rows={(clicks.byChapter ?? []).map((s) => ({
-                    label: s.label,
-                    value: s.events,
-                    ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
-                  }))}
-                  accent={CLICK_ACCENTS[feature]}
-                  emptyText="No answers in this window."
-                />
-              </Panel>
-            </div>
-          )}
-          {clicks.byCategory && (
-            <Panel title="Clicks by category" hint="Views + votes + shares per joke category">
-              <BarList
-                rows={clicks.byCategory.map((c) => ({ label: c.label, value: c.events }))}
-                accent={CLICK_ACCENTS[feature]}
-                emptyText="No joke activity in this window."
-              />
-            </Panel>
-          )}
-          {clicks.topRiddles && clicks.topRiddles.length > 0 && (
-            <Panel title="Most-clicked riddles" hint="Top 5 by interactions">
-              <BarList
-                rows={clicks.topRiddles.map((r) => ({ label: r.label, value: r.events }))}
-                accent={CLICK_ACCENTS[feature]}
-              />
-            </Panel>
-          )}
-
-          {feature === 'jokes' && clicks.voteTypes && (
-            <Panel title="Vote split" hint="Likes vs dislikes in the window">
+            <Panel title="Correct vs wrong" hint="Across all question_answered events">
               <AccuracyBar
                 pct={
-                  clicks.voteTypes.likes + clicks.voteTypes.dislikes > 0
+                  clicks.correctWrong.correct + clicks.correctWrong.wrong > 0
                     ? Math.round(
-                        (clicks.voteTypes.likes /
-                          (clicks.voteTypes.likes + clicks.voteTypes.dislikes)) *
+                        (clicks.correctWrong.correct /
+                          (clicks.correctWrong.correct + clicks.correctWrong.wrong)) *
                           100
                       )
                     : 0
                 }
-                label={`${n(clicks.voteTypes.likes)} 👍 / ${n(clicks.voteTypes.dislikes)} 👎`}
+                label={`${n(clicks.correctWrong.correct)} correct · ${n(clicks.correctWrong.wrong)} wrong`}
               />
             </Panel>
-          )}
-
-          {feature === 'jokes' && dashboard.modules.jokes.top.length > 0 && (
-            <Panel title="Most-voted jokes" hint="Top 5 in the window">
-              <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
-                {dashboard.modules.jokes.top.map((j, i) => (
-                  <tr key={j.jokeId} className="border-t border-gray-800">
-                    <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
-                    <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
-                      {j.label}
-                    </td>
-                    <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
-                    <td className="py-2 text-emerald-400">{j.likePct}%</td>
-                  </tr>
-                ))}
-              </DarkTable>
+            <Panel title="Options picked" hint="Which letter players choose when guessing">
+              <BarList
+                rows={(clicks.options ?? []).map((o) => ({
+                  label: `Option ${o.option}`,
+                  value: o.count,
+                }))}
+                accent={CLICK_ACCENTS[feature]}
+                emptyText="No answers in this window."
+              />
             </Panel>
-          )}
+          </div>
+        )}
 
-          <p className="text-xs text-gray-600">
-            These are aggregates. Individual click-by-click rows — with visitor, session and full
-            properties — are in Raw Events (filter to {feature}, or click any Actor cell).
-          </p>
-        </>
-      ) : null}
+        {/* Where clicks land — subject / chapter / category / riddle dims */}
+        {(clicks.bySubject || clicks.byChapter) && (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Panel title="Clicks by subject" hint="Answers per subject · % correct">
+              <BarList
+                rows={(clicks.bySubject ?? []).map((s) => ({
+                  label: s.label,
+                  value: s.events,
+                  ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
+                }))}
+                accent={CLICK_ACCENTS[feature]}
+                emptyText="No answers in this window."
+              />
+            </Panel>
+            <Panel title="Clicks by chapter" hint="Answers per chapter · % correct">
+              <BarList
+                rows={(clicks.byChapter ?? []).map((s) => ({
+                  label: s.label,
+                  value: s.events,
+                  ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
+                }))}
+                accent={CLICK_ACCENTS[feature]}
+                emptyText="No answers in this window."
+              />
+            </Panel>
+          </div>
+        )}
+        {clicks.byCategory && (
+          <Panel title="Clicks by category" hint="Views + votes + shares per joke category">
+            <BarList
+              rows={clicks.byCategory.map((c) => ({ label: c.label, value: c.events }))}
+              accent={CLICK_ACCENTS[feature]}
+              emptyText="No joke activity in this window."
+            />
+          </Panel>
+        )}
+        {clicks.topRiddles && clicks.topRiddles.length > 0 && (
+          <Panel title="Most-clicked riddles" hint="Top 5 by interactions">
+            <BarList
+              rows={clicks.topRiddles.map((r) => ({ label: r.label, value: r.events }))}
+              accent={CLICK_ACCENTS[feature]}
+            />
+          </Panel>
+        )}
+
+        {feature === 'jokes' && clicks.voteTypes && (
+          <Panel title="Vote split" hint="Likes vs dislikes in the window">
+            <AccuracyBar
+              pct={
+                clicks.voteTypes.likes + clicks.voteTypes.dislikes > 0
+                  ? Math.round(
+                      (clicks.voteTypes.likes /
+                        (clicks.voteTypes.likes + clicks.voteTypes.dislikes)) *
+                        100
+                    )
+                  : 0
+              }
+              label={`${n(clicks.voteTypes.likes)} 👍 / ${n(clicks.voteTypes.dislikes)} 👎`}
+            />
+          </Panel>
+        )}
+
+        {feature === 'jokes' && dashboard.modules.jokes.top.length > 0 && (
+          <Panel title="Most-voted jokes" hint="Top 5 in the window">
+            <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
+              {dashboard.modules.jokes.top.map((j, i) => (
+                <tr key={j.jokeId} className="border-t border-gray-800">
+                  <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
+                  <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
+                    {j.label}
+                  </td>
+                  <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
+                  <td className="py-2 text-emerald-400">{j.likePct}%</td>
+                </tr>
+              ))}
+            </DarkTable>
+          </Panel>
+        )}
+
+        <p className="text-xs text-gray-600">
+          These are aggregates. Individual click-by-click rows — with visitor, session and full
+          properties — are in Raw Events (filter to {feature}, or click any Actor cell).
+        </p>
+      </>
     </div>
   );
 }
