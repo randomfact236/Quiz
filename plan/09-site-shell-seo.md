@@ -73,3 +73,17 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 - **Achievements (06)** — achievement unlock toasts are among the notifications currently invisible (P0).
 - **Site Settings (11)** — SEO metadata is now dynamic: the `seo` settings group (built 2026-09-05) lives in the settings system and is editable from the admin SeoSection; newsletter configuration remains future work.
 - **Analytics (13)** — `page_viewed` fires on every route change the shell renders.
+
+## 6. Extras (2026-09-05 F09 five-step pass — verification only)
+
+- **Step 1 (seed) is N/A for this feature** — the shell/SEO owns no seedable content unit; its
+  "data" is the `seo` settings group (already exercised live in the SEO Dashboard pass).
+- **E2E re-verified live:** robots.txt (allow all / disallow /admin+/api / sitemap pointer),
+  sitemap.xml route list, 404 status for unknown routes, homepage shell markers
+  (skip-to-content, header, footer newsletter form).
+- **Dead-code audit clean:** Header (37 consumers), Footer, MobileFooter, NavigationProgress,
+  ThemeContext, and the toast lib (20 importers) are all wired. No `useToast` export exists
+  (callers use the `toast` singleton directly).
+- Remaining open items in this feature are all owner decisions already tracked above: SSR
+  strategy for JotD/subject pages, web manifest, mobile-drawer focus trap (needs a dependency),
+  legal-page copy approval.
