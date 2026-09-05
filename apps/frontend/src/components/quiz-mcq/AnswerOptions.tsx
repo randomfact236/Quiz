@@ -203,8 +203,10 @@ export function AnswerOptions({
       <div className={`grid gap-4 ${getGridClass()}`} role="radiogroup" aria-label="Answer choices">
         {displayOptions.map((option) => {
           const isSelected = selectedKey === option.key;
-          const isCorrect = showFeedback && correctKey === option.key;
-          const isWrong = showFeedback && isSelected && correctKey !== option.key;
+          // Gate on hasSelection too: showFeedback alone is true during play,
+          // which would leak the correct answer in pre-answer aria-labels.
+          const isCorrect = showFeedback && hasSelection && correctKey === option.key;
+          const isWrong = showFeedback && hasSelection && isSelected && correctKey !== option.key;
 
           return (
             <motion.button
