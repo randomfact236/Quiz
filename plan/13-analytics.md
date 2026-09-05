@@ -192,3 +192,17 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 - **Newsletter (14)** — server-side `newsletter_subscribed`/`newsletter_unsubscribed`; `newsletterSubscribers`/`newsletterNew` KPIs.
 - **Site settings (11)** — server-side `settings_updated` audit event.
 - **Auth (01)** — `user_registered`/`user_login`/`login_failed`/`login_locked`/`password_reset_*` server events; `users.updateLastActive` wired to login.
+
+## 7. F13 five-step pass (2026-09-05) — verification summary
+
+- **Step 1 (seed):** analytics data seeds itself — the F02–F05 gameplay passes generated the
+  event corpus (2,794+ events incl. abandonment, extend, hint, client_error, api_failed,
+  signup_completed samples).
+- **Step 2 (plan audit):** continuously updated this session — §4b pickup items 1–4 + B8/B9 all
+  implemented; §1 inventory, §3 status and the event inventory reflect the current code.
+- **Step 3:** open items tracked (C1 purge decision, C2 tests, B6/B7, A4-resolved, A5/A8–A10,
+  D1) — nothing lost.
+- **Step 4 (dead code):** all analytics exports referenced (pctDelta, exportRowsForTab,
+  JourneyTab, ClickAnalysisTab consumed by AnalyticsSection; csv helpers by the export button).
+- **Step 5 (E2E):** overview / dashboard / retention / funnel / clicks (quiz + jokes) / events
+  all 200 live with the current build; events endpoint correctly 400s unknown params.
