@@ -99,4 +99,8 @@ export interface ClickAnalysis {
   correctWrong: { correct: number; wrong: number } | null;
   options: { option: string; count: number }[] | null;
   voteTypes: { likes: number; dislikes: number } | null;
+  bySubject: { label: string; events: number; accuracyPct: number | null }[] | null;
+  byChapter: { label: string; events: number; accuracyPct: number | null }[] | null;
+  byCategory: { label: string; events: number }[] | null;
+  topRiddles: { label: string; events: number }[] | null;
 }

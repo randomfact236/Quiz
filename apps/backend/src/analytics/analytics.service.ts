@@ -151,6 +151,13 @@ export interface ClickAnalysis {
   options: { option: string; count: number }[] | null;
   /** jokes only: like vs dislike in the window. */
   voteTypes: { likes: number; dislikes: number } | null;
+  /** quiz/riddle: clicks per subject / chapter (B9 dims). */
+  bySubject: { label: string; events: number; accuracyPct: number | null }[] | null;
+  byChapter: { label: string; events: number; accuracyPct: number | null }[] | null;
+  /** jokes: clicks per joke category (joined via jokeId → dad_jokes). */
+  byCategory: { label: string; events: number }[] | null;
+  /** image-riddles: most-interacted riddles. */
+  topRiddles: { label: string; events: number }[] | null;
 }
 
 @Injectable()
@@ -914,7 +921,17 @@ export class AnalyticsService {
     const isQuizLike = module === 'quiz-mcq' || module === 'riddle-mcq';
     const isJokes = module === 'jokes';
 
-    const [eventMix, perDay, correctWrong, options, voteTypes] = await Promise.all([
+    const [
+      eventMix,
+      perDay,
+      correctWrong,
+      options,
+      voteTypes,
+      bySubject,
+      byChapter,
+      byCategory,
+      topRiddles,
+    ] = await Promise.all([
       this.eventRepo.query(
         `SELECT "eventName", COUNT(*)::int AS count FROM analytics_events
          WHERE module = $2 AND ${win} GROUP BY 1 ORDER BY count DESC`,
@@ -956,6 +973,52 @@ export class AnalyticsService {
             [days]
           )
         : Promise.resolve([]),
+      // B9 dims — quiz/riddle: clicks per subject and per chapter.
+      isQuizLike
+        ? this.eventRepo.query(
+            `SELECT COALESCE(properties->>'subject', 'unknown') AS label,
+                      COUNT(*)::int AS events,
+                      ROUND(100.0 * COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0) / COUNT(*))::int AS accuracy
+             FROM analytics_events
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+             GROUP BY 1 ORDER BY events DESC LIMIT 10`,
+            [days, module]
+          )
+        : Promise.resolve([]),
+      isQuizLike
+        ? this.eventRepo.query(
+            `SELECT COALESCE(properties->>'chapter', 'unknown') AS label,
+                      COUNT(*)::int AS events,
+                      ROUND(100.0 * COALESCE(SUM(CASE WHEN (properties->>'correct')::boolean THEN 1 ELSE 0 END), 0) / COUNT(*))::int AS accuracy
+             FROM analytics_events
+             WHERE "eventName" = 'question_answered' AND module = $2 AND ${win}
+             GROUP BY 1 ORDER BY events DESC LIMIT 10`,
+            [days, module]
+          )
+        : Promise.resolve([]),
+      // jokes: clicks per category (jokeId → dad_jokes → joke_categories).
+      isJokes
+        ? this.eventRepo.query(
+            `SELECT COALESCE(c.name, 'uncategorized') AS label, COUNT(*)::int AS events
+             FROM analytics_events e
+             LEFT JOIN dad_jokes d ON d.id::text = e.properties->>'jokeId'
+             LEFT JOIN joke_categories c ON c.id = d."categoryId"
+             WHERE e."eventName" IN ('joke_viewed', 'joke_voted', 'joke_shared')
+               AND e.module = 'jokes' AND ${win}
+             GROUP BY 1 ORDER BY events DESC`,
+            [days]
+          )
+        : Promise.resolve([]),
+      // image-riddles: most-interacted riddles.
+      module === 'image-riddles'
+        ? this.eventRepo.query(
+            `SELECT COALESCE(properties->>'riddleId', '?') AS label, COUNT(*)::int AS events
+             FROM analytics_events
+             WHERE module = 'image-riddles' AND ${win} AND properties->>'riddleId' IS NOT NULL
+             GROUP BY 1 ORDER BY events DESC LIMIT 5`,
+            [days]
+          )
+        : Promise.resolve([]),
     ]);
 
     const mix = (eventMix as { eventName: string; count: number }[]).map((r) => ({
@@ -987,6 +1050,33 @@ export class AnalyticsService {
       voteTypes: isJokes
         ? { likes: Number(voteTypes[0]?.likes ?? 0), dislikes: Number(voteTypes[0]?.dislikes ?? 0) }
         : null,
+      bySubject: isQuizLike
+        ? (bySubject as { label: string; events: number; accuracy: number | null }[]).map((r) => ({
+            label: r.label,
+            events: Number(r.events),
+            accuracyPct: r.accuracy === null ? null : Number(r.accuracy),
+          }))
+        : null,
+      byChapter: isQuizLike
+        ? (byChapter as { label: string; events: number; accuracy: number | null }[]).map((r) => ({
+            label: r.label,
+            events: Number(r.events),
+            accuracyPct: r.accuracy === null ? null : Number(r.accuracy),
+          }))
+        : null,
+      byCategory: isJokes
+        ? (byCategory as { label: string; events: number }[]).map((r) => ({
+            label: r.label,
+            events: Number(r.events),
+          }))
+        : null,
+      topRiddles:
+        module === 'image-riddles'
+          ? (topRiddles as { label: string; events: number }[]).map((r) => ({
+              label: r.label,
+              events: Number(r.events),
+            }))
+          : null,
     };
   }
 

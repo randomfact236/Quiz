@@ -928,6 +928,51 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
             </div>
           )}
 
+          {/* Where clicks land — subject / chapter / category / riddle dims */}
+          {(clicks.bySubject || clicks.byChapter) && (
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Panel title="Clicks by subject" hint="Answers per subject · % correct">
+                <BarList
+                  rows={(clicks.bySubject ?? []).map((s) => ({
+                    label: s.label,
+                    value: s.events,
+                    ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
+                  }))}
+                  accent={CLICK_ACCENTS[feature]}
+                  emptyText="No answers in this window."
+                />
+              </Panel>
+              <Panel title="Clicks by chapter" hint="Answers per chapter · % correct">
+                <BarList
+                  rows={(clicks.byChapter ?? []).map((s) => ({
+                    label: s.label,
+                    value: s.events,
+                    ...(s.accuracyPct !== null ? { meta: `· ${s.accuracyPct}%` } : {}),
+                  }))}
+                  accent={CLICK_ACCENTS[feature]}
+                  emptyText="No answers in this window."
+                />
+              </Panel>
+            </div>
+          )}
+          {clicks.byCategory && (
+            <Panel title="Clicks by category" hint="Views + votes + shares per joke category">
+              <BarList
+                rows={clicks.byCategory.map((c) => ({ label: c.label, value: c.events }))}
+                accent={CLICK_ACCENTS[feature]}
+                emptyText="No joke activity in this window."
+              />
+            </Panel>
+          )}
+          {clicks.topRiddles && clicks.topRiddles.length > 0 && (
+            <Panel title="Most-clicked riddles" hint="Top 5 by interactions">
+              <BarList
+                rows={clicks.topRiddles.map((r) => ({ label: r.label, value: r.events }))}
+                accent={CLICK_ACCENTS[feature]}
+              />
+            </Panel>
+          )}
+
           {feature === 'jokes' && clicks.voteTypes && (
             <Panel title="Vote split" hint="Likes vs dislikes in the window">
               <AccuracyBar
