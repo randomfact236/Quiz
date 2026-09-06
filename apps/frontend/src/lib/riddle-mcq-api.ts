@@ -17,6 +17,12 @@ export type { RiddleMcqSubject } from '@/types/riddles';
 // Types
 // ============================================================================
 
+export interface BulkImportDuplicate {
+  row: number;
+  question: string;
+  duplicateOfRow?: number;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
@@ -370,12 +376,12 @@ export async function createRiddle(dto: CreateRiddleMcqDto): Promise<RiddleMcq> 
  */
 export async function bulkCreateRiddles(
   dtos: CreateRiddleMcqDto[]
-): Promise<{ count: number; errors: string[] }> {
-  const response = await api.post<{ count: number; errors: string[] }>(
-    '/riddle-mcq/riddles/bulk',
-    dtos,
-    { isAdmin: true }
-  );
+): Promise<{ count: number; errors: string[]; duplicates: BulkImportDuplicate[] }> {
+  const response = await api.post<{
+    count: number;
+    errors: string[];
+    duplicates: BulkImportDuplicate[];
+  }>('/riddle-mcq/riddles/bulk', dtos, { isAdmin: true });
   return response.data;
 }
 

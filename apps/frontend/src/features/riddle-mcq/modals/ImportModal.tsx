@@ -2,9 +2,9 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { X, Upload, FileText, Download } from 'lucide-react';
+import { AlertTriangle, X, Upload, FileText, Download } from 'lucide-react';
 import { bulkCreateRiddles } from '@/lib/riddle-mcq-api';
-import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
+import type { CreateRiddleMcqDto, BulkImportDuplicate } from '@/lib/riddle-mcq-api';
 import { parseCsvContent, type ParsedRiddle, type ImportError } from './csv-parser';
 
 interface ImportModalProps {
@@ -18,6 +18,30 @@ interface ImportResult {
   success: boolean;
   count?: number;
   errors?: ImportError[];
+}
+
+/** Duplicate rows the server skipped, with the offending question highlighted. */
+function DuplicatesPanel({ duplicates }: { duplicates: BulkImportDuplicate[] }) {
+  return (
+    <div className="rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800/60 dark:bg-amber-900/20 p-3 space-y-1.5">
+      <p className="flex items-center gap-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
+        <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+        {duplicates.length} duplicate question{duplicates.length === 1 ? '' : 's'} skipped — already
+        exist{duplicates.length === 1 ? 's' : ''} in this subject
+      </p>
+      <div className="max-h-32 overflow-y-auto space-y-1">
+        {duplicates.map((d) => (
+          <p key={d.row} className="text-xs text-amber-900 dark:text-amber-100">
+            <span className="font-semibold">Row {d.row}</span>
+            {d.duplicateOfRow !== undefined ? ` (duplicate of Row ${d.duplicateOfRow}):` : ':'}
+            <mark className="ml-1 rounded bg-amber-100 px-1 py-0.5 font-medium text-amber-900 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
+              {d.question}
+            </mark>
+          </p>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 const downloadTemplate = () => {
@@ -43,6 +67,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
   const [preview, setPreview] = useState<ParsedRiddle[]>([]);
   const [allRiddles, setAllRiddles] = useState<ParsedRiddle[]>([]);
   const [errors, setErrors] = useState<ImportError[]>([]);
+  const [duplicates, setDuplicates] = useState<BulkImportDuplicate[]>([]);
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
@@ -56,6 +81,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
 
       setFile(selectedFile);
       setErrors([]);
+      setDuplicates([]);
       setImportResult(null);
 
       const reader = new FileReader();
@@ -95,6 +121,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
 
     setIsImporting(true);
     setErrors([]);
+    setDuplicates([]);
     setProgress(0);
 
     const CHUNK_SIZE = 100;
@@ -137,6 +164,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
     }
 
     const allErrors: ImportError[] = [];
+    const allDuplicates: BulkImportDuplicate[] = [];
     let totalCreated = 0;
 
     try {
@@ -144,27 +172,39 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
         const chunk = riddlesWithSubjectId.slice(i, i + CHUNK_SIZE);
         const result = await bulkCreateRiddles(chunk);
 
+        // Server error strings already carry their row number ("Row N: ...").
         if (result.errors && result.errors.length > 0) {
-          result.errors.forEach((err, idx) => {
-            allErrors.push({ row: i + idx + 2, message: err });
+          result.errors.forEach((err) => {
+            allErrors.push({ row: 0, message: err });
           });
+        }
+        if (result.duplicates && result.duplicates.length > 0) {
+          allDuplicates.push(...result.duplicates);
         }
         totalCreated += result.count;
         setProgress(Math.min(((i + CHUNK_SIZE) / riddlesWithSubjectId.length) * 100, 100));
       }
 
-      if (allErrors.length > 0) {
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
+
+      setDuplicates(allDuplicates);
+
+      if (totalCreated > 0) {
         setErrors(allErrors);
-      } else {
-        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-questions'] });
-        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-filter-counts'] });
-        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-categories'] });
-        queryClient.invalidateQueries({ queryKey: ['riddle-mcq-subjects'] });
         setImportResult({ success: true, count: totalCreated });
+        // Give the user time to see the duplicates panel before auto-closing.
+        const delay = allDuplicates.length > 0 || allErrors.length > 0 ? 5000 : 1500;
         setTimeout(() => {
           onSuccess?.(totalCreated);
           onClose();
-        }, 1500);
+        }, delay);
+      } else {
+        setErrors(
+          allErrors.length > 0 ? allErrors : [{ row: 0, message: 'No riddles were imported' }]
+        );
       }
     } catch (err) {
       setErrors([
@@ -183,10 +223,13 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
     setPreview([]);
     setAllRiddles([]);
     setErrors([]);
+    setDuplicates([]);
     setProgress(0);
     setImportResult(null);
     onClose();
   }, [onClose]);
+
+  const otherErrors = errors.filter((e) => !e.message.includes('Duplicate question'));
 
   if (!open) return null;
 
@@ -280,6 +323,8 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
                 </div>
               )}
 
+              {duplicates.length > 0 && <DuplicatesPanel duplicates={duplicates} />}
+
               {errors.length > 0 && (
                 <div className="rounded-lg bg-red-50 p-3 space-y-1">
                   <p className="text-sm font-medium text-red-600">{errors.length} error(s) found</p>
@@ -299,7 +344,28 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
             <div className="text-center py-8">
               <div className="text-4xl mb-3">✅</div>
               <p className="text-lg font-medium text-gray-900">Import Successful!</p>
-              <p className="text-gray-500 mt-1">{importResult.count} riddles imported</p>
+              <p className="text-gray-500 mt-1">
+                {importResult.count} riddles imported
+                {duplicates.length > 0 ? ` · ${duplicates.length} duplicates skipped` : ''}
+              </p>
+              {duplicates.length > 0 && (
+                <div className="mt-4 text-left">
+                  <DuplicatesPanel duplicates={duplicates} />
+                </div>
+              )}
+              {otherErrors.length > 0 && (
+                <div className="mt-3 rounded-lg bg-red-50 dark:bg-red-900/20 p-3 text-left">
+                  <p className="text-sm font-medium text-red-600 dark:text-red-400">
+                    {otherErrors.length} row{otherErrors.length === 1 ? '' : 's'} failed
+                  </p>
+                  <div className="max-h-32 overflow-y-auto text-xs text-red-500 space-y-1 mt-1">
+                    {otherErrors.slice(0, 10).map((err, i) => (
+                      <p key={i}>{err.message}</p>
+                    ))}
+                    {otherErrors.length > 10 && <p>...and {otherErrors.length - 10} more</p>}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

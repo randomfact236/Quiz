@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { X } from 'lucide-react';
+import { AlertTriangle, X } from 'lucide-react';
 import type { QuizQuestion, QuizSubject, QuizChapter, CreateQuestionDto } from '@/lib/quiz-mcq-api';
 import { useQuestionMutation } from '../../hooks';
 import { OptionsEditor, CORRECT_LETTERS } from './OptionsEditor';
@@ -42,6 +42,10 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
     useQuestionMutation();
   const isPending = isCreating || isUpdating;
   const error = isEdit ? updateError : createError;
+  // Backend rejects duplicates with: Duplicate question detected: "<text>" already exists in ...
+  const duplicateText = error?.message.match(
+    /^Duplicate question detected: "(.+?)" already exists/
+  )?.[1];
 
   const filteredChapters = useMemo(() => {
     if (!subjectId) return [];
@@ -164,9 +168,23 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
           </button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-          {error && (
-            <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error.message}</div>
-          )}
+          {error &&
+            (duplicateText ? (
+              <div className="p-3 bg-amber-50 border border-amber-200 dark:bg-amber-900/20 dark:border-amber-800/60 rounded-lg space-y-1.5">
+                <p className="flex items-center gap-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                  Duplicate question detected
+                </p>
+                <p className="text-xs text-amber-700 dark:text-amber-300">
+                  A question with this text already exists in the selected chapter:
+                </p>
+                <mark className="block rounded bg-amber-100 px-2 py-1 text-sm font-medium text-amber-900 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
+                  {duplicateText}
+                </mark>
+              </div>
+            ) : (
+              <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error.message}</div>
+            ))}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

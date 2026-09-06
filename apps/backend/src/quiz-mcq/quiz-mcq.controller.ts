@@ -31,6 +31,7 @@ import { IsOptional, IsString } from 'class-validator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { ContentStatus } from '../common/enums/content-status.enum';
+import { ContentImportDuplicate } from '../common/content/content.service';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
 import {
@@ -453,7 +454,7 @@ export class QuizMcqController {
   })
   async createQuestionsBulk(
     @Body() dto: BulkQuestionDto
-  ): Promise<{ count: number; errors: string[] }> {
+  ): Promise<{ count: number; errors: string[]; duplicates: ContentImportDuplicate[] }> {
     if (!dto.questions || dto.questions.length === 0) {
       throw new BadRequestException('Request body must contain questions array');
     }

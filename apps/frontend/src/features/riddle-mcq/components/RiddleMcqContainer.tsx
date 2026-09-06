@@ -76,6 +76,7 @@ export function RiddleMcqContainer() {
   });
   const [subjectModal, setSubjectModal] = useState<ModalState<RiddleMcqSubject>>({ open: false });
   const [riddleModal, setRiddleModal] = useState<ModalState<RiddleMcq>>({ open: false });
+  const [riddleServerError, setRiddleServerError] = useState<string | null>(null);
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [confirm, setConfirm] = useState<ConfirmState>({
@@ -167,12 +168,19 @@ export function RiddleMcqContainer() {
   };
 
   const handleRiddleSubmit = async (dto: CreateRiddleMcqDto) => {
-    if (riddleModal.item) {
-      await riddlesQuery.updateAsync({ id: riddleModal.item.id, dto });
-    } else {
-      await riddlesQuery.createAsync(dto);
+    setRiddleServerError(null);
+    try {
+      if (riddleModal.item) {
+        await riddlesQuery.updateAsync({ id: riddleModal.item.id, dto });
+      } else {
+        await riddlesQuery.createAsync(dto);
+      }
+      setRiddleModal({ open: false });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to save riddle';
+      setRiddleServerError(message);
+      toast.error(message);
     }
-    setRiddleModal({ open: false });
   };
 
   const handleSelectOne = useCallback((id: string, checked: boolean) => {
@@ -320,6 +328,7 @@ export function RiddleMcqContainer() {
         onClose={() => setRiddleModal({ open: false })}
         onSubmit={handleRiddleSubmit}
         isSubmitting={riddlesQuery.isPending}
+        serverError={riddleServerError}
       />
 
       <ConfirmDialog

@@ -15,6 +15,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestj
 
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../../common/constants/app.constants';
+import { ContentImportDuplicate } from '../../common/content/content.service';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { BulkActionDto, BulkActionResponseDto } from '../../common/dto/bulk-action.dto';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -147,7 +148,7 @@ export class RiddleMcqController {
   @ApiOperation({ summary: 'Bulk create riddles (Admin only)' })
   async createRiddlesBulk(
     @Body() dtos: BulkCreateRiddleDto[]
-  ): Promise<{ count: number; errors: string[] }> {
+  ): Promise<{ count: number; errors: string[]; duplicates: ContentImportDuplicate[] }> {
     return this.importService.createRiddlesBulk(dtos);
   }
 

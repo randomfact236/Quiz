@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import type { RiddleMcqSubject, RiddleMcqCategory } from '@/lib/riddle-mcq-api';
 import type { RiddleMcq } from '@/types/riddles';
 import type { CreateRiddleMcqDto } from '@/lib/riddle-mcq-api';
@@ -56,6 +57,8 @@ interface RiddleMcqModalProps {
   onClose: () => void;
   onSubmit: (dto: CreateRiddleMcqDto) => void;
   isSubmitting?: boolean;
+  /** Server-side rejection message (e.g. duplicate question) shown inside the form. */
+  serverError?: string | null;
 }
 
 export function RiddleMcqModal({
@@ -66,6 +69,7 @@ export function RiddleMcqModal({
   onClose,
   onSubmit,
   isSubmitting = false,
+  serverError = null,
 }: RiddleMcqModalProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
 
@@ -124,6 +128,11 @@ export function RiddleMcqModal({
 
   const isExpert = currentLevel === 'expert';
 
+  // Backend rejects duplicates with: Duplicate question detected: "<text>" already exists in ...
+  const duplicateText = serverError?.match(
+    /^Duplicate question detected: "(.+?)" already exists/
+  )?.[1];
+
   const handleFormSubmit = (data: RiddleFormData) => {
     const dto: CreateRiddleMcqDto = {
       question: data.question,
@@ -165,6 +174,25 @@ export function RiddleMcqModal({
         </div>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-3">
+          {serverError &&
+            (duplicateText ? (
+              <div className="p-3 bg-amber-50 border border-amber-200 dark:bg-amber-900/20 dark:border-amber-800/60 rounded-lg space-y-1.5">
+                <p className="flex items-center gap-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                  Duplicate question detected
+                </p>
+                <p className="text-xs text-amber-700 dark:text-amber-300">
+                  A riddle with this text already exists in the selected subject:
+                </p>
+                <mark className="block rounded bg-amber-100 px-2 py-1 text-sm font-medium text-amber-900 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
+                  {duplicateText}
+                </mark>
+              </div>
+            ) : (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-lg">
+                {serverError}
+              </div>
+            ))}
           <RiddleQuestionForm
             register={register}
             watch={watch}

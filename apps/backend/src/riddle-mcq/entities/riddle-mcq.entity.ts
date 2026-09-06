@@ -22,12 +22,20 @@ export enum RiddleStatus {
 
 @Entity('riddle_mcqs')
 @Index(['subjectId', 'level', 'status'])
+@Index('uq_riddle_mcqs_subject_hash', ['subjectId', 'contentHash'], { unique: true })
 export class RiddleMcq {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'text' })
   question: string;
+
+  /**
+   * sha256 of the normalized question text — duplicate guard, unique per
+   * subject. Backfilled/managed by the AddContentHashDedup migration.
+   */
+  @Column({ type: 'varchar', length: 64, name: 'content_hash' })
+  contentHash: string;
 
   @Column({ type: 'simple-json', nullable: true })
   options: string[] | null;

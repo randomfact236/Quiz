@@ -1,9 +1,11 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 
 import { CacheService } from '../../common/cache/cache.service';
 import { invalidateCacheFamilies } from '../../common/content/content-cache.util';
+import { hashQuestionText } from '../../common/content/content-hash.util';
+import { ContentImportDuplicate } from '../../common/content/content.service';
 import { RiddleMcq, RiddleStatus, RiddleMcqLevel } from '../entities/riddle-mcq.entity';
 import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
@@ -47,8 +49,9 @@ export class RiddleMcqImportService {
 
   async createRiddlesBulk(
     dtos: BulkCreateRiddleDto[]
-  ): Promise<{ count: number; errors: string[] }> {
+  ): Promise<{ count: number; errors: string[]; duplicates: ContentImportDuplicate[] }> {
     const errors: string[] = [];
+    const duplicates: ContentImportDuplicate[] = [];
 
     if (!dtos || dtos.length === 0) {
       throw new BadRequestException('No riddles provided for bulk creation');
@@ -63,21 +66,22 @@ export class RiddleMcqImportService {
       const end = Math.min(start + CHUNK_SIZE, dtos.length);
       const chunk = dtos.slice(start, end);
 
-      const result = await this.processRiddleChunk(chunk, errors, start);
+      const result = await this.processRiddleChunk(chunk, errors, duplicates, start);
       totalCreated += result.count;
     }
 
     await this.clearCaches();
-    return { count: totalCreated, errors };
+    return { count: totalCreated, errors, duplicates };
   }
 
   private async processRiddleChunk(
     dtos: BulkCreateRiddleDto[],
     errors: string[],
+    duplicates: ContentImportDuplicate[],
     offset: number
-  ): Promise<{ count: number; errors: string[] }> {
+  ): Promise<{ count: number }> {
     return this.dataSource.transaction(async (transactionalEntityManager) => {
-      const riddles: RiddleMcq[] = [];
+      const built: { riddle: RiddleMcq; rowNo: number }[] = [];
 
       const uniqueCategories = [
         ...new Set(dtos.map((d) => d.categoryName).filter(Boolean)),
@@ -126,21 +130,22 @@ export class RiddleMcqImportService {
 
       for (let i = 0; i < dtos.length; i++) {
         const dto = dtos[i];
+        const rowNo = offset + i + 1;
         const isExpert = dto.level === 'expert';
 
         const validLevels = ['easy', 'medium', 'hard', 'expert'];
         if (!validLevels.includes(dto.level)) {
-          errors.push(`Row ${offset + i + 1}: Invalid level '${dto.level}'`);
+          errors.push(`Row ${rowNo}: Invalid level '${dto.level}'`);
           continue;
         }
 
         if (!isExpert && !dto.correctLetter) {
-          errors.push(`Row ${offset + i + 1}: Riddle requires correctLetter`);
+          errors.push(`Row ${rowNo}: Riddle requires correctLetter`);
           continue;
         }
 
         if (!isExpert && (!dto.options || dto.options.length < 2)) {
-          errors.push(`Row ${offset + i + 1}: Riddle requires at least 2 options`);
+          errors.push(`Row ${rowNo}: Riddle requires at least 2 options`);
           continue;
         }
 
@@ -153,9 +158,7 @@ export class RiddleMcqImportService {
         }
 
         if (!subjectId) {
-          errors.push(
-            `Row ${offset + i + 1}: Subject not found for "${dto.subjectName || dto.subjectId}"`
-          );
+          errors.push(`Row ${rowNo}: Subject not found for "${dto.subjectName || dto.subjectId}"`);
           continue;
         }
 
@@ -170,15 +173,52 @@ export class RiddleMcqImportService {
         riddle.answer = dto.answer ?? null;
         riddle.status = dto.status ?? RiddleStatus.DRAFT;
         riddle.importOrder = dto.importOrder ?? null;
-        riddles.push(riddle);
+        built.push({ riddle, rowNo });
       }
 
-      if (riddles.length === 0) {
+      if (built.length === 0) {
         throw new BadRequestException('No valid riddles to create');
       }
 
-      const saved = await transactionalEntityManager.save(riddles);
-      return { count: saved.length, errors };
+      // Duplicate guard: rows are processed in order — the first occurrence
+      // wins; later identical rows (or ones already in the DB) are skipped and
+      // reported rather than silently doubled.
+      const existingKeys = new Set<string>(
+        (
+          await transactionalEntityManager.find(RiddleMcq, {
+            where: {
+              subjectId: In([...new Set(built.map((b) => b.riddle.subjectId))]),
+            },
+            select: ['subjectId', 'contentHash'],
+          })
+        ).map((r) => `${r.subjectId}:${r.contentHash}`)
+      );
+      /** dupKey -> 1-based row number of the first occurrence in this import. */
+      const batchKeys = new Map<string, number>();
+      const keep: RiddleMcq[] = [];
+
+      for (const { riddle, rowNo } of built) {
+        const contentHash = hashQuestionText(riddle.question);
+        const dupKey = `${riddle.subjectId}:${contentHash}`;
+        const duplicateOfRow = batchKeys.get(dupKey);
+        if (existingKeys.has(dupKey) || duplicateOfRow !== undefined) {
+          const preview =
+            riddle.question.length > 200 ? `${riddle.question.slice(0, 200)}…` : riddle.question;
+          errors.push(`Row ${rowNo}: Duplicate question "${preview}" — skipped`);
+          duplicates.push({
+            row: rowNo,
+            question: riddle.question,
+            ...(duplicateOfRow !== undefined ? { duplicateOfRow } : {}),
+          });
+          continue;
+        }
+        batchKeys.set(dupKey, rowNo);
+        riddle.contentHash = contentHash;
+        keep.push(riddle);
+      }
+
+      const saved = await transactionalEntityManager.save(keep);
+      return { count: saved.length };
     });
   }
 

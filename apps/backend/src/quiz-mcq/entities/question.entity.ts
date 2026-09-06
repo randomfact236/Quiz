@@ -13,12 +13,20 @@ import { Chapter } from './chapter.entity';
 
 @Entity('questions')
 @Index(['chapterId', 'level', 'status'])
+@Index('uq_questions_chapter_hash', ['chapterId', 'contentHash'], { unique: true })
 export class Question {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'text' })
   question: string;
+
+  /**
+   * sha256 of the normalized question text — duplicate guard, unique per
+   * chapter. Backfilled/managed by the AddContentHashDedup migration.
+   */
+  @Column({ type: 'varchar', length: 64, name: 'content_hash' })
+  contentHash: string;
 
   @Column({ type: 'jsonb', default: [], nullable: true })
   options: string[] | null;

@@ -87,9 +87,16 @@ export interface PaginatedResponse<T> {
   total: number;
 }
 
+export interface BulkImportDuplicate {
+  row: number;
+  question: string;
+  duplicateOfRow?: number;
+}
+
 export interface BulkCreateResponse {
   count: number;
   errors: string[];
+  duplicates: BulkImportDuplicate[];
 }
 
 export interface StatusCountResponse {
@@ -401,11 +408,8 @@ export async function createQuestionsBulk(dto: CreateQuestionDto[]): Promise<Bul
 
 export async function createQuestionsBulkFromImport(
   dto: BulkQuestionDto
-): Promise<{ count: number; errors: string[] }> {
-  const response = await adminApi.post<{ count: number; errors: string[] }>(
-    '/quiz-mcq/questions/bulk',
-    dto
-  );
+): Promise<BulkCreateResponse> {
+  const response = await adminApi.post<BulkCreateResponse>('/quiz-mcq/questions/bulk', dto);
   return response.data;
 }
 

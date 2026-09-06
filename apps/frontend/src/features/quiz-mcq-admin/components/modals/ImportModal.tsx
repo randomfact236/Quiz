@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { X, Upload, FileText, Download } from 'lucide-react';
 import { useQuestionMutation } from '../../hooks';
 import { CSVPreview } from './CSVPreview';
-import type { BulkQuestionDto } from '@/lib/quiz-mcq-api';
+import type { BulkQuestionDto, BulkImportDuplicate } from '@/lib/quiz-mcq-api';
 
 interface ImportModalProps {
   open: boolean;
@@ -15,7 +15,9 @@ interface ImportModalProps {
 interface ImportResult {
   success: boolean;
   count?: number;
+  total?: number;
   errors?: string[];
+  duplicates?: BulkImportDuplicate[];
 }
 
 interface ParsedQuestion {
@@ -198,14 +200,23 @@ export function ImportModal({ open, onClose }: ImportModalProps) {
         payload.subjectName = subjectName;
       }
 
-      await bulkCreateAsync(payload);
+      const res = await bulkCreateAsync(payload);
       queryClient.invalidateQueries({ queryKey: ['subjects'] });
       queryClient.invalidateQueries({ queryKey: ['chapters'] });
       queryClient.invalidateQueries({ queryKey: ['filter-counts'] });
       queryClient.invalidateQueries({ queryKey: ['questions'] });
-      setResult({ success: true, count: questions.length });
-    } catch {
-      setResult({ success: false, errors: [bulkCreateError?.message || 'Import failed'] });
+      setResult({
+        success: res.count > 0,
+        count: res.count,
+        total: questions.length,
+        errors: res.errors ?? [],
+        duplicates: res.duplicates ?? [],
+      });
+    } catch (err) {
+      setResult({
+        success: false,
+        errors: [err instanceof Error ? err.message : 'Import failed'],
+      });
     }
   };
 

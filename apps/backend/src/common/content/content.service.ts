@@ -15,13 +15,14 @@
  * ============================================================================
  */
 
-import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, In, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { PaginationDto } from '../dto/base.dto';
 import { CacheService } from '../cache/cache.service';
 import { ContentStatus } from '../enums/content-status.enum';
 
+import { hashQuestionText } from './content-hash.util';
 import { invalidateCacheFamilies } from './content-cache.util';
 import { pickRandomByWeight } from './random-selection.util';
 
@@ -47,9 +48,19 @@ export interface ContentImportRowTaxonomy {
   chapterName: string;
 }
 
+export interface ContentImportDuplicate {
+  /** 1-based row number in the import payload. */
+  row: number;
+  /** Question text of the skipped duplicate row. */
+  question: string;
+  /** 1-based row number of the kept first occurrence within the same import. */
+  duplicateOfRow?: number;
+}
+
 export interface ContentImportResult {
   count: number;
   errors: string[];
+  duplicates: ContentImportDuplicate[];
 }
 
 export interface ContentServiceDeps<
@@ -301,6 +312,7 @@ export abstract class ContentServiceBase<
 
   async createItem(dto: Record<string, any>): Promise<TItem> {
     const built = await this.validateAndBuildCreate(dto);
+    const contentHash = hashQuestionText(String(built.data.question ?? ''));
 
     if (this.deps.flat) {
       if (!built.subjectId) {
@@ -313,28 +325,37 @@ export abstract class ContentServiceBase<
         throw new NotFoundException('Subject not found');
       }
 
+      if (await this.findDuplicate(contentHash, built.subjectId)) {
+        throw await this.duplicateConflictFor({ ...built.data, subjectId: built.subjectId });
+      }
+
       const item = this.deps.itemRepo.create({
         ...built.data,
+        contentHash,
         subjectId: built.subjectId,
       } as any) as unknown as TItem;
-      const saved = await this.deps.itemRepo.save(item);
-      await this.invalidateContentCaches();
-      return saved;
+      return this.saveItemGuarded(item);
     }
 
+    if (!built.chapterId) {
+      throw new BadRequestException('chapterId is required');
+    }
     const chapter = await this.deps.chapterRepo.findOne({ where: { id: built.chapterId } as any });
     if (!chapter) {
       throw new NotFoundException('Chapter not found');
     }
 
+    if (await this.findDuplicate(contentHash, built.chapterId)) {
+      throw await this.duplicateConflictFor({ ...built.data, chapterId: built.chapterId });
+    }
+
     const item = this.deps.itemRepo.create({
       ...built.data,
+      contentHash,
       chapter,
       chapterId: built.chapterId,
     } as any) as unknown as TItem;
-    const saved = await this.deps.itemRepo.save(item);
-    await this.invalidateContentCaches();
-    return saved;
+    return this.saveItemGuarded(item);
   }
 
   async updateItem(id: string, dto: Record<string, any>): Promise<TItem> {
@@ -358,13 +379,21 @@ export abstract class ContentServiceBase<
         throw new NotFoundException('Chapter not found');
       }
       (item as any).chapter = chapter;
+      // Keep the scalar in sync so the duplicate guard below checks the
+      // chapter the item is moving TO, not the one it came from.
+      (item as any).chapterId = dto.chapterId;
     }
 
     await this.applyUpdate(item as any, dto);
 
-    const saved = await this.deps.itemRepo.save(item);
-    await this.invalidateContentCaches();
-    return saved;
+    const contentHash = hashQuestionText(String((item as any).question ?? ''));
+    (item as any).contentHash = contentHash;
+    const scopeId = this.itemScopeId(item as any);
+    if (scopeId && (await this.findDuplicate(contentHash, scopeId, id))) {
+      throw await this.duplicateConflictFor(item as any);
+    }
+
+    return this.saveItemGuarded(item);
   }
 
   async deleteItem(id: string): Promise<void> {
@@ -373,6 +402,70 @@ export abstract class ContentServiceBase<
       throw new NotFoundException(`${this.itemNoun} not found`);
     }
     await this.invalidateContentCaches();
+  }
+
+  // ==================== DUPLICATE GUARD ====================
+
+  /** Owning scope id for the duplicate guard: chapterId (hierarchical) / subjectId (flat). */
+  private itemScopeId(item: any): string | undefined {
+    return this.deps.flat ? item.subjectId : (item.chapterId ?? item.chapter?.id);
+  }
+
+  /** Existing item with the same content hash in the same scope, optionally excluding one id. */
+  private async findDuplicate(
+    contentHash: string,
+    scopeId: string,
+    excludeId?: string
+  ): Promise<TItem | null> {
+    const scope = this.deps.flat ? { subjectId: scopeId } : { chapterId: scopeId };
+    const found = await this.deps.itemRepo.findOne({
+      where: { contentHash, ...scope } as any,
+    });
+    return found && (found as any).id !== excludeId ? found : null;
+  }
+
+  /** 409 carrying the duplicate question text so clients can highlight it. */
+  private async duplicateConflictFor(item: any): Promise<ConflictException> {
+    const text = String(item.question ?? '');
+    if (this.deps.flat) {
+      const subject = item.subjectId
+        ? await this.deps.subjectRepo.findOne({ where: { id: item.subjectId } as any })
+        : null;
+      return this.duplicateConflict(text, 'subject', (subject as any)?.name ?? 'this subject');
+    }
+    const chapterId = item.chapterId ?? item.chapter?.id;
+    const chapter = chapterId
+      ? await this.deps.chapterRepo.findOne({ where: { id: chapterId } as any })
+      : null;
+    return this.duplicateConflict(text, 'chapter', (chapter as any)?.name ?? 'this chapter');
+  }
+
+  private duplicateConflict(
+    questionText: string,
+    scopeLabel: 'chapter' | 'subject',
+    scopeName: string
+  ): ConflictException {
+    const preview = questionText.length > 200 ? `${questionText.slice(0, 200)}…` : questionText;
+    return new ConflictException(
+      `Duplicate question detected: "${preview}" already exists in ${scopeLabel} "${scopeName}"`
+    );
+  }
+
+  /**
+   * Race backstop: between the pre-check and the save, a concurrent insert can
+   * still trip the unique index — translate 23505 into the same friendly 409.
+   */
+  private async saveItemGuarded(item: TItem): Promise<TItem> {
+    try {
+      const saved = await this.deps.itemRepo.save(item);
+      await this.invalidateContentCaches();
+      return saved;
+    } catch (err: any) {
+      if (err?.code === '23505') {
+        throw await this.duplicateConflictFor(item as any);
+      }
+      throw err;
+    }
   }
 
   // ==================== BULK IMPORT ====================
@@ -387,6 +480,7 @@ export abstract class ContentServiceBase<
     defaultSubjectName?: string
   ): Promise<ContentImportResult> {
     const errors: string[] = [];
+    const duplicates: ContentImportDuplicate[] = [];
 
     if (!rows || rows.length === 0) {
       throw new BadRequestException(`No ${this.deps.moduleKey} rows provided for bulk creation`);
@@ -397,12 +491,18 @@ export abstract class ContentServiceBase<
 
     for (let i = 0; i < rows.length; i += CHUNK_SIZE) {
       const chunk = rows.slice(i, i + CHUNK_SIZE);
-      const result = await this.processImportChunk(chunk, defaultSubjectName, errors, i);
+      const result = await this.processImportChunk(
+        chunk,
+        defaultSubjectName,
+        errors,
+        duplicates,
+        i
+      );
       totalCreated += result.count;
     }
 
     await this.invalidateContentCaches();
-    return { count: totalCreated, errors };
+    return { count: totalCreated, errors, duplicates };
   }
 
   /** URL-safe slug for a subject name; falls back to 'subject' when empty. */
@@ -462,6 +562,7 @@ export abstract class ContentServiceBase<
     items: Record<string, any>[],
     defaultSubjectName: string | undefined,
     errors: string[],
+    duplicates: ContentImportDuplicate[],
     offset: number
   ): Promise<{ count: number }> {
     return await this.deps.dataSource.transaction(async (manager) => {
@@ -531,6 +632,24 @@ export abstract class ContentServiceBase<
         chapterMap.set(key, chapter);
       }
 
+      // Duplicate guard: pre-load the hashes already stored in the affected
+      // chapters, then walk rows in import order — the first occurrence wins,
+      // later identical rows (or ones already in the DB) are skipped and
+      // reported rather than silently doubled.
+      const chapterIds = [...new Set([...chapterMap.values()].map((c) => (c as any).id))];
+      const existingKeys = new Set<string>(
+        chapterIds.length === 0
+          ? []
+          : (
+              await manager.find(this.deps.itemRepo.target, {
+                where: { chapterId: In(chapterIds) } as any,
+                select: ['chapterId', 'contentHash'],
+              })
+            ).map((r: any) => `${r.chapterId}:${r.contentHash}`)
+      );
+      /** dupKey -> 1-based row number of the first occurrence in this import. */
+      const batchKeys = new Map<string, number>();
+
       let count = 0;
       for (const { row, index } of validItems) {
         const taxonomy = this.getImportRowTaxonomy(row, defaultSubjectName)!;
@@ -548,6 +667,25 @@ export abstract class ContentServiceBase<
             errors.push(`Row ${index + 1}: ${payload}`);
             continue;
           }
+
+          const questionText = String(payload.question ?? '');
+          const contentHash = hashQuestionText(questionText);
+          const dupKey = `${(chapter as any).id}:${contentHash}`;
+          const duplicateOfRow = batchKeys.get(dupKey);
+          if (existingKeys.has(dupKey) || duplicateOfRow !== undefined) {
+            const preview =
+              questionText.length > 200 ? `${questionText.slice(0, 200)}…` : questionText;
+            errors.push(`Row ${index + 1}: Duplicate question "${preview}" — skipped`);
+            duplicates.push({
+              row: index + 1,
+              question: questionText,
+              ...(duplicateOfRow !== undefined ? { duplicateOfRow } : {}),
+            });
+            continue;
+          }
+          batchKeys.set(dupKey, index + 1);
+          (payload as any).contentHash = contentHash;
+
           await manager.save(this.deps.itemRepo.target, payload as any);
           count++;
         } catch (e: any) {
