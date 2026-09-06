@@ -26,7 +26,8 @@ interface Subject extends QuizSubject {
 }
 
 /** The three fixed homepage worlds, in fallback display order. */
-const CATEGORY_GROUPS = ['Academic', 'Professional & Life', 'Entertainment & Culture'] as const;
+/** Fixed world display order (owner-set 2026-09-06: Entertainment above Professional). */
+const CATEGORY_GROUPS = ['Academic', 'Entertainment & Culture', 'Professional & Life'] as const;
 
 /** Gradient palette cycled across subject cards. */
 const CARD_GRADIENTS = [
@@ -174,22 +175,17 @@ export function TopicsSection(): JSX.Element {
     const sorter = (a: Subject, b: Subject): number =>
       clickOf(b) - clickOf(a) || (a.order ?? 0) - (b.order ?? 0);
 
-    // The three fixed worlds ALWAYS render (empty ones show Coming Soon);
-    // subjects outside them land in an "Other" group only when present.
+    // The three fixed worlds ALWAYS render in the owner-set order (empty ones
+    // show Coming Soon); subjects outside them land in an "Other" group only
+    // when present.
     const ordered: { name: string; items: Subject[] }[] = CATEGORY_GROUPS.map((name) => ({
       name,
       items: (grouped[name] ?? []).sort(sorter),
     }));
     const other = (grouped['Other'] ?? []).sort(sorter);
     if (other.length > 0) ordered.push({ name: 'Other', items: other });
-    // Re-sort worlds by total clicks, descending.
-    ordered.sort(
-      (a, b) =>
-        b.items.reduce((acc, s) => acc + (clicks[s.slug] ?? 0), 0) -
-        a.items.reduce((acc, s) => acc + (clicks[s.slug] ?? 0), 0)
-    );
+    // World order is fixed (owner-set); clicks only order cards WITHIN a world.
     return ordered;
-    // clicks intentionally re-triggers ordering as the popularity feed lands.
   }, [subjects, clicks]);
 
   const hasAnySubjects = subjects.length > 0;
