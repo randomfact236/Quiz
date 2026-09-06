@@ -8,6 +8,8 @@
 
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 
+import { CollapsibleRows } from '@/components/ui/CollapsibleRows';
+
 import type { AdminImageRiddleCategory } from '../hooks/useAdminImageRiddleData';
 
 export interface CategoryFilterRowProps {
@@ -33,7 +35,7 @@ export default function CategoryFilterRow({
 }: CategoryFilterRowProps) {
   return (
     <div className="mb-4 rounded-xl bg-white p-4 shadow-md">
-      <div className="flex flex-wrap items-center gap-2">
+      <CollapsibleRows className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium text-gray-600 mr-2">Category:</span>
         <button
           onClick={() => onSelectCategory('')}
@@ -97,7 +99,7 @@ export default function CategoryFilterRow({
           <Plus className="w-4 h-4" />
           Add Category
         </button>
-      </div>
+      </CollapsibleRows>
     </div>
   );
 }

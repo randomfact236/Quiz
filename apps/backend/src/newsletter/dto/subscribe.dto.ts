@@ -7,10 +7,10 @@ export class SubscribeDto {
   @MaxLength(255)
   email: string;
 
-  @ApiPropertyOptional({ enum: ['footer', 'about'], default: 'footer' })
+  @ApiPropertyOptional({ enum: ['footer', 'about', 'mobile'], default: 'footer' })
   @IsOptional()
-  @IsIn(['footer', 'about'])
-  source?: 'footer' | 'about';
+  @IsIn(['footer', 'about', 'mobile'])
+  source?: 'footer' | 'about' | 'mobile';
 
   /**
    * Honeypot (plan/14-newsletter.md P2): hidden field — humans leave it empty.

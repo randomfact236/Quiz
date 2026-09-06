@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { CollapsibleRows } from '@/components/ui/CollapsibleRows';
 import { CategoryFilterRow } from './CategoryFilterRow';
 import { RiddleMcqSubjectFilterRow } from './RiddleMcqSubjectFilterRow';
 import type { RiddleMcqCategory, RiddleMcqSubject } from '@/lib/riddle-mcq-api';
@@ -72,7 +73,7 @@ export function FilterControls({
   return (
     <>
       {/* Category Row */}
-      <div className="flex flex-wrap items-center gap-2">
+      <CollapsibleRows className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium text-gray-700">Category:</span>
         <button
           onClick={() => onCategoryChange(undefined)}
@@ -106,10 +107,10 @@ export function FilterControls({
         >
           + Add
         </button>
-      </div>
+      </CollapsibleRows>
 
       {/* Subject Row */}
-      <div className="flex flex-wrap items-center gap-2">
+      <CollapsibleRows className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium text-gray-700">Subject:</span>
         <button
           onClick={() => onSubjectChange(undefined)}
@@ -143,7 +144,7 @@ export function FilterControls({
         >
           + Add
         </button>
-      </div>
+      </CollapsibleRows>
 
       {/* Level Row */}
       <div className="flex flex-wrap items-center gap-2">

@@ -47,7 +47,7 @@ export class NewsletterController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Paginated subscriber list (admin)' })
   list(
-    @Query('source') source?: 'footer' | 'about',
+    @Query('source') source?: 'footer' | 'about' | 'mobile',
     @Query('unsubscribed') unsubscribed?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string

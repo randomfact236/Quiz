@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
+import { CollapsibleRows } from '@/components/ui/CollapsibleRows';
 import { SubjectFilterRow } from './SubjectFilterRow';
 import { ChapterFilterRow } from './ChapterFilterRow';
 import type { QuizFilters } from '../hooks/useQuizMcqFilters';
@@ -145,7 +146,7 @@ export function FilterPanel({
       <div
         className={`space-y-3 rounded-lg border p-4 ${filters.subject ? 'bg-purple-50 border-purple-300' : 'bg-gray-50 border-gray-200'}`}
       >
-        <div className="flex flex-wrap items-center gap-2">
+        <CollapsibleRows className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Subject:</span>
           <button
             onClick={() => onFilterChange('subject', undefined)}
@@ -179,9 +180,9 @@ export function FilterPanel({
           >
             + Add
           </button>
-        </div>
+        </CollapsibleRows>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <CollapsibleRows className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Chapter:</span>
           <button
             onClick={() => onFilterChange('chapter', undefined)}
@@ -215,7 +216,7 @@ export function FilterPanel({
           >
             + Add
           </button>
-        </div>
+        </CollapsibleRows>
 
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-700">Level:</span>

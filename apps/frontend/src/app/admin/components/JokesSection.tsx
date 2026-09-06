@@ -5,6 +5,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { FileUploader } from '@/components/ui/FileUploader';
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
+import { CollapsibleRows } from '@/components/ui/CollapsibleRows';
 import { toast } from '@/lib/toast';
 import {
   getAllJokesAdmin,
@@ -517,7 +518,7 @@ export function JokesSection({
 
       {/* Inline Category Filter Row */}
       <div className="mb-4 rounded-xl bg-white p-4 shadow-md">
-        <div className="flex flex-wrap items-center gap-2">
+        <CollapsibleRows className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-gray-600 mr-1">Category:</span>
 
           {/* All Categories chip */}
@@ -622,7 +623,7 @@ export function JokesSection({
           >
             + Add Category
           </button>
-        </div>
+        </CollapsibleRows>
       </div>
 
       {/* Table */}

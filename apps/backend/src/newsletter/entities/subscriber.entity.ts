@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-/** Where the subscription came from (footer form, about page, ...). */
-export type NewsletterSource = 'footer' | 'about';
+/** Where the subscription came from (footer form, about page, mobile app). */
+export type NewsletterSource = 'footer' | 'about' | 'mobile';
 
 @Entity('newsletter_subscribers')
 export class NewsletterSubscriber {
