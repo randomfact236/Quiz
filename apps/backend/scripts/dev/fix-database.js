@@ -142,7 +142,7 @@ END $$;
 
 async function fix() {
   console.log('🔧 Connecting to database...');
-  
+
   const client = new Client({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
@@ -154,20 +154,20 @@ async function fix() {
   try {
     await client.connect();
     console.log('✅ Connected');
-    
+
     console.log('📦 Creating tables...');
     await client.query(sql);
     console.log('✅ Tables created');
-    
+
     console.log('🌱 Seeding data...');
     await client.query(seedSql);
     console.log('✅ Data seeded');
-    
+
     // Verify
     const subjects = await client.query('SELECT COUNT(*) as count FROM riddle_subjects');
     const chapters = await client.query('SELECT COUNT(*) as count FROM riddle_chapters');
     const riddles = await client.query('SELECT COUNT(*) as count FROM riddle_mcqs');
-    
+
     console.log('');
     console.log('📊 Database Status:');
     console.log(`  - Subjects: ${subjects.rows[0].count}`);
@@ -175,7 +175,7 @@ async function fix() {
     console.log(`  - Riddles: ${riddles.rows[0].count}`);
     console.log('');
     console.log('🎉 Database fixed! Refresh your frontend.');
-    
+
     await client.end();
   } catch (err) {
     console.error('❌ Error:', err.message);

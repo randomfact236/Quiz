@@ -34,6 +34,15 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+.tmp-*
+
+# AI tooling working dirs
+.v2c/
+.video_agent/
+.opencode/
 
 # Runtime upload directory (media library local storage)
 apps/backend/public/
+
+# External reference material (kept on disk, not part of the product)
+quiz-reference/

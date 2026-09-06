@@ -20,9 +20,24 @@ function setupMiddleware(app: NestExpressApplication): void {
   // Security: HTTP headers
   app.use(helmet());
 
-  // Increase JSON payload limit for bulk imports (e.g. CSV with 1000+ rows)
-  app.use(express.json({ limit: '50mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+  // Behind a reverse proxy (Dokploy/Traefik/nginx) so rate limiting and
+  // brute-force lockout key off real client IPs instead of the proxy IP.
+  // TRUST_PROXY=true trusts one hop; a number sets hop count; an IP/string
+  // is passed through to express as-is.
+  const trustProxy = configService.get('TRUST_PROXY');
+  if (trustProxy) {
+    app.set('trust proxy', trustProxy === 'true' ? 1 : Number(trustProxy) || trustProxy);
+  }
+
+  // JSON body limit: 1mb globally; bulk import endpoints (quiz-mcq, riddle-mcq,
+  // dad-jokes, image-riddles, admin bulk) allow 50mb for large CSV/JSON imports.
+  const BULK_BODY_LIMIT = '50mb';
+  const DEFAULT_BODY_LIMIT = '1mb';
+  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const isBulkImport = /\/bulk(-action)?$/.test(req.path);
+    express.json({ limit: isBulkImport ? BULK_BODY_LIMIT : DEFAULT_BODY_LIMIT })(req, res, next);
+  });
+  app.use(express.urlencoded({ extended: true, limit: DEFAULT_BODY_LIMIT }));
 
   // Security: CORS configuration
   app.enableCors({
@@ -127,12 +142,42 @@ async function startServer(app: INestApplication, port: number): Promise<void> {
 }
 
 /**
+ * Fail fast in production when critical env vars are missing or weak.
+ * Without this, an unset CORS_ORIGIN/JWT_SECRET silently falls back to
+ * dev defaults and ships an insecure or broken API.
+ */
+function validateProductionEnv(configService: ConfigService): void {
+  if (configService.get('NODE_ENV') !== 'production') return;
+
+  const problems: string[] = [];
+  const jwtSecret = configService.get<string>('JWT_SECRET');
+  if (!jwtSecret || jwtSecret.length < 32) {
+    problems.push('JWT_SECRET must be set and at least 32 characters');
+  }
+  if (!configService.get('CORS_ORIGIN')) {
+    problems.push('CORS_ORIGIN must be set (e.g. https://quiz.example.com)');
+  }
+  if (!configService.get('FRONTEND_URL')) {
+    problems.push('FRONTEND_URL must be set (used for OAuth/email redirects)');
+  }
+  if (!configService.get('DB_SYNCHRONIZE') || configService.get('DB_SYNCHRONIZE') === 'true') {
+    problems.push(
+      'DB_SYNCHRONIZE must be "false" in production — schema changes go through migrations'
+    );
+  }
+  if (problems.length > 0) {
+    throw new Error(`Production environment validation failed:\n  - ${problems.join('\n  - ')}`);
+  }
+}
+
+/**
  * Bootstrap the application
  */
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
+  validateProductionEnv(configService);
   setupMiddleware(app);
   setupSwagger(app);
 

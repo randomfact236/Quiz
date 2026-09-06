@@ -88,8 +88,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
           // SECURITY: Only log in development, never in production
           logging: !isProduction && configService.get('DB_LOGGING') === 'true',
           poolSize: DB_POOL_SIZE,
-          // SSL configuration - disabled for Docker
-          ssl: false,
+          // SSL for hosted Postgres (Neon/RDS/managed): DB_SSL=true enables it.
+          // DB_SSL_REJECT_UNAUTHORIZED=false allows self-signed certs (dev only).
+          ssl:
+            configService.get('DB_SSL') === 'true'
+              ? { rejectUnauthorized: configService.get('DB_SSL_REJECT_UNAUTHORIZED') !== 'false' }
+              : false,
           // Production: schema is owned by migrations; auto-run pending ones on boot
           ...(isProduction && {
             migrations: [__dirname + '/migrations/*{.ts,.js}'],
