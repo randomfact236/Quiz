@@ -114,6 +114,23 @@ export function SummarySection({ onNavigate }: SummarySectionProps): JSX.Element
 
   return (
     <div className="space-y-6">
+      {/* Quick links */}
+      <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
+        <h3 className="mb-4 font-semibold text-slate-800">Quick Links</h3>
+        <div className="flex flex-wrap gap-2">
+          {quickLinks.map((link) => (
+            <button
+              key={link.section}
+              onClick={() => onNavigate(link.section)}
+              className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
+            >
+              {link.icon}
+              {link.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Totals */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {statCards.map((card) => (
@@ -156,23 +173,6 @@ export function SummarySection({ onNavigate }: SummarySectionProps): JSX.Element
             })}
           </div>
         )}
-      </div>
-
-      {/* Quick links */}
-      <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
-        <h3 className="mb-4 font-semibold text-slate-800">Quick Links</h3>
-        <div className="flex flex-wrap gap-2">
-          {quickLinks.map((link) => (
-            <button
-              key={link.section}
-              onClick={() => onNavigate(link.section)}
-              className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
-            >
-              {link.icon}
-              {link.label}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

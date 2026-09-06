@@ -42,7 +42,7 @@ import {
   SummarySection,
   NewsletterSection,
 } from './components';
-import { SidebarWorlds } from './components/SidebarWorlds';
+import { SidebarSubjectGroups } from './components/SidebarSubjectGroups';
 import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
@@ -75,6 +75,8 @@ export default function AdminPage(): JSX.Element {
   const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
   // SEO sub-menu (dashboard tabs) — expanded by default, collapsible.
   const [seoExpanded, setSeoExpanded] = useState(true);
+  // Subject Group sub-menu under Quiz MCQ — open by default, collapsible.
+  const [subjectGroupsExpanded, setSubjectGroupsExpanded] = useState(true);
 
   // Use the hook directly for subjects - database only, no fake data
   const { subjects: dbSubjects } = useQuizMcqSubjects();
@@ -230,6 +232,10 @@ export default function AdminPage(): JSX.Element {
         if (params.section !== 'analytics' && params.section !== 'seo') {
           newParams.delete('tab');
         }
+        // Module filters (status/page) belong to the module that set them —
+        // menu navigation must not carry them into another dashboard.
+        newParams.delete('status');
+        newParams.delete('page');
       }
       if (params.tab !== undefined && params.tab !== null) {
         newParams.set('tab', params.tab);
@@ -250,6 +256,19 @@ export default function AdminPage(): JSX.Element {
       router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
     },
     [router, pathname]
+  );
+
+  // Navigate to a dashboard section. activeSection MUST be set here, not just
+  // via the URL-sync effect: when the URL already shows the target section
+  // (e.g. after a Quick Link changed the section without touching the URL),
+  // router.push with an identical URL is a no-op and the effect never fires —
+  // which made re-clicking a menu item (like Summary) appear dead.
+  const goToSection = useCallback(
+    (section: MenuSection) => {
+      setActiveSection(section);
+      updateURL({ section });
+    },
+    [updateURL]
   );
 
   // Mark as hydrated once after initial mount
@@ -331,7 +350,7 @@ export default function AdminPage(): JSX.Element {
             label="Summary"
             active={activeSection === 'summary'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'summary' })}
+            onClick={() => goToSection('summary')}
           />
 
           {/* All Modules Header */}
@@ -360,6 +379,7 @@ export default function AdminPage(): JSX.Element {
           {/* All Module Items */}
           {otherModulesExpanded && (
             <>
+              {/* Quiz MCQ + collapsible Subject Group sub-menu (open by default) */}
               <MenuItem
                 icon={<BookOpen className="w-5 h-5" />}
                 label="Quiz MCQ"
@@ -367,35 +387,46 @@ export default function AdminPage(): JSX.Element {
                 expanded={sidebarOpen}
                 onClick={() => {
                   setActiveSection('quiz-mcq');
+                  setSubjectGroupsExpanded(true);
                   updateURL({ section: 'quiz-mcq' });
                 }}
+                trailing={
+                  <ChevronDown
+                    className={`w-3 h-3 transition-transform ${
+                      subjectGroupsExpanded ? 'rotate-180' : ''
+                    }`}
+                  />
+                }
+                onTrailingClick={() => setSubjectGroupsExpanded((v) => !v)}
               />
+              {sidebarOpen && subjectGroupsExpanded && (
+                <div className="mb-1 ml-6 mr-3">
+                  <SidebarSubjectGroups />
+                </div>
+              )}
               <MenuItem
                 icon={<Puzzle className="w-5 h-5" />}
                 label="Riddle MCQ"
                 active={activeSection === 'riddle-mcq'}
                 expanded={sidebarOpen}
-                onClick={() => updateURL({ section: 'riddle-mcq' })}
+                onClick={() => goToSection('riddle-mcq')}
               />
               <MenuItem
                 icon={<ImageIcon className="w-5 h-5" />}
                 label="Image Riddles"
                 active={activeSection === 'image-riddles'}
                 expanded={sidebarOpen}
-                onClick={() => updateURL({ section: 'image-riddles' })}
+                onClick={() => goToSection('image-riddles')}
               />
               <MenuItem
                 icon={<Smile className="w-5 h-5" />}
                 label="Dad Jokes"
                 active={activeSection === 'jokes'}
                 expanded={sidebarOpen}
-                onClick={() => updateURL({ section: 'jokes' })}
+                onClick={() => goToSection('jokes')}
               />
             </>
           )}
-
-          {/* Subject worlds — category grouping (open by default, click to collapse) */}
-          <SidebarWorlds expanded={sidebarOpen} />
 
           {/* System */}
           {sidebarOpen && (
@@ -408,28 +439,28 @@ export default function AdminPage(): JSX.Element {
             label="Users"
             active={activeSection === 'users'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'users' })}
+            onClick={() => goToSection('users')}
           />
           <MenuItem
             icon={<ImagePlus className="w-5 h-5" />}
             label="Media"
             active={activeSection === 'media'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'media' })}
+            onClick={() => goToSection('media')}
           />
           <MenuItem
             icon={<MessageSquare className="w-5 h-5" />}
             label="Comments"
             active={activeSection === 'comments'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'comments' })}
+            onClick={() => goToSection('comments')}
           />
           <MenuItem
             icon={<Mail className="w-5 h-5" />}
             label="Newsletter"
             active={activeSection === 'newsletter'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'newsletter' })}
+            onClick={() => goToSection('newsletter')}
           />
           {/* Analytics + collapsible dashboard-tab sub-menu (deep-links ?tab=) */}
           <MenuItem
@@ -515,7 +546,7 @@ export default function AdminPage(): JSX.Element {
             label="Settings"
             active={activeSection === 'settings'}
             expanded={sidebarOpen}
-            onClick={() => updateURL({ section: 'settings' })}
+            onClick={() => goToSection('settings')}
           />
         </nav>
 
