@@ -4,6 +4,36 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
 
 ## Open
 
+### Run summary — duplicate question auto-detection end-to-end (2026-09-06)
+
+- **Audit before fixing:** SQL grouping by chapter/subject + normalized text found quiz-mcq
+  clean (48 rows, 0 dups) but `riddle_mcqs` fully doubled — 46 rows = 23 riddles × 2 (20
+  Brain Teasers pairs from a same-batch re-import + 3 Classic Riddles variants; owner chose
+  keep-earliest for those). Root cause: no duplicate check on any creation path, no unique
+  constraint, and no intra-batch comparison in imports — taxonomy had name checks, question
+  text never did.
+- **Cleanup:** `scripts/dedupe-riddle-mcqs.sql` deletes the newer copy per group (deterministic
+  `createdAt`/`id` order); executed locally — 46 → 23 rows, 0 dup groups. Commit `97dce70`.
+- **Prevention (commit `dd3acb8`):** `content_hash` = sha256 of normalized text with UNIQUE
+  `(chapterId|subjectId, content_hash)` (migration `1789700000000`, refuses to build while
+  dups remain). Normalization uses an explicit ASCII whitespace class, NOT `\s` — Postgres
+  `\s` is locale-ctype dependent, JS `\s` matches NBSP, and PG `trim()` is space-only; the
+  TS util, migration backfill, and cleanup SQL mirror each other (parity verified).
+  Manual create/edit → 409 carrying the duplicate text (+ 23505 race backstop); bulk imports
+  (quiz + riddle) skip duplicates and report `duplicates[{row, question, duplicateOfRow?}]` —
+  first occurrence wins, intra-CSV duplicates caught. Frontend: amber panels with the duplicate
+  question highlighted in quiz CSVPreview + riddle ImportModal; QuestionModal/RiddleMcqModal
+  render duplicate rejections highlighted; quiz ImportModal now reads the real server result
+  (previously discarded it and showed a fake success count); riddle create/edit modal now
+  surfaces server errors at all.
+- **Verified:** both builds clean (frontend via `NEXT_DIST_DIR` override — the dev server
+  locks `.next`); migration applied locally; hash parity TS↔SQL on all 71 rows + 9 adversarial
+  strings; 14/14 backend tests incl. 7 new integration tests against the live DB covering
+  every creation path; 0 duplicate groups after. NOTE for other environments: run
+  `scripts/dedupe-riddle-mcqs.sql` before migrating if that DB still has duplicates — the
+  migration fails loudly by design.
+- Owner asked to commit and push (this commit).
+
 ### Run summary — first analytics data analysis + findings resolved (2026-09-05)
 
 - Pulled every analytics surface (dashboard 90d, funnel, retention, clicks ×4 modules) plus
