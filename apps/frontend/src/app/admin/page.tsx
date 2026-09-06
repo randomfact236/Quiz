@@ -42,6 +42,7 @@ import {
   SummarySection,
   NewsletterSection,
 } from './components';
+import { SidebarWorlds } from './components/SidebarWorlds';
 import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
 
@@ -392,6 +393,9 @@ export default function AdminPage(): JSX.Element {
               />
             </>
           )}
+
+          {/* Subject worlds — category grouping (open by default, click to collapse) */}
+          <SidebarWorlds expanded={sidebarOpen} />
 
           {/* System */}
           {sidebarOpen && (

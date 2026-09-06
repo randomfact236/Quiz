@@ -7,7 +7,6 @@ import { useChapters } from '../hooks/useChapters';
 import { useQuestions } from '../hooks/useQuestions';
 import { useFilterCounts } from '../hooks/useFilterCounts';
 import { QuizMcqHeader } from './QuizMcqHeader';
-import { SubjectCategoryManager } from './SubjectCategoryManager';
 import { FilterPanel } from './FilterPanel';
 import { QuestionManager } from './QuestionManager';
 import { SubjectModal } from './modals/SubjectModal';
@@ -168,8 +167,6 @@ export function QuizMcqContainer() {
           exportQuestionsFromBackend(exportFilters);
         }}
       />
-
-      <SubjectCategoryManager subjects={subjectsQuery.data ?? []} />
 
       <FilterPanel
         filters={filters}
