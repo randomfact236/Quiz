@@ -160,17 +160,14 @@ export function useQuestionMutation() {
     isDeleting: deleteMutation.isPending,
     deleteError: deleteMutation.error,
 
-    bulkCreate: bulkCreateMutation.mutate,
     bulkCreateAsync: bulkCreateMutation.mutateAsync,
     isBulkCreating: bulkCreateMutation.isPending,
     bulkCreateError: bulkCreateMutation.error,
 
-    bulkDelete: bulkDeleteMutation.mutate,
     bulkDeleteAsync: bulkDeleteMutation.mutateAsync,
     isBulkDeleting: bulkDeleteMutation.isPending,
     bulkDeleteError: bulkDeleteMutation.error,
 
-    bulkUpdateStatus: bulkUpdateStatusMutation.mutate,
     bulkUpdateStatusAsync: bulkUpdateStatusMutation.mutateAsync,
     isBulkUpdatingStatus: bulkUpdateStatusMutation.isPending,
     bulkUpdateStatusError: bulkUpdateStatusMutation.error,

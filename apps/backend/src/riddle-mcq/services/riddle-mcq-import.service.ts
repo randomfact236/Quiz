@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In } from 'typeorm';
 
@@ -29,8 +29,6 @@ export interface BulkCreateRiddleDto {
 
 @Injectable()
 export class RiddleMcqImportService {
-  private readonly logger = new Logger(RiddleMcqImportService.name);
-
   constructor(
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,

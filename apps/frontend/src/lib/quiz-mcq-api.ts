@@ -401,11 +401,6 @@ export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuesti
   return response.data;
 }
 
-export async function createQuestionsBulk(dto: CreateQuestionDto[]): Promise<BulkCreateResponse> {
-  const response = await adminApi.post<BulkCreateResponse>('/quiz-mcq/questions/bulk', dto);
-  return response.data;
-}
-
 export async function createQuestionsBulkFromImport(
   dto: BulkQuestionDto
 ): Promise<BulkCreateResponse> {
