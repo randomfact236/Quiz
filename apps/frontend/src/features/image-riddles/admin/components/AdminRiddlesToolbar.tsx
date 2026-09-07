@@ -44,11 +44,11 @@ export default function AdminRiddlesToolbar({
   useClickOutside(exportDropdownRef, () => setShowExportDropdown(false), showExportDropdown);
 
   return (
-    <div className="rounded-xl bg-white p-4 shadow-md">
+    <div className="rounded-xl bg-white dark:bg-secondary-800 p-4 shadow-md">
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-secondary-400"
             aria-hidden="true"
           />
           <input
@@ -56,14 +56,14 @@ export default function AdminRiddlesToolbar({
             placeholder="Search riddles..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="rounded-lg border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none"
+            className="rounded-lg border border-gray-300 dark:border-secondary-600 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none"
             aria-label="Search riddles by keyword"
           />
         </div>
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
-            className="rounded-lg bg-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-300"
+            className="rounded-lg bg-gray-200 dark:bg-secondary-700 px-3 py-2 text-sm text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
             aria-label="Clear all filters"
           >
             ✕ Clear
@@ -81,13 +81,13 @@ export default function AdminRiddlesToolbar({
             Export
           </button>
           {showExportDropdown && (
-            <div className="absolute right-0 z-10 mt-2 w-40 rounded-lg border bg-white shadow-lg">
+            <div className="absolute right-0 z-10 mt-2 w-40 rounded-lg border bg-white dark:bg-secondary-800 shadow-lg">
               <button
                 onClick={() => {
                   onExportCSV();
                   setShowExportDropdown(false);
                 }}
-                className="w-full rounded-t-lg px-4 py-2 text-left text-sm hover:bg-gray-100"
+                className="w-full rounded-t-lg px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-secondary-800"
                 aria-label="Export as CSV"
               >
                 Export as CSV
@@ -97,7 +97,7 @@ export default function AdminRiddlesToolbar({
                   onExportJSON();
                   setShowExportDropdown(false);
                 }}
-                className="w-full rounded-b-lg px-4 py-2 text-left text-sm hover:bg-gray-100"
+                className="w-full rounded-b-lg px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-secondary-800"
                 aria-label="Export as JSON"
               >
                 Export as JSON
@@ -124,7 +124,7 @@ export default function AdminRiddlesToolbar({
         <button
           onClick={onUndo}
           disabled={!canUndo}
-          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 dark:bg-secondary-800 text-slate-400 cursor-not-allowed'}`}
           aria-label="Undo last delete"
           title="Undo last delete"
         >

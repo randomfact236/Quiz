@@ -124,7 +124,7 @@ export function CollapsibleRows({ children, maxRows = 2, className = '' }: Colla
           type="button"
           data-see-more=""
           onClick={() => setExpanded((v) => !v)}
-          className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50 dark:border-gray-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-900/20"
+          className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-200 dark:hover:bg-blue-500/30 dark:hover:bg-blue-500/10 dark:border-gray-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-900/20"
         >
           {expanded ? 'Show less' : `See more (${hiddenCount})`}
           {expanded ? (

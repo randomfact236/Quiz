@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="absolute top-4 left-4">
         <Link href="/login" className="flex items-center text-white/80 hover:text-white">
           <ChevronLeft className="w-5 h-5 mr-1" /> Back to Login
@@ -52,12 +52,10 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="mx-auto h-12 w-12 bg-white/20 rounded-full flex items-center justify-center">
+        <div className="mx-auto h-12 w-12 bg-white/20 dark:bg-secondary-800/20 rounded-full flex items-center justify-center">
           <Mail className="h-6 w-6 text-white" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-          Forgot Password?
-        </h2>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Forgot Password?</h2>
         <p className="mt-2 text-center text-sm text-white/80">
           Enter your email and we will send you a reset link
         </p>
@@ -67,15 +65,15 @@ export default function ForgotPasswordPage() {
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           {success ? (
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <div className="mx-auto h-12 w-12 bg-green-100 dark:bg-green-500/20 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="h-6 w-6 text-green-500" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
                 Check your email
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-                If an account with that email exists, we have sent a password reset link. 
-                Please check your inbox (and spam folder).
+                If an account with that email exists, we have sent a password reset link. Please
+                check your inbox (and spam folder).
               </p>
               <button
                 onClick={() => {
@@ -97,7 +95,10 @@ export default function ForgotPasswordPage() {
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300"
+                >
                   Email Address
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -132,7 +133,10 @@ export default function ForgotPasswordPage() {
               <div className="text-center">
                 <p className="text-sm text-slate-600 dark:text-slate-400">
                   Remember your password?{' '}
-                  <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                  <Link
+                    href="/login"
+                    className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                  >
                     Sign in
                   </Link>
                 </p>

@@ -31,7 +31,7 @@ export default function RiddleFormMetaFields({
         <div>
           <label
             htmlFor="image-riddle-difficulty"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
           >
             Difficulty <span aria-label="required">*</span>
           </label>
@@ -53,7 +53,7 @@ export default function RiddleFormMetaFields({
         <div>
           <label
             htmlFor="image-riddle-timer"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
           >
             Timer (seconds)
           </label>
@@ -76,7 +76,7 @@ export default function RiddleFormMetaFields({
         <div>
           <label
             htmlFor="image-riddle-category"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
           >
             Category Name <span aria-label="required">*</span>
           </label>
@@ -105,7 +105,7 @@ export default function RiddleFormMetaFields({
         <div>
           <label
             htmlFor="image-riddle-emoji"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
           >
             Category Emoji
           </label>
@@ -120,11 +120,11 @@ export default function RiddleFormMetaFields({
         </div>
       </div>
 
-      <div className="flex items-center gap-4 border-t border-slate-100 pt-4 mt-4">
+      <div className="flex items-center gap-4 border-t border-slate-100 dark:border-secondary-800 pt-4 mt-4">
         <div className="flex-1">
           <label
             htmlFor="image-riddle-status"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
           >
             Status
           </label>
@@ -132,7 +132,7 @@ export default function RiddleFormMetaFields({
             id="image-riddle-status"
             value={form.status || 'draft'}
             onChange={(e) => onChange({ status: e.target.value as ContentStatus })}
-            className={`${inputClass} bg-slate-50 font-bold`}
+            className={`${inputClass} bg-slate-50 dark:bg-secondary-800 font-bold`}
           >
             <option value="draft">Draft (Hidden)</option>
             <option value="published">Published (Live)</option>
@@ -145,18 +145,22 @@ export default function RiddleFormMetaFields({
             type="checkbox"
             checked={form.showTimer}
             onChange={(e) => onChange({ showTimer: e.target.checked })}
-            className="rounded border-gray-300 w-4 h-4 text-blue-600"
+            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600"
           />
-          <span className="text-sm text-gray-700 font-medium select-none">Show Timer</span>
+          <span className="text-sm text-gray-700 dark:text-secondary-200 font-medium select-none">
+            Show Timer
+          </span>
         </label>
         <label className="flex items-center gap-2 mt-6 cursor-pointer">
           <input
             type="checkbox"
             checked={form.isActive}
             onChange={(e) => onChange({ isActive: e.target.checked })}
-            className="rounded border-gray-300 w-4 h-4 text-blue-600"
+            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600"
           />
-          <span className="text-sm text-gray-700 font-medium select-none">Active</span>
+          <span className="text-sm text-gray-700 dark:text-secondary-200 font-medium select-none">
+            Active
+          </span>
         </label>
       </div>
     </>

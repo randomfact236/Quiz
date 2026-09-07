@@ -39,7 +39,7 @@ import { formatTimeMMSS } from '@/lib/utils';
 // Loading component — mirrors quiz-mcq/play/page.tsx loading state exactly
 function PlayPageLoading(): JSX.Element {
   return (
-    <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
       <div className="text-center">
         <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
         <p className="text-xl font-semibold text-white">Loading riddles...</p>
@@ -53,7 +53,7 @@ export default function RiddlePlayPage(): JSX.Element {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
           <div className="text-center">
             <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
             <p className="text-xl font-semibold text-white">Loading...</p>
@@ -119,19 +119,21 @@ function RiddlePlayPageContent(): JSX.Element {
   // Error state
   if (play.error) {
     return (
-      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30 px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <Link
             href={backPath}
-            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white hover:bg-white/30"
+            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
+          <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-8 text-center shadow-lg">
             <AlertCircle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
-            <h1 className="mb-2 text-2xl font-bold text-gray-800">Failed to Load</h1>
-            <p className="mb-4 text-gray-600">{play.error}</p>
+            <h1 className="mb-2 text-2xl font-bold text-gray-800 dark:text-secondary-100">
+              Failed to Load
+            </h1>
+            <p className="mb-4 text-gray-600 dark:text-secondary-300">{play.error}</p>
             <button
               onClick={() => window.location.reload()}
               className="inline-block rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
@@ -180,7 +182,7 @@ function RiddlePlayPageContent(): JSX.Element {
 
   // Main playing screen — mirrors quiz-mcq/play/page.tsx layout exactly
   return (
-    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
       {/* Floating Background Emojis */}
       <FloatingBackground count={20} />
 
@@ -193,7 +195,7 @@ function RiddlePlayPageContent(): JSX.Element {
             <div className="mb-1">
               <Link
                 href={backPath}
-                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
+                className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Exit Riddles
@@ -228,15 +230,7 @@ function RiddlePlayPageContent(): JSX.Element {
               {play.isTimerMode && (play.status === 'playing' || play.status === 'paused') && (
                 <div className="flex items-center gap-2">
                   <div
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
-                      play.status === 'paused'
-                        ? 'bg-yellow-500 text-white'
-                        : play.timeRemaining <= 10
-                          ? 'bg-red-500 text-white animate-pulse'
-                          : play.timeRemaining <= 20
-                            ? 'bg-orange-500 text-white'
-                            : 'bg-white/90 text-gray-800'
-                    }`}
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${play.status === 'paused' ? 'bg-yellow-500 text-white' : play.timeRemaining <= 10 ? 'bg-red-500 text-white animate-pulse' : play.timeRemaining <= 20 ? 'bg-orange-500 text-white' : 'bg-white/90 dark:bg-secondary-800/90 text-gray-800 dark:text-secondary-100'}`}
                   >
                     <Timer className="h-4 w-4" />
                     <span>{formatTimeMMSS(play.timeRemaining)}</span>
@@ -246,7 +240,7 @@ function RiddlePlayPageContent(): JSX.Element {
                   {/* Pause/Resume Button */}
                   <button
                     onClick={play.togglePause}
-                    className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
+                    className="rounded-full bg-white/20 dark:bg-secondary-800/20 p-1.5 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
                     title={play.status === 'paused' ? 'Resume Timer' : 'Pause Timer'}
                   >
                     {play.status === 'paused' ? (
@@ -262,7 +256,7 @@ function RiddlePlayPageContent(): JSX.Element {
               <button
                 onClick={handleShare}
                 title="Share this riddle mix"
-                className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
+                className="rounded-full bg-white/20 dark:bg-secondary-800/20 p-1.5 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
               >
                 <Share2 className="h-4 w-4" />
               </button>
@@ -328,7 +322,7 @@ function RiddlePlayPageContent(): JSX.Element {
                 play.handlePrevious();
               }}
               disabled={play.currentIndex === 0}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -350,7 +344,7 @@ function RiddlePlayPageContent(): JSX.Element {
                       play.handleSkip();
                     }
                   }}
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/20"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 dark:bg-secondary-800/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white dark:hover:bg-secondary-700/20"
                 >
                   Skip
                   <SkipForward className="h-3 w-3" />
@@ -366,7 +360,7 @@ function RiddlePlayPageContent(): JSX.Element {
                     play.handleNext();
                   }
                 }}
-                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
+                className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
               >
                 {play.currentIndex >= play.riddles.length - 1 ? 'Submit' : 'Next'}
                 <ChevronRight className="h-4 w-4" />

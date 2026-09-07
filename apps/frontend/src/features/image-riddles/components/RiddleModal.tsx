@@ -134,12 +134,12 @@ export default function RiddleModal({
         aria-modal="true"
         aria-label={riddle.title}
         tabIndex={-1}
-        className="relative max-h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl animate-in zoom-in-95 duration-300"
+        className="relative max-h-[90vh] flex flex-col w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white dark:bg-secondary-800 shadow-2xl animate-in zoom-in-95 duration-300"
       >
         {/* 🔖 Save — direct bookmark (same store as the card chip + ShareMenu) */}
         <button
           onClick={() => toggleSavedRiddle(riddle.id)}
-          className="absolute right-16 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 transition-all hover:bg-amber-50 hover:shadow-sm active:scale-90"
+          className="absolute right-16 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-secondary-800 transition-all hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 hover:shadow-sm active:scale-90"
           aria-pressed={Boolean(savedRiddles[riddle.id])}
           aria-label={savedRiddles[riddle.id] ? 'Remove riddle from saved' : 'Save riddle'}
           title={savedRiddles[riddle.id] ? 'Saved — tap to remove' : 'Save'}
@@ -151,7 +151,7 @@ export default function RiddleModal({
         </button>
         <button
           onClick={game.closeRiddle}
-          className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-all hover:bg-red-100 hover:text-red-600 hover:shadow-sm active:scale-90"
+          className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-secondary-800 text-slate-400 transition-all hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600 hover:shadow-sm active:scale-90"
           aria-label="Close modal"
         >
           <X className="h-5 w-5" aria-hidden="true" />
@@ -165,7 +165,7 @@ export default function RiddleModal({
                 e.stopPropagation();
                 game.navigateRiddle('prev');
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-lg text-slate-500 dark:text-secondary-400 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
               aria-label="Previous Riddle"
             >
               <span className="text-2xl font-black">‹</span>
@@ -175,7 +175,7 @@ export default function RiddleModal({
                 e.stopPropagation();
                 game.navigateRiddle('next');
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg text-slate-500 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-lg text-slate-500 dark:text-secondary-400 hover:text-indigo-600 transition-all hover:scale-110 active:scale-95"
               aria-label="Next Riddle"
             >
               <span className="text-2xl font-black">›</span>
@@ -201,13 +201,13 @@ export default function RiddleModal({
           </div>
 
           <div className="flex items-start justify-between gap-6 mb-6">
-            <h2 className="shrink flex-1 text-2xl sm:text-3xl font-black text-slate-800 tracking-tight leading-loose pt-1">
+            <h2 className="shrink flex-1 text-2xl sm:text-3xl font-black text-slate-800 dark:text-secondary-100 tracking-tight leading-loose pt-1">
               {riddle.title}
             </h2>
             {timerEnabled && (
               <div className="shrink-0 flex flex-col items-end gap-1">
                 <div
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${game.isTimerActive ? (game.timeLeft <= 10 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 border-indigo-100 text-indigo-600') : 'bg-white border-slate-100 text-slate-300'}`}
+                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest shadow-sm transition-all border-2 ${game.isTimerActive ? (game.timeLeft <= 10 ? 'bg-red-50 dark:bg-red-500/10 border-red-200 text-red-600 animate-pulse' : 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-100 text-indigo-600') : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 text-slate-300'}`}
                 >
                   <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>
@@ -216,7 +216,7 @@ export default function RiddleModal({
                   </span>
                 </div>
                 {/* Visual Progress Bar */}
-                <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-1 bg-slate-100 dark:bg-secondary-800 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-1000 linear ${game.timeLeft <= 10 ? 'bg-red-500' : 'bg-indigo-500'}`}
                     style={{ width: `${Math.max(0, (game.timeLeft / totalSeconds) * 100)}%` }}
@@ -228,7 +228,7 @@ export default function RiddleModal({
 
           {/* Image — fixed height (never collapses): flex-1/min-h-0 let the
               guess panel squeeze the image to zero on shorter viewports */}
-          <div className="relative mb-6 h-64 sm:h-80 shrink-0 overflow-hidden rounded-3xl border-2 border-slate-100 shadow-inner group bg-slate-50">
+          <div className="relative mb-6 h-64 sm:h-80 shrink-0 overflow-hidden rounded-3xl border-2 border-slate-100 dark:border-secondary-800 shadow-inner group bg-slate-50 dark:bg-secondary-800">
             {hasImageError ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-300">
                 <span className="text-6xl">🖼️</span>
@@ -251,7 +251,7 @@ export default function RiddleModal({
             {/* Timer Expiry Overlay: hand the choice to the player */}
             {game.timedOut && !game.showAnswer && (
               <div className="absolute inset-0 bg-red-500/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-4 z-10">
-                <span className="text-5xl font-black text-red-600 bg-white/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">
+                <span className="text-5xl font-black text-red-600 bg-white/90 dark:bg-secondary-800/90 px-8 py-4 rounded-3xl shadow-2xl rotate-12 border-4 border-red-600">
                   TIME&apos;S UP!
                 </span>
                 <div className="flex items-center gap-3">
@@ -263,7 +263,7 @@ export default function RiddleModal({
                   </button>
                   <button
                     onClick={game.keepTryingAfterTimeout}
-                    className="rounded-full bg-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-slate-600 shadow-lg transition-all hover:bg-slate-100 hover:scale-105 active:scale-95"
+                    className="rounded-full bg-white dark:bg-secondary-800 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-secondary-300 shadow-lg transition-all hover:bg-slate-100 hover:scale-105 active:scale-95"
                   >
                     Keep Trying
                   </button>

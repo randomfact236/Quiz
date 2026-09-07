@@ -88,7 +88,10 @@ export function StatsSection(): JSX.Element {
     return (
       <div className="mt-6 grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-24 animate-pulse rounded-xl bg-white/10" />
+          <div
+            key={i}
+            className="h-24 animate-pulse rounded-xl bg-white/10 dark:bg-secondary-800/10"
+          />
         ))}
       </div>
     );

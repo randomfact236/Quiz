@@ -120,26 +120,28 @@ export function MediaPicker({
       role="dialog"
       aria-label="Media library"
     >
-      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white dark:bg-secondary-800 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-100 dark:border-secondary-800 px-6 py-4">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">🖼️ Media Library</h3>
-            <p className="text-xs text-gray-500">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-secondary-50">
+              🖼️ Media Library
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-secondary-400">
               {total} image{total === 1 ? '' : 's'} · uploads converted to WebP
             </p>
           </div>
           <button
             onClick={() => onOpenChange(false)}
             aria-label="Close media library"
-            className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-full p-2 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-gray-100 dark:hover:bg-secondary-800 hover:text-gray-600 dark:text-secondary-300"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-6 py-3">
+        <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 dark:border-secondary-800 px-6 py-3">
           <input
             type="search"
             value={search}
@@ -149,11 +151,11 @@ export function MediaPicker({
             }}
             placeholder="Search by filename..."
             aria-label="Search media by filename"
-            className="w-48 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-48 rounded-lg border border-gray-200 dark:border-secondary-700 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
           />
           <button
             onClick={() => void load(1, search)}
-            className="rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
+            className="rounded-lg bg-slate-100 dark:bg-secondary-800 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-secondary-200 hover:bg-slate-200"
           >
             Search
           </button>
@@ -180,17 +182,20 @@ export function MediaPicker({
           {isLoading && !isUploading ? (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="overflow-hidden rounded-xl border border-gray-100">
-                  <div className="h-28 bg-gray-200 animate-pulse" />
-                  <div className="space-y-1.5 bg-white px-2 py-1.5">
-                    <div className="h-2 w-3/4 rounded bg-gray-200 animate-pulse" />
-                    <div className="h-1.5 w-1/3 rounded bg-gray-200 animate-pulse" />
+                <div
+                  key={i}
+                  className="overflow-hidden rounded-xl border border-gray-100 dark:border-secondary-800"
+                >
+                  <div className="h-28 bg-gray-200 dark:bg-secondary-700 animate-pulse" />
+                  <div className="space-y-1.5 bg-white dark:bg-secondary-800 px-2 py-1.5">
+                    <div className="h-2 w-3/4 rounded bg-gray-200 dark:bg-secondary-700 animate-pulse" />
+                    <div className="h-1.5 w-1/3 rounded bg-gray-200 dark:bg-secondary-700 animate-pulse" />
                   </div>
                 </div>
               ))}
             </div>
           ) : assets.length === 0 ? (
-            <div className="py-12 text-center text-sm text-gray-400">
+            <div className="py-12 text-center text-sm text-gray-400 dark:text-secondary-400">
               No images yet. Upload one to get started.
             </div>
           ) : (
@@ -198,7 +203,7 @@ export function MediaPicker({
               {assets.map((asset) => (
                 <div
                   key={asset.id}
-                  className="group relative overflow-hidden rounded-xl border border-gray-100 shadow-sm"
+                  className="group relative overflow-hidden rounded-xl border border-gray-100 dark:border-secondary-800 shadow-sm"
                 >
                   <button
                     onClick={() => {
@@ -221,22 +226,27 @@ export function MediaPicker({
                       className="h-28 w-full object-cover transition-transform group-hover:scale-105"
                     />
                   </button>
-                  <div className="bg-white px-2 py-1.5">
-                    <p className="truncate text-[10px] font-bold text-gray-700">{asset.filename}</p>
+                  <div className="bg-white dark:bg-secondary-800 px-2 py-1.5">
+                    <p className="truncate text-[10px] font-bold text-gray-700 dark:text-secondary-200">
+                      {asset.filename}
+                    </p>
                     {asset.alt ? (
-                      <p className="truncate text-[9px] italic text-gray-500" title={asset.alt}>
+                      <p
+                        className="truncate text-[9px] italic text-gray-500 dark:text-secondary-400"
+                        title={asset.alt}
+                      >
                         {asset.alt}
                       </p>
                     ) : (
                       <p className="text-[9px] text-amber-500">No alt text</p>
                     )}
-                    <p className="text-[9px] text-gray-400">
+                    <p className="text-[9px] text-gray-400 dark:text-secondary-400">
                       {formatFileSize(getDisplayFileSize(asset))}
                       {(() => {
                         const pct = getSavingsPercent(asset);
                         return pct ? (
                           <span
-                            className="ml-1 rounded bg-green-100 px-1 font-semibold text-green-700"
+                            className="ml-1 rounded bg-green-100 dark:bg-green-500/20 px-1 font-semibold text-green-700 dark:text-green-300"
                             title={`WebP conversion saved ${pct}% vs the original upload`}
                           >
                             -{pct}%
@@ -261,21 +271,21 @@ export function MediaPicker({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 border-t border-gray-100 px-6 py-3">
+          <div className="flex items-center justify-center gap-2 border-t border-gray-100 dark:border-secondary-800 px-6 py-3">
             <button
               onClick={() => void load(page - 1, search)}
               disabled={page <= 1}
-              className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-medium disabled:opacity-40"
+              className="rounded-lg bg-gray-100 dark:bg-secondary-800 px-3 py-1 text-xs font-medium disabled:opacity-40"
             >
               Previous
             </button>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-secondary-400">
               Page {page} of {totalPages}
             </span>
             <button
               onClick={() => void load(page + 1, search)}
               disabled={page >= totalPages}
-              className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-medium disabled:opacity-40"
+              className="rounded-lg bg-gray-100 dark:bg-secondary-800 px-3 py-1 text-xs font-medium disabled:opacity-40"
             >
               Next
             </button>

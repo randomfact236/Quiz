@@ -42,7 +42,7 @@ export function GameHeader({
       <div className="mb-1">
         <Link
           href={backHref}
-          className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
+          className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
         >
           <ArrowLeft className="h-4 w-4" />
           Exit Quiz
@@ -87,15 +87,7 @@ export function GameHeader({
           <div className="flex items-center gap-2">
             {/* Timer Clock */}
             <div
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${
-                quizStatus === 'paused'
-                  ? 'bg-yellow-500 text-white'
-                  : timeRemaining <= 10
-                    ? 'bg-red-500 text-white animate-pulse'
-                    : timeRemaining <= 20
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-white/90 text-gray-800'
-              }`}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono font-bold text-sm shadow-md ${quizStatus === 'paused' ? 'bg-yellow-500 text-white' : timeRemaining <= 10 ? 'bg-red-500 text-white animate-pulse' : timeRemaining <= 20 ? 'bg-orange-500 text-white' : 'bg-white/90 dark:bg-secondary-800/90 text-gray-800 dark:text-secondary-100'}`}
             >
               <Timer className="h-4 w-4" />
               <span>
@@ -107,7 +99,7 @@ export function GameHeader({
             {/* Pause/Resume Button */}
             <button
               onClick={onPauseToggle}
-              className="rounded-full bg-white/20 p-1.5 text-white transition-colors hover:bg-white/30"
+              className="rounded-full bg-white/20 dark:bg-secondary-800/20 p-1.5 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
               title={quizStatus === 'paused' ? 'Resume Timer' : 'Pause Timer'}
             >
               {quizStatus === 'paused' ? (

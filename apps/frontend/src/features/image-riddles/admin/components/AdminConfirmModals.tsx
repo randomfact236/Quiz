@@ -25,24 +25,26 @@ export function TrashConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-md rounded-xl bg-white dark:bg-secondary-800 p-6 shadow-2xl animate-in zoom-in-95 duration-200">
         <h3 className="mb-2 text-xl font-bold flex items-center gap-2">
           <Trash2 className="w-5 h-5 text-red-500" />
           {riddle.status === 'trash' ? 'Permanently Delete' : 'Move to Trash'}
         </h3>
-        <p className="mb-4 text-gray-600">
+        <p className="mb-4 text-gray-600 dark:text-secondary-300">
           {riddle.status === 'trash'
             ? 'Are you sure you want to permanently delete this image riddle? This action cannot be undone.'
             : 'Are you sure you want to move this image riddle to trash? You can still restore it later from the Trash tab.'}
         </p>
-        <div className="mb-6 rounded-lg bg-gray-50 p-3 border border-gray-100">
-          <p className="line-clamp-2 text-sm font-medium text-gray-800">{riddle.title}</p>
+        <div className="mb-6 rounded-lg bg-gray-50 dark:bg-secondary-800 p-3 border border-gray-100 dark:border-secondary-800">
+          <p className="line-clamp-2 text-sm font-medium text-gray-800 dark:text-secondary-100">
+            {riddle.title}
+          </p>
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+            className="flex-1 rounded-lg bg-gray-100 dark:bg-secondary-800 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             Cancel
           </button>
@@ -73,20 +75,24 @@ export function DeleteCategoryConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+      <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-300">
           <Trash2 className="h-6 w-6" />
         </div>
-        <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Delete Category?</h3>
-        <p className="mb-6 text-sm text-gray-600">
+        <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-secondary-50 text-left px-0">
+          Delete Category?
+        </h3>
+        <p className="mb-6 text-sm text-gray-600 dark:text-secondary-300">
           Are you sure you want to delete{' '}
-          <span className="font-bold text-gray-900">&quot;{categoryName}&quot;</span>? Riddles
-          currently in this category will be archived (moved out of the active list).
+          <span className="font-bold text-gray-900 dark:text-secondary-50">
+            &quot;{categoryName}&quot;
+          </span>
+          ? Riddles currently in this category will be archived (moved out of the active list).
         </p>
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 transition-colors"
+            className="flex-1 rounded-xl bg-gray-100 dark:bg-secondary-800 px-4 py-2.5 text-sm font-bold text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             Keep it
           </button>
@@ -115,19 +121,21 @@ export function SyncConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+      <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300">
           <RefreshCw className="h-6 w-6" aria-hidden="true" />
         </div>
-        <h3 className="mb-2 text-lg font-bold text-gray-900 text-left px-0">Reload from Server?</h3>
-        <p className="mb-6 text-sm text-gray-600">
+        <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-secondary-50 text-left px-0">
+          Reload from Server?
+        </h3>
+        <p className="mb-6 text-sm text-gray-600 dark:text-secondary-300">
           This will discard local edits and re-fetch all riddles and categories from the database.
           Unsaved changes will be lost.
         </p>
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 transition-colors"
+            className="flex-1 rounded-xl bg-gray-100 dark:bg-secondary-800 px-4 py-2.5 text-sm font-bold text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             Cancel
           </button>

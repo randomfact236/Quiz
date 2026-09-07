@@ -59,25 +59,37 @@ export function AnswerOptions({
     if (hasSelection && showFeedback && correctKey) {
       if (key === correctKey) {
         // Correct answer - green
-        return baseStyle + 'border-green-500 bg-green-50 text-green-800';
+        return (
+          baseStyle +
+          'border-green-500 bg-green-50 text-green-800 dark:border-green-500/50 dark:bg-green-500/10 dark:text-green-300'
+        );
       }
       if (key === selectedKey && key !== correctKey) {
         // Wrong selection - red
-        return baseStyle + 'border-red-500 bg-red-50 text-red-800';
+        return (
+          baseStyle +
+          'border-red-500 bg-red-50 text-red-800 dark:border-red-500/50 dark:bg-red-500/10 dark:text-red-300'
+        );
       }
       // Locked affordance: unselected options dim further once an answer is in
-      return baseStyle + 'border-gray-200 bg-gray-50 text-gray-400 opacity-40';
+      return (
+        baseStyle +
+        'border-gray-200 dark:border-secondary-700 bg-gray-50 dark:bg-secondary-800 text-gray-400 dark:text-secondary-500 opacity-40'
+      );
     }
 
     // No selection yet - lightly visible
     if (selectedKey === key) {
-      return baseStyle + 'border-indigo-400 bg-indigo-50 text-indigo-900 shadow-md';
+      return (
+        baseStyle +
+        'border-indigo-400 dark:border-indigo-500/60 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-900 dark:text-indigo-200 shadow-md'
+      );
     }
 
     // Default lightly visible state
     return (
       baseStyle +
-      'border-gray-200 bg-gray-50 text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
+      'border-gray-200 dark:border-secondary-700 bg-gray-50 dark:bg-secondary-800 text-gray-600 dark:text-secondary-300 hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/10'
     );
   };
 
@@ -109,7 +121,11 @@ export function AnswerOptions({
     }
   };
 
-  const displayOptions = getOptionsForLevel();
+  // Blank stored options render as empty buttons — drop them (keys are
+  // properties on the option objects, so filtering never re-letters A–D).
+  const displayOptions = getOptionsForLevel().filter(
+    (option) => option.text && option.text.trim().length > 0
+  );
   const hasSelection = selectedKey !== null;
 
   // Get grid columns based on number of options
@@ -135,10 +151,10 @@ export function AnswerOptions({
 
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border-2 border-gray-200 bg-gray-50 p-6">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-secondary-700 bg-gray-50 dark:bg-secondary-800 p-6">
           <label
             htmlFor="extreme-answer-input"
-            className="mb-2 block text-sm font-medium text-gray-600"
+            className="mb-2 block text-sm font-medium text-gray-600 dark:text-secondary-300"
           >
             Type your answer:
           </label>
@@ -156,13 +172,13 @@ export function AnswerOptions({
             disabled={disabled || submitted}
             placeholder="Enter your answer here..."
             aria-label="Type your answer"
-            className="w-full rounded-xl border-2 border-gray-200 bg-white p-4 text-lg focus:border-indigo-400 focus:outline-none disabled:bg-gray-100"
+            className="w-full rounded-xl border-2 border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 p-4 text-lg focus:border-indigo-400 focus:outline-none disabled:bg-gray-100 dark:disabled:bg-secondary-700/60 disabled:text-gray-400 dark:disabled:text-secondary-400"
           />
           {!submitted && (
             <button
               onClick={submitExtremeAnswer}
               disabled={!canSubmit}
-              className="mt-3 w-full rounded-xl bg-indigo-600 py-3 text-base font-semibold text-white transition-all hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+              className="mt-3 w-full rounded-xl bg-indigo-600 py-3 text-base font-semibold text-white transition-all hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-600/30 disabled:text-white/50"
             >
               Submit Answer
             </button>
@@ -176,7 +192,9 @@ export function AnswerOptions({
             role="status"
             aria-live="polite"
           >
-            <span className="text-sm text-gray-500">Correct answer: {correctKey || 'N/A'}</span>
+            <span className="text-sm text-gray-500 dark:text-secondary-400">
+              Correct answer: {correctKey || 'N/A'}
+            </span>
           </motion.div>
         )}
       </div>
@@ -226,7 +244,9 @@ export function AnswerOptions({
               {/* Status Icon for Feedback */}
               {showFeedback && hasSelection && (
                 <span className="absolute right-4 top-1/2 -translate-y-1/2">
-                  {isCorrect && <span className="text-2xl text-green-600">✓</span>}
+                  {isCorrect && (
+                    <span className="text-2xl text-green-600 dark:text-green-300">✓</span>
+                  )}
                   {isWrong && <span className="text-2xl text-red-500">✕</span>}
                 </span>
               )}

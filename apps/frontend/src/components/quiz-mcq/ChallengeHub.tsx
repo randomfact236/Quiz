@@ -161,19 +161,19 @@ export function ChallengeHub({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex flex-wrap gap-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
           <Link
             href="/quiz-mcq"
-            className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Quiz
@@ -195,7 +195,7 @@ export function ChallengeHub({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl bg-white/95 shadow-lg overflow-hidden"
+            className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden"
           >
             <button
               onClick={() => setSubjectWiseOpen(!subjectWiseOpen)}
@@ -234,26 +234,16 @@ export function ChallengeHub({
                               key={subject.slug}
                               onClick={() => toggleSubject(subject.slug)}
                               disabled={totalQuestions === 0}
-                              className={`flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-                                isExpanded
-                                  ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300'
-                                  : 'bg-white border-2 border-gray-100 hover:border-blue-200'
-                              }`}
+                              className={`flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isExpanded ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-secondary-800 border-2 border-gray-100 dark:border-secondary-800 hover:border-blue-200'}`}
                             >
                               <span className="text-3xl mb-1">{subject.emoji}</span>
                               <span
-                                className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800'}`}
+                                className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800 dark:text-secondary-100'}`}
                               >
                                 {subject.name}
                               </span>
                               <span
-                                className={`text-xs mt-1 ${
-                                  isExpanded
-                                    ? 'text-white/80'
-                                    : config.showComingSoon && totalQuestions === 0
-                                      ? 'text-orange-500'
-                                      : 'text-gray-500'
-                                }`}
+                                className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : config.showComingSoon && totalQuestions === 0 ? 'text-orange-500' : 'text-gray-500 dark:text-secondary-400'}`}
                               >
                                 {config.showComingSoon && totalQuestions === 0
                                   ? 'Coming Soon'
@@ -275,10 +265,10 @@ export function ChallengeHub({
                             exit={{ opacity: 0, height: 0 }}
                             className="overflow-hidden"
                           >
-                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
-                              <p className="text-center text-sm text-gray-600 mb-3">
+                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-500/30">
+                              <p className="text-center text-sm text-gray-600 dark:text-secondary-300 mb-3">
                                 Select difficulty level for{' '}
-                                <span className="font-semibold text-blue-600">
+                                <span className="font-semibold text-blue-600 dark:text-blue-300">
                                   {subjects.find((s) => s.slug === expandedSubject)?.name}
                                 </span>
                               </p>
@@ -322,7 +312,7 @@ export function ChallengeHub({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-2xl bg-white/95 shadow-lg overflow-hidden"
+            className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden"
           >
             <button
               onClick={() => setAllSubjectOpen(!allSubjectOpen)}
@@ -346,7 +336,9 @@ export function ChallengeHub({
 
             {allSubjectOpen && (
               <div className="p-6">
-                <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+                <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
+                  Select difficulty level:
+                </p>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                   {QUIZ_LEVELS.map((level) => {
                     const count = isHydrated ? getAllSubjectCount(level) : 0;
@@ -375,7 +367,7 @@ export function ChallengeHub({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="rounded-2xl bg-white/95 shadow-lg overflow-hidden"
+            className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden"
           >
             <button
               onClick={() => setCompleteMixOpen(!completeMixOpen)}
@@ -397,12 +389,14 @@ export function ChallengeHub({
 
             {completeMixOpen && (
               <div className="p-6 text-center">
-                <p className="mb-4 text-gray-600">{config.completeMixBody}</p>
+                <p className="mb-4 text-gray-600 dark:text-secondary-300">
+                  {config.completeMixBody}
+                </p>
                 <div className="mb-6 flex justify-center gap-4 text-sm">
-                  <span className="rounded-full bg-purple-100 px-4 py-2 text-purple-700">
+                  <span className="rounded-full bg-purple-100 dark:bg-purple-500/20 px-4 py-2 text-purple-700 dark:text-purple-300">
                     {isHydrated ? `${levelCounts.completeMix} Total Questions` : 'Loading...'}
                   </span>
-                  <span className="rounded-full bg-pink-100 px-4 py-2 text-pink-700">
+                  <span className="rounded-full bg-pink-100 dark:bg-pink-500/20 px-4 py-2 text-pink-700 dark:text-pink-300">
                     All 5 Levels
                   </span>
                 </div>

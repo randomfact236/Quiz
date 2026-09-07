@@ -26,19 +26,21 @@ export function SubmitConfirmModal({
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-xl"
       >
-        <h2 className="mb-2 text-xl font-bold text-gray-800">Submit Quiz?</h2>
+        <h2 className="mb-2 text-xl font-bold text-gray-800 dark:text-secondary-100">
+          Submit Quiz?
+        </h2>
 
         {answeredCount < totalQuestions ? (
-          <div className="mb-4 rounded-lg bg-yellow-50 p-3 text-yellow-800">
+          <div className="mb-4 rounded-lg bg-yellow-50 dark:bg-yellow-500/10 p-3 text-yellow-800 dark:text-yellow-300">
             <p className="font-medium">⚠️ Not all questions answered!</p>
             <p className="text-sm">
               You&apos;ve answered {answeredCount} of {totalQuestions} questions.
             </p>
           </div>
         ) : (
-          <p className="mb-4 text-gray-600">
+          <p className="mb-4 text-gray-600 dark:text-secondary-300">
             You&apos;ve answered all questions. Ready to see your results?
           </p>
         )}
@@ -46,7 +48,7 @@ export function SubmitConfirmModal({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
+            className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 py-3 font-semibold text-gray-700 dark:text-secondary-200 transition-colors hover:bg-gray-300"
           >
             Continue Quiz
           </button>

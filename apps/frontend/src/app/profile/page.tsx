@@ -87,7 +87,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="absolute top-4 left-4">
         <Link href="/" className="flex items-center text-white/80 hover:text-white">
           ← Back to Home
@@ -97,7 +97,7 @@ export default function ProfilePage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           <div className="flex flex-col items-center gap-3 mb-6">
-            <div className="h-16 w-16 rounded-full bg-indigo-100 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+            <div className="h-16 w-16 rounded-full bg-indigo-200 dark:bg-indigo-500/20 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
               {avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatar} alt="Avatar" className="h-16 w-16 object-cover" />
@@ -111,7 +111,7 @@ export default function ProfilePage() {
                 <Mail className="h-4 w-4" />
                 {profile.email}
                 {profile.emailVerified ? (
-                  <span className="inline-flex items-center gap-1 text-green-600 text-xs">
+                  <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-300 text-xs">
                     <CheckCircle className="h-3.5 w-3.5" /> verified
                   </span>
                 ) : (

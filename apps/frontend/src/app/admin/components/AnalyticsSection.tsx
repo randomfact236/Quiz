@@ -132,7 +132,7 @@ export function AnalyticsSection() {
           <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
             <BarChart3 className="h-5 w-5 text-cyan-400" /> Analytics
           </h2>
-          <p className="mt-0.5 text-xs text-gray-500">
+          <p className="mt-0.5 text-xs text-gray-500 dark:text-secondary-400">
             Traffic, engagement and performance across every module
           </p>
         </div>
@@ -173,11 +173,7 @@ export function AnalyticsSection() {
             <button
               key={t.id}
               onClick={() => changeTab(t.id)}
-              className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
-                tab === t.id
-                  ? 'bg-gray-800 font-medium text-white shadow'
-                  : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-              }`}
+              className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${tab === t.id ? 'bg-gray-800 font-medium text-white shadow' : 'text-gray-400 dark:text-secondary-400 hover:bg-gray-900 hover:text-gray-200'}`}
             >
               {t.label}
             </button>
@@ -190,7 +186,7 @@ export function AnalyticsSection() {
         {loading && !data ? (
           <div className="flex h-64 flex-col items-center justify-center gap-3">
             <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-cyan-500" />
-            <p className="text-sm text-gray-500">Loading analytics…</p>
+            <p className="text-sm text-gray-500 dark:text-secondary-400">Loading analytics…</p>
           </div>
         ) : error && !data ? (
           <div className="flex h-64 flex-col items-center justify-center gap-3">

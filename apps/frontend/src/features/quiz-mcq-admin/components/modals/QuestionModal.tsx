@@ -158,12 +158,15 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
       style={{ position: 'fixed' }}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-          <h2 className="text-lg font-bold text-gray-900">
+      <div className="relative z-10 bg-white dark:bg-secondary-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 flex-shrink-0">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-secondary-50">
             {isEdit ? 'Edit Question' : 'Add Question'}
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-secondary-800 rounded-lg"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -183,32 +186,37 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
                 </mark>
               </div>
             ) : (
-              <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error.message}</div>
+              <div className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-300 text-sm rounded-lg">
+                {error.message}
+              </div>
             ))}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
               Question <span className="text-red-500">*</span>
             </label>
             <textarea
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-50 focus:ring-2 focus:ring-blue-500"
               placeholder="Enter the question..."
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Explanation <span className="text-gray-400">(optional — shown in review)</span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+              Explanation{' '}
+              <span className="text-gray-400 dark:text-secondary-400">
+                (optional — shown in review)
+              </span>
             </label>
             <textarea
               value={explanation}
               onChange={(e) => setExplanation(e.target.value)}
               rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-50 focus:ring-2 focus:ring-blue-500"
               placeholder="Why is the correct answer right?"
             />
           </div>
@@ -224,11 +232,13 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+                Level
+              </label>
               <select
                 value={level}
                 onChange={(e) => handleLevelChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-50 focus:ring-2 focus:ring-blue-500"
               >
                 {LEVELS.map((l) => (
                   <option key={l.value} value={l.value}>
@@ -239,11 +249,13 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+                Status
+              </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'draft' | 'published')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-50 focus:ring-2 focus:ring-blue-500"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -253,14 +265,14 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
 
           {isExtreme ? (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
                 Correct Answer <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={openEndedAnswer}
                 onChange={(e) => setOpenEndedAnswer(e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-50 focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter the correct answer/explanation..."
                 required={isExtreme}
               />
@@ -276,10 +288,10 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
             />
           )}
         </div>
-        <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-white flex-shrink-0">
+        <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 flex-shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
+            className="px-4 py-2 text-sm text-gray-700 dark:text-secondary-200 bg-gray-100 dark:bg-secondary-800 hover:bg-gray-200 dark:hover:bg-secondary-700 rounded-lg"
           >
             Cancel
           </button>

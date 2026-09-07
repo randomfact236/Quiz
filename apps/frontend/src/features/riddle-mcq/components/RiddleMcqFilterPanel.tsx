@@ -92,9 +92,7 @@ export function RiddleMcqFilterPanel({
       />
 
       <div
-        className={`space-y-3 rounded-lg border p-4 ${
-          filters.category ? 'bg-purple-50 border-purple-300' : 'bg-gray-50 border-gray-200'
-        }`}
+        className={`space-y-3 rounded-lg border p-4 ${filters.category ? 'bg-purple-50 dark:bg-purple-500/10 border-purple-300 dark:border-purple-500/40' : 'bg-gray-50 dark:bg-secondary-800 border-gray-200 dark:border-secondary-700'}`}
       >
         <FilterControls
           filters={filters}

@@ -72,10 +72,10 @@ export default function RiddleCard({
           onOpen(riddle);
         }
       }}
-      className="group cursor-pointer flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+      className="group cursor-pointer flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-secondary-800 shadow-sm border border-slate-100 dark:border-secondary-800 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
     >
       {/* Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-50">
+      <div className="relative aspect-[4/3] overflow-hidden bg-slate-50 dark:bg-secondary-800">
         {hasImageError ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-300">
             <span className="text-5xl">🖼️</span>
@@ -129,7 +129,7 @@ export default function RiddleCard({
               e.stopPropagation(); // Don't open the riddle modal
               onToggleSave(riddle.id);
             }}
-            className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-md transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm backdrop-blur-md transition-all hover:scale-110 hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             aria-pressed={Boolean(isSaved)}
             aria-label={isSaved ? 'Remove riddle from saved' : 'Save riddle'}
             title={isSaved ? 'Saved — tap to remove' : 'Save'}
@@ -144,12 +144,12 @@ export default function RiddleCard({
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <h3 className="mb-4 line-clamp-2 text-lg font-black tracking-tight text-slate-800 leading-snug">
+        <h3 className="mb-4 line-clamp-2 text-lg font-black tracking-tight text-slate-800 dark:text-secondary-100 leading-snug">
           {riddle.title}
         </h3>
 
         {/* Answer Reveal Section (answer text only mounted once revealed) */}
-        <div className="mt-auto border-t border-slate-100 pt-4 flex items-center justify-between gap-3">
+        <div className="mt-auto border-t border-slate-100 dark:border-secondary-800 pt-4 flex items-center justify-between gap-3">
           <div
             className={`text-sm font-bold overflow-hidden line-clamp-1 ${isRevealed ? 'text-indigo-600' : 'text-slate-300'}`}
           >
@@ -160,7 +160,7 @@ export default function RiddleCard({
               e.stopPropagation();
               onToggleReveal(riddle.id);
             }}
-            className={`flex-shrink-0 flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${isRevealed ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'}`}
+            className={`flex-shrink-0 flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${isRevealed ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 dark:bg-secondary-800 text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-secondary-300'}`}
           >
             {isRevealed ? (
               <Eye className="h-3.5 w-3.5" aria-hidden="true" />
@@ -179,11 +179,7 @@ export default function RiddleCard({
               setShowComments((prev) => !prev);
             }}
             aria-expanded={showComments}
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-              showComments
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'
-            }`}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${showComments ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600'}`}
             aria-label={
               showComments
                 ? 'Hide the guess wall'
@@ -204,7 +200,7 @@ export default function RiddleCard({
                 e.stopPropagation();
                 onShare(riddle);
               }}
-              className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600"
+              className="flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-secondary-800 px-3 py-1.5 text-xs font-bold text-slate-500 dark:text-secondary-400 transition-all hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600"
               aria-label="Share riddle"
               title="Share this riddle"
             >

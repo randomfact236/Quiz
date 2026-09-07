@@ -140,15 +140,17 @@ export default function JokeCommentsModal({
       aria-label={`Comments for: ${jokeSetup}`}
     >
       <div
-        className="w-full max-w-md rounded-3xl bg-white shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]"
+        className="w-full max-w-md rounded-3xl bg-white dark:bg-secondary-800 shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-3 border-b border-orange-100 px-6 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-orange-100 dark:border-orange-500/30 px-6 py-4">
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-widest text-orange-400">
               💬 Joke replies
             </p>
-            <p className="truncate text-sm font-bold text-gray-800">{jokeSetup}</p>
+            <p className="truncate text-sm font-bold text-gray-800 dark:text-secondary-100">
+              {jokeSetup}
+            </p>
             {jokePunchline &&
               (punchlineShown ? (
                 <p className="truncate text-xs font-semibold text-orange-500">🎬 {jokePunchline}</p>
@@ -163,7 +165,7 @@ export default function JokeCommentsModal({
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-600"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600"
             aria-label="Close comments"
           >
             ✕
@@ -173,25 +175,27 @@ export default function JokeCommentsModal({
         <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-2">
           {items === null ? (
             <div className="space-y-2" aria-hidden="true">
-              <div className="h-12 rounded-xl bg-gray-100 animate-pulse" />
-              <div className="h-12 rounded-xl bg-gray-100 animate-pulse" />
+              <div className="h-12 rounded-xl bg-gray-100 dark:bg-secondary-800 animate-pulse" />
+              <div className="h-12 rounded-xl bg-gray-100 dark:bg-secondary-800 animate-pulse" />
             </div>
           ) : items.length === 0 ? (
-            <p className="py-8 text-center text-sm font-semibold text-gray-400">
+            <p className="py-8 text-center text-sm font-semibold text-gray-400 dark:text-secondary-400">
               No replies yet — be the first to 😂
             </p>
           ) : (
             items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-start justify-between gap-3 rounded-2xl bg-orange-50/60 px-4 py-3"
+                className="flex items-start justify-between gap-3 rounded-2xl bg-orange-50/60 dark:bg-orange-500/10 px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
                     {item.authorName || 'Guest'}
                   </p>
-                  <p className="text-sm font-semibold text-gray-800 break-words">{item.text}</p>
-                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  <p className="text-sm font-semibold text-gray-800 dark:text-secondary-100 break-words">
+                    {item.text}
+                  </p>
+                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
                     {timeAgo(item.createdAt)}
                   </p>
                 </div>
@@ -199,7 +203,7 @@ export default function JokeCommentsModal({
                   <button
                     onClick={() => void handleDelete(item.id)}
                     disabled={deletingIds.has(item.id)}
-                    className="shrink-0 rounded-full p-1 text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-40"
+                    className="shrink-0 rounded-full p-1 text-gray-300 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40"
                     aria-label="Delete my reply"
                     title="Delete my reply"
                   >
@@ -211,7 +215,10 @@ export default function JokeCommentsModal({
           )}
         </div>
 
-        <form onSubmit={(e) => void handlePost(e)} className="border-t border-orange-100 p-4">
+        <form
+          onSubmit={(e) => void handlePost(e)}
+          className="border-t border-orange-100 dark:border-orange-500/30 p-4"
+        >
           <input
             type="text"
             value={name}
@@ -221,7 +228,7 @@ export default function JokeCommentsModal({
             }}
             maxLength={50}
             placeholder="Your name (shows with your reply)"
-            className="mb-2 w-full rounded-full border-2 border-gray-100 bg-gray-50 px-4 py-1.5 text-xs font-bold text-gray-700 placeholder:text-gray-300 focus:border-orange-300 focus:bg-white focus:outline-none transition-colors"
+            className="mb-2 w-full rounded-full border-2 border-gray-100 dark:border-secondary-800 bg-gray-50 dark:bg-secondary-800 px-4 py-1.5 text-xs font-bold text-gray-700 dark:text-secondary-200 placeholder:text-gray-300 focus:border-orange-300 focus:bg-white focus:outline-none transition-colors"
             aria-label="Your display name"
           />
           <div className="flex items-center gap-2">
@@ -231,7 +238,7 @@ export default function JokeCommentsModal({
               onChange={(e) => setText(e.target.value)}
               maxLength={MAX_LENGTH}
               placeholder="Add a reply…"
-              className="flex-1 rounded-full border-2 border-gray-100 bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-800 placeholder:text-gray-300 focus:border-orange-300 focus:bg-white focus:outline-none transition-colors"
+              className="flex-1 rounded-full border-2 border-gray-100 dark:border-secondary-800 bg-gray-50 dark:bg-secondary-800 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-secondary-100 placeholder:text-gray-300 focus:border-orange-300 focus:bg-white focus:outline-none transition-colors"
               aria-label="Write a reply"
             />
             <button

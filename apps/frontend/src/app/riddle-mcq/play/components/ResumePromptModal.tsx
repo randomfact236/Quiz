@@ -11,18 +11,20 @@ interface ResumePromptModalProps {
 /** Full-screen resume dialog shown when an unfinished session matches the URL. */
 export function ResumePromptModal({ onResume, onStartNew }: ResumePromptModalProps): JSX.Element {
   return (
-    <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4">
+    <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full"
+        className="bg-white dark:bg-secondary-800 rounded-2xl shadow-xl p-8 max-w-md w-full"
       >
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <RotateCcw className="h-8 w-8 text-indigo-600" />
+          <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <RotateCcw className="h-8 w-8 text-indigo-600 dark:text-indigo-300" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Resume Session?</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-secondary-100 mb-2">
+            Resume Session?
+          </h2>
+          <p className="text-gray-600 dark:text-secondary-300">
             You have an unfinished riddle session. Would you like to continue where you left off?
           </p>
         </div>
@@ -35,7 +37,7 @@ export function ResumePromptModal({ onResume, onStartNew }: ResumePromptModalPro
           </button>
           <button
             onClick={onStartNew}
-            className="w-full py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+            className="w-full py-3 bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             Start New Session
           </button>

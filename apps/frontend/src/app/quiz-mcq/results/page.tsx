@@ -87,7 +87,7 @@ function ResultsContent(): JSX.Element {
   // Loading state
   if (!result) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
           <p className="text-xl font-semibold text-white">Loading results...</p>
@@ -107,7 +107,7 @@ function ResultsContent(): JSX.Element {
   } = result;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-3 py-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-3 py-4">
       {/* Results Celebration */}
       <ResultsCelebration
         trigger={showCelebration}
@@ -120,7 +120,7 @@ function ResultsContent(): JSX.Element {
         <div className="mb-4 flex items-center justify-between">
           <Link
             href="/quiz-mcq"
-            className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Quiz
@@ -129,7 +129,7 @@ function ResultsContent(): JSX.Element {
           <div className="flex gap-2">
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
             >
               <Share2 className="h-4 w-4" />
               {copied ? 'Copied!' : 'Share'}
@@ -156,7 +156,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href={`/quiz-mcq?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
             >
               <List className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Difficulty</span>
@@ -164,7 +164,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href={`/quiz-mcq?subject=${session.subject}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
             >
               <BookOpen className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Chapters</span>
@@ -175,7 +175,7 @@ function ResultsContent(): JSX.Element {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href="/quiz-mcq"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
             >
               <Trophy className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">All Subjects</span>
@@ -183,7 +183,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href="/"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white p-3 text-gray-800 shadow-lg transition-colors hover:bg-gray-50"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
             >
               <Home className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Home</span>
@@ -204,8 +204,8 @@ function ResultsContent(): JSX.Element {
 
         {/* Server-side personal best for this subject (may not exist yet) */}
         {personalBest && personalBest.bestScore >= session.score && (
-          <div className="mb-6 rounded-2xl bg-white/90 p-4 text-center shadow-lg">
-            <p className="text-sm font-medium text-gray-700">
+          <div className="mb-6 rounded-2xl bg-white/90 dark:bg-secondary-800/90 p-4 text-center shadow-lg">
+            <p className="text-sm font-medium text-gray-700 dark:text-secondary-200">
               <Trophy className="mr-1 inline h-4 w-4 text-yellow-500" />
               Your best on {personalBest.subjectName || 'this subject'}: {personalBest.bestScore}/
               {personalBest.maxScore} across {personalBest.sessions} saved session
@@ -219,9 +219,9 @@ function ResultsContent(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 rounded-2xl bg-white p-6 shadow-lg"
+          className="mb-6 rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-lg"
         >
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-800">
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-secondary-100">
             <Trophy className="h-5 w-5 text-yellow-500" />
             Performance by Difficulty
           </h3>
@@ -234,31 +234,19 @@ function ResultsContent(): JSX.Element {
               return (
                 <div
                   key={level}
-                  className={`rounded-xl p-3 text-center ${
-                    data.total === 0
-                      ? 'bg-gray-100'
-                      : pct >= 70
-                        ? 'bg-green-50'
-                        : pct >= 50
-                          ? 'bg-yellow-50'
-                          : 'bg-red-50'
-                  }`}
+                  className={`rounded-xl p-3 text-center ${data.total === 0 ? 'bg-gray-100 dark:bg-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10' : 'bg-red-50 dark:bg-red-500/10'}`}
                 >
-                  <p className="mb-1 text-xs font-medium uppercase text-gray-500">{level}</p>
+                  <p className="mb-1 text-xs font-medium uppercase text-gray-500 dark:text-secondary-400">
+                    {level}
+                  </p>
                   <p
-                    className={`text-xl font-bold ${
-                      data.total === 0
-                        ? 'text-gray-400'
-                        : pct >= 70
-                          ? 'text-green-600'
-                          : pct >= 50
-                            ? 'text-yellow-600'
-                            : 'text-red-600'
-                    }`}
+                    className={`text-xl font-bold ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600' : pct >= 50 ? 'text-yellow-600' : 'text-red-600'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>
-                  {data.total > 0 && <p className="text-xs text-gray-500">{pct}%</p>}
+                  {data.total > 0 && (
+                    <p className="text-xs text-gray-500 dark:text-secondary-400">{pct}%</p>
+                  )}
                 </div>
               );
             })}
@@ -270,23 +258,25 @@ function ResultsContent(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-6 rounded-2xl bg-white p-6 shadow-lg"
+          className="mb-6 rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-lg"
         >
           <div
             className={`grid gap-6 text-center ${unansweredCount > 0 ? 'grid-cols-3' : 'grid-cols-2'}`}
           >
             <div>
-              <p className="text-3xl font-bold text-green-600">{correctCount}</p>
-              <p className="text-sm text-gray-500">Correct Answers</p>
+              <p className="text-3xl font-bold text-green-600 dark:text-green-300">
+                {correctCount}
+              </p>
+              <p className="text-sm text-gray-500 dark:text-secondary-400">Correct Answers</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-red-600">{incorrectCount}</p>
-              <p className="text-sm text-gray-500">Incorrect Answers</p>
+              <p className="text-3xl font-bold text-red-600 dark:text-red-300">{incorrectCount}</p>
+              <p className="text-sm text-gray-500 dark:text-secondary-400">Incorrect Answers</p>
             </div>
             {unansweredCount > 0 && (
               <div>
                 <p className="text-3xl font-bold text-amber-500">{unansweredCount}</p>
-                <p className="text-sm text-gray-500">Not Answered</p>
+                <p className="text-sm text-gray-500 dark:text-secondary-400">Not Answered</p>
               </div>
             )}
           </div>
@@ -301,7 +291,7 @@ function ResultsContent(): JSX.Element {
         >
           <button
             onClick={() => setShowReview(!showReview)}
-            className="w-full rounded-xl bg-white p-4 text-center font-semibold text-gray-800 shadow-lg transition-colors hover:bg-gray-50 flex items-center justify-center gap-2"
+            className="w-full rounded-xl bg-white dark:bg-secondary-800 p-4 text-center font-semibold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800 flex items-center justify-center gap-2"
           >
             {showReview ? 'Hide' : 'Show'} Question Review ({session.questions.length} questions)
             {showReview ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
@@ -334,7 +324,7 @@ export default function QuizResultsPage(): JSX.Element {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70">
           <div className="text-center">
             <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
             <p className="text-xl font-semibold text-white">Loading...</p>

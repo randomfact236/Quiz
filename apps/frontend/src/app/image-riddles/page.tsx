@@ -117,22 +117,22 @@ export default function ImageRiddlesPage(): JSX.Element {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] dark:from-secondary-900 dark:to-secondary-950 px-4 py-8">
       <div className="mx-auto max-w-7xl">
         {/* Back Button */}
         <Link
           href="/"
-          className="mb-6 inline-block rounded-lg bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md"
+          className="mb-6 inline-block rounded-lg bg-white dark:bg-secondary-800 px-4 py-2 text-sm font-bold text-gray-700 dark:text-secondary-200 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md"
         >
           ← Back
         </Link>
 
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="mb-1 text-4xl font-black tracking-tight text-slate-800">
+          <h1 className="mb-1 text-4xl font-black tracking-tight text-slate-800 dark:text-secondary-100">
             🖼️ Image Riddles
           </h1>
-          <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">
+          <p className="text-sm text-slate-500 dark:text-secondary-400 font-bold uppercase tracking-widest">
             Challenge your perception
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function ImageRiddlesPage(): JSX.Element {
             ) : (
               <>
                 {catalog.loadError && (
-                  <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-700">
+                  <div className="mb-4 rounded-xl border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-700 dark:text-amber-300">
                     {catalog.loadError}
                   </div>
                 )}
@@ -187,7 +187,7 @@ export default function ImageRiddlesPage(): JSX.Element {
                 </div>
 
                 {catalog.totalFiltered === 0 && (
-                  <div className="py-24 text-center rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200">
+                  <div className="py-24 text-center rounded-[3rem] bg-slate-50 dark:bg-secondary-800 border-2 border-dashed border-slate-200 dark:border-secondary-700">
                     <Sparkles
                       className="mx-auto mb-6 h-14 w-14 text-slate-300"
                       aria-hidden="true"

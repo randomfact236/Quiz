@@ -144,17 +144,15 @@ export function FilterPanel({
       />
 
       <div
-        className={`space-y-3 rounded-lg border p-4 ${filters.subject ? 'bg-purple-50 border-purple-300' : 'bg-gray-50 border-gray-200'}`}
+        className={`space-y-3 rounded-lg border p-4 ${filters.subject ? 'bg-purple-50 dark:bg-purple-500/10 border-purple-300 dark:border-purple-500/40' : 'bg-gray-50 dark:bg-secondary-800 border-gray-200 dark:border-secondary-700'}`}
       >
         <CollapsibleRows className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">Subject:</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">
+            Subject:
+          </span>
           <button
             onClick={() => onFilterChange('subject', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              !filters.subject || filters.subject === 'all'
-                ? 'bg-purple-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-            }`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.subject || filters.subject === 'all' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
           >
             All ({statusCounts.total})
           </button>
@@ -183,14 +181,12 @@ export function FilterPanel({
         </CollapsibleRows>
 
         <CollapsibleRows className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">Chapter:</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">
+            Chapter:
+          </span>
           <button
             onClick={() => onFilterChange('chapter', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              !filters.chapter || filters.chapter === 'all'
-                ? 'bg-indigo-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-            }`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
           >
             All ({totalChapterCount})
           </button>
@@ -219,14 +215,10 @@ export function FilterPanel({
         </CollapsibleRows>
 
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">Level:</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">Level:</span>
           <button
             onClick={() => onFilterChange('level', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              !filters.level || filters.level === 'all'
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.level || filters.level === 'all' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
           >
             All ({statusCounts.total})
           </button>
@@ -237,11 +229,7 @@ export function FilterPanel({
               <button
                 key={value}
                 onClick={() => onFilterChange('level', value)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                  filters.level === value
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.level === value ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
               >
                 {label} ({levelCount})
               </button>
@@ -250,72 +238,77 @@ export function FilterPanel({
         </div>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="quiz-search" className="text-sm font-medium text-gray-700">
+          <label
+            htmlFor="quiz-search"
+            className="text-sm font-medium text-gray-700 dark:text-secondary-200"
+          >
             Search:
           </label>
           <input
             id="quiz-search"
             type="text"
             placeholder="Type to search questions..."
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            className="flex-1 rounded-lg border border-gray-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 text-gray-900 dark:text-secondary-100 placeholder:text-gray-500 dark:placeholder:text-secondary-500 px-4 py-2 text-sm"
             value={searchInput}
             onChange={handleSearchChange}
           />
         </div>
 
         {hasActiveFilters && (
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
-            <span className="text-xs font-medium text-gray-500 uppercase">Active Filters:</span>
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100 dark:border-secondary-800">
+            <span className="text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase">
+              Active Filters:
+            </span>
             {filters.subject && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 text-sm rounded-full">
                 {getSubjectName(filters.subject)}
                 <button
                   onClick={() => onFilterChange('subject', undefined)}
-                  className="hover:text-purple-900"
+                  className="hover:text-purple-900 dark:hover:text-purple-200"
                 >
                   ×
                 </button>
               </span>
             )}
             {filters.chapter && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 text-sm rounded-full">
                 {getChapterName(filters.chapter)}
                 <button
                   onClick={() => onFilterChange('chapter', undefined)}
-                  className="hover:text-blue-900"
+                  className="hover:text-blue-900 dark:hover:text-blue-200"
                 >
                   ×
                 </button>
               </span>
             )}
             {filters.level && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300 text-sm rounded-full">
                 {filters.level}
                 <button
                   onClick={() => onFilterChange('level', undefined)}
-                  className="hover:text-green-900"
+                  className="hover:text-green-900 dark:hover:text-green-200"
                 >
                   ×
                 </button>
               </span>
             )}
             {filters.status && filters.status !== 'published' && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-700 text-sm rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 text-sm rounded-full">
                 {filters.status}
                 <button
                   onClick={() => onFilterChange('status', 'published')}
-                  className="hover:text-yellow-900"
+                  className="hover:text-yellow-900 dark:hover:text-yellow-200"
                 >
                   ×
                 </button>
               </span>
             )}
             {filters.search && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 text-sm rounded-full">
                 &ldquo;{filters.search}&rdquo;
                 <button
                   onClick={() => onFilterChange('search', undefined)}
-                  className="hover:text-gray-900"
+                  className="hover:text-gray-900 dark:text-secondary-50"
                 >
                   ×
                 </button>
@@ -323,7 +316,7 @@ export function FilterPanel({
             )}
             <button
               onClick={onReset}
-              className="px-3 py-1 bg-red-100 text-red-600 text-sm rounded-full hover:bg-red-200"
+              className="px-3 py-1 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-300 text-sm rounded-full hover:bg-red-200 dark:hover:bg-red-500/30"
             >
               Clear All ×
             </button>

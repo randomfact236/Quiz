@@ -319,7 +319,7 @@ function QuizContent(): JSX.Element {
   // Loading state
   if (quiz.status === 'loading' || isLoadingSettings) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
           <p className="text-xl font-semibold text-white">Loading quiz...</p>
@@ -331,20 +331,22 @@ function QuizContent(): JSX.Element {
   // No questions found
   if (quiz.totalQuestions === 0) {
     return (
-      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+      <div className="bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30 px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <Link
             href={`/quiz-mcq?subject=${subject}`}
-            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Chapters
           </Link>
 
-          <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
+          <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-8 text-center shadow-lg">
             <AlertCircle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
-            <h1 className="mb-2 text-2xl font-bold text-gray-800">No Questions Available</h1>
-            <p className="mb-4 text-gray-600">
+            <h1 className="mb-2 text-2xl font-bold text-gray-800 dark:text-secondary-100">
+              No Questions Available
+            </h1>
+            <p className="mb-4 text-gray-600 dark:text-secondary-300">
               There are no published questions for this chapter and difficulty level.
             </p>
             <Link
@@ -395,7 +397,7 @@ function QuizContent(): JSX.Element {
   }
 
   return (
-    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
       {/* Floating Background Emojis */}
       <FloatingBackground count={20} />
 
@@ -468,7 +470,7 @@ function QuizContent(): JSX.Element {
                 quiz.goToPrevious();
               }}
               disabled={quiz.currentQuestionIndex === 0}
-              className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -495,7 +497,7 @@ function QuizContent(): JSX.Element {
                       quiz.handleSkip();
                     }
                   }}
-                  className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/20 border border-white/20"
+                  className="inline-flex items-center gap-2 rounded-lg bg-white/10 dark:bg-secondary-800/10 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white dark:hover:bg-secondary-700/20 border border-white/20"
                 >
                   Skip
                 </button>
@@ -512,11 +514,7 @@ function QuizContent(): JSX.Element {
                   }
                 }}
                 disabled={!quiz.hasAnsweredCurrent}
-                className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${
-                  quiz.hasAnsweredCurrent
-                    ? 'animate-pulse bg-white text-indigo-600 shadow-lg scale-105'
-                    : 'bg-white/10 text-white/30 cursor-not-allowed'
-                }`}
+                className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${quiz.hasAnsweredCurrent ? 'animate-pulse bg-white dark:bg-secondary-800 text-indigo-600 shadow-lg scale-105' : 'bg-white/10 dark:bg-secondary-800/10 text-white/30 cursor-not-allowed'}`}
               >
                 {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}
                 <ArrowLeft className="h-4 w-4 rotate-180" />
@@ -582,7 +580,7 @@ export default function QuizPage(): JSX.Element {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+        <div className="flex items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:via-indigo-950/60 dark:to-rose-950/30">
           <div className="text-center">
             <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
             <p className="text-xl font-semibold text-white">Loading...</p>

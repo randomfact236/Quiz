@@ -23,7 +23,7 @@ export function ModalFooter({
         type="button"
         onClick={onCancel}
         disabled={isSaving}
-        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-secondary-200 bg-gray-100 dark:bg-secondary-800 rounded-lg hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors disabled:opacity-50"
       >
         {cancelLabel}
       </button>
@@ -33,9 +33,7 @@ export function ModalFooter({
           disabled={isSaving}
           className={cn(
             'px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50',
-            variant === 'danger'
-              ? 'bg-red-600 hover:bg-red-700'
-              : 'bg-blue-500 hover:bg-blue-600'
+            variant === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-600'
           )}
         >
           {isSaving ? 'Saving...' : saveLabel}

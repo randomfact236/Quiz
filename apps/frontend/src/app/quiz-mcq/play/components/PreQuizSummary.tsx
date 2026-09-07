@@ -39,51 +39,61 @@ export function PreQuizSummary({
   onStart,
 }: PreQuizSummaryProps): JSX.Element {
   return (
-    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076]">
+    <div className="relative flex flex-col flex-1 bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70">
       <div className="relative z-10 flex flex-col flex-1 px-3 py-4">
         <div className="mx-auto w-full max-w-lg">
           {/* Back Button */}
           <Link
             href={backHref}
-            className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white/30"
+            className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-3 py-1.5 text-sm text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Mode Selection
           </Link>
 
           {/* Pre-quiz Summary Card */}
-          <div className="rounded-2xl bg-white/95 p-5 shadow-2xl">
+          <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-2xl">
             <div className="text-center mb-4">
               <div className="text-5xl mb-2">{subjectEmoji}</div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-1">{subjectName} Quiz</h1>
-              <p className="text-gray-500 text-sm">Ready to test your knowledge?</p>
+              <h1 className="text-2xl font-bold text-gray-800 dark:text-secondary-100 mb-1">
+                {subjectName} Quiz
+              </h1>
+              <p className="text-gray-500 dark:text-secondary-400 text-sm">
+                Ready to test your knowledge?
+              </p>
             </div>
 
             {/* Quiz Info Grid */}
             <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="bg-indigo-50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-indigo-600">{finalQuestionCount}</div>
-                <div className="text-xs text-gray-600">Questions</div>
+              <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-300">
+                  {finalQuestionCount}
+                </div>
+                <div className="text-xs text-gray-600 dark:text-secondary-300">Questions</div>
               </div>
-              <div className="bg-emerald-50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-emerald-600">{levelDisplay}</div>
-                <div className="text-xs text-gray-600">Difficulty</div>
+              <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-300">
+                  {levelDisplay}
+                </div>
+                <div className="text-xs text-gray-600 dark:text-secondary-300">Difficulty</div>
               </div>
-              <div className="bg-blue-50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="bg-blue-50 dark:bg-blue-500/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                   {mode === 'timer' ? '⏱️' : '🎯'}
                 </div>
-                <div className="text-xs text-gray-600">{modeDisplay}</div>
+                <div className="text-xs text-gray-600 dark:text-secondary-300">{modeDisplay}</div>
               </div>
-              <div className="bg-orange-50 rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-orange-600">{chapter}</div>
-                <div className="text-xs text-gray-600">Chapter</div>
+              <div className="bg-orange-50 dark:bg-orange-500/10 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-orange-600 dark:text-orange-300">
+                  {chapter}
+                </div>
+                <div className="text-xs text-gray-600 dark:text-secondary-300">Chapter</div>
               </div>
             </div>
 
             {/* Add More Questions Section */}
             {availableExtra > 0 && (
-              <div className="bg-purple-50 rounded-xl p-3 mb-4">
+              <div className="bg-purple-50 dark:bg-purple-500/10 rounded-xl p-3 mb-4">
                 <ExtraQuestionsPicker
                   availableExtra={availableExtra}
                   value={extraQuestions}
@@ -93,8 +103,8 @@ export function PreQuizSummary({
             )}
 
             {/* Mode Description */}
-            <div className="bg-gray-50 rounded-lg p-3 mb-4">
-              <p className="text-gray-600 text-sm text-center">
+            <div className="bg-gray-50 dark:bg-secondary-800 rounded-lg p-3 mb-4">
+              <p className="text-gray-600 dark:text-secondary-300 text-sm text-center">
                 {mode === 'timer'
                   ? '⏱️ You have limited time to answer each question. Think fast!'
                   : '🎯 Take your time and answer each question carefully.'}
@@ -130,8 +140,12 @@ function ExtraQuestionsPicker({
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <span className="font-semibold text-gray-700 text-sm">Add More Questions:</span>
-        <span className="text-xs text-purple-600">{availableExtra} more available</span>
+        <span className="font-semibold text-gray-700 dark:text-secondary-200 text-sm">
+          Add More Questions:
+        </span>
+        <span className="text-xs text-purple-600 dark:text-purple-300">
+          {availableExtra} more available
+        </span>
       </div>
 
       <input
@@ -140,14 +154,14 @@ function ExtraQuestionsPicker({
         max={max}
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value))}
-        className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mb-3"
+        className="w-full h-2 bg-purple-200 dark:bg-purple-500/30 rounded-lg appearance-none cursor-pointer mb-3"
       />
 
       <div className="flex items-center justify-center gap-3">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
           disabled={value <= 0}
-          className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="h-8 w-8 rounded-full bg-purple-200 dark:bg-purple-500/30 text-purple-700 dark:text-purple-300 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           <Minus className="h-3 w-3" />
         </button>
@@ -155,7 +169,7 @@ function ExtraQuestionsPicker({
         <select
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value))}
-          className="h-8 px-3 rounded-lg border border-purple-300 bg-white text-gray-700 font-semibold text-sm cursor-pointer"
+          className="h-8 px-3 rounded-lg border border-purple-300 bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 font-semibold text-sm cursor-pointer"
         >
           {Array.from({ length: max + 1 }, (_, i) => (
             <option key={i} value={i}>
@@ -167,14 +181,14 @@ function ExtraQuestionsPicker({
         <button
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
-          className="h-8 w-8 rounded-full bg-purple-200 text-purple-700 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="h-8 w-8 rounded-full bg-purple-200 dark:bg-purple-500/30 text-purple-700 dark:text-purple-300 font-bold hover:bg-purple-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           <Plus className="h-3 w-3" />
         </button>
       </div>
 
       {value > 0 && (
-        <p className="text-center text-xs text-purple-600 mt-1">
+        <p className="text-center text-xs text-purple-600 dark:text-purple-300 mt-1">
           +{value} extra question{value > 1 ? 's' : ''} will be added
         </p>
       )}

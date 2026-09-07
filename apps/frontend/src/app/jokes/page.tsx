@@ -76,19 +76,19 @@ function VoteButtons({
     'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all disabled:cursor-not-allowed';
   const likeActive =
     variant === 'light'
-      ? 'bg-orange-100 text-orange-600 shadow-sm ring-1 ring-orange-400 scale-105'
+      ? 'bg-orange-100 text-orange-600 shadow-sm ring-1 ring-orange-400 scale-105 dark:bg-orange-500/20 dark:text-orange-300 dark:ring-orange-500/40'
       : 'bg-white text-orange-500 shadow-md scale-105';
   const likeInactive =
     variant === 'light'
-      ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+      ? 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-secondary-700/60 dark:text-secondary-300 dark:hover:bg-secondary-700'
       : 'bg-black/10 text-white hover:bg-black/20';
   const dislikeActive =
     variant === 'light'
-      ? 'bg-red-100 text-red-600 shadow-sm ring-1 ring-red-400 scale-105'
+      ? 'bg-red-100 text-red-600 shadow-sm ring-1 ring-red-400 scale-105 dark:bg-red-500/20 dark:text-red-300 dark:ring-red-500/40'
       : 'bg-white text-red-500 shadow-md scale-105';
   const dislikeInactive =
     variant === 'light'
-      ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+      ? 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-secondary-700/60 dark:text-secondary-300 dark:hover:bg-secondary-700'
       : 'bg-black/10 text-white hover:bg-black/20';
 
   // Only the *other* button locks after voting — clicking your own vote toggles it off
@@ -136,11 +136,7 @@ function CommentsChip({
     <button
       onClick={(e) => onOpen(e, jokeId)}
       aria-label={`View comments. ${count} comments`}
-      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-        variant === 'light'
-          ? 'bg-gray-100 text-gray-500 hover:bg-orange-100 hover:text-orange-600'
-          : 'bg-black/10 text-white hover:bg-black/20'
-      }`}
+      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${variant === 'light' ? 'bg-gray-100 dark:bg-secondary-800 text-gray-500 dark:text-secondary-400 hover:bg-orange-200 dark:hover:bg-orange-500/20 hover:text-orange-600' : 'bg-black/10 text-white hover:bg-black/20'}`}
     >
       <span className="text-sm">💬</span> {count}
     </button>
@@ -154,9 +150,7 @@ function VoteToast({ message, visible }: { message: string; visible: boolean }) 
     <div
       aria-live="polite"
       role="status"
-      className={`fixed bottom-24 left-1/2 z-50 -translate-x-1/2 flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-300 ${
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-      }`}
+      className={`fixed bottom-24 left-1/2 z-50 -translate-x-1/2 flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-300 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
     >
       {message}
     </div>
@@ -171,7 +165,7 @@ function SkeletonCards({ count }: { count: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="min-h-[120px] animate-pulse rounded-2xl bg-white/70 shadow-md"
+          className="min-h-[120px] animate-pulse rounded-2xl bg-white/70 dark:bg-secondary-800/70 shadow-md"
           aria-hidden="true"
         />
       ))}
@@ -543,7 +537,7 @@ export default function JokesPage(): JSX.Element {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50 px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50 dark:from-amber-950 dark:to-orange-950/70 px-4 py-8">
       <VoteToast message={toast.message} visible={toast.visible} />
 
       {/* 💬 comments modal (comments-system plan §4) */}
@@ -586,24 +580,26 @@ export default function JokesPage(): JSX.Element {
         {/* Back Button */}
         <Link
           href="/"
-          className="mb-6 inline-block rounded-lg bg-white/60 px-4 py-2 text-gray-700 transition-all hover:bg-white/80 hover:shadow-md"
+          className="mb-6 inline-block rounded-lg bg-white/60 dark:bg-secondary-800/60 px-4 py-2 text-gray-700 dark:text-secondary-200 transition-all hover:bg-white dark:hover:bg-secondary-700/80 hover:shadow-md"
         >
           ← Back to Home
         </Link>
 
-        <h1 className="mb-4 text-center text-4xl font-bold text-gray-800">😄 Dad Jokes</h1>
-        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-gray-600">
+        <h1 className="mb-4 text-center text-4xl font-bold text-gray-800 dark:text-secondary-100">
+          😄 Dad Jokes
+        </h1>
+        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-gray-600 dark:text-secondary-300">
           Get ready for some serious eye-rolling with our collection of dad jokes!
         </p>
 
         {/* Synchronized Header Row (Sticky) */}
         <div
-          className="sticky z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 py-4 bg-yellow-50/80 backdrop-blur-md -mx-4 px-4 transition-shadow"
+          className="sticky z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 dark:border-secondary-700 py-4 bg-yellow-200/80 dark:bg-yellow-500/10 backdrop-blur-md -mx-4 px-4 transition-shadow"
           style={{ top: headerHeight }}
         >
           {/* Sidebar Header Portion */}
           <div className="lg:col-span-1">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
               <span className="text-xl" aria-hidden="true">
                 ✨
               </span>{' '}
@@ -615,18 +611,18 @@ export default function JokesPage(): JSX.Element {
           <div className="lg:col-span-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3 w-full sm:w-auto flex-wrap">
-                <h2 className="text-2xl font-black text-gray-800">
+                <h2 className="text-2xl font-black text-gray-800 dark:text-secondary-100">
                   {activeCategory
                     ? `${jokeCategories.find((c) => c.id === activeCategory)?.name ?? 'Category'} (${displayedJokes.length})`
                     : `All Jokes (${jokes.length})`}
                 </h2>
-                <p className="hidden lg:block text-sm text-orange-600 font-semibold italic mt-0.5">
+                <p className="hidden lg:block text-sm text-orange-600 dark:text-orange-300 font-semibold italic mt-0.5">
                   &ldquo;Laughter is the shortest distance between two people.&rdquo;
                 </p>
                 {activeCategory && (
                   <button
                     onClick={() => setActiveCategory(null)}
-                    className="rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-700 hover:bg-orange-200 transition-colors shadow-sm"
+                    className="rounded-full bg-orange-100 dark:bg-orange-500/20 px-3 py-1 text-xs font-bold text-orange-700 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-500/30 transition-colors shadow-sm"
                   >
                     Clear Filter ✕
                   </button>
@@ -641,13 +637,13 @@ export default function JokesPage(): JSX.Element {
                     placeholder="Search jokes..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-full border border-gray-200 bg-white/80 py-1.5 pl-4 pr-8 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full rounded-full border border-gray-200 dark:border-secondary-700 bg-white/80 dark:bg-secondary-800/80 py-1.5 pl-4 pr-8 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-400"
                     aria-label="Search jokes by keyword"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 text-xs font-bold"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200 text-xs font-bold"
                       aria-label="Clear search"
                     >
                       ✕
@@ -656,29 +652,29 @@ export default function JokesPage(): JSX.Element {
                 </div>
 
                 {/* Sort controls: Newest | 🔥 Top (most liked) | Shuffle */}
-                <div className="flex bg-gray-200/50 p-1 rounded-xl shadow-inner">
+                <div className="flex bg-gray-200 dark:bg-secondary-700/50 p-1 rounded-xl shadow-inner">
                   <button
                     onClick={() => setSortOrder('newest')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'newest' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'newest' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     Newest
                   </button>
                   <button
                     onClick={() => setSortOrder('unseen')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'unseen' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'unseen' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                     title="Jokes you haven't revealed yet, newest first"
                   >
                     Unseen
                   </button>
                   <button
                     onClick={() => setSortOrder('top')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'top' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'top' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     🔥 Top
                   </button>
                   <button
                     onClick={handleShuffle}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white text-orange-600 shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
+                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -739,12 +735,12 @@ export default function JokesPage(): JSX.Element {
                     >
                       {/* Front of card (Setup) */}
                       <div
-                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden ring-1 ring-orange-100 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-0' : 'opacity-100'}`}
+                        className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-secondary-800 p-6 text-center backface-hidden ring-1 ring-orange-100 transition-opacity duration-300 ${flippedCards[jokeOfTheDay.id] ? 'opacity-0' : 'opacity-100'}`}
                       >
                         {/* 🔖 Save chip (front face — flips with the card) */}
                         <button
                           onClick={(e) => handleSaveChip(e, jokeOfTheDay.id)}
-                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-orange-100 transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm ring-1 ring-orange-100 transition-all hover:scale-110 hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                           aria-pressed={Boolean(savedJokes[jokeOfTheDay.id])}
                           aria-label={
                             savedJokes[jokeOfTheDay.id]
@@ -759,11 +755,11 @@ export default function JokesPage(): JSX.Element {
                           />
                         </button>
                         {/* Fixed: was <h2> — broken heading hierarchy. Now a <p> with visual styling. */}
-                        <p className="mb-4 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                        <p className="mb-4 text-sm font-bold text-gray-400 dark:text-secondary-400 uppercase tracking-widest">
                           Joke of the Day
                         </p>
                         <blockquote
-                          className="mb-6 text-lg font-semibold text-gray-800 balance-text"
+                          className="mb-6 text-lg font-semibold text-gray-800 dark:text-secondary-100 balance-text"
                           aria-label="Joke setup"
                         >
                           &ldquo;{jokeOfTheDay.setup}&rdquo;
@@ -797,7 +793,7 @@ export default function JokesPage(): JSX.Element {
                         {/* 🔖 Save chip (back face — flips with the card) */}
                         <button
                           onClick={(e) => handleSaveChip(e, jokeOfTheDay.id)}
-                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 dark:bg-secondary-800/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white dark:hover:bg-secondary-700/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                           aria-pressed={Boolean(savedJokes[jokeOfTheDay.id])}
                           aria-label={
                             savedJokes[jokeOfTheDay.id]
@@ -828,14 +824,14 @@ export default function JokesPage(): JSX.Element {
                           />
                           <button
                             onClick={(e) => openShare(e, jokeOfTheDay.id)}
-                            className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors hover:bg-white/30"
+                            className="rounded-full bg-white/20 dark:bg-secondary-800/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
                             aria-label="Share joke"
                           >
                             🔗 Share
                           </button>
                         </div>
                         <div className="mt-6 flex items-center justify-between w-full px-2">
-                          <span className="rounded-full bg-white/25 px-3 py-1 text-[10px] font-bold backdrop-blur-md border border-white/20 uppercase tracking-wider">
+                          <span className="rounded-full bg-white/25 dark:bg-secondary-800/25 px-3 py-1 text-[10px] font-bold backdrop-blur-md border border-white/20 uppercase tracking-wider">
                             {jokeOfTheDay.category}
                           </span>
                           <VoteButtons
@@ -855,7 +851,7 @@ export default function JokesPage(): JSX.Element {
 
               {/* Topics / Categories with counts */}
               <div className="space-y-4">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
                   <span className="text-xl" aria-hidden="true">
                     📁
                   </span>{' '}
@@ -863,14 +859,14 @@ export default function JokesPage(): JSX.Element {
                 </h2>
                 {/* Seen-joke progress (Workstream C) — excludes Joke of the Day flips */}
                 {!loading && jokes.length > 0 && (
-                  <div className="rounded-xl bg-white p-4 shadow-sm">
-                    <p className="mb-2 text-sm font-semibold text-gray-700">
+                  <div className="rounded-xl bg-white dark:bg-secondary-800 p-4 shadow-sm">
+                    <p className="mb-2 text-sm font-semibold text-gray-700 dark:text-secondary-200">
                       😄 You&apos;ve seen{' '}
                       <span className="font-bold text-orange-500">{seenCount}</span> of{' '}
                       {jokes.length} jokes
                     </p>
                     <div
-                      className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200"
+                      className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-secondary-700"
                       role="progressbar"
                       aria-valuenow={seenCount}
                       aria-valuemin={0}
@@ -884,7 +880,7 @@ export default function JokesPage(): JSX.Element {
                     </div>
                     <button
                       onClick={handleResetSeen}
-                      className="mt-2 text-xs font-semibold text-gray-400 underline transition-colors hover:text-red-500"
+                      className="mt-2 text-xs font-semibold text-gray-400 dark:text-secondary-400 underline transition-colors hover:text-red-500"
                     >
                       Reset seen history
                     </button>
@@ -900,7 +896,7 @@ export default function JokesPage(): JSX.Element {
                         setActiveCategory(null);
                       }
                     }}
-                    className={`cursor-pointer rounded-xl bg-white p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${activeCategory === null ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
+                    className={`cursor-pointer rounded-xl bg-white dark:bg-secondary-800 p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${activeCategory === null ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
                     role="button"
                     tabIndex={0}
                     aria-pressed={activeCategory === null}
@@ -910,8 +906,10 @@ export default function JokesPage(): JSX.Element {
                       🃏
                     </span>
                     <div>
-                      <h3 className="text-base font-semibold text-gray-800">All Jokes</h3>
-                      <p className="text-xs text-gray-500">
+                      <h3 className="text-base font-semibold text-gray-800 dark:text-secondary-100">
+                        All Jokes
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-secondary-400">
                         The full collection ·{' '}
                         <span className="font-bold text-orange-500">{jokes.length}</span>
                       </p>
@@ -933,7 +931,7 @@ export default function JokesPage(): JSX.Element {
                               setActiveCategory(isActive ? null : category.id);
                             }
                           }}
-                          className={`cursor-pointer rounded-xl bg-white p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${isActive ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
+                          className={`cursor-pointer rounded-xl bg-white dark:bg-secondary-800 p-4 shadow-sm transition-all hover:translate-x-1 hover:shadow-md border-2 flex items-center gap-4 ${isActive ? 'border-orange-500 ring-1 ring-orange-200' : 'border-transparent'}`}
                           role="button"
                           tabIndex={0}
                           aria-pressed={isActive}
@@ -943,10 +941,10 @@ export default function JokesPage(): JSX.Element {
                             {category.emoji}
                           </span>
                           <div>
-                            <h3 className="text-base font-semibold text-gray-800">
+                            <h3 className="text-base font-semibold text-gray-800 dark:text-secondary-100">
                               {category.name}
                             </h3>
-                            <p className="text-xs text-gray-500 line-clamp-1">
+                            <p className="text-xs text-gray-500 dark:text-secondary-400 line-clamp-1">
                               <span className="font-bold text-orange-500">{count}</span> jokes
                             </p>
                           </div>
@@ -962,7 +960,7 @@ export default function JokesPage(): JSX.Element {
           <div className="lg:col-span-3 space-y-8" aria-live="polite" aria-atomic="true">
             {/* Search result summary */}
             {searchQuery.trim() && (
-              <p className="text-sm text-gray-500 -mb-4">
+              <p className="text-sm text-gray-500 dark:text-secondary-400 -mb-4">
                 {displayedJokes.length === 0
                   ? `No jokes found for “${searchQuery}”`
                   : `${displayedJokes.length} joke${displayedJokes.length !== 1 ? 's' : ''} found for “${searchQuery}”`}
@@ -999,11 +997,11 @@ export default function JokesPage(): JSX.Element {
                       >
                         {/* Front of card (Setup) */}
                         <div
-                          className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center backface-hidden border-2 transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-0' : seen ? 'border-gray-200 opacity-80 group-hover:border-gray-300' : 'border-transparent opacity-100 group-hover:border-orange-100'}`}
+                          className={`col-start-1 row-start-1 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-secondary-800 p-6 text-center backface-hidden border-2 transition-opacity duration-300 ${flippedCards[joke.id] ? 'opacity-0' : seen ? 'border-gray-200 dark:border-secondary-700 opacity-80 group-hover:border-gray-300 dark:border-secondary-600' : 'border-transparent opacity-100 group-hover:border-orange-100'}`}
                         >
                           {/* Seen chip — muted gray-green, front face only (Workstream C) */}
                           {seen && (
-                            <span className="absolute top-4 left-4 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 ring-1 ring-emerald-100">
+                            <span className="absolute top-4 left-4 rounded-full bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-300 ring-1 ring-emerald-100 dark:ring-emerald-500/30">
                               ✓ Seen
                             </span>
                           )}
@@ -1032,7 +1030,7 @@ export default function JokesPage(): JSX.Element {
                           {/* 🔖 Save chip (front face — flips with the card) */}
                           <button
                             onClick={(e) => handleSaveChip(e, joke.id)}
-                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-gray-100 transition-all hover:scale-110 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm ring-1 ring-gray-100 transition-all hover:scale-110 hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                             aria-pressed={Boolean(savedJokes[joke.id])}
                             aria-label={savedJokes[joke.id] ? 'Remove from saved' : 'Save joke'}
                             title={savedJokes[joke.id] ? 'Saved — tap to remove' : 'Save'}
@@ -1042,12 +1040,12 @@ export default function JokesPage(): JSX.Element {
                               aria-hidden="true"
                             />
                           </button>
-                          <p className="text-base font-bold text-gray-800 balance-text">
+                          <p className="text-base font-bold text-gray-800 dark:text-secondary-100 balance-text">
                             {joke.setup}
                           </p>
 
                           <div className="mt-auto pt-6 flex flex-col items-center gap-3 w-full">
-                            <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100">
+                            <span className="rounded-full bg-orange-50 dark:bg-orange-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-500 ring-1 ring-orange-100 dark:ring-orange-500/30">
                               {joke.category}
                             </span>
                             <div className="flex items-center justify-center gap-3">
@@ -1078,7 +1076,7 @@ export default function JokesPage(): JSX.Element {
                           {/* 🔖 Save chip (back face — flips with the card) */}
                           <button
                             onClick={(e) => handleSaveChip(e, joke.id)}
-                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 dark:bg-secondary-800/20 shadow-sm ring-1 ring-white/30 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white dark:hover:bg-secondary-700/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                             aria-pressed={Boolean(savedJokes[joke.id])}
                             aria-label={savedJokes[joke.id] ? 'Remove from saved' : 'Save joke'}
                             title={savedJokes[joke.id] ? 'Saved — tap to remove' : 'Save'}
@@ -1097,7 +1095,7 @@ export default function JokesPage(): JSX.Element {
                             </p>
                           )}
                           <div className="mt-4 flex flex-col items-center gap-3 w-full">
-                            <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
+                            <span className="rounded-full bg-white/20 dark:bg-secondary-800/20 px-3 py-1 text-[10px] font-bold backdrop-blur-sm uppercase self-center">
                               {joke.category}
                             </span>
                             <div className="flex items-center justify-center gap-3 w-full">
@@ -1118,7 +1116,7 @@ export default function JokesPage(): JSX.Element {
                             </div>
                             <button
                               onClick={(e) => openShare(e, joke.id)}
-                              className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white/30"
+                              className="rounded-full bg-white/20 dark:bg-secondary-800/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
                               aria-label="Share joke"
                             >
                               🔗 Share
@@ -1133,11 +1131,11 @@ export default function JokesPage(): JSX.Element {
             </div>
 
             {!loading && paginatedJokes.length === 0 && (
-              <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-white/50 py-16 text-center col-span-full">
+              <div className="rounded-2xl border-2 border-dashed border-gray-200 dark:border-secondary-700 bg-white/50 dark:bg-secondary-800/50 py-16 text-center col-span-full">
                 <span className="text-4xl mb-4 block" aria-hidden="true">
                   🏜️
                 </span>
-                <p className="text-xl font-medium text-gray-600">
+                <p className="text-xl font-medium text-gray-600 dark:text-secondary-300">
                   {searchQuery
                     ? `No jokes match "${searchQuery}"`
                     : 'No jokes found for this category.'}
@@ -1167,7 +1165,7 @@ export default function JokesPage(): JSX.Element {
                     scrollToGrid();
                   }}
                   disabled={currentPage === 1}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm transition-all hover:bg-orange-50 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Previous page"
                 >
                   <svg
@@ -1199,7 +1197,7 @@ export default function JokesPage(): JSX.Element {
                     return (
                       <span
                         key={`e${i}`}
-                        className="w-10 text-center text-gray-400 font-bold select-none"
+                        className="w-10 text-center text-gray-400 dark:text-secondary-400 font-bold select-none"
                       >
                         …
                       </span>
@@ -1214,7 +1212,7 @@ export default function JokesPage(): JSX.Element {
                         setCurrentPage(page);
                         scrollToGrid();
                       }}
-                      className={`h-10 w-10 rounded-lg font-bold transition-all ${currentPage === page ? 'bg-orange-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-orange-50 hover:text-orange-600'}`}
+                      className={`h-10 w-10 rounded-lg font-bold transition-all ${currentPage === page ? 'bg-orange-500 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300 hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600'}`}
                       aria-label={`Page ${page}`}
                       aria-current={currentPage === page ? 'page' : undefined}
                     >
@@ -1229,7 +1227,7 @@ export default function JokesPage(): JSX.Element {
                     scrollToGrid();
                   }}
                   disabled={currentPage === totalPages}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm transition-all hover:bg-orange-50 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Next page"
                 >
                   <svg

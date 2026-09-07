@@ -74,14 +74,10 @@ export function FilterControls({
     <>
       {/* Category Row */}
       <CollapsibleRows className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">Category:</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">Category:</span>
         <button
           onClick={() => onCategoryChange(undefined)}
-          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-            !filters.category || filters.category === 'all'
-              ? 'bg-purple-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-          }`}
+          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.category || filters.category === 'all' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
         >
           All ({filterCounts?.total ?? 0})
         </button>
@@ -111,14 +107,10 @@ export function FilterControls({
 
       {/* Subject Row */}
       <CollapsibleRows className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">Subject:</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">Subject:</span>
         <button
           onClick={() => onSubjectChange(undefined)}
-          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-            !filters.subject || filters.subject === 'all'
-              ? 'bg-indigo-500 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-          }`}
+          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.subject || filters.subject === 'all' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
         >
           All ({filterCounts?.total ?? 0})
         </button>
@@ -148,14 +140,10 @@ export function FilterControls({
 
       {/* Level Row */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">Level:</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">Level:</span>
         <button
           onClick={() => onLevelChange(undefined)}
-          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-            !filters.level || filters.level === 'all'
-              ? 'bg-green-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
+          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.level || filters.level === 'all' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
         >
           All ({filterCounts?.total ?? 0})
         </button>
@@ -165,11 +153,7 @@ export function FilterControls({
             <button
               key={value}
               onClick={() => onLevelChange(value)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                filters.level === value
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.level === value ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
             >
               {label} ({levelCount})
             </button>

@@ -113,11 +113,11 @@ type AuditRow = SeoAuditRow & { group: SeoGroup };
 // ==================== Small UI atoms (dark) ====================
 
 const inputCls =
-  'w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
+  'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
 
 function Label({ children }: { children: React.ReactNode }): JSX.Element {
   return (
-    <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+    <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
       {children}
     </span>
   );
@@ -168,10 +168,12 @@ function KpiCard({
     rose: 'bg-rose-500/10 text-rose-400',
   }[tone];
   return (
-    <div className="rounded-xl bg-gray-900 p-4 ring-1 ring-gray-800 transition-colors hover:ring-gray-600">
+    <div className="rounded-xl bg-card p-4 ring-1 ring-border transition-colors hover:ring-gray-400 dark:hover:ring-secondary-600">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
+            {label}
+          </p>
           <p className={`mt-1 text-3xl font-bold ${toneCls}`}>{value}</p>
         </div>
         <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${chipCls}`}>
@@ -197,8 +199,8 @@ function GroupCard(
   const { label, emoji, total, healthy, warning, critical } = props;
   const pct = total > 0 ? Math.round((healthy / total) * 100) : 0;
   return (
-    <div className="rounded-xl bg-gray-900 p-4 ring-1 ring-gray-800 transition-colors hover:ring-gray-600">
-      <h5 className="mb-3 flex items-center gap-2 font-semibold text-gray-200">
+    <div className="rounded-xl bg-card p-4 ring-1 ring-border transition-colors hover:ring-gray-400 dark:hover:ring-secondary-600">
+      <h5 className="mb-3 flex items-center gap-2 font-semibold text-foreground">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-base">
           {emoji}
         </span>
@@ -206,23 +208,23 @@ function GroupCard(
       </h5>
       <dl className="space-y-1.5 text-sm">
         <div className="flex justify-between">
-          <dt className="text-gray-500">Total</dt>
-          <dd className="font-semibold text-gray-200">{total}</dd>
+          <dt className="text-gray-500 dark:text-secondary-400">Total</dt>
+          <dd className="font-semibold text-foreground">{total}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-gray-500">Healthy</dt>
+          <dt className="text-gray-500 dark:text-secondary-400">Healthy</dt>
           <dd className="font-semibold text-emerald-400">{healthy}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-gray-500">Warning (1 issue)</dt>
+          <dt className="text-gray-500 dark:text-secondary-400">Warning (1 issue)</dt>
           <dd className="font-semibold text-amber-400">{warning}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-gray-500">Critical (2+ issues)</dt>
+          <dt className="text-gray-500 dark:text-secondary-400">Critical (2+ issues)</dt>
           <dd className="font-semibold text-rose-400">{critical}</dd>
         </div>
       </dl>
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-800">
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
         <div
           className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500"
           style={{ width: `${pct}%` }}
@@ -283,7 +285,7 @@ function ImageField({
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          className="shrink-0 rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-300 hover:bg-gray-800 disabled:opacity-50"
+          className="shrink-0 rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-500 dark:text-secondary-300 hover:bg-gray-100 dark:hover:bg-secondary-800 disabled:opacity-50"
         >
           {uploading ? 'Uploading…' : 'Choose'}
         </button>
@@ -291,7 +293,7 @@ function ImageField({
           <button
             type="button"
             onClick={() => onChange('')}
-            className="shrink-0 rounded-lg px-2 py-2 text-sm text-gray-500 hover:text-rose-400"
+            className="shrink-0 rounded-lg px-2 py-2 text-sm text-gray-500 dark:text-secondary-400 hover:text-rose-400"
             aria-label="Clear image"
           >
             ✕
@@ -303,10 +305,14 @@ function ImageField({
         <img
           src={value}
           alt="Share preview"
-          className="mt-2 h-20 rounded-lg border border-gray-800 object-cover"
+          className="mt-2 h-20 rounded-lg border border-border object-cover"
         />
       )}
-      {fallbackNote && <span className="mt-1 block text-xs text-gray-500">{fallbackNote}</span>}
+      {fallbackNote && (
+        <span className="mt-1 block text-xs text-gray-500 dark:text-secondary-400">
+          {fallbackNote}
+        </span>
+      )}
       {error && <span className="mt-1 block text-xs text-rose-400">{error}</span>}
     </div>
   );
@@ -516,7 +522,7 @@ export function SeoSection(): JSX.Element {
       );
     }
     return (
-      <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-400">
+      <span className="rounded-full bg-gray-100 dark:bg-secondary-800 px-2 py-0.5 text-xs font-semibold text-gray-400 dark:text-secondary-400">
         Checking…
       </span>
     );
@@ -537,22 +543,22 @@ export function SeoSection(): JSX.Element {
 
   if (loading && !auditRows) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-xl bg-gray-950 ring-1 ring-gray-800">
+      <div className="flex h-48 items-center justify-center rounded-xl bg-gray-950 ring-1 ring-border">
         <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-cyan-500" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-5 rounded-xl bg-gray-950 p-5 ring-1 ring-gray-800">
+    <div className="space-y-5 rounded-xl bg-gray-950 p-5 ring-1 ring-border">
       {/* ============ Hero ============ */}
       <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 p-5">
         {/* decorative blobs */}
-        <div className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
+        <div className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-white/10 dark:bg-secondary-800/10 blur-2xl" />
         <div className="pointer-events-none absolute -bottom-28 right-48 h-52 w-52 rounded-full bg-cyan-300/20 blur-2xl" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="flex items-center gap-2 text-2xl font-bold text-white">
+            <h3 className="flex items-center gap-2 text-2xl font-bold text-foreground">
               <Globe className="h-6 w-6" /> SEO Dashboard
             </h3>
             <p className="mt-0.5 text-sm text-white/85">
@@ -584,14 +590,14 @@ export function SeoSection(): JSX.Element {
                   strokeDasharray={`${stats.score} ${100 - stats.score}`}
                 />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
+              <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-foreground">
                 {stats.score}%
               </span>
             </div>
             <button
               onClick={() => void refreshAll()}
               disabled={auditing || loading}
-              className="flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/30 hover:bg-white/25 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-white/15 dark:bg-secondary-800/15 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/30 hover:bg-white dark:hover:bg-secondary-700/25 disabled:opacity-50"
             >
               <RefreshCw className={`h-4 w-4 ${auditing ? 'animate-spin' : ''}`} /> Refresh
             </button>
@@ -618,7 +624,7 @@ export function SeoSection(): JSX.Element {
 
       {/* ============ Tabs ============ */}
       <div
-        className="flex gap-1 overflow-x-auto rounded-lg bg-gray-900/70 p-1"
+        className="flex gap-1 overflow-x-auto rounded-lg bg-gray-100 dark:bg-secondary-800/70 p-1"
         role="tablist"
         aria-label="SEO tabs"
       >
@@ -626,11 +632,7 @@ export function SeoSection(): JSX.Element {
           <button
             key={t.id}
             onClick={() => changeTab(t.id)}
-            className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-              tab === t.id
-                ? 'bg-gray-800 text-white shadow'
-                : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-            }`}
+            className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? 'bg-gray-800 text-white shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
             role="tab"
             aria-selected={tab === t.id}
           >
@@ -646,15 +648,15 @@ export function SeoSection(): JSX.Element {
       {tab === 'dashboard' && (
         <div className="space-y-5">
           {/* GSC panel — honest placeholder until the P3 integration lands */}
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h4 className="font-semibold text-gray-100">Google Search Console — Top Queries</h4>
-                <p className="mt-0.5 text-xs text-gray-500">
+                <p className="mt-0.5 text-xs text-gray-500 dark:text-secondary-400">
                   What people searched on Google when they found your site.
                 </p>
               </div>
-              <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-400">
+              <span className="rounded-full bg-gray-100 dark:bg-secondary-800 px-2 py-0.5 text-xs font-semibold text-gray-400 dark:text-secondary-400">
                 Not connected
               </span>
             </div>
@@ -667,7 +669,7 @@ export function SeoSection(): JSX.Element {
                 panel shows the top queries, clicks and impressions for your pages.
               </p>
             </div>
-            <p className="mt-3 text-xs text-gray-600">
+            <p className="mt-3 text-xs text-gray-600 dark:text-secondary-300">
               Data source: Google Search Console API · property: not linked ·{' '}
               <a
                 href="https://search.google.com/search-console"
@@ -735,27 +737,19 @@ export function SeoSection(): JSX.Element {
                   <button
                     key={id}
                     onClick={() => setGroupFilter(id)}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                      active
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-gray-900 text-gray-400 ring-1 ring-gray-800 hover:text-gray-200'
-                    }`}
+                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${active ? 'bg-emerald-600 text-white' : 'bg-card text-gray-400 dark:text-secondary-400 ring-1 ring-border hover:text-foreground'}`}
                   >
                     {label} ({groupCount(id)})
                   </button>
                 );
               })}
             </div>
-            <div className="flex gap-1 rounded-lg bg-gray-900 p-1 ring-1 ring-gray-800">
+            <div className="flex gap-1 rounded-lg bg-card p-1 ring-1 ring-border">
               {(['all', 'issues', 'healthy'] as const).map((id) => (
                 <button
                   key={id}
                   onClick={() => setHealthFilter(id)}
-                  className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
-                    healthFilter === id
-                      ? 'bg-gray-800 text-white'
-                      : 'text-gray-400 hover:text-gray-200'
-                  }`}
+                  className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${healthFilter === id ? 'bg-gray-800 text-white' : 'text-gray-400 dark:text-secondary-400 hover:text-foreground'}`}
                 >
                   {id === 'all' ? 'All' : id === 'issues' ? 'Issues Only' : 'Healthy Only'}
                 </button>
@@ -764,15 +758,15 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Audit table */}
-          <div className="overflow-x-auto rounded-xl bg-gray-900 ring-1 ring-gray-800">
+          <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-border">
             {auditing && auditRows === null ? (
               <div className="flex h-32 items-center justify-center">
-                <RefreshCw className="h-6 w-6 animate-spin text-gray-500" />
+                <RefreshCw className="h-6 w-6 animate-spin text-gray-500 dark:text-secondary-400" />
               </div>
             ) : (
               <table className="w-full min-w-[820px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-gray-800 bg-gray-950/60 text-xs uppercase tracking-wide text-gray-500">
+                  <tr className="border-b border-border bg-gray-950/60 text-xs uppercase tracking-wide text-gray-500 dark:text-secondary-400">
                     <th className="px-4 py-3">#</th>
                     <th className="px-4 py-3">Page</th>
                     <th className="px-4 py-3">Type</th>
@@ -788,24 +782,24 @@ export function SeoSection(): JSX.Element {
                     return (
                       <tr
                         key={row.path}
-                        className="border-b border-gray-800/60 transition-colors last:border-0 hover:bg-gray-950/60"
+                        className="border-b border-border/60 transition-colors last:border-0 hover:bg-gray-950/60"
                       >
-                        <td className="px-4 py-3 text-gray-500">{i + 1}</td>
+                        <td className="px-4 py-3 text-gray-500 dark:text-secondary-400">{i + 1}</td>
                         <td className="px-4 py-3">
                           <a
                             href={row.path}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-semibold text-gray-200 hover:text-cyan-400"
+                            className="font-semibold text-foreground hover:text-cyan-400"
                           >
                             {row.label}
                           </a>
-                          <span className="block max-w-[260px] truncate text-xs text-gray-500">
+                          <span className="block max-w-[260px] truncate text-xs text-gray-500 dark:text-secondary-400">
                             {row.path}
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-semibold text-gray-300">
+                          <span className="rounded-full bg-gray-100 dark:bg-secondary-800 px-2 py-0.5 text-xs font-semibold text-gray-500 dark:text-secondary-300">
                             {SEO_GROUPS.find((g) => g.id === row.group)?.emoji}{' '}
                             {SEO_GROUPS.find((g) => g.id === row.group)?.label ?? row.group}
                           </span>
@@ -842,7 +836,10 @@ export function SeoSection(): JSX.Element {
                   })}
                   {filteredRows.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
+                      <td
+                        colSpan={6}
+                        className="px-4 py-8 text-center text-sm text-gray-500 dark:text-secondary-400"
+                      >
                         No pages match the current filters.
                       </td>
                     </tr>
@@ -853,7 +850,7 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* SEO tools */}
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <h4 className="mb-3 font-semibold text-gray-100">SEO Tools &amp; Resources</h4>
             <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {[
@@ -868,14 +865,14 @@ export function SeoSection(): JSX.Element {
                   href={tool.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
+                  className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-500 dark:text-secondary-300 ring-1 ring-border transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
                 >
                   {tool.label} <ExternalLink className="h-3 w-3 opacity-50" />
                 </a>
               ))}
               <button
                 onClick={() => changeTab('social')}
-                className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
+                className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-2.5 text-sm text-gray-500 dark:text-secondary-300 ring-1 ring-border transition-colors hover:text-cyan-300 hover:ring-cyan-500/40"
               >
                 Social Sharing Settings
               </button>
@@ -886,10 +883,10 @@ export function SeoSection(): JSX.Element {
 
       {/* ==================== GENERAL ==================== */}
       {tab === 'general' && (
-        <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+        <div className="rounded-xl bg-card p-5 ring-1 ring-border">
           <h4 className="mb-4 font-semibold text-gray-100">
             Site metadata{' '}
-            <span className="text-xs font-normal text-gray-500">
+            <span className="text-xs font-normal text-gray-500 dark:text-secondary-400">
               (rendered into every page&apos;s meta tags)
             </span>
           </h4>
@@ -987,9 +984,9 @@ export function SeoSection(): JSX.Element {
             image. Pages with their own content use it directly.
           </p>
 
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <h4 className="mb-1 font-semibold text-gray-100">Default Fallbacks</h4>
-            <p className="mb-4 text-xs text-gray-500">
+            <p className="mb-4 text-xs text-gray-500 dark:text-secondary-400">
               Used when a platform-specific override isn&apos;t set and the page doesn&apos;t have
               its own content.
             </p>
@@ -1041,13 +1038,15 @@ export function SeoSection(): JSX.Element {
                 </span>
               </label>
             </div>
-            <p className="mt-3 text-xs text-gray-500">Platform overrides below take priority.</p>
+            <p className="mt-3 text-xs text-gray-500 dark:text-secondary-400">
+              Platform overrides below take priority.
+            </p>
           </div>
 
           {/* Facebook */}
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <h4 className="font-semibold text-gray-100">Facebook</h4>
-            <p className="mb-4 text-xs text-gray-500">
+            <p className="mb-4 text-xs text-gray-500 dark:text-secondary-400">
               Optional overrides. Leave empty to use global defaults.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -1096,9 +1095,9 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Twitter / X */}
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <h4 className="font-semibold text-gray-100">Twitter / X</h4>
-            <p className="mb-4 text-xs text-gray-500">
+            <p className="mb-4 text-xs text-gray-500 dark:text-secondary-400">
               Optional overrides. Leave empty to use global defaults.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -1147,9 +1146,9 @@ export function SeoSection(): JSX.Element {
           </div>
 
           {/* Google */}
-          <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
             <h4 className="font-semibold text-gray-100">Google</h4>
-            <p className="mb-4 text-xs text-gray-500">
+            <p className="mb-4 text-xs text-gray-500 dark:text-secondary-400">
               Optional overrides. Leave empty to use global defaults.
             </p>
             <label className="block">
@@ -1174,7 +1173,7 @@ export function SeoSection(): JSX.Element {
 
       {/* ==================== TECHNICAL ==================== */}
       {tab === 'technical' && (
-        <div className="rounded-xl bg-gray-900 p-5 ring-1 ring-gray-800">
+        <div className="rounded-xl bg-card p-5 ring-1 ring-border">
           <h4 className="mb-4 flex items-center gap-2 font-semibold text-gray-100">
             <Globe className="h-4 w-4 text-cyan-400" /> Technical SEO
           </h4>
@@ -1183,7 +1182,7 @@ export function SeoSection(): JSX.Element {
               href="/robots.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:ring-cyan-500/40"
+              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-500 dark:text-secondary-300 ring-1 ring-border transition-colors hover:ring-cyan-500/40"
             >
               robots.txt {statusBadge(robotsStatus)}
             </a>
@@ -1191,19 +1190,19 @@ export function SeoSection(): JSX.Element {
               href="/sitemap.xml"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-300 ring-1 ring-gray-800 transition-colors hover:ring-cyan-500/40"
+              className="flex items-center justify-between rounded-lg bg-gray-950 px-4 py-3 text-sm text-gray-500 dark:text-secondary-300 ring-1 ring-border transition-colors hover:ring-cyan-500/40"
             >
               sitemap.xml {statusBadge(sitemapStatus)}
             </a>
           </div>
-          <p className="mt-3 text-xs text-gray-500">
+          <p className="mt-3 text-xs text-gray-500 dark:text-secondary-400">
             robots.txt and sitemap.xml are generated by the app (<code>app/robots.ts</code>,{' '}
             <code>app/sitemap.ts</code>) — subjects and image categories are included automatically
             from the live APIs.
           </p>
           <button
             onClick={() => void refreshAll()}
-            className="mt-3 flex items-center gap-1.5 rounded-lg border border-gray-700 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-800"
+            className="mt-3 flex items-center gap-1.5 rounded-lg border border-gray-700 px-3 py-1.5 text-xs text-gray-500 dark:text-secondary-300 hover:bg-gray-100 dark:hover:bg-secondary-800"
           >
             <RefreshCw className="h-3 w-3" /> Re-check status
           </button>

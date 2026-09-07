@@ -86,17 +86,21 @@ function SubjectCard({
   return (
     <Link
       href={isAvailable ? `/quiz-mcq?subject=${slug}` : '#'}
-      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 hover:scale-105 hover:bg-white hover:shadow-xl cursor-pointer' : 'bg-gray-100/50 cursor-not-allowed opacity-75'}`}
+      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100/50 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
       aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
     >
       <span className="text-4xl" aria-hidden="true">
         {display}
       </span>
-      <span className="mt-2 font-bold text-gray-800">{name}</span>
+      <span className="mt-2 font-bold text-gray-800 dark:text-secondary-100">{name}</span>
       {isAvailable ? (
-        <span className="mt-1 text-xs font-medium text-green-600">✓ {questionCount} questions</span>
+        <span className="mt-1 text-xs font-medium text-green-600 dark:text-green-300">
+          ✓ {questionCount} questions
+        </span>
       ) : (
-        <span className="mt-1 text-xs font-medium text-gray-500">Coming Soon</span>
+        <span className="mt-1 text-xs font-medium text-gray-500 dark:text-secondary-400">
+          Coming Soon
+        </span>
       )}
     </Link>
   );
@@ -132,12 +136,12 @@ function CategorySection({
     <div className="mb-6">
       <button
         onClick={onToggle}
-        className={`w-full flex items-center justify-between mb-4 p-4 rounded-xl bg-white/20 backdrop-blur-sm transition-all hover:bg-white/30 ${colorClass}`}
+        className={`w-full flex items-center justify-between mb-4 p-4 rounded-xl bg-white/20 dark:bg-secondary-800/20 backdrop-blur-sm transition-all hover:bg-white dark:hover:bg-secondary-700/30 ${colorClass}`}
       >
         <div className="flex items-center gap-3">
           {icon}
           <h2 className="text-xl font-bold text-white">{title.toUpperCase()}</h2>
-          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-white/20 rounded-full text-white">
+          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-white/20 dark:bg-secondary-800/20 rounded-full text-white">
             {subjects.length} subjects • {totalQuestions} questions
           </span>
         </div>
@@ -443,13 +447,13 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         <div className="flex gap-2 mb-6">
           <Link
             href="/"
-            className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             🏠 Back to Home
           </Link>
           <Link
             href="/quiz-mcq"
-            className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             ← Back to Subjects
           </Link>
@@ -463,12 +467,12 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
             <div
               key={i}
               aria-hidden="true"
-              className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg"
+              className="flex items-center gap-4 rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-lg"
             >
-              <div className="h-12 w-12 shrink-0 rounded-full bg-gray-200 animate-pulse" />
+              <div className="h-12 w-12 shrink-0 rounded-full bg-gray-200 dark:bg-secondary-700 animate-pulse" />
               <div className="flex-1">
-                <div className="h-4 w-2/3 rounded bg-gray-200 animate-pulse" />
-                <div className="mt-2 h-3 w-1/2 rounded bg-gray-100 animate-pulse" />
+                <div className="h-4 w-2/3 rounded bg-gray-200 dark:bg-secondary-700 animate-pulse" />
+                <div className="mt-2 h-3 w-1/2 rounded bg-gray-100 dark:bg-secondary-800 animate-pulse" />
               </div>
             </div>
           ))}
@@ -482,13 +486,13 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       <div className="flex gap-2 mb-6">
         <Link
           href="/"
-          className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
         >
           🏠 Back to Home
         </Link>
         <Link
           href="/quiz-mcq"
-          className="inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
         >
           ← Back to Subjects
         </Link>
@@ -498,9 +502,11 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       </h1>
 
       {chapters.length === 0 ? (
-        <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
-          <p className="text-gray-600">No chapters available for this subject yet.</p>
-          <p className="mt-2 text-sm text-gray-500">
+        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-8 text-center shadow-lg">
+          <p className="text-gray-600 dark:text-secondary-300">
+            No chapters available for this subject yet.
+          </p>
+          <p className="mt-2 text-sm text-gray-500 dark:text-secondary-400">
             Questions need to be added in the admin panel.
           </p>
         </div>
@@ -510,37 +516,31 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
             <Link
               key={chapter.name}
               href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
-              className="flex items-center gap-4 rounded-2xl bg-white/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
+              className="flex items-center gap-4 rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl"
             >
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${
-                  chapter.isCompleted
-                    ? 'bg-green-100 text-green-600'
-                    : chapter.attempts > 0
-                      ? 'bg-yellow-100 text-yellow-600'
-                      : 'bg-indigo-100 text-indigo-600'
-                }`}
+                className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/20 text-green-600' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/20 text-yellow-600' : 'bg-indigo-200 dark:bg-indigo-500/20 text-indigo-600'}`}
               >
                 {chapter.isCompleted ? <CheckCircle className="h-6 w-6" /> : index + 1}
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-gray-800">{chapter.name}</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-bold text-gray-800 dark:text-secondary-100">{chapter.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-secondary-400">
                   {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
                 </p>
                 {chapter.attempts > 0 && (
                   <div className="mt-1 flex items-center gap-2 text-xs">
-                    <span className="flex items-center gap-1 text-green-600">
+                    <span className="flex items-center gap-1 text-green-600 dark:text-green-300">
                       <Trophy className="h-3 w-3" />
                       Best: {chapter.bestScore}
                     </span>
-                    <span className="text-gray-400">
+                    <span className="text-gray-400 dark:text-secondary-400">
                       ({chapter.attempts} attempt{chapter.attempts !== 1 ? 's' : ''})
                     </span>
                   </div>
                 )}
               </div>
-              <span className="text-2xl text-gray-400">→</span>
+              <span className="text-2xl text-gray-400 dark:text-secondary-400">→</span>
             </Link>
           ))}
         </div>
@@ -589,7 +589,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
     <div>
       <Link
         href={`/quiz-mcq?subject=${subject}`}
-        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
       >
         ← Back to Chapters
       </Link>
@@ -599,7 +599,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
       <div className="space-y-6">
         {/* Normal Mode Section */}
-        <div className="rounded-2xl bg-white/95 shadow-lg overflow-hidden">
+        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden">
           <button
             onClick={() => setNormalOpen(!normalOpen)}
             className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
@@ -616,7 +616,9 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
           {normalOpen && (
             <div className="p-6">
-              <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+              <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
+                Select difficulty level:
+              </p>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                 {levels.map((level) => {
                   const count = questionCounts[level] || 0;
@@ -640,7 +642,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
         </div>
 
         {/* Timer Mode Section */}
-        <div className="rounded-2xl bg-white/95 shadow-lg overflow-hidden">
+        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden">
           <button
             onClick={() => setTimerOpen(!timerOpen)}
             className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-orange-500 to-red-500 text-white"
@@ -659,7 +661,9 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
 
           {timerOpen && (
             <div className="p-6">
-              <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+              <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
+                Select difficulty level:
+              </p>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                 {levels.map((level) => {
                   const count = questionCounts[level] || 0;
@@ -701,7 +705,7 @@ function LevelSelection({
     <div>
       <Link
         href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
-        className="mb-6 inline-block rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
       >
         ← Back to Mode
       </Link>
@@ -755,7 +759,7 @@ export default function QuizPage(): JSX.Element {
   const key = searchParams?.toString() || '';
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <Suspense
           fallback={

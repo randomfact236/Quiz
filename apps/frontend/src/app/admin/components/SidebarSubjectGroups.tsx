@@ -80,11 +80,9 @@ function SubjectChip({
       {...attributes}
       {...listeners}
       title={`Drag ${subject.name} to a group`}
-      className={`group flex cursor-grab touch-none items-center gap-1.5 rounded-lg bg-gray-700/80 px-2 py-1.5 text-xs text-gray-100 shadow-sm transition-colors hover:bg-gray-600 active:cursor-grabbing ${
-        isDragging || dragging ? 'opacity-40' : ''
-      } ${saving ? 'cursor-wait opacity-60' : ''}`}
+      className={`group flex cursor-grab touch-none items-center gap-1.5 rounded-lg bg-gray-700/80 px-2 py-1.5 text-xs text-gray-100 shadow-sm transition-colors hover:bg-gray-600 active:cursor-grabbing ${isDragging || dragging ? 'opacity-40' : ''} ${saving ? 'cursor-wait opacity-60' : ''}`}
     >
-      <GripVertical className="h-3.5 w-3.5 shrink-0 text-gray-400 opacity-40 transition-opacity group-hover:opacity-100" />
+      <GripVertical className="h-3.5 w-3.5 shrink-0 text-gray-400 dark:text-secondary-400 opacity-40 transition-opacity group-hover:opacity-100" />
       <span className="truncate">
         {subject.emoji} {subject.name}
       </span>
@@ -107,9 +105,7 @@ function GroupCard({
   return (
     <div
       ref={setNodeRef}
-      className={`rounded-xl p-2.5 transition-all ${
-        isOver ? 'bg-gray-800 ring-2 ring-blue-500' : 'bg-gray-800/50'
-      }`}
+      className={`rounded-xl p-2.5 transition-all ${isOver ? 'bg-gray-800 ring-2 ring-blue-500' : 'bg-gray-800/50'}`}
     >
       <div className="mb-2 flex items-center justify-between gap-2">
         <span className="truncate text-xs font-semibold uppercase tracking-wider text-gray-300">
@@ -121,9 +117,7 @@ function GroupCard({
       </div>
       {items.length === 0 ? (
         <p
-          className={`flex min-h-[32px] items-center justify-center rounded-md border border-dashed text-xs ${
-            isOver ? 'border-blue-400 text-blue-300' : 'border-gray-700 text-gray-500'
-          }`}
+          className={`flex min-h-[32px] items-center justify-center rounded-md border border-dashed text-xs ${isOver ? 'border-blue-400 text-blue-300' : 'border-gray-700 text-gray-500 dark:text-secondary-400'}`}
         >
           {isOver ? 'Drop here' : 'Empty'}
         </p>
@@ -204,16 +198,18 @@ export function SidebarSubjectGroups(): JSX.Element {
   }));
 
   if (isLoading) {
-    return <p className="py-2 text-xs text-gray-500">Loading subjects…</p>;
+    return <p className="py-2 text-xs text-gray-500 dark:text-secondary-400">Loading subjects…</p>;
   }
 
   return (
     <div className="space-y-2 py-1">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-400">{subjects.length} subjects</span>
+        <span className="text-xs text-gray-400 dark:text-secondary-400">
+          {subjects.length} subjects
+        </span>
         <button
           onClick={() => void load()}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200"
+          className="flex items-center gap-1 text-xs text-gray-400 dark:text-secondary-400 hover:text-gray-200"
           title="Reload subjects"
         >
           <RefreshCw className="w-3 h-3" /> reload

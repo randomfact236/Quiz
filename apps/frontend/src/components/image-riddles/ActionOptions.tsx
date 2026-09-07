@@ -304,7 +304,11 @@ const Tooltip: React.FC<{
       style={{ left: x, top: y - 30 }}
     >
       <span>{text}</span>
-      {shortcut && <span className="ml-1 text-gray-400">({formatKeyboardShortcut(shortcut)})</span>}
+      {shortcut && (
+        <span className="ml-1 text-gray-400 dark:text-secondary-400">
+          ({formatKeyboardShortcut(shortcut)})
+        </span>
+      )}
     </div>
   );
 };
@@ -326,17 +330,17 @@ const ConfirmDialog: React.FC<{
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-2xl animate-scale">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900">
+      <div className="w-full max-w-md p-6 bg-white dark:bg-secondary-800 rounded-xl shadow-2xl animate-scale">
+        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-secondary-50">
           {confirmDialog.title || 'Confirm Action'}
         </h3>
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-gray-600 dark:text-secondary-300">
           {confirmDialog.message || 'Are you sure you want to proceed?'}
         </p>
         <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-secondary-200 bg-gray-100 dark:bg-secondary-800 rounded-lg hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             {confirmDialog.cancelText || 'Cancel'}
           </button>
@@ -436,7 +440,7 @@ const ActionButton: React.FC<{
       {ripples.map((ripple) => (
         <span
           key={ripple.id}
-          className="absolute bg-white/30 rounded-full animate-ripple pointer-events-none"
+          className="absolute bg-white/30 dark:bg-secondary-800/30 rounded-full animate-ripple pointer-events-none"
           style={{
             left: ripple.x - 10,
             top: ripple.y - 10,

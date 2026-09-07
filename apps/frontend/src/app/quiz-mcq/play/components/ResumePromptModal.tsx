@@ -20,17 +20,19 @@ export function ResumePromptModal({
 }: ResumePromptModalProps): JSX.Element {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+      <div className="bg-white dark:bg-secondary-800 rounded-2xl p-6 max-w-md w-full shadow-xl">
         <h2 className="text-xl font-bold mb-2">Resume Quiz?</h2>
-        <p className="text-gray-600 mb-1">You have an unfinished session from earlier.</p>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-gray-600 dark:text-secondary-300 mb-1">
+          You have an unfinished session from earlier.
+        </p>
+        <p className="text-sm text-gray-500 dark:text-secondary-400 mb-4">
           Question <strong>{currentQuestionIndex + 1}</strong> of <strong>{sessionSize}</strong> —{' '}
           <strong>{answeredCount}</strong> answered
         </p>
         <div className="flex gap-3">
           <button
             onClick={onStartFresh}
-            className="flex-1 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300"
+            className="flex-1 py-3 rounded-lg bg-gray-200 dark:bg-secondary-700 text-gray-700 dark:text-secondary-200 font-semibold hover:bg-gray-300"
           >
             Start Fresh
           </button>

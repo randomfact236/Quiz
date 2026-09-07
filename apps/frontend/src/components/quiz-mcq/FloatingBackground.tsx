@@ -80,7 +80,7 @@ export function FloatingBackground({
             repeat: Infinity,
             ease: 'linear',
           }}
-          className="absolute text-gray-400"
+          className="absolute text-gray-400 dark:text-secondary-400"
           style={{
             fontSize: `${item.size}rem`,
           }}

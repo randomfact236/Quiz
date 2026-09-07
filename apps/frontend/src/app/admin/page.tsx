@@ -356,7 +356,7 @@ export default function AdminPage(): JSX.Element {
           {/* All Modules Header */}
           <button
             onClick={() => setOtherModulesExpanded(!otherModulesExpanded)}
-            className="w-full flex items-center justify-between px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:bg-gray-800 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-2 mt-4 text-xs font-semibold text-gray-500 dark:text-secondary-400 uppercase tracking-wider hover:bg-gray-800 transition-colors"
           >
             {sidebarOpen ? (
               <>
@@ -392,9 +392,7 @@ export default function AdminPage(): JSX.Element {
                 }}
                 trailing={
                   <ChevronDown
-                    className={`w-3 h-3 transition-transform ${
-                      subjectGroupsExpanded ? 'rotate-180' : ''
-                    }`}
+                    className={`w-3 h-3 transition-transform ${subjectGroupsExpanded ? 'rotate-180' : ''}`}
                   />
                 }
                 onTrailingClick={() => setSubjectGroupsExpanded((v) => !v)}
@@ -430,7 +428,7 @@ export default function AdminPage(): JSX.Element {
 
           {/* System */}
           {sidebarOpen && (
-            <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+            <div className="px-4 py-2 mt-4 text-xs font-semibold text-gray-500 dark:text-secondary-400 uppercase tracking-wider flex items-center gap-2">
               <Settings className="w-3 h-3" /> System
             </div>
           )}
@@ -488,11 +486,7 @@ export default function AdminPage(): JSX.Element {
                   <button
                     key={t.id}
                     onClick={() => updateURL({ section: 'analytics', tab: t.id })}
-                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${
-                      isActive
-                        ? 'bg-gray-800 font-semibold text-cyan-300'
-                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
-                    }`}
+                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${isActive ? 'bg-gray-800 font-semibold text-cyan-300' : 'text-gray-400 dark:text-secondary-400 hover:bg-gray-800 hover:text-gray-200'}`}
                   >
                     {t.label}
                   </button>
@@ -526,11 +520,7 @@ export default function AdminPage(): JSX.Element {
                   <button
                     key={t.id}
                     onClick={() => updateURL({ section: 'seo', tab: t.id })}
-                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${
-                      isActive
-                        ? 'bg-gray-800 font-semibold text-emerald-300'
-                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
-                    }`}
+                    className={`block w-full rounded-md px-2 py-1.5 text-left text-xs transition-colors ${isActive ? 'bg-gray-800 font-semibold text-emerald-300' : 'text-gray-400 dark:text-secondary-400 hover:bg-gray-800 hover:text-gray-200'}`}
                   >
                     <span aria-hidden="true" className="mr-1.5">
                       {t.emoji}
@@ -646,7 +636,7 @@ export default function AdminPage(): JSX.Element {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
                 title="Visit Website"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -658,7 +648,7 @@ export default function AdminPage(): JSX.Element {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4" />
@@ -686,7 +676,7 @@ export default function AdminPage(): JSX.Element {
             <Suspense
               fallback={
                 <div className="flex items-center justify-center p-8">
-                  <div className="text-gray-500">Loading...</div>
+                  <div className="text-gray-500 dark:text-secondary-400">Loading...</div>
                 </div>
               }
             >
@@ -732,9 +722,7 @@ function MenuItem({
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
-        active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'
-      }`}
+      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${active ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800'}`}
     >
       <span className="flex items-center justify-center w-5 h-5">{icon}</span>
       {expanded && <span>{label}</span>}

@@ -57,14 +57,14 @@ function Banner({ title, count, expanded, onToggle, children }: SectionProps): J
         aria-label={expanded ? `Collapse ${title} section` : `Expand ${title} section`}
         className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-[#c3b9f5] via-[#a79bf0] to-[#c3b9f5] px-6 py-3 shadow-[0_6px_16px_rgba(109,91,208,.28)] dark:from-indigo-900 dark:via-indigo-800 dark:to-indigo-900"
       >
-        <span className="h-0.5 flex-1 rounded bg-white/80" />
+        <span className="h-0.5 flex-1 rounded bg-white/80 dark:bg-secondary-800/80" />
         <span className="whitespace-nowrap text-base font-extrabold uppercase tracking-wider text-white drop-shadow-[0_2px_5px_rgba(60,45,140,.45)]">
           {title}
         </span>
-        <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-extrabold text-[#6d5bd0]">
+        <span className="rounded-full bg-white dark:bg-secondary-800 px-2.5 py-0.5 text-xs font-extrabold text-[#6d5bd0]">
           {count}
         </span>
-        <span className="h-0.5 flex-1 rounded bg-white/80" />
+        <span className="h-0.5 flex-1 rounded bg-white/80 dark:bg-secondary-800/80" />
         <span className={`text-white transition-transform ${expanded ? '' : '-rotate-90'}`}>▼</span>
       </button>
       {expanded && <div className="mt-4">{children}</div>}
@@ -246,7 +246,7 @@ export function TopicsSection(): JSX.Element {
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                     {items.length === 0 && (
                       <div className="relative flex min-h-[112px] flex-col items-center justify-end gap-1.5 rounded-2xl bg-gradient-to-br from-slate-300 to-slate-200 px-3 pb-3 pt-4 text-center text-slate-500 shadow-[0_8px_18px_rgba(61,53,100,.12)] dark:from-slate-700 dark:to-slate-800 dark:text-slate-300">
-                        <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-0.5 text-[11px] font-extrabold text-gray-700 shadow">
+                        <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white dark:bg-secondary-800 px-3 py-0.5 text-[11px] font-extrabold text-gray-700 dark:text-secondary-200 shadow">
                           Coming Soon
                         </span>
                         <span className="mb-auto mt-1 text-4xl opacity-50">🕒</span>
@@ -263,26 +263,20 @@ export function TopicsSection(): JSX.Element {
                         <a
                           key={subject.id}
                           href={coming ? undefined : `/quiz-mcq?subject=${subject.slug}`}
-                          className={`relative flex min-h-[112px] flex-col items-center justify-end gap-1.5 rounded-2xl px-3 pb-3 pt-4 text-center text-white shadow-[0_8px_18px_rgba(61,53,100,.2)] transition-transform ${
-                            coming ? 'cursor-default' : 'hover:-translate-y-1 hover:scale-[1.02]'
-                          } ${CARD_GRADIENTS[idx % CARD_GRADIENTS.length]}`}
+                          className={`relative flex min-h-[112px] flex-col items-center justify-end gap-1.5 rounded-2xl px-3 pb-3 pt-4 text-center text-white shadow-[0_8px_18px_rgba(61,53,100,.2)] transition-transform ${coming ? 'cursor-default' : 'hover:-translate-y-1 hover:scale-[1.02]'} ${CARD_GRADIENTS[idx % CARD_GRADIENTS.length]}`}
                         >
                           {coming && (
-                            <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-0.5 text-[11px] font-extrabold text-gray-700 shadow">
+                            <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white dark:bg-secondary-800 px-3 py-0.5 text-[11px] font-extrabold text-gray-700 dark:text-secondary-200 shadow">
                               Coming Soon
                             </span>
                           )}
                           <span
-                            className={`mb-auto mt-1 text-4xl drop-shadow-[0_3px_4px_rgba(0,0,0,.25)] ${
-                              coming ? 'opacity-55' : ''
-                            }`}
+                            className={`mb-auto mt-1 text-4xl drop-shadow-[0_3px_4px_rgba(0,0,0,.25)] ${coming ? 'opacity-55' : ''}`}
                           >
                             {subject.emoji || '📚'}
                           </span>
                           <span
-                            className={`text-sm font-extrabold leading-tight drop-shadow-[0_2px_5px_rgba(0,0,0,.3)] ${
-                              coming ? 'opacity-55' : ''
-                            }`}
+                            className={`text-sm font-extrabold leading-tight drop-shadow-[0_2px_5px_rgba(0,0,0,.3)] ${coming ? 'opacity-55' : ''}`}
                           >
                             {subject.name}
                           </span>

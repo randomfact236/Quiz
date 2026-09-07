@@ -148,15 +148,17 @@ export function OverviewTab({ data }: TabProps) {
 
       <Panel title="Web vitals" hint="Avg and p75 across sessions · CLS scaled ×1000">
         {webVitals.length === 0 ? (
-          <p className="text-sm text-gray-600">No vitals captured in this window.</p>
+          <p className="text-sm text-gray-600 dark:text-secondary-300">
+            No vitals captured in this window.
+          </p>
         ) : (
           <DarkTable headers={['Metric', 'Avg', 'p75', 'Samples']}>
             {webVitals.map((v) => (
-              <tr key={v.metric} className="border-t border-gray-800">
-                <td className="py-2 pr-4 font-medium text-gray-200">{v.metric}</td>
-                <td className="py-2 pr-4 text-gray-400">{n(v.avg)} ms</td>
-                <td className="py-2 pr-4 text-gray-400">{n(v.p75)} ms</td>
-                <td className="py-2 text-gray-500">{n(v.samples)}</td>
+              <tr key={v.metric} className="border-t border-border">
+                <td className="py-2 pr-4 font-medium text-foreground">{v.metric}</td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(v.avg)} ms</td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(v.p75)} ms</td>
+                <td className="py-2 text-gray-500 dark:text-secondary-400">{n(v.samples)}</td>
               </tr>
             ))}
           </DarkTable>
@@ -278,27 +280,23 @@ export function ModuleTab({
 
       <Panel title="Hardest questions" hint="Lowest accuracy with at least 3 answers (B2)">
         {m.hardestQuestions.length === 0 ? (
-          <p className="text-sm text-gray-600">Not enough answers yet to rank questions.</p>
+          <p className="text-sm text-gray-600 dark:text-secondary-300">
+            Not enough answers yet to rank questions.
+          </p>
         ) : (
           <DarkTable headers={['Question', 'Answers', 'Accuracy']}>
             {m.hardestQuestions.map((q) => (
-              <tr key={q.questionId} className="border-t border-gray-800">
+              <tr key={q.questionId} className="border-t border-border">
                 <td
-                  className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-300"
+                  className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-500 dark:text-secondary-300"
                   title={q.questionId}
                 >
                   {q.questionId}
                 </td>
-                <td className="py-2 pr-4 text-gray-400">{n(q.answers)}</td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(q.answers)}</td>
                 <td className="py-2">
                   <span
-                    className={`font-medium ${
-                      q.accuracyPct < 40
-                        ? 'text-rose-400'
-                        : q.accuracyPct < 70
-                          ? 'text-amber-400'
-                          : 'text-emerald-400'
-                    }`}
+                    className={`font-medium ${q.accuracyPct < 40 ? 'text-rose-400' : q.accuracyPct < 70 ? 'text-amber-400' : 'text-emerald-400'}`}
                   >
                     {q.accuracyPct}%
                   </span>
@@ -369,30 +367,26 @@ export function JokesTab({ data }: TabProps) {
         {likeRatio !== null ? (
           <AccuracyBar pct={likeRatio} label={`${n(m.liked)} 👍 / ${n(m.disliked)} 👎`} />
         ) : (
-          <p className="text-sm text-gray-600">No votes in this window.</p>
+          <p className="text-sm text-gray-600 dark:text-secondary-300">No votes in this window.</p>
         )}
       </Panel>
       <Panel title="Top jokes" hint="Most-voted jokes in the window (B3)">
         {m.top.length === 0 ? (
-          <p className="text-sm text-gray-600">No votes in this window yet.</p>
+          <p className="text-sm text-gray-600 dark:text-secondary-300">
+            No votes in this window yet.
+          </p>
         ) : (
           <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
             {m.top.map((j, i) => (
-              <tr key={j.jokeId} className="border-t border-gray-800">
-                <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
-                <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
+              <tr key={j.jokeId} className="border-t border-border">
+                <td className="py-2 pr-3 text-gray-500 dark:text-secondary-400">{i + 1}</td>
+                <td className="max-w-[24rem] py-2 pr-4 text-foreground" title={j.label}>
                   {j.label}
                 </td>
-                <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(j.votes)}</td>
                 <td className="py-2">
                   <span
-                    className={`font-medium ${
-                      j.likePct >= 60
-                        ? 'text-emerald-400'
-                        : j.likePct >= 40
-                          ? 'text-amber-400'
-                          : 'text-rose-400'
-                    }`}
+                    className={`font-medium ${j.likePct >= 60 ? 'text-emerald-400' : j.likePct >= 40 ? 'text-amber-400' : 'text-rose-400'}`}
                   >
                     {j.likePct}%
                   </span>
@@ -512,7 +506,7 @@ export function AudienceTab({ data }: TabProps) {
           />
         </Panel>
       </div>
-      <p className="flex items-center gap-1.5 text-xs text-gray-600">
+      <p className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-secondary-300">
         <MapPin className="h-3.5 w-3.5" />
         Geo is resolved server-side from truncated IPs (/24) — raw addresses are never stored.
       </p>
@@ -529,23 +523,19 @@ export function RetentionTab({ cohorts }: { cohorts: RetentionCohort[] }) {
       hint="Share of each weekly cohort active in any later week"
     >
       {cohorts.length === 0 ? (
-        <p className="text-sm text-gray-600">Not enough history yet — check back next week.</p>
+        <p className="text-sm text-gray-600 dark:text-secondary-300">
+          Not enough history yet — check back next week.
+        </p>
       ) : (
         <DarkTable headers={['Cohort week', 'New users', 'Returned', 'Retention']}>
           {cohorts.map((c) => (
-            <tr key={c.cohortWeek} className="border-t border-gray-800">
-              <td className="py-2 pr-4 text-gray-300">{c.cohortWeek}</td>
-              <td className="py-2 pr-4 text-gray-400">{n(c.size)}</td>
-              <td className="py-2 pr-4 text-gray-400">{n(c.returned)}</td>
+            <tr key={c.cohortWeek} className="border-t border-border">
+              <td className="py-2 pr-4 text-gray-500 dark:text-secondary-300">{c.cohortWeek}</td>
+              <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(c.size)}</td>
+              <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(c.returned)}</td>
               <td className="py-2">
                 <span
-                  className={`font-medium ${
-                    c.retentionPct >= 30
-                      ? 'text-emerald-400'
-                      : c.retentionPct >= 10
-                        ? 'text-amber-400'
-                        : 'text-rose-400'
-                  }`}
+                  className={`font-medium ${c.retentionPct >= 30 ? 'text-emerald-400' : c.retentionPct >= 10 ? 'text-amber-400' : 'text-rose-400'}`}
                 >
                   {c.retentionPct}%
                 </span>
@@ -605,7 +595,11 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
     },
     {
       title: 'Other Journey',
-      accent: { border: 'border-gray-500/50', text: 'text-gray-300', bar: 'bg-gray-500' },
+      accent: {
+        border: 'border-gray-500/50',
+        text: 'text-gray-500 dark:text-secondary-300',
+        bar: 'bg-gray-500',
+      },
       stages: [
         { label: 'Pages viewed', value: data.kpis.pageViews },
         { label: 'Sign ups', value: data.users.signupsByDay.reduce((a, d) => a + d.count, 0) },
@@ -624,12 +618,12 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
       >
         {/* TOTAL node */}
         <div className="mb-2 flex justify-center">
-          <div className="rounded-lg border border-gray-600 bg-gray-900 px-8 py-3 text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+          <div className="rounded-lg border border-gray-600 bg-card px-8 py-3 text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-secondary-400">
               Total activity
             </p>
-            <p className="text-3xl font-bold text-white">{total.toLocaleString()}</p>
-            <p className="text-xs text-gray-500">across all modules</p>
+            <p className="text-3xl font-bold text-foreground">{total.toLocaleString()}</p>
+            <p className="text-xs text-gray-500 dark:text-secondary-400">across all modules</p>
           </div>
         </div>
         {/* Fan-out connectors into each column */}
@@ -675,7 +669,7 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
               );
             })}
           </div>
-          <p className="mt-3 text-xs text-gray-600">
+          <p className="mt-3 text-xs text-gray-600 dark:text-secondary-300">
             Stage-to-stage % compares distinct actors (e.g. signed-up ÷ visitors). A guest who
             registers counts as a visitor (guestId) and separately as signed-up (userId) until
             signup anchoring accumulates.
@@ -735,7 +729,7 @@ export function JourneyTab({ data, funnel }: TabProps & { funnel: ConversionFunn
         </Panel>
       </div>
       <Panel title="Click-level analysis" hint="Raw Events → click any Actor cell">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-secondary-300">
           Per-feature aggregates live in each feature tab; click-by-click journeys for a single
           visitor are in Raw Events — filter by event/module/date or click an Actor cell for their
           chronological timeline.
@@ -782,16 +776,12 @@ function FeatureSwitcher({
   onPick: (f: ClickFeatureId) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
+    <div className="flex flex-wrap gap-1 rounded-lg bg-gray-100 dark:bg-secondary-800/70 p-1">
       {CLICK_FEATURES.map((f) => (
         <button
           key={f.id}
           onClick={() => onPick(f.id)}
-          className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
-            feature === f.id
-              ? 'bg-gray-800 font-medium text-white shadow'
-              : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-          }`}
+          className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${feature === f.id ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
         >
           {f.label}
         </button>
@@ -910,7 +900,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           <FeatureSwitcher feature={feature} onPick={pickFeature} />
           <div className="flex h-48 flex-col items-center justify-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
-            <p className="text-sm text-gray-500">Loading click overview…</p>
+            <p className="text-sm text-gray-500 dark:text-secondary-400">Loading click overview…</p>
           </div>
         </div>
       );
@@ -989,7 +979,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           </Panel>
         )}
 
-        <p className="text-xs text-gray-600">
+        <p className="text-xs text-gray-600 dark:text-secondary-300">
           Pick a feature above for its deep view — subject/chapter breakdowns (Quiz, Riddle), option
           choices, joke categories, most-clicked riddles, and the per-day rhythm.
         </p>
@@ -1004,7 +994,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
       {loading && !clicks ? (
         <div className="flex h-48 flex-col items-center justify-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
-          <p className="text-sm text-gray-500">Loading click analysis…</p>
+          <p className="text-sm text-gray-500 dark:text-secondary-400">Loading click analysis…</p>
         </div>
       ) : failed && !clicks ? (
         <Panel title="Click analysis">
@@ -1026,7 +1016,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
       {headlineBlock}
       <>
         {/* ==================== Feature overview (top summary) ==================== */}
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-secondary-400">
           {FEATURE_NAMES[feature]} overview
         </p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
@@ -1067,17 +1057,13 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
         {/* ==================== Subject/category-wise details ==================== */}
         {subjectPills.length > 0 && (
           <>
-            <p className="pt-2 text-xs font-semibold uppercase tracking-widest text-gray-500">
+            <p className="pt-2 text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-secondary-400">
               {feature === 'jokes' ? 'Category-wise details' : 'Subject-wise details'}
             </p>
-            <div className="flex flex-wrap gap-1 rounded-lg bg-gray-900/70 p-1">
+            <div className="flex flex-wrap gap-1 rounded-lg bg-gray-100 dark:bg-secondary-800/70 p-1">
               <button
                 onClick={() => setDrill(undefined)}
-                className={`whitespace-nowrap rounded-md px-3 py-1 text-xs transition-colors ${
-                  !drill
-                    ? 'bg-gray-800 font-medium text-white shadow'
-                    : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-                }`}
+                className={`whitespace-nowrap rounded-md px-3 py-1 text-xs transition-colors ${!drill ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
               >
                 All {feature === 'jokes' ? 'categories' : 'subjects'}
               </button>
@@ -1085,20 +1071,17 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
                 <button
                   key={label}
                   onClick={() => setDrill(drill === label ? undefined : label)}
-                  className={`whitespace-nowrap rounded-md px-3 py-1 text-xs capitalize transition-colors ${
-                    drill === label
-                      ? 'bg-gray-800 font-medium text-white shadow'
-                      : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200'
-                  }`}
+                  className={`whitespace-nowrap rounded-md px-3 py-1 text-xs capitalize transition-colors ${drill === label ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
                 >
                   {label}
                 </button>
               ))}
             </div>
             {drill && (
-              <p className="text-xs text-gray-500">
-                Filtered to <span className="font-medium text-gray-300">{drill}</span> — pick
-                &ldquo;All&rdquo; to go back.
+              <p className="text-xs text-gray-500 dark:text-secondary-400">
+                Filtered to{' '}
+                <span className="font-medium text-gray-500 dark:text-secondary-300">{drill}</span> —
+                pick &ldquo;All&rdquo; to go back.
               </p>
             )}
           </>
@@ -1167,23 +1150,19 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           <Panel title={`Hardest questions in ${drill}`} hint="At least 2 answers · worst first">
             <DarkTable headers={['Question', 'Answers', 'Accuracy']}>
               {clicks.hardestQuestions.map((q) => (
-                <tr key={q.questionId} className="border-t border-gray-800">
+                <tr key={q.questionId} className="border-t border-border">
                   <td
-                    className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-300"
+                    className="max-w-[16rem] truncate py-2 pr-4 font-mono text-xs text-gray-500 dark:text-secondary-300"
                     title={q.questionId}
                   >
                     {q.questionId}
                   </td>
-                  <td className="py-2 pr-4 text-gray-400">{n(q.answers)}</td>
+                  <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">
+                    {n(q.answers)}
+                  </td>
                   <td className="py-2">
                     <span
-                      className={`font-medium ${
-                        q.accuracyPct < 40
-                          ? 'text-rose-400'
-                          : q.accuracyPct < 70
-                            ? 'text-amber-400'
-                            : 'text-emerald-400'
-                      }`}
+                      className={`font-medium ${q.accuracyPct < 40 ? 'text-rose-400' : q.accuracyPct < 70 ? 'text-amber-400' : 'text-emerald-400'}`}
                     >
                       {q.accuracyPct}%
                     </span>
@@ -1233,12 +1212,12 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           <Panel title="Most-voted jokes" hint="Top 5 in the window">
             <DarkTable headers={['#', 'Joke', 'Votes', 'Like ratio']}>
               {dashboard.modules.jokes.top.map((j, i) => (
-                <tr key={j.jokeId} className="border-t border-gray-800">
-                  <td className="py-2 pr-3 text-gray-500">{i + 1}</td>
-                  <td className="max-w-[24rem] py-2 pr-4 text-gray-200" title={j.label}>
+                <tr key={j.jokeId} className="border-t border-border">
+                  <td className="py-2 pr-3 text-gray-500 dark:text-secondary-400">{i + 1}</td>
+                  <td className="max-w-[24rem] py-2 pr-4 text-foreground" title={j.label}>
                     {j.label}
                   </td>
-                  <td className="py-2 pr-4 text-gray-400">{n(j.votes)}</td>
+                  <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(j.votes)}</td>
                   <td className="py-2 text-emerald-400">{j.likePct}%</td>
                 </tr>
               ))}
@@ -1246,7 +1225,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
           </Panel>
         )}
 
-        <p className="text-xs text-gray-600">
+        <p className="text-xs text-gray-600 dark:text-secondary-300">
           These are aggregates. Individual click-by-click rows — with visitor, session and full
           properties — are in Raw Events (filter to {feature}, or click any Actor cell).
         </p>

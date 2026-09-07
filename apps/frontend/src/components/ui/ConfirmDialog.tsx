@@ -38,21 +38,23 @@ export function ConfirmDialog({
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <div className="space-y-4">
         <div className="flex items-start gap-3">
-          <div className={cn(
-            'p-2 rounded-full',
-            confirmVariant === 'danger' && 'bg-red-100 text-red-600',
-            confirmVariant === 'warning' && 'bg-yellow-100 text-yellow-600',
-            confirmVariant === 'default' && 'bg-blue-100 text-blue-600'
-          )}>
+          <div
+            className={cn(
+              'p-2 rounded-full',
+              confirmVariant === 'danger' && 'bg-red-100 text-red-600',
+              confirmVariant === 'warning' && 'bg-yellow-100 text-yellow-600',
+              confirmVariant === 'default' && 'bg-blue-100 text-blue-600'
+            )}
+          >
             <AlertTriangle className="w-5 h-5" />
           </div>
-          <p className="text-gray-600 pt-1">{message}</p>
+          <p className="text-gray-600 dark:text-secondary-300 pt-1">{message}</p>
         </div>
-        
+
         <div className="flex justify-end gap-3 pt-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-secondary-200 bg-gray-100 dark:bg-secondary-800 rounded-lg hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
           >
             Cancel
           </button>

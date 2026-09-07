@@ -430,14 +430,14 @@ export function JokesSection({
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h3 className="text-xl font-bold">Manage Dad Jokes</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-secondary-400">
             Create, edit, and organize the dad jokes collection.
             {stats && (
               <span className="ml-2 inline-flex gap-2 align-middle">
-                <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                <span className="rounded-full bg-indigo-100 dark:bg-indigo-500/20 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:text-indigo-300">
                   {stats.totalJokes} jokes
                 </span>
-                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                <span className="rounded-full bg-emerald-100 dark:bg-emerald-500/20 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
                   {stats.totalCategories} categories
                 </span>
               </span>
@@ -461,13 +461,13 @@ export function JokesSection({
               </svg>
             </button>
             {showExportDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-secondary-800 rounded-lg shadow-lg border border-gray-200 dark:border-secondary-700 z-10">
                 <button
                   onClick={() => {
                     handleExportCSV();
                     setShowExportDropdown(false);
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 first:rounded-t-lg"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-secondary-800 first:rounded-t-lg"
                 >
                   Export as CSV
                 </button>
@@ -476,7 +476,7 @@ export function JokesSection({
                     handleExportJSON();
                     setShowExportDropdown(false);
                   }}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 last:rounded-b-lg"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-secondary-800 last:rounded-b-lg"
                 >
                   Export as JSON
                 </button>
@@ -517,18 +517,16 @@ export function JokesSection({
       />
 
       {/* Inline Category Filter Row */}
-      <div className="mb-4 rounded-xl bg-white p-4 shadow-md">
+      <div className="mb-4 rounded-xl bg-white dark:bg-secondary-800 p-4 shadow-md">
         <CollapsibleRows className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-gray-600 mr-1">Category:</span>
+          <span className="text-sm font-medium text-gray-600 dark:text-secondary-300 mr-1">
+            Category:
+          </span>
 
           {/* All Categories chip */}
           <button
             onClick={() => _setJokeFilterCategory('')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              jokeFilterCategory === ''
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jokeFilterCategory === '' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
           >
             All Categories <span className="opacity-70">({allJokes.length})</span>
           </button>
@@ -546,11 +544,7 @@ export function JokesSection({
                 <button
                   onClick={() => _setJokeFilterCategory(isActive ? '' : cat.name)}
                   disabled={isPendingDelete}
-                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-green-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${isActive ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
                 >
                   {cat.emoji} {cat.name} <span className="opacity-70">({count})</span>
                 </button>
@@ -566,11 +560,7 @@ export function JokesSection({
                     setShowEditCategoryModal(true);
                   }}
                   disabled={isPendingDelete}
-                  className={`px-1.5 py-1.5 transition-colors border-x border-white/20 ${
-                    isActive
-                      ? 'bg-green-400 text-white hover:bg-green-300'
-                      : 'bg-gray-200 text-gray-500 hover:bg-blue-100 hover:text-blue-600'
-                  }`}
+                  className={`px-1.5 py-1.5 transition-colors border-x border-white/20 ${isActive ? 'bg-green-400 text-white hover:bg-green-300' : 'bg-gray-200 dark:bg-secondary-700 text-gray-500 dark:text-secondary-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 dark:hover:bg-blue-500/20 hover:text-blue-600'}`}
                   title={`Edit ${cat.name}`}
                 >
                   <Pencil className="w-3.5 h-3.5" />
@@ -600,11 +590,7 @@ export function JokesSection({
                     // Mark as pending — no timer, waits for user to confirm
                     setPendingCategoryDelete({ category: cat, originalStatuses });
                   }}
-                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${
-                    isActive
-                      ? 'bg-green-400 text-white hover:bg-red-400'
-                      : 'bg-gray-200 text-red-600 hover:bg-red-50'
-                  }`}
+                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${isActive ? 'bg-green-400 text-white hover:bg-red-400' : 'bg-gray-200 dark:bg-secondary-700 text-red-600 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10'}`}
                   title={`Delete ${cat.name}`}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -619,7 +605,7 @@ export function JokesSection({
               setCategoryForm({ name: '', emoji: '', description: '' });
               setShowAddCategoryModal(true);
             }}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-300 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-300 dark:border-indigo-500/40 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-500/10 transition-colors"
           >
             + Add Category
           </button>
@@ -627,50 +613,50 @@ export function JokesSection({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl bg-white shadow-md">
+      <div className="overflow-x-auto rounded-xl bg-white dark:bg-secondary-800 shadow-md">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-secondary-800">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 w-10">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 w-10">
                 <input
                   type="checkbox"
                   checked={selectedIds.length > 0 && selectedIds.length === filteredJokes.length}
                   onChange={() =>
                     selectedIds.length === filteredJokes.length ? deselectAll() : selectAll()
                   }
-                  className="rounded border-gray-300"
+                  className="rounded border-gray-300 dark:border-secondary-600"
                   aria-label="Select all jokes"
                 />
               </th>
               <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
                 onClick={() => handleSort('id')}
               >
                 # {getSortIcon('id')}
               </th>
               <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
                 onClick={() => handleSort('setup')}
               >
                 Question (Setup) {getSortIcon('setup')}
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300">
                 Answer (Punchline)
               </th>
               <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
                 onClick={() => handleSort('category')}
               >
                 Category {getSortIcon('category')}
               </th>
               <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
                 onClick={() => handleSort('engagement')}
               >
                 Engagement {getSortIcon('engagement')}
               </th>
               <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
                 onClick={() => handleSort('status')}
               >
                 Status {getSortIcon('status')}
@@ -679,25 +665,27 @@ export function JokesSection({
           </thead>
           <tbody className="divide-y divide-gray-100">
             {paginatedJokes.map((joke, index) => (
-              <tr key={joke.id} className="hover:bg-gray-50">
+              <tr key={joke.id} className="hover:bg-gray-50 dark:hover:bg-secondary-800">
                 <td className="px-4 py-3">
                   <input
                     type="checkbox"
                     checked={selectedIds.includes(String(joke.id))}
                     onChange={() => toggleSelection(String(joke.id))}
-                    className="rounded border-gray-300"
+                    className="rounded border-gray-300 dark:border-secondary-600"
                     aria-label={`Select joke ${joke.id}`}
                   />
                 </td>
-                <td className="px-4 py-3 text-xs text-gray-400 font-mono">
+                <td className="px-4 py-3 text-xs text-gray-400 dark:text-secondary-400 font-mono">
                   {(jokePage - 1) * jokesPerPage + index + 1}
                 </td>
                 <td className="px-4 py-3">
-                  <p className="text-sm text-gray-800 font-medium">{joke.setup || joke.joke}</p>
+                  <p className="text-sm text-gray-800 dark:text-secondary-100 font-medium">
+                    {joke.setup || joke.joke}
+                  </p>
                   <div className="mt-2 flex gap-2">
                     <button
                       onClick={() => openEditModal(joke)}
-                      className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
+                      className="inline-flex items-center gap-1 rounded bg-blue-50 dark:bg-blue-500/10 px-2 py-1 text-xs text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-500/20"
                       aria-label={`Edit joke ${joke.id}`}
                     >
                       <Pencil className="w-3 h-3" />
@@ -708,7 +696,7 @@ export function JokesSection({
                         _setSelectedJoke(joke);
                         _setShowTrashConfirm(true);
                       }}
-                      className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
+                      className="inline-flex items-center gap-1 rounded bg-red-50 dark:bg-red-500/10 px-2 py-1 text-xs text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-500/20"
                       aria-label={`Trash joke ${joke.id}`}
                     >
                       <Trash2 className="w-3 h-3" />
@@ -716,22 +704,24 @@ export function JokesSection({
                     </button>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">{joke.punchline}</td>
+                <td className="px-4 py-3 text-sm text-gray-600 dark:text-secondary-300">
+                  {joke.punchline}
+                </td>
                 <td className="px-4 py-3">
-                  <span className="inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
+                  <span className="inline-block rounded-full bg-purple-100 dark:bg-purple-500/20 px-2 py-1 text-xs font-medium text-purple-800 dark:text-purple-300">
                     {joke.category}
                   </span>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3 text-xs font-bold">
                     <span
-                      className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded"
+                      className="flex items-center gap-1 text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded"
                       title="Likes"
                     >
                       👍 {joke.likes || 0}
                     </span>
                     <span
-                      className="flex items-center gap-1 text-rose-600 bg-rose-50 px-2 py-0.5 rounded"
+                      className="flex items-center gap-1 text-rose-600 dark:text-rose-300 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded"
                       title="Dislikes"
                     >
                       👎 {joke.dislikes || 0}
@@ -753,8 +743,8 @@ export function JokesSection({
 
       {/* Pagination */}
       {sortedJokes.length > 0 && (
-        <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
-          <p className="text-sm text-gray-500">
+        <div className="flex items-center justify-between border-t bg-gray-50 dark:bg-secondary-800 px-4 py-3 mt-4">
+          <p className="text-sm text-gray-500 dark:text-secondary-400">
             Showing {Math.min((jokePage - 1) * jokesPerPage + 1, sortedJokes.length)} -{' '}
             {Math.min(jokePage * jokesPerPage, sortedJokes.length)} of {sortedJokes.length} items
           </p>
@@ -762,11 +752,11 @@ export function JokesSection({
             <button
               onClick={() => setJokePage((p) => Math.max(1, p - 1))}
               disabled={jokePage === 1}
-              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+              className="rounded bg-gray-200 dark:bg-secondary-700 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600 flex items-center gap-1">
+            <span className="text-sm text-gray-600 dark:text-secondary-300 flex items-center gap-1">
               Page
               <input
                 type="text"
@@ -774,14 +764,14 @@ export function JokesSection({
                 onChange={handlePageInputChange}
                 onBlur={handlePageInputSubmit}
                 onKeyDown={(e) => e.key === 'Enter' && handlePageInputSubmit()}
-                className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+                className="w-12 rounded border border-gray-300 dark:border-secondary-600 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
               />
               of <span className="font-medium">{totalJokePages || 1}</span>
             </span>
             <button
               onClick={() => setJokePage((p) => Math.min(totalJokePages, p + 1))}
               disabled={jokePage >= totalJokePages}
-              className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+              className="rounded bg-gray-200 dark:bg-secondary-700 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
             >
               Next
             </button>
@@ -792,7 +782,7 @@ export function JokesSection({
       {/* Simple Add/Edit Modal */}
       {(showAddModal || showEditModal) && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-xl">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-xl">
             <h3 className="text-xl font-bold mb-4">
               {showAddModal ? 'Add New Joke' : 'Edit Joke'}
             </h3>
@@ -800,7 +790,7 @@ export function JokesSection({
               <div>
                 <label
                   htmlFor="joke-setup"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1"
                 >
                   Question (Setup) *
                 </label>
@@ -808,7 +798,7 @@ export function JokesSection({
                   id="joke-setup"
                   value={jokeForm.setup}
                   onChange={(e) => setJokeForm((prev) => ({ ...prev, setup: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2"
                   rows={2}
                   placeholder="Enter the joke question..."
                   aria-required="true"
@@ -817,7 +807,7 @@ export function JokesSection({
               <div>
                 <label
                   htmlFor="joke-punchline"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1"
                 >
                   Answer (Punchline) *
                 </label>
@@ -825,18 +815,20 @@ export function JokesSection({
                   id="joke-punchline"
                   value={jokeForm.punchline}
                   onChange={(e) => setJokeForm((prev) => ({ ...prev, punchline: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2"
                   rows={2}
                   placeholder="Enter the joke answer..."
                   aria-required="true"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+                  Category
+                </label>
                 <select
                   value={jokeForm.category}
                   onChange={(e) => setJokeForm((prev) => ({ ...prev, category: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2"
                 >
                   <option value="">Select a category</option>
                   {jokeCategories.map((cat) => (
@@ -854,7 +846,7 @@ export function JokesSection({
                   setShowEditModal(false);
                   setJokeForm({ setup: '', punchline: '', category: '' });
                 }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
+                className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200"
               >
                 Cancel
               </button>
@@ -879,19 +871,23 @@ export function JokesSection({
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-red-600">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4 text-red-600 dark:text-red-300">
               🗑️{' '}
               {selectedJoke.status === 'trash' ? 'Permanently Delete Joke' : 'Move Joke to Trash'}
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-secondary-300 mb-6">
               {selectedJoke.status === 'trash'
                 ? 'Are you sure you want to permanently delete this joke? This action cannot be undone.'
                 : 'Are you sure you want to move this joke to trash? You can still restore it later from the Trash tab.'}
             </p>
-            <div className="bg-gray-50 p-3 rounded-lg mb-6">
-              <p className="font-medium text-gray-800">{selectedJoke.setup || selectedJoke.joke}</p>
-              <p className="text-sm text-gray-500 mt-1">Category: {selectedJoke.category}</p>
+            <div className="bg-gray-50 dark:bg-secondary-800 p-3 rounded-lg mb-6">
+              <p className="font-medium text-gray-800 dark:text-secondary-100">
+                {selectedJoke.setup || selectedJoke.joke}
+              </p>
+              <p className="text-sm text-gray-500 dark:text-secondary-400 mt-1">
+                Category: {selectedJoke.category}
+              </p>
             </div>
             <div className="flex gap-2">
               <button
@@ -899,7 +895,7 @@ export function JokesSection({
                   _setShowTrashConfirm(false);
                   _setSelectedJoke(null);
                 }}
-                className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
               >
                 Cancel
               </button>
@@ -923,7 +919,7 @@ export function JokesSection({
         >
           <div
             ref={importModalRef}
-            className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto"
+            className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto"
           >
             <h3 className="text-xl font-bold mb-4">Import Jokes</h3>
 
@@ -936,13 +932,13 @@ export function JokesSection({
                 description="Drag and drop your CSV or JSON file here, or click to browse"
               />
 
-              <div className="bg-gray-50 p-4 rounded-lg text-sm">
+              <div className="bg-gray-50 dark:bg-secondary-800 p-4 rounded-lg text-sm">
                 <p className="font-medium mb-2">CSV Format (with headers):</p>
-                <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                <code className="text-xs bg-gray-200 dark:bg-secondary-700 px-2 py-1 rounded block overflow-x-auto">
                   joke,category,status
                 </code>
                 <p className="font-medium mt-3 mb-2">JSON Format:</p>
-                <code className="text-xs bg-gray-200 px-2 py-1 rounded block overflow-x-auto">
+                <code className="text-xs bg-gray-200 dark:bg-secondary-700 px-2 py-1 rounded block overflow-x-auto">
                   {`{"jokes": [{"joke": "...", "category": "...", "status": "draft"}]}`}
                 </code>
               </div>
@@ -959,7 +955,7 @@ export function JokesSection({
                     _setShowImportModal(false);
                     _setImportError('');
                   }}
-                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+                  className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
                 >
                   Cancel
                 </button>
@@ -972,9 +968,11 @@ export function JokesSection({
       {/* Category Management Modal */}
       {showCategoryManager && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Manage Joke Categories</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-secondary-50">
+                Manage Joke Categories
+              </h3>
               <button
                 onClick={() => setShowAddCategoryModal(true)}
                 className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
@@ -983,35 +981,38 @@ export function JokesSection({
               </button>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-secondary-700">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-secondary-700">
+                <thead className="bg-gray-50 dark:bg-secondary-800">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                       Emoji
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                       Jokes
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="divide-y divide-gray-200 dark:divide-secondary-700 bg-white dark:bg-secondary-800">
                   {jokeCategories.map((cat) => {
                     const jokeCount = allJokes.filter((j) => j.category === cat.name).length;
                     return (
-                      <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={cat.id}
+                        className="hover:bg-gray-50 dark:hover:bg-secondary-800 transition-colors"
+                      >
                         <td className="whitespace-nowrap px-6 py-4 text-2xl">{cat.emoji}</td>
-                        <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                        <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-secondary-50">
                           {cat.name}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                          <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-secondary-400">
+                          <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
                             {jokeCount}
                           </span>
                         </td>
@@ -1026,7 +1027,7 @@ export function JokesSection({
                               });
                               setShowEditCategoryModal(true);
                             }}
-                            className="mr-3 text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-2 py-1 rounded"
+                            className="mr-3 text-indigo-600 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-200 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded"
                           >
                             Edit
                           </button>
@@ -1048,7 +1049,7 @@ export function JokesSection({
                                 }
                               }
                             }}
-                            className="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded"
+                            className="text-red-600 dark:text-red-300 hover:text-red-900 dark:hover:text-red-200 bg-red-50 dark:bg-red-500/10 px-2 py-1 rounded"
                           >
                             Delete
                           </button>
@@ -1058,7 +1059,10 @@ export function JokesSection({
                   })}
                   {jokeCategories.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
+                      <td
+                        colSpan={4}
+                        className="px-6 py-8 text-center text-sm text-gray-500 dark:text-secondary-400"
+                      >
                         No categories found. Click &apos;Add Category&apos; to create one.
                       </td>
                     </tr>
@@ -1070,7 +1074,7 @@ export function JokesSection({
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setShowCategoryManager(false)}
-                className="rounded-lg bg-gray-200 px-6 py-2 font-medium text-gray-700 hover:bg-gray-300"
+                className="rounded-lg bg-gray-200 dark:bg-secondary-700 px-6 py-2 font-medium text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
               >
                 Close
               </button>
@@ -1082,23 +1086,25 @@ export function JokesSection({
       {/* Add Category Modal */}
       {showAddCategoryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
             <h3 className="text-xl font-bold mb-4">Add Joke Category</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
                   Category Name
                 </label>
                 <input
                   type="text"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="e.g. Science Jokes"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+                  Emoji
+                </label>
                 <div className="flex gap-3 items-center">
                   <input
                     type="text"
@@ -1106,16 +1112,16 @@ export function JokesSection({
                     onChange={(e) =>
                       setCategoryForm((prev) => ({ ...prev, emoji: e.target.value }))
                     }
-                    className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-20 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     maxLength={2}
                   />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-secondary-400">
                     Paste an emoji here to represent the category.
                   </span>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
                   Description (Optional)
                 </label>
                 <textarea
@@ -1123,7 +1129,7 @@ export function JokesSection({
                   onChange={(e) =>
                     setCategoryForm((prev) => ({ ...prev, description: e.target.value }))
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   rows={2}
                   placeholder="A brief description of this category..."
                 />
@@ -1134,7 +1140,7 @@ export function JokesSection({
                     setShowAddCategoryModal(false);
                     setCategoryForm({ name: '', emoji: '', description: '' });
                   }}
-                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
+                  className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 font-medium"
                 >
                   Cancel
                 </button>
@@ -1170,22 +1176,24 @@ export function JokesSection({
       {/* Edit Category Modal */}
       {showEditCategoryModal && selectedCategoryForEdit && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
+          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all">
             <h3 className="text-xl font-bold mb-4">Edit Category</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
                   Category Name
                 </label>
                 <input
                   type="text"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
+                  Emoji
+                </label>
                 <div className="flex gap-3 items-center">
                   <input
                     type="text"
@@ -1193,13 +1201,13 @@ export function JokesSection({
                     onChange={(e) =>
                       setCategoryForm((prev) => ({ ...prev, emoji: e.target.value }))
                     }
-                    className="w-20 rounded-lg border border-gray-300 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-20 rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 text-center text-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     maxLength={2}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-secondary-200 mb-1">
                   Description (Optional)
                 </label>
                 <textarea
@@ -1207,7 +1215,7 @@ export function JokesSection({
                   onChange={(e) =>
                     setCategoryForm((prev) => ({ ...prev, description: e.target.value }))
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-secondary-600 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   rows={2}
                 />
               </div>
@@ -1217,7 +1225,7 @@ export function JokesSection({
                     setShowEditCategoryModal(false);
                     setSelectedCategoryForEdit(null);
                   }}
-                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 font-medium"
+                  className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300 font-medium"
                 >
                   Cancel
                 </button>
@@ -1259,16 +1267,16 @@ export function JokesSection({
 
       {/* Category Delete Confirmation Banner */}
       {pendingCategoryDelete && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 bg-white px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
-          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100">
-            <Trash2 className="h-4 w-4 text-red-600" />
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 bg-white dark:bg-secondary-800 px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
+          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20">
+            <Trash2 className="h-4 w-4 text-red-600 dark:text-red-300" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-gray-900 dark:text-secondary-50">
               Delete &ldquo;{pendingCategoryDelete.category.emoji}{' '}
               {pendingCategoryDelete.category.name}&rdquo;?
             </p>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
               {Object.keys(pendingCategoryDelete.originalStatuses).length} joke(s) moved to{' '}
               <strong>Draft</strong> and hidden from public view. Category will <strong>not</strong>{' '}
               be deleted until you confirm below.
@@ -1287,7 +1295,7 @@ export function JokesSection({
                   );
                   setPendingCategoryDelete(null);
                 }}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                className="rounded-lg border border-gray-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-secondary-200 hover:bg-gray-50 dark:hover:bg-secondary-800 transition-colors"
               >
                 Cancel — Restore Jokes
               </button>

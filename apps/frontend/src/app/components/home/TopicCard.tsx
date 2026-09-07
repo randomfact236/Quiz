@@ -1,17 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { 
-  FlaskConical, 
-  Calculator, 
-  Scroll, 
-  Globe, 
-  BookOpen, 
-  Laptop, 
-  Puzzle, 
-  Briefcase, 
-  Heart, 
-  Baby, 
+import {
+  FlaskConical,
+  Calculator,
+  Scroll,
+  Globe,
+  BookOpen,
+  Laptop,
+  Puzzle,
+  Briefcase,
+  Heart,
+  Baby,
   HelpCircle,
   Image as ImageIcon,
   Sparkles,
@@ -28,7 +28,7 @@ import {
   Film,
   Trophy,
   Utensils,
-  type LucideIcon
+  type LucideIcon,
 } from 'lucide-react';
 
 interface TopicCardProps {
@@ -76,21 +76,25 @@ const iconMap: Record<string, LucideIcon> = {
 function TopicCardContent({ emoji, label }: { emoji: string; label: string }): JSX.Element {
   // Check if emoji is an icon key
   const IconComponent = iconMap[emoji.toLowerCase()];
-  
+
   if (IconComponent) {
     return (
       <>
-        <IconComponent className="h-6 w-6 text-indigo-600" />
-        <span className="mt-1 text-xs font-medium text-gray-700">{label}</span>
+        <IconComponent className="h-6 w-6 text-indigo-600 dark:text-indigo-300" />
+        <span className="mt-1 text-xs font-medium text-gray-700 dark:text-secondary-200">
+          {label}
+        </span>
       </>
     );
   }
-  
+
   // Otherwise treat as emoji
   return (
     <>
       <span className="text-2xl">{emoji}</span>
-      <span className="mt-1 text-xs font-medium text-gray-700">{label}</span>
+      <span className="mt-1 text-xs font-medium text-gray-700 dark:text-secondary-200">
+        {label}
+      </span>
     </>
   );
 }
@@ -98,17 +102,19 @@ function TopicCardContent({ emoji, label }: { emoji: string; label: string }): J
 export function TopicCard({ href, emoji, label, soon = false }: TopicCardProps): JSX.Element {
   if (soon) {
     return (
-      <div className="relative flex flex-col items-center rounded-lg bg-white p-3 text-center shadow-sm opacity-60">
-        <span className="absolute -top-2 -right-2 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold text-white">Soon</span>
+      <div className="relative flex flex-col items-center rounded-lg bg-white dark:bg-secondary-800 p-3 text-center shadow-sm opacity-60">
+        <span className="absolute -top-2 -right-2 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold text-white">
+          Soon
+        </span>
         <TopicCardContent emoji={emoji} label={label} />
       </div>
     );
   }
 
   return (
-    <Link 
-      href={href} 
-      className="flex flex-col items-center rounded-lg bg-white p-3 text-center shadow-sm transition-all hover:scale-105 hover:shadow-md"
+    <Link
+      href={href}
+      className="flex flex-col items-center rounded-lg bg-white dark:bg-secondary-800 p-3 text-center shadow-sm transition-all hover:scale-105 hover:shadow-md"
     >
       <TopicCardContent emoji={emoji} label={label} />
     </Link>

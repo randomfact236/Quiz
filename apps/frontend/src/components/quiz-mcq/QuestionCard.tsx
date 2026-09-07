@@ -261,7 +261,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className="relative mx-auto w-full max-w-5xl rounded-3xl bg-white p-5 shadow-xl sm:p-8"
+        className="relative mx-auto w-full max-w-5xl rounded-3xl bg-white dark:bg-secondary-800 p-5 shadow-xl sm:p-8"
       >
         {/* Time Up Indicator */}
         {timeUp && (
@@ -270,7 +270,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
             animate={{ opacity: 1, scale: 1 }}
             className="mb-4 text-center"
           >
-            <span className="text-xl font-bold text-red-600">⏰ TIME UP!</span>
+            <span className="text-xl font-bold text-red-600 dark:text-red-300">⏰ TIME UP!</span>
           </motion.div>
         )}
 
@@ -286,7 +286,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
 
         {/* Question Text - Top */}
         <div className="mb-4 text-center">
-          <h2 className="text-lg font-medium leading-relaxed text-gray-800 sm:text-xl sm:leading-relaxed">
+          <h2 className="text-lg font-medium leading-relaxed text-gray-800 dark:text-secondary-100 sm:text-xl sm:leading-relaxed">
             {question.question}
           </h2>
         </div>
@@ -317,13 +317,13 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         {/* Score Display - Above Progress Bar */}
         {score !== undefined && maxScore !== undefined && (
           <div className="mb-2 flex items-center justify-center gap-3">
-            <span className="text-base font-semibold text-indigo-600">
+            <span className="text-base font-semibold text-indigo-600 dark:text-indigo-300">
               Score: {score}/{maxScore}
             </span>
             {onShare && (
               <button
                 onClick={onShare}
-                className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-600 transition-colors hover:bg-indigo-100"
+                className="inline-flex items-center gap-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-300 transition-colors hover:bg-indigo-100 dark:hover:bg-indigo-500/20"
                 title="Share this question"
               >
                 <Share2 className="h-3.5 w-3.5" />
@@ -335,13 +335,13 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
 
         {/* Progress Bar */}
         <div className="mb-5">
-          <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
+          <div className="mb-1 flex items-center justify-between text-xs text-gray-500 dark:text-secondary-400">
             <span>
               Question {questionNumber} of {totalQuestions}
             </span>
             <span>{Math.round((questionNumber / totalQuestions) * 100)}%</span>
           </div>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+          <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${(questionNumber / totalQuestions) * 100}%` }}

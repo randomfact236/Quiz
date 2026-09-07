@@ -41,7 +41,7 @@ export default function RiddleFormModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={modalRef}
-        className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl bg-white p-6"
+        className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl bg-white dark:bg-secondary-800 p-6"
       >
         <h3 className="mb-4 text-xl font-bold">
           {isAdd ? '➕ Add New Image Riddle' : '✏️ Edit Image Riddle'}
@@ -57,7 +57,7 @@ export default function RiddleFormModal({
         <div className="flex gap-2 pt-4">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+            className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 px-4 py-2 text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
           >
             Cancel
           </button>

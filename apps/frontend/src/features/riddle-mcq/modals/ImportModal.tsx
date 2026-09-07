@@ -239,10 +239,15 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
       style={{ position: 'fixed' }}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose} />
-      <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-          <h2 className="text-lg font-bold text-gray-900">Import Riddles from CSV</h2>
-          <button onClick={handleClose} className="p-2 hover:bg-gray-100 rounded-lg">
+      <div className="relative z-10 bg-white dark:bg-secondary-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 flex-shrink-0">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-secondary-50">
+            Import Riddles from CSV
+          </h2>
+          <button
+            onClick={handleClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-secondary-800 rounded-lg"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -254,9 +259,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
                 onClick={() => fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                  file ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${file ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10' : 'border-gray-300 dark:border-secondary-600 hover:border-gray-400'}`}
               >
                 <input
                   ref={fileInputRef}
@@ -266,39 +269,41 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
                   className="hidden"
                 />
                 {file ? (
-                  <div className="flex items-center justify-center gap-2 text-blue-600">
+                  <div className="flex items-center justify-center gap-2 text-blue-600 dark:text-blue-300">
                     <FileText className="w-5 h-5" />
                     <span className="font-medium">{file.name}</span>
                   </div>
                 ) : (
                   <>
-                    <Upload className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-                    <p className="text-gray-600">
+                    <Upload className="w-10 h-10 mx-auto text-gray-400 dark:text-secondary-400 mb-3" />
+                    <p className="text-gray-600 dark:text-secondary-300">
                       Drag and drop a CSV file here, or click to browse
                     </p>
-                    <p className="text-sm text-gray-500 mt-2">Only .csv files are supported</p>
+                    <p className="text-sm text-gray-500 dark:text-secondary-400 mt-2">
+                      Only .csv files are supported
+                    </p>
                   </>
                 )}
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4 text-sm">
+              <div className="bg-gray-50 dark:bg-secondary-800 rounded-lg p-4 text-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="font-medium text-gray-700">CSV Format:</p>
+                  <p className="font-medium text-gray-700 dark:text-secondary-200">CSV Format:</p>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       downloadTemplate();
                     }}
-                    className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
+                    className="flex items-center gap-1 text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium"
                   >
                     <Download className="w-3 h-3" />
                     Download Template
                   </button>
                 </div>
-                <code className="text-xs text-gray-600 block overflow-x-auto whitespace-nowrap">
+                <code className="text-xs text-gray-600 dark:text-secondary-300 block overflow-x-auto whitespace-nowrap">
                   #,question,optionA,optionB,optionC,optionD,answer,level,subject,hint,explanation,status
                 </code>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-500 dark:text-secondary-400 mt-2">
                   Use <strong># Category:</strong> metadata lines to group riddles. Answer format:{' '}
                   <strong>B. Option text</strong> for normal levels, or just text for expert level.
                 </p>
@@ -306,14 +311,16 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
 
               {preview.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-700">
+                  <h3 className="text-sm font-medium text-gray-700 dark:text-secondary-200">
                     Preview ({preview.length} of {allRiddles.length} riddles)
                   </h3>
-                  <div className="max-h-48 overflow-y-auto rounded border bg-gray-50 divide-y">
+                  <div className="max-h-48 overflow-y-auto rounded border bg-gray-50 dark:bg-secondary-800 divide-y">
                     {preview.map((r, i) => (
                       <div key={i} className="p-3 text-sm">
-                        <p className="font-medium text-gray-900 line-clamp-1">{r.question}</p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="font-medium text-gray-900 dark:text-secondary-50 line-clamp-1">
+                          {r.question}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-secondary-400 mt-1">
                           Level: {r.level} | Subject: {r.subjectName || '(none)'} | Options:{' '}
                           {r.options.length}
                         </p>
@@ -326,8 +333,10 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
               {duplicates.length > 0 && <DuplicatesPanel duplicates={duplicates} />}
 
               {errors.length > 0 && (
-                <div className="rounded-lg bg-red-50 p-3 space-y-1">
-                  <p className="text-sm font-medium text-red-600">{errors.length} error(s) found</p>
+                <div className="rounded-lg bg-red-50 dark:bg-red-500/10 p-3 space-y-1">
+                  <p className="text-sm font-medium text-red-600 dark:text-red-300">
+                    {errors.length} error(s) found
+                  </p>
                   <div className="max-h-32 overflow-y-auto text-xs text-red-500 space-y-1">
                     {errors.slice(0, 10).map((err, i) => (
                       <p key={i}>
@@ -343,8 +352,10 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
           ) : (
             <div className="text-center py-8">
               <div className="text-4xl mb-3">✅</div>
-              <p className="text-lg font-medium text-gray-900">Import Successful!</p>
-              <p className="text-gray-500 mt-1">
+              <p className="text-lg font-medium text-gray-900 dark:text-secondary-50">
+                Import Successful!
+              </p>
+              <p className="text-gray-500 dark:text-secondary-400 mt-1">
                 {importResult.count} riddles imported
                 {duplicates.length > 0 ? ` · ${duplicates.length} duplicates skipped` : ''}
               </p>
@@ -371,10 +382,10 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
         </div>
 
         {!importResult && (
-          <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-white flex-shrink-0">
+          <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 flex-shrink-0">
             <button
               onClick={handleClose}
-              className="px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
+              className="px-4 py-2 text-sm text-gray-700 dark:text-secondary-200 bg-gray-100 dark:bg-secondary-800 hover:bg-gray-200 dark:hover:bg-secondary-700 rounded-lg"
             >
               Cancel
             </button>
@@ -396,7 +407,7 @@ export function ImportModal({ open, onClose, onSuccess }: ImportModalProps) {
         )}
 
         {isImporting && progress > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-secondary-700">
             <div
               className="h-full bg-blue-600 transition-all duration-300"
               style={{ width: `${progress}%` }}

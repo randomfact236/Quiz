@@ -4,7 +4,7 @@ export default function NotFoundPage(): JSX.Element {
   return (
     <main
       id="main-content"
-      className="flex min-h-screen flex-col items-center justify-center bg-secondary-50 px-4"
+      className="flex min-h-screen flex-col items-center justify-center bg-secondary-50 dark:bg-secondary-900 px-4"
     >
       <div className="text-center">
         <h1 className="mb-4 text-9xl font-bold text-primary-600">404</h1>

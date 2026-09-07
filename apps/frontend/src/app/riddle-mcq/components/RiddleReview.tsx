@@ -40,9 +40,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-xl border-2 p-4 ${
-        isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-      }`}
+      className={`rounded-xl border-2 p-4 ${isCorrect ? 'border-green-200 bg-green-200 dark:bg-green-500/10' : 'border-red-200 bg-red-200 dark:bg-red-500/10'}`}
     >
       {/* Header - Always visible */}
       <button
@@ -51,12 +49,14 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
       >
         <div className="flex items-center gap-3">
           {/* Riddle Number */}
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-bold text-gray-700 shadow-sm border border-gray-100">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white dark:bg-secondary-800 text-sm font-bold text-gray-700 dark:text-secondary-200 shadow-sm border border-gray-100 dark:border-secondary-800">
             {riddleNumber}
           </span>
 
           {/* Riddle Preview */}
-          <p className="line-clamp-1 font-medium text-gray-800">{riddle.question}</p>
+          <p className="line-clamp-1 font-medium text-gray-800 dark:text-secondary-100">
+            {riddle.question}
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
 
           {/* Expand Icon */}
           <motion.span animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-gray-400 dark:text-secondary-400" />
           </motion.span>
         </div>
       </button>
@@ -84,27 +84,20 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="mt-4 border-t border-gray-200 pt-4">
+            <div className="mt-4 border-t border-gray-200 dark:border-secondary-700 pt-4">
               {/* Difficulty Badge */}
               <div className="mb-3">
                 <span
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold
-                    ${
-                      riddle.difficulty === 'easy'
-                        ? 'bg-green-100 text-green-700'
-                        : riddle.difficulty === 'medium'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : riddle.difficulty === 'hard'
-                            ? 'bg-orange-100 text-orange-700'
-                            : 'bg-red-100 text-red-700'
-                    }`}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold                     ${riddle.difficulty === 'easy' ? 'bg-green-200 dark:bg-green-500/20 text-green-700' : riddle.difficulty === 'medium' ? 'bg-yellow-200 dark:bg-yellow-500/20 text-yellow-700' : riddle.difficulty === 'hard' ? 'bg-orange-200 dark:bg-orange-500/20 text-orange-700' : 'bg-red-200 dark:bg-red-500/20 text-red-700'}`}
                 >
                   {riddle.difficulty.toUpperCase()}
                 </span>
               </div>
 
               {/* Full Riddle Question */}
-              <p className="mb-4 text-gray-800 text-lg font-medium">{riddle.question}</p>
+              <p className="mb-4 text-gray-800 dark:text-secondary-100 text-lg font-medium">
+                {riddle.question}
+              </p>
 
               {/* Options — MCQ riddles */}
               {!isExpert && (
@@ -126,24 +119,18 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
                       <div key={opt.key} className={style}>
                         <div className="flex items-center gap-3">
                           <span
-                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-sm font-bold shadow-sm ${
-                              isCorrectAnswer
-                                ? 'bg-green-500 text-white'
-                                : isUserChoice && !isCorrect
-                                  ? 'bg-red-500 text-white'
-                                  : 'bg-gray-100 text-gray-500'
-                            }`}
+                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-sm font-bold shadow-sm ${isCorrectAnswer ? 'bg-green-500 text-white' : isUserChoice && !isCorrect ? 'bg-red-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-500 dark:text-secondary-400'}`}
                           >
                             {opt.key}
                           </span>
                           <span className="flex-1 font-medium">{opt.text}</span>
                           {isCorrectAnswer && (
-                            <span className="text-sm font-bold text-green-600 uppercase tracking-widest">
+                            <span className="text-sm font-bold text-green-600 dark:text-green-300 uppercase tracking-widest">
                               Correct
                             </span>
                           )}
                           {isUserChoice && !isCorrect && (
-                            <span className="text-sm font-bold text-red-600 uppercase tracking-widest">
+                            <span className="text-sm font-bold text-red-600 dark:text-red-300 uppercase tracking-widest">
                               Your answer
                             </span>
                           )}
@@ -158,37 +145,31 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
               {isExpert && (
                 <div className="space-y-2">
                   <div
-                    className={`rounded-lg border-2 p-3 ${
-                      isCorrect
-                        ? 'border-green-500 bg-green-100 text-green-800'
-                        : userAnswer
-                          ? 'border-red-500 bg-red-100 text-red-800'
-                          : 'border-gray-200 bg-white text-gray-600'
-                    }`}
+                    className={`rounded-lg border-2 p-3 ${isCorrect ? 'border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800' : userAnswer ? 'border-red-500 bg-red-100 dark:bg-red-500/20 text-red-800' : 'border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300'}`}
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
                         Your answer
                       </span>
                       <span className="flex-1 text-right font-medium">
                         {userAnswer || 'Not answered'}
                       </span>
                       {!isCorrect && userAnswer && (
-                        <span className="text-sm font-bold text-red-600 uppercase tracking-widest">
+                        <span className="text-sm font-bold text-red-600 dark:text-red-300 uppercase tracking-widest">
                           Wrong
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="rounded-lg border-2 border-green-500 bg-green-100 p-3 text-green-800">
+                  <div className="rounded-lg border-2 border-green-500 bg-green-100 dark:bg-green-500/20 p-3 text-green-800 dark:text-green-300">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
                         ✍️ Text answer
                       </span>
                       <span className="flex-1 text-right font-medium">
                         {riddle.correctAnswer || riddle.correctOption}
                       </span>
-                      <span className="text-sm font-bold text-green-600 uppercase tracking-widest">
+                      <span className="text-sm font-bold text-green-600 dark:text-green-300 uppercase tracking-widest">
                         Correct
                       </span>
                     </div>
@@ -198,23 +179,25 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
 
               {/* Explanation / Hint */}
               {(riddle.explanation || riddle.hint) && (
-                <div className="mt-5 rounded-xl bg-indigo-50 p-4 border border-indigo-100">
+                <div className="mt-5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 p-4 border border-indigo-100 dark:border-indigo-500/30">
                   {riddle.explanation && (
                     <div className="mb-3">
-                      <p className="font-bold text-indigo-800 flex items-center gap-2 mb-1">
+                      <p className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 mb-1">
                         💡 Explanation
                       </p>
-                      <p className="text-sm text-indigo-900">{riddle.explanation}</p>
+                      <p className="text-sm text-indigo-900 dark:text-indigo-200">
+                        {riddle.explanation}
+                      </p>
                     </div>
                   )}
                   {riddle.hint && (
                     <div
                       className={`${riddle.explanation ? 'border-t border-indigo-200 pt-3' : ''}`}
                     >
-                      <p className="font-bold text-indigo-800 flex items-center gap-2 mb-1">
+                      <p className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 mb-1">
                         🔑 Hint
                       </p>
-                      <p className="text-sm text-indigo-900">{riddle.hint}</p>
+                      <p className="text-sm text-indigo-900 dark:text-indigo-200">{riddle.hint}</p>
                     </div>
                   )}
                 </div>

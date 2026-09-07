@@ -37,7 +37,7 @@ export default function RiddleFormFields({
       <div>
         <label
           htmlFor="image-riddle-title"
-          className="mb-1 block text-sm font-medium text-gray-700"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
         >
           Title <span aria-label="required">*</span>
         </label>
@@ -53,7 +53,10 @@ export default function RiddleFormFields({
       </div>
 
       <div>
-        <label htmlFor="image-riddle-url" className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="image-riddle-url"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
+        >
           Image URL <span aria-label="required">*</span>
         </label>
         <div className="flex gap-2">
@@ -77,7 +80,7 @@ export default function RiddleFormFields({
           </button>
         </div>
         {form.imageUrl && (
-          <div className="mt-2 text-center rounded-lg border border-slate-200 bg-slate-50 p-2 overflow-hidden">
+          <div className="mt-2 text-center rounded-lg border border-slate-200 dark:border-secondary-700 bg-slate-50 dark:bg-secondary-800 p-2 overflow-hidden">
             <div className="relative h-36 w-full">
               <Image
                 src={form.imageUrl}
@@ -97,7 +100,7 @@ export default function RiddleFormFields({
       <div>
         <label
           htmlFor="image-riddle-answer"
-          className="mb-1 block text-sm font-medium text-gray-700"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
         >
           Answer <span aria-label="required">*</span>
         </label>
@@ -113,7 +116,10 @@ export default function RiddleFormFields({
       </div>
 
       <div>
-        <label htmlFor="image-riddle-hint" className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="image-riddle-hint"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
+        >
           Hint
         </label>
         <input

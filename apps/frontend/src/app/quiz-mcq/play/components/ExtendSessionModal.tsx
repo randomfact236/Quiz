@@ -35,23 +35,25 @@ export function ExtendSessionModal({
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-xl"
       >
-        <h2 className="mb-2 text-xl font-bold text-gray-800">Extend Quiz</h2>
+        <h2 className="mb-2 text-xl font-bold text-gray-800 dark:text-secondary-100">
+          Extend Quiz
+        </h2>
 
         <div className="mb-4 space-y-3">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-secondary-300">
             You&apos;ve answered <strong>{answeredCount}</strong> of{' '}
             <strong>{totalQuestions}</strong> questions.
           </p>
 
-          <div className="rounded-lg bg-blue-50 p-3">
-            <p className="text-sm text-blue-800">
+          <div className="rounded-lg bg-blue-50 dark:bg-blue-500/10 p-3">
+            <p className="text-sm text-blue-800 dark:text-blue-300">
               <strong>{availableCount}</strong> more questions available in this level
             </p>
           </div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-secondary-400">
             How many additional questions would you like to add?
           </p>
 
@@ -59,7 +61,7 @@ export function ExtendSessionModal({
             <button
               onClick={() => onAdditionalQuestionsChange(clamp(additionalQuestions - 1))}
               disabled={additionalQuestions <= 1}
-              className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+              className="h-10 w-10 rounded-lg bg-gray-100 dark:bg-secondary-800 font-bold text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 disabled:opacity-50"
             >
               -
             </button>
@@ -69,18 +71,18 @@ export function ExtendSessionModal({
               max={Math.min(MAX_ADDITIONAL, availableCount)}
               value={additionalQuestions}
               onChange={(e) => onAdditionalQuestionsChange(clamp(parseInt(e.target.value) || 1))}
-              className="h-10 w-20 rounded-lg border border-gray-300 bg-white text-center font-semibold text-gray-700"
+              className="h-10 w-20 rounded-lg border border-gray-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 text-center font-semibold text-gray-700 dark:text-secondary-200"
             />
             <button
               onClick={() => onAdditionalQuestionsChange(clamp(additionalQuestions + 1))}
               disabled={additionalQuestions >= Math.min(MAX_ADDITIONAL, availableCount)}
-              className="h-10 w-10 rounded-lg bg-gray-100 font-bold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+              className="h-10 w-10 rounded-lg bg-gray-100 dark:bg-secondary-800 font-bold text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 disabled:opacity-50"
             >
               +
             </button>
           </div>
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 dark:text-secondary-400">
             New questions will be added without repeating any you&apos;ve already seen.
           </p>
         </div>
@@ -88,7 +90,7 @@ export function ExtendSessionModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
+            className="flex-1 rounded-lg bg-gray-200 dark:bg-secondary-700 py-3 font-semibold text-gray-700 dark:text-secondary-200 transition-colors hover:bg-gray-300"
           >
             {availableCount > 0 ? 'Cancel' : 'Close'}
           </button>
@@ -101,7 +103,7 @@ export function ExtendSessionModal({
               Add & Continue
             </button>
           ) : (
-            <div className="flex-1 rounded-lg bg-red-50 p-2 text-center text-xs font-semibold text-red-600 border border-red-200">
+            <div className="flex-1 rounded-lg bg-red-50 dark:bg-red-500/10 p-2 text-center text-xs font-semibold text-red-600 dark:text-red-300 border border-red-200 dark:border-red-500/30">
               Maximum Limit Reached
             </div>
           )}

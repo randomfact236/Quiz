@@ -124,12 +124,14 @@ export default function ShareMenu({
       aria-label={`Share: ${title}`}
     >
       <div
-        className="w-full max-w-xs rounded-3xl bg-white shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden"
+        className="w-full max-w-xs rounded-3xl bg-white dark:bg-secondary-800 shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="border-b border-gray-100 px-6 py-4 text-center">
+        <div className="border-b border-gray-100 dark:border-secondary-800 px-6 py-4 text-center">
           <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-400">Share</p>
-          <p className="mt-0.5 truncate text-sm font-bold text-gray-800">{title}</p>
+          <p className="mt-0.5 truncate text-sm font-bold text-gray-800 dark:text-secondary-100">
+            {title}
+          </p>
         </div>
         <div className="p-2">
           {TARGETS.map((target) => (
@@ -139,7 +141,7 @@ export default function ShareMenu({
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
-              className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-gray-50"
+              className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
             >
               <span
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-black ${target.badgeClass}`}
@@ -147,32 +149,36 @@ export default function ShareMenu({
               >
                 {target.badge}
               </span>
-              <span className="text-sm font-bold text-gray-700">{target.label}</span>
+              <span className="text-sm font-bold text-gray-700 dark:text-secondary-200">
+                {target.label}
+              </span>
             </a>
           ))}
           <button
             onClick={handleCopyLink}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50"
+            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
           >
             <span
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-sm"
               aria-hidden="true"
             >
               🔗
             </span>
-            <span className="text-sm font-bold text-gray-700">Copy Link</span>
+            <span className="text-sm font-bold text-gray-700 dark:text-secondary-200">
+              Copy Link
+            </span>
           </button>
           <button
             onClick={handleSave}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50"
+            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
           >
             <span
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-sm"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20 text-sm"
               aria-hidden="true"
             >
               {isSavedNow ? '✓' : '🔖'}
             </span>
-            <span className="text-sm font-bold text-gray-700">
+            <span className="text-sm font-bold text-gray-700 dark:text-secondary-200">
               {isSavedNow ? 'Saved — tap to remove' : 'Save'}
             </span>
           </button>

@@ -222,7 +222,7 @@ export function RiddleMcqContainer() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-secondary-400">Loading...</div>
       </div>
     );
   }

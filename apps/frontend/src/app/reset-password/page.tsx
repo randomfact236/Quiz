@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="absolute top-4 left-4">
           <Link href="/login" className="flex items-center text-white/80 hover:text-white">
             Back to Login
@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="mx-auto h-12 w-12 bg-red-100 rounded-full flex items-center justify-center">
+          <div className="mx-auto h-12 w-12 bg-red-100 dark:bg-red-500/20 rounded-full flex items-center justify-center">
             <AlertCircle className="h-6 w-6 text-red-500" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
@@ -101,7 +101,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="absolute top-4 left-4">
         <Link href="/login" className="flex items-center text-white/80 hover:text-white">
           Back to Login
@@ -109,29 +109,26 @@ export default function ResetPasswordPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="mx-auto h-12 w-12 bg-white/20 rounded-full flex items-center justify-center">
+        <div className="mx-auto h-12 w-12 bg-white/20 dark:bg-secondary-800/20 rounded-full flex items-center justify-center">
           <Lock className="h-6 w-6 text-white" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-          Reset Your Password
-        </h2>
-        <p className="mt-2 text-center text-sm text-white/80">
-          Enter your new password below
-        </p>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Reset Your Password</h2>
+        <p className="mt-2 text-center text-sm text-white/80">Enter your new password below</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           {success ? (
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <div className="mx-auto h-12 w-12 bg-green-100 dark:bg-green-500/20 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="h-6 w-6 text-green-500" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
                 Password Reset Complete!
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-                Your password has been successfully reset. You can now sign in with your new password.
+                Your password has been successfully reset. You can now sign in with your new
+                password.
               </p>
               <Link
                 href="/login"
@@ -150,7 +147,10 @@ export default function ResetPasswordPage() {
               )}
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300"
+                >
                   New Password
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -183,7 +183,10 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label
+                  htmlFor="confirm-password"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300"
+                >
                   Confirm Password
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -230,7 +233,10 @@ export default function ResetPasswordPage() {
               <div className="text-center">
                 <p className="text-sm text-slate-600 dark:text-slate-400">
                   Remember your password?{' '}
-                  <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                  <Link
+                    href="/login"
+                    className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                  >
                     Sign in
                   </Link>
                 </p>

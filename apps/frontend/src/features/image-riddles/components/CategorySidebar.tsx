@@ -34,10 +34,10 @@ export default function CategorySidebar({
       <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
         <button
           onClick={() => onSelect(null)}
-          className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-white border-slate-100 hover:border-slate-300'}`}
+          className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:border-secondary-600'}`}
         >
-          <Globe className="h-5 w-5 text-slate-600" aria-hidden="true" />
-          <span className="text-[10px] uppercase font-black tracking-widest text-slate-700">
+          <Globe className="h-5 w-5 text-slate-600 dark:text-secondary-300" aria-hidden="true" />
+          <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 dark:text-secondary-200">
             All
           </span>
         </button>
@@ -49,15 +49,15 @@ export default function CategorySidebar({
               key={cat.id}
               onClick={() => onSelect(cat.name)}
               disabled={isEmpty}
-              className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === cat.name ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-white border-slate-100 hover:border-slate-300'} ${isEmpty ? 'opacity-40 cursor-not-allowed hover:border-slate-100' : ''}`}
+              className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === cat.name ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:border-secondary-600'} ${isEmpty ? 'opacity-40 cursor-not-allowed hover:border-slate-100 dark:border-secondary-800' : ''}`}
               title={isEmpty ? `${cat.name} (no riddles yet)` : cat.name}
             >
               <span className="text-xl">{cat.emoji}</span>
-              <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 line-clamp-1 break-all w-full px-1">
+              <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 dark:text-secondary-200 line-clamp-1 break-all w-full px-1">
                 {cat.name}
               </span>
               <span
-                className={`text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border ${isEmpty ? 'bg-slate-50 text-slate-300 border-slate-100' : 'bg-indigo-50 text-indigo-500 border-indigo-100'}`}
+                className={`text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border ${isEmpty ? 'bg-slate-50 dark:bg-secondary-800 text-slate-300 border-slate-100 dark:border-secondary-800' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-100'}`}
               >
                 {count} {count === 1 ? 'riddle' : 'riddles'}
               </span>

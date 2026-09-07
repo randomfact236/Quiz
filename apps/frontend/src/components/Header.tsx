@@ -85,7 +85,7 @@ export default function Header(): JSX.Element {
               <div className="flex items-center gap-3">
                 {isAdminLoggedIn ? (
                   <div className="flex items-center gap-3">
-                    <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
+                    <span className="text-sm bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full">
                       Admin
                     </span>
                     <button
@@ -199,7 +199,7 @@ export default function Header(): JSX.Element {
                   {isAdminLoggedIn && (
                     <Link
                       href="/admin"
-                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                      className="text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
                     >
                       Admin Panel
                     </Link>
@@ -213,7 +213,7 @@ export default function Header(): JSX.Element {
                     </Link>
                   )}
                   {isAdminLoggedIn && (
-                    <span className="text-sm bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                    <span className="text-sm bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded-full">
                       Admin
                     </span>
                   )}

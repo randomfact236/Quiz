@@ -64,7 +64,7 @@ export function RiddleTableRow({
 
   return (
     <tr
-      className={`hover:bg-gray-50 dark:hover:bg-secondary-700 ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+      className={`hover:bg-gray-50 dark:hover:bg-secondary-700 ${isSelected ? 'bg-blue-50 dark:bg-blue-500/10 dark:bg-blue-900/20' : ''}`}
     >
       {/* Checkbox */}
       <td className="px-3 py-3">
@@ -72,7 +72,7 @@ export function RiddleTableRow({
           type="checkbox"
           checked={isSelected}
           onChange={(e) => onSelect(e.target.checked)}
-          className="w-4 h-4 rounded border-gray-300"
+          className="w-4 h-4 rounded border-gray-300 dark:border-secondary-600"
         />
       </td>
 
@@ -164,11 +164,7 @@ export function RiddleTableRow({
               return (
                 <div
                   key={i}
-                  className={`flex items-center gap-2 text-xs px-2 py-1 rounded ${
-                    isCorrect
-                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium'
-                      : 'text-gray-600 dark:text-secondary-400'
-                  }`}
+                  className={`flex items-center gap-2 text-xs px-2 py-1 rounded ${isCorrect ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium' : 'text-gray-600 dark:text-secondary-400'}`}
                 >
                   <span className="font-bold">{letter}.</span>
                   <span className="truncate">{option}</span>

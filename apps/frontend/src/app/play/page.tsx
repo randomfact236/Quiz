@@ -79,11 +79,11 @@ const MODES: ModeColumn[] = [
 
 export default function UnifiedGamePickerPage(): JSX.Element {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 text-gray-700 transition-all hover:bg-white/60 hover:shadow-md"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/40 dark:bg-secondary-800/40 px-4 py-2 text-gray-700 dark:text-secondary-200 transition-all hover:bg-white dark:hover:bg-secondary-700/60 hover:shadow-md"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Home
@@ -92,11 +92,11 @@ export default function UnifiedGamePickerPage(): JSX.Element {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-2 text-center text-4xl font-extrabold text-gray-800 tracking-tight"
+          className="mb-2 text-center text-4xl font-extrabold text-gray-800 dark:text-secondary-100 tracking-tight"
         >
           Choose Your Game
         </motion.h1>
-        <p className="mb-10 text-center text-gray-600">
+        <p className="mb-10 text-center text-gray-600 dark:text-secondary-300">
           Pick a style, then choose Quiz or Riddle — one click and you&apos;re in.
         </p>
 
@@ -109,7 +109,7 @@ export default function UnifiedGamePickerPage(): JSX.Element {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + idx * 0.1 }}
-                className="rounded-2xl bg-white p-6 shadow-lg"
+                className="rounded-2xl bg-white dark:bg-secondary-800 p-6 shadow-lg"
               >
                 {/* Mode header */}
                 <div className="mb-5 flex items-center gap-3">
@@ -119,8 +119,10 @@ export default function UnifiedGamePickerPage(): JSX.Element {
                     <Icon className="h-6 w-6" />
                   </span>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-800">{m.title}</h2>
-                    <p className="text-sm text-gray-500">{m.blurb}</p>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-secondary-100">
+                      {m.title}
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-secondary-400">{m.blurb}</p>
                   </div>
                 </div>
 
@@ -146,13 +148,19 @@ export default function UnifiedGamePickerPage(): JSX.Element {
           })}
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-2 text-sm text-gray-500">
+        <div className="mt-10 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-secondary-400">
           Know what you want already?
-          <Link href="/riddle-mcq" className="font-medium text-indigo-600 hover:underline">
+          <Link
+            href="/riddle-mcq"
+            className="font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
+          >
             Riddles home
           </Link>
           ·
-          <Link href="/quiz-mcq" className="font-medium text-indigo-600 hover:underline">
+          <Link
+            href="/quiz-mcq"
+            className="font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
+          >
             Quiz home
           </Link>
         </div>

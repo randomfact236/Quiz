@@ -94,7 +94,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
   const chipEntries = Object.entries(chipCounts).filter(([, count]) => count > 0);
 
   return (
-    <div className="shrink-0 rounded-3xl border border-slate-100 bg-slate-50/60 p-5 space-y-3">
+    <div className="shrink-0 rounded-3xl border border-slate-100 dark:border-secondary-800 bg-slate-50 dark:bg-secondary-800/60 p-5 space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
           Guess wall
@@ -117,7 +117,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
                 maxLength={50}
                 placeholder="Your name"
                 autoFocus
-                className="w-28 rounded-full border border-indigo-200 bg-white px-2.5 py-0.5 text-[10px] font-bold text-slate-700 focus:outline-none"
+                className="w-28 rounded-full border border-indigo-200 bg-white dark:bg-secondary-800 px-2.5 py-0.5 text-[10px] font-bold text-slate-700 dark:text-secondary-200 focus:outline-none"
                 aria-label="Your display name"
               />
               <button
@@ -148,7 +148,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
           {chipEntries.map(([chip, count]) => (
             <li
               key={chip}
-              className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-2 text-sm font-bold text-amber-700 border border-amber-100"
+              className="flex items-center gap-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 px-4 py-2 text-sm font-bold text-amber-700 dark:text-amber-300 border border-amber-100 dark:border-amber-500/30"
             >
               <span className="text-base" aria-hidden="true">
                 {CHIP_EMOJI[chip] ?? '🙂'}
@@ -165,7 +165,10 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
       {items === null ? (
         <div className="space-y-2" aria-hidden="true">
           {[0, 1].map((i) => (
-            <div key={i} className="h-10 rounded-xl bg-slate-100 animate-pulse" />
+            <div
+              key={i}
+              className="h-10 rounded-xl bg-slate-100 dark:bg-secondary-800 animate-pulse"
+            />
           ))}
         </div>
       ) : items.length === 0 ? (
@@ -179,7 +182,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
             {(showAllComments ? items : items.slice(0, COLLAPSED_VISIBLE_COUNT)).map((item) => (
               <li
                 key={item.id}
-                className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-sm font-bold ${item.masked ? 'bg-green-50 text-green-700' : 'bg-white text-slate-700 border border-slate-100'}`}
+                className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-sm font-bold ${item.masked ? 'bg-green-50 dark:bg-green-500/10 text-green-700' : 'bg-white dark:bg-secondary-800 text-slate-700 dark:text-secondary-200 border border-slate-100 dark:border-secondary-800'}`}
               >
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
@@ -193,7 +196,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
                   <button
                     onClick={() => void handleDelete(item.id)}
                     disabled={deletingIds.has(item.id)}
-                    className="shrink-0 rounded-full p-1 text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-40"
+                    className="shrink-0 rounded-full p-1 text-slate-300 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40"
                     aria-label="Delete my guess"
                     title="Delete my guess"
                   >
@@ -206,7 +209,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
           {items.length > COLLAPSED_VISIBLE_COUNT && !showAllComments && (
             <button
               onClick={() => setShowAllComments(true)}
-              className="w-full rounded-xl bg-white py-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 border border-slate-100 transition-colors hover:bg-indigo-50"
+              className="w-full rounded-xl bg-white dark:bg-secondary-800 py-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 border border-slate-100 dark:border-secondary-800 transition-colors hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10"
               aria-label={`View all ${items.length} comments`}
             >
               View all {items.length} comments

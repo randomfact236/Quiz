@@ -71,7 +71,7 @@ export default function RiddlesPage(): JSX.Element {
 
 function HubLoading({ label }: { label: string }): JSX.Element {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4">
       <div className="text-center">
         <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
         <p className="text-xl font-semibold text-white">{label}</p>
@@ -82,19 +82,21 @@ function HubLoading({ label }: { label: string }): JSX.Element {
 
 function HubError({ message }: { message: string }): JSX.Element {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       <div className="mx-auto max-w-2xl">
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Home
         </Link>
-        <div className="rounded-2xl bg-white/95 p-8 text-center shadow-lg">
+        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-8 text-center shadow-lg">
           <AlertTriangle className="mx-auto mb-4 h-16 w-16 text-yellow-500" />
-          <h1 className="mb-2 text-2xl font-bold text-gray-800">Something went wrong</h1>
-          <p className="mb-6 text-gray-600">{message}</p>
+          <h1 className="mb-2 text-2xl font-bold text-gray-800 dark:text-secondary-100">
+            Something went wrong
+          </h1>
+          <p className="mb-6 text-gray-600 dark:text-secondary-300">{message}</p>
           <button
             onClick={() => window.location.reload()}
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-indigo-700"
@@ -124,7 +126,7 @@ function ModeLevelPicker({
 
   const grid = (mode: Mode) => (
     <div className="p-6">
-      <p className="mb-4 text-sm text-gray-600">Select difficulty level:</p>
+      <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">Select difficulty level:</p>
       <div className="grid grid-cols-4 gap-2">
         {LEVELS.map((level) => {
           const count = counts[level.key];
@@ -133,9 +135,7 @@ function ModeLevelPicker({
               key={`${mode}-${level.key}`}
               href={`/riddle-mcq/play?subjectId=all&level=${level.key}&mode=${mode}`}
               aria-disabled={count === 0}
-              className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${level.color} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${
-                count === 0 ? 'pointer-events-none opacity-50' : ''
-              }`}
+              className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${level.color} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'pointer-events-none opacity-50' : ''}`}
             >
               <span className="mb-1 text-xl">{level.emoji}</span>
               <span className="text-xs font-semibold">{level.label}</span>
@@ -150,7 +150,7 @@ function ModeLevelPicker({
   return (
     <div className="grid items-start gap-6 md:grid-cols-2">
       {/* Normal Mode */}
-      <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+      <div className="overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg">
         <button
           onClick={() => setNormalOpen(!normalOpen)}
           aria-expanded={normalOpen}
@@ -171,7 +171,7 @@ function ModeLevelPicker({
       </div>
 
       {/* Timer Mode */}
-      <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+      <div className="overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg">
         <button
           onClick={() => setTimerOpen(!timerOpen)}
           aria-expanded={timerOpen}
@@ -302,18 +302,18 @@ function RiddlesPageContent(): JSX.Element {
       return <HubError message="That category could not be found. It may have been removed." />;
     }
     return (
-      <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+      <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
         <div className="mx-auto max-w-4xl">
           <Link
             href="/riddle-mcq"
-            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+            className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
           >
             <ArrowLeft className="h-4 w-4" />
             All Categories
           </Link>
 
           <div className="mb-8 text-center">
-            <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-800">
+            <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-800 dark:text-secondary-100">
               <span className="mr-3">{activeCategory.emoji || '📚'}</span>
               {activeCategory.name}
             </h1>
@@ -330,12 +330,12 @@ function RiddlesPageContent(): JSX.Element {
   // Overview view (/riddle-mcq)
   // ------------------------------------------------------------------
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       <div className="mx-auto max-w-4xl">
         {/* Back Button */}
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Home
@@ -343,7 +343,7 @@ function RiddlesPageContent(): JSX.Element {
 
         {/* Header */}
         <div className="mb-10 text-center">
-          <h1 className="mb-3 text-5xl font-extrabold tracking-tight text-gray-800">
+          <h1 className="mb-3 text-5xl font-extrabold tracking-tight text-gray-800 dark:text-secondary-100">
             <span className="mx-3 opacity-80">🎭</span>
             Riddles
             <span className="mx-3 opacity-80">🎭</span>
@@ -369,13 +369,17 @@ function RiddlesPageContent(): JSX.Element {
                 <Link
                   key={cat.id}
                   href={`/riddle-mcq?category=${encodeURIComponent(cat.slug)}`}
-                  className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-md transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
+                  className="flex flex-col items-center rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-6 text-center shadow-md transition-all hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl"
                 >
                   <span className="text-4xl" aria-hidden="true">
                     {cat.emoji || '📚'}
                   </span>
-                  <span className="mt-2 font-bold text-gray-800">{cat.name}</span>
-                  <span className="text-sm text-gray-500">{cat.riddleTotal} riddles</span>
+                  <span className="mt-2 font-bold text-gray-800 dark:text-secondary-100">
+                    {cat.name}
+                  </span>
+                  <span className="text-sm text-gray-500 dark:text-secondary-400">
+                    {cat.riddleTotal} riddles
+                  </span>
                 </Link>
               ))}
             </div>

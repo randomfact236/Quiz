@@ -64,65 +64,71 @@ export default function AdminRiddlesTable({
   const allSelected = selectedIds.length > 0 && selectedIds.length === riddles.length;
 
   return (
-    <div className="overflow-hidden rounded-xl bg-white shadow-md border border-gray-100">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50/50">
+    <div className="overflow-hidden rounded-xl bg-white dark:bg-secondary-800 shadow-md border border-gray-100 dark:border-secondary-800">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-secondary-700">
+        <thead className="bg-gray-50 dark:bg-secondary-800/50">
           <tr>
-            <th className="w-10 px-4 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">
+            <th className="w-10 px-4 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
               <input
                 type="checkbox"
                 checked={allSelected}
                 onChange={() => (allSelected ? onDeselectAll() : onSelectAll())}
-                className="rounded border-gray-300"
+                className="rounded border-gray-300 dark:border-secondary-600"
                 aria-label="Select all riddles"
               />
             </th>
-            <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 w-12 text-center">
+            <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400 w-12 text-center">
               #
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
               Image
             </th>
             <th
-              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400 cursor-pointer group hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
               onClick={() => onSort('title')}
             >
               Riddle Details <SortIcon field="title" sortConfig={sortConfig} />
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
               Answer
             </th>
             <th
-              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400 cursor-pointer group hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
               onClick={() => onSort('category')}
             >
               Category <SortIcon field="category" sortConfig={sortConfig} />
             </th>
             <th
-              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer group hover:bg-gray-100 transition-colors"
+              className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400 cursor-pointer group hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
               onClick={() => onSort('difficulty')}
             >
               Difficulty <SortIcon field="difficulty" sortConfig={sortConfig} />
             </th>
             <th
-              className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 text-center cursor-pointer group hover:bg-gray-100 transition-colors"
+              className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400 text-center cursor-pointer group hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
               onClick={() => onSort('status')}
             >
               Status <SortIcon field="status" sortConfig={sortConfig} />
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
+        <tbody className="divide-y divide-gray-100 bg-white dark:bg-secondary-800">
           {isLoading && (
             <tr>
-              <td colSpan={8} className="px-6 py-12 text-center text-sm font-bold text-gray-400">
+              <td
+                colSpan={8}
+                className="px-6 py-12 text-center text-sm font-bold text-gray-400 dark:text-secondary-400"
+              >
                 Loading riddles from server...
               </td>
             </tr>
           )}
           {!isLoading && riddles.length === 0 && (
             <tr>
-              <td colSpan={8} className="px-6 py-12 text-center text-sm text-gray-400">
+              <td
+                colSpan={8}
+                className="px-6 py-12 text-center text-sm text-gray-400 dark:text-secondary-400"
+              >
                 No riddles match the current filters.
               </td>
             </tr>

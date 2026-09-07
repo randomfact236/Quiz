@@ -97,7 +97,7 @@ export function RiddleTable({
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={(e) => onSelectAll(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300"
+                  className="w-4 h-4 rounded border-gray-300 dark:border-secondary-600"
                 />
               </th>
               <th className="w-12 px-3 py-3 text-center text-xs font-medium text-gray-500 dark:text-secondary-400 uppercase tracking-wider">
@@ -171,16 +171,12 @@ export function RiddleTable({
                 <button
                   key={i}
                   onClick={() => onPageChange(page)}
-                  className={`min-w-[32px] h-8 px-2 text-sm rounded ${
-                    page === riddlePage
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-700'
-                  }`}
+                  className={`min-w-[32px] h-8 px-2 text-sm rounded ${page === riddlePage ? 'bg-primary-600 text-white' : 'text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-700'}`}
                 >
                   {page}
                 </button>
               ) : (
-                <span key={i} className="px-1 text-gray-400">
+                <span key={i} className="px-1 text-gray-400 dark:text-secondary-400">
                   {page}
                 </span>
               )

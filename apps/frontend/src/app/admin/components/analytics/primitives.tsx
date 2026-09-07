@@ -26,10 +26,12 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <div className={`rounded-lg border border-gray-800 bg-gray-900 p-4 ${className}`}>
+    <div className={`rounded-lg border border-border bg-card p-4 ${className}`}>
       <div className="mb-3">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">{title}</h3>
-        {hint && <p className="mt-0.5 text-xs text-gray-600">{hint}</p>}
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
+          {title}
+        </h3>
+        {hint && <p className="mt-0.5 text-xs text-gray-600 dark:text-secondary-300">{hint}</p>}
       </div>
       {children}
     </div>
@@ -63,9 +65,11 @@ export function KpiCard({
   deltaPct?: number | null;
 }) {
   return (
-    <div className="rounded-lg border border-gray-800 bg-gray-900 p-4">
+    <div className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-secondary-400">
+          {label}
+        </p>
         {Icon && (
           <span
             className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${ACCENTS[accent]}`}
@@ -74,7 +78,7 @@ export function KpiCard({
           </span>
         )}
       </div>
-      <p className="mt-1 text-2xl font-bold text-white">{value}</p>
+      <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
       <div className="mt-0.5 flex items-center gap-2">
         {typeof deltaPct === 'number' && Number.isFinite(deltaPct) && (
           <span
@@ -83,7 +87,7 @@ export function KpiCard({
             {deltaPct >= 0 ? '▲' : '▼'} {Math.abs(deltaPct)}%
           </span>
         )}
-        {hint && <p className="truncate text-xs text-gray-600">{hint}</p>}
+        {hint && <p className="truncate text-xs text-gray-600 dark:text-secondary-300">{hint}</p>}
       </div>
     </div>
   );
@@ -99,19 +103,24 @@ export function BarList({
   emptyText?: string;
 }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
-  if (rows.length === 0) return <p className="text-sm text-gray-600">{emptyText}</p>;
+  if (rows.length === 0)
+    return <p className="text-sm text-gray-600 dark:text-secondary-300">{emptyText}</p>;
   return (
     <div className="space-y-2.5">
       {rows.map((row) => (
         <div key={row.label}>
           <div className="mb-1 flex items-center justify-between text-xs">
-            <span className="truncate text-gray-400">{row.label}</span>
-            <span className="ml-2 shrink-0 font-medium text-gray-200">
+            <span className="truncate text-gray-500 dark:text-secondary-400">{row.label}</span>
+            <span className="ml-2 shrink-0 font-medium text-foreground">
               {row.value.toLocaleString()}
-              {row.meta && <span className="ml-1 font-normal text-gray-500">{row.meta}</span>}
+              {row.meta && (
+                <span className="ml-1 font-normal text-gray-500 dark:text-secondary-400">
+                  {row.meta}
+                </span>
+              )}
             </span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-800">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
             <div
               className={`h-full rounded-full ${accent}`}
               style={{ width: `${Math.max(2, (row.value / max) * 100)}%` }}
@@ -127,7 +136,7 @@ export function BarList({
 export function AccuracyBar({ pct, label }: { pct: number | null; label: string }) {
   if (pct === null) {
     return (
-      <div className="flex items-center justify-between py-1 text-xs text-gray-600">
+      <div className="flex items-center justify-between py-1 text-xs text-gray-600 dark:text-secondary-300">
         <span>{label}</span>
         <span>—</span>
       </div>
@@ -137,10 +146,10 @@ export function AccuracyBar({ pct, label }: { pct: number | null; label: string 
   return (
     <div className="py-1">
       <div className="mb-1 flex items-center justify-between text-xs">
-        <span className="truncate text-gray-400">{label}</span>
-        <span className="font-medium text-gray-200">{pct}%</span>
+        <span className="truncate text-gray-500 dark:text-secondary-400">{label}</span>
+        <span className="font-medium text-foreground">{pct}%</span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-800">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${Math.max(2, pct)}%` }} />
       </div>
     </div>
@@ -157,7 +166,7 @@ export function DailyChart({
   series: { day: string; events: number; pageViews: number; activeUsers: number }[];
 }) {
   if (series.length === 0) {
-    return <p className="text-sm text-gray-600">No data in this window.</p>;
+    return <p className="text-sm text-gray-600 dark:text-secondary-300">No data in this window.</p>;
   }
   const W = 720;
   const H = 180;
@@ -212,7 +221,7 @@ export function DailyChart({
           </rect>
         ))}
       </svg>
-      <div className="mt-2 flex items-center justify-between text-xs text-gray-600">
+      <div className="mt-2 flex items-center justify-between text-xs text-gray-600 dark:text-secondary-300">
         <span>{series[0]?.day}</span>
         <span className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
@@ -237,7 +246,8 @@ export function MiniBars({
   accent?: string;
 }) {
   const max = Math.max(1, ...series.map((d) => d.count));
-  if (series.length === 0) return <p className="text-sm text-gray-600">No data.</p>;
+  if (series.length === 0)
+    return <p className="text-sm text-gray-600 dark:text-secondary-300">No data.</p>;
   return (
     <div>
       <div className="flex h-24 items-end gap-1">
@@ -250,7 +260,7 @@ export function MiniBars({
           />
         ))}
       </div>
-      <div className="mt-1.5 flex justify-between text-xs text-gray-600">
+      <div className="mt-1.5 flex justify-between text-xs text-gray-600 dark:text-secondary-300">
         <span>{series[0]?.day}</span>
         <span>{series[series.length - 1]?.day}</span>
       </div>
@@ -276,15 +286,20 @@ export function FunnelRow({
   return (
     <div>
       <div className="mb-1 flex items-center justify-between text-xs">
-        <span className="text-gray-400">
+        <span className="text-gray-500 dark:text-secondary-400">
           {label}
-          {meta && <span className="ml-2 font-normal text-gray-500">· {meta} of previous</span>}
+          {meta && (
+            <span className="ml-2 font-normal text-gray-500 dark:text-secondary-400">
+              · {meta} of previous
+            </span>
+          )}
         </span>
-        <span className="font-medium text-gray-200">
-          {value.toLocaleString()} <span className="font-normal text-gray-500">({pct}%)</span>
+        <span className="font-medium text-foreground">
+          {value.toLocaleString()}{' '}
+          <span className="font-normal text-gray-500 dark:text-secondary-400">({pct}%)</span>
         </span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-800">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
         <div
           className={`h-full rounded-full ${accent}`}
           style={{ width: `${Math.max(2, pct)}%` }}
@@ -299,7 +314,7 @@ export function DarkTable({ headers, children }: { headers: string[]; children: 
     <div className="overflow-x-auto">
       <table className="min-w-full text-sm">
         <thead>
-          <tr className="text-left text-xs uppercase tracking-wide text-gray-500">
+          <tr className="text-left text-xs uppercase tracking-wide text-gray-500 dark:text-secondary-400">
             {headers.map((h) => (
               <th key={h} className="pb-2 pr-4 font-medium">
                 {h}
@@ -353,11 +368,9 @@ export function JourneyColumn({
   return (
     <div className="flex min-w-0 flex-1 flex-col items-center">
       {/* Column header card */}
-      <div
-        className={`w-full rounded-lg border bg-gray-900/60 px-3 py-3 text-center ${accent.border}`}
-      >
+      <div className={`w-full rounded-lg border bg-card/60 px-3 py-3 text-center ${accent.border}`}>
         <p className={`text-xs font-semibold uppercase tracking-wide ${accent.text}`}>{title}</p>
-        <p className="mt-1 text-2xl font-bold text-white">{top.toLocaleString()}</p>
+        <p className="mt-1 text-2xl font-bold text-foreground">{top.toLocaleString()}</p>
         <p className={`text-xs ${accent.text}`}>{sharePct}% of total</p>
       </div>
 
@@ -381,10 +394,10 @@ export function JourneyColumn({
                 <span className={`mx-auto mb-0.5 block h-4 w-px ${accent.bar}`} aria-hidden />
               </>
             )}
-            <div className="rounded-lg bg-gray-900/80 px-3 py-2.5 text-center">
-              <p className="text-xs text-gray-400">{s.label}</p>
-              <p className="text-lg font-bold text-white">{s.value.toLocaleString()}</p>
-              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-800">
+            <div className="rounded-lg bg-card/80 px-3 py-2.5 text-center">
+              <p className="text-xs text-gray-500 dark:text-secondary-400">{s.label}</p>
+              <p className="text-lg font-bold text-foreground">{s.value.toLocaleString()}</p>
+              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-secondary-800">
                 <div
                   className={`h-full rounded-full ${accent.bar}`}
                   style={{ width: `${Math.min(100, Math.max(3, pct))}%` }}
@@ -397,7 +410,7 @@ export function JourneyColumn({
       })}
 
       {/* Conversion footer */}
-      <p className="mt-2 text-xs text-gray-500">Conversion</p>
+      <p className="mt-2 text-xs text-gray-500 dark:text-secondary-400">Conversion</p>
       <p className="text-lg font-bold text-amber-400">{convPct}%</p>
     </div>
   );

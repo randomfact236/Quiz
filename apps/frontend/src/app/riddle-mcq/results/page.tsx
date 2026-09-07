@@ -118,10 +118,12 @@ function ResultsContent(): JSX.Element {
   // Loading state
   if (!result) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8]">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] dark:from-indigo-950 dark:to-rose-950/70">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
-          <p className="text-xl font-semibold text-indigo-900">Calculating results...</p>
+          <p className="text-xl font-semibold text-indigo-900 dark:text-indigo-200">
+            Calculating results...
+          </p>
         </div>
       </div>
     );
@@ -133,7 +135,7 @@ function ResultsContent(): JSX.Element {
   const retryPath = `/riddle-mcq/play?subjectId=${session.subjectId}&level=${session.difficulty}&mode=${session.mode}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
       {/* Results Celebration */}
       <ResultsCelebration
         trigger={showCelebration}
@@ -146,7 +148,7 @@ function ResultsContent(): JSX.Element {
         <div className="mb-6 flex items-center justify-between">
           <Link
             href={backPath}
-            className="inline-flex items-center gap-2 rounded-lg bg-white/40 px-4 py-2 font-medium text-gray-700 shadow-sm transition-colors hover:bg-white/60"
+            className="inline-flex items-center gap-2 rounded-lg bg-white/40 dark:bg-secondary-800/40 px-4 py-2 font-medium text-gray-700 dark:text-secondary-200 shadow-sm transition-colors hover:bg-white dark:hover:bg-secondary-700/60"
           >
             <ArrowLeft className="h-5 w-5" />
             Back to {session.mode === 'timer' ? 'Challenge' : 'Practice'}
@@ -179,9 +181,9 @@ function ResultsContent(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-8 rounded-3xl bg-white p-6 shadow-lg sm:p-8"
+          className="mb-8 rounded-3xl bg-white dark:bg-secondary-800 p-6 shadow-lg sm:p-8"
         >
-          <h3 className="mb-6 flex items-center gap-3 text-xl font-bold text-gray-800">
+          <h3 className="mb-6 flex items-center gap-3 text-xl font-bold text-gray-800 dark:text-secondary-100">
             <Trophy className="h-6 w-6 text-yellow-500" />
             Performance by Difficulty
           </h3>
@@ -194,34 +196,20 @@ function ResultsContent(): JSX.Element {
               return (
                 <div
                   key={level}
-                  className={`rounded-2xl p-4 text-center border-2 ${
-                    data.total === 0
-                      ? 'bg-gray-50 border-gray-100'
-                      : pct >= 70
-                        ? 'bg-green-50 border-green-200'
-                        : pct >= 50
-                          ? 'bg-yellow-50 border-yellow-200'
-                          : 'bg-red-50 border-red-200'
-                  }`}
+                  className={`rounded-2xl p-4 text-center border-2 ${data.total === 0 ? 'bg-gray-50 dark:bg-secondary-800 border-gray-100 dark:border-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10 border-green-200' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10 border-yellow-200' : 'bg-red-50 dark:bg-red-500/10 border-red-200'}`}
                 >
-                  <p className="mb-2 text-sm font-bold uppercase tracking-wider text-gray-500">
+                  <p className="mb-2 text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                     {level}
                   </p>
                   <p
-                    className={`text-2xl font-black ${
-                      data.total === 0
-                        ? 'text-gray-400'
-                        : pct >= 70
-                          ? 'text-green-600'
-                          : pct >= 50
-                            ? 'text-yellow-600'
-                            : 'text-red-600'
-                    }`}
+                    className={`text-2xl font-black ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600' : pct >= 50 ? 'text-yellow-600' : 'text-red-600'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>
                   {data.total > 0 && (
-                    <p className="mt-1 font-medium text-sm text-gray-500">{pct}% Success</p>
+                    <p className="mt-1 font-medium text-sm text-gray-500 dark:text-secondary-400">
+                      {pct}% Success
+                    </p>
                   )}
                 </div>
               );
@@ -234,18 +222,24 @@ function ResultsContent(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-8 rounded-3xl bg-white p-6 shadow-lg sm:p-8"
+          className="mb-8 rounded-3xl bg-white dark:bg-secondary-800 p-6 shadow-lg sm:p-8"
         >
-          <div className="grid grid-cols-2 gap-6 text-center divide-x border-gray-100">
+          <div className="grid grid-cols-2 gap-6 text-center divide-x border-gray-100 dark:border-secondary-800">
             <div>
-              <p className="text-4xl font-black text-green-600 mb-1">{correctCount}</p>
-              <p className="text-sm font-bold uppercase tracking-wide text-gray-400">
+              <p className="text-4xl font-black text-green-600 dark:text-green-300 mb-1">
+                {correctCount}
+              </p>
+              <p className="text-sm font-bold uppercase tracking-wide text-gray-400 dark:text-secondary-400">
                 Correct Riddles
               </p>
             </div>
             <div>
-              <p className="text-4xl font-black text-red-600 mb-1">{incorrectCount}</p>
-              <p className="text-sm font-bold uppercase tracking-wide text-gray-400">Incorrect</p>
+              <p className="text-4xl font-black text-red-600 dark:text-red-300 mb-1">
+                {incorrectCount}
+              </p>
+              <p className="text-sm font-bold uppercase tracking-wide text-gray-400 dark:text-secondary-400">
+                Incorrect
+              </p>
             </div>
           </div>
         </motion.div>
@@ -259,7 +253,7 @@ function ResultsContent(): JSX.Element {
         >
           <button
             onClick={() => setShowReview(!showReview)}
-            className="w-full rounded-2xl bg-white p-5 text-center text-lg font-bold text-gray-800 shadow-lg transition-colors hover:bg-gray-50 border-2 border-transparent hover:border-gray-200"
+            className="w-full rounded-2xl bg-white dark:bg-secondary-800 p-5 text-center text-lg font-bold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800 border-2 border-transparent hover:border-gray-200 dark:border-secondary-700"
           >
             {showReview ? 'Hide' : 'Show'} Riddle Review ({session.riddles.length} riddles)
           </button>
@@ -300,7 +294,7 @@ function ResultsContent(): JSX.Element {
 
           <Link
             href={backPath}
-            className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-6 text-gray-800 shadow-lg transition-all hover:bg-gray-50 hover:-translate-y-1"
+            className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800 hover:-translate-y-1"
           >
             <Trophy className="h-8 w-8 text-yellow-500" />
             <span className="font-bold text-lg">Change Level</span>
@@ -308,7 +302,7 @@ function ResultsContent(): JSX.Element {
 
           <Link
             href="/"
-            className="flex flex-col items-center justify-center gap-3 col-span-2 sm:col-span-1 rounded-2xl bg-white p-6 text-gray-800 shadow-lg transition-all hover:bg-gray-50 hover:-translate-y-1"
+            className="flex flex-col items-center justify-center gap-3 col-span-2 sm:col-span-1 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800 hover:-translate-y-1"
           >
             <Home className="h-8 w-8 text-indigo-500" />
             <span className="font-bold text-lg">Home Menu</span>
@@ -323,10 +317,10 @@ export default function RiddleResultsPage(): JSX.Element {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8]">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] dark:from-indigo-950 dark:to-rose-950/70">
           <div className="text-center">
             <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
-            <p className="text-xl font-semibold text-indigo-900">Loading...</p>
+            <p className="text-xl font-semibold text-indigo-900 dark:text-indigo-200">Loading...</p>
           </div>
         </div>
       }

@@ -49,31 +49,37 @@ export function QuestionTable({
   const startIndex = (page - 1) * pageSize;
 
   return (
-    <div className="overflow-x-auto rounded-xl bg-white shadow-md">
+    <div className="overflow-x-auto rounded-xl bg-white dark:bg-secondary-800 shadow-md">
       <table className="w-full">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 dark:bg-secondary-800">
           <tr>
-            <th className="w-10 px-3 py-3 text-left text-xs font-semibold text-gray-600">
+            <th className="w-10 px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300">
               <input
                 type="checkbox"
                 checked={isAllSelected}
                 onChange={onToggleSelectAll}
-                className="rounded border-gray-300"
+                className="rounded border-gray-300 dark:border-secondary-600"
               />
             </th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-12">#</th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600">Question</th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-28">
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 w-12">
+              #
+            </th>
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300">
+              Question
+            </th>
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 w-28">
               Chapter
             </th>
-            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 w-48">
+            <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-secondary-300 w-48">
               Options
             </th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-48">Ans</th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 dark:text-secondary-300 w-48">
+              Ans
+            </th>
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 dark:text-secondary-300 w-20">
               Level
             </th>
-            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 w-20">
+            <th className="px-3 py-3 text-center text-xs font-semibold text-gray-600 dark:text-secondary-300 w-20">
               Status
             </th>
           </tr>
@@ -82,7 +88,7 @@ export function QuestionTable({
           {questions.length === 0 ? (
             <tr>
               <td colSpan={8}>
-                <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+                <div className="flex flex-col items-center justify-center py-12 text-gray-500 dark:text-secondary-400">
                   <svg
                     className="w-12 h-12 text-gray-300 mb-3"
                     fill="none"
@@ -97,7 +103,7 @@ export function QuestionTable({
                     />
                   </svg>
                   <p className="font-medium">No questions found</p>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-sm text-gray-400 dark:text-secondary-400 mt-1">
                     Try adjusting filters or add new questions
                   </p>
                 </div>
@@ -116,43 +122,47 @@ export function QuestionTable({
               const isExtreme = question.level === 'extreme';
 
               return (
-                <tr key={question.id} className="hover:bg-gray-50">
+                <tr key={question.id} className="hover:bg-gray-50 dark:hover:bg-secondary-800">
                   <td className="px-3 py-4">
                     <input
                       type="checkbox"
                       checked={selectedIds.has(question.id)}
                       onChange={() => onToggleSelectOne(question.id)}
-                      className="rounded border-gray-300"
+                      className="rounded border-gray-300 dark:border-secondary-600"
                     />
                   </td>
-                  <td className="px-3 py-4 text-sm text-gray-600">{startIndex + index + 1}</td>
+                  <td className="px-3 py-4 text-sm text-gray-600 dark:text-secondary-300">
+                    {startIndex + index + 1}
+                  </td>
                   <td className="px-3 py-3 align-top">
-                    <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                    <p className="text-sm font-medium text-gray-800 dark:text-secondary-100 line-clamp-2">
                       {question.question}
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <button
                         onClick={() => onEdit(question)}
-                        className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100"
+                        className="inline-flex items-center gap-1 rounded bg-blue-50 dark:bg-blue-500/10 px-2 py-1 text-xs text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-500/20"
                       >
                         ✏️ Edit
                       </button>
                       <button
                         onClick={() => onDelete(question)}
-                        className="inline-flex items-center gap-1 rounded bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100"
+                        className="inline-flex items-center gap-1 rounded bg-red-50 dark:bg-red-500/10 px-2 py-1 text-xs text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-500/20"
                       >
                         🗑️ Trash
                       </button>
                     </div>
                   </td>
                   <td className="px-3 py-3 align-top">
-                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 text-xs font-medium">
                       {question.chapter?.name || 'Unknown'}
                     </span>
                   </td>
                   <td className="px-3 py-3 align-top">
                     {isExtreme ? (
-                      <span className="text-xs text-gray-400 italic">Open-ended</span>
+                      <span className="text-xs text-gray-400 dark:text-secondary-400 italic">
+                        Open-ended
+                      </span>
                     ) : (
                       <div className="space-y-1 text-xs">
                         {question.options?.slice(0, 4).map((opt, i) => {
@@ -163,7 +173,7 @@ export function QuestionTable({
                               key={i}
                               className={
                                 isCorrect
-                                  ? 'font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded'
+                                  ? 'font-semibold text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-500/10 px-1.5 py-0.5 rounded'
                                   : 'text-gray-600 px-1.5'
                               }
                             >
@@ -176,11 +186,11 @@ export function QuestionTable({
                   </td>
                   <td className="px-3 py-3 text-center align-top">
                     {isExtreme ? (
-                      <div className="text-xs text-gray-700 bg-purple-50 px-2 py-1 rounded whitespace-normal break-words w-44 leading-tight">
+                      <div className="text-xs text-gray-700 dark:text-secondary-200 bg-purple-200 dark:bg-purple-500/10 px-2 py-1 rounded whitespace-normal break-words w-44 leading-tight">
                         {question.correctAnswer || 'No answer'}
                       </div>
                     ) : (
-                      <div className="font-semibold text-green-700 bg-green-50 px-2 py-1 rounded text-xs">
+                      <div className="font-semibold text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-500/10 px-2 py-1 rounded text-xs">
                         {question.correctLetter}.{' '}
                         {question.options?.[
                           CORRECT_LETTERS.indexOf(question.correctLetter || 'A')

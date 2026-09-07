@@ -35,19 +35,19 @@ export default function AdminRiddlesPagination({
   const to = Math.min(currentPage * ADMIN_ITEMS_PER_PAGE, totalCount);
 
   return (
-    <div className="flex items-center justify-between border-t bg-gray-50 px-4 py-3 mt-4">
-      <p className="text-sm text-gray-500">
+    <div className="flex items-center justify-between border-t bg-gray-50 dark:bg-secondary-800 px-4 py-3 mt-4">
+      <p className="text-sm text-gray-500 dark:text-secondary-400">
         Showing {from} - {to} of {totalCount} items
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={onPrev}
           disabled={currentPage === 1}
-          className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+          className="rounded bg-gray-200 dark:bg-secondary-700 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
         >
           Previous
         </button>
-        <span className="text-sm text-gray-600 flex items-center gap-1">
+        <span className="text-sm text-gray-600 dark:text-secondary-300 flex items-center gap-1">
           Page
           <input
             type="text"
@@ -55,14 +55,14 @@ export default function AdminRiddlesPagination({
             onChange={onPageInputChange}
             onBlur={onPageInputSubmit}
             onKeyDown={(e) => e.key === 'Enter' && onPageInputSubmit()}
-            className="w-12 rounded border border-gray-300 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
+            className="w-12 rounded border border-gray-300 dark:border-secondary-600 px-2 py-1 text-center text-sm font-medium focus:border-blue-500 focus:outline-none"
           />
           of <span className="font-medium">{totalPages || 1}</span>
         </span>
         <button
           onClick={onNext}
           disabled={currentPage >= totalPages}
-          className="rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
+          className="rounded bg-gray-200 dark:bg-secondary-700 px-3 py-1 text-sm hover:bg-gray-300 disabled:opacity-50"
         >
           Next
         </button>

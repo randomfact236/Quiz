@@ -82,7 +82,9 @@ export function MediaLibrarySection() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">Media Library</h2>
-          <p className="text-sm text-gray-500 mt-1">Manage uploaded images and assets</p>
+          <p className="text-sm text-gray-500 dark:text-secondary-400 mt-1">
+            Manage uploaded images and assets
+          </p>
         </div>
         <button
           onClick={() => fileInputRef.current?.click()}
@@ -111,14 +113,14 @@ export function MediaLibrarySection() {
           ].map((s) => (
             <div key={s.label} className="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 text-center">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{s.value}</div>
-              <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+              <div className="text-xs text-gray-500 dark:text-secondary-400 mt-1">{s.label}</div>
             </div>
           ))}
         </div>
       )}
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-secondary-400" />
         <input
           type="text"
           placeholder="Search by filename..."
@@ -147,7 +149,7 @@ export function MediaLibrarySection() {
           ))}
         </div>
       ) : assets.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-400 dark:text-secondary-400">
           <ImageIcon className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No media assets yet. Upload your first image.</p>
         </div>
@@ -172,7 +174,7 @@ export function MediaLibrarySection() {
                 <p className="text-xs truncate text-gray-700 dark:text-gray-300" title={a.filename}>
                   {a.filename}
                 </p>
-                <p className="text-[10px] text-gray-400 mt-0.5">
+                <p className="text-[10px] text-gray-400 dark:text-secondary-400 mt-0.5">
                   {formatFileSize(getDisplayFileSize(a))}
                   {(() => {
                     const pct = getSavingsPercent(a);
@@ -210,7 +212,7 @@ export function MediaLibrarySection() {
           >
             Prev
           </button>
-          <span className="px-3 py-1 text-sm text-gray-500">
+          <span className="px-3 py-1 text-sm text-gray-500 dark:text-secondary-400">
             {page} / {totalPages}
           </span>
           <button

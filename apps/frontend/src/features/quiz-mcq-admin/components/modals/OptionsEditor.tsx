@@ -28,7 +28,7 @@ export function OptionsEditor({
               name="correctAnswer"
               checked={correctLetter === letter}
               onChange={() => onCorrectLetterChange(letter)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 dark:text-blue-300 focus:ring-blue-500"
             />
             <span className="text-sm font-medium w-6">{letter}.</span>
             <input

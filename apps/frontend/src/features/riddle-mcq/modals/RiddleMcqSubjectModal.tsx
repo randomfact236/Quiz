@@ -128,7 +128,7 @@ export function RiddleMcqSubjectModal({
               type="checkbox"
               {...register('isActive')}
               id="isActive"
-              className="h-4 w-4 rounded border-gray-300"
+              className="h-4 w-4 rounded border-gray-300 dark:border-secondary-600"
             />
             <label
               htmlFor="isActive"

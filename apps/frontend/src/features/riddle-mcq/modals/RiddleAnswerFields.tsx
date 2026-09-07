@@ -57,11 +57,7 @@ export function RiddleAnswerFields({ register, watch, setValue, errors }: Riddle
             <button
               type="button"
               onClick={() => handleCorrectAnswerChange(letter)}
-              className={`flex items-center justify-center w-8 h-8 rounded border ${
-                currentCorrectLetter === letter
-                  ? 'bg-green-500 border-green-500 text-white'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-green-400'
-              }`}
+              className={`flex items-center justify-center w-8 h-8 rounded border ${currentCorrectLetter === letter ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 dark:border-gray-600 hover:border-green-400'}`}
             >
               {currentCorrectLetter === letter ? '✓' : ''}
             </button>

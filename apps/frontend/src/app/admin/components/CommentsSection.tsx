@@ -134,7 +134,7 @@ export function CommentsSection() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <MessageSquare className="w-5 h-5" /> Comments
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-secondary-400 mt-1">
             Moderate guesses, reveal-chips, and joke replies · {total} total
           </p>
         </div>
@@ -158,11 +158,7 @@ export function CommentsSection() {
                 setStatusFilter(filter.value);
                 setPage(1);
               }}
-              className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
-                statusFilter === filter.value
-                  ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
-              }`}
+              className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${statusFilter === filter.value ? 'bg-white dark:bg-secondary-800 dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
             >
               {filter.label}
             </button>
@@ -193,7 +189,7 @@ export function CommentsSection() {
           ))}
         </div>
       ) : rows.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-400 dark:text-secondary-400">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No comments match this filter.</p>
         </div>
@@ -207,20 +203,23 @@ export function CommentsSection() {
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   {statusBadge(row.status)}
-                  <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-bold uppercase text-indigo-600">
+                  <span className="rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-indigo-600 dark:text-indigo-300">
                     {row.contentType === 'image-riddle' ? '🖼️ Riddle' : '😄 Joke'}
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
                     {kindLabel(row.kind, row.chip)}
                   </span>
-                  <span className="text-[10px] text-gray-400">
+                  <span className="text-[10px] text-gray-400 dark:text-secondary-400">
                     {new Date(row.createdAt).toLocaleString()}
                   </span>
                 </div>
                 <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 break-words">
                   {row.masked ? 'Someone solved it 🔓 (masked)' : row.text}
                 </p>
-                <p className="text-[10px] text-gray-400 mt-0.5 truncate" title={row.guestId}>
+                <p
+                  className="text-[10px] text-gray-400 dark:text-secondary-400 mt-0.5 truncate"
+                  title={row.guestId}
+                >
                   guest {row.guestId} · content {row.contentId.slice(0, 8)}…
                 </p>
               </div>
@@ -266,7 +265,7 @@ export function CommentsSection() {
           >
             Prev
           </button>
-          <span className="px-3 py-1 text-sm text-gray-500">
+          <span className="px-3 py-1 text-sm text-gray-500 dark:text-secondary-400">
             {page} / {totalPages}
           </span>
           <button

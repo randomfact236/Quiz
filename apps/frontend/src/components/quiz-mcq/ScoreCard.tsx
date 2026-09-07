@@ -83,12 +83,14 @@ export function ScoreCard({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="rounded-2xl bg-white p-8 shadow-lg"
+      className="rounded-2xl bg-white dark:bg-secondary-800 p-8 shadow-lg"
     >
       {/* Header */}
       <div className="mb-6 text-center">
-        <h2 className="mb-2 text-2xl font-bold text-gray-800">Quiz Completed!</h2>
-        <p className="text-gray-600">{getFeedbackMessage(percentage)}</p>
+        <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-secondary-100">
+          Quiz Completed!
+        </h2>
+        <p className="text-gray-600 dark:text-secondary-300">{getFeedbackMessage(percentage)}</p>
       </div>
 
       {/* Grade Circle */}
@@ -97,9 +99,7 @@ export function ScoreCard({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className={`flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 ${getGradeColor(
-            grade
-          )}`}
+          className={`flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 ${getGradeColor(grade)}`}
         >
           <span className="text-4xl font-bold">{grade}</span>
           <span className="text-sm">Grade</span>
@@ -109,26 +109,30 @@ export function ScoreCard({
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-4">
         {/* Score */}
-        <div className="rounded-xl bg-indigo-50 p-4 text-center">
+        <div className="rounded-xl bg-indigo-50 dark:bg-indigo-500/10 p-4 text-center">
           <Trophy className="mx-auto mb-2 h-6 w-6 text-indigo-500" />
-          <p className="text-2xl font-bold text-indigo-700">
+          <p className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
             {displayScore}/{total}
           </p>
-          <p className="text-xs text-indigo-600">Correct Answers</p>
+          <p className="text-xs text-indigo-600 dark:text-indigo-300">Correct Answers</p>
         </div>
 
         {/* Percentage */}
-        <div className="rounded-xl bg-green-50 p-4 text-center">
+        <div className="rounded-xl bg-green-50 dark:bg-green-500/10 p-4 text-center">
           <Target className="mx-auto mb-2 h-6 w-6 text-green-500" />
-          <p className="text-2xl font-bold text-green-700">{Math.round(percentage)}%</p>
-          <p className="text-xs text-green-600">Accuracy</p>
+          <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+            {Math.round(percentage)}%
+          </p>
+          <p className="text-xs text-green-600 dark:text-green-300">Accuracy</p>
         </div>
 
         {/* Time */}
-        <div className="rounded-xl bg-blue-50 p-4 text-center">
+        <div className="rounded-xl bg-blue-50 dark:bg-blue-500/10 p-4 text-center">
           <Clock className="mx-auto mb-2 h-6 w-6 text-blue-500" />
-          <p className="text-2xl font-bold text-blue-700">{formatTimeCompact(timeTaken)}</p>
-          <p className="text-xs text-blue-600">Time Taken</p>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+            {formatTimeCompact(timeTaken)}
+          </p>
+          <p className="text-xs text-blue-600 dark:text-blue-300">Time Taken</p>
         </div>
       </div>
     </motion.div>

@@ -17,7 +17,9 @@ export function QuizMcqHeader({
     <div className="mb-6 flex items-center justify-between">
       <div>
         <h3 className="text-lg font-semibold">📝 Quiz Management</h3>
-        <p className="text-sm text-gray-500">{totalQuestions} total questions</p>
+        <p className="text-sm text-gray-500 dark:text-secondary-400">
+          {totalQuestions} total questions
+        </p>
       </div>
       <div className="flex gap-2">
         <button

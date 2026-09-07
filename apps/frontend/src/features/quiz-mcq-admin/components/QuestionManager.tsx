@@ -234,11 +234,7 @@ export function QuestionManager({
                   key={pageNum}
                   onClick={() => onPageChange(pageNum as number)}
                   disabled={isFetching}
-                  className={`px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed ${
-                    page === pageNum
-                      ? 'bg-blue-500 text-white border-blue-500'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
+                  className={`px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed ${page === pageNum ? 'bg-blue-500 text-white border-blue-500' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
                 >
                   {pageNum}
                 </button>

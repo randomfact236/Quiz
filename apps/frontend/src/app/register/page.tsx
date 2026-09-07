@@ -79,7 +79,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="absolute top-4 left-4">
         <Link href="/" className="flex items-center text-white/80 hover:text-white">
           <ChevronLeft className="w-5 h-5 mr-1" /> Back to Home
@@ -87,7 +87,7 @@ export default function RegisterPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="mx-auto h-12 w-12 bg-white/20 rounded-full flex items-center justify-center">
+        <div className="mx-auto h-12 w-12 bg-white/20 dark:bg-secondary-800/20 rounded-full flex items-center justify-center">
           <UserPlus className="h-6 w-6 text-white" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Create Account</h2>

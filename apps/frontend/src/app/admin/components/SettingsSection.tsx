@@ -182,7 +182,11 @@ export function SettingsSection(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="p-8 text-center text-gray-500" role="status" aria-live="polite">
+      <div
+        className="p-8 text-center text-gray-500 dark:text-secondary-400"
+        role="status"
+        aria-live="polite"
+      >
         Loading settings...
       </div>
     );
@@ -214,13 +218,17 @@ export function SettingsSection(): JSX.Element {
 
       {/* Messages */}
       {error && (
-        <div className="rounded-lg bg-red-100 p-4 text-red-700" role="alert" aria-live="assertive">
+        <div
+          className="rounded-lg bg-red-100 dark:bg-red-500/20 p-4 text-red-700 dark:text-red-300"
+          role="alert"
+          aria-live="assertive"
+        >
           {error}
         </div>
       )}
       {success && (
         <div
-          className="rounded-lg bg-green-100 p-4 text-green-700"
+          className="rounded-lg bg-green-100 dark:bg-green-500/20 p-4 text-green-700 dark:text-green-300"
           role="status"
           aria-live="polite"
         >
@@ -238,11 +246,7 @@ export function SettingsSection(): JSX.Element {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === tab.id
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-            }`}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls={`settings-panel-${tab.id}`}
@@ -287,7 +291,10 @@ export function SettingsSection(): JSX.Element {
                   min={1}
                   max={1000}
                 />
-                <p id="settings-default-limit-help" className="mt-1 text-xs text-gray-500">
+                <p
+                  id="settings-default-limit-help"
+                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
+                >
                   Number of items to display per page by default
                 </p>
               </div>
@@ -310,7 +317,10 @@ export function SettingsSection(): JSX.Element {
                   min={1}
                   max={1000}
                 />
-                <p id="settings-max-limit-help" className="mt-1 text-xs text-gray-500">
+                <p
+                  id="settings-max-limit-help"
+                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
+                >
                   Maximum number of items allowed per page
                 </p>
               </div>
@@ -330,7 +340,10 @@ export function SettingsSection(): JSX.Element {
                   aria-describedby="settings-cache-ttl-help"
                   min={0}
                 />
-                <p id="settings-cache-ttl-help" className="mt-1 text-xs text-gray-500">
+                <p
+                  id="settings-cache-ttl-help"
+                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
+                >
                   Time to live for cached data in seconds
                 </p>
               </div>
@@ -348,7 +361,7 @@ export function SettingsSection(): JSX.Element {
               <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
                 ⏱️ Timer Settings Per Difficulty Level (seconds)
               </h5>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 dark:text-secondary-400 mb-4">
                 Set the default timer duration for each difficulty level in timer mode.
               </p>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
@@ -377,7 +390,7 @@ export function SettingsSection(): JSX.Element {
                       min={5}
                       max={600}
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
                       {Math.floor(
                         (formData.quiz?.defaults?.levelTimers?.[level] ??
                           getDefaultTimerForLevel(level)) / 60
@@ -485,7 +498,7 @@ export function SettingsSection(): JSX.Element {
               <h5 className="text-md font-semibold mb-3 dark:text-gray-300">
                 ⏱️ Timer Settings Per Difficulty Level (seconds)
               </h5>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 dark:text-secondary-400 mb-4">
                 Set the default timer duration for each difficulty level in riddle challenge mode.
               </p>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -514,7 +527,7 @@ export function SettingsSection(): JSX.Element {
                       min={5}
                       max={600}
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
                       {Math.floor(
                         (formData.riddles?.defaults?.levelTimers?.[level] ??
                           getDefaultRiddleTimerForLevel(level)) / 60
@@ -555,7 +568,7 @@ export function SettingsSection(): JSX.Element {
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   min={0}
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
                   Default time if not specified per riddle
                 </p>
               </div>
@@ -603,7 +616,7 @@ export function SettingsSection(): JSX.Element {
                   id="settings-show-timer"
                   checked={formData.imageRiddles?.defaults?.showTimer ?? true}
                   onChange={(e) => updateField('imageRiddles.defaults.showTimer', e.target.checked)}
-                  className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-5 w-5 rounded border-gray-300 dark:border-secondary-600 text-blue-600 focus:ring-blue-500"
                   aria-describedby="settings-show-timer-help"
                 />
                 <label

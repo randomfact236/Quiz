@@ -14,17 +14,17 @@ export default function RiddleCardSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-100"
+      className="flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-secondary-800 shadow-sm border border-slate-100 dark:border-secondary-800"
     >
       {/* Image area (matches aspect-[4/3]) */}
-      <div className="aspect-[4/3] bg-slate-200 animate-pulse" />
+      <div className="aspect-[4/3] bg-slate-200 dark:bg-secondary-700 animate-pulse" />
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <div className="mb-4 h-5 w-3/4 rounded bg-slate-200 animate-pulse" />
-        <div className="mt-auto border-t border-slate-100 pt-4 flex items-center justify-between gap-3">
-          <div className="h-4 w-24 rounded bg-slate-200 animate-pulse" />
-          <div className="h-8 w-20 rounded-xl bg-slate-200 animate-pulse" />
+        <div className="mb-4 h-5 w-3/4 rounded bg-slate-200 dark:bg-secondary-700 animate-pulse" />
+        <div className="mt-auto border-t border-slate-100 dark:border-secondary-800 pt-4 flex items-center justify-between gap-3">
+          <div className="h-4 w-24 rounded bg-slate-200 dark:bg-secondary-700 animate-pulse" />
+          <div className="h-8 w-20 rounded-xl bg-slate-200 dark:bg-secondary-700 animate-pulse" />
         </div>
       </div>
     </div>
