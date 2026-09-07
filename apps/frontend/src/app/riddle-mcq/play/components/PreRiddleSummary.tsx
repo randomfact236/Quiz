@@ -172,7 +172,7 @@ function ExtraRiddlesPicker({
         <select
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value))}
-          className="h-8 cursor-pointer rounded-lg border border-purple-300 bg-white dark:bg-secondary-800 px-3 text-sm font-semibold text-gray-700 dark:text-secondary-200"
+          className="h-8 cursor-pointer rounded-lg border border-purple-300 dark:border-purple-500/40 bg-white dark:bg-secondary-800 px-3 text-sm font-semibold text-gray-700 dark:text-secondary-200"
         >
           {Array.from({ length: max + 1 }, (_, i) => (
             <option key={i} value={i}>

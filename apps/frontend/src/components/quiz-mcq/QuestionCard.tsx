@@ -361,7 +361,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
             aria-live="polite"
           >
             <span
-              className={`text-base font-semibold ${isCorrect ? 'text-green-600' : 'text-red-500'}`}
+              className={`text-base font-semibold ${isCorrect ? 'text-green-600 dark:text-green-300' : 'text-red-500'}`}
             >
               {feedback.text} {feedback.emoji}
             </span>

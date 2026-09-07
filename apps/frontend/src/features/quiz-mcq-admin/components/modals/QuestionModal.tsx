@@ -173,7 +173,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
           {error &&
             (duplicateText ? (
-              <div className="p-3 bg-amber-50 border border-amber-200 dark:bg-amber-900/20 dark:border-amber-800/60 rounded-lg space-y-1.5">
+              <div className="p-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 dark:bg-amber-900/20 dark:border-amber-800/60 rounded-lg space-y-1.5">
                 <p className="flex items-center gap-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                   Duplicate question detected
@@ -181,7 +181,7 @@ export function QuestionModal({ open, question, subjects, chapters, onClose }: Q
                 <p className="text-xs text-amber-700 dark:text-amber-300">
                   A question with this text already exists in the selected chapter:
                 </p>
-                <mark className="block rounded bg-amber-100 px-2 py-1 text-sm font-medium text-amber-900 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
+                <mark className="block rounded bg-amber-100 dark:bg-amber-500/20 px-2 py-1 text-sm font-medium text-amber-900 dark:text-amber-200 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
                   {duplicateText}
                 </mark>
               </div>

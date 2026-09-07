@@ -33,7 +33,10 @@ export default function AdminRiddleRow({
   onCycleStatus,
 }: AdminRiddleRowProps) {
   return (
-    <tr key={`riddle-row-${riddle.id}`} className="group hover:bg-slate-50 transition-colors">
+    <tr
+      key={`riddle-row-${riddle.id}`}
+      className="group hover:bg-slate-50 dark:hover:bg-secondary-800/70 transition-colors"
+    >
       <td className="px-4 py-4">
         <input
           type="checkbox"

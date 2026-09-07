@@ -68,14 +68,14 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
           {filters.searchInput.length > 0 ? (
             <button
               onClick={() => filters.changeSearchInput('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-300"
               aria-label="Clear search"
             >
               ✕
             </button>
           ) : (
             <Search
-              className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"
+              className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-secondary-400"
               aria-hidden="true"
             />
           )}
@@ -85,13 +85,13 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
         <div className="flex items-center bg-slate-100 dark:bg-secondary-800/80 p-1 rounded-xl border border-slate-200 dark:border-secondary-700/60">
           <button
             onClick={() => filters.changeSortOrder('recent')}
-            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'recent' ? 'bg-white dark:bg-secondary-800 text-indigo-600 shadow-md ring-1 ring-slate-200' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:text-secondary-100'}`}
+            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'recent' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
           >
             Recent
           </button>
           <button
             onClick={() => filters.changeSortOrder('random')}
-            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-indigo-600 shadow-md ring-1 ring-slate-200' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:text-secondary-100'}`}
+            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
           >
             Mix
           </button>
@@ -113,7 +113,7 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
             ))}
           </select>
           <ChevronDown
-            className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none h-4 w-4 text-slate-400"
+            className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none h-4 w-4 text-slate-400 dark:text-secondary-400"
             aria-hidden="true"
           />
         </div>

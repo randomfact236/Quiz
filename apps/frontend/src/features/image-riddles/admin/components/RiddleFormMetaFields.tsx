@@ -145,7 +145,7 @@ export default function RiddleFormMetaFields({
             type="checkbox"
             checked={form.showTimer}
             onChange={(e) => onChange({ showTimer: e.target.checked })}
-            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600"
+            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600 dark:text-blue-300"
           />
           <span className="text-sm text-gray-700 dark:text-secondary-200 font-medium select-none">
             Show Timer
@@ -156,7 +156,7 @@ export default function RiddleFormMetaFields({
             type="checkbox"
             checked={form.isActive}
             onChange={(e) => onChange({ isActive: e.target.checked })}
-            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600"
+            className="rounded border-gray-300 dark:border-secondary-600 w-4 h-4 text-blue-600 dark:text-blue-300"
           />
           <span className="text-sm text-gray-700 dark:text-secondary-200 font-medium select-none">
             Active

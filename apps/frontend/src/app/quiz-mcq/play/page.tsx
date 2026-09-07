@@ -514,7 +514,7 @@ function QuizContent(): JSX.Element {
                   }
                 }}
                 disabled={!quiz.hasAnsweredCurrent}
-                className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${quiz.hasAnsweredCurrent ? 'animate-pulse bg-white dark:bg-secondary-800 text-indigo-600 shadow-lg scale-105' : 'bg-white/10 dark:bg-secondary-800/10 text-white/30 cursor-not-allowed'}`}
+                className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${quiz.hasAnsweredCurrent ? 'animate-pulse bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-lg scale-105' : 'bg-white/10 dark:bg-secondary-800/10 text-white/30 cursor-not-allowed'}`}
               >
                 {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}
                 <ArrowLeft className="h-4 w-4 rotate-180" />

@@ -169,7 +169,7 @@ function ExtraQuestionsPicker({
         <select
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value))}
-          className="h-8 px-3 rounded-lg border border-purple-300 bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 font-semibold text-sm cursor-pointer"
+          className="h-8 px-3 rounded-lg border border-purple-300 dark:border-purple-500/40 bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 font-semibold text-sm cursor-pointer"
         >
           {Array.from({ length: max + 1 }, (_, i) => (
             <option key={i} value={i}>

@@ -42,21 +42,21 @@ export function RiddleMetaFields({ register, watch, setValue }: RiddleMetaFields
           <button
             type="button"
             onClick={() => setValue('status', 'draft')}
-            className={`px-3 py-2 text-sm font-medium ${currentStatus === 'draft' ? 'bg-yellow-500 text-white' : 'bg-white dark:bg-secondary-800 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'}`}
+            className={`px-3 py-2 text-sm font-medium ${currentStatus === 'draft' ? 'bg-yellow-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-gray-600'}`}
           >
             Draft
           </button>
           <button
             type="button"
             onClick={() => setValue('status', 'published')}
-            className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${currentStatus === 'published' ? 'bg-green-500 text-white' : 'bg-white dark:bg-secondary-800 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'}`}
+            className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${currentStatus === 'published' ? 'bg-green-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-gray-600'}`}
           >
             Published
           </button>
           <button
             type="button"
             onClick={() => setValue('status', 'trash')}
-            className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${currentStatus === 'trash' ? 'bg-red-500 text-white' : 'bg-white dark:bg-secondary-800 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'}`}
+            className={`px-3 py-2 text-sm font-medium border-l border-gray-300 dark:border-gray-600 ${currentStatus === 'trash' ? 'bg-red-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-gray-600'}`}
           >
             Trash
           </button>

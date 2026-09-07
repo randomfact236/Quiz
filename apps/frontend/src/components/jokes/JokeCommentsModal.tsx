@@ -165,7 +165,7 @@ export default function JokeCommentsModal({
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-300"
             aria-label="Close comments"
           >
             ✕

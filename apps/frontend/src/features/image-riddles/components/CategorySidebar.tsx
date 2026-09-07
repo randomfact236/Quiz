@@ -28,13 +28,13 @@ export default function CategorySidebar({
 }: CategorySidebarProps) {
   return (
     <div className="lg:col-span-1 sticky top-[104px] z-20">
-      <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 px-1 flex items-center gap-2">
+      <h2 className="text-sm font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400 mb-4 px-1 flex items-center gap-2">
         <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" /> Topics
       </h2>
       <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
         <button
           onClick={() => onSelect(null)}
-          className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:border-secondary-600'}`}
+          className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === null ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:hover:border-secondary-600 dark:border-secondary-600'}`}
         >
           <Globe className="h-5 w-5 text-slate-600 dark:text-secondary-300" aria-hidden="true" />
           <span className="text-[10px] uppercase font-black tracking-widest text-slate-700 dark:text-secondary-200">
@@ -49,7 +49,7 @@ export default function CategorySidebar({
               key={cat.id}
               onClick={() => onSelect(cat.name)}
               disabled={isEmpty}
-              className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === cat.name ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:border-secondary-600'} ${isEmpty ? 'opacity-40 cursor-not-allowed hover:border-slate-100 dark:border-secondary-800' : ''}`}
+              className={`w-full text-left rounded-xl p-3 transition-all border-2 flex flex-col items-center justify-center text-center gap-1 ${activeCategory === cat.name ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-sm' : 'bg-white dark:bg-secondary-800 border-slate-100 dark:border-secondary-800 hover:border-slate-300 dark:hover:border-secondary-600 dark:border-secondary-600'} ${isEmpty ? 'opacity-40 cursor-not-allowed hover:border-slate-100 dark:hover:border-secondary-700 dark:border-secondary-800' : ''}`}
               title={isEmpty ? `${cat.name} (no riddles yet)` : cat.name}
             >
               <span className="text-xl">{cat.emoji}</span>
@@ -57,7 +57,7 @@ export default function CategorySidebar({
                 {cat.name}
               </span>
               <span
-                className={`text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border ${isEmpty ? 'bg-slate-50 dark:bg-secondary-800 text-slate-300 border-slate-100 dark:border-secondary-800' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-100'}`}
+                className={`text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border ${isEmpty ? 'bg-slate-50 dark:bg-secondary-800 text-slate-300 border-slate-100 dark:border-secondary-800' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-100 dark:border-indigo-500/30'}`}
               >
                 {count} {count === 1 ? 'riddle' : 'riddles'}
               </span>

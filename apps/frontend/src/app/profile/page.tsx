@@ -97,7 +97,7 @@ export default function ProfilePage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           <div className="flex flex-col items-center gap-3 mb-6">
-            <div className="h-16 w-16 rounded-full bg-indigo-200 dark:bg-indigo-500/20 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+            <div className="h-16 w-16 rounded-full bg-indigo-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
               {avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatar} alt="Avatar" className="h-16 w-16 object-cover" />
@@ -163,7 +163,8 @@ export default function ProfilePage() {
                 htmlFor="avatar"
                 className="block text-sm font-medium text-slate-700 dark:text-slate-300"
               >
-                Avatar URL <span className="text-slate-400">(optional)</span>
+                Avatar URL{' '}
+                <span className="text-slate-400 dark:text-secondary-400">(optional)</span>
               </label>
               <input
                 id="avatar"

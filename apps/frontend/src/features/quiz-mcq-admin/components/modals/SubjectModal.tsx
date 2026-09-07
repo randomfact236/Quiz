@@ -132,7 +132,7 @@ export function SubjectModal({ open, subject, onClose }: SubjectModalProps) {
                   key={e}
                   type="button"
                   onClick={() => setEmoji(e)}
-                  className={`w-10 h-10 text-xl rounded-lg border-2 transition-colors ${emoji === e ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10' : 'border-gray-200 dark:border-secondary-700 hover:border-gray-300 dark:border-secondary-600'}`}
+                  className={`w-10 h-10 text-xl rounded-lg border-2 transition-colors ${emoji === e ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10' : 'border-gray-200 dark:border-secondary-700 hover:border-gray-300 dark:border-secondary-600 dark:hover:border-secondary-500'}`}
                 >
                   {e}
                 </button>

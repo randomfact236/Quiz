@@ -16,7 +16,7 @@ export default function Footer(): JSX.Element {
 
   return (
     <footer
-      className="border-t border-secondary-200 bg-white px-4 py-8 dark:border-secondary-800 dark:bg-secondary-900"
+      className="border-t border-secondary-200 bg-white dark:bg-secondary-800 px-4 py-8 dark:border-secondary-800 dark:bg-secondary-900"
       role="contentinfo"
       aria-label="Site footer"
     >

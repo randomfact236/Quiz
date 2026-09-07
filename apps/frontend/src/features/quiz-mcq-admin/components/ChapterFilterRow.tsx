@@ -25,11 +25,11 @@ export function ChapterFilterRow({
     >
       <button
         onClick={onSelect}
-        className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 dark:text-secondary-200 hover:text-indigo-600'}`}
+        className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 dark:text-secondary-200 hover:text-indigo-600 dark:hover:text-indigo-300'}`}
       >
         {chapter.name}
         <span
-          className={`ml-1 text-xs ${isSelected ? 'text-indigo-200' : 'text-gray-400 dark:text-secondary-400'}`}
+          className={`ml-1 text-xs ${isSelected ? 'text-indigo-200' : 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400'}`}
         >
           ({count})
         </span>

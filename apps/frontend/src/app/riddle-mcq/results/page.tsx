@@ -196,13 +196,13 @@ function ResultsContent(): JSX.Element {
               return (
                 <div
                   key={level}
-                  className={`rounded-2xl p-4 text-center border-2 ${data.total === 0 ? 'bg-gray-50 dark:bg-secondary-800 border-gray-100 dark:border-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10 border-green-200' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10 border-yellow-200' : 'bg-red-50 dark:bg-red-500/10 border-red-200'}`}
+                  className={`rounded-2xl p-4 text-center border-2 ${data.total === 0 ? 'bg-gray-50 dark:bg-secondary-800 border-gray-100 dark:border-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/30' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10 border-yellow-200 dark:border-yellow-500/30' : 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/30'}`}
                 >
                   <p className="mb-2 text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
                     {level}
                   </p>
                   <p
-                    className={`text-2xl font-black ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600' : pct >= 50 ? 'text-yellow-600' : 'text-red-600'}`}
+                    className={`text-2xl font-black ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>
@@ -253,7 +253,7 @@ function ResultsContent(): JSX.Element {
         >
           <button
             onClick={() => setShowReview(!showReview)}
-            className="w-full rounded-2xl bg-white dark:bg-secondary-800 p-5 text-center text-lg font-bold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800 border-2 border-transparent hover:border-gray-200 dark:border-secondary-700"
+            className="w-full rounded-2xl bg-white dark:bg-secondary-800 p-5 text-center text-lg font-bold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 border-2 border-transparent hover:border-gray-200 dark:hover:border-secondary-700 dark:border-secondary-700"
           >
             {showReview ? 'Hide' : 'Show'} Riddle Review ({session.riddles.length} riddles)
           </button>
@@ -294,7 +294,7 @@ function ResultsContent(): JSX.Element {
 
           <Link
             href={backPath}
-            className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800 hover:-translate-y-1"
+            className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 hover:-translate-y-1"
           >
             <Trophy className="h-8 w-8 text-yellow-500" />
             <span className="font-bold text-lg">Change Level</span>
@@ -302,7 +302,7 @@ function ResultsContent(): JSX.Element {
 
           <Link
             href="/"
-            className="flex flex-col items-center justify-center gap-3 col-span-2 sm:col-span-1 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800 hover:-translate-y-1"
+            className="flex flex-col items-center justify-center gap-3 col-span-2 sm:col-span-1 rounded-2xl bg-white dark:bg-secondary-800 p-6 text-gray-800 dark:text-secondary-100 shadow-lg transition-all hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 hover:-translate-y-1"
           >
             <Home className="h-8 w-8 text-indigo-500" />
             <span className="font-bold text-lg">Home Menu</span>

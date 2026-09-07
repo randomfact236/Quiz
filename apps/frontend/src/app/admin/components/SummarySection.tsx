@@ -125,7 +125,7 @@ export function SummarySection({ onNavigate }: SummarySectionProps): JSX.Element
             <button
               key={link.section}
               onClick={() => onNavigate(link.section)}
-              className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-secondary-700 px-3 py-2 text-sm font-medium text-slate-700 dark:text-secondary-200 transition-colors hover:border-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10"
+              className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-secondary-700 px-3 py-2 text-sm font-medium text-slate-700 dark:text-secondary-200 transition-colors hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10"
             >
               {link.icon}
               {link.label}

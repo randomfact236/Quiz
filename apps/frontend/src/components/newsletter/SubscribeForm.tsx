@@ -41,7 +41,7 @@ export function SubscribeForm(): JSX.Element {
   if (status === 'done') {
     return (
       <div
-        className="flex items-center gap-2 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-400"
+        className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-300 dark:bg-green-900/20 dark:text-green-400"
         role="status"
       >
         <CheckCircle className="h-5 w-5" />

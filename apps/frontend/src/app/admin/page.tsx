@@ -560,7 +560,7 @@ export default function AdminPage(): JSX.Element {
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="bg-white shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
+        <header className="bg-white dark:bg-secondary-800 shadow-sm dark:bg-secondary-900 dark:border-b dark:border-secondary-800">
           <div className="flex items-center justify-between px-6 py-4">
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
               {activeSection === 'summary' && (
@@ -636,7 +636,7 @@ export default function AdminPage(): JSX.Element {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-indigo-600 dark:hover:text-indigo-300 dark:hover:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
                 title="Visit Website"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -648,7 +648,7 @@ export default function AdminPage(): JSX.Element {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-300 dark:hover:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4" />

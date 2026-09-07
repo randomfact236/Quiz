@@ -47,7 +47,7 @@ export function QuestionReview({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-xl border-2 p-4 ${isCorrect ? 'border-green-200 bg-green-200 dark:bg-green-500/10' : isAnswered ? 'border-red-200 bg-red-200 dark:bg-red-500/10' : 'border-amber-200 bg-amber-200 dark:bg-amber-500/10'}`}
+      className={`rounded-xl border-2 p-4 ${isCorrect ? 'border-green-200 dark:border-green-500/30 bg-green-200 dark:bg-green-500/10' : isAnswered ? 'border-red-200 dark:border-red-500/30 bg-red-200 dark:bg-red-500/10' : 'border-amber-200 dark:border-amber-500/30 bg-amber-200 dark:bg-amber-500/10'}`}
     >
       {/* Header - Always visible */}
       <button
@@ -140,7 +140,7 @@ export function QuestionReview({
               {/* Extreme question - show actual answer text */}
               {isExtreme && (
                 <div
-                  className={`mt-4 rounded-lg border-2 p-4 ${isCorrect ? 'border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800' : 'border-gray-300 dark:border-secondary-600 bg-gray-50 dark:bg-secondary-800 text-gray-600 dark:text-secondary-300'}`}
+                  className={`mt-4 rounded-lg border-2 p-4 ${isCorrect ? 'border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300' : 'border-gray-300 dark:border-secondary-600 bg-gray-50 dark:bg-secondary-800 text-gray-600 dark:text-secondary-300'}`}
                 >
                   <p className="text-sm font-medium">Your answer:</p>
                   <p className="text-lg">{isAnswered ? userAnswer : '(not answered)'}</p>

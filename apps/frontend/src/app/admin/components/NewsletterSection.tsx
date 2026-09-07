@@ -110,7 +110,9 @@ export function NewsletterSection(): JSX.Element {
         </div>
         <div className="rounded-xl border border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 p-4 shadow-sm">
           <p className="text-sm text-slate-500 dark:text-secondary-400">Unsubscribed</p>
-          <p className="text-2xl font-bold text-slate-400">{unsubscribedCount}</p>
+          <p className="text-2xl font-bold text-slate-400 dark:text-secondary-400">
+            {unsubscribedCount}
+          </p>
         </div>
         <div className="rounded-xl border border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 p-4 shadow-sm">
           <p className="text-sm text-slate-500 dark:text-secondary-400">Total ever subscribed</p>
@@ -129,7 +131,7 @@ export function NewsletterSection(): JSX.Element {
               setStatusFilter(f);
               setCurrentPage(1);
             }}
-            className={`rounded-full px-5 py-2.5 text-sm font-medium capitalize transition-all ${statusFilter === f ? 'bg-indigo-600 text-white shadow-md' : 'border border-slate-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100'}`}
+            className={`rounded-full px-5 py-2.5 text-sm font-medium capitalize transition-all ${statusFilter === f ? 'bg-indigo-600 text-white shadow-md' : 'border border-slate-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100 dark:hover:bg-secondary-800'}`}
           >
             {f}
           </button>
@@ -146,7 +148,7 @@ export function NewsletterSection(): JSX.Element {
         />
         <button
           onClick={() => void fetchSubscribers()}
-          className="flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-secondary-600 px-4 py-2 hover:bg-slate-50"
+          className="flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-secondary-600 px-4 py-2 hover:bg-slate-50 dark:hover:bg-secondary-800/70"
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> Refresh
         </button>
@@ -174,7 +176,7 @@ export function NewsletterSection(): JSX.Element {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 dark:divide-secondary-700">
             {isLoading ? (
               <tr>
                 <td colSpan={4} className="px-6 py-12 text-center">
@@ -192,7 +194,7 @@ export function NewsletterSection(): JSX.Element {
               </tr>
             ) : (
               paginated.map((s) => (
-                <tr key={s.id} className="hover:bg-slate-50">
+                <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-secondary-800/70">
                   <td className="px-6 py-4 font-medium text-slate-900 dark:text-secondary-100">
                     {s.email}
                   </td>
@@ -204,7 +206,7 @@ export function NewsletterSection(): JSX.Element {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${s.unsubscribed ? 'bg-slate-100 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400' : 'bg-green-100 dark:bg-green-500/20 text-green-700'}`}
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${s.unsubscribed ? 'bg-slate-100 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400' : 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300'}`}
                     >
                       {s.unsubscribed ? 'Unsubscribed' : 'Active'}
                     </span>

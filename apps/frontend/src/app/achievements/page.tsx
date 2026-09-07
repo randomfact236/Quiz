@@ -30,11 +30,11 @@ function AchievementCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className={`relative rounded-xl border-2 p-4 transition-all ${achievement.unlocked ? 'border-yellow-200 bg-yellow-50 dark:bg-yellow-500/10' : 'border-gray-200 dark:border-secondary-700 bg-gray-50 dark:bg-secondary-800'}`}
+      className={`relative rounded-xl border-2 p-4 transition-all ${achievement.unlocked ? 'border-yellow-200 dark:border-yellow-500/30 bg-yellow-50 dark:bg-yellow-500/10' : 'border-gray-200 dark:border-secondary-700 bg-gray-50 dark:bg-secondary-800'}`}
     >
       {/* Icon */}
       <div
-        className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full text-2xl ${achievement.unlocked ? 'bg-yellow-100 dark:bg-yellow-500/20' : 'bg-gray-200 dark:bg-secondary-700'}`}
+        className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full text-2xl ${achievement.unlocked ? 'bg-yellow-100 dark:bg-yellow-500/20 dark:bg-yellow-500/20' : 'bg-gray-200 dark:bg-secondary-700 dark:bg-secondary-700'}`}
       >
         {achievement.unlocked ? (
           achievement.icon
@@ -45,7 +45,7 @@ function AchievementCard({
 
       {/* Name */}
       <h3
-        className={`mb-1 font-bold ${achievement.unlocked ? 'text-gray-900 dark:text-secondary-50' : 'text-gray-500 dark:text-secondary-400'}`}
+        className={`mb-1 font-bold ${achievement.unlocked ? 'text-gray-900 dark:text-secondary-100 dark:text-secondary-50' : 'text-gray-500 dark:text-secondary-400 dark:text-secondary-400'}`}
       >
         {achievement.name}
       </h3>

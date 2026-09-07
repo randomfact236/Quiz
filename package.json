@@ -30,6 +30,7 @@
     "test:coverage": "npm run test:coverage --workspaces",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "check:theme": "npm run check:theme --workspace=apps/frontend --if-present",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "type-check": "npm run type-check --workspaces --if-present",

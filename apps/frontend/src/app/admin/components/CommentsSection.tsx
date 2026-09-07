@@ -158,7 +158,7 @@ export function CommentsSection() {
                 setStatusFilter(filter.value);
                 setPage(1);
               }}
-              className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${statusFilter === filter.value ? 'bg-white dark:bg-secondary-800 dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+              className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${statusFilter === filter.value ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 shadow-sm' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 dark:hover:text-gray-300'}`}
             >
               {filter.label}
             </button>

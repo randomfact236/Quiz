@@ -152,7 +152,7 @@ export function FilterPanel({
           </span>
           <button
             onClick={() => onFilterChange('subject', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.subject || filters.subject === 'all' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.subject || filters.subject === 'all' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800'}`}
           >
             All ({statusCounts.total})
           </button>
@@ -186,7 +186,7 @@ export function FilterPanel({
           </span>
           <button
             onClick={() => onFilterChange('chapter', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800'}`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.chapter || filters.chapter === 'all' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 border border-gray-300 dark:border-secondary-600 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800'}`}
           >
             All ({totalChapterCount})
           </button>
@@ -218,7 +218,7 @@ export function FilterPanel({
           <span className="text-sm font-medium text-gray-700 dark:text-secondary-200">Level:</span>
           <button
             onClick={() => onFilterChange('level', undefined)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.level || filters.level === 'all' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${!filters.level || filters.level === 'all' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
           >
             All ({statusCounts.total})
           </button>
@@ -229,7 +229,7 @@ export function FilterPanel({
               <button
                 key={value}
                 onClick={() => onFilterChange('level', value)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.level === value ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${filters.level === value ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
               >
                 {label} ({levelCount})
               </button>
@@ -308,7 +308,7 @@ export function FilterPanel({
                 &ldquo;{filters.search}&rdquo;
                 <button
                   onClick={() => onFilterChange('search', undefined)}
-                  className="hover:text-gray-900 dark:text-secondary-50"
+                  className="hover:text-gray-900 dark:hover:text-secondary-100 dark:text-secondary-50"
                 >
                   ×
                 </button>

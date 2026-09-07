@@ -404,7 +404,10 @@ export function EventsBrowser(): JSX.Element {
                 </tr>
               ) : (
                 rows.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-100 dark:hover:bg-secondary-800/40">
+                  <tr
+                    key={row.id}
+                    className="hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800/40"
+                  >
                     <td className="px-3 py-2">
                       <span
                         className={`inline-block whitespace-nowrap rounded px-2 py-0.5 text-xs font-medium ring-1 ${eventBadgeClass(row.eventName)}`}

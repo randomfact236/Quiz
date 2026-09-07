@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
             </p>
             <Link
               href="/forgot-password"
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+              className="text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
             >
               Request new reset link
             </Link>
@@ -155,7 +155,7 @@ export default function ResetPasswordPage() {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-400" />
+                    <Lock className="h-5 w-5 text-slate-400 dark:text-secondary-400" />
                   </div>
                   <input
                     id="password"
@@ -174,9 +174,9 @@ export default function ResetPasswordPage() {
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                      <EyeOff className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                      <Eye className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                     )}
                   </button>
                 </div>
@@ -191,7 +191,7 @@ export default function ResetPasswordPage() {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-400" />
+                    <Lock className="h-5 w-5 text-slate-400 dark:text-secondary-400" />
                   </div>
                   <input
                     id="confirm-password"
@@ -210,9 +210,9 @@ export default function ResetPasswordPage() {
                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                      <EyeOff className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                      <Eye className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                     )}
                   </button>
                 </div>
@@ -235,7 +235,7 @@ export default function ResetPasswordPage() {
                   Remember your password?{' '}
                   <Link
                     href="/login"
-                    className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                    className="font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
                   >
                     Sign in
                   </Link>

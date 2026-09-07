@@ -112,7 +112,7 @@ export default function AdminRiddlesTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 bg-white dark:bg-secondary-800">
+        <tbody className="divide-y divide-gray-100 dark:divide-secondary-700 bg-white dark:bg-secondary-800">
           {isLoading && (
             <tr>
               <td

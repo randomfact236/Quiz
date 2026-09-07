@@ -156,7 +156,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href={`/quiz-mcq?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <List className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Difficulty</span>
@@ -164,7 +164,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href={`/quiz-mcq?subject=${session.subject}`}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <BookOpen className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Chapters</span>
@@ -175,7 +175,7 @@ function ResultsContent(): JSX.Element {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href="/quiz-mcq"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <Trophy className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">All Subjects</span>
@@ -183,7 +183,7 @@ function ResultsContent(): JSX.Element {
 
             <Link
               href="/"
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-white dark:bg-secondary-800 p-3 text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <Home className="h-5 w-5 text-indigo-500" />
               <span className="text-xs font-semibold">Home</span>
@@ -234,13 +234,13 @@ function ResultsContent(): JSX.Element {
               return (
                 <div
                   key={level}
-                  className={`rounded-xl p-3 text-center ${data.total === 0 ? 'bg-gray-100 dark:bg-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10' : 'bg-red-50 dark:bg-red-500/10'}`}
+                  className={`rounded-xl p-3 text-center ${data.total === 0 ? 'bg-gray-100 dark:bg-secondary-800 dark:bg-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10 dark:bg-green-500/10' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10 dark:bg-yellow-500/10' : 'bg-red-50 dark:bg-red-500/10 dark:bg-red-500/10'}`}
                 >
                   <p className="mb-1 text-xs font-medium uppercase text-gray-500 dark:text-secondary-400">
                     {level}
                   </p>
                   <p
-                    className={`text-xl font-bold ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600' : pct >= 50 ? 'text-yellow-600' : 'text-red-600'}`}
+                    className={`text-xl font-bold ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>
@@ -291,7 +291,7 @@ function ResultsContent(): JSX.Element {
         >
           <button
             onClick={() => setShowReview(!showReview)}
-            className="w-full rounded-xl bg-white dark:bg-secondary-800 p-4 text-center font-semibold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800 flex items-center justify-center gap-2"
+            className="w-full rounded-xl bg-white dark:bg-secondary-800 p-4 text-center font-semibold text-gray-800 dark:text-secondary-100 shadow-lg transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 flex items-center justify-center gap-2"
           >
             {showReview ? 'Hide' : 'Show'} Question Review ({session.questions.length} questions)
             {showReview ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}

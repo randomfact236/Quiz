@@ -161,7 +161,7 @@ export function RiddleTable({
             <button
               onClick={() => onPageChange(Math.max(1, riddlePage - 1))}
               disabled={riddlePage === 1}
-              className="p-2 text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-700 rounded disabled:opacity-50"
+              className="p-2 text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-700 rounded disabled:opacity-50"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -171,7 +171,7 @@ export function RiddleTable({
                 <button
                   key={i}
                   onClick={() => onPageChange(page)}
-                  className={`min-w-[32px] h-8 px-2 text-sm rounded ${page === riddlePage ? 'bg-primary-600 text-white' : 'text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-700'}`}
+                  className={`min-w-[32px] h-8 px-2 text-sm rounded ${page === riddlePage ? 'bg-primary-600 text-white' : 'text-gray-600 dark:text-secondary-300 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-700'}`}
                 >
                   {page}
                 </button>
@@ -185,7 +185,7 @@ export function RiddleTable({
             <button
               onClick={() => onPageChange(Math.min(riddlesTotalPages, riddlePage + 1))}
               disabled={riddlePage === riddlesTotalPages}
-              className="p-2 text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-700 rounded disabled:opacity-50"
+              className="p-2 text-gray-600 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-800 dark:hover:bg-secondary-700 rounded disabled:opacity-50"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

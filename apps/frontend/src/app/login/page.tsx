@@ -126,7 +126,7 @@ export default function LoginPage() {
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-400" />
+                  <Mail className="h-5 w-5 text-slate-400 dark:text-secondary-400" />
                 </div>
                 <input
                   id="email"
@@ -160,7 +160,7 @@ export default function LoginPage() {
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
+                  <Lock className="h-5 w-5 text-slate-400 dark:text-secondary-400" />
                 </div>
                 <input
                   id="password"
@@ -179,9 +179,9 @@ export default function LoginPage() {
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                    <EyeOff className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                   ) : (
-                    <Eye className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
+                    <Eye className="h-5 w-5 text-slate-400 dark:text-secondary-400 hover:text-slate-600 dark:hover:text-slate-300" />
                   )}
                 </button>
               </div>
@@ -195,7 +195,7 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded"
+                  className="h-4 w-4 text-indigo-600 dark:text-indigo-300 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded"
                 />
                 <label
                   htmlFor="remember-me"
@@ -206,7 +206,7 @@ export default function LoginPage() {
               </div>
               <Link
                 href="/forgot-password"
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                className="text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
               >
                 Forgot password?
               </Link>
@@ -230,7 +230,7 @@ export default function LoginPage() {
               Don&apos;t have an account?{' '}
               <Link
                 href="/register"
-                className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                className="font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
               >
                 Create one →
               </Link>
@@ -243,7 +243,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-slate-800 text-slate-500">
+                <span className="px-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-secondary-400">
                   Or continue with
                 </span>
               </div>

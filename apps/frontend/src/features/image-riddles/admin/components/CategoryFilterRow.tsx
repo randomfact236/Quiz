@@ -41,7 +41,7 @@ export default function CategoryFilterRow({
         </span>
         <button
           onClick={() => onSelectCategory('')}
-          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterCategory === '' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filterCategory === '' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
         >
           All Categories <span className="opacity-70">({totalCount})</span>
         </button>
@@ -56,7 +56,7 @@ export default function CategoryFilterRow({
             >
               <button
                 onClick={() => onSelectCategory(isActive ? '' : cat.name)}
-                className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all ${isActive ? 'bg-gray-800 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+                className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all ${isActive ? 'bg-gray-800 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
               >
                 <span>{cat.emoji}</span>
                 <span>{cat.name}</span>
@@ -67,7 +67,7 @@ export default function CategoryFilterRow({
                   e.stopPropagation();
                   onEditCategory(cat);
                 }}
-                className={`px-2 py-1.5 transition-colors border-l border-gray-200 dark:border-secondary-700/50 ${isActive ? 'bg-gray-700 text-white hover:bg-indigo-500' : 'bg-gray-200 dark:bg-secondary-700 text-gray-500 dark:text-secondary-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600'}`}
+                className={`px-2 py-1.5 transition-colors border-l border-gray-200 dark:border-secondary-700/50 ${isActive ? 'bg-gray-700 text-white hover:bg-indigo-500' : 'bg-gray-200 dark:bg-secondary-700 text-gray-500 dark:text-secondary-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-300'}`}
                 title="Edit category"
               >
                 <Pencil className="w-3.5 h-3.5" />
@@ -77,7 +77,7 @@ export default function CategoryFilterRow({
                   e.stopPropagation();
                   onDeleteCategory(cat);
                 }}
-                className={`px-2 py-1.5 transition-colors border-l border-gray-200 dark:border-secondary-700/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 dark:bg-secondary-700 text-red-500 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600'}`}
+                className={`px-2 py-1.5 transition-colors border-l border-gray-200 dark:border-secondary-700/50 ${isActive ? 'bg-gray-700 text-white hover:bg-red-500' : 'bg-gray-200 dark:bg-secondary-700 text-red-500 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-300'}`}
                 title="Delete category"
               >
                 <Trash2 className="w-3.5 h-3.5" />

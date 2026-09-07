@@ -32,7 +32,7 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
         <div className="mb-2 flex items-center justify-between gap-3">
           <label
             htmlFor="riddle-answer"
-            className="block text-xs font-black uppercase tracking-widest text-slate-400"
+            className="block text-xs font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400"
           >
             Your Guess:
           </label>
@@ -44,7 +44,7 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
             )}
             <button
               onClick={game.toggleLetterCount}
-              className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest border transition-all ${game.showLetterCount ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 border-indigo-200' : 'bg-slate-50 dark:bg-secondary-800 text-slate-400 border-slate-200 dark:border-secondary-700 hover:text-slate-600 dark:text-secondary-300'}`}
+              className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest border transition-all ${game.showLetterCount ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border-indigo-200 dark:border-indigo-500/30' : 'bg-slate-50 dark:bg-secondary-800 text-slate-400 dark:text-secondary-400 border-slate-200 dark:border-secondary-700 hover:text-slate-600 dark:hover:text-secondary-200 dark:text-secondary-300'}`}
               aria-pressed={game.showLetterCount}
               title="Toggle letter-count hint"
             >
@@ -63,7 +63,7 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
             if (e.key === 'Enter') game.checkAnswer();
           }}
           placeholder="Type your answer..."
-          className={`w-full rounded-2xl border-2 bg-slate-50 dark:bg-secondary-800 px-6 py-4 text-lg font-bold text-slate-800 dark:text-secondary-100 placeholder:text-slate-300 focus:bg-white focus:outline-none transition-all shadow-inner ${game.shake || game.wrongAnswer ? 'border-red-500 ring-4 ring-red-100 animate-[shake_0.5s_ease-in-out]' : 'border-slate-100 dark:border-secondary-800 focus:border-indigo-500'}`}
+          className={`w-full rounded-2xl border-2 bg-slate-50 dark:bg-secondary-800 px-6 py-4 text-lg font-bold text-slate-800 dark:text-secondary-100 placeholder:text-slate-300 focus:bg-white focus:outline-none transition-all shadow-inner ${game.shake || game.wrongAnswer ? 'border-red-500 ring-4 ring-red-100 animate-[shake_0.5s_ease-in-out]' : 'border-slate-100 dark:border-secondary-700 dark:border-secondary-800 focus:border-indigo-500'}`}
           autoFocus
         />
         {game.wrongAnswer && (

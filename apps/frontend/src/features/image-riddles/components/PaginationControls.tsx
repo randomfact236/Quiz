@@ -32,13 +32,13 @@ export default function PaginationControls({
         <button
           onClick={() => onChangePage(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-300 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
           aria-label="Previous page"
         >
           <span className="text-xl font-bold">‹</span>
         </button>
 
-        <div className="px-4 text-xs font-black uppercase tracking-widest text-slate-400">
+        <div className="px-4 text-xs font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
           <span className="text-slate-800 dark:text-secondary-100">{currentPage}</span> /{' '}
           {totalPages}
         </div>
@@ -46,7 +46,7 @@ export default function PaginationControls({
         <button
           onClick={() => onChangePage(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 dark:bg-secondary-800 text-slate-500 dark:text-secondary-400 transition-all hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-300 disabled:opacity-50 disabled:hover:bg-slate-50 disabled:hover:text-slate-500"
           aria-label="Next page"
         >
           <span className="text-xl font-bold">›</span>

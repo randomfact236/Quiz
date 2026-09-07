@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
                   setSuccess(false);
                   setEmail('');
                 }}
-                className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                className="text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
               >
                 Resend email
               </button>
@@ -103,7 +103,7 @@ export default function ForgotPasswordPage() {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-slate-400" />
+                    <Mail className="h-5 w-5 text-slate-400 dark:text-secondary-400" />
                   </div>
                   <input
                     id="email"
@@ -135,7 +135,7 @@ export default function ForgotPasswordPage() {
                   Remember your password?{' '}
                   <Link
                     href="/login"
-                    className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                    className="font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 dark:text-indigo-400"
                   >
                     Sign in
                   </Link>

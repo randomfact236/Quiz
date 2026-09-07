@@ -84,7 +84,7 @@ export function QuestionTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 dark:divide-secondary-700">
           {questions.length === 0 ? (
             <tr>
               <td colSpan={8}>
@@ -122,7 +122,10 @@ export function QuestionTable({
               const isExtreme = question.level === 'extreme';
 
               return (
-                <tr key={question.id} className="hover:bg-gray-50 dark:hover:bg-secondary-800">
+                <tr
+                  key={question.id}
+                  className="hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
+                >
                   <td className="px-3 py-4">
                     <input
                       type="checkbox"

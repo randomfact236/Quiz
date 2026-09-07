@@ -40,7 +40,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-xl border-2 p-4 ${isCorrect ? 'border-green-200 bg-green-200 dark:bg-green-500/10' : 'border-red-200 bg-red-200 dark:bg-red-500/10'}`}
+      className={`rounded-xl border-2 p-4 ${isCorrect ? 'border-green-200 dark:border-green-500/30 bg-green-200 dark:bg-green-500/10' : 'border-red-200 dark:border-red-500/30 bg-red-200 dark:bg-red-500/10'}`}
     >
       {/* Header - Always visible */}
       <button
@@ -88,7 +88,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
               {/* Difficulty Badge */}
               <div className="mb-3">
                 <span
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold                     ${riddle.difficulty === 'easy' ? 'bg-green-200 dark:bg-green-500/20 text-green-700' : riddle.difficulty === 'medium' ? 'bg-yellow-200 dark:bg-yellow-500/20 text-yellow-700' : riddle.difficulty === 'hard' ? 'bg-orange-200 dark:bg-orange-500/20 text-orange-700' : 'bg-red-200 dark:bg-red-500/20 text-red-700'}`}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold                     ${riddle.difficulty === 'easy' ? 'bg-green-200 dark:bg-green-500/30 dark:bg-green-500/20 text-green-700 dark:text-green-300' : riddle.difficulty === 'medium' ? 'bg-yellow-200 dark:bg-yellow-500/30 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-300' : riddle.difficulty === 'hard' ? 'bg-orange-200 dark:bg-orange-500/30 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300' : 'bg-red-200 dark:bg-red-500/30 dark:bg-red-500/20 text-red-700 dark:text-red-300'}`}
                 >
                   {riddle.difficulty.toUpperCase()}
                 </span>
@@ -145,7 +145,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
               {isExpert && (
                 <div className="space-y-2">
                   <div
-                    className={`rounded-lg border-2 p-3 ${isCorrect ? 'border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800' : userAnswer ? 'border-red-500 bg-red-100 dark:bg-red-500/20 text-red-800' : 'border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300'}`}
+                    className={`rounded-lg border-2 p-3 ${isCorrect ? 'border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300' : userAnswer ? 'border-red-500 bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300' : 'border-gray-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300'}`}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-secondary-400">
@@ -192,7 +192,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
                   )}
                   {riddle.hint && (
                     <div
-                      className={`${riddle.explanation ? 'border-t border-indigo-200 pt-3' : ''}`}
+                      className={`${riddle.explanation ? 'border-t border-indigo-200 dark:border-indigo-500/30 pt-3' : ''}`}
                     >
                       <p className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 mb-1">
                         🔑 Hint

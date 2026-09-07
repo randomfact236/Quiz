@@ -122,7 +122,7 @@ export default function ImageRiddlesPage(): JSX.Element {
         {/* Back Button */}
         <Link
           href="/"
-          className="mb-6 inline-block rounded-lg bg-white dark:bg-secondary-800 px-4 py-2 text-sm font-bold text-gray-700 dark:text-secondary-200 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md"
+          className="mb-6 inline-block rounded-lg bg-white dark:bg-secondary-800 px-4 py-2 text-sm font-bold text-gray-700 dark:text-secondary-200 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-secondary-800/70 hover:shadow-md"
         >
           ← Back
         </Link>
@@ -192,7 +192,7 @@ export default function ImageRiddlesPage(): JSX.Element {
                       className="mx-auto mb-6 h-14 w-14 text-slate-300"
                       aria-hidden="true"
                     />
-                    <h3 className="text-xl font-black text-slate-400 mb-2">
+                    <h3 className="text-xl font-black text-slate-400 dark:text-secondary-400 mb-2">
                       Nothing matches your search...
                     </h3>
                     <button

@@ -246,7 +246,7 @@ export function SettingsSection(): JSX.Element {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id ? 'border-blue-500 text-blue-600 dark:text-blue-300' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls={`settings-panel-${tab.id}`}
@@ -616,7 +616,7 @@ export function SettingsSection(): JSX.Element {
                   id="settings-show-timer"
                   checked={formData.imageRiddles?.defaults?.showTimer ?? true}
                   onChange={(e) => updateField('imageRiddles.defaults.showTimer', e.target.checked)}
-                  className="h-5 w-5 rounded border-gray-300 dark:border-secondary-600 text-blue-600 focus:ring-blue-500"
+                  className="h-5 w-5 rounded border-gray-300 dark:border-secondary-600 text-blue-600 dark:text-blue-300 focus:ring-blue-500"
                   aria-describedby="settings-show-timer-help"
                 />
                 <label

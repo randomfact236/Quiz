@@ -40,7 +40,7 @@ export function CSVPreview({ result, onClose }: CSVPreviewProps) {
           </p>
 
           {duplicates.length > 0 && (
-            <div className="mt-4 text-left rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800/60 dark:bg-amber-900/20 p-3">
+            <div className="mt-4 text-left rounded-lg border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 dark:border-amber-800/60 dark:bg-amber-900/20 p-3">
               <p className="flex items-center gap-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
                 <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                 {duplicates.length} duplicate question{duplicates.length === 1 ? '' : 's'} skipped —
@@ -54,7 +54,7 @@ export function CSVPreview({ result, onClose }: CSVPreviewProps) {
                       <span> (duplicate of Row {d.duplicateOfRow}):</span>
                     )}
                     {d.duplicateOfRow === undefined && ':'}
-                    <mark className="ml-1 rounded bg-amber-100 px-1 py-0.5 font-medium text-amber-900 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
+                    <mark className="ml-1 rounded bg-amber-100 dark:bg-amber-500/20 px-1 py-0.5 font-medium text-amber-900 dark:text-amber-200 ring-1 ring-inset ring-amber-300 dark:bg-amber-900/40 dark:text-amber-100 dark:ring-amber-700">
                       {d.question}
                     </mark>
                   </div>

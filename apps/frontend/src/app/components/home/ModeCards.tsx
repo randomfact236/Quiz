@@ -82,7 +82,7 @@ function ModeSection({ card }: { card: ModeCardConfig }): JSX.Element {
     <div className="overflow-hidden rounded-2xl bg-card/95 shadow-lg">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-white/5"
         aria-label={expanded ? `Collapse ${card.title} section` : `Expand ${card.title} section`}
         aria-expanded={expanded}
       >

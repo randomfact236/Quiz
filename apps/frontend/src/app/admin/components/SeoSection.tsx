@@ -632,7 +632,7 @@ export function SeoSection(): JSX.Element {
           <button
             key={t.id}
             onClick={() => changeTab(t.id)}
-            className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? 'bg-gray-800 text-white shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
+            className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? 'bg-gray-800 text-white shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 dark:hover:bg-secondary-700 hover:text-gray-700 dark:hover:text-secondary-200 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
             role="tab"
             aria-selected={tab === t.id}
           >

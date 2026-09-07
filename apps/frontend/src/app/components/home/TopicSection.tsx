@@ -194,7 +194,7 @@ export function TopicsSection(): JSX.Element {
     <div className="mb-6 overflow-hidden rounded-2xl bg-card/95 shadow-lg">
       <button
         onClick={() => setTopicsExpanded(!topicsExpanded)}
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-white/5"
         aria-label={topicsExpanded ? 'Collapse Quiz Topics section' : 'Expand Quiz Topics section'}
         aria-expanded={topicsExpanded}
       >

@@ -64,7 +64,7 @@ export function RiddleTableRow({
 
   return (
     <tr
-      className={`hover:bg-gray-50 dark:hover:bg-secondary-700 ${isSelected ? 'bg-blue-50 dark:bg-blue-500/10 dark:bg-blue-900/20' : ''}`}
+      className={`hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-700 ${isSelected ? 'bg-blue-50 dark:bg-blue-500/10 dark:bg-blue-900/20' : ''}`}
     >
       {/* Checkbox */}
       <td className="px-3 py-3">
@@ -95,7 +95,7 @@ export function RiddleTableRow({
             {riddle.hint && (
               <button
                 onClick={() => setShowHint(!showHint)}
-                className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700"
+                className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300"
               >
                 {showHint ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 💡 Hint
@@ -106,7 +106,7 @@ export function RiddleTableRow({
             {riddle.explanation && (
               <button
                 onClick={() => setShowExplanation(!showExplanation)}
-                className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700"
+                className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
               >
                 {showExplanation ? (
                   <ChevronUp className="w-3 h-3" />
@@ -120,7 +120,7 @@ export function RiddleTableRow({
             {/* Edit button */}
             <button
               onClick={onEdit}
-              className="flex items-center gap-1 text-xs text-gray-600 dark:text-secondary-400 hover:text-blue-600 dark:hover:text-blue-400"
+              className="flex items-center gap-1 text-xs text-gray-600 dark:text-secondary-400 hover:text-blue-600 dark:hover:text-blue-300 dark:hover:text-blue-400"
             >
               <Pencil className="w-3 h-3" />
               Edit
@@ -129,7 +129,7 @@ export function RiddleTableRow({
             {/* Trash button */}
             <button
               onClick={onTrash}
-              className="flex items-center gap-1 text-xs text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-400"
+              className="flex items-center gap-1 text-xs text-gray-600 dark:text-secondary-400 hover:text-red-600 dark:hover:text-red-300 dark:hover:text-red-400"
             >
               <Trash2 className="w-3 h-3" />
               Trash
@@ -164,7 +164,7 @@ export function RiddleTableRow({
               return (
                 <div
                   key={i}
-                  className={`flex items-center gap-2 text-xs px-2 py-1 rounded ${isCorrect ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium' : 'text-gray-600 dark:text-secondary-400'}`}
+                  className={`flex items-center gap-2 text-xs px-2 py-1 rounded ${isCorrect ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300 dark:bg-green-900/30 dark:text-green-400 font-medium' : 'text-gray-600 dark:text-secondary-300 dark:text-secondary-400'}`}
                 >
                   <span className="font-bold">{letter}.</span>
                   <span className="truncate">{option}</span>

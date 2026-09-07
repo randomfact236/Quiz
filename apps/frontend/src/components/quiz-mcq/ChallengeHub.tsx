@@ -234,16 +234,16 @@ export function ChallengeHub({
                               key={subject.slug}
                               onClick={() => toggleSubject(subject.slug)}
                               disabled={totalQuestions === 0}
-                              className={`flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isExpanded ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-secondary-800 border-2 border-gray-100 dark:border-secondary-800 hover:border-blue-200'}`}
+                              className={`flex flex-col items-center rounded-xl p-4 text-center shadow-md transition-all hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isExpanded ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-secondary-800 border-2 border-gray-100 dark:border-secondary-800 hover:border-blue-200 dark:hover:border-blue-500/40'}`}
                             >
                               <span className="text-3xl mb-1">{subject.emoji}</span>
                               <span
-                                className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800 dark:text-secondary-100'}`}
+                                className={`font-semibold text-sm ${isExpanded ? 'text-white' : 'text-gray-800 dark:text-secondary-200 dark:text-secondary-100'}`}
                               >
                                 {subject.name}
                               </span>
                               <span
-                                className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : config.showComingSoon && totalQuestions === 0 ? 'text-orange-500' : 'text-gray-500 dark:text-secondary-400'}`}
+                                className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : config.showComingSoon && totalQuestions === 0 ? 'text-orange-500' : 'text-gray-500 dark:text-secondary-400 dark:text-secondary-400'}`}
                               >
                                 {config.showComingSoon && totalQuestions === 0
                                   ? 'Coming Soon'

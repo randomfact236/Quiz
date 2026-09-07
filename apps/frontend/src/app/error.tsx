@@ -39,7 +39,7 @@ export default function GlobalError({
           </button>
           <Link
             href="/"
-            className="rounded-lg border border-gray-300 dark:border-secondary-600 px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-secondary-200 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+            className="rounded-lg border border-gray-300 dark:border-secondary-600 px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-secondary-200 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
           >
             Go Home
           </Link>

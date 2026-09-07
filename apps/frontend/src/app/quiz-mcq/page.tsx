@@ -86,7 +86,7 @@ function SubjectCard({
   return (
     <Link
       href={isAvailable ? `/quiz-mcq?subject=${slug}` : '#'}
-      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100/50 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
+      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100 dark:bg-secondary-800/50 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
       aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
     >
       <span className="text-4xl" aria-hidden="true">
@@ -519,7 +519,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
               className="flex items-center gap-4 rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl"
             >
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/20 text-green-600' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/20 text-yellow-600' : 'bg-indigo-200 dark:bg-indigo-500/20 text-indigo-600'}`}
+                className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/30 dark:bg-green-500/20 text-green-600 dark:text-green-300' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/30 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300' : 'bg-indigo-200 dark:bg-indigo-500/30 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300'}`}
               >
                 {chapter.isCompleted ? <CheckCircle className="h-6 w-6" /> : index + 1}
               </div>

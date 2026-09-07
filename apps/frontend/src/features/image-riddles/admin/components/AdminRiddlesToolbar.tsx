@@ -124,7 +124,7 @@ export default function AdminRiddlesToolbar({
         <button
           onClick={onUndo}
           disabled={!canUndo}
-          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 dark:bg-secondary-800 text-slate-400 cursor-not-allowed'}`}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${canUndo ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-100 dark:bg-secondary-800 text-slate-400 dark:text-secondary-400 cursor-not-allowed'}`}
           aria-label="Undo last delete"
           title="Undo last delete"
         >

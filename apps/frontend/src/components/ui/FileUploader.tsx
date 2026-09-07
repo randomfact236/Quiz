@@ -181,7 +181,7 @@ export function FileUploader({
 
         {selectedFile ? (
           <div className="flex flex-col items-center text-center p-4">
-            <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 mb-3">
+            <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-300 mb-3">
               <CheckCircle className="w-8 h-8" />
             </div>
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">

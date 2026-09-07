@@ -80,7 +80,10 @@ export function ActiveFiltersBadge({
       {filters.search && (
         <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 text-sm rounded-full">
           &ldquo;{filters.search}&rdquo;
-          <button onClick={onRemoveSearch} className="hover:text-gray-900 dark:text-secondary-50">
+          <button
+            onClick={onRemoveSearch}
+            className="hover:text-gray-900 dark:hover:text-secondary-100 dark:text-secondary-50"
+          >
             ×
           </button>
         </span>

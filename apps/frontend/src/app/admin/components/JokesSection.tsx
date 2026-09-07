@@ -526,7 +526,7 @@ export function JokesSection({
           {/* All Categories chip */}
           <button
             onClick={() => _setJokeFilterCategory('')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jokeFilterCategory === '' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jokeFilterCategory === '' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
           >
             All Categories <span className="opacity-70">({allJokes.length})</span>
           </button>
@@ -544,7 +544,7 @@ export function JokesSection({
                 <button
                   onClick={() => _setJokeFilterCategory(isActive ? '' : cat.name)}
                   disabled={isPendingDelete}
-                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${isActive ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
+                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${isActive ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
                 >
                   {cat.emoji} {cat.name} <span className="opacity-70">({count})</span>
                 </button>
@@ -560,7 +560,7 @@ export function JokesSection({
                     setShowEditCategoryModal(true);
                   }}
                   disabled={isPendingDelete}
-                  className={`px-1.5 py-1.5 transition-colors border-x border-white/20 ${isActive ? 'bg-green-400 text-white hover:bg-green-300' : 'bg-gray-200 dark:bg-secondary-700 text-gray-500 dark:text-secondary-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 dark:hover:bg-blue-500/20 hover:text-blue-600'}`}
+                  className={`px-1.5 py-1.5 transition-colors border-x border-white/20 ${isActive ? 'bg-green-400 text-white hover:bg-green-300' : 'bg-gray-200 dark:bg-secondary-700 text-gray-500 dark:text-secondary-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 dark:hover:bg-blue-500/20 hover:text-blue-600 dark:hover:text-blue-300'}`}
                   title={`Edit ${cat.name}`}
                 >
                   <Pencil className="w-3.5 h-3.5" />
@@ -590,7 +590,7 @@ export function JokesSection({
                     // Mark as pending — no timer, waits for user to confirm
                     setPendingCategoryDelete({ category: cat, originalStatuses });
                   }}
-                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${isActive ? 'bg-green-400 text-white hover:bg-red-400' : 'bg-gray-200 dark:bg-secondary-700 text-red-600 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10'}`}
+                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${isActive ? 'bg-green-400 text-white hover:bg-red-400' : 'bg-gray-200 dark:bg-secondary-700 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10'}`}
                   title={`Delete ${cat.name}`}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -663,9 +663,12 @@ export function JokesSection({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-secondary-700">
             {paginatedJokes.map((joke, index) => (
-              <tr key={joke.id} className="hover:bg-gray-50 dark:hover:bg-secondary-800">
+              <tr
+                key={joke.id}
+                className="hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
+              >
                 <td className="px-4 py-3">
                   <input
                     type="checkbox"
@@ -1005,7 +1008,7 @@ export function JokesSection({
                     return (
                       <tr
                         key={cat.id}
-                        className="hover:bg-gray-50 dark:hover:bg-secondary-800 transition-colors"
+                        className="hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 transition-colors"
                       >
                         <td className="whitespace-nowrap px-6 py-4 text-2xl">{cat.emoji}</td>
                         <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-secondary-50">
@@ -1267,7 +1270,7 @@ export function JokesSection({
 
       {/* Category Delete Confirmation Banner */}
       {pendingCategoryDelete && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 bg-white dark:bg-secondary-800 px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-start gap-4 rounded-xl border border-red-200 dark:border-red-500/30 bg-white dark:bg-secondary-800 px-5 py-4 shadow-2xl min-w-[380px] max-w-lg">
           <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20">
             <Trash2 className="h-4 w-4 text-red-600 dark:text-red-300" />
           </div>
@@ -1295,7 +1298,7 @@ export function JokesSection({
                   );
                   setPendingCategoryDelete(null);
                 }}
-                className="rounded-lg border border-gray-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-secondary-200 hover:bg-gray-50 dark:hover:bg-secondary-800 transition-colors"
+                className="rounded-lg border border-gray-300 dark:border-secondary-600 bg-white dark:bg-secondary-800 px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-secondary-200 hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 transition-colors"
               >
                 Cancel — Restore Jokes
               </button>

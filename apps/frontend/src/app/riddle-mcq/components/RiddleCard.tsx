@@ -353,7 +353,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
             className="mb-4 text-center"
           >
             <span
-              className={`text-base font-semibold ${isCorrect ? 'text-green-600' : 'text-red-500'}`}
+              className={`text-base font-semibold ${isCorrect ? 'text-green-600 dark:text-green-300' : 'text-red-500'}`}
             >
               {feedback.text} {feedback.emoji}
             </span>

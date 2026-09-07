@@ -32,7 +32,7 @@ export default function ChipRevealStep({ onChooseChip, onSkip }: ChipRevealStepP
             <button
               key={option.value}
               onClick={() => onChooseChip(option.value)}
-              className="flex items-center gap-2 rounded-full bg-white dark:bg-secondary-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-secondary-200 shadow-md border border-amber-100 transition-all hover:scale-105 hover:shadow-lg hover:border-amber-300 active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-white dark:bg-secondary-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-secondary-200 shadow-md border border-amber-100 dark:border-amber-500/30 transition-all hover:scale-105 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500/40 active:scale-95"
               aria-label={`Confess: ${option.label}, then reveal the answer`}
             >
               <span className="text-xl" aria-hidden="true">
@@ -44,7 +44,7 @@ export default function ChipRevealStep({ onChooseChip, onSkip }: ChipRevealStepP
         </div>
         <button
           onClick={onSkip}
-          className="mt-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 underline-offset-2 hover:text-slate-600 dark:text-secondary-300 hover:underline"
+          className="mt-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-secondary-400 underline-offset-2 hover:text-slate-600 dark:hover:text-secondary-200 dark:text-secondary-300 hover:underline"
         >
           Just show me the answer
         </button>

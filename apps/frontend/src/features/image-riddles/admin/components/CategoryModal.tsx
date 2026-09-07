@@ -32,7 +32,7 @@ export default function CategoryModal({
           </h3>
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-gray-400 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-800 hover:text-gray-600 dark:text-secondary-300 transition-colors"
+            className="rounded-full p-2 text-gray-400 dark:text-secondary-400 hover:bg-gray-100 dark:hover:bg-secondary-800 hover:text-gray-600 dark:hover:text-secondary-200 dark:text-secondary-300 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

@@ -96,7 +96,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
   return (
     <div className="shrink-0 rounded-3xl border border-slate-100 dark:border-secondary-800 bg-slate-50 dark:bg-secondary-800/60 p-5 space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
           Guess wall
         </p>
         <div className="flex items-center gap-2">
@@ -117,7 +117,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
                 maxLength={50}
                 placeholder="Your name"
                 autoFocus
-                className="w-28 rounded-full border border-indigo-200 bg-white dark:bg-secondary-800 px-2.5 py-0.5 text-[10px] font-bold text-slate-700 dark:text-secondary-200 focus:outline-none"
+                className="w-28 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-white dark:bg-secondary-800 px-2.5 py-0.5 text-[10px] font-bold text-slate-700 dark:text-secondary-200 focus:outline-none"
                 aria-label="Your display name"
               />
               <button
@@ -133,7 +133,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
                 setNameDraft(displayName);
                 setEditingName(true);
               }}
-              className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-500"
+              className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-secondary-400 hover:text-indigo-500"
               title="Set the name shown with your guesses"
             >
               <Pencil className="h-3 w-3" aria-hidden="true" />
@@ -172,7 +172,7 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <p className="text-sm font-bold text-slate-400">
+        <p className="text-sm font-bold text-slate-400 dark:text-secondary-400">
           No guesses yet — you&apos;re the first to peek. 👀
         </p>
       ) : (
@@ -182,10 +182,10 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
             {(showAllComments ? items : items.slice(0, COLLAPSED_VISIBLE_COUNT)).map((item) => (
               <li
                 key={item.id}
-                className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-sm font-bold ${item.masked ? 'bg-green-50 dark:bg-green-500/10 text-green-700' : 'bg-white dark:bg-secondary-800 text-slate-700 dark:text-secondary-200 border border-slate-100 dark:border-secondary-800'}`}
+                className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-sm font-bold ${item.masked ? 'bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-300' : 'bg-white dark:bg-secondary-800 text-slate-700 dark:text-secondary-200 border border-slate-100 dark:border-secondary-800'}`}
               >
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-secondary-400">
                     {item.authorName || 'Guest'} · {timeAgo(item.createdAt)}
                   </p>
                   <p className="break-words">

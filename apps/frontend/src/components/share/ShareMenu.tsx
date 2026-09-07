@@ -141,7 +141,7 @@ export default function ShareMenu({
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
-              className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+              className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <span
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-black ${target.badgeClass}`}
@@ -156,7 +156,7 @@ export default function ShareMenu({
           ))}
           <button
             onClick={handleCopyLink}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
           >
             <span
               className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-sm"
@@ -170,7 +170,7 @@ export default function ShareMenu({
           </button>
           <button
             onClick={handleSave}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800"
+            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
           >
             <span
               className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20 text-sm"

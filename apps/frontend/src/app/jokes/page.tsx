@@ -136,7 +136,7 @@ function CommentsChip({
     <button
       onClick={(e) => onOpen(e, jokeId)}
       aria-label={`View comments. ${count} comments`}
-      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${variant === 'light' ? 'bg-gray-100 dark:bg-secondary-800 text-gray-500 dark:text-secondary-400 hover:bg-orange-200 dark:hover:bg-orange-500/20 hover:text-orange-600' : 'bg-black/10 text-white hover:bg-black/20'}`}
+      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${variant === 'light' ? 'bg-gray-100 dark:bg-secondary-800 text-gray-500 dark:text-secondary-400 hover:bg-orange-200 dark:hover:bg-orange-500/20 hover:text-orange-600 dark:hover:text-orange-300' : 'bg-black/10 text-white hover:bg-black/20'}`}
     >
       <span className="text-sm">💬</span> {count}
     </button>
@@ -594,7 +594,7 @@ export default function JokesPage(): JSX.Element {
 
         {/* Synchronized Header Row (Sticky) */}
         <div
-          className="sticky z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 dark:border-secondary-700 py-4 bg-yellow-200/80 dark:bg-yellow-500/10 backdrop-blur-md -mx-4 px-4 transition-shadow"
+          className="sticky z-30 grid gap-10 lg:grid-cols-4 mb-6 border-b border-gray-200 dark:border-secondary-700 py-4 bg-yellow-200 dark:bg-yellow-500/10 backdrop-blur-md -mx-4 px-4 transition-shadow"
           style={{ top: headerHeight }}
         >
           {/* Sidebar Header Portion */}
@@ -655,26 +655,26 @@ export default function JokesPage(): JSX.Element {
                 <div className="flex bg-gray-200 dark:bg-secondary-700/50 p-1 rounded-xl shadow-inner">
                   <button
                     onClick={() => setSortOrder('newest')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'newest' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'newest' ? 'bg-white dark:bg-secondary-800 text-orange-600 dark:text-orange-300 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     Newest
                   </button>
                   <button
                     onClick={() => setSortOrder('unseen')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'unseen' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'unseen' ? 'bg-white dark:bg-secondary-800 text-orange-600 dark:text-orange-300 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                     title="Jokes you haven't revealed yet, newest first"
                   >
                     Unseen
                   </button>
                   <button
                     onClick={() => setSortOrder('top')}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'top' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'top' ? 'bg-white dark:bg-secondary-800 text-orange-600 dark:text-orange-300 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     🔥 Top
                   </button>
                   <button
                     onClick={handleShuffle}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-orange-600 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
+                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-orange-600 dark:text-orange-300 shadow-md' : 'text-gray-500 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 dark:text-secondary-200 dark:hover:text-secondary-200'}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -1030,7 +1030,7 @@ export default function JokesPage(): JSX.Element {
                           {/* 🔖 Save chip (front face — flips with the card) */}
                           <button
                             onClick={(e) => handleSaveChip(e, joke.id)}
-                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm ring-1 ring-gray-100 transition-all hover:scale-110 hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm ring-1 ring-gray-100 dark:ring-secondary-700 transition-all hover:scale-110 hover:bg-amber-200 dark:hover:bg-amber-500/30 dark:hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                             aria-pressed={Boolean(savedJokes[joke.id])}
                             aria-label={savedJokes[joke.id] ? 'Remove from saved' : 'Save joke'}
                             title={savedJokes[joke.id] ? 'Saved — tap to remove' : 'Save'}
@@ -1165,7 +1165,7 @@ export default function JokesPage(): JSX.Element {
                     scrollToGrid();
                   }}
                   disabled={currentPage === 1}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 dark:hover:text-orange-300 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Previous page"
                 >
                   <svg
@@ -1212,7 +1212,7 @@ export default function JokesPage(): JSX.Element {
                         setCurrentPage(page);
                         scrollToGrid();
                       }}
-                      className={`h-10 w-10 rounded-lg font-bold transition-all ${currentPage === page ? 'bg-orange-500 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300 hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600'}`}
+                      className={`h-10 w-10 rounded-lg font-bold transition-all ${currentPage === page ? 'bg-orange-500 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-gray-600 dark:text-secondary-300 hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 dark:hover:text-orange-300'}`}
                       aria-label={`Page ${page}`}
                       aria-current={currentPage === page ? 'page' : undefined}
                     >
@@ -1227,7 +1227,7 @@ export default function JokesPage(): JSX.Element {
                     scrollToGrid();
                   }}
                   disabled={currentPage === totalPages}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-secondary-800 shadow-sm transition-all hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 hover:text-orange-600 dark:hover:text-orange-300 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Next page"
                 >
                   <svg

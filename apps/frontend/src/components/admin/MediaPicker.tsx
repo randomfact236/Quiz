@@ -134,7 +134,7 @@ export function MediaPicker({
           <button
             onClick={() => onOpenChange(false)}
             aria-label="Close media library"
-            className="rounded-full p-2 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-gray-100 dark:hover:bg-secondary-800 hover:text-gray-600 dark:text-secondary-300"
+            className="rounded-full p-2 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-gray-100 dark:hover:bg-secondary-800 hover:text-gray-600 dark:hover:text-secondary-200 dark:text-secondary-300"
           >
             <X className="h-5 w-5" />
           </button>
@@ -155,7 +155,7 @@ export function MediaPicker({
           />
           <button
             onClick={() => void load(1, search)}
-            className="rounded-lg bg-slate-100 dark:bg-secondary-800 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-secondary-200 hover:bg-slate-200"
+            className="rounded-lg bg-slate-100 dark:bg-secondary-800 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-secondary-200 hover:bg-slate-200 dark:hover:bg-secondary-700"
           >
             Search
           </button>

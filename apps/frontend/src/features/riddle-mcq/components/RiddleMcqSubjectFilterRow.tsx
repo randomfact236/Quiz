@@ -25,7 +25,7 @@ export function RiddleMcqSubjectFilterRow({
     >
       <button
         onClick={onSelect}
-        className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 dark:text-secondary-200 hover:text-indigo-600'}`}
+        className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-700 dark:text-secondary-200 hover:text-indigo-600 dark:hover:text-indigo-300'}`}
       >
         {subject.emoji} {subject.name} ({count})
       </button>

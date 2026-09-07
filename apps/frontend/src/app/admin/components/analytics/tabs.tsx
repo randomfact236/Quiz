@@ -781,7 +781,7 @@ function FeatureSwitcher({
         <button
           key={f.id}
           onClick={() => onPick(f.id)}
-          className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${feature === f.id ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
+          className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${feature === f.id ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 dark:hover:bg-secondary-700 hover:text-gray-700 dark:hover:text-secondary-200 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
         >
           {f.label}
         </button>
@@ -1063,7 +1063,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
             <div className="flex flex-wrap gap-1 rounded-lg bg-gray-100 dark:bg-secondary-800/70 p-1">
               <button
                 onClick={() => setDrill(undefined)}
-                className={`whitespace-nowrap rounded-md px-3 py-1 text-xs transition-colors ${!drill ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
+                className={`whitespace-nowrap rounded-md px-3 py-1 text-xs transition-colors ${!drill ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 dark:hover:bg-secondary-700 hover:text-gray-700 dark:hover:text-secondary-200 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
               >
                 All {feature === 'jokes' ? 'categories' : 'subjects'}
               </button>
@@ -1071,7 +1071,7 @@ export function ClickAnalysisTab({ days, dashboard }: { days: number; dashboard:
                 <button
                   key={label}
                   onClick={() => setDrill(drill === label ? undefined : label)}
-                  className={`whitespace-nowrap rounded-md px-3 py-1 text-xs capitalize transition-colors ${drill === label ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
+                  className={`whitespace-nowrap rounded-md px-3 py-1 text-xs capitalize transition-colors ${drill === label ? 'bg-card font-medium text-foreground shadow' : 'text-gray-500 dark:text-secondary-400 hover:bg-gray-200 dark:hover:bg-secondary-700 hover:text-gray-700 dark:hover:text-secondary-200 dark:hover:bg-secondary-700/50 dark:hover:text-secondary-200'}`}
                 >
                   {label}
                 </button>

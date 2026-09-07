@@ -147,7 +147,7 @@ export function AdminUsersSection(): JSX.Element {
             setActiveTab('registered');
             setCurrentPage(1);
           }}
-          className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${activeTab === 'registered' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100 border border-slate-300 dark:border-secondary-600'}`}
+          className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${activeTab === 'registered' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100 dark:hover:bg-secondary-800 border border-slate-300 dark:border-secondary-600'}`}
         >
           Registered ({registeredUsers.length})
         </button>
@@ -156,7 +156,7 @@ export function AdminUsersSection(): JSX.Element {
             setActiveTab('guests');
             setCurrentPage(1);
           }}
-          className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${activeTab === 'guests' ? 'bg-purple-600 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100 border border-slate-300 dark:border-secondary-600'}`}
+          className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${activeTab === 'guests' ? 'bg-purple-600 text-white shadow-md' : 'bg-white dark:bg-secondary-800 text-slate-600 dark:text-secondary-300 hover:bg-slate-100 dark:hover:bg-secondary-800 border border-slate-300 dark:border-secondary-600'}`}
         >
           Guest Users ({guestUsers.length})
         </button>
@@ -175,7 +175,7 @@ export function AdminUsersSection(): JSX.Element {
         />
         <button
           onClick={fetchUsers}
-          className="px-4 py-2 rounded-lg border border-slate-300 dark:border-secondary-600 hover:bg-slate-50"
+          className="px-4 py-2 rounded-lg border border-slate-300 dark:border-secondary-600 hover:bg-slate-50 dark:hover:bg-secondary-800/70"
         >
           Refresh
         </button>
@@ -218,7 +218,7 @@ export function AdminUsersSection(): JSX.Element {
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 dark:divide-secondary-700">
             {isLoading ? (
               <tr>
                 <td colSpan={5} className="px-6 py-12 text-center">
@@ -238,7 +238,7 @@ export function AdminUsersSection(): JSX.Element {
               </tr>
             ) : (
               paginatedUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-slate-50">
+                <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-secondary-800/70">
                   <td className="px-6 py-4">
                     {'email' in user ? (
                       <div className="flex items-center gap-3">

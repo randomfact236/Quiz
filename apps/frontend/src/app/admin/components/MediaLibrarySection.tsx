@@ -180,7 +180,7 @@ export function MediaLibrarySection() {
                     const pct = getSavingsPercent(a);
                     return pct ? (
                       <span
-                        className="ml-1 rounded bg-green-100 px-1 font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300"
+                        className="ml-1 rounded bg-green-100 dark:bg-green-500/20 px-1 font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300"
                         title={`WebP conversion saved ${pct}% vs the original upload`}
                       >
                         -{pct}%

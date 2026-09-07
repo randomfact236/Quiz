@@ -157,7 +157,7 @@ export default function MobileFooter() {
               </h3>
               <button
                 onClick={closeDrawer}
-                className="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
+                className="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:bg-gray-700 dark:text-gray-300"
                 aria-label="Close drawer"
               >
                 <X size={20} aria-hidden="true" />
@@ -180,7 +180,7 @@ export default function MobileFooter() {
                       key={subject.id}
                       href={`/quiz-mcq?subject=${subject.id}`}
                       onClick={closeDrawer}
-                      className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-blue-200 dark:hover:bg-blue-500/30 dark:hover:bg-blue-500/10 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-blue-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                     >
                       <span className="mb-2 text-2xl">{subject.emoji}</span>
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -189,7 +189,7 @@ export default function MobileFooter() {
                     </Link>
                   ))
                 ) : (
-                  <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 rounded-xl dark:bg-gray-800/50">
+                  <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-secondary-800 rounded-xl dark:bg-gray-800/50">
                     <p className="text-sm font-medium text-gray-500 dark:text-secondary-400">
                       No subjects found
                     </p>
@@ -214,7 +214,7 @@ export default function MobileFooter() {
                       key={cat.id}
                       href={`/jokes?category=${cat.id}`}
                       onClick={closeDrawer}
-                      className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-orange-200 dark:hover:bg-orange-500/30 dark:hover:bg-orange-500/10 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-orange-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                     >
                       <span className="mb-2 text-2xl">{cat.emoji}</span>
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -223,7 +223,7 @@ export default function MobileFooter() {
                     </Link>
                   ))
                 ) : (
-                  <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 rounded-xl dark:bg-gray-800/50">
+                  <div className="col-span-full flex h-32 flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-secondary-800 rounded-xl dark:bg-gray-800/50">
                     <p className="text-sm font-medium text-gray-500 dark:text-secondary-400">
                       No categories found
                     </p>
@@ -248,7 +248,7 @@ export default function MobileFooter() {
                       key={subject.id}
                       href={`/riddle-mcq/play?subjectId=${subject.id}&mode=practice`}
                       onClick={closeDrawer}
-                      className="flex flex-col items-center rounded-xl bg-gray-50 p-3 text-center transition-colors hover:bg-purple-200 dark:hover:bg-purple-500/30 dark:hover:bg-purple-500/10 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      className="flex flex-col items-center rounded-xl bg-gray-50 p-3 text-center transition-colors hover:bg-purple-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                     >
                       <span className="mb-1 text-xl">{subject.emoji || '🧩'}</span>
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -269,7 +269,7 @@ export default function MobileFooter() {
                     key={level.id}
                     href={`/image-riddles?difficulty=${level.id}`}
                     onClick={closeDrawer}
-                    className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-teal-200 dark:hover:bg-teal-500/30 dark:hover:bg-teal-500/10 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    className="flex flex-col items-center rounded-xl bg-gray-50 p-4 text-center transition-colors hover:bg-teal-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                   >
                     <span className="mb-2 text-2xl">{level.icon}</span>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -291,7 +291,7 @@ export default function MobileFooter() {
         <div className="flex items-center justify-around h-full">
           <Link
             href="/"
-            className="flex flex-col items-center p-2 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 group"
+            className="flex flex-col items-center p-2 text-gray-600 transition-colors hover:text-blue-600 dark:hover:text-blue-300 dark:text-gray-400 dark:hover:text-blue-400 group"
             aria-label="Navigate to Home"
             aria-selected={isClient && activeDrawer === null && currentPath === '/'}
             role="tab"
@@ -306,7 +306,7 @@ export default function MobileFooter() {
 
           <button
             onClick={() => toggleDrawer(DRAWER_TYPES.JOKES)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.JOKES ? 'text-orange-600 dark:text-orange-400' : 'text-gray-600 dark:text-gray-400'}`}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.JOKES ? 'text-orange-600 dark:text-orange-300 dark:text-orange-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Jokes categories"
             aria-expanded={activeDrawer === DRAWER_TYPES.JOKES}
             aria-selected={activeDrawer === DRAWER_TYPES.JOKES}
@@ -322,7 +322,7 @@ export default function MobileFooter() {
 
           <button
             onClick={() => toggleDrawer(DRAWER_TYPES.RIDDLES)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.RIDDLES ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400'}`}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.RIDDLES ? 'text-purple-600 dark:text-purple-300 dark:text-purple-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Riddles chapters"
             aria-expanded={activeDrawer === DRAWER_TYPES.RIDDLES}
             aria-selected={activeDrawer === DRAWER_TYPES.RIDDLES}
@@ -338,7 +338,7 @@ export default function MobileFooter() {
 
           <button
             onClick={() => toggleDrawer(DRAWER_TYPES.IMAGE_RIDDLES)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES ? 'text-teal-600 dark:text-teal-400' : 'text-gray-600 dark:text-gray-400'}`}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES ? 'text-teal-600 dark:text-teal-300 dark:text-teal-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Image Riddles levels"
             aria-expanded={activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES}
             aria-selected={activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES}
@@ -354,7 +354,7 @@ export default function MobileFooter() {
 
           <button
             onClick={() => toggleDrawer(DRAWER_TYPES.QUIZ)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.QUIZ ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.QUIZ ? 'text-blue-600 dark:text-blue-300 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Quiz subjects"
             aria-expanded={activeDrawer === DRAWER_TYPES.QUIZ}
             aria-selected={activeDrawer === DRAWER_TYPES.QUIZ}
