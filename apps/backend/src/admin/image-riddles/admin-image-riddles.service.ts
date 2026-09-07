@@ -90,8 +90,6 @@ export class AdminImageRiddlesService {
 
     const totalPages = Math.ceil(total / limit);
 
-    this.logger.debug(`Found ${total} riddles, returning page ${page} of ${totalPages}`);
-
     return {
       data,
       total,
@@ -147,7 +145,6 @@ export class AdminImageRiddlesService {
     });
 
     const saved = await this.saveRiddleSafely(riddle);
-    this.logger.log(`Created riddle: ${saved.id}`);
 
     await this.invalidateCache();
     return saved;
@@ -175,7 +172,6 @@ export class AdminImageRiddlesService {
       }
     }
 
-    this.logger.log(`Bulk create completed: ${created} created, ${failed} failed`);
     return { created, failed, errors };
   }
 
@@ -231,7 +227,6 @@ export class AdminImageRiddlesService {
     }
 
     const saved = await this.saveRiddleSafely(riddle);
-    this.logger.log(`Updated riddle: ${id}`);
 
     await this.invalidateCache();
     return saved;
@@ -266,7 +261,6 @@ export class AdminImageRiddlesService {
     const riddle = await this.findRiddleById(id);
     riddle.isActive = false;
     await this.riddleRepo.save(riddle);
-    this.logger.log(`Soft deleted riddle: ${id}`);
     await this.invalidateCache();
   }
 
@@ -277,7 +271,6 @@ export class AdminImageRiddlesService {
     const riddle = await this.findRiddleById(id);
     riddle.isActive = !riddle.isActive;
     const saved = await this.riddleRepo.save(riddle);
-    this.logger.log(`Toggled active status for riddle: ${id} -> ${saved.isActive}`);
     await this.invalidateCache();
     return { isActive: saved.isActive };
   }
@@ -338,7 +331,6 @@ export class AdminImageRiddlesService {
     });
 
     const saved = await this.categoryRepo.save(category);
-    this.logger.log(`Created category: ${saved.id}`);
 
     await this.invalidateCache();
     return saved;
@@ -374,7 +366,6 @@ export class AdminImageRiddlesService {
     }
 
     const saved = await this.categoryRepo.save(category);
-    this.logger.log(`Updated category: ${id}`);
 
     await this.invalidateCache();
     return saved;
@@ -403,11 +394,6 @@ export class AdminImageRiddlesService {
       }
       await manager.remove(category);
     });
-
-    if (activeRiddleCount > 0) {
-      this.logger.log(`Soft deleted ${activeRiddleCount} riddles in category: ${id}`);
-    }
-    this.logger.log(`Deleted category: ${id}`);
 
     await this.invalidateCache();
   }
@@ -525,6 +511,5 @@ export class AdminImageRiddlesService {
    */
   private async invalidateCache(): Promise<void> {
     await this.cacheService.delPattern('image-riddles:*');
-    this.logger.debug('Invalidated image riddles cache');
   }
 }

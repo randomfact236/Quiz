@@ -94,8 +94,8 @@ export function TopicsSection(): JSX.Element {
             if (questions.total > 0) {
               counts[subject.slug] = questions.total;
             }
-          } catch (err) {
-            console.error(`Failed to load questions for ${subject.slug}:`, err);
+          } catch {
+            // skip subjects whose question counts can't be loaded
           }
         }
 

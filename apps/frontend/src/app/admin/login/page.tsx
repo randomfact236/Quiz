@@ -72,7 +72,6 @@ export default function AdminLogin() {
       }
       router.push('/admin');
     } catch (err: unknown) {
-      console.error('Login error:', err);
       if (err instanceof TypeError && err.message.includes('fetch')) {
         setError('Network error. Please check your connection and try again.');
       } else if (err instanceof Error) {

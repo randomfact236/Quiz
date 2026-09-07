@@ -37,8 +37,7 @@ export function AdminGuard({ children }: { children?: React.ReactNode }) {
       }
 
       setIsAuthorized(true);
-    } catch (e) {
-      console.error('Invalid token payload', e);
+    } catch {
       router.replace('/admin/login');
     }
   }, [router]);

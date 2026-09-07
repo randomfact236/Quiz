@@ -2,10 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
-import {
-  REDIS_PORT,
-  DEFAULT_CACHE_TTL_S,
-} from '../constants/app.constants';
+import { REDIS_PORT, DEFAULT_CACHE_TTL_S } from '../constants/app.constants';
 
 @Injectable()
 export class CacheService {
@@ -17,10 +14,6 @@ export class CacheService {
       host: this.configService.get('REDIS_HOST', 'localhost'),
       port: this.configService.get('REDIS_PORT', REDIS_PORT),
       password: this.configService.get('REDIS_PASSWORD'),
-    });
-
-    this.redis.on('connect', () => {
-      this.logger.log('Redis connected successfully');
     });
 
     this.redis.on('error', (error: Error) => {
@@ -80,7 +73,11 @@ export class CacheService {
     }
   }
 
-  async getOrSet<T>(key: string, factory: () => Promise<T>, ttl: number = DEFAULT_CACHE_TTL_S): Promise<T> {
+  async getOrSet<T>(
+    key: string,
+    factory: () => Promise<T>,
+    ttl: number = DEFAULT_CACHE_TTL_S
+  ): Promise<T> {
     const cached = await this.get<T>(key);
     if (cached !== null) {
       return cached;

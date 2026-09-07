@@ -6,7 +6,6 @@
  * ============================================================================
  */
 
-import { Logger } from '@nestjs/common';
 import { Repository, QueryRunner } from 'typeorm';
 
 import { BulkActionType } from '../enums/bulk-action.enum';
@@ -22,14 +21,11 @@ export interface IBulkActionStrategy {
    * @param queryRunner - TypeORM query runner
    * @param repository - Entity repository
    * @param entity - Entity to process
-   * @param entityName - Name of the entity for logging
    */
   execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void>;
 }
 
@@ -40,9 +36,7 @@ export class PublishStrategy implements IBulkActionStrategy {
   async execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void> {
     if (entity.status === ContentStatus.PUBLISHED) {
       return; // Already published
@@ -52,8 +46,6 @@ export class PublishStrategy implements IBulkActionStrategy {
       status: ContentStatus.PUBLISHED as any,
       updatedAt: new Date(),
     } as any);
-
-    logger.debug(`[BULK ACTION] Published ${entityName} ${entity.id}`, 'BulkActionService');
   }
 }
 
@@ -64,9 +56,7 @@ export class DraftStrategy implements IBulkActionStrategy {
   async execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void> {
     if (entity.status === ContentStatus.DRAFT) {
       return; // Already draft
@@ -76,8 +66,6 @@ export class DraftStrategy implements IBulkActionStrategy {
       status: ContentStatus.DRAFT as any,
       updatedAt: new Date(),
     } as any);
-
-    logger.debug(`[BULK ACTION] Drafted ${entityName} ${entity.id}`, 'BulkActionService');
   }
 }
 
@@ -88,9 +76,7 @@ export class TrashStrategy implements IBulkActionStrategy {
   async execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void> {
     if (entity.status === ContentStatus.TRASH) {
       return; // Already trashed
@@ -100,8 +86,6 @@ export class TrashStrategy implements IBulkActionStrategy {
       status: ContentStatus.TRASH as any,
       updatedAt: new Date(),
     } as any);
-
-    logger.debug(`[BULK ACTION] Trashed ${entityName} ${entity.id}`, 'BulkActionService');
   }
 }
 
@@ -112,9 +96,7 @@ export class RestoreStrategy implements IBulkActionStrategy {
   async execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void> {
     if (entity.status !== ContentStatus.TRASH) {
       return; // Not in trash
@@ -124,8 +106,6 @@ export class RestoreStrategy implements IBulkActionStrategy {
       status: ContentStatus.PUBLISHED as any,
       updatedAt: new Date(),
     } as any);
-
-    logger.debug(`[BULK ACTION] Restored ${entityName} ${entity.id}`, 'BulkActionService');
   }
 }
 
@@ -136,13 +116,9 @@ export class DeleteStrategy implements IBulkActionStrategy {
   async execute<T extends IStatusEntity>(
     queryRunner: QueryRunner,
     repository: Repository<T>,
-    entity: T,
-    entityName: string,
-    logger: Logger
+    entity: T
   ): Promise<void> {
     await queryRunner.manager.delete(repository.target, entity.id);
-
-    logger.debug(`[BULK ACTION] Deleted ${entityName} ${entity.id}`, 'BulkActionService');
   }
 }
 

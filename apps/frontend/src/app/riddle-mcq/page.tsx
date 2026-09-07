@@ -255,9 +255,8 @@ function RiddlesPageContent(): JSX.Element {
         setCategories(withCounts);
 
         setLoading(false);
-      } catch (err) {
+      } catch {
         if (cancelled) return;
-        console.error('Failed to load riddles hub data:', err);
         setError(
           'We could not load the riddles right now. Please check your connection and try again.'
         );

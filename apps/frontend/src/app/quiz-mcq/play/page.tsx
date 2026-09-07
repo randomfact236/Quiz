@@ -102,8 +102,7 @@ function QuizContent(): JSX.Element {
         } else {
           setTimeLimit(undefined);
         }
-      } catch (error) {
-        console.error('Failed to load timer settings:', error);
+      } catch {
         if (mode === 'timer' && level) {
           setTimeLimit(DEFAULT_TIME_LIMITS[level.toLowerCase()] ?? 30);
         } else {
@@ -129,8 +128,7 @@ function QuizContent(): JSX.Element {
         const subjectData = await getSubjectMeta(subject);
         setSubjectName(subjectData.name);
         setSubjectEmoji(subjectData.emoji);
-      } catch (error) {
-        console.error('Failed to load subject data:', error);
+      } catch {
         setSubjectName(subject);
       }
     };

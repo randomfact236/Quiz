@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,8 +10,6 @@ import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 
 @Injectable()
 export class RiddleMcqBulkActionsService {
-  private readonly logger = new Logger(RiddleMcqBulkActionsService.name);
-
   constructor(
     @InjectRepository(RiddleMcq)
     private riddleMcqRepo: Repository<RiddleMcq>,
@@ -28,10 +26,6 @@ export class RiddleMcqBulkActionsService {
   }
 
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(
-      `[RiddleMcqBulkActionsService] Executing bulk ${action} on ${ids.length} riddles`
-    );
-
     let succeeded = 0;
     let failed = 0;
     const failures: Array<{ id: string; error: string }> = [];

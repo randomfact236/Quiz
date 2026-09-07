@@ -105,10 +105,7 @@ export function ChallengeHub({
       try {
         const [subjectsData, counts] = await Promise.all([
           getSubjects(false),
-          getPublicLevelCounts().catch((error) => {
-            console.error('Failed to load level counts:', error);
-            return { subjectWise: {}, allSubject: {}, completeMix: 0 };
-          }),
+          getPublicLevelCounts().catch(() => ({ subjectWise: {}, allSubject: {}, completeMix: 0 })),
         ]);
         setSubjects(subjectsData.length > 0 ? subjectsData : []);
         setLevelCounts({
@@ -116,8 +113,8 @@ export function ChallengeHub({
           allSubject: counts.allSubject || {},
           completeMix: counts.completeMix || 0,
         });
-      } catch (error) {
-        console.error('Failed to load subjects:', error);
+      } catch {
+        // subjects list just stays empty
       }
     };
 

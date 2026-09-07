@@ -19,7 +19,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -77,8 +76,6 @@ function startOfToday(): Date {
 
 @Injectable()
 export class CommentsService {
-  private readonly logger = new Logger(CommentsService.name);
-
   constructor(
     @InjectRepository(Comment)
     private commentRepo: Repository<Comment>,
@@ -411,7 +408,6 @@ export class CommentsService {
   }
 
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(`[CommentsService] Executing bulk ${action} on ${ids.length} comments`);
     const result = await this.bulkActionService.executeBulkAction(
       this.commentRepo,
       'comment',

@@ -416,8 +416,6 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
   // ==================== BULK ACTIONS ====================
 
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(`[QuizMcqService] Executing bulk ${action} on ${ids.length} questions`);
-
     const result = await this.bulkActionService.executeBulkAction(
       this.deps.itemRepo,
       this.deps.itemAlias,
@@ -427,7 +425,6 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
 
     if (result.succeeded > 0) {
       await this.invalidateContentCaches();
-      this.logger.log(`[QuizMcqService] Cache invalidated after bulk ${action}`);
     }
 
     return result;

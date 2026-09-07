@@ -82,7 +82,6 @@ export function track(
 ): void {
   if (typeof window === 'undefined') return;
   if (!EVENT_NAME_RE.test(eventName)) {
-    console.warn(`[analytics] invalid eventName "${eventName}" — dropped`);
     return;
   }
 

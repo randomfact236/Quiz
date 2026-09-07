@@ -127,9 +127,8 @@ export function SettingsSection(): JSX.Element {
       const data = await SettingsService.getAdminSettings();
       setSettings(data);
       setFormData(JSON.parse(JSON.stringify(data))); // Deep copy for form
-    } catch (err) {
+    } catch {
       setError('Failed to load settings');
-      console.error('Error loading settings:', err);
     } finally {
       setLoading(false);
     }
@@ -145,9 +144,8 @@ export function SettingsSection(): JSX.Element {
 
       setSuccess('Settings saved successfully');
       setSettings(formData as SystemSettings); // Update local "truth"
-    } catch (err) {
+    } catch {
       setError('Failed to save settings');
-      console.error('Error saving settings:', err);
     } finally {
       setSaving(false);
     }

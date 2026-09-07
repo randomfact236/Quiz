@@ -11,7 +11,6 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,8 +32,6 @@ function sanitizeFilename(name: string): string {
 
 @Injectable()
 export class MediaService {
-  private readonly logger = new Logger(MediaService.name);
-
   constructor(
     @InjectRepository(Media)
     private readonly mediaRepo: Repository<Media>,
@@ -86,7 +83,6 @@ export class MediaService {
     });
 
     const saved = await this.mediaRepo.save(media);
-    this.logger.log(`Stored media ${saved.id} (${filename}, ${webpBuffer.length}B webp)`);
     return saved;
   }
 

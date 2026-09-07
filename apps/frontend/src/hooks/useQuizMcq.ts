@@ -80,8 +80,7 @@ async function loadQuestions(
 
     const convertedQuestions = allQuestions.map(convertQuizQuestion);
     return { all: convertedQuestions, total: convertedQuestions.length };
-  } catch (error) {
-    console.error('Failed to load questions from API:', error);
+  } catch {
     return { all: [], total: 0 };
   }
 }

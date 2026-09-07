@@ -134,7 +134,6 @@ export class EmailService {
         return { success: false, message: error.message };
       }
 
-      this.logger.log(`Verification email sent successfully to ${to}, ID: ${data?.id}`);
       return { success: true, message: 'Email sent successfully' };
     } catch (error) {
       this.logger.error(`Error sending email: ${error}`);
@@ -265,7 +264,6 @@ export class EmailService {
         return { success: false, message: error.message };
       }
 
-      this.logger.log(`Password reset email sent successfully to ${to}, ID: ${data?.id}`);
       return { success: true, message: 'Email sent successfully' };
     } catch (error) {
       this.logger.error(`Error sending email: ${error}`);

@@ -146,7 +146,6 @@ export function QuestionManager({
         }
         setSelectedIds(new Set());
       } catch (error) {
-        console.error(`[BulkAction] Failed to execute "${action}":`, error);
         const message = error instanceof Error ? error.message : 'An unknown error occurred';
         alert(`Bulk action failed: ${message}`);
       }

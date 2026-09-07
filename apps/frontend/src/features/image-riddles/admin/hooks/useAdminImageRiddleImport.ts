@@ -168,9 +168,6 @@ export function useAdminImageRiddleImport({
         toast.success(
           `📥 Imported ${result.created} riddles${result.failed > 0 ? ` (${result.failed} failed)` : ''} — saved as drafts.`
         );
-        if (result.failed > 0) {
-          console.warn('Import failures:', result.errors);
-        }
         await loadData();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : 'Import failed');

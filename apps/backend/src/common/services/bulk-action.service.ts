@@ -46,16 +46,10 @@ export class BulkActionService {
     entityName: string,
     ids: string[],
     action: BulkActionType,
-    options: BulkActionOptions = {},
+    options: BulkActionOptions = {}
   ): Promise<BulkActionResult> {
-    const startTime = Date.now();
     const failures: BulkActionFailure[] = [];
     let succeeded = 0;
-
-    this.logger.log(
-      `[BULK ACTION] Starting ${action} on ${ids.length} ${entityName}(s)`,
-      'BulkActionService',
-    );
 
     // Get the strategy for this action
     const strategy = BulkActionStrategyFactory.getStrategy(action);
@@ -65,7 +59,7 @@ export class BulkActionService {
         processed: ids.length,
         succeeded: 0,
         failed: ids.length,
-        failures: ids.map(id => ({ id, error: `Unknown action: ${action}` })),
+        failures: ids.map((id) => ({ id, error: `Unknown action: ${action}` })),
         message: `Bulk ${action} failed: Unknown action type`,
       };
     }
@@ -81,7 +75,7 @@ export class BulkActionService {
         where: { id: In(ids) } as FindOptionsWhere<T>,
       });
 
-      const entityMap = new Map(entities.map(e => [e.id, e]));
+      const entityMap = new Map(entities.map((e) => [e.id, e]));
 
       // Process each ID
       for (const id of ids) {
@@ -94,7 +88,7 @@ export class BulkActionService {
           }
 
           // Execute the strategy
-          await strategy.execute(queryRunner, repository, entity, entityName, this.logger);
+          await strategy.execute(queryRunner, repository, entity);
 
           succeeded++;
         } catch (error) {
@@ -103,7 +97,7 @@ export class BulkActionService {
           this.logger.error(
             `[BULK ACTION] Failed to ${action} ${entityName} ${id}: ${errorMessage}`,
             error instanceof Error ? error.stack : undefined,
-            'BulkActionService',
+            'BulkActionService'
           );
         }
       }
@@ -116,7 +110,6 @@ export class BulkActionService {
         await queryRunner.rollbackTransaction();
       }
 
-      const duration = Date.now() - startTime;
       const result: BulkActionResult = {
         success: failures.length === 0,
         processed: ids.length,
@@ -126,11 +119,6 @@ export class BulkActionService {
         message: this.generateResultMessage(action, entityName, succeeded, failures.length),
       };
 
-      this.logger.log(
-        `[BULK ACTION] Completed ${action} on ${entityName}(s): ${succeeded} succeeded, ${failures.length} failed (${duration}ms)`,
-        'BulkActionService',
-      );
-
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -138,7 +126,7 @@ export class BulkActionService {
       this.logger.error(
         `[BULK ACTION] Transaction failed for ${action} on ${entityName}(s): ${errorMessage}`,
         error instanceof Error ? error.stack : undefined,
-        'BulkActionService',
+        'BulkActionService'
       );
 
       return {
@@ -146,7 +134,7 @@ export class BulkActionService {
         processed: ids.length,
         succeeded: 0,
         failed: ids.length,
-        failures: ids.map(id => ({ id, error: errorMessage })),
+        failures: ids.map((id) => ({ id, error: errorMessage })),
         message: `Bulk ${action} failed: ${errorMessage}`,
       };
     } finally {
@@ -160,7 +148,7 @@ export class BulkActionService {
    * @returns StatusCountResponse with counts by status
    */
   async getStatusCounts<T extends IStatusEntity>(
-    repository: Repository<T>,
+    repository: Repository<T>
   ): Promise<StatusCountResponse> {
     const [total, published, draft, trash] = await Promise.all([
       repository.count(),
@@ -179,7 +167,7 @@ export class BulkActionService {
     action: BulkActionType,
     entityName: string,
     succeeded: number,
-    failed: number,
+    failed: number
   ): string {
     const actionPast = getActionPastTense(action);
 

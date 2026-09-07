@@ -11,10 +11,11 @@ export class BruteForceService {
 
   constructor(
     private cacheService: CacheService,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.MAX_ATTEMPTS = this.configService.get<number>('bruteForce.maxAttempts') || 5;
-    this.LOCKOUT_DURATION_MINUTES = this.configService.get<number>('bruteForce.lockoutMinutes') || 15;
+    this.LOCKOUT_DURATION_MINUTES =
+      this.configService.get<number>('bruteForce.lockoutMinutes') || 15;
   }
 
   private getKey(identifier: string): string {
@@ -23,9 +24,9 @@ export class BruteForceService {
 
   async recordFailedAttempt(identifier: string): Promise<void> {
     const key = this.getKey(identifier);
-    const currentAttempts = await this.cacheService.get<number>(key) || 0;
+    const currentAttempts = (await this.cacheService.get<number>(key)) || 0;
     const newAttempts = currentAttempts + 1;
-    
+
     if (newAttempts === 1) {
       await this.cacheService.set(key, newAttempts, this.LOCKOUT_DURATION_MINUTES * 60);
     } else {
@@ -48,7 +49,6 @@ export class BruteForceService {
   async recordSuccess(identifier: string): Promise<void> {
     const key = this.getKey(identifier);
     await this.cacheService.del(key);
-    this.logger.log(`Successful login for ${identifier} - brute force counter reset`);
   }
 
   async isLockedOut(identifier: string): Promise<boolean> {

@@ -15,7 +15,6 @@ import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
 
 // Modules
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { DadJokesModule } from './dad-jokes/dad-jokes.module';
 import { DuelsModule } from './duels/duels.module';
 import { HealthModule } from './health/health.module';
@@ -138,11 +137,6 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
-    },
-    // Global Logging Interceptor
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
     },
   ],
 })

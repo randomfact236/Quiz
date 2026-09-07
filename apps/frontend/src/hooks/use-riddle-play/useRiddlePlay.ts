@@ -629,8 +629,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
       setCurrentIndex(riddles.length);
       setStatus('playing');
-    } catch (err) {
-      console.error('Failed to extend session:', err);
+    } catch {
       alert('Failed to load more riddles. Please try again.');
       setStatus('playing');
     }

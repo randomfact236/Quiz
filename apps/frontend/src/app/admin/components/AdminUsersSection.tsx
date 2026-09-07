@@ -54,8 +54,8 @@ export function AdminUsersSection(): JSX.Element {
         const data = await guestRes.json();
         setGuestUsers(data.data || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
+    } catch {
+      // fetch failed — tabs render with empty lists
     } finally {
       setIsLoading(false);
     }

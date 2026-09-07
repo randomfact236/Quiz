@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOptionsWhere, In } from 'typeorm';
 
@@ -29,8 +29,6 @@ import { JokeVote, VoterKey } from './entities/joke-vote.entity';
 
 @Injectable()
 export class DadJokesService {
-  private readonly logger = new Logger(DadJokesService.name);
-
   constructor(
     @InjectRepository(DadJoke)
     private jokeRepo: Repository<DadJoke>,
@@ -422,9 +420,6 @@ export class DadJokesService {
       await manager.remove(category);
     });
 
-    if (jokeCount > 0) {
-      this.logger.log(`Trashed ${jokeCount} jokes of deleted category: ${id}`);
-    }
     await invalidateCacheFamilies(this.cacheService, [
       'jokes:categories:hasContent:true',
       'jokes:categories:hasContent:false',
@@ -434,7 +429,6 @@ export class DadJokesService {
   // ==================== BULK ACTIONS ====================
 
   async bulkActionClassic(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(`[DadJokesService] Executing bulk ${action} on ${ids.length} classic jokes`);
     const result = await this.bulkActionService.executeBulkAction(
       this.jokeRepo,
       'joke',
@@ -443,7 +437,6 @@ export class DadJokesService {
     );
     if (result.succeeded > 0) {
       await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
-      this.logger.log(`[DadJokesService] Cache invalidated after bulk ${action}`);
     }
     return result;
   }

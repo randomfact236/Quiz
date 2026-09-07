@@ -8,7 +8,7 @@
  * ============================================================================
  */
 
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere } from 'typeorm';
 
@@ -28,8 +28,6 @@ import { ImageRiddle } from './entities/image-riddle.entity';
 
 @Injectable()
 export class ImageRiddlesService {
-  private readonly logger = new Logger(ImageRiddlesService.name);
-
   constructor(
     @InjectRepository(ImageRiddle)
     private imageRiddleRepo: Repository<ImageRiddle>,
@@ -200,10 +198,6 @@ export class ImageRiddlesService {
   // Single canonical status-change surface (publish/draft/trash/restore/delete).
 
   async bulkAction(ids: string[], action: BulkActionType): Promise<BulkActionResult> {
-    this.logger.log(
-      `[ImageRiddlesService] Executing bulk ${action} on ${ids.length} image riddles`
-    );
-
     return this.bulkActionService.executeBulkAction(
       this.imageRiddleRepo,
       'image-riddle',

@@ -70,8 +70,8 @@ export default function MobileFooter() {
         try {
           const data = await getSubjects(true); // true = hasContentOnly
           setRiddleSubjects(data as RiddleMcqSubject[]);
-        } catch (error) {
-          console.error('Failed to fetch riddle subjects:', error);
+        } catch {
+          // drawer stays empty; finally clears the loading state
         } finally {
           setLoadingRiddles(false);
         }
@@ -84,8 +84,8 @@ export default function MobileFooter() {
         try {
           const data = await getQuizSubjects(true);
           setQuizSubjects(data);
-        } catch (error) {
-          console.error('Failed to fetch quiz subjects:', error);
+        } catch {
+          // drawer stays empty; finally clears the loading state
         } finally {
           setLoadingQuiz(false);
         }
@@ -98,8 +98,8 @@ export default function MobileFooter() {
         try {
           const data = await getJokeCategories(true);
           setJokeCategories(data);
-        } catch (error) {
-          console.error('Failed to fetch joke categories:', error);
+        } catch {
+          // drawer stays empty; finally clears the loading state
         } finally {
           setLoadingJokes(false);
         }

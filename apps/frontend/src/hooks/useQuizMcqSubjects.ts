@@ -32,8 +32,7 @@ export function useQuizMcqSubjects(): UseQuizSubjectsReturn {
       }));
 
       setSubjects(loadedSubjects);
-    } catch (err) {
-      console.error('[useQuizMcqSubjects] Error fetching subjects:', err);
+    } catch {
       setSubjects([]);
     }
   }, []);

@@ -112,9 +112,6 @@ export function useQuestionMutation() {
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
       invalidatePublicQuizCache();
     },
-    onError: (error) => {
-      console.error('[BulkAction] Delete failed:', error);
-    },
   });
 
   const bulkUpdateStatusMutation = useMutation({
@@ -129,9 +126,6 @@ export function useQuestionMutation() {
       queryClient.invalidateQueries({ queryKey: [QUESTIONS_KEY] });
       queryClient.invalidateQueries({ queryKey: [FILTER_COUNTS_KEY] });
       invalidatePublicQuizCache();
-    },
-    onError: (error) => {
-      console.error('[BulkAction] Status update failed:', error);
     },
   });
 
