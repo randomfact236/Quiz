@@ -55,7 +55,7 @@ function Banner({ title, count, expanded, onToggle, children }: SectionProps): J
         onClick={onToggle}
         aria-expanded={expanded}
         aria-label={expanded ? `Collapse ${title} section` : `Expand ${title} section`}
-        className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-[#c3b9f5] via-[#a79bf0] to-[#c3b9f5] px-6 py-3 shadow-[0_6px_16px_rgba(109,91,208,.28)]"
+        className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-[#c3b9f5] via-[#a79bf0] to-[#c3b9f5] px-6 py-3 shadow-[0_6px_16px_rgba(109,91,208,.28)] dark:from-indigo-900 dark:via-indigo-800 dark:to-indigo-900"
       >
         <span className="h-0.5 flex-1 rounded bg-white/80" />
         <span className="whitespace-nowrap text-base font-extrabold uppercase tracking-wider text-white drop-shadow-[0_2px_5px_rgba(60,45,140,.45)]">
@@ -191,16 +191,16 @@ export function TopicsSection(): JSX.Element {
   const hasAnySubjects = subjects.length > 0;
 
   return (
-    <div className="mb-6 overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+    <div className="mb-6 overflow-hidden rounded-2xl bg-card/95 shadow-lg">
       <button
         onClick={() => setTopicsExpanded(!topicsExpanded)}
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
         aria-label={topicsExpanded ? 'Collapse Quiz Topics section' : 'Expand Quiz Topics section'}
         aria-expanded={topicsExpanded}
       >
-        <h2 className="text-xl font-bold text-gray-800">🗂️ Quiz Topics</h2>
+        <h2 className="text-xl font-bold text-foreground">🗂️ Quiz Topics</h2>
         <span
-          className={`text-gray-500 transition-transform ${topicsExpanded ? 'rotate-180' : ''}`}
+          className={`text-muted-foreground transition-transform ${topicsExpanded ? 'rotate-180' : ''}`}
         >
           ▼
         </span>
@@ -215,12 +215,12 @@ export function TopicsSection(): JSX.Element {
               <p className="mt-1 text-xs">{error}</p>
             </div>
           ) : isLoading ? (
-            <div className="py-8 text-center text-gray-400">
+            <div className="py-8 text-center text-muted-foreground">
               <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
               <p className="text-sm">Loading topics...</p>
             </div>
           ) : !hasAnySubjects ? (
-            <div className="py-8 text-center text-gray-400">
+            <div className="py-8 text-center text-muted-foreground">
               <p className="mb-2 text-3xl">📭</p>
               <p className="text-sm font-medium">No quiz topics available yet.</p>
               <p className="mt-1 text-xs">Check back soon or ask the admin to add subjects.</p>
@@ -238,14 +238,14 @@ export function TopicsSection(): JSX.Element {
                   onToggle={() => toggleCategory(name)}
                 >
                   {name === 'Other' && totalClicks === 0 && (
-                    <p className="mb-3 text-xs text-gray-400">
+                    <p className="mb-3 text-xs text-muted-foreground">
                       Subjects without a world — assign Academic / Professional &amp; Life /
                       Entertainment &amp; Culture in the admin panel.
                     </p>
                   )}
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                     {items.length === 0 && (
-                      <div className="relative flex min-h-[112px] flex-col items-center justify-end gap-1.5 rounded-2xl bg-gradient-to-br from-slate-300 to-slate-200 px-3 pb-3 pt-4 text-center text-slate-500 shadow-[0_8px_18px_rgba(61,53,100,.12)]">
+                      <div className="relative flex min-h-[112px] flex-col items-center justify-end gap-1.5 rounded-2xl bg-gradient-to-br from-slate-300 to-slate-200 px-3 pb-3 pt-4 text-center text-slate-500 shadow-[0_8px_18px_rgba(61,53,100,.12)] dark:from-slate-700 dark:to-slate-800 dark:text-slate-300">
                         <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-0.5 text-[11px] font-extrabold text-gray-700 shadow">
                           Coming Soon
                         </span>

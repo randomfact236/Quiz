@@ -79,21 +79,23 @@ function ModeSection({ card }: { card: ModeCardConfig }): JSX.Element {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white/95 shadow-lg">
+    <div className="overflow-hidden rounded-2xl bg-card/95 shadow-lg">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
         aria-label={expanded ? `Collapse ${card.title} section` : `Expand ${card.title} section`}
         aria-expanded={expanded}
       >
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-xl font-bold text-foreground">
             <span className="mr-2">{card.emoji}</span>
             {card.title}
           </h2>
-          <p className="text-sm text-gray-500">{card.subtitle}</p>
+          <p className="text-sm text-muted-foreground">{card.subtitle}</p>
         </div>
-        <span className={`text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`}>
+        <span
+          className={`text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
+        >
           ▼
         </span>
       </button>
@@ -128,11 +130,11 @@ export function ModeCards(): JSX.Element {
         <Link
           key={mode.title}
           href={mode.href}
-          className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl"
+          className="flex flex-col items-center rounded-2xl bg-card/95 p-6 text-center shadow-lg transition-all hover:scale-105 hover:bg-white hover:shadow-xl dark:hover:bg-secondary-800"
         >
           <span className="text-4xl">{mode.emoji}</span>
-          <span className="mt-2 font-bold text-gray-800">{mode.title}</span>
-          <span className="text-sm text-gray-500">{mode.subtitle}</span>
+          <span className="mt-2 font-bold text-foreground">{mode.title}</span>
+          <span className="text-sm text-muted-foreground">{mode.subtitle}</span>
         </Link>
       ))}
     </div>

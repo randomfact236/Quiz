@@ -12,6 +12,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Theme tokens backed by the CSS variables in globals.css (:root/.dark).
+        // Deliberately NOT mapped: --primary/--secondary/--accent/--ring would
+        // collide with the primary/secondary/accent scales below.
+        background: 'hsl(var(--background) / <alpha-value>)',
+        foreground: 'hsl(var(--foreground) / <alpha-value>)',
+        card: {
+          DEFAULT: 'hsl(var(--card) / <alpha-value>)',
+          foreground: 'hsl(var(--card-foreground) / <alpha-value>)',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
+          foreground: 'hsl(var(--muted-foreground) / <alpha-value>)',
+        },
+        border: 'hsl(var(--border) / <alpha-value>)',
+        input: 'hsl(var(--input) / <alpha-value>)',
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
