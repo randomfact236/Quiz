@@ -46,3 +46,6 @@ apps/backend/public/
 
 # External reference material (kept on disk, not part of the product)
 quiz-reference/
+
+# ZCode CLI local workspace state (session artifacts)
+.zcode/
