@@ -31,6 +31,5 @@ import { CommentsService } from './comments.service';
   ],
   controllers: [CommentsController, CommentsAdminController],
   providers: [CommentsService, CacheService, BulkActionService],
-  exports: [CommentsService],
 })
 export class CommentsModule {}

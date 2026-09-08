@@ -46,8 +46,7 @@ export async function loadSitemapPaths(): Promise<Set<string> | null> {
     return new Set(
       locs.map((u) => {
         try {
-          const p = new URL(u).pathname;
-          return p === '' ? '/' : p;
+          return new URL(u).pathname;
         } catch {
           return u;
         }
@@ -80,7 +79,7 @@ export async function auditRoute(
       noindex: /noindex/i.test(robots),
       ogImage: doc.querySelector('meta[property="og:image"]') !== null,
       jsonLd: doc.querySelector('script[type="application/ld+json"]') !== null,
-      inSitemap: sitemapPaths ? sitemapPaths.has(path === '/' ? '/' : path) : null,
+      inSitemap: sitemapPaths ? sitemapPaths.has(path) : null,
     };
   } catch {
     return {

@@ -214,7 +214,6 @@ export function clearAllProgress(): void {
     localStorage.removeItem(STORAGE_KEYS.CHAPTER_PROGRESS);
     localStorage.removeItem(STORAGE_KEYS.SUBJECT_PROGRESS);
     localStorage.removeItem(STORAGE_KEYS.QUIZ_HISTORY);
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_SESSION);
   }
 }
 

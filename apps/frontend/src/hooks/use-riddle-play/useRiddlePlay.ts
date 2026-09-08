@@ -110,7 +110,8 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
             id: string;
             question: string;
             options: string[];
-            correctAnswer: string;
+            answer?: string; // backend text-answer column
+            correctAnswer?: string;
             chapter?: { name?: string };
             chapterId?: string;
             explanation?: string;
@@ -525,6 +526,14 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
     saveRiddleResult(completedSession);
     const unlocked = checkAchievements();
     toastAchievementUnlocks(unlocked);
+    // Analytics plan §4.4 parity: riddle unlocks emit the same event as quiz.
+    unlocked.forEach((achievement) =>
+      track(
+        'achievement_unlocked',
+        { achievementId: achievement.id, name: achievement.name },
+        { module: 'riddle-mcq', sessionId: completedSession.id }
+      )
+    );
 
     // Analytics plan §4.1: session_completed (both manual submit and the
     // time-up auto-submit funnel through here).

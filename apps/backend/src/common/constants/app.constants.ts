@@ -4,7 +4,7 @@
  * ============================================================================
  * @module common/constants/app.constants
  * @description Centralized constants for the backend application.
- * 
+ *
  * NOTE: Port configuration has been moved to './ports.ts'
  * To change ports, edit ports.ts or use environment variables.
  * ============================================================================
@@ -65,13 +65,6 @@ export const ONE_HOUR_MS = 3600000;
  * @default 86400000
  */
 export const ONE_DAY_MS = 86400000;
-
-/**
- * One week in milliseconds
- * @default 604800000
- */
-export const ONE_WEEK_MS = 604800000;
-
 // =============================================================================
 // TIME VALUES (Seconds)
 // =============================================================================
@@ -103,13 +96,6 @@ export const ONE_WEEK_S = 604800;
  * @default 3600
  */
 export const DEFAULT_CACHE_TTL_S = 3600;
-
-/**
- * Default Redis cache TTL in seconds
- * @default 3600
- */
-export const REDIS_CACHE_TTL_S = 3600;
-
 /**
  * Categories cache TTL in seconds (24 hours)
  * @default 86400
@@ -143,41 +129,6 @@ export const MAX_ORDER_VALUE = 1000;
  * @default 0
  */
 export const MIN_ORDER_VALUE = 0;
-
-/**
- * Maximum number of function lines allowed (code quality)
- * @default 50
- */
-export const MAX_FUNCTION_LINES = 50;
-
-/**
- * Maximum number of file lines allowed (code quality)
- * @default 500
- */
-export const MAX_FILE_LINES = 500;
-
-/**
- * Maximum cyclomatic complexity allowed (code quality)
- * @default 15
- */
-export const MAX_COMPLEXITY = 15;
-
-// =============================================================================
-// JWT
-// =============================================================================
-
-/**
- * JWT token expiration time in days
- * @default 7
- */
-export const JWT_EXPIRES_IN_DAYS = 7;
-
-/**
- * JWT token expiration time in seconds (7 days)
- * @default 604800
- */
-export const JWT_EXPIRES_IN_SECONDS = 604800;
-
 // =============================================================================
 // HTTP STATUS CODES
 // =============================================================================
@@ -273,29 +224,6 @@ export const DEFAULT_SUBMIT_ANIMATION_DURATION_MS = 150;
  * @default 5000
  */
 export const MAX_ANIMATION_DURATION_MS = 5000;
-
-/**
- * Default animation delay in milliseconds
- * @default 0
- */
-export const DEFAULT_ANIMATION_DELAY_MS = 0;
-
-// =============================================================================
-// DEFAULT VALUES
-// =============================================================================
-
-/**
- * Default count for random quiz jokes
- * @default 10
- */
-export const DEFAULT_RANDOM_JOKES_COUNT = 10;
-
-/**
- * Default count for mixed quiz jokes
- * @default 20
- */
-export const DEFAULT_MIXED_JOKES_COUNT = 20;
-
 /**
  * Minimum timer duration in seconds for image riddles
  * @default 5
@@ -337,57 +265,3 @@ export const DEFAULT_ACTION_ORDER = 100;
  * @default 999
  */
 export const MAX_ACTION_ORDER = 999;
-
-/**
- * High priority action order (for fullscreen)
- * @default 100
- */
-export const HIGH_PRIORITY_ORDER = 100;
-
-/**
- * Submit answer action order (highest priority)
- * @default 5
- */
-export const SUBMIT_ACTION_ORDER = 5;
-
-/**
- * Show hint action order
- * @default 10
- */
-export const SHOW_HINT_ORDER = 10;
-
-/**
- * Skip action order
- * @default 20
- */
-export const SKIP_ACTION_ORDER = 20;
-
-/**
- * Reveal answer action order
- * @default 30
- */
-export const REVEAL_ANSWER_ORDER = 30;
-
-/**
- * Reset timer action order
- * @default 40
- */
-export const RESET_TIMER_ORDER = 40;
-
-/**
- * Pause timer action order
- * @default 45
- */
-export const PAUSE_TIMER_ORDER = 45;
-
-/**
- * Resume timer action order
- * @default 46
- */
-export const RESUME_TIMER_ORDER = 46;
-
-/**
- * Share action order
- * @default 50
- */
-export const SHARE_ACTION_ORDER = 50;

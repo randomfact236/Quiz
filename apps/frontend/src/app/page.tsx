@@ -19,11 +19,6 @@ export default function HomePage(): JSX.Element {
           <TopicsSection />
           <ModeCards />
           <StatsSection />
-
-          {/* Footer */}
-          <div className="mt-8 text-center text-sm text-white/60">
-            <p>© 2026 AI Quiz Platform</p>
-          </div>
         </div>
       </div>
     </main>

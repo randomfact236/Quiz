@@ -155,17 +155,6 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
     return (await this.findRandomItems({ count })).data;
   }
 
-  async findRiddleById(id: string): Promise<RiddleMcq> {
-    const riddle = await this.deps.itemRepo.findOne({
-      where: { id },
-      relations: ['subject'],
-    });
-    if (!riddle) {
-      throw new NotFoundException('Riddle not found');
-    }
-    return riddle;
-  }
-
   /** Public single read — always PUBLISHED only. */
   async findPublishedRiddleById(id: string): Promise<RiddleMcq> {
     const riddle = await this.deps.itemRepo.findOne({

@@ -107,13 +107,6 @@ export function adaptJoke(raw: RawJoke): AdaptedJoke {
 // Public API — called by the public page
 // ============================================================================
 
-export async function getJokes(page = 1, limit = 200): Promise<AdaptedJoke[]> {
-  const response = await api.get<{ data: RawJoke[]; total: number }>(
-    `/jokes/classic?page=${page}&limit=${limit}`
-  );
-  return (response.data.data ?? []).map(adaptJoke);
-}
-
 const ALL_JOKES_PAGE_SIZE = 100;
 
 /**

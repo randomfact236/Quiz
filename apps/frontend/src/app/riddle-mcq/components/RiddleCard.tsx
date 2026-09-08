@@ -19,6 +19,7 @@ import {
   type BubbleEmojiEffectRef,
 } from '@/components/quiz-mcq/BubbleEmojiEffect';
 import type { Riddle } from '@/types/riddles';
+import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 
 interface RiddleCardProps {
   /** The riddle to display */
@@ -151,9 +152,10 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
   },
   ref
 ): JSX.Element {
-  // Check if answer is correct for feedback display
-  const isCorrect = selectedAnswer === riddle.correctOption;
-  const isWrong = selectedAnswer && selectedAnswer !== riddle.correctOption;
+  // Check if answer is correct for feedback display (shared scorer: letter
+  // compare for MCQ, normalized text compare for expert)
+  const isCorrect = isRiddleAnswerCorrect(riddle, selectedAnswer ?? undefined);
+  const isWrong = !!selectedAnswer && !isCorrect;
 
   // Randomized feedback state
   const [feedback, setFeedback] = useState<{ text: string; emoji: string } | null>(null);

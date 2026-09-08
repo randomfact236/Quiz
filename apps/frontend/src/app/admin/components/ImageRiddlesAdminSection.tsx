@@ -194,7 +194,3 @@ export function ImageRiddlesAdminSection(): JSX.Element {
     </div>
   );
 }
-
-export function ImageRiddlesAdminSectionFallback(): JSX.Element {
-  return <ImageRiddlesAdminSection />;
-}

@@ -3,7 +3,7 @@
  * IMAGE RIDDLE ACTION OPTIONS - ENTERPRISE GRADE
  * ============================================================================
  * Quality Standards: 10/10 - Production Ready
- * 
+ *
  * Features:
  * - Type-safe action option structure
  * - Multiple action types (button, link, custom)
@@ -31,14 +31,14 @@ export type ActionOptionType = 'button' | 'link' | 'toggle' | 'dropdown' | 'cust
 /**
  * Action Option Style - Predefined visual styles
  */
-export type ActionOptionStyle = 
-  | 'primary' 
-  | 'secondary' 
-  | 'success' 
-  | 'danger' 
-  | 'warning' 
-  | 'info' 
-  | 'ghost' 
+export type ActionOptionStyle =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'ghost'
   | 'outline';
 
 /**
@@ -57,64 +57,64 @@ export type ActionPosition = 'below_question' | 'above_image' | 'below_image' | 
 export interface IActionOption {
   /** Unique identifier for the action */
   id: string;
-  
+
   /** Display label */
   label: string;
-  
+
   /** Action type */
   type: ActionOptionType;
-  
+
   /** Visual style */
   style: ActionOptionStyle;
-  
+
   /** Size variant */
   size: ActionOptionSize;
-  
+
   /** Icon identifier (emoji or icon name) */
   icon?: string;
-  
+
   /** Icon position relative to label */
   iconPosition: 'left' | 'right' | 'only';
-  
+
   /** Tooltip text on hover */
   tooltip?: string;
-  
+
   /** ARIA label for accessibility */
   ariaLabel: string;
-  
+
   /** Keyboard shortcut (e.g., 'Ctrl+H', 'Alt+1') */
   keyboardShortcut?: string;
-  
+
   /** Whether the action is enabled */
   isEnabled: boolean;
-  
+
   /** Whether the action is visible */
   isVisible: boolean;
-  
+
   /** Position where action appears */
   position: ActionPosition;
-  
+
   /** Display order (lower = first) */
   order: number;
-  
+
   /** Action-specific payload/data */
   payload?: Record<string, unknown>;
-  
+
   /** URL for link type actions */
   href?: string;
-  
+
   /** Whether to open link in new tab */
   openInNewTab?: boolean;
-  
+
   /** Handler function name (for custom actions) */
   handler?: string;
-  
+
   /** Analytics event name */
   analyticsEvent?: string;
-  
+
   /** Analytics metadata */
   analyticsMetadata?: Record<string, unknown>;
-  
+
   /** Visibility conditions (JSON logic) */
   visibilityConditions?: {
     /** Show only when timer is running */
@@ -130,7 +130,7 @@ export interface IActionOption {
     /** Custom condition expression */
     customCondition?: string;
   };
-  
+
   /** Animation settings */
   animation?: {
     /** Entrance animation */
@@ -144,7 +144,7 @@ export interface IActionOption {
     /** Animation delay in ms */
     delay: number;
   };
-  
+
   /** Badge/notification settings */
   badge?: {
     /** Badge text */
@@ -156,7 +156,7 @@ export interface IActionOption {
     /** Maximum count to display (e.g., 99+) */
     maxCount?: number;
   };
-  
+
   /** Confirmation dialog settings */
   confirmDialog?: {
     /** Whether to show confirmation */
@@ -174,7 +174,7 @@ export interface IActionOption {
     /** Cancel button style */
     cancelStyle?: ActionOptionStyle;
   };
-  
+
   /** Loading state settings */
   loading?: {
     /** Show loading spinner */
@@ -184,10 +184,10 @@ export interface IActionOption {
     /** Disable while loading */
     disableWhileLoading: boolean;
   };
-  
+
   /** Created timestamp */
   createdAt: Date;
-  
+
   /** Updated timestamp */
   updatedAt: Date;
 }
@@ -222,7 +222,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'hint_revealed',
   },
-  
+
   /** Skip action - Skip to next riddle */
   skip: {
     id: 'skip',
@@ -248,7 +248,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'riddle_skipped',
   },
-  
+
   /** Reveal Answer action */
   revealAnswer: {
     id: 'reveal-answer',
@@ -277,7 +277,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'answer_revealed',
   },
-  
+
   /** Submit Answer action */
   submitAnswer: {
     id: 'submit-answer',
@@ -309,7 +309,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'answer_submitted',
   },
-  
+
   /** Reset Timer action */
   resetTimer: {
     id: 'reset-timer',
@@ -336,7 +336,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'timer_reset',
   },
-  
+
   /** Pause Timer action */
   pauseTimer: {
     id: 'pause-timer',
@@ -356,7 +356,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'timer_paused',
   },
-  
+
   /** Resume Timer action */
   resumeTimer: {
     id: 'resume-timer',
@@ -376,7 +376,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'timer_resumed',
   },
-  
+
   /** Fullscreen action */
   fullscreen: {
     id: 'fullscreen',
@@ -393,7 +393,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     tooltip: 'Toggle fullscreen (Alt+F)',
     analyticsEvent: 'fullscreen_toggled',
   },
-  
+
   /** Share action */
   share: {
     id: 'share',
@@ -413,7 +413,7 @@ export const DEFAULT_ACTION_PRESETS: Record<string, Partial<IActionOption>> = {
     },
     analyticsEvent: 'share_opened',
   },
-  
+
   /** Report Issue action */
   report: {
     id: 'report',
@@ -463,7 +463,16 @@ function validateEnums(action: Partial<IActionOption>, errors: string[]): void {
     errors.push(`Invalid action type: ${action.type}`);
   }
 
-  const validStyles: ActionOptionStyle[] = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'ghost', 'outline'];
+  const validStyles: ActionOptionStyle[] = [
+    'primary',
+    'secondary',
+    'success',
+    'danger',
+    'warning',
+    'info',
+    'ghost',
+    'outline',
+  ];
   if (!action.style) {
     errors.push('Action style is required');
   } else if (!validStyles.includes(action.style)) {
@@ -505,24 +514,24 @@ function validateAnimation(action: Partial<IActionOption>, warnings: string[]): 
 
 /**
  * Validates an action option structure for correctness.
- * 
+ *
  * @param action - Partial action option to validate
  * @returns Validation result with isValid flag, errors, and warnings
  */
-export function validateActionOption(action: Partial<IActionOption>): { 
-  isValid: boolean; 
+export function validateActionOption(action: Partial<IActionOption>): {
+  isValid: boolean;
   errors: string[];
   warnings: string[];
 } {
   const errors: string[] = [];
   const warnings: string[] = [];
-  
+
   validateRequiredFields(action, errors);
   validateEnums(action, errors);
   validateAccessibility(action, warnings);
   validateTypeSpecific(action, errors);
   validateAnimation(action, warnings);
-  
+
   return {
     isValid: errors.length === 0,
     errors,
@@ -533,13 +542,13 @@ export function validateActionOption(action: Partial<IActionOption>): {
 /**
  * Applies default values to a partial action option.
  * Ensures all required fields have valid values.
- * 
+ *
  * @param action - Partial action option
  * @returns Complete action option with defaults applied
  */
 export function applyActionDefaults(action: Partial<IActionOption>): IActionOption {
   const now = new Date();
-  
+
   return {
     id: action.id || `action-${Date.now()}`,
     label: action.label || 'Action',
@@ -578,19 +587,4 @@ export function applyActionDefaults(action: Partial<IActionOption>): IActionOpti
     createdAt: action.createdAt || now,
     updatedAt: now,
   };
-}
-
-/** Sorts action options by display order (ascending) */
-export function sortActionOptions(actions: IActionOption[]): IActionOption[] {
-  return [...actions].sort((a, b) => a.order - b.order);
-}
-
-/** Filters actions by position */
-export function filterByPosition(actions: IActionOption[], position: ActionPosition): IActionOption[] {
-  return actions.filter(a => a.position === position && a.isVisible);
-}
-
-/** Gets enabled and visible actions */
-export function getEnabledActions(actions: IActionOption[]): IActionOption[] {
-  return actions.filter(a => a.isEnabled && a.isVisible);
 }

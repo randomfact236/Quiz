@@ -115,10 +115,6 @@ function isExpired(savedAt: number): boolean {
   return Date.now() - savedAt > RESUME_EXPIRY_MS;
 }
 
-export function isQuizResumeExpired(state: QuizResumeState): boolean {
-  return isExpired(state.savedAt);
-}
-
 export function isQuizResumeMatch(
   state: QuizResumeState,
   subject: string,

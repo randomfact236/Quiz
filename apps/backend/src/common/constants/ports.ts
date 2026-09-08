@@ -3,9 +3,9 @@
  * Centralized Port Configuration
  * ============================================================================
  * All port numbers for the AI Quiz application are defined here.
- * 
+ *
  * To change ports system-wide, modify only this file.
- * 
+ *
  * Port Usage:
  * - 3010: Frontend (Next.js)
  * - 3012: Backend API (NestJS)
@@ -25,23 +25,5 @@ export const DATABASE_PORT = parseInt(process.env.DATABASE_PORT || '5432', 10);
 
 /** Redis Port */
 export const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379', 10);
-
-
-/**
- * Get the API URL for the backend
- * Uses environment variable or constructs from BACKEND_PORT
- */
-export function getApiUrl(): string {
-  return process.env.API_URL || `http://localhost:${BACKEND_PORT}/api`;
-}
-
-/**
- * Get the frontend URL
- * Uses environment variable or constructs from FRONTEND_PORT
- */
-export function getFrontendUrl(): string {
-  return process.env.FRONTEND_URL || `http://localhost:${FRONTEND_PORT}`;
-}
-
 // Re-export for backwards compatibility
 export const SERVER_PORT = BACKEND_PORT;

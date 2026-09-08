@@ -19,7 +19,7 @@ import { CacheService } from '../common/cache/cache.service';
 import { GuestUsersService } from '../guest-users/guest-users.service';
 
 import { AnalyticsEvent } from './entities/analytics-event.entity';
-import { AnalyticsEventDto } from './dto/analytics.dto';
+import { AnalyticsEventDto, EVENT_NAME_PATTERN } from './dto/analytics.dto';
 import { RequestContext } from './request-context';
 
 /** Free-form properties payload cap (plan §9 data minimization). */
@@ -83,8 +83,6 @@ export interface AdminDashboard {
     guestUsers: number;
     newGuests: number;
     achievementsUnlocked: number;
-    jokeLikes: number;
-    jokeDislikes: number;
     newsletterSubscribers: number;
     newsletterNew: number;
     commentsTotal: number;
@@ -804,8 +802,6 @@ export class AnalyticsService {
         guestUsers,
         newGuests,
         achievementsUnlocked: quiz.achievementsUnlocked ?? 0,
-        jokeLikes: Number(votes.likes ?? 0),
-        jokeDislikes: Number(votes.dislikes ?? 0),
         newsletterSubscribers,
         newsletterNew,
         commentsTotal,
@@ -1297,9 +1293,10 @@ export class AnalyticsService {
 /**
  * Small helper namespace so ingest validation stays in one place without a
  * second validator instance (the global pipe already shape-validates DTOs).
+ * Reuses EVENT_NAME_PATTERN from the DTO module — single source of truth.
  */
 class AnalyticsEventDtoSafe {
   static isNameValid(name: string): boolean {
-    return typeof name === 'string' && /^[a-z][a-z0-9_]{2,63}$/.test(name);
+    return typeof name === 'string' && EVENT_NAME_PATTERN.test(name);
   }
 }

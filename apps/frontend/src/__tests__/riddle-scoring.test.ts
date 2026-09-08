@@ -95,9 +95,6 @@ describe('adaptRiddleMcq', () => {
     expect(r.correctOption).toBe('B');
     expect(r.difficulty).toBe('easy');
     expect(r.level).toBe('easy');
-    expect(r.chapter).toBe('Logic');
-    expect(r.chapterId).toBe('sub-1');
-    expect(r.status).toBe('published');
   });
 
   it('marks expert riddles open-ended and nulls MCQ-only fields', () => {
@@ -109,11 +106,24 @@ describe('adaptRiddleMcq', () => {
     expect(r.correctAnswer).toBe('An echo');
   });
 
-  it('defaults hint/explanation to empty strings and falls back to General chapter', () => {
+  it('maps the backend `answer` column to correctAnswer when correctAnswer is absent', () => {
+    // Regression: the API exposes the text answer as `answer` — the adapter
+    // used to read a nonexistent `correctAnswer` field, so expert riddles
+    // could never grade correct (plan/stale-code-scan-2026-09-08.md F03).
+    const { correctAnswer: _ignored, ...entity } = mcqEntity({
+      level: 'expert',
+      correctLetter: null,
+      answer: 'An echo',
+    });
+    const r = adaptRiddleMcq(entity);
+    expect(r.correctAnswer).toBe('An echo');
+    expect(isRiddleAnswerCorrect(r, 'an echo')).toBe(true);
+  });
+
+  it('defaults hint/explanation to empty strings', () => {
     const r = adaptRiddleMcq(mcqEntity());
     expect(r.hint).toBe('');
     expect(r.explanation).toBe('');
-    expect(r.chapter).toBe('General');
   });
 });
 

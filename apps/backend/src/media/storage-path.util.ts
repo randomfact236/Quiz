@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /** Root directory served statically by the API. */
-export function getPublicDir(): string {
+function getPublicDir(): string {
   return process.env.UPLOADS_DIR
     ? path.resolve(process.env.UPLOADS_DIR, '..')
     : path.join(process.cwd(), 'public');

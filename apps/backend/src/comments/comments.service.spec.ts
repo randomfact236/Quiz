@@ -73,7 +73,7 @@ describe('CommentsService', () => {
       getOrSet: jest.fn((_key: string, fn: () => unknown) => fn()),
       delPattern: jest.fn(async () => undefined),
     };
-    const bulkActionService = { executeBulkAction: jest.fn(), getStatusCounts: jest.fn() };
+    const bulkActionService = { executeBulkAction: jest.fn() };
     const analyticsService = { record: jest.fn(async () => undefined) };
 
     const service = new CommentsService(

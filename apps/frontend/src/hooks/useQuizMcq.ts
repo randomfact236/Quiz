@@ -130,18 +130,6 @@ function saveToHistory(session: QuizSession): void {
   }
 }
 
-/** Save current session for resume */
-function saveCurrentSession(session: QuizSession): void {
-  setItem(STORAGE_KEYS.CURRENT_SESSION, session);
-}
-
-/** Clear current session */
-function clearCurrentSession(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_SESSION);
-  }
-}
-
 /** Get subject name from slug */
 async function getSubjectName(slug: string): Promise<string> {
   try {
@@ -192,9 +180,7 @@ export function useQuizMcq(
     status: 'loading',
     startTime: Date.now(),
     sessionId: '',
-    visited: new Set<string>(),
     manuallySkipped: new Set<string>(),
-    dismissedUnvisited: false,
   });
 
   const [originalTotal, setOriginalTotal] = useState(0);
@@ -236,10 +222,6 @@ export function useQuizMcq(
         status: 'in-progress',
       };
 
-      const initialVisited = new Set<string>();
-      const startQ = initialQuestions[decision.startIndex];
-      if (startQ) initialVisited.add(startQ.id);
-
       // Fresh streak window per challenge session (best is preserved).
       if (type === 'challenge') {
         resetChallengeStreak();
@@ -257,12 +239,8 @@ export function useQuizMcq(
         status: 'playing',
         startTime: Date.now(),
         sessionId: sessionRef.current!.id,
-        visited: initialVisited,
         manuallySkipped: new Set<string>(),
-        dismissedUnvisited: false,
       }));
-
-      saveCurrentSession(sessionRef.current);
 
       // Write the immutable question snapshot once (two-key resume: the
       // lightweight progress key never re-serializes questions).
@@ -377,21 +355,18 @@ export function useQuizMcq(
           recordChallengeAnswer(isAnswerCorrect(currentQuestion, option));
         }
 
-        const newVisited = new Set(prev.visited).add(currentQuestion.id);
         const newSkipped = new Set(prev.manuallySkipped);
         newSkipped.delete(currentQuestion.id);
 
         if (sessionRef.current) {
           sessionRef.current.answers = newAnswers;
           sessionRef.current.score = newScore;
-          saveCurrentSession(sessionRef.current);
         }
 
         return {
           ...prev,
           answers: newAnswers,
           score: newScore,
-          visited: newVisited,
           manuallySkipped: newSkipped,
         };
       });
@@ -402,14 +377,10 @@ export function useQuizMcq(
   const goToPrevious = useCallback(() => {
     setState((prev) => {
       const newIndex = Math.max(0, prev.currentQuestionIndex - 1);
-      const visitedQuestion = prev.questions[newIndex];
-      const newVisited = new Set(prev.visited);
-      if (visitedQuestion) newVisited.add(visitedQuestion.id);
 
       return {
         ...prev,
         currentQuestionIndex: newIndex,
-        visited: newVisited,
         // UX fix: going BACK must not reset a per-question timer (free time).
         timeRemaining: navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
       };
@@ -419,14 +390,10 @@ export function useQuizMcq(
   const goToNext = useCallback(() => {
     setState((prev) => {
       const newIndex = Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1);
-      const visitedQuestion = prev.questions[newIndex];
-      const newVisited = new Set(prev.visited);
-      if (visitedQuestion) newVisited.add(visitedQuestion.id);
 
       return {
         ...prev,
         currentQuestionIndex: newIndex,
-        visited: newVisited,
         timeRemaining: navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining),
       };
     });
@@ -475,7 +442,6 @@ export function useQuizMcq(
       { module: 'quiz-mcq', sessionId: session.id }
     );
 
-    clearCurrentSession();
     clearQuizResume();
   }, [state.status, state.startTime, state.score, state.answers]);
 
@@ -499,7 +465,7 @@ export function useQuizMcq(
             chapter: sessionRef.current.chapter,
             level: sessionRef.current.level,
             selectedOption: selected,
-            correct: selected === q.correctAnswer,
+            correct: isAnswerCorrect(q, selected),
           },
           { module: 'quiz-mcq', sessionId }
         );
@@ -612,12 +578,10 @@ export function useQuizMcq(
       status: 'playing',
       startTime: Date.now(),
       sessionId: newId,
-      visited: new Set(Object.keys(saved.answers)),
       timeRemaining: timeLimit || 0,
     }));
 
     resumeController.clearPrompt();
-    saveCurrentSession(sessionRef.current);
 
     // Analytics plan §4.1: session_resumed with saved progress.
     track(
@@ -671,17 +635,13 @@ export function useQuizMcq(
       if (!currentQuestion) return prev;
 
       const newIndex = Math.min(prev.questions.length - 1, prev.currentQuestionIndex + 1);
-      const visitedQuestion = prev.questions[newIndex];
 
       const newSkipped = new Set(prev.manuallySkipped).add(currentQuestion.id);
-      const newVisited = new Set(prev.visited).add(currentQuestion.id);
-      if (visitedQuestion) newVisited.add(visitedQuestion.id);
 
       return {
         ...prev,
         currentQuestionIndex: newIndex,
         manuallySkipped: newSkipped,
-        visited: newVisited,
         timeRemaining: navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining),
       };
     });
@@ -691,14 +651,10 @@ export function useQuizMcq(
     (index: number) => {
       setState((prev) => {
         const newIndex = Math.max(0, Math.min(index, prev.questions.length - 1));
-        const visitedQuestion = prev.questions[newIndex];
-        const newVisited = new Set(prev.visited);
-        if (visitedQuestion) newVisited.add(visitedQuestion.id);
 
         return {
           ...prev,
           currentQuestionIndex: newIndex,
-          visited: newVisited,
           timeRemaining:
             newIndex >= prev.currentQuestionIndex
               ? navigateTimeRemaining('forward', timerMode, timeLimit, prev.timeRemaining)
@@ -710,20 +666,12 @@ export function useQuizMcq(
   );
 
   const dismissUnvisited = useCallback(() => {
-    setState((prev) => {
-      const visitedQuestion = prev.questions[0];
-      const newVisited = new Set(prev.visited);
-      if (visitedQuestion) newVisited.add(visitedQuestion.id);
-
-      return {
-        ...prev,
-        currentQuestionIndex: 0,
-        dismissedUnvisited: true,
-        visited: newVisited,
-        // Jumping back to Q1 must not grant fresh per-question time.
-        timeRemaining: navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
-      };
-    });
+    setState((prev) => ({
+      ...prev,
+      currentQuestionIndex: 0,
+      // Jumping back to Q1 must not grant fresh per-question time.
+      timeRemaining: navigateTimeRemaining('neutral', timerMode, timeLimit, prev.timeRemaining),
+    }));
   }, [timerMode, timeLimit]);
 
   const computed: QuizComputed = useMemo(() => {

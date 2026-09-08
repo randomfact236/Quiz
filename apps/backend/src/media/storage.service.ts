@@ -25,11 +25,6 @@ export class StorageService {
     return `/uploads/${filename}`;
   }
 
-  /** Read a previously stored file back by URL path. */
-  downloadFile(url: string): Buffer {
-    return fs.readFileSync(this.resolvePath(url));
-  }
-
   deleteFile(url: string): void {
     try {
       const filePath = this.resolvePath(url);
@@ -40,10 +35,6 @@ export class StorageService {
       // Orphaned-file cleanup is best-effort; DB record removal must not fail.
       this.logger.warn(`Failed to delete file for ${url}: ${(err as Error).message}`);
     }
-  }
-
-  fileExists(url: string): boolean {
-    return fs.existsSync(this.resolvePath(url));
   }
 
   /** Map a public URL path (/uploads/<file>) to an absolute disk path. */

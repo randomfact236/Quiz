@@ -14,8 +14,9 @@ import { adminApi } from '@/lib/api-client';
 
 /**
  * Admin dashboard Summary section (plan/12-admin-dashboard.md P1 #1):
- * totals per module, recent activity, and quick links. Data comes from the
- * same cached `GET /admin/analytics/overview` the Analytics section uses.
+ * totals per module, recent activity, and quick links. Data comes from
+ * `GET /admin/analytics/overview` (the Analytics tabs use /dashboard,
+ * /retention and /funnel instead).
  */
 
 interface AdminOverview {

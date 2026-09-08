@@ -91,11 +91,6 @@ export class RiddleMcqSubjectService {
     return subject;
   }
 
-  async findSubjectMeta(slug: string): Promise<{ name: string; emoji: string; slug: string }> {
-    const subject = await this.findSubjectBySlug(slug);
-    return { name: subject.name, emoji: subject.emoji, slug: subject.slug };
-  }
-
   async createSubject(dto: {
     name: string;
     slug?: string;

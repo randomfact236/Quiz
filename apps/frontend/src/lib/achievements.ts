@@ -89,12 +89,6 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
-/** Get user's unlocked achievements */
-export function getUnlockedAchievements(): Achievement[] {
-  const unlocked = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});
-  return Object.values(unlocked);
-}
-
 /** Check if an achievement is unlocked */
 export function isAchievementUnlocked(achievementId: string): boolean {
   const unlocked = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});

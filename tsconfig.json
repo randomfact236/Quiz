@@ -33,19 +33,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./apps/frontend/src/*"],
-      "@backend/*": ["./apps/backend/src/*"],
-      "@shared/*": ["./libs/shared/src/*"],
-      "@database/*": ["./libs/database/src/*"]
+      "@backend/*": ["./apps/backend/src/*"]
     }
   },
-  "include": [
-    "apps/**/*",
-    "libs/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".next"
-  ]
+  "include": ["apps/**/*"],
+  "exclude": ["node_modules", "dist", "build", ".next"]
 }

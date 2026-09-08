@@ -53,11 +53,3 @@ export interface ConversionStats {
   pending: number;
   storageSavedBytes: number;
 }
-
-export class UploadErrorResponseDto {
-  @ApiProperty()
-  message: string;
-
-  @ApiProperty()
-  status: number;
-}

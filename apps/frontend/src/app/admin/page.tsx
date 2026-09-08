@@ -753,5 +753,3 @@ function MenuItem({
     </button>
   );
 }
-
-/** Admin Guard component to be used at the end of the page */

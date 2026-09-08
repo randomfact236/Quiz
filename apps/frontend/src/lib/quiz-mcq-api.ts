@@ -14,7 +14,6 @@ export interface QuizSubject {
   name: string;
   slug: string;
   emoji: string;
-  description?: string;
   isActive: boolean;
   category?: string;
   order?: number;
@@ -80,11 +79,6 @@ export interface UpdateQuestionDto {
   level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   chapterId?: string;
   status?: 'published' | 'draft' | 'trash' | undefined;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
 }
 
 export interface BulkImportDuplicate {
@@ -231,15 +225,6 @@ export async function updateChapter(
 // Questions API
 // ============================================================================
 
-export async function getQuestionsByChapter(
-  chapterId: string
-): Promise<{ data: QuizQuestion[]; total: number }> {
-  const response = await api.get<{ data: QuizQuestion[]; total: number }>(
-    `/quiz-mcq/questions/${chapterId}`
-  );
-  return response.data;
-}
-
 export async function getRandomQuestions(
   level: string
 ): Promise<{ data: QuizQuestion[]; total: number }> {
@@ -287,41 +272,17 @@ export async function getQuestionsBySubject(
   subjectSlug: string,
   filters: QuestionFilters = {}
 ): Promise<{ data: QuizQuestion[]; total: number }> {
+  // The backend always serves PUBLISHED questions here; no status filter exists.
   let url = `/quiz-mcq/subjects/${subjectSlug}/questions`;
-  if (filters.status) {
-    url += `?status=${filters.status}`;
-  }
-  if (filters.level) {
-    url += `${filters.status ? '&' : '?'}level=${filters.level}`;
-  }
-  if (filters.chapter) {
-    url += `${filters.status || filters.level ? '&' : '?'}chapter=${encodeURIComponent(filters.chapter)}`;
-  }
-  if (filters.search) {
-    url += `${filters.status || filters.level || filters.chapter ? '&' : '?'}search=${encodeURIComponent(filters.search)}`;
+  const params = new URLSearchParams();
+  if (filters.level) params.set('level', filters.level);
+  if (filters.chapter) params.set('chapter', filters.chapter);
+  if (filters.search) params.set('search', filters.search);
+  const query = params.toString();
+  if (query) {
+    url += `?${query}`;
   }
   const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
-  return response.data;
-}
-
-export async function getQuestionCountBySubject(subjectSlug: string): Promise<number> {
-  const response = await api.get<{ data: QuizQuestion[]; total: number }>(
-    `/quiz-mcq/subjects/${subjectSlug}/questions`
-  );
-  return response.data.total;
-}
-
-export interface SubjectStatusCounts {
-  total: number;
-  published: number;
-  draft: number;
-  trash: number;
-}
-
-export async function getStatusCountsBySubject(subjectSlug: string): Promise<SubjectStatusCounts> {
-  const response = await adminApi.get<SubjectStatusCounts>(
-    `/quiz-mcq/subjects/${subjectSlug}/status-counts`
-  );
   return response.data;
 }
 
@@ -358,42 +319,6 @@ export async function getFilterCounts(filters: {
     `/quiz-mcq/filter-counts?${params.toString()}`
   );
   return response.data;
-}
-
-export async function getAllQuestions(
-  filters: {
-    subject?: string;
-    status?: string;
-    level?: string;
-    chapter?: string;
-    search?: string;
-  } = {},
-  page: number = 1,
-  limit: number = 10
-): Promise<{
-  data: QuizQuestion[];
-  total: number;
-  totalPages: number;
-}> {
-  const params = new URLSearchParams();
-  if (filters.subject && filters.subject !== 'all') params.append('subject', filters.subject);
-  if (filters.status && filters.status !== 'all') params.append('status', filters.status);
-  if (filters.level && filters.level !== 'all') params.append('level', filters.level);
-  if (filters.chapter && filters.chapter !== 'all') params.append('chapter', filters.chapter);
-  if (filters.search) params.append('search', filters.search);
-  params.append('page', String(page));
-  params.append('limit', String(limit));
-
-  const response = await adminApi.get<{
-    data: QuizQuestion[];
-    total: number;
-    totalPages: number;
-  }>(`/quiz-mcq/questions?${params.toString()}`);
-  return {
-    data: response.data.data,
-    total: response.data.total,
-    totalPages: response.data.totalPages,
-  };
 }
 
 export async function createQuestion(dto: CreateQuestionDto): Promise<QuizQuestion> {
@@ -482,21 +407,6 @@ export interface QuizSessionPayload {
   durationSeconds?: number;
 }
 
-export interface QuizSessionRecord {
-  id: string;
-  subjectSlug: string | null;
-  subjectName: string | null;
-  chapterName: string | null;
-  level: string | null;
-  mode: string | null;
-  totalQuestions: number;
-  correctCount: number;
-  score: number;
-  maxScore: number;
-  durationSeconds: number | null;
-  completedAt: string;
-}
-
 export interface QuizHighScore {
   subjectSlug: string | null;
   subjectName: string | null;
@@ -512,19 +422,6 @@ export async function saveQuizSession(payload: QuizSessionPayload): Promise<bool
     return response.data.recorded;
   } catch {
     return false;
-  }
-}
-
-/** Latest 50 completed sessions for the caller (token-bound, else guestId). */
-export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessionRecord[]> {
-  const params = guestId ? `?guestId=${encodeURIComponent(guestId)}` : '';
-  try {
-    const response = await api.get<{ data: QuizSessionRecord[] }>(
-      `/quiz-mcq/sessions/history${params}`
-    );
-    return response.data.data;
-  } catch {
-    return [];
   }
 }
 

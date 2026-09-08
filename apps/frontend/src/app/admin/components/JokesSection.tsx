@@ -25,6 +25,7 @@ import {
 } from '@/lib/jokes-api';
 import type { Joke, JokeCategory, ContentStatus, BulkActionType, StatusFilter } from '../types';
 import {
+  downloadFile,
   getStatusBadgeColor,
   useJokeFilters,
   jokesToCSV,
@@ -45,13 +46,10 @@ export function JokesSection({
   jokeCategories,
   setJokeCategories,
 }: JokesSectionProps): JSX.Element {
-  const [_isLoadingData, setIsLoadingData] = useState(true);
   const [stats, setStats] = useState<JokesStatsOverview | null>(null);
-  const [_isSaving, setIsSaving] = useState(false);
 
   /** Load jokes + categories from the backend API. */
   const loadData = useCallback(async () => {
-    setIsLoadingData(true);
     try {
       const [jokePage, cats] = await Promise.all([
         getAllJokesAdmin(1, 100),
@@ -62,7 +60,6 @@ export function JokesSection({
     } catch {
       toast.error('Failed to load jokes from server.');
     } finally {
-      setIsLoadingData(false);
     }
   }, [setAllJokes, setJokeCategories]);
 
@@ -75,7 +72,6 @@ export function JokesSection({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [jokeFilterCategory, _setJokeFilterCategory] = useState<string>('');
-  const [jokeSearch, _setJokeSearch] = useState<string>('');
   const [jokePage, setJokePage] = useState(1);
   const [pageInput, setPageInput] = useState('1');
   const [statusFilter, _setStatusFilter] = useState<StatusFilter>('published');
@@ -92,7 +88,6 @@ export function JokesSection({
   const [showImportModal, _setShowImportModal] = useState(false);
 
   // Category Modal States
-  const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [selectedCategoryForEdit, setSelectedCategoryForEdit] = useState<JokeCategory | null>(null);
@@ -119,7 +114,7 @@ export function JokesSection({
   const { filteredJokes, statusCounts } = useJokeFilters(
     allJokes,
     jokeFilterCategory,
-    jokeSearch,
+    '', // no search input in this section
     statusFilter
   );
 
@@ -221,13 +216,11 @@ export function JokesSection({
   // CRUD Functions
   const handleAddJoke = async () => {
     if (!jokeForm.setup.trim() || !jokeForm.punchline.trim() || !jokeForm.category.trim()) return;
-    setIsSaving(true);
     try {
       const fullJoke = `${jokeForm.setup.trim()} ${jokeForm.punchline.trim()}`;
       const catId = jokeCategories.find((c) => c.name === jokeForm.category.trim())?.id;
       if (!catId) {
         toast.error('Category not found');
-        setIsSaving(false);
         return;
       }
       const created = await createJokeAdmin({ joke: fullJoke, categoryId: catId });
@@ -238,7 +231,6 @@ export function JokesSection({
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to create joke');
     } finally {
-      setIsSaving(false);
     }
   };
 
@@ -250,13 +242,11 @@ export function JokesSection({
       !jokeForm.category.trim()
     )
       return;
-    setIsSaving(true);
     try {
       const fullJoke = `${jokeForm.setup.trim()} ${jokeForm.punchline.trim()}`;
       const catId = jokeCategories.find((c) => c.name === jokeForm.category.trim())?.id;
       if (!catId) {
         toast.error('Category not found');
-        setIsSaving(false);
         return;
       }
       const updated = await updateJokeAdmin(String(selectedJoke.id), {
@@ -273,14 +263,12 @@ export function JokesSection({
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to update joke');
     } finally {
-      setIsSaving(false);
     }
   };
 
   // Trash handler — uses bulk-action for status changes
   const handleTrashJoke = async () => {
     if (!selectedJoke) return;
-    setIsSaving(true);
     try {
       if (selectedJoke.status === 'trash') {
         await deleteJokeAdmin(String(selectedJoke.id));
@@ -299,7 +287,6 @@ export function JokesSection({
       toast.error('Failed to update joke.');
       await loadData();
     } finally {
-      setIsSaving(false);
       _setShowTrashConfirm(false);
       _setSelectedJoke(null);
     }
@@ -373,7 +360,6 @@ export function JokesSection({
           return;
         }
 
-        setIsSaving(true);
         const result = await bulkCreateJokesAdmin(dtos);
         toast.success(
           `📥 Imported ${result.count} jokes${result.errors.length > 0 ? ` (${result.errors.length} failed)` : ''}`
@@ -384,7 +370,6 @@ export function JokesSection({
       } catch (err) {
         _setImportError('Failed to import: ' + (err as Error).message);
       } finally {
-        setIsSaving(false);
       }
     };
     reader.readAsText(file);
@@ -968,124 +953,6 @@ export function JokesSection({
         </div>
       )}
 
-      {/* Category Management Modal */}
-      {showCategoryManager && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-secondary-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-secondary-50">
-                Manage Joke Categories
-              </h3>
-              <button
-                onClick={() => setShowAddCategoryModal(true)}
-                className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
-              >
-                + Add Category
-              </button>
-            </div>
-
-            <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-secondary-700">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-secondary-700">
-                <thead className="bg-gray-50 dark:bg-secondary-800">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
-                      Emoji
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
-                      Jokes
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-secondary-400">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-secondary-700 bg-white dark:bg-secondary-800">
-                  {jokeCategories.map((cat) => {
-                    const jokeCount = allJokes.filter((j) => j.category === cat.name).length;
-                    return (
-                      <tr
-                        key={cat.id}
-                        className="hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800 transition-colors"
-                      >
-                        <td className="whitespace-nowrap px-6 py-4 text-2xl">{cat.emoji}</td>
-                        <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-secondary-50">
-                          {cat.name}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-secondary-400">
-                          <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
-                            {jokeCount}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                          <button
-                            onClick={() => {
-                              setSelectedCategoryForEdit(cat);
-                              setCategoryForm({
-                                name: cat.name,
-                                emoji: cat.emoji,
-                                description: cat.description || '',
-                              });
-                              setShowEditCategoryModal(true);
-                            }}
-                            className="mr-3 text-indigo-600 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-200 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={async () => {
-                              if (
-                                window.confirm(
-                                  `Are you sure you want to delete the category "${cat.name}"?`
-                                )
-                              ) {
-                                try {
-                                  await deleteJokeCategoryAdmin(String(cat.id));
-                                  setJokeCategories((prev) => prev.filter((c) => c.id !== cat.id));
-                                  toast.success('🗑️ Category deleted.');
-                                } catch (err) {
-                                  toast.error(
-                                    err instanceof Error ? err.message : 'Failed to delete category'
-                                  );
-                                }
-                              }
-                            }}
-                            className="text-red-600 dark:text-red-300 hover:text-red-900 dark:hover:text-red-200 bg-red-50 dark:bg-red-500/10 px-2 py-1 rounded"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  {jokeCategories.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        className="px-6 py-8 text-center text-sm text-gray-500 dark:text-secondary-400"
-                      >
-                        No categories found. Click &apos;Add Category&apos; to create one.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setShowCategoryManager(false)}
-                className="rounded-lg bg-gray-200 dark:bg-secondary-700 px-6 py-2 font-medium text-gray-700 dark:text-secondary-200 hover:bg-gray-300"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Add Category Modal */}
       {showAddCategoryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
@@ -1325,16 +1192,4 @@ export function JokesSection({
       )}
     </div>
   );
-}
-
-function downloadFile(content: string, filename: string, type: string): void {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
 }

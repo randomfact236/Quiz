@@ -3,7 +3,6 @@ export { JokesSection } from './JokesSection';
 export { CommentsSection } from './CommentsSection';
 export { AdminGuard } from './AdminGuard';
 export { SettingsSection } from './SettingsSection';
-export { RiddleSidebar } from './RiddleSidebar';
 export { AdminUsersSection } from './AdminUsersSection';
 export { NewsletterSection } from './NewsletterSection';
 export { MediaLibrarySection } from './MediaLibrarySection';

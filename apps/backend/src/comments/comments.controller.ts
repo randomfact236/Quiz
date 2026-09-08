@@ -38,10 +38,6 @@ import { CommentsService, CommentFeed, PublicComment } from './comments.service'
 
 const CONTENT_TYPES: CommentContentType[] = Object.values(CommentContentType);
 
-class ContentTypeParamDto {
-  contentType: CommentContentType;
-}
-
 @ApiTags('Comments')
 @Controller('comments')
 export class CommentsController {
@@ -80,11 +76,13 @@ export class CommentsController {
 
   @Get(':contentType/:contentId')
   @_Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiOperation({ summary: 'Public feed for a riddle/joke (masked, with chip tallies)' })
   findFeed(
     @Param('contentType') contentType: CommentContentType,
     @Param('contentId') contentId: string,
-    @Query() query: CommentFeedQueryDto
+    @Query() query: CommentFeedQueryDto,
+    @Req() req: any
   ): Promise<CommentFeed> {
     if (!CONTENT_TYPES.includes(contentType as CommentContentType)) {
       return Promise.reject(
@@ -93,11 +91,14 @@ export class CommentsController {
         )
       );
     }
+    // Optional identity lets the service flag the caller's own entries (`mine`)
+    // without exposing any author identity on the public payload.
     return this.commentsService.findFeed(
       contentType as CommentContentType,
       contentId,
       query.page ?? 1,
-      query.limit ?? 20
+      query.limit ?? 20,
+      { userId: req.user?.id ?? null, guestId: query.guestId ?? null }
     );
   }
 

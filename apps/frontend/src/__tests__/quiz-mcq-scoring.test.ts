@@ -30,7 +30,6 @@ function mcq(overrides: Partial<Question> = {}): Question {
     correctAnswer: '4',
     correctLetter: 'B',
     level: 'easy',
-    chapter: 'ch1',
     ...overrides,
   };
 }
@@ -46,7 +45,6 @@ function extreme(overrides: Partial<Question> = {}): Question {
     correctAnswer: 'Paris',
     correctLetter: null,
     level: 'extreme',
-    chapter: 'ch1',
     ...overrides,
   };
 }

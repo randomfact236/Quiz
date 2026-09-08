@@ -142,23 +142,6 @@ export interface FilterCounts {
 }
 
 // ============================================================================
-// Stats Types
-// ============================================================================
-
-export interface RiddlesStats {
-  totalRiddleMcqs: number;
-  totalSubjects: number;
-  mcqsByLevel: Record<string, number>;
-}
-
-export interface StatusCounts {
-  total: number;
-  published: number;
-  draft: number;
-  trash: number;
-}
-
-// ============================================================================
 // Categories API
 // ============================================================================
 
@@ -167,16 +150,6 @@ export interface StatusCounts {
  */
 export async function getCategories(): Promise<RiddleMcqCategory[]> {
   const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories');
-  return response.data;
-}
-
-/**
- * Get all categories including inactive (Admin only)
- */
-export async function getCategoriesAdmin(): Promise<RiddleMcqCategory[]> {
-  const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories/all', {
-    isAdmin: true,
-  });
   return response.data;
 }
 
@@ -221,22 +194,6 @@ export async function getSubjects(hasContent: boolean = false): Promise<RiddleMc
   const response = await api.get<RiddleMcqSubject[]>(
     `/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`
   );
-  return response.data;
-}
-
-/**
- * Get subject by slug
- */
-export async function getSubjectBySlug(slug: string): Promise<RiddleMcqSubject> {
-  const response = await api.get<RiddleMcqSubject>(`/riddle-mcq/subjects/${slug}`);
-  return response.data;
-}
-
-/**
- * Get all subjects including inactive (Admin only)
- */
-export async function getAllSubjectsAdmin(): Promise<RiddleMcqSubject[]> {
-  const response = await api.get<RiddleMcqSubject[]>('/riddle-mcq/subjects/all', { isAdmin: true });
   return response.data;
 }
 
@@ -458,14 +415,6 @@ export async function getRiddleFilterCounts(
 // Stats API
 // ============================================================================
 
-/**
- * Get riddle MCQ statistics
- */
-export async function getStats(): Promise<RiddlesStats> {
-  const response = await api.get<RiddlesStats>('/riddle-mcq/stats/overview');
-  return response.data;
-}
-
 /** Public per-level published riddle counts for challenge hubs (single grouped query, cached). */
 export interface RiddleLevelCounts {
   subjectWise: Record<string, Record<string, number>>;
@@ -475,18 +424,5 @@ export interface RiddleLevelCounts {
 
 export async function getPublicLevelCounts(): Promise<RiddleLevelCounts> {
   const response = await api.get<RiddleLevelCounts>('/riddle-mcq/level-counts');
-  return response.data;
-}
-
-/**
- * Get riddle counts by status for a subject (Admin only)
- */
-export async function getStatusCountsBySubject(subjectIdOrSlug: string): Promise<StatusCounts> {
-  const params = new URLSearchParams();
-  params.append('subject', subjectIdOrSlug);
-  const response = await api.get<StatusCounts>(
-    `/riddle-mcq/stats/status-counts?${params.toString()}`,
-    { isAdmin: true }
-  );
   return response.data;
 }

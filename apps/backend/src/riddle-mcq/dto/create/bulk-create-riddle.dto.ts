@@ -27,15 +27,15 @@ export class BulkCreateRiddleDto {
   @IsString()
   subjectName?: string;
 
+  @ApiPropertyOptional({ description: 'Existing subject ID (resolved by name when omitted)' })
+  @IsOptional()
+  @IsString()
+  subjectId?: string;
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   categoryName?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  importOrder?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -46,4 +46,19 @@ export class BulkCreateRiddleDto {
   @IsOptional()
   @IsString()
   explanation?: string;
+
+  @ApiPropertyOptional({ description: 'Text answer (required for expert rows)' })
+  @IsOptional()
+  @IsString()
+  answer?: string;
+
+  @ApiPropertyOptional({ enum: ['draft', 'published', 'trash'], default: 'draft' })
+  @IsOptional()
+  @IsIn(['draft', 'published', 'trash'])
+  status?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  importOrder?: number;
 }

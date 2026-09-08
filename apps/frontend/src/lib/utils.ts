@@ -18,7 +18,6 @@ import {
   MIN_PERCENTAGE,
   MAX_PERCENTAGE,
   RANDOM_ID_SUFFIX_LENGTH,
-  TRUNCATION_ELLIPSIS_LENGTH,
 } from './constants';
 
 /**
@@ -64,24 +63,6 @@ export function calculatePercentage(value: number, total: number): number {
 }
 
 /**
- * Debounces a function
- * @param fn - Function to debounce
- * @param delay - Delay in milliseconds
- * @returns Debounced function
- */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout>;
-
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn(...args), delay);
-  };
-}
-
-/**
  * Formats a relative time string (e.g., "2 hours ago")
  * @param date - Date to format
  * @returns Relative time string
@@ -105,42 +86,6 @@ export function formatRelativeTime(date: Date | string | number): string {
   }
 
   return then.toLocaleDateString();
-}
-
-/**
- * Safely parses JSON with a fallback value
- * @param json - JSON string to parse
- * @param fallback - Fallback value if parsing fails
- * @returns Parsed value or fallback
- */
-export function safeJsonParse<T>(json: string, fallback: T): T {
-  try {
-    return JSON.parse(json) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-/**
- * Creates a promise that resolves after a specified delay
- * @param ms - Milliseconds to delay
- * @returns Promise that resolves after delay
- */
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-/**
- * Truncates text to a specified length with ellipsis
- * @param text - Text to truncate
- * @param maxLength - Maximum length
- * @returns Truncated text
- */
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return `${text.slice(0, maxLength - TRUNCATION_ELLIPSIS_LENGTH)}...`;
 }
 
 export function formatTimeMMSS(seconds: number): string {

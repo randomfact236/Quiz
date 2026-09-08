@@ -7,10 +7,7 @@
  */
 
 import { generateId } from './utils';
-import {
-  TOAST_DURATION,
-  ERROR_TOAST_DURATION,
-} from './constants';
+import { TOAST_DURATION, ERROR_TOAST_DURATION } from './constants';
 
 import type { Toast, ToastType } from '@/types/status.types';
 
@@ -79,14 +76,6 @@ class ToastManager {
   }
 
   /**
-   * Dismiss all toasts
-   */
-  dismissAll(): void {
-    this.toasts = [];
-    this.notify();
-  }
-
-  /**
    * Show a success toast
    * @param message - Success message
    * @param duration - Auto-dismiss duration
@@ -138,8 +127,6 @@ export const toast = {
   error: (message: string, duration?: number) => toastManager.error(message, duration),
   warning: (message: string, duration?: number) => toastManager.warning(message, duration),
   info: (message: string, duration?: number) => toastManager.info(message, duration),
-  dismiss: (id: string) => toastManager.dismiss(id),
-  dismissAll: () => toastManager.dismissAll(),
   subscribe: (callback: ToastCallback) => toastManager.subscribe(callback),
 } as const;
 

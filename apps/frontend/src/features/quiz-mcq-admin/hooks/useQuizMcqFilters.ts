@@ -53,23 +53,6 @@ export function useQuizMcqFilters() {
     [searchParams, pathname, router]
   );
 
-  const setSearch = useCallback(
-    (value: string | undefined) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set('search', value);
-      } else {
-        params.delete('search');
-      }
-
-      params.set('page', '1');
-
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    },
-    [searchParams, pathname, router]
-  );
-
   const setPage = useCallback(
     (newPage: number) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -100,7 +83,6 @@ export function useQuizMcqFilters() {
   return {
     filters,
     setFilter,
-    setSearch,
     resetFilters,
     page,
     pageSize,

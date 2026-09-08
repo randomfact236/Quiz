@@ -18,19 +18,10 @@ import { ArrowLeft, RotateCcw, Share2, Home, Trophy } from 'lucide-react';
 import type { RiddleSession, RiddleResult } from '@/types/riddles';
 import { getRiddleSessionById } from '@/lib/riddle-persistence';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
+import { calculateGrade } from '@/lib/quiz-mcq-scoring';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';
 import { RiddleReview } from '../components/RiddleReview';
-
-/** Calculate grade from percentage */
-function calculateGrade(percentage: number): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
-  if (percentage >= 97) return 'A+';
-  if (percentage >= 90) return 'A';
-  if (percentage >= 80) return 'B';
-  if (percentage >= 70) return 'C';
-  if (percentage >= 60) return 'D';
-  return 'F';
-}
 
 /** Calculate result details from session */
 function calculateResult(session: RiddleSession): RiddleResult {

@@ -11,21 +11,7 @@ import { RiddleMcqCategory } from '../entities/riddle-category.entity';
 import { RiddleMcqSubject } from '../entities/riddle-subject.entity';
 import { generateSlug } from '../utils/slug.util';
 import { buildCsvHeaders, formatAnswerText, buildCsvRow } from '../utils/csv-export.util';
-
-export interface BulkCreateRiddleDto {
-  question: string;
-  options?: string[];
-  correctLetter?: string;
-  level: string;
-  subjectId?: string;
-  subjectName?: string;
-  categoryName?: string;
-  hint?: string;
-  explanation?: string;
-  answer?: string;
-  status?: RiddleStatus;
-  importOrder?: number;
-}
+import { BulkCreateRiddleDto } from '../dto/create/bulk-create-riddle.dto';
 
 @Injectable()
 export class RiddleMcqImportService {
@@ -169,7 +155,7 @@ export class RiddleMcqImportService {
         riddle.hint = dto.hint ?? null;
         riddle.explanation = dto.explanation ?? null;
         riddle.answer = dto.answer ?? null;
-        riddle.status = dto.status ?? RiddleStatus.DRAFT;
+        riddle.status = (dto.status as RiddleStatus) ?? RiddleStatus.DRAFT;
         riddle.importOrder = dto.importOrder ?? null;
         built.push({ riddle, rowNo });
       }

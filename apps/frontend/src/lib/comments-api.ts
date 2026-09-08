@@ -54,15 +54,22 @@ export interface PostCommentInput {
 // Public API
 // ============================================================================
 
-/** Get the paginated, masked feed for a riddle/joke. */
+/**
+ * Get the paginated, masked feed for a riddle/joke. The caller's guestId (and
+ * JWT, attached by api-client) lets the backend flag the caller's own entries
+ * with `mine` — the delete-own UIs depend on it.
+ */
 export async function getComments(
   contentType: CommentContentType,
   contentId: string,
   page = 1,
   limit = 20
 ): Promise<CommentFeedResponse> {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  const guestId = getGuestId();
+  if (guestId) params.set('guestId', guestId);
   const response = await api.get<CommentFeedResponse>(
-    `/comments/${contentType}/${contentId}?page=${page}&limit=${limit}`
+    `/comments/${contentType}/${contentId}?${params.toString()}`
   );
   return response.data;
 }

@@ -20,22 +20,6 @@ import {
 import { MAX_BULK_ITEMS } from '../constants/app.constants';
 import { BulkActionType } from '../enums/bulk-action.enum';
 import { ContentStatus } from '../enums/content-status.enum';
-
-/**
- * DTO for bulk import results (create-many endpoints).
- * Moved here from base.dto.ts so all bulk-operation DTOs are co-located.
- */
-export class BulkImportResultDto {
-  @ApiProperty({ description: 'Number of items successfully imported' })
-  success: number;
-
-  @ApiProperty({ description: 'Number of items that failed to import' })
-  failed: number;
-
-  @ApiPropertyOptional({ description: 'Error messages for failed items', type: [String] })
-  errors?: string[];
-}
-
 /**
  * DTO for bulk action requests
  */
@@ -122,54 +106,4 @@ export class StatusCountResponseDto {
 
   @ApiProperty({ description: 'Number of items in trash' })
   trash: number;
-}
-
-/**
- * DTO for updating content status
- */
-export class UpdateStatusDto {
-  @ApiProperty({
-    description: 'New status to set',
-    enum: ContentStatus,
-    example: ContentStatus.PUBLISHED,
-  })
-  @IsEnum(ContentStatus)
-  status: ContentStatus;
-
-  @ApiPropertyOptional({
-    description: 'Optional reason for status change',
-    example: 'Content approved for publication',
-  })
-  @IsOptional()
-  @IsString()
-  reason?: string;
-}
-
-/**
- * Query DTO for filtering by status
- */
-export class StatusFilterDto {
-  @ApiPropertyOptional({
-    description: 'Filter by content status',
-    enum: ContentStatus,
-    example: ContentStatus.PUBLISHED,
-  })
-  @IsOptional()
-  @IsEnum(ContentStatus)
-  status?: ContentStatus;
-
-  @ApiPropertyOptional({
-    description: 'Filter by subject slug',
-    example: 'science',
-  })
-  @IsOptional()
-  @IsString()
-  subject?: string;
-
-  @ApiPropertyOptional({
-    description: 'Include trashed items',
-    default: false,
-  })
-  @IsOptional()
-  includeTrash?: boolean;
 }

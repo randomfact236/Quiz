@@ -9,17 +9,13 @@
  * - getAdminSettings() / updateSettings(): full read/write via the admin-only
  *   `GET|PATCH /settings` endpoints (admin token required).
  *
- * The former localStorage mock (DEFAULT_MOCK_SETTINGS + MOCK_API_DELAY_MS) is
- * gone — the backend's config/settings.ts is the single defaults source.
+ * The backend's config/settings.ts is the single defaults source.
  * ============================================================================
  */
 
 import { adminApi, api } from '@/lib/api-client';
 import { RIDDLE_TIMERS } from '@/lib/constants';
 import type { SystemSettings } from '@/types/settings.types';
-
-// Re-export SystemSettings for backward compatibility
-export type { SystemSettings };
 
 /** Gameplay-visible settings shape returned by GET /settings/public. */
 export interface PublicSettings {

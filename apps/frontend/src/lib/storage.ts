@@ -28,17 +28,10 @@ export const STORAGE_KEYS = {
   // Seen-joke tracking (dad-jokes Workstream C): jokeId → ISO timestamp of first flip
   SEEN_JOKES: `${PREFIX}seen-jokes`,
   RIDDLES: `${PREFIX}riddles`,
-  IMAGE_RIDDLES: `${PREFIX}image-riddles`,
-  IMAGE_RIDDLE_CATEGORIES: `${PREFIX}image-riddle-categories`,
   // Image riddle game progress (solved vs revealed answers)
   IMAGE_RIDDLE_SOLVED: `${PREFIX}image-riddle-solved`,
   IMAGE_RIDDLE_REVEALED: `${PREFIX}image-riddle-revealed`,
-  JOKE_ITEMS: `${PREFIX}joke-items`,
-  RIDDLE_ITEMS: `${PREFIX}riddle-items`,
-  QUIZ_ITEMS: `${PREFIX}quiz-items`,
-  IMAGE_RIDDLE_ITEMS: `${PREFIX}image-riddle-items`,
   // Quiz session and progress
-  CURRENT_SESSION: `${PREFIX}current-session`,
   QUIZ_HISTORY: `${PREFIX}quiz-history`,
   QUIZ_RESUME_SESSION: `${PREFIX}quiz-resume-session`,
   QUIZ_RESUME_QUESTIONS: `${PREFIX}quiz-resume-questions`,
@@ -51,9 +44,6 @@ export const STORAGE_KEYS = {
   RIDDLE_SESSION: `${PREFIX}riddle-session`,
   RIDDLE_RESUME_PROGRESS: `${PREFIX}riddle-resume-progress`,
   RIDDLE_RESUME_QUESTIONS: `${PREFIX}riddle-resume-questions`,
-  RIDDLE_FAVORITES: `${PREFIX}riddle-favorites`,
-  RIDDLE_STREAK: `${PREFIX}riddle-streak`,
-  RIDDLE_SETTINGS: `${PREFIX}riddle-settings`,
   RIDDLE_HISTORY: `${PREFIX}riddle-history`,
 } as const;
 
@@ -100,7 +90,7 @@ export function setItem<T>(key: string, value: T, persistent = true): void {
     return;
   }
   try {
-    const serialized = typeof value === 'string' ? JSON.stringify(value) : JSON.stringify(value);
+    const serialized = JSON.stringify(value);
     if (persistent) {
       localStorage.setItem(key, serialized);
     } else {

@@ -35,27 +35,17 @@ export function AdminUsersSection(): JSX.Element {
 
   const fetchUsers = async () => {
     setIsLoading(true);
-    const apiUrl = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api/v1';
     try {
+      // adminApi (not raw fetch) so expired sessions get the token refresh +
+      // 401-intercept login bounce instead of silent empty lists.
       const [regRes, guestRes] = await Promise.all([
-        fetch(`${apiUrl}/admin/users`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('aiquiz:admin-token')}` },
-        }),
-        fetch(`${apiUrl}/admin/guest-users`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('aiquiz:admin-token')}` },
-        }),
+        adminApi.get<{ data: User[] }>('/admin/users'),
+        adminApi.get<{ data: GuestUser[] }>('/admin/guest-users'),
       ]);
-
-      if (regRes.ok) {
-        const data = await regRes.json();
-        setRegisteredUsers(data.data || []);
-      }
-      if (guestRes.ok) {
-        const data = await guestRes.json();
-        setGuestUsers(data.data || []);
-      }
+      setRegisteredUsers(regRes.data.data || []);
+      setGuestUsers(guestRes.data.data || []);
     } catch {
-      // fetch failed — tabs render with empty lists
+      // request failed — tabs render with empty lists
     } finally {
       setIsLoading(false);
     }

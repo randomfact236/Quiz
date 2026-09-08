@@ -17,7 +17,6 @@ export interface RiddleMcqCategory {
   slug: string;
   emoji?: string;
   subjects?: RiddleMcqSubject[];
-  riddles?: ClassicRiddle[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -43,28 +42,16 @@ export interface RiddleMcq {
   question: string;
   options: string[];
   correctLetter: string | null; // 'A', 'B', 'C', 'D' or null for expert
-  correctAnswer: string; // kept for backward compatibility
+  correctAnswer?: string; // Text answer for expert level
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   subjectId?: string;
   subject?: RiddleMcqSubject;
   explanation?: string;
   hint?: string;
-  answer?: string;
+  answer?: string; // Backend column: the text answer (mapped to correctAnswer)
   status?: 'published' | 'draft' | 'trash';
   createdAt?: string;
   updatedAt?: string;
-}
-
-/** Classic Riddle - Backend Entity (simple format) */
-export interface ClassicRiddle {
-  id: string;
-  question: string;
-  answer: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  categoryId?: string;
-  status: 'published' | 'draft' | 'trash';
-  createdAt: string;
-  updatedAt: string;
 }
 
 // ============================================================================
@@ -81,9 +68,6 @@ export interface Riddle {
   correctAnswer?: string; // Text answer for expert level
   difficulty: 'easy' | 'medium' | 'hard' | 'expert'; // For display
   level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme'; // For AnswerOptions component
-  chapter: string; // chapter name (for display)
-  chapterId: string; // chapter ID (for API)
-  status: 'published' | 'draft' | 'trash';
   hint?: string;
   explanation?: string;
 }
@@ -108,19 +92,9 @@ export interface RiddleSession {
   timeTaken: number; // in seconds (for practice mode: time spent)
   timeRemaining?: number; // in seconds (for timer mode: time left)
   status: 'in-progress' | 'completed' | 'abandoned';
-  hintsUsed: number;
-  skippedRiddles: string[];
 }
 
 /** Riddle Configuration */
-export interface RiddleConfig {
-  chapterId: string | 'all';
-  chapterName: string;
-  difficulty: 'all' | 'easy' | 'medium' | 'hard' | 'expert';
-  mode: 'timer' | 'practice';
-  riddleCount: number;
-}
-
 /** Riddle Result Summary */
 export interface RiddleResult {
   session: RiddleSession;
@@ -134,55 +108,7 @@ export interface RiddleResult {
     hard: { correct: number; total: number };
     expert: { correct: number; total: number };
   };
-  timeBonus?: number;
 }
-
-// ============================================================================
-// Utility Types
-// ============================================================================
-
-/** Difficulty level with metadata */
-export interface DifficultyLevel {
-  key: 'easy' | 'medium' | 'hard' | 'expert';
-  label: string;
-  emoji: string;
-  color: string;
-  timeLimit: number; // seconds per riddle
-}
-
-/** Filter options for riddle fetching */
-export interface RiddleFilters {
-  subjectId?: string;
-  chapterId?: string;
-  difficulty?: 'easy' | 'medium' | 'hard' | 'expert' | 'all';
-  status?: 'published' | 'draft' | 'trash' | 'all';
-  search?: string;
-  page?: number;
-  limit?: number;
-}
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
-  { key: 'easy', label: 'Easy', emoji: '🌱', color: 'from-green-400 to-green-600', timeLimit: 45 },
-  {
-    key: 'medium',
-    label: 'Medium',
-    emoji: '🌿',
-    color: 'from-blue-400 to-blue-600',
-    timeLimit: 30,
-  },
-  {
-    key: 'hard',
-    label: 'Hard',
-    emoji: '🌲',
-    color: 'from-orange-400 to-orange-600',
-    timeLimit: 25,
-  },
-  { key: 'expert', label: 'Expert', emoji: '🔥', color: 'from-red-400 to-red-600', timeLimit: 20 },
-];
 
 // ============================================================================
 // Adapter Functions
@@ -194,19 +120,19 @@ export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
 export function adaptRiddleMcq(riddle: RiddleMcq): Riddle {
   // Map expert/extreme to 'extreme' for AnswerOptions compatibility (shows text input)
   const isOpenEnded = riddle.level === 'expert' || riddle.level === 'extreme';
+  // Backend exposes the text answer as `answer` (no correctAnswer column); keep
+  // a correctAnswer fallback so test fixtures that inject it directly keep working.
+  const textAnswer = riddle.correctAnswer ?? riddle.answer ?? '';
 
   return {
     id: riddle.id,
     question: riddle.question,
     options: riddle.options,
     correctLetter: riddle.correctLetter || null,
-    correctOption: riddle.correctLetter || riddle.correctAnswer,
-    correctAnswer: riddle.correctAnswer,
+    correctOption: riddle.correctLetter || textAnswer,
+    correctAnswer: textAnswer,
     difficulty: isOpenEnded ? 'expert' : (riddle.level as Riddle['difficulty']),
     level: isOpenEnded ? 'extreme' : riddle.level,
-    chapter: riddle.subject?.name || 'General',
-    chapterId: riddle.subjectId || '',
-    status: 'published',
     hint: riddle.hint || '',
     explanation: riddle.explanation || '',
   };

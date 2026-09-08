@@ -14,8 +14,7 @@
   "author": "AI Quiz Team",
   "license": "MIT",
   "workspaces": [
-    "apps/*",
-    "libs/*"
+    "apps/*"
   ],
   "scripts": {
     "predev": "npm run validate:ports && rimraf apps/frontend/.next",
@@ -35,12 +34,6 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "type-check": "npm run type-check --workspaces --if-present",
     "clean": "npm run clean --workspaces && rimraf node_modules",
-    "docker:up": "docker-compose -f infrastructure/docker/docker-compose.yml up -d",
-    "docker:down": "docker-compose -f infrastructure/docker/docker-compose.yml down",
-    "docker:build": "docker-compose -f infrastructure/docker/docker-compose.yml build",
-    "fix": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -All",
-    "fix:frontend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Frontend",
-    "fix:backend": "powershell -ExecutionPolicy Bypass -File ./scripts/auto-fix-errors.ps1 -Backend",
     "validate:ports": "node scripts/validate-ports.js",
     "ports:status": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action status",
     "ports:setup": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action setup",
@@ -52,7 +45,6 @@
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "concurrently": "^8.2.2",
-    "cross-env": "^10.1.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -63,7 +55,6 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
     "rimraf": "^5.0.5",
-    "ts-morph": "^21.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
@@ -79,8 +70,5 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
-  },
-  "dependencies": {
-    "@tanstack/react-query-devtools": "^5.95.2"
   }
 }

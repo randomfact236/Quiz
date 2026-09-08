@@ -28,10 +28,7 @@ import { CacheService } from '../common/cache/cache.service';
 import { invalidateCacheFamilies } from '../common/content/content-cache.util';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import {
-  BulkActionResult,
-  StatusCountResponse,
-} from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionResult } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { GuestUsersService } from '../guest-users/guest-users.service';
@@ -52,7 +49,7 @@ export interface PublicComment {
   authorName: string | null;
   masked: boolean;
   createdAt: string;
-  /** Present on the caller's own entries (via guestId-scoped queries). */
+  /** True on the caller's own entries (identity projected per-request in findFeed). */
   mine?: boolean;
 }
 
@@ -63,6 +60,16 @@ export interface CommentFeed {
   limit: number;
   chipCounts: Record<string, number>;
   guessesToday: number;
+}
+
+/**
+ * Cached feed entry — the public shape plus raw authorship so `findFeed` can
+ * project the caller's `mine` flag after the (shared) cache lookup. These two
+ * fields are stripped before anything is returned to a client.
+ */
+interface CachedComment extends PublicComment {
+  userId: string | null;
+  guestId: string | null;
 }
 
 const FEED_CACHE_FAMILY = 'comments';
@@ -95,14 +102,36 @@ export class CommentsService {
     contentType: CommentContentType,
     contentId: string,
     page: number = COMMENT_PAGINATION_DEFAULTS.page,
-    limit: number = COMMENT_PAGINATION_DEFAULTS.limit
+    limit: number = COMMENT_PAGINATION_DEFAULTS.limit,
+    identity?: { userId?: string | null; guestId?: string | null }
   ): Promise<CommentFeed> {
     const cacheKey = `${FEED_CACHE_FAMILY}:${contentType}:${contentId}:feed:p${page}:l${limit}`;
-    return this.cacheService.getOrSet(
+    const feed = await this.cacheService.getOrSet(
       cacheKey,
       () => this.loadFeed(contentType, contentId, page, limit),
       FEED_CACHE_TTL_S
     );
+
+    // The cached payload is shared across all callers — project the caller's
+    // `mine` flag here (and always strip the raw authorship fields).
+    const hasIdentity = !!(identity?.userId || identity?.guestId);
+    return {
+      ...feed,
+      items: feed.items.map(({ userId, guestId, ...comment }) =>
+        hasIdentity ? { ...comment, mine: this.isMine(userId, guestId, identity) } : comment
+      ),
+    };
+  }
+
+  /** A comment is the caller's if the logged-in id matches, else the guest id on a guest-only entry. */
+  private isMine(
+    rowUserId: string | null,
+    rowGuestId: string | null,
+    identity: { userId?: string | null; guestId?: string | null }
+  ): boolean {
+    if (identity.userId && rowUserId) return identity.userId === rowUserId;
+    if (!rowUserId && rowGuestId && identity.guestId) return identity.guestId === rowGuestId;
+    return false;
   }
 
   private async loadFeed(
@@ -110,7 +139,7 @@ export class CommentsService {
     contentId: string,
     page: number,
     limit: number
-  ): Promise<CommentFeed> {
+  ): Promise<Omit<CommentFeed, 'items'> & { items: CachedComment[] }> {
     const [rows, total, chipRows, guessesToday] = await Promise.all([
       this.commentRepo.find({
         where: {
@@ -154,9 +183,11 @@ export class CommentsService {
       }),
     ]);
 
-    const items: PublicComment[] = rows.map((row) =>
-      this.toPublicComment(row, { masked: row.isCorrect })
-    );
+    const items: CachedComment[] = rows.map((row) => ({
+      ...this.toPublicComment(row, { masked: row.isCorrect }),
+      userId: row.userId ?? null,
+      guestId: row.guestId ?? null,
+    }));
 
     const chipCounts: Record<string, number> = {};
     for (const chipRow of chipRows) {
@@ -259,7 +290,7 @@ export class CommentsService {
       },
     });
 
-    return this.toPublicComment(saved, { masked: saved.isCorrect });
+    return { ...this.toPublicComment(saved, { masked: saved.isCorrect }), mine: true };
   }
 
   /** Same normalized compare as gameplay (case, articles, punctuation). */
@@ -418,10 +449,6 @@ export class CommentsService {
       await this.invalidateAllFeedCaches();
     }
     return result;
-  }
-
-  async getStatusCounts(): Promise<StatusCountResponse> {
-    return this.bulkActionService.getStatusCounts(this.commentRepo);
   }
 
   /** Counts per content ID for 💬 chips on card backs (jokes grid). */

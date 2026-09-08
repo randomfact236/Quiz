@@ -34,13 +34,5 @@ import {
     RiddleMcqImportService,
     RiddleMcqStatsService,
   ],
-  exports: [
-    RiddleMcqCategoryService,
-    RiddleMcqSubjectService,
-    RiddleMcqQuestionService,
-    RiddleMcqBulkActionsService,
-    RiddleMcqImportService,
-    RiddleMcqStatsService,
-  ],
 })
 export class RiddleMcqModule {}

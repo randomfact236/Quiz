@@ -136,8 +136,6 @@ export function createRiddleSession(
     timeTaken: 0,
     timeRemaining: timeLimit ?? 0,
     status: 'in-progress',
-    hintsUsed: 0,
-    skippedRiddles: [],
   };
 }
 

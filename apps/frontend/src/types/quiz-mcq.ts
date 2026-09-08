@@ -6,8 +6,6 @@
  * ============================================================================
  */
 
-import { type ContentStatus } from '@/app/admin/types';
-
 /** Question Type (aligned with admin Question) */
 export interface Question {
   id: string;
@@ -19,8 +17,6 @@ export interface Question {
   correctAnswer: string;
   correctLetter: string | null;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
-  chapter: string;
-  status?: ContentStatus;
   /** Optional explanation shown after answering (plan/02-mcq-quiz.md P1 #4) */
   explanation?: string | null;
 }
@@ -39,17 +35,7 @@ export interface QuizSession {
   startedAt: string;
   completedAt?: string;
   timeTaken: number; // in seconds
-  status: 'in-progress' | 'completed' | 'abandoned';
-}
-
-/** Quiz Configuration */
-export interface QuizConfig {
-  subject: string;
-  chapter: string;
-  level: string;
-  timeLimit?: number; // in seconds, undefined = no limit
-  showFeedbackImmediately: boolean;
-  allowNavigation: boolean; // Allow going back to previous questions
+  status: 'in-progress' | 'completed';
 }
 
 /** Quiz State for useQuizMcq hook */
@@ -64,9 +50,7 @@ export interface QuizState {
   status: 'loading' | 'playing' | 'paused' | 'completed';
   startTime: number;
   sessionId: string;
-  visited: Set<string>;
   manuallySkipped: Set<string>;
-  dismissedUnvisited: boolean;
 }
 
 /** Quiz Actions */
@@ -99,7 +83,7 @@ export interface QuizComputed {
 /** Combined Quiz Hook Return */
 export interface UseQuizMcqReturn extends QuizState, QuizActions, QuizComputed {
   showResumePrompt: boolean;
-  pendingResumeState: QuizResumeState | null;
+  pendingResumeState: import('@/lib/quiz-mcq-resume').QuizResumeState | null;
   handleResumeSession: () => void;
   handleStartFresh: () => void;
 }
@@ -155,7 +139,6 @@ export interface Achievement {
       | 'perfect_score'
       | 'streak'
       | 'chapter_complete'
-      | 'subject_master'
       | 'speed_run'
       | 'subject_explore'
       | 'retry'
@@ -163,20 +146,4 @@ export interface Achievement {
     threshold: number;
   };
   unlockedAt?: string | undefined;
-}
-
-/** Quiz Resume State for session persistence */
-export interface QuizResumeState {
-  subject: string;
-  chapter: string;
-  level: string;
-  mode: 'normal' | 'timer_challenge' | 'practice_challenge';
-  currentQuestionIndex: number;
-  sessionSize: number;
-  answers: Record<string, string>;
-  score: number;
-  manuallySkipped: string[];
-  availableQuestions: Question[];
-  savedAt: number;
-  startedAt: string;
 }

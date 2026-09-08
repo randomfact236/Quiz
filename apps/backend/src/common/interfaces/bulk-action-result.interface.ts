@@ -39,20 +39,6 @@ export interface StatusCountResponse {
 }
 
 /**
- * Audit log entry for bulk actions
- */
-export interface BulkActionAuditLog {
-  action: string;
-  entityType: string;
-  entityIds: string[];
-  performedBy: string;
-  performedAt: Date;
-  result: BulkActionResult;
-  ipAddress?: string;
-  userAgent?: string;
-}
-
-/**
  * Options for bulk action operations
  */
 export interface BulkActionOptions {

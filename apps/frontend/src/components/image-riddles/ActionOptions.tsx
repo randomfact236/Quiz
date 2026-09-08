@@ -123,21 +123,6 @@ export interface ActionOptionsProps {
   onAnalytics?: (event: string, metadata?: Record<string, unknown>) => void;
 }
 
-export interface ActionOptionsState {
-  loadingActions: Set<string>;
-  openDropdown: string | null;
-  confirmDialog: {
-    isOpen: boolean;
-    action: IActionOption | null;
-  };
-  tooltip: {
-    visible: boolean;
-    text: string;
-    x: number;
-    y: number;
-  };
-}
-
 // =============================================================================
 // Style Constants
 // =============================================================================
@@ -516,7 +501,6 @@ export const ActionOptions: React.FC<ActionOptionsProps> = ({
 }) => {
   // State
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
-  const [_openDropdown, _setOpenDropdown] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     action: IActionOption | null;

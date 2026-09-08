@@ -32,8 +32,6 @@ export interface AdminDashboard {
     guestUsers: number;
     newGuests: number;
     achievementsUnlocked: number;
-    jokeLikes: number;
-    jokeDislikes: number;
     newsletterSubscribers: number;
     newsletterNew: number;
     commentsTotal: number;

@@ -17,7 +17,7 @@
  */
 
 import { useEffect, useState, useMemo } from 'react';
-import { getSubjects, getQuestionsBySubject } from '@/lib/quiz-mcq-api';
+import { getSubjects, getQuestionCounts } from '@/lib/quiz-mcq-api';
 import type { QuizSubject } from '@/lib/quiz-mcq-api';
 
 interface Subject extends QuizSubject {
@@ -87,20 +87,11 @@ export function TopicsSection(): JSX.Element {
         const subjectsData = (await getSubjects(false)) as Subject[];
         const sortedSubjects = subjectsData.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-        const counts: Record<string, number> = {};
-        for (const subject of subjectsData) {
-          try {
-            const questions = await getQuestionsBySubject(subject.slug, { status: 'published' });
-            if (questions.total > 0) {
-              counts[subject.slug] = questions.total;
-            }
-          } catch {
-            // skip subjects whose question counts can't be loaded
-          }
-        }
+        // One cached grouped query (service doc: "feeds the landing page").
+        const countsResponse = await getQuestionCounts();
 
         setSubjects(sortedSubjects);
-        setQuestionCounts(counts);
+        setQuestionCounts(countsResponse.bySubject);
 
         // Initialize found categories expanded
         const uniqueCategories = Array.from(
@@ -127,9 +118,10 @@ export function TopicsSection(): JSX.Element {
   useEffect(() => {
     if (subjects.length === 0) return;
     let stale = false;
-    fetch(
-      `${process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api'}/v1/quiz-mcq/subject-clicks`
-    )
+    // Normalize the base URL: prod env already ends in /api/v1, dev in /api.
+    const base = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
+    const apiBase = base.endsWith('/v1') ? base : `${base.replace(/\/$/, '')}/v1`;
+    fetch(`${apiBase}/quiz-mcq/subject-clicks`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((rows: { subject: string; clicks: number }[]) => {
         if (stale) return;

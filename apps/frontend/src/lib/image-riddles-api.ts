@@ -79,18 +79,6 @@ export interface AdminPaginated<T> {
 // ============================================================================
 
 /**
- * Get published image riddles (paginated).
- */
-export async function getImageRiddles(
-  page: number = 1,
-  limit: number = 100
-): Promise<Paginated<ImageRiddle>> {
-  return apiRequest<Paginated<ImageRiddle>>(`/image-riddles?page=${page}&limit=${limit}`).then(
-    (r) => r.data
-  );
-}
-
-/**
  * Search published riddles by title/answer text.
  */
 export async function searchImageRiddles(params: {
@@ -117,40 +105,6 @@ export async function searchImageRiddles(params: {
 export async function getImageRiddleCategories(): Promise<ImageRiddleCategory[]> {
   const response = await api.get<ImageRiddleCategory[]>('/image-riddles/categories');
   return response.data;
-}
-
-/**
- * Get a random published image riddle.
- */
-export async function getRandomImageRiddle(): Promise<ImageRiddle> {
-  const response = await api.get<ImageRiddle>('/image-riddles/random');
-  return response.data;
-}
-
-/**
- * Get published riddles in a category.
- */
-export async function getImageRiddlesByCategory(
-  categoryId: string,
-  page: number = 1,
-  limit: number = 100
-): Promise<Paginated<ImageRiddle>> {
-  return apiRequest<Paginated<ImageRiddle>>(
-    `/image-riddles/category/${categoryId}?page=${page}&limit=${limit}`
-  ).then((r) => r.data);
-}
-
-/**
- * Get published riddles by difficulty.
- */
-export async function getImageRiddlesByDifficulty(
-  level: ImageRiddleDifficulty,
-  page: number = 1,
-  limit: number = 100
-): Promise<Paginated<ImageRiddle>> {
-  return apiRequest<Paginated<ImageRiddle>>(
-    `/image-riddles/difficulty/${level}?page=${page}&limit=${limit}`
-  ).then((r) => r.data);
 }
 
 export interface ImageRiddlesStats {
@@ -222,16 +176,6 @@ export async function getAllImageRiddlesAdmin(
 }
 
 /**
- * Get a single riddle by ID (Admin).
- */
-export async function getImageRiddleAdmin(id: string): Promise<ImageRiddle> {
-  const response = await api.get<ImageRiddle>(`/admin/image-riddles/${id}`, {
-    isAdmin: true,
-  });
-  return response.data;
-}
-
-/**
  * Create a riddle (Admin). New riddles start as DRAFT.
  */
 export async function createImageRiddle(dto: CreateImageRiddleDto): Promise<ImageRiddle> {
@@ -273,18 +217,6 @@ export async function updateImageRiddle(
  */
 export async function deleteImageRiddle(id: string): Promise<void> {
   await api.delete(`/admin/image-riddles/${id}`, { isAdmin: true });
-}
-
-/**
- * Toggle a riddle's active flag (Admin).
- */
-export async function toggleImageRiddleActive(id: string): Promise<{ isActive: boolean }> {
-  const response = await api.post<{ isActive: boolean }>(
-    `/admin/image-riddles/${id}/toggle-active`,
-    {},
-    { isAdmin: true }
-  );
-  return response.data;
 }
 
 /**

@@ -13,16 +13,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Download, RefreshCw } from 'lucide-react';
 import { toast } from '@/lib/toast';
+import { downloadFile } from '../utils';
 
 import { adminApi, ApiError } from '@/lib/api-client';
 
 interface Subscriber {
   id: string;
   email: string;
-  source: 'footer' | 'about';
+  source: 'footer' | 'about' | 'mobile';
   unsubscribed: boolean;
   createdAt: string;
-  updatedAt: string;
 }
 
 type StatusFilter = 'active' | 'unsubscribed' | 'all';
@@ -59,13 +59,7 @@ export function NewsletterSection(): JSX.Element {
     setIsExporting(true);
     try {
       const res = await adminApi.get<{ csv: string; filename: string }>('/newsletter/export');
-      const blob = new Blob([res.data.csv], { type: 'text/csv;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = res.data.filename;
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadFile(res.data.csv, res.data.filename, 'text/csv;charset=utf-8');
       toast.success('Subscribers exported');
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : 'Export failed');
