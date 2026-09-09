@@ -210,6 +210,34 @@ export interface SeoSettings {
 }
 
 /**
+ * Social profile URLs; empty = the footer icon stays hidden
+ */
+export interface SocialLinksSettings {
+  facebook: string;
+  instagram: string;
+  tiktok: string;
+  youtube: string;
+  twitter: string;
+}
+
+/**
+ * Site Information branding (logo, favicon, names, banner, socials)
+ */
+export interface SiteSettings {
+  /** Brand name; empty = fall back to seo.siteName */
+  siteName: string;
+  /** Brand description; empty = fall back to seo.description */
+  siteDescription: string;
+  /** /uploads/... path or absolute URL; empty = text-only brand */
+  logo: string;
+  /** /uploads/... path or absolute URL; empty = file-convention icon */
+  favicon: string;
+  /** Browser tab "Page | Tagline"; empty = the site name */
+  tabTagline: string;
+  socialLinks: SocialLinksSettings;
+}
+
+/**
  * Complete application settings structure
  */
 export interface AppSettings {
@@ -218,6 +246,7 @@ export interface AppSettings {
   imageRiddles: ImageRiddlesSettings;
   quiz: QuizSettings;
   riddles: RiddlesSettings;
+  site: SiteSettings;
   seo: SeoSettings;
   [key: string]: unknown;
 }

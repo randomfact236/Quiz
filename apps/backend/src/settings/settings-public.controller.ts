@@ -10,8 +10,9 @@ import { SettingsService } from './settings.service';
  *
  * `GET /settings` is admin-only, so gameplay pages could never read real
  * settings. This controller exposes only the non-sensitive keys: gameplay
- * timers and the site SEO metadata (which is rendered into public meta tags
- * anyway). Cache TTLs, patterns, and internal keys stay admin-only.
+ * timers, the site branding group (logo/favicon/socials — rendered into the
+ * public shell anyway), and the site SEO metadata (same). Cache TTLs,
+ * patterns, and internal keys stay admin-only.
  */
 @ApiTags('Settings')
 @Controller('settings')
@@ -20,16 +21,20 @@ export class SettingsPublicController {
 
   @_Public()
   @Get('public')
-  @ApiOperation({ summary: 'Public-safe settings: gameplay timers + site SEO metadata' })
+  @ApiOperation({
+    summary: 'Public-safe settings: gameplay timers + site branding + site SEO metadata',
+  })
   getPublicSettings(): {
     quiz: { defaults: AppSettings['quiz']['defaults'] };
     riddles: { defaults: AppSettings['riddles']['defaults'] };
+    site: AppSettings['site'];
     seo: AppSettings['seo'];
   } {
     const settings = this.settingsService.getSettings();
     return {
       quiz: { defaults: settings.quiz.defaults },
       riddles: { defaults: settings.riddles.defaults },
+      site: settings.site,
       seo: settings.seo,
     };
   }

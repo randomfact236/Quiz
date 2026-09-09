@@ -6,7 +6,11 @@ import { settings } from '../config/settings';
 
 import { AnalyticsService } from '../analytics/analytics.service';
 
-import { isValidSettingKey, AllowedSettingKey } from './dto/update-settings.dto';
+import {
+  isValidSettingKey,
+  ALLOWED_SETTING_KEYS,
+  AllowedSettingKey,
+} from './dto/update-settings.dto';
 import { SystemSetting } from './entities/system-setting.entity';
 import { AppSettings, SettingsValue } from './interfaces/settings.interface';
 
@@ -94,7 +98,7 @@ export class SettingsService implements OnModuleInit {
     const topLevelKey = key.split('.')[0];
     if (!isValidSettingKey(topLevelKey)) {
       throw new BadRequestException(
-        `Invalid setting key: ${key}. Allowed keys are: ${['global', 'dadJokes', 'imageRiddles', 'quiz', 'riddles'].join(', ')}`
+        `Invalid setting key: ${key}. Allowed keys are: ${ALLOWED_SETTING_KEYS.join(', ')}`
       );
     }
   }

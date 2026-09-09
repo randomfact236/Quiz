@@ -72,12 +72,15 @@ export function breadcrumbJsonLd(crumbs: Crumb[]): Record<string, unknown> {
 
 /** Site-wide Organization + WebSite graph, built from the seo settings group. */
 export function siteJsonLd(seo: {
-  siteName?: string;
-  description?: string;
-  ogImageUrl?: string;
-  twitterHandle?: string;
+  siteName?: string | undefined;
+  description?: string | undefined;
+  ogImageUrl?: string | undefined;
+  twitterHandle?: string | undefined;
+  /** Brand logo from the site settings group; falls back to the OG image */
+  logo?: string | undefined;
 }): Record<string, unknown>[] {
   const name = seo.siteName?.trim() || 'AI Quiz';
+  const logo = seo.logo?.trim() || seo.ogImageUrl?.trim() || '';
   const graph: Record<string, unknown>[] = [
     {
       '@type': 'WebSite',
@@ -92,7 +95,7 @@ export function siteJsonLd(seo: {
       '@id': `${APP_URL}/#organization`,
       name: `${name} Team`,
       url: APP_URL,
-      ...(seo.ogImageUrl?.trim() ? { logo: seo.ogImageUrl.trim() } : {}),
+      ...(logo ? { logo } : {}),
       ...(seo.twitterHandle?.trim()
         ? { sameAs: [`https://twitter.com/${seo.twitterHandle.trim().replace(/^@/, '')}`] }
         : {}),

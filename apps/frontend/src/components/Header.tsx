@@ -6,8 +6,23 @@ import { NAV_ITEMS, NAV_MENU_ITEMS } from '@/lib/nav-config';
 import { useState, useEffect } from 'react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { useSiteBrand } from '@/components/SiteBrandContext';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
+
+/** Brand link from the Site Information settings (logo image when configured, else text). */
+function BrandLink(): JSX.Element {
+  const { siteName, logo } = useSiteBrand();
+  return (
+    <Link href="/" className="inline-flex items-center gap-2" aria-label={`${siteName} Home`}>
+      {logo && (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={logo} alt="" className="h-7 w-7 rounded object-contain" />
+      )}
+      <span className="text-xl font-bold text-primary-600 hover:text-primary-700">{siteName}</span>
+    </Link>
+  );
+}
 
 export default function Header(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,13 +75,7 @@ export default function Header(): JSX.Element {
       <header className="sticky top-0 z-50 glass border-b border-secondary-200 dark:border-secondary-800">
         <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
           <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="text-xl font-bold text-primary-600 hover:text-primary-700"
-              aria-label="AI Quiz Home"
-            >
-              AI Quiz
-            </Link>
+            <BrandLink />
 
             <div className="hidden items-center gap-4 md:flex">
               <ul className="flex items-center gap-6" role="menubar">
@@ -182,13 +191,7 @@ export default function Header(): JSX.Element {
     <header className="sticky top-0 z-50 glass border-b border-secondary-200 dark:border-secondary-800">
       <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
         <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-xl font-bold text-primary-600 hover:text-primary-700"
-            aria-label="AI Quiz Home"
-          >
-            AI Quiz
-          </Link>
+          <BrandLink />
 
           <div className="hidden items-center gap-4 md:flex">
             <ul className="flex items-center gap-6" role="menubar">

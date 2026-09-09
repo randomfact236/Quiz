@@ -264,6 +264,34 @@ export interface SeoSettings {
 }
 
 /**
+ * Social media profile links (full URLs; empty = footer icon hidden)
+ */
+export interface SiteSocialLinks {
+  facebook: string;
+  instagram: string;
+  tiktok: string;
+  youtube: string;
+  twitter: string;
+}
+
+/**
+ * Site Information branding (logo, favicon, names, banner, socials)
+ */
+export interface SiteSettings {
+  /** Brand name; empty = fall back to seo.siteName */
+  siteName: string;
+  /** Brand description; empty = fall back to seo.description */
+  siteDescription: string;
+  /** /uploads/... path or absolute URL; empty = text-only brand */
+  logo: string;
+  /** /uploads/... path or absolute URL; empty = file-convention icon */
+  favicon: string;
+  /** Browser tab shows "Page | Tagline"; empty = the site name */
+  tabTagline: string;
+  socialLinks: SiteSocialLinks;
+}
+
+/**
  * Complete system settings structure
  */
 export interface SystemSettings {
@@ -277,6 +305,8 @@ export interface SystemSettings {
   quiz: QuizSettings;
   /** Riddles module settings */
   riddles: RiddlesSettings;
+  /** Site Information branding */
+  site: SiteSettings;
   /** Site-wide SEO metadata */
   seo: SeoSettings;
 }
@@ -317,7 +347,7 @@ export interface SettingsUpdateResponse {
 /**
  * Settings tab identifiers for admin panel
  */
-export type SettingsTab = 'general' | 'quiz-mcq' | 'jokes' | 'riddles' | 'imageRiddles';
+export type SettingsTab = 'site' | 'general' | 'quiz-mcq' | 'jokes' | 'riddles' | 'imageRiddles';
 /**
  * Settings form data type (partial system settings for form handling)
  */
@@ -341,7 +371,7 @@ export type SettingsValue =
 export function isSettingsTab(value: unknown): value is SettingsTab {
   return (
     typeof value === 'string' &&
-    ['general', 'quiz-mcq', 'jokes', 'riddles', 'imageRiddles'].includes(value)
+    ['site', 'general', 'quiz-mcq', 'jokes', 'riddles', 'imageRiddles'].includes(value)
   );
 }
 

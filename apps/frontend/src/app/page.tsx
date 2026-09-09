@@ -1,10 +1,8 @@
-'use client';
-
 import { BubbleBackground, TopicsSection, ModeCards, StatsSection } from './components/home';
 
 /**
  * Home Page Component
- * Refactored to use extracted sub-components for reduced complexity
+ * Refactored to use extracted sub-components for reduced complexity.
  */
 export default function HomePage(): JSX.Element {
   return (

@@ -8,8 +8,9 @@ import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { JsonLd } from '@/components/JsonLd';
+import { SiteBrandProvider } from '@/components/SiteBrandContext';
 import { siteJsonLd } from '@/lib/seo';
-import type { SeoSettings } from '@/types/settings.types';
+import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -40,31 +41,25 @@ const DEFAULTS = {
   ],
 };
 
-/**
- * Site SEO metadata comes from the `seo` settings group (admin SeoSection →
- * PATCH /settings). Cached 5 min server-side; any failure falls back to the
- * built-ins above so the site never renders without metadata.
- */
-async function getSeoSettings(): Promise<Partial<SeoSettings> | null> {
-  const base = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
-  const apiRoot = base.endsWith('/v1') ? base : `${base}/v1`;
-  try {
-    const res = await fetch(`${apiRoot}/settings/public`, { next: { revalidate: 300 } });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { seo?: Partial<SeoSettings> };
-    return data.seo ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = await getSeoSettings();
-  const siteName = seo?.siteName?.trim() || DEFAULTS.siteName;
+  const { seo, site } = await getPublicSettings();
+  // Site Information branding wins; the seo group is the fallback chain below it.
+  const siteName = site?.siteName?.trim() || seo?.siteName?.trim() || DEFAULTS.siteName;
   const titleDefault = seo?.titleDefault?.trim() || DEFAULTS.titleDefault;
-  const description = seo?.description?.trim() || DEFAULTS.description;
+  const description =
+    site?.siteDescription?.trim() || seo?.description?.trim() || DEFAULTS.description;
   const keywords = seo?.keywords && seo.keywords.length > 0 ? seo.keywords : DEFAULTS.keywords;
   const googleVerification = seo?.googleSiteVerification?.trim() || '';
+
+  // Browser tab reads "Page | Tagline"; empty tagline keeps the seo template
+  // (which itself falls back to "%s | <site name>").
+  const tabTagline = site?.tabTagline?.trim() || '';
+  const titleTemplate = tabTagline
+    ? `%s | ${tabTagline}`
+    : seo?.titleTemplate?.trim() || DEFAULTS.titleTemplate;
+
+  // Favicon from settings replaces the file-convention icon.svg when set.
+  const favicon = resolveMediaUrl(site?.favicon?.trim() ?? '');
 
   // Fallback chain (plan/15-seo.md): page content → platform override →
   // global fallback → auto-generated image. Pages with their own metadata
@@ -83,8 +78,9 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(APP_URL),
     title: {
       default: titleDefault,
-      template: seo?.titleTemplate?.trim() || DEFAULTS.titleTemplate,
+      template: titleTemplate,
     },
+    ...(favicon ? { icons: { icon: favicon } } : {}),
     description: metaDescription,
     keywords,
     authors: [{ name: `${siteName} Team` }],
@@ -140,7 +136,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>): Promise<JSX.Element> {
   // Same cached fetch as generateMetadata (Next dedupes it within the pass).
-  const seo = await getSeoSettings();
+  const { seo, site } = await getPublicSettings();
+  const brand = {
+    siteName: site?.siteName?.trim() || seo?.siteName?.trim() || 'AI Quiz',
+    logo: resolveMediaUrl(site?.logo?.trim() ?? ''),
+  };
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
@@ -154,26 +154,36 @@ export default async function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col bg-white dark:bg-secondary-900 font-sans antialiased transition-colors duration-300">
-        <JsonLd data={siteJsonLd(seo ?? {})} />
-        <Suspense fallback={null}>
-          <NavigationProgress />
-        </Suspense>
-        <Providers>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
-          >
-            Skip to main content
-          </a>
-          <Header />
-          <main id="main-content" className="flex flex-col flex-1">
-            {children}
-          </main>
-          <HideOnAdmin>
-            <Footer />
-            <MobileFooter />
-          </HideOnAdmin>
-        </Providers>
+        <JsonLd
+          data={siteJsonLd({
+            siteName: brand.siteName,
+            description: site?.siteDescription?.trim() || seo?.description?.trim(),
+            ogImageUrl: seo?.ogImageUrl,
+            twitterHandle: seo?.twitterHandle,
+            logo: brand.logo || undefined,
+          })}
+        />
+        <SiteBrandProvider value={brand}>
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
+          <Providers>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-white"
+            >
+              Skip to main content
+            </a>
+            <Header />
+            <main id="main-content" className="flex flex-col flex-1">
+              {children}
+            </main>
+            <HideOnAdmin>
+              <Footer />
+              <MobileFooter />
+            </HideOnAdmin>
+          </Providers>
+        </SiteBrandProvider>
       </body>
     </html>
   );

@@ -102,6 +102,26 @@ export const settings = {
       pattern: 'riddles:*',
     },
   },
+  site: {
+    // Site Information branding (admin "Site Info" tab). Empty strings mean
+    // "not set" — the frontend falls back to its built-ins (then to seo below).
+    siteName: '',
+    siteDescription: '',
+    /** /uploads/... path or absolute URL; empty = text-only brand */
+    logo: '',
+    /** /uploads/... path or absolute URL; empty = file-convention icon.svg */
+    favicon: '',
+    /** Browser tab shows "Page | Tagline"; empty = the site name */
+    tabTagline: '',
+    /** Full profile URLs; footer icons render only for the filled links */
+    socialLinks: {
+      facebook: '',
+      instagram: '',
+      tiktok: '',
+      youtube: '',
+      twitter: '',
+    },
+  },
   seo: {
     // Site-wide metadata consumed by the frontend root layout (generateMetadata).
     // Empty strings mean "not set" — the frontend falls back to its built-ins.

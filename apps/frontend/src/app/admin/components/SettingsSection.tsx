@@ -10,10 +10,16 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { SettingsService } from '@/services/settings.service';
 import { ApiError } from '@/lib/api-client';
-import type { SystemSettings, SettingsTab, SettingsValue } from '@/types/settings.types';
+import { getErrorMessage, resolveMediaUrl, uploadMedia } from '@/lib/media-api';
+import type {
+  SystemSettings,
+  SettingsTab,
+  SettingsValue,
+  SiteSocialLinks,
+} from '@/types/settings.types';
 
 /**
  * Helper type for nested state updates
@@ -28,13 +34,133 @@ type NestedSettingsObject = {
 /**
  * Settings tab configuration
  */
-// Only settings with live runtime consumers are exposed here (the quiz and
-// riddle level timers). Every other key in config/settings.ts currently has no
-// reader — surfacing them let admins "save" values that changed nothing.
+// Only settings with live runtime consumers are exposed here: the site
+// branding group (header/footer/metadata/homepage banner) and the gameplay
+// timers. Every other key in config/settings.ts currently has no reader —
+// surfacing them let admins "save" values that changed nothing.
 const SETTINGS_TABS = [
+  { id: 'site' as const, label: 'Site Info', emoji: '🌐' },
   { id: 'quiz-mcq' as const, label: 'Quiz MCQ', emoji: '📚' },
   { id: 'riddles' as const, label: 'Riddles', emoji: '🎭' },
 ];
+
+const SOCIAL_LINK_FIELDS: Array<{
+  key: keyof SiteSocialLinks;
+  label: string;
+  placeholder: string;
+}> = [
+  { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/yourpage' },
+  { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/yourhandle' },
+  { key: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@yourhandle' },
+  { key: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@yourchannel' },
+  { key: 'twitter', label: 'Twitter/X', placeholder: 'https://x.com/yourhandle' },
+];
+
+/**
+ * Image setting field: media-library upload with live preview, plus a manual
+ * URL/path input and a Remove button (empty value = not set).
+ */
+function ImageSettingField({
+  id,
+  label,
+  helpText,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  helpText: string;
+  value: string;
+  onChange: (url: string) => void;
+}): JSX.Element {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewUrl = resolveMediaUrl(value);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file after a retry
+    if (!file) return;
+    setUploading(true);
+    setUploadError('');
+    try {
+      const asset = await uploadMedia(file, label);
+      onChange(asset.url);
+    } catch (err) {
+      setUploadError(getErrorMessage(err));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
+      <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">{helpText}</p>
+      <div className="mt-2 flex items-start gap-4">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
+          {previewUrl ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={previewUrl}
+              alt={`${label} preview`}
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <span className="text-2xl text-gray-300 dark:text-gray-500" aria-hidden="true">
+              🖼️
+            </span>
+          )}
+        </div>
+        <div className="flex-1 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            >
+              {uploading ? 'Uploading…' : 'Choose Image'}
+            </button>
+            {value && (
+              <button
+                type="button"
+                onClick={() => onChange('')}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+              >
+                Remove
+              </button>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              className="hidden"
+              onChange={(e) => void handleFile(e)}
+              aria-hidden="true"
+              tabIndex={-1}
+            />
+          </div>
+          <input
+            id={id}
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="/uploads/image.webp or https://…"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            aria-label={`${label} URL`}
+          />
+          {uploadError && (
+            <p className="text-xs text-red-600 dark:text-red-400" role="alert">
+              {uploadError}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Get default timer value for quiz difficulty level (in seconds)
@@ -82,7 +208,7 @@ export function SettingsSection(): JSX.Element {
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<SettingsTab>('quiz-mcq');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('site');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -263,6 +389,125 @@ export function SettingsSection(): JSX.Element {
         id={`settings-panel-${activeTab}`}
         aria-label={`${activeTab} settings`}
       >
+        {/* Site Information */}
+        {activeTab === 'site' && (
+          <div className="space-y-8">
+            <div>
+              <h4 className="text-lg font-semibold dark:text-gray-200">Site Information</h4>
+              <p className="mt-1 text-sm text-gray-500 dark:text-secondary-400">
+                Branding shown in the header, footer, browser tab, and homepage. Empty fields fall
+                back to the built-in defaults.
+              </p>
+            </div>
+
+            {/* Names */}
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="site-name"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Site Name
+                </label>
+                <input
+                  id="site-name"
+                  type="text"
+                  value={formData.site?.siteName ?? ''}
+                  onChange={(e) => updateField('site.siteName', e.target.value)}
+                  placeholder="ProfitBenefit.com"
+                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="site-tagline"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Browser Tab Tagline
+                </label>
+                <input
+                  id="site-tagline"
+                  type="text"
+                  value={formData.site?.tabTagline ?? ''}
+                  onChange={(e) => updateField('site.tabTagline', e.target.value)}
+                  placeholder="best products"
+                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+                <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
+                  Shown in the browser tab as &quot;Page | Tagline&quot;. Leave empty to use the
+                  site name.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="site-description"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Site Description
+              </label>
+              <textarea
+                id="site-description"
+                value={formData.site?.siteDescription ?? ''}
+                onChange={(e) => updateField('site.siteDescription', e.target.value)}
+                rows={2}
+                placeholder="find best product for you"
+                className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+            </div>
+
+            {/* Logo + Favicon */}
+            <div className="grid gap-8 border-t border-gray-200 pt-6 sm:grid-cols-2 dark:border-gray-700">
+              <ImageSettingField
+                id="site-logo"
+                label="Site Logo"
+                helpText="PNG, JPG, or WebP, at least 200px wide (PNG supports transparency). Shown next to the brand name in the header and footer."
+                value={formData.site?.logo ?? ''}
+                onChange={(url) => updateField('site.logo', url)}
+              />
+              <ImageSettingField
+                id="site-favicon"
+                label="Browser Tab Icon (Favicon)"
+                helpText="Square PNG/WebP, 192x192 or larger. Shown as the browser tab icon."
+                value={formData.site?.favicon ?? ''}
+                onChange={(url) => updateField('site.favicon', url)}
+              />
+            </div>
+
+            {/* Social Media Links */}
+            <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
+              <h5 className="text-md font-semibold mb-1 dark:text-gray-300">
+                🔗 Social Media Links
+              </h5>
+              <p className="text-sm text-gray-500 dark:text-secondary-400 mb-4">
+                Full profile URLs. Footer icons appear only for the links you fill in — empty fields
+                stay hidden.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {SOCIAL_LINK_FIELDS.map(({ key, label, placeholder }) => (
+                  <div key={key}>
+                    <label
+                      htmlFor={`social-${key}`}
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
+                      {label}
+                    </label>
+                    <input
+                      id={`social-${key}`}
+                      type="text"
+                      value={formData.site?.socialLinks?.[key] ?? ''}
+                      onChange={(e) => updateField(`site.socialLinks.${key}`, e.target.value)}
+                      placeholder={placeholder}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Quiz Settings */}
         {activeTab === 'quiz-mcq' && (
           <div className="space-y-6">

@@ -68,6 +68,27 @@ describe('SettingsService', () => {
     expect(timers.medium).toBe(45); // untouched sibling survives the merge
   });
 
+  it('ships the site branding group in the defaults and deep-merges partial updates', async () => {
+    const { service } = setup();
+    await service.onModuleInit();
+    const site = service.getSettings().site;
+    expect(site.siteName).toBe('');
+    expect(site.socialLinks).toMatchObject({
+      facebook: '',
+      instagram: '',
+      tiktok: '',
+      youtube: '',
+      twitter: '',
+    });
+
+    await service.updateSettings({
+      site: { socialLinks: { facebook: 'https://facebook.com/yourpage' } },
+    } as never);
+    const merged = service.getSettings().site;
+    expect(merged.socialLinks.facebook).toBe('https://facebook.com/yourpage');
+    expect(merged.socialLinks.youtube).toBe(''); // untouched sibling survives
+  });
+
   it('rejects prototype-pollution keys', async () => {
     const { service } = setup();
     await expect(

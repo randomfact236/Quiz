@@ -7,6 +7,7 @@ import {
   IsBoolean,
   IsArray,
   IsIn,
+  MaxLength,
   Min,
   Max,
 } from 'class-validator';
@@ -392,6 +393,77 @@ class RiddlesSettingsDto {
 }
 
 /**
+ * Social media profile links DTO (full URLs; empty = icon hidden in footer).
+ * Kept as plain length-validated strings — the rendering layer normalizes and
+ * only emits http(s) links, so partial input like "facebook.com/yourpage" is
+ * accepted here.
+ */
+class SocialLinksDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  facebook?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  instagram?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  tiktok?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  youtube?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  twitter?: string;
+}
+
+/**
+ * Site Information settings DTO (branding: names, logo, favicon, banner, socials)
+ */
+class SiteSettingsDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  siteName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  siteDescription?: string;
+
+  /** /uploads/... path or absolute URL */
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  logo?: string;
+
+  /** /uploads/... path or absolute URL */
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  favicon?: string;
+
+  /** Browser tab "Page | Tagline" */
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  tabTagline?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SocialLinksDto)
+  socialLinks?: SocialLinksDto;
+}
+
+/**
  * Per-platform social-card override DTO (empty string = use global fallback)
  */
 class SeoPlatformOverrideDto {
@@ -502,6 +574,11 @@ export class UpdateSettingsDto {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => SiteSettingsDto)
+  site?: SiteSettingsDto;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => SeoSettingsDto)
   seo?: SeoSettingsDto;
 }
@@ -516,6 +593,7 @@ export const ALLOWED_SETTING_KEYS = [
   'imageRiddles',
   'quiz',
   'riddles',
+  'site',
   'seo',
 ] as const;
 
