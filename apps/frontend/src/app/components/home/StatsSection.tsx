@@ -152,10 +152,17 @@ export function StatsSection(): JSX.Element {
       ];
 
   return (
-    <div className="mt-6 grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
-      {statItems.map((stat) => (
-        <StatItem key={stat.label} {...stat} />
-      ))}
-    </div>
+    <section aria-label="Site statistics" className="mt-6">
+      {!summary && (
+        <p className="mb-2 text-center text-[11px] font-bold uppercase tracking-widest text-white/70">
+          Showing your stats — site totals unavailable
+        </p>
+      )}
+      <div className="grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
+        {statItems.map((stat) => (
+          <StatItem key={stat.label} {...stat} />
+        ))}
+      </div>
+    </section>
   );
 }

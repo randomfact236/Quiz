@@ -626,3 +626,55 @@ Noindex coverage complete (all 28 routes checked; 14 layouts cover every auth/ga
 - **Two favicon/manifest assets** (favicon.ico, PNG icons) are the single cheapest SEO/social polish win remaining.
 
 _End of scan — no code was modified in this pass._
+
+---
+
+## Execution log — 2026-09-08
+
+Fixes from this report were applied the same day. Verification per batch: targeted jest suites +
+repo-wide tsc (both apps, 0 errors) + frontend jest 198/198 (incl. 4 new tests) + backend tsc/tests +
+theme-class guard extended to the `secondary` palette and passing across 181 files.
+
+### Applied (highlights)
+
+- **03**: hint-button gate fixed (`!selectedAnswer`) + 2 render tests; expert-grading contract fix
+  (done in stale pass) now pinned by a regression test; alert() → toasts (extend-session, share); resume
+  now persists `currentIndex` + skipped ids (non-contiguous resumes land correctly).
+- **04**: CSV export rebuilt (explicit column accessors; camelCase fields + `category.name` export
+  correctly; `#` metadata line skipped on re-import) — round-trip test added; altText + alternativeAnswers
+  authored in the form, carried by create/update/import/duplicate/CSV+JSON; guess wall refetches when a
+  guess/chip lands; engagement strip in the admin section; import help text updated; dark-variant chips,
+  `role="status"`, guess `maxLength=280`.
+- **10**: health probes fixed to `/api/v1/health*` (compose, deploy.sh/ps1, README, DEPLOYMENT, banner,
+  docker-startup scripts); ModeCards stacks below `sm`; kit Modal gains dialog semantics + focus trap +
+  restore; `MotionConfig reducedMotion="user"`; TopicsSection skeleton + h1; nested `<main>` removed,
+  `#main-content` moved to the layout main; StatsSection "your stats" caption; kit barrel completed.
+- **11**: all no-op settings inputs removed (General/Dad Jokes/Image Riddles tabs gone — only the two
+  levelTimers groups remain); `imageRiddles.timers` dropped from the public payload + FE type; `@Min/@Max`
+  on all timer DTO fields; save errors surface the API message; dirty tracking + beforeunload + Save
+  disabled when clean; load-error Retry button.
+- **09**: 404 heading visible in dark mode; theme guard NEUTRAL regex extended with `secondary` (caught
+  and fixed 11 real light-only utilities, incl. Header borders/hovers, LegalPage, GuessFeed); header
+  active-link color fixed (replace, not append); hamburger labels + aria-expanded; theme toggle added to
+  both mobile menus; footer legal strip + nav-config-derived product links; `app/icon.svg` favicon +
+  manifest icons/theme color; MobileFooter live pathname + nav semantics + Escape close; toast stack cap.
+- **02**: results retry preserves mode (`mode` now persisted on the session + sent to the server +
+  decomposed into mode/type on retry).
+- **06**: `/achievements` added to NAV_ITEMS.
+- **12**: login `?expired=1` handling and UsersSection `adminApi` migration were done in the stale pass.
+- **13**: web-vitals CLS row no longer labeled "ms" (shows ×1000).
+- **14**: "Total ever subscribed" now shows the server `total` (with a "showing first N" qualifier).
+- **15**: root OG `images` key omitted when unset (file-convention OG image merges again); MODULE_META
+  child `openGraph` objects removed (module pages inherit root OG); jokes layout hardcoded OG/twitter
+  block stripped (fixes downgraded cards + dead admin overrides + doubled title suffix); image-riddles
+  title suffix stripped; `/admin` NOINDEX layout added.
+
+### Deliberately not applied (owner decisions / larger builds — see report rows)
+
+Consumer-less endpoint pruning; `duels` keep-or-kill; settings keys without readers (backend-side);
+comments flag/report UI + load-more exists for GuessFeed only (jokes modal pagination still open);
+media alt inline-edit/copy-URL/picker confirm/413 mapping (F08 remainder); JokesSection table
+loading/empty/retry + one-liner create/edit + import sample header (F05 remainder); sessions-history UI;
+category-scoped riddle play; admin overview payload trim; mobile admin layout; GSC/per-content SEO (P2/P3);
+`ContentManagementSection`; header variant dedupe; timer-expiry enforcement; live runtime probes (dev DB
+was down — code paths verified by tests/type-check instead).

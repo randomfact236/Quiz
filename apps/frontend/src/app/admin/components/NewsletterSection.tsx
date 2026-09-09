@@ -36,6 +36,8 @@ export function NewsletterSection(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
+  // Server-side total — the list fetches at most 200 rows.
+  const [totalKnown, setTotalKnown] = useState(0);
 
   useEffect(() => {
     void fetchSubscribers();
@@ -48,6 +50,7 @@ export function NewsletterSection(): JSX.Element {
         '/newsletter?limit=200'
       );
       setSubscribers(res.data?.data ?? []);
+      setTotalKnown(res.data?.total ?? 0);
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : 'Failed to load subscribers');
     } finally {
@@ -109,9 +112,13 @@ export function NewsletterSection(): JSX.Element {
           </p>
         </div>
         <div className="rounded-xl border border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 p-4 shadow-sm">
-          <p className="text-sm text-slate-500 dark:text-secondary-400">Total ever subscribed</p>
+          <p className="text-sm text-slate-500 dark:text-secondary-400">
+            {totalKnown > subscribers.length
+              ? `Total ever subscribed (showing first ${subscribers.length})`
+              : 'Total ever subscribed'}
+          </p>
           <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-300">
-            {subscribers.length}
+            {totalKnown > 0 ? totalKnown : subscribers.length}
           </p>
         </div>
       </div>

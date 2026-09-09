@@ -121,7 +121,7 @@ function ModeSection({ card }: { card: ModeCardConfig }): JSX.Element {
 
 export function ModeCards(): JSX.Element {
   return (
-    <div className="grid grid-cols-2 items-start gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 items-start gap-4">
       {MODE_CARDS.map((card) => (
         <ModeSection key={card.id} card={card} />
       ))}

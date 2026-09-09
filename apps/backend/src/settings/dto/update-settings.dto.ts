@@ -7,7 +7,13 @@ import {
   IsBoolean,
   IsArray,
   IsIn,
+  Min,
+  Max,
 } from 'class-validator';
+
+/** Gameplay timers must be sane seconds — negatives flow straight into countdowns. */
+const TIMER_MIN = 5;
+const TIMER_MAX = 3600;
 
 /**
  * Pagination configuration DTO
@@ -136,21 +142,29 @@ class ImageRiddlesTimersDto {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   easy?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   medium?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   hard?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   expert?: number;
 }
 
@@ -215,26 +229,36 @@ class QuizLevelTimersDto {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   easy?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   medium?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   hard?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   expert?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   extreme?: number;
 }
 
@@ -286,21 +310,29 @@ class RiddlesLevelTimersDto {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   easy?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   medium?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   hard?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(TIMER_MIN)
+  @Max(TIMER_MAX)
   expert?: number;
 }
 

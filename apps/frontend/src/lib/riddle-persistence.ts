@@ -200,6 +200,11 @@ export interface RiddleResumeProgress {
   answers: Record<string, string>;
   timeRemaining: number;
   startedAt: string;
+  /** Explicit position so resumes land on the right riddle even when answers
+   *  are non-contiguous (skips). Older payloads may omit it — consumers fall
+   *  back to the answers-count heuristic. */
+  currentIndex?: number;
+  skippedRiddles?: string[];
 }
 
 interface StoredResumeProgress extends RiddleResumeIdentity, RiddleResumeProgress {
@@ -240,6 +245,8 @@ export function saveRiddleResume(
     startedAt: progress.startedAt ?? '',
     savedAt: Date.now(),
   };
+  if (progress.currentIndex !== undefined) stored.currentIndex = progress.currentIndex;
+  if (progress.skippedRiddles !== undefined) stored.skippedRiddles = progress.skippedRiddles;
   setItem(PROGRESS_KEY, stored);
 }
 

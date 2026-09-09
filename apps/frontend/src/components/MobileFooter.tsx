@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -46,7 +47,8 @@ const drawerTransition = { type: 'spring' as const, damping: 25, stiffness: 200 
 export default function MobileFooter() {
   const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null);
   const [isClient, setIsClient] = useState(false);
-  const [currentPath, setCurrentPath] = useState('/');
+  const pathname = usePathname();
+  const currentPath = pathname;
 
   const [riddleSubjects, setRiddleSubjects] = useState<RiddleMcqSubject[]>([]);
   const [quizSubjects, setQuizSubjects] = useState<QuizSubject[]>([]);
@@ -59,7 +61,6 @@ export default function MobileFooter() {
 
   useEffect(() => {
     setIsClient(true);
-    setCurrentPath(window.location.pathname);
   }, []);
 
   // Fetch and check content availability for drawers
@@ -120,6 +121,16 @@ export default function MobileFooter() {
   };
 
   const closeDrawer = () => setActiveDrawer(null);
+
+  // Escape closes an open drawer.
+  useEffect(() => {
+    if (activeDrawer === null) return undefined;
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') closeDrawer();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeDrawer]);
 
   return (
     <>
@@ -285,7 +296,7 @@ export default function MobileFooter() {
       {/* Footer Navigation Bar */}
       <nav
         className="fixed bottom-0 left-0 right-0 z-50 block border-t border-gray-200 bg-white/95 px-4 pb-1 pt-1 backdrop-blur-lg lg:hidden dark:border-gray-700 dark:bg-gray-900/95 h-[4.5rem]"
-        role="tablist"
+        role="navigation"
         aria-label="Mobile navigation"
       >
         <div className="flex items-center justify-around h-full">
@@ -293,8 +304,9 @@ export default function MobileFooter() {
             href="/"
             className="flex flex-col items-center p-2 text-gray-600 transition-colors hover:text-blue-600 dark:hover:text-blue-300 dark:text-gray-400 dark:hover:text-blue-400 group"
             aria-label="Navigate to Home"
-            aria-selected={isClient && activeDrawer === null && currentPath === '/'}
-            role="tab"
+            aria-current={
+              isClient && activeDrawer === null && currentPath === '/' ? 'page' : undefined
+            }
           >
             <Home
               size={24}
@@ -309,8 +321,6 @@ export default function MobileFooter() {
             className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.JOKES ? 'text-orange-600 dark:text-orange-300 dark:text-orange-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Jokes categories"
             aria-expanded={activeDrawer === DRAWER_TYPES.JOKES}
-            aria-selected={activeDrawer === DRAWER_TYPES.JOKES}
-            role="tab"
           >
             <Laugh
               size={24}
@@ -325,8 +335,6 @@ export default function MobileFooter() {
             className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.RIDDLES ? 'text-purple-600 dark:text-purple-300 dark:text-purple-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Riddles chapters"
             aria-expanded={activeDrawer === DRAWER_TYPES.RIDDLES}
-            aria-selected={activeDrawer === DRAWER_TYPES.RIDDLES}
-            role="tab"
           >
             <Brain
               size={24}
@@ -341,8 +349,6 @@ export default function MobileFooter() {
             className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES ? 'text-teal-600 dark:text-teal-300 dark:text-teal-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Image Riddles levels"
             aria-expanded={activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES}
-            aria-selected={activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES}
-            role="tab"
           >
             <FileImage
               size={24}
@@ -357,8 +363,6 @@ export default function MobileFooter() {
             className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.QUIZ ? 'text-blue-600 dark:text-blue-300 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
             aria-label="Open Quiz subjects"
             aria-expanded={activeDrawer === DRAWER_TYPES.QUIZ}
-            aria-selected={activeDrawer === DRAWER_TYPES.QUIZ}
-            role="tab"
           >
             <BookOpen
               size={24}

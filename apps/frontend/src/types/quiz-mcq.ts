@@ -35,6 +35,7 @@ export interface QuizSession {
   startedAt: string;
   completedAt?: string;
   timeTaken: number; // in seconds
+  mode?: string; // normal | timer_<type> | practice_<type> (preserved on retry)
   status: 'in-progress' | 'completed';
 }
 

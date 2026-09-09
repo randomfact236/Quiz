@@ -19,6 +19,7 @@ import type { RiddleSession, RiddleResult } from '@/types/riddles';
 import { getRiddleSessionById } from '@/lib/riddle-persistence';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { calculateGrade } from '@/lib/quiz-mcq-scoring';
+import { toast } from '@/lib/toast';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';
 import { RiddleReview } from '../components/RiddleReview';
@@ -101,8 +102,9 @@ function ResultsContent(): JSX.Element {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback
-      alert('Results copied to clipboard!');
+      // Clipboard unavailable (permissions/insecure context) — say so instead
+      // of falsely claiming success (and instead of a raw alert()).
+      toast.error('Could not copy results — clipboard unavailable in this browser.');
     }
   };
 

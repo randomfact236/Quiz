@@ -15,6 +15,9 @@ export interface RiddleFormState {
   title: string;
   imageUrl: string;
   answer: string;
+  /** Comma-separated synonym answers (mapped to alternativeAnswers). */
+  alternativeAnswers: string;
+  altText: string;
   hint: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   timerSeconds: string;
@@ -30,6 +33,8 @@ export const defaultFormState: RiddleFormState = {
   title: '',
   imageUrl: '',
   answer: '',
+  alternativeAnswers: '',
+  altText: '',
   hint: '',
   difficulty: 'medium',
   timerSeconds: '',
@@ -47,12 +52,22 @@ export function isRiddleFormComplete(form: RiddleFormState): boolean {
   );
 }
 
+/** Parse the comma-separated synonyms field into the API payload value. */
+export function parseAlternativeAnswers(alternativeAnswers: string): string[] {
+  return alternativeAnswers
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 /** Map an existing riddle onto the form (used when opening the edit modal). */
 export function riddleToFormState(riddle: ImageRiddle): RiddleFormState {
   return {
     title: riddle.title,
     imageUrl: riddle.imageUrl,
     answer: riddle.answer,
+    alternativeAnswers: (riddle.alternativeAnswers ?? []).join(', '),
+    altText: riddle.altText || '',
     hint: riddle.hint || '',
     difficulty: riddle.difficulty,
     status: riddle.status,

@@ -75,7 +75,11 @@ export default function Header(): JSX.Element {
                     <Link
                       href={item.href}
                       aria-current={isActive(item.href) ? 'page' : undefined}
-                      className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive(item.href) ? 'text-primary-600' : ''}`}
+                      className={
+                        isActive(item.href)
+                          ? 'font-semibold text-primary-600 transition-colors dark:text-primary-400'
+                          : 'text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400'
+                      }
                     >
                       {item.label}
                     </Link>
@@ -96,7 +100,9 @@ export default function Header(): JSX.Element {
                     </button>
                   </div>
                 ) : (
-                  <span className="text-sm text-secondary-500">Admin Portal</span>
+                  <span className="text-sm text-secondary-500 dark:text-secondary-400">
+                    Admin Portal
+                  </span>
                 )}
                 <ThemeToggle size="sm" />
               </div>
@@ -105,6 +111,8 @@ export default function Header(): JSX.Element {
             <button
               type="button"
               className="rounded-lg p-2 text-secondary-600 hover:bg-secondary-100 md:hidden dark:text-secondary-300 dark:hover:bg-secondary-800"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,31 +137,35 @@ export default function Header(): JSX.Element {
 
           {/* Mobile menu */}
           {isMenuOpen && (
-            <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
+            <div className="mt-4 space-y-2 border-t border-secondary-200 dark:border-secondary-700 pt-4 md:hidden">
+              <div className="flex items-center justify-between rounded-lg px-4 py-2">
+                <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
+                <ThemeToggle size="sm" />
+              </div>
               {NAV_MENU_ITEMS.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActive(item.href) ? 'page' : undefined}
-                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              <div className="border-t border-secondary-200 pt-2 mt-2">
+              <div className="border-t border-secondary-200 dark:border-secondary-700 pt-2 mt-2">
                 {isAdminLoggedIn ? (
                   <button
                     onClick={() => {
                       handleAdminLogout();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
                   >
                     Logout
                   </button>
                 ) : (
-                  <span className="block rounded-lg px-4 py-2 text-secondary-500">
+                  <span className="block rounded-lg px-4 py-2 text-secondary-500 dark:text-secondary-400">
                     Admin Portal
                   </span>
                 )}
@@ -185,7 +197,11 @@ export default function Header(): JSX.Element {
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? 'page' : undefined}
-                    className={`text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400 ${isActive(item.href) ? 'text-primary-600' : ''}`}
+                    className={
+                      isActive(item.href)
+                        ? 'font-semibold text-primary-600 transition-colors dark:text-primary-400'
+                        : 'text-secondary-600 hover:text-primary-600 transition-colors dark:text-secondary-300 dark:hover:text-primary-400'
+                    }
                   >
                     {item.label}
                   </Link>
@@ -239,6 +255,8 @@ export default function Header(): JSX.Element {
           <button
             type="button"
             className="rounded-lg p-2 text-secondary-600 hover:bg-secondary-100 md:hidden dark:text-secondary-300 dark:hover:bg-secondary-800"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,25 +280,29 @@ export default function Header(): JSX.Element {
         </div>
 
         {isMenuOpen && (
-          <div className="mt-4 space-y-2 border-t border-secondary-200 pt-4 md:hidden">
+          <div className="mt-4 space-y-2 border-t border-secondary-200 dark:border-secondary-700 pt-4 md:hidden">
+            <div className="flex items-center justify-between rounded-lg px-4 py-2">
+              <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
+              <ThemeToggle size="sm" />
+            </div>
             {NAV_MENU_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={isActive(item.href) ? 'page' : undefined}
-                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="border-t border-secondary-200 pt-2 mt-2">
+            <div className="border-t border-secondary-200 dark:border-secondary-700 pt-2 mt-2">
               {isUserLoggedIn || isAdminLoggedIn ? (
                 <>
                   {isAdminLoggedIn && (
                     <Link
                       href="/admin"
-                      className="block rounded-lg px-4 py-2 text-indigo-600 dark:text-indigo-300 hover:bg-secondary-100 dark:text-indigo-400"
+                      className="block rounded-lg px-4 py-2 text-indigo-600 dark:text-indigo-300 hover:bg-secondary-100 dark:hover:bg-secondary-800 dark:text-indigo-400"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Admin Panel
@@ -289,7 +311,7 @@ export default function Header(): JSX.Element {
                   {isUserLoggedIn && (
                     <Link
                       href="/profile"
-                      className="block rounded-lg px-4 py-2 text-indigo-600 dark:text-indigo-300 hover:bg-secondary-100 dark:text-indigo-400"
+                      className="block rounded-lg px-4 py-2 text-indigo-600 dark:text-indigo-300 hover:bg-secondary-100 dark:hover:bg-secondary-800 dark:text-indigo-400"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Profile
@@ -300,7 +322,7 @@ export default function Header(): JSX.Element {
                       handleLogout();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
                   >
                     Logout
                   </button>
@@ -308,7 +330,7 @@ export default function Header(): JSX.Element {
               ) : (
                 <Link
                   href="/login"
-                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
+                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login

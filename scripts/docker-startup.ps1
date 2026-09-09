@@ -208,7 +208,7 @@ function Start-Services {
     $backendHealthy = $false
     while (-not $backendHealthy -and $retryCount -lt $maxRetries) {
         try {
-            $response = Invoke-WebRequest -Uri "http://localhost:3012/api/health" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
+            $response = Invoke-WebRequest -Uri "http://localhost:3012/api/v1/health" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
             if ($response.StatusCode -eq 200) {
                 $backendHealthy = $true
             }
@@ -243,7 +243,7 @@ function Start-Services {
     Write-Host "  - Frontend:    http://localhost:3010"
     Write-Host "  - Backend API: http://localhost:3012/api"
     Write-Host "  - API Docs:    http://localhost:3012/api/docs"
-    Write-Host "  - Health:      http://localhost:3012/api/health"
+    Write-Host "  - Health:      http://localhost:3012/api/v1/health"
     
     if ($Production -or $Nginx) {
         Write-Host "  - Backend:     http://localhost:3012"

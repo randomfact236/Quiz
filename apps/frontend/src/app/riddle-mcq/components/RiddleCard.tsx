@@ -293,8 +293,8 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           ))}
         </div>
 
-        {/* Hint Button — Show after floating emojis, before score */}
-        {riddle.hint && !showFeedback && (
+        {/* Hint Button — visible while unanswered; hidden once feedback shows */}
+        {riddle.hint && !selectedAnswer && (
           <div className="mb-4">
             {!showHint ? (
               <button

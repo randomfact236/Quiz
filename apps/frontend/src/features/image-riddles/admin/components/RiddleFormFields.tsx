@@ -117,6 +117,48 @@ export default function RiddleFormFields({
 
       <div>
         <label
+          htmlFor="image-riddle-alternative-answers"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
+        >
+          Alternative answers
+        </label>
+        <input
+          id="image-riddle-alternative-answers"
+          type="text"
+          value={form.alternativeAnswers}
+          onChange={(e) => onChange({ alternativeAnswers: e.target.value })}
+          className={inputClass}
+          placeholder="Comma-separated synonyms (optional)..."
+          aria-describedby="alternative-answers-help"
+        />
+        <span id="alternative-answers-help" className="sr-only">
+          Comma-separated. Also accepted as correct guesses.
+        </span>
+      </div>
+
+      <div>
+        <label
+          htmlFor="image-riddle-alt-text"
+          className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
+        >
+          Alt text
+        </label>
+        <input
+          id="image-riddle-alt-text"
+          type="text"
+          value={form.altText}
+          onChange={(e) => onChange({ altText: e.target.value })}
+          className={inputClass}
+          placeholder="Describe the image for screen readers (optional)..."
+          aria-describedby="alt-text-help"
+        />
+        <span id="alt-text-help" className="sr-only">
+          This field is optional. Falls back to the title for accessibility.
+        </span>
+      </div>
+
+      <div>
+        <label
           htmlFor="image-riddle-hint"
           className="mb-1 block text-sm font-medium text-gray-700 dark:text-secondary-200"
         >

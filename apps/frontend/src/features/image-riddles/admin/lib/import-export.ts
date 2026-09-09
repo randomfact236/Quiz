@@ -20,12 +20,30 @@ export const imageRiddleConfig: ImportExportConfig<ImageRiddle> = {
     'Title',
     'ImageUrl',
     'Answer',
+    'AlternativeAnswers',
+    'AltText',
     'Hint',
     'Difficulty',
     'Category',
     'TimerSeconds',
     'ShowTimer',
     'IsActive',
+  ],
+  // Explicit accessors: camelCase properties and the nested category object
+  // made the legacy lowercase-header heuristic export empty/[object Object].
+  csvExportColumns: [
+    { header: 'ID', get: (r) => r['id'] },
+    { header: 'Title', get: (r) => r['title'] },
+    { header: 'ImageUrl', get: (r) => r['imageUrl'] },
+    { header: 'Answer', get: (r) => r['answer'] },
+    { header: 'AlternativeAnswers', get: (r) => (r['alternativeAnswers'] ?? []).join('|') },
+    { header: 'AltText', get: (r) => r['altText'] },
+    { header: 'Hint', get: (r) => r['hint'] },
+    { header: 'Difficulty', get: (r) => r['difficulty'] },
+    { header: 'Category', get: (r) => r['category']?.name },
+    { header: 'TimerSeconds', get: (r) => r['timerSeconds'] },
+    { header: 'ShowTimer', get: (r) => (r['showTimer'] ? 'true' : 'false') },
+    { header: 'IsActive', get: (r) => (r['isActive'] ? 'true' : 'false') },
   ],
   jsonRootKey: 'imageRiddles',
   validators: {
@@ -80,12 +98,16 @@ export function parseImageRiddleCSV(csvText: string): ImportResult<ImageRiddle> 
         title: getValue(1, 'title'),
         imageUrl: getValue(2, 'imageurl'),
         answer: getValue(3, 'answer'),
-        hint: getValue(4, 'hint'),
-        difficulty: (getValue(5, 'difficulty') || 'medium') as ImageRiddle['difficulty'],
-        category: { name: getValue(6, 'category') || 'General', emoji: '🔍' },
-        timerSeconds: parseInt(getValue(7, 'timerseconds')) || 90,
-        showTimer: getValue(8, 'showtimer')?.toLowerCase() === 'true',
-        isActive: getValue(9, 'isactive')?.toLowerCase() !== 'false',
+        alternativeAnswers: getValue(4, 'alternativeanswers')
+          ? getValue(4, 'alternativeanswers').split('|').filter(Boolean)
+          : [],
+        altText: getValue(5, 'alttext') || undefined,
+        hint: getValue(6, 'hint'),
+        difficulty: (getValue(7, 'difficulty') || 'medium') as ImageRiddle['difficulty'],
+        category: { name: getValue(8, 'category') || 'General', emoji: '🔍' },
+        timerSeconds: parseInt(getValue(9, 'timerseconds')) || 90,
+        showTimer: getValue(10, 'showtimer')?.toLowerCase() === 'true',
+        isActive: getValue(11, 'isactive')?.toLowerCase() !== 'false',
       };
     }
   );

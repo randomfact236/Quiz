@@ -163,7 +163,7 @@ cmd_start() {
     echo "  - Frontend:    http://localhost:3010"
     echo "  - Backend API: http://localhost:3012/api"
     echo "  - API Docs:    http://localhost:3012/api/docs"
-    echo "  - Health:      http://localhost:3012/api/health"
+    echo "  - Health:      http://localhost:3012/api/v1/health"
     
     if [ "$PROFILE" = "nginx" ] || [ "$PROFILE" = "production" ]; then
         echo "  - Nginx:       http://localhost (port 80)"

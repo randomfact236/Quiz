@@ -10,7 +10,7 @@ const BREADCRUMBS = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Image Riddles - AI Quiz Platform',
+  title: 'Image Riddles',
   description: 'Challenge your visual perception with image-based riddles and puzzles!',
 };
 

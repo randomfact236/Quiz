@@ -30,7 +30,7 @@ const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'src');
 
 const ACCENT =
   'indigo|purple|pink|rose|red|orange|amber|yellow|green|emerald|teal|cyan|sky|blue|violet|fuchsia|lime';
-const NEUTRAL = 'gray|slate|zinc|neutral|stone';
+const NEUTRAL = 'gray|slate|zinc|neutral|stone|secondary';
 
 /** property → regexes of light-only utilities that need a dark counterpart */
 const RULES = [

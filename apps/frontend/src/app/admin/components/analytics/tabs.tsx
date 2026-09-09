@@ -156,8 +156,12 @@ export function OverviewTab({ data }: TabProps) {
             {webVitals.map((v) => (
               <tr key={v.metric} className="border-t border-border">
                 <td className="py-2 pr-4 font-medium text-foreground">{v.metric}</td>
-                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(v.avg)} ms</td>
-                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">{n(v.p75)} ms</td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">
+                  {v.metric === 'CLS' ? `${n(v.avg)} (×1000)` : `${n(v.avg)} ms`}
+                </td>
+                <td className="py-2 pr-4 text-gray-400 dark:text-secondary-400">
+                  {v.metric === 'CLS' ? `${n(v.p75)} (×1000)` : `${n(v.p75)} ms`}
+                </td>
                 <td className="py-2 text-gray-500 dark:text-secondary-400">{n(v.samples)}</td>
               </tr>
             ))}

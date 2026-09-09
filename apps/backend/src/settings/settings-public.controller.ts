@@ -24,14 +24,12 @@ export class SettingsPublicController {
   getPublicSettings(): {
     quiz: { defaults: AppSettings['quiz']['defaults'] };
     riddles: { defaults: AppSettings['riddles']['defaults'] };
-    imageRiddles: { timers: AppSettings['imageRiddles']['timers'] };
     seo: AppSettings['seo'];
   } {
     const settings = this.settingsService.getSettings();
     return {
       quiz: { defaults: settings.quiz.defaults },
       riddles: { defaults: settings.riddles.defaults },
-      imageRiddles: { timers: settings.imageRiddles.timers },
       seo: settings.seo,
     };
   }

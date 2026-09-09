@@ -13,9 +13,10 @@
 
 'use client';
 
-import { Pencil } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { toast } from '@/lib/toast';
 import { deleteMyComment, getComments, CHIP_OPTIONS, type Comment } from '@/lib/comments-api';
 import { getGuestName, setGuestName } from '@/lib/guest-id';
 import { timeAgo } from '@/lib/time-ago';
@@ -35,10 +36,15 @@ const COLLAPSED_VISIBLE_COUNT = 4;
 
 export interface GuessFeedProps {
   riddleId: string;
+  /** Bump to re-fetch the wall after a local guess/chip commit lands. */
+  refreshKey?: number;
 }
 
-export default function GuessFeed({ riddleId }: GuessFeedProps) {
+export default function GuessFeed({ riddleId, refreshKey = 0 }: GuessFeedProps) {
   const [items, setItems] = useState<Comment[] | null>(null);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [chipCounts, setChipCounts] = useState<Record<string, number>>({});
   const [guessesToday, setGuessesToday] = useState(0);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
@@ -51,23 +57,39 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
     setDisplayName(getGuestName());
   }, []);
 
+  const fetchPage = useCallback(
+    (pageToLoad: number, append: boolean) => {
+      setLoadFailed(false);
+      getComments('image-riddle', riddleId, pageToLoad)
+        .then((feed) => {
+          setTotal(feed.total);
+          setItems((prev) => (append && prev ? [...prev, ...feed.items] : feed.items));
+          setChipCounts(feed.chipCounts);
+          setGuessesToday(feed.guessesToday);
+        })
+        .catch(() => {
+          setItems([]);
+          setLoadFailed(true);
+        });
+    },
+    [riddleId]
+  );
+
   useEffect(() => {
-    let cancelled = false;
     setItems(null);
-    getComments('image-riddle', riddleId)
-      .then((feed) => {
-        if (cancelled) return;
-        setItems(feed.items);
-        setChipCounts(feed.chipCounts);
-        setGuessesToday(feed.guessesToday);
-      })
-      .catch(() => {
-        if (!cancelled) setItems([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [riddleId]);
+    setPage(1);
+    fetchPage(1, false);
+  }, [riddleId, fetchPage]);
+
+  // Re-fetch when the caller commits a new guess/chip (see useImageRiddleGame).
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    fetchPage(1, false);
+  }, [refreshKey, fetchPage]);
 
   const handleDelete = useCallback(async (id: string) => {
     trackImageRiddleEvent('delete_comment', { riddleId: id });
@@ -75,12 +97,14 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
     const ok = await deleteMyComment(id);
     if (ok) {
       setItems((prev) => (prev ? prev.filter((item) => item.id !== id) : prev));
+      setTotal((prev) => Math.max(0, prev - 1));
     } else {
       setDeletingIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
       });
+      toast.error('Could not delete — please try again.');
     }
   }, []);
 
@@ -171,6 +195,18 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
             />
           ))}
         </div>
+      ) : loadFailed ? (
+        <div className="rounded-xl border border-red-100 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 px-4 py-2.5">
+          <p className="text-sm font-bold text-red-600 dark:text-red-300">
+            Couldn&apos;t load the guess wall.
+          </p>
+          <button
+            onClick={() => fetchPage(1, false)}
+            className="mt-1 text-xs font-bold uppercase tracking-widest text-red-500 hover:text-red-700 dark:hover:text-red-300"
+          >
+            Try again
+          </button>
+        </div>
       ) : items.length === 0 ? (
         <p className="text-sm font-bold text-slate-400 dark:text-secondary-400">
           No guesses yet — you&apos;re the first to peek. 👀
@@ -196,11 +232,11 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
                   <button
                     onClick={() => void handleDelete(item.id)}
                     disabled={deletingIds.has(item.id)}
-                    className="shrink-0 rounded-full p-1 text-slate-300 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40"
+                    className="shrink-0 rounded-full p-1 text-slate-300 transition-colors hover:bg-red-100 dark:hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40"
                     aria-label="Delete my guess"
                     title="Delete my guess"
                   >
-                    🗑
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
                 )}
               </li>
@@ -209,10 +245,22 @@ export default function GuessFeed({ riddleId }: GuessFeedProps) {
           {items.length > COLLAPSED_VISIBLE_COUNT && !showAllComments && (
             <button
               onClick={() => setShowAllComments(true)}
-              className="w-full rounded-xl bg-white dark:bg-secondary-800 py-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 border border-slate-100 dark:border-secondary-800 transition-colors hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10"
-              aria-label={`View all ${items.length} comments`}
+              className="w-full rounded-xl bg-white dark:bg-secondary-800 py-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 border border-slate-100 dark:border-secondary-800 transition-colors hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
+              aria-label={`Show all ${items.length} guesses`}
             >
-              View all {items.length} comments
+              See all {items.length} guesses
+            </button>
+          )}
+          {showAllComments && items.length < total && (
+            <button
+              onClick={() => {
+                const next = page + 1;
+                setPage(next);
+                fetchPage(next, true);
+              }}
+              className="w-full rounded-xl bg-white dark:bg-secondary-800 py-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 border border-slate-100 dark:border-secondary-800 transition-colors hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
+            >
+              Load more ({items.length} of {total})
             </button>
           )}
         </>

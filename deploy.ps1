@@ -157,7 +157,7 @@ function Get-Status {
     
     # Check backend
     try {
-        $response = Invoke-WebRequest -Uri "http://localhost:3012/api/health" -UseBasicParsing -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri "http://localhost:3012/api/v1/health" -UseBasicParsing -ErrorAction Stop
         if ($response.StatusCode -eq 200) {
             Write-Success "Backend API: Healthy"
         }

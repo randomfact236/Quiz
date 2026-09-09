@@ -30,45 +30,24 @@ export const MODULE_META: {
     description:
       'Play multiple-choice quizzes across science, history, geography and more. Five difficulty levels, timed challenges, practice mode and instant scoring.',
     alternates: { canonical: '/quiz-mcq' },
-    openGraph: {
-      title: 'Quiz MCQ — Interactive Knowledge Quizzes',
-      description:
-        'Multiple-choice quizzes by subject and difficulty: timed challenges, practice mode, achievements.',
-      type: 'website',
-    },
   },
   'riddle-mcq': {
     title: 'Riddle MCQ — Brain Teasers by Category & Difficulty',
     description:
       'Solve multiple-choice riddles by category and difficulty. Resume anytime, track your streaks, and challenge the clock.',
     alternates: { canonical: '/riddle-mcq' },
-    openGraph: {
-      title: 'Riddle MCQ — Brain Teasers',
-      description: 'Multiple-choice riddles by category and difficulty, with streaks and timers.',
-      type: 'website',
-    },
   },
   play: {
     title: 'Play Hub — Quizzes, Riddles, Jokes & Image Riddles',
     description:
       'Everything in one place: knowledge quizzes, brain-teaser riddles, dad jokes and visual puzzles. Pick a module and start playing.',
     alternates: { canonical: '/play' },
-    openGraph: {
-      title: 'Play Hub — Pick a Game',
-      description: 'Quizzes, riddles, dad jokes and image riddles — all in one hub.',
-      type: 'website',
-    },
   },
   achievements: {
     title: 'Achievements — Unlock Badges as You Play',
     description:
       'Ten achievements to earn across quizzes and riddles: perfect scores, speed runs, streaks and more.',
     alternates: { canonical: '/achievements' },
-    openGraph: {
-      title: 'Achievements — Unlock Badges as You Play',
-      description: 'Ten achievements to earn across quizzes and riddles.',
-      type: 'website',
-    },
   },
 };
 

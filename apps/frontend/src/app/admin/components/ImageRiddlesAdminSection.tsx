@@ -13,12 +13,13 @@
 
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { StatusDashboard } from '@/components/ui/StatusDashboard';
 import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { toast } from '@/lib/toast';
 import { downloadFile } from '@/app/admin/utils';
+import { getImageRiddlesDashboardStats } from '@/lib/image-riddles-api';
 
 import {
   AdminRiddlesPagination,
@@ -46,6 +47,18 @@ import {
 export function ImageRiddlesAdminSection(): JSX.Element {
   const [isSaving, setIsSaving] = useState(false);
   const [showSyncConfirmModal, setShowSyncConfirmModal] = useState<boolean>(false);
+  // Engagement counters (plan/04 P1): written by the play flow, surfaced here.
+  const [engagement, setEngagement] = useState<{
+    views: number;
+    attempts: number;
+    solves: number;
+  } | null>(null);
+
+  useEffect(() => {
+    getImageRiddlesDashboardStats()
+      .then((stats) => setEngagement(stats.engagement ?? null))
+      .catch(() => undefined);
+  }, []);
 
   const data = useAdminImageRiddleData();
   const filters = useAdminImageRiddleFilters(data.imageRiddles);
@@ -103,6 +116,24 @@ export function ImageRiddlesAdminSection(): JSX.Element {
 
   return (
     <div className="space-y-6">
+      {engagement && (
+        <div className="flex flex-wrap gap-3 text-sm">
+          {(
+            [
+              ['Views', engagement.views],
+              ['Attempts', engagement.attempts],
+              ['Solves', engagement.solves],
+            ] as const
+          ).map(([label, value]) => (
+            <span
+              key={label}
+              className="rounded-full bg-white px-4 py-1.5 font-bold text-secondary-700 shadow-sm dark:bg-secondary-800 dark:text-secondary-200"
+            >
+              {label}: <span className="tabular-nums">{value.toLocaleString()}</span>
+            </span>
+          ))}
+        </div>
+      )}
       <StatusDashboard
         counts={filters.statusCounts}
         activeFilter={filters.statusFilter}

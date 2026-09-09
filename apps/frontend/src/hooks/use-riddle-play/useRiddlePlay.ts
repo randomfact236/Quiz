@@ -30,6 +30,7 @@ import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 import { registerExitHook, track } from '@/lib/analytics';
+import { toast } from '@/lib/toast';
 import { shuffle } from '@/lib/utils';
 import { adaptRiddleMcq, type Riddle, type RiddleSession } from '@/types/riddles';
 import { SettingsService } from '@/services/settings.service';
@@ -201,6 +202,8 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       saveRiddleResume(identity, {
         answers: {},
         timeRemaining: totalTimeLimit,
+        currentIndex: 0,
+        skippedRiddles: [],
         startedAt: newSession.startedAt,
       });
       setSession(newSession);
@@ -250,7 +253,10 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       });
       setRiddles(resumedRiddles);
       setAnswers(resume.answers);
-      setCurrentIndex(Object.keys(resume.answers).length);
+      // Explicit index (skips make answers non-contiguous); fall back to the
+      // old heuristic for progress saved before currentIndex was persisted.
+      setCurrentIndex(resume.currentIndex ?? Object.keys(resume.answers).length);
+      setManuallySkipped(new Set(resume.skippedRiddles ?? []));
       setTimeRemaining(resume.timeRemaining || 0);
       setStatus('playing');
       setHasStarted(true);
@@ -372,10 +378,10 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
   // Auto-save — lightweight progress key only (riddle snapshot written once at
   // session start); refs keep the interval from resetting on every answer
-  const progressRef = useRef({ answers, timeRemaining });
+  const progressRef = useRef({ answers, timeRemaining, currentIndex, manuallySkipped });
   useEffect(() => {
-    progressRef.current = { answers, timeRemaining };
-  }, [answers, timeRemaining]);
+    progressRef.current = { answers, timeRemaining, currentIndex, manuallySkipped };
+  }, [answers, timeRemaining, currentIndex, manuallySkipped]);
 
   useEffect(() => {
     if (status !== 'playing' || !session) return;
@@ -386,6 +392,8 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         {
           answers: progressRef.current.answers,
           timeRemaining: progressRef.current.timeRemaining,
+          currentIndex: progressRef.current.currentIndex,
+          skippedRiddles: Array.from(progressRef.current.manuallySkipped),
           startedAt: session.startedAt,
         }
       );
@@ -597,7 +605,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       const uniqueNew = newRiddles.filter((r) => !currentIds.has(r.id)).slice(0, additionalRiddles);
 
       if (uniqueNew.length === 0) {
-        alert('No more unique riddles available for this selection.');
+        toast.info('No more unique riddles available for this selection.');
         setStatus('playing');
         return;
       }
@@ -639,7 +647,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       setCurrentIndex(riddles.length);
       setStatus('playing');
     } catch {
-      alert('Failed to load more riddles. Please try again.');
+      toast.error('Failed to load more riddles. Please try again.');
       setStatus('playing');
     }
   }, [riddles, subjectId, level, additionalRiddles, mode, settings, session]);

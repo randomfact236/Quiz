@@ -190,7 +190,7 @@ export function TopicsSection(): JSX.Element {
         aria-label={topicsExpanded ? 'Collapse Quiz Topics section' : 'Expand Quiz Topics section'}
         aria-expanded={topicsExpanded}
       >
-        <h2 className="text-xl font-bold text-foreground">🗂️ Quiz Topics</h2>
+        <h1 className="text-xl font-bold text-foreground">🗂️ Quiz Topics</h1>
         <span
           className={`text-muted-foreground transition-transform ${topicsExpanded ? 'rotate-180' : ''}`}
         >
@@ -207,9 +207,14 @@ export function TopicsSection(): JSX.Element {
               <p className="mt-1 text-xs">{error}</p>
             </div>
           ) : isLoading ? (
-            <div className="py-8 text-center text-muted-foreground">
-              <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
-              <p className="text-sm">Loading topics...</p>
+            /* Skeleton tiles keep the section height stable while loading. */
+            <div className="grid grid-cols-1 gap-3 py-2 sm:grid-cols-2" aria-hidden="true">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-16 animate-pulse rounded-2xl bg-slate-100 dark:bg-secondary-800/60"
+                />
+              ))}
             </div>
           ) : !hasAnySubjects ? (
             <div className="py-8 text-center text-muted-foreground">

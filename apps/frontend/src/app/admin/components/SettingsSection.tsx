@@ -10,8 +10,9 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { SettingsService } from '@/services/settings.service';
+import { ApiError } from '@/lib/api-client';
 import type { SystemSettings, SettingsTab, SettingsValue } from '@/types/settings.types';
 
 /**
@@ -27,41 +28,13 @@ type NestedSettingsObject = {
 /**
  * Settings tab configuration
  */
+// Only settings with live runtime consumers are exposed here (the quiz and
+// riddle level timers). Every other key in config/settings.ts currently has no
+// reader — surfacing them let admins "save" values that changed nothing.
 const SETTINGS_TABS = [
-  { id: 'general' as const, label: 'General', emoji: '⚙️' },
   { id: 'quiz-mcq' as const, label: 'Quiz MCQ', emoji: '📚' },
-  { id: 'jokes' as const, label: 'Dad Jokes', emoji: '😂' },
   { id: 'riddles' as const, label: 'Riddles', emoji: '🎭' },
-  { id: 'imageRiddles' as const, label: 'Image Riddles', emoji: '🖼️' },
 ];
-
-/**
- * Difficulty levels for image riddles timer configuration
- */
-const DIFFICULTY_LEVELS = [
-  { key: 'easy', label: 'Easy' },
-  { key: 'medium', label: 'Medium' },
-  { key: 'hard', label: 'Hard' },
-  { key: 'expert', label: 'Expert' },
-] as const;
-
-/**
- * Get default timer value for image riddle difficulty level
- */
-function getDefaultTimerValue(level: string): number {
-  switch (level) {
-    case 'easy':
-      return 30;
-    case 'medium':
-      return 60;
-    case 'hard':
-      return 90;
-    case 'expert':
-      return 120;
-    default:
-      return 60;
-  }
-}
 
 /**
  * Get default timer value for quiz difficulty level (in seconds)
@@ -109,7 +82,7 @@ export function SettingsSection(): JSX.Element {
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<SettingsTab>('general');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('quiz-mcq');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -119,6 +92,22 @@ export function SettingsSection(): JSX.Element {
   useEffect(() => {
     loadSettings();
   }, []);
+
+  // Dirty tracking: warn before leaving with unsaved edits.
+  const isDirty = useMemo(() => {
+    if (!settings) return false;
+    return JSON.stringify(formData) !== JSON.stringify(settings);
+  }, [formData, settings]);
+
+  useEffect(() => {
+    if (!isDirty) return undefined;
+    const handler = (e: BeforeUnloadEvent): void => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [isDirty]);
 
   const loadSettings = async (): Promise<void> => {
     try {
@@ -142,10 +131,12 @@ export function SettingsSection(): JSX.Element {
 
       await SettingsService.updateSettings(formData);
 
-      setSuccess('Settings saved successfully');
+      setSuccess('Settings saved successfully (may take up to a minute to reach players)');
       setSettings(formData as SystemSettings); // Update local "truth"
-    } catch {
-      setError('Failed to save settings');
+    } catch (err) {
+      setError(
+        err instanceof ApiError ? err.message : 'Failed to save settings — please try again.'
+      );
     } finally {
       setSaving(false);
     }
@@ -192,8 +183,14 @@ export function SettingsSection(): JSX.Element {
 
   if (!settings) {
     return (
-      <div className="p-8 text-center text-red-500" role="alert" aria-live="assertive">
-        Error loading settings
+      <div className="p-8 text-center" role="alert" aria-live="assertive">
+        <p className="text-red-500">{error || 'Error loading settings'}</p>
+        <button
+          onClick={() => void loadSettings()}
+          className="mt-3 rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -205,7 +202,8 @@ export function SettingsSection(): JSX.Element {
         <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">System Settings</h3>
         <button
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || !isDirty}
+          title={isDirty ? 'Save settings changes' : 'No changes to save'}
           className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
           aria-label={saving ? 'Saving settings' : 'Save settings changes'}
         >
@@ -265,90 +263,6 @@ export function SettingsSection(): JSX.Element {
         id={`settings-panel-${activeTab}`}
         aria-label={`${activeTab} settings`}
       >
-        {/* General Settings */}
-        {activeTab === 'general' && (
-          <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">Global Configuration</h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-default-limit"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Default Pagination Limit
-                </label>
-                <input
-                  id="settings-default-limit"
-                  type="number"
-                  value={formData.global?.pagination?.defaultLimit ?? 10}
-                  onChange={(e) =>
-                    updateField('global.pagination.defaultLimit', parseInt(e.target.value))
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  aria-describedby="settings-default-limit-help"
-                  min={1}
-                  max={1000}
-                />
-                <p
-                  id="settings-default-limit-help"
-                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
-                >
-                  Number of items to display per page by default
-                </p>
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-max-limit"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Max Pagination Limit
-                </label>
-                <input
-                  id="settings-max-limit"
-                  type="number"
-                  value={formData.global?.pagination?.maxLimit ?? 100}
-                  onChange={(e) =>
-                    updateField('global.pagination.maxLimit', parseInt(e.target.value))
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  aria-describedby="settings-max-limit-help"
-                  min={1}
-                  max={1000}
-                />
-                <p
-                  id="settings-max-limit-help"
-                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
-                >
-                  Maximum number of items allowed per page
-                </p>
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-cache-ttl"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Default Cache TTL (seconds)
-                </label>
-                <input
-                  id="settings-cache-ttl"
-                  type="number"
-                  value={formData.global?.cache?.defaultTtl ?? 3600}
-                  onChange={(e) => updateField('global.cache.defaultTtl', parseInt(e.target.value))}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  aria-describedby="settings-cache-ttl-help"
-                  min={0}
-                />
-                <p
-                  id="settings-cache-ttl-help"
-                  className="mt-1 text-xs text-gray-500 dark:text-secondary-400"
-                >
-                  Time to live for cached data in seconds
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Quiz Settings */}
         {activeTab === 'quiz-mcq' && (
           <div className="space-y-6">
@@ -402,93 +316,9 @@ export function SettingsSection(): JSX.Element {
                 ))}
               </div>
             </div>
-
-            {/* Cache Settings */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">Cache Settings</h5>
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="settings-quiz-cache-ttl"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Subjects Cache TTL (seconds)
-                  </label>
-                  <input
-                    id="settings-quiz-cache-ttl"
-                    type="number"
-                    value={formData.quiz?.cache?.subjectsTtl ?? 3600}
-                    onChange={(e) =>
-                      updateField('quiz.cache.subjectsTtl', parseInt(e.target.value))
-                    }
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    min={0}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="settings-quiz-cache-key"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Cache Key (All Subjects)
-                  </label>
-                  <input
-                    id="settings-quiz-cache-key"
-                    type="text"
-                    value={formData.quiz?.cache?.allSubjectsKey ?? 'subjects:all'}
-                    onChange={(e) => updateField('quiz.cache.allSubjectsKey', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* Dad Jokes Settings */}
-        {activeTab === 'jokes' && (
-          <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">Dad Jokes Configuration</h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-jokes-emoji"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Category Emoji
-                </label>
-                <input
-                  id="settings-jokes-emoji"
-                  type="text"
-                  value={formData.dadJokes?.defaults?.categoryEmoji ?? '😂'}
-                  onChange={(e) => updateField('dadJokes.defaults.categoryEmoji', e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  maxLength={10}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-jokes-cache-ttl"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Cache TTL (seconds)
-                </label>
-                <input
-                  id="settings-jokes-cache-ttl"
-                  type="number"
-                  value={formData.dadJokes?.cache?.categoriesTtl ?? 3600}
-                  onChange={(e) =>
-                    updateField('dadJokes.cache.categoriesTtl', parseInt(e.target.value))
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  min={0}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Riddles Settings */}
         {activeTab === 'riddles' && (
           <div className="space-y-6">
             {/* Riddle Level-based Timer Settings */}
@@ -535,123 +365,6 @@ export function SettingsSection(): JSX.Element {
                         getDefaultRiddleTimerForLevel(level)) % 60}
                       s
                     </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Image Riddles Settings */}
-        {activeTab === 'imageRiddles' && (
-          <div className="space-y-6">
-            <h4 className="text-lg font-semibold dark:text-gray-200">
-              Image Riddles Configuration
-            </h4>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="settings-image-default-timer"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Default Timer (seconds)
-                </label>
-                <input
-                  id="settings-image-default-timer"
-                  type="number"
-                  value={formData.imageRiddles?.defaults?.timerSeconds ?? 90}
-                  onChange={(e) =>
-                    updateField('imageRiddles.defaults.timerSeconds', parseInt(e.target.value))
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  min={0}
-                />
-                <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
-                  Default time if not specified per riddle
-                </p>
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-image-emoji"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Category Emoji
-                </label>
-                <input
-                  id="settings-image-emoji"
-                  type="text"
-                  value={formData.imageRiddles?.defaults?.categoryEmoji ?? '🖼️'}
-                  onChange={(e) =>
-                    updateField('imageRiddles.defaults.categoryEmoji', e.target.value)
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  maxLength={10}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="settings-image-cache-ttl"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Cache TTL (seconds)
-                </label>
-                <input
-                  id="settings-image-cache-ttl"
-                  type="number"
-                  value={formData.imageRiddles?.cache?.categoriesTtl ?? 3600}
-                  onChange={(e) =>
-                    updateField('imageRiddles.cache.categoriesTtl', parseInt(e.target.value))
-                  }
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  min={0}
-                />
-              </div>
-
-              {/* Show Timer Toggle */}
-              <div className="flex items-center space-x-3 pt-6 sm:col-span-2 lg:col-span-1">
-                <input
-                  type="checkbox"
-                  id="settings-show-timer"
-                  checked={formData.imageRiddles?.defaults?.showTimer ?? true}
-                  onChange={(e) => updateField('imageRiddles.defaults.showTimer', e.target.checked)}
-                  className="h-5 w-5 rounded border-gray-300 dark:border-secondary-600 text-blue-600 dark:text-blue-300 focus:ring-blue-500"
-                  aria-describedby="settings-show-timer-help"
-                />
-                <label
-                  htmlFor="settings-show-timer"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Show Timer
-                </label>
-              </div>
-            </div>
-
-            {/* Difficulty Timers */}
-            <div className="col-span-full border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
-              <h5 className="text-md font-semibold mb-3 dark:text-gray-300">Difficulty Timers</h5>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {DIFFICULTY_LEVELS.map((level) => (
-                  <div key={level.key}>
-                    <label
-                      htmlFor={`settings-timer-${level.key}`}
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      {level.label} (seconds)
-                    </label>
-                    <input
-                      id={`settings-timer-${level.key}`}
-                      type="number"
-                      value={
-                        formData.imageRiddles?.timers?.[level.key] ??
-                        getDefaultTimerValue(level.key)
-                      }
-                      onChange={(e) =>
-                        updateField(`imageRiddles.timers.${level.key}`, parseInt(e.target.value))
-                      }
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      min={0}
-                      aria-label={`${level.label} difficulty timer in seconds`}
-                    />
                   </div>
                 ))}
               </div>

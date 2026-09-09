@@ -7,10 +7,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage(): JSX.Element {
   return (
-    <main
-      id="main-content"
-      className="min-h-screen bg-secondary-50 dark:bg-secondary-900 px-4 py-12"
-    >
+    <main className="min-h-screen bg-secondary-50 dark:bg-secondary-900 px-4 py-12">
       <div className="container mx-auto max-w-4xl">
         <h1 className="mb-8 text-center text-4xl font-bold text-secondary-900 dark:text-secondary-100">
           About AI Quiz

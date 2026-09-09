@@ -6,6 +6,11 @@
  * @description Export all UI components from a single entry point
  */
 
+// Modal / dialogs / rows (deep imports still work)
+export { Modal } from './Modal';
+export { ConfirmDialog } from './ConfirmDialog';
+export { CollapsibleRows } from './CollapsibleRows';
+
 // Status Dashboard
 export { StatusDashboard } from './StatusDashboard';
 export type { StatusDashboardProps, StatusCountsData } from './StatusDashboard';
@@ -21,9 +26,9 @@ export type { ToastContainerProps } from './ToastContainer';
 // Content Management Section
 export { ContentManagementSection } from './ContentManagementSection';
 export type {
-    ContentManagementSectionProps,
-    ContentItem,
-    ContentItemStatus,
+  ContentManagementSectionProps,
+  ContentItem,
+  ContentItemStatus,
 } from './ContentManagementSection';
 
 // Theme Toggle (existing)

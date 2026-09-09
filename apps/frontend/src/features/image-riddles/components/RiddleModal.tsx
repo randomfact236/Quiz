@@ -280,7 +280,7 @@ export default function RiddleModal({
           ) : !game.showAnswer ? (
             <>
               <RiddleGuessPanel riddle={riddle} game={game} />
-              <GuessFeed riddleId={riddle.id} />
+              <GuessFeed riddleId={riddle.id} refreshKey={game.guessFeedVersion} />
             </>
           ) : (
             <>
@@ -290,7 +290,7 @@ export default function RiddleModal({
                 attemptCount={game.attempts[riddle.id] || 0}
                 onNext={() => game.navigateRiddle('next')}
               />
-              <GuessFeed riddleId={riddle.id} />
+              <GuessFeed riddleId={riddle.id} refreshKey={game.guessFeedVersion} />
             </>
           )}
         </div>

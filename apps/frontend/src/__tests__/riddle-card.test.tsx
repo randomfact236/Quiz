@@ -21,9 +21,6 @@ const makeRiddle = (overrides: Partial<Riddle> = {}): Riddle =>
     correctAnswer: 'A piano',
     difficulty: 'easy',
     level: 'easy',
-    chapter: 'Logic',
-    chapterId: 's1',
-    status: 'published',
     hint: '',
     explanation: '',
     ...overrides,
@@ -88,6 +85,40 @@ describe('RiddleCard — level-format behavior', () => {
     );
     expect(typeof ref.current?.clearBubbles).toBe('function');
     expect(() => ref.current?.clearBubbles()).not.toThrow();
+  });
+
+  // Regression (plan/cosmetics-and-gaps-scan-2026-09-08.md F03): the hint
+  // button used to gate on `!showFeedback`, which is always true in play —
+  // so the hint (and its hint_used analytics) could never appear.
+  it('shows the hint button while unanswered and fires onHintShown', () => {
+    const onHintShown = jest.fn();
+    render(
+      <RiddleCard
+        riddle={makeRiddle({ hint: 'Think of something with 88 keys' })}
+        riddleNumber={1}
+        totalRiddles={5}
+        selectedAnswer={null}
+        onSelectAnswer={jest.fn()}
+        onHintShown={onHintShown}
+      />
+    );
+    const show = screen.getByText('Show Hint');
+    fireEvent.click(show);
+    expect(onHintShown).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('Think of something with 88 keys')).toBeInTheDocument();
+  });
+
+  it('hides the hint button once an answer is selected', () => {
+    render(
+      <RiddleCard
+        riddle={makeRiddle({ hint: 'Think of something with 88 keys' })}
+        riddleNumber={1}
+        totalRiddles={5}
+        selectedAnswer="A"
+        onSelectAnswer={jest.fn()}
+      />
+    );
+    expect(screen.queryByText('Show Hint')).not.toBeInTheDocument();
   });
 });
 

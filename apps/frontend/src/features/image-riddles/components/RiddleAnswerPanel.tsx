@@ -62,7 +62,7 @@ export default function RiddleAnswerPanel({
       </div>
       <button
         onClick={onNext}
-        className="w-full rounded-2xl bg-slate-800 py-3 sm:py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-slate-700 hover:scale-[1.02] active:scale-95"
+        className="w-full rounded-2xl bg-slate-800 dark:bg-indigo-600 py-3 sm:py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-slate-700 dark:hover:bg-indigo-500 hover:scale-[1.02] active:scale-95"
       >
         Next Riddle →
       </button>

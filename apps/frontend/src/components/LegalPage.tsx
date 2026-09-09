@@ -18,7 +18,7 @@ export function LegalPage({
       <div className="prose prose-slate max-w-none space-y-4 text-secondary-700 dark:text-secondary-300">
         {children}
       </div>
-      <p className="mt-10 text-sm text-secondary-500">
+      <p className="mt-10 text-sm text-secondary-500 dark:text-secondary-400">
         <Link href="/" className="font-medium text-primary-600 hover:underline">
           ← Back to home
         </Link>

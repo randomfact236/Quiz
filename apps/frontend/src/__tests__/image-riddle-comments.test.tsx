@@ -16,6 +16,7 @@ import { useImageRiddleGame } from '@/features/image-riddles/hooks/useImageRiddl
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
 jest.mock('@/lib/comments-api', () => ({
+  postComment: jest.fn().mockResolvedValue({ id: 'c1' }),
   postCommentOptimistic: jest.fn(),
   CHIP_OPTIONS: [
     { value: 'never-got', emoji: '🤯', label: 'Never got it' },
@@ -24,8 +25,8 @@ jest.mock('@/lib/comments-api', () => ({
   ],
 }));
 
-import { postCommentOptimistic } from '@/lib/comments-api';
-const mockPost = postCommentOptimistic as jest.Mock;
+import { postComment } from '@/lib/comments-api';
+const mockPost = postComment as jest.Mock;
 
 function makeRiddle(overrides: Partial<ImageRiddle> = {}): ImageRiddle {
   return {
@@ -49,6 +50,8 @@ function makeRiddle(overrides: Partial<ImageRiddle> = {}): ImageRiddle {
 describe('useImageRiddleGame — comments integration', () => {
   beforeEach(() => {
     mockPost.mockReset();
+    // The hook awaits postComment to refresh the wall once a guess lands.
+    mockPost.mockResolvedValue({ id: 'c1' });
     // jsdom lacks pushState-dependent behaviors in older versions? Provide a
     // minimal no-op to keep modal-history integration inert under test.
     window.history.pushState = jest.fn();

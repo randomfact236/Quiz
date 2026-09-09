@@ -77,6 +77,7 @@ export interface ImageRiddle {
   title: string;
   imageUrl: string;
   answer: string;
+  alternativeAnswers?: string[] | null;
   hint: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   category?: { name: string; emoji: string } | undefined;
@@ -112,6 +113,12 @@ export interface ImportExportConfig<T> {
   filePrefix: string;
   csvHeaders: string[];
   jsonRootKey: string;
+  /**
+   * Explicit export accessors (display header → value). Optional: when
+   * omitted the exporter falls back to lowercasing each header to find the
+   * property — which only works for all-lowercase single-word keys.
+   */
+  csvExportColumns?: { header: string; get: (item: T) => unknown }[];
   validators: {
     required: (keyof T)[];
     enumFields?: Record<string, string[]>;

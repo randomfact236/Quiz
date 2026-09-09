@@ -108,14 +108,16 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName,
       title: ogTitle,
       description: ogDescription,
-      images: ogImage ? [{ url: ogImage }] : undefined,
+      // Only set `images` when configured — an always-present key (even with an
+      // undefined value) blocks the file-convention opengraph-image from merging.
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title: twTitle,
       description: twDescription,
       site: seo?.twitterHandle?.trim() || undefined,
-      images: twImage ? [twImage] : undefined,
+      ...(twImage ? { images: [twImage] } : {}),
     },
     verification: googleVerification ? { google: googleVerification } : undefined,
   };
@@ -164,7 +166,9 @@ export default async function RootLayout({
             Skip to main content
           </a>
           <Header />
-          <main className="flex flex-col flex-1">{children}</main>
+          <main id="main-content" className="flex flex-col flex-1">
+            {children}
+          </main>
           <HideOnAdmin>
             <Footer />
             <MobileFooter />

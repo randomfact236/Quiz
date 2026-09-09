@@ -42,14 +42,6 @@ export interface PublicSettings {
       };
     };
   };
-  imageRiddles: {
-    timers: {
-      easy: number;
-      medium: number;
-      hard: number;
-      expert: number;
-    };
-  };
 }
 
 /** Mirrors the backend's config/settings.ts defaults (single-source parity). */
@@ -69,14 +61,6 @@ export const FALLBACK_PUBLIC_SETTINGS: PublicSettings = {
         hard: RIDDLE_TIMERS.HARD,
         expert: RIDDLE_TIMERS.EXPERT,
       },
-    },
-  },
-  imageRiddles: {
-    timers: {
-      easy: RIDDLE_TIMERS.EASY,
-      medium: RIDDLE_TIMERS.MEDIUM,
-      hard: RIDDLE_TIMERS.HARD,
-      expert: RIDDLE_TIMERS.EXPERT,
     },
   },
 };

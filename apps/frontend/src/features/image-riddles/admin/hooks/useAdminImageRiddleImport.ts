@@ -150,11 +150,12 @@ export function useAdminImageRiddleImport({
           title: r.title,
           imageUrl: r.imageUrl,
           answer: r.answer,
+          alternativeAnswers: r.alternativeAnswers ?? [],
           hint: r.hint || undefined,
           difficulty: r.difficulty,
           timerSeconds: r.timerSeconds ?? null,
           showTimer: r.showTimer ?? true,
-          altText: undefined,
+          altText: r.altText || undefined,
           categoryId: (r.category?.name && categoryNameToId.get(r.category.name)) || null,
         }));
 

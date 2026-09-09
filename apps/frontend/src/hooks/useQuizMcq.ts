@@ -120,6 +120,7 @@ function saveToHistory(session: QuizSession): void {
         subjectName: session.subjectName,
         chapterName: session.chapter,
         level: session.level,
+        ...(session.mode ? { mode: session.mode } : {}),
         totalQuestions: session.questions.length,
         correctCount: calculateResult(session).correctCount,
         score: session.score,
@@ -413,6 +414,8 @@ export function useQuizMcq(
     sessionRef.current.timeTaken = timeTaken;
     sessionRef.current.score = state.score;
     sessionRef.current.answers = state.answers;
+    // Persist the mode so results retry can relaunch the same experience.
+    sessionRef.current.mode = type ? `${mode}_${type}` : (mode ?? 'normal');
 
     didSaveCompletionRef.current = sessionRef.current.id;
 
@@ -421,7 +424,7 @@ export function useQuizMcq(
     // Analytics plan §4.1: session_completed with score + grade breakdown.
     const session = sessionRef.current;
     const result = calculateResult(session);
-    const completedMode = type ? `${mode}_${type}` : (mode ?? 'normal');
+    const completedMode = session.mode ?? 'normal';
     track(
       'session_completed',
       {

@@ -20,7 +20,7 @@ export interface ChipRevealStepProps {
 export default function ChipRevealStep({ onChooseChip, onSkip }: ChipRevealStepProps) {
   return (
     <div className="shrink-0 space-y-4 animate-in slide-in-from-top-4 duration-300">
-      <div className="rounded-[2.5rem] bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 dark:border-amber-500/30 p-6 sm:p-8 text-center shadow-inner">
+      <div className="rounded-[2.5rem] bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 border border-amber-100 dark:border-amber-500/30 p-6 sm:p-8 text-center shadow-inner">
         <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-300 mb-1">
           No shame — everyone gets stuck
         </p>

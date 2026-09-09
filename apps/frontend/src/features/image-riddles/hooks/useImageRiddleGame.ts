@@ -16,7 +16,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { IActionOption } from '@/components/image-riddles/ActionOptions';
-import { postCommentOptimistic, type CommentChipValue } from '@/lib/comments-api';
+import { postComment, type CommentChipValue } from '@/lib/comments-api';
 import { isImageRiddleAnswerCorrect } from '@/lib/image-riddle-answer';
 import { recordImageRiddleEngagement } from '@/lib/image-riddles-api';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
@@ -40,6 +40,8 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const [selectedRiddle, setSelectedRiddle] = useState<ImageRiddle | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [showAnswer, setShowAnswer] = useState(false);
+  // Bumped when a guess/chip lands server-side so the wall refetches.
+  const [guessFeedVersion, setGuessFeedVersion] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [revealSource, setRevealSource] = useState<ImageRiddleRevealSource>(null);
@@ -140,11 +142,14 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     // recomputes correctness — the local check only drives gameplay UX.
     const guessText = userAnswer.trim();
     if (guessText.length > 0) {
-      postCommentOptimistic({
+      void postComment({
         contentType: 'image-riddle',
         contentId: selectedRiddle.id,
         kind: 'guess',
         text: guessText,
+      }).then((saved) => {
+        // Once the comment lands, refresh the wall so the guesser sees it.
+        if (saved) setGuessFeedVersion((v) => v + 1);
       });
     }
     const isCorrect = isImageRiddleAnswerCorrect({
@@ -188,11 +193,13 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const chooseChip = useCallback(
     (chip: CommentChipValue) => {
       if (!selectedRiddle) return;
-      postCommentOptimistic({
+      void postComment({
         contentType: 'image-riddle',
         contentId: selectedRiddle.id,
         kind: 'chip',
         chip,
+      }).then((saved) => {
+        if (saved) setGuessFeedVersion((v) => v + 1);
       });
       setChipPrompt(false);
       performReveal();
@@ -262,6 +269,7 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     revealSource,
     timedOut,
     showLetterCount,
+    guessFeedVersion,
     shake,
     attempts,
     shareOpen,

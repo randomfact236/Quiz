@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -30,16 +30,44 @@ export function Modal({ isOpen, onClose, title, children, className, size = 'md'
     [onClose]
   );
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
+    if (!isOpen) return undefined;
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
+    // Move focus into the dialog so keyboard users start inside it.
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const focusable = modalRef.current?.querySelector<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    focusable?.focus();
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
+      previouslyFocused?.focus();
     };
   }, [isOpen, handleEscape]);
+
+  // Minimal focus trap: keep Tab cycling inside the dialog while open.
+  const handleTabTrap = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !modalRef.current) return;
+    const focusable = Array.from(
+      modalRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => el.offsetParent !== null);
+    if (focusable.length === 0) return;
+    const first = focusable[0]!;
+    const last = focusable[focusable.length - 1]!;
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }, []);
 
   if (!isOpen) return null;
 
@@ -50,6 +78,11 @@ export function Modal({ isOpen, onClose, title, children, className, size = 'md'
 
       {/* Modal */}
       <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        onKeyDown={handleTabTrap}
         className={cn(
           'relative bg-white rounded-xl shadow-2xl w-full mx-4 overflow-hidden',
           SIZE_CLASSES[size],
@@ -61,7 +94,7 @@ export function Modal({ isOpen, onClose, title, children, className, size = 'md'
           <h2 className="text-lg font-semibold text-gray-900 dark:text-secondary-50">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 dark:text-secondary-400 hover:text-gray-600 dark:hover:text-secondary-200 dark:text-secondary-300 rounded-lg hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
+            className="p-1 text-gray-400 dark:text-secondary-400 hover:text-gray-600 dark:hover:text-secondary-200 rounded-lg hover:bg-gray-100 dark:hover:bg-secondary-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

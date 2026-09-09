@@ -6,10 +6,17 @@ import { NAV_ITEMS } from '@/lib/nav-config';
 
 const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
 
+// Derived from nav-config so new modules appear here automatically.
 const footerLinks = {
-  product: ['/quiz-mcq', '/jokes', '/riddle-mcq'].map(byHref),
-  company: [{ href: '/about', label: 'About Us' }],
+  product: ['/play', '/quiz-mcq', '/image-riddles', '/jokes', '/riddle-mcq'].map(byHref),
+  company: [{ href: '/about', label: 'About' }],
 };
+
+const legalLinks = [
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
+  { href: '/contact', label: 'Contact' },
+];
 
 export default function Footer(): JSX.Element {
   const currentYear = new Date().getFullYear();
@@ -81,7 +88,21 @@ export default function Footer(): JSX.Element {
           </nav>
         </div>
 
-        <div className="mt-8 border-t border-secondary-200 pt-4 text-center text-secondary-500 text-sm dark:border-secondary-800 dark:text-secondary-500">
+        <div className="mt-8 border-t border-secondary-200 pt-4 text-center text-sm text-secondary-500 dark:border-secondary-800 dark:text-secondary-500">
+          <nav
+            aria-label="Legal links"
+            className="mb-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
+          >
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:text-primary-600 dark:hover:text-primary-400"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           <p>© {currentYear} AI Quiz Platform. All rights reserved.</p>
         </div>
       </div>

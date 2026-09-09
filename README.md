@@ -34,7 +34,7 @@ npm run dev               # runs frontend + backend concurrently
 - Frontend: http://localhost:3010
 - API: http://localhost:3012/api/v1
 - Swagger: http://localhost:3012/api/docs
-- Health: http://localhost:3012/api/health
+- Health: http://localhost:3012/api/v1/health
 
 Create an admin account:
 

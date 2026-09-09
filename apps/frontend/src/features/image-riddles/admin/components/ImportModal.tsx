@@ -64,8 +64,12 @@ export default function ImportModal({
             <div className="rounded-lg bg-gray-50 dark:bg-secondary-800 p-4 text-sm">
               <p className="mb-2 font-medium">CSV Format:</p>
               <code className="block overflow-x-auto rounded bg-gray-200 dark:bg-secondary-700 px-2 py-1 text-xs">
-                Title,ImageUrl,Answer,Hint,Difficulty,Category,TimerSeconds,ShowTimer,IsActive
+                Title,ImageUrl,Answer,AlternativeAnswers,AltText,Hint,Difficulty,Category,TimerSeconds,ShowTimer,IsActive
               </code>
+              <p className="mt-2 text-xs text-gray-500 dark:text-secondary-400">
+                AlternativeAnswers: synonyms separated by <code>|</code>. IsActive is applied after
+                import via each riddle&apos;s status toggle.
+              </p>
               <p className="mb-2 mt-3 font-medium">JSON Format:</p>
               <code className="block overflow-x-auto rounded bg-gray-200 dark:bg-secondary-700 px-2 py-1 text-xs">
                 {

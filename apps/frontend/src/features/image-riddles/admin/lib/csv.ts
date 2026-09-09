@@ -19,7 +19,11 @@ export function validateCSVStructure(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  const lines = csvText.trim().split('\n');
+  // Skip exporter metadata/comments (`# …`) so files round-trip.
+  const lines = csvText
+    .trim()
+    .split('\n')
+    .filter((l) => !l.startsWith('#'));
   if (lines.length < 2) {
     errors.push('CSV file must have at least a header row and one data row');
     return { isValid: false, data: null, errors, warnings };
@@ -45,31 +49,36 @@ export function validateCSVStructure(
 
 /**
  * Enterprise-Grade Generic CSV Exporter
+ *
+ * Uses config.csvExportColumns (explicit accessors) when provided — the
+ * legacy lowercase-header heuristic silently exported empty cells for any
+ * camelCase property (ImageUrl, TimerSeconds, …) and `[object Object]` for
+ * nested values like category.
  */
 export function exportToCSV<T extends Record<string, unknown>>(
   items: T[],
   config: ImportExportConfig<T>,
   metadata?: Record<string, string>
 ): string {
-  const headers = config.csvHeaders;
+  const columns =
+    config.csvExportColumns ??
+    config.csvHeaders.map((header) => ({
+      header,
+      get: (item: T) => item[header.toLowerCase().replace(/\s+/g, '') as keyof T],
+    }));
 
-  const rows = items.map((item) =>
-    headers.map((header) => {
-      const key = header.toLowerCase().replace(/\s+/g, '') as keyof T;
-      const value = item[key];
+  const escape = (value: unknown): string => {
+    if (value === null || value === undefined) return '';
+    const strValue = String(value);
+    // Escape quotes and wrap in quotes if contains comma or newline
+    if (strValue.includes(',') || strValue.includes('\n') || strValue.includes('"')) {
+      return `"${strValue.replace(/"/g, '""')}"`;
+    }
+    return strValue;
+  };
 
-      if (value === null || value === undefined) {
-        return '';
-      }
-
-      const strValue = String(value);
-      // Escape quotes and wrap in quotes if contains comma or newline
-      if (strValue.includes(',') || strValue.includes('\n') || strValue.includes('"')) {
-        return `"${strValue.replace(/"/g, '""')}"`;
-      }
-      return strValue;
-    })
-  );
+  const headers = columns.map((c) => c.header);
+  const rows = items.map((item) => columns.map((c) => escape(c.get(item))));
 
   // Add metadata header if provided
   let csvContent = '';
@@ -111,7 +120,10 @@ export function importFromCSV<T extends Record<string, unknown>>(
     };
   }
 
-  const lines = csvText.trim().split('\n');
+  const lines = csvText
+    .trim()
+    .split('\n')
+    .filter((l) => !l.startsWith('#'));
   const headers = validation.data;
 
   for (let i = 1; i < lines.length; i++) {

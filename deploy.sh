@@ -141,7 +141,7 @@ cmd_status() {
     log_info "\nHealth Checks:"
     
     # Check backend health
-    if curl -sf http://localhost:3012/api/health &> /dev/null; then
+    if curl -sf http://localhost:3012/api/v1/health &> /dev/null; then
         log_success "Backend API: Healthy"
     else
         log_error "Backend API: Unhealthy"

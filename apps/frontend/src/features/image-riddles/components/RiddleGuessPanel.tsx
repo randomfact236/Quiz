@@ -63,11 +63,15 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
             if (e.key === 'Enter') game.checkAnswer();
           }}
           placeholder="Type your answer..."
+          maxLength={280}
           className={`w-full rounded-2xl border-2 bg-slate-50 dark:bg-secondary-800 px-6 py-4 text-lg font-bold text-slate-800 dark:text-secondary-100 placeholder:text-slate-300 focus:bg-white focus:outline-none transition-all shadow-inner ${game.shake || game.wrongAnswer ? 'border-red-500 ring-4 ring-red-100 animate-[shake_0.5s_ease-in-out]' : 'border-slate-100 dark:border-secondary-700 dark:border-secondary-800 focus:border-indigo-500'}`}
           autoFocus
         />
         {game.wrongAnswer && (
-          <p className="mt-2 flex items-center gap-2 text-sm font-bold text-red-600 dark:text-red-300 animate-in slide-in-from-top-2 duration-300">
+          <p
+            role="status"
+            className="mt-2 flex items-center gap-2 text-sm font-bold text-red-600 dark:text-red-300 animate-in slide-in-from-top-2 duration-300"
+          >
             <span>✗</span> Not quite — try again!
           </p>
         )}

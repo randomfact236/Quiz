@@ -147,7 +147,7 @@ function ResultsContent(): JSX.Element {
           {/* Primary Actions - Row 1 */}
           <div className="grid grid-cols-3 gap-3">
             <Link
-              href={`/quiz-mcq/play?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}&level=${session.level}`}
+              href={`/quiz-mcq/play?subject=${session.subject}&chapter=${encodeURIComponent(session.chapter)}&level=${session.level}${buildRetryModeQuery(session.mode)}`}
               className="flex flex-col items-center justify-center gap-1 rounded-xl bg-indigo-600 p-3 text-white shadow-lg transition-colors hover:bg-indigo-700"
             >
               <RotateCcw className="h-5 w-5" />
@@ -318,6 +318,15 @@ function ResultsContent(): JSX.Element {
       </div>
     </div>
   );
+}
+
+/** Rebuild the mode/type query pair from a stored "<mode>_<type>" session mode. */
+function buildRetryModeQuery(storedMode: string | undefined): string {
+  if (!storedMode || storedMode === 'normal') return '';
+  const [baseMode, type] = storedMode.split('_');
+  const params = new URLSearchParams({ mode: baseMode ?? 'normal' });
+  if (type) params.set('type', type);
+  return `&${params.toString()}`;
 }
 
 export default function QuizResultsPage(): JSX.Element {

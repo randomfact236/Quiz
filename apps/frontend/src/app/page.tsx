@@ -8,19 +8,15 @@ import { BubbleBackground, TopicsSection, ModeCards, StatsSection } from './comp
  */
 export default function HomePage(): JSX.Element {
   return (
-    <main
-      id="main-content"
-      className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8 dark:from-indigo-950 dark:to-rose-950/70"
-    >
+    // Plain div: the layout's <main> is the single landmark (and skip-link target).
+    <div className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] px-4 py-8 dark:from-indigo-950 dark:to-rose-950/70">
       <BubbleBackground />
 
       <div className="relative mx-auto max-w-2xl">
-        <div className="home-content">
-          <TopicsSection />
-          <ModeCards />
-          <StatsSection />
-        </div>
+        <TopicsSection />
+        <ModeCards />
+        <StatsSection />
       </div>
-    </main>
+    </div>
   );
 }

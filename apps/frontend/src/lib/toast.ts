@@ -55,7 +55,9 @@ class ToastManager {
     const id = generateId('toast');
     const toast: Toast = { id, message, type, duration };
 
-    this.toasts = [...this.toasts, toast];
+    // Cap the stack so rapid failures can't stack unbounded.
+    const MAX_STACK = 4;
+    this.toasts = [...this.toasts, toast].slice(-MAX_STACK);
     this.notify();
 
     // Auto-dismiss if duration is provided
