@@ -4,10 +4,7 @@
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
->
-> Created 2026-09-05 after the owner asked for "full SEO" beyond the metadata layer built the same
-> day (SeoSection + `seo` settings group, see plan/09 P1). Owns everything search-visibility related;
-> plan/09 keeps the shell/UI items and links here for SEO.
+> Owns everything search-visibility related; plan/09 keeps the shell/UI items and links here for SEO.
 
 ---
 
@@ -15,7 +12,7 @@
 
 | Piece                     | State                                                                                                        |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Root layout metadata      | hardcoded static `metadata` → now `generateMetadata` driven by the `seo` settings group (2026-09-05)         |
+| Root layout metadata      | hardcoded static `metadata` → now `generateMetadata` driven by the `seo` settings group                      |
 | Admin SEO surface         | `SeoSection` (metadata editor + robots/sitemap reachability badges)                                          |
 | `app/robots.ts`           | allow all, disallow `/admin` + `/api`, sitemap pointer — not dashboard-editable                              |
 | `app/sitemap.ts`          | static routes + quiz/riddle subjects + image categories via public APIs; no lastmod; included login/register |
@@ -47,43 +44,12 @@
 
 ### P1 — major gaps (site is indexable and presentable)
 
-- [x] **Metadata coverage + noindex policy** — BUILT 2026-09-05: added route metadata for
-      `/play`, `/achievements`, `/riddle-mcq` and a new `quiz-mcq/layout.tsx` (client page, server
-      layout pattern). Auth pages (login/register/forgot/reset/verify), profile, and all gameplay/
-      results sub-routes are `noindex, follow` via tiny server layouts using the shared `NOINDEX`
-      const from `lib/seo.ts`.
-- [x] **JSON-LD structured data** — BUILT 2026-09-05: `JsonLd` component + `lib/seo.ts` builders;
-      `Organization` + `WebSite` injected site-wide from the root layout (fields from the `seo`
-      settings group); `BreadcrumbList` on the four module landing pages.
-- [x] **Dynamic OG image** — BUILT 2026-09-05: `app/opengraph-image.tsx` (Next `ImageResponse`,
-      1200×630) renders the branded card from the `seo` settings (site name + description over a
-      brand gradient); inherited by every page without its own og:image.
-- [x] **Sitemap/robots depth** — BUILT 2026-09-05: sitemap gains `lastmod` from content
-      `updatedAt` where the API returns it, adds `/achievements`, and drops the auth pages (they are
-      noindex — sitemap/noindex conflicts hurt); priorities rebalanced (module landings 0.8).
-- [x] **Social Sharing settings + Pages audit table** — BUILT 2026-09-05 (owner-requested full
-      version of the SeoSection): the `seo` settings group gained per-platform overrides
-      (`facebook`/`twitter`: image+title+description, `google`: description) — defaults, update DTO
-      whitelist and the public payload all extended; `generateMetadata` implements the fallback chain
-      **page content → platform override → global fallback → auto-generated image** (verified E2E:
-      PATCH a Facebook title override → homepage `og:title` flips after the fetch-cache window → reverts).
-      SeoSection reworked into tabs: General (site metadata), Social Sharing (default fallbacks +
-      Facebook/Twitter-X/Google override cards with character budgets — FB 60/110, TW 70/200, Google 155 —
-      and image "Choose" uploads through the media library), Pages (live audit table crawling the 11
-      indexable routes: title/description lengths with 30–65/110–165 budgets, robots, OG image,
-      JSON-LD, sitemap membership, plus an "N fully optimized · warnings · failing" summary), Technical.
-      Audit logic extracted to `lib/seo-audit.ts` with 8 unit tests (suite 189/189).
-- [x] **SEO Dashboard redesign** — BUILT 2026-09-05 (owner showed a reference dashboard and asked
-      for this instead of the plain layout): SeoSection now opens on a dark **Dashboard** tab
-      matching the AnalyticsSection style — gradient hero with Refresh, a GSC "Top Queries" panel
-      with an honest not-connected placeholder (P3 integration pending), four KPI cards (Total
-      Pages / SEO Healthy / Needs Attention / SEO Score %), five per-module breakdown cards
-      (Quiz/Riddle/Images/Jokes/Static with Total-Healthy-Warning-Critical + progress bars), group + health filter chips (All / per module / Issues Only / Healthy Only), the audit table with
-      Missing-Field chips and health badges (rows now include sitemap query-param URLs, capped at
-      30), and an SEO Tools & Resources card (Schema Validator, Rich Results Test, OG debugger,
-      sitemap/robots, Social Sharing shortcut). Audit lib extended with
-      `classifyRoute`/`buildAuditTargets`/`rowIssues`/`rowHealth` (+4 tests, suite 193/193).
-      Verified live: 11 rows crawled, KPIs populated from real pages.
+- [x] **Metadata coverage + noindex policy** — route metadata for `/play`, `/achievements`, `/riddle-mcq` + `quiz-mcq/layout.tsx`; auth/profile/gameplay sub-routes `noindex, follow` via the shared `NOINDEX` const.
+- [x] **JSON-LD structured data** — `JsonLd` component + `lib/seo.ts` builders; Organization + WebSite site-wide from the `seo` settings, BreadcrumbList on module landings.
+- [x] **Dynamic OG image** — `app/opengraph-image.tsx` (1200×630) renders the branded card from `seo` settings; inherited by pages without their own og:image.
+- [x] **Sitemap/robots depth** — `lastmod` from content `updatedAt`, `/achievements` added, noindex auth pages dropped, priorities rebalanced (module landings 0.8).
+- [x] **Social Sharing settings + Pages audit table** — per-platform OG overrides in the `seo` group with a page-level fallback chain; SeoSection tabs (General / Social Sharing / Pages audit / Technical); audit logic in `lib/seo-audit.ts`.
+- [x] **SEO Dashboard redesign** — SeoSection opens on a dark Dashboard tab: gradient hero, GSC "Top Queries" placeholder panel, four KPI cards, per-module health breakdowns, filter chips, audit table with health badges, SEO tools card.
 
 ### P2 — integration / quality (next tier; needs the RSC decision or new routes)
 

@@ -3,11 +3,7 @@
 > **Phase basis (applies to all feature TODO files):** tasks are divided by priority phase —
 > **P0** = critical / broken · **P1** = major gaps · **P2** = integration / quality · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
->
-> Verified against the live codebase: **2026-09-05 (built, migrated, and live-verified — see §3)**; originally 2026-08-30 when **nothing existed** — no backend endpoint, no table,
-> no UI (repo-wide search confirmed; the only "subscribe" hits are the unrelated toast pub/sub).
->
-> **Owner scope decision (2026-08-30): start with simple email collection only** — a footer form that
+> **Owner scope decision: start with simple email collection only** — a footer form that
 > stores emails, plus an admin list/export. Double opt-in, confirmation emails, campaigns etc. are
 > explicitly deferred (§4 P3 / §6). Added as the first to-build feature in the tracker.
 
@@ -42,7 +38,7 @@ Frontend (`apps/frontend/src/`):
 
 ## 3. Current status
 
-**BUILT and LIVE-VERIFIED 2026-09-05** (migration applied; endpoint probes passed). Backend module (subscribe/unsubscribe/list/export), migration, footer form, 6 service tests, **plus an admin subscriber section** (NewsletterSection: list, search, filters, CSV download — commit `f312c27`) wired via `adminApi`.
+**Built and live.** Backend module (subscribe/unsubscribe/list/export), migration, footer form, 6 service tests, **plus an admin subscriber section** (NewsletterSection: list, search, filters, CSV download — commit `f312c27`) wired via `adminApi`.
 
 ## 4. Task breakdown
 
@@ -52,19 +48,19 @@ Frontend (`apps/frontend/src/`):
 
 ### P1 — major gaps (= the build itself)
 
-- [x] **Migration** — DONE 2026-08-30: `newsletter_subscribers` with UNIQUE lowercased email, `source`, `unsubscribed`, timestamps (`1789400000000` — run pending DB restore).
-- [x] **Backend module** — DONE 2026-08-30: `POST /newsletter/subscribe` (public, 30/min, DTO-validated, idempotent — duplicates are a silent success, re-subscribe re-activates), `GET /newsletter` (admin, paginated, source/unsubscribed filters), `GET /newsletter/export` (admin CSV of active subscribers).
-- [x] **Footer `SubscribeForm`** — DONE 2026-08-30: mounted in the Footer under the brand blurb; pending/success/error states, light-theme styling, honeypot field, privacy-consent line linking `/privacy`.
+- [x] **Migration**
+- [x] **Backend module**
+- [x] **Footer `SubscribeForm`**
 
 ### P2 — integration / quality
 
-- [x] **Unsubscribe** — DONE 2026-08-30: `POST /newsletter/unsubscribe` (public, throttled, idempotent) flags the row; exports exclude unsubscribed addresses.
-- [x] **Anti-spam** — DONE 2026-08-30: hidden `website` honeypot (filled = fake success, nothing stored) + consent line under the form linking the privacy page.
-- [x] **Unit tests** — DONE 2026-08-30: `newsletter.service.spec.ts` (6 tests) — lowercase/trim normalization, idempotent duplicates, honeypot discard, unsubscribe flag + export exclusion, re-subscribe re-activation, unknown-email unsubscribe.
+- [x] **Unsubscribe**
+- [x] **Anti-spam**
+- [x] **Unit tests**
 
 ### P3 — polish / tech debt
 
-- [x] **Email normalization** — DONE 2026-08-30: trim + lowercase applied in the service on both subscribe and unsubscribe.
+- [x] **Email normalization**
 
 ## 5. Cross-feature touchpoints
 
@@ -77,17 +73,3 @@ Frontend (`apps/frontend/src/`):
 - Double opt-in / confirmation emails (Resend `EmailService` is ready when needed).
 - Unsubscribe confirmation emails, welcome mail, campaign sending.
 - Subscriber↔user account linkage, segmentation, per-campaign tracking.
-
-## 7. Extras (2026-09-05 F14 five-step pass — verification summary)
-
-- **Step 1 (seed):** 20 subscribers (`newsletter-test1-20@example.com`, source `footer`) via the
-  public subscribe endpoint — kept in the dev DB; the older `smoke-test@example.com` row predates.
-- **Step 2 (plan audit):** all build claims hold; the admin subscriber section (post-dating this
-  plan) is now in the inventory.
-- **Step 3:** Extras above; deferred items (double opt-in, campaigns, linkage) unchanged.
-- **Step 4 (dead code):** clean — SubscribeForm mounted in Footer, NewsletterSection consumed by
-  the admin shell; no dedicated frontend lib (the section uses `adminApi` inline; the form posts
-  inline as well).
-- **Step 5 (E2E):** subscribe ×20 (200), duplicate re-subscribe idempotent (`subscribed:true`),
-  unsubscribe flags the row, **export excludes unsubscribed** (19 active rows in the CSV payload)
-  and the CSV shape matches what NewsletterSection downloads; admin list total 21.

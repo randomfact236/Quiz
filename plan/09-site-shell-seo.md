@@ -4,11 +4,6 @@
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
->
-> Verified against the live codebase: **2026-09-05** (SEO surface re-audited when the admin SEO
-> section shipped; previous audit 2026-08-30). No archived ledger doc existed for this feature —
-> built from current code. This file was added after the initial 9-file pass (user request) to own the
-> cross-page UI shell, SEO, and the **Newsletter** roadmap item, which previously had no home.
 
 ---
 
@@ -31,7 +26,7 @@ Frontend (`apps/frontend/src/`):
 
 Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 
-## 2. Current status (verified)
+## 2. Current status
 
 **Done:** consistent header/footer across routes (verified usage); dark mode via ThemeContext; mobile drawer deep links into jokes/image-riddles (`?category=`, `?difficulty=`); per-route metadata on the content layouts and About page; NavigationProgress; styled 404/error/loading boundaries.
 
@@ -45,45 +40,31 @@ Backend: none — the shell is frontend-only. (No newsletter endpoints exist.)
 
 ### P0 — critical / broken
 
-- [x] **`<ToastContainer />` mounted** — DONE 2026-08-30 in `app/providers.tsx` (above the app tree); the duplicate local mount in `RiddleMcqContainer` removed per the root-TODO note.
+- [x] **`<ToastContainer />` mounted**
 
 ### P1 — major gaps
 
-- [x] **SEO basics** — DONE 2026-08-30: `app/robots.ts` (allow all, disallow /admin + /api, sitemap pointer) and `app/sitemap.ts` (static routes + quiz/riddle subjects and image categories from the public APIs, graceful-failure on API downtime). OG/Twitter metadata + theme-color already existed in the root layout (plan stale).
-- [x] **Admin SEO surface** — DONE 2026-09-05: new "SEO" section in the admin dashboard (System group, between Analytics and Settings). Edits the new `seo` settings group (site name, default title, title template, description, keywords, OG image, Twitter handle, Google verification) via `PATCH /settings`; the root layout's `generateMetadata` consumes it through `GET /settings/public` (5-min server cache, full fallback to built-ins on backend failure — verified live: PATCH → metadata change → revert). SeoSection also shows robots.txt/sitemap.xml reachability badges. Backend: `seo` added to settings defaults, update DTO whitelist, and the public-settings payload (settings specs 60/60 green; backend restarted on the new build).
+- [x] **SEO basics** — `app/robots.ts` (allow all, disallow /admin + /api, sitemap pointer) + `app/sitemap.ts` (static routes + subjects/categories from the public APIs, graceful failure); OG/Twitter metadata pre-existing.
+- [x] **Admin SEO surface** — admin "SEO" section edits the `seo` settings group via `PATCH /settings`; the root layout's `generateMetadata` consumes `GET /settings/public` (5-min cache, fallback to built-ins); robots/sitemap reachability badges.
 - [ ] Server-rendering strategy for JotD/subject pages — **needs owner decision** (SEO priorities determine the RSC rework).
 - [ ] **Newsletter** — owned by feature 14 (simple email collection first); this feature hosts the footer form. See [14-newsletter.md](14-newsletter.md).
-- [x] **Legal pages** — BUILT 2026-08-30: `/privacy`, `/terms`, `/contact` with shared `LegalPage` shell and honest PLACEHOLDER markers. **Needs owner decision/approved copy before public launch** (contact email is a placeholder too).
+- [x] **Legal pages** — `/privacy`, `/terms`, `/contact` on a shared `LegalPage` shell. **Open decision:** approved copy before public launch (contact email is a placeholder).
 
 ### P2 — integration / quality
 
-- [x] **Mobile drawer links** — VERIFIED 2026-08-30 (plan stale): MobileFooter's drawers are data-driven from the public subject/category APIs, not hardcoded; the static section links now come from the shared nav config.
-- [x] **Nav config extraction** — DONE 2026-08-30: `lib/nav-config.ts` is the single source; both Header variants (admin + user, desktop + mobile) and Footer render from it, with `aria-current="page"` on active items. The three hand-maintained copies are gone.
+- [x] **Mobile drawer links**
+- [x] **Nav config extraction**
 - [ ] Accessibility pass: skip-to-content link exists (root layout) and aria-current added; **focus trap in the mobile drawer deferred** — a correct trap needs a vetted implementation (dependency addition = owner decision); Escape/lambda-close and click-away already work.
 
 ### P3 — polish / tech debt
 
 - [ ] Web manifest — **needs owner decision** (installability only pays off with meaningful mobile traffic; theme-color already present).
-- [x] **Link constants consolidated** — DONE 2026-08-30 via `lib/nav-config.ts`. Emoji sets in Footer/MobileFooter remain local literals (presentational, low churn) — accepted.
+- [x] **Link constants consolidated**
 
 ## 4. Cross-feature touchpoints
 
 - **All content features (02–05)** — the shell frames their pages; MobileFooter deep links feed them query params.
 - **User Accounts (01)** — Header carries login/register state; AuthContext lives beside ThemeContext.
 - **Achievements (06)** — achievement unlock toasts are among the notifications currently invisible (P0).
-- **Site Settings (11)** — SEO metadata is now dynamic: the `seo` settings group (built 2026-09-05) lives in the settings system and is editable from the admin SeoSection; newsletter configuration remains future work.
+- **Site Settings (11)** — SEO metadata is now dynamic: the `seo` settings group lives in the settings system and is editable from the admin SeoSection; newsletter configuration remains future work.
 - **Analytics (13)** — `page_viewed` fires on every route change the shell renders.
-
-## 6. Extras (2026-09-05 F09 five-step pass — verification only)
-
-- **Step 1 (seed) is N/A for this feature** — the shell/SEO owns no seedable content unit; its
-  "data" is the `seo` settings group (already exercised live in the SEO Dashboard pass).
-- **E2E re-verified live:** robots.txt (allow all / disallow /admin+/api / sitemap pointer),
-  sitemap.xml route list, 404 status for unknown routes, homepage shell markers
-  (skip-to-content, header, footer newsletter form).
-- **Dead-code audit clean:** Header (37 consumers), Footer, MobileFooter, NavigationProgress,
-  ThemeContext, and the toast lib (20 importers) are all wired. No `useToast` export exists
-  (callers use the `toast` singleton directly).
-- Remaining open items in this feature are all owner decisions already tracked above: SSR
-  strategy for JotD/subject pages, web manifest, mobile-drawer focus trap (needs a dependency),
-  legal-page copy approval.

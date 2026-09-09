@@ -4,9 +4,6 @@
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
->
-> Verified against the live codebase: 2026-08-30; **re-audited + E2E-tested 2026-09-05** (role-aware single login landed; all sections swept in the browser). **No archived ledger doc existed for this feature**
-> (`docs/features/archive/` has no admin-dashboard file) — this file is built entirely from current code.
 > Note: the per-content admin CRUD surfaces have their own files (01–04); this file covers the shell,
 > navigation, guard, and the non-content sections.
 
@@ -23,7 +20,7 @@ Frontend (`apps/frontend/src/app/admin/`):
 | `users/page.tsx`                                                                                      | Standalone `/admin/users` full page — **duplicates** the `users` section rendered inside the dashboard                                                                           |
 | `components/AdminGuard.tsx`                                                                           | Client-side gate: reads `aiquiz:admin-token`, decodes the JWT payload, requires `role === 'admin'`, else redirects (to `/` for non-admins, `/admin/login` when no/invalid token) |
 | `components/index.ts`                                                                                 | Barrel exports for all sections                                                                                                                                                  |
-| `components/AdminUsersSection.tsx`                                                                    | Users section — plain registered/guest lists (demographics removed 2026-08-30)                                                                                                   |
+| `components/AdminUsersSection.tsx`                                                                    | Users section — plain registered/guest lists (demographics removed)                                                                                                              |
 | `components/AnalyticsSection.tsx`                                                                     | Analytics dashboard (feature 13)                                                                                                                                                 |
 | `components/CommentsSection.tsx`                                                                      | Comment moderation: admin list + bulk actions via `lib/comments-api`                                                                                                             |
 | `components/ImageRiddlesAdminSection.tsx`                                                             | Thin 200-line composition layer over `features/image-riddles/admin/**`                                                                                                           |
@@ -45,11 +42,11 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 | `/media/*`                                     | `media/media.controller.ts` (JWT-guarded upload/list/stats/delete)                                                                                       |
 | Admin-guarded reads inside content controllers | `quiz-mcq` (filter-counts, status-counts, all-questions), `riddle-mcq` (all, filter-counts, status-counts), `jokes` (all, status-counts, stats/overview) |
 
-## 2. Current status (verified)
+## 2. Current status
 
 **Done:** full section navigation (10 sections) with URL sync; separate admin login; client-side role gate; every content feature has a working management UI (quiz-mcq incl. per-subject views, riddle-mcq, image-riddles, jokes); moderation (comments), media library, users, settings, analytics sections all render live data from their APIs; backend enforces admin on every surface (client JWT decode is convenience, not the security boundary).
 
-**Remaining gaps (2026-09-05):** the jokes management data pattern (props + useAdminData localStorage hybrid) still differs from every other section (P2 deferral stands); admin-shell unit tests remain deferred; **auth flow updated 2026-09-05** — admins logging in on the main /login land straight here (role-aware single login), and /admin with no admin session bounces instantly to /admin/login.
+**Remaining gaps:** the jokes management data pattern (props + useAdminData localStorage hybrid) still differs from every other section (P2 deferral stands); admin-shell unit tests remain deferred; **auth flow** — admins logging in on the main /login land straight here (role-aware single login), and /admin with no admin session bounces instantly to /admin/login.
 
 ## 3. Task breakdown
 
@@ -59,22 +56,22 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 
 ### P1 — major gaps
 
-- [x] **Summary section built** — DONE 2026-08-30: new `SummarySection` (totals, DAU/WAU/MAU, per-module completed sessions, quick links wired to section navigation) replaces the "Coming Soon" view; data from the cached `GET /admin/analytics/overview`.
-- [x] **User management actions** — DONE 2026-08-30: `AdminUsersSection` registered-user rows now have a role `<select>` (user/admin, mirrors the F11-constrained enum) and a Delete button with a `window.confirm` guard; feedback via toasts (which now render — feature 09 P0). This also closes the feature-01 owner-decision item.
-- [x] **Canonical user surface** — RESOLVED 2026-08-30: the dashboard Users section is canonical; the standalone `/admin/users` page is now a redirect shim to `/admin?section=users` (prior duplicate list kept in git history).
+- [x] **Summary section built**
+- [x] **User management actions**
+- [x] **Canonical user surface**
 
 ### P2 — integration / quality
 
 - [ ] Unify section data patterns — **deferred as structural tech debt**: `JokesSection` is fully API-backed (feature 05) and works; the props-pattern → hooks migration plus `useAdminData` deletion is churn without user-visible benefit. Revisit when jokes admin needs new features.
 - [ ] Consistent import/export — **deferred**: all four module importers work today; unifying them is a UX refactor with no functional gap. Revisit when adding the fifth importer.
-- [x] **AdminGuard UX / 401-intercept** — DONE 2026-08-30: `api-client` now redirects admin-scope requests to `/admin/login?expired=1` when the refresh flow fails or tokens are cleared mid-session (user-scope behavior unchanged).
+- [x] **AdminGuard UX / 401-intercept**
 - [ ] Tests for admin shell logic — partially covered indirectly (api-client/admin flows exercise the paths in integration tests); dedicated guard-decode unit tests **deferred** (the decode logic is inline in AdminGuard; extracting it solely for tests is churn — revisit with the section-data-patterns unification).
 
 ### P3 — polish / tech debt
 
-- [x] **Dead `_downloadFile` block deleted** — DONE 2026-08-30. The full layout/sidebar split is deferred with the section-pattern unification above (the shell is stable).
-- [x] **Sidebar grouping** — EVALUATED 2026-08-30: the flat list is ~10 items with section deep-links; grouping is presentational. Revisit together with the layout split.
-- [x] **`AdminGuard.tsx` indentation normalized** — DONE 2026-08-30 (2-space, like the rest).
+- [x] **Dead `_downloadFile` block deleted**
+- [x] **Sidebar grouping**
+- [x] **`AdminGuard.tsx` indentation normalized**
 
 ## 4. Cross-feature touchpoints
 
@@ -84,18 +81,3 @@ Backend admin surfaces (JWT + AdminGuard/RolesGuard, all under the default-deny 
 - **Site Settings (11)** — SettingsSection is an admin dashboard section.
 - **Media** — MediaLibrarySection + `lib/media-api` over the JWT-guarded media module; used by the image-riddles form.
 - **Comments** — CommentsSection moderation over `lib/comments-api`.
-
-## 6. Extras (2026-09-05 F12 five-step pass — noted, not acted on)
-
-- **Step 1 (seed) is N/A** — the dashboard manages other features' content, which was seeded in
-  the F02–F05 and F08 passes (Test Science, Brain Teasers, E2E Test category, 20 media assets,
-  20 test users).
-- **Browser section sweep (all render):** Summary, Quiz MCQ (per-subject tree), Users (21+
-  rows incl. the 20 seeded test users), Media Library (20 E2E assets), Settings, Comments,
-  Analytics (incl. the new Journey/Click Analysis tabs in the owner-chosen order). Admin
-  session restored via /admin/login with the reset dev credential (plan/01 §6).
-- **Analytics tab order is owner-set** (Overview / Users / Audience & Geo / Journey / Click
-  Analysis / Retention / per-game / Raw Events) — mirrored by the sidebar via ANALYTICS_TABS.
-- **Three orphan components removed** (SubjectList / SubjectEmptyState / SubjectLoadingState,
-  zero importers after the quiz-tree rebuild) — flagged ambiguous? No: confirmed zero
-  references repo-wide before deletion; git history preserves them.

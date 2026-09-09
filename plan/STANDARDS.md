@@ -1,8 +1,6 @@
 # Standards — Quality, Capacity & Architecture Rules
 
-> **Single cross-cutting reference** for all feature TODO files (`plan/01–13`). Consolidates the former
-> `code-quality-plan.md`, `capacity-plan.md`, and `build-forward-plan.md` (removed 2026-08-30 — content
-> recoverable from git history). Statuses re-verified against code on 2026-08-30.
+> **Single cross-cutting reference** for all feature TODO files (`plan/01–15`).
 
 ## 1. Phase basis (used by every feature TODO file)
 
@@ -10,7 +8,7 @@
 
 ## 2. Quality metric targets
 
-| Metric                          | Baseline              | Now (2026-08-30)                                                                       | Target                   |
+| Metric                          | Baseline              | Now                                                                                    | Target                   |
 | ------------------------------- | --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
 | Backend service test coverage   | ~0%                   | minimal (comments spec only)                                                           | ≥40% on touched services |
 | Frontend logic coverage         | ~0%                   | 139 tests passing (scoring/resume/csv/game/hooks)                                      | ≥30% hooks/libs          |
@@ -44,23 +42,18 @@ Target scale: 50k+ questions, 20k+ daily visitors, stateless backend.
 
 Capacity verdicts: admin browse comfortable to 100k+ questions; ILIKE search 10–30k today (trigram GIN indexes **shipped** in migration `1787653200000`); concurrency 150–400/replica, scales linearly.
 
-## 5. Execution tracks — status
+## 5. Execution tracks (open)
 
-| Track | Item                                                      | Status                                                                                 |
-| ----- | --------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| A1    | Trigram GIN search + `(status, updatedAt)` indexes        | ✅ Done (migration `1787653200000`)                                                    |
-| A2    | `random_weight` index-seek random endpoints + wrap-around | ✅ Done (shared `content/random-selection.util.ts`)                                    |
-| A5    | Denormalized question_count counters                      | Deferred (optional; only if dashboards demand)                                         |
-| B     | Shared ContentServiceBase                                 | **Partial** — quiz-mcq + riddle-mcq use it; image-riddles + dad-jokes still standalone |
-| B     | Targeted cache invalidation                               | ✅ Done (`invalidateCacheFamilies`, family-scoped)                                     |
-| C1    | Global ThrottlerGuard rate limiting                       | ✅ Done (APP_GUARD)                                                                    |
-| C2    | Deep health checks (Redis ping, PG write)                 | **Open** — current `/health` is shallow                                                |
-| C3    | Global default-deny JwtAuthGuard + `@_Public()`           | ✅ Done (APP_GUARD)                                                                    |
-| D     | Player session pipeline (server-authoritative)            | **Open** — BUILD-BACKLOG #2                                                            |
+| Track | Item                                           | Status                                                                                 |
+| ----- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| A5    | Denormalized question_count counters           | Deferred (optional; only if dashboards demand)                                         |
+| B     | Shared ContentServiceBase                      | **Partial** — quiz-mcq + riddle-mcq use it; image-riddles + dad-jokes still standalone |
+| C2    | Deep health checks (Redis ping, PG write)      | **Open** — current `/health` is shallow                                                |
+| D     | Player session pipeline (server-authoritative) | **Open** — BUILD-BACKLOG #2                                                            |
 
-## 6. Security note (2026-08 history)
+## 6. Security note
 
-`apps/backend/.env` was once tracked and pushed, exposing DB/Redis credentials in git history. It was untracked and dev credentials regenerated — **before any production deploy, rotate all credentials for real and evaluate history scrubbing (git filter-repo/BFG).**
+`apps/backend/.env` was once tracked and pushed — **before any production deploy, rotate all credentials for real and evaluate history scrubbing (git filter-repo/BFG).**
 
 ## 7. Working rules
 

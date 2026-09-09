@@ -376,11 +376,6 @@ SiteBrandContext (provider layout:166 → Header:15), SocialLinks (Footer:57, al
 | 8 ui-kit default exports                                       | unused (cosmetic) | zero default imports                                                                                                                     | greps                         | ✅   | drop defaults                        |
 | `lib/query-client.ts:14`                                       | unused            | default export never imported (providers use named)                                                                                      | grep                          | ✅   | DEL (cosmetic)                       |
 | `plan/10-landing-shared-ui.md` §3 P3                           | stale doc         | "[x] components/ui kit tests" unbacked — no test file imports components/ui (testMatch + git history checked)                            | grep + git log                | ✅   | FIX (uncheck or write tests)         |
-| `app/page.tsx:2`                                               | unused (nit)      | WeeklyDealsBanner imported by direct path while siblings come via the home barrel, which omits it                                        | read barrel                   | ✅   | MERGE into barrel (cosmetic)         |
-
-**WeeklyDealsBanner (new, untracked) — fully implemented and used:** backend defaults → interface → DTO →
-`GET /settings/public` → FE type → admin form → homepage render (guarded `enabled && text?.trim()`, https-only
-normalize) → `<a>`/`<div>` variants. Spec coverage exists. Nothing half-wired.
 
 **No issues found:** all 5 home components implemented + rendered (StatsSection local-fallback is plan-mandated);
 `api-client.ts`/`constants.ts` survivors all consumed; no TODO/FIXME; no dangling refs to deleted TopicCard/
@@ -410,7 +405,7 @@ ModalFooter/lib barrel.
 | `settings.module.ts:15`                                             | unused           | `exports:[SettingsService]` — no module imports SettingsModule besides app.module                                                                                                                                                                                                                                                                                                                                                                                                                                      | grep                                             | ✅   | drop export (cosmetic)                                                |
 
 **In-flight `site` group — no half-implemented wiring:** every field consumed end-to-end (siteName, siteDescription,
-logo, favicon, tabTagline, weeklyDealsBanner guarded, socialLinks per-platform). SettingsSection sends full formData
+logo, favicon, tabTagline, socialLinks per-platform). SettingsSection sends full formData
 matching PATCH section-replacement semantics. Uncommitted auth/duels/guest-users diffs contain no settings/brand
 code — no partial brand-scoping exists. Analytics `settings_updated` + module `'site'` valid.
 

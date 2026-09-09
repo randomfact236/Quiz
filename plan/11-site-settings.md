@@ -4,8 +4,6 @@
 > **P0** = critical / broken (blocks users or corrupts data) · **P1** = major gaps (missing core capability) ·
 > **P2** = integration / quality (cross-feature wiring, tests, consistency) · **P3** = polish / tech debt.
 > See `plan/STANDARDS.md` §1.
->
-> Verified against the live codebase: 2026-08-30 (headline finding then: a double split-brain); **re-audited + E2E-tested 2026-09-05** — the split-brain is fully closed (P1 #1–#3): the admin UI reads/writes the backend, a public endpoint serves gameplay, and the mock is deleted. Details in §3.
 
 ---
 
@@ -19,10 +17,10 @@ Backend (`apps/backend/src/settings/`) — **real, complete, and now the single 
 | `settings.service.ts`               | `onModuleInit` refresh (graceful fallback to defaults if the table is missing), deep-merge DB overrides over `config/settings.ts` defaults, prototype-pollution guards (`__proto__`/`constructor`/`prototype`), in-memory `effectiveSettings` cache | 248 lines       |
 | `entities/system-setting.entity.ts` | `system_settings`: `key` (primary), `value` jsonb, description                                                                                                                                                                                      | —               |
 | `dto/update-settings.dto.ts`        | Whitelist DTO (`forbidNonWhitelisted`), typed nested config DTOs                                                                                                                                                                                    | —               |
-| `interfaces/settings.interface.ts`  | `AppSettings` = `global` (pagination/cache) + `dadJokes` + `imageRiddles` + `quiz` (incl. `defaults.levelTimers`) + `riddles` (incl. `defaults.levelTimers`) + `seo` (added 2026-09-05)                                                             | —               |
+| `interfaces/settings.interface.ts`  | `AppSettings` = `global` (pagination/cache) + `dadJokes` + `imageRiddles` + `quiz` (incl. `defaults.levelTimers`) + `riddles` (incl. `defaults.levelTimers`) + `seo`                                                                                | —               |
 | `config/settings.ts`                | Default settings tree (quiz `defaults` is **empty**; imageRiddles has `timerSeconds: 90` + action presets incl. fullscreen/share/report)                                                                                                            | —               |
 
-Frontend (`apps/frontend/src/`) — **wired to the backend since 2026-08-30** (the localStorage mock was deleted):
+Frontend (`apps/frontend/src/`) — **wired to the backend** (localStorage mock deleted):
 
 | File                                       | Purpose                                                                                                                                                                                                                             |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -32,7 +30,7 @@ Frontend (`apps/frontend/src/`) — **wired to the backend since 2026-08-30** (t
 
 No test suite exists for settings (backend merge logic, DTO, or the frontend service).
 
-## 2. Endpoint map (verified against controller 2026-08-30)
+## 2. Endpoint map
 
 | Method & Path     | Auth        | Notes                                                    |
 | ----------------- | ----------- | -------------------------------------------------------- |
@@ -41,7 +39,7 @@ No test suite exists for settings (backend merge logic, DTO, or the frontend ser
 
 Plus `GET /settings/public` (`@_Public`) — gameplay keys only; cache TTLs/patterns stay admin-only.
 
-## 3. Current status (verified)
+## 3. Current status
 
 **The split-brain, stated precisely:**
 
@@ -60,21 +58,21 @@ Plus `GET /settings/public` (`@_Public`) — gameplay keys only; cache TTLs/patt
 
 ### P1 — major gaps
 
-- [x] **Admin UI wired to the backend** — DONE 2026-08-30: `SettingsService.getAdminSettings()` reads `GET /settings` and `updateSettings()` PATCHes via the admin token; `SettingsSection` switched to the admin read.
-- [x] **Public read path** — BUILT 2026-08-30 (code-complete; live probe pending DB restore): new `GET /settings/public` (`SettingsPublicController`, `@_Public`) returning only gameplay keys — quiz/riddles `levelTimers` and imageRiddles `timers`. Cache TTLs/patterns stay admin-only.
-- [x] **`quiz.defaults.levelTimers` in the backend model** — DONE 2026-08-30: interface + config defaults (30/45/60/90/120s, mirroring the frontend fallbacks) + `QuizDefaultsDto.levelTimers`; `riddles.defaults.levelTimers` added the same way (30/60/90/120). `play/page.tsx` and `useRiddlePlay` now receive real values through the public endpoint (with the old constants as offline fallback).
-- [x] **Backend consumption story decided** — 2026-08-30: `config/settings.ts` stays the defaults source; backend modules keep their config reads, and the DTO whitelist is the de-scoping mechanism (only whitelisted sections are PATCHable). Full DI of SettingsService into content modules deferred until a settings key actually needs runtime changes server-side.
+- [x] **Admin UI wired to the backend**
+- [x] **Public read path**
+- [x] **`quiz.defaults.levelTimers` in the backend model**
+- [x] **Backend consumption story decided** — `config/settings.ts` stays the defaults source; backend modules keep their config reads, and the DTO whitelist is the de-scoping mechanism (only whitelisted sections are PATCHable). Full DI of SettingsService into content modules deferred until a settings key actually needs runtime changes server-side.
 
 ### P2 — integration / quality
 
-- [x] **Type parity** — RESOLVED 2026-08-30 by split: gameplay consumes `PublicSettings` (mirrors the backend payload exactly — this is the single source of truth for gameplay); the admin `SystemSettings` type remains the admin form's view. The mock-only keys (timeLimit/passingScore/…) left with the deleted mock.
+- [x] **Type parity**
 - [ ] Cache invalidation: `refreshSettings()` re-reads the DB per process; a multi-instance deploy needs a version/etag or pub-sub invalidation — **folded into the S3/multi-instance pre-deploy decision (feature 08 P1 #2)**.
-- [x] **Tests** — DONE 2026-08-30: `settings.service.spec.ts` (4 tests) — defaults ship levelTimers, partial-section deep-merge preserves siblings, prototype-pollution keys rejected (`__proto__`, `constructor`), unknown top-level keys rejected by the whitelist.
+- [x] **Tests**
 
 ### P3 — polish / tech debt
 
-- [x] **Mock deleted** — DONE 2026-08-30: `DEFAULT_MOCK_SETTINGS` and the `MOCK_API_DELAY_MS` delay removed from the service (the constant itself remains in `lib/constants.ts` for other dev mockers; gameplay service no longer touches localStorage).
-- [x] **Timer-constant consolidation evaluated** — ACCEPTED 2026-08-30: the three copies now have distinct roles — `config/settings.ts` is the server default, `GET /settings/public` is the live value, and the frontend constants (`RIDDLE_TIMERS`, `DEFAULT_TIME_LIMITS`) are offline fallbacks mirrored to the same numbers. Consolidating further would couple gameplay to a network round-trip; keep the fallbacks.
+- [x] **Mock deleted**
+- [x] **Timer-constant consolidation evaluated**
 
 ## 5. Cross-feature touchpoints
 
@@ -84,15 +82,30 @@ Plus `GET /settings/public` (`@_Public`) — gameplay keys only; cache TTLs/patt
 - **Image Riddles (04)** — backend defaults define `imageRiddles.defaults.timerSeconds: 90` and action presets; the entity's `getEffectiveTimer` reads the settings-shaped object, though the settings service itself is not injected into the image-riddles module.
 - **Dad Jokes (05)** — the `dadJokes` settings group (category emoji, cache TTL) is edited by the admin Settings tab against the backend.
 
-## 6. Extras (2026-09-05 F11 five-step pass
+## 6. Site Information branding group (added 2026-09-09)
 
-## 6. Extras (2026-09-05 F11 five-step pass — noted, not acted on)
+New `site` top-level settings group — the admin "Site Info" tab edits it, the public
+endpoint serves it, and the site shell consumes it:
 
-- **Settings E2E re-verified live:** admin GET 200 -> PATCH distinctive quiz levelTimers
-  (33/44/66/99/111) -> `GET /settings/public` reflects them -> restored to defaults. The
-  prototype-pollution guard engages on `__proto__` payloads (spec-covered).
-- **Seeded test data:** none kept — the PATCH probe restored the default timers deliberately
-  (gameplay timing stays predictable for the remaining feature passes).
-- **Cross-module import-status inconsistency:** quiz bulk import accepts `status: 'published'`
-  while riddle/joke/image-riddle imports land DRAFT (see plan/05 + plan/04 Extras).
-- **Cache invalidation (P2 open)** stays folded into the multi-instance/S3 pre-deploy decision.
+- **Fields:** `siteName`, `siteDescription`, `logo`, `favicon`, `tabTagline`,
+  `socialLinks {facebook, instagram,
+tiktok, youtube, twitter}` (full URLs; empty = footer icon hidden).
+- **Backend:** defaults in `config/settings.ts`, `SiteSettings` interface, `SiteSettingsDto`
+  (length-validated strings; social URLs are normalized to http(s) at render time, so
+  partial input like `facebook.com/yourpage` is accepted), `'site'` added to the whitelist,
+  `GET /settings/public` now returns `site`. Spec test covers defaults + partial deep-merge.
+- **Frontend:** shared server fetch `lib/public-settings.ts` (`revalidate: 300`) feeds the
+  root layout metadata (site name/description, `%s | <tabTagline>` title template — empty
+  tagline keeps the seo template — and favicon via `icons`), the `SiteBrandProvider`
+  context (Header logo/name), and the Footer (brand, description, `SocialLinks` icons).
+  Fallback chain: site → seo group → built-in defaults.
+- **Admin UI:** `SettingsSection` gains a "Site Info" tab (now the default tab) with
+  media-library uploads + preview + remove for logo/favicon, name/description/tagline
+  inputs, and the five social URL inputs.
+- **Verified live (2026-09-09):** PATCH site group → `GET /settings/public` reflects it;
+  dev render shows brand name/description in header+footer, "Page | best products" title
+  template, all five social icons, and after an upload the favicon link +
+  header/footer logo `<img>` resolve to the `/uploads/...` URL. Probe data reverted
+  afterwards (row deleted; defaults re-verified after restart). Note: PATCHing a section
+  replaces that section's stored row (pre-existing semantics) — clients must send the
+  full section, which the admin UI does.

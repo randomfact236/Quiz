@@ -4,8 +4,6 @@
 > Each item links to its owning feature file, where the full detail and acceptance criteria live —
 > update status in both places when working an item. Phase basis: same P0–P3 convention as the
 > feature TODO files (see [TODO.md](TODO.md)).
->
-> Last reviewed: 2026-08-30.
 
 | #   | Item                                                                                                                                                                                                        | Priority | Effort       | Owning feature(s)                                                                                                                                | Depends on                                                                     |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
