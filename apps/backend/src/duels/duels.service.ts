@@ -36,8 +36,18 @@ export class DuelsService {
     questionCount: number;
     playerName: string;
     guestId: string;
-    challengeGuestId?: string | null;
+    /** Public (non-secret) handle of the targeted player — resolved to the
+     * target's guestId here so raw guestIds never cross the API
+     * (security-audit-2026-09-09.md A3). */
+    challengePublicId?: string | null;
   }): Promise<{ match: DuelMatch; code: string }> {
+    let challengeGuestId: string | null = null;
+    if (input.challengePublicId) {
+      const target = await this.guests.findOne({
+        where: { publicId: input.challengePublicId },
+      });
+      challengeGuestId = target?.guestId ?? null;
+    }
     const count = Math.min(Math.max(input.questionCount || 10, 3), 20);
     const picked = await this.questions
       .createQueryBuilder('q')
@@ -69,14 +79,14 @@ export class DuelsService {
       })
     );
 
-    if (input.challengeGuestId && input.challengeGuestId !== input.guestId) {
+    if (challengeGuestId && challengeGuestId !== input.guestId) {
       // Targeted invite: a hint row so the challenger's poll finds it. The
       // invite is just the (code, challenger) pair — joining still binds the
       // second slot.
       await this.participants.save(
         this.participants.create({
           matchId: match.id,
-          guestId: input.challengeGuestId,
+          guestId: challengeGuestId,
           playerName: '__invited__',
           slot: 2,
         })
@@ -285,18 +295,21 @@ export class DuelsService {
   }
 
   async onlinePlayers(): Promise<unknown[]> {
-    const rows: { guestId: string; displayName: string | null }[] = await this.guests.query(
-      `SELECT "guestId", "displayName" FROM guest_users
-         WHERE "showInList" = true AND "lastActive" > now() - interval '60 seconds'
-         ORDER BY "lastActive" DESC LIMIT 50`
-    );
+    // guestId authorizes guest writes — it must never appear in responses that
+    // other players can read. publicId is the shareable targeting handle (A3).
+    const rows: { guestId: string; publicId: string; displayName: string | null }[] =
+      await this.guests.query(
+        `SELECT "guestId", "publicId", "displayName" FROM guest_users
+           WHERE "showInList" = true AND "lastActive" > now() - interval '60 seconds'
+           ORDER BY "lastActive" DESC LIMIT 50`
+      );
     const busy: { guestId: string }[] = await this.participants.query(
       `SELECT "guestId" FROM duel_participants
        WHERE "lastPolledAt" > now() - interval '30 seconds'`
     );
     const busySet = new Set(busy.map((row) => row.guestId));
     return rows.map((row) => ({
-      guestId: row.guestId,
+      publicId: row.publicId,
       displayName: row.displayName ?? 'Player',
       inMatch: busySet.has(row.guestId),
     }));

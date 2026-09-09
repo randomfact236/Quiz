@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 /**
  * DTO for user login
@@ -66,4 +66,14 @@ export class OAuthExchangeDto {
   @IsString()
   @IsNotEmpty({ message: 'OAuth code is required' })
   code: string;
+
+  @ApiProperty({
+    description:
+      'Mobile flow (A4): nonce the app generated at initiation — required when the code was issued to the mobile deep-link flow',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(128)
+  nonce?: string;
 }

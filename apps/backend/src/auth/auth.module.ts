@@ -24,7 +24,10 @@ import { GoogleStrategy } from './google.strategy';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET', 'your-secret-key'),
-        signOptions: { expiresIn: '7d' },
+        // Short-lived access token (security-audit-2026-09-09.md A5): clients
+        // auto-refresh on 401, so 15 min costs nothing and caps the blast
+        // radius of a leaked bearer token. Refresh tokens stay 7 days.
+        signOptions: { expiresIn: '15m' },
       }),
       inject: [ConfigService],
     }),

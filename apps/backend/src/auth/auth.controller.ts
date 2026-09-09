@@ -134,7 +134,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Tokens issued' })
   @ApiResponse({ status: 401, description: 'Invalid, expired, or already-used code' })
   async exchangeOAuthCode(@Body() dto: OAuthExchangeDto): Promise<AuthResponse> {
-    return this.authService.exchangeOAuthCode(dto.code);
+    return this.authService.exchangeOAuthCode(dto.code, dto.nonce);
   }
 
   @_Public()
@@ -155,15 +155,23 @@ export class AuthController {
 
     // Tokens never go in the URL (they leak to browser history/referrer logs).
     // The frontend exchanges this short-lived one-time code via POST /auth/oauth/exchange.
-    const code = await this.authService.createOAuthCode(result);
+    // Mobile flow (A4): the initiation middleware stored the app's nonce in a
+    // cookie — bind the code to it and echo it back for the exchange call.
+    const nonceMatch = /(?:^|;\s*)oauth_nonce=([A-Za-z0-9_-]{16,128})(?:;|$)/.exec(
+      req.headers.cookie ?? ''
+    );
+    const nonce = nonceMatch?.[1];
+    const code = await this.authService.createOAuthCode(result, nonce);
+    res.clearCookie('oauth_nonce');
+    res.clearCookie('oauth_platform');
     const frontendUrl = process.env['FRONTEND_URL'] || 'http://localhost:3010';
 
     // Mobile app flow (mobile-app plan §6 gap #1): the initiation middleware
     // marked the request with an oauth_platform cookie — hand the one-time code
     // to the app via its deep link; the app exchanges it the same way as web.
-    const isMobile = /(?:^|;\s*)oauth_platform=mobile(?:;|$)/.test(req.headers.cookie ?? '');
+    const isMobile = nonce !== undefined;
     if (isMobile) {
-      return res.redirect(`aiquiz://auth/callback?code=${code}`);
+      return res.redirect(`aiquiz://auth/callback?code=${code}&nonce=${nonce}`);
     }
 
     return res.redirect(`${frontendUrl}/login?oauth_code=${code}`);

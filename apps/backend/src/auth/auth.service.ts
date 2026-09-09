@@ -197,18 +197,26 @@ export class AuthService {
    * The code is stored hashed; the raw value only ever appears in the
    * one redirect URL and is consumed by exchangeOAuthCode().
    */
-  async createOAuthCode(result: {
-    user: { id: string; email: string; name: string; role: string };
-    token: string;
-    refreshToken: string;
-  }): Promise<string> {
+  async createOAuthCode(
+    result: {
+      user: { id: string; email: string; name: string; role: string };
+      token: string;
+      refreshToken: string;
+    },
+    nonce?: string
+  ): Promise<string> {
     const code = crypto.randomBytes(32).toString('hex');
     const key = `oauth:code:${crypto.createHash('sha256').update(code).digest('hex')}`;
-    await this.cacheService.set(key, result, OAUTH_CODE_TTL_S);
+    // Mobile flow (A4): the code is bound to the app-generated nonce carried in
+    // the oauth_nonce cookie — an intercepted redirect alone is worthless.
+    await this.cacheService.set(key, nonce ? { ...result, nonce } : result, OAUTH_CODE_TTL_S);
     return code;
   }
 
-  async exchangeOAuthCode(code: string): Promise<{
+  async exchangeOAuthCode(
+    code: string,
+    nonce?: string
+  ): Promise<{
     user: { id: string; email: string; name: string; role: string };
     token: string;
     refreshToken: string;
@@ -218,13 +226,19 @@ export class AuthService {
       user: { id: string; email: string; name: string; role: string };
       token: string;
       refreshToken: string;
+      nonce?: string;
     }>(key);
     // Single-use: consume before validating so a replay always misses.
     await this.cacheService.del(key);
     if (!cached) {
       throw new UnauthorizedException('Invalid or expired OAuth code');
     }
-    return cached;
+    // Nonce-bound codes (mobile flow) exchange only with the matching nonce.
+    if (cached.nonce && cached.nonce !== nonce) {
+      throw new UnauthorizedException('Invalid or expired OAuth code');
+    }
+    const { nonce: _bound, ...result } = cached;
+    return result;
   }
 
   async googleLogin(googleData: {

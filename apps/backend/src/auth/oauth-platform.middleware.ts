@@ -17,6 +17,19 @@ export class OAuthPlatformMiddleware implements NestMiddleware {
         sameSite: 'lax',
         path: '/',
       });
+      // Security (security-audit-2026-09-09.md A4): bind the one-time code to a
+      // nonce the app generates and keeps in memory. A malicious app that
+      // hijacks the aiquiz:// redirect gets the code but not the nonce, and
+      // POST /auth/oauth/exchange rejects the mismatch.
+      const nonce = req.query.nonce;
+      if (typeof nonce === 'string' && /^[A-Za-z0-9_-]{16,128}$/.test(nonce)) {
+        res.cookie('oauth_nonce', nonce, {
+          maxAge: 10 * 60 * 1000,
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+        });
+      }
     }
     next();
   }

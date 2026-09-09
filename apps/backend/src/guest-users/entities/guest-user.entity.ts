@@ -34,6 +34,15 @@ export class GuestUser {
   @Column({ default: true })
   showInList: boolean;
 
+  /**
+   * Public, non-secret handle for cross-player targeting (duel challenges).
+   * Unlike guestId — which authorizes guest writes and must never be shared —
+   * publicId is safe to expose in the online-players list
+   * (security-audit-2026-09-09.md A3).
+   */
+  @Column({ type: 'uuid', unique: true, default: () => 'gen_random_uuid()' })
+  publicId: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

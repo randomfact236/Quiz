@@ -36,11 +36,13 @@ class CreateDuelDto {
   @MaxLength(64)
   guestId: string;
 
-  /** Targeted challenge — creates a pending invite for this guest. */
+  /** Targeted challenge — the target's PUBLIC handle from /presence/players
+   * (never a guestId; those authorize guest writes and stay secret, A3).
+   * Resolved to the target's guestId server-side. */
   @IsOptional()
   @IsString()
   @MaxLength(64)
-  challengeGuestId?: string | null;
+  challengePublicId?: string | null;
 }
 
 class JoinDuelDto {
