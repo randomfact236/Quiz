@@ -37,7 +37,7 @@ export class QuizSession {
   @Column({ type: 'varchar', length: 16, nullable: true })
   level: string | null;
 
-  /** quiz | challenge | practice — free-form label from the entry mode. */
+  /** Entry-mode label from the UI route, e.g. normal | timer | timer_challenge | normal_practice (free-form). */
   @Column({ type: 'varchar', length: 16, nullable: true })
   mode: string | null;
 

@@ -32,7 +32,10 @@ export class CreateQuizSessionDto {
   @Length(3, 16)
   level?: string;
 
-  @ApiPropertyOptional({ enum: ['quiz', 'challenge', 'practice'] })
+  @ApiPropertyOptional({
+    description:
+      'Entry-mode label sent by the UI route, e.g. normal | timer | timer_challenge | normal_practice (free-form, max 16 chars)',
+  })
   @IsOptional()
   @IsString()
   @Length(3, 16)

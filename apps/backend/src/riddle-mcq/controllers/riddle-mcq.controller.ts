@@ -207,7 +207,7 @@ export class RiddleMcqController {
   }
 
   @Get('filter-counts')
-  @ApiOperation({ summary: 'Get unified filter counts (Public)' })
+  @ApiOperation({ summary: 'Get unified filter counts (admin — JWT required)' })
   @ApiQuery({ name: 'category', required: false, description: 'Filter by category slug' })
   @ApiQuery({ name: 'subject', required: false, description: 'Filter by subject slug' })
   @ApiQuery({ name: 'level', required: false, description: 'Filter by level' })

@@ -25,7 +25,7 @@ export class EmailService {
     verificationToken: string,
     userName: string
   ): Promise<{ success: boolean; message: string }> {
-    const frontendUrl = this.configService.get<string>('CORS_ORIGIN') || 'http://localhost:3010';
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3010';
     const verifyUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
 
     const emailHtml = `
@@ -111,7 +111,11 @@ export class EmailService {
     `.trim();
 
     this.logger.log(`Verification email would be sent to: ${to}`);
-    this.logger.debug(`Verification URL: ${verifyUrl}`);
+    // Token-bearing URLs must never reach logs in production (A8) — an
+    // unconfigured email service would otherwise leak live verification links.
+    if (this.configService.get('NODE_ENV') !== 'production') {
+      this.logger.debug(`Verification URL: ${verifyUrl}`);
+    }
 
     if (!this.resend) {
       this.logger.warn('Resend not configured - email logged only');
@@ -146,7 +150,7 @@ export class EmailService {
     resetToken: string,
     userName: string
   ): Promise<{ success: boolean; message: string }> {
-    const frontendUrl = this.configService.get<string>('CORS_ORIGIN') || 'http://localhost:3010';
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3010';
     const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
 
     const emailHtml = `
@@ -233,7 +237,10 @@ export class EmailService {
 
     // Log for development
     this.logger.log(`Password reset email would be sent to: ${to}`);
-    this.logger.debug(`Reset URL: ${resetUrl}`);
+    // Same A8 guard as the verification URL above.
+    if (this.configService.get('NODE_ENV') !== 'production') {
+      this.logger.debug(`Reset URL: ${resetUrl}`);
+    }
 
     // Check if Resend is configured
     if (!this.resend) {

@@ -11,10 +11,13 @@ export class BulkCreateRiddleDto {
   @IsArray()
   options: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description:
+      'Correct option letter (A-D) for standard rows; omit for expert rows (text answer)',
+  })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  correctLetter: string;
+  correctLetter?: string;
 
   @ApiProperty({ example: 'medium', description: 'Difficulty level: easy, medium, hard, expert' })
   @IsString()

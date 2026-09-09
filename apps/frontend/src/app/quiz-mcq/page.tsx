@@ -552,8 +552,59 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
 // Shared level metadata (levels/levelEmojis/levelColors) imported at top.
 
 function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
-  const [normalOpen, setNormalOpen] = useState(true);
-  const [timerOpen, setTimerOpen] = useState(true);
+  return (
+    <div>
+      <Link
+        href={`/quiz-mcq?subject=${subject}`}
+        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
+      >
+        ← Back to Chapters
+      </Link>
+      <h1 className="mb-8 text-center text-3xl font-bold text-white">🎮 Select Mode</h1>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        {/* Normal Mode */}
+        <Link
+          href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}&mode=normal`}
+          className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
+        >
+          <span className="text-4xl">🎯</span>
+          <div>
+            <span className="block text-xl font-bold">Normal Mode</span>
+            <span className="text-sm opacity-90">Take your time, no pressure</span>
+          </div>
+          <span className="ml-auto text-2xl opacity-80">→</span>
+        </Link>
+
+        {/* Timer Mode */}
+        <Link
+          href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}&mode=timer`}
+          className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
+        >
+          <span className="text-4xl">⏱️</span>
+          <div>
+            <span className="block text-xl font-bold">Timer Mode</span>
+            <span className="text-sm opacity-90">
+              30 seconds per question - Race against the clock!
+            </span>
+          </div>
+          <span className="ml-auto text-2xl opacity-80">→</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function LevelSelection({
+  subject,
+  chapter,
+  mode,
+}: {
+  subject: string;
+  chapter: string;
+  mode: 'normal' | 'timer';
+}): JSX.Element {
+  // Uses module-level shared level constants (levels/levelEmojis/levelColors).
 
   const subjectQuery = useQuery({
     queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
@@ -588,122 +639,6 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   return (
     <div>
       <Link
-        href={`/quiz-mcq?subject=${subject}`}
-        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-      >
-        ← Back to Chapters
-      </Link>
-      <h1 className="mb-8 text-center text-3xl font-bold text-white">
-        🎮 Select Mode & Difficulty
-      </h1>
-
-      <div className="space-y-6">
-        {/* Normal Mode Section */}
-        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden">
-          <button
-            onClick={() => setNormalOpen(!normalOpen)}
-            className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
-          >
-            <div className="flex items-center gap-4">
-              <span className="text-4xl">🎯</span>
-              <div className="text-left">
-                <span className="text-xl font-bold block">Normal Mode</span>
-                <span className="text-sm opacity-90">Take your time, no pressure</span>
-              </div>
-            </div>
-            {normalOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-          </button>
-
-          {normalOpen && (
-            <div className="p-6">
-              <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
-                Select difficulty level:
-              </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                {levels.map((level) => {
-                  const count = questionCounts[level] || 0;
-                  return (
-                    <Link
-                      key={`normal-${level}`}
-                      href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=normal`}
-                      className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'opacity-50' : ''}`}
-                    >
-                      <span className="text-2xl mb-1">{levelEmojis[level]}</span>
-                      <span className="font-semibold text-sm">{level}</span>
-                      <span className="mt-1 text-xs opacity-90">
-                        {!isLoading ? `${count} questions` : 'Loading...'}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Timer Mode Section */}
-        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg overflow-hidden">
-          <button
-            onClick={() => setTimerOpen(!timerOpen)}
-            className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-orange-500 to-red-500 text-white"
-          >
-            <div className="flex items-center gap-4">
-              <span className="text-4xl">⏱️</span>
-              <div className="text-left">
-                <span className="text-xl font-bold block">Timer Mode</span>
-                <span className="text-sm opacity-90">
-                  30 seconds per question - Race against the clock!
-                </span>
-              </div>
-            </div>
-            {timerOpen ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-          </button>
-
-          {timerOpen && (
-            <div className="p-6">
-              <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
-                Select difficulty level:
-              </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                {levels.map((level) => {
-                  const count = questionCounts[level] || 0;
-                  return (
-                    <Link
-                      key={`timer-${level}`}
-                      href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=timer`}
-                      className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-4 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'opacity-50' : ''}`}
-                    >
-                      <span className="text-2xl mb-1">{levelEmojis[level]}</span>
-                      <span className="font-semibold text-sm">{level}</span>
-                      <span className="mt-1 text-xs opacity-90">
-                        {!isLoading ? `${count} questions` : 'Loading...'}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LevelSelection({
-  subject,
-  chapter,
-  mode,
-}: {
-  subject: string;
-  chapter: string;
-  mode: 'normal' | 'timer';
-}): JSX.Element {
-  // Uses module-level shared level constants (levels/levelEmojis/levelColors).
-
-  return (
-    <div>
-      <Link
         href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
         className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
       >
@@ -714,16 +649,22 @@ function LevelSelection({
       </h1>
       <p className="mb-8 text-center text-white/80">Select difficulty level</p>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {levels.map((level) => (
-          <Link
-            key={level}
-            href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=${mode}`}
-            className={`flex flex-col items-center rounded-2xl bg-gradient-to-br ${levelColors[level]} p-6 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
-          >
-            <span className="text-3xl mb-2">{levelEmojis[level]}</span>
-            <span className="font-bold">{level}</span>
-          </Link>
-        ))}
+        {levels.map((level) => {
+          const count = questionCounts[level] || 0;
+          return (
+            <Link
+              key={level}
+              href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=${mode}`}
+              className={`flex flex-col items-center rounded-2xl bg-gradient-to-br ${levelColors[level]} p-6 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl ${count === 0 ? 'opacity-50' : ''}`}
+            >
+              <span className="text-3xl mb-2">{levelEmojis[level]}</span>
+              <span className="font-bold">{level}</span>
+              <span className="mt-1 text-xs opacity-90">
+                {!isLoading ? `${count} questions` : 'Loading...'}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
