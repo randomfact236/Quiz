@@ -1,6 +1,10 @@
 FROM node:20-alpine AS builder
-ARG NEXT_PUBLIC_API_URL
+# Defaults keep plain `docker build` / Dokploy builds working without explicit
+# build args; docker-compose.prod.yml (or Dokploy Build Args) override them.
+ARG NEXT_PUBLIC_API_URL=https://api.pigzap.com/api/v1
+ARG NEXT_PUBLIC_IMAGE_HOSTS=api.pigzap.com
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_IMAGE_HOSTS=${NEXT_PUBLIC_IMAGE_HOSTS}
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY package*.json ./
