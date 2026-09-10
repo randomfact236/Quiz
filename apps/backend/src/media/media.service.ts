@@ -24,10 +24,25 @@ import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
 import { StorageService } from './storage.service';
 
 /** Allowed upload MIME types — anything else is rejected before decoding. */
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
 
 function sanitizeFilename(name: string): string {
   return name.replace(/[^a-zA-Z0-9.-]/g, '_');
+}
+
+/**
+ * Strip active content from an uploaded SVG so it is safe to serve from
+ * /uploads on the API origin: scripts, event handlers, and script URLs.
+ */
+function sanitizeSvg(svg: string): string {
+  return svg
+    .replace(/<script[\s\S]*?<\/script\s*>/gi, '')
+    .replace(/<script[^>]*\/>/gi, '')
+    .replace(/\son\w+\s*=\s*"[^"]*"/gi, '')
+    .replace(/\son\w+\s*=\s*'[^']*'/gi, '')
+    .replace(/\son\w+\s*=\s*[^\s>]+/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/<foreignObject[\s\S]*?<\/foreignObject\s*>/gi, '');
 }
 
 @Injectable()
@@ -49,6 +64,12 @@ export class MediaService {
       throw new BadRequestException(
         `Unsupported file type: ${file.mimetype}. Allowed: ${ALLOWED_MIME_TYPES.join(', ')}`
       );
+    }
+
+    // SVGs are stored as vector (no sharp raster re-encode) so logos stay
+    // crisp at every size; they must be sanitized before being served.
+    if (file.mimetype === 'image/svg+xml') {
+      return this.createSvgFile(file, alt);
     }
 
     let width: number | undefined;
@@ -84,6 +105,37 @@ export class MediaService {
 
     const saved = await this.mediaRepo.save(media);
     return saved;
+  }
+
+  /** Validate, sanitize, and store an SVG upload as-is (vector path). */
+  private async createSvgFile(file: Express.Multer.File, alt?: string): Promise<Media> {
+    const source = file.buffer.toString('utf8').trim();
+    if (!source.startsWith('<?xml') && !source.startsWith('<svg')) {
+      throw new BadRequestException('Invalid SVG file.');
+    }
+
+    const sanitized = sanitizeSvg(source);
+    if (!/<svg[\s>]/i.test(sanitized)) {
+      throw new BadRequestException('Invalid SVG file.');
+    }
+
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}-${sanitizeFilename(
+      path.parse(file.originalname).name
+    )}.svg`;
+    const url = this.storageService.uploadFile(Buffer.from(sanitized, 'utf8'), filename);
+
+    const media = this.mediaRepo.create({
+      filename,
+      url,
+      alt: alt ?? null,
+      mimeType: file.mimetype,
+      fileSize: Buffer.byteLength(sanitized, 'utf8'),
+      isConverted: false,
+      conversionStatus: MediaConversionStatus.COMPLETED,
+      variants: {},
+    });
+
+    return this.mediaRepo.save(media);
   }
 
   async findAll(query: QueryMediaDto): Promise<MediaListResponse> {

@@ -14,6 +14,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { SettingsService } from '@/services/settings.service';
 import { ApiError } from '@/lib/api-client';
 import { getErrorMessage, resolveMediaUrl, uploadMedia } from '@/lib/media-api';
+import { BrandMark } from '@/components/BrandMark';
 import type {
   SystemSettings,
   SettingsTab,
@@ -57,8 +58,73 @@ const SOCIAL_LINK_FIELDS: Array<{
 ];
 
 /**
- * Image setting field: media-library upload with live preview, plus a manual
- * URL/path input and a Remove button (empty value = not set).
+ * One themed preview chip: renders the uploaded image (or the SVG placeholder
+ * mark + site name) against a fixed light or dark background so the admin can
+ * check brand assets in both themes regardless of the admin panel's own theme.
+ */
+function BrandPreviewChip({
+  tone,
+  label,
+  previewUrl,
+  alt,
+  siteName,
+  variant,
+}: {
+  tone: 'light' | 'dark';
+  label: string;
+  previewUrl: string | null;
+  alt: string;
+  siteName: string;
+  variant: 'desktop' | 'mobile' | 'square';
+}): JSX.Element {
+  const onLight = tone === 'light';
+  const displayName = siteName.trim() || 'Your Site Name';
+  return (
+    <div className="min-w-0 flex-1">
+      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">{label}</span>
+      <div
+        className={`mt-1 flex items-center gap-2 overflow-hidden rounded-lg border px-3 ${
+          variant === 'square' ? 'h-16 justify-center' : 'h-12'
+        } ${onLight ? 'border-gray-200 bg-white' : 'border-gray-700 bg-gray-950'}`}
+      >
+        {previewUrl ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={previewUrl}
+            alt={`${alt} (${tone} mode preview)`}
+            className={
+              variant === 'square'
+                ? 'h-11 w-11 rounded-xl object-contain'
+                : variant === 'mobile'
+                  ? 'h-7 w-7 rounded object-contain'
+                  : 'max-h-9 max-w-full object-contain'
+            }
+          />
+        ) : (
+          <BrandMark
+            size={variant === 'square' ? 44 : variant === 'mobile' ? 24 : 28}
+            tone={onLight ? 'on-light' : 'on-dark'}
+          />
+        )}
+        {variant !== 'square' && (
+          <span
+            className={`truncate font-bold ${variant === 'mobile' ? 'text-sm' : 'text-base'} ${
+              onLight ? 'text-primary-700' : 'text-primary-300'
+            }`}
+          >
+            {displayName}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Image setting field: media-library upload with live light/dark previews,
+ * plus a manual URL/path input and a Remove button (empty value = not set).
+ * `variant` picks the placeholder shape: desktop header logo (mark + site
+ * name), mobile header (square placeholder + site name), or square favicon.
  */
 function ImageSettingField({
   id,
@@ -66,12 +132,16 @@ function ImageSettingField({
   helpText,
   value,
   onChange,
+  variant = 'desktop',
+  siteName = '',
 }: {
   id: string;
   label: string;
   helpText: string;
   value: string;
   onChange: (url: string) => void;
+  variant?: 'desktop' | 'favicon';
+  siteName?: string;
 }): JSX.Element {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -98,66 +168,109 @@ function ImageSettingField({
     <div>
       <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
       <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">{helpText}</p>
-      <div className="mt-2 flex items-start gap-4">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
-          {previewUrl ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={previewUrl}
-              alt={`${label} preview`}
-              className="h-full w-full object-contain"
+      <div className="mt-3 space-y-3">
+        {variant === 'logo' ? (
+          <>
+            <div className="flex gap-3">
+              <BrandPreviewChip
+                tone="light"
+                label="Desktop · Light mode"
+                previewUrl={previewUrl}
+                alt={label}
+                siteName={siteName}
+                variant="desktop"
+              />
+              <BrandPreviewChip
+                tone="dark"
+                label="Desktop · Dark mode"
+                previewUrl={previewUrl}
+                alt={label}
+                siteName={siteName}
+                variant="desktop"
+              />
+            </div>
+            <div className="flex gap-3">
+              <BrandPreviewChip
+                tone="light"
+                label="Mobile · Light mode"
+                previewUrl={previewUrl}
+                alt={label}
+                siteName={siteName}
+                variant="mobile"
+              />
+              <BrandPreviewChip
+                tone="dark"
+                label="Mobile · Dark mode"
+                previewUrl={previewUrl}
+                alt={label}
+                siteName={siteName}
+                variant="mobile"
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex gap-3">
+            <BrandPreviewChip
+              tone="light"
+              label="Light mode"
+              previewUrl={previewUrl}
+              alt={label}
+              siteName={siteName}
+              variant="square"
             />
-          ) : (
-            <span className="text-2xl text-gray-300 dark:text-gray-500" aria-hidden="true">
-              🖼️
-            </span>
-          )}
-        </div>
-        <div className="flex-1 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
-              className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-            >
-              {uploading ? 'Uploading…' : 'Choose Image'}
-            </button>
-            {value && (
-              <button
-                type="button"
-                onClick={() => onChange('')}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
-              >
-                Remove
-              </button>
-            )}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/png,image/jpeg,image/webp,image/gif"
-              className="hidden"
-              onChange={(e) => void handleFile(e)}
-              aria-hidden="true"
-              tabIndex={-1}
+            <BrandPreviewChip
+              tone="dark"
+              label="Dark mode"
+              previewUrl={previewUrl}
+              alt={label}
+              siteName={siteName}
+              variant="square"
             />
           </div>
-          <input
-            id={id}
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="/uploads/image.webp or https://…"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            aria-label={`${label} URL`}
-          />
-          {uploadError && (
-            <p className="text-xs text-red-600 dark:text-red-400" role="alert">
-              {uploadError}
-            </p>
-          )}
-        </div>
+        )}
       </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+        >
+          {uploading ? 'Uploading…' : 'Choose Image'}
+        </button>
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange('')}
+            className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+          >
+            Remove
+          </button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+          className="hidden"
+          onChange={(e) => void handleFile(e)}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      </div>
+      <input
+        id={id}
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="/uploads/logo.svg or https://…"
+        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        aria-label={`${label} URL`}
+      />
+      {uploadError && (
+        <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
+          {uploadError}
+        </p>
+      )}
     </div>
   );
 }
@@ -457,22 +570,37 @@ export function SettingsSection(): JSX.Element {
               />
             </div>
 
-            {/* Logo + Favicon */}
-            <div className="grid gap-8 border-t border-gray-200 pt-6 sm:grid-cols-2 dark:border-gray-700">
-              <ImageSettingField
-                id="site-logo"
-                label="Site Logo"
-                helpText="PNG, JPG, or WebP, at least 200px wide (PNG supports transparency). Shown next to the brand name in the header and footer."
-                value={formData.site?.logo ?? ''}
-                onChange={(url) => updateField('site.logo', url)}
-              />
-              <ImageSettingField
-                id="site-favicon"
-                label="Browser Tab Icon (Favicon)"
-                helpText="Square PNG/WebP, 192x192 or larger. Shown as the browser tab icon."
-                value={formData.site?.favicon ?? ''}
-                onChange={(url) => updateField('site.favicon', url)}
-              />
+            {/* Brand images — logo and favicon grouped: both are image uploads
+                previewed side-by-side in light and dark mode. */}
+            <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
+              <h5 className="text-md font-semibold mb-1 dark:text-gray-300">
+                🖼️ Brand Images (Logo &amp; Favicon)
+              </h5>
+              <p className="mb-4 text-sm text-gray-500 dark:text-secondary-400">
+                SVG, PNG, WebP, or JPG. Each preview shows exactly how the asset sits in light and
+                dark mode; the text beside it is the Site Name above (live). Until a logo is
+                uploaded, the SVG placeholder mark is shown everywhere the brand appears.
+              </p>
+              <div className="grid gap-8 sm:grid-cols-2">
+                <ImageSettingField
+                  id="site-logo"
+                  label="Site Logo"
+                  helpText="Square SVG/PNG works best (shown next to the brand name in the header, footer, and mobile nav). Desktop and mobile previews below."
+                  variant="logo"
+                  siteName={formData.site?.siteName ?? ''}
+                  value={formData.site?.logo ?? ''}
+                  onChange={(url) => updateField('site.logo', url)}
+                />
+                <ImageSettingField
+                  id="site-favicon"
+                  label="Browser Tab Icon (Favicon)"
+                  helpText="Square SVG/PNG, 192x192 or larger. Shown as the browser tab icon."
+                  variant="favicon"
+                  siteName={formData.site?.siteName ?? ''}
+                  value={formData.site?.favicon ?? ''}
+                  onChange={(url) => updateField('site.favicon', url)}
+                />
+              </div>
             </div>
 
             {/* Social Media Links */}

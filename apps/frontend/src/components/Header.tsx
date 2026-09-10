@@ -6,21 +6,41 @@ import { NAV_ITEMS, NAV_MENU_ITEMS } from '@/lib/nav-config';
 import { useState, useEffect } from 'react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { BrandMark } from '@/components/BrandMark';
 import { useSiteBrand } from '@/components/SiteBrandContext';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
 
-/** Brand link from the Site Information settings (logo image when configured, else text). */
+/** Brand link from the Site Information settings (logo image when configured,
+ *  else the adaptive SVG placeholder mark). Always logo/placeholder + name. */
 function BrandLink(): JSX.Element {
   const { siteName, logo } = useSiteBrand();
   return (
     <Link href="/" className="inline-flex items-center gap-2" aria-label={`${siteName} Home`}>
-      {logo && (
+      {logo ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img src={logo} alt="" className="h-7 w-7 rounded object-contain" />
+      ) : (
+        <BrandMark size={28} />
       )}
       <span className="text-xl font-bold text-primary-600 hover:text-primary-700">{siteName}</span>
     </Link>
+  );
+}
+
+/** Logo + site name row shown at the top of the mobile menu drawer. */
+function MobileDrawerBrand(): JSX.Element {
+  const { siteName, logo } = useSiteBrand();
+  return (
+    <div className="mb-2 flex items-center gap-2 border-b border-secondary-200 pb-3 dark:border-secondary-700">
+      {logo ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={logo} alt="" className="h-8 w-8 rounded object-contain" />
+      ) : (
+        <BrandMark size={32} />
+      )}
+      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">{siteName}</span>
+    </div>
   );
 }
 
@@ -147,6 +167,7 @@ export default function Header(): JSX.Element {
           {/* Mobile menu */}
           {isMenuOpen && (
             <div className="mt-4 space-y-2 border-t border-secondary-200 dark:border-secondary-700 pt-4 md:hidden">
+              <MobileDrawerBrand />
               <div className="flex items-center justify-between rounded-lg px-4 py-2">
                 <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
                 <ThemeToggle size="sm" />
@@ -284,6 +305,7 @@ export default function Header(): JSX.Element {
 
         {isMenuOpen && (
           <div className="mt-4 space-y-2 border-t border-secondary-200 dark:border-secondary-700 pt-4 md:hidden">
+            <MobileDrawerBrand />
             <div className="flex items-center justify-between rounded-lg px-4 py-2">
               <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
               <ThemeToggle size="sm" />
