@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Sliding Puzzle — AI Quiz Games</title>
+    <meta
+      name="description"
+      content="Classic 15-puzzle: slide the tiles into order. Guaranteed-solvable shuffles, 3×3 to 5×5, personal records per grid size."
+    />
+    <meta name="theme-color" content="#e8e4f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b4a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A9%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      // Resolve the site's theme (ai-quiz-theme: light|dark|system) before first
+      // paint so the board never flashes the wrong scheme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('ai-quiz-theme');
+          var dark =
+            stored === 'dark' ||
+            ((!stored || stored === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="game.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/play">← AI Quiz games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Sliding puzzle menu">
+        <h1 class="menu-title">Sliding Puzzle 🧩</h1>
+        <p class="tagline">Slide the tiles into order — every shuffle is solvable.</p>
+
+        <div class="card">
+          <h2 id="pmode-label">Tiles</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="pmode-label" id="picture-mode">
+            <button type="button" role="radio" aria-checked="true" data-pmode="numbers">
+              🔢 Numbers
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-pmode="picture">
+              🖼️ Picture
+            </button>
+          </div>
+
+          <h2 id="size-label" class="row-label">Grid size</h2>
+          <div class="size-cards" role="radiogroup" aria-labelledby="size-label" id="size-cards">
+            <button
+              type="button"
+              role="radio"
+              aria-checked="true"
+              class="size-card"
+              id="card-3"
+              data-size="3"
+            >
+              <span class="grid-label">3×3</span>
+              <span class="best" id="best-3">No record yet</span>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              class="size-card"
+              id="card-4"
+              data-size="4"
+            >
+              <span class="grid-label">4×4</span>
+              <span class="best" id="best-4">No record yet</span>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              class="size-card"
+              id="card-5"
+              data-size="5"
+            >
+              <span class="grid-label">5×5</span>
+              <span class="best" id="best-5">No record yet</span>
+            </button>
+          </div>
+
+          <label class="toggle-row">
+            <input type="checkbox" id="hard-toggle" />
+            <span>Hard mode — picture only, no preview or peek 🔥</span>
+          </label>
+
+          <label class="toggle-row">
+            <input type="checkbox" id="mute-toggle" />
+            <span>Mute sound effects 🔇</span>
+          </label>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+        <button type="button" class="daily" id="btn-daily">
+          <span class="daily-title">📅 Daily challenge</span>
+          <span class="daily-sub" id="daily-sub"></span>
+        </button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Sliding puzzle board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="hud">
+            <div class="chip">
+              <span class="chip-icon">⏱</span><span id="hud-time">0:00</span>
+            </div>
+            <div class="chip">
+              <span class="chip-icon">🔢</span><span id="hud-moves">0</span> moves
+            </div>
+          </div>
+          <button type="button" class="ghost" id="btn-pause" aria-label="Pause game">⏸</button>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board-shell">
+            <div id="board" class="board" role="group" aria-label="Sliding puzzle board, 3 by 3"></div>
+
+            <!-- target-picture reference (picture mode): corner thumbnail, tap to enlarge -->
+            <button
+              type="button"
+              id="pic-preview"
+              class="pic-preview hidden"
+              aria-label="Show the target picture"
+              aria-haspopup="dialog"
+            ></button>
+          </div>
+
+          <!-- ============================= PAUSED ============================= -->
+          <div
+            id="overlay-pause"
+            class="overlay overlay--pause hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pause-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji">⏸</div>
+              <h2 class="overlay-title" id="pause-title">Paused</h2>
+              <p class="overlay-sub">The clock is held — and the board stays hidden.</p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-resume">▶ Resume</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-restart2">🔄 Restart</button>
+                  <button type="button" class="ghost" id="btn-menu2">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================== WON ============================== -->
+          <div
+            id="overlay-win"
+            class="overlay overlay--win hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="win-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="win-title">Solved!</h2>
+              <p class="win-stats" id="win-stats"></p>
+              <div class="badges">
+                <span class="badge-new hidden" id="badge-time">NEW BEST TIME</span>
+                <span class="badge-new hidden" id="badge-moves">NEW BEST MOVES</span>
+              </div>
+              <p class="overlay-sub" id="win-best"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-again">▶ Play again</button>
+                <button type="button" class="ghost" id="btn-bigger">Bigger grid</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu3">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ========================= TARGET PICTURE ========================= -->
+          <div
+            id="overlay-preview"
+            class="overlay overlay--preview hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Target picture"
+          >
+            <div class="preview-card">
+              <div class="preview-image" id="preview-image"></div>
+              <p class="overlay-sub">Assemble the tiles to match this picture</p>
+              <button type="button" class="ghost" id="btn-preview-close">✕ Close</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            class="ghost hidden"
+            id="btn-peek"
+            aria-pressed="false"
+            aria-label="Peek at tile numbers"
+          >
+            🔢 Peek
+          </button>
+          <button type="button" class="ghost" id="btn-restart">🔄 Restart</button>
+          <button type="button" class="ghost" id="btn-shuffle">🔀 Shuffle</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>

@@ -1,5 +1,7 @@
 # 2D Games Plan
 
+> Build plans per game: [`plan/games/README.md`](plan/games/README.md) (sample plans created 2026-09-09).
+
 ## 1. "Tap or Don't Tap" — Solo Version
 
 This is based on a real psychology test called **Go/No-Go** (measures self-control) — that's why it feels so addictive. The game tricks your reflexes against themselves.

@@ -1,0 +1,790 @@
+/* ============================================================================
+   Sliding Puzzle — style.css (Game 03, plan/games/03-sliding-puzzle.md §4)
+   Mobile-first, one-thumb layout; the playing screen fits 360 px with the
+   HUD visible and no scroll. Tiles are absolutely-positioned buttons moved
+   via transform: translate transitions; the blank is simply a missing tile.
+   Theme follows the site's `ai-quiz-theme` setting (resolved to
+   [data-theme="dark"] / "light" by an inline script in index.html).
+   ========================================================================== */
+
+:root,
+[data-theme='light'] {
+  --bg-a: #e8e4f3;
+  --bg-b: #d4c5e8;
+  --card: #ffffff;
+  --card-border: rgba(148, 163, 184, 0.35);
+  --text: #1e293b;
+  --muted: #64748b;
+  --board: #94a3b8;
+  --socket: #cbd5e1;
+  --tile: #f8fafc;
+  --tile-hover: #eef2ff;
+  --primary-a: #2563eb;
+  --primary-b: #4f46e5;
+  --gold: #b45309;
+  --gold-bg: #fef3c7;
+  --shadow: 0 10px 30px rgba(30, 27, 75, 0.12);
+}
+
+[data-theme='dark'] {
+  --bg-a: #1e1b4a;
+  --bg-b: #3f1229;
+  --card: #1e293b;
+  --card-border: rgba(148, 163, 184, 0.18);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --board: #475569;
+  --socket: #334155;
+  --tile: #16202f;
+  --tile-hover: #1c2a3f;
+  --primary-a: #3b82f6;
+  --primary-b: #6366f1;
+  --gold: #fbbf24;
+  --gold-bg: rgba(251, 191, 36, 0.14);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--bg-a), var(--bg-b)) fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 26rem; /* comfortable at 360 px wide too */
+  margin: 0 auto;
+  padding: 0.75rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.back-link {
+  align-self: flex-start;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 8px;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--text);
+  background: var(--tile-hover);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---- screens -------------------------------------------------------------- */
+
+.screen {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.screen--active {
+  display: flex;
+}
+
+/* ---- menu ----------------------------------------------------------------- */
+
+.menu-title {
+  margin: 0.25rem 0 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 7vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* segmented control (Numbers / Picture) — the picked option is highlighted */
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  background: var(--tile);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.segmented button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 0.25rem;
+  border-radius: 9px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.segmented button[aria-checked='true'] {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18);
+}
+
+/* daily challenge button: secondary full-width entry under Play */
+
+button.daily {
+  border: 2px solid var(--card-border);
+  border-radius: 14px;
+  padding: 0.65rem 1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+
+button.daily:hover,
+button.daily:focus-visible {
+  border-color: var(--primary-a);
+  transform: scale(0.99);
+}
+
+.daily-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.daily-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* size picker: three cards, each carrying its own personal record */
+
+.size-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.size-card {
+  border: 2px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--tile);
+  color: var(--text);
+  font: inherit;
+  padding: 0.75rem 0.25rem 0.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.size-card:hover,
+.size-card:focus-visible {
+  background: var(--tile-hover);
+}
+
+.size-card[aria-checked='true'] {
+  border-color: var(--primary-a);
+  background: var(--tile-hover);
+}
+
+.size-card .grid-label {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.size-card .best {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.toggle-row input {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--primary-a);
+  flex-shrink: 0;
+}
+
+/* buttons */
+
+button.primary {
+  border: 0;
+  border-radius: 14px;
+  padding: 0.875rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-a), var(--primary-b));
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+
+button.primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+button.primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button.ghost {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.625rem 0.875rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button.ghost:hover:not(:disabled),
+button.ghost:focus-visible {
+  background: var(--tile-hover);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--primary-a);
+  outline-offset: 2px;
+}
+
+/* ---- playing screen --------------------------------------------------------- */
+
+/* one compact centered strip — menu, HUD and pause sit together instead of
+   being pinned to the screen edges with large gaps between them */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap; /* safety on very narrow screens */
+}
+
+.topbar .ghost {
+  padding: 0.4rem 0.65rem;
+}
+
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.chip {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.chip .chip-icon {
+  margin-right: 0.3rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.actions .ghost {
+  padding: 0.5rem 0.85rem;
+}
+
+/* the board: plan §4 sizes it min(92vw, 60dvh); tiles are positioned by
+   transform translate(±cell), so --x/--y are plain cell coordinates */
+
+/* the play cluster: HUD, board and action buttons hug together as one
+   centered group — on tall/desktop windows nothing stretches toward the
+   screen edges (no orphaned thumbnail, no buttons stranded at the bottom) */
+
+#screen-playing {
+  justify-content: center;
+}
+
+.board-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  align-self: center; /* shrink to the board's exact box — overlays cover it fully */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-shell {
+  position: relative; /* anchors the corner preview to the board itself */
+  flex: 0 0 auto;
+}
+
+.board {
+  --n: 3;
+  --gap: 4px;
+  position: relative;
+  width: min(92vw, 60vh);
+  width: min(92vw, 60dvh);
+  max-width: 25rem;
+  aspect-ratio: 1;
+  background: var(--socket);
+  border: 1px solid var(--board);
+  border-radius: 18px;
+  touch-action: manipulation;
+}
+
+.tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% / var(--n));
+  height: calc(100% / var(--n));
+  border: var(--gap) solid transparent;
+  background-clip: padding-box; /* the border is the gutter between tiles */
+  background-color: var(--tile);
+  border-radius: 16px;
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  font-size: calc(min(92vw, 60vh) / var(--n) * 0.36);
+  font-size: calc(min(92vw, 60dvh) / var(--n) * 0.36);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 0;
+  transform: translate(calc(var(--x, 0) * 100%), calc(var(--y, 0) * 100%));
+  transition: transform 180ms ease;
+}
+
+.tile:not(:disabled):hover {
+  background-color: var(--tile-hover);
+  background-clip: padding-box;
+}
+
+.tile:focus-visible {
+  outline: 3px solid var(--primary-a);
+  outline-offset: -6px;
+  z-index: 1;
+}
+
+/* ---- picture mode (plan P3): each tile owns one fixed slice of the image */
+
+/* corner thumbnail of the target picture, with the n×n grid overlaid so
+   slices can be matched to cells; tap to enlarge */
+
+.pic-preview {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: clamp(48px, 15vw, 68px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  background-size: 100% 100%;
+  box-shadow: var(--shadow);
+  cursor: zoom-in;
+  z-index: 2;
+  --n: 3;
+}
+
+.pic-preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.5) 0 1px,
+      transparent 1px calc(100% / var(--n))
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.5) 0 1px,
+      transparent 1px calc(100% / var(--n))
+    );
+  pointer-events: none;
+}
+
+.overlay--preview {
+  background: color-mix(in srgb, var(--bg-a) 72%, transparent);
+  backdrop-filter: blur(3px);
+  z-index: 3;
+}
+
+.preview-card {
+  width: 100%;
+  max-width: 19rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.preview-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background-size: 100% 100%;
+}
+
+.preview-card .overlay-sub {
+  margin: 0.6rem 0 0.75rem;
+}
+
+.preview-card .ghost {
+  width: 100%;
+}
+
+.row-label {
+  margin-top: 0.875rem;
+}
+
+.tile-num {
+  pointer-events: none;
+}
+
+.board--picture .tile {
+  background-color: transparent;
+}
+
+.board--picture .tile:not(:disabled):hover {
+  background-color: transparent;
+  filter: brightness(1.12);
+}
+
+.board--picture .tile-num {
+  display: none;
+}
+
+/* Peek shows a small readable number pill over each slice */
+
+.board--picture.board--peek .tile-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.9em;
+  padding: 0.08em 0.3em;
+  border-radius: 0.6em;
+  background: rgba(15, 23, 42, 0.66);
+  color: #fff;
+  font-size: calc(min(92vw, 60vh) / var(--n) * 0.2);
+  font-size: calc(min(92vw, 60dvh) / var(--n) * 0.2);
+}
+
+/* on win, the blank receives its slice back and the picture completes */
+
+.tile--ghost {
+  pointer-events: none;
+  cursor: default;
+  animation: ghost-in 0.45s ease-out;
+}
+
+@keyframes ghost-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* wrong-tile shake (plan §2). Animates the `translate` property so it
+   composes with the positioning transform instead of clobbering it. */
+
+.tile--shake {
+  animation: tile-shake 0.3s ease;
+}
+
+@keyframes tile-shake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  20% {
+    translate: -4% 0;
+  }
+  40% {
+    translate: 4% 0;
+  }
+  60% {
+    translate: -3% 0;
+  }
+  80% {
+    translate: 3% 0;
+  }
+}
+
+/* fresh round deal-in */
+
+.board--deal {
+  animation: deal 0.3s ease-out;
+}
+
+@keyframes deal {
+  from {
+    opacity: 0.2;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---- pause overlay: opaque, the board must be hidden (plan §7.3) ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: 18px;
+}
+
+.overlay--pause {
+  background: var(--bg-a); /* fully opaque — no sneaking moves */
+  border: 1px solid var(--board);
+}
+
+.overlay--win {
+  background: color-mix(in srgb, var(--bg-a) 55%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.overlay-card {
+  width: 100%;
+  max-width: 19rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.overlay--in .overlay-card {
+  animation: pop 0.25s ease-out;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.overlay-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.overlay-title {
+  margin: 0.375rem 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.overlay-sub {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.win-stats {
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge-new {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  background: var(--gold-bg);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+.overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.overlay-actions .ghost-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.overlay-actions .ghost-row > button {
+  flex: 1;
+}
+
+/* ---- toast ------------------------------------------------------------------ */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translate(-50%, 200%);
+  background: var(--text);
+  color: var(--card);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.toast--in {
+  transform: translate(-50%, 0);
+}
+
+/* ---- small viewports ----------------------------------------------------------- */
+
+@media (max-height: 560px) {
+  .app {
+    gap: 0.5rem;
+  }
+
+  .menu-title {
+    font-size: 1.4rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+
+  .tile--shake,
+  .board--deal,
+  .tile--ghost,
+  .overlay--in .overlay-card {
+    animation: none;
+  }
+
+  button.primary,
+  button.ghost,
+  .size-card,
+  .toast {
+    transition: none;
+  }
+}

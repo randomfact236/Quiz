@@ -47,8 +47,11 @@ apps/backend/public/
 # External reference material (kept on disk, not part of the product)
 quiz-reference/
 
-# 2D games (kept on disk, git-isolated from the product until owner ships them — see plan/games/README.md)
-apps/frontend/public/games/
+# 2D games (kept on disk, git-isolated from the product until owner ships them — see plan/games/README.md).
+# Exception (owner decision 2026-09-11): Sliding Puzzle (game 03) is committed; the other
+# games stay local-only, and no site coupling (footer/sitemap/Play Hub/analytics) exists.
+apps/frontend/public/games/*
+!apps/frontend/public/games/sliding-puzzle/
 
 # ZCode CLI local workspace state (session artifacts)
 .zcode/
