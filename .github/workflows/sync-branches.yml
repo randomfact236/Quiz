@@ -1,0 +1,45 @@
+name: Sync branches
+
+# Pushing `production` is the only git step: this workflow fast-forwards
+# `main` and the backup branch to the same commit on the remote. It only
+# ever fast-forwards — if either branch has diverged, it is skipped and
+# must be reconciled by hand.
+
+on:
+  push:
+    branches: [production]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-branches
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fast-forward main and backup to production
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main backup/pre-push-2026-09-10
+
+          if git merge-base --is-ancestor origin/main HEAD; then
+            git push origin HEAD:main
+            echo "main fast-forwarded to ${GITHUB_SHA}"
+          else
+            echo "::warning::main has diverged from production — skipped. Reconcile it manually."
+          fi
+
+          if git merge-base --is-ancestor origin/backup/pre-push-2026-09-10 HEAD; then
+            git push origin HEAD:backup/pre-push-2026-09-10
+            echo "backup branch fast-forwarded to ${GITHUB_SHA}"
+          else
+            echo "::warning::backup branch has diverged from production — skipped. Reconcile it manually."
+          fi
