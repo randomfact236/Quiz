@@ -132,7 +132,7 @@ function ImageSettingField({
   helpText,
   value,
   onChange,
-  variant = 'desktop',
+  variant = 'logo',
   siteName = '',
 }: {
   id: string;
@@ -140,7 +140,7 @@ function ImageSettingField({
   helpText: string;
   value: string;
   onChange: (url: string) => void;
-  variant?: 'desktop' | 'favicon';
+  variant?: 'logo' | 'favicon';
   siteName?: string;
 }): JSX.Element {
   const [uploading, setUploading] = useState(false);
