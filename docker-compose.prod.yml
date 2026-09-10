@@ -41,6 +41,11 @@ services:
       dockerfile: apps/backend/Dockerfile
     container_name: quiz-backend
     restart: unless-stopped
+    # Host port for direct-IP access/debugging only — domain traffic routes via
+    # the Dokploy proxy over the internal network, not through this mapping.
+    # Container port 3012 = the PORT env below (app default in common/constants/ports.ts).
+    ports:
+      - '4004:3012'
     environment:
       NODE_ENV: production
       PORT: 3012
@@ -82,6 +87,11 @@ services:
         NEXT_PUBLIC_IMAGE_HOSTS: api.profitbenefit.com
     container_name: quiz-frontend
     restart: unless-stopped
+    # Container port is 3010, NOT Next's default 3000: the Dockerfile sets
+    # ENV PORT=3010 / EXPOSE 3010 and package.json runs "next start -p 3010".
+    # Host port for direct-IP access/debugging only — domains route via Dokploy.
+    ports:
+      - '3001:3010'
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_API_URL: https://api.profitbenefit.com/api/v1
