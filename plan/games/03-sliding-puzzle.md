@@ -129,6 +129,13 @@ keyboard input, timer accumulator, best-score logic, share text.
 - [x] Hard mode (2026-09-11): menu toggle; free play forces the picture look and removes
       the corner preview + Peek; records live under `game:sliding-puzzle:best:<size>:hard`;
       share text appends "on hard mode"
+- [ ] Future feature (deferred — owner decision 2026-09-11): **fixed picture library** —
+      bundled, curated square JPEG/PNG packs (e.g. `pics/<pack>/`) players select as round
+      pictures, instead of / alongside the procedural scenes. The slicer already works
+      with any square image (`sliceBackground` is content-agnostic); the only new pieces
+      are an image loader (async, feeding the same data-URL path as `makePicture`) and a
+      pack picker on the menu. Deferred because it adds real asset files to the repo —
+      the game currently ships zero assets. Revisit when the games ship publicly.
 
 ## 10. Acceptance criteria
 
