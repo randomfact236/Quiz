@@ -2,22 +2,33 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import { Home, Laugh, FileImage, X, BookOpen, Brain, Loader2 } from 'lucide-react';
+import {
+  Home,
+  Laugh,
+  FileImage,
+  X,
+  BookOpen,
+  Brain,
+  Loader2,
+  Menu as MenuIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { NAV_MENU_ITEMS } from '@/lib/nav-config';
 import { getSubjects } from '@/lib/riddle-mcq-api';
 import { getSubjects as getQuizSubjects, QuizSubject } from '@/lib/quiz-mcq-api';
 import { getJokeCategories, JokeCategory } from '@/lib/jokes-api';
 import type { RiddleMcqSubject } from '@/types/riddles';
 
 // Drawer Types
-type DrawerType = 'quiz' | 'jokes' | 'riddles' | 'image-riddles' | null;
+type DrawerType = 'quiz' | 'jokes' | 'riddles' | 'image-riddles' | 'menu' | null;
 
 const DRAWER_TYPES = {
   QUIZ: 'quiz',
   JOKES: 'jokes',
   RIDDLES: 'riddles',
   IMAGE_RIDDLES: 'image-riddles',
+  MENU: 'menu',
 } as const;
 
 // Hardcoded lists removed - using dynamic fetching
@@ -165,6 +176,7 @@ export default function MobileFooter() {
                 {activeDrawer === DRAWER_TYPES.JOKES && 'Joke Categories'}
                 {activeDrawer === DRAWER_TYPES.RIDDLES && 'Riddle Chapters'}
                 {activeDrawer === DRAWER_TYPES.IMAGE_RIDDLES && 'Difficulty Levels'}
+                {activeDrawer === DRAWER_TYPES.MENU && 'Menu'}
               </h3>
               <button
                 onClick={closeDrawer}
@@ -176,6 +188,20 @@ export default function MobileFooter() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {/* Menu links */}
+              {activeDrawer === DRAWER_TYPES.MENU &&
+                NAV_MENU_ITEMS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeDrawer}
+                    aria-current={isClient && currentPath === item.href ? 'page' : undefined}
+                    className="col-span-full flex items-center rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-blue-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
               {/* Quiz content */}
               {activeDrawer === DRAWER_TYPES.QUIZ &&
                 (loadingQuiz ? (
@@ -317,17 +343,17 @@ export default function MobileFooter() {
           </Link>
 
           <button
-            onClick={() => toggleDrawer(DRAWER_TYPES.JOKES)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.JOKES ? 'text-orange-600 dark:text-orange-300 dark:text-orange-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
-            aria-label="Open Jokes categories"
-            aria-expanded={activeDrawer === DRAWER_TYPES.JOKES}
+            onClick={() => toggleDrawer(DRAWER_TYPES.QUIZ)}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.QUIZ ? 'text-blue-600 dark:text-blue-300 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
+            aria-label="Open Quiz subjects"
+            aria-expanded={activeDrawer === DRAWER_TYPES.QUIZ}
           >
-            <Laugh
+            <BookOpen
               size={24}
-              className={activeDrawer === DRAWER_TYPES.JOKES ? 'scale-110' : ''}
+              className={activeDrawer === DRAWER_TYPES.QUIZ ? 'scale-110' : ''}
               aria-hidden="true"
             />
-            <span className="mt-1 text-[10px] font-medium">Jokes</span>
+            <span className="mt-1 text-[10px] font-medium">Quiz</span>
           </button>
 
           <button
@@ -359,17 +385,31 @@ export default function MobileFooter() {
           </button>
 
           <button
-            onClick={() => toggleDrawer(DRAWER_TYPES.QUIZ)}
-            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.QUIZ ? 'text-blue-600 dark:text-blue-300 dark:text-blue-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
-            aria-label="Open Quiz subjects"
-            aria-expanded={activeDrawer === DRAWER_TYPES.QUIZ}
+            onClick={() => toggleDrawer(DRAWER_TYPES.JOKES)}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.JOKES ? 'text-orange-600 dark:text-orange-300 dark:text-orange-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
+            aria-label="Open Jokes categories"
+            aria-expanded={activeDrawer === DRAWER_TYPES.JOKES}
           >
-            <BookOpen
+            <Laugh
               size={24}
-              className={activeDrawer === DRAWER_TYPES.QUIZ ? 'scale-110' : ''}
+              className={activeDrawer === DRAWER_TYPES.JOKES ? 'scale-110' : ''}
               aria-hidden="true"
             />
-            <span className="mt-1 text-[10px] font-medium">Quiz</span>
+            <span className="mt-1 text-[10px] font-medium">Jokes</span>
+          </button>
+
+          <button
+            onClick={() => toggleDrawer(DRAWER_TYPES.MENU)}
+            className={`flex flex-col items-center p-2 transition-colors ${activeDrawer === DRAWER_TYPES.MENU ? 'text-indigo-600 dark:text-indigo-300 dark:text-indigo-400' : 'text-gray-600 dark:text-secondary-300 dark:text-gray-400'}`}
+            aria-label="Open Menu"
+            aria-expanded={activeDrawer === DRAWER_TYPES.MENU}
+          >
+            <MenuIcon
+              size={24}
+              className={activeDrawer === DRAWER_TYPES.MENU ? 'scale-110' : ''}
+              aria-hidden="true"
+            />
+            <span className="mt-1 text-[10px] font-medium">Menu</span>
           </button>
         </div>
       </nav>
