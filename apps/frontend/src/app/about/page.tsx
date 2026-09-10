@@ -74,8 +74,8 @@ export default function AboutPage(): JSX.Element {
             </h2>
             <p className="text-secondary-600 dark:text-secondary-300 leading-relaxed">
               Have questions or suggestions? We&apos;d love to hear from you! Reach out to us at{' '}
-              <a href="mailto:contact@aiquiz.com" className="text-primary-600 hover:underline">
-                contact@aiquiz.com
+              <a href="mailto:contact@pigzap.com" className="text-primary-600 hover:underline">
+                contact@pigzap.com
               </a>
             </p>
           </section>

@@ -13,15 +13,12 @@ export default function ContactPage(): JSX.Element {
       <p>
         Questions, content feedback, or data-deletion requests? Email us at{' '}
         <a
-          href="mailto:contact@example.com"
+          href="mailto:contact@pigzap.com"
           className="font-medium text-primary-600 hover:underline"
         >
-          contact@example.com
+          contact@pigzap.com
         </a>
         .
-      </p>
-      <p className="font-semibold">
-        PLACEHOLDER — replace with the real contact address before public launch.
       </p>
     </LegalPage>
   );
