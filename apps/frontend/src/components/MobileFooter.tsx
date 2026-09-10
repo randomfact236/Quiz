@@ -143,7 +143,7 @@ export default function MobileFooter() {
             animate="animate"
             exit="exit"
             onClick={closeDrawer}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
           />
         )}
       </AnimatePresence>
@@ -157,7 +157,7 @@ export default function MobileFooter() {
             animate="animate"
             exit="exit"
             transition={drawerTransition}
-            className="fixed bottom-[4.5rem] left-0 right-0 z-50 max-h-[60vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] lg:hidden dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
+            className="fixed bottom-[4.5rem] left-0 right-0 z-50 max-h-[60vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] md:hidden dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
@@ -295,7 +295,7 @@ export default function MobileFooter() {
 
       {/* Footer Navigation Bar */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 block border-t border-gray-200 bg-white/95 px-4 pb-1 pt-1 backdrop-blur-lg lg:hidden dark:border-gray-700 dark:bg-gray-900/95 h-[4.5rem]"
+        className="fixed bottom-0 left-0 right-0 z-50 block border-t border-gray-200 bg-white/95 px-4 pb-1 pt-1 backdrop-blur-lg md:hidden dark:border-gray-700 dark:bg-gray-900/95 h-[4.5rem]"
         role="navigation"
         aria-label="Mobile navigation"
       >
@@ -375,7 +375,7 @@ export default function MobileFooter() {
       </nav>
 
       {/* Spacer to prevent content from being hidden behind footer */}
-      <div className="h-20 lg:hidden" />
+      <div className="h-20 md:hidden" />
     </>
   );
 }
