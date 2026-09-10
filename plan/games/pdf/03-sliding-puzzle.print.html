@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game 03 — Sliding Puzzle (Complete Plan)</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+html, body { margin:0; padding:0; background:#ffffff; }
+body { color:#1c1f33; font:10.5pt/1.55 'Segoe UI', system-ui, -apple-system, 'Segoe UI Emoji', sans-serif; }
+.kicker { font-size:8pt; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#4744b8; margin:0 0 6pt; }
+h1 { font-size:20pt; line-height:1.25; margin:0 0 4pt; }
+.meta { color:#5f6377; font-size:9pt; margin:0 0 10pt; }
+.meta span { margin-right:14pt; }
+.rule { border:none; border-top:2.5px solid #4744b8; margin:0 0 14pt; }
+h2 { font-size:13pt; margin:18pt 0 6pt; padding-bottom:3pt; border-bottom:1px solid #e2e4ee; break-after:avoid; }
+h3 { font-size:11pt; margin:12pt 0 4pt; break-after:avoid; }
+p { margin:5pt 0; }
+a { color:#4744b8; text-decoration:none; }
+blockquote { margin:8pt 0; padding:6pt 10pt; border-left:3px solid #4744b8; background:#f3f3fb; }
+blockquote p { margin:2pt 0; }
+code { font-family:Consolas, ui-monospace, monospace; font-size:8.5pt; background:#f1f2f8; border:1px solid #e2e4ee; border-radius:3px; padding:0 3pt; }
+pre { background:#f5f6fa; border:1px solid #e2e4ee; border-radius:5px; padding:8pt 10pt; break-inside:avoid; }
+pre code { background:none; border:none; padding:0; font-size:8pt; line-height:1.5; white-space:pre-wrap; }
+table { border-collapse:collapse; width:100%; margin:8pt 0; font-size:9pt; }
+thead { display:table-header-group; }
+tr { break-inside:avoid; }
+th, td { border:1px solid #d8dae8; padding:4pt 6pt; text-align:left; vertical-align:top; }
+th { background:#eef0f8; }
+ul, ol { margin:5pt 0; padding-left:16pt; }
+li { margin:2.5pt 0; break-inside:avoid; }
+li > ul, li > ol { margin:2pt 0; }
+.cb { display:inline-block; width:8pt; height:8pt; border:1.5px solid #4744b8; border-radius:2px; margin-right:4pt; }
+.cb.done { background:#4744b8; }
+hr { border:none; border-top:1px solid #e2e4ee; margin:14pt 0; }
+.footnote { color:#5f6377; font-size:8pt; margin-top:16pt; border-top:1px solid #e2e4ee; padding-top:5pt; }
+</style>
+</head>
+<body>
+<p class="kicker">2D Games · Sample Build Plan</p>
+<h1>Game 03 — Sliding Puzzle (Complete Plan)</h1>
+<p class="meta"><span>Game 3 of 7</span><span>Complexity: ⭐⭐ Medium</span><span>Estimate: 1–2 days</span><span>Status: not started</span></p>
+<hr class="rule">
+<blockquote><p>Complete plan (supersedes the 2026-09-09 sample). Status: <strong>not started</strong> — build-ready<br>as written. Slug <code>sliding-puzzle</code>; folder <code>apps/frontend/public/games/sliding-puzzle/</code>.</p></blockquote><h2>1. Overview</h2><p>Classic 15-puzzle: slide tiles into order. Hook is the personal record pair —<br>&quot;4×4 in 2:41 · 213 moves&quot; — plus guaranteed-solvable shuffles so nobody ever hits an<br>impossible board.</p><h2>2. Complete game spec</h2><ul><li>Sizes: <strong>3×3</strong> (default), <strong>4×4</strong> (classic), 5×5 (P3). Tiles numbered 1..N²−1, blank last.</li><li><strong>Shuffle:</strong> from the solved state, apply random legal moves — 120 (3×3), 250 (4×4), 400 (5×5) — never undoing the immediately previous move. Solvability is guaranteed by construction; the inversion-count check runs anyway in tests.</li><li><strong>Move counting:</strong> a single-tile slide = 1 move; a row/column segment push = 1 move per tile displaced.</li><li><strong>Timer:</strong> starts on the first move, stops on the winning move; accumulates across pauses (<code>visibilitychange</code>), never runs during <code>menu</code>/<code>won</code>.</li><li><strong>Win:</strong> tiles in order, blank at end → overlay (§4). Input locked after the winning move.</li><li><strong>Score:</strong> <code>score = max(0, sizeBonus − floor(moves/2) − floor(seconds/5))</code> with <code>sizeBonus</code> 300 / 500 / 800 for 3×3 / 4×4 / 5×5.</li><li><strong>Wrong-tile feedback:</strong> tapping a tile not in the blank's row/column = shake animation, no move, no move-count change.</li></ul><h2>3. Progression model</h2><p>Best records per size (time + moves). Progression is self-referential (beat your record);<br>&quot;won at size N&quot; unlocks nothing (all sizes always selectable — no fake gating).</p><h2>4. Screens &amp; UI</h2><table><thead><tr><th>State</th><th>Elements</th></tr></thead><tbody><tr><td><code>menu</code></td><td>Size picker (3 cards with best time/moves per size), ▶ Play, mute toggle</td></tr><tr><td><code>playing</code></td><td>Board (CSS grid), HUD: moves, timer, [Restart] [Shuffle] [⌂ Menu]</td></tr><tr><td><code>paused</code></td><td>Overlay on <code>visibilitychange</code> / ⏸ — board hidden (no sneaking moves), timer held</td></tr><tr><td><code>won</code></td><td>Overlay: 🎉 time, moves, score, per-size best badges (&quot;NEW BEST!&quot;), [Play again] [Bigger grid] [📤 Share]</td></tr></tbody></table><p>Tiles are absolutely-positioned buttons moved via <code>transform: translate</code> transitions<br>(180 ms ease); the blank is a missing tile. Board sizing: <code>min(92vw, 60dvh)</code> square.</p><h2>5. Data model (localStorage)</h2><pre><code>game:sliding-puzzle:best:&lt;size&gt;  → { timeMs: 161000, moves: 213 }     # size = 3|4|5
+game:sliding-puzzle:prefs        → { size: 3, muted: false }</code></pre><h2>6. File structure &amp; function inventory</h2><pre><code>sliding-puzzle/
+  index.html
+  style.css
+  core.js     # pure model — the test surface
+  game.js     # rendering, input, timer, audio, share</code></pre><p><code>core.js</code> exports: <code>solvedBoard(n)</code>, <code>neighbors(i, n)</code>, <code>legalMoves(board, n)</code>,<br><code>shuffle(n, movesCount, rng) → board</code> (no-undo rule), `slideTile(board, n, index) →<br>{ board, moved } | null<code> (single tile or segment), </code>isSolved(board)<code>, </code>scoreFor(size,<br>moves, seconds)<code>. </code>game.js`: render from board array (keyed by tile value), pointer +<br>keyboard input, timer accumulator, best-score logic, share text.</p><h2>7. Edge cases</h2><ol><li>Segment slide: tap tile k in blank's row/col → tiles between k and blank shift one step toward blank; move count += displaced count; animation staggered 40 ms/tile.</li><li>Shuffle never leaves the board solved (assert; re-shuffle if it somehow lands solved).</li><li>Pause hides the board (overlay is opaque) — no solving while paused; timer freezes.</li><li>Keyboard focus: arrows move the tile <em>into</em> the blank (tile travels in arrow direction); focus ring visible; Enter = same as tap on focused tile.</li><li>Storage disabled → no records, game still fully playable.</li><li>Rapid tap during transition animation → state updates immediately, animation catches up (never queue clicks).</li><li><code>won</code> input lock: any tap/slide after the final move is a no-op until an overlay button is used.</li></ol><h2>8. Testing plan (core.js under node:test or test.html)</h2><ul><li>100 shuffles per size → <code>isSolved</code> false + inversion-parity solvable (3×3 &amp; 4×4 rules).</li><li>No-undo rule: replay any shuffle log → no move is the inverse of its predecessor.</li><li><code>slideTile</code>: adjacent slide; row segment (2 and 3 tiles); column segment; illegal tile → null; move counts correct.</li><li><code>isSolved</code> on solved + known-shuffled boards.</li><li><code>scoreFor</code>: clamps at 0; monotonic in moves and seconds.</li></ul><h2>9. Task breakdown</h2><h3>P0 — playable core</h3><ul><li><span class="cb"></span> <code>core.js</code> model: solved/neighbors/legalMoves/slideTile/isSolved/shuffle + unit tests</li><li><span class="cb"></span> Board rendering with transform transitions; tap + segment slide; move counter</li><li><span class="cb"></span> Timer (accumulate across pause); win detection + overlay; restart/shuffle buttons</li></ul><h3>P1 — full rules &amp; feel</h3><ul><li><span class="cb"></span> 3×3/4×4 size switch with per-size records; pause overlay (board hidden)</li><li><span class="cb"></span> Slide/snap animations, staggered segment push, wrong-tile shake, sound blips + mute</li><li><span class="cb"></span> Keyboard play (arrows + Enter) with visible focus</li></ul><h3>P2 — persistence/share/QA</h3><ul><li><span class="cb"></span> Best records per size + &quot;NEW BEST&quot; badge; share text (<code>{size}×{size} in m:ss · moves</code>)</li><li><span class="cb"></span> QA gate (master README §5): offline, isolation greps, 10-min phone session</li></ul><h3>P3 — polish</h3><ul><li><span class="cb"></span> 5×5 size; picture mode (CSS background-position split of any bundled-free image); single-level undo; solve-demo animation; swipe input</li></ul><h2>10. Acceptance criteria</h2><ul><li>§8 tests green; shuffles always solvable (automated proof, 100 runs/size).</li><li>Timer exact across pause/resume (±50 ms vs wall clock of played time).</li><li>No input accepted after win; 3×3 fits 360 px with HUD visible, no scroll.</li><li>Restart ≤ 1 tap; shuffle produces a visibly mixed board every time.</li></ul><h2>11. Deferred coupling (intentionally NOT built)</h2><p>Footer/nav links, analytics events, achievements, backend leaderboards — per master<br>README §7.</p>
+<p class="footnote">Source: plan/games markdown · generated 2026-09-09 · part of the 2D Games sample plans (plan/games/pdf).</p>
+</body>
+</html>

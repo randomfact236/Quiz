@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game 04 — Word Puzzle (Complete Plan)</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+html, body { margin:0; padding:0; background:#ffffff; }
+body { color:#1c1f33; font:10.5pt/1.55 'Segoe UI', system-ui, -apple-system, 'Segoe UI Emoji', sans-serif; }
+.kicker { font-size:8pt; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#4744b8; margin:0 0 6pt; }
+h1 { font-size:20pt; line-height:1.25; margin:0 0 4pt; }
+.meta { color:#5f6377; font-size:9pt; margin:0 0 10pt; }
+.meta span { margin-right:14pt; }
+.rule { border:none; border-top:2.5px solid #4744b8; margin:0 0 14pt; }
+h2 { font-size:13pt; margin:18pt 0 6pt; padding-bottom:3pt; border-bottom:1px solid #e2e4ee; break-after:avoid; }
+h3 { font-size:11pt; margin:12pt 0 4pt; break-after:avoid; }
+p { margin:5pt 0; }
+a { color:#4744b8; text-decoration:none; }
+blockquote { margin:8pt 0; padding:6pt 10pt; border-left:3px solid #4744b8; background:#f3f3fb; }
+blockquote p { margin:2pt 0; }
+code { font-family:Consolas, ui-monospace, monospace; font-size:8.5pt; background:#f1f2f8; border:1px solid #e2e4ee; border-radius:3px; padding:0 3pt; }
+pre { background:#f5f6fa; border:1px solid #e2e4ee; border-radius:5px; padding:8pt 10pt; break-inside:avoid; }
+pre code { background:none; border:none; padding:0; font-size:8pt; line-height:1.5; white-space:pre-wrap; }
+table { border-collapse:collapse; width:100%; margin:8pt 0; font-size:9pt; }
+thead { display:table-header-group; }
+tr { break-inside:avoid; }
+th, td { border:1px solid #d8dae8; padding:4pt 6pt; text-align:left; vertical-align:top; }
+th { background:#eef0f8; }
+ul, ol { margin:5pt 0; padding-left:16pt; }
+li { margin:2.5pt 0; break-inside:avoid; }
+li > ul, li > ol { margin:2pt 0; }
+.cb { display:inline-block; width:8pt; height:8pt; border:1.5px solid #4744b8; border-radius:2px; margin-right:4pt; }
+.cb.done { background:#4744b8; }
+hr { border:none; border-top:1px solid #e2e4ee; margin:14pt 0; }
+.footnote { color:#5f6377; font-size:8pt; margin-top:16pt; border-top:1px solid #e2e4ee; padding-top:5pt; }
+</style>
+</head>
+<body>
+<p class="kicker">2D Games · Sample Build Plan</p>
+<h1>Game 04 — Word Puzzle (Complete Plan)</h1>
+<p class="meta"><span>Game 4 of 7</span><span>Complexity: ⭐⭐ Medium</span><span>Estimate: 2–3 days</span><span>Status: not started</span></p>
+<hr class="rule">
+<blockquote><p>Complete plan (supersedes the 2026-09-09 sample). Status: <strong>not started</strong> — build-ready.<br>Interpretation decided: <strong>word search</strong> (master README §8 #1–2). Slug <code>word-puzzle</code>;<br>folder <code>apps/frontend/public/games/word-puzzle/</code>.</p></blockquote><h2>1. Overview</h2><p>Themed word search: drag a line through letters to find hidden words; correct finds lock<br>in with colored highlights, wrong picks flash red. Hook: 3-star levels and the daily<br>seed (P3) that gives everyone the same puzzle.</p><h2>2. Complete game spec</h2><ul><li><strong>Content:</strong> 4 themes (Animals 🦁, Food 🍎, Tech 💻, Space 🚀) × 3 levels, shipped as static <code>data/themes.json</code> (schema §5). English, lowercase, 4–9 letters, no spaces, no duplicate words within a level.</li><li><strong>Grid tiers:</strong> L1 = 8×8, 5 words, directions {→, ↓}; L2 = 10×10, 7 words, + {↘, ↗}; L3 = 12×12, 10 words, all 8 directions incl. reversed.</li><li><strong>Selection:</strong> pointerdown on a cell anchors; pointermove samples cells via <code>document.elementFromPoint</code>, snapped to the grid; a valid drag follows one of the 8 direction vectors in a straight line. Live highlight while dragging; on release:<ul><li>Letters match an unfound word (or its reverse where reversed dirs are on) → <strong>locked</strong> in the word's color, struck off the list, +pop animation. ✅</li><li>Otherwise → red flash 300 ms, <strong>wrong picks +1</strong>, selection clears. ❌</li></ul></li><li><strong>Hints:</strong> 3 per level; a hint rings the first letter of a random unfound word.</li><li><strong>Stars:</strong> ⭐ finish the level · ⭐ time ≤ par · ⭐ <code>hintsUsed === 0 &amp;&amp; wrongPicks ≤ 2</code>.</li><li><strong>Par times:</strong> L1 90 s · L2 150 s · L3 240 s (per level data, tunable).</li><li><strong>Level flow:</strong> complete → result overlay → next level → theme complete → badge. Progress persisted per level (§5).</li></ul><h2>3. Generator (pure, deterministic)</h2><p><code>generateLevel(levelData, seed)</code> using <code>mulberry32(seed)</code>:</p><ol><li>Sort words longest-first. For each word: try up to 200 random placements (random direction from the tier's set, random start cell) — legal if in bounds and every cell is empty or holds the same letter (shared-letter crossings allowed).</li><li>If a word fails 200 attempts → restart the whole level (max 20 restarts, then throw — data bug, must never ship).</li><li>Fill empty cells from a letter bag: 60 % weighted toward the level's own letters, 40 % uniform A–Z (keeps grids solvable-feeling and dense).</li><li>Return <code>{ grid, placements: [{word, row, col, dir}], seed }</code>.</li></ol><h2>4. Screens &amp; UI</h2><table><thead><tr><th>State</th><th>Elements</th></tr></thead><tbody><tr><td><code>menu</code></td><td>Theme cards (emoji, name, stars x/9, badge when complete), Continue banner, mute toggle</td></tr><tr><td><code>level</code></td><td>Letter grid + word list (chips; found = struck, colored), HUD: timer, hint stars, [Hint] [⌂]</td></tr><tr><td><code>result</code></td><td>Overlay: time, stars, words found, [Next level] [Replay] [📤 Share]; theme-complete variant</td></tr></tbody></table><p>Word list sits below the grid at phone width (side-by-side ≥ 768 px). Grid cells sized<br><code>min(92vw, 100% / size)</code>; touch highlight uses per-word colors from a fixed 10-color<br>accessible palette (4.5:1 on white).</p><h2>5. Data model</h2><pre><code>data/themes.json:
+{ &quot;themes&quot;: [ { &quot;id&quot;: &quot;animals&quot;, &quot;name&quot;: &quot;Animals&quot;, &quot;emoji&quot;: &quot;🦁&quot;,
+    &quot;levels&quot;: [ { &quot;size&quot;: 8, &quot;parSec&quot;: 90, &quot;words&quot;: [&quot;LION&quot;,&quot;ZEBRA&quot;, …] }, … ] }, … ] }
+
+localStorage:
+game:word-puzzle:progress  → { &quot;&lt;themeId&gt;:&lt;lvl&gt;&quot;: { stars: 0-3, bestTimeMs: 84200 } }
+game:word-puzzle:prefs     → { muted: false }</code></pre><h2>6. File structure &amp; function inventory</h2><pre><code>word-puzzle/
+  index.html
+  style.css        # grid, highlight pills, flash animations
+  core.js          # generator + validation (pure, seeded) — test surface
+  game.js          # input, rendering, timer, stars, persistence
+  data/themes.json</code></pre><p><code>core.js</code> exports: <code>mulberry32(seed)</code>, <code>generateLevel(level, seed)</code>, `lineCells(grid,<br>start, end) → cells | null<code> (8-direction check), </code>lettersAt(grid, cells) → string`,<br><code>matchesWord(letters, word, allowReverse)</code>, `starsFor(parSec, timeSec, hintsUsed,<br>wrongPicks)<code>. </code>game.js`: pointer/tap-tap/keyboard input, highlight rendering, timer,<br>progress, share.</p><h2>7. Edge cases</h2><ol><li>Diagonal reverse drags (e.g. ↙ when reversed on) must validate as the word reversed.</li><li>Drag that leaves the grid → clamp to last valid cell; release outside → evaluate.</li><li>Re-finding a found word → counts as correct-but-noop (no star penalty, no duplicate).</li><li>Wrong selection on cells that partially spell a word (prefix) → still wrong (full word required) — documented in-game via the red flash.</li><li>Tap-tap mode: first tap anchors (cell pulses), second tap submits; tapping the anchor again cancels.</li><li>Keyboard: arrows move focus; Enter anchors/submits; grid is one tab stop (roving focus), <code>aria-label</code> per cell = &quot;row r column c, letter X&quot;; word chips labeled &quot;word k, N letters&quot; (never the word itself).</li><li><code>visibilitychange</code> pauses the timer; level restarts only via user action.</li><li>Storage disabled → progress not saved, everything else works.</li></ol><h2>8. Testing plan (core.js)</h2><ul><li>Seeded determinism: same seed → identical grid/placements (snapshot).</li><li>Every word present in <code>placements</code>, within the tier's allowed directions.</li><li>Generated grid: all placements verified by <code>lineCells</code> + <code>lettersAt</code> round-trip.</li><li>Generator termination: 100 seeds per shipped level, zero throws.</li><li><code>lineCells</code>: 8 directions, out-of-bounds, non-collinear → null.</li><li><code>matchesWord</code>: exact, reverse (allowed vs not), case handling.</li><li><code>starsFor</code>: boundary table (par ±1 s, hints 0/1, wrong 2/3).</li></ul><h2>9. Task breakdown</h2><h3>P0 — playable core</h3><ul><li><span class="cb"></span> <code>core.js</code>: mulberry32, generateLevel, lineCells, lettersAt, matchesWord + tests</li><li><span class="cb"></span> Grid rendering + drag selection with live highlight and correct/wrong resolution</li><li><span class="cb"></span> Word list check-off, level timer, win detection, next-level flow</li></ul><h3>P1 — full rules &amp; feel</h3><ul><li><span class="cb"></span> 4 themes × 3 levels data (<code>themes.json</code>) + data lint (lengths, dupes, charset)</li><li><span class="cb"></span> Reversed directions at L3; hints; star rating; color pills; red flash; pop anim</li><li><span class="cb"></span> Progress persistence + Continue; sound blips + mute</li></ul><h3>P2 — persistence/share/QA</h3><ul><li><span class="cb"></span> Tap-tap + full keyboard path; a11y labels (§7.5–7.6)</li><li><span class="cb"></span> Share text (<code>{words} words in m:ss · ⭐⭐⭐</code>); QA gate (master README §5)</li></ul><h3>P3 — polish</h3><ul><li><span class="cb"></span> Daily puzzle (seed = <code>YYYYMMDD</code> hash → same grid for everyone, share-friendly); confetti on theme completion; more themes</li></ul><h2>10. Acceptance criteria</h2><ul><li>§8 tests green; every shipped level solvable and every word placeable (generator proof).</li><li>Wrong picks never permanently mark letters; found letters stay locked.</li><li>Drag usable at 360 px without zoom; grid + chips visible during a drag.</li><li>Seeded daily mode reproduces identical grids across reloads.</li></ul><h2>11. Deferred coupling (intentionally NOT built)</h2><p>Riddle/content-pipeline integration (backend word lists), footer/nav links, analytics<br>events, achievements — per master README §7.</p>
+<p class="footnote">Source: plan/games markdown · generated 2026-09-09 · part of the 2D Games sample plans (plan/games/pdf).</p>
+</body>
+</html>

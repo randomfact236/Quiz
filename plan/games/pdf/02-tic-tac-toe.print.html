@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game 02 — Tic Tac Toe (Complete Plan)</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+html, body { margin:0; padding:0; background:#ffffff; }
+body { color:#1c1f33; font:10.5pt/1.55 'Segoe UI', system-ui, -apple-system, 'Segoe UI Emoji', sans-serif; }
+.kicker { font-size:8pt; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#4744b8; margin:0 0 6pt; }
+h1 { font-size:20pt; line-height:1.25; margin:0 0 4pt; }
+.meta { color:#5f6377; font-size:9pt; margin:0 0 10pt; }
+.meta span { margin-right:14pt; }
+.rule { border:none; border-top:2.5px solid #4744b8; margin:0 0 14pt; }
+h2 { font-size:13pt; margin:18pt 0 6pt; padding-bottom:3pt; border-bottom:1px solid #e2e4ee; break-after:avoid; }
+h3 { font-size:11pt; margin:12pt 0 4pt; break-after:avoid; }
+p { margin:5pt 0; }
+a { color:#4744b8; text-decoration:none; }
+blockquote { margin:8pt 0; padding:6pt 10pt; border-left:3px solid #4744b8; background:#f3f3fb; }
+blockquote p { margin:2pt 0; }
+code { font-family:Consolas, ui-monospace, monospace; font-size:8.5pt; background:#f1f2f8; border:1px solid #e2e4ee; border-radius:3px; padding:0 3pt; }
+pre { background:#f5f6fa; border:1px solid #e2e4ee; border-radius:5px; padding:8pt 10pt; break-inside:avoid; }
+pre code { background:none; border:none; padding:0; font-size:8pt; line-height:1.5; white-space:pre-wrap; }
+table { border-collapse:collapse; width:100%; margin:8pt 0; font-size:9pt; }
+thead { display:table-header-group; }
+tr { break-inside:avoid; }
+th, td { border:1px solid #d8dae8; padding:4pt 6pt; text-align:left; vertical-align:top; }
+th { background:#eef0f8; }
+ul, ol { margin:5pt 0; padding-left:16pt; }
+li { margin:2.5pt 0; break-inside:avoid; }
+li > ul, li > ol { margin:2pt 0; }
+.cb { display:inline-block; width:8pt; height:8pt; border:1.5px solid #4744b8; border-radius:2px; margin-right:4pt; }
+.cb.done { background:#4744b8; }
+hr { border:none; border-top:1px solid #e2e4ee; margin:14pt 0; }
+.footnote { color:#5f6377; font-size:8pt; margin-top:16pt; border-top:1px solid #e2e4ee; padding-top:5pt; }
+</style>
+</head>
+<body>
+<p class="kicker">2D Games · Sample Build Plan</p>
+<h1>Game 02 — Tic Tac Toe (Complete Plan)</h1>
+<p class="meta"><span>Game 2 of 7</span><span>Complexity: ⭐ Low</span><span>Estimate: 1 day</span><span>Status: not started</span></p>
+<hr class="rule">
+<blockquote><p>Complete plan (supersedes the 2026-09-09 sample). Status: <strong>built</strong> — P0–P2 complete<br>plus misère from P3; X/O theme picker skipped. <code>apps/frontend/public/games/tic-tac-toe/</code><br>(<code>index.html</code>, <code>style.css</code>, ESM <code>game.js</code>, <code>game.test.html</code>); jest twin at<br><code>src/__tests__/games-tic-tac-toe.test.ts</code> incl. the exhaustive minimax sweep.<br>Constants below are the spec of record; §9–§11 list the only remaining work.</p></blockquote><h2>1. Overview</h2><p>Classic tic tac toe: two players on one device, or single player vs. the computer at<br>three AI levels. Hook is the running series score (&quot;first to 5?&quot;) and a provably<br>unbeatable Hard AI.</p><h2>2. Complete game spec</h2><ul><li>3×3 board; <strong>X moves first in round 1</strong>; alternate marks each round; the <strong>loser of a round starts the next</strong>; after a draw, the alternating starter flips.</li><li>Win = 3 in a row (8 lines: 3 rows, 3 cols, 2 diagonals). Draw = full board, no win.</li><li><strong>Modes:</strong> <code>2P local</code> (pass-and-play) · <code>1P</code> vs computer with levels:<ul><li><strong>Easy</strong> — uniformly random legal move.</li><li><strong>Medium</strong> — win/block heuristic:<ol><li>take a winning move if one exists</li><li>block an opponent win</li><li>otherwise random legal move</li></ol></li><li><strong>Hard</strong> — full minimax (unbeatable); ties broken by first-found move in scan order (deterministic for tests).</li></ul></li><li><strong>Misère variant</strong> (toggle): completing 3-in-a-row <strong>loses</strong>. Win detection is the same <code>checkWinner</code>; the <em>interpretation</em> flips (winner of a line loses the round). Draw rules unchanged.</li><li>Illegal input impossible: occupied cell, finished round, or out-of-turn tap are no-ops; input locked during AI &quot;thinking&quot; tick (~300 ms artificial delay for feel).</li></ul><h2>3. Series model</h2><p>Series = per-mode running tally. Persisted per <code>(mode, level)</code> key; Reset zeroes the<br>current series only.</p><h2>4. Screens &amp; UI</h2><table><thead><tr><th>State</th><th>Elements</th></tr></thead><tbody><tr><td><code>menu</code></td><td>Mode pick (1P/2P), level pick (1P), misère toggle, series scoreboard, ▶ Play</td></tr><tr><td><code>playing</code></td><td>Board grid, turn indicator (mark + color), series mini-score, ⌂ Menu</td></tr><tr><td><code>roundEnd</code></td><td>Overlay: &quot;X wins! 🎉&quot; / &quot;O wins!&quot; / &quot;Draw 🤝&quot; (misère wording flips), winning line</td></tr><tr><td></td><td>highlighted through the 3 marks, [Next round] [Menu]</td></tr></tbody></table><p>Board = CSS grid; marks render as inline SVG strokes with draw-in animation. Winning line<br>gets a distinct highlight class. Fits 360 px viewport with no scroll.</p><h2>5. Data model (localStorage)</h2><pre><code>game:tic-tac-toe:series:&lt;modeKey&gt;  → { x: 3, o: 2, d: 1 }   # modeKey = '2p' | '1p-easy' | '1p-medium' | '1p-hard'
+game:tic-tac-toe:prefs             → { mode, level, misere, muted }
+game:tic-tac-toe:best              → n/a (no score; share uses the series line)</code></pre><h2>6. File structure &amp; function inventory</h2><pre><code>tic-tac-toe/
+  index.html       # menu / playing / roundEnd sections
+  style.css        # grid, marks, win highlight, overlays
+  game.js          # ESM: pure logic exported + DOM wiring
+  game.test.html   # browser twin of the jest suite</code></pre><p>Pure exported logic: <code>newBoard()</code>, <code>applyMove(board, i, mark)</code>, `checkWinner(board) →<br>{ winner, line } | 'draw' | null<code>, </code>legalMoves(board)<code>, </code>minimaxScore(board, mark)`,<br><code>bestMove(board, mark)</code> (hard), <code>mediumMove(board, mark)</code>, <code>easyMove(board, mark, rng)</code>,<br><code>resolveMisere(result)</code>. DOM layer: screens, <code>renderBoard/renderCell</code>,<br><code>highlightWin(line)</code>, <code>isAiTurnNow()</code>, series storage, share.</p><h2>7. Edge cases</h2><ol><li>occupied / finished / out-of-turn taps = no-ops; double-tap debounce 50 ms.</li><li>AI never acts during <code>roundEnd</code>; Next-round resets board but not series.</li><li>Misère + AI: Hard minimax optimizes the <em>misère</em> objective (inverted leaf scores) — covered by the exhaustive test at this variant too.</li><li>Storage disabled → defaults, no persistence, no crash.</li><li>Series key changes when mode/level changes (no cross-mode pollution).</li><li>Draw starter alternation persists only within a session (not in storage) — stated.</li></ol><h2>8. Testing plan (jest twin + game.test.html)</h2><ul><li><code>checkWinner</code>: all 8 lines, draw, empty, mid-game null.</li><li>Hard AI: exhaustive sweep — never loses from any reachable position (both normal and misère objectives).</li><li>Medium: always takes an available win; always blocks an immediate threat.</li><li>Series persistence round-trip; mode-key isolation.</li><li>Misère interpretation flips round outcome without changing <code>checkWinner</code>.</li></ul><h2>9. Task breakdown</h2><h3>P0/P1/P2 — DONE (2026-09-09/10 build pass)</h3><ul><li><span class="cb done">✓</span> 2P local, win/draw detection, win-line highlight, round flow, series scoreboard</li><li><span class="cb done">✓</span> 1P Easy/Medium/Hard (minimax), misère variant, SVG marks + animations</li><li><span class="cb done">✓</span> Persistence, tests (incl. exhaustive unbeatable sweep), game.test.html</li></ul><h3>P2 — remaining</h3><ul><li><span class="cb"></span> <strong>Resolve analytics coupling</strong> — <code>game.js</code> (~lines 531–582) POSTs <code>game_played</code> with <code>?api=</code> base resolution. Under isolation: delete this block (owner call — see master README §7 conflict note).</li><li><span class="cb"></span> QA gate (master README §5): offline play + isolation greps.</li></ul><h3>P3 — remaining polish</h3><ul><li><span class="cb done">✓</span> Misère variant — done</li><li><span class="cb done">✓</span> Board flip animation — done</li><li><span class="cb"></span> X/O theme picker (skipped by owner decision — keep skipped unless requested)</li></ul><h2>10. Acceptance criteria</h2><ul><li>§7 cases verified; §8 tests green in jest and browser twin.</li><li>Hard AI unbeatable in exhaustive sweep (both objectives).</li><li>Series survives reload; Reset works; 360 px fits with no scroll.</li></ul><h2>11. Deferred coupling (intentionally NOT built)</h2><p>Online multiplayer (needs backend rooms), footer/nav links, Play Hub card, achievements —<br>per master README §7. Existing analytics POST block is the one live violation; flagged<br>above, not silently removed.</p>
+<p class="footnote">Source: plan/games markdown · generated 2026-09-09 · part of the 2D Games sample plans (plan/games/pdf).</p>
+</body>
+</html>
