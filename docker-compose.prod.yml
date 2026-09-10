@@ -58,8 +58,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
-      CORS_ORIGIN: https://quiz.profitbenefit.com
-      FRONTEND_URL: https://quiz.profitbenefit.com
+      CORS_ORIGIN: https://pigzap.com
+      FRONTEND_URL: https://pigzap.com
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
       # Schema changes ONLY via migrations — never enable synchronize in production.
       DB_SYNCHRONIZE: 'false'
@@ -83,8 +83,8 @@ services:
       context: .
       dockerfile: apps/frontend/Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: https://api.profitbenefit.com/api/v1
-        NEXT_PUBLIC_IMAGE_HOSTS: api.profitbenefit.com
+        NEXT_PUBLIC_API_URL: https://api.pigzap.com/api/v1
+        NEXT_PUBLIC_IMAGE_HOSTS: api.pigzap.com
     container_name: quiz-frontend
     restart: unless-stopped
     # Container port is 3010, NOT Next's default 3000: the Dockerfile sets
@@ -94,8 +94,8 @@ services:
       - '3001:3010'
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: https://api.profitbenefit.com/api/v1
-      NEXT_PUBLIC_IMAGE_HOSTS: api.profitbenefit.com
+      NEXT_PUBLIC_API_URL: https://api.pigzap.com/api/v1
+      NEXT_PUBLIC_IMAGE_HOSTS: api.pigzap.com
     depends_on:
       backend:
         condition: service_healthy

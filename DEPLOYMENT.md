@@ -6,8 +6,8 @@ Next.js + NestJS quiz app with local-first development, VPS for production only.
 
 **Domains:**
 
-- Production Frontend: https://quiz.profitbenefit.com
-- Production API: https://api.profitbenefit.com
+- Production Frontend: https://pigzap.com
+- Production API: https://api.pigzap.com
 
 ---
 
@@ -79,7 +79,7 @@ Quiz/
 │  LOCAL MACHINE (Development)                         │      │  VPS PRODUCTION (Dokploy)   │
 │                                                     │      │                             │
 │  ┌─────────────────────────────────────────────┐    │      │  Live site                  │
-│  │  Docker: PostgreSQL :5432, Redis :6379      │    │      │  quiz.profitbenefit.com     │
+│  │  Docker: PostgreSQL :5432, Redis :6379      │    │      │  pigzap.com     │
 │  └─────────────────────────────────────────────┘    │      │                             │
 │                                                     │      │  Auto-deploy on git push    │
 │  npm run start:dev  →  localhost:3012 (Backend)      │─────▶│                             │
@@ -400,7 +400,7 @@ DB_DATABASE: aiquiz
 
 - Backend may be starting up - wait 10 seconds
 - Check backend health: `docker logs quiz-backend`
-- Verify `ALLOWED_ORIGINS` includes `quiz.profitbenefit.com`
+- Verify `ALLOWED_ORIGINS` includes `pigzap.com`
 
 ### Docker layers caching old code
 

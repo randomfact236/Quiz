@@ -1,5 +1,10 @@
 # Deployment Diagnosis — production mismatch — 2026-09-10
 
+> **Resolution note (later same day):** the `quiz.` NXDOMAIN mystery is closed — the owner confirmed the quiz
+> domain is now **`pigzap.com`** (API: `api.pigzap.com`); `quiz.profitbenefit.com` was abandoned before its DNS
+> was ever created. Repo domain config has been switched to pigzap.com; the §5 DNS/Dokploy checklist still
+> applies against the pigzap.com zone.
+
 > Code/config-side diagnosis only. **No fixes attempted.** Read-only probes of the two production URLs
 > (GET requests only), repo/config inspection, and git archaeology. Supersedes the live-check interpretation
 > in §2 of `plan/project-status-2026-09-10.md` (that pass used wrong probe paths — corrected below).
