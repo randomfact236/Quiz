@@ -12,8 +12,9 @@ import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
 
 /** Brand link from the Site Information settings. Mobile (<md) shows the
- *  square app icon; md+ shows the whole (wide) logo. The site name sits
- *  beside either. Falls back to the adaptive placeholder mark when unset. */
+ *  square app icon + site name; md+ shows the whole logo only — it already
+ *  carries the brand name, so no text is added beside it (unless no logo is
+ *  uploaded, in which case the placeholder mark + name are shown). */
 function BrandLink(): JSX.Element {
   const { siteName, logo, favicon } = useSiteBrand();
   const squareIcon = favicon || logo;
@@ -29,7 +30,7 @@ function BrandLink(): JSX.Element {
           <BrandMark size={28} />
         )}
       </span>
-      {/* Larger screens — whole logo */}
+      {/* Larger screens — whole logo only */}
       <span className="hidden md:block" aria-hidden="true">
         {fullLogo ? (
           /* eslint-disable-next-line @next/next/no-img-element */
@@ -38,7 +39,15 @@ function BrandLink(): JSX.Element {
           <BrandMark size={32} />
         )}
       </span>
-      <span className="text-xl font-bold text-primary-600 hover:text-primary-700">{siteName}</span>
+      {/* Site name: always on mobile; on md+ only when no logo is uploaded
+          (the placeholder mark alone would leave the brand nameless) */}
+      <span
+        className={`text-xl font-bold text-primary-600 hover:text-primary-700 ${
+          fullLogo ? 'md:hidden' : ''
+        }`}
+      >
+        {siteName}
+      </span>
     </Link>
   );
 }
