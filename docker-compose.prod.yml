@@ -64,6 +64,11 @@ services:
       # Schema changes ONLY via migrations — never enable synchronize in production.
       DB_SYNCHRONIZE: 'false'
       TRUST_PROXY: 'true'
+    volumes:
+      # Persistent media: bind-mounted host dir so uploaded logos/media survive
+      # redeploys and files can be copied straight onto the server (scp/rsync).
+      # Create the host dir once: mkdir -p /opt/quiz-uploads
+      - /opt/quiz-uploads:/app/public/uploads
     depends_on:
       postgres:
         condition: service_healthy
