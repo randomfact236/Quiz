@@ -140,6 +140,7 @@ export default async function RootLayout({
   const brand = {
     siteName: site?.siteName?.trim() || seo?.siteName?.trim() || 'AI Quiz',
     logo: resolveMediaUrl(site?.logo?.trim() ?? ''),
+    favicon: resolveMediaUrl(site?.favicon?.trim() ?? ''),
   };
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>

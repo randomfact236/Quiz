@@ -11,31 +11,47 @@ import { useSiteBrand } from '@/components/SiteBrandContext';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
 
-/** Brand link from the Site Information settings (logo image when configured,
- *  else the adaptive SVG placeholder mark). Always logo/placeholder + name. */
+/** Brand link from the Site Information settings. Mobile (<md) shows the
+ *  square app icon; md+ shows the whole (wide) logo. The site name sits
+ *  beside either. Falls back to the adaptive placeholder mark when unset. */
 function BrandLink(): JSX.Element {
-  const { siteName, logo } = useSiteBrand();
+  const { siteName, logo, favicon } = useSiteBrand();
+  const squareIcon = favicon || logo;
+  const fullLogo = logo || favicon;
   return (
     <Link href="/" className="inline-flex items-center gap-2" aria-label={`${siteName} Home`}>
-      {logo ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={logo} alt="" className="h-7 w-7 rounded object-contain" />
-      ) : (
-        <BrandMark size={28} />
-      )}
+      {/* Mobile top bar — square app icon */}
+      <span className="md:hidden" aria-hidden="true">
+        {squareIcon ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={squareIcon} alt="" className="h-7 w-7 rounded object-contain" />
+        ) : (
+          <BrandMark size={28} />
+        )}
+      </span>
+      {/* Larger screens — whole logo */}
+      <span className="hidden md:block" aria-hidden="true">
+        {fullLogo ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={fullLogo} alt="" className="h-9 w-auto max-w-[190px] object-contain" />
+        ) : (
+          <BrandMark size={32} />
+        )}
+      </span>
       <span className="text-xl font-bold text-primary-600 hover:text-primary-700">{siteName}</span>
     </Link>
   );
 }
 
-/** Logo + site name row shown at the top of the mobile menu drawer. */
+/** Square icon + site name row shown at the top of the mobile menu drawer. */
 function MobileDrawerBrand(): JSX.Element {
-  const { siteName, logo } = useSiteBrand();
+  const { siteName, favicon, logo } = useSiteBrand();
+  const squareIcon = favicon || logo;
   return (
     <div className="mb-2 flex items-center gap-2 border-b border-secondary-200 pb-3 dark:border-secondary-700">
-      {logo ? (
+      {squareIcon ? (
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={logo} alt="" className="h-8 w-8 rounded object-contain" />
+        <img src={squareIcon} alt="" className="h-8 w-8 rounded object-contain" />
       ) : (
         <BrandMark size={32} />
       )}

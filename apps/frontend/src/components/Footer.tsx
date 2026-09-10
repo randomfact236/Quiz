@@ -48,7 +48,7 @@ export default async function Footer(): Promise<JSX.Element> {
             >
               {logo && (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={logo} alt="" className="h-8 w-8 rounded object-contain" />
+                <img src={logo} alt="" className="h-9 w-auto max-w-[190px] object-contain" />
               )}
               <span className="text-xl font-bold text-primary-600">{siteName}</span>
             </Link>

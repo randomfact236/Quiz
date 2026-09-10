@@ -578,14 +578,14 @@ export function SettingsSection(): JSX.Element {
               </h5>
               <p className="mb-4 text-sm text-gray-500 dark:text-secondary-400">
                 SVG, PNG, WebP, or JPG. Each preview shows exactly how the asset sits in light and
-                dark mode; the text beside it is the Site Name above (live). Until a logo is
+                dark mode; the text beside it is the Site Name above (live). Until an asset is
                 uploaded, the SVG placeholder mark is shown everywhere the brand appears.
               </p>
               <div className="grid gap-8 sm:grid-cols-2">
                 <ImageSettingField
                   id="site-logo"
                   label="Site Logo"
-                  helpText="Square SVG/PNG works best (shown next to the brand name in the header, footer, and mobile nav). Desktop and mobile previews below."
+                  helpText="Whole (wide) logo shown on larger screens in the header and footer. The Site Name is rendered beside it."
                   variant="logo"
                   siteName={formData.site?.siteName ?? ''}
                   value={formData.site?.logo ?? ''}
@@ -593,8 +593,8 @@ export function SettingsSection(): JSX.Element {
                 />
                 <ImageSettingField
                   id="site-favicon"
-                  label="Browser Tab Icon (Favicon)"
-                  helpText="Square SVG/PNG, 192x192 or larger. Shown as the browser tab icon."
+                  label="App Icon (Square)"
+                  helpText="Square SVG/PNG, 192x192 or larger. Used as the compact icon in the mobile top bar, the mobile menu drawer, and the browser tab."
                   variant="favicon"
                   siteName={formData.site?.siteName ?? ''}
                   value={formData.site?.favicon ?? ''}

@@ -10,11 +10,13 @@ import { createContext, useContext } from 'react';
 export interface SiteBrand {
   /** Resolved brand name (site → seo → built-in default) */
   siteName: string;
-  /** Absolute logo URL, or '' when unset (render the text brand) */
+  /** Wide/whole logo URL for large screens, or '' when unset */
   logo: string;
+  /** Square icon URL (app icon) for mobile surfaces + browser tab, or '' */
+  favicon: string;
 }
 
-const DEFAULT_BRAND: SiteBrand = { siteName: 'AI Quiz', logo: '' };
+const DEFAULT_BRAND: SiteBrand = { siteName: 'AI Quiz', logo: '', favicon: '' };
 
 const SiteBrandContext = createContext<SiteBrand>(DEFAULT_BRAND);
 
