@@ -53,5 +53,3 @@ export function BrandMark({
     </svg>
   );
 }
-
-export default BrandMark;
