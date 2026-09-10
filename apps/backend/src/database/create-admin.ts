@@ -101,7 +101,9 @@ async function createAdmin(): Promise<void> {
     process.exit(1);
   }
 
-  const dataSource = new DataSource(getDatabaseConfig());
+  // Register the User entity explicitly: the default glob is CWD-relative and
+  // matches nothing when this runs from compiled dist inside the container.
+  const dataSource = new DataSource(getDatabaseConfig({ entities: [User] }));
 
   try {
     await dataSource.initialize();

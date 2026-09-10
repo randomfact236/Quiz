@@ -53,7 +53,7 @@ export function getDatabaseConfig(
     synchronize?: boolean;
     logging?: boolean;
     migrations?: string[];
-    entities?: string[];
+    entities?: (string | Function)[];
   } = {}
 ): DataSourceOptions {
   // Validate environment variables
