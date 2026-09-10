@@ -10,11 +10,15 @@ COPY apps/backend/src ./apps/backend/src
 COPY apps/backend/tsconfig*.json ./apps/backend/
 COPY apps/backend/scripts ./apps/backend/scripts/
 WORKDIR /app/apps/backend
+# npm nests some deps (e.g. sharp) here instead of hoisting — keep the dir so
+# the runtime stages can copy it even when npm happens to hoist everything.
+RUN mkdir -p apps/backend/node_modules
 RUN DOCKER_ENV=true npm run build
 
 FROM node:20-alpine AS development
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/backend/node_modules ./apps/backend/node_modules
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 COPY --from=builder /app/apps/backend/package*.json ./apps/backend/
 COPY --from=builder /app/apps/backend/src ./apps/backend/src
@@ -26,6 +30,7 @@ RUN apk add --no-cache ca-certificates curl
 RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/backend/node_modules ./apps/backend/node_modules
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 COPY --from=builder /app/apps/backend/package*.json ./apps/backend/
 COPY --from=builder /app/apps/backend/src ./apps/backend/src
