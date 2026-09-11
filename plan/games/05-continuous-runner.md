@@ -85,6 +85,8 @@ hurdle-runner/
   engine.js   # loop/camera/parallax/input (generic — 07 forks this file)
   render.js   # draw calls: world, player, obstacles, HUD (procedural art)
   main.js     # state machine + glue
+  config.js   # flags + strings (host-overridable); tuning constants source of truth
+  storage.js  # guarded facade: versioned best/prefs + migrations, remote adapter slot
 ```
 
 `core.js` exports: `createPlayer()`, `stepPlayer(player, dt, input)` (jump/buffer/coyote/
@@ -147,3 +149,31 @@ gameover` transitions.
 ## 11. Deferred coupling (intentionally NOT built)
 
 Footer/nav links, analytics events, achievements, leaderboards — per master README §7.
+
+## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2). This game
+> is not started, so Rev 2 is **folded directly into the build spec above** (§6 already
+> includes `config.js` + `storage.js`) instead of being retrofitted later. Everything in
+> §1–§11 stands; this section adds the per-game multiplayer analysis and two checklist
+> items.
+
+### Multiplayer (per this game's nature)
+
+- **Hot-seat:** alternate runs on one device, compare distance — trivial (a two-slot
+  score line), no backend.
+- **Async seeded track — the natural fit:** `createSpawner(rng)` already accepts a seed,
+  so a shared seed gives both players the **identical obstacle sequence**; compare
+  distance. Ship as `?seed=` + a share template carrying the seed (P2).
+- **Live racing:** **gated** — real-time positions need a backend, and competitive
+  timing requires server-side validation (client clocks can't be trusted); needs a §7
+  reversal. Not planned.
+
+### Checklist additions
+
+- [ ] P0 addition: `config.js` (the §2 tuning constants move there — the tables stay the
+      spec of record) + `storage.js` facade (versioned best/prefs, migrations, remote
+      adapter slot).
+- [ ] P2 addition: `?seed=` support + share template carrying the seed (async challenge).
+- [ ] Note for 07: Spirit Runner forks `engine.js` — keep the fork contract in sync when
+      `config.js`/`storage.js` land here.

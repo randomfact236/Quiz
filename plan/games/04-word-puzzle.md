@@ -1,6 +1,11 @@
 # Game 04 — Word Puzzle (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **not started** — build-ready.
+> Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete,
+> 2026-09-11) — full game in `apps/frontend/public/games/word-puzzle/`
+> (core.js/game.js/style.css + `data/themes.json`), jest suite + `core.test.html` green
+> (incl. the 100-seeds-per-level generator proof and data lint), browser smoke test
+> covered drag / tap-tap / keyboard paths, hints, stars, progress and the
+> theme-complete flow; P3 extras (daily puzzle, confetti, more themes) deferred.
 > Interpretation decided: **word search** (master README §8 #1–2). Slug `word-puzzle`;
 > folder `apps/frontend/public/games/word-puzzle/`.
 
@@ -112,25 +117,29 @@ progress, share.
 
 ### P0 — playable core
 
-- [ ] `core.js`: mulberry32, generateLevel, lineCells, lettersAt, matchesWord + tests
-- [ ] Grid rendering + drag selection with live highlight and correct/wrong resolution
-- [ ] Word list check-off, level timer, win detection, next-level flow
+- [x] `core.js`: mulberry32, generateLevel, lineCells, lettersAt, matchesWord + tests
+- [x] Grid rendering + drag selection with live highlight and correct/wrong resolution
+- [x] Word list check-off, level timer, win detection, next-level flow
 
 ### P1 — full rules & feel
 
-- [ ] 4 themes × 3 levels data (`themes.json`) + data lint (lengths, dupes, charset)
-- [ ] Reversed directions at L3; hints; star rating; color pills; red flash; pop anim
-- [ ] Progress persistence + Continue; sound blips + mute
+- [x] 4 themes × 3 levels data (`themes.json`) + data lint (lengths, dupes, charset)
+- [x] Reversed directions at L3; hints; star rating; color pills; red flash; pop anim
+- [x] Progress persistence + Continue; sound blips + mute
 
 ### P2 — persistence/share/QA
 
-- [ ] Tap-tap + full keyboard path; a11y labels (§7.5–7.6)
-- [ ] Share text (`{words} words in m:ss · ⭐⭐⭐`); QA gate (master README §5)
+- [x] Tap-tap + full keyboard path; a11y labels (§7.5–7.6)
+- [x] Share text (`{words} words in m:ss · ⭐⭐⭐`); QA gate (master README §5)
+      (browser smoke test at 390×844 covered seeded drags, tap-tap branches, keyboard,
+      hints, stars, persistence, theme completion + lint harness; a human 10-minute
+      session is still owed before calling it player-proof)
 
 ### P3 — polish
 
 - [ ] Daily puzzle (seed = `YYYYMMDD` hash → same grid for everyone, share-friendly);
-      confetti on theme completion; more themes
+      confetti on theme completion; more themes _(deferred — `?seed=` QA hook already
+      ships the deterministic-generator half)_
 
 ## 10. Acceptance criteria
 
@@ -143,3 +152,54 @@ progress, share.
 
 Riddle/content-pipeline integration (backend word lists), footer/nav links, analytics
 events, achievements — per master README §7.
+
+## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2), applied
+> per this game's nature: word search is already data-driven (`themes.json`) and seeded
+> (`mulberry32` + the `?seed=` hook), so its Rev 2 is persistence hygiene plus
+> **promoting the daily/seed features that make async multiplayer natural**.
+
+### Target file layout (additions to the shipped trio)
+
+```
+word-puzzle/
+  index.html
+  style.css
+  core.js         # generator + validation (unchanged)
+  game.js         # UI shell (unchanged behavior)
+  config.js       # flags (dailyEnabled) + per-locale strings (share template, hint copy,
+                  # theme-complete lines); host-overridable
+  storage.js      # guarded facade: versioned progress + prefs + migrations,
+                  # remote adapter slot (host-injected only)
+  data/themes.json
+```
+
+### config.js
+
+Flags (`dailyEnabled`) and per-locale strings (share template, hint wording,
+theme-complete lines). Host override `window.__WORD_PUZZLE_CONFIG__` → `?locale=` →
+defaults. `prefs` may override copy but is a cache, not the source of truth.
+
+### storage.js facade
+
+Versioned progress record — `{ version, levels: { "<theme>:<lvl>": {stars, bestTimeMs} },
+prefs }` — migrated from the loose per-level keys. Remote adapter slot reserved for
+future account sync of stars/progress — the game never checks auth; **guests keep full
+local persistence**. Mid-round resume: N/A (levels are short; stars already persist).
+
+### Multiplayer (per this game's nature)
+
+- **Async seeded race — the natural fit; promote from P3:** the generator is already
+  deterministic (`generateLevel(level, seed)`, `?seed=` hook ships). Daily seed
+  (`YYYYMMDD`) = everyone gets the same grid; a shared seed link = challenge a friend;
+  compare time/stars. Hot-seat: pass the device per level.
+- Live co-op/race: **gated** — backend + §7 reversal. Not planned.
+
+### Phases
+
+- [ ] R2-1 Hygiene: `config.js` + versioned `storage.js` (migration from the loose
+      progress keys); strings moved out of `game.js`.
+- [ ] R2-2 Promote the P3 daily: seed = `YYYYMMDD`, share template carries the seed,
+      identical grids across reloads (acceptance §10 already requires this).
+- [ ] R2-3 Content: more themes via `themes.json` (data-only); confetti polish.

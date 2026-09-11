@@ -123,3 +123,55 @@ Pure exported logic: `newBoard()`, `applyMove(board, i, mark)`, `checkWinner(boa
 Online multiplayer (needs backend rooms), footer/nav links, Play Hub card, achievements —
 per master README §7. Existing analytics POST block is the one live violation; flagged
 above, not silently removed.
+
+## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2), applied
+> per this game's nature: tic tac toe is turn-based, so its multiplayer story is
+> "hot-seat is already shipped; async position challenges are a cheap future add; live
+> online stays gated." The upgrade is otherwise persistence hygiene + structure.
+
+### Target file layout
+
+```
+tic-tac-toe/
+  index.html
+  style.css
+  config.js     # flags + per-locale strings (round-end/series copy, AI think-delay),
+                # host-overridable: window.__TIC_TAC_TOE_CONFIG__ → ?locale= → defaults
+  storage.js    # guarded facade: versioned save (series tallies + prefs) + migrations,
+                # remote adapter slot (host-injected only)
+  core.js       # extracted pure logic (board, checkWinner, minimax/medium/easy, misère)
+                # — the test surface; jest suite + game.test.html re-pointed here
+  game.js       # UI shell: screens, rendering, series wiring
+  game.test.html
+```
+
+### config.js
+
+Constants currently living in `game.js` (AI think-delay ms, mark order) plus per-locale
+strings for round-end and series copy. `prefs` may override copy but is a cache, not the
+source of truth.
+
+### storage.js facade
+
+One versioned save document (series tallies + prefs together, `version` field) migrated
+from the loose per-modeKey series keys. Remote adapter slot reserved for future account
+sync of series — the game never checks auth; **guests keep full local persistence**.
+Mid-round resume: N/A (rounds are fast by design).
+
+### Multiplayer (per this game's nature)
+
+- Hot-seat 2P: **already shipped** (pass-and-play + series scoreboard).
+- Future/optional: **async position challenge** — share a mid-game position + turn as a
+  link ("can you win from here?"); a pure function of the board, no backend.
+- Live online rooms: **gated** — backend + §7 reversal (§11). Not planned.
+
+### Phases
+
+- [ ] R2-1 Hygiene: delete the analytics POST block (§9 — required); extract `core.js`;
+      introduce `config.js` + versioned `storage.js` (migration from the loose series
+      keys); re-point jest + `game.test.html` at `core.js`.
+- [ ] R2-2 A11y pass: roundEnd overlay focus handling, roving focus on the board,
+      contrast check on mark colors.
+- [ ] R2-3 (deferred, optional) async position challenge.

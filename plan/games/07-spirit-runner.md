@@ -1,9 +1,11 @@
 # Game 07 — Spirit Runner (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **not started** — build-ready,
-> **requires Game 05's engine first** (forks `engine.js`). Slug `spirit-runner`;
-> folder `apps/frontend/public/games/spirit-runner/`. Highest complexity (5–7 days);
-> phased A–D so every phase ends shippable.
+> Complete plan (supersedes the 2026-09-09 sample). Status: **built 2026-09-11** —
+> Phases A–D complete in `apps/frontend/public/games/spirit-runner/` (`engine.js`
+> forked from Game 05 with slide + swipe grammar, `gates.js`, `core.js`, `render.js`,
+> `main.js`); §8 jest suite (`src/__tests__/games-spirit-runner.test.ts`) and the
+> folder's `core.test.html` harness green. Outstanding: balance pass (§9 Phase D)
+> and the 10-minute manual session (master README §5); P3 deferred below.
 
 ## 1. Overview
 
@@ -97,6 +99,13 @@ Virtual viewport 900×500 like 05; `?debug=1` draws hitboxes + gate rule id (dev
 - Jump: tap / Space / ↑ (double jump while empowered). Slide: swipe down / ↓ / S.
 - Power: button (bottom-right) / E; auto-trigger accessibility setting.
 - Swipe-up = jump, swipe-down = slide (pointer gesture thresholds: 30 px, 120 ms).
+- **Gate choice (built 2026-09-11, plan left it open):** while a split is live the
+  outer thirds of the screen are the doors — tap the left third for the left door,
+  right third for the right (← / → on keyboard); the middle third keeps jumping and
+  slides still work. While the doors are on the track the spawner holds and the
+  spawn cursor jumps past them, so no obstacle ever overlaps the choice window; a
+  split answered by nothing (the doors pass the runner) resolves as `shadow` — the
+  realm takes you, never a soft-lock (§7.7).
 
 ## 5. Data model (localStorage)
 
@@ -153,24 +162,28 @@ extensions (`spawnOrbArc`, `spawnTrap`, `spawnGuardian`), `applyPower(run, kind)
 
 ### Phase A — core run (≈2 days)
 
-- [ ] Fork engine from 05; slide + low-branch/log/guardian/trap obstacles; trap pulse cycle
-- [ ] 2 hearts + invulnerability; depth palettes; pause/blur; menu/gameover; best distance
+- [x] Fork engine from 05; slide + low-branch/log/guardian/trap obstacles; trap pulse cycle
+- [x] 2 hearts + invulnerability; depth palettes; pause/blur; menu/gameover; best distance
 
 ### Phase B — orbs & powers (≈1.5 days)
 
-- [ ] Orb arcs in spawner; power meter + cycle; DJ/Dash/Slow implementations
-- [ ] Power button + auto-trigger setting; WebAudio (collect/power/hit) + mute
+- [x] Orb arcs in spawner; power meter + cycle; DJ/Dash/Slow implementations
+- [x] Power button + auto-trigger setting; WebAudio (collect/power/hit) + mute
 
 ### Phase C — rune gates & shadow realm (≈2 days)
 
-- [ ] `gates.js` 5 rules + hints (+ tests); split-path rendering; resolution flow
-- [ ] Shadow realm: palette, density ×1.5, ×2 orbs, shard payout, timed return, banner
+- [x] `gates.js` 5 rules + hints (+ tests); split-path rendering; resolution flow
+- [x] Shadow realm: palette, density ×1.5, ×2 orbs, shard payout, timed return, banner
 
 ### Phase D — characters & meta (≈1.5 days)
 
-- [ ] Shard earning; unlock thresholds; 3 character modifiers; picker UI
+- [x] Shard earning; unlock thresholds; 3 character modifiers; picker UI
 - [ ] Balance pass: median first-run 30–45 s, each gate rule learnable ≤ 3 exposures
-- [ ] Share (`Ran {m} m as {character}… {pts}`); QA gate (master README §5)
+      (analytically tuned — obstacle intro at 0/300/800/1200 m, splits 600±100 m,
+      hearts 2 — but no human playtest yet)
+- [x] Share (`Ran {m} m as {character}… {pts}`); QA gate (master README §5) — automated
+      parts done (§8 suites green, offline static, isolation greps clean); the 10-minute
+      manual phone-width session remains for the owner
 
 ### P3 — polish
 
@@ -189,3 +202,58 @@ extensions (`spawnOrbArc`, `spawnTrap`, `spawnGuardian`), `applyPower(run, kind)
 
 Footer/nav links, analytics events, platform achievements integration, leaderboards —
 per master README §7 (revisit only if the owner reverses isolation).
+
+## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2), applied
+> per this game's nature: spirit runner already has seeded, choice-rich runs (the run
+> seed shuffles gate-rule order), so async "same seed" challenges compare runs fairly;
+> the upgrade is persistence hygiene + config extraction. Isolation contract unchanged.
+
+### Target additions
+
+```
+spirit-runner/
+  index.html
+  style.css
+  engine.js     # unchanged
+  core.js       # unchanged (obstacles, orbs, powers, shards — test surface)
+  gates.js      # unchanged (5 rune rules)
+  render.js     # unchanged
+  main.js       # unchanged
+  config.js     # tuning constants (power durations, spawn densities), flags + per-locale
+                # strings (share template, gate hint copy), host-overridable
+  storage.js    # guarded facade: versioned `game:spirit-runner:save` (shards, unlocks,
+                # character, settings) + migrations + remote adapter slot
+```
+
+### Why versioning matters here
+
+This is the composite save most likely to need a migration later (shards, unlocks,
+character, settings in one document) — version it **before** players accumulate shards,
+and migrate on read.
+
+### config.js
+
+The §2 tuning tables (power durations, densities, shard formula) remain the spec of
+record; `config.js` is where the shipped values live so balancing passes (§9 Phase D)
+are data edits. Per-locale strings for gate hints, share template, character copy. Host
+override `window.__SPIRIT_RUNNER_CONFIG__` → `?locale=` → defaults. `prefs` may override
+copy but is a cache, not the source of truth.
+
+### Multiplayer (per this game's nature)
+
+- **Async seeded run — the natural fit:** share the run seed → identical gate-rule order
+  and spawner stream; compare distance/shards. Gate choices stay the human skill, so the
+  comparison is fair without a server.
+- **Hot-seat:** alternate runs on one device, compare shards/distance — trivial.
+- **Live co-op/race (incl. shadow realm):** **gated** — backend + server timing + §7
+  reversal. Not planned.
+
+### Phases
+
+- [ ] R2-1 Hygiene: `config.js` (move shipped tuning values; §2 tables stay
+      authoritative) + versioned `storage.js` (migration for the composite save).
+- [ ] R2-2 Async seeded-run challenge (`?seed=` + share template carrying it).
+- [ ] R2-3 Still owed from §9 Phase D: the balance pass and the owner's 10-minute
+      manual session — unchanged by Rev 2.

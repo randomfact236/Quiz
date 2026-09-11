@@ -141,3 +141,53 @@ the update loop.
 ## 11. Deferred coupling (intentionally NOT built)
 
 Footer/nav links, analytics events, achievements, leaderboards — per master README §7.
+
+## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2), applied
+> per this game's nature: flappy is score-attack with a seeded spawner, so async
+> "same pipes" challenges are the natural multiplayer shape; the upgrade is persistence
+> hygiene + those challenges. Isolation contract unchanged.
+
+### Target additions
+
+```
+flying-snake/
+  index.html
+  style.css
+  core.js       # unchanged (physics/spawner/collision/scoring — test surface)
+  render.js     # unchanged
+  main.js       # unchanged
+  config.js     # flags + per-locale strings (share template, medal copy), host-overridable
+  storage.js    # guarded facade: versioned best/prefs + migrations, remote adapter slot
+```
+
+### config.js
+
+Physics constants stay in `core.js` — §2 tables are the spec of record. `config.js`
+carries flags and per-locale strings: share template, medal names/copy, per-locale UI
+copy. Host override `window.__FLYING_SNAKE_CONFIG__` → `?locale=` → defaults. `prefs`
+may override copy but is a cache, not the source of truth.
+
+### storage.js facade
+
+Versioned save (`{ version, best, prefs:{muted} }`, migrated from the loose keys) with
+a remote adapter slot reserved for future account sync — the game never checks auth;
+**guests keep full local persistence**. Mid-run resume: N/A (runs are seconds; death =
+instant restart by design).
+
+### Multiplayer (per this game's nature)
+
+- **Async seeded pipes — the natural fit:** `createSpawner(rng)` already accepts a seed,
+  so `?seed=` + a share template carrying it = the **identical pipe sequence** for a
+  friend; compare score. Pairs naturally with the deferred P3 "ghost of best run".
+- **Hot-seat:** alternate runs on one device, compare score — trivial.
+- **Live race:** **gated** — backend + server-side timing + §7 reversal. Not planned.
+
+### Phases
+
+- [ ] R2-1 Hygiene: `config.js` + versioned `storage.js` (migration from the loose
+      best/prefs keys).
+- [ ] R2-2 Async seeded challenge: `?seed=` + share template carrying the seed.
+- [ ] R2-3 A11y/polish: reduced-motion variant for flash/shake, menu/gameover focus
+      handling, HUD contrast check.
