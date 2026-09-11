@@ -3,13 +3,13 @@
 import { readdirSync } from 'node:fs';
 
 export const GAMES = [
-  { file: '01-tap-or-dont-tap', no: 1, title: "Tap or Don't Tap", complexity: '⭐ Low', est: '1–2 days', blurb: 'Go/No-Go reaction test — the shareable number is your best reaction time in ms.' },
-  { file: '02-tic-tac-toe', no: 2, title: 'Tic Tac Toe', complexity: '⭐ Low', est: '1 day', blurb: 'Pass-and-play classic with an optional minimax AI and a series scoreboard.' },
-  { file: '03-sliding-puzzle', no: 3, title: 'Sliding Puzzle', complexity: '⭐⭐ Medium', est: '1–2 days', blurb: '15-puzzle with guaranteed-solvable shuffles, move counter and timer.' },
-  { file: '04-word-puzzle', no: 4, title: 'Word Puzzle', complexity: '⭐⭐ Medium', est: '2–3 days', blurb: 'Themed word search — drag to highlight found words, hints and star ratings.' },
-  { file: '05-continuous-runner', no: 5, title: 'Continuous Runner / Hurdles', complexity: '⭐⭐ Medium', est: '2–3 days', blurb: 'Endless hurdle runner. Its engine is the foundation for Spirit Runner.' },
-  { file: '06-flying-snake', no: 6, title: 'Flying Snake (Flappy)', complexity: '⭐⭐ Medium', est: '1–2 days', blurb: 'One-tap flap-through-gaps arcade game with medals and instant retry.' },
-  { file: '07-spirit-runner', no: 7, title: 'Spirit Runner', complexity: '⭐⭐⭐ High', est: '5–7 days', blurb: 'Mystical runner with orb powers, rune-gate puzzles and the shadow realm.' },
+  { file: '01-tap-or-dont-tap', no: 1, title: "Tap or Don't Tap", complexity: '⭐ Low', est: '1–2 days', status: 'Mostly built', blurb: 'Go/No-Go reaction test — the shareable number is your best reaction time in ms.' },
+  { file: '02-tic-tac-toe', no: 2, title: 'Tic Tac Toe', complexity: '⭐ Low', est: '1 day', status: 'Half built', blurb: 'Pass-and-play classic with an optional minimax AI and a series scoreboard.' },
+  { file: '03-sliding-puzzle', no: 3, title: 'Sliding Puzzle', complexity: '⭐⭐ Medium', est: '1–2 days', status: 'Built', blurb: '15-puzzle with guaranteed-solvable shuffles, move counter and timer.' },
+  { file: '04-word-puzzle', no: 4, title: 'Word Puzzle', complexity: '⭐⭐ Medium', est: '2–3 days', status: 'Built', blurb: 'Themed word search — drag to highlight found words, hints and star ratings.' },
+  { file: '05-continuous-runner', no: 5, title: 'Continuous Runner / Hurdles', complexity: '⭐⭐ Medium', est: '2–3 days', status: 'Not started', blurb: 'Endless hurdle runner. Its engine is the foundation for Spirit Runner.' },
+  { file: '06-flying-snake', no: 6, title: 'Flying Snake (Flappy)', complexity: '⭐⭐ Medium', est: '1–2 days', status: 'Built', blurb: 'One-tap flap-through-gaps arcade game with medals and instant retry.' },
+  { file: '07-spirit-runner', no: 7, title: 'Spirit Runner', complexity: '⭐⭐⭐ High', est: '5–7 days', status: 'Not started', blurb: 'Mystical runner with orb powers, rune-gate puzzles and the shadow realm.' },
 ];
 
 export const planMdFiles = (dir) => readdirSync(dir).filter((f) => f.endsWith('.md') && f !== 'README.md');

@@ -68,7 +68,7 @@ function indexPage() {
     <div class="num">Game ${g.no}</div>
     <h3>${esc(g.title)}</h3>
     <p>${esc(g.blurb)}</p>
-    <div class="meta"><span>${g.complexity}</span><span>${g.est}</span><span class="status">not started</span></div>
+    <div class="meta"><span>${g.complexity}</span><span>${g.est}</span><span class="status">${esc(g.status || 'not started')}</span></div>
   </a>`).join('');
   return `<!doctype html>
 <html lang="en">

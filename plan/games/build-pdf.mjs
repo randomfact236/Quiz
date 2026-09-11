@@ -64,7 +64,7 @@ ${bodyHtml}
 
 function metaLine(g) {
   const parts = g
-    ? [`Game ${g.no} of 7`, `Complexity: ${g.complexity}`, `Estimate: ${g.est}`, 'Status: not started']
+    ? [`Game ${g.no} of 7`, `Complexity: ${g.complexity}`, `Estimate: ${g.est}`, `Status: ${g.status || 'not started'}`]
     : ['Overview & shared conventions', 'Status: reference document'];
   return parts.map((p) => `<span>${esc(p)}</span>`).join('');
 }
