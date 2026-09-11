@@ -12,11 +12,9 @@
  * ============================================================================
  */
 import {
-  BEST_KEY,
   FIRST_PIPE_X,
   PIPE_SPACING,
   PIPE_W,
-  PREFS_KEY,
   VIEW_H,
   VIEW_W,
   WORLD_SPEED,
@@ -32,6 +30,12 @@ import {
   stepSnake,
 } from './core.js';
 import { drawScene } from './render.js';
+import {
+  getBest as loadBest,
+  getMuted as loadMuted,
+  saveBest,
+  setMuted as saveMuted,
+} from './storage.js';
 
 /* ==========================================================================
  * 0. Share text (pure — plan §9 P2 + master README §2 format)
@@ -42,70 +46,9 @@ export function shareText(score, url) {
 }
 
 /* ==========================================================================
- * 1. Guarded storage (README §2 — private-mode safe, plan §7.6: disabled
- *    storage means no best/medal, still fully playable)
+ * 1. Persistence — storage.js facade (Rev 2: versioned save + migrations).
+ *    Disabled storage means no best/medal, still fully playable (§7.6).
  * ======================================================================= */
-
-const storage = (() => {
-  const fallback = {};
-  function backend() {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const probe = '__fs_probe__';
-        window.localStorage.setItem(probe, '1');
-        window.localStorage.removeItem(probe);
-        return window.localStorage;
-      }
-    } catch {
-      /* private mode / disabled — fall through */
-    }
-    return null;
-  }
-  return {
-    readJson(key, fallbackValue) {
-      try {
-        const store = backend();
-        const raw = store ? store.getItem(key) : fallback[key] || null;
-        if (!raw) return fallbackValue;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : fallbackValue;
-      } catch {
-        return fallbackValue;
-      }
-    },
-    writeJson(key, value) {
-      try {
-        const store = backend();
-        if (store) store.setItem(key, JSON.stringify(value));
-        else fallback[key] = JSON.stringify(value);
-      } catch {
-        /* quota / private mode — the game keeps working without records */
-      }
-    },
-  };
-})();
-
-function loadBest() {
-  const best = storage.readJson(BEST_KEY, null);
-  return best && typeof best.score === 'number' && best.score >= 0 ? best : null;
-}
-
-/** Returns true when `score` is a new personal best (which is then stored). */
-function saveBest(score) {
-  const prev = loadBest();
-  if (prev && prev.score >= score) return false;
-  storage.writeJson(BEST_KEY, { score });
-  return true;
-}
-
-function loadMuted() {
-  const prefs = storage.readJson(PREFS_KEY, {});
-  return prefs.muted === true;
-}
-
-function saveMuted(muted) {
-  storage.writeJson(PREFS_KEY, { muted });
-}
 
 /* ==========================================================================
  * 2. Audio (README §3 audio.js equivalent — context on first user gesture)

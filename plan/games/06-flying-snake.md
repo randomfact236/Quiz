@@ -188,8 +188,11 @@ instant restart by design).
 
 ### Phases
 
-- [ ] R2-1 Hygiene: `config.js` + versioned `storage.js` (migration from the loose
-      best/prefs keys).
-- [ ] R2-2 Async seeded challenge: `?seed=` + share template carrying the seed.
+- [x] R2-1 Hygiene (2026-09-11): `config.js` (locale + reserved strings,
+      host-overridable) + `storage.js` (versioned `save` document — best + prefs —
+      migrated from the loose best/prefs keys, corrupt-save sanitization, remote adapter
+      slot); `main.js` slimmed to the facade. 42/42 tests green; flap-spam smoke clean.
+- [ ] R2-2 Async seeded challenge: `?seed=` + share template carrying the seed —
+      `createSpawner(rng)` is ready; `main.js` needs to thread the seed through.
 - [ ] R2-3 A11y/polish: reduced-motion variant for flash/shake, menu/gameover focus
       handling, HUD contrast check.
