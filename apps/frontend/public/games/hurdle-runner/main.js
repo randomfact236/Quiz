@@ -12,12 +12,10 @@
  * ============================================================================
  */
 import {
-  BEST_KEY,
   CULL_X,
   CLEAR_BONUS,
   GROUND_Y,
   HITBOX_INSET,
-  PREFS_KEY,
   PLAYER_X,
   SPAWN_X,
   SCROLL_START,
@@ -43,6 +41,12 @@ import {
 } from './core.js';
 import { advanceCamera, createCamera, createJumpInput, createLoop } from './engine.js';
 import { drawScene } from './render.js';
+import {
+  getBest as loadBest,
+  getMuted as loadMuted,
+  saveBest,
+  setMuted as saveMuted,
+} from './storage.js';
 
 /* ==========================================================================
  * 0. Share text (plan §9 P2 "Ran {m} m — beat that!" in the master README §2
@@ -54,70 +58,9 @@ export function shareText(distanceM, url) {
 }
 
 /* ==========================================================================
- * 1. Guarded storage (master README §2 — private-mode safe; plan §7.6:
- *    disabled storage means no best score, still fully playable)
+ * 1. Persistence — storage.js facade (Rev 2: versioned save + migrations).
+ *    Disabled storage means no best score, still fully playable (§7.6).
  * ======================================================================= */
-
-const storage = (() => {
-  const fallback = {};
-  function backend() {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const probe = '__hr_probe__';
-        window.localStorage.setItem(probe, '1');
-        window.localStorage.removeItem(probe);
-        return window.localStorage;
-      }
-    } catch {
-      /* private mode / disabled — fall through */
-    }
-    return null;
-  }
-  return {
-    readJson(key, fallbackValue) {
-      try {
-        const store = backend();
-        const raw = store ? store.getItem(key) : fallback[key] || null;
-        if (!raw) return fallbackValue;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : fallbackValue;
-      } catch {
-        return fallbackValue;
-      }
-    },
-    writeJson(key, value) {
-      try {
-        const store = backend();
-        if (store) store.setItem(key, JSON.stringify(value));
-        else fallback[key] = JSON.stringify(value);
-      } catch {
-        /* quota / private mode — the game keeps working without records */
-      }
-    },
-  };
-})();
-
-function loadBest() {
-  const best = storage.readJson(BEST_KEY, null);
-  return best && typeof best.distanceM === 'number' && best.distanceM >= 0 ? best : null;
-}
-
-/** Returns true when `distanceM` is a new personal best (which is then stored). */
-function saveBest(distanceM) {
-  const prev = loadBest();
-  if (prev && prev.distanceM >= distanceM) return false;
-  storage.writeJson(BEST_KEY, { distanceM });
-  return true;
-}
-
-function loadMuted() {
-  const prefs = storage.readJson(PREFS_KEY, {});
-  return prefs.muted === true;
-}
-
-function saveMuted(muted) {
-  storage.writeJson(PREFS_KEY, { muted });
-}
 
 /* ==========================================================================
  * 2. Audio (master README §3 audio.js equivalent — context on first gesture)
