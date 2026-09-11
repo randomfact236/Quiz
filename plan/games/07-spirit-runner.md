@@ -252,8 +252,11 @@ copy but is a cache, not the source of truth.
 
 ### Phases
 
-- [ ] R2-1 Hygiene: `config.js` (move shipped tuning values; §2 tables stay
-      authoritative) + versioned `storage.js` (migration for the composite save).
+- [x] R2-1 Persistence hygiene (2026-09-11): `config.js` (locale + reserved strings +
+      the host-injectable `remoteAdapter` seam; host-overridable) and the versioned save
+      (writes carry `version: 1`; load normalizes per field). **Deferred:** moving the
+      §2 tuning constants into `config.js` — they live in `core.js` and are imported by
+      every module; a dedicated pass when the balance settles. 42/42 tests green.
 - [ ] R2-2 Async seeded-run challenge (`?seed=` + share template carrying it).
 - [ ] R2-3 Still owed from §9 Phase D: the balance pass and the owner's 10-minute
       manual session — unchanged by Rev 2.

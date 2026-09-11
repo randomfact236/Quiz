@@ -59,6 +59,7 @@ import {
 import { createCamera, advanceCamera, createLoop, createRunnerInput } from './engine.js';
 import { DEPTH_LABELS, drawScene, paletteFor, POWER_LABEL } from './render.js';
 import { makeGate, resolveChoice, shuffledRules } from './gates.js';
+import { GAME_CONFIG } from './config.js';
 
 /* ==========================================================================
  * 0. Share text (plan §2 Phase D format inside the master README §2 wrapper)
@@ -128,6 +129,7 @@ const storage = (() => {
 
 function defaultSave() {
   return {
+    version: 1,
     bestDistanceM: 0,
     shards: 0,
     unlocked: ['spirit'],
@@ -141,6 +143,7 @@ function loadSave() {
   const def = defaultSave();
   if (!raw) return def;
   return {
+    version: 1,
     bestDistanceM:
       typeof raw.bestDistanceM === 'number' && raw.bestDistanceM >= 0 ? raw.bestDistanceM : 0,
     shards: typeof raw.shards === 'number' && raw.shards >= 0 ? Math.floor(raw.shards) : 0,
@@ -156,8 +159,23 @@ function loadSave() {
   };
 }
 
+/** Host-injected account-sync seam (Rev 2): adapter shape `{ save(saveObj) }`. */
+let remoteAdapter = null;
+
+function setRemoteAdapter(adapter) {
+  remoteAdapter = adapter && typeof adapter.save === 'function' ? adapter : null;
+}
+
 function saveSave() {
-  storage.writeJson(SAVE_KEY, save);
+  const written = storage.writeJson(SAVE_KEY, save);
+  if (remoteAdapter) {
+    try {
+      remoteAdapter.save(save); // host contract — never let it break gameplay
+    } catch {
+      /* best-effort mirror */
+    }
+  }
+  return written;
 }
 
 /* ==========================================================================
@@ -252,6 +270,7 @@ const state = {
 };
 
 const save = loadSave();
+if (GAME_CONFIG.remoteAdapter) setRemoteAdapter(GAME_CONFIG.remoteAdapter);
 
 const els = {};
 let canvas = null;
