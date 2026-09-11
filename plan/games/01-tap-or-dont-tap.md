@@ -4,8 +4,10 @@
 > (2026-09-09 build pass) — `apps/frontend/public/games/tap-or-dont-tap/` with decoys,
 > Stroop traps, rule swap, audio, pause and a baked percentile table. Logic tests:
 > `apps/frontend/src/__tests__/games-tap-or-dont-tap.test.ts`.
-> This doc is the spec of record: the constants below are authoritative when tuning, and
-> the open items in §9–§12 are the only remaining work.
+> **Rev 2 (2026-09-11): architecture upgraded — pure `core.js`, `config.js`,
+> `storage.js` (versioned + migrated), `audio.js`; analytics removed; a11y pass. 30/30
+> tests green.** This doc is the spec of record: the constants below are authoritative
+> when tuning, and §13 tracks the Rev 2 state.
 
 ## 1. Overview
 
@@ -128,11 +130,12 @@ seeded `pickSignal` sequences per band; `percentileFor` monotonic + bounds.
 ### P2 — persistence/share/QA
 
 - [x] Best score + history persistence; share chain
-- [ ] **Delete `analyticsCandidates`/`trackGamePlayed` stubs** (isolation decision — they
-      must never post to `/api/*`)
-- [ ] Optional: migrate inline storage/audio helpers to `../shared/`
-- [ ] Optional: extract pure core to `core.js`; keep site test file green
-- [ ] QA gate (master README §5): offline play + isolation greps
+- [x] **Delete `analyticsCandidates`/`trackGamePlayed` stubs** — done 2026-09-11 (Rev 2);
+      the game makes zero network calls (isolation greps clean)
+- [x] Storage/audio/config helpers moved to per-game modules (`storage.js`, `audio.js`,
+      `config.js`) per the Rev 2 architecture — supersedes the `../shared/` idea
+- [x] Pure core extracted to `core.js`; site test file re-pointed and green (30 tests)
+- [x] QA gate (master README §5): offline play + isolation greps clean (2026-09-11)
 
 ### P3 — polish
 
@@ -152,6 +155,68 @@ per master README §7. The analytics stubs in `game.js` are to be **deleted**, n
 
 ## 12. Remaining work (from code review 2026-09-10)
 
-1. Remove analytics stubs (P2 — the only required code change).
-2. Optional shared-utils migration + `core.js` extraction (P2, non-blocking).
-3. Reduced-motion + tuning (P3).
+1. ~~Remove analytics stubs~~ — done 2026-09-11 (Rev 2 R2-1; isolation greps clean).
+2. ~~Shared-utils migration + `core.js` extraction~~ — done 2026-09-11 as per-game
+   `config.js`/`storage.js`/`audio.js` + `core.js` (Rev 2 R2-1; supersedes `../shared/`).
+3. ~~Reduced-motion + tuning~~ — reduced-motion covered (flash is a solid color; pop +
+   button transitions disabled); tuning pass still owes human sessions (P3).
+
+## 13. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
+
+> Owner-approved architecture reference for all games (Sliding Puzzle Rev 2), applied
+> per this game's nature: a reflex game has no levels and no meaningful multiplayer, so
+> the upgrade here is **hygiene + structure**, not features. Isolation contract
+> unchanged: no analytics, no site coupling, offline-first.
+
+### Target file layout
+
+```
+tap-or-dont-tap/
+  index.html
+  style.css
+  config.js     # flags + per-locale strings (menu rule line, feedback/share/gameover
+                # copy), host-overridable: window.__TAP_OR_DONT_TAP_CONFIG__ → ?locale= → defaults
+  storage.js    # guarded facade: versioned save + migrations, remote adapter slot
+  audio.js      # WebAudio + mute
+  core.js       # extracted pure core (windowMs, pointsForGreen, pickSignal, resolveTap,
+                # percentileFor) — the test surface; jest suite re-pointed here
+  game.js       # UI shell: state machine + DOM wiring
+```
+
+### config.js
+
+Flags and strings only — no multiplayer, no levels in this game. Per-locale strings for
+the rule line, feedback overlays, share template and gameover card; `prefs` may override
+the copy but is documented as a cache, not the source of truth.
+
+### storage.js facade
+
+One versioned save record replaces the three loose keys:
+`game:tap-or-dont-tap:save → { version:1, best:{score,bestMs}, history:[…≤50], prefs:{muted} }`
+with a one-time migration from the legacy keys. Remote adapter slot (host-injected only)
+reserved for future account sync of best/history — the game never checks auth; **guests
+keep full local persistence**. Mid-round resume: N/A (rounds are seconds).
+
+### Multiplayer (per this game's nature)
+
+- Live/real-time duels: **gated** — device input/display latency makes reaction times
+  unfairly comparable; needs a backend plus server-side timing and a §7 reversal. Not
+  planned.
+- Optional future: **async seeded duel** — `pickSignal(round, rng)` already accepts an
+  rng, so a shared seed fixes the identical signal sequence for both players; compare
+  score. Deferred; not scheduled.
+
+### Phases
+
+- [x] R2-1 Hygiene (2026-09-11): analytics stubs deleted; pure core extracted to
+      `core.js` (jest suite re-pointed); `config.js` (locale + share strings,
+      host-overridable) and `storage.js` (versioned `save` document, legacy-key
+      migration, remote adapter slot) introduced; `audio.js` split out. 30/30 tests
+      green; browser-verified end-to-end.
+- [x] R2-2 A11y/polish (2026-09-11): signal `aria-label` describing each flash (incl.
+      the Stroop lie) via `role="img"`; focus lands on Retry at gameover; `data-state`
+      now maintained on the game root; Stroop word contrast fixed on the green flash;
+      go-badge gradient darkened to AA; visible `:focus-visible` rings. (Reduced-motion:
+      the flash is a solid color — nothing moves; the existing block covers the feedback
+      pop + buttons. Sparkline + haptics were already shipped.)
+- [ ] R2-3 (deferred, optional) async seeded duel — only if there's demand.

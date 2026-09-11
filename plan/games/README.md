@@ -6,15 +6,15 @@
 
 ## 1. Status
 
-| #   | Game             | Plan file                 | Build status                                                                                                                                                                                                                                                          | Est. left |
-| --- | ---------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| 1   | Tap or Don't Tap | `01-tap-or-dont-tap.md`   | **Mostly built** — full trio in `public/games/tap-or-dont-tap/` incl. decoys/Stroop/swap, baked percentile table, audio; see plan §12 for the remaining gap list                                                                                                      | ~0.5 day  |
-| 2   | Tic Tac Toe      | `02-tic-tac-toe.md`       | **Half built** — `game.js` (screens, series storage, AI logic) exists; **`index.html` + `style.css` missing**                                                                                                                                                         | ~0.5 day  |
-| 3   | Sliding Puzzle   | `03-sliding-puzzle.md`    | **Built** — P0–P2 complete + 5×5, picture mode (8 procedural scenes, corner target preview, peek pills), daily challenge (seeded 4×4) and hard mode; jest suite + `core.test.html` green; remaining P3 extras: undo, solve-demo, swipe; future: fixed picture library | done      |
-| 4   | Word Puzzle      | `04-word-puzzle.md`       | Not started                                                                                                                                                                                                                                                           | 2–3 days  |
-| 5   | Hurdle Runner    | `05-continuous-runner.md` | Not started                                                                                                                                                                                                                                                           | 2–3 days  |
-| 6   | Flying Snake     | `06-flying-snake.md`      | **Built** — P0–P2 complete in `public/games/flying-snake/` (core/render/main, fixed 1/120 s physics, medals, share, `?debug=1`); jest suite + `core.test.html` green; P3 extras deferred                                                                              | done      |
-| 7   | Spirit Runner    | `07-spirit-runner.md`     | Not started (needs 05)                                                                                                                                                                                                                                                | 5–7 days  |
+| #   | Game             | Plan file                 | Build status                                                                                                                                                                                                                                                                                | Est. left |
+| --- | ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 1   | Tap or Don't Tap | `01-tap-or-dont-tap.md`   | **Built** — Rev 2 applied 2026-09-11: modular (core/config/storage/audio), analytics removed, a11y + contrast pass, 30 tests green; tuning pass after human sessions owed                                                                                                                   | ~0.5 day  |
+| 2   | Tic Tac Toe      | `02-tic-tac-toe.md`       | **Half built** — `game.js` (screens, series storage, AI logic) exists; **`index.html` + `style.css` missing**                                                                                                                                                                               | ~0.5 day  |
+| 3   | Sliding Puzzle   | `03-sliding-puzzle.md`    | **Built** — P0–P2 complete + 5×5, picture mode (8 procedural scenes, corner target preview, peek pills), daily challenge (seeded 4×4) and hard mode; jest suite + `core.test.html` green; remaining P3 extras: undo, solve-demo, swipe; future: fixed picture library                       | done      |
+| 4   | Word Puzzle      | `04-word-puzzle.md`       | **Built** — P0–P2 complete in `public/games/word-puzzle/` (core/game + `data/themes.json`, 4 themes × 3 tiers, seeded generator, drag/tap/keyboard input, hints, stars, share); jest suite + `core.test.html` green; P3 extras (daily puzzle, confetti, more themes) deferred               | done      |
+| 5   | Hurdle Runner    | `05-continuous-runner.md` | **Built** — P0–P2 complete in `public/games/hurdle-runner/` (engine/core/render/main, 💚 pickup, share, `?debug=1`, day→night palette); a spawner rng double-call bug left by the interrupted build pass was fixed 2026-09-11 and the jest suite is green; P3 leftovers: fast-fall, gamepad | done      |
+| 6   | Flying Snake     | `06-flying-snake.md`      | **Built** — P0–P2 complete in `public/games/flying-snake/` (core/render/main, fixed 1/120 s physics, medals, share, `?debug=1`); jest suite + `core.test.html` green; P3 extras deferred                                                                                                    | done      |
+| 7   | Spirit Runner    | `07-spirit-runner.md`     | **Built** — Phases A–D complete in `public/games/spirit-runner/` (engine forked from 05 with slide/swipes; `gates.js` 5 rules; orbs/powers; shadow realm; characters/unlocks; `?debug=1`); jest suite + `core.test.html` green; balance pass + 10-min manual session pending; P3 deferred   | ~0.5 day  |
 
 ## 2. Shared conventions (binding for all games)
 
@@ -33,6 +33,15 @@
   `visibilitychange` (timers restart or accumulate — never silently elapse).
 - **Code layout:** pure game logic lives in a separate `core.js` (or a clearly separated
   pure section of `game.js`) with no DOM access — this is what makes games testable.
+- **Rev 2 architecture reference (2026-09-11):** `03-sliding-puzzle.md` — every game
+  adopts, per its nature, a `config.js` (flags + per-locale strings, host-overridable
+  via `window.__<GAME>_CONFIG__` → URL param → defaults), a `storage.js` facade (schema
+  version + migrations over its keys, prefs/records, and a remote adapter slot that only
+  a host can inject), **local-first persistence** (guests keep full local saving; the
+  game never checks auth; account sync is a gated future phase), and a per-game
+  multiplayer analysis in its plan (hot-seat / async seeded challenges are backend-free;
+  live online is gated behind a backend + an explicit §7 reversal). See each plan's
+  "Rev 2 architecture upgrade" section.
 - **Phases:** P0 playable core · P1 full rules & feel · P2 persistence/share/QA ·
   P3 polish (same basis as `plan/STANDARDS.md` §1).
 

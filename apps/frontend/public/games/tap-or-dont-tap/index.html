@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0e14" />
+    <meta
+      name="description"
+      content="Tap or Don't Tap — a Go/No-Go reaction game. Tap the green flash, resist the red. How fast are you in milliseconds?"
+    />
+    <title>Tap or Don't Tap</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚦</text></svg>" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="game-root" data-state="menu">
+      <!-- HUD: fixed during play, never reflows on a flash -->
+      <header id="hud" hidden>
+        <span id="hud-hearts" aria-label="Hearts remaining">❤️❤️❤️</span>
+        <span id="hud-score">0</span>
+        <span id="hud-round">R1</span>
+      </header>
+
+      <!-- Rule-flip banner (P3) -->
+      <div id="swap-banner" hidden>🔄 RULES SWAPPED! red = tap · green = wait</div>
+
+      <!-- ============ menu ============ -->
+      <section id="state-menu" class="state" hidden>
+        <div class="menu-card">
+          <h1>🚦 Tap or Don't Tap</h1>
+          <p class="tagline">Tap the <b class="green">green</b>. Resist the <b class="red">red</b>. That's it — until your brain betrays you.</p>
+          <p class="best-line" id="menu-best" hidden>
+            Best score <b id="menu-best-score">0</b> · fastest <b id="menu-best-ms">—</b>
+          </p>
+          <svg id="sparkline" hidden aria-hidden="true"></svg>
+          <button id="btn-start" class="btn-primary" type="button">▶ Start</button>
+          <p class="hint">Whole screen is the button · Space/Enter on desktop</p>
+          <button id="btn-mute" class="btn-ghost" type="button" aria-pressed="false">🔊 Sound on</button>
+        </div>
+        <a class="back-link" href="/games">← All games</a>
+      </section>
+
+      <!-- ============ waiting ============ -->
+      <section id="state-waiting" class="state" hidden>
+        <p class="wait-text">wait for it…</p>
+      </section>
+
+      <!-- ============ signal ============ -->
+      <section id="state-signal" class="state" hidden>
+        <div id="signal-surface" class="">
+          <span id="signal-word"></span>
+        </div>
+      </section>
+
+      <!-- ============ feedback ============ -->
+      <div id="feedback" hidden aria-live="polite"></div>
+
+      <!-- ============ gameover ============ -->
+      <section id="state-gameover" class="state" hidden>
+        <div class="menu-card">
+          <h1>🚦 GAME OVER</h1>
+          <p class="go-score" id="go-score">0</p>
+          <p class="go-stats">
+            <span id="go-best-label">Best reaction <b id="go-best-ms">—</b> · </span>
+            <span id="go-rounds">0</span> rounds survived
+          </p>
+          <p id="go-badge" class="go-badge" hidden></p>
+          <p id="go-record" class="go-record" hidden>🏆 New personal best!</p>
+          <div class="btn-row">
+            <button id="btn-share" class="btn-primary" type="button">📤 Share my score</button>
+            <button id="btn-retry" class="btn-secondary" type="button">↻ Retry</button>
+          </div>
+          <p id="share-note" class="share-note" hidden>Copied to clipboard!</p>
+          <button id="btn-menu" class="btn-ghost" type="button">Back to menu</button>
+        </div>
+      </section>
+
+      <!-- ============ pause overlay ============ -->
+      <div id="pause-overlay" hidden>
+        <div class="menu-card">
+          <h1>⏸ Paused</h1>
+          <p class="tagline">Tab switched — your run is safe.</p>
+          <button id="btn-resume" class="btn-primary" type="button">Resume</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="game.js"></script>
+  </body>
+</html>
