@@ -21,8 +21,6 @@
  * ============================================================================
  */
 import {
-  PREFS_KEY,
-  PROGRESS_KEY,
   DIRS,
   formatTime,
   generateLevel,
@@ -32,6 +30,8 @@ import {
   reverseAllowed,
   starsFor,
 } from './core.js';
+import { getMuted, loadLevels, saveResult, setMuted } from './storage.js';
+import { GAME_CONFIG, t } from './config.js';
 
 /* ==========================================================================
  * 0. Data + pure presentation helpers
@@ -73,88 +73,11 @@ const WORD_COLORS = [
 ];
 
 /* ==========================================================================
- * 1. Guarded storage (README §2 — private-mode safe, no progress ≠ unplayable)
+ * 1. Persistence — storage.js facade (Rev 2: versioned save + migrations)
  * ======================================================================= */
 
-const storage = (() => {
-  const fallback = {};
-  function backend() {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const probe = '__wp_probe__';
-        window.localStorage.setItem(probe, '1');
-        window.localStorage.removeItem(probe);
-        return window.localStorage;
-      }
-    } catch {
-      /* private mode / disabled — fall through */
-    }
-    return null;
-  }
-  return {
-    readJson(key, fallbackValue) {
-      try {
-        const store = backend();
-        const raw = store ? store.getItem(key) : fallback[key] || null;
-        if (!raw) return fallbackValue;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : fallbackValue;
-      } catch {
-        return fallbackValue;
-      }
-    },
-    writeJson(key, value) {
-      try {
-        const store = backend();
-        if (store) store.setItem(key, JSON.stringify(value));
-        else fallback[key] = JSON.stringify(value);
-      } catch {
-        /* quota / private mode — the game keeps working without progress */
-      }
-    },
-  };
-})();
-
 function loadProgress() {
-  const raw = storage.readJson(PROGRESS_KEY, {});
-  const progress = {};
-  for (const key of Object.keys(raw)) {
-    const rec = raw[key];
-    if (
-      rec &&
-      typeof rec.stars === 'number' &&
-      rec.stars >= 0 &&
-      rec.stars <= 3 &&
-      typeof rec.bestTimeMs === 'number' &&
-      rec.bestTimeMs >= 0
-    ) {
-      progress[key] = { stars: rec.stars, bestTimeMs: rec.bestTimeMs };
-    }
-  }
-  return progress;
-}
-
-/** Fold a finished level into the progress map: best stars + best time. */
-function saveResult(themeId, levelNo, stars, timeMs) {
-  const key = themeId + ':' + levelNo;
-  const progress = loadProgress();
-  const prev = progress[key] || { stars: 0, bestTimeMs: Infinity };
-  const rec = {
-    stars: Math.max(prev.stars, stars),
-    bestTimeMs: Math.min(prev.bestTimeMs, timeMs),
-  };
-  progress[key] = rec;
-  storage.writeJson(PROGRESS_KEY, progress);
-  return { record: rec, newBest: timeMs < prev.bestTimeMs };
-}
-
-function loadPrefs() {
-  const prefs = storage.readJson(PREFS_KEY, {});
-  return { muted: prefs.muted === true };
-}
-
-function savePrefs() {
-  storage.writeJson(PREFS_KEY, { muted: state.muted });
+  return loadLevels();
 }
 
 /* ==========================================================================
@@ -654,16 +577,12 @@ function winLevel() {
 function shareText() {
   const url = window.location.origin + window.location.pathname;
   const stars = '⭐'.repeat(Math.max(1, Math.min(3, state.resultStars || 0)));
-  return (
-    'I found ' +
-    state.level.words.length +
-    ' words in ' +
-    formatTime(state.resultTimeMs || Math.round(playedMs())) +
-    ' · ' +
-    stars +
-    ' in Word Puzzle — can you beat it? ' +
-    url
-  );
+  return t('share', {
+    words: state.level.words.length,
+    time: formatTime(state.resultTimeMs || Math.round(playedMs())),
+    stars,
+    url,
+  });
 }
 
 function share() {
@@ -932,7 +851,7 @@ function wire() {
 
   els.muteToggle.addEventListener('change', () => {
     state.muted = els.muteToggle.checked;
-    savePrefs();
+    setMuted(state.muted);
     if (!state.muted) blip(660, 80); // audible confirmation the sound is back
   });
 
@@ -951,8 +870,7 @@ async function init() {
   bindEls();
   wire();
 
-  const prefs = loadPrefs();
-  state.muted = prefs.muted;
+  state.muted = getMuted();
   els.muteToggle.checked = state.muted;
 
   THEMES = await loadThemes();

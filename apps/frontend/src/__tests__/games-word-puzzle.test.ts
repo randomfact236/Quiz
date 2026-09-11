@@ -10,8 +10,6 @@
 import {
   DIRS,
   LETTERS,
-  PREFS_KEY,
-  PROGRESS_KEY,
   TIER_BY_SIZE,
   TIER_DIRS,
   formatTime,
@@ -25,6 +23,17 @@ import {
   starsFor,
   tierDirs,
 } from '../../public/games/word-puzzle/core';
+import {
+  PREFS_KEY,
+  PROGRESS_KEY,
+  SAVE_KEY,
+  getMuted,
+  loadLevels,
+  loadSave,
+  saveResult,
+  setMuted,
+} from '../../public/games/word-puzzle/storage';
+import { resolveConfig, t } from '../../public/games/word-puzzle/config';
 import THEMES from '../../public/games/word-puzzle/data/themes.json';
 
 const ALL_LEVELS: {
@@ -303,8 +312,87 @@ describe('formatTime + storage keys', () => {
     expect(formatTime(3600000)).toBe('60:00');
   });
 
-  it('keeps the README §2 key layout', () => {
+  it('keeps the README §2 key layout (legacy) and the Rev 2 save key', () => {
     expect(PROGRESS_KEY).toBe('game:word-puzzle:progress');
     expect(PREFS_KEY).toBe('game:word-puzzle:prefs');
+    expect(SAVE_KEY).toBe('game:word-puzzle:save');
+  });
+});
+
+describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
+  const KEYS = [SAVE_KEY, PROGRESS_KEY, PREFS_KEY];
+  let original: Record<string, string | null>;
+
+  beforeEach(() => {
+    original = Object.fromEntries(KEYS.map((k) => [k, window.localStorage.getItem(k)]));
+    KEYS.forEach((k) => window.localStorage.removeItem(k));
+  });
+
+  afterAll(() => {
+    for (const [k, v] of Object.entries(original)) {
+      if (v === null) window.localStorage.removeItem(k);
+      else window.localStorage.setItem(k, v);
+    }
+  });
+
+  it('defaults to a fresh versioned save when nothing is stored', () => {
+    expect(loadSave()).toEqual({ version: 1, levels: {}, prefs: { muted: false } });
+  });
+
+  it('migrates legacy progress + prefs keys and removes them', () => {
+    window.localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify({
+        'animals:1': { stars: 3, bestTimeMs: 42000 },
+        'food:2': { stars: 1, bestTimeMs: 150000 },
+      })
+    );
+    window.localStorage.setItem(PREFS_KEY, JSON.stringify({ muted: true }));
+
+    expect(loadLevels()).toEqual({
+      'animals:1': { stars: 3, bestTimeMs: 42000 },
+      'food:2': { stars: 1, bestTimeMs: 150000 },
+    });
+    expect(getMuted()).toBe(true);
+    expect(window.localStorage.getItem(PROGRESS_KEY)).toBeNull();
+    expect(window.localStorage.getItem(PREFS_KEY)).toBeNull();
+  });
+
+  it('drops corrupt legacy entries instead of trusting the store', () => {
+    window.localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify({ 'animals:1': { stars: 9, bestTimeMs: 'fast' }, 'tech:3': 'junk' })
+    );
+    expect(loadLevels()).toEqual({});
+  });
+
+  it('saveResult keeps the best stars and the best time independently', () => {
+    saveResult('animals', 1, 2, 90000);
+    const { record, newBest } = saveResult('animals', 1, 3, 80000);
+    expect(record).toEqual({ stars: 3, bestTimeMs: 80000 });
+    expect(newBest).toBe(true);
+    const slower = saveResult('animals', 1, 1, 120000);
+    expect(slower.record).toEqual({ stars: 3, bestTimeMs: 80000 });
+    expect(slower.newBest).toBe(false);
+    expect(loadLevels()['animals:1']).toEqual({ stars: 3, bestTimeMs: 80000 });
+  });
+});
+
+describe('config (flags + strings, host-overridable)', () => {
+  it('resolveConfig merges host overrides over defaults', () => {
+    const merged = resolveConfig(
+      { locale: 'en', dailyEnabled: false, strings: { en: { share: 'EN' } } },
+      { locale: 'fr', dailyEnabled: true, strings: { fr: { share: 'FR' } } }
+    );
+    expect(merged).toMatchObject({ locale: 'fr', dailyEnabled: true });
+    expect(merged.strings.en.share).toBe('EN');
+    expect(merged.strings.fr.share).toBe('FR');
+  });
+
+  it('t() substitutes vars and falls back to the key', () => {
+    expect(t('share', { words: 5, time: '1:30', stars: '⭐⭐⭐', url: 'http://x' })).toContain(
+      'I found 5 words in 1:30'
+    );
+    expect(t('no-such-key')).toBe('no-such-key');
   });
 });

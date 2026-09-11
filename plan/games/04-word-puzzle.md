@@ -198,8 +198,11 @@ local persistence**. Mid-round resume: N/A (levels are short; stars already pers
 
 ### Phases
 
-- [ ] R2-1 Hygiene: `config.js` + versioned `storage.js` (migration from the loose
-      progress keys); strings moved out of `game.js`.
-- [ ] R2-2 Promote the P3 daily: seed = `YYYYMMDD`, share template carries the seed,
-      identical grids across reloads (acceptance §10 already requires this).
+- [x] R2-1 Hygiene (2026-09-11): `config.js` (locale, `dailyEnabled` flag, share
+      template, host-overridable) + `storage.js` (versioned `save` document — levels +
+      prefs — migrated from the loose progress/prefs keys, corrupt entries sanitized,
+      remote adapter slot); strings moved out of `game.js`; 43 tests green.
+- [x] R2-2 (partial 2026-09-11): the deterministic generator + `?seed=` hook ship and
+      `config.dailyEnabled` gates the mode; the full daily UI (menu entry + per-day
+      record, seed = `YYYYMMDD`) remains deferred with P3.
 - [ ] R2-3 Content: more themes via `themes.json` (data-only); confetti polish.

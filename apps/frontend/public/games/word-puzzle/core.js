@@ -15,9 +15,6 @@
  * ============================================================================
  */
 
-export const PROGRESS_KEY = 'game:word-puzzle:progress';
-export const PREFS_KEY = 'game:word-puzzle:prefs';
-
 export const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 /** The 8 direction vectors as [rowDelta, colDelta]; row 0 is the top. */
