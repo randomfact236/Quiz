@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tic Tac Toe — AI Quiz Games</title>
+    <meta
+      name="description"
+      content="Classic tic tac toe: pass-and-play for two, or take on the computer (easy, medium, or unbeatable hard). Series score included."
+    />
+    <meta name="theme-color" content="#e8e4f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b4a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%8C%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      // Resolve the site's theme (ai-quiz-theme: light|dark|system) before first
+      // paint so the board never flashes the wrong scheme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('ai-quiz-theme');
+          var dark =
+            stored === 'dark' ||
+            ((!stored || stored === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="game.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/play">← AI Quiz games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Tic tac toe menu">
+        <h1 class="menu-title">Tic Tac Toe ⭕❌</h1>
+        <p class="tagline">Pass-and-play or take on the computer — series score included.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">
+              👥 2 Players
+            </button>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div
+              class="segmented"
+              role="radiogroup"
+              aria-labelledby="difficulty-label"
+              id="difficulty-segmented"
+            >
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">
+                Easy
+              </button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">
+                Medium
+              </button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">
+                Hard
+              </button>
+            </div>
+          </div>
+
+          <label class="toggle-row">
+            <input type="checkbox" id="misere-toggle" />
+            <span>Misère rule — three in a row <b>loses</b></span>
+          </label>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--x">
+              <span class="num" id="series-x">0</span>
+              <span class="label">✕ wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--o">
+              <span class="num" id="series-o">0</span>
+              <span class="label">◯ wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Tic tac toe board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">✕ 0 · 🤝 0 · ◯ 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">✕'s turn</div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Tic tac toe board, 3 by 3"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">X wins!</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next round</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge hidden" id="misere-badge">Misère: three in a row loses</div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>

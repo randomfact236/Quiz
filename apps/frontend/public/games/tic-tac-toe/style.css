@@ -1,0 +1,651 @@
+/* ============================================================================
+   Tic Tac Toe — style.css (Game 02)
+   Mobile-first, one-thumb layout. The playing screen must fit a 360 px
+   viewport with zero scroll (plan §8), so everything is sized off 100dvh.
+   Theme follows the site's `ai-quiz-theme` setting (resolved to
+   [data-theme="dark"] / "light" by an inline script in index.html).
+   ========================================================================== */
+
+:root,
+[data-theme='light'] {
+  --bg-a: #e8e4f3;
+  --bg-b: #d4c5e8;
+  --card: #ffffff;
+  --card-border: rgba(148, 163, 184, 0.35);
+  --text: #1e293b;
+  --muted: #64748b;
+  --grid-line: #94a3b8;
+  --cell: #f8fafc;
+  --cell-hover: #eef2ff;
+  --x: #2563eb;
+  --o: #e11d48;
+  --win: #10b981;
+  --win-glow: rgba(16, 185, 129, 0.22);
+  --primary-a: #2563eb;
+  --primary-b: #4f46e5;
+  --shadow: 0 10px 30px rgba(30, 27, 75, 0.12);
+}
+
+[data-theme='dark'] {
+  --bg-a: #1e1b4a;
+  --bg-b: #3f1229;
+  --card: #1e293b;
+  --card-border: rgba(148, 163, 184, 0.18);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --grid-line: #475569;
+  --cell: #16202f;
+  --cell-hover: #1c2a3f;
+  --x: #60a5fa;
+  --o: #fb7185;
+  --win: #34d399;
+  --win-glow: rgba(52, 211, 153, 0.25);
+  --primary-a: #3b82f6;
+  --primary-b: #6366f1;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--bg-a), var(--bg-b)) fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 26rem; /* 416px — comfortable at 360px wide too */
+  margin: 0 auto;
+  padding: 0.75rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.back-link {
+  align-self: flex-start;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 8px;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--text);
+  background: var(--cell-hover);
+}
+
+/* ---- screens -------------------------------------------------------------- */
+
+.screen {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.screen--active {
+  display: flex;
+}
+
+/* ---- menu ----------------------------------------------------------------- */
+
+.menu-title {
+  margin: 0.25rem 0 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 7vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.card h2 .scope {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+/* segmented controls (mode / difficulty) */
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  background: var(--cell);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.segmented button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 0.25rem;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.segmented button[aria-checked='true'] {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18);
+}
+
+.row {
+  margin-top: 0.75rem;
+}
+
+.row.hidden,
+.hidden {
+  display: none !important;
+}
+
+/* misère toggle */
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.toggle-row input {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--primary-a);
+  flex-shrink: 0;
+}
+
+/* series scoreboard */
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.score {
+  background: var(--cell);
+  border-radius: 12px;
+  padding: 0.625rem 0.25rem;
+}
+
+.score .num {
+  display: block;
+  font-size: 1.375rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.score .label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.score--x .num {
+  color: var(--x);
+}
+
+.score--o .num {
+  color: var(--o);
+}
+
+.scoreboard-actions {
+  margin-top: 0.625rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* buttons */
+
+button.primary {
+  border: 0;
+  border-radius: 14px;
+  padding: 0.875rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-a), var(--primary-b));
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+
+button.primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+button.primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button.primary:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+}
+
+button.ghost {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.625rem 0.875rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+}
+
+button.ghost:hover:not(:disabled),
+button.ghost:focus-visible {
+  background: var(--cell-hover);
+}
+
+button.ghost:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button:focus-visible,
+a:focus-visible,
+.cell:focus-visible {
+  outline: 3px solid var(--primary-a);
+  outline-offset: 2px;
+}
+
+/* ---- playing screen --------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.topbar .ghost {
+  padding: 0.4rem 0.75rem;
+}
+
+.mini-series {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.turn {
+  text-align: center;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  min-height: 1.6em;
+}
+
+.turn[data-mark='X'] {
+  color: var(--x);
+}
+
+.turn[data-mark='O'] {
+  color: var(--o);
+}
+
+.badge {
+  align-self: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px dashed var(--grid-line);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+}
+
+/* the board: grid lines come from the container background showing through
+   the gaps, so the whole board is exactly one visual table */
+
+.board-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 5px;
+  background: var(--grid-line);
+  border-radius: 18px;
+  /* fit narrow phones and short landscape viewports alike */
+  width: min(100%, 58vh, 58dvh);
+  max-width: 25rem;
+  aspect-ratio: 1;
+}
+
+.cell {
+  position: relative;
+  border: 0;
+  padding: 0;
+  aspect-ratio: 1;
+  border-radius: 13px;
+  background: var(--cell);
+  cursor: pointer;
+  color: inherit;
+  transition: background 0.12s ease;
+}
+
+.cell:not(:disabled):hover {
+  background: var(--cell-hover);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell svg {
+  position: absolute;
+  top: 21%;
+  left: 21%;
+  width: 58%;
+  height: 58%;
+  overflow: visible;
+}
+
+.cell .stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 11;
+  stroke-linecap: round;
+}
+
+.cell[data-mark='X'] {
+  color: var(--x);
+}
+
+.cell[data-mark='O'] {
+  color: var(--o);
+}
+
+/* draw-in animation for marks. The resting state is the FULL mark; the
+   animation lives on a temporary .cell--animating class that game.js removes
+   after ~600ms, so a mark is always visible in the end even if animations
+   never run or their clock is frozen (backgrounded webviews). */
+
+.cell--animating .stroke {
+  stroke-dasharray: 80;
+  animation: draw-in 0.22s ease-out backwards;
+}
+
+.cell--animating .s2 {
+  animation-delay: 0.14s;
+}
+
+@keyframes draw-in {
+  from {
+    stroke-dashoffset: 80;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* circle circumference (2πr = 182) needs a longer dash than the x strokes */
+.cell--animating[data-mark='O'] .stroke {
+  stroke-dasharray: 183;
+  animation: draw-in-o 0.3s ease-out backwards;
+}
+
+@keyframes draw-in-o {
+  from {
+    stroke-dashoffset: 183;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* winning line highlight: winning marks pop, the rest recede */
+
+.cell--win {
+  background: var(--win-glow);
+  animation: win-pulse 0.9s ease-in-out 2;
+}
+
+.cell--win[data-mark='X'],
+.cell--win[data-mark='O'] {
+  color: var(--win);
+}
+
+.cell--dim {
+  opacity: 0.4;
+}
+
+@keyframes win-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* deal-in of the cleared board between rounds */
+
+.board--deal {
+  animation: deal 0.35s ease-out;
+}
+
+@keyframes deal {
+  from {
+    opacity: 0.2;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell--animating .stroke,
+  .cell--win,
+  .board--deal,
+  .overlay--in .overlay-card {
+    animation: none;
+  }
+
+  button.primary,
+  button.ghost,
+  .cell {
+    transition: none;
+  }
+}
+
+/* ---- round-end overlay ------------------------------------------------------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bg-a) 55%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.overlay-card {
+  width: 100%;
+  max-width: 19rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.overlay--in .overlay-card {
+  animation: pop 0.25s ease-out;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.overlay-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.overlay-title {
+  margin: 0.375rem 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.overlay-title[data-mark='X'] {
+  color: var(--x);
+}
+
+.overlay-title[data-mark='O'] {
+  color: var(--o);
+}
+
+.overlay-sub {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.overlay-actions .ghost-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.overlay-actions .ghost-row > button {
+  flex: 1;
+}
+
+/* ---- toast ---------------------------------------------------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translate(-50%, 200%);
+  background: var(--text);
+  color: var(--card);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.toast--in {
+  transform: translate(-50%, 0);
+}
+
+/* ---- small viewports --------------------------------------------------------------- */
+
+@media (max-height: 560px) {
+  .app {
+    gap: 0.5rem;
+  }
+
+  .menu-title {
+    font-size: 1.4rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+  }
+
+  .board {
+    width: min(100%, 52vh, 52dvh);
+  }
+}

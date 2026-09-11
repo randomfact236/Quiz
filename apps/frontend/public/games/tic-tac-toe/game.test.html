@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tic Tac Toe — test harness</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 1.5rem;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        background: #0f172a;
+        padding: 0.5rem 0;
+        font-weight: 700;
+      }
+      .pass {
+        color: #34d399;
+      }
+      .fail {
+        color: #f87171;
+        font-weight: 700;
+      }
+      section {
+        color: #94a3b8;
+        margin-top: 0.75rem;
+      }
+    </style>
+    <script type="module" src="core.js"></script>
+  </head>
+  <body>
+    <h1>Tic Tac Toe — game.test.html (manual harness, auto-runs)</h1>
+    <div id="summary">running…</div>
+    <div id="results"></div>
+
+    <script type="module">
+      import * as T3 from './core.js';
+      import * as T3S from './storage.js';
+
+      'use strict';
+      let passCount = 0;
+      let failCount = 0;
+      const resultsEl = document.getElementById('results');
+      const summaryEl = document.getElementById('summary');
+
+      function assert(cond, message) {
+        if (cond) {
+          passCount++;
+        } else {
+          failCount++;
+          resultsEl.insertAdjacentHTML(
+            'beforeend',
+            '<div class="fail">✗ ' + message + '</div>'
+          );
+        }
+      }
+
+      function section(name) {
+        resultsEl.insertAdjacentHTML('beforeend', '<section>— ' + name + '</section>');
+      }
+
+      function boardFrom(spec) {
+        // spec: string of 9 chars, 'X' / 'O' / '.'
+        return spec.split('').map(function (c) {
+          return c === '.' ? null : c;
+        });
+      }
+
+      function boardStr(board) {
+        return board
+          .map(function (c) {
+            return c || '.';
+          })
+          .join('');
+      }
+
+      /* ==================================================================== */
+
+      function testCheckWinner() {
+        section('checkWinner — all 8 lines, both marks');
+        for (var i = 0; i < T3.WIN_LINES.length; i++) {
+          ['X', 'O'].forEach(function (mark) {
+            var line = T3.WIN_LINES[i];
+            var board = T3.emptyBoard();
+            board[line[0]] = mark;
+            board[line[1]] = mark;
+            board[line[2]] = mark;
+            // up to two opponent marks off the line — too few to complete anything
+            var placed = 0;
+            for (var c = 0; c < 9 && placed < 2; c++) {
+              if (!board[c]) {
+                board[c] = T3.other(mark);
+                placed++;
+              }
+            }
+            var result = T3.checkWinner(board);
+            assert(
+              result && result !== 'draw' && result.completedBy === mark,
+              'line ' + line.join(',') + ' completes for ' + mark
+            );
+          });
+        }
+
+        section('checkWinner — open boards, draw, full-with-line');
+        assert(T3.checkWinner(T3.emptyBoard()) === null, 'empty board → null');
+        assert(T3.checkWinner(boardFrom('XO.XO....')) === null, 'partial board → null');
+        assert(
+          T3.checkWinner(boardFrom('XOXXOOOXX')) === 'draw',
+          'full board without a line → draw'
+        );
+        var full = T3.checkWinner(boardFrom('XOXOXOXOX')); // X owns both diagonals
+        assert(full && full !== 'draw' && full.completedBy === 'X', 'full board with a line → that winner');
+      }
+
+      function testMisere() {
+        section('roundOutcome — misère flips the winner');
+        var board = boardFrom('XXXOO....'); // X own the top row; a real, reachable position
+        var normal = T3.roundOutcome(board, false);
+        var misere = T3.roundOutcome(board, true);
+        assert(normal && normal !== 'draw' && normal.winner === 'X', 'normal: completer X wins');
+        assert(misere && misere !== 'draw' && misere.winner === 'O', 'misère: completer X loses');
+        assert(
+          T3.roundOutcome(boardFrom('XOXXOOOXX'), true) === 'draw',
+          'misère: full board without a line → draw'
+        );
+      }
+
+      function testSeriesStorage() {
+        section('series persistence — round-trip');
+        var setup = T3S.seriesSetupKey('1p', 'hard', true);
+        assert(setup === '1p:hard:misere', 'setup key composes mode/difficulty/misère');
+        assert(T3S.seriesSetupKey('2p', 'easy', false) === '2p', '2p key has no difficulty part');
+
+        var original = window.localStorage.getItem(T3S.SAVE_KEY);
+        try {
+          T3S.saveSeries(setup, { x: 3, o: 2, draw: 1 });
+          var loaded = T3S.loadSeries(setup);
+          assert(
+            loaded.x === 3 && loaded.o === 2 && loaded.draw === 1,
+            'save → load round-trips the tally'
+          );
+          var prefs = { mode: '2p', level: 'easy', misere: true };
+          T3S.savePrefs(prefs);
+          assert(
+            T3S.loadPrefs().mode === '2p' && T3S.loadPrefs().misere === true,
+            'prefs round-trip through the versioned save'
+          );
+        } finally {
+          if (original === null) window.localStorage.removeItem(T3S.SAVE_KEY);
+          else window.localStorage.setItem(T3S.SAVE_KEY, original);
+        }
+        assert(T3S.loadSeries('setup-that-never-existed').x === 0, 'unknown setup → zeroed tally');
+      }
+
+      function testMediumHeuristics() {
+        section('medium AI — takes wins, blocks threats (normal rules)');
+        for (var trial = 0; trial < 30; trial++) {
+          var win = T3.mediumMove(boardFrom('XX.O.....'), 'X', false);
+          assert(win === 2, 'medium takes the completing move (got ' + win + ')');
+          var block = T3.mediumMove(boardFrom('OO..X....'), 'X', false);
+          assert(block === 2, 'medium blocks the opponent line (got ' + block + ')');
+        }
+
+        section('medium AI — misère avoids completing a line');
+        for (var t = 0; t < 30; t++) {
+          var move = T3.mediumMove(boardFrom('XX...O...'), 'X', true);
+          assert(move !== 2, 'misère medium never volunteers the losing line (got ' + move + ')');
+        }
+      }
+
+      /* ---- exhaustive minimax (the "Hard is unbeatable" proof) ---------------
+       * Sweeps every position reachable in real play (recursion stops where the
+       * game ends — a completed line or a full board — under either rule set)
+       * and asserts bestMove always plays the position's exact game value.
+       * That is the precise form of "unbeatable": it can only be beaten by
+       * positions that are already theoretically lost.
+       * ---------------------------------------------------------------------- */
+
+      function enumerateReachable(onBoard) {
+        var seen = {};
+        var count = 0;
+        function turnOf(board) {
+          var x = 0;
+          var o = 0;
+          for (var i = 0; i < 9; i++) {
+            if (board[i] === 'X') x++;
+            else if (board[i] === 'O') o++;
+          }
+          return x === o ? 'X' : 'O';
+        }
+        (function walk(board) {
+          var k = boardStr(board);
+          if (seen[k]) return;
+          seen[k] = true;
+          count++;
+          onBoard(board, turnOf(board));
+          if (T3.checkWinner(board) !== null) return; // game over under both rule sets
+          for (var i = 0; i < 9; i++) {
+            if (board[i]) continue;
+            board[i] = turnOf(board);
+            walk(board);
+            board[i] = null;
+          }
+        })(T3.emptyBoard());
+        return count;
+      }
+
+      function testMinimaxExhaustive(misere) {
+        section(
+          'minimax exhaustive — ' +
+            (misere ? 'misère' : 'normal') +
+            ' rules (bestMove is game-value optimal everywhere)'
+        );
+        var leafChecks = 0;
+        var optimalChecks = 0;
+        enumerateReachable(function (board, turn) {
+          var outcome = T3.roundOutcome(board, misere);
+          var value = T3.gameValue(board, turn, misere);
+          if (outcome === 'draw') {
+            assert(value === 0, 'terminal draw values 0 at ' + boardStr(board));
+            leafChecks++;
+            return;
+          }
+          if (outcome) {
+            assert(
+              outcome.winner === turn ? value > 0 : value < 0,
+              'terminal ' +
+                (misere ? 'misère ' : '') +
+                'winner sign correct at ' +
+                boardStr(board)
+            );
+            leafChecks++;
+            return;
+          }
+          var choice = T3.bestMove(board, turn, misere);
+          assert(choice !== null, 'non-terminal board has a move');
+          assert(
+            choice.value === value,
+            'bestMove optimal at ' +
+              boardStr(board) +
+              ' (' + turn + ' to move' + (misere ? ', misère' : '') + ')'
+          );
+          // Unbeatable, stated precisely: whenever the position is not already
+          // lost, the AI's move keeps it non-lost.
+          if (value >= 0) assert(choice.value >= 0, 'Hard holds won/drawn position ' + boardStr(board));
+          optimalChecks++;
+        });
+        assert(optimalChecks > 4000, 'swept a full game tree (' + optimalChecks + ' choice points)');
+        return { leaves: leafChecks, choices: optimalChecks };
+      }
+
+      function testRootValues() {
+        section('game-theory sanity');
+        assert(T3.gameValue(T3.emptyBoard(), 'X', false) === 0, 'normal: perfect X first draws');
+        assert(T3.gameValue(T3.emptyBoard(), 'O', false) === 0, 'normal: perfect O first draws');
+        var misereRoot = T3.gameValue(T3.emptyBoard(), 'X', true);
+        resultsEl.insertAdjacentHTML(
+          'beforeend',
+          '<section>misère root value for X-to-move: ' + misereRoot + ' (computed, not assumed)</section>'
+        );
+      }
+
+      /* ==================================================================== */
+
+      try {
+        testCheckWinner();
+        testMisere();
+        testSeriesStorage();
+        testMediumHeuristics();
+        testMinimaxExhaustive(false);
+        testMinimaxExhaustive(true);
+        testRootValues();
+      } catch (err) {
+        failCount++;
+        resultsEl.insertAdjacentHTML(
+          'beforeend',
+          '<div class="fail">✗ harness crashed: ' + err.message + '</div>'
+        );
+        if (window.console && window.console.error) window.console.error(err);
+      }
+
+      summaryEl.innerHTML =
+        '<span class="' + (failCount ? 'fail' : 'pass') + '">' +
+        (failCount ? failCount + ' FAILURES' : 'ALL PASS') +
+        '</span> · ' + passCount + ' assertions passed';
+    </script>
+  </body>
+</html>

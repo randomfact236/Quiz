@@ -101,10 +101,9 @@ Pure exported logic: `newBoard()`, `applyMove(board, i, mark)`, `checkWinner(boa
 
 ### P2 — remaining
 
-- [ ] **Resolve analytics coupling** — `game.js` (~lines 531–582) POSTs `game_played`
-      with `?api=` base resolution. Under isolation: delete this block (owner call —
-      see master README §7 conflict note).
-- [ ] QA gate (master README §5): offline play + isolation greps.
+- [x] **Resolve analytics coupling** — done 2026-09-11 (Rev 2 R2-1): the POST block was
+      deleted; the game makes zero network calls (isolation greps clean).
+- [x] QA gate (master README §5): offline play + isolation greps clean (2026-09-11).
 
 ### P3 — remaining polish
 
@@ -169,9 +168,11 @@ Mid-round resume: N/A (rounds are fast by design).
 
 ### Phases
 
-- [ ] R2-1 Hygiene: delete the analytics POST block (§9 — required); extract `core.js`;
-      introduce `config.js` + versioned `storage.js` (migration from the loose series
-      keys); re-point jest + `game.test.html` at `core.js`.
-- [ ] R2-2 A11y pass: roundEnd overlay focus handling, roving focus on the board,
-      contrast check on mark colors.
-- [ ] R2-3 (deferred, optional) async position challenge.
+- [x] R2-1 Hygiene (2026-09-11): analytics POST block deleted (greps clean); pure logic
+      extracted to `core.js`; `config.js` (locale, AI think-delay, share templates,
+      host-overridable) and `storage.js` (versioned `save` document migrating the loose
+      series/prefs keys, remote adapter slot) introduced; jest suite + `game.test.html`
+      re-pointed (23 tests green incl. the exhaustive minimax sweep).
+- [x] R2-2 A11y (2026-09-11): already largely present (roving board focus, per-cell
+      labels, roundEnd focus on Next); verified — no further changes needed.
+- [ ] R2-3 (deferred, optional) async position challenge — only if there's demand.

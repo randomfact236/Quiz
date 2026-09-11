@@ -49,11 +49,12 @@ quiz-reference/
 
 # 2D games (kept on disk, git-isolated from the product until owner ships them — see plan/games/README.md).
 # Exception (owner decision 2026-09-11): completed games are committed — Sliding Puzzle
-# (game 03) and Tap or Don't Tap (game 01); the rest stay local-only, and no site
-# coupling (footer/sitemap/Play Hub/analytics) exists.
+# (game 03), Tap or Don't Tap (game 01), Tic Tac Toe (game 02); the rest stay local-only,
+# and no site coupling (footer/sitemap/Play Hub/analytics) exists.
 apps/frontend/public/games/*
 !apps/frontend/public/games/sliding-puzzle/
 !apps/frontend/public/games/tap-or-dont-tap/
+!apps/frontend/public/games/tic-tac-toe/
 
 # ZCode CLI local workspace state (session artifacts)
 .zcode/
