@@ -1,0 +1,136 @@
+{
+  "themes": [
+    {
+      "id": "animals",
+      "name": "Animals",
+      "emoji": "🦁",
+      "levels": [
+        {
+          "size": 8,
+          "parSec": 90,
+          "words": ["ELEPHANT", "GIRAFFE", "ZEBRA", "TIGER", "LION"]
+        },
+        {
+          "size": 10,
+          "parSec": 150,
+          "words": ["DOLPHIN", "LEOPARD", "RABBIT", "BEAVER", "FALCON", "OTTER", "KOALA"]
+        },
+        {
+          "size": 12,
+          "parSec": 240,
+          "words": [
+            "CROCODILE",
+            "ORANGUTAN",
+            "CHAMELEON",
+            "ALLIGATOR",
+            "SQUIRREL",
+            "HEDGEHOG",
+            "PENGUIN",
+            "FLAMINGO",
+            "TORTOISE",
+            "RACCOON"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "emoji": "🍎",
+      "levels": [
+        {
+          "size": 8,
+          "parSec": 90,
+          "words": ["BANANA", "MANGO", "BREAD", "OLIVE", "PASTA"]
+        },
+        {
+          "size": 10,
+          "parSec": 150,
+          "words": ["AVOCADO", "PUMPKIN", "CABBAGE", "TOMATO", "RADISH", "GARLIC", "ONION"]
+        },
+        {
+          "size": 12,
+          "parSec": 240,
+          "words": [
+            "PINEAPPLE",
+            "BLUEBERRY",
+            "RASPBERRY",
+            "CHOCOLATE",
+            "SPAGHETTI",
+            "CROISSANT",
+            "SANDWICH",
+            "DUMPLING",
+            "PANCAKE",
+            "MEATBALL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tech",
+      "name": "Tech",
+      "emoji": "💻",
+      "levels": [
+        {
+          "size": 8,
+          "parSec": 90,
+          "words": ["PIXEL", "ROBOT", "CLOUD", "MOUSE", "CACHE"]
+        },
+        {
+          "size": 10,
+          "parSec": 150,
+          "words": ["SERVER", "ROUTER", "BINARY", "LAPTOP", "KERNEL", "PYTHON", "JAVA"]
+        },
+        {
+          "size": 12,
+          "parSec": 240,
+          "words": [
+            "ALGORITHM",
+            "BANDWIDTH",
+            "FIREWALL",
+            "KEYBOARD",
+            "HARDWARE",
+            "SOFTWARE",
+            "DATABASE",
+            "PROTOCOL",
+            "COMPILER",
+            "TERMINAL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "name": "Space",
+      "emoji": "🚀",
+      "levels": [
+        {
+          "size": 8,
+          "parSec": 90,
+          "words": ["COMET", "VENUS", "ORBIT", "PLUTO", "LUNA"]
+        },
+        {
+          "size": 10,
+          "parSec": 150,
+          "words": ["JUPITER", "MERCURY", "METEOR", "GALAXY", "NEBULA", "SATURN", "COSMIC"]
+        },
+        {
+          "size": 12,
+          "parSec": 240,
+          "words": [
+            "ASTEROID",
+            "SATELLITE",
+            "TELESCOPE",
+            "SUPERNOVA",
+            "UNIVERSE",
+            "STARDUST",
+            "STARLIGHT",
+            "ECLIPSE",
+            "GRAVITY",
+            "APOLLO"
+          ]
+        }
+      ]
+    }
+  ]
+}

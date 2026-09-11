@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spirit Runner — core test harness</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 1.5rem;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        background: #0f172a;
+        padding: 0.5rem 0;
+        font-weight: 700;
+      }
+      .pass {
+        color: #34d399;
+      }
+      .fail {
+        color: #f87171;
+        font-weight: 700;
+      }
+      section {
+        color: #94a3b8;
+        margin-top: 0.75rem;
+      }
+    </style>
+    <script type="module" src="core.js"></script>
+  </head>
+  <body>
+    <h1>Spirit Runner — core.test.html (manual harness, auto-runs gates.js + core.js)</h1>
+    <div id="summary">running…</div>
+    <div id="results"></div>
+
+    <script type="module">
+      import * as C from './core.js';
+      import * as G from './gates.js';
+
+      let passCount = 0;
+      let failCount = 0;
+      const resultsEl = document.getElementById('results');
+      const summaryEl = document.getElementById('summary');
+
+      function assert(cond, message) {
+        if (cond) {
+          passCount++;
+        } else {
+          failCount++;
+          resultsEl.insertAdjacentHTML('beforeend', '<div class="fail">✗ ' + message + '</div>');
+        }
+      }
+
+      function section(name) {
+        resultsEl.insertAdjacentHTML('beforeend', '<section>— ' + name + '</section>');
+      }
+
+      function seededRng(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a += 0x6d2b79f5;
+          var t = a;
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      var DT = 1 / 120;
+
+      function fly(durationS, presses, slides) {
+        var player = C.createPlayer();
+        var minFeet = player.y;
+        var steps = Math.round(durationS / DT);
+        for (var i = 0; i < steps; i++) {
+          var t0 = i * DT;
+          C.stepPlayer(player, DT, {
+            pressed: presses.indexOf(t0) >= 0 || presses.some(function (p) { return p >= t0 && p < t0 + DT; }),
+            held: presses.length > 0 && t0 >= presses[0],
+            slidePressed: (slides || []).some(function (p) { return p >= t0 && p < t0 + DT; }),
+            doubleJump: false,
+          });
+          minFeet = Math.min(minFeet, player.y);
+        }
+        return { player: player, rise: C.GROUND_Y - minFeet };
+      }
+
+      function slideBox() {
+        var p = C.createPlayer();
+        C.stepPlayer(p, DT, { pressed: false, held: false, slidePressed: true, doubleJump: false });
+        return C.playerBox(p);
+      }
+
+      function state(seed) {
+        return { orbsSinceGate: 3, lastGateRune: 'ᚨ', lastOrbColor: 'violet' };
+      }
+
+      /* ==================================================================== */
+
+      function testStorage() {
+        section('storage key (plan §5)');
+        assert(C.SAVE_KEY === 'game:spirit-runner:save', 'save key is game:spirit-runner:save');
+      }
+
+      function testGates() {
+        section('5 rune rules — deterministic per state, hints never empty (plan §8)');
+        var seeds = [1, 7, 99, 4242, 51503];
+        for (var r = 0; r < G.RULE_IDS.length; r++) {
+          var rule = G.RULE_IDS[r];
+          assert(G.hintFor(rule).length > 0, 'hintFor(' + rule + ') is non-empty');
+          for (var s = 0; s < seeds.length; s++) {
+            var run = function (rule, seed) {
+              return JSON.stringify(G.makeGate(rule, seededRng(seed), state(seed)));
+            };
+            assert(run(rule, seeds[s]) === run(rule, seeds[s]), rule + ' deterministic for seed ' + seeds[s]);
+            var gate = G.makeGate(rule, seededRng(seeds[s]), state(seeds[s]));
+            var other = gate.correctSide === 'left' ? 'right' : 'left';
+            assert(G.resolveChoice(gate, gate.correctSide) === 'correct', rule + ' correct side resolves correct');
+            assert(G.resolveChoice(gate, other) === 'shadow', rule + ' wrong side resolves shadow');
+            assert(gate.hintText.length > 0, rule + ' hint non-empty');
+          }
+        }
+        assert(G.makeGate('parity', seededRng(5), { orbsSinceGate: 4 }).correctSide === 'left', 'parity: even → left');
+        assert(G.makeGate('parity', seededRng(5), { orbsSinceGate: 5 }).correctSide === 'right', 'parity: odd → right');
+        var echoState = state(1);
+        var echo = G.makeGate('echo', seededRng(9), echoState);
+        assert(echo.runes[echo.correctSide] === 'ᚨ', 'echo: correct door wears the previous rune');
+        assert(echoState.lastGateRune === echo.runes[echo.correctSide], 'echo advances the chain');
+        var neg = G.makeGate('negation', seededRng(11), state(1));
+        var liarSide = neg.correctSide === 'left' ? 'right' : 'left';
+        assert(neg.runes[liarSide] === neg.bannerRune && neg.runes[neg.correctSide] !== neg.bannerRune, 'negation: banner names the liar door');
+        var seq = G.makeGate('sequence', seededRng(13), state(1));
+        var expected = seq.pattern[0] === seq.pattern[1] ? seq.pattern[0] : seq.pattern[1];
+        assert(seq.shapes[seq.correctSide] === expected, 'sequence: correct door continues the pattern');
+        var col = G.makeGate('color', seededRng(17), state(1));
+        assert(col.colors[col.correctSide] === 'violet', 'color: correct door matches the last orb');
+        var order = G.shuffledRules(seededRng(3));
+        assert(order.slice().sort().join() === G.RULE_IDS.slice().sort().join(), 'shuffledRules keeps all 5 rules');
+        assert(new Set(order).size === 5, 'shuffledRules never repeats within a cycle');
+      }
+
+      function testShards() {
+        section('shard math (plan §2 Phase D)');
+        function runWith(gates, shadows) {
+          var run = C.createRun('spirit', seededRng(1));
+          run.correctGates = gates;
+          run.shadowSurvives = shadows || 0;
+          return run;
+        }
+        assert(C.shardsFor(runWith(0, 0), 999) === 0, '999 m → 0 distance shards');
+        assert(C.shardsFor(runWith(0, 0), 1000) === 1, '1000 m → 1');
+        assert(C.shardsFor(runWith(2), 0) === 0, '2 gates → 0');
+        assert(C.shardsFor(runWith(3), 0) === 1, '3 gates → 1');
+        assert(C.shardsFor(runWith(0, 1), 0) === 1, 'shadow survive → +1');
+        assert(C.shardsFor(runWith(4, 2), 2500) === 5, 'parts add: 2 + 2 + 1');
+        assert(C.scoreFor(runWith(2), 1234) === 1434, 'score = m + 100·gates');
+      }
+
+      function testPowers() {
+        section('powers — cycle, durations, Forest Spirit ×1.5, dash single-destroy (plan §2)');
+        var hunter = C.createPowers('hunter');
+        assert(C.chargedPower(hunter) === 'dash', 'Hunter starts with Dash charged');
+        C.applyPower(hunter, 'dash');
+        assert(C.chargedPower(hunter) === 'double', 'authored cycle resumes: double → dash → slow');
+        var spirit = C.createPowers('spirit');
+        spirit.meter = C.METER_FULL;
+        C.applyPower(spirit, 'double');
+        assert(spirit.timers.double === 12, 'Forest Spirit double jump lasts 12 s (8 × 1.5)');
+        assert(spirit.meter === 0, 'activating resets the meter');
+        C.applyPower(spirit, 'slow');
+        assert(spirit.timers.slow === 6, 'Forest Spirit slow time lasts 6 s');
+        for (var i = 0; i < Math.round(1.5 / DT); i++) C.tickPowers(hunter, DT);
+        assert(hunter.timers.dash < 1e-9, 'dash drains on the fixed-step clock');
+        var fresh = C.createPowers('hunter'); // exact-zero timer for the guard test
+        var obs = C.makeObstacle(100, { dx: 0, w: 24, h: 40, kind: 'log' });
+        assert(C.dashDestroy(fresh, obs) === false, 'no dash → no destroy');
+        C.applyPower(fresh, 'dash');
+        assert(C.dashDestroy(fresh, obs) === true && obs.destroyed, 'dash destroys the obstacle it hits');
+        assert(fresh.timers.dash === 0, 'dash consumed');
+        assert(C.dashDestroy(fresh, C.makeObstacle(200, { dx: 0, w: 24, h: 40, kind: 'log' })) === false, 'exactly one destroy');
+      }
+
+      function testShadow() {
+        section('shadow realm — 45 s, deferral, single payout, density (plan §2/§7)');
+        var run = C.createRun('spirit', seededRng(1));
+        run.nextGateM = 600;
+        C.enterShadow(run, 800);
+        assert(run.shadowS === C.SHADOW_S, '45 s timer set');
+        assert(C.gateReady(run, 99999) === false, 'no gates during the shadow realm (§7.7)');
+        var expiries = 0;
+        for (var i = 0; i < Math.round(C.SHADOW_S / DT) * 2; i++) {
+          if (C.tickShadow(run, DT)) expiries++;
+        }
+        assert(expiries === 1, 'timer expires exactly once');
+        assert(run.shadowSurvives === 1 && run.shadowShardPaid, 'survival pays exactly one shard');
+        C.reanchorGates(run, 2000, seededRng(7));
+        assert(run.nextGateM >= 2500 && run.nextGateM <= 2700, 'gates re-anchor 600 m ± 100 after return');
+        var airtime = (2 * 820) / 2200;
+        var fair = true;
+        for (var speed = 320; speed <= 900; speed += 20) {
+          if (C.minGap(speed, C.SHADOW_DENSITY) <= airtime * speed) fair = false;
+        }
+        assert(fair, 'density ×1.5 keeps every gap clearable');
+        assert(Math.abs(C.minGap(320, 1, C.MONK_SLOW_SPAWN_SCALE) - C.minGap(320) / 0.7) < 1e-9, 'Monk: spawns ×0.7 while slow (§7.4, once)');
+      }
+
+      function testPhysics() {
+        section('slide + clearances (plan §2 Phase A)');
+        var player = C.createPlayer();
+        C.stepPlayer(player, DT, { pressed: true, held: true, slidePressed: false, doubleJump: false });
+        assert(player.jumped && !player.onGround, 'a grounded press jumps (forked from 05)');
+        var slider = C.createPlayer();
+        C.stepPlayer(slider, DT, { pressed: false, held: false, slidePressed: true, doubleJump: false });
+        assert(slider.sliding, 'a down press starts the slide');
+        assert(Math.abs(C.playerBox(slider).h - 44 * 0.4) < 1e-9, 'slide hitbox drops to 40 %');
+        var hop = C.createPlayer();
+        C.stepPlayer(hop, DT, { pressed: false, held: false, slidePressed: true, doubleJump: false });
+        C.stepPlayer(hop, DT, { pressed: true, held: false, slidePressed: false, doubleJump: false });
+        assert(Math.abs(hop.vy - (C.SLIDE_HOP_VY + C.GRAVITY * DT)) < 1e-6, 'hop leaves the ground at SLIDE_HOP_VY');
+        C.stepPlayer(hop, DT, { pressed: false, held: false, slidePressed: false, doubleJump: false });
+        assert(Math.abs(hop.vy - (C.SLIDE_HOP_VY + C.GRAVITY * DT * 2)) < 1e-6, 'slide-jump hop is immune to the cut');
+
+        var at = C.PLAYER_X; // place boxes under the runner
+        var branch = C.obstacleBox(C.makeObstacle(at, { dx: 0, w: 100, h: 0, kind: 'branch' }));
+        assert(C.aabbHit(C.playerBox(C.createPlayer()), branch), 'standing runner hits the low branch');
+        assert(!C.aabbHit(slideBox(), branch), 'sliding runner passes under the branch');
+        assert(C.aabbHit(C.playerBox(fly(0.55, [0]).player), branch), 'no jump beats the hanging branch');
+        var tall = C.obstacleBox(C.makeObstacle(at, { dx: 0, w: 30, h: C.GUARDIAN_TALL_H, kind: 'guardian-tall' }));
+        assert(C.aabbHit(slideBox(), tall), 'sliding into the tall guardian hits');
+        assert(!C.aabbHit(C.playerBox(fly(0.55, [0]).player), tall), 'a full jump clears the tall guardian');
+        var low = C.obstacleBox(C.makeObstacle(at, { dx: 0, w: 84, h: 0, kind: 'guardian-low' }));
+        assert(C.aabbHit(C.playerBox(C.createPlayer()), low), 'standing runner hits the hovering disc');
+        assert(!C.aabbHit(slideBox(), low), 'sliding under the disc is safe');
+        assert(C.aabbHit(C.playerBox(fly(0.55, [0]).player), low), 'no jump beats the disc');
+        var trap = C.makeObstacle(at, { dx: 0, w: 64, h: 26, kind: 'trap', phase: 0 });
+        assert(!C.trapLit(trap, 0.3) && C.trapLit(trap, 0.7) && C.trapLit(trap, 1.19) && !C.trapLit(trap, 1.25), 'trap pulses 0.7 s dark / 0.5 s lit');
+        assert(C.aabbHit(C.playerBox(C.createPlayer()), C.obstacleBox(trap)) && C.trapLit(trap, 0.9), 'a lit trap kills a standing runner');
+        var dbl = C.createPlayer();
+        C.stepPlayer(dbl, DT, { pressed: true, held: true, slidePressed: false, doubleJump: true });
+        for (var k = 0; k < 30; k++) C.stepPlayer(dbl, DT, { pressed: false, held: true, slidePressed: false, doubleJump: true });
+        C.stepPlayer(dbl, DT, { pressed: true, held: true, slidePressed: false, doubleJump: true });
+        assert(dbl.airJumps === 1, 'double jump: one mid-air jump while empowered');
+        dbl.jumped = false;
+        C.stepPlayer(dbl, DT, { pressed: true, held: true, slidePressed: false, doubleJump: true });
+        assert(dbl.airJumps === 1 && !dbl.jumped, 'never a third jump');
+      }
+
+      function testSpawner() {
+        section('spawner sweep — 30 speeds × 2 densities × 300 spawns; orb formations fit');
+        var tiers = [0, 400, 1000, 1600];
+        var kinds = {};
+        var ok = true;
+        var firstSpawnOk = true;
+        for (var speed = 320; speed <= 900; speed += 20) {
+          [1, C.SHADOW_DENSITY].forEach(function (density) {
+            var spawner = C.createSpawner(seededRng(speed * 131 + density * 17));
+            spawner.density = density;
+            var lastRight = C.SPAWN_X - C.minGap(320, density);
+            for (var i = 0; i < 300; i++) {
+              spawner.meters = tiers[i % 4];
+              var tier = C.tierFor(spawner.meters);
+              var spawn = C.nextSpawn(spawner, speed, lastRight);
+              kinds[spawn.kind] = true;
+              if (spawn.x - lastRight < C.minGap(speed, density) - 1e-9) ok = false;
+              if (i === 0 && spawn.x < C.SPAWN_X) firstSpawnOk = false;
+              if (tier === 1 && spawn.kind !== 'log') ok = false;
+              if (spawn.kind === 'trap' && tier !== 4) ok = false;
+              lastRight = C.groupRightX(spawn.x, spawn.items);
+            }
+          });
+        }
+        assert(ok, 'every gap respects the scaled fair floor; types stay legal per tier');
+        assert(firstSpawnOk, 'the first group always lands at ≥ SPAWN_X');
+        assert(kinds['log'] && kinds['branch'] && kinds['guardian-tall'] && kinds['guardian-low'] && kinds['trap'], 'all five obstacle types fire');
+        var formationsFit = true;
+        [320, 900].forEach(function (sp) {
+          for (var seed = 0; seed < 40; seed++) {
+            var arc = C.spawnOrbArc(seededRng(seed * 61 + sp), 0, sp);
+            if (arc.length < 5 || arc.length > 7) formationsFit = false;
+            var width = arc[arc.length - 1].worldX - arc[0].worldX;
+            if (width > C.minGap(sp) - 210 + 1e-9) formationsFit = false;
+          }
+        });
+        assert(formationsFit, 'orb arcs (5–7) always fit inside a fair gap');
+      }
+
+      /* ==================================================================== */
+
+      try {
+        testStorage();
+        testGates();
+        testShards();
+        testPowers();
+        testShadow();
+        testPhysics();
+        testSpawner();
+      } catch (err) {
+        failCount++;
+        resultsEl.insertAdjacentHTML(
+          'beforeend',
+          '<div class="fail">✗ harness crashed: ' + err.message + '</div>'
+        );
+        if (window.console && window.console.error) window.console.error(err);
+      }
+
+      summaryEl.innerHTML =
+        '<span class="' + (failCount ? 'fail' : 'pass') + '">' +
+        (failCount ? failCount + ' FAILURES' : 'ALL PASS') +
+        '</span> · ' + passCount + ' assertions passed';
+    </script>
+  </body>
+</html>

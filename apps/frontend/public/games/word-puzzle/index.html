@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Word Puzzle — AI Quiz Games</title>
+    <meta
+      name="description"
+      content="Themed word search: drag a line through the letters to find every hidden word. 4 themes, 3 grid sizes each, daily-seeded puzzles, star ratings."
+    />
+    <meta name="theme-color" content="#e8e4f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b4a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%8D%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      // Resolve the site's theme (ai-quiz-theme: light|dark|system) before first
+      // paint so the board never flashes the wrong scheme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('ai-quiz-theme');
+          var dark =
+            stored === 'dark' ||
+            ((!stored || stored === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="game.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/play">← AI Quiz games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Word puzzle menu">
+        <h1 class="menu-title">Word Puzzle 🔍</h1>
+        <p class="tagline">Drag a line through the letters — find every hidden word.</p>
+
+        <button type="button" class="continue hidden" id="btn-continue">
+          <span class="continue-title">▶ Continue</span>
+          <span class="continue-sub" id="continue-sub"></span>
+        </button>
+
+        <div class="themes" id="theme-cards"><!-- theme cards rendered by game.js --></div>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="mute-toggle" />
+          <span>Mute sound effects 🔇</span>
+        </label>
+      </section>
+
+      <!-- ============================== LEVEL ============================= -->
+      <section id="screen-level" class="screen" aria-label="Word search board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="hud">
+            <div class="chip">
+              <span class="chip-icon">⏱</span><span id="hud-time">0:00</span>
+            </div>
+            <div class="chip" id="chip-hints">
+              <span class="chip-icon">💡</span><span id="hud-hints">3</span>
+            </div>
+          </div>
+          <button type="button" class="ghost" id="btn-hint">Hint</button>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Word search grid"></div>
+
+          <!-- ========================= RESULT ========================= -->
+          <div
+            id="overlay-result"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="result-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="result-emoji">🎉</div>
+              <h2 class="overlay-title" id="result-title">Level complete!</h2>
+              <div class="result-stars" id="result-stars"></div>
+              <p class="win-stats" id="result-stats"></p>
+              <p class="overlay-sub" id="result-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next level →</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-replay">🔄 Replay</button>
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu3">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul id="words" class="words" aria-label="Words to find"></ul>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>

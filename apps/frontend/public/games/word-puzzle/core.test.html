@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Word Puzzle — core test harness</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 1.5rem;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        background: #0f172a;
+        padding: 0.5rem 0;
+        font-weight: 700;
+      }
+      .pass {
+        color: #34d399;
+      }
+      .fail {
+        color: #f87171;
+        font-weight: 700;
+      }
+      section {
+        color: #94a3b8;
+        margin-top: 0.75rem;
+      }
+    </style>
+    <script type="module" src="core.js"></script>
+  </head>
+  <body>
+    <h1>Word Puzzle — core.test.html (manual harness, auto-runs)</h1>
+    <div id="summary">running…</div>
+    <div id="results"></div>
+
+    <script type="module">
+      import * as C from './core.js';
+
+      let THEMES = null;
+      try {
+        THEMES = (await import('./data/themes.json', { with: { type: 'json' } })).default;
+      } catch {
+        THEMES = (await import('./data/themes.json', { assert: { type: 'json' } })).default;
+      }
+
+      'use strict';
+      let passCount = 0;
+      let failCount = 0;
+      const resultsEl = document.getElementById('results');
+      const summaryEl = document.getElementById('summary');
+
+      function assert(cond, message) {
+        if (cond) {
+          passCount++;
+        } else {
+          failCount++;
+          resultsEl.insertAdjacentHTML('beforeend', '<div class="fail">✗ ' + message + '</div>');
+        }
+      }
+
+      function section(name) {
+        resultsEl.insertAdjacentHTML('beforeend', '<section>— ' + name + '</section>');
+      }
+
+      const key = (cells) => cells.map((c) => c.row + ':' + c.col).join(',');
+
+      /* ==================================================================== */
+
+      function testLineCells() {
+        section('lineCells — 8 directions on a 5×5 grid');
+        const g = Array.from({ length: 5 }, () => '.....');
+        const s = { row: 2, col: 2 };
+        const expected = {
+          E: '2:2,2:3,2:4',
+          W: '2:2,2:1,2:0',
+          S: '2:2,3:2,4:2',
+          N: '2:2,1:2,0:2',
+          SE: '2:2,3:3,4:4',
+          NW: '2:2,1:1,0:0',
+          NE: '2:2,1:3,0:4',
+          SW: '2:2,3:1,4:0',
+        };
+        for (const [dir, dr, dc] of [
+          ['E', 0, 2], ['W', 0, -2], ['S', 2, 0], ['N', -2, 0],
+          ['SE', 2, 2], ['NW', -2, -2], ['NE', -2, 2], ['SW', 2, -2],
+        ]) {
+          const cells = C.lineCells(g, s, { row: 2 + dr, col: 2 + dc });
+          assert(cells && key(cells) === expected[dir], dir + ' line walks 3 cells: ' + key(cells));
+        }
+
+        section('lineCells — degenerate, non-collinear, out of bounds');
+        const single = C.lineCells(g, s, { row: 2, col: 2 });
+        assert(single && single.length === 1 && single[0].row === 2 && single[0].col === 2, 'same cell → [start]');
+        assert(C.lineCells(g, s, { row: 3, col: 4 }) === null, 'knight move → null');
+        assert(C.lineCells(g, s, { row: 2, col: 7 }) === null, 'end out of bounds → null');
+        assert(C.lineCells(g, s, { row: -1, col: 2 }) === null, 'negative end → null');
+        assert(C.lineCells(g, s, { row: 5, col: 5 }) === null, 'beyond the grid → null');
+        assert(C.lineCells(g, s, { row: 2, col: 3 }) && C.lineCells(g, s, { row: 2, col: 3 }).length === 2, 'adjacent cell → 2 cells');
+      }
+
+      function testLettersAndMatches() {
+        section('lettersAt / matchesWord');
+        const g = ['lionx', 'yxzeb', 'zzztq'];
+        assert(C.lettersAt(g, [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 0, col: 3 }]) === 'lion', 'lettersAt reads E');
+        assert(C.lettersAt(g, [{ row: 0, col: 3 }, { row: 1, col: 3 }, { row: 2, col: 3 }]) === 'net', 'lettersAt reads S');
+        assert(C.matchesWord('lion', 'lion', false) === true, 'exact match');
+        assert(C.matchesWord('LION', 'lion', false) === true, 'case-insensitive');
+        assert(C.matchesWord('noil', 'lion', false) === false, 'reverse needs allowReverse');
+        assert(C.matchesWord('noil', 'lion', true) === true, 'reverse matches when allowed');
+        assert(C.matchesWord('lion', 'noil', true) === true, 'reverse symmetric');
+        assert(C.matchesWord('cats', 'lion', true) === false, 'different word never matches');
+        assert(C.matchesWord('li', 'lion', true) === false, 'prefix is not a match');
+      }
+
+      function testStarsFor() {
+        section('starsFor — boundary table (par 90)');
+        assert(C.starsFor(90, 0, 0, 0) === 3, 'instant flawless → 3');
+        assert(C.starsFor(90, 90, 0, 0) === 3, 'exactly on par keeps the speed star');
+        assert(C.starsFor(90, 91, 0, 0) === 2, 'par +1 s drops the speed star');
+        assert(C.starsFor(90, 89, 0, 2) === 3, 'fast, 2 wrong picks, no hints → 3');
+        assert(C.starsFor(90, 89, 0, 3) === 2, '3rd wrong pick drops the clean star');
+        assert(C.starsFor(90, 89, 1, 0) === 2, 'one hint drops the clean star');
+        assert(C.starsFor(90, 91, 1, 3) === 1, 'finish star is unconditional');
+      }
+
+      function testGenerator() {
+        section('generateLevel — seeded determinism (snapshot)');
+        const level = THEMES.themes[0].levels[0];
+        const a = C.generateLevel(level, 42);
+        const b = C.generateLevel(level, 42);
+        assert(JSON.stringify(a) === JSON.stringify(b), 'same seed → identical grid + placements');
+        const c = C.generateLevel(level, 43);
+        assert(a.grid.join('|') !== c.grid.join('|'), 'different seed → different grid');
+        assert(a.grid.length === 8 && a.grid.every((r) => r.length === 8), 'grid is 8×8');
+        assert(a.seed === 42, 'seed is echoed back');
+
+        section('generateLevel — tier directions are respected');
+        assert(
+          a.placements.every((p) => C.TIER_DIRS[1].includes(p.dir)),
+          'L1 placements only use → ↓'
+        );
+        const l2 = C.generateLevel(THEMES.themes[1].levels[1], 7);
+        assert(
+          l2.placements.every((p) => C.TIER_DIRS[2].includes(p.dir)),
+          'L2 placements use the L2 set'
+        );
+        const l3 = C.generateLevel(THEMES.themes[2].levels[2], 7);
+        assert(
+          l3.placements.every((p) => C.TIER_DIRS[3].includes(p.dir)),
+          'L3 placements use all 8 directions'
+        );
+
+        section('generateLevel — round trip (every word verifiable in the grid)');
+        let roundTrip = true;
+        for (const [lvl, allowRev] of [
+          [THEMES.themes[0].levels[0], false],
+          [THEMES.themes[1].levels[1], false],
+          [THEMES.themes[2].levels[2], true],
+        ]) {
+          const gen = C.generateLevel(lvl, 1234);
+          for (const p of gen.placements) {
+            const d = C.DIRS[p.dir];
+            const end = { row: p.row + d[0] * (p.word.length - 1), col: p.col + d[1] * (p.word.length - 1) };
+            const cells = C.lineCells(gen.grid, { row: p.row, col: p.col }, end);
+            if (!cells) roundTrip = false;
+            else if (C.lettersAt(gen.grid, cells) !== p.word) roundTrip = false;
+            else if (!C.matchesWord(C.lettersAt(gen.grid, cells), p.word, allowRev)) roundTrip = false;
+            // the reversed drag validates exactly when the tier allows reverse
+            const rev = C.lineCells(gen.grid, end, { row: p.row, col: p.col });
+            if (C.matchesWord(C.lettersAt(gen.grid, rev), p.word, allowRev) !== allowRev) roundTrip = false;
+          }
+          const words = gen.placements.map((p) => p.word).sort();
+          const expected = lvl.words.map((w) => w.toLowerCase()).sort();
+          if (words.join(',') !== expected.join(',')) roundTrip = false;
+        }
+        assert(roundTrip, 'all placements round-trip through lineCells + lettersAt');
+      }
+
+      async function testTermination() {
+        section('generateLevel — 100 seeds per shipped level, zero throws');
+        let ok = true;
+        for (const theme of THEMES.themes) {
+          for (const level of theme.levels) {
+            for (let seed = 1; seed <= 100; seed++) {
+              try {
+                const gen = C.generateLevel(level, seed);
+                if (gen.placements.length !== level.words.length) ok = false;
+              } catch (e) {
+                ok = false;
+                console.error(theme.id, level.size, seed, e);
+              }
+            }
+          }
+        }
+        assert(ok, '1200 generations all placed every word');
+      }
+
+      function testLint() {
+        section('lintThemes — shipped data is clean, malformed data is caught');
+        assert(C.lintThemes(THEMES).length === 0, 'shipped themes.json has no lint errors: ' + C.lintThemes(THEMES).join(' | '));
+        const broken = {
+          themes: [
+            {
+              id: 'x',
+              name: 'X',
+              emoji: '❌',
+              levels: [
+                // 5 words (right count) with one problem each, plus wrong size/par
+                { size: 9, parSec: 0, words: ['CAT', 'LION', 'LION', 'ELEPHANT!', 'TOOLONGWORDX'] },
+                { size: 10, parSec: 150, words: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] }, // wrong count
+                { size: 12, parSec: 240, words: [] }, // wrong count
+              ],
+            },
+          ],
+        };
+        const errs = C.lintThemes(broken);
+        assert(errs.length >= 6, 'broken theme produces multiple errors (' + errs.length + ')');
+        assert(errs.some((e) => e.includes('size must be 8')), 'wrong tier size caught');
+        assert(errs.some((e) => e.includes('LION')), 'duplicate word caught');
+        assert(errs.some((e) => e.includes('CAT')), 'too-short word caught');
+        assert(errs.some((e) => e.includes('exactly 7 words')), 'wrong word count caught');
+      }
+
+      function testClock() {
+        section('formatTime');
+        assert(C.formatTime(0) === '0:00', 'zero → 0:00');
+        assert(C.formatTime(90000) === '1:30', '90 s → 1:30');
+        assert(C.formatTime(239999) === '3:59', 'sub-second floor');
+      }
+
+      /* ==================================================================== */
+
+      try {
+        testLineCells();
+        testLettersAndMatches();
+        testStarsFor();
+        testGenerator();
+        testClock();
+        testLint();
+        await testTermination();
+      } catch (err) {
+        failCount++;
+        resultsEl.insertAdjacentHTML(
+          'beforeend',
+          '<div class="fail">✗ harness crashed: ' + err.message + '</div>'
+        );
+        if (window.console && window.console.error) window.console.error(err);
+      }
+
+      summaryEl.innerHTML =
+        '<span class="' + (failCount ? 'fail' : 'pass') + '">' +
+        (failCount ? failCount + ' FAILURES' : 'ALL PASS') +
+        '</span> · ' + passCount + ' assertions passed';
+    </script>
+  </body>
+</html>
