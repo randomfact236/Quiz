@@ -1,0 +1,311 @@
+/* ============================================================================
+   Flying Snake — style.css (Game 06, plan/games/06-flying-snake.md §3)
+   Mobile-first, one-thumb: the canvas contain-fits the 720×960 logical
+   viewport into the space below the back-link (no scrolling in any state);
+   main.js sizes it explicitly, so the CSS only lays out the chrome. DOM
+   overlays (menu / pause / game over) sit on the world; the in-game HUD is
+   canvas-drawn. Theme follows the site's `ai-quiz-theme` setting (resolved
+   to [data-theme="dark"] / "light" by an inline script in index.html).
+   ========================================================================== */
+
+:root,
+[data-theme='light'] {
+  --bg-a: #e8e4f3;
+  --bg-b: #d4c5e8;
+  --card: #ffffff;
+  --card-border: rgba(148, 163, 184, 0.35);
+  --text: #1e293b;
+  --muted: #64748b;
+  --primary-a: #2563eb;
+  --primary-b: #4f46e5;
+  --gold: #b45309;
+  --gold-bg: #fef3c7;
+  --dim: rgba(12, 32, 20, 0.4);
+  --shadow: 0 10px 30px rgba(30, 27, 75, 0.18);
+}
+
+[data-theme='dark'] {
+  --bg-a: #1e1b4a;
+  --bg-b: #12102e;
+  --card: #272257;
+  --card-border: rgba(148, 163, 184, 0.3);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --primary-a: #3b82f6;
+  --primary-b: #6366f1;
+  --gold: #fcd34d;
+  --gold-bg: rgba(252, 211, 77, 0.14);
+  --dim: rgba(5, 15, 10, 0.55);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: linear-gradient(160deg, var(--bg-a), var(--bg-b));
+  color: var(--text);
+}
+
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 12px 16px 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* ---- stage + canvas ------------------------------------------------------ */
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px 14px;
+}
+
+.world-wrap {
+  position: relative; /* overlays and the mute button align to the canvas box */
+}
+
+#world {
+  display: block;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  background: #8ed8f8; /* painted over every frame — this only covers resize gaps */
+  touch-action: none; /* the whole world is a flap surface (plan §4) */
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- mute toggle ---------------------------------------------------------- */
+
+.mute {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 6;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(15, 45, 25, 0.4);
+  color: #fff;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.mute:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---- overlays --------------------------------------------------------------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: var(--dim);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, 88%);
+  max-height: 92%;
+  overflow-y: auto;
+  padding: 24px 22px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.card-emoji {
+  font-size: 44px;
+  line-height: 1;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 29px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.card-sub {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.best-line {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.final-score {
+  font-size: 62px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.badge-new {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--gold-bg);
+  color: var(--gold);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.badge-new.hidden {
+  display: none;
+}
+
+.tiny-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---- buttons ------------------------------------------------------------------ */
+
+button {
+  font-family: inherit;
+}
+
+.primary {
+  width: 100%;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary-a), var(--primary-b));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
+}
+
+.primary:hover {
+  filter: brightness(1.07);
+}
+
+.primary:active {
+  transform: scale(0.97);
+}
+
+.ghost {
+  padding: 9px 16px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.ghost:hover {
+  background: rgba(148, 163, 184, 0.14);
+}
+
+.primary:focus-visible,
+.ghost:focus-visible {
+  outline: 3px solid var(--primary-a);
+  outline-offset: 2px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-row .ghost {
+  flex: 1;
+}
+
+/* ---- toast ----------------------------------------------------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 16px);
+  z-index: 20;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--card);
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.toast.toast--in {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

@@ -1,0 +1,585 @@
+/**
+ * ============================================================================
+ * Flying Snake — main.js (Game 06, plan/games/06-flying-snake.md)
+ * ============================================================================
+ * Plain ESM, no build step (same convention as games 01/02/03). The pure
+ * model lives in core.js — the test surface; this file owns the run
+ * lifecycle: the menu/ready/playing/dying/paused/gameover state machine, the
+ * fixed-timestep loop (1/120 s accumulator, 250 ms frame clamp), input,
+ * guarded storage, WebAudio, and the end-card. It only auto-inits when the
+ * canvas exists in the DOM, so importing it (jest / harnesses) has no side
+ * effects. Per plan §11, no analytics and no site coupling.
+ * ============================================================================
+ */
+import {
+  BEST_KEY,
+  FIRST_PIPE_X,
+  PIPE_SPACING,
+  PIPE_W,
+  PREFS_KEY,
+  VIEW_H,
+  VIEW_W,
+  WORLD_SPEED,
+  createSnake,
+  createSpawner,
+  groundY,
+  hitRadius,
+  makePipe,
+  medalFor,
+  nextGap,
+  pipePassed,
+  snakeHit,
+  stepSnake,
+} from './core.js';
+import { drawScene } from './render.js';
+
+/* ==========================================================================
+ * 0. Share text (pure — plan §9 P2 + master README §2 format)
+ * ======================================================================= */
+
+export function shareText(score, url) {
+  return 'Flew through ' + score + ' gaps in Flying Snake — beat that! ' + url;
+}
+
+/* ==========================================================================
+ * 1. Guarded storage (README §2 — private-mode safe, plan §7.6: disabled
+ *    storage means no best/medal, still fully playable)
+ * ======================================================================= */
+
+const storage = (() => {
+  const fallback = {};
+  function backend() {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const probe = '__fs_probe__';
+        window.localStorage.setItem(probe, '1');
+        window.localStorage.removeItem(probe);
+        return window.localStorage;
+      }
+    } catch {
+      /* private mode / disabled — fall through */
+    }
+    return null;
+  }
+  return {
+    readJson(key, fallbackValue) {
+      try {
+        const store = backend();
+        const raw = store ? store.getItem(key) : fallback[key] || null;
+        if (!raw) return fallbackValue;
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : fallbackValue;
+      } catch {
+        return fallbackValue;
+      }
+    },
+    writeJson(key, value) {
+      try {
+        const store = backend();
+        if (store) store.setItem(key, JSON.stringify(value));
+        else fallback[key] = JSON.stringify(value);
+      } catch {
+        /* quota / private mode — the game keeps working without records */
+      }
+    },
+  };
+})();
+
+function loadBest() {
+  const best = storage.readJson(BEST_KEY, null);
+  return best && typeof best.score === 'number' && best.score >= 0 ? best : null;
+}
+
+/** Returns true when `score` is a new personal best (which is then stored). */
+function saveBest(score) {
+  const prev = loadBest();
+  if (prev && prev.score >= score) return false;
+  storage.writeJson(BEST_KEY, { score });
+  return true;
+}
+
+function loadMuted() {
+  const prefs = storage.readJson(PREFS_KEY, {});
+  return prefs.muted === true;
+}
+
+function saveMuted(muted) {
+  storage.writeJson(PREFS_KEY, { muted });
+}
+
+/* ==========================================================================
+ * 2. Audio (README §3 audio.js equivalent — context on first user gesture)
+ * ======================================================================= */
+
+let audioCtx = null;
+
+function ensureAudio() {
+  try {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  } catch {
+    /* no audio — fine */
+  }
+  return audioCtx;
+}
+
+function blip(freq, ms = 60, type = 'triangle', when = 0) {
+  if (state.muted) return;
+  try {
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const t = ctx.currentTime + when;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.setValueAtTime(0.0001, t);
+    gain.exponentialRampToValueAtTime(0.12, t + 0.01);
+    gain.exponentialRampToValueAtTime(0.0001, t + ms / 1000);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + ms / 1000 + 0.02);
+  } catch {
+    /* audio must never break gameplay */
+  }
+}
+
+function vibrate(pattern) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+  } catch {
+    /* unsupported — fine */
+  }
+}
+
+/* ==========================================================================
+ * 3. State
+ * ======================================================================= */
+
+const MEDAL_EMOJI = { bronze: '🥉', silver: '🥈', gold: '🥇', platinum: '🏆' };
+const MEDAL_NAME = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', platinum: 'Platinum' };
+
+const state = {
+  mode: 'menu', // menu | ready | playing | dying | paused | gameover
+  snake: createSnake(),
+  pipes: [],
+  spawner: createSpawner(),
+  score: 0,
+  worldX: 0,
+  trail: [], // past {y}, newest first — the 5 body segments (plan §2)
+  trailAcc: 0,
+  flapQueue: 0, // taps buffered for the fixed-step loop
+  deathAt: 0, // seconds — flash + shake anchor
+  deathCause: null, // 'ground' | 'ceiling' | 'pipe'
+  scorePopAt: -10,
+  muted: false,
+};
+
+const FIXED_DT = 1 / 120; // plan §2: fixed timestep physics
+const TRAIL_DT = 0.04; // sample a body segment every 40 ms
+const FLASH_S = 0.12; // white flash length (plan §2)
+const SHAKE_S = 0.3; // screen shake length (plan §2)
+const DEATH_MAX_S = 0.9; // fall animation cap before the gameover card
+
+const els = {};
+let canvas = null;
+let ctx = null;
+let debug = false;
+let clockNow = 0; // seconds, updated once per frame
+
+function lastPipe() {
+  return state.pipes[state.pipes.length - 1];
+}
+
+/** A fresh run: world with the first pair at FIRST_PIPE_X, snake at the
+ *  safe mid-screen height, everything zeroed (plan §7.1). */
+function buildWorld() {
+  state.snake = createSnake();
+  state.spawner = createSpawner();
+  state.pipes = [];
+  for (let x = FIRST_PIPE_X; x < VIEW_W + PIPE_SPACING; x += PIPE_SPACING) {
+    const gap = nextGap(state.spawner, 0);
+    state.pipes.push(makePipe(x, gap.gap, gap.centerY));
+  }
+  state.score = 0;
+  state.worldX = 0;
+  state.trail = [];
+  state.trailAcc = 0;
+  state.flapQueue = 0;
+}
+
+/* ==========================================================================
+ * 4. Screens
+ * ======================================================================= */
+
+function showScreen(mode) {
+  els.screenMenu.classList.toggle('hidden', mode !== 'menu');
+  els.overlayPause.classList.toggle('hidden', mode !== 'paused');
+  els.overlayOver.classList.toggle('hidden', mode !== 'gameover');
+  if (mode === 'menu') renderMenuBest();
+}
+
+function renderMenuBest() {
+  const best = loadBest();
+  if (!best) {
+    els.menuBest.textContent = 'No best yet — how far can you get?';
+    return;
+  }
+  const medal = medalFor(best.score);
+  els.menuBest.textContent =
+    'Best ' + best.score + (medal ? ' · ' + MEDAL_EMOJI[medal] + ' ' + MEDAL_NAME[medal] : '');
+}
+
+function toMenu() {
+  buildWorld();
+  state.mode = 'menu';
+  showScreen('menu');
+}
+
+function toReady() {
+  buildWorld();
+  state.mode = 'ready';
+  showScreen('ready');
+}
+
+/* ==========================================================================
+ * 5. Run lifecycle
+ * ======================================================================= */
+
+function die(cause) {
+  state.mode = 'dying';
+  state.deathAt = clockNow;
+  state.flapQueue = 0;
+  state.deathCause = cause;
+  blip(130, 200, 'square');
+  blip(90, 260, 'sawtooth', 0.06);
+  vibrate([60, 40, 60]);
+}
+
+function gameOver() {
+  state.mode = 'gameover';
+  const newBest = state.score > 0 && saveBest(state.score);
+  const best = loadBest();
+  const medal = medalFor(state.score);
+  els.overScore.textContent = String(state.score);
+  els.badgeNew.classList.toggle('hidden', !newBest);
+  els.overBest.textContent = 'Best ' + (best ? best.score : state.score);
+  els.overMedal.textContent = medal
+    ? MEDAL_EMOJI[medal] + ' ' + MEDAL_NAME[medal] + ' medal'
+    : 'Reach 10 for a 🥉 medal';
+  if (newBest) {
+    blip(523, 90, 'triangle', 0.25);
+    blip(659, 90, 'triangle', 0.35);
+    blip(784, 160, 'triangle', 0.45);
+  }
+  showScreen('gameover');
+  els.btnRetry.focus();
+}
+
+/** Pause (plan §3): auto on visibilitychange; resume continues the exact
+ *  fall state — the loop keeps ticking `last`, so no dt spike on return. */
+function pauseGame() {
+  if (state.mode !== 'playing') return;
+  state.mode = 'paused';
+  showScreen('paused');
+}
+
+function resumeGame() {
+  if (state.mode !== 'paused') return;
+  state.mode = 'playing';
+  showScreen('playing');
+}
+
+/* ==========================================================================
+ * 6. Fixed-step update
+ * ======================================================================= */
+
+function update(dt) {
+  if (state.mode === 'playing') {
+    const flapped = state.flapQueue > 0;
+    if (flapped) state.flapQueue--;
+    stepSnake(state.snake, dt, flapped);
+    scrollWorld(dt);
+    sampleTrail(dt);
+    for (const pipe of state.pipes) {
+      if (pipePassed(pipe)) {
+        state.score += 1;
+        state.scorePopAt = clockNow;
+        blip(880, 70, 'triangle');
+        if (state.score % 10 === 0) blip(1174, 90, 'triangle', 0.07);
+      }
+    }
+    const hit = snakeHit(state.snake, state.pipes);
+    if (hit) die(hit);
+  } else if (state.mode === 'dying') {
+    // world frozen, snake keeps falling (plan §2 death sequence) — but lands
+    // on the ground strip instead of sinking through it
+    stepSnake(state.snake, dt, false);
+    const restingY = groundY() - hitRadius();
+    if (state.snake.y > restingY) state.snake.y = restingY;
+    if (state.snake.y > VIEW_H + 60 || clockNow - state.deathAt > DEATH_MAX_S) gameOver();
+  }
+}
+
+function scrollWorld(dt) {
+  const dx = WORLD_SPEED * dt;
+  state.worldX += dx;
+  for (const pipe of state.pipes) pipe.x -= dx;
+  // spawn ahead, cull behind
+  while (lastPipe() && lastPipe().x < VIEW_W + PIPE_SPACING) {
+    const gap = nextGap(state.spawner, state.score);
+    state.pipes.push(makePipe(lastPipe().x + PIPE_SPACING, gap.gap, gap.centerY));
+  }
+  while (state.pipes.length && state.pipes[0].x + PIPE_W < -40) state.pipes.shift();
+}
+
+function sampleTrail(dt) {
+  state.trailAcc += dt;
+  while (state.trailAcc >= TRAIL_DT) {
+    state.trailAcc -= TRAIL_DT;
+    state.trail.unshift({ y: state.snake.y });
+    if (state.trail.length > 5) state.trail.pop();
+  }
+}
+
+/* ==========================================================================
+ * 7. Render
+ * ======================================================================= */
+
+function fitCanvas() {
+  // Contain-fit the 720×960 world into the stage box; the CSS size is set
+  // explicitly (not via auto/intrinsic) so resizing the buffer never feeds
+  // back into layout.
+  const box = els.stage.getBoundingClientRect();
+  const padX = 20;
+  const padY = 18;
+  const scale = Math.max(0.1, Math.min((box.width - padX) / VIEW_W, (box.height - padY) / VIEW_H));
+  const cssW = Math.floor(VIEW_W * scale);
+  const cssH = Math.floor(VIEW_H * scale);
+  if (canvas.style.width !== cssW + 'px') canvas.style.width = cssW + 'px';
+  if (canvas.style.height !== cssH + 'px') canvas.style.height = cssH + 'px';
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = Math.max(1, Math.round(cssW * dpr));
+  const h = Math.max(1, Math.round(cssH * dpr));
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+  }
+}
+
+function draw(t) {
+  fitCanvas();
+  ctx.setTransform(canvas.width / VIEW_W, 0, 0, canvas.height / VIEW_H, 0, 0);
+
+  // menu/ready: the world is frozen and the snake bobs at its safe y (§7.1)
+  const bobbing = state.mode === 'menu' || state.mode === 'ready';
+  const snakeY = bobbing ? state.snake.y + Math.sin(t * 2.3) * 14 : state.snake.y;
+
+  // death flash (120 ms) + shake (300 ms), plan §2
+  const sinceDeath = t - state.deathAt;
+  const flash =
+    state.mode === 'dying' || state.mode === 'gameover' ? Math.max(0, 1 - sinceDeath / FLASH_S) : 0;
+  const shake = { x: 0, y: 0 };
+  if ((state.mode === 'dying' || state.mode === 'gameover') && sinceDeath < SHAKE_S) {
+    const mag = 9 * (1 - sinceDeath / SHAKE_S);
+    shake.x = mag * Math.sin(t * 73);
+    shake.y = mag * Math.cos(t * 61);
+  }
+
+  // score pop: 1 + 0.35 decaying over 180 ms after the last point
+  const sincePop = t - state.scorePopAt;
+  const scorePop = 1 + 0.35 * Math.max(0, 1 - sincePop / 0.18);
+
+  drawScene(ctx, {
+    mode: state.mode,
+    snakeY,
+    snakeVy: state.snake.vy,
+    trail: bobbing ? [] : state.trail,
+    pipes: state.pipes,
+    score: state.score,
+    worldX: state.worldX,
+    t,
+    flash,
+    shake,
+    scorePop,
+    debug,
+  });
+}
+
+/* ==========================================================================
+ * 8. Loop (fixed 1/120 steps via accumulator, 250 ms clamp — README §2;
+ *    identical physics at 60 and 144 Hz)
+ * ======================================================================= */
+
+let rafId = 0;
+let lastMs = 0;
+let accumulator = 0;
+
+function frame(nowMs) {
+  rafId = requestAnimationFrame(frame);
+  const t = nowMs / 1000;
+  clockNow = t; // updates read it (death timestamps anchor to this frame)
+  let dt = lastMs ? (nowMs - lastMs) / 1000 : 0;
+  lastMs = nowMs;
+  if (dt > 0.25) dt = 0.25;
+  accumulator += dt;
+  while (accumulator >= FIXED_DT) {
+    update(FIXED_DT);
+    accumulator -= FIXED_DT;
+  }
+  draw(t);
+}
+
+function startLoop() {
+  if (!rafId) rafId = requestAnimationFrame(frame);
+}
+
+/* ==========================================================================
+ * 9. Input (plan §4: tap anywhere / Space / ↑ = flap; multi-touch flaps
+ *    within 50 ms collapse to one; flap during gameover is ignored §7.3)
+ * ======================================================================= */
+
+/** The one action: start from menu, start physics + flap from ready, flap. */
+function primaryAction() {
+  if (state.mode === 'menu') {
+    toReady();
+    return;
+  }
+  if (state.mode === 'ready') {
+    state.mode = 'playing';
+    showScreen('playing');
+    state.flapQueue++; // first flap both starts the run and applies (§7.1)
+    blip(600, 55);
+    return;
+  }
+  if (state.mode === 'playing') {
+    state.flapQueue++;
+    blip(600, 55);
+  }
+  // dying / paused / gameover: deliberately ignored (§7.3)
+}
+
+function bindTap() {
+  let lastTapAt = 0;
+  els.stage.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button, a')) return; // buttons act for themselves
+    e.preventDefault();
+    ensureAudio();
+    const now = performance.now();
+    if (now - lastTapAt < 50) return; // multi-touch debounce (plan §4)
+    lastTapAt = now;
+    primaryAction();
+  });
+}
+
+function bindKeys() {
+  document.addEventListener('keydown', (e) => {
+    if (e.repeat) return; // holding a key is no hold-to-fly (plan §4)
+    if (e.key !== ' ' && e.key !== 'ArrowUp') return;
+    if (state.mode === 'menu' || state.mode === 'ready' || state.mode === 'playing') {
+      e.preventDefault(); // no page scroll, no focused-button double-fire
+      ensureAudio();
+      primaryAction();
+    }
+    // paused / gameover: fall through so a focused button keeps working
+  });
+}
+
+/* ==========================================================================
+ * 10. Share (README §2 chain: Web Share → clipboard → prompt)
+ * ======================================================================= */
+
+function share() {
+  const text = shareText(state.score, window.location.origin + window.location.pathname);
+  if (navigator.share) {
+    navigator.share({ title: 'Flying Snake', text }).catch(() => {
+      /* user dismissed the sheet */
+    });
+    return;
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => toast('Result copied to clipboard 📋'),
+      () => window.prompt('Copy your result:', text)
+    );
+    return;
+  }
+  window.prompt('Copy your result:', text);
+}
+
+let toastTimer = null;
+function toast(message) {
+  els.toast.textContent = message;
+  els.toast.classList.add('toast--in');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => els.toast.classList.remove('toast--in'), 2200);
+}
+
+/* ==========================================================================
+ * 11. Wiring + init
+ * ======================================================================= */
+
+function init() {
+  canvas = document.getElementById('world');
+  ctx = canvas.getContext('2d');
+  debug = new URLSearchParams(window.location.search).get('debug') === '1';
+
+  els.stage = document.getElementById('stage');
+  els.screenMenu = document.getElementById('screen-menu');
+  els.overlayPause = document.getElementById('overlay-pause');
+  els.overlayOver = document.getElementById('overlay-over');
+  els.menuBest = document.getElementById('menu-best');
+  els.overScore = document.getElementById('over-score');
+  els.overBest = document.getElementById('over-best');
+  els.overMedal = document.getElementById('over-medal');
+  els.badgeNew = document.getElementById('badge-new');
+  els.btnMute = document.getElementById('btn-mute');
+  els.btnRetry = document.getElementById('btn-retry');
+  els.toast = document.getElementById('toast');
+
+  state.muted = loadMuted();
+  els.btnMute.textContent = state.muted ? '🔇' : '🔊';
+  els.btnMute.setAttribute('aria-pressed', String(state.muted));
+  els.btnMute.addEventListener('click', () => {
+    state.muted = !state.muted;
+    saveMuted(state.muted);
+    els.btnMute.textContent = state.muted ? '🔇' : '🔊';
+    els.btnMute.setAttribute('aria-pressed', String(state.muted));
+    if (!state.muted) blip(660, 80); // audible confirmation the sound is back
+  });
+
+  document.getElementById('btn-play').addEventListener('click', () => {
+    ensureAudio();
+    toReady();
+  });
+  document.getElementById('btn-resume').addEventListener('click', resumeGame);
+  document.getElementById('btn-pmenu').addEventListener('click', toMenu);
+  els.btnRetry.addEventListener('click', () => {
+    ensureAudio();
+    toReady(); // instant retry: one tap, straight back into `ready` (§10)
+  });
+  document.getElementById('btn-share').addEventListener('click', share);
+  document.getElementById('btn-omenu').addEventListener('click', toMenu);
+
+  bindTap();
+  bindKeys();
+
+  // The run auto-pauses when the tab hides — time never silently elapses (§2).
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseGame();
+  });
+  // WebAudio contexts may only be created from a user gesture.
+  document.addEventListener('pointerdown', ensureAudio, { once: true });
+
+  buildWorld();
+  state.mode = 'menu';
+  showScreen('menu');
+  startLoop();
+}
+
+if (typeof document !== 'undefined' && document.getElementById('world')) {
+  init();
+}

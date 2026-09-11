@@ -5,6 +5,8 @@
 > jest suite + `core.test.html` green; P3 extras (moving pipes, night palette, ghost run)
 > deferred. Slug `flying-snake`; folder `apps/frontend/public/games/flying-snake/`.
 > Branding decided: page title "Flying Snake" (master README §8 #8).
+> **Committed 2026-09-11** (owner decision): the folder joined the committed games so its
+> already-committed jest suite stays CI-safe (§12 Rev 2 pass still pending).
 
 ## 1. Overview
 

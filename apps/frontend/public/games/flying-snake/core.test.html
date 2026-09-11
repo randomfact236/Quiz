@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flying Snake — core test harness</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 1.5rem;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        background: #0f172a;
+        padding: 0.5rem 0;
+        font-weight: 700;
+      }
+      .pass {
+        color: #34d399;
+      }
+      .fail {
+        color: #f87171;
+        font-weight: 700;
+      }
+      section {
+        color: #94a3b8;
+        margin-top: 0.75rem;
+      }
+    </style>
+    <script type="module" src="core.js"></script>
+  </head>
+  <body>
+    <h1>Flying Snake — core.test.html (manual harness, auto-runs)</h1>
+    <div id="summary">running…</div>
+    <div id="results"></div>
+
+    <script type="module">
+      import * as C from './core.js';
+
+      let passCount = 0;
+      let failCount = 0;
+      const resultsEl = document.getElementById('results');
+      const summaryEl = document.getElementById('summary');
+
+      function assert(cond, message) {
+        if (cond) {
+          passCount++;
+        } else {
+          failCount++;
+          resultsEl.insertAdjacentHTML('beforeend', '<div class="fail">✗ ' + message + '</div>');
+        }
+      }
+
+      function section(name) {
+        resultsEl.insertAdjacentHTML('beforeend', '<section>— ' + name + '</section>');
+      }
+
+      function closeTo(a, b, eps) {
+        return Math.abs(a - b) <= eps;
+      }
+
+      /** Deterministic rng (mulberry32) — the sweep must be reproducible. */
+      function seededRng(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a += 0x6d2b79f5;
+          var t = a;
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      /** Fly a purely physical trajectory: fixed steps, flaps at the given times. */
+      function fly(durationS, flapTimesS, dt) {
+        var snake = C.createSnake();
+        var minY = snake.y;
+        var steps = Math.round(durationS / dt);
+        var nextFlap = 0;
+        for (var i = 0; i < steps; i++) {
+          var t0 = i * dt;
+          var flapped =
+            nextFlap < flapTimesS.length &&
+            flapTimesS[nextFlap] >= t0 &&
+            flapTimesS[nextFlap] < t0 + dt;
+          if (flapped) nextFlap++;
+          C.stepSnake(snake, dt, flapped);
+          minY = Math.min(minY, snake.y);
+        }
+        return { snake: snake, rise: C.createSnake().y - minY };
+      }
+
+      function snakeAt(y, elapsed) {
+        var s = C.createSnake();
+        s.y = y;
+        s.elapsed = elapsed === undefined ? 10 : elapsed;
+        return s;
+      }
+
+      /* ==================================================================== */
+
+      function testStorageKeys() {
+        section('storage keys (plan §5)');
+        assert(C.BEST_KEY === 'game:flying-snake:best', 'best key is game:flying-snake:best');
+        assert(C.PREFS_KEY === 'game:flying-snake:prefs', 'prefs key is game:flying-snake:prefs');
+      }
+
+      function testPhysics() {
+        section('stepSnake — gravity, flap, terminal, ceiling grace');
+        var snake = C.createSnake();
+        var start = C.createSnake().y;
+        var dt = 1 / 120;
+        for (var i = 0; i < 30; i++) C.stepSnake(snake, dt, false);
+        assert(closeTo(snake.vy, C.GRAVITY * 0.25, 1e-6), 'vy is exact g·t after 0.25 s');
+        assert(
+          closeTo(snake.y, start + C.GRAVITY * dt * dt * 465, 1e-6),
+          'y is start + the Euler sum g·dt²·(1+…+N)'
+        );
+
+        var flapped = C.createSnake();
+        flapped.vy = C.TERMINAL_VY;
+        C.stepSnake(flapped, dt, true);
+        assert(
+          closeTo(flapped.vy, -480 + C.GRAVITY / 120, 1e-9),
+          'a flap sets vy (never accumulates) — one flap per press'
+        );
+
+        var fall = C.createSnake();
+        for (var k = 0; k < 120; k++) C.stepSnake(fall, dt, false);
+        assert(fall.vy === C.TERMINAL_VY, 'fall speed clamps at terminal velocity');
+
+        var arc = fly(0.6, [0.01], dt);
+        assert(arc.rise > 61 && arc.rise < 64, 'one flap rises the v²/2g = 64 px arc (Euler ~62)');
+
+        var spam = C.createSnake();
+        for (var j = 0; j < 240; j++) C.stepSnake(spam, dt, true);
+        assert(spam.y === C.hitRadius(), '2 s of flap spam clamps at the ceiling, no death');
+        assert(C.snakeHit(spam, []) === null, 'ceiling is not lethal during the grace');
+        C.stepSnake(spam, dt, true);
+        assert(C.snakeHit(spam, []) === 'ceiling', 'ceiling is lethal just past the grace');
+      }
+
+      function testTilt() {
+        section('tiltFor — endpoints, clamp, linearity, monotonicity');
+        assert(C.tiltFor(-480) === -25, '−25° at a fresh flap');
+        assert(C.tiltFor(700) === 80, '+80° at terminal velocity');
+        assert(C.tiltFor(-2000) === -25 && C.tiltFor(3000) === 80, 'clamped outside the range');
+        assert(C.tiltFor(110) === 27.5, 'velocity midpoint maps to the angle midpoint');
+        var monotonic = true;
+        var prev = C.tiltFor(-480);
+        for (var vy = -470; vy <= 700; vy += 10) {
+          var t = C.tiltFor(vy);
+          if (t < prev) monotonic = false;
+          prev = t;
+        }
+        assert(monotonic, 'monotonically non-decreasing across the range');
+      }
+
+      function testGaps() {
+        section('gapForScore — 170 px, −2/point, floor 120');
+        assert(C.gapForScore(0) === 170, 'starts at 170 px');
+        assert(C.gapForScore(10) === 150, 'shrinks 2 px per point');
+        assert(C.gapForScore(24) === 122 && C.gapForScore(25) === 120, 'floors at 120 px at 25');
+        assert(C.gapForScore(80) === 120, 'stays floored');
+
+        section('spawner sweep — 1,000 gaps, scores 0–80, margins ≥ 80 + gap/2');
+        var rng = seededRng(20260911);
+        var spawner = C.createSpawner(rng);
+        var allOk = true;
+        for (var i = 0; i < 1000; i++) {
+          var score = i % 81;
+          var g = C.nextGap(spawner, score);
+          if (g.gap !== C.gapForScore(score)) allOk = false;
+          if (g.gap < 120 || g.gap > 170) allOk = false;
+          if (g.centerY - g.gap / 2 < C.EDGE_MARGIN - 1e-9) allOk = false;
+          if (C.groundY() - (g.centerY + g.gap / 2) < C.EDGE_MARGIN - 1e-9) allOk = false;
+          if (g.centerY <= 0 || g.centerY >= C.groundY()) allOk = false;
+        }
+        assert(allOk, 'all 1,000 gaps respect margins and the 120–170 px window');
+
+        var a = C.createSpawner(seededRng(7));
+        var b = C.createSpawner(seededRng(7));
+        var det = true;
+        [0, 5, 25, 60].forEach(function (score) {
+          var ga = C.nextGap(a, score);
+          var gb = C.nextGap(b, score);
+          if (ga.gap !== gb.gap || ga.centerY !== gb.centerY) det = false;
+        });
+        assert(det, 'identical rng streams → identical gap sequences');
+      }
+
+      function testCollision() {
+        section('circleRectHit — clamp, corners, 1 px inset');
+        var rect = { x: 0, y: 0, w: 10, h: 10 };
+        assert(C.circleRectHit(5, 5, 1, rect), 'center inside hits');
+        assert(C.circleRectHit(13, 13, 5, rect), 'corner overlap hits (√18 < 5)');
+        assert(!C.circleRectHit(13, 13, 4, rect), 'corner just misses (√18 > 4)');
+        assert(!C.circleRectHit(11, 5, 0.9, rect), '1 px outside a small radius misses');
+        assert(C.circleRectHit(11, 5, 1.5, rect), '0.5 px overlap hits');
+        assert(!C.circleRectHit(11, 5, 1, rect), 'exactly touching is NOT a hit');
+
+        section('pipeRects — column split at the gap, ground-ended bottom');
+        var pipe = C.makePipe(100, 170, 480);
+        var rects = C.pipeRects(pipe);
+        assert(
+          rects[0].x === 100 && rects[0].y === 0 && rects[0].w === 64 && rects[0].h === 395,
+          'top rect runs from the ceiling to the gap top'
+        );
+        assert(
+          rects[1].y === 565 && rects[1].h === C.groundY() - 565,
+          'bottom rect runs from the gap bottom to the ground'
+        );
+
+        section('snakeHit — ground / ceiling / vines');
+        assert(C.snakeHit(snakeAt(400), []) === null, 'clear flight is null');
+        assert(C.snakeHit(snakeAt(C.groundY() - C.hitRadius() - 1), []) === null, 'above ground is clear');
+        assert(C.snakeHit(snakeAt(C.groundY() - C.hitRadius()), []) === 'ground', 'ground contact kills');
+        assert(C.snakeHit(snakeAt(C.hitRadius() - 1, 1.5), []) === null, 'ceiling clear during grace');
+        assert(C.snakeHit(snakeAt(C.hitRadius() - 1, 2.5), []) === 'ceiling', 'ceiling lethal after grace');
+        var column = C.makePipe(C.snakeX() - 32, 170, 480);
+        assert(C.snakeHit(snakeAt(480), [column]) === null, 'gap center is safe');
+        assert(C.snakeHit(snakeAt(480 - 85 + 6), [column]) === 'pipe', '6 px into the top vine kills');
+        assert(C.snakeHit(snakeAt(480 + 85 - 6), [column]) === 'pipe', '6 px into the bottom vine kills');
+        var far = C.makePipe(C.snakeX() + C.hitRadius() + 1, 170, 400);
+        assert(C.snakeHit(snakeAt(400), [far]) === null, 'vines beyond reach are ignored');
+      }
+
+      function testScoring() {
+        section('pipePassed — score once per pair (plan §7.5)');
+        var pipe = C.makePipe(C.snakeX(), 170, 480);
+        assert(pipe.scored === false, 'a fresh pair has not scored');
+        assert(C.pipePassed(pipe) === false, 'right edge not past the snake → no point');
+        pipe.x = C.snakeX() - 64 - 1;
+        assert(C.pipePassed(pipe) === true, 'passing the right edge scores');
+        assert(C.pipePassed(pipe) === false, 'a pair can never pay twice');
+      }
+
+      function testReadyWorld() {
+        section('ready world — first flap never spawns into a pipe (plan §10)');
+        var spawner = C.createSpawner(seededRng(1));
+        var pipes = [];
+        for (var x = C.FIRST_PIPE_X; x < C.VIEW_W + C.PIPE_SPACING; x += C.PIPE_SPACING) {
+          var gap = C.nextGap(spawner, 0);
+          pipes.push(C.makePipe(x, gap.gap, gap.centerY));
+        }
+        var clearOfSnake = true;
+        for (var p = 0; p < pipes.length; p++) {
+          if (pipes[p].x <= C.snakeX() + C.hitRadius()) clearOfSnake = false;
+        }
+        assert(clearOfSnake, 'every initial pair starts clear of the snake column');
+        assert(C.snakeHit(C.createSnake(), pipes) === null, 'frozen ready world is collision-free');
+        var snake = C.createSnake();
+        assert(
+          snake.y > C.EDGE_MARGIN && snake.y < C.groundY() - C.EDGE_MARGIN,
+          'the snake bobs at a safe mid-screen height'
+        );
+      }
+
+      function testDeterminism() {
+        section('fixed-timestep determinism (plan §10)');
+        var a = fly(1 / 3, [0.1, 0.2], 1 / 120);
+        var b = fly(1 / 3, [0.1, 0.2], 1 / 120);
+        assert(a.snake.y === b.snake.y && a.snake.vy === b.snake.vy, 'same steps → identical outcome');
+        var fine = fly(1 / 3, [0.1, 0.2], 1 / 240);
+        assert(
+          Math.abs(a.snake.vy - fine.snake.vy) < 0.01 && Math.abs(a.snake.y - fine.snake.y) < 2.5,
+          'halving the step converges'
+        );
+      }
+
+      function testMedals() {
+        section('medalFor — 9/10/19/20/39/40/74/75 boundaries (plan §2)');
+        assert(C.medalFor(0) === null && C.medalFor(9) === null, 'below 10: no medal');
+        assert(C.medalFor(10) === 'bronze' && C.medalFor(19) === 'bronze', 'bronze 10–19');
+        assert(C.medalFor(20) === 'silver' && C.medalFor(39) === 'silver', 'silver 20–39');
+        assert(C.medalFor(40) === 'gold' && C.medalFor(74) === 'gold', 'gold 40–74');
+        assert(C.medalFor(75) === 'platinum' && C.medalFor(200) === 'platinum', 'platinum 75+');
+      }
+
+      /* ==================================================================== */
+
+      try {
+        testStorageKeys();
+        testPhysics();
+        testTilt();
+        testGaps();
+        testCollision();
+        testScoring();
+        testReadyWorld();
+        testDeterminism();
+        testMedals();
+      } catch (err) {
+        failCount++;
+        resultsEl.insertAdjacentHTML(
+          'beforeend',
+          '<div class="fail">✗ harness crashed: ' + err.message + '</div>'
+        );
+        if (window.console && window.console.error) window.console.error(err);
+      }
+
+      summaryEl.innerHTML =
+        '<span class="' + (failCount ? 'fail' : 'pass') + '">' +
+        (failCount ? failCount + ' FAILURES' : 'ALL PASS') +
+        '</span> · ' + passCount + ' assertions passed';
+    </script>
+  </body>
+</html>
