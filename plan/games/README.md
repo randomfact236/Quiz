@@ -6,15 +6,15 @@
 
 ## 1. Status
 
-| #   | Game             | Plan file                 | Build status                                                                                                                                                                                                                                                                                | Est. left |
-| --- | ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| 1   | Tap or Don't Tap | `01-tap-or-dont-tap.md`   | **Built** — Rev 2 applied 2026-09-11: modular (core/config/storage/audio), analytics removed, a11y + contrast pass, 30 tests green; tuning pass after human sessions owed                                                                                                                   | ~0.5 day  |
-| 2   | Tic Tac Toe      | `02-tic-tac-toe.md`       | **Built** — Rev 2 applied 2026-09-11: pure logic in `core.js`, modular (config/storage), analytics removed, versioned series/prefs save with legacy migration, 23 tests green (incl. exhaustive minimax sweep)                                                                              | done      |
-| 3   | Sliding Puzzle   | `03-sliding-puzzle.md`    | **Built** — P0–P2 complete + 5×5, picture mode (8 procedural scenes, corner target preview, peek pills), daily challenge (seeded 4×4) and hard mode; jest suite + `core.test.html` green; remaining P3 extras: undo, solve-demo, swipe; future: fixed picture library                       | done      |
-| 4   | Word Puzzle      | `04-word-puzzle.md`       | **Built** — P0–P2 complete in `public/games/word-puzzle/` (core/game + `data/themes.json`, 4 themes × 3 tiers, seeded generator, drag/tap/keyboard input, hints, stars, share); jest suite + `core.test.html` green; P3 extras (daily puzzle, confetti, more themes) deferred               | done      |
-| 5   | Hurdle Runner    | `05-continuous-runner.md` | **Built** — P0–P2 complete in `public/games/hurdle-runner/` (engine/core/render/main, 💚 pickup, share, `?debug=1`, day→night palette); a spawner rng double-call bug left by the interrupted build pass was fixed 2026-09-11 and the jest suite is green; P3 leftovers: fast-fall, gamepad | done      |
-| 6   | Flying Snake     | `06-flying-snake.md`      | **Built** — P0–P2 complete in `public/games/flying-snake/` (core/render/main, fixed 1/120 s physics, medals, share, `?debug=1`); jest suite + `core.test.html` green; P3 extras deferred                                                                                                    | done      |
-| 7   | Spirit Runner    | `07-spirit-runner.md`     | **Built** — Phases A–D complete in `public/games/spirit-runner/` (engine forked from 05 with slide/swipes; `gates.js` 5 rules; orbs/powers; shadow realm; characters/unlocks; `?debug=1`); jest suite + `core.test.html` green; balance pass + 10-min manual session pending; P3 deferred   | ~0.5 day  |
+| #   | Game             | Plan file                 | Build status                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Est. left |
+| --- | ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 1   | Tap or Don't Tap | `01-tap-or-dont-tap.md`   | **Built** — Rev 2 applied 2026-09-11: modular (core/config/storage/audio), analytics removed, a11y + contrast pass; 2026-09-12 stale-code cleanup: config strings completed (menu/feedback/gameover copy), dead code removed, history schema aligned with plan; 31 tests green; tuning pass after human sessions owed                                                                                                                                                           | ~0.5 day  |
+| 2   | Tic Tac Toe      | `02-tic-tac-toe.md`       | **Built** — Rev 2 applied 2026-09-11: pure logic in `core.js`, modular (config/storage), analytics removed, versioned series/prefs save with legacy migration, 23 tests green (incl. exhaustive minimax sweep)                                                                                                                                                                                                                                                                  | done      |
+| 3   | Sliding Puzzle   | `03-sliding-puzzle.md`    | **Built** — P0–P2 complete + 5×5, picture mode (8 procedural scenes, corner target preview, peek pills), daily challenge (seeded 4×4) and hard mode; jest suite + `core.test.html` green; **Rev 2 Phase 0 applied 2026-09-12**: config/storage/scenes/audio modules, versioned save with legacy migration, `slideTile` returns displaced tiles, dead CSS removed; remaining P3 extras: undo, solve-demo, swipe, score/clock rounding unification; future: fixed picture library | done      |
+| 4   | Word Puzzle      | `04-word-puzzle.md`       | **Built** — P0–P2 complete in `public/games/word-puzzle/` (core/game + `data/themes.json`, 4 themes × 3 tiers, seeded generator, drag/tap/keyboard input, hints, stars, share); jest suite + `core.test.html` green; P3 extras (daily puzzle, confetti, more themes) deferred                                                                                                                                                                                                   | done      |
+| 5   | Hurdle Runner    | `05-continuous-runner.md` | **Built** — P0–P2 complete in `public/games/hurdle-runner/` (engine/core/render/main, 💚 pickup, share, `?debug=1`, day→night palette); a spawner rng double-call bug left by the interrupted build pass was fixed 2026-09-11 and the jest suite is green; 2026-09-12: config.js wired (strings live), storage legacy guard fixed, dead helpers removed; P3 leftovers: fast-fall, gamepad                                                                                       | done      |
+| 6   | Flying Snake     | `06-flying-snake.md`      | **Built** — P0–P2 complete in `public/games/flying-snake/` (core/render/main, fixed 1/120 s physics, medals, share, `?debug=1`); jest suite + `core.test.html` green; 2026-09-12: config.js wired (share/medal strings live), medal thresholds single-sourced, dead code removed; P3 extras deferred                                                                                                                                                                            | done      |
+| 7   | Spirit Runner    | `07-spirit-runner.md`     | **Built** — Phases A–D complete in `public/games/spirit-runner/` (engine forked from 05 with slide/swipes; `gates.js` 5 rules; orbs/powers; shadow realm; characters/unlocks; `?debug=1`); jest suite + `core.test.html` green; 2026-09-12: `storage.js` facade extracted, tall-guardian spawn/hitbox fixed per plan, config strings live, dead fork leftovers removed; balance pass + 10-min manual session pending; P3 deferred                                               | ~0.5 day  |
 
 ## 2. Shared conventions (binding for all games)
 
@@ -42,6 +42,15 @@
   multiplayer analysis in its plan (hot-seat / async seeded challenges are backend-free;
   live online is gated behind a backend + an explicit §7 reversal). See each plan's
   "Rev 2 architecture upgrade" section.
+- **Static asset freshness (2026-09-12):** everything under `/games/` is served with
+  `Cache-Control: public, max-age=0, must-revalidate` (both Next configs), so a deploy is
+  picked up on the next load — no cache-busting query strings needed, and players never
+  get a stale `style.css`/`game.js`. Non-Next hosts must serve the games with the same
+  revalidation.
+- **Browser floor (2026-09-12):** games must load on any module-capable browser — data
+  ships as JS modules, never JSON-module imports (Safari < 17.2 / Firefox < 128 can't
+  parse `with`/`assert`), and modern CSS (`dvh`, `color-mix`, `backdrop-filter`) always
+  has a plain fallback declared first.
 - **Phases:** P0 playable core · P1 full rules & feel · P2 persistence/share/QA ·
   P3 polish (same basis as `plan/STANDARDS.md` §1).
 
@@ -61,6 +70,11 @@ code with `<script type="module">`; no bundler.
 
 Games 01/02 already carry their own inline versions of these helpers — migrating them to
 `shared/` is a P2 item per game, not a blocker.
+
+> **Superseded (2026-09-11/12):** the `shared/` folder was never built. The Rev 2 pass
+> gave every game its own `config.js`/`storage.js` modules (plus per-game `audio.js` /
+> `scenes.js` where relevant) instead — see each plan's "Rev 2 architecture upgrade".
+> Kept for history.
 
 ## 4. Build order & milestones
 
@@ -97,13 +111,12 @@ Markdown here is the single source of truth. Regenerate with:
 - No nav/footer/sitemap links, no analytics events, no achievements integration, no
   backend endpoints, no shared UI. Each game plan has a **Deferred coupling** section
   listing what is intentionally NOT built.
-- ⚠️ **CONFLICT TO RESOLVE (found 2026-09-10):** a parallel build pass already wired
-  both finished games to the site — `tap-or-dont-tap/game.js` and `tic-tac-toe/game.js`
-  each POST `game_played` to `{apiBase}/analytics/events` (best-effort), and game 02's
-  header claims Play Hub linkage (the local `/games` hub page exists — a games-owned,
-  git-ignored path; `app/play/page.tsx` itself is clean as of 2026-09-10). Under the
-  isolation decision these POSTs must be deleted; if the owner has reversed the decision,
-  update this section instead. Not silently changed — owner to pick a direction.
+- ✅ **RESOLVED (2026-09-11/12):** the analytics POSTs were deleted in the Rev 2 commits
+  (verified 2026-09-12: isolation greps clean across all seven games — see
+  `plan/stale-code-scan-2026-09-12.md`); the local `/games` hub's `?api=` beacon
+  plumbing was removed 2026-09-12 (games take no hub parameters and post nothing);
+  game 02's Play-Hub header claim is gone. Isolation holds; shipping later remains the
+  explicit owner action below.
 - Shipping later is an explicit owner action: remove the `.gitignore` line
   `apps/frontend/public/games/`, commit, and add any site references in one scoped change.
 

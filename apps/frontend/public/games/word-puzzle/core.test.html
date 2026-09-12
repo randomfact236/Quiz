@@ -45,15 +45,10 @@
 
     <script type="module">
       import * as C from './core.js';
+      // Static import (JS module, not JSON): loads on every module-capable
+      // browser — see data/themes.js for why.
+      import THEMES from './data/themes.js';
 
-      let THEMES = null;
-      try {
-        THEMES = (await import('./data/themes.json', { with: { type: 'json' } })).default;
-      } catch {
-        THEMES = (await import('./data/themes.json', { assert: { type: 'json' } })).default;
-      }
-
-      'use strict';
       let passCount = 0;
       let failCount = 0;
       const resultsEl = document.getElementById('results');

@@ -2,7 +2,7 @@
 
 > Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete,
 > 2026-09-11) — full game in `apps/frontend/public/games/word-puzzle/`
-> (core.js/game.js/style.css + `data/themes.json`), jest suite + `core.test.html` green
+> (core.js/game.js/style.css + `data/themes.js`), jest suite + `core.test.html` green
 > (incl. the 100-seeds-per-level generator proof and data lint), browser smoke test
 > covered drag / tap-tap / keyboard paths, hints, stars, progress and the
 > theme-complete flow; P3 extras (daily puzzle, confetti, more themes) deferred.
@@ -18,7 +18,9 @@ seed (P3) that gives everyone the same puzzle.
 ## 2. Complete game spec
 
 - **Content:** 4 themes (Animals 🦁, Food 🍎, Tech 💻, Space 🚀) × 3 levels, shipped as
-  static `data/themes.json` (schema §5). English, lowercase, 4–9 letters, no spaces,
+  static `data/themes.js` (schema §5) — a JS module on purpose: the game imports it
+  statically, which works on every module-capable browser, whereas a JSON-module import
+  fails on Safari < 17.2 / Firefox < 128. English, lowercase, 4–9 letters, no spaces,
   no duplicate words within a level.
 - **Grid tiers:** L1 = 8×8, 5 words, directions {→, ↓}; L2 = 10×10, 7 words,
   - {↘, ↗}; L3 = 12×12, 10 words, all 8 directions incl. reversed.
@@ -62,7 +64,7 @@ accessible palette (4.5:1 on white).
 ## 5. Data model
 
 ```
-data/themes.json:
+data/themes.js (default export):
 { "themes": [ { "id": "animals", "name": "Animals", "emoji": "🦁",
     "levels": [ { "size": 8, "parSec": 90, "words": ["LION","ZEBRA", …] }, … ] }, … ] }
 
@@ -79,7 +81,7 @@ word-puzzle/
   style.css        # grid, highlight pills, flash animations
   core.js          # generator + validation (pure, seeded) — test surface
   game.js          # input, rendering, timer, stars, persistence
-  data/themes.json
+  data/themes.js
 ```
 
 `core.js` exports: `mulberry32(seed)`, `generateLevel(level, seed)`, `lineCells(grid,
@@ -123,7 +125,7 @@ progress, share.
 
 ### P1 — full rules & feel
 
-- [x] 4 themes × 3 levels data (`themes.json`) + data lint (lengths, dupes, charset)
+- [x] 4 themes × 3 levels data (`themes.js`) + data lint (lengths, dupes, charset)
 - [x] Reversed directions at L3; hints; star rating; color pills; red flash; pop anim
 - [x] Progress persistence + Continue; sound blips + mute
 
@@ -172,13 +174,15 @@ word-puzzle/
                   # theme-complete lines); host-overridable
   storage.js      # guarded facade: versioned progress + prefs + migrations,
                   # remote adapter slot (host-injected only)
-  data/themes.json
+  data/themes.js
 ```
 
 ### config.js
 
-Flags (`dailyEnabled`) and per-locale strings (share template, hint wording,
-theme-complete lines). Host override `window.__WORD_PUZZLE_CONFIG__` → `?locale=` →
+Per-locale strings (share template, hint wording, toasts, theme-complete lines).
+(The placeholder `dailyEnabled` flag was removed 2026-09-12 — daily stays deferred with
+P3; strings extraction completed 2026-09-12.) Host override
+`window.__WORD_PUZZLE_CONFIG__` → `?locale=` →
 defaults. `prefs` may override copy but is a cache, not the source of truth.
 
 ### storage.js facade
@@ -198,11 +202,13 @@ local persistence**. Mid-round resume: N/A (levels are short; stars already pers
 
 ### Phases
 
-- [x] R2-1 Hygiene (2026-09-11): `config.js` (locale, `dailyEnabled` flag, share
-      template, host-overridable) + `storage.js` (versioned `save` document — levels +
-      prefs — migrated from the loose progress/prefs keys, corrupt entries sanitized,
-      remote adapter slot); strings moved out of `game.js`; 43 tests green.
-- [x] R2-2 (partial 2026-09-11): the deterministic generator + `?seed=` hook ship and
-      `config.dailyEnabled` gates the mode; the full daily UI (menu entry + per-day
-      record, seed = `YYYYMMDD`) remains deferred with P3.
+- [x] R2-1 Hygiene (2026-09-11; strings completed 2026-09-12): `config.js` (locale,
+      share template + hint/toast/theme-complete copy, host-overridable) + `storage.js`
+      (versioned `save` document — levels + prefs — migrated from the loose
+      progress/prefs keys, corrupt entries sanitized, remote adapter slot); strings
+      moved out of `game.js`; 43 tests green.
+- [x] R2-2 (partial 2026-09-11): the deterministic generator + `?seed=` hook ship; the
+      full daily UI (menu entry + per-day record, seed = `YYYYMMDD`) remains deferred
+      with P3 (the placeholder `dailyEnabled` flag was removed 2026-09-12 until the
+      mode ships).
 - [ ] R2-3 Content: more themes via `themes.json` (data-only); confetti polish.

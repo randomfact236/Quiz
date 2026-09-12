@@ -21,7 +21,6 @@
  * ============================================================================
  */
 import {
-  DIRS,
   formatTime,
   generateLevel,
   lettersAt,
@@ -31,28 +30,12 @@ import {
   starsFor,
 } from './core.js';
 import { getMuted, loadLevels, saveResult, setMuted } from './storage.js';
-import { GAME_CONFIG, t } from './config.js';
+import { t } from './config.js';
+import THEMES from './data/themes.js';
 
 /* ==========================================================================
  * 0. Data + pure presentation helpers
  * ======================================================================= */
-
-let THEMES = null;
-
-/**
- * data/themes.json without fetch (QA gate §5.4: zero fetches): a dynamic
- * JSON-module import. Modern browsers take the `with` attribute; older
- * ones throw a catchable SyntaxError and retry with the legacy `assert`.
- */
-async function loadThemes() {
-  try {
-    const mod = await import('./data/themes.json', { with: { type: 'json' } });
-    return mod.default;
-  } catch {
-    const mod = await import('./data/themes.json', { assert: { type: 'json' } });
-    return mod.default;
-  }
-}
 
 /**
  * Fixed 10-color accessible palette (plan §4): [light, dark] pairs per
@@ -396,7 +379,7 @@ function startLevel(themeIndex, levelIndex) {
   holdClock(); // no-op safety if a previous round was still ticking
   state.playedMs = 0;
   els.hudTime.textContent = formatTime(0);
-  els.hudHints.textContent = '3';
+  els.hudHints.textContent = String(MAX_HINTS);
   els.btnHint.disabled = false;
 
   clearAnchor();
@@ -422,7 +405,7 @@ function evaluate(cells) {
 
   for (const word of state.foundColors.keys()) {
     if (matchesWord(letters, word, allowRev)) {
-      toast('Already found ✓'); // plan §7.3: correct-but-noop, no penalty
+      toast(t('alreadyFound')); // plan §7.3: correct-but-noop, no penalty
       return;
     }
   }
@@ -498,9 +481,11 @@ function restartPop(el) {
 
 /* ---- hints (3 per level — ring the first letter of an unfound word) ------- */
 
+const MAX_HINTS = 3;
+
 function useHint() {
   if (state.screen !== 'level' || state.resultShown) return;
-  if (state.hintsUsed >= 3 || state.unfound.size === 0) return;
+  if (state.hintsUsed >= MAX_HINTS || state.unfound.size === 0) return;
   const remaining = [...state.unfound];
   const word = remaining[Math.floor(Math.random() * remaining.length)];
   const p = state.placements.find((pl) => pl.word === word);
@@ -509,8 +494,8 @@ function useHint() {
   state.hintedWords.add(word);
   const el = cellAt(p.row, p.col);
   if (el) el.classList.add('cell--hinted');
-  els.hudHints.textContent = String(3 - state.hintsUsed);
-  if (state.hintsUsed >= 3) els.btnHint.disabled = true;
+  els.hudHints.textContent = String(MAX_HINTS - state.hintsUsed);
+  if (state.hintsUsed >= MAX_HINTS) els.btnHint.disabled = true;
   blip(880, 90);
 }
 
@@ -530,7 +515,9 @@ function winLevel() {
   state.resultStars = stars;
   state.resultTimeMs = timeMs;
   els.resultEmoji.textContent = themeComplete ? '🏆' : '🎉';
-  els.resultTitle.textContent = themeComplete ? state.theme.name + ' complete!' : 'Level complete!';
+  els.resultTitle.textContent = themeComplete
+    ? t('themeCompleteTitle', { theme: state.theme.name })
+    : 'Level complete!';
   els.resultStars.innerHTML = [0, 1, 2]
     .map(
       (i) => '<span class="star' + (i < stars ? ' star--on' : '') + '" aria-hidden="true">⭐</span>'
@@ -543,11 +530,9 @@ function winLevel() {
   let sub;
   if (themeComplete) {
     sub =
-      'Theme stars: ' +
-      tp.stars +
-      '/9' +
-      (tp.stars === 9 ? ' — perfect! 🌟' : '') +
-      (newBest ? ' · New best time!' : '');
+      t('themeCompleteSub', { stars: tp.stars }) +
+      (tp.stars === 9 ? t('themeCompletePerfect') : '') +
+      (newBest ? t('themeCompleteNewBest') : '');
   } else {
     sub =
       'Best ' +
@@ -595,12 +580,12 @@ function share() {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
-      () => toast('Result copied to clipboard 📋'),
-      () => window.prompt('Copy your result:', text)
+      () => toast(t('copiedToast')),
+      () => window.prompt(t('copyPrompt'), text)
     );
     return;
   }
-  window.prompt('Copy your result:', text);
+  window.prompt(t('copyPrompt'), text);
 }
 
 let toastTimer = null;
@@ -641,18 +626,7 @@ function onPointerDown(e) {
 
   if (state.anchor) {
     // second tap of tap-tap (plan §7.5): submit, cancel, or re-anchor
-    if (sameCell(cell, state.anchor)) {
-      clearAnchor();
-      return;
-    }
-    const cells = lineCells(state.grid, state.anchor, cell);
-    if (cells && cells.length > 1) {
-      const judged = cells;
-      clearAnchor();
-      evaluate(judged);
-      return;
-    }
-    setAnchor(cell); // stray tap → move the anchor, no penalty
+    tapCell(cell);
     return;
   }
 
@@ -700,7 +674,7 @@ function onPointerCancel() {
   setSelection([]);
 }
 
-/** Keyboard tap (Enter/Space) — same semantics as the tap-tap pointer path. */
+/** Tap-tap resolution (plan §7.5) — the pointer's second tap and keyboard Enter/Space both land here. */
 function tapCell(cell) {
   noteStarted();
   if (!state.anchor) {
@@ -866,14 +840,16 @@ function wire() {
   document.addEventListener('pointerdown', ensureAudio, { once: true });
 }
 
-async function init() {
+function init() {
   bindEls();
   wire();
+  els.btnHint.textContent = t('hint');
 
   state.muted = getMuted();
   els.muteToggle.checked = state.muted;
 
-  THEMES = await loadThemes();
+  // Static ESM import (data/themes.js): no fetch, and it loads on every
+  // module-capable browser — see the module header for why it is not JSON.
   if (!THEMES || !Array.isArray(THEMES.themes) || THEMES.themes.length === 0) {
     els.toast.textContent = 'Puzzle data failed to load';
     return;

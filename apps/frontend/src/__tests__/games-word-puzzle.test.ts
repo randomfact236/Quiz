@@ -34,7 +34,7 @@ import {
   setMuted,
 } from '../../public/games/word-puzzle/storage';
 import { resolveConfig, t } from '../../public/games/word-puzzle/config';
-import THEMES from '../../public/games/word-puzzle/data/themes.json';
+import THEMES from '../../public/games/word-puzzle/data/themes.js';
 
 const ALL_LEVELS: {
   theme: string;
@@ -52,7 +52,7 @@ const ALL_LEVELS: {
   }))
 );
 
-describe('data/themes.json (shipped content)', () => {
+describe('data/themes.js (shipped content)', () => {
   it('lints clean — 4 themes × 3 tiers, word counts, charset, dupes', () => {
     expect(THEMES.themes).toHaveLength(4);
     expect(lintThemes(THEMES)).toEqual([]);
@@ -381,10 +381,10 @@ describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
 describe('config (flags + strings, host-overridable)', () => {
   it('resolveConfig merges host overrides over defaults', () => {
     const merged = resolveConfig(
-      { locale: 'en', dailyEnabled: false, strings: { en: { share: 'EN' } } },
-      { locale: 'fr', dailyEnabled: true, strings: { fr: { share: 'FR' } } }
+      { locale: 'en', strings: { en: { share: 'EN' } } },
+      { locale: 'fr', strings: { fr: { share: 'FR' } } }
     );
-    expect(merged).toMatchObject({ locale: 'fr', dailyEnabled: true });
+    expect(merged).toMatchObject({ locale: 'fr' });
     expect(merged.strings.en.share).toBe('EN');
     expect(merged.strings.fr.share).toBe('FR');
   });

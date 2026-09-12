@@ -46,6 +46,19 @@ const nextConfig = {
       },
     ];
   },
+
+  // The static games under /public/games are plain files with no fingerprint in
+  // their names, so a long-lived cache would serve stale HTML/CSS/JS to players
+  // after a deploy. Force revalidation on every load (conditional requests stay
+  // cheap); asset URLs keep their clean names.
+  async headers() {
+    return [
+      {
+        source: '/games/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' }],
+      },
+    ];
+  },
   
   // Disable image optimization in dev
   images: {

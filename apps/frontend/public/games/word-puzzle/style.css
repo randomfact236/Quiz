@@ -22,10 +22,10 @@
   --primary-a: #2563eb;
   --primary-b: #4f46e5;
   --gold: #b45309;
-  --gold-bg: #fef3c7;
   --sel: rgba(37, 99, 235, 0.28);
   --wrong: #dc2626;
   --shadow: 0 10px 30px rgba(30, 27, 75, 0.12);
+  --board-w: min(92vw, calc(100vh - 16.5rem), 24rem);
   --board-w: min(92vw, calc(100dvh - 16.5rem), 24rem);
 }
 
@@ -43,10 +43,10 @@
   --primary-a: #3b82f6;
   --primary-b: #6366f1;
   --gold: #fbbf24;
-  --gold-bg: rgba(251, 191, 36, 0.14);
   --sel: rgba(59, 130, 246, 0.38);
   --wrong: #ef4444;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --board-w: min(92vw, calc(100vh - 16.5rem), 24rem);
   --board-w: min(92vw, calc(100dvh - 16.5rem), 24rem);
 }
 
@@ -442,12 +442,16 @@ a:focus-visible {
 
 /* found words lock in with their own color pill (--wc / --wc-d set inline) */
 .cell--found {
+  /* Neutral tint fallback when color-mix is unavailable — the found state is
+     also carried by the letter color. */
+  background: rgba(148, 163, 184, 0.22);
   background: color-mix(in srgb, var(--wc) 22%, transparent);
   color: var(--wc);
   font-weight: 800;
 }
 
 [data-theme='dark'] .cell--found {
+  background: rgba(148, 163, 184, 0.26);
   background: color-mix(in srgb, var(--wc-d) 26%, transparent);
   color: var(--wc-d);
 }
@@ -527,6 +531,7 @@ a:focus-visible {
 
 .word-chip--found {
   border-color: transparent;
+  background: rgba(148, 163, 184, 0.16);
   background: color-mix(in srgb, var(--wc) 16%, transparent);
   color: var(--wc);
   text-decoration: line-through;
@@ -534,6 +539,7 @@ a:focus-visible {
 }
 
 [data-theme='dark'] .word-chip--found {
+  background: rgba(148, 163, 184, 0.2);
   background: color-mix(in srgb, var(--wc-d) 20%, transparent);
   color: var(--wc-d);
 }
@@ -548,7 +554,10 @@ a:focus-visible {
   justify-content: center;
   padding: 0.75rem;
   border-radius: 18px;
+  /* Fallback first: without color-mix the scrim must still be visible. */
+  background: rgba(15, 23, 42, 0.55);
   background: color-mix(in srgb, var(--bg-a) 55%, transparent);
+  -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   z-index: 2;
 }
@@ -694,6 +703,7 @@ a:focus-visible {
 @media (max-height: 620px) {
   :root,
   [data-theme='dark'] {
+    --board-w: min(92vw, calc(100vh - 13.5rem), 24rem);
     --board-w: min(92vw, calc(100dvh - 13.5rem), 24rem);
   }
 

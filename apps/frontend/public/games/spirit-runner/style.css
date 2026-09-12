@@ -68,6 +68,7 @@ body {
 }
 
 .app {
+  height: 100vh;
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -105,6 +106,10 @@ body {
 
 #world {
   display: block;
+  /* Pre-JS guard: fitCanvas() sizes the canvas on the first render frame; until
+     then cap it at the container so the page can never scroll sideways. */
+  max-width: 100%;
+  height: auto;
   border-radius: 18px;
   box-shadow: var(--shadow);
   background: #1c2c52; /* painted over every frame — this only covers resize gaps */
