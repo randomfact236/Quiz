@@ -127,6 +127,9 @@
           <div class="board-shell">
             <div id="board" class="board" role="group" aria-label="Sliding puzzle board, 3 by 3"></div>
 
+            <!-- polite move announcements for screen readers (game.js updates it) -->
+            <div id="board-status" class="sr-only" role="status" aria-live="polite"></div>
+
             <!-- target-picture reference (picture mode): corner thumbnail, tap to enlarge -->
             <button
               type="button"

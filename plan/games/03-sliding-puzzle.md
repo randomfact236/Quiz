@@ -165,17 +165,19 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 
 ### Phase 0 — Foundation: correctness fixes, config/flags, storage facade
 
-- [ ] `shuffle()` guards: validate `movesCount` (unknown size → clear error), bound the
-      solved-retry loop (no infinite loop from a degenerate rng); pathological case falls
-      back to a forced nudge.
+- [x] `shuffle()` guards: unknown size → clear error; solved-retry bounded (8 attempts)
+      with a forced legal nudge as the last resort. (2026-09-12; guard tests added.)
 - [ ] One per-size config object (`shuffleMoves`, `sizeBonus`) as the single source;
       `SIZES`/`SHUFFLE_MOVES`/`SIZE_BONUS` derived from it; unknown size fails fast.
-- [ ] `slideTile` returns displaced tile values; UI stops re-implementing the geometry.
-- [ ] `config.js` + `storage.js` + `scenes.js` + `audio.js` modules created; `game.js`
-      becomes the UI shell importing them (behavior unchanged).
-- [ ] Dead CSS removed (`board--deal`, `overlay--in`, `@keyframes deal/pop`);
-      `.daily` added to reduced-motion; score/clock rounding unified.
-- [ ] Jest + harness updated for the new modules; all green; game behavior unchanged.
+- [x] `slideTile` returns displaced tile values; UI stops re-implementing the geometry.
+      (2026-09-12: returns `{ board, moved, pushed }`; `pushedTileValues` deleted.)
+- [x] `config.js` + `storage.js` + `scenes.js` + `audio.js` modules created; `game.js`
+      becomes the UI shell importing them (behavior unchanged). (2026-09-12)
+- [x] Dead CSS removed (`board--deal`, `overlay--in`, `@keyframes deal/pop`);
+      `.daily` added to reduced-motion. (2026-09-12)
+- [x] Score/clock rounding unified (score floors like `formatTime`). (2026-09-12)
+- [x] Jest + harness updated for the new modules; all green; game behavior unchanged.
+      (2026-09-12: versioned `game:sliding-puzzle:save` v1 with legacy-key migration.)
 
 ### Phase 1 — Campaign levels + Free Play
 
@@ -221,18 +223,22 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 
 ### Phase 5 — Polish, accessibility, QA, docs
 
-- [ ] A11y: tile position in `aria-label` + blank announcement (polite live region),
-      focus trap/inert for `aria-modal` dialogs, roving focus + arrow keys for radio
-      groups, focus target when a round starts.
-- [ ] Contrast to AA (primary gradient light stop, muted text); `color-mix` fallback +
-      `-webkit-backdrop-filter`.
-- [ ] Cache-busting for `style.css` / `game.js` / `data/pictures.json`.
+- [x] A11y: tile `aria-label` carries its board position + a polite live region
+      announces each move and the blank's cell; Tab is trapped inside the open
+      `aria-modal` dialog. (2026-09-12)
+- [ ] A11y remaining: roving focus + arrow keys for the radio groups, focus target when
+      a round starts.
+- [x] `color-mix` fallback + `-webkit-backdrop-filter` on the overlays. (2026-09-12)
+- [x] Cache-busting: `/games/:path*` now sends `Cache-Control: public, max-age=0,
+    must-revalidate` from both Next configs, so a deploy is picked up on reload.
+      (2026-09-12)
+- [ ] Contrast to AA (primary gradient light stop, muted text).
 - [ ] Timer/share helper extraction + tests; determinism test fixed (two fresh streams);
       mid-board segment + non-integer index cases.
 - [ ] Docs: this file's status + `plan/games/README.md` row per phase; gated items
       (§7) recorded.
 - [ ] QA gate (master README §5): offline check, isolation greps, 10-minute phone
-      session (incl. iOS Safari fallbacks).
+      session (incl. iOS Safari fallbacks) — the manual session is the owner's.
 
 ## 11. Acceptance criteria
 

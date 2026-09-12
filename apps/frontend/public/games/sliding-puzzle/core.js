@@ -26,9 +26,12 @@ export function bestKey(size, variant) {
 
 export const PREFS_KEY = 'game:sliding-puzzle:prefs';
 
+/** Prefix of one day's daily-challenge record key (plan §5's daily layout). */
+export const DAILY_PREFIX = 'game:sliding-puzzle:daily:';
+
 /** Storage key of one day's daily-challenge record, from a Date. */
 export function dailyKey(date) {
-  return 'game:sliding-puzzle:daily:' + dailySeed(date);
+  return DAILY_PREFIX + dailySeed(date);
 }
 
 /** YYYYMMDD number of a Date — the daily challenge's identity + rng seed. */
@@ -39,7 +42,7 @@ export function dailySeed(date) {
 /**
  * Deterministic 32-bit rng (mulberry32). shuffle() accepts it, so a fixed
  * seed makes every player — and every replay — walk the exact same board:
-  * that is the whole daily challenge.
+ * that is the whole daily challenge.
  */
 export function mulberry32(seed) {
   let a = seed >>> 0;
@@ -108,9 +111,11 @@ export function isSolved(board) {
  * the blank moves alone (moved: 1); any other tile in the blank's row or
  * column pushes the whole segment between it and the blank one step toward
  * the blank (moved: tiles displaced — plan §2 move counting). Returns a NEW
- * board (input is never mutated) or null for an illegal slide: the blank
- * itself, an out-of-range index, or a tile not sharing the blank's row/column
- * (the UI turns null into the wrong-tile shake).
+ * board (input is never mutated) plus `moved` (tiles displaced) and `pushed`
+ * (the displaced tiles' values, nearest the blank first), or null for an
+ * illegal slide: the blank itself, an out-of-range index, or a tile not
+ * sharing the blank's row/column (the UI turns null into the wrong-tile
+ * shake).
  */
 export function slideTile(board, n, index) {
   if (!Number.isInteger(index) || index < 0 || index >= board.length) return null;
@@ -122,13 +127,15 @@ export function slideTile(board, n, index) {
   const step = index > blank ? (sameRow ? 1 : n) : sameRow ? -1 : -n;
   const dist = Math.abs(index - blank) / (sameRow ? 1 : n);
   const next = board.slice();
+  const pushed = [];
   let b = blank;
   for (let i = 0; i < dist; i++) {
-    next[b] = next[b + step]; // nearest tile slides into the blank...
-    b += step;                // ...and the blank takes its place
+    pushed.push(next[b + step]); // nearest tile slides into the blank...
+    next[b] = next[b + step]; // ...and the blank takes its place
+    b += step;
   }
   next[b] = 0;
-  return { board: next, moved: dist };
+  return { board: next, moved: dist, pushed };
 }
 
 /**
@@ -139,14 +146,37 @@ export function slideTile(board, n, index) {
  * blank position after every move (test surface for the no-undo rule, §8).
  * Re-walks in the unlikely case the board lands back on solved (plan §7.2).
  */
+/** Bounded retries before the forced nudge guarantees a mixed board. */
+const MAX_SHUFFLE_ATTEMPTS = 8;
+
+/**
+ * Shuffle by walking the blank through `movesCount` random legal single-tile
+ * slides starting from the solved board (plan §2) — solvable by construction.
+ *
+ * Guards (production pass):
+ *  - an unknown size with no `SHUFFLE_MOVES` entry fails fast instead of
+ *    walking zero moves and retrying forever;
+ *  - the walk never undoes its immediately previous move (the blank never
+ *    steps back onto the cell it just left);
+ *  - the solved-retry loop is bounded, and the pathological case ends with one
+ *    forced legal move — always a mixed board — so this can never hang a tab.
+ *
+ * If `log` is given it receives the blank position after every move (the test
+ * surface for the no-undo rule, §8).
+ */
 export function shuffle(n, movesCount, rng = Math.random, log = null) {
-  let board;
-  do {
-    board = solvedBoard(n);
+  const moves = Number.isInteger(movesCount) && movesCount > 0 ? movesCount : SHUFFLE_MOVES[n];
+  if (!Number.isInteger(moves) || moves <= 0) {
+    throw new Error(
+      'shuffle: no walk length for size ' + n + ' — add it to SHUFFLE_MOVES (plan §2)'
+    );
+  }
+  for (let attempt = 0; attempt < MAX_SHUFFLE_ATTEMPTS; attempt++) {
+    const board = solvedBoard(n);
     if (log) log.length = 0;
     let blank = n * n - 1;
     let prev = -1;
-    for (let m = 0; m < movesCount; m++) {
+    for (let m = 0; m < moves; m++) {
       const options = neighbors(blank, n).filter((p) => p !== prev);
       const roll = Math.min(options.length - 1, Math.floor(rng() * options.length));
       const pick = options[roll];
@@ -156,7 +186,16 @@ export function shuffle(n, movesCount, rng = Math.random, log = null) {
       blank = pick;
       if (log) log.push(blank);
     }
-  } while (isSolved(board));
+    if (!isSolved(board)) return board;
+  }
+  // Degenerate rng landed on the solved board every attempt: one legal move
+  // from solved is always unsolved, so fall back to that instead of hanging.
+  const board = solvedBoard(n);
+  if (log) log.length = 0;
+  const first = neighbors(n * n - 1, n)[0];
+  board[n * n - 1] = board[first];
+  board[first] = 0;
+  if (log) log.push(first);
   return board;
 }
 

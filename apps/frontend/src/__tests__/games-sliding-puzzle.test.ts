@@ -1,12 +1,15 @@
 /**
  * Pure-logic tests for the static game at
- * public/games/sliding-puzzle/core.js (plan/games/03-sliding-puzzle.md §8:
+ * public/games/sliding-puzzle/ (plan/games/03-sliding-puzzle.md §8:
  * "100 shuffles per size → isSolved false + inversion-parity solvable;
- * no-undo rule; slideTile segments; scoreFor clamps"). The same assertions
- * ship in the game's own core.test.html harness; this suite keeps them
- * running in CI.
+ * no-undo rule; slideTile segments; scoreFor clamps") plus the Rev 2
+ * modules: scenes.js slicing, the storage facade (versioned save + legacy
+ * migration) and config resolution. The core assertions also ship in the
+ * game's own core.test.html harness; this suite keeps them running in CI.
  */
 import {
+  DAILY_PREFIX,
+  PREFS_KEY,
   SHUFFLE_MOVES,
   bestKey,
   blankAt,
@@ -24,7 +27,19 @@ import {
   slideTile,
   solvedBoard,
 } from '../../public/games/sliding-puzzle/core';
-import { sliceBackground } from '../../public/games/sliding-puzzle/game';
+import { sliceBackground } from '../../public/games/sliding-puzzle/scenes';
+import {
+  SAVE_KEY,
+  loadBest,
+  loadDailyRecord,
+  loadPrefs,
+  loadSave,
+  saveBest,
+  saveDailyRecord,
+  savePrefs,
+  setRemoteAdapter,
+} from '../../public/games/sliding-puzzle/storage';
+import { GAME_CONFIG, resolveConfig, t } from '../../public/games/sliding-puzzle/config';
 
 const boardStr = (board: number[]) => board.join(',');
 
@@ -77,12 +92,16 @@ describe('slideTile (adjacent, segments, illegal, purity)', () => {
 
   it('adjacent slide moves exactly one tile', () => {
     const single = slideTile(solved, 3, 5); // tile 6 sits directly above the blank
-    expect(single).toEqual({ board: [1, 2, 3, 4, 5, 0, 7, 8, 6], moved: 1 });
+    expect(single).toEqual({ board: [1, 2, 3, 4, 5, 0, 7, 8, 6], moved: 1, pushed: [6] });
   });
 
   it('two-tile row segment counts 2 moves', () => {
     const row2 = slideTile(solved, 3, 6); // blank at 8, tap 6 in the same row
-    expect(row2).toEqual({ board: [1, 2, 3, 4, 5, 6, 0, 7, 8], moved: 2 });
+    expect(row2).toEqual({
+      board: [1, 2, 3, 4, 5, 6, 0, 7, 8],
+      moved: 2,
+      pushed: [8, 7], // nearest the blank first
+    });
   });
 
   it('three-tile row segment counts 3 moves', () => {
@@ -90,12 +109,17 @@ describe('slideTile (adjacent, segments, illegal, purity)', () => {
     expect(row3).toEqual({
       board: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 13, 14, 15],
       moved: 3,
+      pushed: [15, 14, 13],
     });
   });
 
   it('column segment shifts tiles downward and counts both', () => {
     const col2 = slideTile(solved, 3, 2); // tile 3, two rows above the blank
-    expect(col2).toEqual({ board: [1, 2, 0, 4, 5, 3, 7, 8, 6], moved: 2 });
+    expect(col2).toEqual({
+      board: [1, 2, 0, 4, 5, 3, 7, 8, 6],
+      moved: 2,
+      pushed: [6, 3], // nearest the blank first
+    });
   });
 
   it('illegal slides are null: wrong row/column, the blank, out of range', () => {
@@ -109,6 +133,33 @@ describe('slideTile (adjacent, segments, illegal, purity)', () => {
     const before = solved.slice();
     slideTile(solved, 3, 5);
     expect(solved).toEqual(before);
+  });
+});
+
+describe('shuffle guards (production pass)', () => {
+  it('never hangs on a degenerate rng and still returns a mixed, solvable board', () => {
+    for (const n of [3, 4, 5]) {
+      const board = shuffle(n, SHUFFLE_MOVES[n as 3 | 4 | 5], () => 0);
+      expect(isSolved(board)).toBe(false);
+      expect(isSolvable(board, n)).toBe(true);
+    }
+  });
+
+  it('fails fast for a size with no walk length instead of looping forever', () => {
+    expect(() => shuffle(6, undefined as unknown as number)).toThrow(/no walk length/);
+    expect(() => shuffle(6, 0)).toThrow(/no walk length/); // 6 has no default either
+  });
+
+  it('falls back to the size default for a non-positive explicit count', () => {
+    const log: number[] = [];
+    shuffle(3, 0, Math.random, log);
+    expect(log).toHaveLength(SHUFFLE_MOVES[3]);
+  });
+
+  it('still honours an explicit walk length', () => {
+    const log: number[] = [];
+    shuffle(3, 7, Math.random, log);
+    expect(log).toHaveLength(7);
   });
 });
 
@@ -278,5 +329,182 @@ describe('records (mergeRecord + best keys)', () => {
   it('best keys separate normal and hard records', () => {
     expect(bestKey(3)).toBe('game:sliding-puzzle:best:3');
     expect(bestKey(4, 'hard')).toBe('game:sliding-puzzle:best:4:hard');
+  });
+});
+
+/* ---- storage facade (Rev 2: one versioned save + legacy migration) ---------
+ * The loose pre-Rev 2 keys (plan §5) are folded into game:sliding-puzzle:save
+ * on first read, dropped only after the migrated save is durably written.
+ * -------------------------------------------------------------------------- */
+
+describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
+  const DAY = new Date(2026, 8, 11);
+  const KEYS = [
+    SAVE_KEY,
+    PREFS_KEY,
+    bestKey(3),
+    bestKey(4),
+    bestKey(5),
+    bestKey(3, 'hard'),
+    bestKey(4, 'hard'),
+    bestKey(5, 'hard'),
+    dailyKey(DAY),
+  ];
+  let original: Record<string, string | null>;
+
+  beforeEach(() => {
+    original = Object.fromEntries(KEYS.map((k) => [k, window.localStorage.getItem(k)]));
+    KEYS.forEach((k) => window.localStorage.removeItem(k));
+  });
+
+  afterAll(() => {
+    for (const [k, v] of Object.entries(original)) {
+      if (v === null) window.localStorage.removeItem(k);
+      else window.localStorage.setItem(k, v);
+    }
+  });
+
+  it('keeps the legacy key layout and the Rev 2 save key (plan §5)', () => {
+    expect(PREFS_KEY).toBe('game:sliding-puzzle:prefs');
+    expect(DAILY_PREFIX).toBe('game:sliding-puzzle:daily:');
+    expect(SAVE_KEY).toBe('game:sliding-puzzle:save');
+  });
+
+  it('defaults to a fresh versioned save when nothing is stored', () => {
+    expect(loadSave()).toEqual({
+      version: 1,
+      prefs: { size: 3, muted: false, mode: 'numbers', hard: false },
+      bests: {},
+      daily: {},
+    });
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY) as string).version).toBe(1);
+    expect(loadPrefs()).toEqual({ size: 3, muted: false, mode: 'numbers', hard: false });
+    expect(loadBest(4)).toBeNull();
+    expect(loadDailyRecord(DAY)).toBeNull();
+  });
+
+  it('migrates the legacy loose keys into the versioned save and removes them', () => {
+    window.localStorage.setItem(
+      PREFS_KEY,
+      JSON.stringify({ size: 4, muted: true, mode: 'picture' })
+    );
+    window.localStorage.setItem(bestKey(4), JSON.stringify({ timeMs: 100000, moves: 50 }));
+    window.localStorage.setItem(bestKey(5, 'hard'), JSON.stringify({ timeMs: 200000, moves: 120 }));
+    window.localStorage.setItem(dailyKey(DAY), JSON.stringify({ timeMs: 90000, moves: 40 }));
+
+    expect(loadPrefs()).toEqual({ size: 4, muted: true, mode: 'picture', hard: false });
+    expect(loadBest(4)).toEqual({ timeMs: 100000, moves: 50 });
+    expect(loadBest(5, 'hard')).toEqual({ timeMs: 200000, moves: 120 });
+    expect(loadBest(3)).toBeNull();
+    expect(loadDailyRecord(DAY)).toEqual({ timeMs: 90000, moves: 40 });
+    expect(window.localStorage.getItem(PREFS_KEY)).toBeNull();
+    expect(window.localStorage.getItem(bestKey(4))).toBeNull();
+    expect(window.localStorage.getItem(bestKey(5, 'hard'))).toBeNull();
+    expect(window.localStorage.getItem(dailyKey(DAY))).toBeNull();
+
+    const saved = JSON.parse(window.localStorage.getItem(SAVE_KEY) as string);
+    expect(saved.version).toBe(1);
+    expect(saved.bests).toEqual({
+      '4': { timeMs: 100000, moves: 50 },
+      '5:hard': { timeMs: 200000, moves: 120 },
+    });
+    expect(saved.daily).toEqual({ '20260911': { timeMs: 90000, moves: 40 } });
+  });
+
+  it('drops corrupt legacy entries instead of trusting the store', () => {
+    window.localStorage.setItem(PREFS_KEY, JSON.stringify({ size: 9, muted: 'yes' }));
+    window.localStorage.setItem(bestKey(3), JSON.stringify({ timeMs: 'fast', moves: -1 }));
+    window.localStorage.setItem(dailyKey(DAY), 'not json');
+
+    expect(loadPrefs()).toEqual({ size: 3, muted: false, mode: 'numbers', hard: false });
+    expect(loadBest(3)).toBeNull();
+    expect(loadDailyRecord(DAY)).toBeNull();
+  });
+
+  it('saveBest keeps the lower time and lower moves independently, per variant', () => {
+    expect(saveBest(4, 100000, 50)).toEqual({
+      best: { timeMs: 100000, moves: 50 },
+      newTime: true,
+      newMoves: true,
+    });
+    expect(saveBest(4, 90000, 60)).toEqual({
+      best: { timeMs: 90000, moves: 50 },
+      newTime: true,
+      newMoves: false,
+    });
+    expect(saveBest(4, 120000, 45)).toEqual({
+      best: { timeMs: 90000, moves: 45 },
+      newTime: false,
+      newMoves: true,
+    });
+    expect(loadBest(4)).toEqual({ timeMs: 90000, moves: 45 });
+    expect(loadBest(4, 'hard')).toBeNull(); // variants stay separate
+  });
+
+  it('saveDailyRecord folds into the day slot and loadDailyRecord reads it back', () => {
+    expect(saveDailyRecord(DAY, 90000, 40)).toEqual({
+      best: { timeMs: 90000, moves: 40 },
+      newTime: true,
+      newMoves: true,
+    });
+    expect(saveDailyRecord(DAY, 80000, 45)).toEqual({
+      best: { timeMs: 80000, moves: 40 },
+      newTime: true,
+      newMoves: false,
+    });
+    expect(loadDailyRecord(DAY)).toEqual({ timeMs: 80000, moves: 40 });
+    expect(loadDailyRecord(new Date(2026, 8, 12))).toBeNull();
+  });
+
+  it('savePrefs round-trips through the versioned save', () => {
+    savePrefs({ size: 5, muted: true, mode: 'picture', hard: true });
+    expect(loadPrefs()).toEqual({ size: 5, muted: true, mode: 'picture', hard: true });
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY) as string).version).toBe(1);
+  });
+
+  it('mirrors writes to a host-injected remote adapter', () => {
+    const seen: unknown[] = [];
+    setRemoteAdapter({ save: (save: unknown) => seen.push(save) });
+    saveBest(3, 60000, 30);
+    expect(seen).toHaveLength(1);
+    expect(seen[0]).toMatchObject({ version: 1, bests: { '3': { timeMs: 60000, moves: 30 } } });
+    setRemoteAdapter(null);
+    saveBest(3, 50000, 25);
+    expect(seen).toHaveLength(1); // adapter detached
+  });
+});
+
+describe('config (strings, host-overridable)', () => {
+  it('resolves the defaults the game consumes', () => {
+    expect(GAME_CONFIG.locale).toBe('en');
+    expect(GAME_CONFIG.strings.en.share).toContain('Sliding Puzzle');
+    expect(GAME_CONFIG.strings.en.shareDaily).toContain('Daily Sliding Puzzle');
+  });
+
+  it('resolveConfig merges host overrides over defaults, strings per locale', () => {
+    const merged = resolveConfig(
+      { locale: 'en', strings: { en: { share: 'EN' } } },
+      { locale: 'fr', strings: { fr: { share: 'FR' } } }
+    );
+    expect(merged).toMatchObject({ locale: 'fr' });
+    expect(merged.strings.en.share).toBe('EN');
+    expect(merged.strings.fr.share).toBe('FR');
+  });
+
+  it('t() substitutes vars and falls back to the key', () => {
+    expect(
+      t('share', {
+        size: 4,
+        mode: ' on hard mode',
+        result: '2:41 · 213 moves',
+        url: 'http://x',
+      })
+    ).toBe(
+      'I solved 4×4 on hard mode in 2:41 · 213 moves in Sliding Puzzle — can you beat it? http://x'
+    );
+    expect(t('shareDaily', { result: '1:00 · 20 moves', url: 'http://x' })).toBe(
+      'I solved today\u2019s Daily Sliding Puzzle in 1:00 · 20 moves — can you beat me? http://x'
+    );
+    expect(t('no-such-key')).toBe('no-such-key');
   });
 });

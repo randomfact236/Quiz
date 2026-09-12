@@ -101,6 +101,19 @@ body {
   display: none !important;
 }
 
+/* Visually hidden but exposed to assistive tech (live region). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---- screens -------------------------------------------------------------- */
 
 .screen {
@@ -498,7 +511,10 @@ a:focus-visible {
 }
 
 .overlay--preview {
+  /* Fallback first: without color-mix the scrim must still be visible. */
+  background: rgba(15, 23, 42, 0.72);
   background: color-mix(in srgb, var(--bg-a) 72%, transparent);
+  -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   z-index: 3;
 }
@@ -609,23 +625,6 @@ a:focus-visible {
   }
 }
 
-/* fresh round deal-in */
-
-.board--deal {
-  animation: deal 0.3s ease-out;
-}
-
-@keyframes deal {
-  from {
-    opacity: 0.2;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 /* ---- pause overlay: opaque, the board must be hidden (plan §7.3) ---------- */
 
 .overlay {
@@ -644,7 +643,10 @@ a:focus-visible {
 }
 
 .overlay--win {
+  /* Fallback first: without color-mix the scrim must still be visible. */
+  background: rgba(15, 23, 42, 0.55);
   background: color-mix(in srgb, var(--bg-a) 55%, transparent);
+  -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
 }
 
@@ -657,21 +659,6 @@ a:focus-visible {
   box-shadow: var(--shadow);
   padding: 1.25rem 1rem;
   text-align: center;
-}
-
-.overlay--in .overlay-card {
-  animation: pop 0.25s ease-out;
-}
-
-@keyframes pop {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .overlay-emoji {
@@ -775,14 +762,13 @@ a:focus-visible {
   }
 
   .tile--shake,
-  .board--deal,
-  .tile--ghost,
-  .overlay--in .overlay-card {
+  .tile--ghost {
     animation: none;
   }
 
   button.primary,
   button.ghost,
+  button.daily,
   .size-card,
   .toast {
     transition: none;
