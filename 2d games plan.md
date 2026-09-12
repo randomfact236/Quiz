@@ -1,6 +1,12 @@
 # 2D Games Plan
 
 > Build plans per game: [`plan/games/README.md`](plan/games/README.md) (sample plans created 2026-09-09).
+>
+> **Historical brainstorm — superseded by `plan/games/README.md` + the per-game complete
+> plans.** Several specifics below were deliberately changed during planning (see the
+> README §8 decisions log): game 01 ships with no hearts/percentile leaderboard as
+> described, art is procedural rather than hand-drawn, and there is no background music.
+> Kept for history; do not build from this file.
 
 ## 1. "Tap or Don't Tap" — Solo Version
 

@@ -7,9 +7,10 @@ The 2D games are deliberately kept separate from the website product (owner deci
 the 2D games must not touch them in any way.** Concretely, unless the owner names them:
 
 - **Do not read, modify, refactor, plan, analyze, delete, or reference** anything under:
-  - `apps/frontend/public/games/` — the static games (git-ignored)
-  - `apps/frontend/src/app/games/` — the local games hub pages (git-ignored)
-  - `apps/frontend/src/__tests__/games-*` — the games tests (git-ignored)
+  - `apps/frontend/public/games/` — the static games (committed via a `.gitignore`
+    allowlist since 2026-09-11 — owner decision; still isolated from the product)
+  - `apps/frontend/src/app/games/` — the local games hub pages (untracked)
+  - `apps/frontend/src/__tests__/games-*` — the games tests (committed)
   - `plan/games/` and `2d games plan.md` — the games build plans
 - **Do not re-add** games entries to product surfaces: the footer, nav config, sitemap,
   the Play Hub (`app/play/page.tsx`), or the analytics module lists
@@ -20,8 +21,8 @@ the 2D games must not touch them in any way.** Concretely, unless the owner name
 - Work on any other feature must never require opening or changing the paths above.
   If a task seems blocked on them, stop and ask the owner instead.
 
-**Shipping the games later** is an explicit owner action: remove the three games lines in
-`.gitignore`, commit, and re-add the site references (footer/sitemap/Play Hub/analytics) in a
-single explicitly-scoped change.
+**Shipping the games later** is an explicit owner action: remove the games lines in
+`.gitignore`'s games block, commit, and re-add the site references (footer/sitemap/Play
+Hub/analytics) in a single explicitly-scoped change.
 
 See `assistant-rules.md` for port configuration and development commands.
