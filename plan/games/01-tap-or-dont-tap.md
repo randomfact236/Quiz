@@ -1,6 +1,7 @@
 # Game 01 — Tap or Don't Tap (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **built & browser-verified**
+> Complete plan (supersedes the 2026-09-09 sample). Status: **built & browser-verified** —
+> re-synced with the implementation 2026-09-13 (deviations recorded in §13.1 below).
 > (2026-09-09 build pass) — `apps/frontend/public/games/tap-or-dont-tap/` with decoys,
 > Stroop traps, rule swap, audio, pause and a baked percentile table. Logic tests:
 > `apps/frontend/src/__tests__/games-tap-or-dont-tap.test.ts`.
@@ -141,8 +142,12 @@ seeded `pickSignal` sequences per band; `percentileFor` monotonic + bounds.
 
 ### P3 — polish
 
-- [ ] Reduced-motion variant of flash; tuning pass after 5 test sessions
-- [ ] History sparkline on menu; haptics on heart loss; sound design pass
+- [x] History sparkline on menu; haptics on heart loss; sound design pass
+      (sparkline: core.js `sparklinePoints` + menu SVG; haptics: audio.js `buzz()` —
+      verified 2026-09-13; the checkbox was stale)
+- [ ] Reduced-motion variant of flash (shipped: CSS disables feedback animation and
+      button transitions under `prefers-reduced-motion`); tuning pass after 5 human
+      test sessions still owed
 
 ## 10. Acceptance criteria
 
@@ -227,4 +232,29 @@ keep full local persistence**. Mid-round resume: N/A (rounds are seconds).
       dropped); dead flash-yellow word rule removed; `defaultSave()` single-sourced;
       config strings completed (menu rule, swap banner, feedback overlays, gameover
       card); `FEEDBACK_MS` single-sourced. 31/31 tests green.
-- [ ] R2-3 (deferred, optional) async seeded duel — only if there's demand.
+- [ ] R2-3 (deferred, optional) async seeded duel — only if there's demand. Still
+      not built; `generateRound`'s injectable rng is the only seam kept for it.
+
+## 13.1 Implementation sync (2026-09-13) — deviations of code from the text above
+
+Recorded verbatim from a code audit; the plan text above is otherwise accurate.
+
+- **Function inventory drift (§6/§13):** shipped names are `windowMsForRound`,
+  `generateRound`, `resolveRound(spec, opts)`, `bakedPercentile`/`localPercentile`
+  (not `windowMs`, `pickSignal`, `resolveTap`, `percentileFor`). Extras:
+  `effectiveExpectsTap` (Stroop lie) and `sparklinePoints`.
+- **Badge = hybrid, not baked-only (§3):** with ≥5 recorded runs the top-% badge comes
+  from the player's own history (`localPercentile`); `BAKED_TABLE` is the fallback.
+  The table lives in `core.js`, not `game.js`.
+- **History cap is 20**, not §13's "≤50" (§3's amendment is the accurate one).
+- **No distinct `PAUSED` state (§2):** the shell keeps waiting/signal states plus a
+  paused-overlay flag; hidden-during-signal pauses and restarts the round on resume
+  instead of scoring a miss (kinder than §7.1's "counts as a miss").
+- **No 50 ms tap debounce and no >window+50 ms anomaly discard (§7.2/§7.7):** the
+  feedback state gates double-taps instead; reactions clamp to ≥1 ms only.
+- **Share chain lacks the third `prompt()` fallback (§10):** Web Share → clipboard
+  ("Copied" note) → clipboard failure is swallowed silently.
+- **`?debug=1` does not exist in this game** (never specced here; `?locale=` only).
+- **Back-link exists:** `← All games` to `/games` — §11's "no nav links" referred to
+  the product footer/nav; the hub back-link ships in every game.
+- **No in-folder test.html:** tests are jest-only (31 cases).

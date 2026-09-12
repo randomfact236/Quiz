@@ -1,6 +1,7 @@
 # Game 07 — Spirit Runner (Complete Plan)
 
 > Complete plan (supersedes the 2026-09-09 sample). Status: **built 2026-09-11** —
+> re-synced with the implementation 2026-09-13 (deviations recorded in §12.1 below);
 > Phases A–D complete in `apps/frontend/public/games/spirit-runner/` (`engine.js`
 > forked from Game 05 with slide + swipe grammar, `gates.js`, `core.js`, `render.js`,
 > `main.js`); §8 jest suite (`src/__tests__/games-spirit-runner.test.ts`) and the
@@ -265,3 +266,23 @@ copy but is a cache, not the source of truth.
 - [ ] R2-2 Async seeded-run challenge (`?seed=` + share template carrying it).
 - [ ] R2-3 Still owed from §9 Phase D: the balance pass and the owner's 10-minute
       manual session — unchanged by Rev 2.
+
+## 12.1 Implementation sync (2026-09-13) — deviations of code from the text above
+
+- **gates.js API:** exports `RULE_IDS` + `shuffledRules(rng)` (no `RULES` array);
+  `hintFor(ruleId)` takes no run-state. Sequence hints render the glyph pattern plus
+  "…"; negation renders "The moon door lies. Shun {rune}."
+- **The five shipped rules:** parity, echo, negation, sequence, color — deterministic
+  resolution + binary choice; hints never empty (fuzz-tested over 200 states/rule).
+- **config.js carries only the share string** (deliberate, per R2-1: gate hints stayed
+  in gates.js); menu best/no-best lines and character copy are hardcoded in main.js.
+- **File tree:** `core.test.html` (322 lines, auto-run browser twin) exists but is
+  missing from the §6/§12 trees; everything else matches (10 files; engine fork
+  documented in its header).
+- **?debug=1** draws hitboxes + the active gate rule/correct side AND exposes
+  `window.__sr = { state, save }`.
+- **Depths:** Dawn Forest → Dusk Forest → Night Forest crossfades; announcements on
+  depth-up.
+- **Outstanding (accurate in the header):** the analytic balance constants exist, but
+  the median-first-run/learnability playtest and the owner's 10-minute phone session
+  are still owed; ?seed= async challenges and P3 art/music/daily-depth not built.

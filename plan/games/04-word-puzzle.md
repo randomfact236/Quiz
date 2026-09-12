@@ -1,6 +1,7 @@
 # Game 04 — Word Puzzle (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete,
+> Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete;
+> re-synced with the implementation 2026-09-13 — see §12.1)
 > 2026-09-11) — full game in `apps/frontend/public/games/word-puzzle/`
 > (core.js/game.js/style.css + `data/themes.js`), jest suite + `core.test.html` green
 > (incl. the 100-seeds-per-level generator proof and data lint), browser smoke test
@@ -140,8 +141,9 @@ progress, share.
 ### P3 — polish
 
 - [ ] Daily puzzle (seed = `YYYYMMDD` hash → same grid for everyone, share-friendly);
-      confetti on theme completion; more themes _(deferred — `?seed=` QA hook already
-      ships the deterministic-generator half)_
+      confetti on theme completion; more themes _(deferred — verified still absent
+      2026-09-13; the `?seed=`/`?theme=`/`?level=` QA hook ships the
+      deterministic-generator half)_
 
 ## 10. Acceptance criteria
 
@@ -211,4 +213,22 @@ local persistence**. Mid-round resume: N/A (levels are short; stars already pers
       full daily UI (menu entry + per-day record, seed = `YYYYMMDD`) remains deferred
       with P3 (the placeholder `dailyEnabled` flag was removed 2026-09-12 until the
       mode ships).
-- [ ] R2-3 Content: more themes via `themes.json` (data-only); confetti polish.
+- [ ] R2-3 Content: more themes via the data module (**shipped as `data/themes.js`**,
+      not `themes.json` — ESM on purpose per §2); confetti polish. Still deferred.
+
+## 12.1 Implementation sync (2026-09-13) — deviations of code from the text above
+
+- **Data file is `data/themes.js`** (ESM module, §2's own decision) — every
+  `themes.json` mention in this plan and in core.js comments means that file.
+- **Storage is the Rev 2 versioned facade:** `game:word-puzzle:save` v1
+  (`{version, levels, prefs:{muted}}`); the §5 loose `:progress`/`:prefs` keys are
+  legacy migration inputs, deleted after migration. Remote adapter slot shipped.
+- **Tests:** 32 jest cases (an earlier "43 tests" note here was stale) + the
+  in-folder `core.test.html` browser harness.
+- **Share template** extended beyond §9's sketch: "I found {words} words in {time} ·
+  {stars} in Word Puzzle — can you beat it? {url}" (config.js).
+- **Input paths all ship:** drag (elementFromPoint sampling), tap-tap anchor/submit,
+  keyboard (arrows + Enter/Space/Escape, roving tabindex), plus `?seed=`/`?theme=`/
+  `?level=` QA hooks and 3-hint rings.
+- **Result overlay** also has a ⌂ Menu button (§4 lists Next/Replay/Share).
+- **Stars formula:** finish + ≤par + (no hints and ≤2 wrong picks).

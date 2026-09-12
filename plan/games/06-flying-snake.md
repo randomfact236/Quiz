@@ -1,6 +1,7 @@
 # Game 06 — Flying Snake / Flappy (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete,
+> Complete plan (supersedes the 2026-09-09 sample). Status: **Built** (P0–P2 complete;
+> re-synced with the implementation 2026-09-13 — see §12.1 deviations)
 > 2026-09-11) — full trio in `apps/frontend/public/games/flying-snake/` (core/render/main),
 > jest suite + `core.test.html` green; P3 extras (moving pipes, night palette, ghost run)
 > deferred. Slug `flying-snake`; folder `apps/frontend/public/games/flying-snake/`.
@@ -197,3 +198,22 @@ instant restart by design).
       `createSpawner(rng)` is ready; `main.js` needs to thread the seed through.
 - [ ] R2-3 A11y/polish: reduced-motion variant for flash/shake, menu/gameover focus
       handling, HUD contrast check.
+
+## 12.1 Implementation sync (2026-09-13) — deviations of code from the text above
+
+- **Rev 2 pass is DONE** (the header once said "pending"; §12 R2-1 is the accurate
+  record): `config.js` (share/medal strings, host-overridable) and `storage.js`
+  (`game:flying-snake:save` v1; legacy `:best`/`:prefs` migrated then removed;
+  remote adapter slot) are wired into main.js.
+- **Test count:** 32 jest cases (§12's "42/42" was stale) + `core.test.html`.
+- **`dying` state:** the shell adds an explicit death-fall state between playing and
+  gameover (§3's five-state table omits it).
+- **Persistence key constants live in `core.js`** (storage.js imports them) — §12's
+  tree showed storage.js owning them.
+- **core.js exports beyond §6's list:** `gapForScore`, `makePipe`, `pipeRects`,
+  `snakeHit`, `pipePassed`, `tiltFor`, `MEDAL_THRESHOLDS` (10/20/40/75 — §2's values).
+- **No day/night or moving pipes (P3):** one fixed day palette; static vines.
+- **Reduced-motion polish (R2-3):** not built (flash/shake always run; retry focus
+  exists).
+- **Seeded async challenge (R2-2):** not built — `createSpawner(rng)` accepts a seed
+  but main.js never threads one.

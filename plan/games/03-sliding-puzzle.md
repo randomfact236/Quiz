@@ -6,6 +6,11 @@
 > file structure, campaign levels + free play, a curated picture library with a builder
 > tool, same-device + own-device multiplayer behind a config flag, and local-first
 > persistence with mid-round resume. Supersedes the 2026-09-09 sample and revision 1.
+>
+> **SYNCED WITH THE IMPLEMENTATION 2026-09-13:** of the Phase 0-5 roadmap only Phase 0
+> (foundation) and pieces of Phases 4-5 shipped - see the per-box annotations below and
+> the section 13 verdict. The campaign/library/multiplayer/resume phases were never
+> built; the shipped game is free-play + daily + hard mode.
 
 ## 1. Overview
 
@@ -63,7 +68,7 @@ Tiles are absolutely-positioned buttons moved via `transform: translate` transit
 (180 ms ease); the blank is a missing tile. Board sizing `min(92vw, 60dvh)`, capped for
 desktop; HUD + board + actions cluster together at every viewport.
 
-## 5. Data model (localStorage, schema-versioned, guarded)
+## 5. Data model (localStorage) — SUPERSEDED: shipped as the versioned `game:sliding-puzzle:save` v1 doc (see §8); the loose keys below are legacy migration inputs, deleted after migration
 
 ```
 game:sliding-puzzle:prefs          { version, size, muted, mode, hard, locale? }
@@ -167,7 +172,10 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 
 - [x] `shuffle()` guards: unknown size → clear error; solved-retry bounded (8 attempts)
       with a forced legal nudge as the last resort. (2026-09-12; guard tests added.)
-- [ ] One per-size config object (`shuffleMoves`, `sizeBonus`) as the single source;
+- [x] One per-size config object (`shuffleMoves`, `sizeBonus`) as the single source;
+      `SIZES`/`SHUFFLE_MOVES`/`SIZE_BONUS` derived from it; unknown size fails fast
+      (shipped as three parallel consts - same values; fail-fast lives in `shuffle()`,
+      `scoreFor` falls back to 0 for unknown sizes - accepted 2026-09-13)
       `SIZES`/`SHUFFLE_MOVES`/`SIZE_BONUS` derived from it; unknown size fails fast.
 - [x] `slideTile` returns displaced tile values; UI stops re-implementing the geometry.
       (2026-09-12: returns `{ board, moved, pushed }`; `pushedTileValues` deleted.)
@@ -179,46 +187,46 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 - [x] Jest + harness updated for the new modules; all green; game behavior unchanged.
       (2026-09-12: versioned `game:sliding-puzzle:save` v1 with legacy-key migration.)
 
-### Phase 1 — Campaign levels + Free Play
+### Phase 1 — Campaign levels + Free Play — **DESCOPED (never built; free-play + daily + hard shipped instead)**
 
-- [ ] `levels.js`: stage definitions (~24 stages, three tiers: 3×3 → 4×4 → 5×5, assists
+- [ ] (descoped - not built) `levels.js`: stage definitions (~24 stages, three tiers: 3x3 - 4x4 - 5x5, assists) - the shipped game is free-play + daily + hard (see section 13)
       fading, fixed picture per stage, par + star thresholds) and pure rules
       (`stageById`, `isUnlocked`, `starsFor`, `nextStage`).
-- [ ] `storage.js`: progress record (versioned, migrated) + free-play separation.
-- [ ] UI: Campaign screen (grid, locks, stars, bests), Free Play screen (today's menu),
+- [ ] (descoped - not built) `storage.js`: progress record - the shipped save v1 keeps prefs/bests/dailies only
+- [ ] (descoped - not built) UI: Campaign screen (grid, locks, stars, bests), Free Play screen (today's menu), campaign win overlay (stars, retry/next), hub navigation
       campaign win overlay (stars, retry/next), hub navigation.
-- [ ] Daily picture deterministic from the daily seed.
-- [ ] Jest: unlock/star/scoring boundaries; browser: unlock flow + free-play parity.
+- [ ] (not built) Daily picture deterministic from the daily seed - the seed drives the BOARD only; the picture scene is random
+- [ ] (descoped - not built) Jest: unlock/star/scoring boundaries; browser: unlock flow + free-play parity
 
-### Phase 2 — Picture library + Library Builder
+### Phase 2 — Picture library + Library Builder — **DEFERRED (not built; procedural scenes ship)**
 
-- [ ] `data/pictures.json` manifest schema (packs, pictures, sections) + `library.js`
+- [ ] (deferred - not built) `data/pictures.json` manifest schema (packs, pictures, sections) + `library.js`
       (resolve/fallback) + `scenes.js` picture resolution for levels/daily/free.
-- [ ] `builder.html`: upload → square-crop/resize 720×720 → JPEG q0.85 → assign packs +
+- [ ] (deferred - not built) `builder.html`: upload, square-crop/resize 720x720, JPEG q0.85, assign packs
       sections → export `pictures.json` + named `pics/<pack>/<id>.jpg` files.
-- [ ] Rules: ≤ ~150 KB per image, square, license-clear (owner's responsibility);
+- [ ] (deferred - not built) Rules: <= ~150 KB per image, square, license-clear (zero entries = procedural-only, which is the current state)
       zero entries → procedural-only behavior unchanged.
-- [ ] Jest: manifest validation/resolution/fallback; browser: assigned image slices
+- [ ] (deferred - not built) Jest: manifest validation/resolution/fallback; browser: assigned image slices; builder round-trip
       correctly + appears in the corner preview; builder round-trip.
 
-### Phase 3 — Multiplayer + website/app gating
+### Phase 3 — Multiplayer + website/app gating — **NOT BUILT (gated per §7; the `multiplayerEnabled` flag was never added to config.js)**
 
-- [ ] Same-device series: alternating seeded boards, per-round results, series scoreboard.
-- [ ] Own-device challenge: URL/code encoding `{size, seed, assists, pictureId}`;
+- [ ] (not built) Same-device series: alternating seeded boards, per-round results, series scoreboard
+- [ ] (not built) Own-device challenge: URL/code encoding of {size, seed, assists, pictureId}
       identical board + picture on the friend's device; result comparison via share +
       manual opponent entry.
-- [ ] Flag gating per §7: disabled entry + dialog + zero logic/network; `?mp=1`/host
+- [ ] (not built) Flag gating per section 7 - the `multiplayerEnabled` flag itself was never added to config.js
       override enables full behavior.
-- [ ] Jest: challenge encode/decode round-trip; browser: both flag states, network-request
+- [ ] (not built) Jest: challenge encode/decode round-trip; browser: both flag states, network-request
       log empty when disabled; isolation grep clean.
 
 ### Phase 4 — Persistence & resume
 
-- [ ] `storage.js` migrations + remote adapter slot (host-injected only).
-- [ ] Mid-round resume snapshot (save on state change, offer Continue on return); works
+- [x] `storage.js` migrations + remote adapter slot (host-injected only) - BUILT early under the Rev 2 Phase 0 pass; jest-covered; this box was stale
+- [ ] (not built) Mid-round resume snapshot (save on state change, offer Continue on return); works
       for guests; campaign rounds resume into their stage.
-- [ ] Docs: host-injection contract for the adapter (the game never checks auth).
-- [ ] Jest: snapshot save/restore round-trip, migration path; browser: resume accuracy
+- [x] Docs: host-injection contract for the adapter - covered by storage.js's header contract (`{ save(saveObj) }` shape); no standalone doc
+- [ ] (partial) Jest: migration-path tests ship; snapshot/resume tests have nothing to test while resume is not built
       ±50 ms; zero network calls with no adapter injected.
 
 ### Phase 5 — Polish, accessibility, QA, docs
@@ -226,18 +234,18 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 - [x] A11y: tile `aria-label` carries its board position + a polite live region
       announces each move and the blank's cell; Tab is trapped inside the open
       `aria-modal` dialog. (2026-09-12)
-- [ ] A11y remaining: roving focus + arrow keys for the radio groups, focus target when
+- [ ] (not built) A11y remaining: roving focus + arrow keys for the radio groups, focus target when a round starts
       a round starts.
 - [x] `color-mix` fallback + `-webkit-backdrop-filter` on the overlays. (2026-09-12)
 - [x] Cache-busting: `/games/:path*` now sends `Cache-Control: public, max-age=0,
-    must-revalidate` from both Next configs, so a deploy is picked up on reload.
+  must-revalidate` from both Next configs, so a deploy is picked up on reload.
       (2026-09-12)
-- [ ] Contrast to AA (primary gradient light stop, muted text).
-- [ ] Timer/share helper extraction + tests; determinism test fixed (two fresh streams);
+- [ ] (not done) Contrast to AA (primary gradient light stop, muted text)
+- [x] Determinism test fixed (two fresh streams - jest). STILL OPEN: timer/share helper extraction + tests; mid-board-blank and non-integer-index segment cases
       mid-board segment + non-integer index cases.
-- [ ] Docs: this file's status + `plan/games/README.md` row per phase; gated items
+- [x] Docs: this file's status + `plan/games/README.md` row; gated items (section 12)
       (§7) recorded.
-- [ ] QA gate (master README §5): offline check, isolation greps, 10-minute phone
+- [ ] QA gate (master README §5): offline check OK, isolation greps OK - the 10-minute phone session is the owner's, still owed
       session (incl. iOS Safari fallbacks) — the manual session is the owner's.
 
 ## 11. Acceptance criteria
@@ -265,3 +273,30 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
 - Shipping the games publicly (removing `.gitignore` isolation lines + footer/sitemap/
   Play Hub references) remains a separate, explicitly-scoped owner action. Sliding
   Puzzle is the only committed game (owner decision 2026-09-11).
+
+## 13. Implementation sync (2026-09-13) — what shipped vs this plan
+
+**Shipped:** the classic puzzle exactly as §2 (3×3/4×4/5×5, guaranteed-solvable
+walk shuffles, segment slides with per-tile stagger), plus picture mode (8
+procedural scenes — Aurora, Sunset, Ocean, Forest, City, Space, Desert,
+Bubbles — corner target preview + number-pill peek, both disabled in hard
+mode), the seeded daily 4×4 (the seed drives the BOARD only; the picture
+scene is random), hard mode (picture forced, preview/peek hidden, separate
+`4:hard` records), Rev 2 modules (`config.js` share strings; `storage.js`
+save v1 folding prefs + per-size bests + per-day dailies, with legacy
+migration and the remote-adapter slot; `scenes.js`; `audio.js`), and unified
+floor-rounding for score/clock. Tests: 55 executed jest cases + the
+`core.test.html` twin (core.js surface).
+
+**Not built (annotated above per phase):** the campaign/levels system, the
+picture library + Library Builder, same-device series / own-device challenges
+and the `multiplayerEnabled` flag (never added to config.js), mid-round
+resume snapshots, roving-focus a11y, an AA contrast pass, and extracted
+timer+share helpers. The §6 caption's "campaign | free play | multiplayer"
+screens describe this roadmap, not the shipped two-screen shell.
+
+**Deviations worth knowing:** a daily solve also folds into the plain 4×4
+best record (dual record, undocumented in §2/§3); §5's loose-key data model is
+superseded by the single versioned save; §9's claim that core.test.html
+mirrors all jest assertions holds only for core.js (scenes/storage/config are
+jest-only).

@@ -1,6 +1,7 @@
 # Game 02 — Tic Tac Toe (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **built** — P0–P2 complete
+> Complete plan (supersedes the 2026-09-09 sample). Status: **built** — P0–P2 complete;
+> re-synced with the implementation 2026-09-13 (deviations recorded in §12.1 below).
 > plus misère from P3; X/O theme picker skipped. `apps/frontend/public/games/tic-tac-toe/`
 > (`index.html`, `style.css`, ESM `game.js`, `game.test.html`); jest twin at
 > `src/__tests__/games-tic-tac-toe.test.ts` incl. the exhaustive minimax sweep.
@@ -113,7 +114,8 @@ Pure exported logic: `newBoard()`, `applyMove(board, i, mark)`, `checkWinner(boa
 
 - [x] Misère variant — done
 - [x] Board flip animation — done
-- [ ] X/O theme picker (skipped by owner decision — keep skipped unless requested)
+- [ ] X/O theme picker (skipped by owner decision — keep skipped unless requested;
+      verified still absent 2026-09-13 — marks are fixed X/O SVGs)
 
 ## 10. Acceptance criteria
 
@@ -124,8 +126,8 @@ Pure exported logic: `newBoard()`, `applyMove(board, i, mark)`, `checkWinner(boa
 ## 11. Deferred coupling (intentionally NOT built)
 
 Online multiplayer (needs backend rooms), footer/nav links, Play Hub card, achievements —
-per master README §7. Existing analytics POST block is the one live violation; flagged
-above, not silently removed.
+per master README §7. The analytics POST block flagged here was deleted 2026-09-11
+(see §9 P2 and §12 R2-1) — isolation greps clean, re-verified 2026-09-13.
 
 ## 12. Rev 2 architecture upgrade (2026-09-11) — reference: `03-sliding-puzzle.md`
 
@@ -181,3 +183,24 @@ Mid-round resume: N/A (rounds are fast by design).
 - [x] R2-2 A11y (2026-09-11): already largely present (roving board focus, per-cell
       labels, roundEnd focus on Next); verified — no further changes needed.
 - [ ] R2-3 (deferred, optional) async position challenge — only if there's demand.
+      Still not built (share carries only the series line).
+
+## 12.1 Implementation sync (2026-09-13) — deviations of code from the text above
+
+- **Hard AI tie-break:** plan §2 says ties resolve by first-found scan order; code picks
+  randomly among equal-value moves (tests assert value-optimality, not a fixed move).
+- **AI think delay:** plan §2 says ~300 ms; `config.js` ships `aiThinkDelayMs: 500`.
+- **Function inventory drift (§6):** shipped names are `emptyBoard` (not `newBoard`),
+  `negamax` + `gameValue` (not `minimaxScore`), `roundOutcome(board, misere)` (not
+  `resolveMisere`); `applyMove` doesn't exist (the shell plays inline);
+  `checkWinner` returns `{completedBy, line}`; extras: `other`, `completesLine`,
+  `aiMove`, `emptyTally`, `seriesSetupKey`.
+- **Prefs have no `muted` (§5):** the game has no audio; prefs normalize to
+  `{mode, level, misere}`.
+- **Series keys are broader than §5:** colon setup keys including a misère dimension
+  (legacy dash keys are migration inputs only).
+- **Medium AI under misère** avoids completing any line (beyond §2's win/block/random,
+  which only defines misère behavior for Hard).
+- **Round-end overlay also carries a Share button** (§4 lists only Next/Menu).
+- **config.js** carries `aiThinkDelayMs` + the two share strings; round-end/series copy
+  is hardcoded in the shell (§12's "per-locale strings" for those was not built).

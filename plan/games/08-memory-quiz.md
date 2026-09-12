@@ -1,8 +1,10 @@
 # Game 08 — Memory Quiz (Complete Plan)
 
-> Complete plan (2026-09-12, owner request). Status: **built** — P0–P2 complete
-> 2026-09-12 (see `README.md` §1 for the one recorded pack-size deviation). Slug
-> `memory-quiz`; folder `apps/frontend/public/games/memory-quiz/`.
+> Complete plan (2026-09-12, owner request). Status: **built + upgraded** — P0–P2
+> complete 2026-09-12; the 2026-09-13 extension upgrade (`08-memory-quiz-upgrade.md`)
+> added the 30-level campaign, question-type registry, modes and save v2 on top of
+> this spec (packs grew 10 → 14 items — see README §1). Slug `memory-quiz`; folder
+> `apps/frontend/public/games/memory-quiz/`.
 > Architecture follows the Rev 2 reference (`03-sliding-puzzle.md`): `config.js` +
 > versioned `storage.js` from day one, zero assets, zero network, JS modules only
 > (no JSON imports), browser-floor fallbacks. Built as a **new game**, so the Rev 2
@@ -204,9 +206,12 @@ cleared on pause), grid rendering, input, share.
 
 ### P3 — polish
 
-- [ ] Swap twist (an item silently moves; "tap what changed"); more packs (data-only);
-      kids mode (names printed under the emoji); confetti on a perfect board;
-      hard mode (no hearts, one miss ends the run)
+- [x] Swap twist (**shipped** in the 2026-09-13 upgrade as a two-item exchange —
+      "The {item} moved! Where is it now?" — data/questions.js); kids mode (**shipped**:
+      names under the items + memorize bonus); hard mode (**shipped**: one miss ends
+      the run); zen mode (**shipped**: no fail state) — see data/modes.js
+- [ ] confetti on a perfect board; more packs (packs grew to 14 items each for the
+      candidate budget; additional packs still open)
 
 ## 10. Acceptance criteria
 

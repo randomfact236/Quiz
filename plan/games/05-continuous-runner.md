@@ -1,8 +1,17 @@
 # Game 05 — Continuous Runner / Hurdles (Complete Plan)
 
-> Complete plan (supersedes the 2026-09-09 sample). Status: **not started** — build-ready.
+> Complete plan (supersedes the 2026-09-09 sample). Status: **BUILT** — P0–P2 complete
+> (2026-09-11/12), P3 partially (day/night palette shipped; slide/fast-fall/gamepad and
+> `?seed=` async tracks not built). Synced with the implementation 2026-09-13: the §6/§12
+> file structure matches the folder exactly (8 files), fixed-timestep 1/120 s loop with
+> 250 ms clamp, 💚 pickup, day→night palette per 500 m band, `?debug=1` hitbox/gap
+> overlay, config.js strings wired, versioned `game:hurdle-runner:save` facade with
+> legacy migration + remote adapter slot. Tests: 33 jest cases
+> (`apps/frontend/src/__tests__/games-hurdle-runner.test.ts`); no in-folder test.html
+> (§8's "node:test / test.html" predates the jest convention — jest is the runner).
+> Owed: the manual 10-minute phone session (owner, like every game).
 > Slug `hurdle-runner`; folder `apps/frontend/public/games/hurdle-runner/`.
-> Its engine is the foundation for Spirit Runner (07) — build to the structure in §6.
+> Its engine is the foundation for Spirit Runner (07) — 07 forked it as planned.
 
 ## 1. Overview
 
@@ -70,9 +79,14 @@ death always reads as the player's fault.
 
 ## 5. Data model (localStorage)
 
+Built as the Rev 2 versioned facade (§12) — the two loose keys below were the
+original sketch and now exist only as legacy migration inputs (migrated once,
+then removed):
+
 ```
-game:hurdle-runner:best   → { distanceM: 1204 }
-game:hurdle-runner:prefs  → { muted: false }
+game:hurdle-runner:save    → { version: 1, best: { distanceM: 1204 }, prefs: { muted: false } }
+game:hurdle-runner:best    → legacy input  (migrated into save.best, then deleted)
+game:hurdle-runner:prefs   → legacy input  (migrated into save.prefs, then deleted)
 ```
 
 ## 6. File structure & function inventory (engine is 07's base)
@@ -107,7 +121,13 @@ gameover` transitions.
 6. Storage disabled → no best score, playable.
 7. Tab-crash recovery: no mid-run persistence (stated; run is lost — acceptable).
 
-## 8. Testing plan (core.js, node:test / test.html)
+## 8. Testing plan (core.js — jest; the "node:test / test.html" note predates the jest convention)
+
+Shipped as `apps/frontend/src/__tests__/games-hurdle-runner.test.ts` — 33 cases
+across 13 describes: jump-arc proof (max jump clears a 90 px barrier), jump-cut
+apex, spawner sweep (30 speeds × 500 spawns, fairness + determinism), inset
+collision corners, once-per-obstacle scoring, 💚 pickup geometry, fixed-timestep
+determinism, share-text format, storage facade. No in-folder test.html.
 
 - Jump arc: from ground, max jump clears a 90 px tall barrier at min speed 320 px/s.
 - Jump-cut: release at 50 % rise → apex lower than full hold (assert heights).
@@ -118,26 +138,31 @@ gameover` transitions.
 
 ## 9. Task breakdown
 
-### P0 — playable core
+### P0 — playable core · ✅ BUILT
 
-- [ ] `core.js` physics + spawner + collision + scoring (+ tests §8)
-- [ ] `engine.js` loop, ground scroll, camera; player jump with coyote/buffer/cut
-- [ ] Hurdles, speed ramp, tiers, game over; menu/gameover states; best distance
+- [x] `core.js` physics + spawner + collision + scoring (+ tests §8)
+- [x] `engine.js` loop, ground scroll, camera; player jump with coyote/buffer/cut
+- [x] Hurdles, speed ramp, tiers, game over; menu/gameover states; best distance
 
-### P1 — full rules & feel
+### P1 — full rules & feel · ✅ BUILT
 
-- [ ] Parallax layers; procedural player run/jump animation (shapes); landing dust
-- [ ] Tall barrier + double hurdles; tier announcements; WebAudio jump/land/crash + mute
-- [ ] Pause overlay + `visibilitychange` (shared loop handles)
+- [x] Parallax layers; procedural player run/jump animation (shapes); landing dust
+- [x] Tall barrier + double hurdles; tier announcements; WebAudio jump/land/crash + mute
+- [x] Pause overlay + `visibilitychange` (shared loop handles)
 
-### P2 — persistence/share/QA
+### P2 — persistence/share/QA · ✅ BUILT (QA phone session owed by the owner)
 
-- [ ] 💚 pickup; share (`Ran {m} m — beat that!`); `?debug=1` hitboxes
-- [ ] QA gate (master README §5): 60 fps phone check, offline, isolation greps
+- [x] 💚 pickup; share (`Ran {m} m in Hurdle Runner — beat that! {url}` — extended
+      template per the master-README wrapper); `?debug=1` hitboxes + spawner-gap markers
+- [x] QA gate (master README §5): offline ✓, isolation greps ✓ — the 60 fps phone
+      check is the owner's manual session, still owed
 
-### P3 — polish
+### P3 — polish · PARTIAL
 
-- [ ] Day/night palette shift per 500 m; slide/duck obstacle; fast-fall; gamepad
+- [x] Day/night palette shift per 500 m (day → dusk → night → dawn crossfades)
+- [ ] slide/duck obstacle; fast-fall; gamepad — **not built** (deferred; zero
+      references in code). `?seed=` async seeded track (§12) is also still queued
+      — `createSpawner(rng)` accepts the seed, `main.js` doesn't thread one yet.
 
 ## 10. Acceptance criteria
 
@@ -178,5 +203,5 @@ Footer/nav links, analytics events, achievements, leaderboards — per master RE
       live; legacy-prefs guard fixed; unused `parallax` helper removed.)
 - [x] P2 addition (2026-09-11): Rev 2 storage landed with the facade. `?seed=` support +
       share template carrying the seed (async challenge) remains queued.
-- [ ] Note for 07: Spirit Runner forks `engine.js` — keep the fork contract in sync when
-      `config.js`/`storage.js` land here. (07 now carries its own `config.js` pattern.)
+- [x] Note for 07: Spirit Runner forked `engine.js` (header documents the fork) and
+      ships its own `config.js`/`storage.js` — contract satisfied.
