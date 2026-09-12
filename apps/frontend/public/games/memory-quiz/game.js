@@ -260,6 +260,9 @@ function startBoard() {
   state.questionIndex = 0;
   state.removedCell = -1;
 
+  // Campaign levels are gated by completion; ladder modes climb waves — the
+  // HUD never calls a wave a "level" so the two can't be confused.
+  els.hudLevelLabel.textContent = mode.levelSource === 'campaign' ? 'Level' : 'Wave';
   els.hudLevel.textContent = String(
     mode.levelSource === 'campaign' ? LEVELS.indexOf(state.level) + 1 : state.position
   );
@@ -959,6 +962,7 @@ function init() {
   els.hudHearts = document.getElementById('hud-hearts');
   els.hudScore = document.getElementById('hud-score');
   els.hudLevel = document.getElementById('hud-level');
+  els.hudLevelLabel = document.getElementById('hud-level-label');
   els.hudBoard = document.getElementById('hud-board');
   els.hudBoardWrap = document.getElementById('hud-board-wrap');
   els.bannerText = document.getElementById('banner-text');

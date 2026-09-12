@@ -22,6 +22,7 @@ async function readState(page) {
     hearts: document.getElementById('hud-hearts').getAttribute('aria-label'),
     score: document.getElementById('hud-score').textContent,
     level: document.getElementById('hud-level').textContent,
+    levelLabel: document.getElementById('hud-level-label').textContent,
     boardNo: document.getElementById('hud-board').textContent,
     boardHiddenWrap: document.getElementById('hud-board-wrap').classList.contains('hidden'),
     gridHidden: document.getElementById('board').classList.contains('grid--hidden'),
@@ -129,7 +130,7 @@ try {
     w: document.documentElement.scrollWidth, h: document.documentElement.scrollHeight }));
   check('play: no page overflow at 360×740 (plan §10 acceptance)', playOverflow.w <= 360 && playOverflow.h <= 740, JSON.stringify(playOverflow));
   s = await readState(page);
-  check('campaign l01: level chip 1, board chip hidden', s.level === '1' && s.boardHiddenWrap);
+  check('campaign l01: level chip says Level 1, board chip hidden', s.level === '1' && s.levelLabel === 'Level' && s.boardHiddenWrap);
   check('campaign l01: memorize shows a FULL grid — no blank blocks', !s.gridHidden
     && s.cellLabels.length === 4 && s.cellLabels.every((l) => !l.endsWith(', empty')),
     JSON.stringify(s.cellLabels));
@@ -308,7 +309,8 @@ try {
   await page.locator('#btn-start').click();
   await playLadderTo(page, 'l03');
   const endlessRun = await debugRun(page);
-  check('endless: HUD climbs (level 3, board chip visible)', endlessRun.position === 3 && !s.boardHiddenWrap);
+  s = await readState(page);
+  check('endless: HUD climbs as WAVES (wave 3, board chip visible)', endlessRun.position === 3 && s.levelLabel === 'Wave' && !s.boardHiddenWrap, s.levelLabel + ' ' + s.level);
 
   /* ---- 9. pause holds; restart replays ---- */
   await page.keyboard.press('Escape');
