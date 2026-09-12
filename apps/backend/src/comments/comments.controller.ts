@@ -108,10 +108,14 @@ export class CommentsController {
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Post a guess / chip tap / comment (guest or logged-in, 20/min)' })
   create(
-    @Body() dto: CreateCommentDto & { guestId: string },
+    // Plain DTO class — an inline `& { guestId }` intersection erases the
+    // metatype and the global ValidationPipe skips validation entirely
+    // (unknown keys passed through, text length uncapped). guestId is now a
+    // validated field on CreateCommentDto.
+    @Body() dto: CreateCommentDto,
     @Req() req: any
   ): Promise<PublicComment> {
-    return this.commentsService.create(dto.guestId, dto, req.user?.id ?? null);
+    return this.commentsService.create(dto.guestId ?? '', dto, req.user?.id ?? null);
   }
 
   @Post(':id/flag')

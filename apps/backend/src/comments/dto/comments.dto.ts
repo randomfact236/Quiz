@@ -58,6 +58,19 @@ export class CreateCommentDto {
   @IsString()
   @MaxLength(50)
   authorName?: string;
+
+  /**
+   * Client-issued guest identity for guest-authored entries. Lives ON the DTO
+   * (not an inline `CreateCommentDto & { guestId }` intersection in the
+   * controller): intersections erase the class metatype, the global
+   * ValidationPipe then sees `Object` and skips validation entirely — no
+   * whitelist, no forbid, no length caps (security-audit-2026-09-12 pass).
+   */
+  @ApiPropertyOptional({ description: 'Client-issued guest identity (guest writes)' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  guestId?: string;
 }
 
 export class CommentFeedQueryDto extends PaginationDto {
