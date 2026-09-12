@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Memory Quiz — AI Quiz Games</title>
+    <meta
+      name="description"
+      content="Memorize the snack grid before the timer runs out — then answer where things were and which one vanished. A memory reaction game with streak scoring."
+    />
+    <meta name="theme-color" content="#e8e4f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b4a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      // Resolve the site's theme (ai-quiz-theme: light|dark|system) before first
+      // paint so the board never flashes the wrong scheme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('ai-quiz-theme');
+          var dark =
+            stored === 'dark' ||
+            ((!stored || stored === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="game.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Memory quiz menu">
+        <h1 class="menu-title">Memory Quiz 🧠</h1>
+        <p class="tagline">Memorize the grid — then prove it.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="chips" role="radiogroup" aria-labelledby="mode-label" id="mode-picker">
+            <!-- mode chips rendered by game.js from data/modes.js -->
+          </div>
+
+          <div id="level-picker-wrap" class="level-picker-wrap">
+            <h2 id="levels-label">Levels</h2>
+            <div id="level-picker" class="levels" role="radiogroup" aria-labelledby="levels-label">
+              <!-- level tiles rendered by game.js from data/levels.js -->
+            </div>
+          </div>
+
+          <h2 id="pack-label">Food pack</h2>
+          <div class="chips" role="radiogroup" aria-labelledby="pack-label" id="pack-picker">
+            <!-- pack chips rendered by game.js from data/packs.js -->
+          </div>
+
+          <p class="best-line" id="menu-best">No best score yet</p>
+
+          <label class="toggle-row">
+            <input type="checkbox" id="mute-toggle" />
+            <span>Mute sound effects 🔇</span>
+          </label>
+        </div>
+
+        <button type="button" class="primary" id="btn-start">▶ Start</button>
+        <button type="button" class="daily" id="btn-daily">
+          <span class="daily-title">📅 Daily memory quiz</span>
+          <span class="daily-sub" id="daily-sub"></span>
+        </button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-play" class="screen" aria-label="Memory quiz board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="hud">
+            <div class="chip" id="hud-hearts" aria-label="Hearts"></div>
+            <div class="chip"><span class="chip-icon">🧠</span><span id="hud-score">0</span></div>
+            <div class="chip">
+              <span class="chip-icon">🎯</span>Level <span id="hud-level">1</span>
+            </div>
+            <div class="chip" id="hud-board-wrap">
+              <span class="chip-icon">📋</span>Board <span id="hud-board">1</span>
+            </div>
+          </div>
+          <button type="button" class="ghost" id="btn-pause" aria-label="Pause game">⏸</button>
+        </div>
+
+        <div class="banner">
+          <svg class="ring" viewBox="0 0 24 24" aria-hidden="true">
+            <circle class="ring-track" cx="12" cy="12" r="10" />
+            <circle class="ring-fill" id="ring-fill" cx="12" cy="12" r="10" />
+          </svg>
+          <span id="banner-text" class="banner-text">Get ready…</span>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="grid" role="group" aria-label="Memory grid"></div>
+
+          <!-- missing-question candidate row (game.js renders the emoji buttons) -->
+          <div id="candidates" class="candidates hidden" role="group" aria-label="Answer choices"></div>
+
+          <!-- polite question/feedback announcements for screen readers -->
+          <div id="play-status" class="sr-only" role="status" aria-live="polite"></div>
+
+          <!-- ============================ FEEDBACK ============================ -->
+          <div id="overlay-feedback" class="overlay overlay--feedback hidden" aria-hidden="true">
+            <div class="feedback-card" id="feedback-card"></div>
+          </div>
+
+          <!-- ============================= PAUSED ============================= -->
+          <div
+            id="overlay-pause"
+            class="overlay overlay--pause hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pause-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji">⏸</div>
+              <h2 class="overlay-title" id="pause-title">Paused</h2>
+              <p class="overlay-sub">The countdown is held — nothing expires while you're away.</p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-resume">▶ Resume</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-restart">🔄 Restart</button>
+                  <button type="button" class="ghost" id="btn-menu2">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================= LEVEL CLEARED ========================= -->
+          <div
+            id="overlay-levelclear"
+            class="overlay overlay--gameover hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clear-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="clear-title">Level cleared!</h2>
+              <p class="stars" id="clear-stars" aria-label="Stars"></p>
+              <p class="win-stats" id="clear-stats"></p>
+              <div class="badges">
+                <span class="badge-new hidden" id="badge-levelbest">NEW BEST</span>
+                <span class="badge-new hidden" id="badge-levelstars">★ UPGRADED</span>
+              </div>
+              <p class="overlay-sub" id="clear-best"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next level ▶</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-retry2">↻ Retry</button>
+                  <button type="button" class="ghost" id="btn-menu4">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================ GAME OVER =========================== -->
+          <div
+            id="overlay-gameover"
+            class="overlay overlay--gameover hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gameover-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji">🧠</div>
+              <h2 class="overlay-title" id="gameover-title">Out of hearts!</h2>
+              <p class="win-stats" id="go-stats"></p>
+              <div class="badges">
+                <span class="badge-new hidden" id="badge-best">NEW BEST</span>
+                <span class="badge-top hidden" id="badge-top"></span>
+              </div>
+              <p class="overlay-sub" id="go-best"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-again">↻ Retry</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu3">⌂ Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>

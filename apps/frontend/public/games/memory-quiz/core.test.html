@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Memory Quiz — core test harness</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 1.5rem;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        background: #0f172a;
+        padding: 0.5rem 0;
+        font-weight: 700;
+      }
+      .pass {
+        color: #34d399;
+      }
+      .fail {
+        color: #f87171;
+        font-weight: 700;
+      }
+      section {
+        color: #94a3b8;
+        margin-top: 0.75rem;
+      }
+    </style>
+    <script type="module" src="core.js"></script>
+  </head>
+  <body>
+    <h1>Memory Quiz — core.test.html (manual harness, auto-runs)</h1>
+    <div id="summary">running…</div>
+    <div id="results"></div>
+
+    <script type="module">
+      import * as C from './core.js';
+      import { PACKS } from './data/packs.js';
+      import { LEVELS, levelFor, lintLevels, makeEndlessLevel, levelUnlocked } from './data/levels.js';
+      import { QUESTION_TYPES } from './data/questions.js';
+      import {
+        SAVE_KEY,
+        loadBest,
+        loadLevelRecord,
+        loadPrefs,
+        loadSave,
+        savePrefs,
+        saveLevelResult,
+        saveRunResult,
+        setRemoteAdapter,
+      } from './storage.js';
+
+      'use strict';
+      let passCount = 0;
+      let failCount = 0;
+      const resultsEl = document.getElementById('results');
+      const summaryEl = document.getElementById('summary');
+
+      function assert(cond, message) {
+        if (cond) {
+          passCount++;
+        } else {
+          failCount++;
+          resultsEl.insertAdjacentHTML('beforeend', '<div class="fail">✗ ' + message + '</div>');
+        }
+      }
+
+      function section(name) {
+        resultsEl.insertAdjacentHTML('beforeend', '<section>— ' + name + '</section>');
+      }
+
+      function throws(fn) {
+        try {
+          fn();
+          return false;
+        } catch {
+          return true;
+        }
+      }
+
+      /* ==================================================================== */
+
+      function testLadder() {
+        section('levels — campaign lint, invariants, levelFor, endless generator');
+        assert(lintLevels(LEVELS) === true, 'shipped ladder passes lint');
+        assert(LEVELS.length === 30 && new Set(LEVELS.map(function (l) { return l.id; })).size === 30, '30 unique level ids');
+        var ok = true;
+        for (var level of LEVELS) {
+          var cells = level.cols * level.rows;
+          if (level.items !== cells) ok = false; // fully filled — no blank cells
+          if (cells > C.MAX_CELLS) ok = false;
+          if (level.items + C.spareNeed(level, QUESTION_TYPES) > 14) ok = false;
+          if (level.memorizeS < C.MEMORIZE_FLOOR_S || level.questionS < C.QUESTION_FLOOR_S) ok = false;
+        }
+        assert(ok, 'every level holds fill/grid/spare/floor invariants');
+        assert(LEVELS[0].items === 4 && LEVELS[10].items === 6 && LEVELS[20].items === 8, 'bands: easy 4 / medium 6 / hard 8 blocks');
+        assert(levelFor(1, 'campaign').id === 'l01' && levelFor(99, 'campaign').id === 'l30', 'campaign clamps');
+        assert(levelFor(30, 'ladder').id === 'l30' && levelFor(31, 'ladder').id === 'endless-31', 'ladder continues past the campaign');
+        var e13 = makeEndlessLevel(13);
+        var e13b = makeEndlessLevel(13);
+        assert(JSON.stringify(e13) === JSON.stringify(e13b), 'endless generator is deterministic');
+        assert(e13.items + C.spareNeed(e13, QUESTION_TYPES) <= 14, 'endless level respects the spare budget');
+        assert(C.starsFor(0, true) === 3 && C.starsFor(1, true) === 2 && C.starsFor(2, true) === 1 && C.starsFor(1, false) === 0, 'starsFor table');
+        var records = { l01: { best: { score: 1, bestStreak: 1 }, stars: 1, clears: 1 } };
+        assert(levelUnlocked(LEVELS[1], records, {}) === true, 'unlock via prerequisite stars');
+        assert(levelUnlocked(LEVELS[1], {}, {}) === false, 'locked without stars');
+        assert(levelUnlocked(LEVELS[1], {}, { unlockAll: true }) === true, 'unlock-all override');
+      }
+
+      function testRegistry() {
+        section('question registry — metadata, truth tables, composer invariants');
+        assert(Object.keys(QUESTION_TYPES).sort().join(',') === 'missing,oddOne,swap,where', 'four shipped types');
+        for (var level of LEVELS) {
+          for (var seed = 0; seed < 100; seed++) {
+            var board = C.buildBoard(PACKS[seed % PACKS.length], level, seed * 7 + 1);
+            var qs = C.pickQuestions(board, level, C.mulberry32(seed * 13 + 5), QUESTION_TYPES);
+            var total = level.questions.reduce(function (s, q) { return s + q.count; }, 0);
+            if (qs.length !== total) { assert(false, 'count mismatch on ' + level.id); return; }
+            var seen = new Set();
+            for (var q of qs) {
+              var t = QUESTION_TYPES[q.type];
+              if (t.needs === 'boardItem') {
+                if (seen.has(q.item.emoji)) { assert(false, 'repeat item on ' + level.id); return; }
+                seen.add(q.item.emoji);
+              }
+              try {
+                t.invariants(board, q, level);
+              } catch (err) {
+                assert(false, level.id + '/' + q.type + ': ' + err.message);
+                return;
+              }
+            }
+          }
+        }
+        assert(true, 'composer invariants hold for 12 levels × 100 seeds');
+      }
+
+      function testResolve() {
+        section('resolve truth tables per type');
+        var board = C.buildBoard(PACKS[0], LEVELS[0], 42);
+        var qs = C.pickQuestions(board, LEVELS[0], C.mulberry32(1), QUESTION_TYPES);
+        var where = qs[0];
+        var hit = QUESTION_TYPES.where.resolve(where, where.cell, { level: LEVELS[0], streak: 0, timeLeftMs: 0 });
+        assert(hit.outcome === 'hit' && hit.points === 100 && hit.heartsLost === 0, 'where hit → 100');
+        assert(QUESTION_TYPES.where.resolve(where, -1, { level: LEVELS[0], streak: 0 }).outcome === 'miss', 'where wrong cell → miss');
+        var level = LEVELS[3]; // l04: missing + swap
+        var board1 = C.buildBoard(PACKS[0], level, 7);
+        var qs1 = C.pickQuestions(board1, level, C.mulberry32(2), QUESTION_TYPES);
+        var missing = qs1.find(function (q) { return q.type === 'missing'; });
+        var swap = qs1.find(function (q) { return q.type === 'swap'; });
+        assert(!!missing && !!swap, 'l05 generated missing + swap');
+        assert(QUESTION_TYPES.missing.resolve(missing, missing.item, { level, streak: 0 }).outcome === 'hit', 'missing hit');
+        var onBoard = missing.candidates.find(function (c) { return c.emoji !== missing.item.emoji; });
+        assert(QUESTION_TYPES.missing.resolve(missing, onBoard, { level, streak: 0 }).heartsLost === 1, 'missing wrong candidate → heart lost');
+        assert(board1.cells[swap.to] === swap.partner && swap.from !== swap.to, 'swap targets the partner cell');
+        assert(QUESTION_TYPES.swap.resolve(swap, swap.to, { level, streak: 0 }).outcome === 'hit', 'swap hit at destination');
+        assert(C.pointsFor(level, 11) === 300, 'streak cap honored from the level spec');
+        var timed = JSON.parse(JSON.stringify(level));
+        timed.rules = { timeBonusPerSecond: 5 };
+        assert(C.pointsFor(timed, 1, 7300) === 135, 'time bonus adds after the cap');
+      }
+
+      function testHelpers() {
+        section('formatCountdown / dailySeed / percentiles');
+        assert(C.formatCountdown(8000) === '8' && C.formatCountdown(300) === '1' && C.formatCountdown(0) === '0', 'countdown formatting');
+        var d = new Date(2026, 8, 12);
+        assert(C.dailySeed(d) === 20260912 && C.dailyKey(d) === 'game:memory-quiz:daily:20260912', 'daily key');
+        assert(C.bakedPercentile(3000) === 3 && C.bakedPercentile(10) === 50, 'baked table');
+        assert(C.localPercentile(500, [100, 200, 300, 400, 1000]) === 20, 'history percentile beats 4 of 5');
+      }
+
+      function testStorage() {
+        section('storage facade — save v2 + v1 migration (browser)');
+        var hadSave = null;
+        try {
+          hadSave = window.localStorage.getItem(SAVE_KEY);
+        } catch (e) {
+          hadSave = undefined;
+        }
+        try {
+          // v1 → v2 migration
+          window.localStorage.setItem(SAVE_KEY, JSON.stringify({
+            version: 1,
+            best: { score: 700, bestStreak: 9 },
+            history: [{ score: 700, boards: 5, ts: 1001 }],
+            prefs: { muted: true, pack: 'fruits' },
+          }));
+          var migrated = loadSave();
+          assert(migrated.version === 2 && migrated.best.score === 700 && migrated.best.bestStreak === 9, 'v1 best migrated');
+          assert(migrated.history.length === 1 && migrated.prefs.pack === 'fruits', 'v1 history + prefs migrated');
+          assert(migrated.levels && Object.keys(migrated.levels).length === 0, 'no level records invented');
+
+          window.localStorage.removeItem(SAVE_KEY);
+          assert(loadSave().version === 2, 'fresh save is v2');
+          var res = saveLevelResult('l01', 220, 2, 3);
+          assert(res.newStars === true && res.newBest === true, 'first level clear records everything');
+          res = saveLevelResult('l01', 180, 1, 2);
+          assert(res.newStars === false && res.newBest === false, 'weaker run folds without downgrades');
+          var rec = loadLevelRecord('l01');
+          assert(rec.stars === 3 && rec.clears === 2 && rec.best.score === 220, 'level record folded');
+          saveRunResult(500, 3, 4, 1700000000000, { mode: 'endless' });
+          assert(loadBest().score === 500, 'global best folded');
+          savePrefs({ muted: true, pack: 'fruits', mode: 'zen', levelId: 'l07' });
+          assert(loadPrefs().mode === 'zen' && loadPrefs().levelId === 'l07', 'prefs round-trip with mode');
+          window.localStorage.setItem(SAVE_KEY, '{corrupt');
+          assert(loadSave().version === 2 && loadBest().score === 0, 'corrupt save sanitizes to fresh');
+
+          var seen = [];
+          setRemoteAdapter({ save: function (s) { seen.push(s); } });
+          saveRunResult(50, 1, 1, 1700000000003, {});
+          assert(seen.length === 1, 'remote adapter mirrored');
+          setRemoteAdapter(null);
+        } finally {
+          if (hadSave === null || hadSave === undefined) window.localStorage.removeItem(SAVE_KEY);
+          else window.localStorage.setItem(SAVE_KEY, hadSave);
+        }
+      }
+
+      /* ==================================================================== */
+
+      try {
+        testLadder();
+        testRegistry();
+        testResolve();
+        testHelpers();
+        testStorage();
+      } catch (err) {
+        failCount++;
+        resultsEl.insertAdjacentHTML('beforeend', '<div class="fail">✗ harness crashed: ' + err.message + '</div>');
+      }
+
+      summaryEl.innerHTML =
+        '<span class="' + (failCount ? 'fail' : 'pass') + '">' +
+        (failCount ? failCount + ' failing' : 'all passing') +
+        '</span> · ' + passCount + ' assertions';
+    </script>
+  </body>
+</html>
