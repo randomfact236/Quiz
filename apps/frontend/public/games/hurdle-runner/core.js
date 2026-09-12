@@ -5,8 +5,7 @@
  * Pure model, zero DOM access — this module is the test surface (plan §8).
  * Plain ESM, no build step (same convention as games 01–03/06): engine.js,
  * render.js and main.js import it in the browser, and the jest suite
- * (src/__tests__/games-hurdle-runner.test.ts) plus the folder's own
- * core.test.html harness import it directly.
+ * (src/__tests__/games-hurdle-runner.test.ts) imports it directly.
  *
  * World = 900×500 logical viewport, landscape, ground line at y=420 (§2).
  * The runner sits at a fixed x (25 % of the width); the world — hurdles,
@@ -237,17 +236,28 @@ export function obstacleBox(obs) {
 }
 
 /**
+ * Shrink a box toward its center by `inset` per axis (side length ×1−inset).
+ * Single source for the hitbox inset: aabbHit() tests against this box and
+ * render.js's ?debug=1 overlay draws it (plan §10: the debug boxes must match
+ * the shipped hitbox math exactly).
+ */
+export function insetBox(box, inset) {
+  const w = box.w * (1 - inset);
+  const h = box.h * (1 - inset);
+  return { x: box.x + (box.w - w) / 2, y: box.y + (box.h - h) / 2, w, h };
+}
+
+/**
  * AABB hit with the player-side inset (§2: player box ×0.85, obstacles full).
- * The player box is shrunk toward its center by `inset` per axis, then a
- * strict overlap test runs — exactly touching is NOT a hit (same forgiving
- * convention as game 06's circle test).
+ * The player box is shrunk via insetBox(), then a strict overlap test runs —
+ * exactly touching is NOT a hit (same forgiving convention as game 06's
+ * circle test).
  */
 export function aabbHit(playerB, obsB, inset = HITBOX_INSET) {
-  const w = playerB.w * (1 - inset);
-  const h = playerB.h * (1 - inset);
-  const px = playerB.x + (playerB.w - w) / 2;
-  const py = playerB.y + (playerB.h - h) / 2;
-  return px < obsB.x + obsB.w && px + w > obsB.x && py < obsB.y + obsB.h && py + h > obsB.y;
+  const pb = insetBox(playerB, inset);
+  return (
+    pb.x < obsB.x + obsB.w && pb.x + pb.w > obsB.x && pb.y < obsB.y + obsB.h && pb.y + pb.h > obsB.y
+  );
 }
 
 /* ---- scoring (§2: meters + 10 per obstacle, exactly once each) ---------------- */

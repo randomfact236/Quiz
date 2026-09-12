@@ -19,6 +19,27 @@ const DEFAULT_CONFIG = {
   locale: 'en',
   strings: {
     en: {
+      // Menu rule line — keeps its <b> markup; game.js injects it as HTML.
+      menuRule:
+        'Tap the <b class="green">green</b>. Resist the <b class="red">red</b>. That\'s it — until your brain betrays you.',
+      swapBanner: '🔄 RULES SWAPPED! red = tap · green = wait',
+      // Feedback overlay labels.
+      tooEarly: '❌ Too early!',
+      hitMs: '{ms}ms! {emoji}',
+      resisted: '✅ Resisted +{points}',
+      ignored: '✅ Ignored +{points}',
+      tooSlow: '❌ Too slow',
+      stroopLie: '❌ It said WAIT for a reason!',
+      wasRed: '❌ It was RED!',
+      // Gameover card copy.
+      goTitle: '🚦 GAME OVER',
+      bestReaction: 'Best reaction',
+      topBadge: 'Top {pct}% of players',
+      newRecord: '🏆 New personal best!',
+      shareScoreBtn: '📤 Share my score',
+      retryBtn: '↻ Retry',
+      backToMenu: 'Back to menu',
+      copiedNote: 'Copied to clipboard!',
       // {bestMs} / {score} / {url} are substituted by game.js at share time.
       share: "⚡ Best reaction: {bestMs} — score {score} in Tap or Don't Tap. Beat that! {url}",
     },

@@ -174,6 +174,8 @@ Footer/nav links, analytics events, achievements, leaderboards — per master RE
 - [x] P0 addition (2026-09-11, Rev 2): `config.js` (flags + per-locale strings,
       host-overridable) + `storage.js` facade (versioned best/prefs with legacy-key
       migration, remote adapter slot) — main.js rewired onto the facade.
+      (2026-09-12: config.js wired into `main.js` — best/no-best/share/toast strings
+      live; legacy-prefs guard fixed; unused `parallax` helper removed.)
 - [x] P2 addition (2026-09-11): Rev 2 storage landed with the facade. `?seed=` support +
       share template carrying the seed (async challenge) remains queued.
 - [ ] Note for 07: Spirit Runner forks `engine.js` — keep the fork contract in sync when

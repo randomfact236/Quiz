@@ -120,6 +120,10 @@
           single && boardStr(single.board) === '1,2,3,4,5,0,7,8,6',
           'adjacent slide swaps tile and blank'
         );
+        assert(
+          single && single.pushed && single.pushed.join(',') === '6',
+          'adjacent slide reports its one displaced tile'
+        );
 
         section('slideTile — row segment (2 and 3 tiles)');
         var row2 = P.slideTile(solved, 3, 6); // blank at 8, tap 6 in the same row
@@ -128,11 +132,19 @@
           row2 && boardStr(row2.board) === '1,2,3,4,5,6,0,7,8',
           'two-tile row push shifts both tiles toward the blank'
         );
+        assert(
+          row2 && row2.pushed && row2.pushed.join(',') === '8,7',
+          'row push reports displaced tiles nearest the blank first'
+        );
         var row3 = P.slideTile(P.solvedBoard(4), 4, 12); // blank at 15, whole bottom row
         assert(!!row3 && row3.moved === 3, 'three-tile row push counts 3 moves');
         assert(
           row3 && boardStr(row3.board) === '1,2,3,4,5,6,7,8,9,10,11,12,0,13,14,15',
           'three-tile row push shifts all three tiles toward the blank'
+        );
+        assert(
+          row3 && row3.pushed && row3.pushed.join(',') === '15,14,13',
+          'three-tile push reports all displaced tiles'
         );
 
         section('slideTile — column segment');
@@ -141,6 +153,10 @@
         assert(
           col2 && boardStr(col2.board) === '1,2,0,4,5,3,7,8,6',
           'column segment shifts tiles downward'
+        );
+        assert(
+          col2 && col2.pushed && col2.pushed.join(',') === '6,3',
+          'column push reports displaced tiles nearest the blank first'
         );
 
         section('slideTile — illegal slides');

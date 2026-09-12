@@ -29,25 +29,26 @@ plus `PAUSED`):
    - STROOP TRAP (round ≥ 15) — word "TAP" in red or "WAIT" in green; **color wins,
      word ignored**.
 3. **FEEDBACK** — 400 ms overlay ("218ms! 🔥" / "❌ Too slow" / "✅ Resisted +25"), then
-   250 ms blank before the next WAITING.
+   the next round begins. (Amended 2026-09-12 to match shipped tuning — no blank gap.)
 
 ### Constants (authoritative — implemented in `game.js`)
 
-| Constant            | Value      | Notes                                         |
-| ------------------- | ---------- | --------------------------------------------- |
-| `WAIT_MIN/MAX_MS`   | 300 / 3000 | uniform random                                |
-| `WINDOW_START_MS`   | 1200       | signal visible duration, round 1              |
-| `WINDOW_SHRINK_MS`  | 25         | per round                                     |
-| `WINDOW_FLOOR_MS`   | 450        | never below                                   |
-| `HEARTS`            | 3          | 0 → game over                                 |
-| `GREEN_BASE_POINTS` | 100        | `points = min(100 + streak×10, 500)` (×5 cap) |
-| `RESIST_BONUS`      | 25         | red expired untouched                         |
-| `DECOY_BONUS`       | 50         | decoy expired untouched (round ≥ 10)          |
-| `FEEDBACK_MS`       | 400        | + 250 ms blank                                |
-| `SWAP_ROUNDS`       | 21–23      | "🔄 RULES SWAPPED!" — red taps, green doesn't |
+| Constant                          | Value      | Notes                                                                                                                             |
+| --------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `WAIT_MIN/MAX_MS`                 | 300 / 3000 | uniform random                                                                                                                    |
+| `WINDOW_START_MS`                 | 1200       | signal visible duration, round 1                                                                                                  |
+| `WINDOW_SHRINK_MS`                | 25         | per round                                                                                                                         |
+| `WINDOW_FLOOR_MS`                 | 450        | never below                                                                                                                       |
+| `HEARTS`                          | 3          | 0 → game over                                                                                                                     |
+| `GREEN_BASE_POINTS`               | 100        | `points = min(100 + streak×10, 500)` (×5 cap)                                                                                     |
+| `RESIST_BONUS`                    | 25         | red expired untouched                                                                                                             |
+| `DECOY_BONUS`                     | 50         | decoy expired untouched (round ≥ 10)                                                                                              |
+| `FEEDBACK_MS`                     | 400        | overlay dwell, then next round (amended 2026-09-12)                                                                               |
+| `SWAP_FROM_ROUND` / `SWAP_CHANCE` | 12 / 0.15  | from round 12, 15 %/round; swap lasts `SWAP_ROUNDS` = 3 rounds — "🔄 RULES SWAPPED!" (amended 2026-09-12 to match shipped tuning) |
 
-Signal mix per round band: 1–9 → 45 % green / 55 % red; 10–14 → 40/30/30 decoy;
-15+ → 40 green / 30 red / 15 decoy / 15 Stroop.
+Signal mix per round band (amended 2026-09-12 to match shipped tuning): 1–9 → 55 % green /
+45 % red; 10–14 → 45 green / 35 red / 20 decoy; 15+ → 40 green / 30 red / 15 decoy /
+15 Stroop.
 
 Losing: tap on red/decoy/Stroop-wrong, false start, or green missed → −1 heart each.
 Reaction recorded only on green hits. Swap inverts green/red only; decoys always
@@ -58,7 +59,8 @@ Reaction recorded only on green hits. Swap inverts green/red only; decoys always
 - Difficulty = shrinking window + signal mix. No other knobs.
 - **Best reaction** = min green-hit reaction of the run; **score** = sum of points.
 - **Top-% badge**: `BAKED_TABLE` in `game.js` maps score → percentile (fixed simulated
-  distribution). Personal history (last 50 runs `{date, score, bestMs}`) stored locally.
+  distribution). Personal history (last 20 runs `{score, bestMs}`) stored locally
+  (amended 2026-09-12: cap 20, no per-entry date — matches shipped schema).
 
 ## 4. Screens & UI
 
@@ -78,7 +80,7 @@ Space/Enter equivalent on desktop; HUD height fixed across states (no relayout).
 
 ```
 game:tap-or-dont-tap:best     → { score: 1240, bestMs: 187 }
-game:tap-or-dont-tap:history  → [{ date: '2026-09-10', score: 1240, bestMs: 187 }, …max 50]
+game:tap-or-dont-tap:history  → [{ score: 1240, bestMs: 187 }, …max 20]
 game:tap-or-dont-tap:muted    → true|false
 ```
 
@@ -186,7 +188,8 @@ tap-or-dont-tap/
 ### config.js
 
 Flags and strings only — no multiplayer, no levels in this game. Per-locale strings for
-the rule line, feedback overlays, share template and gameover card; `prefs` may override
+the rule line, feedback overlays, share template and gameover card (shipped 2026-09-12 —
+18 keys, all consumed); `prefs` may override
 the copy but is documented as a cache, not the source of truth.
 
 ### storage.js facade
@@ -219,4 +222,9 @@ keep full local persistence**. Mid-round resume: N/A (rounds are seconds).
       go-badge gradient darkened to AA; visible `:focus-visible` rings. (Reduced-motion:
       the flash is a solid color — nothing moves; the existing block covers the feedback
       pop + buttons. Sparkline + haptics were already shipped.)
+- [x] R2-1b Cleanup (2026-09-12, stale-code scan): unused `isMuted`/`whenSec` removed;
+      history writes trimmed to the plan schema (`{score, bestMs}` — `rounds`/`ts`
+      dropped); dead flash-yellow word rule removed; `defaultSave()` single-sourced;
+      config strings completed (menu rule, swap banner, feedback overlays, gameover
+      card); `FEEDBACK_MS` single-sourced. 31/31 tests green.
 - [ ] R2-3 (deferred, optional) async seeded duel — only if there's demand.

@@ -4,22 +4,23 @@
  * ============================================================================
  * Plain ESM, no build step (games 01–06 convention). The pure model lives in
  * core.js + gates.js (the test surfaces); engine.js owns loop + input;
- * render.js owns drawing. This file owns the run lifecycle — the
- * menu/playing/paused/gameover state machine, the gate + shadow-realm flow,
- * the meta (spirit shards, characters, unlocks, settings — plan §2 Phase D),
- * guarded storage and WebAudio. It only auto-inits when the canvas exists in
- * the DOM, so importing it (jest / harnesses) has no side effects. Per the
- * master README §7 isolation decision: no analytics, no site coupling.
+ * render.js owns drawing; storage.js owns the guarded save facade. This file
+ * owns the run lifecycle — the menu/playing/paused/gameover state machine, the
+ * gate + shadow-realm flow, the meta (spirit shards, characters, unlocks,
+ * settings — plan §2 Phase D) and WebAudio. It only auto-inits when the canvas
+ * exists in the DOM, so importing it (jest / harnesses) has no side effects.
+ * Per the master README §7 isolation decision: no analytics, no site coupling.
  * ============================================================================
  */
 import {
   CULL_X,
   GATE_SPAN,
   GROUND_Y,
+  HEARTS_MAX,
+  INVULN_S,
   METER_FULL,
   MONK_SLOW_SPAWN_SCALE,
   PLAYER_X,
-  SAVE_KEY,
   SCROLL_START,
   SHADOW_DENSITY,
   SHADOW_ORB_WORTH,
@@ -57,29 +58,21 @@ import {
   trapLit,
 } from './core.js';
 import { createCamera, advanceCamera, createLoop, createRunnerInput } from './engine.js';
-import { DEPTH_LABELS, drawScene, paletteFor, POWER_LABEL } from './render.js';
+import { DEPTH_LABELS, drawScene, paletteFor, POWER_GLYPH, POWER_LABEL } from './render.js';
 import { makeGate, resolveChoice, shuffledRules } from './gates.js';
-import { GAME_CONFIG } from './config.js';
+import { GAME_CONFIG, t } from './config.js';
+import { loadSave, saveSave, setRemoteAdapter } from './storage.js';
 
 /* ==========================================================================
  * 0. Share text (plan §2 Phase D format inside the master README §2 wrapper)
  * ======================================================================= */
 
 export function shareText(distanceM, characterLabel, score, url) {
-  return (
-    'Ran ' +
-    distanceM +
-    ' m as ' +
-    characterLabel +
-    ' in Spirit Runner — ' +
-    score +
-    ' pts — beat that! ' +
-    url
-  );
+  return t('share', { distance: distanceM, character: characterLabel, score, url });
 }
 
 /* ==========================================================================
- * 1. Meta: characters (plan §2 Phase D) + guarded storage
+ * 1. Meta: characters (plan §2 Phase D)
  * ======================================================================= */
 
 export const CHARACTERS = {
@@ -87,96 +80,6 @@ export const CHARACTERS = {
   hunter: { label: 'Hunter', unlockAt: 5, blurb: 'Every run starts with Dash charged' },
   monk: { label: 'Monk', unlockAt: 12, blurb: 'Slow time also slows spawns ×0.7' },
 };
-
-const storage = (() => {
-  const fallback = {};
-  function backend() {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const probe = '__sr_probe__';
-        window.localStorage.setItem(probe, '1');
-        window.localStorage.removeItem(probe);
-        return window.localStorage;
-      }
-    } catch {
-      /* private mode / disabled — fall through */
-    }
-    return null;
-  }
-  return {
-    readJson(key, fallbackValue) {
-      try {
-        const store = backend();
-        const raw = store ? store.getItem(key) : fallback[key] || null;
-        if (!raw) return fallbackValue;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : fallbackValue;
-      } catch {
-        return fallbackValue;
-      }
-    },
-    writeJson(key, value) {
-      try {
-        const store = backend();
-        if (store) store.setItem(key, JSON.stringify(value));
-        else fallback[key] = JSON.stringify(value);
-      } catch {
-        /* quota / private mode — the game keeps working without records */
-      }
-    },
-  };
-})();
-
-function defaultSave() {
-  return {
-    version: 1,
-    bestDistanceM: 0,
-    shards: 0,
-    unlocked: ['spirit'],
-    character: 'spirit',
-    settings: { autoPower: false, muted: false },
-  };
-}
-
-function loadSave() {
-  const raw = storage.readJson(SAVE_KEY, null);
-  const def = defaultSave();
-  if (!raw) return def;
-  return {
-    version: 1,
-    bestDistanceM:
-      typeof raw.bestDistanceM === 'number' && raw.bestDistanceM >= 0 ? raw.bestDistanceM : 0,
-    shards: typeof raw.shards === 'number' && raw.shards >= 0 ? Math.floor(raw.shards) : 0,
-    unlocked:
-      Array.isArray(raw.unlocked) && raw.unlocked.includes('spirit')
-        ? raw.unlocked.filter((c) => CHARACTERS[c])
-        : def.unlocked,
-    character: CHARACTERS[raw.character] ? raw.character : 'spirit',
-    settings: {
-      autoPower: !!(raw.settings && raw.settings.autoPower),
-      muted: !!(raw.settings && raw.settings.muted),
-    },
-  };
-}
-
-/** Host-injected account-sync seam (Rev 2): adapter shape `{ save(saveObj) }`. */
-let remoteAdapter = null;
-
-function setRemoteAdapter(adapter) {
-  remoteAdapter = adapter && typeof adapter.save === 'function' ? adapter : null;
-}
-
-function saveSave() {
-  const written = storage.writeJson(SAVE_KEY, save);
-  if (remoteAdapter) {
-    try {
-      remoteAdapter.save(save); // host contract — never let it break gameplay
-    } catch {
-      /* best-effort mirror */
-    }
-  }
-  return written;
-}
 
 /* ==========================================================================
  * 2. Audio (context on first gesture; slow time drops the pitch — plan §2)
@@ -300,7 +203,7 @@ function buildRun() {
   state.spawnHoldS = 0;
   state.cam = createCamera();
   state.worldS = 0;
-  state.hearts = 2; // plan §2: hearts 2
+  state.hearts = HEARTS_MAX; // plan §2: hearts 2
   state.depthIndex = 0;
   state.pressQueue = 0;
   state.slideQueue = 0;
@@ -384,7 +287,7 @@ function pickCharacter(id) {
     return;
   }
   save.character = id;
-  saveSave();
+  saveSave(save);
   blip(660, 60);
   renderCharCards();
 }
@@ -437,7 +340,7 @@ function die() {
       newUnlocks.push(CHARACTERS[id].label);
     }
   }
-  saveSave();
+  saveSave(save);
 
   els.overDistance.textContent = m + ' m';
   els.overDetail.textContent =
@@ -450,7 +353,7 @@ function die() {
     '+' + earned + ' shard' + (earned === 1 ? '' : 's') + ' · ' + save.shards + ' total';
   els.overUnlock.textContent = newUnlocks.length
     ? '✦ Unlocked: ' + newUnlocks.join(' · ')
-    : save.shards >= 12
+    : save.shards >= CHARACTERS.monk.unlockAt
       ? ''
       : nextUnlockHint();
   els.overUnlock.classList.toggle('hidden', !els.overUnlock.textContent);
@@ -477,7 +380,7 @@ function nextUnlockHint() {
 /** A heart absorbs the hit: −1 heart, 1.2 s invulnerability blink (plan §2). */
 function hitHeart() {
   state.hearts--;
-  state.player.invulnS = 1.2;
+  state.player.invulnS = INVULN_S;
   state.hitAt = clockNow;
   state.hitFlashColor = '255,120,140';
   blip(392, 90, 'square');
@@ -726,7 +629,7 @@ function update(dt) {
         blip(880, 70, 'sawtooth');
         vibrate(20);
       } else {
-        if (state.hearts > 1) hitHeart();
+        if (state.hearts > HEARTS_MAX - 1) hitHeart();
         else {
           hitHeart();
           die();
@@ -889,9 +792,7 @@ function draw(t) {
     const key = (ready ? '1' : '0') + chargedPower(run.powers);
     if (key !== powerBtnState) {
       powerBtnState = key;
-      els.btnPower.textContent = ready
-        ? { double: '⇈', dash: '»', slow: '⏳' }[chargedPower(run.powers)]
-        : '✦';
+      els.btnPower.textContent = ready ? POWER_GLYPH[chargedPower(run.powers)] : '✦';
       els.btnPower.classList.toggle('charged', ready);
       els.btnPower.setAttribute(
         'aria-label',
@@ -1003,7 +904,7 @@ function init() {
   els.btnMute.setAttribute('aria-pressed', String(save.settings.muted));
   els.btnMute.addEventListener('click', () => {
     save.settings.muted = !save.settings.muted;
-    saveSave();
+    saveSave(save);
     els.btnMute.textContent = save.settings.muted ? '🔇' : '🔊';
     els.btnMute.setAttribute('aria-pressed', String(save.settings.muted));
     if (!save.settings.muted) blip(660, 80);
@@ -1011,7 +912,7 @@ function init() {
 
   els.toggleAuto.addEventListener('change', () => {
     save.settings.autoPower = els.toggleAuto.checked;
-    saveSave();
+    saveSave(save);
   });
 
   document.getElementById('btn-play').addEventListener('click', () => {

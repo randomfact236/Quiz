@@ -31,7 +31,7 @@ import { GAME_CONFIG, t } from './config.js';
 const MARK_SVG = {
   X:
     '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">' +
-    '<line class="stroke s1" x1="22" y1="22" x2="78" y2="78"/>' +
+    '<line class="stroke" x1="22" y1="22" x2="78" y2="78"/>' +
     '<line class="stroke s2" x1="78" y1="22" x2="22" y2="78"/></svg>',
   O:
     '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">' +
@@ -133,7 +133,6 @@ function renderTurn() {
   }
   els.turn.textContent = label;
   els.turn.dataset.mark = mark;
-  els.board.dataset.turn = mark;
 }
 
 function renderMiniSeries() {

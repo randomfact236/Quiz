@@ -37,6 +37,9 @@ import { GAME_CONFIG, t } from './config.js';
 import { getBest, getHistory, getMuted, setMuted, recordRun } from './storage.js';
 import { blip, buzz, setMuted as setAudioMuted } from './audio.js';
 
+/** Feedback overlay dwell: the outcome shows, then the next round begins (ms). */
+const FEEDBACK_MS = 400;
+
 /* ------------------------------ engine ------------------------------ */
 
 const $ = (id) => document.getElementById(id);
@@ -155,7 +158,7 @@ function handleTap() {
   if (state === 'waiting') {
     // False start: tapping during the dark wait loses a heart.
     clearTimers();
-    loseHeart('❌ Too early!');
+    loseHeart(t('tooEarly'));
     return;
   }
   if (state !== 'signal') return;
@@ -186,26 +189,29 @@ function finishRound({ tapped, elapsedMs }) {
     if (bestMsThisRun === null || result.reactionMs < bestMsThisRun)
       bestMsThisRun = result.reactionMs;
     blip(880, 90);
-    showFeedback(`${result.reactionMs}ms! ${lastFeedbackWasStroop ? '🧠' : '🔥'}`, 'good');
+    showFeedback(
+      t('hitMs', { ms: result.reactionMs, emoji: lastFeedbackWasStroop ? '🧠' : '🔥' }),
+      'good'
+    );
   } else if (result.outcome === 'resist') {
     streak += 1;
     blip(520, 120, 'triangle');
-    showFeedback(`✅ Resisted +${RESIST_POINTS}`, 'good');
+    showFeedback(t('resisted', { points: RESIST_POINTS }), 'good');
   } else if (result.outcome === 'decoy-ignored') {
     streak += 1;
     blip(520, 120, 'triangle');
-    showFeedback(`✅ Ignored +${DECOY_IGNORE_POINTS}`, 'good');
+    showFeedback(t('ignored', { points: DECOY_IGNORE_POINTS }), 'good');
   } else {
     const msg =
       result.outcome === 'miss'
-        ? '❌ Too slow'
+        ? t('tooSlow')
         : lastFeedbackWasStroop
-          ? '❌ It said WAIT for a reason!'
-          : '❌ It was RED!';
+          ? t('stroopLie')
+          : t('wasRed');
     loseHeart(msg);
     return;
   }
-  after(400, () => beginRound(round + 1));
+  after(FEEDBACK_MS, () => beginRound(round + 1));
 }
 
 function loseHeart(message) {
@@ -215,14 +221,14 @@ function loseHeart(message) {
   buzz();
   blip(140, 220, 'sawtooth');
   showFeedback(message, 'bad');
-  after(400, hearts <= 0 ? gameOver : () => beginRound(round + 1));
+  after(FEEDBACK_MS, hearts <= 0 ? gameOver : () => beginRound(round + 1));
 }
 
 function showFeedback(text, tone) {
   els.feedback.textContent = text;
   els.feedback.className = tone;
   els.feedback.hidden = false;
-  after(400, () => {
+  after(FEEDBACK_MS, () => {
     els.feedback.hidden = true;
   });
 }
@@ -232,14 +238,14 @@ function showFeedback(text, tone) {
 function gameOver() {
   if (state === 'gameover') return; // re-entry guard — one card per run
   setState('gameover');
-  const { best, isRecord } = recordRun({ score, bestMs: bestMsThisRun, rounds: round });
+  const { best, isRecord } = recordRun({ score, bestMs: bestMsThisRun });
 
   els.goScore.textContent = score.toLocaleString(GAME_CONFIG.locale);
   els.goBestMs.textContent = bestMsThisRun !== null ? `${bestMsThisRun}ms 🔥` : '—';
   // No green tapped this run ⇒ no reaction to report; drop the segment entirely.
   els.goBestLabel.hidden = bestMsThisRun === null;
   els.goRounds.textContent = String(round);
-  els.goBadge.textContent = `Top ${localPercentile(score, runStartScoreHistory)}% of players`;
+  els.goBadge.textContent = t('topBadge', { pct: localPercentile(score, runStartScoreHistory) });
   els.goBadge.hidden = false;
   els.goRecord.hidden = !isRecord;
   els.shareNote.hidden = true;
@@ -335,6 +341,7 @@ function init() {
     roundEl: $('hud-round'),
     swapBanner: $('swap-banner'),
     stateMenu: $('state-menu'),
+    menuTagline: $('menu-tagline'),
     stateWaiting: $('state-waiting'),
     stateSignal: $('state-signal'),
     stateGameover: $('state-gameover'),
@@ -346,19 +353,35 @@ function init() {
     menuBestScore: $('menu-best-score'),
     menuBestMs: $('menu-best-ms'),
     sparkline: $('sparkline'),
+    goTitle: $('go-title'),
     goScore: $('go-score'),
     goBestMs: $('go-best-ms'),
     goBestLabel: $('go-best-label'),
+    goBestText: $('go-best-text'),
     goRounds: $('go-rounds'),
     goBadge: $('go-badge'),
     goRecord: $('go-record'),
     shareNote: $('share-note'),
     mute: $('btn-mute'),
     btnRetry: $('btn-retry'),
+    btnShare: $('btn-share'),
+    btnMenu: $('btn-menu'),
   });
 
   // Keep the audio module's runtime flag in sync with the persisted pref.
   setAudioMuted(getMuted());
+
+  // Static copy is config-driven too (plan §13) — the rule line keeps its
+  // <b> markup, so it is the one string assigned as HTML.
+  els.menuTagline.innerHTML = t('menuRule');
+  els.swapBanner.textContent = t('swapBanner');
+  els.goTitle.textContent = t('goTitle');
+  els.goBestText.textContent = t('bestReaction');
+  els.goRecord.textContent = t('newRecord');
+  els.btnShare.textContent = t('shareScoreBtn');
+  els.btnRetry.textContent = t('retryBtn');
+  els.btnMenu.textContent = t('backToMenu');
+  els.shareNote.textContent = t('copiedNote');
 
   // Whole screen is the tap target — pointerdown, not click (lower latency).
   els.root.addEventListener(

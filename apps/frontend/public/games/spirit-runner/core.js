@@ -308,11 +308,9 @@ function branchGroup(spawner, x) {
 }
 
 function guardianGroup(spawner, x, kind) {
-  return {
-    x,
-    kind,
-    items: [{ dx: 0, w: kind === 'guardian-tall' ? GUARDIAN_TALL_W : GUARDIAN_LOW_W, h: 0, kind }],
-  };
+  const w = kind === 'guardian-tall' ? GUARDIAN_TALL_W : GUARDIAN_LOW_W;
+  const h = kind === 'guardian-tall' ? GUARDIAN_TALL_H : 0;
+  return { x, kind, items: [{ dx: 0, w, h, kind }] };
 }
 
 function trapGroup(spawner, x) {
@@ -356,6 +354,9 @@ export function makeObstacle(worldX, item) {
 export function obstacleBox(obs) {
   if (obs.kind === 'branch') {
     return { x: obs.worldX, y: GROUND_Y - BRANCH_TOP, w: obs.w, h: BRANCH_TOP - BRANCH_BOTTOM };
+  }
+  if (obs.kind === 'guardian-tall') {
+    return { x: obs.worldX, y: GROUND_Y - GUARDIAN_TALL_H, w: obs.w, h: GUARDIAN_TALL_H };
   }
   if (obs.kind === 'guardian-low') {
     return {

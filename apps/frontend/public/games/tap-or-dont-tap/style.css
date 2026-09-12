@@ -314,11 +314,6 @@ button:focus-visible {
   text-shadow: none;
 }
 
-#signal-surface.flash-yellow #signal-word {
-  color: #3f2d04;
-  text-shadow: none;
-}
-
 #signal-word[hidden] {
   display: none;
 }

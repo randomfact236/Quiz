@@ -3,8 +3,8 @@
  * Spirit Runner — engine.js (Game 07, plan/games/07-spirit-runner.md §6)
  * ============================================================================
  * Forked from Game 05's engine (public/games/hurdle-runner/engine.js), as the
- * plan directs ("forks engine.js"). Unchanged: the fixed-timestep loop, the
- * camera / parallax helpers. Extended: the input layer gains the slide and
+ * plan directs ("forks engine.js"). Unchanged: the fixed-timestep loop and the
+ * camera helper. Extended: the input layer gains the slide and
  * the pointer swipe grammar (plan §4: swipe-up = jump, swipe-down = slide,
  * thresholds 30 px / 120 ms) while keeping 05's jump feel — coyote/buffer/
  * cut read the live `jumpHeld` flag exactly as before.
@@ -86,9 +86,9 @@ export function createLoop({ update, render, fixedDt = 1 / 120, onAutoPause }) {
  *    release (hold = higher, exactly 05's jump cut)
  * Keyboard mirrors it instantly: Space/↑ = jump (held until keyup),
  * ↓ / S = slide edge. Actions arrive as
- *   { type: 'jump' | 'slide', fx, fy, key }
- * where fx/fy are 0..1 fractions of the stage box (main maps gate door
- * zones from fx; key actions carry the KeyboardEvent.code instead).
+ *   { type: 'jump' | 'slide', fx }
+ * where fx is a 0..1 fraction of the stage box width (main maps the gate
+ * door zones from it; keyboard actions carry no fx).
  *
  * Returns { jumpHeld } — the live hold state driving the jump cut (pointer
  * jump-presses and the key flag OR together; lifting one finger while
@@ -112,14 +112,14 @@ export function createRunnerInput(stage, onAction) {
     input.jumpHeld = keyHeld;
   }
 
-  function classify(p, kind, e) {
+  function classify(p, kind) {
     if (p.kind) return;
     p.kind = kind;
     if (p.timer) {
       clearTimeout(p.timer);
       p.timer = 0;
     }
-    onAction({ type: kind, fx: p.fx, fy: p.fy, code: undefined, event: e });
+    onAction({ type: kind, fx: p.fx });
     refresh();
   }
 
@@ -136,14 +136,13 @@ export function createRunnerInput(stage, onAction) {
       x0: e.clientX,
       y0: e.clientY,
       fx: rect.width ? (e.clientX - rect.left) / rect.width : 0.5,
-      fy: rect.height ? (e.clientY - rect.top) / rect.height : 0.5,
       kind: null,
       timer: 0,
     };
     pointers.set(e.pointerId, p);
     // still down and directionless at 120 ms → it's a hold-jump (05 feel)
     p.timer = setTimeout(() => {
-      if (pointers.get(e.pointerId) === p) classify(p, 'jump', undefined);
+      if (pointers.get(e.pointerId) === p) classify(p, 'jump');
     }, SWIPE_MS);
   });
 
@@ -152,8 +151,8 @@ export function createRunnerInput(stage, onAction) {
     if (!p || p.kind) return;
     const dy = e.clientY - p.y0;
     if (dy <= -SWIPE_PX)
-      classify(p, 'jump', undefined); // swipe-up = jump
-    else if (dy >= SWIPE_PX) classify(p, 'slide', undefined); // swipe-down = slide
+      classify(p, 'jump'); // swipe-up = jump
+    else if (dy >= SWIPE_PX) classify(p, 'slide'); // swipe-down = slide
   });
 
   const lift = (e) => {
@@ -163,7 +162,7 @@ export function createRunnerInput(stage, onAction) {
     if (p.timer) clearTimeout(p.timer);
     if (!p.kind) {
       // released inside the window with < 30 px travel → tap = jump edge
-      onAction({ type: 'jump', fx: p.fx, fy: p.fy, code: undefined, event: e });
+      onAction({ type: 'jump', fx: p.fx });
     }
     refresh();
   };
@@ -183,10 +182,10 @@ export function createRunnerInput(stage, onAction) {
       if (!keyHeld) {
         keyHeld = true;
         refresh();
-        onAction({ type: 'jump', fx: undefined, fy: undefined, code: e.code });
+        onAction({ type: 'jump' });
       }
     } else {
-      onAction({ type: 'slide', fx: undefined, fy: undefined, code: e.code });
+      onAction({ type: 'slide' });
     }
   });
   document.addEventListener('keyup', (e) => {
@@ -213,9 +212,4 @@ export function advanceCamera(cam, dt, speedFn) {
   const dx = cam.speed * dt;
   cam.x += dx;
   return dx;
-}
-
-/** Parallax offset for a layer (far canopy ×0.2, near trees ×0.5, ground ×1). */
-export function parallax(camX, factor) {
-  return camX * factor;
 }

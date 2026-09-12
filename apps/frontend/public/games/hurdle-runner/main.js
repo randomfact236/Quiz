@@ -11,12 +11,15 @@
  * no side effects. Per plan §11, no analytics and no site coupling.
  * ============================================================================
  */
+import { t } from './config.js';
 import {
   CULL_X,
   CLEAR_BONUS,
   GROUND_Y,
   HITBOX_INSET,
   PLAYER_X,
+  PICKUP_AT_MAX_M,
+  PICKUP_AT_MIN_M,
   SPAWN_X,
   SCROLL_START,
   TIER_START_M,
@@ -54,7 +57,7 @@ import {
  * ======================================================================= */
 
 export function shareText(distanceM, url) {
-  return 'Ran ' + distanceM + ' m in Hurdle Runner — beat that! ' + url;
+  return t('share', { m: distanceM, url });
 }
 
 /* ==========================================================================
@@ -164,7 +167,8 @@ function buildRun() {
   state.obstacles = [];
   state.pickup = null;
   state.pickupSpawned = false;
-  state.pickupAtM = 600 + Math.random() * 300; // plan §9 P2 spawn window
+  // plan §9 P2 spawn window
+  state.pickupAtM = PICKUP_AT_MIN_M + Math.random() * (PICKUP_AT_MAX_M - PICKUP_AT_MIN_M);
   state.lastRightX = SPAWN_X - minGap(SCROLL_START); // first gap → x ≥ SPAWN_X
   state.cam = createCamera();
   state.hearts = 0;
@@ -190,9 +194,7 @@ function showScreen(mode) {
 
 function renderMenuBest() {
   const best = loadBest();
-  els.menuBest.textContent = best
-    ? 'Best ' + best.distanceM + ' m'
-    : 'No best yet — how far can you get?';
+  els.menuBest.textContent = best ? t('best', { m: best.distanceM }) : t('noBest');
 }
 
 function toMenu() {
@@ -227,7 +229,7 @@ function die() {
   els.overDetail.textContent =
     state.cleared + ' cleared · score ' + (m + state.cleared * CLEAR_BONUS);
   els.badgeNew.classList.toggle('hidden', !newBest);
-  els.overBest.textContent = 'Best ' + (best ? best.distanceM : m) + ' m';
+  els.overBest.textContent = t('best', { m: best ? best.distanceM : m });
   if (newBest) {
     blip(523, 90, 'triangle', 0.25);
     blip(659, 90, 'triangle', 0.35);
@@ -433,6 +435,7 @@ function draw(t) {
     announceUntil: state.announceUntil,
     dust: state.dust,
     floaters: state.floaters,
+    fx: { dustLifeS: DUST_LIFE_S, floaterLifeS: FLOATER_LIFE_S, announceS: ANNOUNCE_S },
     debugInfo: { spawnCursor: state.lastRightX, minGap: minGap(state.cam.speed) },
     flash,
     shake,
@@ -480,7 +483,7 @@ function share() {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
-      () => toast('Result copied to clipboard 📋'),
+      () => toast(t('copied')),
       () => window.prompt('Copy your result:', text)
     );
     return;

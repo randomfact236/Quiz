@@ -18,17 +18,13 @@ export function setMuted(value) {
   muted = !!value;
 }
 
-export function isMuted() {
-  return muted;
-}
-
-/** Short envelope blip. `whenSec` offsets the start (for little arpeggios). */
-export function blip(freq, durationMs = 90, type = 'sine', whenSec = 0) {
+/** Short envelope blip. */
+export function blip(freq, durationMs = 90, type = 'sine') {
   if (muted) return;
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') void audioCtx.resume();
-    const start = audioCtx.currentTime + whenSec;
+    const start = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = type;

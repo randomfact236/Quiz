@@ -188,8 +188,9 @@ instant restart by design).
 
 ### Phases
 
-- [x] R2-1 Hygiene (2026-09-11): `config.js` (locale + reserved strings,
-      host-overridable) + `storage.js` (versioned `save` document — best + prefs —
+- [x] R2-1 Hygiene (2026-09-11; strings wired 2026-09-12): `config.js` (locale +
+      share/medal strings, host-overridable) + `storage.js` (versioned `save` document —
+      best + prefs —
       migrated from the loose best/prefs keys, corrupt-save sanitization, remote adapter
       slot); `main.js` slimmed to the facade. 42/42 tests green; flap-spam smoke clean.
 - [ ] R2-2 Async seeded challenge: `?seed=` + share template carrying the seed —

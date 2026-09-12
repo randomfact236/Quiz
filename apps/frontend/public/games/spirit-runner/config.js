@@ -23,7 +23,11 @@ const DEFAULT_CONFIG = {
   locale: 'en',
   remoteAdapter: null,
   strings: {
-    en: {},
+    en: {
+      // {distance} / {character} / {score} / {url} are substituted by main.js
+      // at share time.
+      share: 'Ran {distance} m as {character} in Spirit Runner — {score} pts — beat that! {url}',
+    },
   },
 };
 

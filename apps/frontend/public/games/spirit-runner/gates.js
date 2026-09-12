@@ -39,15 +39,6 @@ export const ORB_COLORS = ['cyan', 'violet', 'gold'];
 /** Rule ids in their authored cycle order (a run shuffles this — plan §2). */
 export const RULE_IDS = ['parity', 'echo', 'negation', 'sequence', 'color'];
 
-/** Fresh runState fields the gate chain needs (main.js spreads this at run
- *  start; echo/color always have an answer because these are seeded). */
-export function createGateState() {
-  return {
-    lastGateRune: RUNE_ALPHABET[0],
-    lastOrbColor: null, // the color rule seeds it on first use
-  };
-}
-
 /** Fisher–Yates shuffle of the authored rule order, driven by `rng` — the
  *  per-run seed makes the cycle learnable within a run, fresh across runs. */
 export function shuffledRules(rng) {

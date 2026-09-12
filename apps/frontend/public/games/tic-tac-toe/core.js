@@ -66,7 +66,6 @@ export function roundOutcome(board, misere) {
   return {
     winner: misere ? other(result.completedBy) : result.completedBy,
     line: result.line,
-    completedBy: result.completedBy,
   };
 }
 

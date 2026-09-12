@@ -618,6 +618,24 @@ describe('spawner sweep (tiers × density, 30 speeds × 400 spawns)', () => {
     ]);
   });
 
+  it('spawner-produced tall guardians carry the full-height lethal column (plan §2: jump only)', () => {
+    const spawner = createSpawner(seededRng(3));
+    spawner.meters = 900; // tier 3 — the roll includes both guardians
+    let tallSeen = false;
+    for (let i = 0; i < 400 && !tallSeen; i++) {
+      const spawn = nextSpawn(spawner, 600, 0);
+      if (spawn.kind !== 'guardian-tall') continue;
+      tallSeen = true;
+      expect(spawn.items).toHaveLength(1);
+      expect(spawn.items[0].h).toBe(GUARDIAN_TALL_H); // the spawner wires the constant in
+      const box = obstacleBox(makeObstacle(PLAYER_X, spawn.items[0]));
+      expect(box.h).toBe(GUARDIAN_TALL_H); // the box covers the full column…
+      expect(box.y).toBe(GROUND_Y - GUARDIAN_TALL_H); // …top at the column height…
+      expect(box.y + box.h).toBe(GROUND_Y); // …and grounded on the ground line
+    }
+    expect(tallSeen).toBe(true);
+  });
+
   it('orb formations fit inside a fair gap — the next group can never overlap', () => {
     for (const speed of [SCROLL_START, 500, 900]) {
       for (let seed = 0; seed < 50; seed++) {

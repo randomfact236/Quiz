@@ -28,7 +28,7 @@
       <section id="state-menu" class="state" hidden>
         <div class="menu-card">
           <h1>🚦 Tap or Don't Tap</h1>
-          <p class="tagline">Tap the <b class="green">green</b>. Resist the <b class="red">red</b>. That's it — until your brain betrays you.</p>
+          <p class="tagline" id="menu-tagline">Tap the <b class="green">green</b>. Resist the <b class="red">red</b>. That's it — until your brain betrays you.</p>
           <p class="best-line" id="menu-best" hidden>
             Best score <b id="menu-best-score">0</b> · fastest <b id="menu-best-ms">—</b>
           </p>
@@ -58,10 +58,10 @@
       <!-- ============ gameover ============ -->
       <section id="state-gameover" class="state" hidden>
         <div class="menu-card">
-          <h1>🚦 GAME OVER</h1>
+          <h1 id="go-title">🚦 GAME OVER</h1>
           <p class="go-score" id="go-score">0</p>
           <p class="go-stats">
-            <span id="go-best-label">Best reaction <b id="go-best-ms">—</b> · </span>
+            <span id="go-best-label"><span id="go-best-text">Best reaction</span> <b id="go-best-ms">—</b> · </span>
             <span id="go-rounds">0</span> rounds survived
           </p>
           <p id="go-badge" class="go-badge" hidden></p>

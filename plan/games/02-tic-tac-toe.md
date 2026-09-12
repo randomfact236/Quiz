@@ -56,6 +56,10 @@ game:tic-tac-toe:prefs             → { mode, level, misere, muted }
 game:tic-tac-toe:best              → n/a (no score; share uses the series line)
 ```
 
+(2026-09-12: the Rev 2 `storage.js` migration accepts **both** this per-modeKey layout
+and a single `game:tic-tac-toe:series` key with colon setupKeys — tallies are remapped
+(`d` → `draw`) and merged field-wise, so a pre-Rev-2 save in either layout survives.)
+
 ## 6. File structure & function inventory
 
 ```
@@ -155,7 +159,8 @@ source of truth.
 ### storage.js facade
 
 One versioned save document (series tallies + prefs together, `version` field) migrated
-from the loose per-modeKey series keys. Remote adapter slot reserved for future account
+from the loose series keys — both the per-modeKey layout of §5 and the single-key layout
+are accepted and merged (2026-09-12). Remote adapter slot reserved for future account
 sync of series — the game never checks auth; **guests keep full local persistence**.
 Mid-round resume: N/A (rounds are fast by design).
 

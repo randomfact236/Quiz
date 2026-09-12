@@ -3,9 +3,8 @@
  * public/games/hurdle-runner/core.js (plan/games/05-continuous-runner.md §8:
  * the max-jump-clears-a-tall-barrier proof, the jump-cut height delta, the
  * spawner sweep 320→900 px/s with the minGap fairness invariant, the inset
- * AABB corner cases, and the once-per-obstacle scoring). The same assertions
- * ship in the game's own core.test.html harness; this suite keeps them
- * running in CI.
+ * AABB corner cases, and the once-per-obstacle scoring) — this suite keeps
+ * them running in CI.
  */
 import {
   BEST_KEY,

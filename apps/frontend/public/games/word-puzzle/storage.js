@@ -25,7 +25,7 @@ export const PROGRESS_KEY = 'game:word-puzzle:progress';
 export const PREFS_KEY = 'game:word-puzzle:prefs';
 
 export const SAVE_KEY = 'game:word-puzzle:save';
-export const SAVE_VERSION = 1;
+const SAVE_VERSION = 1;
 
 let remoteAdapter = null;
 
@@ -170,13 +170,7 @@ function persist(save) {
 }
 
 export function loadLevels() {
-  const save = loadSave();
-  const levels = {};
-  for (const [key, rec] of Object.entries(save.levels)) {
-    const normalized = normalizeTally(rec);
-    if (normalized) levels[key] = normalized;
-  }
-  return levels;
+  return loadSave().levels;
 }
 
 /**

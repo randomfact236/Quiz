@@ -4,8 +4,8 @@
  * ============================================================================
  * Procedural draw, no assets (master README §8.7): the mystical forest —
  * depth palettes (dawn → dusk → night forest, plan §2 Phase A), drifting
- * mist, fireflies at night, a far canopy (parallax ×0.2), a near tree line
- * (×0.5), the mossy path (×1); the five obstacle looks (fallen log, hanging
+ * mist, fireflies at night, a far canopy (×0.2), a near tree line (×0.5), the
+ * mossy path (×1); the five obstacle looks (fallen log, hanging
  * branch, wisp-column / wisp-disc guardians, pulsing rune trap); spirit orbs
  * and rune-gate doors drawn with 'lighter' composite glow (plan §6); the
  * hooded runner with per-character tint and a crouch slide pose; particles,
@@ -26,12 +26,14 @@ import {
   GROUND_Y,
   GUARDIAN_LOW_BOTTOM,
   GUARDIAN_LOW_TOP,
+  HEARTS_MAX,
   HITBOX_INSET,
   METER_FULL,
   ORB_R,
   PLAYER_X,
   SLIDE_H_FACTOR,
   PLAYER_H,
+  SHADOW_S,
   TRAP_DARK_S,
   TRAP_WARN_S,
   VIEW_H,
@@ -241,7 +243,7 @@ function drawSky(ctx, pal) {
   ctx.fillRect(0, 0, VIEW_W, GROUND_Y);
 }
 
-function drawCelestial(ctx, pal, t, m) {
+function drawCelestial(ctx, pal, t) {
   // dawn/dusk sun sits low; the night raises a pale spirit moon
   const cx = VIEW_W * 0.78;
   const cy = 92;
@@ -288,7 +290,7 @@ function drawCelestial(ctx, pal, t, m) {
   }
 }
 
-/** Drifting mist bands above the ground (parallax feel without layer cost). */
+/** Drifting mist bands above the ground (depth feel without layer cost). */
 function drawMist(ctx, pal, camX, t) {
   for (let i = 0; i < 3; i++) {
     const speed = 14 + i * 9;
@@ -304,7 +306,7 @@ function drawMist(ctx, pal, camX, t) {
   }
 }
 
-/** Rounded canopy blobs on a sine silhouette (parallax ×0.2). */
+/** Rounded canopy blobs on a sine silhouette (×0.2 scroll). */
 function drawFarCanopy(ctx, color, camX, t) {
   const offset = camX * 0.2;
   ctx.fillStyle = color;
@@ -335,7 +337,7 @@ function drawFarCanopy(ctx, color, camX, t) {
   }
 }
 
-/** Near pine line (parallax ×0.5): deterministic pines repeating every 120 px. */
+/** Near pine line (×0.5 scroll): deterministic pines repeating every 120 px. */
 function drawTrees(ctx, pal, camX) {
   const offset = camX * 0.5;
   const startK = Math.floor(offset / 120) - 1;
@@ -497,7 +499,7 @@ function drawBranch(ctx, x, w, pal) {
   }
 }
 
-function drawGuardianTall(ctx, x, w, h, t, pal, shadow) {
+function drawGuardianTall(ctx, x, w, h, t, shadow) {
   // a column of hovering wisp stones with a glowing core
   const glowColor = shadow ? [255, 110, 170] : [154, 255, 226];
   const baseY = GROUND_Y;
@@ -528,7 +530,7 @@ function drawGuardianTall(ctx, x, w, h, t, pal, shadow) {
   ctx.stroke();
 }
 
-function drawGuardianLow(ctx, x, w, t, pal, shadow) {
+function drawGuardianLow(ctx, x, w, t, shadow) {
   // a hovering wisp disc with a trail of fading rings above (slide under it)
   const glowColor = shadow ? [255, 110, 170] : [196, 148, 255];
   const cy = GROUND_Y - (GUARDIAN_LOW_BOTTOM + 24);
@@ -609,8 +611,8 @@ function drawObstacles(ctx, obstacles, camX, worldS, t, pal, shadow) {
     const x = obs.worldX - camX;
     if (x + obs.w < -40 || x > VIEW_W + 40) continue;
     if (obs.kind === 'branch') drawBranch(ctx, x, obs.w, pal);
-    else if (obs.kind === 'guardian-tall') drawGuardianTall(ctx, x, obs.w, obs.h, t, pal, shadow);
-    else if (obs.kind === 'guardian-low') drawGuardianLow(ctx, x, obs.w, t, pal, shadow);
+    else if (obs.kind === 'guardian-tall') drawGuardianTall(ctx, x, obs.w, obs.h, t, shadow);
+    else if (obs.kind === 'guardian-low') drawGuardianLow(ctx, x, obs.w, t, shadow);
     else if (obs.kind === 'trap') drawTrap(ctx, x, obs.w, obs.h, obs, worldS, t, shadow);
     else drawLog(ctx, x, GROUND_Y - obs.h, obs.w, obs.h, pal);
   }
@@ -1011,7 +1013,7 @@ function drawHUD(ctx, s) {
   );
 
   // hearts (plan §2: hearts 2)
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < HEARTS_MAX; i++) {
     const filled = i < s.hearts;
     const bob = filled ? Math.sin(s.t * 3.1 + i) * 2 : 0;
     ctx.save();
@@ -1090,7 +1092,7 @@ function drawHUD(ctx, s) {
     );
     ctx.restore();
     // closing vignette as the timer drains
-    const urgency = 1 - s.shadowS / 45;
+    const urgency = 1 - s.shadowS / SHADOW_S;
     const vg = ctx.createRadialGradient(
       VIEW_W / 2,
       VIEW_H / 2,
@@ -1159,12 +1161,7 @@ function drawDebug(ctx, s) {
   for (const orb of s.orbs) {
     if (orb.taken) continue;
     ctx.strokeStyle = '#7dff8a';
-    ctx.strokeRect(
-      orb.worldX - ORB_R_DEBUG - s.cam.x,
-      orb.y - ORB_R_DEBUG,
-      ORB_R_DEBUG * 2,
-      ORB_R_DEBUG * 2
-    );
+    ctx.strokeRect(orb.worldX - ORB_R - s.cam.x, orb.y - ORB_R, ORB_R * 2, ORB_R * 2);
   }
   if (s.gate && !s.gate.resolved) {
     const bx = s.gate.worldX - s.cam.x;
@@ -1197,7 +1194,6 @@ function drawDebug(ctx, s) {
   );
   ctx.restore();
 }
-const ORB_R_DEBUG = 13;
 
 /* ---- entry point ------------------------------------------------------------------------ */
 
@@ -1215,7 +1211,7 @@ export function drawScene(ctx, s) {
   ctx.save();
   ctx.translate(s.shake.x, s.shake.y);
   drawSky(ctx, pal);
-  drawCelestial(ctx, pal, s.t, s.paletteM);
+  drawCelestial(ctx, pal, s.t);
   drawFarCanopy(ctx, pal.canopyFar, s.cam.x, s.t);
   drawMist(ctx, pal, s.cam.x, s.t);
   drawTrees(ctx, pal, s.cam.x);

@@ -3,7 +3,7 @@
  * storage.js — Tic Tac Toe (guarded persistence facade)
  * ============================================================================
  * Rev 2 pattern (plan/games/02-tic-tac-toe.md §12): one versioned save
- * document instead of loose keys, migrated once from the legacy layout, with
+ * document instead of loose keys, migrated once from the legacy layouts, with
  * a remote adapter slot a host can inject for future account sync.
  *
  * Local-first contract: every call is try/catch guarded, works in private
@@ -11,9 +11,13 @@
  * host has explicitly injected a remote adapter. The game never checks auth —
  * the host decides, and guests keep full local persistence.
  *
- * Legacy layout (pre-Rev 2, migrated on first write, then removed):
- *   game:tic-tac-toe:series → { [setupKey]: { x, o, draw } }
- *   game:tic-tac-toe:prefs  → { mode, level, misere }
+ * Legacy layouts (pre-Rev 2, migrated on first write, then removed) — both
+ * documented variants are accepted and merged:
+ *   game:tic-tac-toe:series           → { [setupKey]: { x, o, draw } },
+ *                                        colon setupKeys ('1p:hard')
+ *   game:tic-tac-toe:series:<modeKey> → { x, o, d }, per-mode loose keys
+ *                                        (plan §5), dash modeKeys ('1p-hard')
+ *   game:tic-tac-toe:prefs            → { mode, level, misere }
  *
  * Versioned layout:
  *   game:tic-tac-toe:save   → { version: 1, series, prefs }
@@ -29,6 +33,19 @@ export const PREFS_KEY = 'game:tic-tac-toe:prefs';
 
 const MODES = ['1p', '2p'];
 const LEVELS = ['easy', 'medium', 'hard'];
+
+/** Every series setup the game can produce, misère variants included. */
+const ALL_SETUPS = MODES.flatMap((mode) => {
+  const bases = mode === '1p' ? LEVELS.map((level) => mode + ':' + level) : [mode];
+  return bases.flatMap((base) => [base, base + ':misere']);
+});
+
+/** Plan §5 legacy twins: one dash-format loose key per setup, e.g. '1p:hard'
+ * lives under 'game:tic-tac-toe:series:1p-hard'. */
+const LEGACY_PER_MODE = ALL_SETUPS.map((setup) => ({
+  setup,
+  key: SERIES_KEY + ':' + setup.replace(/:/g, '-'),
+}));
 
 /** What a fresh install plays with — also what corrupt prefs normalize into. */
 export const DEFAULT_PREFS = Object.freeze({ mode: '1p', level: 'medium', misere: false });
@@ -134,8 +151,46 @@ function normalizePrefs(parsed) {
   };
 }
 
+/** Plan §5 per-mode tallies count draws as `d`; reshape into { x, o, draw }. */
+function legacyModeTally(tally) {
+  if (!tally || typeof tally !== 'object') return emptyTally();
+  return {
+    x: Number(tally.x) || 0,
+    o: Number(tally.o) || 0,
+    draw: Number(tally.d) || 0,
+  };
+}
+
 /**
- * Read the versioned save, migrating from the legacy layout once. Migration
+ * Read every per-mode loose key that exists. Returns null when none do, else
+ * setup-key → tally, with all-zero tallies skipped (nothing to migrate).
+ */
+function readPerModeSeries() {
+  const found = {};
+  let existed = false;
+  for (const { setup, key } of LEGACY_PER_MODE) {
+    const raw = readJson(key, null);
+    if (raw === null) continue;
+    existed = true;
+    const tally = legacyModeTally(raw);
+    if (tally.x || tally.o || tally.draw) found[setup] = tally;
+  }
+  return existed ? found : null;
+}
+
+/** Field-wise sum — the layouts describe the same counters, so a setup found
+ * in both keeps every game recorded in either. */
+function sumTallies(a, b) {
+  const total = emptyTally();
+  for (const field of Object.keys(total)) {
+    total[field] = (Number(a[field]) || 0) + (Number(b[field]) || 0);
+  }
+  return total;
+}
+
+/**
+ * Read the versioned save, migrating from both legacy layouts once (the
+ * single-key series document and the plan §5 per-mode loose keys). Migration
  * is idempotent: with the versioned key present it just validates and returns.
  */
 function loadSave() {
@@ -144,7 +199,9 @@ function loadSave() {
 
   const legacySeries = readJson(SERIES_KEY, null);
   const legacyPrefs = readJson(PREFS_KEY, null);
-  const hasLegacy = (legacySeries && typeof legacySeries === 'object') || !!legacyPrefs;
+  const perModeSeries = readPerModeSeries();
+  const hasLegacy =
+    (legacySeries && typeof legacySeries === 'object') || !!legacyPrefs || !!perModeSeries;
 
   const series = {};
   if (legacySeries && typeof legacySeries === 'object') {
@@ -152,6 +209,12 @@ function loadSave() {
       series[setup] = normalizeTally(tally);
     }
   }
+  if (perModeSeries) {
+    for (const [setup, tally] of Object.entries(perModeSeries)) {
+      series[setup] = setup in series ? sumTallies(series[setup], tally) : tally;
+    }
+  }
+
   const save = {
     version: SAVE_VERSION,
     series,
@@ -162,6 +225,7 @@ function loadSave() {
     // Only drop the legacy keys once the migrated save is durably written.
     storage.removeItem(SERIES_KEY);
     storage.removeItem(PREFS_KEY);
+    for (const { key } of LEGACY_PER_MODE) storage.removeItem(key);
   }
   return save;
 }

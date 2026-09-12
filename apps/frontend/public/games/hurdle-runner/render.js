@@ -4,7 +4,7 @@
  * ============================================================================
  * Procedural draw, no assets (master README §8.7): palette-shifting sky
  * (day → dusk → night → dawn per 500 m, plan §9 P3), drifting clouds, far
- * hills (parallax ×0.2), a pine tree line (×0.5), the scrolling track (×1),
+ * hills (×0.2), a pine tree line (×0.5), the scrolling track (×1),
  * hurdles / tall barriers / the 💚 pickup, the animated runner, landing dust,
  * +10 floaters, the HUD (distance, tier bar, hearts, "Speed up!"), the death
  * flash and the ?debug=1 hitboxes + spawner-gap markers (plan §3).
@@ -23,6 +23,7 @@ import {
   TIER_START_M,
   VIEW_H,
   VIEW_W,
+  insetBox,
   obstacleBox,
   pickupBox,
   playerBox,
@@ -222,7 +223,7 @@ function drawClouds(ctx, t) {
   }
 }
 
-/** Rolling sine silhouette; `offset` carries the layer's parallax scroll. */
+/** Rolling sine silhouette; `offset` carries the layer's scroll. */
 function drawHills(ctx, color, baseY, amp, wavelength, offset) {
   ctx.fillStyle = color;
   ctx.beginPath();
@@ -236,7 +237,7 @@ function drawHills(ctx, color, baseY, amp, wavelength, offset) {
   ctx.fill();
 }
 
-/** Pine tree line (parallax ×0.5): deterministic pines repeating every 130 px. */
+/** Pine tree line (×0.5 scroll): deterministic pines repeating every 130 px. */
 function drawTrees(ctx, color, trunkColor, camX) {
   const offset = camX * 0.5;
   const startK = Math.floor(offset / 130) - 1;
@@ -298,7 +299,7 @@ function drawGround(ctx, pal, camX) {
 
 /* ---- obstacles ------------------------------------------------------------------------ */
 
-function drawHurdle(ctx, x, y, w, h, pal) {
+function drawHurdle(ctx, x, y, w, h) {
   // two posts + striped crossbar — a track hurdle
   ctx.fillStyle = '#5b6470';
   ctx.fillRect(x + 2, y + 8, 4, h - 8);
@@ -355,13 +356,13 @@ function drawTall(ctx, x, y, w, h) {
   ctx.fill();
 }
 
-function drawObstacles(ctx, obstacles, camX, pal) {
+function drawObstacles(ctx, obstacles, camX) {
   for (const obs of obstacles) {
     const x = obs.worldX - camX;
     if (x + obs.w < -20 || x > VIEW_W + 20) continue;
     const y = GROUND_Y - obs.h;
     if (obs.kind === 'tall') drawTall(ctx, x, y, obs.w, obs.h);
-    else drawHurdle(ctx, x, y, obs.w, obs.h, pal);
+    else drawHurdle(ctx, x, y, obs.w, obs.h);
   }
 }
 
@@ -506,27 +507,27 @@ function drawRunner(ctx, player, camX, t) {
 
 /* ---- particles + floaters ---------------------------------------------------------------------- */
 
-function drawDust(ctx, dust, t) {
+function drawDust(ctx, dust, t, lifeS) {
   for (const p of dust) {
     const age = t - p.born;
-    if (age > 0.45) continue;
+    if (age > lifeS) continue;
     const x = p.x + p.vx * age;
     const y = p.y + p.vy * age + 300 * age * age;
-    ctx.fillStyle = 'rgba(210,200,180,' + (0.5 * (1 - age / 0.45)).toFixed(3) + ')';
+    ctx.fillStyle = 'rgba(210,200,180,' + (0.5 * (1 - age / lifeS)).toFixed(3) + ')';
     ctx.beginPath();
-    ctx.arc(x, y, 2 + 3 * (1 - age / 0.45), 0, Math.PI * 2);
+    ctx.arc(x, y, 2 + 3 * (1 - age / lifeS), 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
-function drawFloaters(ctx, floaters, t) {
+function drawFloaters(ctx, floaters, t, lifeS) {
   ctx.font = '800 20px "Segoe UI", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (const f of floaters) {
     const age = t - f.born;
-    if (age > 0.8) continue;
-    ctx.globalAlpha = 1 - age / 0.8;
+    if (age > lifeS) continue;
+    ctx.globalAlpha = 1 - age / lifeS;
     ctx.lineWidth = 5;
     ctx.lineJoin = 'round';
     ctx.strokeStyle = 'rgba(15,45,25,0.7)';
@@ -605,7 +606,7 @@ function drawHUD(ctx, s) {
 
   // tier announcement
   if (s.t < s.announceUntil) {
-    const total = 1.6;
+    const total = s.fx.announceS;
     const age = total - (s.announceUntil - s.t);
     const alpha = age < 0.15 ? age / 0.15 : Math.max(0, 1 - (age - 1.1) / 0.5);
     const pop = 1 + 0.18 * Math.max(0, 1 - age / 0.25);
@@ -625,10 +626,9 @@ function drawDebug(ctx, s) {
   ctx.lineWidth = 2;
   // the player's INSET box — exactly what aabbHit() tests (plan §10)
   const pb = playerBox(s.player);
-  const insetW = pb.w * (1 - HITBOX_INSET);
-  const insetH = pb.h * (1 - HITBOX_INSET);
+  const inset = insetBox(pb, HITBOX_INSET);
   ctx.strokeStyle = '#ff2d95';
-  ctx.strokeRect(pb.x + (pb.w - insetW) / 2, pb.y + (pb.h - insetH) / 2, insetW, insetH);
+  ctx.strokeRect(inset.x, inset.y, inset.w, inset.h);
   ctx.strokeStyle = 'rgba(255,255,255,0.6)';
   ctx.lineWidth = 1;
   ctx.strokeRect(pb.x, pb.y, pb.w, pb.h);
@@ -691,7 +691,7 @@ function drawDebug(ctx, s) {
 /**
  * Draw one frame. `s` carries the scene state main.js assembled:
  * { mode, player, obstacles, pickup, cam, distanceM, hearts, tier,
- *   tierProgress, announceUntil, dust, floaters, debugInfo, flash, shake,
+ *   tierProgress, announceUntil, dust, floaters, fx, debugInfo, flash, shake,
  *   t, paletteM, debug }
  * Modes: 'menu' | 'playing' | 'paused' | 'gameover'.
  */
@@ -705,11 +705,11 @@ export function drawScene(ctx, s) {
   drawHills(ctx, pal.hillFar, GROUND_Y - 52, 58, 300, s.cam.x * 0.2);
   drawTrees(ctx, pal.hillNear, pal.dirtDark, s.cam.x);
   drawGround(ctx, pal, s.cam.x);
-  drawObstacles(ctx, s.obstacles, s.cam.x, pal);
+  drawObstacles(ctx, s.obstacles, s.cam.x);
   drawPickup(ctx, s.pickup, s.cam.x, s.t);
-  drawDust(ctx, s.dust, s.t);
+  drawDust(ctx, s.dust, s.t, s.fx.dustLifeS);
   drawRunner(ctx, s.player, s.cam.x, s.t);
-  drawFloaters(ctx, s.floaters, s.t);
+  drawFloaters(ctx, s.floaters, s.t, s.fx.floaterLifeS);
   if (s.mode !== 'menu') drawHUD(ctx, s);
   if (s.flash > 0) {
     ctx.fillStyle = 'rgba(255,255,255,' + s.flash.toFixed(3) + ')';

@@ -18,8 +18,20 @@ const DEFAULT_CONFIG = {
   locale: 'en',
   strings: {
     en: {
-      // Reserved for the Rev 2 pass: share/medal copy is currently authored in
-      // main.js (shareText is a jest-covered pure function).
+      // {score} / {url} are substituted by main.js at share time.
+      share: 'Flew through {score} gaps in Flying Snake — beat that! {url}',
+      // Medal names + emoji per tier (plan §2), keyed by medalFor's tier.
+      medalNameBronze: 'Bronze',
+      medalNameSilver: 'Silver',
+      medalNameGold: 'Gold',
+      medalNamePlatinum: 'Platinum',
+      medalEmojiBronze: '🥉',
+      medalEmojiSilver: '🥈',
+      medalEmojiGold: '🥇',
+      medalEmojiPlatinum: '🏆',
+      // Gameover line for a run with no medal; {bronzeAt} is core.js's
+      // MEDAL_THRESHOLDS.bronze.
+      noMedal: 'Reach {bronzeAt} for a 🥉 medal',
     },
   },
 };

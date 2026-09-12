@@ -116,20 +116,17 @@ export function loadSave() {
     Array.isArray(legacyHistory) ||
     legacyMuted !== null;
 
-  const save = {
-    version: SAVE_VERSION,
-    best:
-      legacyBest && typeof legacyBest === 'object'
-        ? {
-            score: typeof legacyBest.score === 'number' ? legacyBest.score : 0,
-            bestMs: typeof legacyBest.bestMs === 'number' ? legacyBest.bestMs : null,
-          }
-        : { score: 0, bestMs: null },
-    history: Array.isArray(legacyHistory)
-      ? legacyHistory.filter((h) => h && typeof h === 'object').slice(-HISTORY_MAX)
-      : [],
-    prefs: { muted: legacyMuted === '1' },
-  };
+  const save = defaultSave();
+  if (legacyBest && typeof legacyBest === 'object') {
+    save.best = {
+      score: typeof legacyBest.score === 'number' ? legacyBest.score : 0,
+      bestMs: typeof legacyBest.bestMs === 'number' ? legacyBest.bestMs : null,
+    };
+  }
+  if (Array.isArray(legacyHistory)) {
+    save.history = legacyHistory.filter((h) => h && typeof h === 'object').slice(-HISTORY_MAX);
+  }
+  save.prefs.muted = legacyMuted === '1';
   if (writeJson(SAVE_KEY, save) && hasLegacy) {
     // Only drop the legacy keys once the migrated save is durably written.
     removeKey(LEGACY_KEYS.best);
@@ -169,7 +166,7 @@ export function getHistory() {
  * higher score independently; history is capped at HISTORY_MAX.
  * Returns `{ best, isRecord }`.
  */
-export function recordRun({ score, bestMs = null, rounds = 0 }) {
+export function recordRun({ score, bestMs = null }) {
   const save = loadSave();
   const prevBest = save.best;
   const isRecord = score > (prevBest.score || 0);
@@ -180,7 +177,7 @@ export function recordRun({ score, bestMs = null, rounds = 0 }) {
         ? Math.min(bestMs, prevBest.bestMs)
         : (bestMs ?? prevBest.bestMs),
   };
-  save.history.push({ score, bestMs, rounds, ts: Date.now() });
+  save.history.push({ score, bestMs });
   save.history = save.history.slice(-HISTORY_MAX);
   persist(save);
   return { best: save.best, isRecord };

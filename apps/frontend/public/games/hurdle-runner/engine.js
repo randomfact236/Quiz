@@ -4,8 +4,8 @@
  * ============================================================================
  * Generic engine plumbing, deliberately game-agnostic so Spirit Runner (07)
  * can fork this file as its base: the fixed-timestep loop, the jump input
- * (press edge + live hold state, pointer + keyboard), and the camera /
- * parallax helpers. No game rules live here — those are core.js; no drawing —
+ * (press edge + live hold state, pointer + keyboard), and the camera helper.
+ * No game rules live here — those are core.js; no drawing —
  * that is render.js; no state machine — that is main.js.
  *
  * Plain ESM, no build step, no DOM access at import time (jest imports its
@@ -152,9 +152,4 @@ export function advanceCamera(cam, dt, speedFn) {
   const dx = cam.speed * dt;
   cam.x += dx;
   return dx;
-}
-
-/** Parallax offset for a layer (§2: far hills ×0.2, near trees ×0.5, ground ×1). */
-export function parallax(camX, factor) {
-  return camX * factor;
 }

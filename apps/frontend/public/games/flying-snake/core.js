@@ -116,12 +116,9 @@ export function gapForScore(score) {
   return Math.max(GAP_MIN, GAP_START - GAP_SHRINK * score);
 }
 
-/**
- * A spawner owns the rng stream (injectable — tests use a seeded rng) and
- * counts the pairs it has produced.
- */
+/** A spawner owns the rng stream (injectable — tests use a seeded rng). */
 export function createSpawner(rng = Math.random) {
-  return { rng, made: 0 };
+  return { rng };
 }
 
 /**
@@ -135,7 +132,6 @@ export function nextGap(spawner, score) {
   const lo = EDGE_MARGIN + gap / 2;
   const hi = VIEW_H - GROUND_H - EDGE_MARGIN - gap / 2;
   const center = lo + (hi - lo) * spawner.rng();
-  spawner.made += 1;
   return { gap, centerY: center };
 }
 
@@ -205,10 +201,13 @@ export function pipePassed(pipe) {
 
 /* ---- medals (plan §2): bronze 10 · silver 20 · gold 40 · platinum 75 ------- */
 
+/* ---- medals (plan §2): bronze 10 · silver 20 · gold 40 · platinum 75 ------- */
+
+export const MEDAL_THRESHOLDS = { bronze: 10, silver: 20, gold: 40, platinum: 75 };
+
 export function medalFor(score) {
-  if (score >= 75) return 'platinum';
-  if (score >= 40) return 'gold';
-  if (score >= 20) return 'silver';
-  if (score >= 10) return 'bronze';
+  for (const medal of ['platinum', 'gold', 'silver', 'bronze']) {
+    if (score >= MEDAL_THRESHOLDS[medal]) return medal;
+  }
   return null;
 }

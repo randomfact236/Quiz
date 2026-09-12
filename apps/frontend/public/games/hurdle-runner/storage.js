@@ -108,7 +108,7 @@ function loadSave() {
   if (existing) return existing;
 
   const legacyBest = readJson(BEST_KEY, null);
-  const legacyPrefs = readJson(PREFS_KEY, {});
+  const legacyPrefs = readJson(PREFS_KEY, null);
   const hasLegacy = (legacyBest && typeof legacyBest === 'object') || !!legacyPrefs;
 
   const save = {

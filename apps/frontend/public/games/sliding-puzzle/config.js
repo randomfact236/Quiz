@@ -1,13 +1,12 @@
 /**
  * ============================================================================
- * config.js — Word Puzzle (flags + strings, host-overridable)
+ * Sliding Puzzle — config.js (Game 03, flags + strings, host-overridable)
  * ============================================================================
- * Rev 2 pattern (plan/games/04-word-puzzle.md §12, reference
- * 03-sliding-puzzle.md Rev 2): environment flags and per-locale UI strings in
- * one host-overridable place:
+ * Rev 2 pattern (plan/games/03-sliding-puzzle.md §6/§7): per-locale UI strings
+ * in one host-overridable place:
  *
- *   defaults  ←  window.__WORD_PUZZLE_CONFIG__ (host page / WebView)
- *             ←  ?locale=fr URL param (testing)
+ *   defaults  ←  window.__SLIDING_PUZZLE_CONFIG__ (host page / WebView)
+ *             ←  ?locale=xx URL param (testing)
  *
  * `prefs` in storage.js may override copy at runtime but is a per-device
  * cache — the source of truth for strings lives here.
@@ -18,17 +17,10 @@ const DEFAULT_CONFIG = {
   locale: 'en',
   strings: {
     en: {
-      // {words} / {time} / {stars} / {url} are substituted by game.js at
+      // {size} / {mode} / {result} / {url} are substituted by game.js at
       // share time.
-      share: 'I found {words} words in {time} · {stars} in Word Puzzle — can you beat it? {url}',
-      hint: 'Hint',
-      alreadyFound: 'Already found ✓',
-      themeCompleteTitle: '{theme} complete!',
-      themeCompleteSub: 'Theme stars: {stars}/9',
-      themeCompletePerfect: ' — perfect! 🌟',
-      themeCompleteNewBest: ' · New best time!',
-      copiedToast: 'Result copied to clipboard 📋',
-      copyPrompt: 'Copy your result:',
+      share: 'I solved {size}×{size}{mode} in {result} in Sliding Puzzle — can you beat it? {url}',
+      shareDaily: 'I solved today\u2019s Daily Sliding Puzzle in {result} — can you beat me? {url}',
     },
   },
 };
@@ -52,8 +44,8 @@ export function resolveConfig(base, ...overrides) {
 
 function readHostOverride() {
   try {
-    if (typeof window !== 'undefined' && window.__WORD_PUZZLE_CONFIG__) {
-      return window.__WORD_PUZZLE_CONFIG__;
+    if (typeof window !== 'undefined' && window.__SLIDING_PUZZLE_CONFIG__) {
+      return window.__SLIDING_PUZZLE_CONFIG__;
     }
   } catch {
     /* no window (tests) — fine */

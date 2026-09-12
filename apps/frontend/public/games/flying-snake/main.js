@@ -11,8 +11,10 @@
  * effects. Per plan §11, no analytics and no site coupling.
  * ============================================================================
  */
+import { t } from './config.js';
 import {
   FIRST_PIPE_X,
+  MEDAL_THRESHOLDS,
   PIPE_SPACING,
   PIPE_W,
   VIEW_H,
@@ -42,16 +44,11 @@ import {
  * ======================================================================= */
 
 export function shareText(score, url) {
-  return 'Flew through ' + score + ' gaps in Flying Snake — beat that! ' + url;
+  return t('share', { score, url });
 }
 
 /* ==========================================================================
- * 1. Persistence — storage.js facade (Rev 2: versioned save + migrations).
- *    Disabled storage means no best/medal, still fully playable (§7.6).
- * ======================================================================= */
-
-/* ==========================================================================
- * 2. Audio (README §3 audio.js equivalent — context on first user gesture)
+ * 1. Audio (README §3 audio.js equivalent — context on first user gesture)
  * ======================================================================= */
 
 let audioCtx = null;
@@ -99,11 +96,17 @@ function vibrate(pattern) {
 }
 
 /* ==========================================================================
- * 3. State
+ * 2. State
  * ======================================================================= */
 
-const MEDAL_EMOJI = { bronze: '🥉', silver: '🥈', gold: '🥇', platinum: '🏆' };
-const MEDAL_NAME = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', platinum: 'Platinum' };
+/** Medal label lookups — names + emoji live in config.js strings (plan §12). */
+function medalName(medal) {
+  return t('medalName' + medal[0].toUpperCase() + medal.slice(1));
+}
+
+function medalEmoji(medal) {
+  return t('medalEmoji' + medal[0].toUpperCase() + medal.slice(1));
+}
 
 const state = {
   mode: 'menu', // menu | ready | playing | dying | paused | gameover
@@ -116,7 +119,6 @@ const state = {
   trailAcc: 0,
   flapQueue: 0, // taps buffered for the fixed-step loop
   deathAt: 0, // seconds — flash + shake anchor
-  deathCause: null, // 'ground' | 'ceiling' | 'pipe'
   scorePopAt: -10,
   muted: false,
 };
@@ -155,7 +157,7 @@ function buildWorld() {
 }
 
 /* ==========================================================================
- * 4. Screens
+ * 3. Screens
  * ======================================================================= */
 
 function showScreen(mode) {
@@ -173,7 +175,7 @@ function renderMenuBest() {
   }
   const medal = medalFor(best.score);
   els.menuBest.textContent =
-    'Best ' + best.score + (medal ? ' · ' + MEDAL_EMOJI[medal] + ' ' + MEDAL_NAME[medal] : '');
+    'Best ' + best.score + (medal ? ' · ' + medalEmoji(medal) + ' ' + medalName(medal) : '');
 }
 
 function toMenu() {
@@ -189,14 +191,13 @@ function toReady() {
 }
 
 /* ==========================================================================
- * 5. Run lifecycle
+ * 4. Run lifecycle
  * ======================================================================= */
 
-function die(cause) {
+function die() {
   state.mode = 'dying';
   state.deathAt = clockNow;
   state.flapQueue = 0;
-  state.deathCause = cause;
   blip(130, 200, 'square');
   blip(90, 260, 'sawtooth', 0.06);
   vibrate([60, 40, 60]);
@@ -211,8 +212,8 @@ function gameOver() {
   els.badgeNew.classList.toggle('hidden', !newBest);
   els.overBest.textContent = 'Best ' + (best ? best.score : state.score);
   els.overMedal.textContent = medal
-    ? MEDAL_EMOJI[medal] + ' ' + MEDAL_NAME[medal] + ' medal'
-    : 'Reach 10 for a 🥉 medal';
+    ? medalEmoji(medal) + ' ' + medalName(medal) + ' medal'
+    : t('noMedal', { bronzeAt: MEDAL_THRESHOLDS.bronze });
   if (newBest) {
     blip(523, 90, 'triangle', 0.25);
     blip(659, 90, 'triangle', 0.35);
@@ -237,7 +238,7 @@ function resumeGame() {
 }
 
 /* ==========================================================================
- * 6. Fixed-step update
+ * 5. Fixed-step update
  * ======================================================================= */
 
 function update(dt) {
@@ -256,7 +257,7 @@ function update(dt) {
       }
     }
     const hit = snakeHit(state.snake, state.pipes);
-    if (hit) die(hit);
+    if (hit) die();
   } else if (state.mode === 'dying') {
     // world frozen, snake keeps falling (plan §2 death sequence) — but lands
     // on the ground strip instead of sinking through it
@@ -289,7 +290,7 @@ function sampleTrail(dt) {
 }
 
 /* ==========================================================================
- * 7. Render
+ * 6. Render
  * ======================================================================= */
 
 function fitCanvas() {
@@ -353,7 +354,7 @@ function draw(t) {
 }
 
 /* ==========================================================================
- * 8. Loop (fixed 1/120 steps via accumulator, 250 ms clamp — README §2;
+ * 7. Loop (fixed 1/120 steps via accumulator, 250 ms clamp — README §2;
  *    identical physics at 60 and 144 Hz)
  * ======================================================================= */
 
@@ -381,7 +382,7 @@ function startLoop() {
 }
 
 /* ==========================================================================
- * 9. Input (plan §4: tap anywhere / Space / ↑ = flap; multi-touch flaps
+ * 8. Input (plan §4: tap anywhere / Space / ↑ = flap; multi-touch flaps
  *    within 50 ms collapse to one; flap during gameover is ignored §7.3)
  * ======================================================================= */
 
@@ -432,7 +433,7 @@ function bindKeys() {
 }
 
 /* ==========================================================================
- * 10. Share (README §2 chain: Web Share → clipboard → prompt)
+ * 9. Share (README §2 chain: Web Share → clipboard → prompt)
  * ======================================================================= */
 
 function share() {
@@ -462,7 +463,7 @@ function toast(message) {
 }
 
 /* ==========================================================================
- * 11. Wiring + init
+ * 10. Wiring + init
  * ======================================================================= */
 
 function init() {

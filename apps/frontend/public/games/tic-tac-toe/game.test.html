@@ -160,6 +160,41 @@
           else window.localStorage.setItem(T3S.SAVE_KEY, original);
         }
         assert(T3S.loadSeries('setup-that-never-existed').x === 0, 'unknown setup → zeroed tally');
+
+        section('series persistence — legacy migrations (both layouts)');
+        var legacyKeys = [T3S.SERIES_KEY, T3S.SERIES_KEY + ':1p-hard'];
+        var legacyOriginals = legacyKeys.map(function (k) {
+          return window.localStorage.getItem(k);
+        });
+        var saveSnapshot = window.localStorage.getItem(T3S.SAVE_KEY);
+        try {
+          window.localStorage.removeItem(T3S.SAVE_KEY); // force the migration path
+          window.localStorage.setItem(
+            T3S.SERIES_KEY,
+            JSON.stringify({ '1p:hard': { x: 1, o: 0, draw: 0 } })
+          );
+          window.localStorage.setItem(
+            T3S.SERIES_KEY + ':1p-hard',
+            JSON.stringify({ x: 2, o: 1, d: 1 })
+          );
+          var merged = T3S.loadSeries('1p:hard');
+          assert(
+            merged.x === 3 && merged.o === 1 && merged.draw === 1,
+            'both legacy layouts merge (dash modeKey remaps to the setup key, `d` counts as draw)'
+          );
+          assert(
+            window.localStorage.getItem(T3S.SERIES_KEY) === null &&
+              window.localStorage.getItem(T3S.SERIES_KEY + ':1p-hard') === null,
+            'legacy keys are removed once the migrated save is durably written'
+          );
+        } finally {
+          for (var li = 0; li < legacyKeys.length; li++) {
+            if (legacyOriginals[li] === null) window.localStorage.removeItem(legacyKeys[li]);
+            else window.localStorage.setItem(legacyKeys[li], legacyOriginals[li]);
+          }
+          if (saveSnapshot === null) window.localStorage.removeItem(T3S.SAVE_KEY);
+          else window.localStorage.setItem(T3S.SAVE_KEY, saveSnapshot);
+        }
       }
 
       function testMediumHeuristics() {

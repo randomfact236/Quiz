@@ -18,8 +18,10 @@ const DEFAULT_CONFIG = {
   locale: 'en',
   strings: {
     en: {
-      // Reserved for the Rev 2 pass: share copy is currently authored in
-      // main.js (shareText is a jest-covered pure function).
+      best: 'Best {m} m',
+      noBest: 'No best yet — how far can you get?',
+      share: 'Ran {m} m in Hurdle Runner — beat that! {url}',
+      copied: 'Result copied to clipboard 📋',
     },
   },
 };

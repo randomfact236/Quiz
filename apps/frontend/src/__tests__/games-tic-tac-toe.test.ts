@@ -92,7 +92,7 @@ describe('roundOutcome (misère flips the winner)', () => {
 });
 
 describe('series persistence (Rev 2 versioned save)', () => {
-  const KEYS = [SAVE_KEY, SERIES_KEY, PREFS_KEY];
+  const KEYS = [SAVE_KEY, SERIES_KEY, PREFS_KEY, SERIES_KEY + ':1p-hard', SERIES_KEY + ':2p'];
   let original: Record<string, string | null>;
 
   beforeEach(() => {
@@ -135,6 +135,23 @@ describe('series persistence (Rev 2 versioned save)', () => {
     expect(loadPrefs()).toEqual({ mode: '2p', level: 'easy', misere: true });
     expect(window.localStorage.getItem(SERIES_KEY)).toBeNull(); // legacy removed
     expect(window.localStorage.getItem(PREFS_KEY)).toBeNull();
+  });
+
+  it('migrates the plan §5 per-mode loose keys (dash modeKeys, draws as `d`)', () => {
+    window.localStorage.setItem(SERIES_KEY + ':1p-hard', JSON.stringify({ x: 3, o: 2, d: 1 }));
+    window.localStorage.setItem(SERIES_KEY + ':2p', JSON.stringify({ x: 1, o: 0, d: 0 }));
+    expect(loadSeries('1p:hard')).toEqual({ x: 3, o: 2, draw: 1 });
+    expect(loadSeries('2p')).toEqual({ x: 1, o: 0, draw: 0 });
+    expect(window.localStorage.getItem(SERIES_KEY + ':1p-hard')).toBeNull(); // legacy removed
+    expect(window.localStorage.getItem(SERIES_KEY + ':2p')).toBeNull();
+  });
+
+  it('a setup found in both legacy layouts keeps every game from either', () => {
+    window.localStorage.setItem(SERIES_KEY, JSON.stringify({ '1p:hard': { x: 1, o: 0, draw: 0 } }));
+    window.localStorage.setItem(SERIES_KEY + ':1p-hard', JSON.stringify({ x: 2, o: 1, d: 1 }));
+    expect(loadSeries('1p:hard')).toEqual({ x: 3, o: 1, draw: 1 });
+    expect(window.localStorage.getItem(SERIES_KEY)).toBeNull();
+    expect(window.localStorage.getItem(SERIES_KEY + ':1p-hard')).toBeNull();
   });
 });
 

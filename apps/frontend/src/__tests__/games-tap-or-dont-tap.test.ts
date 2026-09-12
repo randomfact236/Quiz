@@ -3,8 +3,6 @@
  * public/games/tap-or-dont-tap/ (plan/games/01-tap-or-dont-tap.md §13 Rev 2).
  * The pure model lives in the game's core.js; this suite also covers the
  * storage facade (versioned save + legacy migration) and config resolution.
- * The same pure assertions ship in the game's own harness; this suite keeps
- * them running in CI.
  */
 import {
   DECOY_IGNORE_POINTS,
@@ -26,7 +24,7 @@ import {
   recordRun,
   setMuted,
 } from '../../public/games/tap-or-dont-tap/storage';
-import { resolveConfig, t } from '../../public/games/tap-or-dont-tap/config';
+import { GAME_CONFIG, resolveConfig, t } from '../../public/games/tap-or-dont-tap/config';
 
 const rng = (value: number) => () => value;
 
@@ -265,15 +263,20 @@ describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
   });
 
   it('recordRun keeps the higher score and the lower reaction independently', () => {
-    recordRun({ score: 500, bestMs: 200, rounds: 12 });
-    const { best, isRecord } = recordRun({ score: 400, bestMs: 180, rounds: 10 });
+    recordRun({ score: 500, bestMs: 200 });
+    const { best, isRecord } = recordRun({ score: 400, bestMs: 180 });
     expect(isRecord).toBe(false); // 400 < 500
     expect(best).toEqual({ score: 500, bestMs: 180 });
     expect(getBest()).toEqual(best);
+    // History entries carry only score + bestMs (plan §5 schema).
+    expect(getHistory()).toEqual([
+      { score: 500, bestMs: 200 },
+      { score: 400, bestMs: 180 },
+    ]);
   });
 
   it('caps history at 20 entries', () => {
-    for (let i = 1; i <= 25; i++) recordRun({ score: i, bestMs: 100 + i, rounds: 5 });
+    for (let i = 1; i <= 25; i++) recordRun({ score: i, bestMs: 100 + i });
     const history = getHistory();
     expect(history).toHaveLength(20);
     expect(history[0].score).toBe(6); // oldest kept entry
@@ -311,5 +314,30 @@ describe('config (flags + strings, host-overridable)', () => {
       'Best reaction: 187ms'
     );
     expect(t('no-such-key')).toBe('no-such-key');
+  });
+
+  it('ships the full en copy set (plan §13: rule line, swap banner, feedback, gameover, share)', () => {
+    expect(Object.keys(GAME_CONFIG.strings.en)).toEqual(
+      expect.arrayContaining([
+        'menuRule',
+        'swapBanner',
+        'tooEarly',
+        'hitMs',
+        'resisted',
+        'ignored',
+        'tooSlow',
+        'stroopLie',
+        'wasRed',
+        'goTitle',
+        'bestReaction',
+        'topBadge',
+        'newRecord',
+        'shareScoreBtn',
+        'retryBtn',
+        'backToMenu',
+        'copiedNote',
+        'share',
+      ])
+    );
   });
 });

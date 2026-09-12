@@ -221,10 +221,12 @@ spirit-runner/
   gates.js      # unchanged (5 rune rules)
   render.js     # unchanged
   main.js       # unchanged
-  config.js     # tuning constants (power durations, spawn densities), flags + per-locale
-                # strings (share template, gate hint copy), host-overridable
+  config.js     # flags + per-locale strings (share template; gate hints stay in
+                # gates.js — rule-coupled), host-overridable; §2 tuning constants stay
+                # in core.js (moving them is deferred until the balance settles)
   storage.js    # guarded facade: versioned `game:spirit-runner:save` (shards, unlocks,
-                # character, settings) + migrations + remote adapter slot
+                # character, settings) + migrations + remote adapter slot (created
+                # 2026-09-12, extracted from main.js)
 ```
 
 ### Why versioning matters here
@@ -252,11 +254,14 @@ copy but is a cache, not the source of truth.
 
 ### Phases
 
-- [x] R2-1 Persistence hygiene (2026-09-11): `config.js` (locale + reserved strings +
-      the host-injectable `remoteAdapter` seam; host-overridable) and the versioned save
-      (writes carry `version: 1`; load normalizes per field). **Deferred:** moving the
-      §2 tuning constants into `config.js` — they live in `core.js` and are imported by
-      every module; a dedicated pass when the balance settles. 42/42 tests green.
+- [x] R2-1 Persistence hygiene (2026-09-11; completed 2026-09-12): `config.js` (locale +
+      share template + the host-injectable `remoteAdapter` seam; host-overridable), the
+      versioned save extracted to `storage.js` (writes carry `version: 1`; load
+      normalizes per field), and the tall-guardian gap fixed per §2 (spawner emits
+      `h = GUARDIAN_TALL_H`; `obstacleBox` full-height jump-only branch). **Deferred:**
+      moving the §2 tuning constants into `config.js` — they live in `core.js` and are
+      imported by every module; a dedicated pass when the balance settles. Gate-hint
+      copy stays in `gates.js` (rule-coupled). 43/43 tests green.
 - [ ] R2-2 Async seeded-run challenge (`?seed=` + share template carrying it).
 - [ ] R2-3 Still owed from §9 Phase D: the balance pass and the owner's 10-minute
       manual session — unchanged by Rev 2.
