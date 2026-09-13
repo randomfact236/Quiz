@@ -1,5 +1,13 @@
 # Tic-Tac-Toe Enhancement Specifications
 
+> **STATUS (2026-09-13):** Item 3 DONE — already implemented: persistent
+> in-play badge (`#misere-badge`, toggled in `game.js`), scope suffix
+> "· misère", and round-end sub-line "O completed three in a row — misère
+> rules say that loses." Its copy is hardcoded like the game's other English
+> strings rather than config-sourced; accepted as-is. Items 1 (think-pulse)
+> and 2 (Hard-AI toast) OPEN. Name fix: misère logic is inline
+> (`state.misere` + `roundOutcome`), there is no `resolveMisere` function.
+
 ## Task: Three User-Friendliness Upgrades
 
 Add three user-friendliness upgrades to tic-tac-toe — clarity, onboarding, forgiveness. No changes to checkWinner, minimax, or the round/series model.

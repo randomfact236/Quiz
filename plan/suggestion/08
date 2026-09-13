@@ -1,5 +1,15 @@
 # Memory Quiz Enhancement Specifications
 
+> **STATUS (2026-09-13):** Task 1 (level ladder) is DONE — shipped in
+> commits `122c601` + `b09cc28` with a design that supersedes this spec:
+> 30 levels in 2×2/3×2/4×2 bands (not 15–20 on 3×2/4×3/5×4), stars derived
+> from hearts (`starsFor(heartsLost, cleared)` in core.js, not score
+> thresholds), APIs named `levelFor` / `levelUnlocked` / `nextLevelId` /
+> `lintLevels` in `data/levels.js`, save v2 migration in place. Canonical
+> doc: `plan/games/08-memory-quiz-upgrade.md`. Task 2 (Mystery Shuffle) is
+> OPEN — build it against the implemented APIs above, not this file's
+> Task 1 naming (`levelConfig` / `starsForScore` / `isLevelUnlocked`).
+
 ## Task 1: Level-Ladder System for Memory Quiz
 
 Add a level-ladder system to memory-quiz, separate from modes, per this contract:

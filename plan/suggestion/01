@@ -1,5 +1,12 @@
 # Tap-or-Don't-Tap Enhancement Specifications
 
+> **STATUS (2026-09-13):** All three items OPEN — nothing implemented yet.
+> Name fix for item 3: the outcome resolver is `resolveRound(spec, opts)` in
+> `tap-or-dont-tap/core.js` (not `resolveTap`); outcomes are
+> `hit | tap-red | tap-decoy | miss | decoy-ignored | resist`. Note there is
+> no "false start" outcome in the resolver — settle how "Too early!" maps
+> (or drop it) during implementation.
+
 ## Task: Three User-Friendliness Upgrades
 
 Add three user-friendliness upgrades to tap-or-dont-tap — accessibility, onboarding, loss clarity. No changes to the round loop, constants, or scoring.

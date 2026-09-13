@@ -1,5 +1,22 @@
 # Game Enhancement Specifications (Multi-Game)
 
+> **STATUS (2026-09-13):**
+> - **Sliding-Puzzle** — Items 1 (stage preview) and 3 (resume banner) are
+>   **PARKED**: the campaign/library/resume phases were never built (see
+>   `plan/games/03-sliding-puzzle.md`); no `levels.js`, `stageId`, or
+>   cross-session resume snapshot exists in `sliding-puzzle/`. Fold these two
+>   specs into that future build instead of implementing standalone. Item 2
+>   (one-swap-away nudge) is OPEN and implementable today.
+> - **Word-Puzzle** — Items 1–3 OPEN. Verified: `lineCells`, `starsFor`,
+>   theme-complete strings exist.
+> - **Flying-Snake** — Items 1–2 OPEN. Item 3 PARTIAL: the gameover card
+>   already shows "Reach {bronzeAt} for a 🥉" for sub-bronze scores
+>   (`main.js`, `noMedal` string); the remaining delta is the distance-to-
+>   *next-tier* hint for scores between tiers. Medal table matches spec
+>   (10/20/40/75).
+> - **Spirit-Runner** — Items 1–3 OPEN. Verified: `makeGate`, `hintFor`,
+>   `resolveChoice`, `ruleId` all exist as cited.
+
 ---
 
 ## Sliding-Puzzle Enhancements
