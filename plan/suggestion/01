@@ -1,11 +1,13 @@
 # Tap-or-Don't-Tap Enhancement Specifications
 
-> **STATUS (2026-09-13):** All three items OPEN — nothing implemented yet.
-> Name fix for item 3: the outcome resolver is `resolveRound(spec, opts)` in
-> `tap-or-dont-tap/core.js` (not `resolveTap`); outcomes are
-> `hit | tap-red | tap-decoy | miss | decoy-ignored | resist`. Note there is
-> no "false start" outcome in the resolver — settle how "Too early!" maps
-> (or drop it) during implementation.
+> **STATUS (2026-09-13): IMPLEMENTED** — all three items shipped
+> (commit `7eb296f`): colorblind shape cues on every flash (shape follows the
+> actual color, never the word), one-time tutorial toasts for decoy/Stroop/
+> swap via save v2 (`prefs.seenTutorials`, v1→v2 + legacy migrations), and
+> distinct loss-reason copy (`missedIt` / `wasRed` / `wasDecoy` / `stroopTrap`;
+> the old `tooSlow`/`stroopLie` keys were replaced). "Too early!" for false
+> starts already existed and was kept. Manual QA note for item 1: the ✓ / ✕ /
+> △ silhouettes are dark ink distinct by shape — grayscale-safe by design.
 
 ## Task: Three User-Friendliness Upgrades
 

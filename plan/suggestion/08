@@ -1,14 +1,17 @@
 # Memory Quiz Enhancement Specifications
 
-> **STATUS (2026-09-13):** Task 1 (level ladder) is DONE — shipped in
-> commits `122c601` + `b09cc28` with a design that supersedes this spec:
-> 30 levels in 2×2/3×2/4×2 bands (not 15–20 on 3×2/4×3/5×4), stars derived
-> from hearts (`starsFor(heartsLost, cleared)` in core.js, not score
-> thresholds), APIs named `levelFor` / `levelUnlocked` / `nextLevelId` /
-> `lintLevels` in `data/levels.js`, save v2 migration in place. Canonical
-> doc: `plan/games/08-memory-quiz-upgrade.md`. Task 2 (Mystery Shuffle) is
-> OPEN — build it against the implemented APIs above, not this file's
-> Task 1 naming (`levelConfig` / `starsForScore` / `isLevelUnlocked`).
+> **STATUS (2026-09-13): BOTH TASKS DONE.** Task 1 shipped earlier
+> (`122c601`/`b09cc28`) with a design that supersedes this file's naming:
+> 30 levels in 2×2/3×2/4×2 bands, stars from hearts (`starsFor`), APIs
+> `levelFor`/`levelUnlocked`/`nextLevelId` in `data/levels.js`, save v2.
+> Task 2 (Mystery Shuffle) shipped (`9649935`): `drawShuffleCards` in
+> `data/levels.js` samples 6 unique level×mode cards from unlocked levels
+> (deterministic rng); a shuffle screen flips cards permanently per session;
+> Play starts that level under the card mode's hearts + rules (host `shuffle`
+> mode in data/modes.js, `levelSource: 'campaign'` so results write to the
+> same `levels[id]` record); run end returns to the grid with refreshed
+> stars; zen cards no longer NaN the star calc. Canonical doc:
+> `plan/games/08-memory-quiz-upgrade.md`.
 
 ## Task 1: Level-Ladder System for Memory Quiz
 

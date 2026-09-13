@@ -1,21 +1,27 @@
 # Game Enhancement Specifications (Multi-Game)
 
-> **STATUS (2026-09-13):**
-> - **Sliding-Puzzle** — Items 1 (stage preview) and 3 (resume banner) are
->   **PARKED**: the campaign/library/resume phases were never built (see
->   `plan/games/03-sliding-puzzle.md`); no `levels.js`, `stageId`, or
->   cross-session resume snapshot exists in `sliding-puzzle/`. Fold these two
->   specs into that future build instead of implementing standalone. Item 2
->   (one-swap-away nudge) is OPEN and implementable today.
-> - **Word-Puzzle** — Items 1–3 OPEN. Verified: `lineCells`, `starsFor`,
->   theme-complete strings exist.
-> - **Flying-Snake** — Items 1–2 OPEN. Item 3 PARTIAL: the gameover card
->   already shows "Reach {bronzeAt} for a 🥉" for sub-bronze scores
->   (`main.js`, `noMedal` string); the remaining delta is the distance-to-
->   *next-tier* hint for scores between tiers. Medal table matches spec
->   (10/20/40/75).
-> - **Spirit-Runner** — Items 1–3 OPEN. Verified: `makeGate`, `hintFor`,
->   `resolveChoice`, `ruleId` all exist as cited.
+> **STATUS (2026-09-13): IMPLEMENTED** (except the two parked sliding-puzzle
+> items below).
+> - **Sliding-Puzzle** — Item 2 shipped (`673c11b`): `oneSwapFromSolved` in
+>   core.js drives a one-time-per-round "So close! One swap away." banner on
+>   illegal moves, numbers mode only. Items 1 (stage preview) and 3 (resume
+>   banner) remain **PARKED** until the campaign/resume phases are actually
+>   built (no `levels.js`/`stageId`/cross-session snapshot exists) — fold
+>   them into that future build.
+> - **Word-Puzzle** — Items 1–3 shipped (`25a754e`): live invalid-direction
+>   drag state via the same `lineCells` call as release-time, first-hint
+>   star-cost toast (session flag), and a theme-complete strip powered by
+>   core.js `themeSummary` (other themes ×/9, tap = first unsolved level).
+> - **Flying-Snake** — Items 1–3 shipped (`0bd77c5`): sub-15%-of-gap passes
+>   flash the score gold + viewport edge glow + sparkle blip (no score
+>   change), ready hint swaps to "Beat {best}?" from the third run's ready
+>   screen (session counter), gameover names the distance to the next medal
+>   tier (core.js `nextMedalFor`; sub-bronze keeps the existing line,
+>   platinum shows nothing extra).
+> - **Spirit-Runner** — Items 1–3 shipped (`ccb47cf`): persistent rule-name
+>   tag under the hint banner (gates.js `ruleLabel`), non-blocking post-gate
+>   announce naming the rule's answer (gates.js `answerLine`, 10 cases), and
+>   a first-entry-per-run "Survive for a shard" line under the countdown.
 
 ---
 
