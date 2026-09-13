@@ -619,19 +619,25 @@ a:focus-visible,
   left: 50%;
   bottom: 1.25rem;
   transform: translate(-50%, 200%);
+  /* parked fully out of sight — the % translate resolves against the content
+     box, so the padded pill otherwise peeks above the bottom edge */
+  opacity: 0;
   background: var(--text);
   color: var(--card);
   font-size: 0.8125rem;
   font-weight: 600;
   padding: 0.5rem 0.9rem;
   border-radius: 999px;
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
   pointer-events: none;
   z-index: 10;
 }
 
 .toast--in {
   transform: translate(-50%, 0);
+  opacity: 1;
 }
 
 /* ---- small viewports --------------------------------------------------------------- */

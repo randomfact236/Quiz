@@ -688,18 +688,26 @@ button:focus-visible {
   left: 50%;
   bottom: 1.25rem;
   transform: translate(-50%, 200%);
+  /* parked fully out of sight — the % translate resolves against the content
+     box, so the padded pill otherwise peeks above the bottom edge */
+  opacity: 0;
+  pointer-events: none;
   background: var(--text);
   color: var(--bg-a);
   border-radius: 999px;
   padding: 0.55rem 1rem;
   font-size: 0.875rem;
   font-weight: 600;
-  transition: transform 220ms ease;
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease;
   z-index: 50;
 }
 
 .toast--in {
   transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
