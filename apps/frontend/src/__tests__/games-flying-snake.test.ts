@@ -25,15 +25,20 @@ import {
   gapForScore,
   groundY,
   hitRadius,
+  isNearMiss,
   makePipe,
   medalFor,
   nextGap,
+  nextMedalFor,
+  passClearance,
   pipePassed,
+  readyHintKind,
   pipeRects,
   snakeHit,
   snakeX,
   stepSnake,
   tiltFor,
+  NEAR_MISS_FRACTION,
 } from '../../public/games/flying-snake/core';
 import { shareText } from '../../public/games/flying-snake/main';
 
@@ -371,5 +376,58 @@ describe('shareText (plan §9 P2 format)', () => {
     expect(shareText(12, 'http://x/y')).toBe(
       'Flew through 12 gaps in Flying Snake — beat that! http://x/y'
     );
+  });
+});
+
+describe('near-miss clearance (suggestion 03 item 1)', () => {
+  const gap = 170;
+  const centerY = groundY() / 2;
+  const pipe = makePipe(200, gap, centerY);
+
+  it('dead-center threading is not a near-miss', () => {
+    const snake = { y: centerY, elapsed: 1, vy: 0 };
+    expect(isNearMiss(snake, pipe)).toBe(false);
+    expect(passClearance(snake, pipe)).toBeGreaterThan(gap * NEAR_MISS_FRACTION);
+  });
+
+  it('hugging a vine edge reads as a near-miss', () => {
+    // sit just outside the hit circle of the top vine's gap edge
+    const edgeY = centerY - gap / 2 + hitRadius() + gap * NEAR_MISS_FRACTION * 0.5;
+    const snake = { y: edgeY, elapsed: 1, vy: 0 };
+    expect(isNearMiss(snake, pipe)).toBe(true);
+    expect(passClearance(snake, pipe)).toBeLessThan(gap * NEAR_MISS_FRACTION);
+  });
+
+  it('threshold is a fraction of the CURRENT gap, not a flat px value', () => {
+    const tight = makePipe(200, GAP_MIN, centerY); // 120 px gap at high scores
+    const snake = { y: centerY, elapsed: 1, vy: 0 };
+    expect(isNearMiss(snake, tight)).toBe(false);
+    const nearTightEdge = centerY - GAP_MIN / 2 + hitRadius() + GAP_MIN * NEAR_MISS_FRACTION * 0.5;
+    expect(isNearMiss({ y: nearTightEdge, elapsed: 1, vy: 0 }, tight)).toBe(true);
+  });
+});
+
+describe('nextMedalFor (distance to the next tier, suggestion 03 item 3)', () => {
+  it('returns the tier above the score with the points still missing', () => {
+    expect(nextMedalFor(0)).toEqual({ medal: 'bronze', remaining: 10 });
+    expect(nextMedalFor(8)).toEqual({ medal: 'bronze', remaining: 2 });
+    expect(nextMedalFor(10)).toEqual({ medal: 'silver', remaining: 10 });
+    expect(nextMedalFor(19)).toEqual({ medal: 'silver', remaining: 1 });
+    expect(nextMedalFor(39)).toEqual({ medal: 'gold', remaining: 1 });
+    expect(nextMedalFor(74)).toEqual({ medal: 'platinum', remaining: 1 });
+  });
+
+  it('returns null once platinum is reached (no hint beyond the top)', () => {
+    expect(nextMedalFor(75)).toBeNull();
+    expect(nextMedalFor(200)).toBeNull();
+  });
+});
+
+describe('readyHintKind (run-count boundary, suggestion 03 item 2)', () => {
+  it('plain instruction for the first two runs, challenge from the third', () => {
+    expect(readyHintKind(0)).toBe('plain');
+    expect(readyHintKind(1)).toBe('plain');
+    expect(readyHintKind(2)).toBe('challenge');
+    expect(readyHintKind(9)).toBe('challenge');
   });
 });

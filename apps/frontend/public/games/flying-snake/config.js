@@ -32,6 +32,8 @@ const DEFAULT_CONFIG = {
       // Gameover line for a run with no medal; {bronzeAt} is core.js's
       // MEDAL_THRESHOLDS.bronze.
       noMedal: 'Reach {bronzeAt} for a 🥉 medal',
+      // Distance to the next tier above a medal already earned (suggestion 03).
+      nextMedal: '{n} more for {medal}!',
     },
   },
 };

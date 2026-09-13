@@ -211,3 +211,51 @@ export function medalFor(score) {
   }
   return null;
 }
+
+/* ---- suggestion 03: near-miss, ready momentum, medal progress --------------- */
+
+/** Distance from the circle center to the nearest point of the rect. */
+export function circleRectDist(cx, cy, rect) {
+  const nx = Math.max(rect.x, Math.min(cx, rect.x + rect.w));
+  const ny = Math.max(rect.y, Math.min(cy, rect.y + rect.h));
+  return Math.hypot(cx - nx, cy - ny);
+}
+
+/** A pass under this fraction of the gap height counts as a near-miss. */
+export const NEAR_MISS_FRACTION = 0.15;
+
+/**
+ * Clearance between the hitbox circle and both vines, read at the pass
+ * moment (the same circleRectHit inputs, distance instead of boolean).
+ */
+export function passClearance(snake, pipe) {
+  const rects = pipeRects(pipe);
+  const dTop = circleRectDist(snakeX(), snake.y, rects[0]) - hitRadius();
+  const dBottom = circleRectDist(snakeX(), snake.y, rects[1]) - hitRadius();
+  return Math.min(dTop, dBottom);
+}
+
+/** True when the pass threaded the gap by under `fraction` of its height. */
+export function isNearMiss(snake, pipe, fraction = NEAR_MISS_FRACTION) {
+  return passClearance(snake, pipe) < pipe.gap * fraction;
+}
+
+/**
+ * Next medal tier above `score` with the points still missing — null at or
+ * above platinum (there is no tier beyond the top).
+ */
+export function nextMedalFor(score) {
+  for (const [medal, min] of Object.entries(MEDAL_THRESHOLDS)) {
+    if (score < min) return { medal, remaining: min - score };
+  }
+  return null;
+}
+
+/**
+ * Ready-hint selection (suggestion 03 item 2): the plain instructional hint
+ * covers exactly the first two runs; from the third run's ready screen on,
+ * the hint pulls from the player's own best. Session-scoped run count.
+ */
+export function readyHintKind(completedRuns) {
+  return completedRuns >= 2 ? 'challenge' : 'plain';
+}

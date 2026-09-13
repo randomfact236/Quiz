@@ -263,13 +263,36 @@ function drawScore(ctx, s) {
   ctx.lineWidth = 9;
   ctx.lineJoin = 'round';
   ctx.strokeStyle = 'rgba(15,45,25,0.75)';
+  // A threaded-by-a-hair pass flashes the score gold with a glow instead of
+  // plain white (suggestion 03 item 1).
+  if (s.nearMiss > 0) {
+    ctx.shadowColor = 'rgba(255, 215, 0, ' + Math.min(1, s.nearMiss).toFixed(3) + ')';
+    ctx.shadowBlur = 26 * s.nearMiss;
+  }
   ctx.strokeText(String(s.score), 0, 0);
-  ctx.fillStyle = '#fff';
+  ctx.fillStyle = s.nearMiss > 0 ? '#ffd700' : '#fff';
   ctx.fillText(String(s.score), 0, 0);
   ctx.restore();
 }
 
-function drawHint(ctx, t) {
+/** Quick gold edge glow around the viewport after a near-miss pass. */
+function drawNearMissGlow(ctx, s) {
+  if (!(s.nearMiss > 0)) return;
+  const glow = ctx.createRadialGradient(
+    VIEW_W / 2,
+    VIEW_H / 2,
+    VIEW_H * 0.35,
+    VIEW_W / 2,
+    VIEW_H / 2,
+    VIEW_H * 0.72
+  );
+  glow.addColorStop(0, 'rgba(255,215,0,0)');
+  glow.addColorStop(1, 'rgba(255,215,0,' + (0.28 * s.nearMiss).toFixed(3) + ')');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+}
+
+function drawHint(ctx, t, text) {
   const pulse = 0.65 + 0.35 * Math.sin(t * 3.4);
   ctx.save();
   ctx.globalAlpha = pulse;
@@ -279,9 +302,9 @@ function drawHint(ctx, t) {
   ctx.lineWidth = 7;
   ctx.lineJoin = 'round';
   ctx.strokeStyle = 'rgba(15,45,25,0.7)';
-  ctx.strokeText('Tap to flap', VIEW_W / 2, VIEW_H * 0.6);
+  ctx.strokeText(text, VIEW_W / 2, VIEW_H * 0.6);
   ctx.fillStyle = '#fff';
-  ctx.fillText('Tap to flap', VIEW_W / 2, VIEW_H * 0.6);
+  ctx.fillText(text, VIEW_W / 2, VIEW_H * 0.6);
   // little up arrow under the text
   ctx.beginPath();
   ctx.moveTo(VIEW_W / 2, VIEW_H * 0.6 + 58);
@@ -324,7 +347,7 @@ function drawDebug(ctx, s) {
 /**
  * Draw one frame. `s` carries the scene state main.js assembled:
  * { mode, snakeY, snakeVy, trail, pipes, score, worldX, t, flash,
- *   shake: {x, y}, scorePop, debug }
+ *   shake: {x, y}, scorePop, nearMiss, hintText, debug }
  * Modes: 'menu' | 'ready' | 'playing' | 'dying' | 'paused' | 'gameover'.
  */
 export function drawScene(ctx, s) {
@@ -337,8 +360,9 @@ export function drawScene(ctx, s) {
   drawVines(ctx, s.pipes);
   drawGround(ctx, s.worldX);
   drawSnake(ctx, s);
+  drawNearMissGlow(ctx, s);
   if (s.mode === 'playing' || s.mode === 'dying') drawScore(ctx, s);
-  if (s.mode === 'ready') drawHint(ctx, s.t);
+  if (s.mode === 'ready') drawHint(ctx, s.t, s.hintText || 'Tap to flap');
   if (s.flash > 0) {
     ctx.fillStyle = 'rgba(255,255,255,' + s.flash.toFixed(3) + ')';
     ctx.fillRect(-20, -20, VIEW_W + 40, VIEW_H + 40);

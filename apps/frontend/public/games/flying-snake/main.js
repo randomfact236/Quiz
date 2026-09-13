@@ -24,10 +24,13 @@ import {
   createSpawner,
   groundY,
   hitRadius,
+  isNearMiss,
   makePipe,
   medalFor,
   nextGap,
+  nextMedalFor,
   pipePassed,
+  readyHintKind,
   snakeHit,
   stepSnake,
 } from './core.js';
@@ -120,6 +123,8 @@ const state = {
   flapQueue: 0, // taps buffered for the fixed-step loop
   deathAt: 0, // seconds — flash + shake anchor
   scorePopAt: -10,
+  nearMissAt: -10, // seconds — gold glow anchor for a threaded-by-a-hair pass
+  runsFinished: 0, // session counter — drives the ready-hint swap (suggestion 03)
   muted: false,
 };
 
@@ -128,6 +133,7 @@ const TRAIL_DT = 0.04; // sample a body segment every 40 ms
 const FLASH_S = 0.12; // white flash length (plan §2)
 const SHAKE_S = 0.3; // screen shake length (plan §2)
 const DEATH_MAX_S = 0.9; // fall animation cap before the gameover card
+const NEAR_MISS_S = 0.35; // gold "close one" glow decay (suggestion 03)
 
 const els = {};
 let canvas = null;
@@ -205,14 +211,28 @@ function die() {
 
 function gameOver() {
   state.mode = 'gameover';
+  state.runsFinished += 1;
   const newBest = state.score > 0 && saveBest(state.score);
   const best = loadBest();
   const medal = medalFor(state.score);
+  // Distance to the NEXT tier (suggestion 03 item 3) — the bronze line below
+  // already covers sub-bronze scores; nothing extra once platinum is reached.
+  const next = nextMedalFor(state.score);
   els.overScore.textContent = String(state.score);
   els.badgeNew.classList.toggle('hidden', !newBest);
   els.overBest.textContent = 'Best ' + (best ? best.score : state.score);
   els.overMedal.textContent = medal
-    ? medalEmoji(medal) + ' ' + medalName(medal) + ' medal'
+    ? medalEmoji(medal) +
+      ' ' +
+      medalName(medal) +
+      ' medal' +
+      (next
+        ? ' · ' +
+          t('nextMedal', {
+            n: next.remaining,
+            medal: medalEmoji(next.medal) + ' ' + medalName(next.medal),
+          })
+        : '')
     : t('noMedal', { bronzeAt: MEDAL_THRESHOLDS.bronze });
   if (newBest) {
     blip(523, 90, 'triangle', 0.25);
@@ -254,6 +274,12 @@ function update(dt) {
         state.scorePopAt = clockNow;
         blip(880, 70, 'triangle');
         if (state.score % 10 === 0) blip(1174, 90, 'triangle', 0.07);
+        // Threaded by a hair (suggestion 03 item 1) — a gold "close one" cue;
+        // visual/audio polish only, no score bonus.
+        if (isNearMiss(state.snake, pipe)) {
+          state.nearMissAt = clockNow;
+          blip(1318, 90, 'triangle', 0.05);
+        }
       }
     }
     const hit = snakeHit(state.snake, state.pipes);
@@ -314,6 +340,14 @@ function fitCanvas() {
   }
 }
 
+/** The ready hint (suggestion 03 item 2): plain instruction for the first
+ *  two runs, then a momentum pull from the player's own best. */
+function readyHintText() {
+  if (readyHintKind(state.runsFinished) !== 'challenge') return 'Tap to flap';
+  const best = loadBest();
+  return best && best.score > 0 ? 'Beat ' + best.score + '? Tap to flap' : 'Tap to flap';
+}
+
 function draw(t) {
   fitCanvas();
   ctx.setTransform(canvas.width / VIEW_W, 0, 0, canvas.height / VIEW_H, 0, 0);
@@ -336,6 +370,9 @@ function draw(t) {
   // score pop: 1 + 0.35 decaying over 180 ms after the last point
   const sincePop = t - state.scorePopAt;
   const scorePop = 1 + 0.35 * Math.max(0, 1 - sincePop / 0.18);
+  // near-miss gold glow: 1 → 0 over 350 ms after a threaded pass
+  const sinceNear = t - state.nearMissAt;
+  const nearMiss = Math.max(0, 1 - sinceNear / NEAR_MISS_S);
 
   drawScene(ctx, {
     mode: state.mode,
@@ -349,6 +386,8 @@ function draw(t) {
     flash,
     shake,
     scorePop,
+    nearMiss,
+    hintText: readyHintText(),
     debug,
   });
 }
