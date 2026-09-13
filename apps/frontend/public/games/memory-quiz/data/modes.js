@@ -43,6 +43,10 @@ export const MODES = {
     hearts: 3,
     rules: { questionS: 5, timeBonusPerSecond: 5 },
   },
+  // Mystery Mix host mode (suggestion 08 task 2) — never a menu chip: a card
+  // plays ONE level (campaign source → level-clear + stars to levels[id])
+  // with the card's own mode carrying hearts + rule twists.
+  shuffle: { id: 'shuffle', label: 'Mystery Mix', levelSource: 'campaign', hearts: 3 },
 };
 
 /** Menu chip order — the seeded daily keeps its dedicated button instead. */

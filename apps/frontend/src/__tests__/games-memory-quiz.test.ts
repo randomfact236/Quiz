@@ -30,6 +30,7 @@ import {
 import { PACKS } from '../../public/games/memory-quiz/data/packs';
 import {
   LEVELS,
+  drawShuffleCards,
   levelFor,
   levelUnlocked,
   lintLevels,
@@ -218,6 +219,45 @@ describe('level ladder (data/levels.js)', () => {
 /* ==========================================================================
  * Question-type registry + composer (Phase B)
  * ========================================================================== */
+
+describe('Mystery Mix draw (data/levels.js drawShuffleCards, suggestion 08 task 2)', () => {
+  it('draws the requested count of unique level×mode cards as pure data', () => {
+    const hand = drawShuffleCards(MODE_ORDER, {}, { count: 6, rng: mulberry32(7) });
+    expect(hand).toHaveLength(6);
+    expect(new Set(hand.map((c) => c.cardId)).size).toBe(6); // no duplicates
+    for (const card of hand) {
+      expect(card.cardId).toBe(card.levelId + ':' + card.modeId);
+      expect(MODE_ORDER).toContain(card.modeId);
+      expect(LEVELS.some((l) => l.id === card.levelId)).toBe(true);
+    }
+  });
+
+  it('only draws from unlocked levels', () => {
+    const records = { l01: { best: { score: 100, bestStreak: 2 }, stars: 1, clears: 1 } };
+    for (let seed = 0; seed < 20; seed++) {
+      const hand = drawShuffleCards(MODE_ORDER, records, { count: 6, rng: mulberry32(seed) });
+      for (const card of hand) expect(['l01', 'l02']).toContain(card.levelId);
+    }
+  });
+
+  it('caps the draw at the available combos (no placeholders, no error)', () => {
+    // fresh save: exactly one unlocked level × 6 modes = 6 combos
+    const hand = drawShuffleCards(MODE_ORDER, {}, { count: 6, rng: mulberry32(1) });
+    expect(hand).toHaveLength(6);
+    expect(hand.every((c) => c.levelId === 'l01')).toBe(true);
+    expect(new Set(hand.map((c) => c.modeId))).toEqual(new Set(MODE_ORDER));
+    // fewer modes available than requested → still exactly what exists
+    const tight = drawShuffleCards(['zen'], {}, { count: 6, rng: mulberry32(1) });
+    expect(tight).toHaveLength(1);
+    expect(tight[0]).toMatchObject({ levelId: 'l01', modeId: 'zen' });
+  });
+
+  it('is deterministic for a given rng stream and defaults count to 6', () => {
+    const a = drawShuffleCards(MODE_ORDER, {}, { rng: mulberry32(99) });
+    const b = drawShuffleCards(MODE_ORDER, {}, { count: 6, rng: mulberry32(99) });
+    expect(a).toEqual(b);
+  });
+});
 
 describe('question-type registry (data/questions.js)', () => {
   it('exposes the four shipped types with valid metadata', () => {

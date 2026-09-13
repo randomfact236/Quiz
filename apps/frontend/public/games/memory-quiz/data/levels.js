@@ -21,7 +21,7 @@
  * share text reference them, never array positions.
  * ============================================================================
  */
-import { MEMORIZE_FLOOR_S, QUESTION_FLOOR_S, MAX_CELLS, spareNeed } from '../core.js';
+import { MEMORIZE_FLOOR_S, QUESTION_FLOOR_S, MAX_CELLS, sampleWith, spareNeed } from '../core.js';
 import { QUESTION_TYPES } from './questions.js';
 
 /**
@@ -642,4 +642,24 @@ export function levelUnlocked(level, records, opts = {}) {
   if (!level.unlock) return true;
   const stars = (records[level.unlock.levelId] && records[level.unlock.levelId].stars) || 0;
   return stars >= (level.unlock.stars || 1);
+}
+
+/**
+ * Mystery Mix draw (suggestion 08 task 2): `count` cards sampled WITHOUT
+ * replacement from unlocked levels × the given mode ids. Cards are pure
+ * data — `{ cardId, levelId, modeId }`; playing one writes to the same
+ * levels[id] record as campaign play. `levelId:modeId` pairs are unique by
+ * construction (the product has no duplicates to reroll), sampleWith caps
+ * the draw at what exists, and a fresh draw on re-entry naturally excludes
+ * levels unlocked mid-session. Deterministic given `rng`.
+ */
+export function drawShuffleCards(modes, records, { count = 6, rng = Math.random, opts = {} } = {}) {
+  const combos = [];
+  for (const level of LEVELS) {
+    if (!levelUnlocked(level, records, opts)) continue;
+    for (const modeId of modes) {
+      combos.push({ cardId: level.id + ':' + modeId, levelId: level.id, modeId });
+    }
+  }
+  return sampleWith(rng, combos, count);
 }

@@ -33,7 +33,14 @@ import {
   starsFor,
 } from './core.js';
 import { QUESTION_TYPES } from './data/questions.js';
-import { LEVELS, levelFor, levelUnlocked, lintLevels, nextLevelId } from './data/levels.js';
+import {
+  LEVELS,
+  drawShuffleCards,
+  levelFor,
+  levelUnlocked,
+  lintLevels,
+  nextLevelId,
+} from './data/levels.js';
 import { MODES, MODE_ORDER, modeById, rulesFor } from './data/modes.js';
 import { PACKS, DEFAULT_PACK_ID, packById } from './data/packs.js';
 import { blip, ensureAudio, setMuted } from './audio.js';
@@ -55,17 +62,18 @@ import { GAME_CONFIG, t } from './config.js';
  * ======================================================================= */
 
 const state = {
-  screen: 'menu', // menu | play
+  screen: 'menu', // menu | play | shuffle
   paused: false,
   phase: 'idle', // idle | memorize | question | feedback | blank | gameover
   phaseLeft: 0, // ms remaining in the current phase
   phaseTotal: 0, // ms the phase started with (ring fraction)
-  mode: 'campaign', // campaign | endless | zen | hard | kids | timeAttack | daily
+  mode: 'campaign', // campaign | endless | zen | hard | kids | timeAttack | daily | shuffle
   modePref: 'campaign', // menu selection (persisted)
   selectedLevelId: 'l01', // campaign tile selection (persisted)
-  levelId: null, // the level being played (campaign)
+  levelId: null, // the level being played (campaign / shuffle card)
   level: null, // active level spec
   effectiveLevel: null, // level spec with the mode's rules merged in
+  shuffleCard: null, // { cardId, levelId, modeId } while a Mystery Mix card is played
   position: 1, // 1-based ladder position (ladder modes)
   questionWindowS: 10,
   board: null, // { cells, items, pack } from buildBoard
@@ -81,6 +89,12 @@ const state = {
   muted: false,
   lastPointerAt: 0, // 50 ms double-tap debounce (plan §7.5)
 };
+
+// Mystery Mix session (suggestion 08 task 2): one draw per menu entry, held
+// in memory — returning from a run re-renders it (stars refreshed), only a
+// fresh entry from the menu re-draws.
+let shuffleDraw = [];
+const shuffleRevealed = new Set();
 
 const els = {};
 let cellEls = [];
@@ -158,6 +172,7 @@ function showScreen(name) {
   state.screen = name;
   els.screenMenu.classList.toggle('screen--active', name === 'menu');
   els.screenPlay.classList.toggle('screen--active', name === 'play');
+  els.screenShuffle.classList.toggle('screen--active', name === 'shuffle');
   if (name === 'menu') {
     stopTicker();
     state.paused = false;
@@ -166,6 +181,7 @@ function showScreen(name) {
     renderMenuBests();
     renderDaily();
   }
+  if (name === 'shuffle') renderShuffle();
 }
 
 function renderHearts() {
@@ -215,16 +231,21 @@ function announce(message) {
 /**
  * Start a run. Campaign plays the level `levelId` (one board); ladder modes
  * climb from level 1; daily replays today's seeded board (Snacks, fixed —
- * deterministic for everyone, plan §2).
+ * deterministic for everyone, plan §2); shuffle plays one Mystery Mix card:
+ * a specific level under the card mode's hearts + rules (suggestion 08).
  */
-function startRun(modeId, levelId) {
+function startRun(modeId, levelId, shuffleCard = null) {
   const mode = modeById(modeId);
   state.mode = mode.id;
-  state.levelId = mode.levelSource === 'campaign' ? levelId || state.selectedLevelId : null;
+  state.shuffleCard = mode.id === 'shuffle' && shuffleCard ? shuffleCard : null;
+  // A card's own mode carries the hearts (hard card = 1 heart, zen = no fail).
+  const heartsMode = state.shuffleCard ? modeById(state.shuffleCard.modeId) : mode;
+  state.levelId =
+    mode.levelSource === 'campaign' || state.shuffleCard ? levelId || state.selectedLevelId : null;
   state.pack = isDaily() ? packById(DEFAULT_PACK_ID) : state.pack;
   state.position = 1;
-  state.maxHearts = mode.hearts;
-  state.hearts = mode.hearts;
+  state.maxHearts = heartsMode.hearts;
+  state.hearts = heartsMode.hearts;
   state.score = 0;
   state.streak = 0;
   state.bestStreak = 0;
@@ -244,7 +265,15 @@ function startBoard() {
   } else {
     state.level = levelFor(state.position, 'ladder');
   }
-  state.effectiveLevel = { ...state.level, rules: rulesFor(mode, state.level) };
+  // A Mystery Mix card merges its own mode's rules too (card mode wins —
+  // e.g. a time-attack card tightens the window on any level).
+  const cardMode = state.shuffleCard ? modeById(state.shuffleCard.modeId) : null;
+  state.effectiveLevel = {
+    ...state.level,
+    rules: cardMode
+      ? { ...(state.level.rules || {}), ...(cardMode.rules || {}), ...(mode.rules || {}) }
+      : rulesFor(mode, state.level),
+  };
   state.questionWindowS = state.effectiveLevel.rules.questionS || state.level.questionS;
 
   const seed = isDaily()
@@ -617,8 +646,9 @@ function showLevelClear() {
   state.phase = 'gameover';
   stopTicker();
   hideCandidates();
-  const mode = activeMode();
-  const heartsLost = mode.hearts - state.hearts;
+  // Stars count the hearts the run STARTED with (a shuffle card's mode may
+  // carry fewer) — and no-fail modes (zen) have none to lose: 0 lost.
+  const heartsLost = Number.isFinite(state.maxHearts) ? state.maxHearts - state.hearts : 0;
   const stars = starsFor(heartsLost, true);
   const { record, newBest, newStars } = saveLevelResult(
     state.levelId,
@@ -635,10 +665,12 @@ function showLevelClear() {
   els.badgeLevelStars.classList.toggle('hidden', !newStars);
   els.clearBest.textContent =
     'Level best ' + record.best.score + ' · best streak ' + record.best.bestStreak;
-  const nextId = nextLevelId(state.levelId);
+  const onShuffleCard = state.mode === 'shuffle';
+  const nextId = onShuffleCard ? null : nextLevelId(state.levelId);
   els.btnNext.classList.toggle('hidden', !nextId);
+  els.btnCards.classList.toggle('hidden', !onShuffleCard);
   openOverlay('levelclear');
-  (nextId ? els.btnNext : els.btnRetry2).focus();
+  (nextId ? els.btnNext : onShuffleCard ? els.btnCards : els.btnRetry2).focus();
   blip(523, 90, 'triangle', 0);
   blip(659, 90, 'triangle', 0.1);
   blip(784, 160, 'triangle', 0.2);
@@ -674,6 +706,7 @@ function showGameover() {
   els.badgeTop.textContent = 'Top ' + pct + '%';
   els.badgeTop.classList.remove('hidden');
   els.goBest.textContent = 'Best score ' + best.score + ' · best streak ' + best.bestStreak;
+  els.btnCards2.classList.toggle('hidden', state.mode !== 'shuffle');
   openOverlay('gameover');
   els.btnAgain.focus();
   blip(392, 110);
@@ -948,14 +981,84 @@ function handleKeys(e) {
   }
 }
 
-/** Replay exactly what is on screen (campaign level / daily / ladder run). */
+/** Replay exactly what is on screen (campaign level / daily / ladder / card). */
 function replayCurrent() {
-  startRun(state.mode, state.levelId || state.selectedLevelId);
+  startRun(state.mode, state.levelId || state.selectedLevelId, state.shuffleCard);
+}
+
+/* ==========================================================================
+ * 7½. Mystery Mix (suggestion 08 task 2)
+ * ======================================================================= */
+
+/** Fresh entry from the menu: re-draw the hand, forget any reveals. */
+function enterShuffle() {
+  const records = loadLevelRecords();
+  const opts = { unlockAll: !!GAME_CONFIG.flags.unlockAll, grants: GAME_CONFIG.grants };
+  shuffleDraw = drawShuffleCards(MODE_ORDER, records, { count: 6, opts });
+  shuffleRevealed.clear();
+  showScreen('shuffle');
+}
+
+function renderShuffle() {
+  els.shuffleGrid.innerHTML = '';
+  els.shuffleTagline.textContent =
+    shuffleDraw.length === 0
+      ? 'Unlock a level or two, then come back for a mix.'
+      : shuffleDraw.length + ' cards · flip as many as you like — no limits, no timer.';
+  const records = loadLevelRecords();
+  for (const card of shuffleDraw) {
+    const level = LEVELS.find((l) => l.id === card.levelId);
+    const cardMode = modeById(card.modeId);
+    const open = shuffleRevealed.has(card.cardId);
+    const cardEl = document.createElement(open ? 'div' : 'button');
+    if (!open) {
+      cardEl.type = 'button';
+      cardEl.className = 'shuffle-card';
+      cardEl.textContent = '🂠';
+      cardEl.setAttribute('aria-label', 'Mystery card — tap to flip');
+      cardEl.addEventListener('click', () => {
+        shuffleRevealed.add(card.cardId);
+        blip(480, 40);
+        renderShuffle();
+      });
+    } else {
+      cardEl.className = 'shuffle-card shuffle-card--open';
+      const levelEl = document.createElement('span');
+      levelEl.className = 'sc-level';
+      levelEl.textContent = String(LEVELS.indexOf(level) + 1);
+      const modeEl = document.createElement('span');
+      modeEl.className = 'sc-mode';
+      modeEl.textContent = cardMode.label;
+      const stars = (records[card.levelId] && records[card.levelId].stars) || 0;
+      const starsEl = document.createElement('span');
+      starsEl.className = 'sc-stars';
+      starsEl.textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+      starsEl.setAttribute('aria-label', stars + ' of 3 stars');
+      const play = document.createElement('button');
+      play.type = 'button';
+      play.className = 'primary sc-play';
+      play.textContent = '▶ Play';
+      play.setAttribute(
+        'aria-label',
+        'Play level ' + (LEVELS.indexOf(level) + 1) + ', ' + cardMode.label
+      );
+      play.addEventListener('click', () => {
+        ensureAudio();
+        startRun('shuffle', card.levelId, card);
+      });
+      cardEl.appendChild(levelEl);
+      cardEl.appendChild(modeEl);
+      cardEl.appendChild(starsEl);
+      cardEl.appendChild(play);
+    }
+    els.shuffleGrid.appendChild(cardEl);
+  }
 }
 
 function init() {
   els.screenMenu = document.getElementById('screen-menu');
   els.screenPlay = document.getElementById('screen-play');
+  els.screenShuffle = document.getElementById('screen-shuffle');
   els.board = document.getElementById('board');
   els.candidates = document.getElementById('candidates');
   els.playStatus = document.getElementById('play-status');
@@ -974,6 +1077,8 @@ function init() {
   els.menuBest = document.getElementById('menu-best');
   els.dailySub = document.getElementById('daily-sub');
   els.btnDaily = document.getElementById('btn-daily');
+  els.shuffleGrid = document.getElementById('shuffle-grid');
+  els.shuffleTagline = document.getElementById('shuffle-tagline');
   els.overlayFeedback = document.getElementById('overlay-feedback');
   els.feedbackCard = document.getElementById('feedback-card');
   els.overlayPause = document.getElementById('overlay-pause');
@@ -986,6 +1091,8 @@ function init() {
   els.badgeLevelBest = document.getElementById('badge-levelbest');
   els.badgeLevelStars = document.getElementById('badge-levelstars');
   els.btnNext = document.getElementById('btn-next');
+  els.btnCards = document.getElementById('btn-cards');
+  els.btnCards2 = document.getElementById('btn-cards2');
   els.goStats = document.getElementById('go-stats');
   els.goBest = document.getElementById('go-best');
   els.badgeBest = document.getElementById('badge-best');
@@ -1037,6 +1144,13 @@ function init() {
     ensureAudio();
     startRun('daily');
   });
+  document.getElementById('btn-shuffle').addEventListener('click', () => {
+    ensureAudio();
+    enterShuffle();
+  });
+  document.getElementById('btn-shuffle-menu').addEventListener('click', () => showScreen('menu'));
+  els.btnCards.addEventListener('click', () => showScreen('shuffle'));
+  els.btnCards2.addEventListener('click', () => showScreen('shuffle'));
   document.getElementById('btn-menu').addEventListener('click', () => showScreen('menu'));
   document.getElementById('btn-pause').addEventListener('click', pauseGame);
   els.btnResume.addEventListener('click', resumeGame);

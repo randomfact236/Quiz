@@ -69,10 +69,24 @@
         </div>
 
         <button type="button" class="primary" id="btn-start">▶ Start</button>
+        <button type="button" class="daily" id="btn-shuffle">
+          <span class="daily-title">🃏 Mystery Mix</span>
+          <span class="daily-sub">Six mystery cards from your unlocked levels</span>
+        </button>
         <button type="button" class="daily" id="btn-daily">
           <span class="daily-title">📅 Daily memory quiz</span>
           <span class="daily-sub" id="daily-sub"></span>
         </button>
+      </section>
+
+      <!-- ============================ MYSTERY MIX ============================ -->
+      <section id="screen-shuffle" class="screen" aria-label="Mystery Mix cards">
+        <h1 class="menu-title">Mystery Mix 🃏</h1>
+        <p class="tagline" id="shuffle-tagline">Flip a card, play what's on it.</p>
+        <div id="shuffle-grid" class="shuffle-grid">
+          <!-- cards rendered by game.js from data/levels.js drawShuffleCards -->
+        </div>
+        <button type="button" class="ghost" id="btn-shuffle-menu">⌂ Menu</button>
       </section>
 
       <!-- ============================= PLAYING ============================= -->
@@ -157,6 +171,7 @@
               <p class="overlay-sub" id="clear-best"></p>
               <div class="overlay-actions">
                 <button type="button" class="primary" id="btn-next">Next level ▶</button>
+                <button type="button" class="primary hidden" id="btn-cards">🃏 Cards</button>
                 <div class="ghost-row">
                   <button type="button" class="ghost" id="btn-retry2">↻ Retry</button>
                   <button type="button" class="ghost" id="btn-menu4">⌂ Menu</button>
@@ -184,6 +199,7 @@
               <p class="overlay-sub" id="go-best"></p>
               <div class="overlay-actions">
                 <button type="button" class="primary" id="btn-again">↻ Retry</button>
+                <button type="button" class="primary hidden" id="btn-cards2">🃏 Cards</button>
                 <div class="ghost-row">
                   <button type="button" class="ghost" id="btn-share">📤 Share</button>
                   <button type="button" class="ghost" id="btn-menu3">⌂ Menu</button>

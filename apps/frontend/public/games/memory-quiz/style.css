@@ -711,3 +711,74 @@ button:focus-visible {
     animation: none;
   }
 }
+
+/* ---------- Mystery Mix (suggestion 08 task 2) ---------- */
+
+.shuffle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 1rem;
+}
+
+@media (max-width: 360px) {
+  .shuffle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.shuffle-card {
+  aspect-ratio: 3 / 4;
+  border: 1.5px dashed var(--card-border);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+button.shuffle-card:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+.shuffle-card--open {
+  border-style: solid;
+  cursor: default;
+  gap: 0.3rem;
+}
+
+.shuffle-card--open .sc-level {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.shuffle-card--open .sc-mode {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.shuffle-card--open .sc-stars {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+.shuffle-card--open .sc-play {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+}
+
+#screen-shuffle .ghost {
+  margin-top: auto;
+}
