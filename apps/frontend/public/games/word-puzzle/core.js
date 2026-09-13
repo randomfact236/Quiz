@@ -246,3 +246,28 @@ export function lintThemes(themes) {
   });
   return errors;
 }
+
+/**
+ * One theme's momentum summary (suggestion 03 item 3): total stars against
+ * the theme max, completion flag, and the index of the first unsolved level
+ * (0 when every level is solved). Powers the theme-complete strip — the
+ * "one more theme" pull, one tap earlier than the menu.
+ */
+export function themeSummary(theme, progress) {
+  let stars = 0;
+  let complete = true;
+  let nextLevelIndex = 0;
+  for (let l = 0; l < theme.levels.length; l++) {
+    const rec = progress[theme.id + ':' + (l + 1)];
+    if (rec && rec.stars > 0) stars += rec.stars;
+    else complete = false;
+  }
+  for (let l = 0; l < theme.levels.length; l++) {
+    const rec = progress[theme.id + ':' + (l + 1)];
+    if (!rec || rec.stars === 0) {
+      nextLevelIndex = l;
+      break;
+    }
+  }
+  return { stars, max: theme.levels.length * 3, complete, nextLevelIndex };
+}

@@ -28,6 +28,7 @@ import {
   matchesWord,
   reverseAllowed,
   starsFor,
+  themeSummary,
 } from './core.js';
 import { getMuted, loadLevels, saveResult, setMuted } from './storage.js';
 import { t } from './config.js';
@@ -132,6 +133,7 @@ const state = {
   dragAnchor: null,
   lastDragCell: null,
   selection: [], // cells currently live-highlighted
+  hintToastShown: false, // first-hint star warning, per level attempt
   seedOverride: null, // ?seed= QA hook
   muted: false,
   cellEls: new Map(), // 'r:c' → button element
@@ -374,7 +376,9 @@ function startLevel(themeIndex, levelIndex) {
   state.anchor = null;
   state.dragging = false;
   state.selection = [];
+  state.hintToastShown = false;
   els.overlayResult.classList.add('hidden');
+  els.board.classList.remove('board--drag-invalid');
 
   holdClock(); // no-op safety if a previous round was still ticking
   state.playedMs = 0;
@@ -492,6 +496,12 @@ function useHint() {
   if (!p) return;
   state.hintsUsed++;
   state.hintedWords.add(word);
+  // First hint of this attempt: name the cost while there's still time to
+  // play without it (suggestion 03 item 2 — session flag, never persists).
+  if (!state.hintToastShown) {
+    state.hintToastShown = true;
+    toast(t('hintStarToast'));
+  }
   const el = cellAt(p.row, p.col);
   if (el) el.classList.add('cell--hinted');
   els.hudHints.textContent = String(MAX_HINTS - state.hintsUsed);
@@ -548,6 +558,7 @@ function winLevel() {
 
   els.btnNext.textContent = themeComplete ? '⌂ All themes' : 'Next level →';
   els.hudTime.textContent = formatTime(timeMs);
+  renderThemeStrip(themeComplete, progress);
   blip(523, 90, 'triangle', 0);
   blip(659, 90, 'triangle', 0.1);
   blip(784, 160, 'triangle', 0.2);
@@ -555,6 +566,46 @@ function winLevel() {
 
   els.overlayResult.classList.remove('hidden');
   els.btnNext.focus();
+}
+
+/**
+ * Theme-complete momentum strip (suggestion 03 item 3): the other themes
+ * with their star totals, one tap from jumping into the next theme's first
+ * unsolved level. Only shown when the finished level completes its theme.
+ */
+function renderThemeStrip(themeComplete, progress) {
+  els.themeStrip.innerHTML = '';
+  els.themeStrip.classList.toggle('hidden', !themeComplete);
+  if (!themeComplete) return;
+  THEMES.themes.forEach((theme, ti) => {
+    if (ti === state.themeIndex) return;
+    const summary = themeSummary(theme, progress);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-strip-chip';
+    btn.innerHTML =
+      '<span class="ts-emoji">' +
+      theme.emoji +
+      '</span><span class="ts-name">' +
+      theme.name +
+      '</span><span class="ts-stars">' +
+      summary.stars +
+      '/' +
+      summary.max +
+      '</span>';
+    btn.setAttribute(
+      'aria-label',
+      theme.name +
+        ', ' +
+        summary.stars +
+        ' of ' +
+        summary.max +
+        ' stars — play level ' +
+        (summary.nextLevelIndex + 1)
+    );
+    btn.addEventListener('click', () => startLevel(ti, summary.nextLevelIndex));
+    els.themeStrip.appendChild(btn);
+  });
 }
 
 /* ---- share (README §2 chain: Web Share → clipboard → prompt) --------------- */
@@ -651,7 +702,14 @@ function onPointerMove(e) {
   const cell = readCell(cellEl);
   if (sameCell(cell, state.lastDragCell)) return;
   const cells = lineCells(state.grid, state.dragAnchor, cell);
-  if (!cells) return; // not a straight line from the anchor — keep the last valid
+  if (!cells) {
+    // not a straight line from the anchor — live "invalid direction" state on
+    // the held highlight (suggestion 03 item 1); the release-time check is the
+    // SAME lineCells call, so live and final validity can never drift.
+    els.board.classList.add('board--drag-invalid');
+    return; // keep the last valid line highlighted underneath
+  }
+  els.board.classList.remove('board--drag-invalid');
   state.lastDragCell = cell;
   setSelection(cells);
 }
@@ -659,6 +717,7 @@ function onPointerMove(e) {
 function onPointerUp() {
   if (!state.dragging) return;
   state.dragging = false;
+  els.board.classList.remove('board--drag-invalid');
   const cells = state.selection;
   setSelection([]);
   if (cells.length > 1) {
@@ -671,6 +730,7 @@ function onPointerUp() {
 function onPointerCancel() {
   state.dragging = false;
   state.lastDragCell = null;
+  els.board.classList.remove('board--drag-invalid');
   setSelection([]);
 }
 
@@ -761,6 +821,7 @@ function bindEls() {
   els.resultStars = document.getElementById('result-stars');
   els.resultStats = document.getElementById('result-stats');
   els.resultSub = document.getElementById('result-sub');
+  els.themeStrip = document.getElementById('theme-strip');
   els.btnNext = document.getElementById('btn-next');
   els.btnReplay = document.getElementById('btn-replay');
   els.btnShare = document.getElementById('btn-share');

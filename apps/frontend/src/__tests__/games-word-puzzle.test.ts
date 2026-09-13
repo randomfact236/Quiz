@@ -21,6 +21,7 @@ import {
   mulberry32,
   reverseAllowed,
   starsFor,
+  themeSummary,
   tierDirs,
 } from '../../public/games/word-puzzle/core';
 import {
@@ -394,5 +395,47 @@ describe('config (flags + strings, host-overridable)', () => {
       'I found 5 words in 1:30'
     );
     expect(t('no-such-key')).toBe('no-such-key');
+  });
+});
+
+describe('themeSummary (theme-complete strip, suggestion 03 item 3)', () => {
+  it('totals stars against the theme max and flags completion', () => {
+    const theme = THEMES.themes[0];
+    expect(themeSummary(theme, {})).toEqual({
+      stars: 0,
+      max: theme.levels.length * 3,
+      complete: false,
+      nextLevelIndex: 0,
+    });
+    const full: Record<string, { stars: number; bestTimeMs: number }> = {};
+    theme.levels.forEach((_, l) => {
+      full[theme.id + ':' + (l + 1)] = { stars: 3, bestTimeMs: 1000 };
+    });
+    expect(themeSummary(theme, full)).toMatchObject({ stars: 9, max: 9, complete: true });
+  });
+
+  it('nextLevelIndex points at the first unsolved level (0 when all solved)', () => {
+    const theme = THEMES.themes[0];
+    const partial: Record<string, { stars: number; bestTimeMs: number }> = {
+      [theme.id + ':1']: { stars: 2, bestTimeMs: 1000 },
+    };
+    expect(themeSummary(theme, partial).nextLevelIndex).toBe(1); // L2 is next
+    const full: Record<string, { stars: number; bestTimeMs: number }> = {};
+    theme.levels.forEach((_, l) => {
+      full[theme.id + ':' + (l + 1)] = { stars: 1, bestTimeMs: 1000 };
+    });
+    expect(themeSummary(theme, full).nextLevelIndex).toBe(0); // replay L1
+    expect(
+      themeSummary(theme, { ...partial, [theme.id + ':3']: { stars: 0, bestTimeMs: 0 } })
+        .nextLevelIndex
+    ).toBe(1);
+  });
+});
+
+describe('hint cost contract (suggestion 03 item 2 — what the toast promises)', () => {
+  it('any hint caps the level at 2 stars; 0 hints can still earn 3', () => {
+    expect(starsFor(60, 10, 0, 0)).toBe(3);
+    expect(starsFor(60, 10, 1, 0)).toBeLessThanOrEqual(2);
+    expect(starsFor(60, 10, 1, 2)).toBeLessThanOrEqual(2);
   });
 });

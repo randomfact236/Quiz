@@ -23,6 +23,8 @@ const DEFAULT_CONFIG = {
       share: 'I found {words} words in {time} · {stars} in Word Puzzle — can you beat it? {url}',
       hint: 'Hint',
       alreadyFound: 'Already found ✓',
+      // First hint of a level attempt warns about the perfect-run star.
+      hintStarToast: 'Using a hint means no perfect-run star this level.',
       themeCompleteTitle: '{theme} complete!',
       themeCompleteSub: 'Theme stars: {stars}/9',
       themeCompletePerfect: ' — perfect! 🌟',
