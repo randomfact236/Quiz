@@ -217,3 +217,47 @@ export function makeGate(ruleId, rng, runState) {
 export function resolveChoice(gate, side) {
   return side === gate.correctSide ? 'correct' : 'shadow';
 }
+
+/* ---- suggestion 03: rule tag + outcome confirmation -------------------------- */
+
+/** Player-facing rule name — the persistent tag beside the hint banner. */
+export function ruleLabel(ruleId) {
+  switch (ruleId) {
+    case 'parity':
+      return 'Parity';
+    case 'echo':
+      return 'Shape Echo';
+    case 'negation':
+      return 'Negation';
+    case 'sequence':
+      return 'Sequence';
+    case 'color':
+      return 'Color Trail';
+    default:
+      return String(ruleId);
+  }
+}
+
+/**
+ * The rule's answer in plain words, shown for 1s when the split resolves
+ * (suggestion 03 item 2) — outcome AND mechanics in one line, so an unseen
+ * rule teaches itself instead of feeling arbitrary. Never empty for the
+ * authored 5 rules × both outcomes.
+ */
+export function answerLine(ruleId, outcome) {
+  const verdict = outcome === 'correct' ? 'Nailed it.' : 'Shadow realm.';
+  switch (ruleId) {
+    case 'parity':
+      return 'Parity: even orbs → left, odd → right. ' + verdict;
+    case 'echo':
+      return 'Shape Echo: take the doubled rune. ' + verdict;
+    case 'negation':
+      return 'Negation: the hint lies — shun the named rune. ' + verdict;
+    case 'sequence':
+      return 'Sequence: continue the pattern. ' + verdict;
+    case 'color':
+      return 'Color Trail: match the last orb\u2019s color. ' + verdict;
+    default:
+      return '';
+  }
+}

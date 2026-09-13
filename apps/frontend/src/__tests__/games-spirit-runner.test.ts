@@ -62,9 +62,11 @@ import {
   GLYPHS,
   ORB_COLORS,
   RULE_IDS,
+  answerLine,
   hintFor,
   makeGate,
   resolveChoice,
+  ruleLabel,
   shuffledRules,
 } from '../../public/games/spirit-runner/gates';
 import { CHARACTERS, shareText } from '../../public/games/spirit-runner/main';
@@ -702,5 +704,31 @@ describe('misc contracts', () => {
       return { y: player.y, vy: player.vy, sliding: player.sliding };
     };
     expect(fly()).toEqual(fly());
+  });
+});
+
+describe('gate rule tag + outcome lines (suggestion 03 items 1-2)', () => {
+  it('ruleLabel maps 1:1 to all 5 rules, no empty names', () => {
+    expect(ruleLabel('parity')).toBe('Parity');
+    expect(ruleLabel('echo')).toBe('Shape Echo');
+    expect(ruleLabel('negation')).toBe('Negation');
+    expect(ruleLabel('sequence')).toBe('Sequence');
+    expect(ruleLabel('color')).toBe('Color Trail');
+    for (const id of RULE_IDS) expect(ruleLabel(id).length).toBeGreaterThan(0);
+  });
+
+  it('answerLine covers correct/shadow × all 5 rules, names the rule + verdict', () => {
+    for (const id of RULE_IDS) {
+      for (const outcome of ['correct', 'shadow'] as const) {
+        const line = answerLine(id, outcome);
+        expect(line.length).toBeGreaterThan(0);
+        expect(line).toContain(ruleLabel(id));
+        expect(line.endsWith(outcome === 'correct' ? 'Nailed it.' : 'Shadow realm.')).toBe(true);
+      }
+    }
+  });
+
+  it('negation\u2019s answer explains the lie (the counter-intuitive rule)', () => {
+    expect(answerLine('negation', 'shadow')).toMatch(/hint lies/);
   });
 });

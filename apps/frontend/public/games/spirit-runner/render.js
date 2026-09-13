@@ -43,6 +43,7 @@ import {
   trapLit,
   trapPhase,
 } from './core.js';
+import { ruleLabel } from './gates.js';
 
 /* ---- palettes (plan §2 Phase A: dawn → dusk → night forest) ------------------ */
 
@@ -784,6 +785,25 @@ function drawGateBanner(ctx, gate, t) {
       '#ffe9b0'
     );
   }
+  // Persistent rule-name tag (suggestion 03 item 1): which of the 5 rules is
+  // active, visible through the whole choice window — not just the hint.
+  const tag = ruleLabel(gate.gate.rule);
+  ctx.font = '800 11px "Segoe UI", system-ui, sans-serif';
+  const tagW = ctx.measureText(tag.toUpperCase()).width + 20;
+  ctx.fillStyle = 'rgba(38,66,110,0.9)';
+  roundRect(ctx, VIEW_W / 2 - tagW / 2, y + 26, tagW, 18, 9);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(154,214,255,0.4)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  outlinedText(
+    ctx,
+    tag.toUpperCase(),
+    VIEW_W / 2,
+    y + 35,
+    '800 11px "Segoe UI", system-ui, sans-serif',
+    '#9ad6ff'
+  );
   ctx.restore();
 }
 
@@ -1090,6 +1110,18 @@ function drawHUD(ctx, s) {
       '900 24px "Segoe UI", system-ui, sans-serif',
       '#f2a0ff'
     );
+    // First entry this run (suggestion 03 item 3): name what surviving earns.
+    if (s.shadowHint > 0) {
+      ctx.globalAlpha = 0.9 * Math.min(1, s.shadowHint);
+      outlinedText(
+        ctx,
+        'Survive for a shard — auto-returns to the forest',
+        VIEW_W / 2,
+        136,
+        '600 13px "Segoe UI", system-ui, sans-serif',
+        '#e6c8ff'
+      );
+    }
     ctx.restore();
     // closing vignette as the timer drains
     const urgency = 1 - s.shadowS / SHADOW_S;

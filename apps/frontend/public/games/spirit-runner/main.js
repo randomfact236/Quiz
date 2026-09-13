@@ -59,7 +59,7 @@ import {
 } from './core.js';
 import { createCamera, advanceCamera, createLoop, createRunnerInput } from './engine.js';
 import { DEPTH_LABELS, drawScene, paletteFor, POWER_GLYPH, POWER_LABEL } from './render.js';
-import { makeGate, resolveChoice, shuffledRules } from './gates.js';
+import { makeGate, resolveChoice, shuffledRules, answerLine } from './gates.js';
 import { GAME_CONFIG, t } from './config.js';
 import { loadSave, saveSave, setRemoteAdapter } from './storage.js';
 
@@ -170,6 +170,7 @@ const state = {
   announceText: '',
   announceUntil: -1,
   announceColor: '#ffd76a',
+  shadowHintAt: -10, // first shadow entry this run — "survive for a shard" banner (suggestion 03)
 };
 
 const save = loadSave();
@@ -210,6 +211,7 @@ function buildRun() {
   state.particles = [];
   state.floaters = [];
   state.hitAt = -10;
+  state.shadowHintAt = -10; // per-run flag: the shadow banner fires once per run
   powerBtnState = '';
 }
 
@@ -441,6 +443,12 @@ function chooseGate(side) {
   wrapper.resolved = true;
   wrapper.resolvedAt = clockNow;
   wrapper.outcome = resolveChoice(wrapper.gate, side);
+  // Name the rule AND its answer in plain words (suggestion 03 item 2) —
+  // non-blocking, the run continues under it exactly as it already does.
+  announce(
+    answerLine(wrapper.gate.rule, wrapper.outcome),
+    wrapper.outcome === 'correct' ? '#b7f5c4' : '#f2a0ff'
+  );
   state.run.orbsSinceGate = 0;
   state.gateIndex++;
   state.spawnHoldS = GATE_RESUME_DELAY_S;
@@ -461,9 +469,10 @@ function chooseGate(side) {
     // wrong gate → banished to the shadow realm (plan §2 Phase C). This is
     // not damage: it fires through invulnerability too (plan §7.2).
     enterShadow(state.run, meters(state.cam.x));
+    // First banish this run teaches what surviving means (suggestion 03 item 3).
+    if (state.shadowHintAt < 0) state.shadowHintAt = clockNow;
     state.hitAt = clockNow;
     state.hitFlashColor = '190,90,230';
-    announce('SHADOW REALM', '#f2a0ff');
     blip(147, 260, 'sawtooth');
     blip(110, 320, 'sawtooth', 0.09);
     vibrate([50, 30, 50]);
@@ -772,6 +781,7 @@ function draw(t) {
     chargedPower: run ? chargedPower(run.powers) : 'double',
     depthLabel: DEPTH_LABELS[paletteFor(m).depthIndex],
     shadowS: run ? run.shadowS : 0,
+    shadowHint: state.shadowHintAt < 0 ? 0 : Math.max(0, 1 - (clockNow - state.shadowHintAt) / 3),
     announceText: state.announceText,
     announceUntil: state.announceUntil,
     announceColor: state.announceColor,
