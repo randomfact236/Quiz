@@ -19,6 +19,7 @@ import {
   formatTime,
   isSolved,
   mulberry32,
+  oneSwapFromSolved,
   scoreFor,
   shuffle,
   slideTile,
@@ -56,6 +57,7 @@ const state = {
   daily: false, // the current round is today's daily challenge (seeded 4×4)
   picture: null, // data URL of this round's picture (null → numbers look)
   peek: false, // picture mode: show the number pills over the slices
+  nudgeShown: false, // one-swap-away banner: once per round (suggestion 03)
   tiles: new Map(), // tile value → button element
 };
 
@@ -223,6 +225,7 @@ function startRound(daily = false) {
   state.playedMs = 0;
   state.running = false;
   state.peek = false;
+  state.nudgeShown = false; // one-swap-away banner: once per round (suggestion 03)
   // Picture mode renders a fresh procedural scene every round (plan P3);
   // a null result (no canvas) silently falls back to the numbers look.
   state.picture = wantPicture ? makePicture(Math.floor(Math.random() * SCENES.length)) : null;
@@ -252,6 +255,7 @@ function attemptSlide(index) {
   const result = slideTile(state.board, state.size, index);
   if (!result) {
     shakeTile(index);
+    maybeNudge();
     return;
   }
   if (!state.started) {
@@ -310,6 +314,23 @@ function shakeTile(index) {
   el.classList.add('tile--shake');
   blip(140, 80, 'square');
   setTimeout(() => el.classList.remove('tile--shake'), 320);
+}
+
+/**
+ * "Almost there" nudge (suggestion 03 item 2): when an illegal move happens
+ * while the board sits exactly one swap from solved, say so — once per
+ * round. Numbers mode only: in picture mode "one swap away" has no visual
+ * referent. The shake still plays; the banner adds what the shake can't.
+ */
+function maybeNudge() {
+  if (state.nudgeShown || state.picture) return;
+  if (!oneSwapFromSolved(state.board)) return;
+  state.nudgeShown = true;
+  els.nudge.hidden = false;
+  blip(1046, 120, 'triangle');
+  setTimeout(() => {
+    els.nudge.hidden = true;
+  }, 1800);
 }
 
 /* ---- win ------------------------------------------------------------------ */
@@ -573,6 +594,7 @@ function init() {
   els.picPreview = document.getElementById('pic-preview');
   els.overlayPreview = document.getElementById('overlay-preview');
   els.boardStatus = document.getElementById('board-status');
+  els.nudge = document.getElementById('nudge');
   els.btnShuffle = document.getElementById('btn-shuffle');
   els.previewImage = document.getElementById('preview-image');
   els.btnPreviewClose = document.getElementById('btn-preview-close');

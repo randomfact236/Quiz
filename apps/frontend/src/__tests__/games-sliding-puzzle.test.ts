@@ -22,6 +22,7 @@ import {
   mergeRecord,
   mulberry32,
   neighbors,
+  oneSwapFromSolved,
   scoreFor,
   shuffle,
   slideTile,
@@ -506,5 +507,51 @@ describe('config (strings, host-overridable)', () => {
       'I solved today\u2019s Daily Sliding Puzzle in 1:00 · 20 moves — can you beat me? http://x'
     );
     expect(t('no-such-key')).toBe('no-such-key');
+  });
+});
+
+describe('oneSwapFromSolved (almost-there nudge, suggestion 03 item 2)', () => {
+  it('is false for the solved board itself', () => {
+    expect(oneSwapFromSolved(solvedBoard(3))).toBe(false);
+    expect(oneSwapFromSolved(solvedBoard(4))).toBe(false);
+  });
+
+  it('is true for exactly one transposition of two tiles', () => {
+    // 3×3 solved [1,2,3,4,5,6,7,8,0] with 5 and 6 swapped
+    const board = solvedBoard(3);
+    const i = board.indexOf(5);
+    const j = board.indexOf(6);
+    [board[i], board[j]] = [board[j], board[i]];
+    expect(oneSwapFromSolved(board)).toBe(true);
+  });
+
+  it('is false for two swaps away (four misplaced tiles)', () => {
+    const board = solvedBoard(3);
+    let [i, j] = [board.indexOf(5), board.indexOf(6)];
+    [board[i], board[j]] = [board[j], board[i]];
+    [i, j] = [board.indexOf(1), board.indexOf(2)];
+    [board[i], board[j]] = [board[j], board[i]];
+    expect(oneSwapFromSolved(board)).toBe(false);
+  });
+
+  it('is false when two tiles are displaced but not into each other\u2019s slots', () => {
+    const board = solvedBoard(3);
+    // put tile 1 where tile 3 belongs and tile 2 where tile 1 belongs:
+    // tiles 1 and 2 misplaced, but not a mutual transposition
+    const b = board.slice();
+    b[0] = 2;
+    b[2] = 1;
+    expect(oneSwapFromSolved(b)).toBe(false);
+  });
+
+  it('detects the classic last-two-tiles swap (blank at home, ignored)', () => {
+    const board = [1, 2, 3, 4, 5, 6, 8, 7, 0];
+    expect(oneSwapFromSolved(board)).toBe(true);
+  });
+
+  it('a blank move is a 3-cycle of tiles — never one swap away', () => {
+    // a blank shifted off its home necessarily displaces a third tile
+    const board = [1, 2, 3, 4, 5, 6, 0, 8, 7];
+    expect(oneSwapFromSolved(board)).toBe(false);
   });
 });

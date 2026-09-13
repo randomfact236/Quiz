@@ -229,3 +229,24 @@ export function formatTime(ms) {
   const total = Math.max(0, Math.floor(ms / 1000));
   return Math.floor(total / 60) + ':' + String(total % 60).padStart(2, '0');
 }
+
+/**
+ * True when exactly one pair of tiles is swapped from the solved order
+ * (suggestion 03 item 2): precisely two non-blank tiles are out of place,
+ * each sitting in the other's home slot. The blank's position is irrelevant,
+ * and the solved board itself is NOT one swap away.
+ */
+export function oneSwapFromSolved(board) {
+  const misplaced = [];
+  for (let i = 0; i < board.length; i++) {
+    const v = board[i];
+    if (v === 0) continue; // the blank is not a tile
+    if (v !== i + 1) {
+      misplaced.push(i);
+      if (misplaced.length > 2) return false; // early out on 3+
+    }
+  }
+  if (misplaced.length !== 2) return false;
+  const [a, b] = misplaced;
+  return board[a] === b + 1 && board[b] === a + 1;
+}

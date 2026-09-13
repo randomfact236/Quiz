@@ -774,3 +774,26 @@ a:focus-visible {
     transition: none;
   }
 }
+
+/* ---- one-swap-away nudge (suggestion 03 item 2) ---------------------------- */
+
+.nudge {
+  position: absolute;
+  left: 50%;
+  bottom: -2.4rem;
+  transform: translateX(-50%);
+  background: var(--card, #fff);
+  color: var(--text, #1e293b);
+  border: 1px solid var(--card-border, #cbd5e1);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+  z-index: 5;
+}
+
+.nudge[hidden] {
+  display: none;
+}
