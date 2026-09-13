@@ -17,14 +17,17 @@
  *   game:tap-or-dont-tap:muted   → '1' | '0'
  *
  * Versioned layout:
- *   game:tap-or-dont-tap:save    → { version: 1, best, history, prefs }
+ *   game:tap-or-dont-tap:save → { version: 2, best, history, prefs }
+ *     v1: prefs.muted only.
+ *     v2: adds prefs.seenTutorials { decoy, stroop, swap } (first-encounter
+ *         tutorial flags — suggestion 01); v1 saves migrate on first read.
  * ============================================================================
  */
 
 import { SLUG, HISTORY_MAX } from './core.js';
 
 const SAVE_KEY = `game:${SLUG}:save`;
-const SAVE_VERSION = 1;
+const SAVE_VERSION = 2;
 const LEGACY_KEYS = {
   best: `game:${SLUG}:best`,
   history: `game:${SLUG}:history`,
@@ -72,7 +75,20 @@ function defaultSave() {
     version: SAVE_VERSION,
     best: { score: 0, bestMs: null },
     history: [],
-    prefs: { muted: false },
+    prefs: {
+      muted: false,
+      seenTutorials: { decoy: false, stroop: false, swap: false },
+    },
+  };
+}
+
+/** Normalize the seenTutorials flags (missing/garbage fields read as false). */
+function normalizeSeenTutorials(value) {
+  const source = value && typeof value === 'object' ? value : {};
+  return {
+    decoy: !!source.decoy,
+    stroop: !!source.stroop,
+    swap: !!source.swap,
   };
 }
 
@@ -95,17 +111,58 @@ function normalizeSave(parsed) {
       bestMs: typeof parsed.best.bestMs === 'number' ? parsed.best.bestMs : null,
     },
     history: parsed.history.filter((h) => h && typeof h === 'object'),
-    prefs: { muted: !!(parsed.prefs && parsed.prefs.muted) },
+    prefs: {
+      muted: !!(parsed.prefs && parsed.prefs.muted),
+      seenTutorials: normalizeSeenTutorials(parsed.prefs && parsed.prefs.seenTutorials),
+    },
   };
 }
 
 /**
- * Read the save, migrating from the legacy layout once. Migration is
- * idempotent: with the versioned key present it just validates and returns.
+ * v1 → v2 migration: carries best/history/muted over untouched and defaults
+ * the three tutorial flags to false (they flip true after first showing).
+ * Returns null for anything that isn't a well-formed v1 save.
+ */
+function migrateV1(parsed) {
+  if (
+    !parsed ||
+    typeof parsed !== 'object' ||
+    parsed.version !== 1 ||
+    !parsed.best ||
+    typeof parsed.best.score !== 'number' ||
+    !Array.isArray(parsed.history)
+  ) {
+    return null;
+  }
+  return {
+    version: SAVE_VERSION,
+    best: {
+      score: parsed.best.score || 0,
+      bestMs: typeof parsed.best.bestMs === 'number' ? parsed.best.bestMs : null,
+    },
+    history: parsed.history.filter((h) => h && typeof h === 'object'),
+    prefs: {
+      muted: !!(parsed.prefs && parsed.prefs.muted),
+      seenTutorials: { decoy: false, stroop: false, swap: false },
+    },
+  };
+}
+
+/**
+ * Read the save, migrating older layouts in once: v1 → v2 (tutorial flags)
+ * first, then the legacy loose keys. Migration is idempotent: with a current
+ * versioned key present it just validates and returns.
  */
 export function loadSave() {
-  const existing = normalizeSave(readJson(SAVE_KEY, null));
+  const raw = readJson(SAVE_KEY, null);
+  const existing = normalizeSave(raw);
   if (existing) return existing;
+
+  const migrated = migrateV1(raw);
+  if (migrated) {
+    persist(migrated); // durable before the next read sees it as current
+    return migrated;
+  }
 
   const legacyBest = readJson(LEGACY_KEYS.best, null);
   const legacyHistory = readJson(LEGACY_KEYS.history, null);
@@ -190,5 +247,17 @@ export function getMuted() {
 export function setMuted(muted) {
   const save = loadSave();
   save.prefs.muted = !!muted;
+  persist(save);
+}
+
+/** First-encounter tutorial flags — all false until the mechanic is shown. */
+export function getSeenTutorials() {
+  return { ...loadSave().prefs.seenTutorials };
+}
+
+export function markTutorialSeen(key) {
+  const save = loadSave();
+  if (!save.prefs.seenTutorials || !(key in save.prefs.seenTutorials)) return;
+  save.prefs.seenTutorials[key] = true;
   persist(save);
 }

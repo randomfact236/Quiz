@@ -11,6 +11,7 @@ import {
   effectiveExpectsTap,
   generateRound,
   localPercentile,
+  loseFeedbackKey,
   pointsForGreen,
   resolveRound,
   sparklinePoints,
@@ -20,7 +21,9 @@ import {
   getBest,
   getHistory,
   getMuted,
+  getSeenTutorials,
   loadSave,
+  markTutorialSeen,
   recordRun,
   setMuted,
 } from '../../public/games/tap-or-dont-tap/storage';
@@ -214,6 +217,28 @@ describe('sparklinePoints (menu history chart)', () => {
   });
 });
 
+describe('loseFeedbackKey (loss-reason copy mapping, suggestion 01 item 3)', () => {
+  it('maps each losing outcome to its own string key', () => {
+    expect(loseFeedbackKey('miss')).toBe('missedIt');
+    expect(loseFeedbackKey('tap-red')).toBe('wasRed');
+    expect(loseFeedbackKey('tap-decoy')).toBe('wasDecoy');
+  });
+
+  it('every misjudge on a Stroop round explains the lie instead', () => {
+    expect(loseFeedbackKey('miss', { stroop: true })).toBe('stroopTrap');
+    expect(loseFeedbackKey('tap-red', { stroop: true })).toBe('stroopTrap');
+    expect(loseFeedbackKey('tap-decoy', { stroop: true })).toBe('stroopTrap');
+  });
+
+  it('never maps to an unknown key (copy-set guard)', () => {
+    for (const outcome of ['miss', 'tap-red', 'tap-decoy']) {
+      for (const stroop of [false, true]) {
+        expect(GAME_CONFIG.strings.en).toHaveProperty(loseFeedbackKey(outcome, { stroop }));
+      }
+    }
+  });
+});
+
 describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
   const KEYS = {
     save: 'game:tap-or-dont-tap:save',
@@ -237,11 +262,43 @@ describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
 
   it('defaults to a fresh versioned save when nothing is stored', () => {
     expect(loadSave()).toEqual({
-      version: 1,
+      version: 2,
       best: { score: 0, bestMs: null },
       history: [],
-      prefs: { muted: false },
+      prefs: {
+        muted: false,
+        seenTutorials: { decoy: false, stroop: false, swap: false },
+      },
     });
+  });
+
+  it('migrates a v1 save to v2: tutorial flags default false, no data loss', () => {
+    localStorage.setItem(
+      KEYS.save,
+      JSON.stringify({
+        version: 1,
+        best: { score: 1240, bestMs: 187 },
+        history: [{ score: 900, bestMs: 201 }],
+        prefs: { muted: true },
+      })
+    );
+    const save = loadSave();
+    expect(save.version).toBe(2);
+    expect(save.best).toEqual({ score: 1240, bestMs: 187 });
+    expect(save.history).toEqual([{ score: 900, bestMs: 201 }]);
+    expect(save.prefs.muted).toBe(true);
+    expect(save.prefs.seenTutorials).toEqual({ decoy: false, stroop: false, swap: false });
+    // The migrated save is durably rewritten as current.
+    expect(JSON.parse(localStorage.getItem(KEYS.save)!).version).toBe(2);
+  });
+
+  it('seenTutorials round-trips: only the shown mechanic flips true', () => {
+    markTutorialSeen('decoy');
+    expect(getSeenTutorials()).toEqual({ decoy: true, stroop: false, swap: false });
+    markTutorialSeen('swap');
+    expect(getSeenTutorials()).toEqual({ decoy: true, stroop: false, swap: true });
+    markTutorialSeen('no-such-key'); // unknown keys are ignored
+    expect(getSeenTutorials().stroop).toBe(false);
   });
 
   it('migrates legacy keys into the versioned save and removes them', () => {
@@ -253,10 +310,11 @@ describe('storage facade (Rev 2: versioned save + legacy migration)', () => {
     localStorage.setItem(KEYS.muted, '1');
 
     const save = loadSave();
-    expect(save.version).toBe(1);
+    expect(save.version).toBe(2); // legacy saves migrate through to current
     expect(save.best).toEqual({ score: 1240, bestMs: 187 });
     expect(save.history).toEqual([{ score: 900, bestMs: 201, rounds: 18, ts: 1 }]);
     expect(save.prefs.muted).toBe(true);
+    expect(save.prefs.seenTutorials).toEqual({ decoy: false, stroop: false, swap: false });
     expect(localStorage.getItem(KEYS.best)).toBeNull();
     expect(localStorage.getItem(KEYS.history)).toBeNull();
     expect(localStorage.getItem(KEYS.muted)).toBeNull();
@@ -325,9 +383,13 @@ describe('config (flags + strings, host-overridable)', () => {
         'hitMs',
         'resisted',
         'ignored',
-        'tooSlow',
-        'stroopLie',
+        'missedIt',
         'wasRed',
+        'wasDecoy',
+        'stroopTrap',
+        'tutDecoy',
+        'tutStroop',
+        'tutSwap',
         'goTitle',
         'bestReaction',
         'topBadge',

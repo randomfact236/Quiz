@@ -24,6 +24,9 @@
       <!-- Rule-flip banner (P3) -->
       <div id="swap-banner" hidden>🔄 RULES SWAPPED! red = tap · green = wait</div>
 
+      <!-- First-encounter tutorial toast (one-time per mechanic per device) -->
+      <div id="tut-toast" hidden role="status"></div>
+
       <!-- ============ menu ============ -->
       <section id="state-menu" class="state" hidden>
         <div class="menu-card">
@@ -48,6 +51,20 @@
       <!-- ============ signal ============ -->
       <section id="state-signal" class="state" hidden>
         <div id="signal-surface" class="">
+          <!-- Colorblind-safe redundant cue: the shape always matches the
+               actual color, never the Stroop word. -->
+          <span id="signal-shape" aria-hidden="true" hidden>
+            <svg id="shape-check" viewBox="0 0 100 100" hidden>
+              <circle cx="50" cy="50" r="40" />
+              <path class="cut" d="M30 52 L45 66 L72 36" />
+            </svg>
+            <svg id="shape-cross" viewBox="0 0 100 100" hidden>
+              <path d="M22 22 L78 78 M78 22 L22 78" />
+            </svg>
+            <svg id="shape-triangle" viewBox="0 0 100 100" hidden>
+              <path d="M50 14 L90 82 L10 82 Z" />
+            </svg>
+          </span>
           <span id="signal-word"></span>
         </div>
       </section>

@@ -23,14 +23,19 @@ const DEFAULT_CONFIG = {
       menuRule:
         'Tap the <b class="green">green</b>. Resist the <b class="red">red</b>. That\'s it — until your brain betrays you.',
       swapBanner: '🔄 RULES SWAPPED! red = tap · green = wait',
-      // Feedback overlay labels.
+      // Feedback overlay labels — one distinct reason per loss cause.
       tooEarly: '❌ Too early!',
       hitMs: '{ms}ms! {emoji}',
       resisted: '✅ Resisted +{points}',
       ignored: '✅ Ignored +{points}',
-      tooSlow: '❌ Too slow',
-      stroopLie: '❌ It said WAIT for a reason!',
+      missedIt: '❌ Missed it!',
       wasRed: '❌ It was RED!',
+      wasDecoy: '❌ That was a decoy!',
+      stroopTrap: '❌ Color, not word!',
+      // First-encounter tutorial toasts (one-time per device per mechanic).
+      tutDecoy: '👀 New: ignore this one too',
+      tutStroop: '🧠 Careful — the word lies, the color is truth',
+      tutSwap: '🔄 Rules flipped for a few rounds!',
       // Gameover card copy.
       goTitle: '🚦 GAME OVER',
       bestReaction: 'Best reaction',

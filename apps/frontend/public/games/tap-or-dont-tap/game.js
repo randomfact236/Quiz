@@ -30,15 +30,30 @@ import {
   windowMsForRound,
   generateRound,
   resolveRound,
+  loseFeedbackKey,
   localPercentile,
   sparklinePoints,
 } from './core.js';
 import { GAME_CONFIG, t } from './config.js';
-import { getBest, getHistory, getMuted, setMuted, recordRun } from './storage.js';
+import {
+  getBest,
+  getHistory,
+  getMuted,
+  setMuted,
+  recordRun,
+  getSeenTutorials,
+  markTutorialSeen,
+} from './storage.js';
 import { blip, buzz, setMuted as setAudioMuted } from './audio.js';
 
 /** Feedback overlay dwell: the outcome shows, then the next round begins (ms). */
 const FEEDBACK_MS = 400;
+
+/** Tutorial toast dwell (suggestion 01: 1.5–2s, non-blocking). */
+const TUT_TOAST_MS = 1900;
+
+/** First-encounter mechanic → its config string key. */
+const TUTORIAL_STRINGS = { decoy: 'tutDecoy', stroop: 'tutStroop', swap: 'tutSwap' };
 
 /* ------------------------------ engine ------------------------------ */
 
@@ -58,6 +73,8 @@ let runStartScoreHistory = [];
 let pausedFrom = null;
 const timers = new Set();
 let lastFeedbackWasStroop = false;
+let toastTimer = null; // tutorial toast hide — deliberately NOT in `timers`:
+// the toast is cosmetic and must survive a pause's clearTimers() to hide itself.
 
 function after(ms, fn) {
   const t = setTimeout(() => {
@@ -126,6 +143,7 @@ function beginRound(n, { advance = true } = {}) {
   }
   setState('waiting');
   renderHud();
+  if (isSwapActive()) showTutorialToast('swap');
   after(MIN_WAIT_MS + Math.random() * (MAX_WAIT_MS - MIN_WAIT_MS), showSignal);
 }
 
@@ -136,6 +154,12 @@ function showSignal() {
   els.signalSurface.className = `flash-${signalSpec.color}`;
   els.signalWord.textContent = signalSpec.word || '';
   els.signalWord.hidden = !signalSpec.word;
+  // Redundant non-color cue (suggestion 01): shape follows the actual color,
+  // never the word, so shape-readers get the same signal as color-readers.
+  els.shapeCheck.hidden = signalSpec.color !== 'green';
+  els.shapeCross.hidden = signalSpec.color !== 'red';
+  els.shapeTriangle.hidden = signalSpec.color !== 'yellow' && signalSpec.color !== 'blue';
+  els.signalShape.hidden = false;
   // Screen-reader description of the visual signal (the game is color-driven,
   // so the label carries the meaning, including the Stroop lie).
   const meaning = {
@@ -150,6 +174,8 @@ function showSignal() {
   els.signalSurface.setAttribute('role', 'img');
   els.signalSurface.setAttribute('aria-label', label);
   signalShownAt = performance.now();
+  if (signalSpec.word) showTutorialToast('stroop');
+  else if (!els.shapeTriangle.hidden) showTutorialToast('decoy');
   after(windowMsForRound(round), () => expireSignal());
 }
 
@@ -183,6 +209,7 @@ function finishRound({ tapped, elapsedMs }) {
   // next round begins (otherwise a second tap could resolve the round twice).
   setState('feedback');
   els.signalSurface.className = '';
+  els.signalShape.hidden = true;
 
   if (result.outcome === 'hit') {
     streak += 1;
@@ -202,16 +229,24 @@ function finishRound({ tapped, elapsedMs }) {
     blip(520, 120, 'triangle');
     showFeedback(t('ignored', { points: DECOY_IGNORE_POINTS }), 'good');
   } else {
-    const msg =
-      result.outcome === 'miss'
-        ? t('tooSlow')
-        : lastFeedbackWasStroop
-          ? t('stroopLie')
-          : t('wasRed');
-    loseHeart(msg);
+    // One distinct reason per loss cause (suggestion 01 item 3) — the outcome
+    // value already carries the cause, this is a pure copy mapping.
+    loseHeart(t(loseFeedbackKey(result.outcome, { stroop: lastFeedbackWasStroop })));
     return;
   }
   after(FEEDBACK_MS, () => beginRound(round + 1));
+}
+
+function showTutorialToast(key) {
+  if (getSeenTutorials()[key]) return;
+  markTutorialSeen(key);
+  els.tutToast.textContent = t(TUTORIAL_STRINGS[key]);
+  els.tutToast.hidden = false;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    els.tutToast.hidden = true;
+    toastTimer = null;
+  }, TUT_TOAST_MS);
 }
 
 function loseHeart(message) {
@@ -347,6 +382,11 @@ function init() {
     stateGameover: $('state-gameover'),
     signalSurface: $('signal-surface'),
     signalWord: $('signal-word'),
+    signalShape: $('signal-shape'),
+    shapeCheck: $('shape-check'),
+    shapeCross: $('shape-cross'),
+    shapeTriangle: $('shape-triangle'),
+    tutToast: $('tut-toast'),
     feedback: $('feedback'),
     pauseOverlay: $('pause-overlay'),
     menuBest: $('menu-best'),
@@ -421,6 +461,15 @@ function init() {
   els.pauseOverlay.addEventListener('pointerdown', (e) => {
     e.stopPropagation();
     resumeRun();
+  });
+  // Dismissing the tutorial toast must never count as a game tap.
+  els.tutToast.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    els.tutToast.hidden = true;
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+      toastTimer = null;
+    }
   });
   els.mute.addEventListener('click', () => {
     const next = !getMuted();

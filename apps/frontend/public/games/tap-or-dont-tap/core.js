@@ -118,6 +118,18 @@ export function resolveRound(
 }
 
 /**
+ * Feedback-copy key for a losing outcome (suggestion 01 item 3): maps the
+ * resolver's outcome to a distinct config string. On a Stroop round (a lying
+ * word was on screen) every misjudge gets the one explanatory message —
+ * "the word lies, the color is truth" — regardless of which way it failed.
+ * Copy-only: no new logic, the outcome value already carries the cause.
+ */
+export function loseFeedbackKey(outcome, { stroop = false } = {}) {
+  if (stroop) return 'stroopTrap';
+  return { miss: 'missedIt', 'tap-red': 'wasRed', 'tap-decoy': 'wasDecoy' }[outcome] ?? 'missedIt';
+}
+
+/**
  * Local top-% for the end screen: with a real history (≥5 runs), the top-%
  * implied by the share of past runs the current score beats (beating 60% of
  * your runs ⇒ top 40%); otherwise a baked-in score→top-% curve.

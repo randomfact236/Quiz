@@ -318,6 +318,76 @@ button:focus-visible {
   display: none;
 }
 
+/* Colorblind-safe redundant cue (suggestion 01): a shape layered on the
+   flash, always matching the actual color — never the Stroop word.
+   Grayscale QA note: ✓ / ✕ / △ stay distinct by silhouette alone, so no
+   hue check is needed; dark ink reads on all four bright flashes. */
+#signal-shape {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+#signal-shape svg {
+  width: 46vmin;
+  height: 46vmin;
+  fill: rgb(0 0 0 / 0.22);
+  stroke: none;
+}
+
+#shape-cross path,
+#shape-triangle {
+  fill: none;
+  stroke: rgb(0 0 0 / 0.28);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#shape-check .cut {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.75);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#signal-shape svg[hidden] {
+  display: none;
+}
+
+#signal-word {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- tutorial toast ---------- */
+
+#tut-toast {
+  position: absolute;
+  bottom: calc(64px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  z-index: 35;
+  white-space: nowrap;
+  cursor: pointer;
+  animation: feedback-pop 0.18s ease-out;
+}
+
+#tut-toast[hidden] {
+  display: none;
+}
+
 /* ---------- feedback overlay ---------- */
 
 #feedback {
