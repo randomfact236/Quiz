@@ -12,6 +12,7 @@ import {
   completesLine,
   emptyBoard,
   gameValue,
+  hardAiToastDue,
   legalMoves,
   mediumMove,
   other,
@@ -21,8 +22,10 @@ import {
   PREFS_KEY,
   SAVE_KEY,
   SERIES_KEY,
+  getHardAiToastSeen,
   loadPrefs,
   loadSeries,
+  markHardAiToastSeen,
   savePrefs,
   saveSeries,
   seriesSetupKey,
@@ -291,5 +294,67 @@ describe('game-theory sanity (empty board)', () => {
 
   it('legalMoves on the empty board offers all nine cells', () => {
     expect(legalMoves(emptyBoard())).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+});
+
+describe('hardAiToastDue (one-time Hard-AI softening, suggestion 02 item 2)', () => {
+  const base = { mode: '1p', difficulty: 'hard', winner: null, isDraw: false, seen: false };
+
+  it('fires on the first loss and the first draw vs Hard AI in 1p', () => {
+    expect(hardAiToastDue({ ...base, winner: 'O' })).toBe(true);
+    expect(hardAiToastDue({ ...base, isDraw: true })).toBe(true);
+  });
+
+  it('never fires once seen', () => {
+    expect(hardAiToastDue({ ...base, winner: 'O', seen: true })).toBe(false);
+    expect(hardAiToastDue({ ...base, isDraw: true, seen: true })).toBe(false);
+  });
+
+  it('never fires on Easy/Medium or 2P, nor when the player wins', () => {
+    expect(hardAiToastDue({ ...base, difficulty: 'easy', winner: 'O' })).toBe(false);
+    expect(hardAiToastDue({ ...base, difficulty: 'medium', winner: 'O' })).toBe(false);
+    expect(hardAiToastDue({ ...base, mode: '2p', winner: 'O' })).toBe(false);
+    expect(hardAiToastDue({ ...base, winner: 'X' })).toBe(false);
+  });
+});
+
+describe('lifetime flags (save v2: hardAiToast)', () => {
+  const KEY = SAVE_KEY;
+  let original: string | null;
+
+  beforeEach(() => {
+    original = window.localStorage.getItem(KEY);
+    window.localStorage.removeItem(KEY);
+  });
+
+  afterAll(() => {
+    if (original === null) window.localStorage.removeItem(KEY);
+    else window.localStorage.setItem(KEY, original);
+  });
+
+  it('defaults to unseen and flips true only through the marker', () => {
+    expect(getHardAiToastSeen()).toBe(false);
+    markHardAiToastSeen();
+    expect(getHardAiToastSeen()).toBe(true);
+  });
+
+  it('migrates a v1 save: series + prefs intact, flag defaults false, no crash', () => {
+    window.localStorage.setItem(
+      KEY,
+      JSON.stringify({
+        version: 1,
+        series: { '1p:hard': { x: 3, o: 2, draw: 1 } },
+        prefs: { mode: '1p', level: 'hard', misere: false },
+      })
+    );
+    expect(loadSeries('1p:hard')).toEqual({ x: 3, o: 2, draw: 1 });
+    expect(loadPrefs()).toEqual({ mode: '1p', level: 'hard', misere: false });
+    expect(getHardAiToastSeen()).toBe(false);
+  });
+
+  it('menu prefs saves do not reset the flag', () => {
+    markHardAiToastSeen();
+    savePrefs({ mode: '1p', level: 'medium', misere: true });
+    expect(getHardAiToastSeen()).toBe(true);
   });
 });

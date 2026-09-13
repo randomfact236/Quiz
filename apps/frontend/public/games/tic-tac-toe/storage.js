@@ -20,12 +20,14 @@
  *   game:tic-tac-toe:prefs            → { mode, level, misere }
  *
  * Versioned layout:
- *   game:tic-tac-toe:save   → { version: 1, series, prefs }
+ *   game:tic-tac-toe:save   → { version: 2, series, prefs, flags }
+ *     v2 adds `flags` for one-time lifetime markers (currently only
+ *     `hardAiToast` — suggestion 02 item 2); v1 saves migrate on first read.
  * ============================================================================
  */
 
 export const SAVE_KEY = 'game:tic-tac-toe:save';
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 /** Legacy key constants — kept exported for the migration tests. */
 export const SERIES_KEY = 'game:tic-tac-toe:series';
@@ -139,6 +141,38 @@ function normalizeSave(parsed) {
     version: SAVE_VERSION,
     series,
     prefs: normalizePrefs(parsed.prefs) || { ...DEFAULT_PREFS },
+    flags: normalizeFlags(parsed.flags),
+  };
+}
+
+/** Lifetime one-time markers (never menu prefs — they survive prefs resets). */
+function normalizeFlags(raw) {
+  return { hardAiToast: !!(raw && raw.hardAiToast === true) };
+}
+
+/**
+ * v1 → v2 migration: series + prefs carried over untouched, flags default
+ * to unseen. Returns null for anything that isn't a well-formed v1 save.
+ */
+function migrateV1(parsed) {
+  if (
+    !parsed ||
+    typeof parsed !== 'object' ||
+    parsed.version !== 1 ||
+    !parsed.series ||
+    typeof parsed.series !== 'object'
+  ) {
+    return null;
+  }
+  const series = {};
+  for (const [setup, tally] of Object.entries(parsed.series)) {
+    series[setup] = normalizeTally(tally);
+  }
+  return {
+    version: SAVE_VERSION,
+    series,
+    prefs: normalizePrefs(parsed.prefs) || { ...DEFAULT_PREFS },
+    flags: normalizeFlags(null),
   };
 }
 
@@ -194,8 +228,15 @@ function sumTallies(a, b) {
  * is idempotent: with the versioned key present it just validates and returns.
  */
 function loadSave() {
-  const existing = normalizeSave(readJson(SAVE_KEY, null));
+  const raw = readJson(SAVE_KEY, null);
+  const existing = normalizeSave(raw);
   if (existing) return existing;
+
+  const migrated = migrateV1(raw);
+  if (migrated) {
+    persist(migrated); // durably upgrade v1 → v2 on first read (idempotent)
+    return migrated;
+  }
 
   const legacySeries = readJson(SERIES_KEY, null);
   const legacyPrefs = readJson(PREFS_KEY, null);
@@ -219,6 +260,7 @@ function loadSave() {
     version: SAVE_VERSION,
     series,
     prefs: normalizePrefs(legacyPrefs) || { ...DEFAULT_PREFS },
+    flags: normalizeFlags(null),
   };
 
   if (writeJson(SAVE_KEY, save) && hasLegacy) {
@@ -265,5 +307,17 @@ export function savePrefs(prefs) {
   const save = loadSave();
   const normalized = normalizePrefs(prefs);
   if (normalized) save.prefs = normalized;
+  persist(save);
+}
+
+/* ---- one-time lifetime flags (suggestion 02) -------------------------------- */
+
+export function getHardAiToastSeen() {
+  return loadSave().flags.hardAiToast === true;
+}
+
+export function markHardAiToastSeen() {
+  const save = loadSave();
+  save.flags.hardAiToast = true;
   persist(save);
 }

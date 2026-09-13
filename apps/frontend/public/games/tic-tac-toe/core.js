@@ -174,3 +174,12 @@ export function aiMove(board, toMove, difficulty, misere) {
   if (difficulty === 'medium') return mediumMove(board, toMove, misere);
   return easyMove(board);
 }
+
+/**
+ * One-time softening toast (suggestion 02 item 2): due only for a player's
+ * FIRST loss-or-draw against Hard AI in 1p — never Easy/Medium, never 2P.
+ * Pure decision; game.js owns showing the toast and flipping the flag.
+ */
+export function hardAiToastDue({ mode, difficulty, winner, isDraw, seen }) {
+  return !seen && mode === '1p' && difficulty === 'hard' && (isDraw || winner === 'O');
+}

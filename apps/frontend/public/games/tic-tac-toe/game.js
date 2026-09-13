@@ -13,7 +13,7 @@
  * ============================================================================
  */
 
-import { emptyBoard, other, roundOutcome, aiMove } from './core.js';
+import { emptyBoard, other, roundOutcome, aiMove, hardAiToastDue } from './core.js';
 import {
   emptyTally,
   seriesSetupKey,
@@ -21,6 +21,8 @@ import {
   saveSeries,
   loadPrefs,
   savePrefs,
+  getHardAiToastSeen,
+  markHardAiToastSeen,
 } from './storage.js';
 import { GAME_CONFIG, t } from './config.js';
 
@@ -102,7 +104,7 @@ function renderCell(i) {
     'Row ' + row + ', column ' + col + ', ' + (mark ? mark : 'empty')
   );
   cell.disabled = state.locked || !!mark;
-  cell.classList.remove('cell--win', 'cell--dim', 'cell--animating');
+  cell.classList.remove('cell--win', 'cell--dim', 'cell--animating', 'cell--think');
   if (mark) {
     // Draw-in reveal; the class is always removed on a timer so the mark
     // ends fully visible even if CSS animations never advance.
@@ -187,12 +189,29 @@ function play(index) {
   if (isAiTurnNow()) scheduleAiMove();
 }
 
+function clearThinkPulse() {
+  for (const cell of els.board.children) cell.classList.remove('cell--think');
+}
+
 function scheduleAiMove() {
   lockBoard(true);
+  // Medium/Hard are deterministic, so the "decision" can be shown honestly: a
+  // faint pulse on the cell being settled on resolves into the move when the
+  // think-delay ends. Easy stays instant/random — there is no strategy to
+  // visualize (suggestion 02 item 1).
+  const planned =
+    state.difficulty !== 'easy' ? aiMove(state.board, 'O', state.difficulty, state.misere) : null;
+  if (planned !== null && planned !== undefined) {
+    els.board.children[planned].classList.add('cell--think');
+  }
   state.aiTimer = setTimeout(() => {
     state.aiTimer = null;
+    clearThinkPulse();
     if (state.screen !== 'playing' || !isAiTurnNow()) return;
-    const move = aiMove(state.board, 'O', state.difficulty, state.misere);
+    const move =
+      planned !== null && planned !== undefined
+        ? planned
+        : aiMove(state.board, 'O', state.difficulty, state.misere);
     if (move === null || move === undefined) return;
     lockBoard(false);
     play(move);
@@ -250,6 +269,20 @@ function showOverlay(isDraw, winner) {
   els.overlayTitle.dataset.mark = isDraw ? '' : winner;
   els.overlay.classList.remove('hidden');
   els.overlay.classList.add('overlay--in');
+  // One-time softening: first loss-or-draw vs Hard AI points at Medium
+  // (suggestion 02 item 2) — lifetime per device, never on other setups.
+  if (
+    hardAiToastDue({
+      mode: state.mode,
+      difficulty: state.difficulty,
+      winner,
+      isDraw,
+      seen: getHardAiToastSeen(),
+    })
+  ) {
+    markHardAiToastSeen();
+    toast(t('hardAiToast'));
+  }
   document.getElementById('btn-next').focus();
 }
 

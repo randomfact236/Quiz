@@ -24,6 +24,8 @@ const DEFAULT_CONFIG = {
       // {score} is the series line; {url} the game URL.
       share1p: '{setup} — {score}. Can you do better? {url}',
       share2p: 'We played a Tic Tac Toe series — {score}. Settle it: {url}',
+      // One-time toast after a first loss/draw vs Hard AI (suggestion 02).
+      hardAiToast: 'Hard AI never loses — try Medium to actually win, or keep grinding for draws!',
     },
   },
 };

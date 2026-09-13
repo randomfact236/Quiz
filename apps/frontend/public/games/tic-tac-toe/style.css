@@ -654,3 +654,26 @@ a:focus-visible,
     width: min(100%, 52vh, 52dvh);
   }
 }
+
+/* AI "thinking" pulse (suggestion 02 item 1): a faint settle on the cell the
+   computer is about to take (Medium/Hard only) — feedback that a move is
+   being decided, not a hint; it resolves into the mark on its own. */
+.cell--think {
+  animation: cell-think 1s ease-in-out infinite;
+}
+
+@keyframes cell-think {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.08);
+  }
+  50% {
+    box-shadow: inset 0 0 0 3px rgb(255 255 255 / 0.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell--think {
+    animation: none;
+  }
+}
