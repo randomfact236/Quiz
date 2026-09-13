@@ -156,10 +156,16 @@ function showSignal() {
   els.signalWord.hidden = !signalSpec.word;
   // Redundant non-color cue (suggestion 01): shape follows the actual color,
   // never the word, so shape-readers get the same signal as color-readers.
-  els.shapeCheck.hidden = signalSpec.color !== 'green';
-  els.shapeCross.hidden = signalSpec.color !== 'red';
-  els.shapeTriangle.hidden = signalSpec.color !== 'yellow' && signalSpec.color !== 'blue';
+  // SVGElement has no `hidden` property — the ATTRIBUTE must be toggled,
+  // or the shapes would stay display:none forever.
+  const isDecoy = signalSpec.color === 'yellow' || signalSpec.color === 'blue';
+  els.shapeCheck.toggleAttribute('hidden', signalSpec.color !== 'green');
+  els.shapeCross.toggleAttribute('hidden', signalSpec.color !== 'red');
+  els.shapeTriangle.toggleAttribute('hidden', !isDecoy);
   els.signalShape.hidden = false;
+  // With a Stroop word on screen, fade the shape so the two never fight for
+  // readability — the shape still reads peripherally, the word stays crisp.
+  els.signalSurface.classList.toggle('has-word', !!signalSpec.word);
   // Screen-reader description of the visual signal (the game is color-driven,
   // so the label carries the meaning, including the Stroop lie).
   const meaning = {
@@ -175,7 +181,7 @@ function showSignal() {
   els.signalSurface.setAttribute('aria-label', label);
   signalShownAt = performance.now();
   if (signalSpec.word) showTutorialToast('stroop');
-  else if (!els.shapeTriangle.hidden) showTutorialToast('decoy');
+  else if (isDecoy) showTutorialToast('decoy');
   after(windowMsForRound(round), () => expireSignal());
 }
 
@@ -209,7 +215,7 @@ function finishRound({ tapped, elapsedMs }) {
   // next round begins (otherwise a second tap could resolve the round twice).
   setState('feedback');
   els.signalSurface.className = '';
-  els.signalShape.hidden = true;
+  els.signalShape.toggleAttribute('hidden', true);
 
   if (result.outcome === 'hit') {
     streak += 1;
@@ -348,7 +354,8 @@ function renderMenu() {
   els.menuBestScore.textContent = (best.score || 0).toLocaleString(GAME_CONFIG.locale);
   els.menuBestMs.textContent = best.bestMs !== null ? `${best.bestMs}ms` : '—';
   const scores = getHistory().map((h) => h.score);
-  els.sparkline.hidden = scores.length < 2;
+  // svg elements: the hidden ATTRIBUTE must be toggled (no `hidden` property)
+  els.sparkline.toggleAttribute('hidden', scores.length < 2);
   els.sparkline.setAttribute('viewBox', '0 0 200 40');
   let polyline = els.sparkline.querySelector('polyline');
   if (!polyline) {

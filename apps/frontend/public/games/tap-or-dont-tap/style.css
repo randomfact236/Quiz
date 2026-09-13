@@ -164,6 +164,10 @@ body {
   margin-bottom: 14px;
 }
 
+#sparkline[hidden] {
+  display: none;
+}
+
 #sparkline polyline {
   fill: none;
   stroke: var(--primary);
@@ -331,6 +335,11 @@ button:focus-visible {
   z-index: 0;
 }
 
+/* The author display:flex would defeat the UA [hidden] rule — restate it. */
+#signal-shape[hidden] {
+  display: none;
+}
+
 #signal-shape svg {
   width: 46vmin;
   height: 46vmin;
@@ -357,6 +366,10 @@ button:focus-visible {
 
 #signal-shape svg[hidden] {
   display: none;
+}
+
+#signal-surface.has-word #signal-shape {
+  opacity: 0.35;
 }
 
 #signal-word {
