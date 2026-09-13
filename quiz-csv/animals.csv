@@ -1,0 +1,1003 @@
+# Subject: Animals
+
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,In which natural habitat does the orca live?,Rivers and lakes,Grassland,Ocean,Wetlands,C,medium,Habitats
+2,What do you call an animal that is active at night?,Diurnal,Migratory,Nocturnal,Crepuscular,C,easy,Animal Basics
+3,In which natural habitat does the koala live?,Coastal areas,Forest,Wetlands,Rainforest,B,medium,Habitats
+4,To which animal class does the sparrow belong?,Bird,Fish,Mammal,Arachnid,A,easy,Animal Classes
+5,To which animal class does the walrus belong?,Fish,Mammal,Amphibian,Arachnid,B,easy,Animal Classes
+6,To which animal class does the armadillo belong?,Insect,Amphibian,Mammal,Arachnid,C,easy,Animal Classes
+7,What is an apex predator?,A predator with no teeth,A small insect eater,A predator at the top of its food chain,A plant-eating hunter,C,medium,Animal Basics
+8,To which animal class does the coyote belong?,Fish,Insect,Mammal,Amphibian,C,easy,Animal Classes
+9,What is a scavenger?,An animal that feeds on remains,An insect only,A plant eater,A top predator,A,medium,Animal Basics
+10,Are any two zebras striped identically?,Only in the same herd,Yes,Only twins,No,D,easy,Animal Basics
+11,"Is the chicken a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+12,To which animal class does the turkey belong?,Bird,Insect,Mammal,Reptile,A,easy,Animal Classes
+13,Which insect can survive for weeks without its head?,the ant,the fly,the beetle,the cockroach,D,medium,Animal Basics
+14,In which natural habitat does the katydid live?,Wetlands,Rainforest,Antarctic ice,Forest,B,medium,Habitats
+15,"Is the gazelle a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+16,"Is the cod a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+17,"Is the marmot a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+18,What is a group of bats called?,a colony,a cave,a cloud,a flight,A,medium,Animal Groups
+19,Which is the tallest animal in the world?,the ostrich,the camel,the elephant,the giraffe,D,easy,Animal Records
+20,"Is the caecilian a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+21,Which animal builds dams in rivers?,the badger,the beaver,the mole,the otter,B,easy,Animal Basics
+22,To which animal class does the pangolin belong?,Mammal,Amphibian,Fish,Reptile,A,easy,Animal Classes
+23,In which natural habitat does the monarch butterfly live?,Coastal areas,Arctic tundra,Ocean,Grassland,D,medium,Habitats
+24,To which animal class does the starfish belong?,Reptile,Insect,Amphibian,Echinoderm,D,easy,Animal Classes
+25,What is a baby hare called?,a cub,a leveret,a kit,a pup,B,hard,Baby Animals
+26,In which natural habitat does the moth live?,Forest,Wetlands,Rainforest,Grassland,A,medium,Habitats
+27,"Is the hare a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+28,"Is the jaguar a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+29,In which natural habitat does the seagull live?,Desert,Ocean,Coastal areas,Rivers and lakes,C,medium,Habitats
+30,What is the study of fish called?,Ichthyology,Marinology,Entomology,Herpetology,A,medium,Animal Basics
+31,"Is the python a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+32,What is a baby chicken called?,a duckling,a chick,a squab,a poult,B,easy,Baby Animals
+33,"Is the cicada a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+34,In which natural habitat does the chameleon live?,Wetlands,Desert,Rainforest,Rivers and lakes,C,medium,Habitats
+35,"Is the seagull a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+36,To which animal class does the meerkat belong?,Amphibian,Mammal,Bird,Fish,B,easy,Animal Classes
+37,What is a group of lions called?,a herd,a pack,a flock,a pride,D,easy,Animal Groups
+38,To which animal class does the grouper belong?,Arachnid,Mammal,Amphibian,Fish,D,easy,Animal Classes
+39,What do herbivores have for grinding plants?,Sharp canines,No teeth,Flat molars,Beaks only,C,medium,Animal Basics
+40,In which natural habitat does the baboon live?,Ocean,Savanna,Rivers and lakes,Wetlands,B,medium,Habitats
+41,To which animal class does the narwhal belong?,Reptile,Mammal,Fish,Arachnid,B,easy,Animal Classes
+42,"Is the cassowary a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+43,"Is the salmon a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+44,In which natural habitat does the toad live?,Antarctic ice,Grassland,Savanna,Forest,D,medium,Habitats
+45,In which natural habitat does the wallaby live?,Rivers and lakes,Grassland,Coastal areas,Antarctic ice,B,medium,Habitats
+46,In which natural habitat does the gerbil live?,Antarctic ice,Desert,Rainforest,Savanna,B,medium,Habitats
+47,"Is the flying fish a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+48,In which natural habitat does the poison dart frog live?,Antarctic ice,Grassland,Coastal areas,Rainforest,D,medium,Habitats
+49,What color is the blood of an octopus?,Green,Red,Clear,Blue,D,medium,Animal Basics
+50,"Is the squirrel a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+51,In which natural habitat does the tapir live?,Rainforest,Forest,Mountains,Rivers and lakes,A,medium,Habitats
+52,To which animal class does the tarsier belong?,Bird,Reptile,Arachnid,Mammal,D,easy,Animal Classes
+53,"Is the penguin a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+54,What is a group of jellyfish called?,a bloom,a drift,a smack,a sting,C,expert,Animal Groups
+55,To which animal class does the parrot belong?,Mammal,Bird,Insect,Fish,B,easy,Animal Classes
+56,"Is the squid a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+57,In which natural habitat does the boa constrictor live?,Savanna,Rainforest,Grassland,Rivers and lakes,B,medium,Habitats
+58,In which natural habitat does the snapping turtle live?,Coastal areas,Rivers and lakes,Antarctic ice,Grassland,B,medium,Habitats
+59,"Is the humpback whale a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+60,In which natural habitat does the dugong live?,Antarctic ice,Coastal areas,Rainforest,Forest,B,medium,Habitats
+61,In which natural habitat does the dolphin live?,Grassland,Ocean,Coastal areas,Forest,B,medium,Habitats
+62,In which natural habitat does the robin live?,Arctic tundra,Forest,Savanna,Coastal areas,B,medium,Habitats
+63,To which animal class does the conch belong?,Bird,Mollusk,Mammal,Fish,B,easy,Animal Classes
+64,"Is the pelican a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+65,To which animal class does the hamster belong?,Bird,Insect,Amphibian,Mammal,D,easy,Animal Classes
+66,Which is the largest primate?,the gorilla,the orangutan,the baboon,the chimpanzee,A,easy,Animal Records
+67,Which insect makes honey?,the beetle,the honeybee,the ant,the wasp,B,easy,Animal Basics
+68,To which animal class does the pig belong?,Fish,Bird,Amphibian,Mammal,D,easy,Animal Classes
+69,To which animal class does the beluga whale belong?,Amphibian,Bird,Mammal,Arachnid,C,easy,Animal Classes
+70,"Is the barracuda a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+71,Which mammal is known for laying eggs?,the bat,the sloth,the platypus,the kangaroo,C,medium,Animal Basics
+72,"Is the baboon a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+73,To which animal class does the goat belong?,Mammal,Insect,Arachnid,Reptile,A,easy,Animal Classes
+74,To which animal class does the cockatoo belong?,Arachnid,Amphibian,Mammal,Bird,D,easy,Animal Classes
+75,In which natural habitat does the monitor lizard live?,Wetlands,Savanna,Grassland,Rivers and lakes,C,medium,Habitats
+76,To which animal class does the tick belong?,Reptile,Fish,Insect,Arachnid,D,easy,Animal Classes
+77,"Is the tick a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+78,"Is the impala a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+79,In which natural habitat does the jaguar live?,Desert,Rainforest,Rivers and lakes,Forest,B,medium,Habitats
+80,In which natural habitat does the emperor penguin live?,Mountains,Rivers and lakes,Savanna,Antarctic ice,D,medium,Habitats
+81,"Is the tern a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+82,"Is the gecko a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+83,What is a male chicken called?,a pullet,a capon,a rooster,a hen,C,easy,Animal Basics
+84,In which natural habitat does the mole live?,Forest,Wetlands,Grassland,Desert,A,medium,Habitats
+85,In which natural habitat does the oystercatcher live?,Coastal areas,Desert,Antarctic ice,Ocean,A,medium,Habitats
+86,To which animal class does the stork belong?,Reptile,Bird,Fish,Amphibian,B,easy,Animal Classes
+87,"Is the monitor lizard a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+88,What is a baby horse called?,a fawn,a calf,a foal,a cub,C,easy,Baby Animals
+89,To which animal class does the zebra belong?,Insect,Mammal,Reptile,Amphibian,B,easy,Animal Classes
+90,In which natural habitat does the cricket live?,Arctic tundra,Savanna,Grassland,Rivers and lakes,C,medium,Habitats
+91,"Is the canary a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+92,"Is the armadillo a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+93,To which animal class does the echidna belong?,Mammal,Amphibian,Insect,Arachnid,A,easy,Animal Classes
+94,"Is the giraffe a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+95,To which animal class does the crab belong?,Mammal,Amphibian,Bird,Crustacean,D,easy,Animal Classes
+96,"Is the seahorse a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+97,To which animal class does the magpie belong?,Reptile,Fish,Bird,Mammal,C,easy,Animal Classes
+98,"Is the koala a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+99,What do scorpions do under ultraviolet light?,Disappear,Freeze,Glow,Change color to red,C,medium,Animal Basics
+100,In which natural habitat does the impala live?,Wetlands,Savanna,Grassland,Desert,B,medium,Habitats
+101,"Is the trout a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+102,To which animal class does the stick insect belong?,Insect,Fish,Arachnid,Amphibian,A,easy,Animal Classes
+103,"Is the hammerhead shark a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+104,"Is the camel a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+105,In which natural habitat does the tarsier live?,Arctic tundra,Coastal areas,Rivers and lakes,Rainforest,D,medium,Habitats
+106,What is a male horse called?,a stallion,a gelding only,a mare,a colt,A,easy,Animal Basics
+107,"Is the swan a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+108,In which natural habitat does the centipede live?,Forest,Savanna,Antarctic ice,Desert,A,medium,Habitats
+109,To which animal class does the canary belong?,Mammal,Bird,Arachnid,Fish,B,easy,Animal Classes
+110,"Is the orangutan a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+111,"Is the opossum a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+112,"Is the herring a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+113,In which natural habitat does the lemming live?,Grassland,Coastal areas,Mountains,Arctic tundra,D,medium,Habitats
+114,To which animal class does the bat belong?,Amphibian,Fish,Bird,Mammal,D,easy,Animal Classes
+115,Which animal group are cold-blooded reptiles in?,Reptilia,Amphibia,Aves,Mammalia,A,medium,Animal Basics
+116,"Is the sea urchin a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+117,"Is the Asian elephant a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+118,"Is the aardvark a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+119,"Is the raccoon a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+120,In which natural habitat does the damselfly live?,Rainforest,Wetlands,Savanna,Coastal areas,B,medium,Habitats
+121,"Is the flamingo a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+122,To which animal class does the spotted hyena belong?,Reptile,Mammal,Amphibian,Bird,B,easy,Animal Classes
+123,Which is the largest land animal?,the African elephant,the hippopotamus,the giraffe,the white rhinoceros,A,easy,Animal Records
+124,To which animal class does the monarch butterfly belong?,Amphibian,Fish,Insect,Mammal,C,easy,Animal Classes
+125,In which natural habitat does the zebra live?,Wetlands,Mountains,Savanna,Rivers and lakes,C,medium,Habitats
+126,"Is the wolverine a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+127,To which animal class does the cardinal belong?,Bird,Arachnid,Reptile,Insect,A,easy,Animal Classes
+128,How do geckos climb smooth walls?,Suction cups,Claw hooks,Glue from their feet,Sticky toe pads with microscopic hairs,D,medium,Animal Basics
+129,"Is the crane a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+130,What is a group of birds called?,a flock,a pack,a school,a pride,A,easy,Animal Groups
+131,In which natural habitat does the meerkat live?,Wetlands,Desert,Rainforest,Grassland,B,medium,Habitats
+132,"Is the pangolin a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+133,Which way do crabs typically walk?,In circles,Sideways,Forward,Backward,B,easy,Animal Basics
+134,Which bird cannot fly but swims extremely well?,the owl,the eagle,the parrot,the penguin,D,easy,Animal Basics
+135,"Is the cockroach a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+136,To which animal class does the python belong?,Amphibian,Insect,Arachnid,Reptile,D,easy,Animal Classes
+137,To which animal class does the sea turtle belong?,Mammal,Insect,Amphibian,Reptile,D,easy,Animal Classes
+138,"Is the pufferfish a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+139,To which animal class does the moth belong?,Reptile,Amphibian,Arachnid,Insect,D,easy,Animal Classes
+140,"Is the avocet a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+141,To which animal class does the otter belong?,Bird,Insect,Mammal,Arachnid,C,easy,Animal Classes
+142,To which animal class does the badger belong?,Reptile,Arachnid,Amphibian,Mammal,D,easy,Animal Classes
+143,How many legs does an insect have?,Four,Six,Ten,Eight,B,easy,Animal Basics
+144,"Is the hummingbird a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+145,What is a group of bees called?,a herd,a swarm,a pack,a flock,B,easy,Animal Groups
+146,"Is the peregrine falcon a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+147,To which animal class does the mole belong?,Reptile,Fish,Bird,Mammal,D,easy,Animal Classes
+148,To which animal class does the squid belong?,Mammal,Reptile,Arachnid,Mollusk,D,easy,Animal Classes
+149,"Is the sperm whale a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+150,What is a group of wolves called?,a troop,a herd,a pride,a pack,D,easy,Animal Groups
+151,"Is the cuttlefish a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+152,What is a shark skeleton made of?,Cartilage,Cartoon,Bone,Shell,A,medium,Animal Basics
+153,To which animal class does the honeybee belong?,Mammal,Insect,Arachnid,Fish,B,easy,Animal Classes
+154,In which natural habitat does the alpaca live?,Wetlands,Mountains,Desert,Ocean,B,medium,Habitats
+155,Which is the largest big cat?,the leopard,the tiger,the jaguar,the lion,B,easy,Animal Records
+156,In which natural habitat does the walrus live?,Grassland,Arctic tundra,Rivers and lakes,Forest,B,medium,Habitats
+157,In which natural habitat does the sea turtle live?,Ocean,Rivers and lakes,Arctic tundra,Mountains,A,medium,Habitats
+158,In which natural habitat does the hamster live?,Desert,Grassland,Arctic tundra,Rainforest,A,medium,Habitats
+159,"Is the dove a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+160,What is a group of sheep called?,a pack,a herd,a flock,a pride,C,easy,Animal Groups
+161,To which animal class does the halibut belong?,Arachnid,Insect,Fish,Bird,C,easy,Animal Classes
+162,In which natural habitat does the rhinoceros live?,Grassland,Savanna,Wetlands,Mountains,B,medium,Habitats
+163,What does it mean when an animal is territorial?,It lives alone by choice,It defends its area,It hunts in packs,It travels constantly,B,medium,Animal Basics
+164,To which animal class does the sheep belong?,Insect,Reptile,Arachnid,Mammal,D,easy,Animal Classes
+165,To which animal class does the albatross belong?,Amphibian,Fish,Reptile,Bird,D,easy,Animal Classes
+166,To which animal class does the newt belong?,Insect,Amphibian,Arachnid,Fish,B,easy,Animal Classes
+167,"Is the cockatoo a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+168,"Is the blue jay a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+169,In which natural habitat does the firefly live?,Ocean,Mountains,Forest,Antarctic ice,C,medium,Habitats
+170,To which animal class does the roadrunner belong?,Bird,Arachnid,Mammal,Insect,A,easy,Animal Classes
+171,What is a female sheep called?,a lamb,a mutton,a ram,a ewe,D,easy,Animal Basics
+172,What is a group of hippopotamuses called?,a herd,a wallow,a bloat,a pod,C,expert,Animal Groups
+173,To which animal class does the impala belong?,Insect,Amphibian,Mammal,Bird,C,easy,Animal Classes
+174,In which natural habitat does the manatee live?,Rivers and lakes,Desert,Rainforest,Savanna,A,medium,Habitats
+175,In which natural habitat does the crane live?,Coastal areas,Forest,Savanna,Wetlands,D,medium,Habitats
+176,To which animal class does the snapping turtle belong?,Fish,Insect,Reptile,Mammal,C,easy,Animal Classes
+177,In which natural habitat does the hornbill live?,Desert,Ocean,Coastal areas,Rainforest,D,medium,Habitats
+178,How do butterflies taste food?,With their antennae,With their feet,With their wings,With their tongue,B,medium,Animal Basics
+179,To which animal class does the crow belong?,Fish,Reptile,Bird,Insect,C,easy,Animal Classes
+180,"Is the sparrow a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+181,"Is the dugong a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+182,"Is the kiwi a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+183,What is a species?,A color pattern,A group that can breed together,Any animal,A zoo category,B,medium,Animal Basics
+184,In which natural habitat does the skink live?,Forest,Wetlands,Desert,Grassland,A,medium,Habitats
+185,What is camouflage?,A pack structure,Blending into surroundings,A mating call,A hunting technique,B,easy,Animal Basics
+186,What is a baby koala called?,a cub,a kit,a calf,a joey,D,easy,Baby Animals
+187,In which natural habitat does the blue jay live?,Forest,Mountains,Ocean,Antarctic ice,A,medium,Habitats
+188,In which natural habitat does the bonobo live?,Mountains,Grassland,Rainforest,Antarctic ice,C,medium,Habitats
+189,"Is the cheetah a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+190,To which animal class does the brown bear belong?,Insect,Arachnid,Amphibian,Mammal,D,easy,Animal Classes
+191,To which animal class does the giant anteater belong?,Amphibian,Arachnid,Mammal,Bird,C,easy,Animal Classes
+192,To which animal class does the orangutan belong?,Mammal,Insect,Fish,Arachnid,A,easy,Animal Classes
+193,What is a group of zebras called?,a parade,a stripe,a herd,a dazzle,D,hard,Animal Groups
+194,"Is the grouper a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+195,Which is the fastest animal in the sea?,the tuna,the marlin,the sailfish,the dolphin,C,hard,Animal Records
+196,"Is the grebe a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+197,To which animal class does the scorpion belong?,Bird,Arachnid,Reptile,Mammal,B,easy,Animal Classes
+198,In which natural habitat does the giraffe live?,Mountains,Rainforest,Arctic tundra,Savanna,D,medium,Habitats
+199,To which animal class does the mosquito belong?,Insect,Bird,Amphibian,Fish,A,easy,Animal Classes
+200,"Is the cardinal a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+201,"Is the salamander a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+202,What feeds on a giant panda diet of?,Insects,Berries,Fish,Bamboo,D,easy,Animal Basics
+203,In which natural habitat does the condor live?,Forest,Wetlands,Mountains,Coastal areas,C,medium,Habitats
+204,Which animal is said to have nine lives?,the cat,the fox,the wolf,the dog,A,easy,Animal Basics
+205,"Is the lobster a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+206,To which animal class does the dugong belong?,Amphibian,Fish,Mammal,Arachnid,C,easy,Animal Classes
+207,"Is the squirrel monkey a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+208,In which natural habitat does the giant anteater live?,Antarctic ice,Wetlands,Grassland,Ocean,C,medium,Habitats
+209,"Is the goat a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+210,To which animal class does the tuna belong?,Amphibian,Fish,Reptile,Bird,B,easy,Animal Classes
+211,What do you call animals that eat plants and meat?,Herbivores,Carnivores,Detritivores,Omnivores,D,easy,Animal Basics
+212,What is a baby penguin called?,a pup,a calf,a cub,a chick,D,easy,Baby Animals
+213,In which natural habitat does the bighorn sheep live?,Mountains,Coastal areas,Antarctic ice,Rivers and lakes,A,medium,Habitats
+214,"Is the toucan a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+215,To which animal class does the pelican belong?,Bird,Arachnid,Mammal,Reptile,A,easy,Animal Classes
+216,To which animal class does the squirrel belong?,Arachnid,Fish,Mammal,Bird,C,easy,Animal Classes
+217,To which animal class does the red fox belong?,Amphibian,Reptile,Mammal,Fish,C,easy,Animal Classes
+218,In which natural habitat does the lynx live?,Forest,Arctic tundra,Rivers and lakes,Grassland,A,medium,Habitats
+219,In which natural habitat does the rabbit live?,Wetlands,Antarctic ice,Grassland,Rainforest,C,medium,Habitats
+220,In which natural habitat does the seal live?,Ocean,Rainforest,Coastal areas,Arctic tundra,C,medium,Habitats
+221,In which natural habitat does the llama live?,Coastal areas,Mountains,Antarctic ice,Wetlands,B,medium,Habitats
+222,What is a baby goat called?,a kid,a foal,a pup,a lamb,A,easy,Baby Animals
+223,In which natural habitat does the orangutan live?,Grassland,Rainforest,Savanna,Arctic tundra,B,medium,Habitats
+224,In which natural habitat does the woodpecker live?,Wetlands,Rivers and lakes,Arctic tundra,Forest,D,medium,Habitats
+225,In which natural habitat does the blue whale live?,Antarctic ice,Rainforest,Arctic tundra,Ocean,D,medium,Habitats
+226,To which animal class does the tern belong?,Insect,Fish,Bird,Arachnid,C,easy,Animal Classes
+227,"Is the vampire bat a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+228,To which animal class does the seal belong?,Arachnid,Mammal,Fish,Bird,B,easy,Animal Classes
+229,To which animal class does the mountain goat belong?,Bird,Mammal,Amphibian,Arachnid,B,easy,Animal Classes
+230,To which animal class does the weasel belong?,Amphibian,Mammal,Insect,Bird,B,easy,Animal Classes
+231,Which is the largest lizard in the world?,the crocodile,the monitor lizard,the Komodo dragon,the iguana,C,medium,Animal Records
+232,Which mammal hangs upside down in caves?,the bat,the sloth,the owl,the monkey,A,easy,Animal Basics
+233,To which animal class does the barracuda belong?,Arachnid,Insect,Fish,Reptile,C,easy,Animal Classes
+234,"Is the bighorn sheep a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+235,To which animal class does the hornbill belong?,Amphibian,Bird,Mammal,Fish,B,easy,Animal Classes
+236,In which natural habitat does the platypus live?,Antarctic ice,Savanna,Rivers and lakes,Mountains,C,medium,Habitats
+237,"Is the sea turtle a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+238,What is the largest bird in the world?,,,,,The ostrich,extreme,Animal Records
+239,To which animal class does the gorilla belong?,Reptile,Fish,Insect,Mammal,D,easy,Animal Classes
+240,In which natural habitat does the tiger live?,Rivers and lakes,Arctic tundra,Ocean,Rainforest,D,medium,Habitats
+241,Which bird is a symbol of peace?,the eagle,the dove,the owl,the swan,B,easy,Animal Basics
+242,In which natural habitat does the sperm whale live?,Ocean,Forest,Savanna,Desert,A,medium,Habitats
+243,In which natural habitat does the flamingo live?,Wetlands,Antarctic ice,Mountains,Ocean,A,medium,Habitats
+244,To which animal class does the gharial belong?,Insect,Bird,Mammal,Reptile,D,easy,Animal Classes
+245,In which natural habitat does the termite live?,Forest,Rainforest,Wetlands,Grassland,D,medium,Habitats
+246,In which natural habitat does the camel live?,Savanna,Ocean,Desert,Rivers and lakes,C,medium,Habitats
+247,To which animal class does the piranha belong?,Bird,Amphibian,Fish,Mammal,C,easy,Animal Classes
+248,To which animal class does the millipede belong?,Arachnid,Amphibian,Fish,Myriapod,D,easy,Animal Classes
+249,To which animal class does the firefly belong?,Mammal,Fish,Amphibian,Insect,D,easy,Animal Classes
+250,To which animal class does the mayfly belong?,Insect,Reptile,Fish,Arachnid,A,easy,Animal Classes
+251,"Is the horse a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+252,To which animal class does the wolverine belong?,Arachnid,Insect,Mammal,Fish,C,easy,Animal Classes
+253,To which animal class does the katydid belong?,Bird,Insect,Arachnid,Mammal,B,easy,Animal Classes
+254,To which animal class does the rattlesnake belong?,Insect,Reptile,Mammal,Arachnid,B,easy,Animal Classes
+255,To which animal class does the porcupine belong?,Insect,Fish,Mammal,Arachnid,C,easy,Animal Classes
+256,"Is the flea a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+257,How do ants breathe?,Through their skin only,Through tiny holes called spiracles,With lungs,With gills,B,expert,Animal Basics
+258,"Is the seal a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+259,In which natural habitat does the Tasmanian devil live?,Mountains,Forest,Desert,Grassland,B,medium,Habitats
+260,To which animal class does the bearded dragon belong?,Amphibian,Reptile,Mammal,Insect,B,easy,Animal Classes
+261,"Is the bearded dragon a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+262,What is a male sheep called?,a lamb,a hogget,a ram,a ewe,C,easy,Animal Basics
+263,"Is the sloth a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+264,"Is the katydid a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+265,In which natural habitat does the marmot live?,Ocean,Arctic tundra,Rivers and lakes,Mountains,D,medium,Habitats
+266,Which is the largest bird in the world?,the condor,the albatross,the emu,the ostrich,D,easy,Animal Records
+267,In which natural habitat does the bald eagle live?,Ocean,Forest,Grassland,Savanna,B,medium,Habitats
+268,In which natural habitat does the crow live?,Forest,Mountains,Rainforest,Antarctic ice,A,medium,Habitats
+269,In which natural habitat does the bison live?,Ocean,Grassland,Wetlands,Arctic tundra,B,medium,Habitats
+270,In which natural habitat does the Bactrian camel live?,Desert,Grassland,Rainforest,Coastal areas,A,medium,Habitats
+271,"Is the great white shark a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+272,To which animal class does the raccoon belong?,Amphibian,Bird,Fish,Mammal,D,easy,Animal Classes
+273,"Is the clownfish a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+274,What do you call animals that eat only plants?,Omnivores,Insectivores,Carnivores,Herbivores,D,easy,Animal Basics
+275,To which animal class does the cicada belong?,Amphibian,Bird,Reptile,Insect,D,easy,Animal Classes
+276,"Is the oystercatcher a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+277,To which animal class does the oystercatcher belong?,Reptile,Fish,Bird,Amphibian,C,easy,Animal Classes
+278,To which animal class does the opossum belong?,Reptile,Mammal,Arachnid,Bird,B,easy,Animal Classes
+279,In which natural habitat does the armadillo live?,Grassland,Forest,Rainforest,Wetlands,A,medium,Habitats
+280,"Is the pigeon a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+281,To which animal class does the spider monkey belong?,Insect,Mammal,Arachnid,Amphibian,B,easy,Animal Classes
+282,In which natural habitat does the tree frog live?,Grassland,Antarctic ice,Rivers and lakes,Rainforest,D,medium,Habitats
+283,What is a baby kangaroo called?,a joey,a pup,a fawn,a cub,A,easy,Baby Animals
+284,"Is the rabbit a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+285,In which natural habitat does the raven live?,Ocean,Forest,Mountains,Desert,B,medium,Habitats
+286,"Is the wildebeest a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+287,To which animal class does the shrimp belong?,Insect,Arachnid,Fish,Crustacean,D,easy,Animal Classes
+288,"Is the ant a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+289,In which natural habitat does the tortoise live?,Coastal areas,Desert,Savanna,Forest,B,medium,Habitats
+290,To which animal class does the musk ox belong?,Mammal,Arachnid,Amphibian,Reptile,A,easy,Animal Classes
+291,What is a baby tiger called?,a calf,a puppy,a cub,a lamb,C,easy,Baby Animals
+292,In which natural habitat does the sparrow live?,Rivers and lakes,Forest,Rainforest,Antarctic ice,B,medium,Habitats
+293,In which natural habitat does the rhea live?,Grassland,Arctic tundra,Antarctic ice,Coastal areas,A,medium,Habitats
+294,Which animal is known as the King of the Jungle?,the tiger,the gorilla,the elephant,the lion,D,easy,Animal Basics
+295,In which natural habitat does the parrot live?,Rainforest,Arctic tundra,Grassland,Rivers and lakes,A,medium,Habitats
+296,"Is the caribou a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+297,"Is the chimpanzee a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+298,"Is the rhinoceros a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+299,In which natural habitat does the hare live?,Mountains,Savanna,Grassland,Antarctic ice,C,medium,Habitats
+300,"Is the dung beetle a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+301,"Is the mountain goat a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+302,What is a baby fox called?,a kit,a kid,a fawn,a cub,A,medium,Baby Animals
+303,What is a baby owl called?,an owlet,a fledgling,a hatchling,a chick,A,medium,Baby Animals
+304,To which animal class does the stag beetle belong?,Bird,Insect,Reptile,Amphibian,B,easy,Animal Classes
+305,"Is the sea anemone a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+306,"Is the narwhal a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+307,What is a baby sheep called?,a kid,a colt,a lamb,a calf,C,easy,Baby Animals
+308,In which natural habitat does the beluga whale live?,Grassland,Mountains,Rainforest,Arctic tundra,D,medium,Habitats
+309,Which ape is the closest living relative of humans?,the baboon,the orangutan,the chimpanzee,the gorilla,C,medium,Animal Basics
+310,"Is the magpie a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+311,"Is the nautilus a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+312,"Is the ferret a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+313,To which animal class does the flamingo belong?,Fish,Amphibian,Bird,Mammal,C,easy,Animal Classes
+314,To which animal class does the chameleon belong?,Mammal,Reptile,Bird,Fish,B,easy,Animal Classes
+315,To which animal class does the herring belong?,Fish,Arachnid,Insect,Amphibian,A,easy,Animal Classes
+316,"Is the ostrich a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+317,To which animal class does the jaguar belong?,Mammal,Reptile,Fish,Amphibian,A,easy,Animal Classes
+318,To which animal class does the black widow spider belong?,Bird,Fish,Reptile,Arachnid,D,easy,Animal Classes
+319,To which animal class does the termite belong?,Arachnid,Reptile,Amphibian,Insect,D,easy,Animal Classes
+320,In which natural habitat does the lion live?,Savanna,Grassland,Arctic tundra,Rivers and lakes,A,medium,Habitats
+321,What is a baby dolphin called?,a chick,a pup,a kit,a calf,D,medium,Baby Animals
+322,In which natural habitat does the groundhog live?,Rainforest,Forest,Desert,Mountains,B,medium,Habitats
+323,In which natural habitat does the frilled lizard live?,Wetlands,Antarctic ice,Desert,Rainforest,D,medium,Habitats
+324,In which natural habitat does the Asian elephant live?,Rainforest,Desert,Grassland,Coastal areas,A,medium,Habitats
+325,What is a group of gorillas called?,a herd,a troop,a pack,a pride,B,medium,Animal Groups
+326,To which animal class does the Komodo dragon belong?,Reptile,Bird,Insect,Arachnid,A,easy,Animal Classes
+327,Which bird cannot fly?,the penguin,the eagle,the sparrow,the parrot,A,easy,Animal Basics
+328,To which animal class does the snowy owl belong?,Reptile,Bird,Insect,Amphibian,B,easy,Animal Classes
+329,To which animal class does the vicuna belong?,Insect,Mammal,Arachnid,Bird,B,easy,Animal Classes
+330,In which natural habitat does the golden eagle live?,Antarctic ice,Arctic tundra,Savanna,Mountains,D,medium,Habitats
+331,"Is the puffin a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+332,In which natural habitat does the penguin live?,Coastal areas,Savanna,Desert,Grassland,A,medium,Habitats
+333,"Is the oyster a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+334,To which animal class does the manatee belong?,Mammal,Bird,Insect,Arachnid,A,easy,Animal Classes
+335,"Is the monarch butterfly a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+336,In which natural habitat does the horned viper live?,Savanna,Desert,Arctic tundra,Antarctic ice,B,medium,Habitats
+337,In which natural habitat does the giant panda live?,Grassland,Forest,Savanna,Rainforest,D,medium,Habitats
+338,"Is the okapi a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+339,To which animal class does the camel belong?,Amphibian,Arachnid,Reptile,Mammal,D,easy,Animal Classes
+340,What is a baby elephant called?,a calf,a kid,a cub,a foal,A,easy,Baby Animals
+341,To which animal class does the hammerhead shark belong?,Amphibian,Fish,Mammal,Reptile,B,easy,Animal Classes
+342,Which mammal has the most powerful bite?,the hippopotamus,the crocodile,the grizzly bear,the lion,A,hard,Animal Records
+343,In which natural habitat does the brown bear live?,Arctic tundra,Ocean,Savanna,Forest,D,medium,Habitats
+344,"Is the centipede a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+345,To which animal class does the aphid belong?,Fish,Insect,Reptile,Amphibian,B,easy,Animal Classes
+346,"Is the rattlesnake a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+347,To which animal class does the centipede belong?,Bird,Myriapod,Mammal,Amphibian,B,easy,Animal Classes
+348,"Is the skunk a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+349,To which animal class does the poison dart frog belong?,Arachnid,Bird,Amphibian,Mammal,C,easy,Animal Classes
+350,To which animal class does the lobster belong?,Crustacean,Mammal,Insect,Fish,A,easy,Animal Classes
+351,What is an invertebrate?,A mammal,A bird only,An animal without a backbone,An animal with a spine,C,easy,Animal Basics
+352,In which natural habitat does the leopard live?,Antarctic ice,Mountains,Coastal areas,Savanna,D,medium,Habitats
+353,In which natural habitat does the cassowary live?,Wetlands,Rainforest,Rivers and lakes,Coastal areas,B,medium,Habitats
+354,"Is the hedgehog a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+355,What is a group of crocodiles called?,a bask,a snap,a float,a herd,A,hard,Animal Groups
+356,Which animal has the longest gestation period?,the elephant,the rhinoceros,the giraffe,the whale,A,hard,Animal Records
+357,Which bird lays the largest egg?,the ostrich,the albatross,the eagle,the emu,A,easy,Animal Records
+358,Which reptile is famous for its hard protective shell?,the frog,the lizard,the turtle,the snake,C,easy,Animal Basics
+359,To which animal class does the earwig belong?,Insect,Mammal,Bird,Reptile,A,easy,Animal Classes
+360,"Is the robin a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+361,To which animal class does the thorny devil belong?,Mammal,Amphibian,Reptile,Insect,C,easy,Animal Classes
+362,In which natural habitat does the crocodile live?,Forest,Rivers and lakes,Coastal areas,Desert,B,medium,Habitats
+363,"Is the scorpion a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+364,To which animal class does the ladybug belong?,Fish,Bird,Reptile,Insect,D,easy,Animal Classes
+365,To which animal class does the stingray belong?,Bird,Mammal,Fish,Reptile,C,easy,Animal Classes
+366,In which natural habitat does the skunk live?,Arctic tundra,Grassland,Forest,Savanna,C,medium,Habitats
+367,To which animal class does the moray eel belong?,Fish,Bird,Insect,Amphibian,A,easy,Animal Classes
+368,What is a group of monkeys called?,a troop,a pack,a band,a tribe,A,medium,Animal Groups
+369,"Is the chameleon a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+370,"Is the gray wolf a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+371,"Is the vicuna a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+372,What does endangered mean for a species?,Living in zoos only,Recently discovered,Living in captivity,At risk of extinction,D,easy,Animal Basics
+373,What is a baby echidna called?,a calf,a joey,a puggle,a hatchling,C,expert,Baby Animals
+374,In which natural habitat does the Komodo dragon live?,Coastal areas,Arctic tundra,Savanna,Grassland,D,medium,Habitats
+375,What is a group of toads called?,a colony,a knot,a bloat,an army,B,expert,Animal Groups
+376,In which natural habitat does the flea live?,Rainforest,Arctic tundra,Ocean,Grassland,D,medium,Habitats
+377,"Is the tarsier a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+378,In which natural habitat does the grebe live?,Mountains,Rivers and lakes,Wetlands,Rainforest,B,medium,Habitats
+379,Which is the largest spider in the world by mass?,the huntsman spider,the tarantula,the goliath birdeater,the wolf spider,C,hard,Animal Records
+380,What is a male deer called?,a stag only,a doe,a fawn,a buck,D,medium,Animal Basics
+381,"Is the African elephant a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+382,In which natural habitat does the red panda live?,Coastal areas,Savanna,Rainforest,Grassland,C,medium,Habitats
+383,Which is the largest rodent in the world?,the wombat,the beaver,the capybara,the porcupine,C,medium,Animal Records
+384,"Is the albatross a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+385,To which animal class does the cassowary belong?,Mammal,Bird,Arachnid,Fish,B,easy,Animal Classes
+386,To which animal class does the bumblebee belong?,Insect,Mammal,Arachnid,Reptile,A,easy,Animal Classes
+387,"Is the bull shark a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+388,To which animal class does the crocodile belong?,Reptile,Mammal,Amphibian,Bird,A,easy,Animal Classes
+389,"Is the alligator a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+390,In which natural habitat does the tarantula live?,Wetlands,Grassland,Desert,Savanna,C,medium,Habitats
+391,To which animal class does the bald eagle belong?,Insect,Fish,Bird,Amphibian,C,easy,Animal Classes
+392,"Is the sea cucumber a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+393,"Is the spider monkey a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+394,In which natural habitat does the alligator live?,Mountains,Savanna,Coastal areas,Wetlands,D,medium,Habitats
+395,"Is the bumblebee a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+396,In which natural habitat does the hornet live?,Antarctic ice,Forest,Arctic tundra,Mountains,B,medium,Habitats
+397,To which animal class does the butterfly belong?,Insect,Reptile,Amphibian,Arachnid,A,easy,Animal Classes
+398,To which animal class does the emu belong?,Bird,Mammal,Reptile,Insect,A,easy,Animal Classes
+399,To which animal class does the wombat belong?,Amphibian,Insect,Fish,Mammal,D,easy,Animal Classes
+400,To which animal class does the guinea pig belong?,Insect,Mammal,Reptile,Fish,B,easy,Animal Classes
+401,In which natural habitat does the hummingbird live?,Rivers and lakes,Coastal areas,Desert,Rainforest,D,medium,Habitats
+402,"Is the gerbil a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+403,To which animal class does the gray wolf belong?,Arachnid,Bird,Mammal,Amphibian,C,easy,Animal Classes
+404,To which animal class does the crane belong?,Bird,Reptile,Amphibian,Mammal,A,easy,Animal Classes
+405,In which natural habitat does the tern live?,Ocean,Forest,Rivers and lakes,Coastal areas,D,medium,Habitats
+406,"Is the housefly a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+407,What is the tallest animal in the world?,,,,,The giraffe,extreme,Animal Records
+408,In which natural habitat does the narwhal live?,Ocean,Savanna,Rainforest,Arctic tundra,D,medium,Habitats
+409,To which animal class does the flounder belong?,Arachnid,Bird,Amphibian,Fish,D,easy,Animal Classes
+410,To which animal class does the grass snake belong?,Bird,Arachnid,Insect,Reptile,D,easy,Animal Classes
+411,In which natural habitat does the albatross live?,Savanna,Ocean,Mountains,Rivers and lakes,B,medium,Habitats
+412,To which animal class does the caiman belong?,Arachnid,Reptile,Mammal,Amphibian,B,easy,Animal Classes
+413,Which is the largest turtle in the world?,the leatherback sea turtle,the green sea turtle,the snapping turtle,the Galapagos tortoise,A,hard,Animal Records
+414,What is a group of ants called?,a colony,a swarm,an army,a nest,A,easy,Animal Groups
+415,What is a food chain?,A zoo feeding plan,A migration route,A group of predators,Who eats whom in an ecosystem,D,easy,Animal Basics
+416,To which animal class does the white-tailed deer belong?,Arachnid,Mammal,Insect,Fish,B,easy,Animal Classes
+417,To which animal class does the nautilus belong?,Mollusk,Reptile,Amphibian,Mammal,A,easy,Animal Classes
+418,"Is the crocodile a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+419,To which animal class does the anchovy belong?,Bird,Mammal,Insect,Fish,D,easy,Animal Classes
+420,In which natural habitat does the badger live?,Coastal areas,Antarctic ice,Rivers and lakes,Forest,D,medium,Habitats
+421,"Is the red fox a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+422,What is a vertebrate?,A plant eater,An animal without bones,An insect,An animal with a backbone,D,easy,Animal Basics
+423,What is a group of butterflies called?,a kaleidoscope,a flutter,a rainbow,a swarm,A,expert,Animal Groups
+424,In which natural habitat does the honeybee live?,Rainforest,Mountains,Antarctic ice,Forest,D,medium,Habitats
+425,Why do chameleons change color?,To attract prey,Only to hide,To communicate and control temperature,They change only at night,C,medium,Animal Basics
+426,Which mammal lives the longest?,the horse,the elephant,the lion,the bowhead whale,D,expert,Animal Records
+427,"Is the newt a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+428,What is an omnivore example?,the lion,the cow,the rabbit,the bear,D,medium,Animal Basics
+429,What is the largest animal on Earth?,,,,,The blue whale,extreme,Animal Records
+430,"Is the emu a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+431,To which animal class does the lemming belong?,Mammal,Amphibian,Bird,Arachnid,A,easy,Animal Classes
+432,Which is the largest animal on Earth?,the blue whale,the African elephant,the orca,the whale shark,A,easy,Animal Records
+433,What is poaching?,Illegal hunting of protected animals,Feeding wild animals,Tracking animals with cameras,A mating season,A,easy,Animal Basics
+434,Which bird has the largest wingspan?,the swan,the wandering albatross,the condor,the eagle,B,medium,Animal Records
+435,In which natural habitat does the white-tailed deer live?,Ocean,Desert,Coastal areas,Forest,D,medium,Habitats
+436,What color is a polar bear skin under its fur?,White,Gray,Pink,Black,D,medium,Animal Basics
+437,"Is the porcupine a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+438,To which animal class does the grasshopper belong?,Insect,Arachnid,Mammal,Bird,A,easy,Animal Classes
+439,What is a group of fish called?,a herd,a flock,a school,a pack,C,easy,Animal Groups
+440,To which animal class does the snow leopard belong?,Insect,Mammal,Fish,Amphibian,B,easy,Animal Classes
+441,To which animal class does the peregrine falcon belong?,Bird,Arachnid,Reptile,Mammal,A,easy,Animal Classes
+442,To which animal class does the orca belong?,Amphibian,Insect,Arachnid,Mammal,D,easy,Animal Classes
+443,Why are flamingos pink?,Sun exposure,Their skin pigment,Their diet of shrimp and algae,Their blood,C,easy,Animal Basics
+444,"Is the peacock a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+445,"Is the dolphin a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+446,What is the study of reptiles and amphibians called?,Herpetology,Zoology,Ichthyology,Ornithology,A,medium,Animal Basics
+447,"Is the ladybug a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+448,"Is the brown bear a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+449,In which natural habitat does the spotted hyena live?,Mountains,Rivers and lakes,Savanna,Rainforest,C,medium,Habitats
+450,Which animal is known as humans best friend?,the horse,the parrot,the dog,the cat,C,easy,Animal Basics
+451,To which animal class does the dung beetle belong?,Fish,Insect,Amphibian,Mammal,B,easy,Animal Classes
+452,"Is the musk ox a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+453,In which natural habitat does the warthog live?,Savanna,Forest,Rivers and lakes,Coastal areas,A,medium,Habitats
+454,To which animal class does the goose belong?,Amphibian,Bird,Mammal,Fish,B,easy,Animal Classes
+455,In which natural habitat does the caecilian live?,Antarctic ice,Mountains,Rivers and lakes,Rainforest,D,medium,Habitats
+456,"Is the hornbill a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+457,What is a group of elephant families led by?,The strongest male,The fastest hunter,A rotating leader,The oldest female,D,medium,Animal Basics
+458,In which natural habitat does the sandpiper live?,Coastal areas,Antarctic ice,Wetlands,Ocean,A,medium,Habitats
+459,To which animal class does the frilled lizard belong?,Insect,Reptile,Arachnid,Fish,B,easy,Animal Classes
+460,"Is the blue marlin a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+461,What is conservation?,Building zoos,Protecting nature and wildlife,Hunting for sport,Collecting animals,B,easy,Animal Basics
+462,Which animal has the thickest fur?,the sea otter,the chinchilla,the polar bear,the arctic fox,A,expert,Animal Records
+463,"Is the bullfrog a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+464,To which animal class does the okapi belong?,Bird,Reptile,Mammal,Fish,C,easy,Animal Classes
+465,To which animal class does the swan belong?,Bird,Mammal,Reptile,Insect,A,easy,Animal Classes
+466,To which animal class does the iguana belong?,Mammal,Reptile,Bird,Amphibian,B,easy,Animal Classes
+467,In which natural habitat does the gharial live?,Mountains,Rainforest,Rivers and lakes,Coastal areas,C,medium,Habitats
+468,To which animal class does the king cobra belong?,Bird,Reptile,Fish,Mammal,B,easy,Animal Classes
+469,In which natural habitat does the king cobra live?,Grassland,Forest,Rainforest,Desert,C,medium,Habitats
+470,To which animal class does the chipmunk belong?,Mammal,Insect,Fish,Amphibian,A,easy,Animal Classes
+471,In which natural habitat does the hedgehog live?,Grassland,Forest,Rivers and lakes,Antarctic ice,B,medium,Habitats
+472,"Is the tuatara a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+473,In which natural habitat does the wolverine live?,Arctic tundra,Rainforest,Forest,Coastal areas,A,medium,Habitats
+474,To which animal class does the hippopotamus belong?,Reptile,Bird,Amphibian,Mammal,D,easy,Animal Classes
+475,To which animal class does the squirrel monkey belong?,Insect,Mammal,Fish,Reptile,B,easy,Animal Classes
+476,What is an ecosystem?,A single species,A zoo habitat,A community of living things and their environment,A food chain only,C,medium,Animal Basics
+477,"Is the turkey a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+478,To which animal class does the avocet belong?,Amphibian,Mammal,Bird,Reptile,C,easy,Animal Classes
+479,In which natural habitat does the okapi live?,Arctic tundra,Wetlands,Coastal areas,Rainforest,D,medium,Habitats
+480,"Is the dragonfly a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+481,"Is the giant anteater a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+482,To which animal class does the electric eel belong?,Arachnid,Bird,Amphibian,Fish,D,easy,Animal Classes
+483,To which animal class does the flying fish belong?,Insect,Reptile,Fish,Bird,C,easy,Animal Classes
+484,"Is the polar bear a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+485,To which animal class does the ostrich belong?,Bird,Insect,Arachnid,Reptile,A,easy,Animal Classes
+486,"Is the swordfish a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+487,What is a baby pig called?,a joey,a kit,a piglet,a calf,C,easy,Baby Animals
+488,"Is the alpaca a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+489,"Is the basilisk lizard a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+490,In which natural habitat does the bullfrog live?,Ocean,Forest,Wetlands,Coastal areas,C,medium,Habitats
+491,"Is the anchovy a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+492,To which animal class does the manta ray belong?,Fish,Arachnid,Reptile,Insect,A,easy,Animal Classes
+493,"Is the snow leopard a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+494,"Is the iguana a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+495,In which natural habitat does the canary live?,Mountains,Forest,Coastal areas,Grassland,B,medium,Habitats
+496,In which natural habitat does the spider live?,Forest,Ocean,Coastal areas,Savanna,A,medium,Habitats
+497,In which natural habitat does the howler monkey live?,Desert,Rainforest,Grassland,Arctic tundra,B,medium,Habitats
+498,What are male seahorses famous for?,Building nests from pearls,Guarding nothing,Changing into females,Giving birth,D,easy,Animal Basics
+499,To which animal class does the great white shark belong?,Insect,Amphibian,Bird,Fish,D,easy,Animal Classes
+500,What is a predator?,An animal that hunts other animals,A sleeping animal,A scavenger bird,An animal that eats plants,A,easy,Animal Basics
+501,In which natural habitat does the turkey live?,Rainforest,Forest,Arctic tundra,Desert,B,medium,Habitats
+502,In which natural habitat does the ostrich live?,Antarctic ice,Grassland,Savanna,Rivers and lakes,C,medium,Habitats
+503,"Is the earwig a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+504,To which animal class does the woodpecker belong?,Bird,Amphibian,Insect,Arachnid,A,easy,Animal Classes
+505,To which animal class does the loon belong?,Fish,Insect,Reptile,Bird,D,easy,Animal Classes
+506,Why is the clownfish safe among sea anemones?,It fights the anemone,A protective mucus layer,It hides in the tentacle shadows,It eats the stingers,B,medium,Animal Basics
+507,In which natural habitat does the raccoon live?,Ocean,Rivers and lakes,Forest,Coastal areas,C,medium,Habitats
+508,"Is the lionfish a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+509,In which natural habitat does the wasp live?,Rivers and lakes,Rainforest,Forest,Antarctic ice,C,medium,Habitats
+510,To which animal class does the caecilian belong?,Fish,Mammal,Amphibian,Arachnid,C,easy,Animal Classes
+511,Why does a woodpecker have such a long tongue?,It wraps around its skull,It has a hook at the end,It is a hollow tube,It can detach,A,expert,Animal Basics
+512,To which animal class does the horse belong?,Mammal,Bird,Insect,Amphibian,A,easy,Animal Classes
+513,To which animal class does the blue whale belong?,Bird,Mammal,Arachnid,Reptile,B,easy,Animal Classes
+514,"Is the firefly a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+515,"Is the parrot a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+516,Which bird lays its eggs in other birds nests?,the robin,the sparrow,the dove,the cuckoo,D,medium,Animal Basics
+517,To which animal class does the flea belong?,Reptile,Amphibian,Mammal,Insect,D,easy,Animal Classes
+518,Which is the largest fish in the ocean?,the great white shark,the giant squid,the blue whale,the whale shark,D,medium,Animal Records
+519,To which animal class does the swordfish belong?,Fish,Mammal,Arachnid,Bird,A,easy,Animal Classes
+520,What is a baby whale called?,a foal,a cub,a pup,a calf,D,medium,Baby Animals
+521,In which natural habitat does the cardinal live?,Rivers and lakes,Wetlands,Grassland,Forest,D,medium,Habitats
+522,"Is the hornet a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+523,What is a diurnal animal?,Active at night,Active at dawn only,Active during the day,Always sleeping,C,medium,Animal Basics
+524,In which natural habitat does the beaver live?,Rivers and lakes,Grassland,Savanna,Coastal areas,A,medium,Habitats
+525,To which animal class does the groundhog belong?,Amphibian,Mammal,Fish,Bird,B,easy,Animal Classes
+526,To which animal class does the grebe belong?,Fish,Mammal,Bird,Insect,C,easy,Animal Classes
+527,To which animal class does the moose belong?,Mammal,Fish,Reptile,Arachnid,A,easy,Animal Classes
+528,Which big cat has the loudest roar?,the lion,the leopard,the cheetah,the tiger,A,medium,Animal Basics
+529,What do aardvarks mainly eat?,Roots,Grass,Fruit,Ants and termites,D,easy,Animal Basics
+530,In which natural habitat does the basilisk lizard live?,Savanna,Desert,Rainforest,Mountains,C,medium,Habitats
+531,"Is the bald eagle a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+532,To which animal class does the robin belong?,Fish,Insect,Mammal,Bird,D,easy,Animal Classes
+533,"Is the sheep a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+534,To which animal class does the anole belong?,Insect,Amphibian,Fish,Reptile,D,easy,Animal Classes
+535,"Is the pig a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+536,"Is the mallard duck a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+537,What is a group of penguins called?,a rookery,a huddle,a colony,a waddle,C,medium,Animal Groups
+538,To which animal class does the giraffe belong?,Mammal,Reptile,Bird,Amphibian,A,easy,Animal Classes
+539,"Is the sardine a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+540,"Is the otter a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+541,Which crab borrows shells to live in?,the king crab,the fiddler crab,the hermit crab,the horseshoe crab,C,medium,Animal Basics
+542,To which animal class does the coral belong?,Amphibian,Fish,Reptile,Cnidarian,D,easy,Animal Classes
+543,In which natural habitat does the loon live?,Rainforest,Grassland,Rivers and lakes,Desert,C,medium,Habitats
+544,In which natural habitat does the housefly live?,Grassland,Savanna,Arctic tundra,Rainforest,A,medium,Habitats
+545,Roughly how large is a kiwi egg compared to its body?,One fiftieth of its weight,About one sixth of its weight,One hundredth of its weight,Half of its weight,B,hard,Animal Basics
+546,What is a baby bear called?,a fawn,a kitten,a cub,a pup,C,easy,Baby Animals
+547,Which animal is a symbol of Australia?,the kiwi,the panda,the kangaroo,the tiger,C,easy,Animal Basics
+548,"Is the flounder a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+549,Which sea creature has the largest eyes?,the giant clam,the colossal squid,the great white shark,the blue whale,B,hard,Animal Basics
+550,To which animal class does the Tasmanian devil belong?,Arachnid,Reptile,Mammal,Insect,C,easy,Animal Classes
+551,To which animal class does the skink belong?,Amphibian,Insect,Arachnid,Reptile,D,easy,Animal Classes
+552,"Is the leopard a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+553,How strong is the shock of an electric eel?,About 50 volts,About 12 volts,Up to about 600 volts,About 5000 volts,C,hard,Animal Basics
+554,"Is the groundhog a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+555,In which natural habitat does the avocet live?,Grassland,Arctic tundra,Wetlands,Rivers and lakes,C,medium,Habitats
+556,In which natural habitat does the opossum live?,Coastal areas,Ocean,Desert,Forest,D,medium,Habitats
+557,In which natural habitat does the magpie live?,Arctic tundra,Grassland,Antarctic ice,Forest,D,medium,Habitats
+558,To which animal class does the tiger belong?,Insect,Bird,Mammal,Amphibian,C,easy,Animal Classes
+559,What is a baby rabbit called?,a cub,a kit,a joey,a fawn,B,medium,Baby Animals
+560,To which animal class does the bonobo belong?,Reptile,Fish,Arachnid,Mammal,D,easy,Animal Classes
+561,What is a baby otter called?,a calf,a cub,a pup,a kit,C,medium,Baby Animals
+562,Which is the loudest animal on Earth?,the sperm whale,the lion,the howler monkey,the blue whale,A,expert,Animal Records
+563,"Is the bison a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+564,"Is the anglerfish a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+565,What do camels store in their humps?,Fat,Muscle,Food,Water,A,easy,Animal Basics
+566,To which animal class does the damselfly belong?,Amphibian,Mammal,Insect,Arachnid,C,easy,Animal Classes
+567,To which animal class does the monitor lizard belong?,Bird,Reptile,Arachnid,Mammal,B,easy,Animal Classes
+568,"Is the whale shark a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+569,"Is the raven a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+570,In which natural habitat does the peregrine falcon live?,Ocean,Desert,Mountains,Coastal areas,D,medium,Habitats
+571,To which animal class does the black bear belong?,Bird,Reptile,Mammal,Insect,C,easy,Animal Classes
+572,In which natural habitat does the pheasant live?,Grassland,Ocean,Rainforest,Mountains,A,medium,Habitats
+573,"Is the halibut a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+574,"Is the warthog a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+575,Which animal is famous for its long trunk and large ears?,the buffalo,the elephant,the hippopotamus,the rhinoceros,B,easy,Animal Basics
+576,"Is the lynx a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+577,To which animal class does the blue jay belong?,Insect,Bird,Reptile,Arachnid,B,easy,Animal Classes
+578,What can a starfish do if it loses an arm?,Nothing,Swap roles with another arm,Replace it with a leg,Regrow it,D,easy,Animal Basics
+579,"Is the cricket a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+580,In which natural habitat does the bat live?,Desert,Forest,Coastal areas,Arctic tundra,B,medium,Habitats
+581,"Is the red panda a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+582,"Is the skink a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+583,To which animal class does the bison belong?,Amphibian,Bird,Insect,Mammal,D,easy,Animal Classes
+584,"Is the beluga whale a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+585,To which animal class does the sea urchin belong?,Echinoderm,Fish,Reptile,Arachnid,A,easy,Animal Classes
+586,"Is the tiger shark a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+587,"Is the stag beetle a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+588,In which natural habitat does the axolotl live?,Wetlands,Mountains,Rivers and lakes,Antarctic ice,C,medium,Habitats
+589,In which natural habitat does the moorhen live?,Coastal areas,Wetlands,Desert,Savanna,B,medium,Habitats
+590,"Is the hamster a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+591,What is unique about each zebra pattern?,It matches their mother exactly,It is unique like a fingerprint,All zebras share one pattern,It changes with age,B,easy,Animal Basics
+592,In which natural habitat does the macaw live?,Savanna,Rainforest,Ocean,Grassland,B,medium,Habitats
+593,In which natural habitat does the chimpanzee live?,Rainforest,Coastal areas,Rivers and lakes,Antarctic ice,A,medium,Habitats
+594,In which natural habitat does the bearded dragon live?,Rivers and lakes,Coastal areas,Rainforest,Desert,D,medium,Habitats
+595,In which natural habitat does the vampire bat live?,Grassland,Rivers and lakes,Rainforest,Ocean,C,medium,Habitats
+596,To which animal class does the sloth belong?,Mammal,Arachnid,Fish,Insect,A,easy,Animal Classes
+597,"Is the kangaroo a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+598,To which animal class does the gecko belong?,Fish,Reptile,Insect,Mammal,B,easy,Animal Classes
+599,To which animal class does the humpback whale belong?,Amphibian,Fish,Mammal,Reptile,C,easy,Animal Classes
+600,"Is the lion a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+601,"Is the echidna a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+602,To which animal class does the box turtle belong?,Reptile,Bird,Fish,Mammal,A,easy,Animal Classes
+603,What is a baby dog called?,a kitten,a puppy,a kit,a cub,B,easy,Baby Animals
+604,"Is the goose a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+605,"Is the white-tailed deer a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+606,What do snakes use to detect heat?,Their eyes,Their scales,Their tongues,Heat-sensing pits,D,medium,Animal Basics
+607,To which animal class does the gazelle belong?,Insect,Mammal,Fish,Reptile,B,easy,Animal Classes
+608,In which natural habitat does the cheetah live?,Coastal areas,Rainforest,Savanna,Ocean,C,medium,Habitats
+609,"Is the mussel a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+610,What do you call animals that eat only meat?,Omnivores,Carnivores,Herbivores,Frugivores,B,easy,Animal Basics
+611,In which natural habitat does the donkey live?,Grassland,Forest,Savanna,Rainforest,A,medium,Habitats
+612,"Is the golden eagle a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+613,What is animal migration?,Shedding fur,Hunting in packs,Hibernation,Seasonal movement between regions,D,easy,Animal Basics
+614,"Is the shrimp a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+615,In which natural habitat does the stag beetle live?,Mountains,Forest,Coastal areas,Antarctic ice,B,medium,Habitats
+616,Which is the fastest bird in a dive?,the swift,the hawk,the golden eagle,the peregrine falcon,D,easy,Animal Records
+617,To which animal class does the sea cucumber belong?,Fish,Reptile,Echinoderm,Bird,C,easy,Animal Classes
+618,"Is the wallaby a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+619,Which big cat is famous for purring?,the cheetah,the lion,the leopard,the tiger,A,hard,Animal Basics
+620,To which animal class does the seagull belong?,Bird,Arachnid,Fish,Insect,A,easy,Animal Classes
+621,In which natural habitat does the mosquito live?,Savanna,Wetlands,Mountains,Rivers and lakes,B,medium,Habitats
+622,In which natural habitat does the red fox live?,Coastal areas,Antarctic ice,Ocean,Forest,D,medium,Habitats
+623,To which animal class does the howler monkey belong?,Arachnid,Bird,Mammal,Fish,C,easy,Animal Classes
+624,"Is the heron a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+625,"Is the gorilla a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+626,In which natural habitat does the polar bear live?,Arctic tundra,Grassland,Wetlands,Ocean,A,medium,Habitats
+627,To which animal class does the cod belong?,Amphibian,Fish,Insect,Reptile,B,easy,Animal Classes
+628,"Is the wasp a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+629,"Is the snowy owl a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+630,In which natural habitat does the ferret live?,Rainforest,Antarctic ice,Grassland,Desert,C,medium,Habitats
+631,"Is the tiger a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+632,"Is the ibex a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+633,In which natural habitat does the mallard duck live?,Rivers and lakes,Arctic tundra,Savanna,Rainforest,A,medium,Habitats
+634,In which natural habitat does the wombat live?,Rivers and lakes,Arctic tundra,Mountains,Forest,D,medium,Habitats
+635,Which is the slowest mammal?,the tortoise,the sloth,the koala,the manatee,B,easy,Animal Records
+636,In which natural habitat does the sloth live?,Desert,Forest,Arctic tundra,Rainforest,D,medium,Habitats
+637,What is a female chicken called?,a chick,a hen,a rooster,a cockerel,B,easy,Animal Basics
+638,In which natural habitat does the kangaroo live?,Wetlands,Grassland,Desert,Savanna,B,medium,Habitats
+639,"Is the millipede a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+640,To which animal class does the ferret belong?,Fish,Bird,Reptile,Mammal,D,easy,Animal Classes
+641,To which animal class does the tapir belong?,Mammal,Bird,Arachnid,Amphibian,A,easy,Animal Classes
+642,Which is the fastest land animal?,the horse,the lion,the cheetah,the greyhound,C,easy,Animal Records
+643,What is a group of domestic cats called?,a kindle,a clowder,a pack,a pride,B,expert,Animal Groups
+644,"Is the moray eel a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+645,"Is the barn owl a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+646,"Is the weasel a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+647,To which animal class does the bighorn sheep belong?,Insect,Fish,Mammal,Reptile,C,easy,Animal Classes
+648,In which natural habitat does the cockroach live?,Forest,Wetlands,Rivers and lakes,Mountains,A,medium,Habitats
+649,"Is the vulture a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+650,In which natural habitat does the gray wolf live?,Desert,Forest,Ocean,Coastal areas,B,medium,Habitats
+651,To which animal class does the kiwi belong?,Bird,Amphibian,Reptile,Arachnid,A,easy,Animal Classes
+652,"Is the stick insect a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+653,"Is the Bactrian camel a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+654,In which natural habitat does the bumblebee live?,Desert,Ocean,Grassland,Antarctic ice,C,medium,Habitats
+655,What is a group of crows called?,a murder,a flock,an unkindness,a parliament,A,hard,Animal Groups
+656,Which big cat cannot roar?,the lion,the tiger,the snow leopard,the jaguar,C,hard,Animal Basics
+657,"Is the prairie dog a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+658,In which natural habitat does the African elephant live?,Grassland,Rainforest,Arctic tundra,Savanna,D,medium,Habitats
+659,"Is the cougar a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+660,What is the study of animals called?,Ecology,Geology,Zoology,Botany,C,easy,Animal Basics
+661,In which natural habitat does the roadrunner live?,Ocean,Arctic tundra,Wetlands,Desert,D,medium,Habitats
+662,What is a habitat?,A zoo cage,The natural home of an animal,A hunting ground only,An animal diet,B,easy,Animal Basics
+663,In which natural habitat does the kingfisher live?,Savanna,Rivers and lakes,Rainforest,Arctic tundra,B,medium,Habitats
+664,What is a female horse called?,a stallion,a filly only,a mare,a foal,C,easy,Animal Basics
+665,"Is the tree frog a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+666,"Is the gharial a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+667,"Is the mole a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+668,What is a young cat under one year usually called?,a kitten,a cub,a pup,a foal,A,easy,Animal Basics
+669,"Is the sea lion a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+670,To which animal class does the platypus belong?,Bird,Arachnid,Mammal,Reptile,C,easy,Animal Classes
+671,To which animal class does the pigeon belong?,Insect,Bird,Mammal,Reptile,B,easy,Animal Classes
+672,"Is the king cobra a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+673,To which animal class does the hummingbird belong?,Amphibian,Reptile,Bird,Insect,C,easy,Animal Classes
+674,What is a nocturnal bird of prey called?,a sparrow,a falcon,an eagle,an owl,D,easy,Animal Basics
+675,What is a group of locusts called?,a swarm,a horde,a cloud,a plague,D,medium,Animal Groups
+676,"Is the bonobo a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+677,In which natural habitat does the Galapagos tortoise live?,Forest,Wetlands,Grassland,Coastal areas,C,medium,Habitats
+678,What is a baby seal called?,a cub,a pup,a joey,a calf,B,medium,Baby Animals
+679,In which natural habitat does the gecko live?,Coastal areas,Desert,Rivers and lakes,Mountains,B,medium,Habitats
+680,"Is the Tasmanian devil a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+681,"Is the toad a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+682,In which natural habitat does the stork live?,Desert,Wetlands,Arctic tundra,Savanna,B,medium,Habitats
+683,In which natural habitat does the echidna live?,Desert,Grassland,Rivers and lakes,Antarctic ice,B,medium,Habitats
+684,Which animal kills the most humans each year?,the hippopotamus,the mosquito,the snake,the crocodile,B,medium,Animal Records
+685,In which natural habitat does the hippopotamus live?,Coastal areas,Rainforest,Rivers and lakes,Savanna,C,medium,Habitats
+686,In which natural habitat does the black bear live?,Grassland,Forest,Rainforest,Ocean,B,medium,Habitats
+687,To which animal class does the barn owl belong?,Amphibian,Arachnid,Bird,Reptile,C,easy,Animal Classes
+688,"Is the honeybee a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+689,"Is the axolotl a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+690,To which animal class does the angelfish belong?,Arachnid,Amphibian,Fish,Insect,C,easy,Animal Classes
+691,What is the largest primate?,,,,,The gorilla,extreme,Animal Records
+692,To which animal class does the polar bear belong?,Mammal,Reptile,Insect,Fish,A,easy,Animal Classes
+693,"Is the sandpiper a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+694,To which animal class does the peacock belong?,Mammal,Bird,Arachnid,Amphibian,B,easy,Animal Classes
+695,To which animal class does the tortoise belong?,Bird,Arachnid,Fish,Reptile,D,easy,Animal Classes
+696,"Is the coyote a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+697,To which animal class does the rhinoceros belong?,Amphibian,Insect,Mammal,Arachnid,C,easy,Animal Classes
+698,In which natural habitat does the cicada live?,Desert,Arctic tundra,Rivers and lakes,Forest,D,medium,Habitats
+699,"Is the howler monkey a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+700,In which natural habitat does the pigeon live?,Forest,Arctic tundra,Savanna,Wetlands,A,medium,Habitats
+701,To which animal class does the vulture belong?,Insect,Reptile,Amphibian,Bird,D,easy,Animal Classes
+702,To which animal class does the lionfish belong?,Mammal,Arachnid,Reptile,Fish,D,easy,Animal Classes
+703,In which natural habitat does the toucan live?,Rainforest,Coastal areas,Ocean,Antarctic ice,A,medium,Habitats
+704,To which animal class does the leopard belong?,Arachnid,Bird,Reptile,Mammal,D,easy,Animal Classes
+705,To which animal class does the tuatara belong?,Mammal,Reptile,Insect,Amphibian,B,easy,Animal Classes
+706,"Is the macaw a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+707,To which animal class does the alligator belong?,Mammal,Reptile,Amphibian,Fish,B,easy,Animal Classes
+708,Which snake is the heaviest in the world?,the boa constrictor,the green anaconda,the reticulated python,the king cobra,B,medium,Animal Records
+709,To which animal class does the golden eagle belong?,Reptile,Bird,Insect,Fish,B,easy,Animal Classes
+710,"Is the damselfly a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+711,"Is the stingray a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+712,To which animal class does the cheetah belong?,Arachnid,Amphibian,Bird,Mammal,D,easy,Animal Classes
+713,To which animal class does the boa constrictor belong?,Arachnid,Reptile,Amphibian,Mammal,B,easy,Animal Classes
+714,In which natural habitat does the sheep live?,Desert,Grassland,Rainforest,Wetlands,B,medium,Habitats
+715,What is a group of whales called?,a flock,a school,a herd,a pod,D,medium,Animal Groups
+716,To which animal class does the hornet belong?,Fish,Amphibian,Insect,Bird,C,easy,Animal Classes
+717,To which animal class does the capybara belong?,Fish,Reptile,Mammal,Bird,C,easy,Animal Classes
+718,"Is the moose a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+719,"Is the loon a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+720,What is a group of owls called?,a watch,a murder,a flock,a parliament,D,hard,Animal Groups
+721,"Is the conch a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+722,To which animal class does the mallard duck belong?,Bird,Amphibian,Arachnid,Insect,A,easy,Animal Classes
+723,In which natural habitat does the weasel live?,Rivers and lakes,Grassland,Antarctic ice,Forest,D,medium,Habitats
+724,In which natural habitat does the earwig live?,Rivers and lakes,Forest,Ocean,Wetlands,B,medium,Habitats
+725,To which animal class does the cuttlefish belong?,Mollusk,Fish,Mammal,Insect,A,easy,Animal Classes
+726,To which animal class does the salmon belong?,Amphibian,Fish,Bird,Mammal,B,easy,Animal Classes
+727,To which animal class does the moorhen belong?,Insect,Bird,Reptile,Mammal,B,easy,Animal Classes
+728,"Is the moth a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+729,"Is the donkey a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+730,What is a baby beaver called?,a kit,a pup,a calf,a cub,A,hard,Baby Animals
+731,To which animal class does the llama belong?,Arachnid,Mammal,Reptile,Fish,B,easy,Animal Classes
+732,What is a group of hyenas called?,a pack,a clan,a laugh,a cackle,D,hard,Animal Groups
+733,In which natural habitat does the ant live?,Rivers and lakes,Ocean,Grassland,Forest,D,medium,Habitats
+734,Which is the smallest bird in the world?,the bee hummingbird,the wren,the goldcrest,the sparrow,A,medium,Animal Records
+735,To which animal class does the Asian elephant belong?,Mammal,Amphibian,Bird,Fish,A,easy,Animal Classes
+736,In which natural habitat does the squirrel live?,Wetlands,Forest,Antarctic ice,Grassland,B,medium,Habitats
+737,To which animal class does the anglerfish belong?,Reptile,Bird,Amphibian,Fish,D,easy,Animal Classes
+738,"Is the meerkat a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+739,How do frogs absorb water?,Through their skin,They drink from ponds,With their tongue,By licking leaves,A,medium,Animal Basics
+740,To which animal class does the skunk belong?,Arachnid,Reptile,Amphibian,Mammal,D,easy,Animal Classes
+741,In which natural habitat does the snowy owl live?,Arctic tundra,Forest,Ocean,Rivers and lakes,A,medium,Habitats
+742,Which bird is a national symbol of the United States?,the turkey,the falcon,the raven,the bald eagle,D,easy,Animal Basics
+743,To which animal class does the barnacle belong?,Reptile,Amphibian,Mammal,Crustacean,D,easy,Animal Classes
+744,"Is the stork a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+745,What is binomial naming?,A breed label,A two-part scientific name,A zoo nickname,A tracking code,B,medium,Animal Basics
+746,In which natural habitat does the pelican live?,Coastal areas,Mountains,Rivers and lakes,Wetlands,A,medium,Habitats
+747,To which animal class does the dragonfly belong?,Amphibian,Insect,Arachnid,Mammal,B,easy,Animal Classes
+748,To which animal class does the praying mantis belong?,Insect,Amphibian,Reptile,Bird,A,easy,Animal Classes
+749,To which animal class does the housefly belong?,Amphibian,Insect,Arachnid,Reptile,B,easy,Animal Classes
+750,In which natural habitat does the scorpion live?,Desert,Arctic tundra,Ocean,Rainforest,A,medium,Habitats
+751,What is the study of insects called?,Zoology,Entomology,Ornithology,Apiology,B,medium,Animal Basics
+752,In which natural habitat does the caiman live?,Rivers and lakes,Savanna,Rainforest,Coastal areas,C,medium,Habitats
+753,What do elephants use their trunks for?,Balance only,Only for drinking,Only for smelling,"Breathing, smelling, and grabbing",D,easy,Animal Basics
+754,To which animal class does the octopus belong?,Bird,Mollusk,Fish,Mammal,B,easy,Animal Classes
+755,What is a group of rhinoceroses called?,a charge,a herd,a crash,a storm,C,hard,Animal Groups
+756,In which natural habitat does the mountain goat live?,Antarctic ice,Ocean,Desert,Mountains,D,medium,Habitats
+757,"Is the hippopotamus a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+758,In which natural habitat does the stick insect live?,Rainforest,Arctic tundra,Desert,Rivers and lakes,A,medium,Habitats
+759,In which natural habitat does the dove live?,Wetlands,Rivers and lakes,Arctic tundra,Forest,D,medium,Habitats
+760,To which animal class does the wallaby belong?,Arachnid,Mammal,Amphibian,Bird,B,easy,Animal Classes
+761,To which animal class does the lynx belong?,Fish,Reptile,Mammal,Amphibian,C,easy,Animal Classes
+762,To which animal class does the wildebeest belong?,Insect,Mammal,Bird,Reptile,B,easy,Animal Classes
+763,In which natural habitat does the horse live?,Wetlands,Rainforest,Mountains,Grassland,D,medium,Habitats
+764,What is the largest fish in the sea?,,,,,The whale shark,extreme,Animal Records
+765,In which natural habitat does the aphid live?,Antarctic ice,Ocean,Grassland,Desert,C,medium,Habitats
+766,In which natural habitat does the grass snake live?,Mountains,Antarctic ice,Wetlands,Rivers and lakes,C,medium,Habitats
+767,"Is the spider a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+768,What is a baby lion called?,a foal,a kitten,a kid,a cub,D,easy,Baby Animals
+769,"Is the piranha a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+770,"Is the lemming a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+771,What is a baby giraffe called?,a calf,a fawn,a cub,a foal,A,medium,Baby Animals
+772,"Is the grass snake a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+773,"Is the jellyfish a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+774,To which animal class does the puffin belong?,Insect,Fish,Bird,Reptile,C,easy,Animal Classes
+775,To which animal class does the macaw belong?,Mammal,Arachnid,Amphibian,Bird,D,easy,Animal Classes
+776,"Is the tortoise a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+777,What is a group of geese on the ground called?,a gaggle,a skein,a wedge,a flock,A,medium,Animal Groups
+778,"Is the Komodo dragon a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+779,"Is the grasshopper a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+780,In which natural habitat does the goat live?,Rainforest,Grassland,Mountains,Ocean,C,medium,Habitats
+781,"Is the crow a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+782,"Is the mosquito a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+783,What is a baby deer called?,a calf,a foal,a cub,a fawn,D,easy,Baby Animals
+784,"Is the wombat a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,C,medium,Diets
+785,In which natural habitat does the chipmunk live?,Coastal areas,Forest,Arctic tundra,Grassland,B,medium,Habitats
+786,"Is the thorny devil a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+787,To which animal class does the blue marlin belong?,Bird,Fish,Insect,Mammal,B,easy,Animal Classes
+788,Which is the smallest mammal in the world?,the pygmy possum,the bumblebee bat,the shrew,the mouse,B,hard,Animal Records
+789,"Is the emperor penguin a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+790,"Is the tapir a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+791,"Is the tuna a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+792,In which natural habitat does the peacock live?,Rivers and lakes,Wetlands,Ocean,Forest,D,medium,Habitats
+793,In which natural habitat does the pig live?,Rivers and lakes,Mountains,Coastal areas,Forest,D,medium,Habitats
+794,In which natural habitat does the vicuna live?,Rivers and lakes,Mountains,Ocean,Grassland,B,medium,Habitats
+795,"Is the capybara a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+796,To which animal class does the pheasant belong?,Amphibian,Mammal,Insect,Bird,D,easy,Animal Classes
+797,In which natural habitat does the coyote live?,Rivers and lakes,Grassland,Ocean,Arctic tundra,B,medium,Habitats
+798,What is a baby frog called?,a fry,a larva,a nymph,a tadpole,D,easy,Baby Animals
+799,To which animal class does the wasp belong?,Mammal,Insect,Reptile,Amphibian,B,easy,Animal Classes
+800,To which animal class does the sperm whale belong?,Fish,Arachnid,Bird,Mammal,D,easy,Animal Classes
+801,In which natural habitat does the aardvark live?,Antarctic ice,Rivers and lakes,Savanna,Arctic tundra,C,medium,Habitats
+802,To which animal class does the kangaroo belong?,Mammal,Amphibian,Insect,Fish,A,easy,Animal Classes
+803,To which animal class does the marmot belong?,Mammal,Reptile,Bird,Insect,A,easy,Animal Classes
+804,In which natural habitat does the dragonfly live?,Mountains,Forest,Wetlands,Savanna,C,medium,Habitats
+805,To which animal class does the koala belong?,Reptile,Mammal,Insect,Amphibian,B,easy,Animal Classes
+806,To which animal class does the bullfrog belong?,Amphibian,Insect,Arachnid,Reptile,A,easy,Animal Classes
+807,In which natural habitat does the gazelle live?,Grassland,Ocean,Mountains,Rivers and lakes,A,medium,Habitats
+808,"Is the spotted hyena a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+809,Is tiger skin striped as well as its fur?,No,Yes,Only when young,Only on the back,B,medium,Animal Basics
+810,How many teeth does an anteater have?,None,Twenty,Thirty-two,Ten,A,medium,Animal Basics
+811,"Is the boa constrictor a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,C,medium,Diets
+812,"Is the barnacle a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+813,Which bird can fly backward?,the swift,the kingfisher,the swallow,the hummingbird,D,medium,Animal Records
+814,"Is the badger a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+815,"Is the chipmunk a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+816,To which animal class does the beaver belong?,Arachnid,Amphibian,Mammal,Bird,C,easy,Animal Classes
+817,"Is the pheasant a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+818,In which natural habitat does the ibex live?,Ocean,Wetlands,Mountains,Grassland,C,medium,Habitats
+819,To which animal class does the condor belong?,Reptile,Arachnid,Bird,Mammal,C,easy,Animal Classes
+820,To which animal class does the toad belong?,Bird,Amphibian,Arachnid,Insect,B,easy,Animal Classes
+821,To which animal class does the kingfisher belong?,Amphibian,Bird,Mammal,Arachnid,B,easy,Animal Classes
+822,"Is the beaver a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+823,In which natural habitat does the cougar live?,Mountains,Ocean,Rivers and lakes,Savanna,A,medium,Habitats
+824,In which natural habitat does the heron live?,Desert,Wetlands,Arctic tundra,Antarctic ice,B,medium,Habitats
+825,In which natural habitat does the tuatara live?,Forest,Arctic tundra,Grassland,Coastal areas,A,medium,Habitats
+826,"Is the octopus a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+827,In which natural habitat does the emu live?,Arctic tundra,Grassland,Rainforest,Savanna,B,medium,Habitats
+828,In which natural habitat does the pangolin live?,Grassland,Wetlands,Savanna,Rainforest,D,medium,Habitats
+829,"Is the electric eel a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+830,"Is the guinea pig a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+831,To which animal class does the donkey belong?,Arachnid,Fish,Insect,Mammal,D,easy,Animal Classes
+832,In which natural habitat does the gaboon viper live?,Rainforest,Rivers and lakes,Mountains,Grassland,A,medium,Habitats
+833,What color is flamingo feathers related to?,,,,,Diet of shrimp and algae,extreme,Animal Records
+834,Which mammal lays eggs?,,,,,The platypus,extreme,Animal Basics
+835,To which animal class does the hare belong?,Reptile,Amphibian,Bird,Mammal,D,easy,Animal Classes
+836,In which natural habitat does the grasshopper live?,Grassland,Mountains,Ocean,Rivers and lakes,A,medium,Habitats
+837,What is the fastest land animal?,,,,,The cheetah,extreme,Animal Records
+838,To which animal class does the hedgehog belong?,Arachnid,Bird,Mammal,Amphibian,C,easy,Animal Classes
+839,What is a baby reindeer called?,a fawn,a cub,a calf,a foal,C,hard,Baby Animals
+840,To which animal class does the oryx belong?,Arachnid,Reptile,Mammal,Insect,C,easy,Animal Classes
+841,"Is the condor a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+842,"Is the orca a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+843,In which natural habitat does the puffin live?,Forest,Coastal areas,Rivers and lakes,Grassland,B,medium,Habitats
+844,To which animal class does the tiger shark belong?,Fish,Arachnid,Reptile,Insect,A,easy,Animal Classes
+845,In which natural habitat does the humpback whale live?,Ocean,Wetlands,Coastal areas,Desert,A,medium,Habitats
+846,To which animal class does the spider belong?,Amphibian,Bird,Mammal,Arachnid,D,easy,Animal Classes
+847,What is a baby swan called?,a gosling,a cygnet,a duckling,a chick,B,medium,Baby Animals
+848,To which animal class does the raven belong?,Insect,Amphibian,Mammal,Bird,D,easy,Animal Classes
+849,"Is the Galapagos tortoise a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,B,medium,Diets
+850,What is a baby cat called?,a joey,a kitten,a lamb,a puppy,B,easy,Baby Animals
+851,To which animal class does the red panda belong?,Arachnid,Amphibian,Mammal,Insect,C,easy,Animal Classes
+852,Can a crocodile stick out its tongue?,Yes,No,Only in water,Only when young,B,medium,Animal Basics
+853,To which animal class does the horned viper belong?,Reptile,Amphibian,Bird,Arachnid,A,easy,Animal Classes
+854,"Is the rhea a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,C,medium,Diets
+855,In which natural habitat does the musk ox live?,Forest,Ocean,Arctic tundra,Mountains,C,medium,Habitats
+856,In which natural habitat does the anole live?,Savanna,Antarctic ice,Rainforest,Coastal areas,C,medium,Habitats
+857,"Is the manta ray a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+858,To which animal class does the seahorse belong?,Insect,Arachnid,Fish,Bird,C,easy,Animal Classes
+859,To which animal class does the alpaca belong?,Amphibian,Bird,Insect,Mammal,D,easy,Animal Classes
+860,In which natural habitat does the spider monkey live?,Arctic tundra,Rainforest,Coastal areas,Grassland,B,medium,Habitats
+861,To which animal class does the African elephant belong?,Insect,Mammal,Bird,Arachnid,B,easy,Animal Classes
+862,In which natural habitat does the prairie dog live?,Wetlands,Grassland,Ocean,Desert,B,medium,Habitats
+863,"Is the woodpecker a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+864,"Is the butterfly a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+865,"Is the termite a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+866,In which natural habitat does the mayfly live?,Rivers and lakes,Forest,Mountains,Desert,A,medium,Habitats
+867,"Is the black widow spider a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+868,In which natural habitat does the python live?,Wetlands,Rainforest,Savanna,Rivers and lakes,B,medium,Habitats
+869,Which bird is famous for collecting shiny objects?,the magpie,the raven,the crow,the starling,A,medium,Animal Records
+870,"Is the praying mantis a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+871,What is a group of frogs called?,a chorus,a bloat,an army,a knot,C,hard,Animal Groups
+872,To which animal class does the cricket belong?,Insect,Reptile,Amphibian,Arachnid,A,easy,Animal Classes
+873,"Is the caiman a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+874,What is a baby goose called?,a cygnet,a duckling,a chick,a gosling,D,medium,Baby Animals
+875,"Is the coral a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+876,What do baleen whales use to feed?,Sharp teeth,Long tongues only,Baleen plates to filter food,Suction cups,C,medium,Animal Basics
+877,In which natural habitat does the newt live?,Coastal areas,Antarctic ice,Wetlands,Ocean,C,medium,Habitats
+878,How does a snake mainly smell?,With its skin,With its tongue,With its nose,With its ears,B,medium,Animal Basics
+879,In which natural habitat does the praying mantis live?,Rivers and lakes,Antarctic ice,Rainforest,Grassland,D,medium,Habitats
+880,To which animal class does the gaboon viper belong?,Fish,Reptile,Arachnid,Mammal,B,easy,Animal Classes
+881,"Is the box turtle a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+882,To which animal class does the dolphin belong?,Mammal,Amphibian,Fish,Arachnid,A,easy,Animal Classes
+883,To which animal class does the emperor penguin belong?,Amphibian,Bird,Arachnid,Reptile,B,easy,Animal Classes
+884,To which animal class does the chicken belong?,Reptile,Bird,Insect,Amphibian,B,easy,Animal Classes
+885,Which snake is the longest in the world?,the anaconda,the reticulated python,the king cobra,the boa constrictor,B,medium,Animal Records
+886,How many arms does an octopus have?,Ten,Twelve,Eight,Six,C,easy,Animal Basics
+887,In which natural habitat does the oryx live?,Antarctic ice,Desert,Forest,Arctic tundra,B,medium,Habitats
+888,How far can an owl rotate its head?,180 degrees,About 270 degrees,360 degrees,90 degrees,B,medium,Animal Basics
+889,What is a group of ravens called?,a murder,an unkindness,a conspiracy,a parliament,B,expert,Animal Groups
+890,What is a group of elephants called?,a pride,a troop,a pack,a herd,D,easy,Animal Groups
+891,"Is the blue whale a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+892,To which animal class does the mussel belong?,Reptile,Amphibian,Mollusk,Arachnid,C,easy,Animal Classes
+893,"Is the zebra a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,A,medium,Diets
+894,In which natural habitat does the otter live?,Coastal areas,Wetlands,Rivers and lakes,Arctic tundra,C,medium,Habitats
+895,To which animal class does the ibex belong?,Reptile,Arachnid,Mammal,Amphibian,C,easy,Animal Classes
+896,To which animal class does the rhea belong?,Insect,Fish,Mammal,Bird,D,easy,Animal Classes
+897,Which animal can sleep for up to three years?,the bat,the bear,the sloth,the snail,D,medium,Animal Records
+898,In which natural habitat does the guinea pig live?,Wetlands,Forest,Rivers and lakes,Grassland,D,medium,Habitats
+899,In which natural habitat does the salamander live?,Forest,Antarctic ice,Ocean,Rivers and lakes,A,medium,Habitats
+900,What is a group of giraffes called?,a stretch,a herd,a tower,a patch,C,hard,Animal Groups
+901,To which animal class does the cockroach belong?,Reptile,Insect,Mammal,Arachnid,B,easy,Animal Classes
+902,To which animal class does the prairie dog belong?,Arachnid,Mammal,Insect,Amphibian,B,easy,Animal Classes
+903,"Is the poison dart frog a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+904,What is the study of birds called?,Ichthyology,Herpetology,Ornithology,Entomology,C,medium,Animal Basics
+905,To which animal class does the baboon belong?,Reptile,Amphibian,Mammal,Insect,C,easy,Animal Classes
+906,What is a baby platypus called?,a kit,a larva,a puggle,a joey,C,expert,Baby Animals
+907,Which mammal is venomous?,the koala,the wallaby,the wombat,the platypus,D,hard,Animal Basics
+908,How many legs does a spider have?,Eight,Six,Four,Ten,A,easy,Animal Basics
+909,To which animal class does the chimpanzee belong?,Arachnid,Bird,Reptile,Mammal,D,easy,Animal Classes
+910,How long can a dolphin rest one half of its brain at a time?,It sleeps with both halves,Ten minutes,Twenty-four hours,About two hours,D,expert,Animal Basics
+911,"Is the kingfisher a herbivore, carnivore, or omnivore?",Carnivore,Herbivore,Omnivore,,A,medium,Diets
+912,To which animal class does the oyster belong?,Insect,Bird,Mollusk,Mammal,C,easy,Animal Classes
+913,Which large flightless bird lives in Australia?,the ostrich,the penguin,the kiwi,the emu,D,easy,Animal Basics
+914,"Is the frilled lizard a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+915,To which animal class does the caribou belong?,Fish,Reptile,Arachnid,Mammal,D,easy,Animal Classes
+916,To which animal class does the trout belong?,Fish,Bird,Insect,Reptile,A,easy,Animal Classes
+917,To which animal class does the giant panda belong?,Amphibian,Insect,Fish,Mammal,D,easy,Animal Classes
+918,In which natural habitat does the butterfly live?,Rainforest,Mountains,Grassland,Wetlands,C,medium,Habitats
+919,In which natural habitat does the thorny devil live?,Desert,Savanna,Wetlands,Arctic tundra,A,medium,Habitats
+920,In which natural habitat does the porcupine live?,Forest,Savanna,Coastal areas,Rivers and lakes,A,medium,Habitats
+921,"Is the moorhen a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+922,To which animal class does the sardine belong?,Arachnid,Fish,Reptile,Insect,B,easy,Animal Classes
+923,To which animal class does the pufferfish belong?,Fish,Reptile,Mammal,Arachnid,A,easy,Animal Classes
+924,To which animal class does the lion belong?,Mammal,Amphibian,Bird,Insect,A,easy,Animal Classes
+925,What is a baby wolf called?,a calf,a cub,a kit,a pup,D,medium,Baby Animals
+926,"Is the roadrunner a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,A,medium,Diets
+927,In which natural habitat does the capybara live?,Savanna,Ocean,Wetlands,Coastal areas,C,medium,Habitats
+928,"Is the crab a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,B,medium,Diets
+929,To which animal class does the tree frog belong?,Amphibian,Bird,Reptile,Insect,A,easy,Animal Classes
+930,To which animal class does the salamander belong?,Fish,Amphibian,Arachnid,Reptile,B,easy,Animal Classes
+931,To which animal class does the dove belong?,Bird,Arachnid,Insect,Mammal,A,easy,Animal Classes
+932,To which animal class does the jellyfish belong?,Arachnid,Reptile,Amphibian,Cnidarian,D,easy,Animal Classes
+933,In which natural habitat does the caribou live?,Arctic tundra,Coastal areas,Wetlands,Desert,A,medium,Habitats
+934,In which natural habitat does the vulture live?,Rainforest,Forest,Savanna,Wetlands,C,medium,Habitats
+935,To which animal class does the aardvark belong?,Insect,Amphibian,Mammal,Arachnid,C,easy,Animal Classes
+936,To which animal class does the whale shark belong?,Bird,Fish,Amphibian,Reptile,B,easy,Animal Classes
+937,To which animal class does the clownfish belong?,Mammal,Reptile,Fish,Bird,C,easy,Animal Classes
+938,To which animal class does the rabbit belong?,Arachnid,Mammal,Amphibian,Bird,B,easy,Animal Classes
+939,What is a baby raccoon called?,a cub,a kid,a kit,a pup,C,medium,Baby Animals
+940,"Is the giant panda a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+941,"Is the tarantula a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,B,medium,Diets
+942,Which mammals can truly fly?,Squirrels,Bats,Flying fish,Sugar gliders,B,easy,Animal Basics
+943,In which natural habitat does the black widow spider live?,Wetlands,Grassland,Desert,Antarctic ice,C,medium,Habitats
+944,To which animal class does the tarantula belong?,Amphibian,Reptile,Bird,Arachnid,D,easy,Animal Classes
+945,Which insect produces silk?,the silkworm,the wasp,the ant,the bee,A,easy,Animal Basics
+946,What is a group of kangaroos called?,a band,a mob,a herd,a troop,B,hard,Animal Groups
+947,In which natural habitat does the sea lion live?,Antarctic ice,Ocean,Coastal areas,Rivers and lakes,C,medium,Habitats
+948,How many hearts does an octopus have?,Two,Four,One,Three,D,medium,Animal Basics
+949,To which animal class does the ant belong?,Fish,Reptile,Amphibian,Insect,D,easy,Animal Classes
+950,"Is the manatee a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,B,medium,Diets
+951,"Is the aphid a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,C,medium,Diets
+952,"Is the walrus a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+953,To which animal class does the gerbil belong?,Insect,Arachnid,Mammal,Bird,C,easy,Animal Classes
+954,To which animal class does the penguin belong?,Amphibian,Reptile,Fish,Bird,D,easy,Animal Classes
+955,"Is the platypus a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+956,To which animal class does the cougar belong?,Arachnid,Amphibian,Bird,Mammal,D,easy,Animal Classes
+957,How do dolphins locate prey in murky water?,Sharp eyesight,Echolocation,Electric senses,Smell,B,medium,Animal Basics
+958,To which animal class does the vampire bat belong?,Reptile,Amphibian,Fish,Mammal,D,easy,Animal Classes
+959,To which animal class does the sea lion belong?,Reptile,Arachnid,Amphibian,Mammal,D,easy,Animal Classes
+960,"Is the snapping turtle a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+961,How do fireflies produce light?,Reflecting moonlight,Heat glow,Static electricity,Bioluminescence,D,medium,Animal Basics
+962,"Is the black bear a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,C,medium,Diets
+963,What is a baby duck called?,a chick,a cygnet,a duckling,a gosling,C,easy,Baby Animals
+964,What is a group of cattle called?,a flock,a pack,a herd,a swarm,C,easy,Animal Groups
+965,In which natural habitat does the goose live?,Desert,Wetlands,Mountains,Ocean,B,medium,Habitats
+966,In which natural habitat does the millipede live?,Coastal areas,Ocean,Rainforest,Forest,D,medium,Habitats
+967,In which natural habitat does the wildebeest live?,Wetlands,Desert,Rainforest,Savanna,D,medium,Habitats
+968,To which animal class does the Galapagos tortoise belong?,Arachnid,Fish,Mammal,Reptile,D,easy,Animal Classes
+969,To which animal class does the basilisk lizard belong?,Arachnid,Fish,Reptile,Bird,C,easy,Animal Classes
+970,What is a female deer called?,a doe,a hart,a fawn,a buck,A,medium,Animal Basics
+971,"Is the angelfish a herbivore, carnivore, or omnivore?",Omnivore,Herbivore,Carnivore,,A,medium,Diets
+972,What is a group of dolphins called?,a herd,a pride,a school,a pod,D,medium,Animal Groups
+973,"Is the gaboon viper a herbivore, carnivore, or omnivore?",Carnivore,Omnivore,Herbivore,,A,medium,Diets
+974,What is hibernation?,A migration path,A mating ritual,A hunting style,A deep sleep to survive winter,D,easy,Animal Basics
+975,To which animal class does the sandpiper belong?,Bird,Insect,Fish,Arachnid,A,easy,Animal Classes
+976,To which animal class does the Bactrian camel belong?,Mammal,Insect,Fish,Arachnid,A,easy,Animal Classes
+977,In which natural habitat does the dung beetle live?,Rainforest,Grassland,Rivers and lakes,Antarctic ice,B,medium,Habitats
+978,To which animal class does the axolotl belong?,Insect,Arachnid,Amphibian,Mammal,C,easy,Animal Classes
+979,In which natural habitat does the gorilla live?,Grassland,Rainforest,Ocean,Arctic tundra,B,medium,Habitats
+980,To which animal class does the sea anemone belong?,Amphibian,Arachnid,Cnidarian,Insect,C,easy,Animal Classes
+981,In which natural habitat does the box turtle live?,Desert,Grassland,Rivers and lakes,Forest,D,medium,Habitats
+982,"Is the llama a herbivore, carnivore, or omnivore?",Herbivore,Carnivore,Omnivore,,A,medium,Diets
+983,In which natural habitat does the rattlesnake live?,Savanna,Desert,Forest,Wetlands,B,medium,Habitats
+984,"Is the bat a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,B,medium,Diets
+985,To which animal class does the toucan belong?,Amphibian,Mammal,Bird,Arachnid,C,easy,Animal Classes
+986,In which natural habitat does the chicken live?,Wetlands,Grassland,Coastal areas,Desert,B,medium,Habitats
+987,To which animal class does the warthog belong?,Insect,Mammal,Arachnid,Fish,B,easy,Animal Classes
+988,"Is the starfish a herbivore, carnivore, or omnivore?",Herbivore,Omnivore,Carnivore,,C,medium,Diets
+989,In which natural habitat does the moose live?,Savanna,Coastal areas,Rainforest,Forest,D,medium,Habitats
+990,What grows on sloth fur?,Small flowers,Fungi spores,Moss roots,Algae,D,medium,Animal Basics
+991,In which natural habitat does the tick live?,Rivers and lakes,Forest,Arctic tundra,Rainforest,B,medium,Habitats
+992,To which animal class does the bull shark belong?,Insect,Amphibian,Bird,Fish,D,easy,Animal Classes
+993,In which natural habitat does the iguana live?,Savanna,Arctic tundra,Forest,Rainforest,D,medium,Habitats
+994,"Is the horned viper a herbivore, carnivore, or omnivore?",Omnivore,Carnivore,Herbivore,,B,medium,Diets
+995,To which animal class does the heron belong?,Bird,Fish,Arachnid,Amphibian,A,easy,Animal Classes
+996,In which natural habitat does the barn owl live?,Mountains,Forest,Savanna,Grassland,D,medium,Habitats
+997,In which natural habitat does the cockatoo live?,Forest,Arctic tundra,Ocean,Grassland,A,medium,Habitats
+998,In which natural habitat does the kiwi live?,Arctic tundra,Rainforest,Forest,Grassland,C,medium,Habitats
+999,In which natural habitat does the squirrel monkey live?,Rivers and lakes,Rainforest,Coastal areas,Antarctic ice,B,medium,Habitats
+1000,In which natural habitat does the snow leopard live?,Wetlands,Forest,Mountains,Coastal areas,C,medium,Habitats

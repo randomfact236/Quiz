@@ -1,0 +1,1003 @@
+# Subject: Movies & TV
+
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,Which Netflix fantasy adapts Andrzej Sapkowski novels?,Cursed,The Wheel of Time,Shadow and Bone,The Witcher,D,easy,TV Facts
+2,Which actor or actress starred in Gladiator?,Al Pacino,Russell Crowe,Leonardo DiCaprio,Marlon Brando,B,hard,Directors & Cast
+3,Which 2023 Pixar film is set in a city of elements? Elemental,Elemental,Soul,Wish,Luca,A,medium,Movie Facts
+4,Which symbiote bonds with Eddie Brock?,Toxin,Venom,Carnage,Riot,B,easy,Superheroes
+5,In which year was Goldfinger released?,1972,1974,1997,1964,D,medium,Movies
+6,Which 2016 film assembles villains for black-ops missions?,Guardians of the Galaxy,X-Force,Suicide Squad,The Avengers,C,easy,Superheroes
+7,Which iconic role is Orlando Bloom known for?,Ron Weasley,Hermione Granger,Legolas and Will Turner,Harry Potter,C,medium,Actors & Roles
+8,Who directed Men in Black?,Barry Sonnenfeld,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+9,Which quiz show features answers phrased as questions?,Trivial Pursuit show,Family Feud,Millionaire,Jeopardy,D,easy,TV Facts
+10,"Which three films won the Big Five Oscars: Picture, Director, Actor, Actress, and Screenplay?","It Happened One Night, One Flew Over the Cuckoos Nest, and The Silence of the Lambs",Gone with the Wind and Titanic,Rocky and Forrest Gump,Godfather I and II,A,expert,Awards & Records
+11,Which Kurosawa film gave its name to conflicting-testimony storytelling?,Ikiru,High and Low,Rashomon,Seven Samurai,C,medium,Cinema History
+12,Which Disney hit features sisters Elsa and Anna? Frozen,Frozen,Brave,Tangled,Moana,A,easy,Movie Facts
+13,Which iconic role is Emma Stone known for?,Ron Weasley,Hermione Granger,Mia (La La Land),Harry Potter,C,medium,Actors & Roles
+14,In which year was The Godfather Part II released?,2009,1974,1972,1997,B,medium,Movies
+15,On which network or platform did Suits air?,USA Network,HBO,FX,AMC,A,medium,TV Shows
+16,What is Prison Break about?,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,a man engineered to break his brother out of jail,D,medium,TV Shows
+17,Which cartoon featured a stone age family?,Huckleberry Hound,The Jetsons future family,The Flintstones,Yogi Bear,C,easy,TV Facts
+18,Who directed Inception?,Francis Ford Coppola,James Cameron,Steven Spielberg,Christopher Nolan,D,medium,Directors & Cast
+19,Which kids show features a boy with a secret laboratory and a rival Dee Dee?,Johnny Bravo,Jimmy Neutron,Codename Kids Next Door,Dexters Laboratory,D,easy,Kids & Anime
+20,Which series features Aang mastering all four elements?,Xiaolin Showdown,The Legend of Korra,Avatar: The Last Airbender,Ninjago,C,easy,Kids & Anime
+21,Which 1922 unauthorized Dracula adaptation starred Max Schreck?,Dracula 1931,The Phantom Carriage,Nosferatu,Vampyr,C,medium,Cinema History
+22,In which year was the animated film How to Train Your Dragon released?,2003,2010,2009,1995,B,medium,Animation
+23,In which year was Jaws released?,1997,1974,1975,1972,C,medium,Movies
+24,In which year was A Few Good Men released?,1997,1974,1972,1992,D,medium,Movies
+25,Which slasher villain stalks dreams with a glove of blades? Freddy Krueger,Leatherface,Freddy Krueger,Michael Myers,Jason Voorhees,B,easy,Movie Facts
+26,Which anime features phantom sixth man Kuroko in basketball?,Ahiru no Sora,Kuroko no Basket,Haikyuu,Slam Dunk,B,medium,Kids & Anime
+27,Which Netflix series made chess popular in 2020?,The Scope,The Queens Gambit,Magnus,Endgame series,B,easy,TV Facts
+28,Which long-running detective anime stars a shrunken Shinichi? Case Closed,Inuyasha,Detective Conan,City Hunter,Yu Yu Hakusho,B,medium,Kids & Anime
+29,Which sitcom featured a genie named Jeannie?,I Dream of Jeannie,Bewitched,The Flying Nun,Mork and Mindy,A,easy,Classic TV
+30,Which iconic role is Lena Headey known for?,Harry Potter,Hermione Granger,Cersei Lannister,Ron Weasley,C,medium,Actors & Roles
+31,In which year was Whiplash released?,1997,1974,1972,2014,D,medium,Movies
+32,Which mutant team does Professor Xavier lead?,The X-Men,X-Factor,Excalibur,The Brotherhood,A,easy,Superheroes
+33,Which 1982 Kurt Russell horror features a shape-shifting thing? The Thing,Prince of Darkness,Christine,The Thing,The Fog,C,medium,Movie Facts
+34,Who directed The Godfather Part II?,James Cameron,Steven Spielberg,Francis Ford Coppola,George Lucas,C,medium,Directors & Cast
+35,In which year was Mad Max: Fury Road released?,2015,1974,1972,1997,A,medium,Movies
+36,Which Japanese horror follows a cursed house with Kayako? Ju-On: The Grudge,Ringu,Ju-On: The Grudge,Audition,Kwaidan,B,hard,Movie Facts
+37,Which actor or actress starred in The Notebook?,Ryan Gosling,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+38,Which film won the first Academy Award for Best Picture?,Sunrise,The Jazz Singer,Metropolis,Wings in 1929,D,expert,Awards & Records
+39,Which iconic role is Keanu Reeves known for?,Ron Weasley,Neo (The Matrix),Hermione Granger,Harry Potter,B,medium,Actors & Roles
+40,"Which studio made the animated film Monsters, Inc.?",DreamWorks,Studio Ghibli,Pixar,Disney,C,easy,Animation
+41,Which iconic role is Winona Ryder known for?,Lydia (Beetlejuice) and Joyce (Stranger Things),Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+42,Which iconic role is Harrison Ford known for?,Han Solo and Indiana Jones,Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+43,Which reality show features contestants surviving on an island for immunity?,Big Brother,Survivor,Alone,The Challenge alone,B,easy,TV Facts
+44,Who played Rocky Balboa?,Rupert Grint,Sylvester Stallone,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+45,What is House about?,six friends in New York City,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,"a brilliant, grumpy diagnostician",D,medium,TV Shows
+46,Who composed the Godfather score?,Ennio Morricone,Franco Ferrara,Nino Rota,John Williams,C,expert,Cinema History
+47,Which reality competition finds a fashion designer?,The Voice,Ink Master,Project Runway,Top Chef,C,medium,TV Facts
+48,In which year was The Silence of the Lambs released?,1991,1972,1997,1974,A,medium,Movies
+49,On which network or platform did The Crown actor air?,HBO,ITV,BBC,Netflix,D,expert,TV Shows
+50,Which Elton John song won an Oscar for The Lion King?,Hakuna Matata,Be Prepared,Can You Feel the Love Tonight,Circle of Life,C,expert,Cinema History
+51,Which 1980 horror film follows Jack Torrance at the Overlook Hotel? The Shining,The Shining,Misery,Hotel Inferno,Psycho,A,easy,Movie Facts
+52,Which 1954 Kurosawa epic inspired The Magnificent Seven?,Rashomon,Yojimbo,Ikiru,Seven Samurai,D,medium,Cinema History
+53,Which anime sends Kagome through a well to feudal Japan?,Fruits Basket,Yashahime,Rurouni Kenshin,Inuyasha,D,medium,Kids & Anime
+54,Which iconic role is Tim Robbins known for?,Andy Dufresne,Harry Potter,Ron Weasley,Hermione Granger,A,medium,Actors & Roles
+55,Which iconic role is Adam Driver known for?,Harry Potter,Ron Weasley,Hermione Granger,Kylo Ren,D,medium,Actors & Roles
+56,In which year was the animated film Despicable Me released?,2009,2010,1995,2003,B,medium,Animation
+57,Who directed Kill Bill: Vol. 1?,James Cameron,Francis Ford Coppola,Quentin Tarantino,Steven Spielberg,C,medium,Directors & Cast
+58,Which actor played Dwight Schrute?,BJ Novak,Rainn Wilson,John Krasinski,Ed Helms,B,medium,TV Facts
+59,Which Netflix series adapts Leigh Bardugo novels?,Shadow and Bone,Cursed,The Letters of Fire,The Witcher,A,hard,TV Facts
+60,Which comedy featured a Spanish teacher turned meth maker? That is Breaking Bad drama,No such comedy; Breaking Bad is the drama,Narcos comedy,Weeds,Barry,A,expert,TV Facts
+61,Who directed Titanic?,James Cameron,Francis Ford Coppola,George Lucas,Steven Spielberg,A,medium,Directors & Cast
+62,What is Suits about?,a law firm hiring a college dropout genius,a chemistry teacher turned meth maker,six friends in New York City,employees of the Dunder Mifflin paper company,A,medium,TV Shows
+63,Which 1968 zombie film founded the modern zombie genre?,White Zombie,Dawn of the Dead,Night of the Living Dead,The Last Man on Earth,C,hard,Movie Facts
+64,Which Indian blockbuster series is Baahubali? Baahubali two-part epic,Baahubali,Pushpa,RRR,KGF,A,medium,Movie Facts
+65,In which year was The Shawshank Redemption released?,1972,1974,1994,1997,C,medium,Movies
+66,In which year was Inception released?,1974,2010,1997,1972,B,medium,Movies
+67,Which 1960 Godard film starred Jean-Paul Belmondo as Michel?,Breathless,The 400 Blows,Jules and Jim,Pierrot le Fou,A,expert,Cinema History
+68,Which Fantastic Four member stretches?,Invisible Woman,Human Torch,Mister Fantastic,The Thing,C,easy,Superheroes
+69,Which show about advertising men in the 1960s starred Jon Hamm?,Masters of Sex,Suits,Better Call Saul,Mad Men,D,easy,TV Facts
+70,Which iconic role is Michelle Yeoh known for?,Harry Potter,Evelyn (Everything Everywhere All at Once),Hermione Granger,Ron Weasley,B,medium,Actors & Roles
+71,Which film overtook Titanic in 2019 briefly before Avatar reclaimed the spot?,Star Wars: Force Awakens,Avatar 2,Avengers: Endgame,Infinity War,C,medium,Movie Facts
+72,Which anime follows the Elric brothers seeking the Philosophers Stone?,D.Gray-man,Fullmetal Alchemist,Soul Eater,Magi,B,easy,Kids & Anime
+73,Which Pixar film features a rat who wants to cook?,The Bear and the Bee,Chef,Ratatouille,Cloudy with Meatballs,C,easy,Movie Facts
+74,In which year was The Godfather released?,2009,1997,1974,1972,D,medium,Movies
+75,Which actor or actress starred in Dirty Dancing?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Patrick Swayze,D,hard,Directors & Cast
+76,In which year was Dune released?,1972,1997,1974,2021,D,medium,Movies
+77,Which iconic role is Christian Bale known for?,Harry Potter,Batman (Dark Knight trilogy),Ron Weasley,Hermione Granger,B,medium,Actors & Roles
+78,Which studio made the animated film Up?,Disney,DreamWorks,Studio Ghibli,Pixar,D,easy,Animation
+79,Which anime features bounty hunter Spike Spiegel in space?,Trigun,Samurai Champloo,Outlaw Star,Cowboy Bebop,D,medium,Kids & Anime
+80,Which cartoon features Bloo at a home for imaginary friends?,Fosters Home for Imaginary Friends,Flapjack,Chowder,Camp Lazlo,A,medium,Kids & Anime
+81,Which actor refused his Oscar for The Godfather in 1973?,Richard Burton,Marlon Brando,Dudley Moore,George C. Scott,B,medium,Awards & Records
+82,Which iconic role is Maisie Williams known for?,Arya Stark,Harry Potter,Ron Weasley,Hermione Granger,A,medium,Actors & Roles
+83,Which Disney film is set in Colombia with the Madrigal family?,Encanto,Moana,Coco,Raya,A,easy,Movie Facts
+84,In which year was Forrest Gump released?,1972,1974,1997,1994,D,medium,Movies
+85,In which year was the animated film Up released?,1995,2008,2003,2009,D,medium,Animation
+86,Who played The Bride (Kill Bill)?,Uma Thurman,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+87,Who played Red (The Shawshank Redemption)?,Morgan Freeman,Rupert Grint,Emma Watson,Daniel Radcliffe,A,medium,Actors & Roles
+88,What is Batmans home city?,Gotham City,Central City,Star City,Metropolis,A,easy,Superheroes
+89,Who played Hermione Granger?,Daniel Radcliffe,Rupert Grint,Emma Watson,Hugh Jackman,C,medium,Actors & Roles
+90,In which year was Footloose released?,1984,1972,1997,1974,A,medium,Movies
+91,Which iconic role is Henry Cavill known for?,Superman (2013),Ron Weasley,Harry Potter,Hermione Granger,A,medium,Actors & Roles
+92,Which composer wrote Beauty and the Beast songs with Howard Ashman?,Alan Menken,Lin-Manuel Miranda,Phil Collins,Elton John,A,medium,Cinema History
+93,Which director is known for horrors like Saw and Aquaman?,Sam Raimi,James Wan,Wes Craven,Rob Zombie,B,medium,Movie Facts
+94,Which series features the line I am the one who knocks?,The Sopranos,Better Call Saul,Breaking Bad,Ozark,C,medium,Quotes & Moments
+95,Which anime director co-founded Studio Ghibli?,Satoshi Kon,Hayao Miyazaki,Katsuhiro Otomo,Osamu Tezuka,B,medium,Movie Facts
+96,On which network or platform did The Fresh Prince of Bel-Air air?,NBC,FOX,ABC,WB,A,easy,TV Shows
+97,Who directed Goodfellas?,James Cameron,Francis Ford Coppola,Steven Spielberg,Martin Scorsese,D,medium,Directors & Cast
+98,In which year was the animated film The Incredibles released?,2003,2009,2004,1995,C,medium,Animation
+99,Which film features Ill make him an offer he cant refuse?,The Godfather,Scarface,Casino,Goodfellas,A,easy,Quotes & Moments
+100,Which anime features Goku hunting Dragon Balls?,Dragon Ball,Bleach,One Piece,Naruto,A,easy,Kids & Anime
+101,Which animated family has run since 1989 making it the longest-running American sitcom?,The Flintstones,Family Guy,South Park,The Simpsons,D,medium,TV Facts
+102,Which cartoon featured a space age family?,The Jetsons,Duck Dodgers,Futurama,The Flintstones,A,easy,TV Facts
+103,Which actor or actress starred in Rear Window?,Grace Kelly,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+104,Which iconic role is Robin Williams known for?,The Genie (Aladdin),Hermione Granger,Ron Weasley,Harry Potter,A,medium,Actors & Roles
+105,What is Family Guy about?,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,the Griffins of Quahog,D,medium,TV Shows
+106,Which Hong Kong director made hard-boiled hits like The Killer and Face/Off?,Tsui Hark,John Woo,Ringo Lam,Corey Yuen,B,medium,Cinema History
+107,Which film held the highest-grossing record from 1998 to 2009?,Gone with the Wind,The Lion King,Jurassic Park,Titanic,D,medium,Movie Facts
+108,On which network or platform did House air?,ABC,NBC,FOX,CBS,C,easy,TV Shows
+109,Which 2018 Queen hit title song bohemian rhapsody became a film title? Bohemian Rhapsody the song,Dont Stop Me Now,We Will Rock You,The song Bohemian Rhapsody,Somebody to Love,C,easy,Movie Facts
+110,Which 90s sitcom featured Ellen Morgans coming out episode?,The Ellen Show,Will and Grace,Ellen,Friends,C,medium,Classic TV
+111,Which actor or actress starred in The Departed?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Sam Worthington,B,hard,Directors & Cast
+112,Who played Walter White?,Bryan Cranston,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+113,Which game show features two families guessing survey answers?,The Price is Right,Press Your Luck,Family Feud,Wheel of Fortune,C,easy,TV Facts
+114,Which 2019 film became the fastest to gross two billion dollars?,Force Awakens,Titanic,Avatar,Avengers: Endgame,D,medium,Movie Facts
+115,Which director made In the Mood for Love?,Zhang Yimou,John Woo,Wong Kar-wai,Ang Lee,C,hard,Cinema History
+116,Which actor or actress starred in Forrest Gump?,Tom Hanks,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+117,Who directed Aquaman?,James Wan,Francis Ford Coppola,Steven Spielberg,James Cameron,A,medium,Directors & Cast
+118,In which year was Barbie released?,1997,1974,1972,2023,D,medium,Movies
+119,Who played Thor?,Daniel Radcliffe,Chris Hemsworth,Emma Watson,Rupert Grint,B,medium,Actors & Roles
+120,Who played Jon Snow?,Emma Watson,Rupert Grint,Daniel Radcliffe,Kit Harington,D,medium,Actors & Roles
+121,Which Breaking Bad sequel film follows Jesse Pinkman?,El Camino,Black Mail,Better Call Saul,The Reward,A,medium,TV Facts
+122,On which network or platform did Doctor Who air?,ITV,BBC,Sky,Channel 4,B,easy,TV Shows
+123,Who played Elizabeth Bennet and Elizabeth Swann?,Daniel Radcliffe,Emma Watson,Rupert Grint,Keira Knightley,D,medium,Actors & Roles
+124,Which 2008 monster film by J.J. Abrams is called Cloverfield? Cloverfield,Cloverfield,10 Cloverfield Lane 2016,Godzilla 2014,Super 8 nostalgic 2011,A,medium,Movie Facts
+125,Which film series is set in Panem with districts?,The Giver,Divergent,The Hunger Games,Maze Runner,C,easy,Movie Facts
+126,Which studio made the animated film The Lion King?,Studio Ghibli,Pixar,DreamWorks,Disney,D,easy,Animation
+127,In which year was Vertigo released?,1974,1972,1958,1997,C,medium,Movies
+128,Which actor or actress starred in Scarface?,Sam Worthington,Leonardo DiCaprio,Al Pacino,Marlon Brando,C,hard,Directors & Cast
+129,Who directed Once Upon a Time in Hollywood?,Francis Ford Coppola,James Cameron,Quentin Tarantino,Steven Spielberg,C,medium,Directors & Cast
+130,Which iconic role is Peter Dinklage known for?,Harry Potter,Hermione Granger,Ron Weasley,Tyrion Lannister,D,medium,Actors & Roles
+131,Which 1988 anime film influenced cyberpunk worldwide?,Akira,Perfect Blue,Ghost in the Shell,Ninja Scroll,A,medium,Movie Facts
+132,Who directed Django Unchained?,Quentin Tarantino,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+133,Which Pixar film turns a girl into a red panda?,Turning Red,Brave,Luca,Onward,A,easy,Movie Facts
+134,Which Disney film features the Polynesian wayfinder Moana? Moana itself,Frozen,Moana is the film,Lilo and Stitch,Raya,B,medium,Movie Facts
+135,In which year was the animated film Mulan released?,2003,1998,1995,2009,B,medium,Animation
+136,Which film features Theres no crying in baseball?,The Natural,Bull Durham,Field of Dreams,A League of Their Own,D,hard,Quotes & Moments
+137,On which network or platform did Black Mirror air?,AMC,Netflix,Hulu,BBC,B,medium,TV Shows
+138,Which anime follows Naruto Uzumaki toward Hokage?,My Hero Academia,Dragon Ball Z,Bleach,Naruto,D,easy,Kids & Anime
+139,Which metal is Wolverines skeleton laced with?,Vibranium,Adamantium,Titanium,Carbonadium,B,easy,Superheroes
+140,Which series features Winter is coming?,The Last Kingdom,Game of Thrones,Vikings,The Witcher,B,easy,Quotes & Moments
+141,Which actor or actress starred in Pretty Woman?,Julia Roberts,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+142,Which 1980 slasher is set at Camp Crystal Lake? Friday the 13th,Sleepaway Camp,A Nightmare on Elm Street,Halloween,Friday the 13th,D,easy,Movie Facts
+143,Who played Ron Weasley?,Hugh Jackman,Rupert Grint,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+144,Which actor or actress starred in Mean Girls?,Lindsay Lohan,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+145,Who played The Fresh Prince and Men in Black?,Daniel Radcliffe,Emma Watson,Rupert Grint,Will Smith,D,medium,Actors & Roles
+146,Which vigilante uses a skull logo and guns?,The Punisher,Deadpool,Moon Knight,Jessica Jones,A,easy,Superheroes
+147,Which actor or actress starred in Schindlers List?,Marlon Brando,Leonardo DiCaprio,Liam Neeson,Al Pacino,C,hard,Directors & Cast
+148,Which star Trek series rebooted in 2017 with Jason Isaacs and Sonequa Martin-Green?,Star Trek: Picard,Star Trek: Discovery,Star Trek: Lower Decks,Star Trek: Strange New Worlds,B,hard,TV Facts
+149,In which year was the animated film The Little Mermaid released?,1989,1995,2003,2009,A,medium,Animation
+150,Which Indian film won Best Original Song Oscar for Naatu Naatu?,Baahubali,Dangal,Slumdog Millionaire,RRR,D,hard,Movie Facts
+151,Who played The Joker (The Dark Knight)?,Emma Watson,Heath Ledger,Daniel Radcliffe,Rupert Grint,B,medium,Actors & Roles
+152,In which year was Twilight released?,1997,1972,2008,1974,C,medium,Movies
+153,Which actor or actress starred in Django Unchained?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Jamie Foxx,D,hard,Directors & Cast
+154,Which actor or actress starred in North by Northwest?,Marlon Brando,Al Pacino,Cary Grant,Leonardo DiCaprio,C,hard,Directors & Cast
+155,Who receives Caps shield at the end of Endgame?,Rhodey,Sam Wilson,Bucky Barnes,Peter Parker,B,medium,Superheroes
+156,Who is considered the father of special effects with 1902s A Trip to the Moon?,Griffith,Porter,Edison,Georges Melies,D,hard,Movie Facts
+157,Which film franchise features Jason Bourne?,The Transporter,The Bourne Identity series,Bond,Mission Impossible,B,easy,Movie Facts
+158,In which year was Harry Potter and the Sorcerers Stone released?,1974,1997,2001,1972,C,medium,Movies
+159,In which year was Deadpool released?,1974,1972,2016,1997,C,medium,Movies
+160,Which studio made the animated film Moana?,DreamWorks,Studio Ghibli,Pixar,Disney,D,easy,Animation
+161,Which animated hit features Miguel visiting the Land of the Dead?,The Book of Life,Coco,Encanto,Luca,B,easy,Movie Facts
+162,What is Dark about?,six friends in New York City,employees of the Dunder Mifflin paper company,time travel mysteries in a German town,a chemistry teacher turned meth maker,C,medium,TV Shows
+163,Which iconic role is Zendaya known for?,MJ (Spider-Man) and Rue (Euphoria),Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+164,Who directed Gladiator?,Francis Ford Coppola,James Cameron,Ridley Scott,Steven Spielberg,C,medium,Directors & Cast
+165,In which year was The Pursuit of Happyness released?,1974,2006,1972,1997,B,medium,Movies
+166,Which studio created the first fully computer-animated feature?,DreamWorks,Disney classics,Illumination,Pixar with Toy Story,D,medium,Awards & Records
+167,Which iconic role is Robert Pattinson known for?,Harry Potter,Edward Cullen,Ron Weasley,Hermione Granger,B,medium,Actors & Roles
+168,On which network or platform did 24 air?,CBS,FOX,NBC,HBO,B,medium,TV Shows
+169,Who directed The Shawshank Redemption?,Frank Darabont,James Cameron,Francis Ford Coppola,Steven Spielberg,A,medium,Directors & Cast
+170,Who directed The Lord of the Rings: The Two Towers?,Peter Jackson,James Cameron,Steven Spielberg,Francis Ford Coppola,A,medium,Directors & Cast
+171,Which cursed videotape kills viewers in seven days? The Ring,Ringu Japanese original same story,The Grudge,The Ring,Sinister,C,medium,Movie Facts
+172,Who played Princess Leia?,Emma Watson,Daniel Radcliffe,Rupert Grint,Carrie Fisher,D,medium,Actors & Roles
+173,Who played Sansa Stark?,Sophie Turner,Rupert Grint,Emma Watson,Daniel Radcliffe,A,medium,Actors & Roles
+174,Which 1999 Matrix line asks for red or blue pills? The Matrix,The Matrix,eXistenZ,Inception,Total Recall 1990 variant,A,easy,Movie Facts
+175,Which iconic role is Patrick Swayze known for?,Harry Potter,Hermione Granger,Johnny (Dirty Dancing),Ron Weasley,C,medium,Actors & Roles
+176,In which year was Misery released?,1974,1997,1990,1972,C,medium,Movies
+177,Which silent star dangled from a clock in Safety Last?,Douglas Fairbanks,Harold Lloyd,Charlie Chaplin,Buster Keaton,B,hard,Cinema History
+178,Which Pixar film features two elves seeking magic? Onward,Wish,Elemental,Onward,Brave,C,medium,Movie Facts
+179,Who directed Taxi Driver?,Martin Scorsese,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+180,Who played Vivian (Pretty Woman)?,Julia Roberts,Emma Watson,Daniel Radcliffe,Rupert Grint,A,medium,Actors & Roles
+181,Who played Michael Scott in The Office?,Steve Carell,Ricky Gervais,John Krasinski,Rainn Wilson,A,easy,TV Facts
+182,Which Japanese horror inspired The Ring as Ringu? Ringu,Ringu,Dark Water,Ju-On,Audition,A,medium,Movie Facts
+183,"Which dark comedy features a hitman wanting to act, starring Bill Hader?",Barry,The Bear,Atlanta,Fargo,A,medium,TV Facts
+184,Which iconic role is Millie Bobby Brown known for?,Harry Potter,Eleven (Stranger Things),Hermione Granger,Ron Weasley,B,medium,Actors & Roles
+185,Which Netflix series features the Hargreeves siblings?,The Umbrella Academy,The Boys,Doom Patrol,Titans,A,medium,TV Facts
+186,Who directed Apollo 13?,Ron Howard,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+187,Which warthog pairs with Timon in The Lion King? Pumbaa,Simba,Pumbaa,Rafiki,Timon,B,easy,Movie Facts
+188,In which year was The Breakfast Club released?,1997,1974,1985,1972,C,medium,Movies
+189,Who directed Iron Man?,Jon Favreau,Francis Ford Coppola,Steven Spielberg,James Cameron,A,medium,Directors & Cast
+190,Which studio produced Popeye and Betty Boop cartoons?,Hanna-Barbera,Fleischer Studios,Warner Bros.,MGM,B,hard,Cinema History
+191,Which studio has won the most Academy Awards overall?,Universal,Disney,Warner Bros.,Paramount,B,expert,Awards & Records
+192,In which year was The Wizard of Oz released?,1939,1997,1974,1972,A,medium,Movies
+193,On which network or platform did Narcos air?,AMC,HBO,Netflix,FX,C,medium,TV Shows
+194,Which sitcom starred Jackie Gleason as Ralph Kramden?,All in the Family,The Dick Van Dyke Show,The Honeymooners,I Love Lucy,C,hard,Classic TV
+195,Which blind lawyer is Daredevil?,Foggy Nelson,Matt Murdock,Frank Castle,Danny Rand,B,easy,Superheroes
+196,Who directed Twilight?,James Cameron,Catherine Hardwicke,Francis Ford Coppola,Steven Spielberg,B,medium,Directors & Cast
+197,"Which film features If you build it, he will come?",The Natural,Cobb,The Sandlot,Field of Dreams,D,medium,Quotes & Moments
+198,"Which film features All those moments will be lost in time, like tears in rain?",Solaris,Blade Runner,2001: A Space Odyssey,Ex Machina,B,expert,Quotes & Moments
+199,Who directed Independence Day?,Steven Spielberg,Francis Ford Coppola,Roland Emmerich,James Cameron,C,medium,Directors & Cast
+200,Which cartoon features a young cook apprenticing in Marzipan City?,Camp Lazlo,Chowder,Squirrel Boy,Flapjack,B,hard,Kids & Anime
+201,Who directed The Matrix?,Steven Spielberg,James Cameron,The Wachowskis,Francis Ford Coppola,C,medium,Directors & Cast
+202,In which year was the animated film The Emoji Movie released?,1995,2009,2003,2017,D,medium,Animation
+203,Which show is set at Dunder Mifflin?,The Office,Parks and Recreation,Superstore,30 Rock,A,easy,TV Facts
+204,Which iconic role is Sean Connery known for?,James Bond (1962-1971),Ron Weasley,Hermione Granger,Harry Potter,A,medium,Actors & Roles
+205,Who directed Speed?,Steven Spielberg,James Cameron,Francis Ford Coppola,Jan de Bont,D,medium,Directors & Cast
+206,Which animated film features Hiccup and Toothless?,Eragon,Pete and His Dragon,Brave,How to Train Your Dragon,D,easy,Movie Facts
+207,Which Donald Glover series won Emmys for Atlanta?,Brooklyn Nine-Nine,Ramy,Insecure,Atlanta,D,medium,TV Facts
+208,Which horror franchise features Death designing elaborate accidents?,Saw,Cabin Fever,Wrong Turn,Final Destination,D,medium,Movie Facts
+209,Which team is called Earths Mightiest Heroes?,The Justice League,The Eternals,The Suicide Squad,The Avengers,D,easy,Superheroes
+210,In which year was Terminator 2: Judgment Day released?,1972,1974,1991,1997,C,medium,Movies
+211,Who played Mr. Darcy (Pride and Prejudice)?,Daniel Radcliffe,Colin Firth,Rupert Grint,Emma Watson,B,medium,Actors & Roles
+212,Who played Mia (The Princess Diaries)?,Emma Watson,Rupert Grint,Anne Hathaway,Daniel Radcliffe,C,medium,Actors & Roles
+213,Which actor or actress starred in The Lord of the Rings: The Return of the King?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Elijah Wood,D,hard,Directors & Cast
+214,Who directed Skyfall?,Francis Ford Coppola,Sam Mendes,James Cameron,Steven Spielberg,B,medium,Directors & Cast
+215,Who played Batman (Dark Knight trilogy)?,Rupert Grint,Christian Bale,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+216,Which sitcom followed the Tanner household in San Francisco?,Family Matters,Full House,Boy Meets World,Growing Pains,B,easy,Classic TV
+217,Which film features Theres no place like home?,The Wizard of Oz,E.T.,Home Alone,Cinderella,A,easy,Quotes & Moments
+218,Which workplace sitcom starred Dave Foley at a New York radio station?,Murphy Brown,WKRP in Cincinnati,Frasier,NewsRadio,D,hard,Classic TV
+219,In which year was The Mask released?,1974,1972,1994,1997,C,medium,Movies
+220,In which year was the animated film Inside Out released?,2009,2003,2015,1995,C,medium,Animation
+221,In which year was Taxi Driver released?,1976,1997,1972,1974,A,medium,Movies
+222,On which network or platform did Breaking Bad air?,AMC,FX,HBO,Netflix,A,easy,TV Shows
+223,Who directed Wonder Woman?,James Cameron,Steven Spielberg,Francis Ford Coppola,Patty Jenkins,D,medium,Directors & Cast
+224,Which film features Why so serious?,Suicide Squad,Batman Begins,Joker,The Dark Knight,D,easy,Quotes & Moments
+225,On which network or platform did Fargo air?,HBO,FX,Netflix,AMC,B,medium,TV Shows
+226,Which series follows a fine-dining chef returning to his family sandwich shop?,Salt Fat Acid Heat,Sweetbitter,Chef series,The Bear,D,medium,TV Facts
+227,Which iconic role is Sophie Turner known for?,Hermione Granger,Harry Potter,Sansa Stark,Ron Weasley,C,medium,Actors & Roles
+228,Which actor or actress starred in Pulp Fiction?,Leonardo DiCaprio,John Travolta,Marlon Brando,Al Pacino,B,hard,Directors & Cast
+229,Which anime film became a global phenomenon in 2001 Japan release worldwide fame?,Akira,Princess Mononoke,Your Name,Spirited Away,D,medium,Movie Facts
+230,Which Avenger lifts Mjolnir in Endgame?,Hulk,Hawkeye,Iron Man,Captain America,D,easy,Superheroes
+231,Which studio produced the Looney Tunes shorts?,Fleischer Studios,MGM,Disney,Warner Bros.,D,medium,Cinema History
+232,What is Modern Family about?,three branches of one family,a chemistry teacher turned meth maker,six friends in New York City,employees of the Dunder Mifflin paper company,A,medium,TV Shows
+233,In which year was the animated film Snow White and the Seven Dwarfs released?,1937,2003,1995,2009,A,medium,Animation
+234,Which animated film parodies fairy tales with Fiona and Donkey? Shrek,Hoodwinked,Shrek,Tangled,Enchanted,B,easy,Movie Facts
+235,Which iconic role is Jack Nicholson known for?,Harry Potter,Hermione Granger,Jack Torrance (The Shining),Ron Weasley,C,medium,Actors & Roles
+236,In which year was Avatar released?,1972,2009,1997,1974,B,medium,Movies
+237,Who directed The Sixth Sense?,Francis Ford Coppola,Steven Spielberg,James Cameron,M. Night Shyamalan,D,medium,Directors & Cast
+238,Which iconic role is Will Smith known for?,Hermione Granger,The Fresh Prince and Men in Black,Harry Potter,Ron Weasley,B,medium,Actors & Roles
+239,On which network or platform did Cheers air?,ABC,FOX,NBC,CBS,C,medium,TV Shows
+240,Which Bollywood star is called King Khan?,Saif Ali Khan,Aamir Khan,Shah Rukh Khan,Salman Khan,C,medium,Movie Facts
+241,Which talent show features a golden buzzer?,Americas Got Talent,American Idol,The Four,The X Factor,A,medium,TV Facts
+242,In which year was Casino Royale released?,1997,2006,1974,1972,B,medium,Movies
+243,In which year was Kill Bill: Vol. 1 released?,1974,1972,2003,1997,C,medium,Movies
+244,In which year was the animated film Ratatouille released?,2009,2007,2003,1995,B,medium,Animation
+245,Which Nigerian film industry is called Nollywood?,South Africas,Kenyas,Nigerias film industry,Ghanas,C,easy,Movie Facts
+246,Who played Legolas and Will Turner?,Rupert Grint,Orlando Bloom,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+247,Which Italian director made 8½ and La Dolce Vita?,Vittorio De Sica,Roberto Rossellini,Antonioni,Federico Fellini,D,medium,Cinema History
+248,What is Wednesday about?,six friends in New York City,the Addams Family daughter at Nevermore Academy,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,B,medium,TV Shows
+249,Which DC series features a dysfunctional team of superheroes with Brendan Fraser and Diane Guerrero?,Titans,Stargirl,Doom Patrol,Swamp Thing,C,hard,TV Facts
+250,Which iconic role is Scarlett Johansson known for?,Ron Weasley,Hermione Granger,Harry Potter,Black Widow,D,medium,Actors & Roles
+251,Which actor or actress starred in The Matrix?,Leonardo DiCaprio,Marlon Brando,Keanu Reeves,Al Pacino,C,hard,Directors & Cast
+252,Which young hero is Kamala Khan?,Monica Rambeau,America Chavez,Captain Marvel Carol Danvers,Ms. Marvel,D,medium,Superheroes
+253,In which year was Gone with the Wind released?,1974,1939,1972,1997,B,medium,Movies
+254,Who directed Mad Max: Fury Road?,George Miller,Francis Ford Coppola,Steven Spielberg,James Cameron,A,medium,Directors & Cast
+255,In which year was Guardians of the Galaxy released?,1974,1997,2014,1972,C,medium,Movies
+256,Who directed Rear Window?,Steven Spielberg,Alfred Hitchcock,James Cameron,Francis Ford Coppola,B,medium,Directors & Cast
+257,Which actor or actress starred in The Wizard of Oz?,Judy Garland,Al Pacino,Marlon Brando,Leonardo DiCaprio,A,hard,Directors & Cast
+258,Which actor or actress starred in Whiplash?,Miles Teller,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+259,Which iconic role is Carrie Fisher known for?,Harry Potter,Ron Weasley,Hermione Granger,Princess Leia,D,medium,Actors & Roles
+260,On which network or platform did Modern Family air?,NBC,ABC,FOX,CBS,B,easy,TV Shows
+261,Which anime features Eren fighting man-eating Titans?,Kabaneri of the Iron Fortress,Tokyo Ghoul,Parasyte,Attack on Titan,D,easy,Kids & Anime
+262,Which actor or actress starred in Fight Club?,Al Pacino,Brad Pitt,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+263,Which series features a boy wizard at Hogwarts?,Harry Potter,Percy Jackson,Artemis Fowl,Eragon,A,easy,Movie Facts
+264,Who directed The Karate Kid?,Francis Ford Coppola,James Cameron,John G. Avildsen,Steven Spielberg,C,medium,Directors & Cast
+265,Which iconic role is Anne Hathaway known for?,Hermione Granger,Mia (The Princess Diaries),Harry Potter,Ron Weasley,B,medium,Actors & Roles
+266,In which year was Gladiator released?,2000,1997,1974,1972,A,medium,Movies
+267,Which Indian composer won an Oscar for the Slumdog Millionaire score?,Ilaiyaraaja,A.R. Rahman,Zakir Hussain,Ravi Shankar,B,medium,Cinema History
+268,Who played Jules (Pulp Fiction) and Nick Fury?,Emma Watson,Daniel Radcliffe,Samuel L. Jackson,Rupert Grint,C,medium,Actors & Roles
+269,Which Hong Kong star performed his own stunts in Rush Hour?,Donnie Yen,Jet Li,Tony Jaa,Jackie Chan,D,easy,Movie Facts
+270,Which film features Say hello to my little friend?,Casino,Scarface,The Godfather,Goodfellas,B,easy,Quotes & Moments
+271,Who played Mia (La La Land)?,Emma Stone,Emma Watson,Daniel Radcliffe,Rupert Grint,A,medium,Actors & Roles
+272,Which reality show locks housemates in a house with live cameras?,Survivor,Big Brother,The Amazing Race,Love Island,B,easy,TV Facts
+273,Which 1978 slasher follows Michael Myers on Halloween night? Halloween,Halloween,Scream 1996,Friday the 13th at a camp,Black Christmas 1974 earlier,A,easy,Movie Facts
+274,On which network or platform did Money Heist air?,Netflix,HBO,Antena 3,Amazon,A,medium,TV Shows
+275,Which film features the shout Im king of the world?,The Beach,Cast Away,Titanic,Avatar,C,easy,Quotes & Moments
+276,Which film franchise features Dominic Toretto and family?,Mission Impossible,Expendables,Fast and Furious,Ocean movies,C,easy,Movie Facts
+277,Which film first won Best Picture for a non-English language film?,Parasite in 2020,Crouching Tiger,Roma,Life is Beautiful,A,medium,Awards & Records
+278,Which film features I could do this all day?,Iron Man,Black Widow,Thor,Captain America: The First Avenger,D,medium,Quotes & Moments
+279,Which actor or actress starred in Interstellar?,Matthew McConaughey,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+280,Which film features We are Groot?,Eternals,The Avengers,Guardians of the Galaxy,Thor,C,easy,Quotes & Moments
+281,In which year was The Shining released?,1980,1997,1972,1974,A,medium,Movies
+282,What is Seinfeld about?,employees of the Dunder Mifflin paper company,a comedian and friends in New York,six friends in New York City,a chemistry teacher turned meth maker,B,medium,TV Shows
+283,In which year was Logan released?,2017,1972,1997,1974,A,medium,Movies
+284,Which studio made the animated film Snow White and the Seven Dwarfs?,Studio Ghibli,DreamWorks,Pixar,Disney,D,easy,Animation
+285,What is The Simpsons about?,six friends in New York City,a yellow animated family in Springfield,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,B,medium,TV Shows
+286,Which sequel series follows Avatar Korra?,Avatar: The Last Airbender,The Legend of Korra,Yu-Gi-Oh GX,Dragon Ball Super,B,easy,Kids & Anime
+287,Which award honors animated features at the Oscars since 2002 ceremony?,Best Animation,Best Cartoon,Best Animated Feature,Best Visual Story,C,medium,Awards & Records
+288,Which TV animation house created Scooby-Doo and The Flintstones?,Filmation,Hanna-Barbera,Ruby-Spears,DePatie-Freleng,B,medium,Cinema History
+289,Which Pixar film is set on the Italian Riviera as sea monsters? Luca,Turning Red,Onward,Luca,Finding Nemo,C,medium,Movie Facts
+290,Which iconic role is Johnny Depp known for?,Hermione Granger,Ron Weasley,Captain Jack Sparrow,Harry Potter,C,medium,Actors & Roles
+291,Which studio made the animated film Inside Out?,DreamWorks,Pixar,Studio Ghibli,Disney,B,easy,Animation
+292,Who directed The Lord of the Rings: The Return of the King?,James Cameron,Francis Ford Coppola,Steven Spielberg,Peter Jackson,D,medium,Directors & Cast
+293,Which films are tied with 11 Oscars alongside The Return of the King?,Gone with the Wind and Rocky,West Side Story and Forrest Gump,Chicago and Slumdog Millionaire,Titanic and Ben-Hur,D,expert,Awards & Records
+294,Who directed Scarface?,Brian De Palma,Francis Ford Coppola,Steven Spielberg,James Cameron,A,medium,Directors & Cast
+295,Which telekinetic X-Men becomes the Phoenix?,Jean Grey,Storm,Rogue,Psylocke,A,easy,Superheroes
+296,Which Disney film features the madrigal family and no gifts? Encanto uses a candle,Raya and the Last Dragon,Moana,Coco,Encanto,D,easy,Movie Facts
+297,Which anime features soul reaper Ichigo Kurosaki?,Death Note,Yu Yu Hakusho,Bleach,Naruto,C,medium,Kids & Anime
+298,Who directed The Silence of the Lambs?,Francis Ford Coppola,Jonathan Demme,Steven Spielberg,James Cameron,B,medium,Directors & Cast
+299,What is Cheers about?,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,a Boston bar where everybody knows your name,D,medium,TV Shows
+300,In which year was Oppenheimer released?,1974,2023,1997,1972,B,medium,Movies
+301,In which year was The Sixth Sense released?,1974,1997,1972,1999,D,medium,Movies
+302,In which year was Singin in the Rain released?,1974,1952,1997,1972,B,medium,Movies
+303,Which iconic role is Colin Firth known for?,Hermione Granger,Ron Weasley,Harry Potter,Mr. Darcy (Pride and Prejudice),D,medium,Actors & Roles
+304,Who played Evelyn (Everything Everywhere All at Once)?,Michelle Yeoh,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+305,In which year was the animated film WALL-E released?,2003,1995,2008,2009,C,medium,Animation
+306,Who directed Parasite?,Francis Ford Coppola,James Cameron,Steven Spielberg,Bong Joon-ho,D,medium,Directors & Cast
+307,What is The Crown actor about?,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,Claire Foy and Olivia Colman and Imelda Staunton played Elizabeth,six friends in New York City,C,medium,TV Shows
+308,In which year was the animated film Aladdin released?,1995,2009,2003,1992,D,medium,Animation
+309,Which rock artist scored Tarzan with Youll Be in My Heart?,Alan Menken,Elton John,Phil Collins,Randy Newman,C,medium,Cinema History
+310,Which spin-off of The Office ran for seven seasons? Parks and Recreation shares the universe loosely,Superstore,Parks and Recreation is not a spin-off but shares creators,Brooklyn Nine-Nine,American Vandal,B,expert,TV Facts
+311,Which German director made Metropolis in 1927?,F.W. Murnau,Robert Wiene,Ernst Lubitsch,Fritz Lang,D,medium,Cinema History
+312,How many MCU films led to Avengers: Endgame in the Infinity Saga?,Eighteen,Twenty-five,Twenty,Twenty-three,D,hard,Movie Facts
+313,Which song from Frozen became a global anthem? Let It Go,Let It Go,Do You Want to Build a Snowman,For the First Time in Forever,Into the Unknown from Frozen II,A,easy,Movie Facts
+314,Which actor or actress starred in La La Land?,Ryan Gosling,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+315,In which year was Home Alone released?,1997,1990,1974,1972,B,medium,Movies
+316,Who directed Logan?,Steven Spielberg,James Mangold,James Cameron,Francis Ford Coppola,B,medium,Directors & Cast
+317,Which series starred Neil Patrick Harris as a teenage doctor?,Chicago Hope,House,Doogie Howser M.D.,ER,C,medium,Classic TV
+318,Who played Superman (1978)?,Christopher Reeve,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+319,Which 1950s sitcom starred Lucille Ball?,Our Miss Brooks,Bewitched,I Love Lucy,The Honeymooners,C,medium,Classic TV
+320,Which actor or actress starred in Top Gun?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Tom Cruise,D,hard,Directors & Cast
+321,Who played Andy Dufresne?,Emma Watson,Daniel Radcliffe,Tim Robbins,Rupert Grint,C,medium,Actors & Roles
+322,In which year was the animated film Kung Fu Panda released?,2009,1995,2003,2008,D,medium,Animation
+323,Who directed Pirates of the Caribbean: The Curse of the Black Pearl?,Steven Spielberg,Gore Verbinski,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+324,In which year was Apollo 13 released?,1997,1972,1995,1974,C,medium,Movies
+325,Which iconic role is Hugh Jackman known for?,Hermione Granger,Ron Weasley,Harry Potter,Wolverine,D,medium,Actors & Roles
+326,Which film popularized Hakuna Matata?,Madagascar,Tarzan,Jungle Book,The Lion King,D,easy,Quotes & Moments
+327,Which animated ogre film parodies fairy tales?,Trolls,Shrek,Hoodwinked,Igor,B,easy,Movie Facts
+328,Which actor or actress starred in Kill Bill: Vol. 1?,Marlon Brando,Leonardo DiCaprio,Uma Thurman,Al Pacino,C,hard,Directors & Cast
+329,Which actor or actress starred in Independence Day?,Al Pacino,Marlon Brando,Leonardo DiCaprio,Will Smith,D,hard,Directors & Cast
+330,Which actor or actress starred in Ferris Buellers Day Off?,Marlon Brando,Al Pacino,Leonardo DiCaprio,Matthew Broderick,D,hard,Directors & Cast
+331,Which 1990 Schwarzenegger film also had memory implants? Total Recall,Total Recall,The Running Man,Commando,Predator,A,medium,Movie Facts
+332,Which iconic role is Tom Cruise known for?,Ron Weasley,Ethan Hunt (Mission: Impossible),Harry Potter,Hermione Granger,B,medium,Actors & Roles
+333,Who directed Singin in the Rain?,James Cameron,Stanley Donen,Steven Spielberg,Francis Ford Coppola,B,medium,Directors & Cast
+334,In which year was X-Men released?,1997,1974,2000,1972,C,medium,Movies
+335,In which year was The Matrix released?,1972,1997,1974,1999,D,medium,Movies
+336,Which studio made the animated film WALL-E?,DreamWorks,Disney,Studio Ghibli,Pixar,D,easy,Animation
+337,Which 2018 film featured A Star is Born remake with Lady Gaga? A Star is Born 2018,La La Land,A Star is Born,Judy 2019,Rocketman 2019,B,easy,Movie Facts
+338,Which directing brothers made The Matrix?,The Wachowskis,The Russo brothers,The Coen brothers,The Farrelly brothers,A,medium,Movie Facts
+339,Which actor or actress starred in Taxi Driver?,Leonardo DiCaprio,Robert De Niro,Al Pacino,Marlon Brando,B,hard,Directors & Cast
+340,Which iconic role is Anthony Hopkins known for?,Hermione Granger,Hannibal Lecter,Harry Potter,Ron Weasley,B,medium,Actors & Roles
+341,Who played The Mask?,Emma Watson,Daniel Radcliffe,Jim Carrey,Rupert Grint,C,medium,Actors & Roles
+342,Which iconic role is Taylor Lautner known for?,Jacob Black,Harry Potter,Hermione Granger,Ron Weasley,A,medium,Actors & Roles
+343,What is Peaky Blinders about?,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,a Birmingham gang led by Thomas Shelby,D,medium,TV Shows
+344,Which horror franchise features Pennywise the clown?,Killer Klowns,It,The Conjuring,Poltergeist,B,easy,Movie Facts
+345,On which network or platform did Dexter air?,HBO,FX,Showtime,AMC,C,medium,TV Shows
+346,Which actor or actress starred in Mad Max: Fury Road?,Tom Hardy,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+347,Which film features Nobody puts Baby in a corner?,Footloose,Flashdance,Grease,Dirty Dancing,D,medium,Quotes & Moments
+348,Which actor won Best Actor for Lincoln and There Will Be Blood twice overall?,Tom Hanks,Sean Penn,Denzel Washington,Daniel Day-Lewis with three total,D,expert,Awards & Records
+349,In which year was First Blood released?,1982,1997,1972,1974,A,medium,Movies
+350,Which film features the line Ill be back?,Die Hard,Predator,Rambo,The Terminator,D,easy,Quotes & Moments
+351,Which Friends cast member played Ross Geller?,Jennifer Aniston,David Schwimmer,Matthew Perry,Matt LeBlanc,B,medium,TV Facts
+352,Which M. Night film features James McAvoy with 24 personalities? Split,Split,Unbreakable,The Visit,Glass,A,medium,Movie Facts
+353,Which anime follows Tohru and the cursed Sohma zodiac family?,Kimi ni Todoke,Ouran High School Host Club,Fruits Basket,Nana,C,medium,Kids & Anime
+354,Who directed The Lord of the Rings: The Fellowship of the Ring?,James Cameron,Steven Spielberg,Peter Jackson,Francis Ford Coppola,C,medium,Directors & Cast
+355,Which show features Ben Tennyson and the Omnitrix?,The Secret Saturdays,Ben 10,Generator Rex,Danny Phantom,B,easy,Kids & Anime
+356,Which anime features Sakura Kinomoto capturing Clow Cards?,Magic Knight Rayearth,Shugo Chara,Cardcaptor Sakura,Sailor Moon,C,medium,Kids & Anime
+357,Who directed Vertigo?,James Cameron,Francis Ford Coppola,Steven Spielberg,Alfred Hitchcock,D,medium,Directors & Cast
+358,Who played Wonder Woman?,Rupert Grint,Emma Watson,Gal Gadot,Daniel Radcliffe,C,medium,Actors & Roles
+359,Which Disney+ series follows Loki with the TVA?,WandaVision,Secret Invasion,Loki,What If,C,easy,Superheroes
+360,Which film features Life is like a box of chocolates?,Rain Man,Big Fish,The Curious Case of Benjamin Button,Forrest Gump,D,easy,Quotes & Moments
+361,Which iconic role is Sandra Bullock known for?,Hermione Granger,Harry Potter,Annie (Speed),Ron Weasley,C,medium,Actors & Roles
+362,What is South Park about?,four boys in a Colorado mountain town,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,A,medium,TV Shows
+363,Which actor or actress starred in The Dark Knight?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Christian Bale,D,hard,Directors & Cast
+364,Which 2021 biopic starred Aretha Franklin story with Jennifer Hudson? Respect,House of Gucci,Respect,The United States vs. Billie Holiday,Judy,B,hard,Movie Facts
+365,Which actor or actress starred in Raiders of the Lost Ark?,Al Pacino,Harrison Ford,Leonardo DiCaprio,Marlon Brando,B,hard,Directors & Cast
+366,Which Korean actor starred in Parasite as the father?,Song Kang-ho,Park So-dam,Choi Woo-shik,Lee Sun-kyun,A,expert,Movie Facts
+367,In which year was Men in Black released?,2009,1997,1974,1972,B,medium,Movies
+368,"Which 1960s cartoon family featured George, Jane, Judy, and Elroy?",Meet the Robinsons,The Jetsons,The Flintstones,The Incredibles,B,medium,TV Facts
+369,What is Friends about?,six friends in New York City,a chemistry teacher turned meth maker,noble families fighting for the Iron Throne,employees of the Dunder Mifflin paper company,A,medium,TV Shows
+370,Who played The Amazing Spider-Man?,Emma Watson,Daniel Radcliffe,Andrew Garfield,Rupert Grint,C,medium,Actors & Roles
+371,Which M. Night film features crop circles and Mel Gibson? Signs,Signs,Old,The Happening,The Village,A,medium,Movie Facts
+372,Which film features You talking to me?,Mean Streets,Raging Bull,Taxi Driver,The King of Comedy,C,medium,Quotes & Moments
+373,On which network or platform did Stranger Things air?,Amazon,Hulu,Netflix,HBO,C,easy,TV Shows
+374,Which actor or actress starred in Men in Black?,Will Smith,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+375,Which horror franchise features Jigsaw and traps?,Cube,Hostel,Final Destination,Saw,D,easy,Movie Facts
+376,Which actor or actress starred in The Sixth Sense?,Bruce Willis,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+377,Which Amazon series adapts Tolkien the second age? The Rings of Power,Wheel of Time,Shadow and Bone,The Witcher,The Rings of Power,D,medium,TV Facts
+378,In which year was Iron Man released?,1972,1997,2008,1974,C,medium,Movies
+379,Which iconic role is Josh Hutcherson known for?,Harry Potter,Hermione Granger,Ron Weasley,Peeta Mellark,D,medium,Actors & Roles
+380,Which actor or actress starred in Iron Man?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Robert Downey Jr.,D,hard,Directors & Cast
+381,Who played Spider-Man (MCU)?,Rupert Grint,Tom Holland,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+382,Which actor or actress starred in Groundhog Day?,Bill Murray,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+383,Which company bought Lucasfilm in 2012?,Warner Bros.,Paramount,Universal,Disney,D,easy,Movie Facts
+384,On which network or platform did Greys Anatomy air?,NBC,CBS,ABC,FOX,C,easy,TV Shows
+385,"Which Black Panther villain name means vengeance in the film? Killmonger is Erik, not translated",Zuri,W Kabi,M Baku,Erik Killmonger,D,expert,Movie Facts
+386,Which Swedish director made The Seventh Seal?,Ingmar Bergman,Andrei Tarkovsky,Federico Fellini,Luis Bunuel,A,medium,Cinema History
+387,Which singing chipmunk trio debuted in 1958?,Huckleberry Hound,Alvin and the Chipmunks,Yakky Doodle,Chip and Dale,B,medium,Cinema History
+388,Which sitcom starred Eric McCormack and Debra Messing in New York?,Sex and the City,Will and Grace,Partners,Ellen,B,easy,Classic TV
+389,Who played James Bond (1962-1971)?,Sean Connery,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+390,On which network or platform did The Mandalorian air?,Amazon,Disney+,HBO Max,Netflix,B,easy,TV Shows
+391,Which magical girl anime features Usagi Tsukino?,Cardcaptor Sakura,Sailor Moon,Tokyo Mew Mew,Mermaid Melody,B,easy,Kids & Anime
+392,Which iconic role is Daisy Ridley known for?,Rey (Star Wars),Hermione Granger,Ron Weasley,Harry Potter,A,medium,Actors & Roles
+393,Which iconic role is Christopher Reeve known for?,Superman (1978),Ron Weasley,Hermione Granger,Harry Potter,A,medium,Actors & Roles
+394,Who played Tyrion Lannister?,Rupert Grint,Emma Watson,Daniel Radcliffe,Peter Dinklage,D,medium,Actors & Roles
+395,Who played Edward Cullen?,Rupert Grint,Robert Pattinson,Daniel Radcliffe,Emma Watson,B,medium,Actors & Roles
+396,Which actor or actress starred in Jerry Maguire?,Tom Cruise,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+397,Which cartoon features Sector V of the Kids Next Door?,Fosters Home for Imaginary Friends,"Ed, Edd n Eddy",Chowder,Codename: Kids Next Door,D,medium,Kids & Anime
+398,Which 2019 film honored Judy Garland with Renee Zellweger? Judy,Rocketman,Judy,Respect,Bohemian Rhapsody,B,medium,Movie Facts
+399,In which year was Rear Window released?,1997,1974,1972,1954,D,medium,Movies
+400,Which X-Men leader fires optic beams?,Gambit,Havok,Beast,Cyclops,D,easy,Superheroes
+401,Which actor or actress starred in The Silence of the Lambs?,Marlon Brando,Al Pacino,Leonardo DiCaprio,Jodie Foster,D,hard,Directors & Cast
+402,In which year was the animated film Frozen released?,2013,2009,2003,1995,A,medium,Animation
+403,Which studio made the animated film Toy Story?,Studio Ghibli,Disney,DreamWorks,Pixar,D,easy,Animation
+404,In which year was Groundhog Day released?,1997,1974,1972,1993,D,medium,Movies
+405,Who directed Misery?,James Cameron,Francis Ford Coppola,Rob Reiner,Steven Spielberg,C,medium,Directors & Cast
+406,In which year was Interstellar released?,1972,1997,1974,2014,D,medium,Movies
+407,Which animated superhero series on Amazon adapts Robert Kirkman comics?,Harley Quinn,The Boys presents Diabolical,Invincible,Umbrella Academy,C,medium,TV Facts
+408,Who directed Ferris Buellers Day Off?,Steven Spielberg,John Hughes,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+409,Which actor or actress starred in The Hunger Games?,Al Pacino,Jennifer Lawrence,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+410,What was Alfred Hitchcocks famous TV anthology called?,Thriller,The Hitchcock Hour,Alfred Hitchcock Presents,Suspense Theatre,C,medium,Movie Facts
+411,Which film features I am Iron Man?,Doctor Strange,Iron Man,The Avengers,Captain America,B,easy,Quotes & Moments
+412,Which 2011 film rebooted Planet of the Apes with James Franco?,Rise of the Planet of the Apes,Dawn of the Planet of the Apes,Kingdom of the Planet of the Apes,War for the Planet of the Apes,A,medium,Movie Facts
+413,Which actor or actress starred in Blade Runner?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Harrison Ford,D,hard,Directors & Cast
+414,Which actor or actress starred in Skyfall?,Leonardo DiCaprio,Daniel Craig,Al Pacino,Marlon Brando,B,hard,Directors & Cast
+415,In which year was Mean Girls released?,1972,1997,1974,2004,D,medium,Movies
+416,Which show gave a teacher an alien superhero suit? The Greatest American Hero,Automan,The Six Million Dollar Man,The Incredible Hulk series,The Greatest American Hero,D,hard,Classic TV
+417,In which year was Schindlers List released?,1972,1997,1974,1993,D,medium,Movies
+418,Which actor or actress starred in Grease?,John Travolta,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+419,Which HBO series followed Carrie Bradshaw and friends?,Curb Your Enthusiasm,Sex and the City,Girls,The L Word,B,easy,Classic TV
+420,Which sitcom featured a witch married to a mortal man?,Bewitched,Dark Shadows,I Dream of Jeannie,Sabrina the Teenage Witch,A,easy,Classic TV
+421,On which network or platform did Wednesday air?,Netflix,HBO,CW,Hulu,A,easy,TV Shows
+422,Who composed the Lord of the Rings trilogy music?,Howard Shore,Patrick Doyle,John Williams,James Newton Howard,A,medium,Cinema History
+423,Which actor or actress starred in Parasite?,Song Kang-ho,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+424,In which year was The Lord of the Rings: The Two Towers released?,1972,2002,1997,1974,B,medium,Movies
+425,Which film features the phrase My precious?,Harry Potter,The Lord of the Rings,Willow,The Hobbit film only,B,easy,Quotes & Moments
+426,Which word game features a letter board and hangman-style play?,Wordle TV,Scrabble show,Wheel of Fortune,Countdown,C,medium,TV Facts
+427,In which year was the animated film Howls Moving Castle released?,2004,1995,2009,2003,A,medium,Animation
+428,Who played Annie Wilkes (Misery)?,Rupert Grint,Emma Watson,Kathy Bates,Daniel Radcliffe,C,medium,Actors & Roles
+429,Which actor or actress starred in Singin in the Rain?,Gene Kelly,Marlon Brando,Al Pacino,Leonardo DiCaprio,A,hard,Directors & Cast
+430,How many Oscars did Walt Disney win in total?,26 including honorary awards,11,30,22,A,expert,Awards & Records
+431,Who directed The Pursuit of Happyness?,Steven Spielberg,James Cameron,Francis Ford Coppola,Gabriele Muccino,D,medium,Directors & Cast
+432,Who played The Genie (Aladdin)?,Emma Watson,Robin Williams,Rupert Grint,Daniel Radcliffe,B,medium,Actors & Roles
+433,Which film series began with Dr. No in 1962?,Mission Impossible,James Bond,Pink Panther,Matt Helm,B,medium,Movie Facts
+434,Which film features To infinity and beyond?,Toy Story,Wall-E,Space Jam,Interstellar,A,easy,Quotes & Moments
+435,Who directed Back to the Future?,Francis Ford Coppola,Robert Zemeckis,Steven Spielberg,James Cameron,B,medium,Directors & Cast
+436,Who played Cersei Lannister?,Emma Watson,Daniel Radcliffe,Rupert Grint,Lena Headey,D,medium,Actors & Roles
+437,Which studio made the animated film Mulan?,Studio Ghibli,DreamWorks,Disney,Pixar,C,easy,Animation
+438,In which year was Casablanca released?,1974,1997,1972,1942,D,medium,Movies
+439,Who directed Saving Private Ryan?,Steven Spielberg,Francis Ford Coppola,George Lucas,James Cameron,A,medium,Directors & Cast
+440,Who directed Pretty Woman?,Garry Marshall,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+441,In which year was The Terminator released?,1984,1972,1997,1974,A,medium,Movies
+442,Which director made Nightmare on Elm Street and Scream?,Wes Craven,Tobe Hooper,George Romero,John Carpenter,A,medium,Movie Facts
+443,Which Kurosawa film inspired A Fistful of Dollars?,Throne of Blood,Seven Samurai,Sanjuro,Yojimbo,D,hard,Cinema History
+444,In which year was Die Hard released?,1988,1972,1997,1974,A,medium,Movies
+445,Which iconic role is Eddie Murphy known for?,Axel Foley (Beverly Hills Cop),Ron Weasley,Hermione Granger,Harry Potter,A,medium,Actors & Roles
+446,Which movement did Bicycle Thieves define?,German Expressionism,Italian neorealism,Soviet montage,French New Wave,B,medium,Cinema History
+447,Which franchise features cyborgs called Terminators played by Arnold?,Universal Soldier,RoboCop,Westworld film,The Terminator series,D,easy,Movie Facts
+448,Who directed Die Hard?,John McTiernan,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+449,In which year was the animated film The Secret Life of Pets released?,2016,2003,1995,2009,A,medium,Animation
+450,On which network or platform did Brooklyn Nine-Nine air?,CBS,FOX then NBC,ABC,TBS,B,medium,TV Shows
+451,Who is Tony Starks father in the MCU?,Howard Stark,Nick Fury,Aldrich Killian,Obadiah Stane,A,medium,Superheroes
+452,In which year was Dumb and Dumber released?,1974,1994,1997,1972,B,medium,Movies
+453,Which studio made the animated film Howls Moving Castle?,Disney,Pixar,DreamWorks,Studio Ghibli,D,easy,Animation
+454,Which film features I see dead people?,The Others,Poltergeist,Ghost,The Sixth Sense,D,easy,Quotes & Moments
+455,In which year was When Harry Met Sally released?,1997,1989,1972,1974,B,medium,Movies
+456,In which year was Jurassic Park released?,1974,1972,1993,1997,C,medium,Movies
+457,Who played Axel Foley (Beverly Hills Cop)?,Eddie Murphy,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+458,Which 1920 German horror film features a sleepwalking somnambulist?,Nosferatu,Metropolis,The Golem,The Cabinet of Dr. Caligari,D,hard,Cinema History
+459,Which 1946 Frank Capra film shows a world where George Bailey was never born?,Arsenic and Old Lace,Mr. Smith Goes to Washington,Meet John Doe,Its a Wonderful Life,D,medium,Cinema History
+460,Who played Thomas Shelby (Peaky Blinders)?,Daniel Radcliffe,Cillian Murphy,Emma Watson,Rupert Grint,B,medium,Actors & Roles
+461,Which 90s drama followed teens at West Beverly High?,Party of Five,Dawsons Creek,Beverly Hills 90210,Melrose Place,C,easy,Classic TV
+462,Which studio made the animated film Beauty and the Beast?,Studio Ghibli,DreamWorks,Disney,Pixar,C,easy,Animation
+463,Who played John McClane (Die Hard)?,Bruce Willis,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+464,Which actor or actress starred in Misery?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Kathy Bates,D,hard,Directors & Cast
+465,Which shapeshifting X-Men villain-ally is blue?,Mystique,Emma Frost,Jean Grey,Rogue,A,easy,Superheroes
+466,Which film features the wardrobe leading to Narnia?,The Silver Chair,"The Lion, the Witch and the Wardrobe",Prince Caspian,The Voyage of the Dawn Treader,B,easy,Movie Facts
+467,Which studio made the animated film Shrek?,DreamWorks,Disney,Pixar,Studio Ghibli,A,easy,Animation
+468,Which actor or actress starred in Pirates of the Caribbean: The Curse of the Black Pearl?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Johnny Depp,D,hard,Directors & Cast
+469,Which film features I feel the need for speed exactly? Top Gun variant,The Fast and the Furious,Days of Thunder,Top Gun,Top Gun: Maverick,C,expert,Quotes & Moments
+470,"Which cartoon features spy Sam, Clover, and Alex from Beverly Hills?",Kim Possible,Totally Spies,WITCH,Winx Club,B,medium,Kids & Anime
+471,Which Studio Ghibli founder directed My Neighbor Totoro?,Makoto Shinkai,Mamoru Hosoda,Isao Takahata,Hayao Miyazaki,D,medium,Movie Facts
+472,Who directed Schindlers List?,Francis Ford Coppola,Steven Spielberg,George Lucas,James Cameron,B,medium,Directors & Cast
+473,Which M. Night film features an unbreakable hero? Unbreakable,The Sixth Sense,Split sequel,Signs,Unbreakable,D,medium,Movie Facts
+474,In which year was Joker released?,1972,2019,1997,1974,B,medium,Movies
+475,Which daywalker hunts vampires with a sword?,Punisher,Blade,Moon Knight,Ghost Rider,B,medium,Superheroes
+476,Who played Luke Hobbs (Fast and Furious)?,Daniel Radcliffe,Dwayne Johnson,Emma Watson,Rupert Grint,B,medium,Actors & Roles
+477,In which year was Titanic released?,1997,1972,1974,2009,A,medium,Movies
+478,Which anime features Vash the Stampede with a huge bounty?,Trigun,Baccano,Gungrave,Cowboy Bebop,A,medium,Kids & Anime
+479,Which Disney film features Raya and the last of its namesake dragon? Raya and the Last Dragon,Raya and the Last Dragon,Mulan animated,Moana,Frozen II,A,medium,Movie Facts
+480,Who played Bella Swan?,Daniel Radcliffe,Kristen Stewart,Rupert Grint,Emma Watson,B,medium,Actors & Roles
+481,What is Sherlock (BBC) about?,a chemistry teacher turned meth maker,six friends in New York City,employees of the Dunder Mifflin paper company,a modern consulting detective in London,D,medium,TV Shows
+482,Which anime features Saitama finishing foes with one punch?,Baki,Mob Psycho 100,My Hero Academia,One Punch Man,D,easy,Kids & Anime
+483,Who directed First Blood?,Francis Ford Coppola,Ted Kotcheff,Steven Spielberg,James Cameron,B,medium,Directors & Cast
+484,Which 2019 musical biopic followed Elton John? Rocketman,Rocketman,Respect 2021 Franklin,Judy 2019 Garland,Bohemian Rhapsody 2018 Queen,A,easy,Movie Facts
+485,Which actor or actress starred in Logan?,Al Pacino,Hugh Jackman,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+486,Which iconic role is Rupert Grint known for?,Hermione Granger,Harry Potter,Wolverine,Ron Weasley,D,medium,Actors & Roles
+487,Which actor or actress starred in Star Wars: A New Hope?,Mark Hamill,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+488,Which anime film swaps Taki and Mitsuha across time?,Your Name,Suzume,Weathering with You,A Silent Voice,A,medium,Kids & Anime
+489,Who directed Raiders of the Lost Ark?,James Cameron,Steven Spielberg,George Lucas,Francis Ford Coppola,B,medium,Directors & Cast
+490,Who played Rey (Star Wars)?,Emma Watson,Daisy Ridley,Rupert Grint,Daniel Radcliffe,B,medium,Actors & Roles
+491,Which Italian director pioneered spaghetti westerns?,Sergio Leone,Federico Fellini,Dario Argento,Michelangelo Antonioni,A,medium,Cinema History
+492,In which year was The Departed released?,1974,2006,1972,1997,B,medium,Movies
+493,In which year was Goodfellas released?,1990,1997,1972,1974,A,medium,Movies
+494,In which year was the animated film The Lion King released?,2003,2009,1995,1994,D,medium,Animation
+495,Which classic sitcom tackled bigotry via Archie Bunker?,The Jeffersons,Maude,All in the Family,Sanford and Son,C,medium,Classic TV
+496,In which year was Aquaman released?,2018,1972,1997,1974,A,medium,Movies
+497,Which actor or actress starred in The Godfather Part II?,Marlon Brando,Sam Worthington,Al Pacino,Leonardo DiCaprio,C,hard,Directors & Cast
+498,Who directed Forrest Gump?,Steven Spielberg,Robert Zemeckis,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+499,Which digital-monster anime features Tai and Agumon?,Pokemon,Beyblade,Medabots,Digimon Adventure,D,easy,Kids & Anime
+500,Which show centers on the Millennium Puzzle and duel monsters?,Medabots,Yu-Gi-Oh,Pokemon,Bakugan,B,easy,Kids & Anime
+501,Which studio made the animated film Princess Mononoke?,Disney,DreamWorks,Studio Ghibli,Pixar,C,easy,Animation
+502,What is Fargo about?,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,six friends in New York City,crimes in a snowy Minnesota inspired by the film,D,medium,TV Shows
+503,Which 2014 film launched the current Planet of the Apes trilogy with Caesar?,Dawn of the Planet of the Apes 2014 followed Rise 2011,War for the Planet of the Apes,Kingdom of the Planet of the Apes,Rise of the Planet of the Apes in 2011,A,expert,Movie Facts
+504,In which year was Blade Runner released?,1974,1972,1997,1982,D,medium,Movies
+505,What was the Friends coffee shop called?,The Coffee Bean,Monks,Central Cafe,Central Perk,D,easy,TV Facts
+506,Who directed Star Wars: A New Hope?,George Lucas,Francis Ford Coppola,Steven Spielberg,James Cameron,A,medium,Directors & Cast
+507,Which actor or actress starred in Ghostbusters?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Bill Murray,D,hard,Directors & Cast
+508,Which actor or actress starred in Once Upon a Time in Hollywood?,Sam Worthington,Leonardo DiCaprio,Marlon Brando,Al Pacino,B,hard,Directors & Cast
+509,Which aquatic hero rules Atlantis in DC films?,Mera,Namor,Triton,Aquaman,D,easy,Superheroes
+510,Which Doctor Who spin-off followed Captain Jack Harkness?,The Sarah Jane Adventures,Class,K9 and Company,Torchwood,D,hard,TV Facts
+511,In which year was Ace Ventura: Pet Detective released?,1974,1997,1972,1994,D,medium,Movies
+512,Which studio made the animated film My Neighbor Totoro?,DreamWorks,Pixar,Studio Ghibli,Disney,C,easy,Animation
+513,Which animated film features Po the panda learning kung fu?,Raya,Big Hero 6,Kung Fu Panda,Mulan,C,easy,Movie Facts
+514,Which Fantastic Four member is made of orange rock?,Mister Fantastic,Silver Surfer,Human Torch,The Thing,D,easy,Superheroes
+515,Which film features Heres Johnny?,Misery,Scream,Psycho,The Shining,D,medium,Quotes & Moments
+516,Who played Dominic Toretto and Groot voice?,Vin Diesel,Daniel Radcliffe,Emma Watson,Rupert Grint,A,medium,Actors & Roles
+517,Who played James Bond (2006-2021)?,Rupert Grint,Emma Watson,Daniel Craig,Daniel Radcliffe,C,medium,Actors & Roles
+518,Which iconic role is Kit Harington known for?,Ron Weasley,Hermione Granger,Jon Snow,Harry Potter,C,medium,Actors & Roles
+519,Who directed Deadpool?,Steven Spielberg,Tim Miller,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+520,Which 1995 anime film inspired The Matrix aesthetics?,Macross,Akira,Ghost in the Shell,Cowboy Bebop film,C,hard,Movie Facts
+521,Which teen sitcom was set at Bayside High with Zack Morris?,Beverly Hills 90210,Saved by the Bell,Hang Time,California Dreams,B,easy,Classic TV
+522,Which film became the highest-grossing film worldwide in 2009?,Star Wars: The Force Awakens,Avatar,Avengers: Endgame,Titanic,B,easy,Movie Facts
+523,Which iconic role is Mark Hamill known for?,Harry Potter,Ron Weasley,Hermione Granger,Luke Skywalker,D,medium,Actors & Roles
+524,Which iconic role is Dwayne Johnson known for?,Luke Hobbs (Fast and Furious),Ron Weasley,Hermione Granger,Harry Potter,A,medium,Actors & Roles
+525,Which iconic role is Jim Carrey known for?,Hermione Granger,Ron Weasley,Harry Potter,The Mask,D,medium,Actors & Roles
+526,Who directed Braveheart?,James Cameron,Francis Ford Coppola,Steven Spielberg,Mel Gibson,D,medium,Directors & Cast
+527,Which Harlem hero has unbreakable skin?,Luke Cage,Blade,Colleen Wing,Iron Fist,A,medium,Superheroes
+528,Which film features May the odds be ever in your favor?,The Maze Runner,Twilight,The Hunger Games,Divergent,C,easy,Quotes & Moments
+529,On which network or platform did South Park air?,Comedy Central,FOX,Adult Swim,MTV,A,easy,TV Shows
+530,What is Breaking Bad about?,employees of the Dunder Mifflin paper company,six friends in New York City,noble families fighting for the Iron Throne,a chemistry teacher turned meth maker,D,medium,TV Shows
+531,What is The Witcher about?,employees of the Dunder Mifflin paper company,six friends in New York City,the monster hunter Geralt of Rivia,a chemistry teacher turned meth maker,C,medium,TV Shows
+532,On which network or platform did The Crown air?,BBC,HBO,ITV,Netflix,D,easy,TV Shows
+533,Which actor or actress starred in Joker?,Leonardo DiCaprio,Al Pacino,Joaquin Phoenix,Marlon Brando,C,hard,Directors & Cast
+534,Who played Ethan Hunt (Mission: Impossible)?,Daniel Radcliffe,Emma Watson,Rupert Grint,Tom Cruise,D,medium,Actors & Roles
+535,Which X-Men controls weather?,Bishop,Storm,Cyclops,Iceman,B,easy,Superheroes
+536,Which studio made the animated film The Emoji Movie?,Pixar,Disney,Sony Animation,DreamWorks,C,easy,Animation
+537,Which iconic role is Sylvester Stallone known for?,Hermione Granger,Rocky Balboa,Ron Weasley,Harry Potter,B,medium,Actors & Roles
+538,In which year was A Clockwork Orange released?,1972,1971,1974,1997,B,medium,Movies
+539,Who was the first Black actor to win Best Actor?,Forest Whitaker,Sidney Poitier in 1964,Denzel Washington in 2002,Sidney Poitier again 1967,B,medium,Awards & Records
+540,Which actor or actress starred in Barbie?,Al Pacino,Marlon Brando,Margot Robbie,Leonardo DiCaprio,C,hard,Directors & Cast
+541,Which underwater antihero fights Wakanda in the sequel?,MBaku,Killmonger,Attuma,Namor,D,expert,Superheroes
+542,"Which film features Heres looking at you, kid?",Citizen Kane,The Maltese Falcon,Casablanca,Gone with the Wind,C,medium,Quotes & Moments
+543,In which year was The Notebook released?,1997,1972,1974,2004,D,medium,Movies
+544,Who played Black Widow?,Rupert Grint,Daniel Radcliffe,Scarlett Johansson,Emma Watson,C,medium,Actors & Roles
+545,Who directed Pulp Fiction?,Steven Spielberg,Francis Ford Coppola,James Cameron,Quentin Tarantino,D,medium,Directors & Cast
+546,Which actor or actress starred in Twilight?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Kristen Stewart,D,hard,Directors & Cast
+547,Which 2017 ceremony famously announced the wrong Best Picture?,La La Land instead of Birdman,La La Land instead of Moonlight,Roma instead of Green Book,Barbie instead of Oppenheimer,B,easy,Awards & Records
+548,Which actor or actress starred in Back to the Future?,Michael J. Fox,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+549,Which 80s sitcom featured a furry alien from Melmac?,3rd Rock from the Sun,Mork and Mindy,ALF,Perfect Strangers,C,medium,Classic TV
+550,Who played Hannibal Lecter?,Rupert Grint,Daniel Radcliffe,Emma Watson,Anthony Hopkins,D,medium,Actors & Roles
+551,Which actor won posthumously for Network?,James Dean nominated only,Spencer Tracy,Peter Finch,Heath Ledger won for Joker role,C,expert,Awards & Records
+552,Who played Jacob Black?,Daniel Radcliffe,Rupert Grint,Taylor Lautner,Emma Watson,C,medium,Actors & Roles
+553,Which HBO mob drama starred James Gandolfini?,The Wire,Oz,Boardwalk Empire,The Sopranos,D,easy,TV Facts
+554,Who directed The Shining?,Stanley Kubrick,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+555,Who directed The Wizard of Oz?,Francis Ford Coppola,James Cameron,Victor Fleming,Steven Spielberg,C,medium,Directors & Cast
+556,Which kids show features a boy genius named after neutron science?,Dexters Laboratory,Edd Ed n Eddy,Jimmy Neutron,Johnny Test,C,easy,Kids & Anime
+557,Which actor or actress starred in Rocky?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Sylvester Stallone,D,hard,Directors & Cast
+558,Which actor or actress starred in Avatar?,Leonardo DiCaprio,Al Pacino,Sam Worthington,Marlon Brando,C,hard,Directors & Cast
+559,Which sitcom featured Punky Brewster a spirited orphan?,Small Wonder,Out of This World,Mr. Belvedere,Punky Brewster,D,hard,Classic TV
+560,Which iconic role is Zoe Saldana known for?,Neytiri and Gamora,Ron Weasley,Harry Potter,Hermione Granger,A,medium,Actors & Roles
+561,Which actor or actress starred in Terminator 2: Judgment Day?,Arnold Schwarzenegger,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+562,What is the Simpsons town called?,Shelbyville,Springfield,Quahog,Arlen,B,easy,TV Facts
+563,"Which cartoon features Blossom, Bubbles, and Buttercup?",Atomic Betty,The Powerpuff Girls,Totally Spies,Kim Possible,B,easy,Kids & Anime
+564,Who played Jack Torrance (The Shining)?,Daniel Radcliffe,Jack Nicholson,Rupert Grint,Emma Watson,B,medium,Actors & Roles
+565,Which Oscar winner plays Ramonda in Black Panther? Angela Bassett,Viola Davis,Lupita Nyongo,Danai Gurira,Angela Bassett,D,medium,Movie Facts
+566,In which year was the animated film Madagascar released?,2009,1995,2003,2005,D,medium,Animation
+567,Which studio made the animated film Ratatouille?,DreamWorks,Pixar,Studio Ghibli,Disney,B,easy,Animation
+568,Heath Ledger won a posthumous Oscar for which role?,Candy,Ned Kelly,The Joker in The Dark Knight,Brokeback Mountain,C,easy,Awards & Records
+569,Which anime follows quirkless Izuku at UA High?,One Punch Man,My Hero Academia,Mob Psycho 100,Black Clover,B,easy,Kids & Anime
+570,Who directed Fight Club?,David Fincher,James Cameron,Francis Ford Coppola,Steven Spielberg,A,medium,Directors & Cast
+571,Who directed Gone with the Wind?,Francis Ford Coppola,James Cameron,Steven Spielberg,Victor Fleming,D,medium,Directors & Cast
+572,Who directed Whiplash?,James Cameron,Damien Chazelle,Francis Ford Coppola,Steven Spielberg,B,medium,Directors & Cast
+573,Which actor or actress starred in Titanic?,Marlon Brando,Leonardo DiCaprio,Al Pacino,Sam Worthington,B,hard,Directors & Cast
+574,Which Chinese director made Hero and House of Flying Daggers?,Tsui Hark,Chen Kaige,Ang Lee,Zhang Yimou,D,medium,Cinema History
+575,Who played Clarice Starling?,Jodie Foster,Emma Watson,Daniel Radcliffe,Rupert Grint,A,medium,Actors & Roles
+576,In which year was Scarface released?,1997,1972,1974,1983,D,medium,Movies
+577,Which director made Halloween in 1978?,Joe Dante,John Carpenter,Wes Craven,Sean Cunningham,B,medium,Movie Facts
+578,Who directed E.T. the Extra-Terrestrial?,James Cameron,Francis Ford Coppola,Steven Spielberg,George Lucas,C,medium,Directors & Cast
+579,In which year was Once Upon a Time in Hollywood released?,2019,1974,1997,1972,A,medium,Movies
+580,Which actor or actress starred in The Karate Kid?,Leonardo DiCaprio,Marlon Brando,Ralph Macchio,Al Pacino,C,hard,Directors & Cast
+581,Which year did the first movies screen publicly by the Lumiere brothers?,1910,1888,1901,1895,D,hard,Movie Facts
+582,Which actor or actress starred in Casino Royale?,Marlon Brando,Al Pacino,Daniel Craig,Leonardo DiCaprio,C,hard,Directors & Cast
+583,Which Pixar film follows a robot cleaning Earth?,WALL-E,Ratatouille,Cars,Eve story,A,easy,Movie Facts
+584,Which sci-fi franchise features xenomorphs and Ripley?,Predator,Alien,Prometheus alone,The Thing,B,easy,Movie Facts
+585,Who played Barbie and Harley Quinn?,Rupert Grint,Emma Watson,Daniel Radcliffe,Margot Robbie,D,medium,Actors & Roles
+586,Which classic 90s anime followed Shohoku High basketball?,Dear Boys,Slam Dunk,Buzzer Beater,Kuroko no Basket,B,hard,Kids & Anime
+587,Which HBO crime drama starred Matthew McConaughey and Woody Harrelson in season one?,Mare of Easttown,True Detective,The Night Of,Sharp Objects,B,medium,TV Facts
+588,In which year was Saving Private Ryan released?,1998,1972,1997,1974,A,medium,Movies
+589,Who directed Citizen Kane in 1941?,Orson Welles,Billy Wilder,John Ford,Alfred Hitchcock,A,medium,Cinema History
+590,Which film franchise features Dom and family saying family a lot in memes?,The Expendables,Rush Hour,Fast and Furious,Ocean films,C,easy,Movie Facts
+591,In which year was E.T. the Extra-Terrestrial released?,1972,1982,1997,1974,B,medium,Movies
+592,Which actor or actress starred in E.T. the Extra-Terrestrial?,Al Pacino,Henry Thomas,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+593,Who played Superman (2013)?,Daniel Radcliffe,Henry Cavill,Emma Watson,Rupert Grint,B,medium,Actors & Roles
+594,Who played Captain America?,Chris Evans,Rupert Grint,Emma Watson,Daniel Radcliffe,A,medium,Actors & Roles
+595,Which film features the line May the Force be with you?,Dune,Star Trek,The Matrix,Star Wars,D,easy,Quotes & Moments
+596,Who directed Casino Royale?,James Cameron,Francis Ford Coppola,Martin Campbell,Steven Spielberg,C,medium,Directors & Cast
+597,What is The Fresh Prince of Bel-Air about?,six friends in New York City,a chemistry teacher turned meth maker,a West Philly teen sent to rich relatives,employees of the Dunder Mifflin paper company,C,medium,TV Shows
+598,Which actor or actress starred in The Pursuit of Happyness?,Al Pacino,Marlon Brando,Will Smith,Leonardo DiCaprio,C,hard,Directors & Cast
+599,Who directed The Hunger Games?,Steven Spielberg,James Cameron,Gary Ross,Francis Ford Coppola,C,medium,Directors & Cast
+600,What is Brooklyn Nine-Nine about?,employees of the Dunder Mifflin paper company,detectives of a New York precinct,a chemistry teacher turned meth maker,six friends in New York City,B,medium,TV Shows
+601,Which actor or actress starred in The Avengers?,Marlon Brando,Al Pacino,Robert Downey Jr.,Leonardo DiCaprio,C,hard,Directors & Cast
+602,Who directed Jurassic World?,Colin Trevorrow,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+603,Who played Luke Skywalker?,Mark Hamill,Rupert Grint,Daniel Radcliffe,Emma Watson,A,medium,Actors & Roles
+604,Who directed Mean Girls?,Francis Ford Coppola,James Cameron,Mark Waters,Steven Spielberg,C,medium,Directors & Cast
+605,Which actor or actress starred in Jurassic Park?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Sam Neill,D,hard,Directors & Cast
+606,Who directed X-Men?,Steven Spielberg,James Cameron,Bryan Singer,Francis Ford Coppola,C,medium,Directors & Cast
+607,Which actor or actress starred in Home Alone?,Marlon Brando,Leonardo DiCaprio,Al Pacino,Macaulay Culkin,D,hard,Directors & Cast
+608,Which axe does Thor wield in Endgame?,Gungnir,The Chitauri scepter,Stormbreaker,The Casket sword,C,medium,Superheroes
+609,What is 24 about?,counter-terrorist agent Jack Bauer in real time,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,A,medium,TV Shows
+610,Which spin-off followed two women at a Milwaukee brewery?,Alice,Laverne and Shirley,One Day at a Time,Kate and Allie,B,medium,Classic TV
+611,Which actor or actress starred in The Shawshank Redemption?,Al Pacino,Marlon Brando,Leonardo DiCaprio,Tim Robbins,D,hard,Directors & Cast
+612,Which sitcom followed the Clampett family after striking oil?,Green Acres,Petticoat Junction,The Beverly Hillbillies,Dallas,C,easy,Classic TV
+613,Which film features Youre gonna need a bigger boat?,The Abyss,Titanic,Jaws,Moby Dick,C,medium,Quotes & Moments
+614,In which year was the animated film Coco released?,2017,2003,2009,1995,A,medium,Animation
+615,Which green hero grows stronger with rage?,Martian Manhunter,The Hulk,Doc Samson,Beast Boy,B,easy,Superheroes
+616,Who directed Footloose?,Steven Spielberg,Francis Ford Coppola,Herbert Ross,James Cameron,C,medium,Directors & Cast
+617,In which year was Ferris Buellers Day Off released?,1986,1974,1997,1972,A,medium,Movies
+618,Which actor or actress starred in The Breakfast Club?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Molly Ringwald,D,hard,Directors & Cast
+619,Who played Katniss Everdeen?,Jennifer Lawrence,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+620,Which dance competition features stars paired with pros?,World of Dance,So You Think You Can Dance,Dancing with the Stars,Americas Best Dance Crew,C,easy,TV Facts
+621,Which actor or actress starred in Alien?,Leonardo DiCaprio,Sigourney Weaver,Marlon Brando,Al Pacino,B,hard,Directors & Cast
+622,Who played Ren (Footloose)?,Emma Watson,Rupert Grint,Daniel Radcliffe,Kevin Bacon,D,medium,Actors & Roles
+623,In which year was the animated film Spirited Away released?,2009,1995,2001,2003,C,medium,Animation
+624,In which year was the animated film Shrek released?,1995,2003,2001,2009,C,medium,Animation
+625,Who directed Harry Potter and the Sorcerers Stone?,Chris Columbus,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+626,Which iconic role is Tom Hanks known for?,Ron Weasley,Forrest Gump,Hermione Granger,Harry Potter,B,medium,Actors & Roles
+627,Which iconic role is Vin Diesel known for?,Hermione Granger,Harry Potter,Ron Weasley,Dominic Toretto and Groot voice,D,medium,Actors & Roles
+628,Which Truffaut debut about a boy launched the New Wave?,The 400 Blows,Jules and Jim,Breathless,Shoot the Piano Player,A,hard,Cinema History
+629,On which network or platform did Friends air?,FOX,CBS,ABC,NBC,D,easy,TV Shows
+630,In which year was the animated film Spider-Man: Into the Spider-Verse released?,1995,2018,2003,2009,B,medium,Animation
+631,Which sitcom made Fonzie and the Ayyy a pop culture icon?,Happy Days,Joanie Loves Chachi,Mork and Mindy,Laverne and Shirley,A,easy,Classic TV
+632,Which cartoon features the Eds scheming for jawbreakers?,"Ed, Edd n Eddy",Billy and Mandy,Fosters Home,Kids Next Door,A,medium,Kids & Anime
+633,What is The Mandalorian about?,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,six friends in New York City,a bounty hunter protecting Grogu,D,medium,TV Shows
+634,Who played Han Solo and Indiana Jones?,Rupert Grint,Harrison Ford,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+635,In which year was Rocky released?,1976,1974,1997,1972,A,medium,Movies
+636,Which sitcom made Steve Urkel a breakout character?,Family Matters,Full House,Hangin with Mr. Cooper,Step by Step,A,easy,Classic TV
+637,Who directed Rocky?,John G. Avildsen,James Cameron,Steven Spielberg,Francis Ford Coppola,A,medium,Directors & Cast
+638,Which iconic role is Kate Winslet known for?,Ron Weasley,Harry Potter,Rose (Titanic),Hermione Granger,C,medium,Actors & Roles
+639,What is The Crown about?,employees of the Dunder Mifflin paper company,the reign of Queen Elizabeth II,a chemistry teacher turned meth maker,six friends in New York City,B,medium,TV Shows
+640,Who played Kylo Ren?,Daniel Radcliffe,Emma Watson,Rupert Grint,Adam Driver,D,medium,Actors & Roles
+641,Which actor or actress starred in Harry Potter and the Sorcerers Stone?,Daniel Radcliffe,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+642,Which fictional country hides vibranium as Wakanda?,Latveria,Zamunda comedy,Wakanda,Genosha mutant state,C,easy,Superheroes
+643,Who directed Oppenheimer?,Francis Ford Coppola,James Cameron,Christopher Nolan,Steven Spielberg,C,medium,Directors & Cast
+644,In which year was Pulp Fiction released?,1994,1972,1997,1974,A,medium,Movies
+645,In which year was the animated film Princess Mononoke released?,2009,1995,2003,1997,D,medium,Animation
+646,Which anime features volleyball ace Hinata Shoyo?,Haikyuu,Kuroko no Basket,Yowamushi Pedal,Free,A,medium,Kids & Anime
+647,Which studio made the animated film How to Train Your Dragon?,Disney,Studio Ghibli,Pixar,DreamWorks,D,easy,Animation
+648,Which actor played James Bond the most times officially?,Sean Connery with six official EON,Pierce Brosnan with four,Daniel Craig with five,Roger Moore with seven,D,hard,Movie Facts
+649,Who directed Avatar?,James Cameron,Francis Ford Coppola,George Lucas,Steven Spielberg,A,medium,Directors & Cast
+650,In which year was Dirty Dancing released?,1974,1972,1987,1997,C,medium,Movies
+651,Who played Iron Man?,Daniel Radcliffe,Robert Downey Jr.,Rupert Grint,Emma Watson,B,medium,Actors & Roles
+652,Which Korean War dramedy followed Hawkeye and Hot Lips?,McHales Navy,MASH,Hogans Heroes,Car 54 Where Are You,B,expert,Classic TV
+653,Who played Neo (The Matrix)?,Keanu Reeves,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+654,In which year was The Avengers released?,1972,1974,2012,1997,C,medium,Movies
+655,Which cosmic herald rides a surfboard toward Galactus?,The Watcher,The Silver Surfer,Quasar,Nova,B,medium,Superheroes
+656,Which dog and his pals solve mysteries in the Mystery Machine?,Augie Doggie,Yogi and Boo-Boo,Alvin and the Chipmunks,Scooby-Doo and the gang,D,easy,Cinema History
+657,Which sci-fi franchise features the Predator hunting humans?,Alien,The Predator only,Predator,Aliens vs Predator alone,C,easy,Movie Facts
+658,In which year was North by Northwest released?,1972,1959,1997,1974,B,medium,Movies
+659,Which iconic role is Aaron Paul known for?,Ron Weasley,Jesse Pinkman,Harry Potter,Hermione Granger,B,medium,Actors & Roles
+660,Who directed Dirty Dancing?,Steven Spielberg,Francis Ford Coppola,James Cameron,Emile Ardolino,D,medium,Directors & Cast
+661,On which network or platform did Squid Game air?,Netflix,KBS,tvN,Disney+,A,easy,TV Shows
+662,Which villain sing-talks Be Prepared in The Lion King? Scar,Scar,Hyenas together,Zazu,Mufasa,A,medium,Movie Facts
+663,Which princess film features Rapunzel?,Brave,Frozen,Enchanted,Tangled,D,easy,Movie Facts
+664,Which series features Valar Morghulis?,Game of Thrones,His Dark Materials,The Witcher,Vikings,A,medium,Quotes & Moments
+665,Which drama followed friends in Capeside starring Katie Holmes?,Everwood,Felicity,One Tree Hill,Dawsons Creek,D,medium,Classic TV
+666,Who played The Terminator?,Rupert Grint,Emma Watson,Arnold Schwarzenegger,Daniel Radcliffe,C,medium,Actors & Roles
+667,Which actor or actress starred in Dumb and Dumber?,Al Pacino,Jim Carrey,Leonardo DiCaprio,Marlon Brando,B,hard,Directors & Cast
+668,In which year was Braveheart released?,1974,1997,1995,1972,C,medium,Movies
+669,Which DC series stars John Cena as Peacemaker?,Harley Quinn series,Superman and Lois,Peacemaker,The Suicide Squad film only,C,medium,Superheroes
+670,What is Money Heist about?,a chemistry teacher turned meth maker,a heist led by the Professor in Spain,six friends in New York City,employees of the Dunder Mifflin paper company,B,medium,TV Shows
+671,Who directed Psycho?,James Cameron,Alfred Hitchcock,Francis Ford Coppola,Steven Spielberg,B,medium,Directors & Cast
+672,Which actor or actress starred in First Blood?,Sylvester Stallone,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+673,Which actor or actress starred in Aquaman?,Al Pacino,Leonardo DiCaprio,Jason Momoa,Marlon Brando,C,hard,Directors & Cast
+674,Which actor or actress starred in 2001: A Space Odyssey?,Marlon Brando,Keir Dullea,Leonardo DiCaprio,Al Pacino,B,hard,Directors & Cast
+675,Which actor or actress starred in The Shining?,Jack Nicholson,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+676,Which studio made the animated film Spider-Man: Into the Spider-Verse?,DreamWorks,Pixar,Sony Animation,Disney,C,easy,Animation
+677,Which series features Tris in faction-based Chicago?,Uglies,Divergent,Maze Runner,The Hunger Games,B,medium,Movie Facts
+678,Who played Peeta Mellark?,Josh Hutcherson,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+679,Which superhero series on Amazon satirizes Vought and the Seven?,Invincible,The Boys,Umbrella Academy,Jupiter’s Legacy,B,medium,TV Facts
+680,Who directed Home Alone?,Francis Ford Coppola,James Cameron,Chris Columbus,Steven Spielberg,C,medium,Directors & Cast
+681,Which Star Wars series follows Cassian Andor?,Rogue One prequel series The Mandalorian,Ahsoka,The Bad Batch,Andor,D,medium,TV Facts
+682,Which iconic role is Kathy Bates known for?,Ron Weasley,Annie Wilkes (Misery),Hermione Granger,Harry Potter,B,medium,Actors & Roles
+683,What is Rick and Morty about?,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,a mad scientist and his grandson,D,medium,TV Shows
+684,Who directed Everything Everywhere All at Once?,The Daniels,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+685,Who directed The Notebook?,Nick Cassavetes,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+686,Which Spider-Man villain is the Green Goblin?,Eddie Brock,Norman Osborn,Otto Octavius,Adrian Toomes,B,easy,Superheroes
+687,On which network or platform did The Simpsons air?,CBS,NBC,FOX,Comedy Central,C,easy,TV Shows
+688,Which studio made the animated film Aladdin?,Disney,Pixar,Studio Ghibli,DreamWorks,A,easy,Animation
+689,Which 2018 biopic dramatized Queen and Freddie Mercury? Bohemian Rhapsody,Bohemian Rhapsody,Rocketman,Judy,Love and Mercy 2014 Beach Boys,A,easy,Movie Facts
+690,In which year was Top Gun released?,1974,1997,1986,1972,C,medium,Movies
+691,Which horror villain appears when saying his name five times in a mirror? Candyman,Samara,Bloody Mary folklore,Beetlejuice three times comedy,Candyman,D,medium,Movie Facts
+692,In which year was Raiders of the Lost Ark released?,1981,1974,1997,1972,A,medium,Movies
+693,Which film features Bryan Mills saying I will find you?,John Wick,Taken,Man on Fire,Safe,B,easy,Movie Facts
+694,Which US series reimagined Holmes as a New York recovering addict with Lucy Liu?,Elementary,Sherlock,The Irregulars,Watson,A,hard,TV Facts
+695,Which actor or actress starred in Die Hard?,Bruce Willis,Marlon Brando,Leonardo DiCaprio,Al Pacino,A,hard,Directors & Cast
+696,Which 1927 film was the first major talking picture?,The Jazz Singer,Wings,Metropolis,The Crowd,A,medium,Movie Facts
+697,Which iconic role is Daniel Radcliffe known for?,Wolverine,Ron Weasley,Harry Potter,Hermione Granger,C,medium,Actors & Roles
+698,Who was the first woman to win Best Director?,Kathryn Bigelow for The Hurt Locker,Jane Campion later,Greta Gerwig,Ava DuVernay,A,hard,Awards & Records
+699,Which studio made the animated film Kung Fu Panda?,Studio Ghibli,DreamWorks,Pixar,Disney,B,easy,Animation
+700,Which actor or actress starred in Spider-Man?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Tobey Maguire,D,hard,Directors & Cast
+701,Which actor or actress starred in Jurassic World?,Al Pacino,Marlon Brando,Leonardo DiCaprio,Chris Pratt,D,hard,Directors & Cast
+702,Which silent comedian made City Lights and Modern Times?,Harold Lloyd,Harry Langdon,Charlie Chaplin,Buster Keaton,C,easy,Cinema History
+703,On which network or platform did Rick and Morty air?,FOX,Adult Swim,Comedy Central,Netflix,B,medium,TV Shows
+704,Which iconic role is Jodie Foster known for?,Ron Weasley,Hermione Granger,Harry Potter,Clarice Starling,D,medium,Actors & Roles
+705,What is Lost about?,a chemistry teacher turned meth maker,six friends in New York City,plane crash survivors on a mysterious island,employees of the Dunder Mifflin paper company,C,medium,TV Shows
+706,Which animated film won Best Animated Feature first for Japan?,Akira,Spirited Away in 2003,Princess Mononoke,Your Name,B,hard,Awards & Records
+707,Which film franchise features John Wick as a retired hitman?,Taken,Leon,The Equalizer,John Wick,D,easy,Movie Facts
+708,Which series followed Cory Matthews from middle school to college?,Boy Meets World,The Wonder Years,Saved by the Bell,Sabrina the Teenage Witch,A,easy,Classic TV
+709,Which film features You cant handle the truth?,A Time to Kill,A Few Good Men,12 Angry Men,Judgment at Nuremberg,B,medium,Quotes & Moments
+710,Who directed North by Northwest?,Alfred Hitchcock,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+711,What is The Walking Dead about?,survivors in a zombie apocalypse,six friends in New York City,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,A,medium,TV Shows
+712,"Which film features Wax on, wax off?",The Matrix,Kung Fu Panda,The Karate Kid,Crouching Tiger,C,easy,Quotes & Moments
+713,Which film features You had me at hello?,Jerry Maguire,When Harry Met Sally,Sleepless in Seattle,Notting Hill,A,medium,Quotes & Moments
+714,Which superhero is known as the Man of Steel?,Superman,Captain Marvel DC,Steel,Martian Manhunter,A,easy,Superheroes
+715,Which show features Jake Long as a dragon protecting New York?,Jackie Chan Adventures,American Dragon: Jake Long,Danny Phantom,Juniper Lee,B,medium,Kids & Anime
+716,Which iconic role is Keira Knightley known for?,Ron Weasley,Harry Potter,Hermione Granger,Elizabeth Bennet and Elizabeth Swann,D,medium,Actors & Roles
+717,In which year was La La Land released?,1997,1972,2016,1974,C,medium,Movies
+718,Which 1986 sequel expanded the Aliens saga with Cameron directing? Aliens,Aliens,Alien Resurrection,Alien,Alien 3,A,medium,Movie Facts
+719,Which HBO series featured dragons and west of Westeros prequel House of the Dragon?,The Witcher,Shadow and Bone,House of the Dragon,The Rings of Power,C,easy,TV Facts
+720,Which actor or actress starred in Everything Everywhere All at Once?,Michelle Yeoh,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+721,Who plays Killmonger in Black Panther?,Chadwick Boseman,John Boyega,Michael B. Jordan,Daniel Kaluuya,C,medium,Superheroes
+722,"Who scored The Good, the Bad and the Ugly?",Hans Zimmer,John Barry,Nino Rota,Ennio Morricone,D,medium,Cinema History
+723,Which classic sitcom was set in Mayberry with Sheriff Taylor?,Green Acres,The Andy Griffith Show,Petticoat Junction,Gomer Pyle U.S.M.C.,B,medium,Classic TV
+724,Which 1975 film is credited with creating the summer blockbuster?,Superman,Rocky,Star Wars,Jaws,D,medium,Movie Facts
+725,Who directed The Terminator?,Steven Spielberg,Francis Ford Coppola,James Cameron,George Lucas,C,medium,Directors & Cast
+726,Who directed Joker?,Steven Spielberg,Todd Phillips,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+727,Which actor or actress starred in Speed?,Keanu Reeves,Al Pacino,Leonardo DiCaprio,Marlon Brando,A,hard,Directors & Cast
+728,Which studio made the animated film The Incredibles?,Disney,DreamWorks,Pixar,Studio Ghibli,C,easy,Animation
+729,Which composer wrote Youve Got a Friend in Me for Toy Story?,Randy Newman,Phil Collins,Alan Menken,John Powell,A,medium,Cinema History
+730,Which iconic role is Bruce Willis known for?,Harry Potter,Ron Weasley,John McClane (Die Hard),Hermione Granger,C,medium,Actors & Roles
+731,Which iconic role is Samuel L. Jackson known for?,Ron Weasley,Harry Potter,Hermione Granger,Jules (Pulp Fiction) and Nick Fury,D,medium,Actors & Roles
+732,Which studio made the animated film Coco?,Pixar,DreamWorks,Studio Ghibli,Disney,A,easy,Animation
+733,Who directed The Godfather?,Steven Spielberg,George Lucas,James Cameron,Francis Ford Coppola,D,medium,Directors & Cast
+734,Which actor or actress starred in X-Men?,Leonardo DiCaprio,Al Pacino,Hugh Jackman,Marlon Brando,C,hard,Directors & Cast
+735,Which shinigami drops the Death Note into the human world?,Jealous,Sidoh,Rem,Ryuk,D,medium,Kids & Anime
+736,Which actor or actress starred in Vertigo?,Leonardo DiCaprio,Marlon Brando,James Stewart,Al Pacino,C,hard,Directors & Cast
+737,Which director was famous for westerns like The Searchers?,Anthony Mann,John Ford,Howard Hawks,Sergio Leone,B,medium,Cinema History
+738,Which actor or actress starred in Guardians of the Galaxy?,Al Pacino,Chris Pratt,Leonardo DiCaprio,Marlon Brando,B,hard,Directors & Cast
+739,Which actor or actress starred in Goldfinger?,Al Pacino,Sean Connery,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+740,Which speedster protects Central City?,The Flash,Speedball,Quicksilver,Zoom,A,easy,Superheroes
+741,Who directed A Clockwork Orange?,Steven Spielberg,Francis Ford Coppola,Stanley Kubrick,James Cameron,C,medium,Directors & Cast
+742,What is Squid Game about?,desperate players in deadly Korean games,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,six friends in New York City,A,medium,TV Shows
+743,Which actor or actress starred in Deadpool?,Leonardo DiCaprio,Ryan Reynolds,Al Pacino,Marlon Brando,B,hard,Directors & Cast
+744,Which sitcom featured Arnold and Willis with the famous line about Willis?,Family Matters,Webster,Gimme a Break,Diffrent Strokes,D,medium,Classic TV
+745,Which anime features Light Yagami and a deadly notebook?,Code Geass,Future Diary,Death Note,Psycho-Pass,C,easy,Kids & Anime
+746,Which iconic role is Chris Hemsworth known for?,Harry Potter,Ron Weasley,Thor,Hermione Granger,C,medium,Actors & Roles
+747,What is Stranger Things about?,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,six friends in New York City,"kids facing supernatural events in Hawkins, Indiana",D,medium,TV Shows
+748,Which hero rides a flaming motorcycle with a vengeance spirit?,Hellboy,Ghost Rider,Lobo,Spawn,B,medium,Superheroes
+749,Who directed Jaws?,George Lucas,Francis Ford Coppola,Steven Spielberg,James Cameron,C,medium,Directors & Cast
+750,Who directed When Harry Met Sally?,Rob Reiner,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+751,Which Star Wars series stars Pedro Pascal as Din Djarin?,The Mandalorian,The Book of Boba Fett,Andor,Obi-Wan Kenobi,A,easy,TV Facts
+752,In which year was Black Panther released?,1997,1974,2018,1972,C,medium,Movies
+753,Who played Captain Jack Sparrow?,Emma Watson,Daniel Radcliffe,Johnny Depp,Rupert Grint,C,medium,Actors & Roles
+754,Who directed Alien?,James Cameron,Francis Ford Coppola,Steven Spielberg,Ridley Scott,D,medium,Directors & Cast
+755,Which Lion King meerkat sings Hakuna Matata with Timon? Timon is the meerkat,Rafiki,Pumbaa the warthog,Timon,Zazu,C,easy,Movie Facts
+756,Who played Batman (1989)?,Rupert Grint,Emma Watson,Daniel Radcliffe,Michael Keaton,D,medium,Actors & Roles
+757,Which adult cartoon is set in the 31st century with Fry and Leela?,Futurama,Solar Opposites,The Simpsons,Family Guy,A,easy,TV Facts
+758,Which iconic role is Jason Momoa known for?,Harry Potter,Ron Weasley,Khal Drogo and Aquaman,Hermione Granger,C,medium,Actors & Roles
+759,Who composed The Lion King and Dune scores?,Danny Elfman,Hans Zimmer,Alan Menken,John Williams,B,easy,Cinema History
+760,Which quiz show features answering questions for a million dollars?,The Weakest Link,Who Wants to Be a Millionaire,Deal or No Deal,Jeopardy,B,easy,TV Facts
+761,Who directed The Departed?,James Cameron,Francis Ford Coppola,Steven Spielberg,Martin Scorsese,D,medium,Directors & Cast
+762,On which network or platform did Sherlock (BBC) air?,Netflix,Channel 4,ITV,BBC,D,medium,TV Shows
+763,In which year was Speed released?,1994,1997,1974,1972,A,medium,Movies
+764,In which year was Ghostbusters released?,1997,1984,1974,1972,B,medium,Movies
+765,Which 2007 found-footage series features Katie and Micah? Paranormal Activity,Blair Witch,Cloverfield monster,Paranormal Activity,REC Spanish,C,medium,Movie Facts
+766,Which Infinity Stone does Vision have in his forehead?,The Mind Stone,The Reality Stone,The Power Stone,The Time Stone,A,medium,Superheroes
+767,Which 2022 Indian epic featured Naatu Naatu and SS Rajamouli? RRR,KGF Chapter 2,Baahubali,Vikram,RRR,D,medium,Movie Facts
+768,Which Amazon series adapts Robert Jordan novels?,The Wheel of Time,The Rings of Power,The Shannara Chronicles,The Witcher,A,medium,TV Facts
+769,Who directed Groundhog Day?,Steven Spielberg,James Cameron,Harold Ramis,Francis Ford Coppola,C,medium,Directors & Cast
+770,Which Disney+ series places Wanda and Vision in sitcom worlds?,Hawkeye,WandaVision,Moon Knight,Loki,B,easy,Superheroes
+771,Which actor or actress starred in Saving Private Ryan?,Leonardo DiCaprio,Tom Hanks,Al Pacino,Marlon Brando,B,hard,Directors & Cast
+772,On which network or platform did Lost air?,FOX,NBC,ABC,CBS,C,easy,TV Shows
+773,Which horror franchise features the Warrens as paranormal investigators?,The Conjuring,Sinister,Annabelle alone,Insidious,A,easy,Movie Facts
+774,On which network or platform did Seinfeld air?,ABC,CBS,FOX,NBC,D,easy,TV Shows
+775,Which iconic role is Robert Downey Jr. known for?,Iron Man,Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+776,Which French movement featured Godard and Truffaut?,Italian neorealism,The French New Wave,Cinema du look,Pure cinema,B,medium,Cinema History
+777,Which show features spinning battle tops and Bit Beasts?,Beyblade,Medabots,Bakugan,Yu-Gi-Oh,A,easy,Kids & Anime
+778,Which actor or actress starred in The Mask?,Jim Carrey,Leonardo DiCaprio,Marlon Brando,Al Pacino,A,hard,Directors & Cast
+779,Which actor or actress starred in The Terminator?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Arnold Schwarzenegger,D,hard,Directors & Cast
+780,Which Spider-Man villain has mechanical tentacles?,Doctor Octopus,Venom,Green Goblin,Electro,A,easy,Superheroes
+781,On which network or platform did The Walking Dead air?,HBO,AMC,Netflix,FOX,B,easy,TV Shows
+782,Who directed Interstellar?,Francis Ford Coppola,James Cameron,Steven Spielberg,Christopher Nolan,D,medium,Directors & Cast
+783,On which network or platform did The Big Bang Theory air?,CBS,ABC,NBC,FOX,A,easy,TV Shows
+784,In which year was Pretty Woman released?,1972,1974,1990,1997,C,medium,Movies
+785,What is The Big Bang Theory about?,six friends in New York City,scientists living in Pasadena,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,B,medium,TV Shows
+786,On which network or platform did Peaky Blinders air?,ITV,Netflix,BBC,Sky,C,medium,TV Shows
+787,Which kids show features a sponge living in a pineapple under the sea?,Danny Phantom,SpongeBob SquarePants,The Fairly OddParents,Jimmy Neutron,B,easy,Kids & Anime
+788,"Who composed the scores for Star Wars, Jaws, and Jurassic Park?",John Williams,Jerry Goldsmith,James Horner,Hans Zimmer,A,easy,Cinema History
+789,Who directed Grease?,Randal Kleiser,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+790,In which year was Pirates of the Caribbean: The Curse of the Black Pearl released?,1997,1972,1974,2003,D,medium,Movies
+791,In which year was The Lord of the Rings: The Return of the King released?,1974,1972,1997,2003,D,medium,Movies
+792,Who played Edward (Pretty Woman)?,Richard Gere,Rupert Grint,Emma Watson,Daniel Radcliffe,A,medium,Actors & Roles
+793,On which network or platform did Dark air?,ARD,Sky,ZDF,Netflix,D,hard,TV Shows
+794,Which villain collects the Infinity Stones in Infinity War?,Ronan,Ultron,Loki,Thanos,D,easy,Superheroes
+795,In which year was Wonder Woman released?,2017,1974,1997,1972,A,medium,Movies
+796,Which film is frequently ranked the greatest ever from 1941?,Citizen Kane,Vertigo,Sunrise,Casablanca,A,medium,Cinema History
+797,Which team assembles in the Hall of Justice?,The X-Men,The Justice League,The Avengers,The Guardians,B,easy,Superheroes
+798,Who directed The Dark Knight?,James Cameron,Christopher Nolan,Steven Spielberg,Francis Ford Coppola,B,medium,Directors & Cast
+799,Which cat-and-mouse duo ran since 1940 MGM cartoons?,Pixie and Dixie,Itchy and Scratchy,Herman and Katnip,Tom and Jerry,D,easy,TV Facts
+800,Which Thai star is known for Ong-Bak martial arts?,Tony Jaa,Jet Li,Iko Uwais,Scott Adkins,A,hard,Movie Facts
+801,Who directed Goldfinger?,Francis Ford Coppola,James Cameron,Guy Hamilton,Steven Spielberg,C,medium,Directors & Cast
+802,On which network or platform did The Office (US) air?,HBO,FOX,NBC,CBS,C,easy,TV Shows
+803,What is Black Mirror about?,a dark anthology about technology,six friends in New York City,employees of the Dunder Mifflin paper company,a chemistry teacher turned meth maker,A,medium,TV Shows
+804,Which iconic role is Cillian Murphy known for?,Harry Potter,Thomas Shelby (Peaky Blinders),Ron Weasley,Hermione Granger,B,medium,Actors & Roles
+805,Who played Arya Stark?,Maisie Williams,Emma Watson,Rupert Grint,Daniel Radcliffe,A,medium,Actors & Roles
+806,On which network or platform did Game of Thrones air?,AMC,HBO,Netflix,Showtime,B,easy,TV Shows
+807,Which studio made the animated film Frozen?,Studio Ghibli,Disney,DreamWorks,Pixar,B,easy,Animation
+808,Who directed Jurassic Park?,George Lucas,James Cameron,Steven Spielberg,Francis Ford Coppola,C,medium,Directors & Cast
+809,Which silent star was called The Great Stone Face for his deadpan stunts?,Roscoe Arbuckle,Buster Keaton,Harold Lloyd,Charlie Chaplin,B,medium,Cinema History
+810,Which nostalgia series followed Kevin Arnold in the 1960s-70s?,The Wonder Years,Freaks and Geeks later,Doogie Howser M.D.,Boy Meets World,A,medium,Classic TV
+811,Which actor or actress starred in When Harry Met Sally?,Marlon Brando,Leonardo DiCaprio,Billy Crystal,Al Pacino,C,hard,Directors & Cast
+812,In which year was Django Unchained released?,2012,1974,1972,1997,A,medium,Movies
+813,Which director is known for twisted endings like The Sixth Sense?,M. Night Shyamalan,Denis Villeneuve,James Wan,David Fincher,A,easy,Movie Facts
+814,Which studio made the animated film The Little Mermaid?,Studio Ghibli,DreamWorks,Pixar,Disney,D,easy,Animation
+815,What is the Black Panther royal name?,Zuri,Killmonger,TChalla,MBaku,C,medium,Superheroes
+816,Which film features Just keep swimming?,Moana,The Little Mermaid,Finding Nemo,Shark Tale,C,easy,Quotes & Moments
+817,Which studio made the animated film The Secret Life of Pets?,Illumination,Pixar,Disney,DreamWorks,A,easy,Animation
+818,Who played MJ (Spider-Man) and Rue (Euphoria)?,Emma Watson,Rupert Grint,Zendaya,Daniel Radcliffe,C,medium,Actors & Roles
+819,Which metal is Captain Americas shield made of?,Uru,Steel,Vibranium,Adamantium,C,easy,Superheroes
+820,In which year was the animated film Beauty and the Beast released?,2009,2003,1995,1991,D,medium,Animation
+821,In which year was the animated film Toy Story released?,2008,2003,1995,2009,C,medium,Animation
+822,Which actor or actress starred in Inception?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Sam Worthington,A,hard,Directors & Cast
+823,In which year was the animated film My Neighbor Totoro released?,1988,1995,2003,2009,A,medium,Animation
+824,Which X-Men absorbs powers and memories by touch?,Rogue,Mystique,Jubilee,Dazzler,A,medium,Superheroes
+825,Which Black Panther actress plays Shuri? Letitia Wright,Angela Bassett,Letitia Wright,Danai Gurira,Lupita Nyongo,B,medium,Movie Facts
+826,What is Spider-Mans real name in the main comics?,Peter Parker,Ben Reilly,Miguel OHara,Miles Morales,A,easy,Superheroes
+827,Which Indonesian film features Iko Uwais in The Raid?,The Night Comes for Us,Headshot,Merantau,The Raid: Redemption,D,hard,Movie Facts
+828,Who directed Dumb and Dumber?,James Cameron,Peter Farrelly,Francis Ford Coppola,Steven Spielberg,B,medium,Directors & Cast
+829,Which iconic role is Emilia Clarke known for?,Ron Weasley,Daenerys Targaryen,Harry Potter,Hermione Granger,B,medium,Actors & Roles
+830,Which film features John Wick avenging his dog?,The Equalizer,John Wick,Man on Fire,Taken,B,easy,Movie Facts
+831,Who directed Black Panther?,Steven Spielberg,James Cameron,Ryan Coogler,Francis Ford Coppola,C,medium,Directors & Cast
+832,Which Nigerian-American actor played Okoye in Black Panther? Danai Gurira,Danai Gurira,Angela Bassett as Ramonda,Letitia Wright as Shuri,Lupita Nyongo as Nakia,A,hard,Movie Facts
+833,Which actor or actress starred in Footloose?,Leonardo DiCaprio,Al Pacino,Marlon Brando,Kevin Bacon,D,hard,Directors & Cast
+834,In which year was Fight Club released?,1972,1974,1997,1999,D,medium,Movies
+835,Who played Wolverine?,Rupert Grint,Daniel Radcliffe,Hugh Jackman,Emma Watson,C,medium,Actors & Roles
+836,In which year was Parasite released?,1972,1997,2019,1974,C,medium,Movies
+837,In which year was the animated film Moana released?,2016,2009,2003,1995,A,medium,Animation
+838,Which X-Men villain controls magnetism?,Magneto,Juggernaut,Apocalypse,Mystique,A,easy,Superheroes
+839,"Which Looney Tunes character says Whats up, Doc?",Elmer Fudd,Daffy Duck,Porky Pig,Bugs Bunny,D,easy,TV Facts
+840,Which Pixar film is set inside a girls mind with emotions?,Coco,Up,Inside Out,Soul,C,easy,Movie Facts
+841,Which iconic role is Emma Watson known for?,Wolverine,Harry Potter,Hermione Granger,Ron Weasley,C,medium,Actors & Roles
+842,Which 2016 animated film is set in the world of the dead in Mexico?,The Book of Life,Encanto,Maya and the Three,Coco,D,medium,Movie Facts
+843,Which film won the most Oscars with 11 including Best Picture in 2004?,Ben-Hur,Chicago,Titanic,The Return of the King,D,hard,Awards & Records
+844,Who directed La La Land?,Damien Chazelle,James Cameron,Francis Ford Coppola,Steven Spielberg,A,medium,Directors & Cast
+845,Who directed Blade Runner?,Francis Ford Coppola,Ridley Scott,James Cameron,Steven Spielberg,B,medium,Directors & Cast
+846,Who directed Terminator 2: Judgment Day?,Francis Ford Coppola,Steven Spielberg,George Lucas,James Cameron,D,medium,Directors & Cast
+847,Who played Harry Potter?,Daniel Radcliffe,Emma Watson,Rupert Grint,Hugh Jackman,A,medium,Actors & Roles
+848,In which year was Alien released?,1997,1974,1972,1979,D,medium,Movies
+849,In which year was Independence Day released?,1974,1996,1972,1997,B,medium,Movies
+850,Which actor or actress starred in A Clockwork Orange?,Al Pacino,Malcolm McDowell,Leonardo DiCaprio,Marlon Brando,B,hard,Directors & Cast
+851,In which year was Psycho released?,1997,1974,1960,1972,C,medium,Movies
+852,Which actor or actress starred in The Lord of the Rings: The Fellowship of the Ring?,Leonardo DiCaprio,Al Pacino,Elijah Wood,Marlon Brando,C,hard,Directors & Cast
+853,Who played Khal Drogo and Aquaman?,Rupert Grint,Daniel Radcliffe,Jason Momoa,Emma Watson,C,medium,Actors & Roles
+854,Which actor or actress starred in Wonder Woman?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Gal Gadot,D,hard,Directors & Cast
+855,Who directed Guardians of the Galaxy?,Steven Spielberg,James Cameron,James Gunn,Francis Ford Coppola,C,medium,Directors & Cast
+856,Which 1987 film featured the Predator hunting Arnold? Predator,Commando,Aliens,The Terminator,Predator,D,easy,Movie Facts
+857,Which actor or actress starred in Apollo 13?,Tom Hanks,Leonardo DiCaprio,Al Pacino,Marlon Brando,A,hard,Directors & Cast
+858,Which private investigator hero is Jessica Jones alias Jewel?,Jessica Jones,Typhoid Mary,Colleen Wing,Black Cat,A,medium,Superheroes
+859,In which year was The Lord of the Rings: The Fellowship of the Ring released?,2001,1972,1997,1974,A,medium,Movies
+860,Which actor or actress starred in Braveheart?,Marlon Brando,Al Pacino,Mel Gibson,Leonardo DiCaprio,C,hard,Directors & Cast
+861,Which iconic role is Kevin Bacon known for?,Ron Weasley,Harry Potter,Ren (Footloose),Hermione Granger,C,medium,Actors & Roles
+862,Who played Daenerys Targaryen?,Emilia Clarke,Emma Watson,Daniel Radcliffe,Rupert Grint,A,medium,Actors & Roles
+863,Which iconic role is Kristen Stewart known for?,Harry Potter,Bella Swan,Ron Weasley,Hermione Granger,B,medium,Actors & Roles
+864,In which year was the animated film Finding Nemo released?,1995,2009,2003,2008,C,medium,Animation
+865,Who played Lydia (Beetlejuice) and Joyce (Stranger Things)?,Rupert Grint,Emma Watson,Winona Ryder,Daniel Radcliffe,C,medium,Actors & Roles
+866,Which film features the need for speed line?,Fast and Furious,Le Mans 66,Days of Thunder,Top Gun,D,medium,Quotes & Moments
+867,Which school do the X-Men attend?,S.T.A.R. Labs academy,Ivy University,Xaviers School for Gifted Youngsters,Midtown High,C,easy,Superheroes
+868,Which studio made the animated film Despicable Me?,Disney,Illumination,Pixar,DreamWorks,B,easy,Animation
+869,Which series features Thomas in a deadly maze?,The Hunger Games,Lord of the Flies,Divergent,The Maze Runner,D,easy,Movie Facts
+870,Which actor or actress starred in Goodfellas?,Marlon Brando,Leonardo DiCaprio,Ray Liotta,Al Pacino,C,hard,Directors & Cast
+871,"Which film features Houston, we have a problem?",Apollo 13,Gravity,The Martian,First Man,A,medium,Quotes & Moments
+872,Which film reveals I am your father?,The Empire Strikes Back,Return of the Jedi,Star Wars: A New Hope,Rogue One,A,easy,Quotes & Moments
+873,Which film features This is Sparta!,300,Alexander,Troy,Gladiator,A,easy,Quotes & Moments
+874,Who directed Ghostbusters?,Ivan Reitman,Steven Spielberg,Francis Ford Coppola,James Cameron,A,medium,Directors & Cast
+875,In which year was Back to the Future released?,1974,1985,1997,1972,B,medium,Movies
+876,Which cartoon follows Flapjack and Captain K nuckles to Candied Island?,Camp Lazlo,Squirrel Boy,The Marvelous Misadventures of Flapjack,Chowder,C,hard,Kids & Anime
+877,Which show featured a Martian living with a reporter? My Favorite Martian,ALF,Mork and Mindy,My Favorite Martian,3rd Rock from the Sun,C,hard,Classic TV
+878,Which Alfred Hitchcock film shows a shower murder?,Dial M for Murder,Frenzy,Blackmail,Psycho,D,easy,Movie Facts
+879,Which 2023 film paired Barbie with Oppenheimer in Barbenheimer?,Dune,Killers of the Flower Moon,Barbie,Poor Things,C,easy,Movie Facts
+880,Which iconic role is Uma Thurman known for?,Hermione Granger,Ron Weasley,Harry Potter,The Bride (Kill Bill),D,medium,Actors & Roles
+881,Which slasher villain wields a chainsaw in Texas? Leatherface,Pinhead,Michael Myers,Jason Voorhees,Leatherface,D,medium,Movie Facts
+882,Which actor or actress starred in Casablanca?,Al Pacino,Humphrey Bogart,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+883,Which sitcom starred Candice Bergen as a TV journalist?,NewsRadio,Murphy Brown,Sports Night,The Mary Tyler Moore Show,B,medium,Classic TV
+884,Which actor or actress starred in Gone with the Wind?,Leonardo DiCaprio,Vivien Leigh,Marlon Brando,Al Pacino,B,hard,Directors & Cast
+885,What is Supermans Kryptonian birth name?,Zor-El,Kal-El,Nam-Ek,Jor-El,B,medium,Superheroes
+886,Who directed Barbie?,Greta Gerwig,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+887,Who directed The Breakfast Club?,John Hughes,Francis Ford Coppola,James Cameron,Steven Spielberg,A,medium,Directors & Cast
+888,Which game show asks contestants to guess prices?,Let's Make a Deal,The Price is Right,Wheel of Fortune,Family Feud,B,easy,TV Facts
+889,Which cartoon features teen spy Kim Possible and Ron Stoppable?,Kim Possible,Atomic Betty,6teen,Totally Spies,A,easy,Kids & Anime
+890,In which year was 2001: A Space Odyssey released?,1974,1968,1972,1997,B,medium,Movies
+891,Which iconic role is Morgan Freeman known for?,Harry Potter,Red (The Shawshank Redemption),Ron Weasley,Hermione Granger,B,medium,Actors & Roles
+892,Which iconic role is Tom Holland known for?,Ron Weasley,Hermione Granger,Spider-Man (MCU),Harry Potter,C,medium,Actors & Roles
+893,Which actor or actress starred in Jaws?,Al Pacino,Marlon Brando,Leonardo DiCaprio,Roy Scheider,D,hard,Directors & Cast
+894,Which found-footage horror terrified 1999 audiences with the Blair Witch? The Blair Witch Project,Cannibal Holocaust controversial 1980,Paranormal Activity 2007 later,The Blair Witch Project,The Last Broadcast,C,medium,Movie Facts
+895,Which film features E.T. phone home?,Arrival,Close Encounters,E.T. the Extra-Terrestrial,Alien,C,easy,Quotes & Moments
+896,Who directed Top Gun?,Steven Spielberg,Francis Ford Coppola,James Cameron,Tony Scott,D,medium,Directors & Cast
+897,Who played Jesse Pinkman?,Emma Watson,Rupert Grint,Aaron Paul,Daniel Radcliffe,C,medium,Actors & Roles
+898,Which film features Show me the money?,Wall Street,The Wolf of Wall Street,Jerry Maguire,Moneyball,C,medium,Quotes & Moments
+899,Who directed The Avengers?,Francis Ford Coppola,James Cameron,Steven Spielberg,Joss Whedon,D,medium,Directors & Cast
+900,"Which director made Crouching Tiger, Hidden Dragon and Life of Pi?",John Woo,Zhang Yimou,Wong Kar-wai,Ang Lee,D,medium,Cinema History
+901,Which show featured Mary Tyler Moore in a Minneapolis newsroom?,The Mary Tyler Moore Show,That Girl,Murphy Brown,The Dick Van Dyke Show,A,medium,Classic TV
+902,Which film features With great power comes great responsibility?,X-Men,Superman,Spider-Man,Batman,C,easy,Quotes & Moments
+903,Which iconic role is Heath Ledger known for?,The Joker (The Dark Knight),Hermione Granger,Ron Weasley,Harry Potter,A,medium,Actors & Roles
+904,Which spin-off followed Frasier Crane back in Seattle on radio?,Frasier,Cheers,Wings,Becker,A,medium,Classic TV
+905,Who played Neytiri and Gamora?,Rupert Grint,Zoe Saldana,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+906,What is the Tesseract?,A vibranium core,An Infinity Gauntlet,The container of the Space Stone,A shield,C,medium,Superheroes
+907,Which kids show features Timmy Turner and his fairy godparents?,Danny Phantom,The Fairly OddParents,Jimmy Neutron,ChalkZone,B,easy,Kids & Anime
+908,Which iconic role is Arnold Schwarzenegger known for?,Hermione Granger,Ron Weasley,The Terminator,Harry Potter,C,medium,Actors & Roles
+909,Which film started the Marvel Cinematic Universe in 2008?,Iron Man,Captain America,Thor,The Hulk,A,easy,Movie Facts
+910,Which iconic role is Jennifer Lawrence known for?,Ron Weasley,Katniss Everdeen,Hermione Granger,Harry Potter,B,medium,Actors & Roles
+911,What is Narcos about?,the rise of Pablo Escobar,six friends in New York City,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,A,medium,TV Shows
+912,In which year was Jurassic World released?,1997,2015,1974,1972,B,medium,Movies
+913,Which fantasy series features a ring of power?,The Lord of the Rings,Narnia,Harry Potter,His Dark Materials,A,easy,Movie Facts
+914,Which Breaking Bad spin-off follows Saul Goodman?,El Camino,No Half Measures,Slipping Jimmy,Better Call Saul,D,easy,TV Facts
+915,Which 1979 chestburster scene shocked audiences? Alien,The Thing 1982,Life,Alien,Invasion of the Body Snatchers,C,medium,Movie Facts
+916,On which network or platform did Prison Break air?,FOX,ABC,CBS,NBC,A,easy,TV Shows
+917,Which anime follows Luffy and the Straw Hats for treasure?,Hunter x Hunter,Black Clover,Fairy Tail,One Piece,D,easy,Kids & Anime
+918,Who played Forrest Gump?,Emma Watson,Daniel Radcliffe,Rupert Grint,Tom Hanks,D,medium,Actors & Roles
+919,In which year was the animated film Tangled released?,1995,2009,2003,2010,D,medium,Animation
+920,Which villain broke Batmans back in Knightfall?,Ra al Ghul,Two-Face,Bane,Joker,C,medium,Superheroes
+921,In which year was Jerry Maguire released?,1974,1972,1997,1996,D,medium,Movies
+922,What is Batmans loyal butler called?,Harvey Dent,Alfred Pennyworth,Lucius Fox,James Gordon,B,easy,Superheroes
+923,Who directed Casablanca?,James Cameron,Francis Ford Coppola,Steven Spielberg,Michael Curtiz,D,medium,Directors & Cast
+924,Who directed 2001: A Space Odyssey?,James Cameron,Francis Ford Coppola,Steven Spielberg,Stanley Kubrick,D,medium,Directors & Cast
+925,What is Greys Anatomy about?,six friends in New York City,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,surgical interns at a Seattle hospital,D,medium,TV Shows
+926,In which year was The Dark Knight released?,1974,2008,1997,1972,B,medium,Movies
+927,Which anime features Ash Ketchum and Pikachu?,Digimon,Monster Rancher,Yo-kai Watch,Pokemon,D,easy,Kids & Anime
+928,Who played Johnny (Dirty Dancing)?,Rupert Grint,Daniel Radcliffe,Patrick Swayze,Emma Watson,C,medium,Actors & Roles
+929,What did Thanos snap do?,Reset one timeline,Erase half of all life,Destroy only the Avengers,Merge two universes,B,easy,Superheroes
+930,Which studio made the animated film Madagascar?,Disney,Pixar,DreamWorks,Studio Ghibli,C,easy,Animation
+931,Which iconic role is Timothee Chalamet known for?,Paul Atreides (Dune),Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+932,Which actor or actress starred in A Few Good Men?,Tom Cruise,Al Pacino,Marlon Brando,Leonardo DiCaprio,A,hard,Directors & Cast
+933,Which iconic role is Tobey Maguire known for?,Ron Weasley,Spider-Man (2002),Hermione Granger,Harry Potter,B,medium,Actors & Roles
+934,Who composed Batman 1989 and The Nightmare Before Christmas?,Danny Elfman,Hans Zimmer,Alan Silvestri,Howard Shore,A,medium,Cinema History
+935,Which studio made the animated film Spirited Away?,Pixar,Disney,DreamWorks,Studio Ghibli,D,easy,Animation
+936,Which chart hit from Slumdog Millionaire won Best Original Song?,Naatu Naatu,Chaiyya Chaiyya,Jai Ho,O Saya,C,medium,Cinema History
+937,Who has won the most acting Oscars with four?,Daniel Day-Lewis,Jack Nicholson,Meryl Streep,Katharine Hepburn,D,hard,Awards & Records
+938,Which actor or actress starred in Black Panther?,Marlon Brando,Al Pacino,Leonardo DiCaprio,Chadwick Boseman,D,hard,Directors & Cast
+939,Which singing competition features blind auditions with chairs?,The Four,The Voice,American Idol,X Factor,B,easy,TV Facts
+940,Which iconic role is Julia Roberts known for?,Harry Potter,Hermione Granger,Vivian (Pretty Woman),Ron Weasley,C,medium,Actors & Roles
+941,Which actor or actress starred in Dune?,Leonardo DiCaprio,Timothee Chalamet,Marlon Brando,Al Pacino,B,hard,Directors & Cast
+942,Which iconic role is Bryan Cranston known for?,Ron Weasley,Harry Potter,Hermione Granger,Walter White,D,medium,Actors & Roles
+943,Which reality competition is for chefs hosted famously with judges?,Top Chef,MasterChef only,Chopped,HellKitchen,A,medium,TV Facts
+944,Which sitcom paired Felix Unger and Oscar Madison?,The Odd Couple,Three is Company,Mork and Mindy,The Honeymooners,A,medium,Classic TV
+945,Who played Paul Atreides (Dune)?,Emma Watson,Daniel Radcliffe,Rupert Grint,Timothee Chalamet,D,medium,Actors & Roles
+946,Which cartoon cat chases Tweety?,Scratchy,Sylvester,Heathcliff,Tom,B,easy,TV Facts
+947,What is Doctor Who about?,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,a time-traveling alien called the Doctor,six friends in New York City,C,medium,TV Shows
+948,Who directed Spider-Man?,James Cameron,Francis Ford Coppola,Sam Raimi,Steven Spielberg,C,medium,Directors & Cast
+949,In which year was Star Wars: A New Hope released?,1977,1972,1997,1974,A,medium,Movies
+950,Which iconic role is Andrew Garfield known for?,Ron Weasley,The Amazing Spider-Man,Hermione Granger,Harry Potter,B,medium,Actors & Roles
+951,What is Dexter about?,a forensic analyst who is a serial killer,employees of the Dunder Mifflin paper company,six friends in New York City,a chemistry teacher turned meth maker,A,medium,TV Shows
+952,Which 2008 film won eight Oscars including Slumdog Milionaire music? Slumdog Millionaire itself,Slumdog Millionaire,Gandhi,RRR,Lagaan,A,medium,Movie Facts
+953,Which Disney film pairs rapunzel-tangled Flynn Rider and Rapunzel? Tangled,Tangled,Wish,Enchanted,Frozen,A,easy,Movie Facts
+954,What does TVA stand for in Loki?,Temporal Vanguard Agency,Time Variance Authority,Time Verification Alliance,Timeline Vigilance Administration,B,medium,Superheroes
+955,Who directed The Mask?,James Cameron,Francis Ford Coppola,Chuck Russell,Steven Spielberg,C,medium,Directors & Cast
+956,Who directed Jerry Maguire?,Steven Spielberg,Cameron Crowe,Francis Ford Coppola,James Cameron,B,medium,Directors & Cast
+957,Which iconic role is Gal Gadot known for?,Wonder Woman,Hermione Granger,Harry Potter,Ron Weasley,A,medium,Actors & Roles
+958,Which iconic role is Margot Robbie known for?,Barbie and Harley Quinn,Ron Weasley,Hermione Granger,Harry Potter,A,medium,Actors & Roles
+959,Which film gave Halle Berry her historic Best Actress win?,X-Men,Swordfish,Die Another Day,Monsters Ball in 2002,D,medium,Awards & Records
+960,In which year was Everything Everywhere All at Once released?,1997,1972,1974,2022,D,medium,Movies
+961,Which show features Danny Fenton becoming a ghost hero?,Danny Phantom,The Life and Times of Juniper Lee,American Dragon: Jake Long,El Tigre,A,easy,Kids & Anime
+962,Who played Spider-Man (2002)?,Emma Watson,Rupert Grint,Daniel Radcliffe,Tobey Maguire,D,medium,Actors & Roles
+963,Which actor or actress starred in Oppenheimer?,Al Pacino,Cillian Murphy,Marlon Brando,Leonardo DiCaprio,B,hard,Directors & Cast
+964,Which actor or actress starred in The Godfather?,Leonardo DiCaprio,Marlon Brando,Al Pacino,Sam Worthington,B,hard,Directors & Cast
+965,Who directed A Few Good Men?,Rob Reiner,James Cameron,Steven Spielberg,Francis Ford Coppola,A,medium,Directors & Cast
+966,Who holds the record for most Oscar nominations for acting?,Jack Nicholson,Bette Davis,Katharine Hepburn,Meryl Streep,D,medium,Awards & Records
+967,On which network or platform did How I Met Your Mother air?,FOX,NBC,ABC,CBS,D,medium,TV Shows
+968,Which god of mischief does Tom Hiddleston play?,Odin,Loki,Heimdall,Thor,B,easy,Superheroes
+969,Which studio made the animated film Tangled?,Pixar,Studio Ghibli,DreamWorks,Disney,D,easy,Animation
+970,Which long-running British sci-fi features the TARDIS?,Torchwood,Doctor Who,Red Dwarf,Blake 7,B,easy,TV Facts
+971,Which anime features giant Eva robots and Angels?,Code Geass,Gundam Wing,Neon Genesis Evangelion,Gurren Lagann,C,medium,Kids & Anime
+972,Which studio made the animated film Finding Nemo?,Disney,DreamWorks,Pixar,Studio Ghibli,C,easy,Animation
+973,Which sitcom featured a robot daughter named V.I.C.I.?,Weird Science,Punky Brewster,Small Wonder,My Living Doll,C,expert,Classic TV
+974,Which brothers directed Avengers: Endgame?,The Russo brothers,The Wachowskis,The Hughes brothers,The Coen brothers,A,medium,Movie Facts
+975,In which year was Grease released?,1978,1972,1974,1997,A,medium,Movies
+976,Which actor or actress starred in The Lord of the Rings: The Two Towers?,Elijah Wood,Marlon Brando,Al Pacino,Leonardo DiCaprio,A,hard,Directors & Cast
+977,Who played Annie (Speed)?,Daniel Radcliffe,Rupert Grint,Emma Watson,Sandra Bullock,D,medium,Actors & Roles
+978,Which series features Sherlock Holmes in modern London with Benedict Cumberbatch?,Elementary,Sherlock,Lucifer,House MD,B,easy,TV Facts
+979,In which year was Spider-Man released?,2002,1974,1972,1997,A,medium,Movies
+980,"Which film series features Bond, James Bond?",The Bourne Identity,Kingsman,James Bond,Mission: Impossible,C,easy,Quotes & Moments
+981,Who played Eleven (Stranger Things)?,Rupert Grint,Millie Bobby Brown,Emma Watson,Daniel Radcliffe,B,medium,Actors & Roles
+982,Which iconic role is Chris Evans known for?,Ron Weasley,Hermione Granger,Harry Potter,Captain America,D,medium,Actors & Roles
+983,On which network or platform did Family Guy air?,Comedy Central,FOX,Adult Swim,TBS,B,easy,TV Shows
+984,Who directed Ace Ventura: Pet Detective?,Steven Spielberg,James Cameron,Tom Shadyac,Francis Ford Coppola,C,medium,Directors & Cast
+985,Which iconic role is Michael Keaton known for?,Harry Potter,Ron Weasley,Batman (1989),Hermione Granger,C,medium,Actors & Roles
+986,What is Game of Thrones about?,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,six friends in New York City,noble families fighting for the Iron Throne,D,medium,TV Shows
+987,On which network or platform did The Witcher air?,Starz,Amazon,HBO,Netflix,D,easy,TV Shows
+988,"In which year was the animated film Monsters, Inc. released?",1995,2003,2009,2001,D,medium,Animation
+989,Which studio produced Tom and Jerry shorts?,Disney,MGM,Warner Bros.,Fleischer,B,medium,Cinema History
+990,Which film franchise features Ethan Hunt?,James Bond,Jack Reacher,The Bourne Identity,Mission: Impossible,D,easy,Movie Facts
+991,Which actor or actress starred in Psycho?,Al Pacino,Leonardo DiCaprio,Marlon Brando,Anthony Perkins,D,hard,Directors & Cast
+992,Which Baltimore crime series examined institutions?,Homicide: Life on the Street,The Wire,Treme,The Corner,B,medium,TV Facts
+993,Which horror villain leads Cenobites saying we have such sights to show you? Pinhead,Jigsaw,Pinhead,Pennywise,Candyman,B,medium,Movie Facts
+994,What is The Office (US) about?,a chemistry teacher turned meth maker,noble families fighting for the Iron Throne,employees of the Dunder Mifflin paper company,six friends in New York City,C,medium,TV Shows
+995,Which actor or actress starred in Ace Ventura: Pet Detective?,Marlon Brando,Jim Carrey,Al Pacino,Leonardo DiCaprio,B,hard,Directors & Cast
+996,In which year was The Hunger Games released?,1972,2012,1997,1974,B,medium,Movies
+997,Who wields the Time Stone in Doctor Strange?,The Tesseract,The Eye of Agamotto,The Orb,The Darkhold,B,medium,Superheroes
+998,In which year was The Karate Kid released?,1974,1984,1972,1997,B,medium,Movies
+999,Which iconic role is Daniel Craig known for?,Harry Potter,James Bond (2006-2021),Hermione Granger,Ron Weasley,B,medium,Actors & Roles
+1000,What is How I Met Your Mother about?,a chemistry teacher turned meth maker,employees of the Dunder Mifflin paper company,Ted telling his kids a long story,six friends in New York City,C,medium,TV Shows

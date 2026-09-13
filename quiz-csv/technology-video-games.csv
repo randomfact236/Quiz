@@ -1,0 +1,1003 @@
+# Subject: Technology & Video Games
+
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,In which year did Castlevania: Symphony of the Night release?,1984,1997,1985,1986,B,hard,Video Games
+2,What is Coinbase for? Buying and selling crypto,Cryptocurrency exchange,Banking app,Stock trading,Forex only,A,easy,Apps & Platforms
+3,Who developed or published Grand Theft Auto V?,Alexey Pajitnov created it,Mojang,Nintendo,Rockstar Games,D,medium,Video Games
+4,Which Monster Hunter game introduced Palamutes? Rise,Sunbreak expansion,Stories 2,World,Monster Hunter Rise,D,medium,Games
+5,Which country is ByteDance headquartered in?,China,South Korea,Japan,the United States,A,medium,Tech Companies
+6,In which year did Candy Crush Saga release?,1986,1985,2012,1984,C,hard,Video Games
+7,Who founded Siemens?,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Werner von Siemens,Larry Page and Sergey Brin,C,medium,Tech Companies
+8,Which language is primarily used for low-level hardware control?,Python,JavaScript,Assembly,Java,C,hard,Programming
+9,Who developed or published Sonic the Hedgehog?,Mojang,Alexey Pajitnov created it,Nintendo,Sega,D,medium,Video Games
+10,Which Fullbright house story is Gone Home?,Tacoma,Edith Finch,Gone Home,Firewatch,C,medium,Games
+11,Which country is AMD headquartered in?,South Korea,Japan,China,the United States,D,medium,Tech Companies
+12,What does nanometer describe in chips? Manufacturing process scale,WiFi frequency,The size scale of chip features,Screen brightness,Battery capacity,B,medium,Hardware
+13,Who created Pokemon games? Satoshi Tajiri with Game Freak,Junichi Masuda composer director,Satoshi Tajiri with Game Freak,Shigeru Miyamoto mentor,Ken Sugimori art,B,hard,Gaming History
+14,Which 2022 Call of Duty rebooted Modern Warfare again?,Black Ops Cold War,WWII,Vanguard,Modern Warfare II,D,medium,Games
+15,Which game was released by Capcom in 1996?,Super Mario Bros.,Tetris,The Legend of Zelda,Resident Evil,D,hard,Video Games
+16,Which company made the the NES?,Sony,Nintendo,Sega,Microsoft,B,easy,Consoles
+17,Which company made the PSP handheld?,Sony,Sega,Nintendo,Microsoft,A,easy,Consoles
+18,What is Samsung best known for?,the iPhone,Windows,Galaxy smartphones,Google Search,C,hard,Tech Companies
+19,Who developed or published Mortal Kombat?,Nintendo,Mojang,Alexey Pajitnov created it,Midway,D,medium,Video Games
+20,Which Konami series succeeded PES?,FIFA,Pro Evo 2020,Football Manager,eFootball,D,medium,Games
+21,What year did YouTube launch? 2005,2005,2009,2004,2007,A,medium,Internet & Web
+22,In which year did The Witcher 3: Wild Hunt release?,2015,1985,1984,1986,A,hard,Video Games
+23,What is Notion used for? Notes and workspace docs,Video calls,All-in-one notes and wikis,Music streaming,Antivirus,B,medium,Apps & Platforms
+24,Who founded Logitech?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Daniel Borel and Pierluigi Zappacosta,Bill Gates and Paul Allen,C,medium,Tech Companies
+25,Which country is ASUS headquartered in?,South Korea,the United States,China,Taiwan,D,medium,Tech Companies
+26,What is BYD known for? Chinese electric vehicles and batteries,Korean sedans,German luxury cars,Chinese EVs and battery tech,Japanese hybrids,C,hard,Cars & Space
+27,Which id classic defined FPS in 1993?,Wolfenstein 3D,Doom,Heretic,Quake,B,easy,Games
+28,What is spyware? Software spying on users,A firewall rule,A keychain,A browser extension always safe,Software secretly monitoring you,D,easy,Security
+29,In which year did Half-Life 2 release?,1984,2004,1986,1985,B,hard,Video Games
+30,In which year did Tekken 3 release?,1985,1998,1984,1986,B,hard,Video Games
+31,What does GIF stand for? Graphics interchange format,Great image file,Graphic internet frame,Graphics interchange format,General interface format,C,medium,Acronyms
+32,Which game was released by FromSoftware in 2019?,The Legend of Zelda,Super Mario Bros.,Tetris,Sekiro: Shadows Die Twice,D,hard,Video Games
+33,What is a VPN for? A private encrypted connection,Speeding up downloads only,Boosting Wi-Fi range,Creating a private encrypted tunnel,Blocking ads only,C,medium,Internet & Web
+34,Which Taito shooter launched 1978 arcade boom? Space Invaders,Space Invaders,Pac-Man 1980 maze,Asteroids Atari vector 1979,Galaxian Namco 1979,A,easy,Games
+35,Which company made the the Game Boy?,Nintendo,Sony,Sega,Microsoft,A,easy,Consoles
+36,Which Supergiant game follows Zagreus in the underworld?,Pyre,Transistor,Hades,Bastion,C,easy,Games
+37,Which language is primarily used for memory-safe systems programming?,JavaScript,Python,Java,Rust,D,hard,Programming
+38,Which 2001 Microsoft OS brought NT stability to consumers? Windows XP,Windows 7 later,Windows ME troubled,Windows XP,Windows 2000 professional only,C,medium,Tech History
+39,Which country is Yandex headquartered in?,the United States,China,Russia,South Korea,C,medium,Tech Companies
+40,Which weapon-based fighter travels the soul edge?,Virtua Fighter,Tekken,Samurai Shodown,Soulcalibur,D,medium,Games
+41,Which game was released by Respawn Entertainment in 2019?,Tetris,The Legend of Zelda,Apex Legends,Super Mario Bros.,C,hard,Video Games
+42,What is a cookie on the web? A small data file stored by a browser,A browser plugin only,A small file a site stores in your browser,A web server,A type of virus,B,medium,Internet & Web
+43,Which country is Oracle headquartered in?,South Korea,Japan,the United States,China,C,medium,Tech Companies
+44,"Which language is primarily used for data science, AI, and general scripting?",C,Python,Java,JavaScript,B,hard,Programming
+45,Which game was released by Ubisoft in 2015?,Tetris,Super Mario Bros.,Tom Clancys Rainbow Six Siege,The Legend of Zelda,C,hard,Video Games
+46,Which device series is Kindle? Amazons e-reader,The Amazon e-reader,The iPad reader app,The Kobo reader,The Barnes and Noble Nook rival,A,easy,Tech History
+47,What does .edu denote? An education domain,An electronics domain,An events domain,An email domain,An education domain,D,easy,Internet & Web
+48,What does WAN stand for? Wide area network,Wide area network,Worldwide app net,Wireless access node,Web area network,A,medium,Acronyms
+49,What does OS stand for? Operating system,Operating system,Online service,Open source,Output system,A,easy,Acronyms
+50,Which browser is built into Windows? Microsoft Edge,Firefox,Microsoft Edge,Safari,Opera,B,easy,Internet & Web
+51,What is Kindle app for? Reading e-books,Buying print books,Comics only,Audiobooks only,Reading ebooks on devices,D,easy,Apps & Platforms
+52,Which company makes the Switch?,,,,,Nintendo,extreme,Consoles
+53,What is a smart plug? A WiFi controlled power socket,A battery pack,A remotely controlled outlet adapter,A power strip only,A USB charger,B,easy,Smart Home
+54,Which game was released by Maxis in 1989?,Super Mario Bros.,Tetris,The Legend of Zelda,SimCity,D,hard,Video Games
+55,What does AI stand for?,Applied informatics,Artificial intelligence,Automatic input,Advanced internet,B,easy,Acronyms
+56,Which country is RIM (BlackBerry) headquartered in?,South Korea,the United States,Canada,China,C,medium,Tech Companies
+57,Who composed Final Fantasy music? Nobuo Uematsu,Yoko Shimomura,Yasunori Mitsuda Chrono,Nobuo Uematsu,Koji Kondo Zelda composer,C,medium,Gaming History
+58,Which Motive remake is Dead Space? Dead Space Remake 2023,RE4 Capcom,Silent Hill 2 Bloober,Dead Space Remake,System Shock Nightdive,C,medium,Games
+59,What is Ring known for? Video doorbells,Robot vacuums,Smart plugs,Smart bulbs,Smart video doorbells,D,easy,Smart Home
+60,Which Metroid game revived the series in 2021?,Metroid Dread,Metroid Fusion,Samus Returns,Metroid Prime 4 pending,A,medium,Games
+61,What is social engineering? Manipulating people for access,Networking events,Group policy setup,Coding socially,Tricking humans instead of machines,D,medium,Security
+62,Which company made the the original Xbox?,Nintendo,Sega,Sony,Microsoft,D,easy,Consoles
+63,What is Solidity primarily used for?,Ethereum smart contracts,"data science, AI, and general scripting",enterprise and Android applications,web interactivity and front-end development,A,medium,Programming
+64,Who founded Adobe?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",John Warnock and Charles Geschke,Bill Gates and Paul Allen,Larry Page and Sergey Brin,B,medium,Tech Companies
+65,Which language is primarily used for web interactivity and front-end development?,JavaScript,Python,C,Java,A,hard,Programming
+66,What is Uber used for? Ride hailing,Hotel booking,Food only,Booking rides with drivers,Car sales,C,easy,Apps & Platforms
+67,In which year did Cyberpunk 2077 release?,1985,1984,2020,1986,C,hard,Video Games
+68,Which 1930s cartoon-styled run and gun is Cuphead? Cuphead by Studio MDHR,Hollow Knight,Inside,Ori,Cuphead,D,easy,Games
+69,Which company made the PlayStation 4?,Microsoft,Nintendo,Sony,Sega,C,easy,Consoles
+70,What is DeepMind best known for?,Windows,the iPhone,Google Search,AI research,D,hard,Tech Companies
+71,Which farming game dominated early Facebook?,Mafia Wars,Draw Something,FarmVille,Words with Friends,C,medium,Games
+72,Which engine does Fortnite use? Unreal Engine,Unreal Engine,Unity,Frostbite,Source 2,A,easy,Gaming History
+73,Which game was released by Insomniac Games in 2018?,Tetris,Spider-Man (PS4),Super Mario Bros.,The Legend of Zelda,B,hard,Video Games
+74,What is a hyperlink? A clickable link to another page,A network hub,A website address bar,An image file,A clickable link to a resource,D,easy,Internet & Web
+75,In which year did Overwatch release?,1986,2016,1984,1985,B,hard,Video Games
+76,What does an anemometer measure? Wind speed,Wind speed,Air pressure,Humidity,Temperature,A,medium,Hardware
+77,Who developed or published Far Cry 3?,Nintendo,Mojang,Ubisoft,Alexey Pajitnov created it,C,medium,Video Games
+78,What is overclocking? Running a chip faster than rated,Forcing a chip beyond stock speed,Replacing a chip,Cooling a chip more,Underclocking,A,medium,Hardware
+79,What is Shazam used for? Song identification,Making playlists only,Radio streaming,Identifying playing songs,Concert tickets,C,medium,Apps & Platforms
+80,Which game was released by Krafton in 2017?,Super Mario Bros.,The Legend of Zelda,PUBG: Battlegrounds,Tetris,C,hard,Video Games
+81,What does .gov denote? A government domain,A general domain,A gaming domain,A global domain,A government domain,D,easy,Internet & Web
+82,In which year did FIFA series release?,1993,1986,1984,1985,A,hard,Video Games
+83,Which WWII British machine cracked Lorenz codes? Colossus,Colossus cracked Lorenz,Harvard Mark I,Altair 8800,ENIAC American general purpose,A,expert,Tech History
+84,Which game was released by Blizzard in 1998?,Super Mario Bros.,Tetris,The Legend of Zelda,StarCraft,D,hard,Video Games
+85,Which walking app features Pikmin?,Pikmin Bloom,Monster Hunter Now,Ingress,Pokemon Go,A,medium,Games
+86,"Which 1977 trio of home computers defined the market? Apple II, TRS-80, and Commodore PET","VIC-20, C64, MSX","Apple II, TRS-80, and Commodore PET","IBM PC, Apple III, ZX81","Macintosh, Amiga, Atari ST",B,expert,Tech History
+87,What does P2P mean? Peer to peer,Protocol to protocol,Peer to peer,Private to public,Port to port,B,medium,Acronyms
+88,Which game was released by Riot Games in 2009?,The Legend of Zelda,Tetris,Super Mario Bros.,League of Legends,D,hard,Video Games
+89,Who developed or published Uncharted 4?,Alexey Pajitnov created it,Naughty Dog,Mojang,Nintendo,B,medium,Video Games
+90,What is a mechanical keyboard? One with individual physical switches,A touchscreen,A soft membrane keyboard,A wireless-only keyboard,A keyboard with individual switches,D,medium,Hardware
+91,Which game was released by Rovio in 2009?,Super Mario Bros.,Angry Birds,Tetris,The Legend of Zelda,B,hard,Video Games
+92,What is Z-Wave? A smart home wireless protocol,A phone chip,A battery standard,A smart home mesh protocol,A video codec,C,hard,Smart Home
+93,Which game was released by FromSoftware in 2011?,Dark Souls,Tetris,Super Mario Bros.,The Legend of Zelda,A,hard,Video Games
+94,What is an emoji? A small pictorial icon in text,An animated movie,A sound effect,A keyboard layout,A pictorial character in messages,D,easy,Internet & Web
+95,What is Perl primarily used for?,enterprise and Android applications,text processing legacy,web interactivity and front-end development,"data science, AI, and general scripting",B,medium,Programming
+96,What is Find My used for? Locating Apple devices,Finding friends only legally separate,Locating lost Apple devices,Finding restaurants,Finding WiFi,B,easy,Apps & Platforms
+97,Who developed or published Minecraft?,Nintendo,Alexey Pajitnov created it,Rockstar Games,Mojang,D,medium,Video Games
+98,What does JSON stand for? JavaScript object notation,JavaScript serial operation node,Joint system object name,JavaScript object notation,Java standard output network,C,hard,Acronyms
+99,Which wearable counts steps and heartbeats popularly? The fitness tracker smartwatch category,The smartwatch fitness tracker category,The bike computer,The smart ring only,The chest strap only,A,easy,Tech History
+100,Who created NieR: Automata director? Yoko Taro,PlatinumGames Kamiya,Yoko Taro,Fumito Ueda,Hidetaka Miyazaki,B,hard,Gaming History
+101,What does AR stand for? Augmented reality,Artificial reasoning,Auto run,Audio receiver,Augmented reality,D,easy,Acronyms
+102,What is Google Maps best known for? Maps and navigation,Weather forecasts,Music discovery,General maps and navigation,Social feeds,C,easy,Apps & Platforms
+103,What is AMD best known for?,Google Search,CPUs and GPUs,the iPhone,Windows,B,hard,Tech Companies
+104,What does IDE stand for? Integrated development environment,Internet data exchange,Interactive design engine,Internal drive enclosure,Integrated development environment,D,medium,Acronyms
+105,What is COBOL primarily used for?,web interactivity and front-end development,"data science, AI, and general scripting",enterprise and Android applications,banking mainframes legacy,D,medium,Programming
+106,Which Xbox racer series includes Horizon?,Forza,Need for Speed,Gran Turismo,Project Cars,A,easy,Games
+107,In which year did Sonic the Hedgehog release?,1991,1986,1984,1985,A,hard,Video Games
+108,Which classic Square RPG has Toriyama art?,Final Fantasy VI,Secret of Mana,Chrono Trigger,Terranigma,C,medium,Games
+109,In which year did Portal release?,1986,1985,2007,1984,C,hard,Video Games
+110,What is SaaS? Software as a Service,System as a Server,Storage as a System,Software as a Service,Software and Applications Service,C,medium,Internet & Web
+111,Which game was released by Valve in 1998?,Tetris,Half-Life,Super Mario Bros.,The Legend of Zelda,B,hard,Video Games
+112,Which Sega rail shooter flew Harrier jets fantasy? Space Harrier,Space Harrier,After Burner fighter jet,Virtua Racing polygon later,OutRun Ferrari driving,A,medium,Games
+113,What is Zigbee? A low-power mesh network protocol,A GPS augmentation,A USB version,A low-power home mesh protocol,A TV standard,C,hard,Smart Home
+114,What is Discord used for? Community voice and chat,Photo editing,Community chat servers for gaming,File compression,Map navigation,B,medium,Apps & Platforms
+115,Who founded Instagram?,Bill Gates and Paul Allen,Kevin Systrom and Mike Krieger,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,B,medium,Tech Companies
+116,In which year did Quake release?,1986,1985,1996,1984,C,hard,Video Games
+117,What is Amazon best known for?,Amazon marketplace and AWS,Windows,the iPhone,Google Search,A,hard,Tech Companies
+118,What is face recognition used for in phones? Unlocking devices,Improving photos only,Unlocking and authentication,Battery saving,Sorting apps,B,medium,Apps & Platforms
+119,Which game was released by Mojang in 2011?,Super Mario Bros.,Minecraft,Tetris,The Legend of Zelda,B,hard,Video Games
+120,Who founded Vodafone?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,Racal Telecom spun off,Larry Page and Sergey Brin,C,medium,Tech Companies
+121,Which SNES action RPG uses a ring menu? Secret of Mana,Chrono Trigger,Illusion of Gaia,Secret of Mana,Ys,C,medium,Games
+122,What is Galileo? The European navigation constellation,The EU global navigation system,The Chinese BeiDou system,A telescope name,The Russian navigation system,A,medium,Cars & Space
+123,Which camera brand popularized action cams? GoPro,DJI action later,Sony Action Cam,Nikon Keymission failed,GoPro,D,medium,Tech History
+124,Who developed or published Spyro the Dragon?,Mojang,Alexey Pajitnov created it,Nintendo,Insomniac Games,D,medium,Video Games
+125,Who developed or published Age of Empires II?,Ensemble Studios,Nintendo,Mojang,Alexey Pajitnov created it,A,medium,Video Games
+126,Which NES cowboy light gun sequel? Wild Gunman,Duck Hunt dog laughing,Duck Hunt ducks,Hogan Alley,Wild Gunman,D,hard,Games
+127,Who developed or published Final Fantasy VII?,Nintendo,Alexey Pajitnov created it,Mojang,Square,D,medium,Video Games
+128,Which Fullbright space station game is Tacoma?,Edith Finch,Gone Home,Tacoma,Prey,C,expert,Games
+129,Which game awards show is The Game Awards hosted by? Geoff Keighley,Gamescom opening night live also Keighley,Spike VGA predecessor hosts varied,E3 canceled later,Geoff Keighley,D,medium,Gaming History
+130,What is Logitech best known for?,the iPhone,computer peripherals,Windows,Google Search,B,hard,Tech Companies
+131,In which year did Spyro the Dragon release?,1984,1986,1998,1985,C,hard,Video Games
+132,Which gaming show runs in Germany annually? Gamescom,TGS in Tokyo,Gamescom in Cologne,EGX in London,E3 in Los Angeles ended,B,easy,Gaming History
+133,Which FromSoftware kingdom is Lordran? Dark Souls,Demons Boletaria,Dark Souls Lordran,Bloodborne Yharnam,Elden Ring Lands Between,B,medium,Games
+134,Which studio made Halo until Reach? Bungie,Epic,343 Industries after,Bungie,Rare,C,medium,Gaming History
+135,What is Strava for? Tracking runs and rides,Tracking athletic activities,Tracking sleep only,Tracking spending,Tracking study time,A,medium,Apps & Platforms
+136,Which Konami drum series is Taiko no Tatsujin? Taiko no Tatsujin,Popn Music colorful,Beatmania keys,DDR dancing,Taiko no Tatsujin drums,D,medium,Games
+137,Who created The Sims and SimCity? Will Wright,Sid Meier,Peter Molyneux,Will Wright,Richard Garriott,C,medium,Gaming History
+138,What is spam? Unwanted bulk messages,A web browser,A fast connection,Unwanted bulk messages,An email provider,C,easy,Internet & Web
+139,Which Niantic AR game preceded Pokemon Go?,Peridot,Field Trip,Pikmin Bloom,Ingress,D,hard,Games
+140,Who founded AMD?,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Jerry Sanders,Larry Page and Sergey Brin,C,medium,Tech Companies
+141,Which studio makes Gears of War now? The Coalition,343,People Can Fly Judgment,The Coalition,Epic original,C,medium,Gaming History
+142,What is WhatsApp main use? Messaging and calls,Video editing,Free messaging and calls,Web hosting,Cloud storage,B,easy,Apps & Platforms
+143,Who developed or published Space Invaders?,Alexey Pajitnov created it,Mojang,Taito,Nintendo,C,medium,Video Games
+144,What is Assembly primarily used for?,low-level hardware control,"data science, AI, and general scripting",enterprise and Android applications,web interactivity and front-end development,A,medium,Programming
+145,Which 1936 machine by Konrad Zuse was an early computer? The Z3,ENIAC,The Z3,Colossus,UNIVAC,B,expert,Tech History
+146,What is two-factor authentication? A second verification step,Dual monitors,Two passwords typed twice,A second proof of identity,Double encryption only,C,easy,Internet & Web
+147,What is AES? A widely used encryption standard,The standard symmetric encryption algorithm,An asymmetric key exchange,A hashing algorithm,A VPN protocol name,A,hard,Security
+148,What is hashing? One-way fingerprint of data,A one-way data fingerprint,A compression method,A signed certificate,Reversible encryption,A,medium,Security
+149,Which Creative Assembly strategy hybrid is Total War?,StarCraft,Total War,Age of Empires,Civilization,B,medium,Games
+150,Which country is Tesla headquartered in?,South Korea,Japan,the United States,China,C,medium,Tech Companies
+151,Which game was released by Konami in 1998?,The Legend of Zelda,Super Mario Bros.,Metal Gear Solid,Tetris,C,hard,Video Games
+152,What does a barometer measure? Air pressure,Wind speed,Atmospheric pressure,Humidity,Altitude only,B,medium,Hardware
+153,What does BIOS update mean? Firmware update,A Windows update,A firmware update for the motherboard,A driver uninstall,A browser refresh,B,medium,Acronyms
+154,What year did Twitter launch? 2006,2004,2006,2008,2010,B,medium,Internet & Web
+155,Which language is primarily used for Flutter mobile apps?,JavaScript,Java,Dart,Python,C,hard,Programming
+156,Who founded ARM?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,Acorn Computers team,D,medium,Tech Companies
+157,Which 3DS Mii apartment sim is Tomodachi Life? Tomodachi Life,Nintendogs pets,Street Pass Mii Plaza built-in,Miitopia RPG newer,Tomodachi Life,D,hard,Games
+158,What is two-step verification? Second factor beyond password,A security question,A code plus your password,Two passwords,A fingerprint only,B,easy,Security
+159,In which year did Red Dead Redemption 2 release?,1985,1986,1984,2018,D,hard,Video Games
+160,Who created Linux originally? Linus Torvalds,Steve Jobs,Richard Stallman,Bill Gates,Linus Torvalds,D,medium,Internet & Web
+161,Which country is Shopify headquartered in?,China,Canada,South Korea,the United States,B,medium,Tech Companies
+162,Which platform hosts most PC mods famously? Steam Workshop among others,Steam Workshop broadly,CurseForge Minecraft specific,Nexus Mods community largest actually,ModDB archive,A,expert,Gaming History
+163,Which language is primarily used for functional programming research?,Haskell,JavaScript,Java,Python,A,hard,Programming
+164,Who developed or published Battlefield 1942?,Nintendo,Alexey Pajitnov created it,Mojang,Digital Illusions CE,D,medium,Video Games
+165,Who developed or published Valorant?,Mojang,Riot Games,Nintendo,Alexey Pajitnov created it,B,medium,Video Games
+166,Which game was released by Epic Games in 2006?,Super Mario Bros.,The Legend of Zelda,Gears of War,Tetris,C,hard,Video Games
+167,Which game was released by Rockstar Games in 2018?,Super Mario Bros.,Tetris,The Legend of Zelda,Red Dead Redemption 2,D,hard,Video Games
+168,What is a trojan? Malware disguised as useful software,A virus attaching files,Malware pretending to be legitimate,A botnet army,A worm self-spreading,B,medium,Security
+169,Which Capcom hunter game is set in the New World? Monster Hunter World,Monster Hunter Rise,Frontier,Monster Hunter: World,Stories,C,easy,Games
+170,Which Zelda game is Breath of the Wilds sequel?,Tears of the Kingdom,Skyward Sword,Links Awakening,Ocarina of Time,A,easy,Games
+171,Who developed or published Tekken 3?,Namco,Alexey Pajitnov created it,Mojang,Nintendo,A,medium,Video Games
+172,What does eSIM mean? Embedded SIM,Enhanced SIM,Electronic signal module,Embedded SIM,External SIM,C,medium,Acronyms
+173,What is JavaScript primarily used for?,web interactivity and front-end development,operating systems and embedded systems,"data science, AI, and general scripting",enterprise and Android applications,A,medium,Programming
+174,Name a console made by Valve.,PlayStation 4,the Steam Deck,PlayStation 3,PlayStation 5,B,medium,Consoles
+175,Which language is primarily used for engineering computation?,JavaScript,Java,Python,MATLAB,D,hard,Programming
+176,What is Intel best known for?,Google Search,CPUs,the iPhone,Windows,B,hard,Tech Companies
+177,Who created RollerCoaster Tycoon solo legend? Chris Sawyer,Sid Meier,David Braben,Will Wright,Chris Sawyer,D,expert,Gaming History
+178,What is Microsoft best known for?,the iPhone,Google Search,Windows,Facebook,C,hard,Tech Companies
+179,What is Matter in smart homes? A connectivity standard,A voice assistant,A camera protocol only,A thermostat brand,A unifying smart home standard,D,hard,Smart Home
+180,In which year did StarCraft release?,1985,1998,1986,1984,B,hard,Video Games
+181,In which year did Counter-Strike release?,2000,1984,1985,1986,A,hard,Video Games
+182,Which goat chaos simulator is by Coffee Stain? Goat Simulator,Octodad,Goat Simulator,I Am Bread,Surgeon Simulator,B,easy,Games
+183,What is Ericsson best known for?,Google Search,Windows,telecom networks,the iPhone,C,hard,Tech Companies
+184,Which country is Meta (Facebook) headquartered in?,the United States,China,South Korea,Japan,A,medium,Tech Companies
+185,Which Atlus chibi dungeon crawler is Persona Q?,Persona Q,P4 Golden,Dancing games,Strikers,A,expert,Games
+186,Which Pokemon games are open world in Paldea?,Sword and Shield,Legends Arceus,Lets Go Pikachu,Scarlet and Violet,D,medium,Games
+187,Which Call of Duty battle royale launched in 2020?,Blackout,Warzone,Apex Legends,Firestorm,B,easy,Games
+188,Which game was released by Valve in 2004?,The Legend of Zelda,Super Mario Bros.,Half-Life 2,Tetris,C,hard,Video Games
+189,What is Grab in Southeast Asia? Ride hailing and delivery super app,A Chinese game company,A Japanese e-commerce only,A Southeast Asian super app for rides and food,An Indian bank app,C,hard,Apps & Platforms
+190,Who founded Huawei?,Ren Zhengfei,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,A,medium,Tech Companies
+191,What is C++ primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",game engines and high-performance software,web interactivity and front-end development,C,medium,Programming
+192,What does SIM stand for? Subscriber identity module,Signal input module,System interface mode,Subscriber identity module,Serial interface modem,C,medium,Acronyms
+193,In which year did The Sims release?,1985,1986,1984,2000,D,hard,Video Games
+194,Who developed or published Rocket League?,Alexey Pajitnov created it,Mojang,Nintendo,Psyonix,D,medium,Video Games
+195,Which company made the the Nintendo DS?,Microsoft,Sony,Nintendo,Sega,C,easy,Consoles
+196,Which Telltale Fables noir is Wolf Among Us?,Batman,The Wolf Among Us,Borderlands,Walking Dead,B,medium,Games
+197,What does API stand for? Application programming interface,App process identifier,Advanced protocol internet,Applied program install,Application programming interface,D,medium,Acronyms
+198,Which octopus dad game is by Young Horses? Octodad: Dadliest Catch,Surgeon Simulator,Goat Simulator,Octodad: Dadliest Catch,I Am Bread,C,medium,Games
+199,Who developed or published The Last of Us?,Naughty Dog,Alexey Pajitnov created it,Mojang,Nintendo,A,medium,Video Games
+200,Which Sega light-gun series is House of the Dead? House of the Dead,House of the Dead,Virtua Cop pioneered 3D light gun,Time Crisis Namco pedal,Point Blank Namco mini games,A,medium,Games
+201,Who founded ByteDance?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,Zhang Yiming,Larry Page and Sergey Brin,C,medium,Tech Companies
+202,What is Rivian known for? Electric trucks and SUVs,Flying taxis,Electric scooters,Hybrid buses,Electric pickup trucks and SUVs,D,medium,Cars & Space
+203,What does HDD stand for?,Hot data drive,Hard disk drive,Hyper drive disk,High density drive,B,medium,Hardware
+204,Which Capcom remake is RE2? Resident Evil 2 Remake 2019,RE7 new era,Resident Evil 2 Remake,RE3 Remake,RE4 Remake,B,easy,Games
+205,Which platform is biggest for game streaming? Twitch,Facebook Gaming,Kick newer,YouTube Gaming,Twitch,D,easy,Gaming History
+206,In which year did Assassins Creed release?,1986,1985,1984,2007,D,hard,Video Games
+207,Who developed or published Pokemon Red and Blue?,Alexey Pajitnov created it,Mojang,Nintendo,Game Freak,D,medium,Video Games
+208,What does ML stand for in tech? Machine learning,Main loader,Mobile link,Media library,Machine learning,D,easy,Acronyms
+209,Who founded Philips?,Bill Gates and Paul Allen,Gerard Philips and Frederik Philips,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,B,medium,Tech Companies
+210,Which game was released by Infinity Ward in 2007?,Call of Duty: Modern Warfare,Tetris,The Legend of Zelda,Super Mario Bros.,A,hard,Video Games
+211,What is Telegram known for? Messaging with channels,Messaging plus public channels,Antivirus,Search engine,Email service,A,medium,Apps & Platforms
+212,Which game was released by Blizzard in 2010?,The Legend of Zelda,StarCraft II,Super Mario Bros.,Tetris,B,hard,Video Games
+213,Which Pokemon game is set in ancient Hisui?,Ultra Moon,Scarlet,Legends: Arceus,Brilliant Diamond,C,medium,Games
+214,Who developed or published Half-Life 2?,Valve,Nintendo,Alexey Pajitnov created it,Mojang,A,medium,Video Games
+215,What is Pinterest used for? Visual idea boards,Live streaming games,Banking,Language learning,Saving visual ideas on boards,D,medium,Apps & Platforms
+216,Which Bioshock flying city is Columbia? Bioshock Infinite,Columbia in Infinite,S-link separate,Rapture original,Yharnam Bloodborne gothic,A,medium,Games
+217,Who developed or published Tom Clancys Rainbow Six Siege?,Nintendo,Ubisoft,Alexey Pajitnov created it,Mojang,B,medium,Video Games
+218,What is PHP primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",web interactivity and front-end development,server-side web development,D,medium,Programming
+219,Which language is primarily used for text processing legacy?,Python,Perl,JavaScript,Java,B,hard,Programming
+220,In which year did GTA: San Andreas release?,1984,1985,2004,1986,C,hard,Video Games
+221,Who founded RIM (BlackBerry)?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Mike Lazaridis and Douglas Fregin,Bill Gates and Paul Allen,C,medium,Tech Companies
+222,Which co-op horror ghost hunting game trended on Twitch?,Demonologist,Devour,Lethal Company,Phasmophobia,D,medium,Games
+223,Which indie game features Sans and Papyrus?,Hollow Knight,Deltarune,Undertale,Celeste,C,easy,Games
+224,Which country is DeepMind headquartered in?,the United States,China,the United Kingdom,South Korea,C,medium,Tech Companies
+225,In which year did Minecraft release?,1985,2011,1984,1986,B,hard,Video Games
+226,Which Kirby game switched to 3D in 2022?,Kirby Fighters 2,Kirby and the Forgotten Land,Kirby Battle Royale,Kirby Star Allies,B,medium,Games
+227,Which game was released by Ubisoft in 2012?,Super Mario Bros.,Far Cry 3,Tetris,The Legend of Zelda,B,hard,Video Games
+228,Which assistant is on Samsung phones? Bixby,Bixby,Cortana,Alexa,Siri,A,medium,Tech History
+229,Which studio took over Halo after Bungie? 343 Industries,343 Industries,The Coalition Gears,Rare,Bungie stayed,A,easy,Gaming History
+230,In which year did Battlefield 1942 release?,1986,1985,2002,1984,C,hard,Video Games
+231,What does OLED stand for? Organic light-emitting diode,Oversized LED,Organic light-emitting diode,Oxidized light display,Optical LED,B,medium,Hardware
+232,What is end-to-end encryption? Only endpoints can read messages,File compression,Only sender and receiver can decrypt,Email encryption only,Server-side decryption,B,medium,Security
+233,Which island dictator sim is Tropico?,Tropico,Cities Skylines,Anno,Rise of Nations,A,medium,Games
+234,Which flashcard platform is Quizlet?,Brainscape,Kahoot,Anki,Quizlet,D,medium,Games
+235,Which Team Ninja Three Kingdoms game is Wo Long?,Dynasty Warriors,Wo Long Fallen Dynasty,Nioh,Stranger of Paradise,B,hard,Games
+236,What does PSU stand for in a PC? Power supply unit,Primary storage unit,Power supply unit,Processing system unit,Personal system updater,B,medium,Hardware
+237,Who founded information theory? Claude Shannon,Claude Shannon,Alan Turing,John von Neumann,Norbert Wiener,A,expert,Tech History
+238,Which Namco 3D fighter features the Mishima family?,Tekken,Dead or Alive,Soulcalibur,Virtua Fighter,A,easy,Games
+239,What is SAP best known for?,enterprise software,Windows,Google Search,the iPhone,A,hard,Tech Companies
+240,What is antivirus software? Software detecting malware,A firewall hardware,Software that blocks and removes malware,A browser,A VPN service,B,easy,Security
+241,Which Campo Santo tower game is Firewatch?,Valley of Gods,Firewatch,Gone Home,Edith Finch,B,medium,Games
+242,Which Zelda musou crossover is Hyrule Warriors?,Hyrule Warriors,Dynasty Warriors,Persona Strikers,Fire Emblem Warriors,A,easy,Games
+243,Which country is Cisco headquartered in?,the United States,China,South Korea,Japan,A,medium,Tech Companies
+244,What is a rootkit? Deep hidden malware,Malware hiding deep in a system,A admin tool legit,A VPN client,A backup utility,A,hard,Security
+245,Which country is Siemens headquartered in?,Germany,the United States,China,South Korea,A,medium,Tech Companies
+246,Which 2021 co-op relationship game won Game of the Year?,Split Fiction,Unravel Two,A Way Out,It Takes Two,D,medium,Games
+247,Who developed or published Metal Gear Solid?,Alexey Pajitnov created it,Konami,Nintendo,Mojang,B,medium,Video Games
+248,What is Nestle best known for?,food and beverages,Google Search,the iPhone,Windows,A,hard,Tech Companies
+249,What is Nvidia best known for?,the iPhone,Google Search,GPUs,Windows,C,hard,Tech Companies
+250,What does Hz measure for monitors? Refresh rate,Color depth,Screen refresh rate,Response pixel count,Brightness level,B,medium,Hardware
+251,What does VR stand for?,,,,,Virtual reality,extreme,Acronyms
+252,Which country is Amazon headquartered in?,Japan,South Korea,the United States,China,C,medium,Tech Companies
+253,Who developed or published The Legend of Zelda?,Alexey Pajitnov created it,Rockstar Games,Nintendo,Mojang,C,medium,Video Games
+254,Who founded Meta (Facebook)?,Mark Zuckerberg,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Bill Gates and Paul Allen,A,medium,Tech Companies
+255,What is a laser cutter? A machine cutting materials with a laser beam,A welding torch,A machine that cuts using focused light,A water jet,A paper cutter,B,easy,Hardware
+256,Which studio makes FIFA now EA Sports FC?,Konami,EA Sports,Ubisoft,2K Games,B,easy,Games
+257,In which year did Among Us release?,1985,1984,1986,2018,D,hard,Video Games
+258,Which game was released by Blizzard in 2000?,Diablo II,Super Mario Bros.,Tetris,The Legend of Zelda,A,hard,Video Games
+259,What is a video doorbell? A doorbell with a camera,A doorbell streaming video to your phone,A window sensor,A smart lock,A garage controller,A,easy,Smart Home
+260,In which year did Wii Sports release?,2006,1985,1986,1984,A,hard,Video Games
+261,Which Nintendo light gun classic had ducks? Duck Hunt,Duck Hunt,Wild Gunman cowboy earlier,Hogan Alley training,Barker Bill trick shooting,A,medium,Games
+262,What is WhatsApp best known for?,Google Search,messaging app,the iPhone,Windows,B,hard,Tech Companies
+263,Which language is primarily used for operating systems and embedded systems?,Python,C,Java,JavaScript,B,hard,Programming
+264,Who developed or published Sekiro: Shadows Die Twice?,Nintendo,Alexey Pajitnov created it,FromSoftware,Mojang,C,medium,Video Games
+265,Which CDPR card game spun from The Witcher 3? Gwent,Hearthstone,Gwent,Eternal,Runeterra,B,medium,Games
+266,Who developed or published Civilization?,Nintendo,Mojang,MicroProse then Firaxis,Alexey Pajitnov created it,C,medium,Video Games
+267,What is Waymo? Alphabet self-driving car project,Alphabets autonomous driving company,A charging network,Teslas rival app only,Ubers drone project,A,medium,Cars & Space
+268,In which year did Silent Hill 2 release?,1986,2001,1984,1985,B,hard,Video Games
+269,What is LinkedIn primarily for? Professional networking,Professional networking and jobs,Photo filters,Music streaming,Food delivery,A,easy,Apps & Platforms
+270,What is Slack used for? Team workplace chat,Workplace team messaging,Video editing,News aggregation,Game streaming,A,medium,Apps & Platforms
+271,Who developed or published Team Fortress 2?,Nintendo,Alexey Pajitnov created it,Valve,Mojang,C,medium,Video Games
+272,Who founded Nintendo?,Larry Page and Sergey Brin,Fusajiro Yamauchi,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,B,medium,Tech Companies
+273,What is Skyscanner for? Comparing flights,Booking hotels only,Train passes only,Searching and comparing flights,Car sharing,C,medium,Apps & Platforms
+274,What is a download? Transferring data to your device,Encrypting data,Receiving data to your device,Sending data out,Deleting data,B,easy,Internet & Web
+275,Who developed or published Pro Evolution Soccer?,Mojang,Alexey Pajitnov created it,Nintendo,Konami,D,medium,Video Games
+276,In which year did Halo: Combat Evolved release?,1984,1986,1985,2001,D,hard,Video Games
+277,What is streaming? Consuming media as it arrives,Watching or listening as data arrives,Downloading a full file first,Printing web pages,Copying files to USB,A,easy,Internet & Web
+278,Which NASA program returns humans to the Moon? Artemis,The Apollo program historic,The Artemis program,The Gemini program,The Constellation canceled program,B,easy,Cars & Space
+279,Who developed or published SimCity?,Alexey Pajitnov created it,Nintendo,Maxis,Mojang,C,medium,Video Games
+280,Which country is Netflix headquartered in?,Japan,South Korea,the United States,China,C,medium,Tech Companies
+281,Who developed or published Castlevania: Symphony of the Night?,Alexey Pajitnov created it,Nintendo,Konami,Mojang,C,medium,Video Games
+282,What does NFC stand for? Near-field communication,National fiber circuit,New frequency channel,Near-field communication,Network file cache,C,medium,Acronyms
+283,What is an Arduino? A microcontroller board for electronics projects,A camera,A drone brand,A laptop,A hobby microcontroller board,D,medium,Hardware
+284,Who founded Amazon?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,Jeff Bezos,"Steve Jobs, Steve Wozniak, and Ronald Wayne",C,medium,Tech Companies
+285,What is Huawei best known for?,telecom equipment,Windows,the iPhone,Google Search,A,hard,Tech Companies
+286,Which game was released by Naughty Dog in 1996?,Crash Bandicoot,Tetris,Super Mario Bros.,The Legend of Zelda,A,hard,Video Games
+287,Which assistant is in iPhones? Siri,Alexa,Siri,Bixby,Cortana,B,easy,Tech History
+288,Which PlayStation racing sim is by Polyphony Digital?,Gran Turismo,Wipeout,Ridge Racer,Forza,A,easy,Games
+289,Which Remedy noir bullet-time game is Max Payne?,Quantum Break,Alan Wake,Control,Max Payne,D,medium,Games
+290,Name a console made by Nintendo.,Nintendo Switch,PlayStation 3,PlayStation 5,PlayStation 4,A,medium,Consoles
+291,In which year did World of Warcraft release?,1985,1984,2004,1986,C,hard,Video Games
+292,Which Klei gothic survival is Dont Starve?,Grounded,Subnautica,Dont Starve,The Long Dark,C,medium,Games
+293,Who developed or published Pac-Man?,Mojang,Namco,Alexey Pajitnov created it,Nintendo,B,medium,Video Games
+294,In which year did Call of Duty: Modern Warfare release?,1985,1984,1986,2007,D,hard,Video Games
+295,What is GLONASS? The Russian navigation constellation,The Indian NavIC regional,The Chinese BeiDou system,The Russian global navigation system,The European Galileo system,C,medium,Cars & Space
+296,Which game was released by Naughty Dog in 2016?,The Legend of Zelda,Super Mario Bros.,Tetris,Uncharted 4,D,hard,Video Games
+297,What is regenerative braking? Recovering energy when slowing,An anti-lock system,Recharging batteries while braking,An engine braking only for manuals,A stronger brake pad,B,medium,Cars & Space
+298,What is Supercharger network? Teslas fast charging network,Teslas rapid charging stations,An insurance plan,A universal charger brand,A battery swap system,A,medium,Cars & Space
+299,Which agency landed Perseverance on Mars? NASA,NASA,ISRO,JAXA,ESA,A,easy,Cars & Space
+300,Which game was released by Bungie in 2001?,The Legend of Zelda,Tetris,Halo: Combat Evolved,Super Mario Bros.,C,hard,Video Games
+301,Which Paradox medieval dynasty sim is Crusader Kings?,Victoria 3,HOI4,EU4,Crusader Kings III,D,medium,Games
+302,Which VR lightsaber rhythm game by Beat Games? Beat Saber,Pistol Whip,Beat Saber,osu!,Audio Trip,B,easy,Games
+303,Which company made the first Walkman? Sony,Panasonic,Sony,Toshiba,Aiwa,B,medium,Tech History
+304,Which company made the Xbox One?,Nintendo,Sony,Sega,Microsoft,D,easy,Consoles
+305,Name a console made by Sony.,Xbox Series X/S,PlayStation 5,Xbox One,Xbox 360,B,medium,Consoles
+306,What is Salesforce best known for?,Google Search,Windows,the iPhone,cloud CRM,D,hard,Tech Companies
+307,Who developed or published GTA: San Andreas?,Nintendo,Mojang,Rockstar Games,Alexey Pajitnov created it,C,medium,Video Games
+308,What does BCC mean in email? Blind carbon copy,Blind carbon chat,Bulk copy center,Backup copy,Blind carbon copy,D,medium,Internet & Web
+309,Which game was released by Santa Monica Studio in 2018?,Tetris,The Legend of Zelda,God of War (2018),Super Mario Bros.,C,hard,Video Games
+310,Who developed or published StarCraft II?,Mojang,Nintendo,Alexey Pajitnov created it,Blizzard,D,medium,Video Games
+311,Who founded Tencent?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Pony Ma,Bill Gates and Paul Allen,C,medium,Tech Companies
+312,What is Philips best known for?,the iPhone,Windows,Google Search,electronics and lighting,D,hard,Tech Companies
+313,Who developed or published Crash Bandicoot?,Mojang,Alexey Pajitnov created it,Nintendo,Naughty Dog,D,medium,Video Games
+314,What does 4K streaming need compare to SD? Much higher bandwidth,The same bandwidth,No bandwidth,Less bandwidth,Significantly more bandwidth,D,easy,Acronyms
+315,In which year did Pro Evolution Soccer release?,1986,1984,1985,1995,D,hard,Video Games
+316,Which studio makes Cyberpunk 2077 sequel studio same? CD Projekt Red again,Techland Dying Light,Bloober Silent Hill 2 remake,Fool Theory supporting,CD Projekt Red,D,easy,Games
+317,Which country is Philips headquartered in?,South Korea,China,the Netherlands,the United States,C,medium,Tech Companies
+318,What is Nest? A Google smart home brand,A Google smart home brand with thermostats,An Amazon ring rival,A Philips lighting line,A Samsung appliance line,A,medium,Smart Home
+319,What is a sandbox in security? An isolated test environment,A safe isolated run area,A childrens app mode,A backup vault,A router firmware,A,medium,Security
+320,Which Namco maze icon launched 1980? Pac-Man,Donkey Kong Nintendo 1981,Galaga 1981,Pac-Man,Space Invaders Taito,C,easy,Games
+321,Which learning platform runs live quizzes?,Quizlet,Anki,Duolingo,Kahoot,D,medium,Games
+322,What is BeiDou? The Chinese navigation constellation,The Japanese QZSS regional,The Chinese satellite navigation system,The Korean KPS planned,The Indian NavIC regional,B,medium,Cars & Space
+323,Who founded Nokia?,Fredrik Idestam paper origins,Bill Gates and Paul Allen,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",A,medium,Tech Companies
+324,Which company creates Call of Duty mainline Modern Warfare entries? Infinity Ward,,,,,Infinity Ward,extreme,Games
+325,Which language is primarily used for big data with Spark?,Python,JavaScript,Java,Scala,D,hard,Programming
+326,What is a driver in computing? Software letting the OS talk to hardware,A hardware store tool,A chauffeur app,A type of cable,Software enabling hardware communication,D,medium,Hardware
+327,What year did Instagram launch? 2010,2009,2011,2010,2012,C,medium,Internet & Web
+328,Which metroidvania features the Knight?,Dead Cells,Hollow Knight,Ori and the Blind Forest,Blasphemous,B,easy,Games
+329,Which country is Instagram headquartered in?,the United States,Japan,South Korea,China,A,medium,Tech Companies
+330,What is PayPal used for? Online payments,Ride hailing,Video calls,Sending and receiving payments online,Photo storage,C,easy,Apps & Platforms
+331,Who founded Ubisoft?,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,the Guillemot brothers,D,medium,Tech Companies
+332,Who founded Acer?,Stan Shih,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,A,medium,Tech Companies
+333,Which 2004 dual-screen handheld followed the Game Boy line? The Nintendo DS,The Nintendo DS,The Game Boy Advance horizontal 2003,The PSP by Sony same year,The Virtual Boy 1995 fail,A,medium,Tech History
+334,Who developed or published Chrono Trigger?,Nintendo,Alexey Pajitnov created it,Square,Mojang,C,medium,Video Games
+335,Which 3DS RPG puts Miis in classes? Miitopia,Street Pass Plaza minis,Miitopia,Find Mii RPG in plaza actually,Tomodachi Life sim,B,expert,Games
+336,What is a worm in malware? Self-replicating network malware,An email scam,A rootkit hidden layer,A USB virus only,Malware spreading itself over networks,D,medium,Security
+337,What is Kotlin primarily used for?,enterprise and Android applications,modern Android development,"data science, AI, and general scripting",web interactivity and front-end development,B,medium,Programming
+338,Which Nintendo fighting game uses stretchy arms?,Pushmo,Splatoon,Punch-Out,ARMS,D,medium,Games
+339,What does PNG stand for? Portable network graphics,Portable network graphics,Pixel network gateway,Photo number generator,Printed network grid,A,medium,Acronyms
+340,Which company made the Xbox Series X/S?,Sega,Nintendo,Microsoft,Sony,C,easy,Consoles
+341,What does ISP stand for?,Internal Server Protocol,Instant Service Provider,Internet Service Provider,Internet Speed Program,C,medium,Internet & Web
+342,What is Tesla best known for?,electric cars,Windows,the iPhone,Google Search,A,hard,Tech Companies
+343,In which year did Tetris release?,2011,1986,1985,1984,D,hard,Video Games
+344,What is Twitter (X) best known for?,the iPhone,Windows,microblogging,Google Search,C,hard,Tech Companies
+345,Which spaced repetition app is Anki?,Anki,Memrise,Quizlet,SuperMemo,A,hard,Games
+346,Which Falcom action RPG series stars Adol? Ys,Ys,Diablo,Trails,Zelda,A,medium,Games
+347,Which country is SpaceX headquartered in?,the United States,South Korea,Japan,China,A,medium,Tech Companies
+348,Which language is primarily used for web apps with Rails?,Ruby,Python,JavaScript,Java,A,hard,Programming
+349,Which is an operating system? macOS,Safari,iCloud,Final Cut,macOS,D,easy,Hardware
+350,Who developed or published Wii Sports?,Rockstar Games,Alexey Pajitnov created it,Nintendo,Mojang,C,medium,Video Games
+351,Which Team Bondi detective game did Rockstar publish?,Max Payne,The Warriors,L.A. Noire,Red Dead Revolver,C,hard,Games
+352,Which country is Nvidia headquartered in?,China,South Korea,the United States,Japan,C,medium,Tech Companies
+353,Who founded TikTok (ByteDance)?,Larry Page and Sergey Brin,Bill Gates and Paul Allen,Zhang Yiming,"Steve Jobs, Steve Wozniak, and Ronald Wayne",C,medium,Tech Companies
+354,In which year did Gears of War release?,1986,1985,1984,2006,D,hard,Video Games
+355,Which Valve card game flopped in 2018? Artifact,Hearthstone,Artifact,Gwent,Duelyst,B,hard,Games
+356,Which Resident Evil first supported PSVR1? Resident Evil 7,RE2 Remake,Village,RE4 VR Quest,Resident Evil 7,D,hard,Games
+357,Which Hazelight prison break co-op game?,Brothers,A Way Out,It Takes Two,Split Fiction,B,medium,Games
+358,What does CPU stand for?,Central processing unit,Computer power unit,Central program utility,Core processing utility,A,easy,Hardware
+359,What does URL stand for?,Unified Router Line,Universal Reference Link,Uniform Resource Locator,User Resource Locator,C,medium,Internet & Web
+360,Which country is SAP headquartered in?,China,Germany,the United States,South Korea,B,medium,Tech Companies
+361,What does VR stand for? Virtual reality,Voice recognition,Virtual reality,Video renderer,Visual radio,B,easy,Acronyms
+362,Which country is Twitter (X) headquartered in?,the United States,China,Japan,South Korea,A,medium,Tech Companies
+363,Who developed or published Among Us?,Mojang,InnerSloth,Alexey Pajitnov created it,Nintendo,B,medium,Video Games
+364,Which futuristic anti-gravity racer is by Psygnosis?,Wipeout,Redout,Fast RMX,F-Zero,A,medium,Games
+365,What does UX stand for? User experience,Unix extension,Utility exchange,User experience,User express,C,easy,Acronyms
+366,Which 1995 Microsoft OS release was a cultural milestone? Windows 95,Windows 98,Windows 95,Windows ME,Windows XP 2001,B,medium,Tech History
+367,Which language is primarily used for typed JavaScript at scale?,Java,JavaScript,TypeScript,Python,C,hard,Programming
+368,Which 2010 device created the modern tablet wave? The iPad,Galaxy Tab,Microsoft Surface later,Kindle Fire,The iPad,D,easy,Tech History
+369,Which 2023 co-op horror company game went viral?,Phasmophobia,Content Warning,The Forest,Lethal Company,D,expert,Games
+370,What is Dell best known for?,Windows,personal computers,the iPhone,Google Search,B,hard,Tech Companies
+371,What is Waze known for? Community traffic navigation,Offline hiking maps,Flight tracking,Crowdsourced traffic navigation,Satellite imaging,C,medium,Apps & Platforms
+372,What is Nokia best known for?,phones historically,Windows,the iPhone,Google Search,A,hard,Tech Companies
+373,Which society survival city is Frostpunk?,Anno,Tropico,Frostpunk,Cities Skylines,C,medium,Games
+374,Which modern city builder is Cities Skylines?,Tropico 6,SimCity 2013,Cities Skylines,Anno 1800,C,easy,Games
+375,Which language is primarily used for database queries?,SQL,Python,Java,JavaScript,A,hard,Programming
+376,What is a podcast? An episodic audio program,A text blog,An on-demand audio show,A video game stream,A live TV show,B,easy,Internet & Web
+377,"What is a multimeter for? Measuring voltage, current, and resistance",Timing races,Measuring electrical properties,Measuring weather,Testing batteries only by brand,B,medium,Hardware
+378,Which team won back-to-back Dota 2 internationals? OG,Evil Geniuses,OG,Team Liquid,PSG.LGD,B,medium,Gaming History
+379,Which game was released by FromSoftware in 2022?,Super Mario Bros.,Tetris,Elden Ring,The Legend of Zelda,C,hard,Video Games
+380,What does a capacitor store? Electrical charge,Electrical energy briefly,Programs,Sound waves,Data permanently,A,medium,Hardware
+381,What is cloud computing? Using remote servers over the internet,Offline computing,Using remote servers via the internet,Weather modeling,Storing data on disks only,B,easy,Internet & Web
+382,What is NIO known for? Chinese EVs with battery swap,Korean budget cars,Chinese EVs offering battery swapping,Italian hypercars,US muscle EVs,B,hard,Cars & Space
+383,Which DS animation app is Flipnote Studio? Flipnote Studio,Pictochat DS built-in chat,Notes 3DS,Flipnote Studio,Swapdoodle later messaging,C,expert,Games
+384,Which country is Google headquartered in?,Japan,China,South Korea,the United States,D,medium,Tech Companies
+385,What does MP3 stand for roughly? MPEG audio layer 3,MPEG-1 audio layer 3,Multi phase 3,Music player 3,Media protocol 3,A,hard,Acronyms
+386,What does .org traditionally denote? An organization domain,An orange domain,"An organization, often nonprofit",An oracle domain,An organic domain,B,medium,Internet & Web
+387,Which company makes Xbox?,,,,,Microsoft,extreme,Consoles
+388,Which Konami sniper scope game is Silent Scope? Silent Scope,Silent Scope,Lethal Enforcers colored guns,Point Blank wacky,Time Crisis pedal,A,hard,Games
+389,Which cyberpunk bartending game is VA-11 HALL-A? VA-11 HALL-A by Sukeban Games,N1RV Ann-A,The Red Strings Club,Coffee Talk,VA-11 HALL-A,D,hard,Games
+390,In which year did Tony Hawks Pro Skater release?,1985,1986,1984,1999,D,hard,Video Games
+391,Which Star Wars Jedi game followed Fallen Order?,Squadrons,Jedi: Survivor,Jedi: Fallen Order,Battlefront II,B,medium,Games
+392,Which Switch leg-strapped ring game is Ring Fit? Ring Fit Adventure,Just Dance dancing mat free,Ring Fit Adventure,Wii Fit balance board older,Fitness Boxing punching,B,easy,Games
+393,Which Blizzard card game is set in Warcraft? Hearthstone,Hearthstone,Gwent,Magic Arena,Legends of Runeterra,A,easy,Games
+394,In which year did Chrono Trigger release?,1985,1995,1984,1986,B,hard,Video Games
+395,What is ARM best known for?,chip architecture,Windows,the iPhone,Google Search,A,hard,Tech Companies
+396,In which year did Age of Empires II release?,1999,1985,1986,1984,A,hard,Video Games
+397,Which Nintendo arcade introduced Mario as Jumpman? Donkey Kong,Donkey Kong,Super Mario Bros 1985,Mario Bros 1983,Punch-Out arcade,A,medium,Games
+398,What does OTA stand for? Over the air,Output to adapter,One time access,Online transfer app,Over the air updates,D,medium,Acronyms
+399,Which country is Logitech headquartered in?,China,South Korea,Switzerland,the United States,C,medium,Tech Companies
+400,What does IP stand for?,Internal Program,Integrated Port,Internet Protocol,Internet Provider,C,medium,Internet & Web
+401,Which Quantic Dream android game is Detroit?,Detroit Become Human,Beyond Two Souls,Star Wars Eclipse,Heavy Rain,A,medium,Games
+402,Who founded ASUS?,four hardware engineers incl. Jonney Shih,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,A,medium,Tech Companies
+403,Which engine do many indie games use? Unity popularly,Unreal also popular,Unity commonly,Godot rising open source,CryEngine niche,B,medium,Gaming History
+404,What is an SSD advantage over HDD? Faster speeds with no moving parts,Larger capacity only,Heavier and sturdier,Cheaper per terabyte,"Faster, silent, no moving parts",D,medium,Hardware
+405,Which 2007 device redefined smartphones? The iPhone,HTC Dream first Android,Nokia N95 strong that year,BlackBerry Storm,The iPhone,D,easy,Tech History
+406,In which year did Resident Evil release?,1996,1986,1985,1984,A,hard,Video Games
+407,Who developed or published Angry Birds?,Mojang,Nintendo,Alexey Pajitnov created it,Rovio,D,medium,Video Games
+408,Which standalone VR headset made VR mainstream in 2020? The Oculus Quest 2,The Rift S tethered,The Pico Neo regional,The Vive Cosmos,The Oculus Quest 2,D,medium,Tech History
+409,In which year did Doom release?,1985,1993,1986,1984,B,hard,Video Games
+410,What is the GNU Project related to? Free software movement,Chip design,Video codecs,The free software movement,Web hosting,C,hard,Internet & Web
+411,In which year did Dota 2 release?,2013,1985,1986,1984,A,hard,Video Games
+412,Who founded OpenAI?,Bill Gates and Paul Allen,"Sam Altman, Elon Musk, and others",Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",B,medium,Tech Companies
+413,Which country is Ubisoft headquartered in?,South Korea,France,the United States,China,B,medium,Tech Companies
+414,Which company made the PlayStation 2?,Sega,Sony,Microsoft,Nintendo,B,easy,Consoles
+415,Who wrote about the Analytical Engine notes becoming first programmer? Ada Lovelace,Hedy Lamarr,Mary Jackson,Ada Lovelace,Grace Hopper,C,medium,Tech History
+416,Who created Final Fantasy? Hironobu Sakaguchi,Nobuo Uematsu composer,Hideo Kojima,Hironobu Sakaguchi,Yu Suzuki,C,hard,Gaming History
+417,What is C primarily used for?,enterprise and Android applications,operating systems and embedded systems,"data science, AI, and general scripting",web interactivity and front-end development,B,medium,Programming
+418,What year did TikTok launch internationally widely? 2017-2018,2015-2016,2013-2014,2017-2018,2019-2020,C,hard,Internet & Web
+419,What is Snapchat known for? Disappearing messages,Job listings,News articles,Disappearing photo messages,Music charts,C,medium,Apps & Platforms
+420,Which chaotic kitchen co-op is Overcooked? Overcooked by Ghost Town Games,Cook Serve Delicious,Overcooked,Cooking Mama,Battle Chef Brigade,B,easy,Games
+421,What is Yandex best known for?,Windows,Google Search,the iPhone,search engine,D,hard,Tech Companies
+422,What is a pattern lock? Drawing a shape to unlock,A password manager,A voice command,A smart lock brand,A swipe shape unlock method,D,easy,Apps & Platforms
+423,What is Lua primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",game scripting,web interactivity and front-end development,C,medium,Programming
+424,Which Square Enix Disney crossover RPG?,Kingdom Hearts,Dragon Quest Heroes,World of Final Fantasy,Final Fantasy VII Remake,A,easy,Games
+425,Which country is Microsoft headquartered in?,South Korea,Japan,China,the United States,D,medium,Tech Companies
+426,What does BIOS stand for? Basic input output system,Built in operating system,Binary integrated OS,Boot interface OS,Basic input output system,D,hard,Hardware
+427,Which game was released by Rockstar Games in 2013?,Grand Theft Auto V,Super Mario Bros.,The Legend of Zelda,Tetris,A,hard,Video Games
+428,What is Apple Pay? A contactless payment service,A gift card store,A tap-to-pay wallet service,A stock app,A banking app,B,easy,Apps & Platforms
+429,Who composed Zelda and Mario music? Koji Kondo,Koji Kondo,Nobuo Uematsu,Hirokazu Tanaka,Kazumi Totaka,A,medium,Gaming History
+430,What is SpaceX best known for?,Google Search,the iPhone,Windows,Falcon rockets,D,hard,Tech Companies
+431,What is Haskell primarily used for?,web interactivity and front-end development,functional programming research,enterprise and Android applications,"data science, AI, and general scripting",B,medium,Programming
+432,Which game was released by Insomniac Games in 1998?,Tetris,Super Mario Bros.,Spyro the Dragon,The Legend of Zelda,C,hard,Video Games
+433,Which country is Kaspersky headquartered in?,the United States,South Korea,China,Russia,D,medium,Tech Companies
+434,Which country landed Chang-e missions on the Moon? China,China with Chang-e landers,India with Vikram only,Japan with SLIM later,Israel Beresheet attempt,A,medium,Cars & Space
+435,Which Animal Crossing game exploded in 2020?,Wild World,New Leaf,City Folk,New Horizons,D,easy,Games
+436,What is Careem known for? Ride hailing in the Middle East,A Turkish airline app,Middle East ride hailing acquired by Uber,An Egyptian bank,An Indian food app,B,hard,Apps & Platforms
+437,Which language is primarily used for modern Android development?,Kotlin,Java,JavaScript,Python,A,hard,Programming
+438,Who developed or published Quake?,Nintendo,Alexey Pajitnov created it,Mojang,id Software,D,medium,Video Games
+439,Which probe left the heliosphere into interstellar space? Voyager 1,Pioneer 10 earlier direction,New Horizons heading out,Voyager 1,Voyager 2 followed,C,medium,Cars & Space
+440,Which battle royale launched from the Titanfall universe?,Titanfall 2,Apex Legends,Call of Duty Warzone,PUBG,B,easy,Games
+441,Which asteroid sample mission returned in 2023? OSIRIS-REx returned Bennu samples,OSIRIS-REx with Bennu samples,Lucy Jupiter trojans tour,Hayabusa2 earlier Ryugu,DART impact test,A,expert,Cars & Space
+442,What is a zero-day? An unknown vulnerability exploit,A patch released instantly,A 24-hour sale,An old virus,An attack on an unpatched unknown flaw,D,hard,Security
+443,What is Bash primarily used for?,web interactivity and front-end development,shell scripting,enterprise and Android applications,"data science, AI, and general scripting",B,medium,Programming
+444,Who created Mario?,,,,,Shigeru Miyamoto,extreme,Gaming History
+445,Which 4X turn-based is Civilization?,Total War,Endless Legend,Civilization,Age of Wonders,C,medium,Games
+446,Who founded Twitter (X)?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,Jack Dorsey and Evan Williams and Biz Stone,Larry Page and Sergey Brin,C,medium,Tech Companies
+447,What is HTML primarily used for?,enterprise and Android applications,web page structure,"data science, AI, and general scripting",web interactivity and front-end development,B,medium,Programming
+448,Who developed or published Resident Evil?,Alexey Pajitnov created it,Mojang,Capcom,Nintendo,C,medium,Video Games
+449,What is ByteDance best known for?,Google Search,Windows,TikTok parent,the iPhone,C,hard,Tech Companies
+450,Which Konami light gun classic had colored guns? Lethal Enforcers,Silent Scope scope,Lethal Enforcers,Area 51 Atari rasterization,Time Crisis pedal,B,expert,Games
+451,In which year did Crash Bandicoot release?,1984,1996,1986,1985,B,hard,Video Games
+452,In which year did Horizon Zero Dawn release?,1986,1985,2017,1984,C,hard,Video Games
+453,Which country is Salesforce headquartered in?,South Korea,the United States,China,Japan,B,medium,Tech Companies
+454,What is Meta (Facebook) best known for?,Windows,the iPhone,Facebook,Google Search,C,hard,Tech Companies
+455,Which language is primarily used for cloud services and networking tools?,Python,Go,JavaScript,Java,B,hard,Programming
+456,Which game was released by Naughty Dog in 2013?,The Last of Us,The Legend of Zelda,Super Mario Bros.,Tetris,A,hard,Video Games
+457,Who developed or published Gears of War?,Alexey Pajitnov created it,Epic Games,Nintendo,Mojang,B,medium,Video Games
+458,Which language is primarily used for game engines and high-performance software?,Python,Java,C++,JavaScript,C,hard,Programming
+459,In which year did Valorant release?,1985,1984,2020,1986,C,hard,Video Games
+460,Who proposed the stored-program computer architecture? John von Neumann,John von Neumann,Charles Babbage,Alan Turing,J. Presper Eckert,A,hard,Tech History
+461,In which year did Fall Guys release?,2020,1984,1986,1985,A,hard,Video Games
+462,Which Arkane station immersive sim is Prey?,Bioshock,System Shock,Dead Space,Prey 2017,D,medium,Games
+463,Which Sega 1995 rally arcade racer? Sega Rally Championship,Sega Rally,Virtua Racing,Emergency Call Ambulance odd,Daytona oval,A,hard,Games
+464,Which Atari tank vector game 1980 used 3D wireframes? Battlezone,Battlezone,Asteroids rocks,Star Wars cockpit game,Tempest tunnels,A,hard,Games
+465,What is Ruby primarily used for?,enterprise and Android applications,web apps with Rails,"data science, AI, and general scripting",web interactivity and front-end development,B,medium,Programming
+466,Which Atlus improved P4 port is Golden?,P3 Reload,P5 Royal,Persona 4 Golden,Persona 2,C,medium,Games
+467,Which Gears hero wields the Lancer chainsaw gun?,Marcus Fenix,Cole Train,Dom Santiago,JD Fenix,A,easy,Games
+468,Who developed or published PUBG: Battlegrounds?,Krafton,Mojang,Nintendo,Alexey Pajitnov created it,A,medium,Video Games
+469,What does USB stand for?,Universal system board,Universal serial bus,Universal storage bay,United serial byte,B,easy,Hardware
+470,"Who invented the transistor at Bell Labs? Bardeen, Brattain, and Shockley",Jack Kilby,"Bardeen, Brattain, and Shockley",Robert Noyce,Gordon Moore,B,hard,Hardware
+471,What does HTTP stand for?,High Transfer Text Path,Hypertext Transfer Protocol,Hypertext Terminal Protocol,Hyper Transfer Text Protocol,B,medium,Internet & Web
+472,What does SSD stand for?,Serial storage drive,Solid state drive,Super speed disk,System storage device,B,easy,Hardware
+473,What is Spotify Wrapped? A yearly listening recap,A year-end listening summary,A concert finder,A lyrics app,A playlist generator only,A,medium,Apps & Platforms
+474,What is a heatsink for? Dissipating heat from chips,Adding storage,Filtering dust,Boosting power,Absorbing and spreading heat,D,easy,Hardware
+475,What does DB stand for? Database,Digital board,Database,Disk backup,Data bus,B,easy,Acronyms
+476,What is Philips Hue? Smart color lighting,A camera brand,A speaker line,A smart lighting system,A robot vacuum,C,easy,Smart Home
+477,Which game was released by Valve in 2000?,Counter-Strike,The Legend of Zelda,Tetris,Super Mario Bros.,A,hard,Video Games
+478,What is Scala primarily used for?,web interactivity and front-end development,big data with Spark,"data science, AI, and general scripting",enterprise and Android applications,B,medium,Programming
+479,Which Remedy Oldest House game is Control?,Alan Wake,Firebreak,CrossfireX,Control,D,medium,Games
+480,Who developed or published The Witcher 3: Wild Hunt?,Mojang,Alexey Pajitnov created it,Nintendo,CD Projekt Red,D,medium,Video Games
+481,What is Google best known for?,Windows,Facebook,the iPhone,Google Search,D,hard,Tech Companies
+482,Which word game by Zynga pairs friends?,Scrabble GO,Draw Something,FarmVille,Words with Friends,D,medium,Games
+483,In which year did SimCity release?,1989,1984,1985,1986,A,hard,Video Games
+484,In which year did Team Fortress 2 release?,1986,2007,1984,1985,B,hard,Video Games
+485,Which Bluepoint remake is Demons Souls?,Bloodborne none,Uncharted Legacy,The PS5 remake,Shadow of the Colossus,C,hard,Games
+486,What is a data breach? Unauthorized data exposure,A power outage,A server upgrade,A disk failure only,When private data leaks out,D,easy,Security
+487,Who developed or published Candy Crush Saga?,Mojang,King,Alexey Pajitnov created it,Nintendo,B,medium,Video Games
+488,Which Japanese show runs in Chiba? Tokyo Game Show,E3 American,ChinaJoy Chinese,Tokyo Game Show,Gamescom German,C,medium,Gaming History
+489,Who founded SpaceX?,Elon Musk,Larry Page and Sergey Brin,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",A,medium,Tech Companies
+490,Which game was released by Game Freak in 1996?,Pokemon Red and Blue,The Legend of Zelda,Super Mario Bros.,Tetris,A,hard,Video Games
+491,What is SQL primarily used for?,database queries,"data science, AI, and general scripting",enterprise and Android applications,web interactivity and front-end development,A,medium,Programming
+492,Which country is Samsung headquartered in?,the United States,Japan,South Korea,China,C,medium,Tech Companies
+493,What does a transistor do? Switches or amplifies signals,Acts as a tiny switch,Displays images,Stores large data,Prints circuits,A,medium,Hardware
+494,Who developed or published FIFA series?,EA Sports,Nintendo,Mojang,Alexey Pajitnov created it,A,medium,Video Games
+495,Who created Sonic? Naoto Ohshima and Yuji Naka team at Sega,Takashi Iizuka modern producer,Yuji Naka and team at Sega,Sonic Team name yes,Yu Suzuki OutRun,B,hard,Gaming History
+496,What is firmware? Software embedded in hardware devices,A mobile app,Built-in software on a device,A screensaver,A cloud service,B,medium,Hardware
+497,Which game was released by Epic Games in 2017?,Fortnite,Super Mario Bros.,The Legend of Zelda,Tetris,A,hard,Video Games
+498,Which Bioshock city is Rapture? Bioshock underwater,Talos I Prey station,Columbia flying Infinite,Dunwall Dishonored,Rapture underwater,D,easy,Games
+499,Which Wii balance board series is Wii Fit? Wii Fit,Ring Fit newer adventure,Wii Play mini games bundle,Wii Sports simple sports,Wii Fit,D,easy,Games
+500,Who created Mario? Shigeru Miyamoto,Satoru Iwata executive later,Hideo Kojima,Shigeru Miyamoto,Yu Suzuki,C,easy,Gaming History
+501,Who founded Microsoft?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Bill Gates and Paul Allen,Mark Zuckerberg,C,medium,Tech Companies
+502,Which game was released by Riot Games in 2020?,The Legend of Zelda,Super Mario Bros.,Valorant,Tetris,C,hard,Video Games
+503,What does PDF stand for? Portable document format,Personal document firewall,Public data folder,Portable document format,Printed document file,C,easy,Acronyms
+504,In which year did PUBG: Battlegrounds release?,1986,1985,1984,2017,D,hard,Video Games
+505,Who founded Salesforce?,Bill Gates and Paul Allen,Marc Benioff,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",B,medium,Tech Companies
+506,Which FMV western shooter is Mad Dog McCree? Mad Dog McCree,Crime Patrol police,Who Shot Johnny Rock jazzy,Mad Dog McCree,Area 51 aliens,C,expert,Games
+507,What does SVG stand for? Scalable vector graphics,Small vector icon,System vector grid,Scalable vector graphics,Standard video graphics,C,medium,Acronyms
+508,What is a firewall? A network security barrier,A barrier filtering network traffic,A fast router,A storage drive,A video card cooler,A,easy,Internet & Web
+509,Which Persona musou is Strikers?,P3 Reload,Persona 5 Strikers,Persona 4 Arena,Persona Q,B,medium,Games
+510,What is IBM best known for?,Google Search,mainframe computers,Windows,the iPhone,B,hard,Tech Companies
+511,Which Resident Evil got Quest VR? Resident Evil 4 VR,Village VR,RE7 PSVR1,RE2 none,Resident Evil 4 VR,D,medium,Games
+512,Who founded Xiaomi?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,Lei Jun,D,medium,Tech Companies
+513,What does GPU stand for?,General purpose unit,Graphics processing unit,Global processing unit,Graphics power unit,B,easy,Hardware
+514,What is Reddit structured around? Interest forums called subreddits,Stories that vanish,Music playlists,Community forums called subreddits,Followers only feeds,C,medium,Apps & Platforms
+515,Which game was released by Niantic in 2016?,The Legend of Zelda,Pokemon Go,Super Mario Bros.,Tetris,B,hard,Video Games
+516,Which studio made Super Meat Boy? Team Meat,House House,Team Meat,Studio MDHR,Tarsier,B,medium,Games
+517,Which SpaceX capsule carries NASA crews? Crew Dragon,Cygnus cargo only,Starship in development,Crew Dragon,Dream Chaser cargo,C,medium,Cars & Space
+518,What is a graphics card for? Rendering images and video,Connecting printers,Rendering visuals for the display,Cooling the CPU,Storing files,B,easy,Hardware
+519,What is phishing? Fake messages stealing credentials,Fast typing,File sharing,Fraudulent messages tricking users,Fishing for compliments online,C,easy,Internet & Web
+520,Who developed or published Silent Hill 2?,Alexey Pajitnov created it,Mojang,Konami,Nintendo,C,medium,Video Games
+521,Which skating series got a 1+2 remaster?,SSX,Skate,Tony Hawks Pro Skater,OlliWorld,C,medium,Games
+522,Which 2009 Wii resort follow-up needed MotionPlus? Wii Sports Resort,Wii Party U for Wii U,Wii Play motion bundle,Wii Sports Resort,Wii Sports original,C,medium,Games
+523,Who developed or published Guitar Hero?,Nintendo,Alexey Pajitnov created it,Harmonix,Mojang,C,medium,Video Games
+524,Which 2006 console used motion controls with the Wii Remote? The Wii,The Wii,The PS3 Sixaxis attempt,The Xbox 360 Kinect later 2010,The GameCube,A,easy,Tech History
+525,Which game was released by EA Sports in 1993?,FIFA series,Super Mario Bros.,Tetris,The Legend of Zelda,A,hard,Video Games
+526,Who developed or published World of Warcraft?,Mojang,Blizzard,Alexey Pajitnov created it,Nintendo,B,medium,Video Games
+527,What does IT stand for? Information technology,Internal transfer,Innovation tech,Internet tools,Information technology,D,easy,Acronyms
+528,Which studio made GoldenEye 007 N64? Rare,Free Radical formed from ex-Rare,Bizarre Creations,Naughty Dog,Rare,D,medium,Gaming History
+529,Who founded Cisco?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Leonard Bosack and Sandy Lerner,D,medium,Tech Companies
+530,In which year did Space Invaders release?,1984,1986,1978,1985,C,hard,Video Games
+531,Who founded HP?,Larry Page and Sergey Brin,Bill Hewlett and David Packard,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",B,medium,Tech Companies
+532,Which capsule flew Artemis I around the Moon uncrewed? Orion,The Orion capsule,The Soyuz capsule,The Crew Dragon capsule,The Starliner capsule,A,medium,Cars & Space
+533,What is CCS in EV charging? A combined charging connector standard,A solar panel type,A combined charging system standard,A battery brand,A driving mode,B,expert,Cars & Space
+534,What is RIM (BlackBerry) best known for?,Google Search,BlackBerry phones,Windows,the iPhone,B,hard,Tech Companies
+535,Which org did Faker stay with? T1 formerly SKT,DRX upset winners 2022,T1 formerly SK Telecom T1,Hanwha Life,Gen.G rival,B,medium,Gaming History
+536,Which game was released by Nintendo in 2006?,The Legend of Zelda,Super Mario Bros.,Wii Sports,Tetris,C,hard,Video Games
+537,What is a touchscreen? A display you can interact with by touch,A projector,A keyboard cover,A display accepting touch input,A stylus pad only,C,easy,Hardware
+538,Which Sega NASCAR-style 1994 arcade racer? Daytona USA,Sega Rally WRC 1995,Scud Race 1996,Daytona USA,Virtua Racing F1,C,medium,Games
+539,Who founded Sony?,Larry Page and Sergey Brin,Masaru Ibuka and Akio Morita,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,B,medium,Tech Companies
+540,Which Arc System Works Dragon Ball fighting game?,Budokai Tenkaichi,Dragon Ball FighterZ,Kakarot,Xenoverse,B,medium,Games
+541,Which Koji Igarashi Castlevania successor is Bloodstained? Ritual of the Night,Harmony of Despair,SOTN original,Ritual of the Night,Curse of the Moon retro,C,medium,Games
+542,Which site is the largest mods community? Nexus Mods,Nexus Mods,Steam Workshop in-client,ModDB,CurseForge,A,medium,Gaming History
+543,Which store is DRM-free classic friendly? GOG,Epic Store,Humble Store storefront,Steam,GOG,D,medium,Gaming History
+544,Which DS pet dog game is Nintendogs? Nintendogs,Tomodachi Life Mii apartment,Nintendogs,Pokemon Amie affection later,Animal Crossing villagers,B,medium,Games
+545,Which Paradox WWII strategy is Hearts of Iron?,EU4,Victoria 3,CK3,Hearts of Iron IV,D,medium,Games
+546,What does MMS stand for? Multimedia messaging service,Multi-mode sender,Message management system,Mobile mail system,Multimedia messaging service,D,hard,Acronyms
+547,Which Paradox early-modern game is EU4?,Victoria 3,CK3,Europa Universalis IV,HOI4,C,medium,Games
+548,Which country is IBM headquartered in?,the United States,China,Japan,South Korea,A,medium,Tech Companies
+549,What does IoT stand for? Internet of Things,Integrated online tech,Internal Operations Tool,Input of Transfers,Internet of Things,D,medium,Acronyms
+550,What is Binance? A large crypto exchange,A major cryptocurrency exchange,A payment bank,A fintech card only,A stock broker,A,medium,Apps & Platforms
+551,Which game was released by Harmonix in 2005?,Tetris,Super Mario Bros.,Guitar Hero,The Legend of Zelda,C,hard,Video Games
+552,Which VR headset made Half-Life: Alyx shine in 2020? PC VR headsets like Valve Index,The Valve Index with PC VR,Cardboard,PSVR1,The Quest standalone later supported,A,expert,Tech History
+553,What is Lucid known for? Luxury electric sedans,Budget EV hatchbacks,Long-range luxury electric sedans,Classic car restorations,Electric motorcycles,B,medium,Cars & Space
+554,Who developed or published League of Legends?,Riot Games,Mojang,Nintendo,Alexey Pajitnov created it,A,medium,Video Games
+555,What is Kaspersky best known for?,Google Search,the iPhone,antivirus software,Windows,C,hard,Tech Companies
+556,What is MATLAB primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",web interactivity and front-end development,engineering computation,D,medium,Programming
+557,Which game was released by Maxis in 2000?,The Sims,The Legend of Zelda,Super Mario Bros.,Tetris,A,hard,Video Games
+558,What does RAM cache mean? Fast temporary storage near the CPU,A saved game,A disk backup,Fast temporary memory storage,A browser bookmark,C,medium,Acronyms
+559,Who founded SAP?,five former IBM engineers incl. Hasso Plattner,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,A,medium,Tech Companies
+560,In which year did Pokemon Red and Blue release?,1996,1984,1985,1986,A,hard,Video Games
+561,Which MachineGames reimagined Wolfenstein?,Wolfenstein 3D,The New Order,Youngblood,Return to Castle Wolfenstein,B,medium,Games
+562,Which cold Canadian survival is The Long Dark?,The Long Dark,Dont Starve,Frostpunk,This War of Mine,A,medium,Games
+563,In which year did Metal Gear Solid release?,1985,1998,1986,1984,B,hard,Video Games
+564,What does the mouse do? Controls a pointer on screen,Moves the on-screen pointer,Scans documents,Types letters,Prints pages,A,easy,Hardware
+565,What company leads rocket reuse with Falcon 9 landings? SpaceX,Roscosmos Soyuz,Blue Shepard suborbital,NASA shuttle era,SpaceX with landing boosters,D,medium,Cars & Space
+566,Which language is primarily used for shell scripting?,Bash,Java,Python,JavaScript,A,hard,Programming
+567,Which language is primarily used for Windows apps and Unity games?,C#,JavaScript,Python,Java,A,hard,Programming
+568,Which Namco light-gun series uses a foot pedal? Time Crisis,Virtua Cop Sega again,Silent Scope sniper scope,House of the Dead Sega,Time Crisis pedal cover,D,medium,Games
+569,Name a console made by Atari.,PlayStation 4,the Atari 2600,PlayStation 3,PlayStation 5,B,medium,Consoles
+570,Which Amazon-owned platform streams games? Twitch,YouTube,Mixer closed 2020,Twitch,DLive,C,medium,Gaming History
+571,What is a wiki? A collaboratively edited website,A site anyone can edit together,A photo gallery,A chat service,A news app,A,medium,Internet & Web
+572,Which country is WhatsApp headquartered in?,China,the United States,Japan,South Korea,B,medium,Tech Companies
+573,In which year did Donkey Kong release?,1984,1981,1985,1986,B,hard,Video Games
+574,Which Arkane time loop is Deathloop?,Dishonored,Prey,Redfall,Deathloop,D,medium,Games
+575,Which country is Acer headquartered in?,China,Taiwan,the United States,South Korea,B,medium,Tech Companies
+576,Which Monolith Soft RPG is on Switch? Xenoblade Chronicles,Diablo IV,Tales of Arise,Final Fantasy XVI,Xenoblade Chronicles,D,easy,Games
+577,Which game was released by Alexey Pajitnov created it in 1984?,Tetris,The Legend of Zelda,Minecraft,Super Mario Bros.,A,hard,Video Games
+578,Who founded DeepMind?,Bill Gates and Paul Allen,Demis Hassabis and others,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",B,medium,Tech Companies
+579,Who developed or published Just Dance?,Alexey Pajitnov created it,Ubisoft,Nintendo,Mojang,B,medium,Video Games
+580,Who developed or published Horizon Zero Dawn?,Alexey Pajitnov created it,Guerrilla Games,Mojang,Nintendo,B,medium,Video Games
+581,Which NES fitness mat game used Power Pad? Track Meet style World Class Track Meet,World Class Track Meet on Power Pad,Ring Fit newer Switch,Wii Fit balance board,Duck Hunt zapper,A,expert,Games
+582,Which assistant lives in the Echo? Alexa,Alexa,Bixby,Siri,Google Assistant,A,easy,Tech History
+583,Which country is OpenAI headquartered in?,Japan,South Korea,the United States,China,C,medium,Tech Companies
+584,What does 5G mean?,,,,,Fifth-generation mobile network,extreme,Internet & Web
+585,Which SNK fighting series features Kyo Kusanagi?,Virtua Fighter,Mortal Kombat,The King of Fighters,Street Fighter,C,medium,Games
+586,What is Vodafone best known for?,mobile networks,the iPhone,Windows,Google Search,A,hard,Tech Companies
+587,What is a router? A device directing network traffic,A keyboard layout,A device that routes network traffic,A monitor stand,A type of cable,B,easy,Internet & Web
+588,Which telescope launched in 2021 to see infrared? The James Webb Space Telescope,The Chandra X-ray observatory,The Hubble optical veteran,The James Webb Space Telescope,The Kepler exoplanet hunter,C,easy,Cars & Space
+589,Who created Resident Evil series? Shinji Mikami directed the first,Hideki Kamiya RE2,Jun Takeuchi RE5,Shinji Mikami directed the original,Kazuhiro Aoyama RE Code Veronica,C,expert,Gaming History
+590,Which Nintendo anti-gravity racer is Captain Falcon from?,Sonic Racing,Mario Kart,F-Zero,Wipeout,C,easy,Games
+591,Which company made the the Steam Deck?,Microsoft,Valve,Sony,Nintendo,B,easy,Consoles
+592,What is Google Find My Device for? Locating Android devices,Finding chargers,Locating lost Android phones,Finding apps,Locating iPhones,B,easy,Apps & Platforms
+593,Who developed or published Red Dead Redemption 2?,Nintendo,Mojang,Alexey Pajitnov created it,Rockstar Games,D,medium,Video Games
+594,Which language is primarily used for web page styling?,CSS,Java,JavaScript,Python,A,hard,Programming
+595,Which Sega 1992 polygon fighter is Virtua Fighter as said? Virtua Racing polygon F1 1992,Sega Rally 1995,Virtua Racing,Virtua Fighter 1993,Daytona USA 1994,B,expert,Games
+596,What is R primarily used for?,statistics and analytics,web interactivity and front-end development,enterprise and Android applications,"data science, AI, and general scripting",A,medium,Programming
+597,What is Toyota best known for?,Google Search,Windows,automobiles,the iPhone,C,hard,Tech Companies
+598,What does 4K mean for screens? About 3840 by 2160 resolution,Four kilobytes of memory,Four kilohertz refresh,Roughly 3840 x 2160 pixels,4000 nits brightness,C,medium,Hardware
+599,Which game was released by Namco in 1980?,Tetris,The Legend of Zelda,Super Mario Bros.,Pac-Man,D,hard,Video Games
+600,Which Remedy writer thriller is Alan Wake?,Alan Wake,Max Payne,Control,Quantum Break,A,medium,Games
+601,Which language is primarily used for iOS and macOS apps?,Swift,Python,JavaScript,Java,A,hard,Programming
+602,Which game was released by InnerSloth in 2018?,The Legend of Zelda,Super Mario Bros.,Tetris,Among Us,D,hard,Video Games
+603,Who developed or published Dark Souls?,Alexey Pajitnov created it,Nintendo,FromSoftware,Mojang,C,medium,Video Games
+604,What does GUI stand for? Graphical user interface,Graphical user interface,General unit interface,Global user index,Graphic uniform icon,A,medium,Acronyms
+605,What is Go primarily used for?,web interactivity and front-end development,"data science, AI, and general scripting",cloud services and networking tools,enterprise and Android applications,C,medium,Programming
+606,What is GPS maintained by? The United States Space Force historically Air Force,EU Galileo separate,Russia GLONASS separate,China BeiDou separate,The US government GPS constellation,D,medium,Cars & Space
+607,Who founded Skype?,Niklas Zennstrom and Janus Friis,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Bill Gates and Paul Allen,A,medium,Tech Companies
+608,Which game was released by Ensemble Studios in 1999?,Super Mario Bros.,Age of Empires II,The Legend of Zelda,Tetris,B,hard,Video Games
+609,What is bandwidth? The data-carrying capacity of a connection,A website layout,A router brand,The data capacity of a connection,The weight of a cable,C,medium,Internet & Web
+610,What is a hashtag used for? Tagging topics on social media,Creating emails,Making calls,Labeling topics on social media,Encrypting messages,C,easy,Internet & Web
+611,What is OpenAI best known for?,the iPhone,ChatGPT,Google Search,Windows,B,hard,Tech Companies
+612,Which Konami DJ turntable series is Beatmania? Beatmania IIDX,Sound Voltex newer knobs,DDR,Taiko,Beatmania IIDX,D,medium,Games
+613,What is ASUS best known for?,Google Search,the iPhone,PC hardware,Windows,C,hard,Tech Companies
+614,Which 2002 Battlefield set 64-player combined arms?,Battlefield 3,Battlefield 1942,Battlefield 1,Battlefield 2,B,medium,Games
+615,What is open source? Software with publicly available code,Encrypted code,Paid cloud apps,Software whose code is public,Free hardware,C,easy,Internet & Web
+616,What is Ubisoft best known for?,video games,Windows,the iPhone,Google Search,A,hard,Tech Companies
+617,Which company made the Nintendo Switch?,Sega,Nintendo,Sony,Microsoft,B,easy,Consoles
+618,What is a smoke detector? A device sensing smoke for alarms,A CO meter separate,A humidity sensor,A heat only sensor,A smoke alarm safety device,D,easy,Smart Home
+619,Who invented the World Wide Web?,,,,,Tim Berners-Lee,extreme,Internet & Web
+620,What is latency? The delay before data transfer begins,Bandwidth size,A data limit,Network delay time,A browser speed test,C,medium,Internet & Web
+621,Which language is primarily used for scientific computing legacy?,Fortran,JavaScript,Python,Java,A,hard,Programming
+622,Which 1979 device made music portable with cassettes? The Sony Walkman,The Sony Walkman TPS-L2,The Aiwa cassette rival,The iPod 2001,The Discman CD later 1984,A,medium,Tech History
+623,In which year did Guitar Hero release?,1985,2005,1986,1984,B,hard,Video Games
+624,What is an email attachment? A file sent with an email,A signature,A mailing list,A file sent along with an email,A spam filter,C,easy,Internet & Web
+625,In which year did Apex Legends release?,1985,1986,2019,1984,C,hard,Video Games
+626,Which 1975 kit computer launched the PC hobby era? The Altair 8800,Commodore PET,The Altair 8800,Apple I,TRS-80,B,hard,Tech History
+627,What does OTA mean for phones? Getting updates over the air,Receiving updates wirelessly,Charging wirelessly,Paying online,Optimizing the antenna,A,medium,Acronyms
+628,Who founded Ericsson?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Lars Magnus Ericsson,Bill Gates and Paul Allen,C,medium,Tech Companies
+629,What is Objective-C primarily used for?,legacy Apple development,"data science, AI, and general scripting",enterprise and Android applications,web interactivity and front-end development,A,medium,Programming
+630,Which Riot card game? Legends of Runeterra,Gwent,Hearthstone,Legends of Runeterra,Faeria,C,medium,Games
+631,What does WWW stand for?,Web World Wide,Wide World Web,World Web Wide,The World Wide Web,D,easy,Internet & Web
+632,What is a servo motor? A motor with precise position control,A motor with position feedback,A power drill motor,A pump,A fan motor,A,medium,Hardware
+633,Which 1985 Microsoft OS version became dominant? Windows 1.0 started it; Windows 3.x and 95 cemented,MS-DOS 1.0 only,OS/2,Windows CE later,Windows lineage starting 1985,D,medium,Tech History
+634,What does LED stand for? Light-emitting diode,Light-emitting diode,Liquid emerald display,Low energy display,Lighted energy driver,A,medium,Hardware
+635,What does ZIP mean for files? A compressed archive format,A compressed file archive,A zoned image,A zoom interface,A zipped internet protocol,A,easy,Acronyms
+636,In which year did Uncharted 4 release?,1985,1984,2016,1986,C,hard,Video Games
+637,Which company made the the Nintendo 64?,Sony,Microsoft,Sega,Nintendo,D,easy,Consoles
+638,What is Adobe best known for?,the iPhone,Google Search,Photoshop,Windows,C,hard,Tech Companies
+639,Who developed or published Portal?,Mojang,Nintendo,Alexey Pajitnov created it,Valve,D,medium,Video Games
+640,In which year did Rocket League release?,2015,1985,1986,1984,A,hard,Video Games
+641,Which telescope has serviced Earth orbit since 1990? The Hubble Space Telescope,The James Webb at L2,Spitzer retired infrared,The Hubble Space Telescope,Fermi gamma-ray,C,medium,Cars & Space
+642,Which country is Sony headquartered in?,Japan,South Korea,the United States,China,A,medium,Tech Companies
+643,Which Giant Sparrow finch game is Edith Finch?,Firewatch,Gone Home,What Remains of Edith Finch,Unfinished Swan,C,hard,Games
+644,What is Fortran primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",scientific computing legacy,web interactivity and front-end development,C,medium,Programming
+645,Which Paradox space grand strategy is Stellaris?,Galactic Civilizations,Stellaris,Distant Worlds,Endless Space,B,easy,Games
+646,What is HTTPS padlock? A secure connection indicator,An SEO badge,A safe site guarantee scam possible,A speed boost,A sign of encrypted connection,D,medium,Security
+647,Who is the mother of COBOL and compiler pioneer? Grace Hopper,Ada Lovelace,Hedy Lamarr,Grace Hopper,Jean Bartik,C,hard,Tech History
+648,Which FromSoftware land is the Lands Between? Elden Ring,Bloodborne Yharnam,Elden Ring Lands Between,Dark Souls Lordran,Demons Boletaria,B,easy,Games
+649,Who created Tetris? Alexey Pajitnov,Shigeru Miyamoto,Hideo Kojima,Alexey Pajitnov,Sid Meier,C,medium,Gaming History
+650,What is a motherboard? The main circuit board of a computer,A display panel,A cooling fan,A power cable,The main circuit board,D,easy,Hardware
+651,Which Dontnod rewind game is Life is Strange?,Tell Me Why,Life is Strange,Vampyr,Jusant,B,medium,Games
+652,Who created Devil May Cry from RE idea? Hideki Kamiya,Yoko Taro,Shinji Mikami,Hideki Kamiya,Fumito Ueda,C,expert,Gaming History
+653,Which company made the the SNES?,Sega,Microsoft,Sony,Nintendo,D,easy,Consoles
+654,Which game was released by Konami in 1997?,Tetris,Super Mario Bros.,Castlevania: Symphony of the Night,The Legend of Zelda,C,hard,Video Games
+655,Which game was released by Namco in 1998?,Tetris,Super Mario Bros.,The Legend of Zelda,Tekken 3,D,hard,Video Games
+656,In which year did League of Legends release?,1986,1984,1985,2009,D,hard,Video Games
+657,Which game was released by CD Projekt Red in 2020?,Super Mario Bros.,Cyberpunk 2077,The Legend of Zelda,Tetris,B,hard,Video Games
+658,Which country is HP headquartered in?,the United States,South Korea,China,Japan,A,medium,Tech Companies
+659,What is NFC mobile payment example? Apple Pay and Google Wallet,QR codes only,SMS payments,Apple Pay or Google Wallet tap payments,Bluetooth transfers,C,medium,Apps & Platforms
+660,In which year did Diablo II release?,1986,2000,1984,1985,B,hard,Video Games
+661,Which game was released by Valve in 2007?,Portal,The Legend of Zelda,Tetris,Super Mario Bros.,A,hard,Video Games
+662,Who developed or published Call of Duty: Modern Warfare?,Nintendo,Alexey Pajitnov created it,Mojang,Infinity Ward,D,medium,Video Games
+663,What is Google Wallet used for? Storing cards for tap payments,Web browsing,Text messages,Contactless card storage and taps,Photo backup,C,medium,Apps & Platforms
+664,What is Booking.com for? Travel reservations,Events tickets,Ride hailing,Flights only,Booking hotels and stays,D,medium,Apps & Platforms
+665,Which language is primarily used for enterprise and Android applications?,Python,C,Java,JavaScript,C,hard,Programming
+666,What is CSS primarily used for?,enterprise and Android applications,"data science, AI, and general scripting",web interactivity and front-end development,web page styling,D,medium,Programming
+667,Which country is ARM headquartered in?,China,the United States,South Korea,the United Kingdom,D,medium,Tech Companies
+668,Which Russian-core team won TI10 and TI11? Team Spirit,Virtus.pro era strong earlier,Gambit Esports,Team Spirit,NaVi earlier,C,hard,Gaming History
+669,Which physics sandbox VR is by Stress Level Zero? Boneworks,Boneworks,Blade and Sorcery,Superhot VR,Alyx,A,hard,Games
+670,Which 2008 phone was the first Android commercial device? The HTC Dream T-Mobile G1,Nexus One,Motorola Droid,Samsung Galaxy i7500,The HTC Dream G1,D,expert,Tech History
+671,Which Namco digging game features Pooka? Dig Dug,Pac-Man dots,Bosconian space,Galaga bees,Dig Dug,D,hard,Games
+672,Which game was released by Nintendo in 1981?,The Legend of Zelda,Donkey Kong,Super Mario Bros.,Tetris,B,hard,Video Games
+673,Who founded Nvidia?,Bill Gates and Paul Allen,Jensen Huang and Chris Malachowsky and Curtis Priem,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,B,medium,Tech Companies
+674,What is a smart lock? An app-controlled door lock,A remotely controlled door lock,A keyed lock only,A door camera,A window alarm,A,easy,Smart Home
+675,What does SMS stand for? Short message service,System message sender,Social media share,Short message service,Secure message socket,C,medium,Acronyms
+676,Which game was released by FromSoftware in 2015?,The Legend of Zelda,Super Mario Bros.,Tetris,Bloodborne,D,hard,Video Games
+677,What is TikTok (ByteDance) best known for?,Windows,the iPhone,Google Search,short video app,D,hard,Tech Companies
+678,Which agency launched Chandrayaan-3 to the Moon south pole region? ISRO,Roscosmos,NASA,ESA,ISRO of India,D,medium,Cars & Space
+679,Which Sega series pioneered 3D fighting?,Virtua Fighter,Dead or Alive,Tekken,Soulcalibur,A,medium,Games
+680,What is DoorDash or Deliveroo for? Food delivery,Taxi rides,Ordering food delivery,Restaurant reviews only,Grocery stores only,B,easy,Apps & Platforms
+681,Who created Street Fighter characters Ryu and Ken designs? Takashi Nishiyama and team Capcom,Namco team,SNK rival team,Capcom team with Takashi Nishiyama idea,Taito team,C,expert,Gaming History
+682,Which vector Atari shooter 1979? Asteroids,Space Invaders Taito,Tempest 1981,Asteroids,Battlezone tanks 1980,C,medium,Games
+683,Which game was released by Capcom in 1991?,Street Fighter II,Super Mario Bros.,Tetris,The Legend of Zelda,A,hard,Video Games
+684,In which year did Final Fantasy VII release?,1985,1986,1997,1984,C,hard,Video Games
+685,What is a motion sensor? A device detecting movement,A detector triggering on movement,A light dimmer,A sound meter,A smoke alarm,A,easy,Smart Home
+686,Which game was released by Blizzard in 2004?,The Legend of Zelda,World of Warcraft,Tetris,Super Mario Bros.,B,hard,Video Games
+687,What is TikTok built around? Short-form videos,Audio podcasts,Long documentaries,Short-form vertical videos,Text articles,C,easy,Apps & Platforms
+688,Which language is primarily used for banking mainframes legacy?,JavaScript,COBOL,Python,Java,B,hard,Programming
+689,Which Quantic Dream rain origami game is Heavy Rain?,Detroit,Fahrenheit,Beyond Two Souls,Heavy Rain,D,medium,Games
+690,Which game was released by id Software in 1996?,Super Mario Bros.,Tetris,Quake,The Legend of Zelda,C,hard,Video Games
+691,What is LinkedIn best known for?,the iPhone,professional networking,Windows,Google Search,B,hard,Tech Companies
+692,What is Duolingo for? Language learning,Learning languages with gamification,Learning piano,Learning math only,Learning to code only,A,easy,Apps & Platforms
+693,Which countrys show is ChinaJoy? China,Japan,China,Taipei Game Show,South Korea G-STAR,B,medium,Gaming History
+694,What is Airbnb for? Stays and rentals,Restaurant tables,Booking homes and stays,Car rentals only,Flights only,B,easy,Apps & Platforms
+695,Name a console made by Microsoft.,Xbox Series X/S,PlayStation 3,PlayStation 5,PlayStation 4,A,medium,Consoles
+696,Which VR gun-rhythm game is Pistol Whip? Pistol Whip,Pistol Whip,Synth Riders,Superhot VR,Beat Saber,A,hard,Games
+697,Who developed or published Super Mario Bros.?,Rockstar Games,Nintendo,Mojang,Alexey Pajitnov created it,B,medium,Video Games
+698,What is M-Pesa famous for? Mobile money in Kenya,Mobile money transfers in Kenya,Kenyan streaming,Kenyan ride hailing,Kenyan e-learning,A,hard,Apps & Platforms
+699,What is Cisco best known for?,Google Search,Windows,the iPhone,networking hardware,D,hard,Tech Companies
+700,Which company made the the Dreamcast?,Microsoft,Sony,Nintendo,Sega,D,easy,Consoles
+701,In which year did Just Dance release?,1986,2009,1985,1984,B,hard,Video Games
+702,Name a console made by Sega.,the Sega Genesis (Mega Drive),PlayStation 5,PlayStation 3,PlayStation 4,A,medium,Consoles
+703,What is adware? Software forcing ads,An ad blocker opposite,A secure browser,Software that shows unwanted ads,A malware scanner,C,easy,Security
+704,What does a hygrometer measure? Humidity,Wind,Rainfall,Temperature,Humidity,D,medium,Hardware
+705,Who created Mortal Kombat? Ed Boon and John Tobias,Ed Boon and John Tobias,Dave Perry Earthworm Jim,Akira Nishitani Street Fighter,Yoshiki Okamoto Capcom rival,A,medium,Gaming History
+706,What is Rust primarily used for?,"data science, AI, and general scripting",memory-safe systems programming,web interactivity and front-end development,enterprise and Android applications,B,medium,Programming
+707,Who founded Dell?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,Michael Dell,"Steve Jobs, Steve Wozniak, and Ronald Wayne",C,medium,Tech Companies
+708,Who developed or published Spider-Man (PS4)?,Mojang,Nintendo,Insomniac Games,Alexey Pajitnov created it,C,medium,Video Games
+709,What does RFID stand for? Radio-frequency identification,Radio-frequency identification,Rapid file input device,Radio frequency internet data,Remote file id,A,hard,Acronyms
+710,Which 2D sandbox has bosses and building?,Starbound,Minecraft,Terraria,Dont Starve,C,easy,Games
+711,What is Oracle best known for?,database software,Google Search,Windows,the iPhone,A,hard,Tech Companies
+712,Which DS handheld Wi-Fi social plaza is StreetPass Mii Plaza? StreetPass Mii Plaza,StreetPass Mii Plaza,Flipnote Studio animation,Miitopia,Tomodachi Life,A,hard,Games
+713,What is a browser? Software to view websites,A network cable type,A server program,A search engine only,Software used to view websites,D,easy,Internet & Web
+714,Which Konami rhythm dance series is Dance Dance Revolution? DDR,Guitar Hero strumming,Dance Dance Revolution,Taiko no Tatsujin drums,Beatmania turntables,B,easy,Games
+715,Who made Undertale?,Eric Barone,Edmund McMillen,Toby Fox,Team Cherry,C,easy,Games
+716,Which country is Nokia headquartered in?,the United States,China,South Korea,Finland,D,medium,Tech Companies
+717,Which studio made Fortnite and Unreal? Epic Games,Epic Games,Valve,Respawn,Raven,A,easy,Gaming History
+718,Which Pokemon fighting game is by Bandai Namco? Pokken,Smash Bros.,Pokemon UNITE,Masters,Pokken Tournament,D,medium,Games
+719,Which studio made Untitled Goose Game? House House,Team Meat,Tarsier,Young Horses,House House,D,medium,Games
+720,What does LCD stand for? Liquid crystal display,Liquid capacitive display,Liquid crystal display,Large crystal diode,Light color display,B,medium,Hardware
+721,Who is called the father of the computer? Charles Babbage,Charles Babbage,Alan Turing,John von Neumann,Konrad Zuse,A,medium,Tech History
+722,What does Wi-Fi provide? Wireless network access,Wireless local networking,Satellite TV,Cellular calls,Bluetooth audio only,A,easy,Internet & Web
+723,What is Xiaomi best known for?,the iPhone,Google Search,smartphones,Windows,C,hard,Tech Companies
+724,What is malware? Malicious software,Antivirus,Any harmful software,A hardware fault,A firewall,B,easy,Security
+725,Who founded YouTube?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne","Steve Chen, Chad Hurley, and Jawed Karim",D,medium,Tech Companies
+726,Who created Linux?,,,,,Linus Torvalds,extreme,Internet & Web
+727,Which game was released by CD Projekt Red in 2015?,Super Mario Bros.,The Legend of Zelda,The Witcher 3: Wild Hunt,Tetris,C,hard,Video Games
+728,Which VR shooter freezes time when you stop moving? SUPERHOT VR,Half-Life: Alyx,SUPERHOT VR,Beat Saber,Boneworks,B,medium,Games
+729,Which mission tested asteroid deflection in 2022? DART,The DART impact mission,Psyche metal asteroid trip,Hera follow-up European,NEOWISE survey telescope,A,hard,Cars & Space
+730,What is a certificate authority? An issuer of digital certificates,A domain registrar,A password manager brand,A government ID office,An organization issuing TLS certificates,D,hard,Security
+731,Which game was released by Neversoft in 1999?,Tetris,Super Mario Bros.,Tony Hawks Pro Skater,The Legend of Zelda,C,hard,Video Games
+732,Who developed or published Fall Guys?,Mediatonic,Mojang,Alexey Pajitnov created it,Nintendo,A,medium,Video Games
+733,What is Sony best known for?,Google Search,PlayStation and TVs,the iPhone,Windows,B,hard,Tech Companies
+734,Which SNK samurai fighter is Samurai Shodown?,Soulcalibur,Samurai Shodown,Guilty Gear,BlazBlue,B,medium,Games
+735,Who founded Nestle?,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Henri Nestle,Bill Gates and Paul Allen,C,medium,Tech Companies
+736,What is a 3D printer? A device building objects layer by layer,A machine printing solid objects in layers,A scanner,A paper printer,A copier,A,easy,Hardware
+737,In which year did Dark Souls release?,1984,2011,1986,1985,B,hard,Video Games
+738,Who developed or published Fortnite?,Nintendo,Alexey Pajitnov created it,Epic Games,Mojang,C,medium,Video Games
+739,What is Venmo used for? Peer payments in the US,Sending money to friends,Investing stocks,Crypto only,Paying bills abroad,A,medium,Apps & Platforms
+740,Who developed or published Overwatch?,Alexey Pajitnov created it,Nintendo,Mojang,Blizzard,D,medium,Video Games
+741,What is Twitch for? Live game streaming,Making games,Live streaming video games,Storing saves,Buying games,B,easy,Apps & Platforms
+742,Which charity marathon features speedruns? Games Done Quick,Games Done Quick,SGDQ is part of GDQ same org,Extra Life separate charity,St. Jude streams various,A,expert,Gaming History
+743,Which Sega racer introduced sprite-scaling in 1986? OutRun,After Burner 1987,Space Harrier rail shooter 1985,OutRun,Hang-On 1985 motorbike,C,hard,Games
+744,Which language is primarily used for fault-tolerant realtime systems?,JavaScript,Elixir,Java,Python,B,hard,Programming
+745,Who developed or published Dota 2?,Alexey Pajitnov created it,Mojang,Valve,Nintendo,C,medium,Video Games
+746,What is Alexa built into? Amazon Echo speakers,Amazon Echo devices,Samsung TVs only,Google Nest hubs,Apple HomePods,A,easy,Smart Home
+747,Which country is Ericsson headquartered in?,Sweden,China,the United States,South Korea,A,medium,Tech Companies
+748,Which game was released by Ubisoft in 2007?,Tetris,Assassins Creed,The Legend of Zelda,Super Mario Bros.,B,hard,Video Games
+749,What is Java primarily used for?,operating systems and embedded systems,web interactivity and front-end development,"data science, AI, and general scripting",enterprise and Android applications,D,medium,Programming
+750,What is a password hash database leak risk? Cracking reused passwords,Attackers cracking weak or reused passwords,Emails bouncing,Immediate bank loss guaranteed,No risk if hashed strongly with salts generally,A,hard,Security
+751,Who developed or published StarCraft?,Mojang,Alexey Pajitnov created it,Nintendo,Blizzard,D,medium,Video Games
+752,In which year did God of War (2018) release?,1986,2018,1984,1985,B,hard,Video Games
+753,Who founded IBM?,Charles Ranlett Flint merger,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Bill Gates and Paul Allen,A,medium,Tech Companies
+754,Which game was released by Rockstar Games in 2004?,Tetris,Super Mario Bros.,The Legend of Zelda,GTA: San Andreas,D,hard,Video Games
+755,Who developed or published Elden Ring?,Alexey Pajitnov created it,Mojang,FromSoftware,Nintendo,C,medium,Video Games
+756,In which year did Tom Clancys Rainbow Six Siege release?,1985,2015,1986,1984,B,hard,Video Games
+757,What is Linux? An open-source operating system,An open-source operating system,A programming language only,A phone brand,A browser,A,easy,Internet & Web
+758,Which company created Fortnite?,,,,,Epic Games,extreme,Games
+759,Who created Civilization? Sid Meier,Will Wright,Chris Sawyer,Peter Molyneux,Sid Meier,D,medium,Gaming History
+760,What does DPI measure for mice? Dots per inch of movement precision,Screen resolution,Pointer sensitivity in dots per inch,Printer speed,Download rate,B,hard,Hardware
+761,What does CC mean in email? Carbon copy,Central contact,Carbon copy,Current conversation,Copy center,B,medium,Internet & Web
+762,Which Halo enemy alliance is the Covenant?,The Banished,The Flood,The Forerunners,The Covenant,D,medium,Games
+763,What is HP best known for?,Windows,printers and PCs,the iPhone,Google Search,B,hard,Tech Companies
+764,Which country is YouTube headquartered in?,South Korea,the United States,China,Japan,B,medium,Tech Companies
+765,In which year did Spider-Man (PS4) release?,1985,1984,1986,2018,D,hard,Video Games
+766,Which company made the the Wii?,Nintendo,Sega,Sony,Microsoft,A,easy,Consoles
+767,Which country is LinkedIn headquartered in?,China,Japan,South Korea,the United States,D,medium,Tech Companies
+768,Which Arc System Works anime fighter features Sol Badguy?,Guilty Gear,Persona 4 Arena,BlazBlue,Dragon Ball FighterZ,A,medium,Games
+769,Who developed or published Tetris?,Alexey Pajitnov created it,Nintendo,Rockstar Games,Mojang,A,medium,Video Games
+770,Which NBA series is 2K?,NBA Jam,NBA 2K,NBA Street,NBA Live,B,medium,Games
+771,Which company made the Game Boy? Nintendo,Nintendo,Sega Game Gear rival,NEC TurboExpress,Atari Lynx,A,easy,Tech History
+772,Which game was released by Blizzard in 2016?,Overwatch,The Legend of Zelda,Tetris,Super Mario Bros.,A,hard,Video Games
+773,Which game was released by Konami in 1995?,Tetris,Pro Evolution Soccer,The Legend of Zelda,Super Mario Bros.,B,hard,Video Games
+774,Which company made the the Sega Genesis (Mega Drive)?,Microsoft,Sega,Sony,Nintendo,B,easy,Consoles
+775,What does QA stand for? Quality assurance,Query access,Quick analysis,Quality assurance,Quantum application,C,medium,Acronyms
+776,Which country is Spotify headquartered in?,the United States,China,South Korea,Sweden,D,medium,Tech Companies
+777,Which company created Minecraft originally?,,,,,Mojang,extreme,Games
+778,Which game was released by Digital Illusions CE in 2002?,Battlefield 1942,The Legend of Zelda,Tetris,Super Mario Bros.,A,hard,Video Games
+779,What is a smart thermostat? A WiFi learning climate controller,A learning WiFi thermostat like Nest,A manual dial thermostat,A humidifier,A ceiling fan controller,A,easy,Smart Home
+780,Who developed or published The Sims?,Alexey Pajitnov created it,Maxis,Mojang,Nintendo,B,medium,Video Games
+781,What does UI stand for? User interface,User interface,Unit integration,User internet,Universal input,A,easy,Acronyms
+782,What is the ISS? The International Space Station,The International Space Station orbiting Earth,A Moon base,A Mars lander,A Chinese station named Tiangong,A,easy,Cars & Space
+783,Who founded WhatsApp?,Brian Acton and Jan Koum,Larry Page and Sergey Brin,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",A,medium,Tech Companies
+784,Which esport team won the first Dota 2 TI? Natus Vincere NaVi,Alliance won TI3,NaVi won TI1,Evil Geniuses later TI5,Invictus Gaming won TI2,B,expert,Gaming History
+785,Which Rockstar western is Red Dead Redemption?,GTA,Max Payne,Red Dead Redemption,Bully,C,easy,Games
+786,Who founded Oracle?,Larry Page and Sergey Brin,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Ellison and Bob Miner and Ed Oates,D,medium,Tech Companies
+787,Which country is Xiaomi headquartered in?,the United States,South Korea,China,Japan,C,medium,Tech Companies
+788,Which VR headset did Oculus kickstart with 2012 crowdfunding? The Oculus Rift,Samsung Gear VR mobile 2015,The Oculus Rift,PlayStation VR 2016,HTC Vive partnered with Valve 2016,B,medium,Tech History
+789,Which language is primarily used for game scripting?,Python,Java,Lua,JavaScript,C,hard,Programming
+790,Which Dontnod vampire RPG is Vampyr?,Life is Strange,Tell Me Why,Vampyr,Twin Mirror,C,hard,Games
+791,Which Nightdive studio remasters System Shock?,Bluepoint,Aspyr,Virtuos,Nightdive Studios,D,expert,Games
+792,What is Autopilot in Teslas? Driver assistance suite,A cruise control brand generic,A driver assistance feature suite,A parking valet service,A fully self-driving guarantee,B,medium,Cars & Space
+793,Which Playdead pair is Inside? Limbo and Inside,Limbo and Inside,Gris pair,Ori pair,Little Nightmares pair,A,medium,Games
+794,Which country is Zoom headquartered in?,Japan,South Korea,China,the United States,D,medium,Tech Companies
+795,What is duolingo streak feature? Daily practice counter,A leaderboard only,A friend chat,A currency,A daily practice streak counter,D,medium,Apps & Platforms
+796,Who founded Tesla?,"Steve Jobs, Steve Wozniak, and Ronald Wayne","Martin Eberhard and Marc Tarpenning, led by Elon Musk",Bill Gates and Paul Allen,Larry Page and Sergey Brin,B,medium,Tech Companies
+797,Which 1984 Apple machine introduced the mouse GUI to the mass market? The Macintosh,Apple III,Apple II,The Macintosh,Lisa,C,medium,Tech History
+798,Which game was released by Psyonix in 2015?,The Legend of Zelda,Rocket League,Super Mario Bros.,Tetris,B,hard,Video Games
+799,Which Atari 1991 light gun shooter filmed digitized actors? Area 51,Mad Dog McCree full motion video western,Lethal Enforcers sprite drawn,Area 51,Crime Patrol FMV similar,C,expert,Games
+800,In which year did The Legend of Zelda release?,2011,1986,1985,1984,B,hard,Video Games
+801,Which store challenged Steam with free games? The Epic Games Store,Uplay Ubisoft Connect,GOG classics DRM-free,The Epic Games Store,Origin EA,C,easy,Gaming History
+802,What does GPS stand for? Global positioning system,General purpose sensor,Global path service,Global positioning system,Ground positioning station,C,easy,Acronyms
+803,Who created Tetris?,,,,,Alexey Pajitnov,extreme,Gaming History
+804,What is Nintendo best known for?,Google Search,Windows,the iPhone,Switch and Mario games,D,hard,Tech Companies
+805,What is a digital wallet? An app holding payment cards,A physical wallet,A crypto coin,An app storing payment methods,A bank branch service,C,easy,Apps & Platforms
+806,Which Koei musou crowd series is Dynasty Warriors?,Dynasty Warriors,Samurai Warriors,Hyrule Warriors,Fire Emblem Warriors,A,easy,Games
+807,What is a search engine? A tool for finding web pages,A program that finds web pages,A web host,A password manager,A social network,A,easy,Internet & Web
+808,Which Capcom remake is RE4? Resident Evil 4 Remake 2023,Resident Evil 4 Remake,RE3 Remake 2020,RE2 Remake 2019,Code Veronica none yet,A,medium,Games
+809,Which open-source rhythm game features Boyfriend? Friday Night Funkin,Friday Night Funkin,osu!,Muse Dash,Beat Saber,A,medium,Games
+810,What is Square known for? Seller payments hardware and software,Games,Social apps,Card readers for small sellers,Cloud storage,C,medium,Apps & Platforms
+811,Who founded Toyota?,Kiichiro Toyoda,Larry Page and Sergey Brin,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",A,medium,Tech Companies
+812,What is Shopify best known for?,the iPhone,e-commerce platform,Google Search,Windows,B,hard,Tech Companies
+813,Which historical trade builder is Anno?,Civilization,Total War,Anno,Tropico,C,hard,Games
+814,What is HomeKit? Apples smart home framework,The Apple smart home platform,The Google home platform,The Amazon platform,The Samsung SmartThings platform,A,medium,Smart Home
+815,What is a captcha for? Verifying a human user,speeding up sites,Telling humans from bots,Encrypting passwords,Storing cookies,B,easy,Internet & Web
+816,Which VR melee sandbox is by Warpfrog? Blade and Sorcery,Blade and Sorcery,Until You Fall,Boneworks,Swordsman VR,A,hard,Games
+817,Which game was released by id Software in 1993?,The Legend of Zelda,Tetris,Doom,Super Mario Bros.,C,hard,Video Games
+818,Which indie farming sim became huge?,Graveyard Keeper,Stardew Valley,My Time at Portia,Harvest Moon,B,easy,Games
+819,Who created Elite with David Braben? Ian Bell co-created,Geoff Crammond,Chris Sawyer,Ian Bell with David Braben,Jon Ritman,C,expert,Gaming History
+820,What is Elixir primarily used for?,"data science, AI, and general scripting",web interactivity and front-end development,enterprise and Android applications,fault-tolerant realtime systems,D,medium,Programming
+821,What is a CO detector for? Detecting carbon monoxide,Detecting radon,Detecting gas leaks propane,Detecting smoke only,Detecting carbon monoxide gas,D,medium,Smart Home
+822,What is a domain name? A websites registered address name,The registered name of a website,An IP number,A hosting plan,A browser name,A,easy,Internet & Web
+823,What is Zoom best known for?,Google Search,video conferencing,the iPhone,Windows,B,hard,Tech Companies
+824,What is Instagram best known for?,photo sharing,Windows,the iPhone,Google Search,A,hard,Tech Companies
+825,Who cracked Enigma and theorized computing machines? Alan Turing,Grace Hopper,Claude Shannon,Tim Berners-Lee,Alan Turing,D,easy,Tech History
+826,Which Chinese team won TI2? Invictus Gaming,OG back-to-back TI8-9,Team Spirit TI10-11,Invictus Gaming,Team Liquid TI7,C,hard,Gaming History
+827,What does Bluetooth connect? Nearby devices wirelessly,Short-range nearby devices,Satellites,Long-range networks,Power lines,A,easy,Internet & Web
+828,In which year did Fortnite release?,2017,1986,1985,1984,A,hard,Video Games
+829,Which game was released by Konami in 2001?,Super Mario Bros.,Tetris,Silent Hill 2,The Legend of Zelda,C,hard,Video Games
+830,What is Jumia known for? E-commerce in Africa,A US retailer,A European bank,An African e-commerce platform,An Asian streamer,C,hard,Apps & Platforms
+831,Who founded Google?,Larry Page and Sergey Brin,Bill Gates and Paul Allen,Mark Zuckerberg,"Steve Jobs, Steve Wozniak, and Ronald Wayne",A,medium,Tech Companies
+832,In which year did Bloodborne release?,1985,1986,2015,1984,C,hard,Video Games
+833,Which 1989 handheld defined portable gaming? The Game Boy,The Game Boy,The Game Gear color but heavy,The Lynx color but bulky,The Watara Supervision,A,medium,Tech History
+834,Which brand leads robot vacuums? iRobot Roomba popularized it,Roomba by iRobot popularized it,Roborock newer rival,Dyson entrant,Neato earlier rival,A,medium,Smart Home
+835,In which year did Sekiro: Shadows Die Twice release?,2019,1984,1986,1985,A,hard,Video Games
+836,Which underwater survival game is Subnautica?,Subnautica,Raft,Stranded Deep,The Forest,A,easy,Games
+837,Which company made the PlayStation 3?,Sony,Nintendo,Microsoft,Sega,A,easy,Consoles
+838,Which roguelike features Isaac and the basement?,The Binding of Isaac,Enter the Gungeon,Hades,Cult of the Lamb,A,medium,Games
+839,Which Wii U launch theme-park minigame collection? Nintendo Land,Nintendo Land,Wii Party U parties,Nintendogs pets DS,Tomodachi Life Mii life 3DS,A,hard,Games
+840,Which country is Intel headquartered in?,Japan,South Korea,the United States,China,C,medium,Tech Companies
+841,What is Python primarily used for?,operating systems and embedded systems,enterprise and Android applications,"data science, AI, and general scripting",web interactivity and front-end development,C,medium,Programming
+842,In which year did StarCraft II release?,1985,2010,1984,1986,B,hard,Video Games
+843,Which Inafune Kickstarter game disappointed fans? Mighty No. 9,Mega Man 11,Bloodstained,Mighty No. 9,Gunvolt,C,medium,Games
+844,Who founded Yandex?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Arkady Volozh and others,Larry Page and Sergey Brin,Bill Gates and Paul Allen,B,medium,Tech Companies
+845,What is MyFitnessPal for? Diet and calorie tracking,Tracking food and calories,Meal delivery,Gym classes,Tracking runs only,A,medium,Apps & Platforms
+846,Which game was released by Nintendo in 1985?,Minecraft,Tetris,The Legend of Zelda,Super Mario Bros.,D,hard,Video Games
+847,What is SmartThings? Samsungs smart home platform,The Xiaomi platform,The Amazon platform,The Apple platform,The Samsung smart home hub platform,D,medium,Smart Home
+848,What is ransomware? Malware demanding payment,A password leak,A DDoS flood only,Fishing email scam,Malware that encrypts files for ransom,D,easy,Security
+849,In which year did The Last of Us release?,1984,1986,1985,2013,D,hard,Video Games
+850,What is Robinhood known for? Commission-free stock trading,Crypto mining,Free stock trading app,Bank savings only,Retirement plans only,B,medium,Apps & Platforms
+851,What is Dart primarily used for?,web interactivity and front-end development,Flutter mobile apps,"data science, AI, and general scripting",enterprise and Android applications,B,medium,Programming
+852,What is Audible for? Audiobooks,Listening to audiobooks,Reading ebooks,Music albums,Podcast hosting,A,easy,Apps & Platforms
+853,What is a keylogger? Software recording keystrokes,A macro tool always safe,Malware recording what you type,A typing tutor,A keyboard tester,B,medium,Security
+854,Which country is Huawei headquartered in?,South Korea,China,the United States,Japan,B,medium,Tech Companies
+855,What does LAN stand for? Local area network,Light area network,Large access node,Local area network,Linked application net,C,medium,Acronyms
+856,Who founded Samsung?,Larry Page and Sergey Brin,Bill Gates and Paul Allen,Lee Byung-chul,"Steve Jobs, Steve Wozniak, and Ronald Wayne",C,medium,Tech Companies
+857,Which company makes Chrome? Google,Google,Apple,Microsoft,Mozilla,A,easy,Internet & Web
+858,What does .com denote? A commercial domain,An education domain,A commercial domain,A government domain,A nonprofit domain,B,easy,Internet & Web
+859,Which studio made Little Nightmares? Tarsier Studios,Tarsier Studios,Amanita Design,Playdead,Team Meat,A,hard,Games
+860,Which Pokemon MOBA is 5v5?,Masters,Pokken,Pokemon Go,Pokemon UNITE,D,medium,Games
+861,What is Alibaba best known for?,the iPhone,Google Search,Windows,e-commerce,D,hard,Tech Companies
+862,Which country is Alibaba headquartered in?,Japan,China,the United States,South Korea,B,medium,Tech Companies
+863,What does SDK stand for? Software development kit,Secure digital kit,System design kit,Standard data keyboard,Software development kit,D,medium,Acronyms
+864,Who created Ico and Shadow of the Colossus? Fumito Ueda,Goichi Suda,Fumito Ueda,Yoko Taro,Hideo Kojima,B,hard,Gaming History
+865,Which platform is known for speedruns? Speedrun.com and Games Done Quick events,Twitch only venue,YouTube only,Discord servers,Speedrun.com with GDQ events,D,medium,Gaming History
+866,What is Tencent best known for?,the iPhone,Google Search,WeChat and gaming,Windows,C,hard,Tech Companies
+867,Who developed or published Pokemon Go?,Mojang,Alexey Pajitnov created it,Nintendo,Niantic,D,medium,Video Games
+868,Who founded Spotify?,Bill Gates and Paul Allen,Daniel Ek and Martin Lorentzon,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",B,medium,Tech Companies
+869,What is a Raspberry Pi? A low-cost single-board computer,A gaming console,A tablet,A small affordable hobby computer,A router brand,C,medium,Hardware
+870,Which language is primarily used for statistics and analytics?,Python,Java,JavaScript,R,D,hard,Programming
+871,In which year did Elden Ring release?,2022,1985,1984,1986,A,hard,Video Games
+872,What is a meme? A viral idea or joke spreading online,An online store,A social media app,A streaming service,A viral internet idea or image,D,easy,Internet & Web
+873,Who developed or published Donkey Kong?,Rockstar Games,Alexey Pajitnov created it,Mojang,Nintendo,D,medium,Video Games
+874,Which language is primarily used for Ethereum smart contracts?,Java,Solidity,Python,JavaScript,B,hard,Programming
+875,In which year did Pokemon Go release?,1985,1984,1986,2016,D,hard,Video Games
+876,Which game was released by Sega in 1991?,Tetris,Super Mario Bros.,The Legend of Zelda,Sonic the Hedgehog,D,hard,Video Games
+877,Which Bloober remake is Silent Hill 2? The Silent Hill 2 Remake 2024,Resident Evil remakes Capcom,Alan Wake Remastered,Dead Space Motive,Silent Hill 2 Remake,D,medium,Games
+878,Which Capcom blue bomber series is Mega Man? Mega Man,Cuphead,Mega Man,Mighty No. 9,Gunvolt,B,easy,Games
+879,Which game was released by Valve in 2013?,The Legend of Zelda,Dota 2,Tetris,Super Mario Bros.,B,hard,Video Games
+880,What is Opera best known for?,Google Search,Windows,the iPhone,Opera browser,D,hard,Tech Companies
+881,Which original DS built-in chat was PictoChat? PictoChat,Swapnote 3DS messaging,PictoChat,Chat later apps,Flipnote 3DS animation,B,hard,Games
+882,What is Netflix best known for?,Windows,Google Search,streaming service,the iPhone,C,hard,Tech Companies
+883,Which language is primarily used for server-side web development?,JavaScript,Python,PHP,Java,C,hard,Programming
+884,Which company makes Firefox? Mozilla,Mozilla,Brave Software,Google,Opera,A,medium,Internet & Web
+885,What is Instagram primarily for? Photo and video sharing,Desktop gaming,Microblogging text,Professional jobs,Photo and video sharing,D,easy,Apps & Platforms
+886,Who created Metal Gear? Hideo Kojima,Hideki Kamiya,Yoko Taro,Hideo Kojima,Shinji Mikami,C,easy,Gaming History
+887,Who founded Zoom?,Bill Gates and Paul Allen,Eric Yuan,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,B,medium,Tech Companies
+888,Which Moon Studios duo is Ori? Blind Forest and Will of the Wisps,Hollow Knight pair,Ori and the Blind Forest and Will of the Wisps,Gris and Neva,Limbo and Inside,B,medium,Games
+889,Which is an operating system? Windows,Windows,Excel,Photoshop,Chrome the browser,A,easy,Hardware
+890,What is C# primarily used for?,web interactivity and front-end development,"data science, AI, and general scripting",enterprise and Android applications,Windows apps and Unity games,D,medium,Programming
+891,Who founded Shopify?,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Tobias Lutke and others,Larry Page and Sergey Brin,C,medium,Tech Companies
+892,Which studio created Crash Bandicoot and Spyro early? Naughty Dog and Insomniac respectively,Insomniac made Crash; Naughty Dog made Spyro,Vicarious Visions remade both,Naughty Dog made Crash; Insomniac made Spyro,Rare made both,C,expert,Gaming History
+893,Which country is Tencent headquartered in?,China,South Korea,the United States,Japan,A,medium,Tech Companies
+894,In which year did Half-Life release?,1985,1986,1984,1998,D,hard,Video Games
+895,What is Siemens best known for?,the iPhone,Windows,industrial engineering,Google Search,C,hard,Tech Companies
+896,Who developed or published Doom?,id Software,Alexey Pajitnov created it,Nintendo,Mojang,A,medium,Video Games
+897,What company makes Galaxy phones?,,,,,Samsung,extreme,Companies
+898,Which country is Adobe headquartered in?,South Korea,the United States,China,Japan,B,medium,Tech Companies
+899,What does RAM stand for?,Read all memory,Rapid access module,Random access memory,Runtime allocated memory,C,easy,Hardware
+900,Which Nintendo crossover platform fighter?,Pokken Tournament,ARMS,Super Smash Bros.,Rivals of Aether,C,easy,Games
+901,Which Resident Evil got PSVR2 support? Village,RE4 Remake,RE2 Remake none,Resident Evil Village,RE7 on PSVR1,C,medium,Games
+902,Which 2017 hybrid console works handheld and docked? The Nintendo Switch,The Steam Deck PC 2022,The Wii U precursor 2012,The PS Vita handheld,The Nintendo Switch,D,easy,Tech History
+903,Which Apple 2001 OS replaced classic Mac OS? Mac OS X,macOS Catalina later,Mac OS 9,System 7,Mac OS X,D,medium,Tech History
+904,What is Stripe used for? Online payment processing for businesses,Personal budgeting,Business online payment processing,Crypto wallets,Invoicing paper only,B,medium,Apps & Platforms
+905,Which gaming convention was canceled permanently after 2020 shift? E3,PAX continued,Tokyo Game Show continued,E3,Gamescom continued,C,medium,Gaming History
+906,Who developed or published Half-Life?,Alexey Pajitnov created it,Valve,Nintendo,Mojang,B,medium,Video Games
+907,What year did Facebook launch at colleges? 2004,2002,2006,2008,2004,D,medium,Internet & Web
+908,What is a password manager? Software storing credentials securely,A firewall app,A browser only,An antivirus suite,A vault for login credentials,D,easy,Internet & Web
+909,Who made Stardew Valley solo?,Eric Barone (ConcernedApe),Team Cherry,Toby Fox,Edmund McMillen,A,medium,Games
+910,What is Spotify best known for?,the iPhone,music streaming,Google Search,Windows,B,hard,Tech Companies
+911,In which year did Civilization release?,1986,1984,1991,1985,C,hard,Video Games
+912,Which is an operating system? Android,Bixby,Galaxy Store,Play Store,Android,D,easy,Hardware
+913,Who founded LinkedIn?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Reid Hoffman,D,medium,Tech Companies
+914,Which country is Opera headquartered in?,Norway,China,South Korea,the United States,A,medium,Tech Companies
+915,What is Tesla famous for in cars? Electric vehicles and software,Leading electric vehicles with software updates,Motorcycles,Hybrid sedans only,Diesel trucks,A,easy,Cars & Space
+916,What is Wikipedia? A free online encyclopedia,A search engine,A free collaborative encyclopedia,A video site,A social network,B,easy,Internet & Web
+917,Which game was released by Square in 1997?,The Legend of Zelda,Super Mario Bros.,Final Fantasy VII,Tetris,C,hard,Video Games
+918,What year did Google Search launch roughly? 1998,2001,1998,1994,1990,B,medium,Internet & Web
+919,Who developed or published Street Fighter II?,Nintendo,Alexey Pajitnov created it,Mojang,Capcom,D,medium,Video Games
+920,What is WeChat in China? A super app for messaging and payments,A search engine,A video site like YouTube,A shopping site like Amazon only,A super app combining chat and payments,D,medium,Apps & Platforms
+921,Which company made the the GameCube?,Nintendo,Sega,Microsoft,Sony,A,easy,Consoles
+922,Which Mario Kart game is on Switch?,Mario Kart Tour mobile,Mario Kart 7 handheld,Mario Kart 8 Deluxe,Mario Kart Wii,C,easy,Games
+923,Which game was released by Mediatonic in 2020?,Super Mario Bros.,Tetris,Fall Guys,The Legend of Zelda,C,hard,Video Games
+924,In which year did Far Cry 3 release?,1984,1986,1985,2012,D,hard,Video Games
+925,Which FromSoftware gothic city is Yharnam? Bloodborne,Elden Ring Lands Between,Bloodborne Yharnam,Demons Souls Boletaria,Dark Souls Lordran,B,medium,Games
+926,Which game was released by Midway in 1992?,Mortal Kombat,Tetris,The Legend of Zelda,Super Mario Bros.,A,hard,Video Games
+927,Who founded Apple?,Bill Gates and Paul Allen,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Mark Zuckerberg,B,medium,Tech Companies
+928,Which Rockstar school game is Bully?,LA Noire,RDR,GTA,Bully,D,medium,Games
+929,Which Arkane vampire co-op is Redfall?,Prey,Deathloop,Dishonored,Redfall,D,medium,Games
+930,Which game was released by Nintendo in 1986?,The Legend of Zelda,Minecraft,Tetris,Super Mario Bros.,A,hard,Video Games
+931,Which company makes PlayStation?,,,,,Sony,extreme,Consoles
+932,Which company popularized smart speakers with Echo? Amazon,Google with Home later,Sonos speakers premium,Amazon,Apple HomePod later,C,easy,Tech History
+933,Which browser is built into macOS and iOS? Safari,Firefox,Safari,Edge,Chrome,B,easy,Internet & Web
+934,Which company led drone cameras for consumers? DJI,GoPro action cams,DJI,Skydio follower,Parrot rival,B,medium,Tech History
+935,What is an upload? Sending data from your device,Receiving data,Backing up to disk only,Sending data from your device outward,Compressing data,C,easy,Internet & Web
+936,Which civilian war survival is This War of Mine?,This War of Mine,Spec Ops the Line,Valiant Hearts,Frostpunk,A,medium,Games
+937,Who developed or published Apex Legends?,Respawn Entertainment,Alexey Pajitnov created it,Mojang,Nintendo,A,medium,Video Games
+938,Which country is Dell headquartered in?,the United States,China,South Korea,Japan,A,medium,Tech Companies
+939,What is Tiangong? Chinas space station,The ISS module name,The Chinese space station,A Chinese lunar rover,A Japanese cargo craft,B,medium,Cars & Space
+940,Which 2001 Apple device changed music players? The iPod,The Creative Nomad earlier,The Rio Pioneer MP3 player 1998 actually first MP3 walkman,The Zune later 2006,The iPod,D,medium,Tech History
+941,What is a blog? A regularly updated website of posts,A website with regular written posts,A video channel only,A private forum,An audio show,A,easy,Internet & Web
+942,Which sci-fi horror is Dead Space hero Isaac Clarke? Dead Space,Dead Space with Isaac Clarke,System Shock Hacker,Bioshock Booker,Prey Morgan Yu,A,medium,Games
+943,Which circle-clicking rhythm game is osu!? osu!,Beat Saber,Guitar Hero,Friday Night Funkin,osu!,D,medium,Games
+944,Who developed or published Tony Hawks Pro Skater?,Alexey Pajitnov created it,Mojang,Nintendo,Neversoft,D,medium,Video Games
+945,Who developed or published Counter-Strike?,Nintendo,Alexey Pajitnov created it,Valve,Mojang,C,medium,Video Games
+946,Who developed or published God of War (2018)?,Mojang,Alexey Pajitnov created it,Santa Monica Studio,Nintendo,C,medium,Video Games
+947,Which Wii U board-game style party game? Wii Party U,Wii Play,Wii Party original,Wii Party U,Nintendo Land theme park for Wii U,C,hard,Games
+948,Which Japanese mission returned Ryugu samples? Hayabusa2,Hayabusa1 Itokawa earlier,Hayabusa2,OSIRIS-REx American,Artemis crewed program,B,hard,Cars & Space
+949,Which Boeing capsule is its crew vehicle? Starliner,Crew Dragon,Dream Chaser,Orion,The Starliner capsule,D,medium,Cars & Space
+950,Which engine made Frostbite games like Battlefield? EAs Frostbite engine,The Frostbite engine at EA,Source at Valve,Anvil at Ubisoft,CryEngine at Crytek,A,medium,Gaming History
+951,Which language is primarily used for legacy Apple development?,JavaScript,Python,Objective-C,Java,C,hard,Programming
+952,Which game was released by Ubisoft in 2009?,Just Dance,Super Mario Bros.,Tetris,The Legend of Zelda,A,hard,Video Games
+953,What is HomePod? Apples smart speaker,The Amazon speaker,The Google speaker,The Apple smart speaker,The Sonos speaker,C,medium,Smart Home
+954,Which game was released by Guerrilla Games in 2017?,Tetris,Super Mario Bros.,Horizon Zero Dawn,The Legend of Zelda,C,hard,Video Games
+955,What is a drone? An unmanned aircraft,A server rack,A remote-controlled flying craft,A submarine robot,A battery pack,B,easy,Hardware
+956,Which company made the Xbox 360?,Nintendo,Sony,Sega,Microsoft,D,easy,Consoles
+957,In which year did Super Mario Bros. release?,1985,2011,1984,1986,A,hard,Video Games
+958,What was the first email sent over ARPANET about? A trivial test message QWERTYUIOP,A news bulletin,A business memo,A plain keyboard test string,A love letter,C,expert,Internet & Web
+959,Who founded Netflix?,Bill Gates and Paul Allen,Larry Page and Sergey Brin,Reed Hastings and Marc Randolph,"Steve Jobs, Steve Wozniak, and Ronald Wayne",C,medium,Tech Companies
+960,What is Alipay? Alibabas mobile payment platform,A Chinese search engine,A Chinese mobile payment platform,A Chinese social network,A Chinese airline app,B,medium,Apps & Platforms
+961,Which country is TikTok (ByteDance) headquartered in?,Japan,the United States,China,South Korea,C,medium,Tech Companies
+962,Which country is Nestle headquartered in?,South Korea,the United States,China,Switzerland,D,medium,Tech Companies
+963,In which year did Street Fighter II release?,1991,1985,1984,1986,A,hard,Video Games
+964,Which country is Toyota headquartered in?,South Korea,the United States,Japan,China,C,medium,Tech Companies
+965,What is YouTube best known for?,Google Search,video sharing,Windows,the iPhone,B,hard,Tech Companies
+966,What is Swift primarily used for?,web interactivity and front-end development,enterprise and Android applications,iOS and macOS apps,"data science, AI, and general scripting",C,medium,Programming
+967,Which Namco 1981 sequel to Galaxian? Galaga,Pac-Land platformer,Dig Dug digging,Galaxian predecessor,Galaga,D,medium,Games
+968,Who created Zelda with Miyamoto? Shigeru Miyamoto led it,Hideo Kojima,Yuji Horii Dragon Quest,Shigeru Miyamoto,Eiji Aonuma producer later,C,medium,Gaming History
+969,What does NoSQL mean? Non-relational database approach,No sql language ever,New sequencing query layer,Network SQL,A non-relational database family,D,medium,Acronyms
+970,What is Moore observed trend? Transistor counts roughly doubling every two years,Transistor counts doubling roughly every two years,CPUs cooling better every year,Storage halving in price monthly,Internet speeds doubling yearly,A,hard,Hardware
+971,What is Skype best known for?,Google Search,video calls,the iPhone,Windows,B,hard,Tech Companies
+972,Who founded Kaspersky?,"Steve Jobs, Steve Wozniak, and Ronald Wayne",Larry Page and Sergey Brin,Bill Gates and Paul Allen,Eugene Kaspersky,D,medium,Tech Companies
+973,In which year did Grand Theft Auto V release?,1984,1986,2013,1985,C,hard,Video Games
+974,What is Cash App known for? Peer payments and stocks,Shopping only,Bank loans,Paying friends and small investing,Crypto only,C,medium,Apps & Platforms
+975,What is TripIt for? Organizing travel plans,Booking rides,Hotel reviews only,Consolidating travel itineraries,Translating phrases,C,hard,Apps & Platforms
+976,What is Face ID? Apples facial unlock system,A camera filter,Apples face unlock feature,Samsung face unlock,A payment card,B,medium,Apps & Platforms
+977,Which platform is Twitch owned by?,,,,,Amazon,extreme,Gaming History
+978,What is thermal paste for? Improving heat transfer between chip and cooler,Insulating wires,Conducting heat between chip and cooler,Gluing the fan,Cleaning contacts,B,medium,Hardware
+979,Who developed or published Diablo II?,Alexey Pajitnov created it,Nintendo,Mojang,Blizzard,D,medium,Video Games
+980,Which flagship Valve VR story game launched 2020? Half-Life: Alyx,Laidlaw essays,Half-Life: Alyx,Portal Stories,Alyx manga,B,easy,Games
+981,Who developed or published Assassins Creed?,Alexey Pajitnov created it,Ubisoft,Nintendo,Mojang,B,medium,Video Games
+982,Which company makes the Steam Deck? Valve,GPD handhelds,Razer Edge,Asus ROG Ally rival,Valve,D,easy,Tech History
+983,What is a DDoS attack? Flooding a service with traffic,Encrypting disks,Stealing passwords,Overwhelming servers with traffic,Phishing executives,C,medium,Security
+984,Which satellite network provides Starlink internet? SpaceX Starlink,The SpaceX Starlink constellation,Iridium voice pioneer,GPS navigation constellation,OneWeb rival constellation,A,easy,Cars & Space
+985,Which company made the PlayStation 5?,Nintendo,Microsoft,Sega,Sony,D,easy,Consoles
+986,Which country is Skype headquartered in?,China,South Korea,Estonia and Denmark founders,the United States,C,medium,Tech Companies
+987,Which Team Ninja soulslike is Nioh?,Nioh,Rise of Ronin,Sekiro,Stranger of Paradise,A,medium,Games
+988,In which year did Pac-Man release?,1980,1985,1984,1986,A,hard,Video Games
+989,What does CSV stand for? Comma-separated values,Comma-separated values,Common system vector,Central saved variable,Compressed server vault,A,medium,Acronyms
+990,In which year did Mortal Kombat release?,1985,1984,1986,1992,D,hard,Video Games
+991,Which bean-based party royale launched in 2020?,Gang Beasts,Human Fall Flat,Fall Guys,Stumble Guys,C,easy,Games
+992,Which company made the the Atari 2600?,Nintendo,Atari,Sony,Microsoft,B,easy,Consoles
+993,Which Arkane whalepunk stealth is Dishonored?,Redfall,Deathloop,Dishonored,Prey,C,easy,Games
+994,What does HTTPS add to HTTP?,Encryption and security,Faster speed,More colors,Email support,A,easy,Internet & Web
+995,What is TypeScript primarily used for?,"data science, AI, and general scripting",typed JavaScript at scale,web interactivity and front-end development,enterprise and Android applications,B,medium,Programming
+996,Which game was released by MicroProse then Firaxis in 1991?,The Legend of Zelda,Civilization,Tetris,Super Mario Bros.,B,hard,Video Games
+997,Which country is Nintendo headquartered in?,South Korea,China,Japan,the United States,C,medium,Tech Companies
+998,Which Google OS runs Chromebooks? ChromeOS,Chromium only builds,Android TV,Fuchsia experimental,ChromeOS,D,medium,Tech History
+999,Which country is Apple headquartered in?,China,the United States,South Korea,Japan,B,medium,Tech Companies
+1000,What is an operating system? Software managing hardware and apps,A power supply,The core software running a device,A web browser,A word processor,B,easy,Hardware
