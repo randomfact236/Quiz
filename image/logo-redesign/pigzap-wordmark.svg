@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="356 56 776 296" role="img" aria-label="PigZap wordmark">
+  <text x="372" y="228" font-family="'Baloo 2','Fredoka',Nunito,'Arial Rounded MT Bold','Segoe UI',system-ui,sans-serif" font-weight="800" font-size="196" letter-spacing="-2">
+    <tspan fill="#E5397F">Pig</tspan><tspan fill="#1E1B4B">Zap</tspan>
+  </text>
+  <text x="1024" y="150" font-family="'Baloo 2','Fredoka',Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="56" fill="#64748B">.com</text>
+  <path d="M378 268 Q540 296 706 260" stroke="#22C55E" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <text x="380" y="330" font-family="Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="36" letter-spacing="9" fill="#64748B">FUN AND GAMES</text>
+</svg>

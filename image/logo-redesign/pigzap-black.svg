@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 384" role="img" aria-label="PigZap — one-color dark version (transparent background)">
+  <g transform="translate(20,32) scale(0.625)" fill="#1E1B4B">
+    <path d="M140 168 L84 74 Q78 58 96 64 L218 118 Z" stroke="#1E1B4B" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M372 168 L428 74 Q434 58 416 64 L294 118 Z" stroke="#1E1B4B" stroke-width="28" stroke-linejoin="round"/>
+    <path fill-rule="evenodd" d="M98 282 a158 140 0 1 0 316 0 a158 140 0 1 0 -316 0 Z
+      M179 250 a17 17 0 1 0 34 0 a17 17 0 1 0 -34 0 Z
+      M299 250 a17 17 0 1 0 34 0 a17 17 0 1 0 -34 0 Z"/>
+    <path fill-rule="evenodd" d="M190 320 a66 48 0 1 0 132 0 a66 48 0 1 0 -132 0 Z
+      M224 320 a10 17 0 1 0 20 0 a10 17 0 1 0 -20 0 Z
+      M268 320 a10 17 0 1 0 20 0 a10 17 0 1 0 -20 0 Z"/>
+    <path d="M204 390 Q256 422 308 390" stroke="#1E1B4B" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M466 84 L410 176 L444 176 L424 250 L502 146 L466 146 Z"/>
+  </g>
+
+  <text x="372" y="228" font-family="'Baloo 2','Fredoka',Nunito,'Arial Rounded MT Bold','Segoe UI',system-ui,sans-serif" font-weight="800" font-size="196" letter-spacing="-2" fill="#1E1B4B">PigZap</text>
+  <text x="1024" y="150" font-family="'Baloo 2','Fredoka',Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="56" fill="#1E1B4B" opacity="0.7">.com</text>
+  <path d="M378 268 Q540 296 706 260" stroke="#1E1B4B" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <text x="380" y="330" font-family="Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="36" letter-spacing="9" fill="#1E1B4B" opacity="0.7">FUN AND GAMES</text>
+</svg>
