@@ -45,7 +45,7 @@ export interface PublicSettings {
 }
 
 /** Mirrors the backend's config/settings.ts defaults (single-source parity). */
-export const FALLBACK_PUBLIC_SETTINGS: PublicSettings = {
+const FALLBACK_PUBLIC_SETTINGS: PublicSettings = {
   quiz: {
     defaults: {
       levelTimers: { easy: 30, medium: 45, hard: 60, expert: 90, extreme: 120 },

@@ -50,7 +50,7 @@ export function saveRiddleSession(session: RiddleSession): void {
  * Load the saved riddle session from localStorage
  * Returns null if no session exists or session has expired
  */
-export function loadRiddleSession(): RiddleSession | null {
+function loadRiddleSession(): RiddleSession | null {
   const session = getItem<RiddleSession | null>(STORAGE_KEYS.RIDDLE_SESSION, null);
 
   if (!session) {
@@ -100,7 +100,7 @@ export function getRiddleSessionById(id: string): RiddleSession | null {
 /**
  * Check if there's an active session that can be resumed
  */
-export function hasActiveSession(): boolean {
+function hasActiveSession(): boolean {
   const session = loadRiddleSession();
   return session !== null && session.status === 'in-progress';
 }
@@ -150,7 +150,7 @@ function generateSessionId(): string {
  * Check if user has progress that would be lost
  * Used for navigation warnings
  */
-export function hasUnsavedProgress(session?: RiddleSession | null): boolean {
+function hasUnsavedProgress(session?: RiddleSession | null): boolean {
   if (!session) {
     return hasActiveSession();
   }

@@ -19,7 +19,7 @@ export const APP_URL = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3
  * Auth/gameplay-state routes are deliberately absent: they are noindex, and a
  * sitemap entry pointing at a noindex page sends crawlers mixed signals.
  */
-export interface IndexableRoute {
+interface IndexableRoute {
   path: string;
   label: string;
   priority: number;

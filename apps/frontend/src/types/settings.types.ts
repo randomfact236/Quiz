@@ -3,13 +3,12 @@
  * SETTINGS TYPES - Type definitions for system settings
  * ============================================================================
  * @module types/settings.types
- * @description Enterprise-grade type definitions for system settings management
+ * @description Type definitions for system settings management. The composed
+ * sub-structure types (timers/cache/defaults per module) are internal to
+ * `SystemSettings`; only the root shapes are exported.
  */
 
-/**
- * Quiz timer settings per difficulty level (in seconds)
- */
-export interface QuizLevelTimers {
+interface QuizLevelTimers {
   /** Timer for easy level */
   easy: number;
   /** Timer for medium level */
@@ -22,10 +21,7 @@ export interface QuizLevelTimers {
   extreme: number;
 }
 
-/**
- * Quiz default configuration properties
- */
-export interface QuizDefaults {
+interface QuizDefaults {
   /** Default time limit for quizzes in seconds (fallback if level-specific not set) */
   timeLimit?: number;
   /** Per-level timer settings */
@@ -44,66 +40,45 @@ export interface QuizDefaults {
   showExplanations?: boolean;
 }
 
-/**
- * Global pagination settings
- */
-export interface PaginationSettings {
+interface PaginationSettings {
   /** Default number of items per page */
   defaultLimit: number;
   /** Maximum allowed items per page */
   maxLimit: number;
 }
 
-/**
- * Global cache settings
- */
-export interface CacheSettings {
+interface CacheSettings {
   /** Default time-to-live in seconds */
   defaultTtl: number;
 }
 
-/**
- * Global settings section
- */
-export interface GlobalSettings {
+interface GlobalSettings {
   /** Pagination configuration */
   pagination: PaginationSettings;
   /** Cache configuration */
   cache: CacheSettings;
 }
 
-/**
- * Dad jokes cache settings
- */
-export interface DadJokesCache {
+interface DadJokesCache {
   /** Categories cache TTL in seconds */
   categoriesTtl: number;
   /** Cache key pattern */
   pattern: string;
 }
 
-/**
- * Dad jokes default settings
- */
-export interface DadJokesDefaults {
+interface DadJokesDefaults {
   /** Default emoji for categories */
   categoryEmoji: string;
 }
 
-/**
- * Dad jokes settings section
- */
-export interface DadJokesSettings {
+interface DadJokesSettings {
   /** Default values */
   defaults: DadJokesDefaults;
   /** Cache configuration */
   cache: DadJokesCache;
 }
 
-/**
- * Image riddle timer settings per difficulty
- */
-export interface ImageRiddleTimers {
+interface ImageRiddleTimers {
   /** Timer for easy riddles in seconds */
   easy: number;
   /** Timer for medium riddles in seconds */
@@ -114,20 +89,14 @@ export interface ImageRiddleTimers {
   expert: number;
 }
 
-/**
- * Image riddles cache settings
- */
-export interface ImageRiddlesCache {
+interface ImageRiddlesCache {
   /** Categories cache TTL in seconds */
   categoriesTtl: number;
   /** Cache key pattern */
   pattern: string;
 }
 
-/**
- * Image riddles default settings
- */
-export interface ImageRiddlesDefaults {
+interface ImageRiddlesDefaults {
   /** Default emoji for categories */
   categoryEmoji: string;
   /** Default timer duration in seconds */
@@ -136,10 +105,7 @@ export interface ImageRiddlesDefaults {
   showTimer: boolean;
 }
 
-/**
- * Image riddles settings section
- */
-export interface ImageRiddlesSettings {
+interface ImageRiddlesSettings {
   /** Default values */
   defaults: ImageRiddlesDefaults;
   /** Timer configuration per difficulty */
@@ -148,20 +114,14 @@ export interface ImageRiddlesSettings {
   cache: ImageRiddlesCache;
 }
 
-/**
- * Quiz cache settings
- */
-export interface QuizCache {
+interface QuizCache {
   /** Subjects cache TTL in seconds */
   subjectsTtl: number;
   /** Cache key for all subjects */
   allSubjectsKey: string;
 }
 
-/**
- * Quiz settings section
- */
-export interface QuizSettings {
+interface QuizSettings {
   /** Default quiz configuration values */
   defaults: QuizDefaults;
   /** Available difficulty levels */
@@ -170,10 +130,7 @@ export interface QuizSettings {
   cache: QuizCache;
 }
 
-/**
- * Riddle timer settings per difficulty level (in seconds)
- */
-export interface RiddleLevelTimers {
+interface RiddleLevelTimers {
   /** Timer for easy riddles */
   easy: number;
   /** Timer for medium riddles */
@@ -184,10 +141,7 @@ export interface RiddleLevelTimers {
   expert: number;
 }
 
-/**
- * Riddles default settings
- */
-export interface RiddlesDefaults {
+interface RiddlesDefaults {
   /** Default emoji for categories */
   categoryEmoji: string;
   /** Default difficulty level */
@@ -196,10 +150,7 @@ export interface RiddlesDefaults {
   levelTimers?: RiddleLevelTimers;
 }
 
-/**
- * Riddles cache settings
- */
-export interface RiddlesCache {
+interface RiddlesCache {
   /** Categories cache TTL in seconds */
   categoriesTtl: number;
   /** Subjects cache TTL in seconds */
@@ -208,10 +159,7 @@ export interface RiddlesCache {
   pattern: string;
 }
 
-/**
- * Riddles settings section
- */
-export interface RiddlesSettings {
+interface RiddlesSettings {
   /** Default values */
   defaults: RiddlesDefaults;
   /** Available difficulty levels */
@@ -230,10 +178,7 @@ export interface SeoSocialOverride {
   description: string;
 }
 
-/**
- * Google shows only a description (title comes from the page's <title>)
- */
-export interface SeoGoogleOverride {
+interface SeoGoogleOverride {
   description: string;
 }
 
@@ -312,46 +257,9 @@ export interface SystemSettings {
 }
 
 /**
- * Settings API response structure
- */
-export interface SettingsResponse {
-  /** Whether the request was successful */
-  success: boolean;
-  /** The settings data */
-  data: SystemSettings;
-  /** Response message */
-  message?: string;
-  /** Timestamp of the response */
-  timestamp: string;
-}
-
-/**
- * Settings update request payload
- */
-export type SettingsUpdatePayload = Partial<SystemSettings>;
-
-/**
- * Settings update response structure
- */
-export interface SettingsUpdateResponse {
-  /** Whether the update was successful */
-  success: boolean;
-  /** The updated settings data */
-  data: SystemSettings;
-  /** Response message */
-  message?: string;
-  /** Timestamp of the response */
-  timestamp: string;
-}
-
-/**
  * Settings tab identifiers for admin panel
  */
 export type SettingsTab = 'site' | 'general' | 'quiz-mcq' | 'jokes' | 'riddles' | 'imageRiddles';
-/**
- * Settings form data type (partial system settings for form handling)
- */
-export type SettingsFormData = Partial<SystemSettings>;
 
 /**
  * Nested settings value type for generic operations
@@ -364,30 +272,3 @@ export type SettingsValue =
   | undefined
   | SettingsValue[]
   | { [key: string]: SettingsValue };
-
-/**
- * Type guard for SettingsTab
- */
-export function isSettingsTab(value: unknown): value is SettingsTab {
-  return (
-    typeof value === 'string' &&
-    ['site', 'general', 'quiz-mcq', 'jokes', 'riddles', 'imageRiddles'].includes(value)
-  );
-}
-
-/**
- * Type guard for SystemSettings
- */
-export function isSystemSettings(value: unknown): value is SystemSettings {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  const settings = value as Record<string, unknown>;
-  return (
-    typeof settings['global'] === 'object' &&
-    typeof settings['quiz'] === 'object' &&
-    typeof settings['dadJokes'] === 'object' &&
-    typeof settings['riddles'] === 'object' &&
-    typeof settings['imageRiddles'] === 'object'
-  );
-}
