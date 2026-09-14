@@ -14,7 +14,7 @@
  */
 
 import { adminApi, api } from '@/lib/api-client';
-import { RIDDLE_TIMERS } from '@/lib/constants';
+import { RIDDLE_MCQ_TIMERS } from '@/lib/constants';
 import type { SystemSettings } from '@/types/settings.types';
 
 /** Gameplay-visible settings shape returned by GET /settings/public. */
@@ -56,10 +56,10 @@ export const FALLBACK_PUBLIC_SETTINGS: PublicSettings = {
       categoryEmoji: '🧩',
       difficulty: 'medium',
       levelTimers: {
-        easy: RIDDLE_TIMERS.EASY,
-        medium: RIDDLE_TIMERS.MEDIUM,
-        hard: RIDDLE_TIMERS.HARD,
-        expert: RIDDLE_TIMERS.EXPERT,
+        easy: RIDDLE_MCQ_TIMERS.EASY,
+        medium: RIDDLE_MCQ_TIMERS.MEDIUM,
+        hard: RIDDLE_MCQ_TIMERS.HARD,
+        expert: RIDDLE_MCQ_TIMERS.EXPERT,
       },
     },
   },

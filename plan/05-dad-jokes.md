@@ -52,7 +52,6 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 | POST `/jokes/classic`, `/classic/bulk` (max 100, transactional), `/classic/bulk-action`, `/classic/categories` | admin  | create/bulk/bulk-action/category-create                       |
 | PUT `/jokes/classic/:id`, `/classic/categories/:id`                                                            | admin  | update                                                        |
 | DELETE `/jokes/classic/:id`, `/classic/categories/:id`                                                         | admin  | hard delete; category delete hard-cascades jokes              |
-| GET `/jokes/classic/status-counts`                                                                             | admin  | counts by ContentStatus                                       |
 | GET `/jokes/stats/overview`                                                                                    | admin  | `{ totalJokes, totalCategories }`                             |
 
 ## 3. Current status
@@ -64,7 +63,7 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 - "Votes are device-local / backend vote endpoint idle" is **no longer true** — both directions are wired, with vote removal added.
 - "Newest sort broken" is **fixed**.
 - The old doc didn't mention **comments at all** — jokes are now a first-class comment target with a modal on the public page.
-- Still true: category delete **hard-cascades** its jokes (bypasses the DRAFT/TRASH workflow); `/jokes/stats/overview` has **no frontend consumer**; `defaultJokeCategories` fallback with numeric ids remains.
+- Still true: category delete **hard-cascades** its jokes (bypasses the DRAFT/TRASH workflow); `defaultJokeCategories` fallback with numeric ids remains. (`/jokes/stats/overview` **is** consumed — header stat badges in `JokesSection`.)
 
 ## 4. Task breakdown
 
@@ -92,7 +91,7 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 - [ ] Jokes bulk import accepts no `status` field (same gap as image riddles) — cross-module consistency candidate.
 - [ ] `page.tsx` is 1253 lines — extraction into `features/jokes/` hooks mirrors the image-riddles refactor but is cosmetic: the page is stable, tested through the API client, and no second consumer exists. **Deferred as tech debt (revisit if the page grows or a bug forces a rewrite).**
 - [ ] Trending sort and share buttons — **needs owner decision:** both are new product surfaces (a trending metric definition; share targets/placement), not gaps in shipped behavior.
-- [ ] Server-side search + true server pagination — **deferred (owner-accepted until >500 jokes).**
+- [x] Server-side search + true server pagination — **built (2026-09-14)**: the public page's search box and category view go through `GET /jokes/classic/search` / `/classic/category/:id` (debounced, server-filtered, newest-first with client-side sorts on top); client-side filtering remains the offline fallback.
 
 ## 5. Cross-feature touchpoints
 

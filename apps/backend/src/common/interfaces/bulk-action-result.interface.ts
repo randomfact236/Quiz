@@ -29,16 +29,6 @@ export interface BulkActionResult {
 }
 
 /**
- * Status count response for content statistics
- */
-export interface StatusCountResponse {
-  total: number;
-  published: number;
-  draft: number;
-  trash: number;
-}
-
-/**
  * Options for bulk action operations
  */
 export interface BulkActionOptions {

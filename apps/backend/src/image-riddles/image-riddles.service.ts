@@ -10,16 +10,13 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
-import { PaginationDto, SearchImageRiddlesDto } from '../common/dto/base.dto';
+import { SearchImageRiddlesDto } from '../common/dto/base.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import {
-  BulkActionResult,
-  StatusCountResponse,
-} from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionResult } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { settings } from '../config/settings';
 
@@ -65,26 +62,6 @@ export class ImageRiddlesService {
 
   // ==================== IMAGE RIDDLES ====================
 
-  /** Public list — always PUBLISHED only (admins use /admin/image-riddles for all statuses). */
-  async findAllRiddles(pagination: PaginationDto): Promise<{ data: ImageRiddle[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
-
-    const where: FindOptionsWhere<ImageRiddle> = {
-      isActive: true,
-      status: ContentStatus.PUBLISHED,
-    };
-
-    const [data, total] = await this.imageRiddleRepo.findAndCount({
-      where,
-      relations: ['category'],
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
-    return { data, total };
-  }
-
   /** Public single read — always PUBLISHED only (mirrors riddle-mcq). */
   async findRiddleById(id: string): Promise<ImageRiddle> {
     const riddle = await this.imageRiddleRepo.findOne({
@@ -121,38 +98,6 @@ export class ImageRiddlesService {
       throw new NotFoundException('No image riddles found');
     }
     return riddle;
-  }
-
-  async findRiddlesByCategory(
-    categoryId: string,
-    pagination: PaginationDto
-  ): Promise<{ data: ImageRiddle[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
-    const [data, total] = await this.imageRiddleRepo.findAndCount({
-      where: { category: { id: categoryId }, isActive: true, status: ContentStatus.PUBLISHED },
-      relations: ['category'],
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
-    return { data, total };
-  }
-
-  async findRiddlesByDifficulty(
-    difficulty: string,
-    pagination: PaginationDto
-  ): Promise<{ data: ImageRiddle[]; total: number }> {
-    const page = pagination.page ?? 1;
-    const limit = pagination.limit ?? 10;
-    const [data, total] = await this.imageRiddleRepo.findAndCount({
-      where: { difficulty, isActive: true, status: ContentStatus.PUBLISHED },
-      relations: ['category'],
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' },
-    });
-    return { data, total };
   }
 
   async searchRiddles(
@@ -204,10 +149,6 @@ export class ImageRiddlesService {
       ids,
       action
     );
-  }
-
-  async getStatusCounts(): Promise<StatusCountResponse> {
-    return this.bulkActionService.getStatusCounts(this.imageRiddleRepo);
   }
 
   // ==================== STATS ====================

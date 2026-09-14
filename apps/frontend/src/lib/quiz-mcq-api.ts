@@ -87,20 +87,13 @@ export interface BulkImportDuplicate {
   duplicateOfRow?: number;
 }
 
-export interface BulkCreateResponse {
+interface BulkCreateResponse {
   count: number;
   errors: string[];
   duplicates: BulkImportDuplicate[];
 }
 
-export interface StatusCountResponse {
-  total: number;
-  published: number;
-  draft: number;
-  trash: number;
-}
-
-export interface BulkQuestionItemDto {
+interface BulkQuestionItemDto {
   question: string;
   optionA?: string;
   optionB?: string;
@@ -136,7 +129,7 @@ export async function getSubjects(
 }
 
 /** Public per-level question counts for challenge hubs (single grouped query, cached). */
-export interface PublicLevelCounts {
+interface PublicLevelCounts {
   subjectWise: Record<string, Record<string, number>>;
   allSubject: Record<string, number>;
   completeMix: number;
@@ -148,7 +141,7 @@ export async function getPublicLevelCounts(): Promise<PublicLevelCounts> {
 }
 
 /** Public per-subject + per-chapter published counts (single grouped query, cached). */
-export interface PublicQuestionCounts {
+interface PublicQuestionCounts {
   bySubject: Record<string, number>;
   byChapter: Record<string, { count: number; levels: Record<string, number> }>;
 }
@@ -261,31 +254,6 @@ export async function getSubjectRandomQuestions(
   return response.data;
 }
 
-export interface QuestionFilters {
-  status?: string;
-  level?: string;
-  chapter?: string;
-  search?: string;
-}
-
-export async function getQuestionsBySubject(
-  subjectSlug: string,
-  filters: QuestionFilters = {}
-): Promise<{ data: QuizQuestion[]; total: number }> {
-  // The backend always serves PUBLISHED questions here; no status filter exists.
-  let url = `/quiz-mcq/subjects/${subjectSlug}/questions`;
-  const params = new URLSearchParams();
-  if (filters.level) params.set('level', filters.level);
-  if (filters.chapter) params.set('chapter', filters.chapter);
-  if (filters.search) params.set('search', filters.search);
-  const query = params.toString();
-  if (query) {
-    url += `?${query}`;
-  }
-  const response = await api.get<{ data: QuizQuestion[]; total: number }>(url);
-  return response.data;
-}
-
 export interface FilterCountsResponse {
   subjects: {
     id: string;
@@ -393,7 +361,7 @@ export async function exportQuestionsFromBackend(
 // Server-side session persistence (plan/02-mcq-quiz.md P1 #1)
 // ============================================================================
 
-export interface QuizSessionPayload {
+interface QuizSessionPayload {
   guestId?: string;
   subjectSlug?: string;
   subjectName?: string;
@@ -431,6 +399,35 @@ export async function getQuizSessionHighScores(guestId?: string): Promise<QuizHi
   try {
     const response = await api.get<{ data: QuizHighScore[] }>(
       `/quiz-mcq/sessions/high-scores${params}`
+    );
+    return response.data.data;
+  } catch {
+    return [];
+  }
+}
+
+/** One completed server-backed session (survives device/browser loss). */
+export interface QuizSessionHistoryEntry {
+  id: string;
+  subjectSlug: string | null;
+  subjectName: string | null;
+  chapterName: string | null;
+  level: string | null;
+  mode: string | null;
+  totalQuestions: number;
+  correctCount: number;
+  score: number;
+  maxScore: number;
+  durationSeconds: number | null;
+  completedAt: string;
+}
+
+/** Latest 50 completed sessions for the caller (token-bound, else guestId). */
+export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessionHistoryEntry[]> {
+  const params = guestId ? `?guestId=${encodeURIComponent(guestId)}` : '';
+  try {
+    const response = await api.get<{ data: QuizSessionHistoryEntry[] }>(
+      `/quiz-mcq/sessions/history${params}`
     );
     return response.data.data;
   } catch {

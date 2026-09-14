@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  getSubjects,
+  getAllSubjectsAdmin,
   createSubject,
   updateSubject,
   deleteSubject,
@@ -14,12 +14,13 @@ const SUBJECTS_KEY = ['riddle-mcq-subjects'];
 const RIDDLES_KEY = ['riddle-mcq-questions'];
 const FILTER_COUNTS_KEY = ['riddle-mcq-filter-counts'];
 
-export function useRiddleMcqSubjects(hasContentOnly: boolean = false) {
+/** Admin surface: lists ALL subjects (inactive included) via GET /subjects/all. */
+export function useRiddleMcqSubjects() {
   const queryClient = useQueryClient();
 
   const query = useQuery({
-    queryKey: [...SUBJECTS_KEY, hasContentOnly],
-    queryFn: () => getSubjects(hasContentOnly),
+    queryKey: SUBJECTS_KEY,
+    queryFn: () => getAllSubjectsAdmin(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

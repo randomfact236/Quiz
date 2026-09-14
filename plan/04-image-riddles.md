@@ -13,19 +13,19 @@ Backend — public module (`apps/backend/src/image-riddles/`):
 
 | File                                       | Purpose                                                                                                                                                                                                                                                                                            | Size (verified) |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `image-riddles.controller.ts`              | Public reads only + `POST bulk-action` + `GET status-counts` (the single status-change surface used by the admin panel)                                                                                                                                                                            | 177 lines       |
-| `image-riddles.service.ts`                 | Read queries: paginated list, by-id, random, search (ILIKE with `%`/`_` sanitization), by-category, by-difficulty, stats                                                                                                                                                                           | 273 lines       |
+| `image-riddles.controller.ts`              | Public reads (`/search` catalog, random, categories, by-id, stats) + `POST :id/engage` + `POST bulk-action` (the single status-change surface used by the admin panel)                                                                                                                             | —               |
+| `image-riddles.service.ts`                 | Read queries: search (ILIKE with `%`/`_` sanitization, category/difficulty/pagination filters), by-id, random, categories, stats                                                                                                                                                                   | —               |
 | `entities/image-riddle.entity.ts`          | `image_riddles`: title, imageUrl, answer, **alternativeAnswers** (synonym list, added by migration `1788000000000`), hint, difficulty enum, timerSeconds/showTimer with difficulty-based defaults, altText, categoryId FK, isActive, ContentStatus, JSONB `actionOptions` + in-entity action logic | —               |
 | `entities/image-riddle-category.entity.ts` | `image_riddle_categories`: name, emoji, description                                                                                                                                                                                                                                                | —               |
 | `entities/image-riddle-action.entity.ts`   | **Not a DB entity** — TS types + `DEFAULT_ACTION_PRESETS` + validation for per-riddle configurable buttons                                                                                                                                                                                         | —               |
 
 Backend — admin module (`apps/backend/src/admin/image-riddles/`) — **canonical CRUD surface**:
 
-| File                                | Purpose                                                                                                                                    | Size (verified) |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `admin-image-riddles.controller.ts` | `/admin/image-riddles` JWT+admin: list, by-id, create, bulk, update, delete (soft), toggle-active, categories CRUD, dashboard stats/recent | 246 lines       |
-| `admin-image-riddles.service.ts`    | Pagination+filters, duplicate-name checks (409), soft delete, dashboard aggregation                                                        | 516 lines       |
-| `admin-image-riddles.module.ts`     | Repos + CacheService wiring                                                                                                                | 20 lines        |
+| File                                | Purpose                                                                                                                                        | Size (verified) |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `admin-image-riddles.controller.ts` | `/admin/image-riddles` JWT+admin: list, by-id, create, bulk, update, toggle-active, categories CRUD, dashboard stats (recent riddles embedded) | —               |
+| `admin-image-riddles.service.ts`    | Pagination+filters, duplicate-name checks (409), soft delete, dashboard aggregation                                                            | 516 lines       |
+| `admin-image-riddles.module.ts`     | Repos + CacheService wiring                                                                                                                    | 20 lines        |
 
 Setup: `apps/backend/sample-image-riddles.sql` (rewritten against current entity) + `setup-riddles-database.ps1` (now migrates/seeds image-riddle tables).
 
@@ -33,7 +33,7 @@ Frontend (`apps/frontend/src/`):
 
 | File / dir                                                                      | Purpose                                                                                                                                                                                                                                                                                                      |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `app/image-riddles/page.tsx`                                                    | Public page shell; fetches `GET /image-riddles?limit=200` + `/categories` (initial-data arrays are offline fallback only); reads `?category=` / `?difficulty=` URL params                                                                                                                                    |
+| `app/image-riddles/page.tsx`                                                    | Public page shell; server-filtered catalog via `GET /image-riddles/search` + `/categories` + `/stats/overview` (initial-data arrays are offline fallback only); reads `?category=` / `?difficulty=` URL params                                                                                               |
 | `features/image-riddles/components/*`                                           | Public UI: RiddleCard, RiddleModal, RiddleGuessPanel, RiddleAnswerPanel, GuessFeed, ChipRevealStep, CategorySidebar, RiddlesToolbar, PaginationControls, skeletons                                                                                                                                           |
 | `features/image-riddles/hooks/*`                                                | Public game hooks: useImageRiddleCatalog, Filters, Game, Score, Timers, useRiddleKeyboardNav                                                                                                                                                                                                                 |
 | `features/image-riddles/lib/analytics.ts`                                       | **Committed:** analytics sink shim now forwards preset action events (`answer_submitted`, `hint_revealed`, `riddle_skipped`, `answer_revealed`, `share_opened`, …) to the shared tracker (`lib/analytics.ts` → `POST /analytics/events`); console.debug kept behind the `image-riddles:analytics-debug` flag |
@@ -49,27 +49,23 @@ Frontend (`apps/frontend/src/`):
 
 Public (unauthenticated):
 
-| Method & Path                                                       | Notes                                             |
-| ------------------------------------------------------------------- | ------------------------------------------------- |
-| GET `/image-riddles?page&limit`                                     | PUBLISHED only (hard-filtered; no `status` param) |
-| GET `/image-riddles/random`                                         | PUBLISHED only                                    |
-| GET `/image-riddles/search?search&categoryId&difficulty&page&limit` | PUBLISHED only                                    |
-| GET `/image-riddles/categories`, `/categories/:id`                  | cached under `image-riddles:categories`           |
-| GET `/image-riddles/category/:id?page&limit`                        | PUBLISHED only                                    |
-| GET `/image-riddles/difficulty/:level?page&limit`                   | validates easy/medium/hard/expert                 |
-| GET `/image-riddles/stats/overview`                                 | totals + difficulty histogram + avg timer         |
-| GET `/image-riddles/:id`                                            | PUBLISHED only                                    |
-| POST `/image-riddles/bulk-action`                                   | admin-guarded; single status-change surface       |
-| GET `/image-riddles/status-counts`                                  | admin-guarded                                     |
+| Method & Path                                                       | Notes                                                                                                                                                                                            |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GET `/image-riddles/random`                                         | PUBLISHED only (mobile/deep-link surface)                                                                                                                                                        |
+| GET `/image-riddles/search?search&categoryId&difficulty&page&limit` | PUBLISHED only — the catalog surface (category and difficulty filters live here; the standalone by-category / by-difficulty / root paginated lists were superseded by it and removed 2026-09-14) |
+| GET `/image-riddles/categories`, `/categories/:id`                  | cached under `image-riddles:categories`                                                                                                                                                          |
+| GET `/image-riddles/stats/overview`                                 | totals + difficulty histogram + avg timer                                                                                                                                                        |
+| GET `/image-riddles/:id`                                            | PUBLISHED only                                                                                                                                                                                   |
+| POST `/image-riddles/bulk-action`                                   | admin-guarded; single status-change surface                                                                                                                                                      |
 
 Admin (JWT + role admin) — canonical CRUD:
 
-| Method & Path                                                                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET `/admin/image-riddles` (filtered/paginated), `/admin/image-riddles/:id`, `/categories/all`, `/categories/:id`, `/dashboard/stats`, `/dashboard/recent?limit`, `/status-counts` |
-| POST `/admin/image-riddles`, `/bulk`, `/categories`, `/:id/toggle-active`                                                                                                          |
-| PUT `/admin/image-riddles/:id`, `/categories/:id`                                                                                                                                  |
-| DELETE `/admin/image-riddles/:id` (soft), `/categories/:id`                                                                                                                        |
+| Method & Path                                                                                                                                                   |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET `/admin/image-riddles` (filtered/paginated), `/admin/image-riddles/:id`, `/categories/all`, `/categories/:id`, `/dashboard/stats` (recent riddles embedded) |
+| POST `/admin/image-riddles`, `/bulk`, `/categories`, `/:id/toggle-active`                                                                                       |
+| PUT `/admin/image-riddles/:id`, `/categories/:id`                                                                                                               |
+| DELETE `/admin/image-riddles/categories/:id` (riddle deletion goes through `/image-riddles/bulk-action` — the single status-change surface)                     |
 
 ## 3. Current status
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search, UserSearch, X } from 'lucide-react';
 import { adminApi } from '@/lib/api-client';
+import { ANALYTICS_MODULES } from '@/lib/analytics';
 
 /**
  * Raw-events browser (plan/13-analytics.md P1 #3, filters §4b B4): visual
@@ -59,7 +60,7 @@ const KNOWN_EVENT_NAMES = [
   'settings_updated',
 ];
 
-const KNOWN_MODULES = ['quiz-mcq', 'riddle-mcq', 'image-riddles', 'jokes', 'site', 'achievements'];
+const KNOWN_MODULES: readonly string[] = ANALYTICS_MODULES;
 
 const inputClass =
   'rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200';

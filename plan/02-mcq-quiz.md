@@ -40,36 +40,35 @@ Frontend (`apps/frontend/src/`):
 
 ## 2. Endpoint map
 
-| Method & Path                                    | Auth         | Notes                                                           |
-| ------------------------------------------------ | ------------ | --------------------------------------------------------------- |
-| GET `/quiz-mcq/subjects`                         | public       | `?hasContent=true`, `?includeInactive`                          |
-| GET `/quiz-mcq/level-counts`                     | public       | cached per-level published counts (challenge hubs)              |
-| GET `/quiz-mcq/question-counts`                  | public       | cached per-subject/chapter counts with level breakdown (wizard) |
-| GET `/quiz-mcq/subjects/:slug/meta`              | public       | lightweight meta                                                |
-| GET `/quiz-mcq/subjects/:slug`                   | public       | with chapters                                                   |
-| GET `/quiz-mcq/subjects/:slug/questions`         | public       | PUBLISHED only, throttled 60/min, unbounded if no `limit`       |
-| GET `/quiz-mcq/filter-counts`                    | admin        | unified facet counts                                            |
-| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`       | admin        | CRUD with cascade deletes                                       |
-| GET `/quiz-mcq/chapters`, `/chapters/:subjectId` | public       | list                                                            |
-| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`     | admin        | CRUD                                                            |
-| GET `/quiz-mcq/questions`                        | admin        | paginated + filters                                             |
-| GET `/quiz-mcq/questions/export`                 | admin        | CSV                                                             |
-| GET `/quiz-mcq/questions/:chapterId`             | public       | PUBLISHED only                                                  |
-| GET `/quiz-mcq/subjects/:slug/questions/random`  | public       | capped random (`count`, `level`, `chapterId`) — STANDARDS A2    |
-| GET `/quiz-mcq/mixed`, `/quiz-mcq/random/:level` | public       | challenge pools via `random_weight` index-seek                  |
-| POST `/quiz-mcq/questions`, `/questions/bulk`    | admin        | single + chunked import (auto subject/chapter creation)         |
-| PATCH/DELETE `/quiz-mcq/questions/:id`           | admin        | draft→published→trash lifecycle                                 |
-| POST `/quiz-mcq/bulk-action`                     | admin        | shared BulkActionService                                        |
-| GET `/quiz-mcq/subjects/:slug/status-counts`     | admin        | per-status counts                                               |
-| POST `/quiz-mcq/sessions`                        | optional JWT | save completed session (guestId attribution, DTO-validated)     |
-| GET `/quiz-mcq/sessions/history`                 | optional JWT | latest 50 completed sessions for caller (token or guestId)      |
-| GET `/quiz-mcq/sessions/high-scores`             | optional JWT | server-backed personal bests                                    |
+| Method & Path                                    | Auth         | Notes                                                                                                                                |
+| ------------------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| GET `/quiz-mcq/subjects`                         | public       | `?hasContent=true`, `?includeInactive`                                                                                               |
+| GET `/quiz-mcq/level-counts`                     | public       | cached per-level published counts (challenge hubs)                                                                                   |
+| GET `/quiz-mcq/question-counts`                  | public       | cached per-subject/chapter counts with level breakdown (wizard)                                                                      |
+| GET `/quiz-mcq/subjects/:slug/meta`              | public       | lightweight meta                                                                                                                     |
+| GET `/quiz-mcq/subjects/:slug`                   | public       | with chapters                                                                                                                        |
+| GET `/quiz-mcq/subjects/:slug/questions`         | public       | PUBLISHED only, throttled 60/min, unbounded if no `limit`                                                                            |
+| GET `/quiz-mcq/filter-counts`                    | admin        | unified facet counts                                                                                                                 |
+| POST/PUT/DELETE `/quiz-mcq/subjects[/:id]`       | admin        | CRUD with cascade deletes                                                                                                            |
+| GET `/quiz-mcq/chapters`, `/chapters/:subjectId` | public       | list                                                                                                                                 |
+| POST/PATCH/DELETE `/quiz-mcq/chapters[/:id]`     | admin        | CRUD                                                                                                                                 |
+| GET `/quiz-mcq/questions`                        | admin        | paginated + filters                                                                                                                  |
+| GET `/quiz-mcq/questions/export`                 | admin        | CSV                                                                                                                                  |
+| GET `/quiz-mcq/questions/:chapterId`             | public       | PUBLISHED only                                                                                                                       |
+| GET `/quiz-mcq/subjects/:slug/questions/random`  | public       | capped random (`count`, `level`, `chapterId`) — STANDARDS A2                                                                         |
+| GET `/quiz-mcq/mixed`, `/quiz-mcq/random/:level` | public       | challenge pools via `random_weight` index-seek                                                                                       |
+| POST `/quiz-mcq/questions`, `/questions/bulk`    | admin        | single + chunked import (auto subject/chapter creation)                                                                              |
+| PATCH/DELETE `/quiz-mcq/questions/:id`           | admin        | draft→published→trash lifecycle                                                                                                      |
+| POST `/quiz-mcq/bulk-action`                     | admin        | shared BulkActionService                                                                                                             |
+| POST `/quiz-mcq/sessions`                        | optional JWT | save completed session (guestId attribution, DTO-validated)                                                                          |
+| GET `/quiz-mcq/sessions/history`                 | optional JWT | latest 50 completed sessions for caller (token or guestId) — rendered on the results page as the cross-device "Session History" list |
+| GET `/quiz-mcq/sessions/high-scores`             | optional JWT | server-backed personal bests                                                                                                         |
 
 ## 3. Current status
 
-**Done:** full gameplay loop (wizard → play → results); level-aware answer formats (easy=True/False, medium=2, hard=3, expert=4, extreme=free-text); capped server-side random session fetch (`QUIZ_SESSION_SIZE = 20`); shared scorer with regression tests; two-key resume; chapter progress + achievements written on completion; complete admin CRUD with optimistic mutations and CSV import/export; **per-level timers: `play/page.tsx` attempts to read `quiz.defaults.levelTimers` from settings, but the frontend settings service is a localStorage mock that never defines `levelTimers`, so the hardcoded `DEFAULT_TIME_LIMITS` fallback is the effective behavior** (correction of the earlier 'reads from Site Settings' claim — see feature 11 for the settings split-brain); wizard + hubs run on cached public count endpoints (no N+1 loops).
+**Done:** full gameplay loop (wizard → play → results); level-aware answer formats (easy=True/False, medium=2, hard=3, expert=4, extreme=free-text); capped server-side random session fetch (`QUIZ_SESSION_SIZE = 20`); shared scorer with regression tests; two-key resume; chapter progress + achievements written on completion; complete admin CRUD with optimistic mutations and CSV import/export; **per-level timers read from the API-backed settings service (`GET /settings/public`, hardcoded fallback offline — feature 11)**; wizard + hubs run on cached public count endpoints (no N+1 loops); **server-side session persistence (`quiz_sessions`)** with `sessions/history` + `high-scores` reads, and the results page renders the cross-device **Session History** list beside the localStorage-backed review; explanations end-to-end (entity column + admin authoring + `QuestionReview` render); distinct unanswered state; challenge-streak and chapter-complete evaluators implemented (see feature 06).
 
-**Not done / corrected claims:** no server-side session persistence (all history/resume/high-scores in localStorage only); no explanation content (frontend type + `QuestionReview` render it, but the backend entity has **no** `explanation` column and no admin authoring field); `ResultsCelebration` defines tiers but only the `perfect` emoji set is ever used; achievement `streak` condition exists but its evaluator is a no-op; `chapter_complete` condition actually checks _perfect quizzes_, not chapter completion (verified in `lib/achievements.ts:139-145`); unanswered questions grade as incorrect everywhere (no distinct review state).
+**Not done / by design:** `ResultsCelebration.tryAgain` tier intentionally unused (candidate for a future encouragement animation, P3); unanswered questions score 0 (review marks them distinctly — no partial credit, by design).
 
 ## 4. Task breakdown
 

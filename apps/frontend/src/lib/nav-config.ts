@@ -3,7 +3,7 @@
  * (plan/09-site-shell-seo.md P2: Header, Header mobile menu, and Footer all
  * render from this list instead of three hand-maintained copies).
  */
-export interface NavItem {
+interface NavItem {
   href: string;
   label: string;
 }

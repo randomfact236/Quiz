@@ -15,8 +15,8 @@ import { api, apiRequest } from './api-client';
 // Types
 // ============================================================================
 
-export type ImageRiddleDifficulty = 'easy' | 'medium' | 'hard' | 'expert';
-export type ImageRiddleStatus = 'published' | 'draft' | 'trash';
+type ImageRiddleDifficulty = 'easy' | 'medium' | 'hard' | 'expert';
+type ImageRiddleStatus = 'published' | 'draft' | 'trash';
 
 export interface ImageRiddleCategory {
   id: string;
@@ -26,13 +26,13 @@ export interface ImageRiddleCategory {
 }
 
 /** Category as embedded on a riddle (public list includes the relation). */
-export interface EmbeddedImageRiddleCategory {
+interface EmbeddedImageRiddleCategory {
   id?: string;
   name: string;
   emoji: string;
 }
 
-export interface ImageRiddleActionOption {
+interface ImageRiddleActionOption {
   id: string;
   label: string;
   type: 'button' | 'link' | 'toggle' | 'dropdown' | 'custom';
@@ -107,7 +107,7 @@ export async function getImageRiddleCategories(): Promise<ImageRiddleCategory[]>
   return response.data;
 }
 
-export interface ImageRiddlesStats {
+interface ImageRiddlesStats {
   totalRiddles: number;
   totalCategories: number;
   riddlesByDifficulty: Record<string, number>;
@@ -126,7 +126,7 @@ export async function getImageRiddlesStats(): Promise<ImageRiddlesStats> {
 // Admin API (/admin/image-riddles/*)
 // ============================================================================
 
-export interface CreateImageRiddleDto {
+interface CreateImageRiddleDto {
   title: string;
   imageUrl: string;
   answer: string;
@@ -141,11 +141,11 @@ export interface CreateImageRiddleDto {
   useDefaultActions?: boolean;
 }
 
-export interface UpdateImageRiddleDto extends Partial<CreateImageRiddleDto> {
+interface UpdateImageRiddleDto extends Partial<CreateImageRiddleDto> {
   isActive?: boolean;
 }
 
-export interface GetAllImageRiddlesParams {
+interface GetAllImageRiddlesParams {
   difficulty?: string;
   categoryId?: string;
   isActive?: boolean;
@@ -210,13 +210,6 @@ export async function updateImageRiddle(
     isAdmin: true,
   });
   return response.data;
-}
-
-/**
- * Soft delete a riddle (sets isActive=false) (Admin).
- */
-export async function deleteImageRiddle(id: string): Promise<void> {
-  await api.delete(`/admin/image-riddles/${id}`, { isAdmin: true });
 }
 
 /**
@@ -292,7 +285,7 @@ export async function bulkActionImageRiddles(
   return response.data;
 }
 
-export interface ImageRiddlesDashboardStats {
+interface ImageRiddlesDashboardStats {
   totalRiddles: number;
   activeRiddles: number;
   totalCategories: number;
@@ -309,17 +302,6 @@ export interface ImageRiddlesDashboardStats {
 export async function getImageRiddlesDashboardStats(): Promise<ImageRiddlesDashboardStats> {
   const response = await api.get<ImageRiddlesDashboardStats>(
     '/admin/image-riddles/dashboard/stats',
-    { isAdmin: true }
-  );
-  return response.data;
-}
-
-/**
- * Get recently created/updated riddles (Admin).
- */
-export async function getRecentImageRiddles(limit: number = 10): Promise<ImageRiddle[]> {
-  const response = await api.get<ImageRiddle[]>(
-    `/admin/image-riddles/dashboard/recent?limit=${limit}`,
     { isAdmin: true }
   );
   return response.data;

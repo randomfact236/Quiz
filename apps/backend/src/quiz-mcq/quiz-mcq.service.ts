@@ -7,10 +7,7 @@ import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dt
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import {
-  BulkActionResult,
-  StatusCountResponse,
-} from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionResult } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import {
   ContentListFilters,
@@ -428,38 +425,6 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     }
 
     return result;
-  }
-
-  async getStatusCountsBySubject(subjectSlug: string): Promise<StatusCountResponse> {
-    const subject = await this.deps.subjectRepo.findOne({ where: { slug: subjectSlug } });
-    if (!subject) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const chapters = await this.deps.chapterRepo.find({ where: { subjectId: subject.id } });
-    const chapterIds = chapters.map((c) => c.id);
-
-    if (chapterIds.length === 0) {
-      return { total: 0, published: 0, draft: 0, trash: 0 };
-    }
-
-    const statusCounts = await this.deps.itemRepo
-      .createQueryBuilder('question')
-      .select('question.status', 'status')
-      .addSelect('CAST(COUNT(*) AS INT)', 'count')
-      .where('question.chapterId IN (:...chapterIds)', { chapterIds })
-      .groupBy('question.status')
-      .getRawMany();
-
-    const counts = { total: 0, published: 0, draft: 0, trash: 0 };
-    statusCounts.forEach((row: { status: string; count: number }) => {
-      counts.total += row.count;
-      if (row.status in counts) {
-        (counts as any)[row.status] = row.count;
-      }
-    });
-
-    return counts;
   }
 
   async getFilterCounts(filters: {

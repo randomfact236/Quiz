@@ -15,6 +15,7 @@ import { ArrowLeft, Trophy, Lock, Star } from 'lucide-react';
 import {
   getAllAchievementsWithStatus,
   getAchievementStats,
+  hydrateUnlocksFromServer,
   type AchievementWithStatus,
 } from '@/lib/achievements';
 
@@ -100,7 +101,13 @@ export default function AchievementsPage(): JSX.Element {
       setIsLoading(false);
     };
 
-    loadAchievements();
+    // Re-hydrate unlocks synced from other devices first (plan/06 P3), then
+    // render — the page shows the merged cross-device state.
+    void hydrateUnlocksFromServer()
+      .catch(() => 0)
+      .then(() => {
+        loadAchievements();
+      });
 
     // Listen for storage changes
     const handleStorageChange = (e: StorageEvent) => {

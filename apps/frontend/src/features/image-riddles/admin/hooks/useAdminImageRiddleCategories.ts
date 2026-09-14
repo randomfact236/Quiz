@@ -22,7 +22,7 @@ import type { ImageRiddle } from '@/app/admin/types';
 
 import type { AdminImageRiddleCategory } from './useAdminImageRiddleData';
 
-export interface UseAdminImageRiddleCategoriesArgs {
+interface UseAdminImageRiddleCategoriesArgs {
   setCategories: React.Dispatch<React.SetStateAction<AdminImageRiddleCategory[]>>;
   setImageRiddles: React.Dispatch<React.SetStateAction<ImageRiddle[]>>;
   loadData: () => Promise<void>;

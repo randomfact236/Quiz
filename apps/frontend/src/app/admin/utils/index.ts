@@ -141,7 +141,7 @@ export function parseJokeCSV(csvText: string): ImportResult<Joke> {
 /**
  * Parse CSV line (handles quoted values and empty fields)
  */
-export function parseCSVLine(line: string): string[] {
+function parseCSVLine(line: string): string[] {
   const result: string[] = [];
   let current = '';
   let inQuotes = false;

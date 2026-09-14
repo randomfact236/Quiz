@@ -27,31 +27,31 @@ Frontend (`apps/frontend/src/`):
 | `types/quiz-mcq.ts`             | `Achievement` type (id, name, description, icon, condition: type + threshold)                                                                                                                                      |
 | `lib/progress.ts`               | Data source: `getQuizHistory()` (localStorage `aiquiz:quiz-history`), `getTotalStats()` (totalQuizzes, averageScore, day-streak), `saveQuizResult` + chapter/subject progress                                      |
 | `hooks/useQuizMcq.ts`           | **The only evaluation trigger** — `saveToHistory` → `checkAchievements()` → `toastAchievementUnlocks()` on quiz-mcq completion; uncommitted `track('achievement_unlocked', …)` events                              |
-| `lib/storage.ts`                | Keys: `ACHIEVEMENTS` (`aiquiz:achievements`); **`RIDDLE_ACHIEVEMENTS` (`aiquiz:riddle-achievements`) exists but is used nowhere**                                                                                  |
+| `lib/storage.ts`                | Key: `ACHIEVEMENTS` (`aiquiz:achievements`). The legacy `RIDDLE_ACHIEVEMENTS` key was removed (P3) — riddle play feeds the shared history instead                                                                  |
 | `__tests__/useQuizMcq.test.tsx` | Asserts `toastAchievementUnlocks` is called on completion (mocked) — **no dedicated achievements test suite**                                                                                                      |
 
 ## 2. The 10 achievements and how they actually evaluate
 
-| Achievement      | Declared condition  | Actual evaluator behavior                                                                            |
-| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| First Steps      | quiz_count ≥ 1      | ✅ correct (history length)                                                                          |
-| Quiz Enthusiast  | quiz_count ≥ 10     | ✅ correct                                                                                           |
-| Quiz Master      | quiz_count ≥ 50     | ✅ correct                                                                                           |
-| Perfect Score    | perfect_score ≥ 1   | ✅ correct (score === maxScore)                                                                      |
-| Speed Demon      | speed_run < 30s     | ✅ works (threshold = seconds; any quiz ≤ 30s with maxScore > 0)                                     |
-| Chapter Champion | chapter_complete    | ⚠️ **mis-evaluated** — checks perfect _quizzes_ (identical to Perfect Score), not chapter completion |
-| Subject Explorer | subject_explore ≥ 5 | ⚠️ loose — counts subjects with score **> 0** (any correct answer), not "complete a chapter"         |
-| Streak Master    | streak ≥ 10         | ❌ **dead** — evaluator is an empty `case`; can never unlock                                         |
-| Persistence      | retry ≥ 3           | ✅ works (chapters with 3+ attempts in history)                                                      |
-| Accuracy Expert  | accuracy ≥ 90       | ⚠️ loose — uses all-time `averageScore` ≥ 90 with ≥ 10 quizzes, not a "maintain 90%+" window         |
+| Achievement      | Declared condition  | Actual evaluator behavior                                                                    |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------------------- |
+| First Steps      | quiz_count ≥ 1      | ✅ correct (history length)                                                                  |
+| Quiz Enthusiast  | quiz_count ≥ 10     | ✅ correct                                                                                   |
+| Quiz Master      | quiz_count ≥ 50     | ✅ correct                                                                                   |
+| Perfect Score    | perfect_score ≥ 1   | ✅ correct (score === maxScore)                                                              |
+| Speed Demon      | speed_run < 30s     | ✅ works (threshold = seconds; any quiz ≤ 30s with maxScore > 0)                             |
+| Chapter Champion | chapter_complete    | ✅ correct (P2 fix) — distinct chapters with a perfect session                               |
+| Subject Explorer | subject_explore ≥ 5 | ⚠️ loose — counts subjects with score **> 0** (any correct answer), not "complete a chapter" |
+| Streak Master    | streak ≥ 10         | ✅ correct (P1 #2) — challenge-mode best streak via `lib/challenge-streak.ts`                |
+| Persistence      | retry ≥ 3           | ✅ works (chapters with 3+ attempts in history)                                              |
+| Accuracy Expert  | accuracy ≥ 90       | ⚠️ loose — uses all-time `averageScore` ≥ 90 with ≥ 10 quizzes, not a "maintain 90%+" window |
 
-`getAchievementProgress` has real progress math only for quiz_count, perfect_score, accuracy, subject_explore; all other types fall to `default: unlocked ? 100 : 0` (no intermediate progress shown for Speed Demon, Chapter Champion, Streak Master, Persistence).
+`getAchievementProgress` has real progress math for quiz_count, perfect_score, accuracy, subject_explore, streak and retry; Speed Demon, Chapter Champion, Subject Explorer fall to `default: unlocked ? 100 : 0`.
 
 ## 3. Current status
 
-**Done:** complete client-side unlock store with timestamps; 10 achievements defined; evaluation + toast wiring on quiz-mcq AND riddle-mcq completion; `/achievements` page with progress bars and locked/unlocked styling; committed `achievement_unlocked` analytics events per unlock; **server-side sync built and verified** (idempotent upsert with user/guest attribution + unlocks readback).
+**Done:** complete client-side unlock store with timestamps; 10 achievements defined; evaluation + toast wiring on quiz-mcq AND riddle-mcq completion; `/achievements` page with progress bars and locked/unlocked styling; committed `achievement_unlocked` analytics events per unlock; **server-side sync built and verified** (idempotent upsert with user/guest attribution + unlocks readback); **server→client re-hydration built (2026-09-14)** — the achievements page merges `GET /achievements/unlocks` into the local store on mount (earlier-timestamp-wins, unknown ids dropped).
 
-**Remaining gaps:** image-riddles completions still don't feed achievements (owner decision on semantics — see P1 #1); localStorage remains the live source of truth with the server as a fire-and-forget mirror (no read-back/re-hydration path yet — unlocks synced from another device won't appear locally).
+**Remaining gaps:** image-riddles completions still don't feed achievements (owner decision on semantics — see P1 #1).
 
 ## 4. Task breakdown
 
@@ -79,11 +79,11 @@ Frontend (`apps/frontend/src/`):
 - [x] **Accuracy Expert description aligned**
 - [x] **Chapter Champion vs Perfect Score**
 - [x] **Hardcoded achievements list**
-- [ ] Server→client re-hydration not built — sync is one-way (client → server); merge `GET /achievements/unlocks` into localStorage on login if cross-device continuity matters.
+- [x] Server→client re-hydration — built (2026-09-14): `hydrateUnlocksFromServer()` merges `GET /achievements/unlocks` into the local store on the achievements page mount (earlier timestamp wins; unknown ids dropped).
 
 ## 5. Cross-feature touchpoints
 
 - **MCQ Quiz + Riddle MCQ** — unlock triggers (`saveToHistory` / riddle submit); source of the committed `achievement_unlocked` events.
 - **Riddle MCQ** — wired (combined evaluator); **Image Riddles** — not wired (owner decision on semantics, P1 #1).
 - **Analytics** — `achievement_unlocked` events (committed) with module `quiz-mcq`.
-- **User Accounts** — server-side attribution exists: unlocks attribute to the JWT user or the guest id, synced via `POST /achievements/sync`. Cross-device re-hydration (server → localStorage) is not built.
+- **User Accounts** — server-side attribution exists: unlocks attribute to the JWT user or the guest id, synced via `POST /achievements/sync`; read back via `GET /achievements/unlocks` and merged locally on the achievements page.

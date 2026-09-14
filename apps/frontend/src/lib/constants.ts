@@ -63,13 +63,15 @@ export const SECONDS_PER_WEEK = 604800;
 export const ONE_SECOND_MS = 1000;
 
 // =============================================================================
-// RIDDLE TIMERS BY DIFFICULTY (Seconds)
+// RIDDLE-MCQ TIMERS BY DIFFICULTY (Seconds)
 // =============================================================================
 
 /**
- * Riddle timer durations by difficulty level
+ * Riddle-MCQ timer durations by difficulty level — mirrors the backend's
+ * `riddles.defaults.levelTimers` (config/settings.ts). Distinct from the
+ * image-riddle timers, which live in features/image-riddles/lib/game.ts.
  */
-export const RIDDLE_TIMERS = {
+export const RIDDLE_MCQ_TIMERS = {
   EASY: 30,
   MEDIUM: 60,
   HARD: 90,

@@ -189,14 +189,14 @@ const PROGRESS_KEY = STORAGE_KEYS.RIDDLE_RESUME_PROGRESS;
 const QUESTIONS_KEY = STORAGE_KEYS.RIDDLE_RESUME_QUESTIONS;
 
 /** Identity fields shared by both keys — used to bind snapshot ↔ progress. */
-export interface RiddleResumeIdentity {
+interface RiddleResumeIdentity {
   mode: 'timer' | 'practice';
   subjectId: string;
   level: string;
 }
 
 /** Lightweight per-change progress payload (no riddles). */
-export interface RiddleResumeProgress {
+interface RiddleResumeProgress {
   answers: Record<string, string>;
   timeRemaining: number;
   startedAt: string;
@@ -219,7 +219,7 @@ interface StoredResumeQuestions extends RiddleResumeIdentity {
 }
 
 /** Merged state handed to consumers. */
-export interface RiddleResumeState extends RiddleResumeIdentity, RiddleResumeProgress {
+interface RiddleResumeState extends RiddleResumeIdentity, RiddleResumeProgress {
   availableRiddles: unknown[];
   savedAt: number;
 }

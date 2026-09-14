@@ -28,11 +28,7 @@ import {
   SearchJokesDto,
   BulkImportResultDto,
 } from '../common/dto/base.dto';
-import {
-  BulkActionDto,
-  BulkActionResponseDto,
-  StatusCountResponseDto,
-} from '../common/dto/bulk-action.dto';
+import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { DadJokesService } from './dad-jokes.service';
@@ -206,16 +202,6 @@ export class DadJokesController {
   @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
   async executeBulkActionClassic(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
     return this.jokesService.bulkActionClassic(dto.ids, dto.action);
-  }
-
-  @Get('classic/status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get classic joke counts by status (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
-  async getStatusCounts(): Promise<StatusCountResponseDto> {
-    return this.jokesService.getStatusCounts();
   }
 
   @Post('classic/categories')

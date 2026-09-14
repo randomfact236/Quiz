@@ -15,7 +15,7 @@ import { toast } from '@/lib/toast';
 import { bulkActionImageRiddles } from '@/lib/image-riddles-api';
 import type { ImageRiddle } from '@/app/admin/types';
 
-export interface UseAdminImageRiddleDeleteArgs {
+interface UseAdminImageRiddleDeleteArgs {
   setImageRiddles: React.Dispatch<React.SetStateAction<ImageRiddle[]>>;
   loadData: () => Promise<void>;
 }

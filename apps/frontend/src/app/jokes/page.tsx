@@ -4,7 +4,14 @@ import Link from 'next/link';
 import { Bookmark } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 
-import { getAllJokes, getJokeCategories, voteJoke, type AdaptedJoke } from '@/lib/jokes-api';
+import {
+  getAllJokes,
+  getJokeCategories,
+  getJokesByCategory,
+  searchJokes,
+  voteJoke,
+  type AdaptedJoke,
+} from '@/lib/jokes-api';
 import { getCommentCounts } from '@/lib/comments-api';
 import { useSavedItems } from '@/hooks/useSavedItems';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
@@ -177,6 +184,11 @@ function SkeletonCards({ count }: { count: number }) {
 
 export default function JokesPage(): JSX.Element {
   const [jokes, setJokes] = useState<Joke[]>([]);
+  // Server-side filtered view (plan/05 P3): when a search/category filter is
+  // active and the API is reachable, the server filters (scales past the
+  // client-loaded window); null = no server filter, use the client-side one.
+  const [serverFiltered, setServerFiltered] = useState<Joke[] | null>(null);
+  const [apiOnline, setApiOnline] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'newest' | 'unseen' | 'random' | 'top'>('newest');
   const [randomSeed, setRandomSeed] = useState<number>(0);
@@ -288,6 +300,9 @@ export default function JokesPage(): JSX.Element {
 
       // Optimistic updates with functional setters (no stale closure)
       setJokes((curr) => curr.map((j) => (j.id === jokeId ? { ...j, ...updated } : j)));
+      setServerFiltered((curr) =>
+        curr ? curr.map((j) => (j.id === jokeId ? { ...j, ...updated } : j)) : curr
+      );
       setJokeOfTheDay((prev) => (prev?.id === jokeId ? { ...prev, ...updated } : prev));
 
       const newVotedState = { ...votedJokes };
@@ -304,6 +319,9 @@ export default function JokesPage(): JSX.Element {
           if (typeof s?.likes !== 'number' || typeof s?.dislikes !== 'number') return;
           const serverCounts = { likes: s.likes, dislikes: s.dislikes };
           setJokes((curr) => curr.map((j) => (j.id === jokeId ? { ...j, ...serverCounts } : j)));
+          setServerFiltered((curr) =>
+            curr ? curr.map((j) => (j.id === jokeId ? { ...j, ...serverCounts } : j)) : curr
+          );
           setJokeOfTheDay((prev) => (prev?.id === jokeId ? { ...prev, ...serverCounts } : prev));
           const latest = getItem<Record<string, { likes: number; dislikes: number }>>(
             STORAGE_KEYS.JOKE_VOTE_COUNTS,
@@ -333,6 +351,7 @@ export default function JokesPage(): JSX.Element {
         if (cancelled) return;
 
         setJokes(apiJokes);
+        setApiOnline(true);
         if (apiCats.length > 0) setJokeCategories(apiCats);
 
         // Deterministic Joke of the Day
@@ -407,6 +426,36 @@ export default function JokesPage(): JSX.Element {
     if (catId) setActiveCategory(catId);
   }, []);
 
+  // Server-side search + category filter (plan/05-dad-jokes.md P3): the server
+  // filters PUBLISHED jokes (ILIKE search / category join), so results stay
+  // correct as the catalog grows past the client-loaded window. Search is
+  // debounced; failure falls back to the client-side filters below.
+  useEffect(() => {
+    const q = searchQuery.trim();
+    if (!apiOnline || (!q && !activeCategory)) {
+      setServerFiltered(null);
+      return;
+    }
+    let cancelled = false;
+    const timer = setTimeout(
+      () => {
+        const fetcher = q ? searchJokes(q, activeCategory) : getJokesByCategory(activeCategory!);
+        fetcher
+          .then((results) => {
+            if (!cancelled) setServerFiltered(results);
+          })
+          .catch(() => {
+            if (!cancelled) setServerFiltered(null);
+          });
+      },
+      q ? 300 : 0
+    );
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [apiOnline, searchQuery, activeCategory]);
+
   // 💬 comment counts for the card chips (comments-system plan §4) — batched
   // one request for the whole set; silently empty offline.
   useEffect(() => {
@@ -446,6 +495,9 @@ export default function JokesPage(): JSX.Element {
             { likes: number; dislikes: number }
           >;
           setJokes((curr) => curr.map((j) => (counts[j.id] ? { ...j, ...counts[j.id] } : j)));
+          setServerFiltered((curr) =>
+            curr ? curr.map((j) => (counts[j.id] ? { ...j, ...counts[j.id] } : j)) : curr
+          );
           setJokeOfTheDay((prev) =>
             prev && counts[prev.id] ? { ...prev, ...counts[prev.id] } : prev
           );
@@ -479,17 +531,24 @@ export default function JokesPage(): JSX.Element {
     setCurrentPage(1);
   };
 
-  // Memoized: filter + search + sort — recomputes only when dependencies change
+  // Memoized: filter + search + sort — recomputes only when dependencies change.
+  // When the server already filtered (search/category), skip the client-side
+  // equivalents and just sort its results.
   const displayedJokes = useMemo(() => {
-    // Filter by category UUID (matches API categoryId)
-    let result = activeCategory ? jokes.filter((j) => j.categoryId === activeCategory) : [...jokes];
+    let result: Joke[];
+    if (serverFiltered) {
+      result = [...serverFiltered];
+    } else {
+      // Filter by category UUID (matches API categoryId)
+      result = activeCategory ? jokes.filter((j) => j.categoryId === activeCategory) : [...jokes];
 
-    // Filter by search query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (j) => j.setup.toLowerCase().includes(q) || j.punchline.toLowerCase().includes(q)
-      );
+      // Filter by search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        result = result.filter(
+          (j) => j.setup.toLowerCase().includes(q) || j.punchline.toLowerCase().includes(q)
+        );
+      }
     }
 
     // Newest uses the real createdAt timestamp (ids are UUIDs, not numeric)
@@ -506,7 +565,7 @@ export default function JokesPage(): JSX.Element {
     }
 
     return result;
-  }, [jokes, activeCategory, searchQuery, sortOrder, randomSeed, seenJokes]);
+  }, [jokes, serverFiltered, activeCategory, searchQuery, sortOrder, randomSeed, seenJokes]);
 
   // Seen progress: how much of the current catalog has been revealed
   const seenCount = useMemo(

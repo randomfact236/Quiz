@@ -13,6 +13,33 @@ import type { Metadata } from 'next';
 
 export const APP_URL = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3010';
 
+/**
+ * The indexable route registry — the single list that both the sitemap's
+ * static entries and the admin SEO audit table derive from (plan/15-seo.md).
+ * Auth/gameplay-state routes are deliberately absent: they are noindex, and a
+ * sitemap entry pointing at a noindex page sends crawlers mixed signals.
+ */
+export interface IndexableRoute {
+  path: string;
+  label: string;
+  priority: number;
+  freq: 'daily' | 'weekly' | 'monthly' | 'yearly';
+}
+
+export const INDEXABLE_ROUTES: readonly IndexableRoute[] = [
+  { path: '', label: 'Home', priority: 1, freq: 'daily' },
+  { path: '/play', label: 'Play Hub', priority: 0.9, freq: 'weekly' },
+  { path: '/quiz-mcq', label: 'Quiz MCQ', priority: 0.8, freq: 'weekly' },
+  { path: '/riddle-mcq', label: 'Riddle MCQ', priority: 0.8, freq: 'weekly' },
+  { path: '/image-riddles', label: 'Image Riddles', priority: 0.8, freq: 'weekly' },
+  { path: '/jokes', label: 'Dad Jokes', priority: 0.8, freq: 'daily' },
+  { path: '/achievements', label: 'Achievements', priority: 0.6, freq: 'weekly' },
+  { path: '/about', label: 'About', priority: 0.5, freq: 'monthly' },
+  { path: '/contact', label: 'Contact', priority: 0.3, freq: 'monthly' },
+  { path: '/privacy', label: 'Privacy', priority: 0.3, freq: 'yearly' },
+  { path: '/terms', label: 'Terms', priority: 0.3, freq: 'yearly' },
+];
+
 /** For auth, gameplay-state and account pages: crawl the links, not the page. */
 export const NOINDEX: Metadata = {
   robots: { index: false, follow: true },

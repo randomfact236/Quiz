@@ -2,10 +2,13 @@
  * ============================================================================
  * Image Riddles Controller
  * ============================================================================
- * Public read endpoints plus the shared admin surfaces for status/bulk
- * operations (bulk-action, status-counts). Canonical CRUD lives in
+ * Public read endpoints plus the shared admin bulk-action surface (the single
+ * status-change surface consumed by the admin panel). Canonical CRUD lives in
  * AdminImageRiddlesController (/admin/image-riddles/*) — see
  * plan/04-image-riddles.md "De-duplicate admin CRUD".
+ * Catalog reads go through GET /search (category/difficulty/text filters with
+ * pagination); the standalone by-category and by-difficulty lists were
+ * superseded by it and removed.
  * ============================================================================
  */
 
@@ -15,22 +18,18 @@ import {
   Post,
   Body,
   Param,
+  ParseUUIDPipe,
   Query,
   HttpCode,
   HttpStatus,
   UseGuards,
-  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { PaginationDto, SearchImageRiddlesDto } from '../common/dto/base.dto';
-import {
-  BulkActionDto,
-  BulkActionResponseDto,
-  StatusCountResponseDto,
-} from '../common/dto/bulk-action.dto';
+import { SearchImageRiddlesDto } from '../common/dto/base.dto';
+import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { ImageRiddleCategory } from './entities/image-riddle-category.entity';
@@ -46,15 +45,6 @@ export class ImageRiddlesController {
   constructor(private readonly imageRiddlesService: ImageRiddlesService) {}
 
   // ==================== PUBLIC ENDPOINTS ====================
-
-  @_Public()
-  @Throttle({ default: { limit: 60, ttl: 60000 } })
-  @Get()
-  @ApiOperation({ summary: 'Get all published image riddles with pagination' })
-  @ApiResponse({ status: 200, description: 'Returns paginated image riddles' })
-  findAll(@Query() pagination: PaginationDto): Promise<{ data: ImageRiddle[]; total: number }> {
-    return this.imageRiddlesService.findAllRiddles(pagination);
-  }
 
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
@@ -90,38 +80,8 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Get category by ID with riddles' })
   @ApiResponse({ status: 200, description: 'Returns category' })
   @ApiResponse({ status: 404, description: 'Category not found' })
-  findCategoryById(@Param('id') id: string): Promise<ImageRiddleCategory> {
+  findCategoryById(@Param('id', ParseUUIDPipe) id: string): Promise<ImageRiddleCategory> {
     return this.imageRiddlesService.findCategoryById(id);
-  }
-
-  @_Public()
-  @Get('category/:id')
-  @ApiOperation({ summary: 'Get image riddles by category' })
-  @ApiResponse({ status: 200, description: 'Returns image riddles in category' })
-  findByCategory(
-    @Param('id') id: string,
-    @Query() pagination: PaginationDto
-  ): Promise<{ data: ImageRiddle[]; total: number }> {
-    return this.imageRiddlesService.findRiddlesByCategory(id, pagination);
-  }
-
-  @_Public()
-  @Throttle({ default: { limit: 60, ttl: 60000 } })
-  @Get('difficulty/:level')
-  @ApiOperation({ summary: 'Get image riddles by difficulty level' })
-  @ApiResponse({ status: 200, description: 'Returns image riddles by difficulty' })
-  findByDifficulty(
-    @Param('level') level: string,
-    @Query() pagination: PaginationDto
-  ): Promise<{ data: ImageRiddle[]; total: number }> {
-    // Validate difficulty level
-    const validDifficulties = ['easy', 'medium', 'hard', 'expert'];
-    if (!validDifficulties.includes(level)) {
-      throw new BadRequestException(
-        `Invalid difficulty level: ${level}. Valid values are: ${validDifficulties.join(', ')}`
-      );
-    }
-    return this.imageRiddlesService.findRiddlesByDifficulty(level, pagination);
   }
 
   @_Public()
@@ -140,7 +100,7 @@ export class ImageRiddlesController {
 
   // ==================== ADMIN: BULK STATUS OPERATIONS ====================
   // Canonical CRUD (create/update/delete/categories) lives under
-  // /admin/image-riddles/*; these two remain here because they are the single
+  // /admin/image-riddles/*; this remains here because it is the single
   // status-change surface consumed by the admin panel.
 
   @Post('bulk-action')
@@ -152,16 +112,6 @@ export class ImageRiddlesController {
   @ApiResponse({ status: 200, description: 'Bulk action executed', type: BulkActionResponseDto })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
     return this.imageRiddlesService.bulkAction(dto.ids, dto.action);
-  }
-
-  @Get('status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get image riddle counts by status (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Returns status counts', type: StatusCountResponseDto })
-  async getStatusCounts(): Promise<StatusCountResponseDto> {
-    return this.imageRiddlesService.getStatusCounts();
   }
 
   // ==================== STATS ====================
@@ -179,14 +129,15 @@ export class ImageRiddlesController {
     return this.imageRiddlesService.getStats();
   }
 
-  // NOTE: ':id' route must stay AFTER all literal GET routes (status-counts,
-  // stats/overview) or it shadows them (Express matches in registration order).
+  // NOTE: ':id' route must stay AFTER all literal GET routes (stats/overview)
+  // or it shadows them (Express matches in registration order). The UUID pipe
+  // keeps removed-literal paths (e.g. /status-counts) as 400s, not DB 500s.
   @_Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get image riddle by ID' })
   @ApiResponse({ status: 200, description: 'Returns image riddle' })
   @ApiResponse({ status: 404, description: 'Image riddle not found' })
-  findById(@Param('id') id: string): Promise<ImageRiddle> {
+  findById(@Param('id', ParseUUIDPipe) id: string): Promise<ImageRiddle> {
     return this.imageRiddlesService.findRiddleById(id);
   }
 }

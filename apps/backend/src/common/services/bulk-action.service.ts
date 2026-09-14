@@ -14,7 +14,6 @@ import { ContentStatus } from '../enums/content-status.enum';
 import {
   BulkActionResult,
   BulkActionFailure,
-  StatusCountResponse,
   BulkActionOptions,
   IStatusEntity,
 } from '../interfaces/bulk-action-result.interface';
@@ -140,24 +139,6 @@ export class BulkActionService {
     } finally {
       await queryRunner.release();
     }
-  }
-
-  /**
-   * Get status counts for an entity type
-   * @param repository - TypeORM repository for the entity
-   * @returns StatusCountResponse with counts by status
-   */
-  async getStatusCounts<T extends IStatusEntity>(
-    repository: Repository<T>
-  ): Promise<StatusCountResponse> {
-    const [total, published, draft, trash] = await Promise.all([
-      repository.count(),
-      repository.count({ where: { status: ContentStatus.PUBLISHED } as FindOptionsWhere<T> }),
-      repository.count({ where: { status: ContentStatus.DRAFT } as FindOptionsWhere<T> }),
-      repository.count({ where: { status: ContentStatus.TRASH } as FindOptionsWhere<T> }),
-    ]);
-
-    return { total, published, draft, trash };
   }
 
   /**

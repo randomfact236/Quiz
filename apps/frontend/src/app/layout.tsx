@@ -9,7 +9,7 @@ import MobileFooter from '@/components/MobileFooter';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { JsonLd } from '@/components/JsonLd';
 import { SiteBrandProvider } from '@/components/SiteBrandContext';
-import { siteJsonLd } from '@/lib/seo';
+import { APP_URL, siteJsonLd } from '@/lib/seo';
 import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 import { Providers } from './providers';
 import './globals.css';
@@ -19,8 +19,6 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 });
-
-const APP_URL = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3010';
 
 /** Built-in metadata — the fallback whenever the backend or the seo group is unavailable. */
 const DEFAULTS = {

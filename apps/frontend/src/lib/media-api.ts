@@ -9,23 +9,11 @@
 
 import { apiRequest } from './api-client';
 
-const RAW_BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
 /**
- * Server origin — strips the entire API path (`/api`, `/api/v1`, etc.) so that
- * `/uploads/...` files are resolved against the host root, not the API prefix.
+ * Single implementation lives in lib/public-settings.ts (server-safe module);
+ * re-exported here so media consumers keep one import path.
  */
-const SERVER_ORIGIN = RAW_BASE.replace(/\/api(\/v[0-9]+)?\/?.*$/, '');
-
-/**
- * Resolve a stored media path to an absolute URL.
- * Absolute http(s) URLs pass through unchanged; `/uploads/...` paths get the
- * API server origin prefix.
- */
-export function resolveMediaUrl(url: string): string {
-  if (!url) return '';
-  if (/^https?:\/\//i.test(url)) return url;
-  return `${SERVER_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
-}
+export { resolveMediaUrl } from './public-settings';
 
 /** Human-readable byte size, e.g. `66.1 KB`. */
 export function formatFileSize(bytes: number): string {

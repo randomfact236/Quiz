@@ -17,20 +17,6 @@ export type StatusFilter = 'all' | 'published' | 'draft' | 'trash';
 export type BulkActionType = 'publish' | 'draft' | 'trash' | 'delete' | 'restore';
 
 /**
- * Status count data structure
- */
-export interface StatusCounts {
-  /** Total number of items */
-  total: number;
-  /** Number of published items */
-  published: number;
-  /** Number of draft items */
-  draft: number;
-  /** Number of items in trash */
-  trash: number;
-}
-
-/**
  * Result of a bulk action operation
  */
 export interface BulkActionResult {
@@ -189,7 +175,8 @@ export const BULK_ACTIONS_CONFIG: Record<BulkActionType, BulkActionConfig> = {
     variant: 'danger',
     requiresConfirmation: true,
     confirmationTitle: 'Delete Permanently',
-    confirmationMessage: 'This action cannot be undone. The selected items will be permanently deleted.',
+    confirmationMessage:
+      'This action cannot be undone. The selected items will be permanently deleted.',
     confirmButtonText: 'Delete Permanently',
     availableInFilters: ['trash'],
   },

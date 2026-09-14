@@ -17,7 +17,7 @@ import type { BulkActionType, ContentStatus, ImageRiddle } from '@/app/admin/typ
 
 import { nextStatusCycle } from '../lib/filters';
 
-export interface UseAdminImageRiddleBulkArgs {
+interface UseAdminImageRiddleBulkArgs {
   allFilteredIds: string[];
   setImageRiddles: React.Dispatch<React.SetStateAction<ImageRiddle[]>>;
   loadData: () => Promise<void>;

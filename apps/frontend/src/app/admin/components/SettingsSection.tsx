@@ -14,6 +14,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { SettingsService } from '@/services/settings.service';
 import { ApiError } from '@/lib/api-client';
 import { getErrorMessage, resolveMediaUrl, uploadMedia } from '@/lib/media-api';
+import { SOCIAL_PLATFORMS } from '@/components/SocialLinks';
 import { BrandMark } from '@/components/BrandMark';
 import type {
   SystemSettings,
@@ -45,17 +46,21 @@ const SETTINGS_TABS = [
   { id: 'riddles' as const, label: 'Riddles', emoji: '🎭' },
 ];
 
-const SOCIAL_LINK_FIELDS: Array<{
-  key: keyof SiteSocialLinks;
-  label: string;
-  placeholder: string;
-}> = [
-  { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/yourpage' },
-  { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/yourhandle' },
-  { key: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@yourhandle' },
-  { key: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@yourchannel' },
-  { key: 'twitter', label: 'Twitter/X', placeholder: 'https://x.com/yourhandle' },
-];
+/** Admin-form input placeholders, keyed by the shared platform list (SocialLinks). */
+const SOCIAL_LINK_PLACEHOLDERS: Record<keyof SiteSocialLinks, string> = {
+  facebook: 'https://facebook.com/yourpage',
+  instagram: 'https://instagram.com/yourhandle',
+  tiktok: 'https://tiktok.com/@yourhandle',
+  youtube: 'https://youtube.com/@yourchannel',
+  twitter: 'https://x.com/yourhandle',
+};
+
+/** Derived from SOCIAL_PLATFORMS so keys/labels can't drift from the footer icons. */
+const SOCIAL_LINK_FIELDS = SOCIAL_PLATFORMS.map(({ key, label }) => ({
+  key,
+  label,
+  placeholder: SOCIAL_LINK_PLACEHOLDERS[key],
+}));
 
 /**
  * One themed preview chip: renders the uploaded image (or the SVG placeholder

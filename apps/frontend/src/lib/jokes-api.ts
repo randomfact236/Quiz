@@ -110,6 +110,34 @@ export function adaptJoke(raw: RawJoke): AdaptedJoke {
 const ALL_JOKES_PAGE_SIZE = 100;
 
 /**
+ * Server-side search over published jokes (ILIKE on setup/punchline, plan
+ * 05-dad-jokes.md P3). `limit` is clamped server-side to [1,100]; results are
+ * newest-first, so the page's client-side sorts still apply on top.
+ */
+export async function searchJokes(
+  query: string,
+  categoryId?: string | null
+): Promise<AdaptedJoke[]> {
+  const params = new URLSearchParams({ search: query, limit: String(ALL_JOKES_PAGE_SIZE) });
+  if (categoryId) params.set('categoryId', categoryId);
+  const response = await api.get<{ data: RawJoke[]; total: number }>(
+    `/jokes/classic/search?${params.toString()}`
+  );
+  return (response.data.data ?? []).map(adaptJoke);
+}
+
+/**
+ * Server-side paginated jokes for one category (PUBLISHED only) — the scale
+ * path when the catalog outgrows the client-loaded page window.
+ */
+export async function getJokesByCategory(categoryId: string): Promise<AdaptedJoke[]> {
+  const response = await api.get<{ data: RawJoke[]; total: number }>(
+    `/jokes/classic/category/${categoryId}?limit=${ALL_JOKES_PAGE_SIZE}`
+  );
+  return (response.data.data ?? []).map(adaptJoke);
+}
+
+/**
  * Fetch every published joke by walking all pages of GET /jokes/classic.
  * The public page does its filtering/sorting client-side, so it needs the full set.
  */

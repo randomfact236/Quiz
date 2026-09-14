@@ -20,7 +20,7 @@ import { defaultFormState, riddleToFormState, type RiddleFormState } from '../li
 import type { AdminImageRiddleCategory } from './useAdminImageRiddleData';
 import { useAdminImageRiddleMutations } from './useAdminImageRiddleMutations';
 
-export interface UseAdminImageRiddleFormArgs {
+interface UseAdminImageRiddleFormArgs {
   categories: AdminImageRiddleCategory[];
   setImageRiddles: React.Dispatch<React.SetStateAction<ImageRiddle[]>>;
   categoryIdByName: (name: string) => string | undefined;

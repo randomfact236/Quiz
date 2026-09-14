@@ -122,15 +122,6 @@ export class AdminImageRiddlesController {
     return this.adminService.updateRiddle(id, dto);
   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete image riddle (soft delete)' })
-  @ApiResponse({ status: 204, description: 'Riddle deleted successfully' })
-  @ApiResponse({ status: 404, description: 'Riddle not found' })
-  async deleteRiddle(@Param('id') id: string): Promise<void> {
-    await this.adminService.deleteRiddle(id);
-  }
-
   @Post(':id/toggle-active')
   @ApiOperation({ summary: 'Toggle riddle active status' })
   @ApiResponse({ status: 200, description: 'Status toggled successfully' })
@@ -201,13 +192,5 @@ export class AdminImageRiddlesController {
     averageTimer: number;
   }> {
     return this.adminService.getDashboardStats();
-  }
-
-  @Get('dashboard/recent')
-  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Number of recent items' })
-  @ApiOperation({ summary: 'Get recently created/updated riddles' })
-  @ApiResponse({ status: 200, description: 'Returns recent riddles' })
-  async getRecentRiddles(@Query('limit') limit: number = 10): Promise<ImageRiddle[]> {
-    return this.adminService.getRecentRiddles(Number(limit));
   }
 }

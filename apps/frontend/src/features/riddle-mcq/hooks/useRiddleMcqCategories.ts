@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  getCategories,
+  getAllCategoriesAdmin,
   createCategory,
   updateCategory,
   deleteCategory,
@@ -15,12 +15,13 @@ const SUBJECTS_KEY = ['riddle-mcq-subjects'];
 const RIDDLES_KEY = ['riddle-mcq-questions'];
 const FILTER_COUNTS_KEY = ['riddle-mcq-filter-counts'];
 
+/** Admin surface: lists ALL categories (inactive included) via GET /categories/all. */
 export function useRiddleMcqCategories() {
   const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: CATEGORIES_KEY,
-    queryFn: () => getCategories(),
+    queryFn: () => getAllCategoriesAdmin(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

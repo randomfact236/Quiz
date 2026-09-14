@@ -17,16 +17,19 @@
 import { api, API_BASE_URL } from './api-client';
 import { getGuestId } from './guest-id';
 
-export type AnalyticsModuleName = 'quiz-mcq' | 'riddle-mcq' | 'jokes' | 'image-riddles' | 'site';
+/**
+ * Mirrors the backend's ANALYTICS_MODULES (analytics.dto.ts) — the single
+ * shared module list for tracking and every admin dashboard surface.
+ */
+export const ANALYTICS_MODULES = [
+  'quiz-mcq',
+  'riddle-mcq',
+  'jokes',
+  'image-riddles',
+  'site',
+] as const;
 
-/** Display labels — kept beside the union so a new module must update both (plan/13-analytics.md P3). */
-export const MODULE_LABELS: Record<AnalyticsModuleName, string> = {
-  'quiz-mcq': 'Quiz MCQ',
-  'riddle-mcq': 'Riddle MCQ',
-  jokes: 'Dad Jokes',
-  'image-riddles': 'Image Riddles',
-  site: 'Site',
-};
+type AnalyticsModuleName = (typeof ANALYTICS_MODULES)[number];
 
 interface AnalyticsPayload {
   eventName: string;
@@ -38,7 +41,7 @@ interface AnalyticsPayload {
   clientTs: string;
 }
 
-export interface TrackOptions {
+interface TrackOptions {
   module?: AnalyticsModuleName | undefined;
   sessionId?: string | undefined;
 }

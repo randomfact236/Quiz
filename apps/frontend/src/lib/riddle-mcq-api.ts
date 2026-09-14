@@ -23,11 +23,6 @@ export interface BulkImportDuplicate {
   duplicateOfRow?: number;
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-}
-
 // ============================================================================
 // Category Types
 // ============================================================================
@@ -121,7 +116,7 @@ export interface GetRiddlesParams {
   search?: string;
 }
 
-export interface GetFilterCountsParams {
+interface GetFilterCountsParams {
   category?: string;
   subject?: string;
   level?: string;
@@ -150,6 +145,16 @@ export interface FilterCounts {
  */
 export async function getCategories(): Promise<RiddleMcqCategory[]> {
   const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories');
+  return response.data;
+}
+
+/**
+ * Get all categories including inactive (Admin) — the admin panel's list.
+ */
+export async function getAllCategoriesAdmin(): Promise<RiddleMcqCategory[]> {
+  const response = await api.get<RiddleMcqCategory[]>('/riddle-mcq/categories/all', {
+    isAdmin: true,
+  });
   return response.data;
 }
 
@@ -194,6 +199,16 @@ export async function getSubjects(hasContent: boolean = false): Promise<RiddleMc
   const response = await api.get<RiddleMcqSubject[]>(
     `/riddle-mcq/subjects${hasContent ? '?hasContent=true' : ''}`
   );
+  return response.data;
+}
+
+/**
+ * Get all subjects including inactive (Admin) — the admin panel's list.
+ */
+export async function getAllSubjectsAdmin(): Promise<RiddleMcqSubject[]> {
+  const response = await api.get<RiddleMcqSubject[]>('/riddle-mcq/subjects/all', {
+    isAdmin: true,
+  });
   return response.data;
 }
 
@@ -416,7 +431,7 @@ export async function getRiddleFilterCounts(
 // ============================================================================
 
 /** Public per-level published riddle counts for challenge hubs (single grouped query, cached). */
-export interface RiddleLevelCounts {
+interface RiddleLevelCounts {
   subjectWise: Record<string, Record<string, number>>;
   allSubject: Record<string, number>;
   completeMix: number;
@@ -424,5 +439,18 @@ export interface RiddleLevelCounts {
 
 export async function getPublicLevelCounts(): Promise<RiddleLevelCounts> {
   const response = await api.get<RiddleLevelCounts>('/riddle-mcq/level-counts');
+  return response.data;
+}
+
+/** Public catalog stats for the hub header (plan/03 §2 stats contract). */
+export interface RiddleStats {
+  totalRiddleMcqs: number;
+  totalSubjects: number;
+  totalCategories: number;
+  mcqsByLevel: Record<string, number>;
+}
+
+export async function getRiddleStats(): Promise<RiddleStats> {
+  const response = await api.get<RiddleStats>('/riddle-mcq/stats/overview');
   return response.data;
 }

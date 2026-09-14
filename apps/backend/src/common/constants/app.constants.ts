@@ -39,55 +39,6 @@ export const MAX_PAGE_SIZE = 100;
 export const MIN_PAGE_NUMBER = 1;
 
 // =============================================================================
-// TIME VALUES (Milliseconds)
-// =============================================================================
-
-/**
- * One second in milliseconds
- * @default 1000
- */
-export const ONE_SECOND_MS = 1000;
-
-/**
- * One minute in milliseconds
- * @default 60000
- */
-export const ONE_MINUTE_MS = 60000;
-
-/**
- * One hour in milliseconds
- * @default 3600000
- */
-export const ONE_HOUR_MS = 3600000;
-
-/**
- * One day in milliseconds
- * @default 86400000
- */
-export const ONE_DAY_MS = 86400000;
-// =============================================================================
-// TIME VALUES (Seconds)
-// =============================================================================
-
-/**
- * One hour in seconds
- * @default 3600
- */
-export const ONE_HOUR_S = 3600;
-
-/**
- * One day in seconds
- * @default 86400
- */
-export const ONE_DAY_S = 86400;
-
-/**
- * One week in seconds
- * @default 604800
- */
-export const ONE_WEEK_S = 604800;
-
-// =============================================================================
 // CACHE TTL (Seconds)
 // =============================================================================
 
@@ -129,41 +80,6 @@ export const MAX_ORDER_VALUE = 1000;
  * @default 0
  */
 export const MIN_ORDER_VALUE = 0;
-// =============================================================================
-// HTTP STATUS CODES
-// =============================================================================
-
-/**
- * HTTP Status Codes
- */
-export const HTTP_STATUS = {
-  /** OK - Request succeeded */
-  OK: 200,
-  /** Created - Resource created successfully */
-  CREATED: 201,
-  /** Accepted - Request accepted for processing */
-  ACCEPTED: 202,
-  /** No Content - Request succeeded, no content to return */
-  NO_CONTENT: 204,
-  /** Bad Request - Invalid request syntax or parameters */
-  BAD_REQUEST: 400,
-  /** Unauthorized - Authentication required */
-  UNAUTHORIZED: 401,
-  /** Forbidden - Access denied */
-  FORBIDDEN: 403,
-  /** Not Found - Resource not found */
-  NOT_FOUND: 404,
-  /** Conflict - Resource conflict */
-  CONFLICT: 409,
-  /** Unprocessable Entity - Validation error */
-  UNPROCESSABLE_ENTITY: 422,
-  /** Too Many Requests - Rate limit exceeded */
-  TOO_MANY_REQUESTS: 429,
-  /** Internal Server Error - Server error */
-  INTERNAL_ERROR: 500,
-  /** Service Unavailable - Service temporarily unavailable */
-  SERVICE_UNAVAILABLE: 503,
-} as const;
 
 // =============================================================================
 // MEMORY & PERFORMANCE

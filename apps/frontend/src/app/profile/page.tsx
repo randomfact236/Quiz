@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { User as UserIcon, Mail, AlertCircle, CheckCircle, Loader2, Save } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api-client';
+import { authService } from '@/lib/auth';
 
 interface ProfileData {
   id: string;
@@ -69,10 +70,8 @@ export default function ProfilePage() {
     if (!profile) return;
     setResendMessage('');
     try {
-      const result = await api.post<{ message: string }>('/auth/resend-verification', {
-        email: profile.email,
-      });
-      setResendMessage(result.data.message);
+      const result = await authService.resendVerification(profile.email);
+      setResendMessage(result.message);
     } catch {
       setResendMessage('Could not send the email right now. Please try again later.');
     }

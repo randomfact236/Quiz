@@ -32,8 +32,7 @@
     "useUnknownInCatchVariables": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./apps/frontend/src/*"],
-      "@backend/*": ["./apps/backend/src/*"]
+      "@/*": ["./apps/frontend/src/*"]
     }
   },
   "include": ["apps/**/*"],

@@ -11,7 +11,7 @@
 
 import type { SeoSettings, SiteSettings } from '@/types/settings.types';
 
-export interface PublicSettingsPayload {
+interface PublicSettingsPayload {
   seo: Partial<SeoSettings> | null;
   site: Partial<SiteSettings> | null;
 }

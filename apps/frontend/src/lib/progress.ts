@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import type { QuizSession, ChapterProgress, SubjectProgress } from '@/types/quiz-mcq';
+import type { QuizSession, ChapterProgress } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem, setItem } from './storage';
 import { getRiddleHistory } from './riddle-progress';
 
@@ -43,49 +43,6 @@ export function saveQuizResult(session: QuizSession): void {
 
   chapterProgress[key] = newProgress;
   setItem(STORAGE_KEYS.CHAPTER_PROGRESS, chapterProgress);
-
-  // Update subject progress
-  updateSubjectProgress(session.subject);
-}
-
-/** Update subject progress based on chapter progress */
-function updateSubjectProgress(subjectSlug: string): void {
-  const chapterProgress = getItem<Record<string, ChapterProgress>>(
-    STORAGE_KEYS.CHAPTER_PROGRESS,
-    {}
-  );
-
-  // Get all chapters for this subject
-  const subjectChapters = Object.values(chapterProgress).filter((p) => p.subject === subjectSlug);
-
-  if (subjectChapters.length === 0) return;
-
-  const totalChapters = subjectChapters.length;
-  const completedChapters = subjectChapters.filter((p) => p.completed).length;
-  const totalAttempts = subjectChapters.reduce((sum, p) => sum + p.attempts, 0);
-  const bestScore = Math.max(...subjectChapters.map((p) => p.bestScore), 0);
-
-  // Calculate overall accuracy
-  const totalQuestionsAnswered = subjectChapters.reduce((sum, p) => sum + p.attempts, 0);
-  const totalCorrect = subjectChapters.reduce((sum, p) => sum + p.averageScore * p.attempts, 0);
-  const overallAccuracy =
-    totalQuestionsAnswered > 0 ? Math.round(totalCorrect / totalQuestionsAnswered) : 0;
-
-  const subjectProgress = getItem<Record<string, SubjectProgress>>(
-    STORAGE_KEYS.SUBJECT_PROGRESS,
-    {}
-  );
-
-  subjectProgress[subjectSlug] = {
-    subject: subjectSlug,
-    totalChapters,
-    completedChapters,
-    totalAttempts,
-    bestScore,
-    overallAccuracy,
-  };
-
-  setItem(STORAGE_KEYS.SUBJECT_PROGRESS, subjectProgress);
 }
 
 /** Get chapter progress */
@@ -97,24 +54,9 @@ export function getChapterProgress(subject: string, chapter: string): ChapterPro
   return chapterProgress[getChapterKey(subject, chapter)] || null;
 }
 
-/** Get subject progress */
-export function getSubjectProgress(subject: string): SubjectProgress | null {
-  const subjectProgress = getItem<Record<string, SubjectProgress>>(
-    STORAGE_KEYS.SUBJECT_PROGRESS,
-    {}
-  );
-  return subjectProgress[subject] || null;
-}
-
 /** Get all quiz history */
 export function getQuizHistory(): QuizSession[] {
   return getItem<QuizSession[]>(STORAGE_KEYS.QUIZ_HISTORY, []);
-}
-
-/** Get recent quiz sessions */
-export function getRecentSessions(count: number = 10): QuizSession[] {
-  const history = getQuizHistory();
-  return history.slice(-count).reverse();
 }
 
 /** Get total stats across all subjects */
@@ -187,63 +129,4 @@ export function getTotalStats(): {
     averageScore,
     bestStreak: maxStreak,
   };
-}
-
-/** Check if chapter is completed */
-export function isChapterCompleted(subject: string, chapter: string): boolean {
-  const progress = getChapterProgress(subject, chapter);
-  return progress?.completed ?? false;
-}
-
-/** Get recommended chapters (chapters with low scores) */
-export function getRecommendedChapters(subject: string): string[] {
-  const chapterProgress = getItem<Record<string, ChapterProgress>>(
-    STORAGE_KEYS.CHAPTER_PROGRESS,
-    {}
-  );
-
-  return Object.values(chapterProgress)
-    .filter((p) => p.subject === subject && p.averageScore < 70)
-    .sort((a, b) => a.averageScore - b.averageScore)
-    .map((p) => p.chapter);
-}
-
-/** Clear all progress (for debugging/reset) */
-export function clearAllProgress(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(STORAGE_KEYS.CHAPTER_PROGRESS);
-    localStorage.removeItem(STORAGE_KEYS.SUBJECT_PROGRESS);
-    localStorage.removeItem(STORAGE_KEYS.QUIZ_HISTORY);
-  }
-}
-
-/** Export progress data (for backup) */
-export function exportProgress(): string {
-  const data = {
-    chapterProgress: getItem(STORAGE_KEYS.CHAPTER_PROGRESS, {}),
-    subjectProgress: getItem(STORAGE_KEYS.SUBJECT_PROGRESS, {}),
-    quizHistory: getItem(STORAGE_KEYS.QUIZ_HISTORY, []),
-    exportedAt: new Date().toISOString(),
-  };
-  return JSON.stringify(data, null, 2);
-}
-
-/** Import progress data (from backup) */
-export function importProgress(jsonString: string): boolean {
-  try {
-    const data = JSON.parse(jsonString);
-
-    if (data.chapterProgress) {
-      setItem(STORAGE_KEYS.CHAPTER_PROGRESS, data.chapterProgress);
-    }
-    if (data.subjectProgress) {
-      setItem(STORAGE_KEYS.SUBJECT_PROGRESS, data.subjectProgress);
-    }
-    if (data.quizHistory) {
-      setItem(STORAGE_KEYS.QUIZ_HISTORY, data.quizHistory);
-    }
-    return true;
-  } catch {
-    return false;
-  }
 }

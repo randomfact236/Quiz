@@ -8,6 +8,8 @@
  * ============================================================================
  */
 
+import { INDEXABLE_ROUTES } from './seo';
+
 export interface SeoAuditRow {
   path: string;
   label: string;
@@ -20,19 +22,12 @@ export interface SeoAuditRow {
   inSitemap: boolean | null;
 }
 
-export const AUDIT_ROUTES: { path: string; label: string }[] = [
-  { path: '/', label: 'Home' },
-  { path: '/play', label: 'Play Hub' },
-  { path: '/quiz-mcq', label: 'Quiz MCQ' },
-  { path: '/riddle-mcq', label: 'Riddle MCQ' },
-  { path: '/image-riddles', label: 'Image Riddles' },
-  { path: '/jokes', label: 'Dad Jokes' },
-  { path: '/achievements', label: 'Achievements' },
-  { path: '/about', label: 'About' },
-  { path: '/contact', label: 'Contact' },
-  { path: '/privacy', label: 'Privacy' },
-  { path: '/terms', label: 'Terms' },
-];
+/** Audit targets derive from the shared indexable-route registry (lib/seo.ts);
+ *  the registry stores the home page as '' (for clean URL joins) — the audit
+ *  crawls it as '/'. */
+export const AUDIT_ROUTES: { path: string; label: string }[] = INDEXABLE_ROUTES.map(
+  ({ path, label }) => ({ path: path === '' ? '/' : path, label })
+);
 
 /** Fetch /sitemap.xml and reduce it to a set of crawlable paths. Null on failure. */
 export async function loadSitemapPaths(): Promise<Set<string> | null> {
@@ -40,9 +35,7 @@ export async function loadSitemapPaths(): Promise<Set<string> | null> {
     const res = await fetch('/sitemap.xml');
     if (!res.ok) return null;
     const xml = await res.text();
-    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-      .map((m) => m[1])
-      .filter((u): u is string => typeof u === 'string');
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].flatMap((m) => (m[1] ? [m[1]] : []));
     return new Set(
       locs.map((u) => {
         try {
@@ -95,7 +88,7 @@ export async function auditRoute(
   }
 }
 
-/** Title/description budget checks shared by the audit table status colors. */
+/** Title/description budget checks — feed rowIssues' "Title length" chips. */
 export function titleStatus(title: string): 'ok' | 'warn' | 'fail' {
   if (!title) return 'fail';
   return title.length >= 30 && title.length <= 65 ? 'ok' : 'warn';
@@ -169,7 +162,7 @@ export function rowIssues(row: SeoAuditRow): string[] {
   return issues;
 }
 
-export type SeoHealth = 'healthy' | 'warning' | 'critical';
+type SeoHealth = 'healthy' | 'warning' | 'critical';
 
 export function rowHealth(row: SeoAuditRow): SeoHealth {
   const n = rowIssues(row).length;

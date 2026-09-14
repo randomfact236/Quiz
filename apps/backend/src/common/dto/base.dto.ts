@@ -392,47 +392,6 @@ export class CreateQuestionDto {
   order?: number;
 }
 
-export class UpdateQuestionDto {
-  @ApiPropertyOptional({ example: 'What is the capital of France?' })
-  @IsOptional()
-  @IsString()
-  question?: string;
-
-  @ApiPropertyOptional({ description: 'Optional rationale shown in the review UI' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(4000)
-  explanation?: string | null;
-
-  @ApiPropertyOptional({ example: 'Paris' })
-  @IsOptional()
-  @IsString()
-  correctAnswer?: string;
-
-  @ApiPropertyOptional({ example: 'A', description: 'Correct letter for MCQ (A/B/C/D)' })
-  @IsOptional()
-  @IsString()
-  correctLetter?: string;
-
-  @ApiPropertyOptional({ example: ['Paris', 'London', 'Berlin', 'Madrid'], type: [String] })
-  @IsOptional()
-  @IsString({ each: true })
-  options?: string[];
-
-  @ApiPropertyOptional({ example: 'easy', enum: QuestionLevel })
-  @IsOptional()
-  @IsEnum(QuestionLevel)
-  level?: QuestionLevel;
-
-  @ApiPropertyOptional({
-    example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'Chapter ID',
-  })
-  @IsOptional()
-  @IsString()
-  chapterId?: string;
-}
-
 // ==================== SUBJECTS ====================
 
 export class CreateSubjectDto {
@@ -460,31 +419,6 @@ export class CreateSubjectDto {
   @IsOptional()
   @IsString()
   description?: string;
-}
-
-export class UpdateSubjectDto {
-  @ApiPropertyOptional({ example: 'Mathematics' })
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @ApiPropertyOptional({
-    example: 'Academic',
-    description: 'Homepage world: Academic / Professional & Life / Entertainment & Culture',
-  })
-  @IsOptional()
-  @IsString()
-  category?: string;
-
-  @ApiPropertyOptional({ example: 'Math fundamentals and advanced topics' })
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
 }
 
 // ==================== IMAGE RIDDLE CATEGORIES ====================

@@ -29,7 +29,7 @@ import type { ImageRiddleSortOrder } from './useImageRiddleFilters';
 const OFFLINE_RIDDLES = initialImageRiddles as ImageRiddle[];
 const OFFLINE_CATEGORIES = initialImageRiddleCategories as ImageRiddleCategory[];
 
-export interface UseImageRiddleCatalogArgs {
+interface UseImageRiddleCatalogArgs {
   search: string;
   activeCategory: string | null;
   difficulty: string;

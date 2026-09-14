@@ -39,8 +39,7 @@ Frontend (`apps/frontend/src/`):
 | `hooks/use-riddle-play/useRiddlePlay.ts` + `useRiddleTimers.ts`                                                                         | Engine orchestration + clocks. **8 committed `track()` analytics calls** (session_started / session_resumed / question_answered / question_skipped / session_completed / **session_abandoned / session_extended / hint_used**, module `riddle-mcq`) |
 | `lib/riddle-mcq-api.ts`                                                                                                                 | Typed client (incl. `getPublicLevelCounts`, `getRiddlesBySubject`, `getMixedRiddles`, `getRandomRiddles`)                                                                                                                                           |
 | `lib/riddle-scoring.ts`                                                                                                                 | Single scorer `isRiddleAnswerCorrect` (MCQ letters + expert text)                                                                                                                                                                                   |
-| `lib/riddle-resume.ts`                                                                                                                  | Two-key resume store (snapshot written once + lightweight progress per tick)                                                                                                                                                                        |
-| `lib/riddle-session.ts`                                                                                                                 | 10s autosave session store; also read by results page (`getRiddleSessionById`)                                                                                                                                                                      |
+| `lib/riddle-persistence.ts`                                                                                                             | Consolidated persistence (plan P2): 10s autosave session store (also read once by the results page via `getRiddleSessionById`) + two-key resume store (snapshot written once + lightweight progress per tick)                                       |
 | `lib/riddle-mode-param.ts`                                                                                                              | `parseModeParam` (lives outside the page module per Next.js export rules)                                                                                                                                                                           |
 | `types/riddles.ts`                                                                                                                      | Types incl. `adaptRiddleMcq`                                                                                                                                                                                                                        |
 | `features/riddle-mcq/**`                                                                                                                | Admin CRUD: container, filter rows, table rows, 7 React Query hooks, modals (create/edit with zod level-based option counts, category/subject, ImportModal + csv-parser)                                                                            |
@@ -48,32 +47,31 @@ Frontend (`apps/frontend/src/`):
 
 ## 2. Endpoint map
 
-| Method & Path                                                                           | Auth   | Notes                                                       |
-| --------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------- |
-| GET `/riddle-mcq/all`                                                                   | admin  | paginated cached list with filters                          |
-| GET `/riddle-mcq/level-counts`                                                          | public | per-subject×level published counts, 300s cache              |
-| GET `/riddle-mcq/subjects/:subjectId/riddles`                                           | public | PUBLISHED only                                              |
-| GET `/riddle-mcq/mixed?count<=100`, `/random/:level?count<=50`                          | public | `random_weight` index-seek random pools                     |
-| GET `/riddle-mcq/riddles/:id`                                                           | public | single PUBLISHED read                                       |
-| POST/PATCH/DELETE `/riddle-mcq/riddles[/:id]`                                           | admin  | CRUD, draft→published→trash lifecycle                       |
-| POST `/riddle-mcq/riddles/bulk`                                                         | admin  | chunked import                                              |
-| POST `/riddle-mcq/riddles/bulk-action`                                                  | admin  | incl. restore→DRAFT                                         |
-| GET `/riddle-mcq/export`                                                                | admin  | category-grouped CSV                                        |
-| GET `/riddle-mcq/stats/overview`                                                        | public | FE contract `{totalRiddleMcqs, totalSubjects, mcqsByLevel}` |
-| GET `/riddle-mcq/filter-counts`                                                         | admin  | facet counts for admin panel                                |
-| GET `/riddle-mcq/stats/status-counts?subject`                                           | admin  | per-status counts                                           |
-| GET/POST/PATCH/DELETE `/riddle-mcq/subjects[/:slug or :id]`, `/all`, `?hasContent=true` | mixed  | subject CRUD + reads                                        |
-| GET/POST/PATCH/DELETE `/riddle-mcq/categories[/:id]`, `/all`                            | mixed  | category CRUD + reads                                       |
+| Method & Path                                                                           | Auth   | Notes                                                                              |
+| --------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------- |
+| GET `/riddle-mcq/all`                                                                   | admin  | paginated cached list with filters                                                 |
+| GET `/riddle-mcq/level-counts`                                                          | public | per-subject×level published counts, 300s cache                                     |
+| GET `/riddle-mcq/subjects/:subjectId/riddles`                                           | public | PUBLISHED only                                                                     |
+| GET `/riddle-mcq/mixed?count<=100`, `/random/:level?count<=50`                          | public | `random_weight` index-seek random pools                                            |
+| GET `/riddle-mcq/riddles/:id`                                                           | public | single PUBLISHED read                                                              |
+| POST/PATCH/DELETE `/riddle-mcq/riddles[/:id]`                                           | admin  | CRUD, draft→published→trash lifecycle                                              |
+| POST `/riddle-mcq/riddles/bulk`                                                         | admin  | chunked import                                                                     |
+| POST `/riddle-mcq/riddles/bulk-action`                                                  | admin  | incl. restore→DRAFT                                                                |
+| GET `/riddle-mcq/export`                                                                | admin  | category-grouped CSV                                                               |
+| GET `/riddle-mcq/stats/overview`                                                        | public | hub header strip: `{totalRiddleMcqs, totalSubjects, totalCategories, mcqsByLevel}` |
+| GET `/riddle-mcq/filter-counts`                                                         | admin  | facet counts for admin panel (incl. statusCounts)                                  |
+| GET/POST/PATCH/DELETE `/riddle-mcq/subjects[/:slug or :id]`, `/all`, `?hasContent=true` | mixed  | subject CRUD + reads (admin panel lists via `/all` — inactive included)            |
+| GET/POST/PATCH/DELETE `/riddle-mcq/categories[/:id]`, `/all`                            | mixed  | category CRUD + reads (admin panel lists via `/all`)                               |
 
 ## 3. Current status
 
-**Done:** full game loop (unified hub → play → results); server-side level answer rules mirrored from FE zod (min options 2/3/4 per level, letter ranges, expert text answer); capped `random_weight` random pools; two-key resume store + 10s autosave; shared scorer across play/results/review incl. expert text; chunked CSV import/export with auto-created taxonomy; bulk actions with restore; family-scoped cache invalidation; public reads hard-filter PUBLISHED; recent commits wired ImportModal success invalidation, typed submit handlers, and expert text answers in review.
+**Done:** full game loop (unified hub → play → results); server-side level answer rules mirrored from FE zod (min options 2/3/4 per level, letter ranges, expert text answer); capped `random_weight` random pools; two-key resume store + 10s autosave; shared scorer across play/results/review incl. expert text; chunked CSV import/export with auto-created taxonomy; bulk actions with restore; family-scoped cache invalidation; public reads hard-filter PUBLISHED; recent commits wired ImportModal success invalidation, typed submit handlers, and expert text answers in review; the hub header renders catalog stats from `/riddle-mcq/stats/overview`; the admin panel lists subjects/categories through the `/all` admin endpoints (inactive included).
 
 **Corrected vs the archived doc:**
 
 - The shared `RiddleChallengeHub` component **no longer exists** — the hubs were unified into the riddle home page itself (mode + level picker inline); `challenge`/`practice` routes are now pure redirects. The old doc's "ChallengeHub" inventory entry is stale.
 - Riddle levels are **easy→expert only** (expert = free-text answer); there is no extreme level — answers differ from quiz-mcq, which has 5 levels.
-- Persistence uses **two** localStorage stores side by side: `lib/riddle-resume.ts` (two-key resume) and `lib/riddle-session.ts` (10s autosave, read by results). Functional but redundant.
+- In-flight persistence lives in the consolidated `lib/riddle-persistence.ts`: the 10s autosave session store (read once by the results page via `getRiddleSessionById`) and the two-key resume store.
 - `useRiddlePlay.ts` has 8 committed analytics `track()` calls mirroring (and now exceeding) the quiz-mcq instrumentation.
 
 ## 4. Task breakdown

@@ -22,7 +22,7 @@ import { validateJSONStructure } from '../lib/json';
 
 import type { AdminImageRiddleCategory } from './useAdminImageRiddleData';
 
-export interface UseAdminImageRiddleImportArgs {
+interface UseAdminImageRiddleImportArgs {
   categories: AdminImageRiddleCategory[];
   setCategories: React.Dispatch<React.SetStateAction<AdminImageRiddleCategory[]>>;
   loadData: () => Promise<void>;

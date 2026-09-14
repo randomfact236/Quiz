@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 import { isSaved, toggleSaved } from '@/lib/saved-items';
 import { toast } from '@/lib/toast';
 
-export interface ShareMenuProps {
+interface ShareMenuProps {
   /** Headline used by share targets (e.g. the joke setup). */
   title: string;
   /** Body text used by share targets. */

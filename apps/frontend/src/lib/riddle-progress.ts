@@ -14,7 +14,7 @@ import { STORAGE_KEYS, getItem, setItem } from './storage';
 
 const RIDDLE_HISTORY_MAX = 100;
 
-export interface RiddleHistoryEntry {
+interface RiddleHistoryEntry {
   id: string;
   subjectId: string;
   subjectName: string;

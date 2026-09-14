@@ -255,16 +255,6 @@ export class AdminImageRiddlesService {
   }
 
   /**
-   * Soft delete riddle (set isActive to false)
-   */
-  async deleteRiddle(id: string): Promise<void> {
-    const riddle = await this.findRiddleById(id);
-    riddle.isActive = false;
-    await this.riddleRepo.save(riddle);
-    await this.invalidateCache();
-  }
-
-  /**
    * Toggle active status
    */
   async toggleActive(id: string): Promise<{ isActive: boolean }> {

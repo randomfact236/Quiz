@@ -8,12 +8,14 @@ interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Mount-time session hydration only. Login/logout flows call authService
+ * directly (lib/auth.ts) and the session state is re-read on the next mount.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,19 +36,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    await authService.login(email, password);
-    const currentUser = await authService.getCurrentUser();
-    setUser(currentUser);
-  };
-
-  const logout = () => {
-    authService.logout();
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

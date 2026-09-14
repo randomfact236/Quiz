@@ -53,7 +53,7 @@ export const CARD_BLUR_DATA_URL =
 
 // Mirrors backend settings.imageRiddles.timers (RIDDLE_TIMERS) — single
 // source of truth lives there; keep these values in sync.
-export const defaultTimers: Record<string, number> = {
+const defaultTimers: Record<string, number> = {
   easy: 60,
   medium: 90,
   hard: 120,
@@ -91,7 +91,7 @@ export function applyMixSort(riddles: ImageRiddle[], seed: number): ImageRiddle[
   return [...riddles].sort((a, b) => seededPosition(a.id, seed) - seededPosition(b.id, seed));
 }
 
-export interface RiddleFilterParams {
+interface RiddleFilterParams {
   activeCategory: string | null;
   difficulty: string;
   searchQuery: string;

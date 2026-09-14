@@ -30,7 +30,7 @@ import {
 
 import type { AdminImageRiddleCategory } from './useAdminImageRiddleData';
 
-export interface UseAdminImageRiddleMutationsArgs {
+interface UseAdminImageRiddleMutationsArgs {
   categories: AdminImageRiddleCategory[];
   setImageRiddles: React.Dispatch<React.SetStateAction<ImageRiddle[]>>;
   categoryIdByName: (name: string) => string | undefined;

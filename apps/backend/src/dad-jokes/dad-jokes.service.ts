@@ -14,10 +14,7 @@ import {
 } from '../common/dto/base.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
-import {
-  BulkActionResult,
-  StatusCountResponse,
-} from '../common/interfaces/bulk-action-result.interface';
+import { BulkActionResult } from '../common/interfaces/bulk-action-result.interface';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { settings } from '../config/settings';
@@ -238,17 +235,6 @@ export class DadJokesService {
     return saved;
   }
 
-  async updateJokeStatus(id: string, status: ContentStatus): Promise<DadJoke> {
-    const joke = await this.jokeRepo.findOne({ where: { id } });
-    if (joke === null) {
-      throw new NotFoundException('Joke not found');
-    }
-    joke.status = status;
-    const saved = await this.jokeRepo.save(joke);
-    await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
-    return saved;
-  }
-
   async deleteJoke(id: string): Promise<void> {
     const result = await this.jokeRepo.delete(id);
     if (result.affected === 0) {
@@ -439,10 +425,6 @@ export class DadJokesService {
       await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
     }
     return result;
-  }
-
-  async getStatusCounts(): Promise<StatusCountResponse> {
-    return this.bulkActionService.getStatusCounts(this.jokeRepo);
   }
 
   // ==================== STATS ====================

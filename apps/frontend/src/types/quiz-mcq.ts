@@ -55,7 +55,7 @@ export interface QuizState {
 }
 
 /** Quiz Actions */
-export interface QuizActions {
+interface QuizActions {
   selectAnswer: (option: string) => void;
   goToPrevious: () => void;
   goToNext: () => void;
@@ -116,16 +116,6 @@ export interface ChapterProgress {
   averageScore: number;
   completed: boolean;
   lastAttemptAt: string;
-}
-
-/** Subject Progress */
-export interface SubjectProgress {
-  subject: string;
-  totalChapters: number;
-  completedChapters: number;
-  totalAttempts: number;
-  bestScore: number;
-  overallAccuracy: number;
 }
 
 /** Achievement */

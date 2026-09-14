@@ -29,7 +29,12 @@ import toast from '@/lib/toast';
 import type { QuizSession, QuizResult } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { calculateResult } from '@/lib/quiz-mcq-scoring';
-import { getQuizSessionHighScores, type QuizHighScore } from '@/lib/quiz-mcq-api';
+import {
+  getQuizSessionHighScores,
+  getQuizSessionHistory,
+  type QuizHighScore,
+  type QuizSessionHistoryEntry,
+} from '@/lib/quiz-mcq-api';
 import { getGuestId } from '@/lib/guest-id';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { QuestionReview } from '@/components/quiz-mcq/QuestionReview';
@@ -45,6 +50,8 @@ function ResultsContent(): JSX.Element {
   const [copied, setCopied] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [personalBest, setPersonalBest] = useState<QuizHighScore | null>(null);
+  const [serverHistory, setServerHistory] = useState<QuizSessionHistoryEntry[] | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
 
   // Load session from history
   useEffect(() => {
@@ -66,6 +73,11 @@ function ResultsContent(): JSX.Element {
       setPersonalBest(match ?? null);
     });
   }, [sessionId, router]);
+
+  // Server-side session history — the cross-device record (plan/02-mcq-quiz.md).
+  useEffect(() => {
+    getQuizSessionHistory(getGuestId()).then(setServerHistory);
+  }, []);
 
   // Share results
   const handleShare = async () => {
@@ -212,6 +224,64 @@ function ResultsContent(): JSX.Element {
               {personalBest.sessions === 1 ? '' : 's'}
             </p>
           </div>
+        )}
+
+        {/* Cross-device session history (server-backed) */}
+        {serverHistory !== null && serverHistory.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="mb-6"
+          >
+            <button
+              onClick={() => setShowHistory(!showHistory)}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-white p-4 text-center font-semibold text-gray-800 shadow-lg transition-colors hover:bg-gray-50 dark:bg-secondary-800 dark:text-secondary-100 dark:hover:bg-secondary-800/70"
+            >
+              {showHistory ? 'Hide' : 'Show'} Session History ({serverHistory.length} synced)
+              {showHistory ? (
+                <ChevronUp className="h-5 w-5" />
+              ) : (
+                <ChevronDown className="h-5 w-5" />
+              )}
+            </button>
+
+            {showHistory && (
+              <div className="mt-4 rounded-2xl bg-white p-4 shadow-lg dark:bg-secondary-800">
+                <p className="mb-2 text-xs text-gray-500 dark:text-secondary-400">
+                  Latest {Math.min(serverHistory.length, 20)} completed sessions — saved to your
+                  account, not just this device.
+                </p>
+                <div className="divide-y divide-gray-100 dark:divide-secondary-700">
+                  {serverHistory.slice(0, 20).map((h) => {
+                    const pct = h.maxScore > 0 ? Math.round((h.score / h.maxScore) * 100) : 0;
+                    return (
+                      <div key={h.id} className="flex items-center justify-between gap-3 py-2">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-gray-800 dark:text-secondary-100">
+                            {h.subjectName || h.subjectSlug || 'Quiz'}
+                            {h.chapterName ? ` · ${h.chapterName}` : ''}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-secondary-400">
+                            {h.level ?? 'mixed'}
+                            {h.mode && h.mode !== 'normal'
+                              ? ` · ${h.mode.replace('_', ' ')}`
+                              : ''}{' '}
+                            · {new Date(h.completedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <p
+                          className={`shrink-0 text-sm font-bold ${pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
+                        >
+                          {h.score}/{h.maxScore}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </motion.div>
         )}
 
         {/* Performance Breakdown */}

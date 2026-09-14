@@ -25,8 +25,10 @@ import {
   getSubjects,
   getCategories,
   getPublicLevelCounts,
+  getRiddleStats,
   type RiddleMcqCategory,
   type RiddleMcqSubject,
+  type RiddleStats,
 } from '@/lib/riddle-mcq-api';
 import { parseModeParam, type RiddlePlayMode as Mode } from '@/lib/riddle-mode-param';
 
@@ -210,6 +212,21 @@ function RiddlesPageContent(): JSX.Element {
   const [allSubjectCounts, setAllSubjectCounts] =
     useState<Record<Level, number>>(emptyLevelCounts());
   const [subjectWise, setSubjectWise] = useState<Record<string, Record<string, number>>>({});
+  const [stats, setStats] = useState<RiddleStats | null>(null);
+
+  // Catalog stats for the header strip (plan/03 §2 stats contract) —
+  // non-critical: fetched after the hub renders, hidden on failure.
+  useEffect(() => {
+    let cancelled = false;
+    getRiddleStats()
+      .then((s) => {
+        if (!cancelled) setStats(s);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -350,6 +367,12 @@ function RiddlesPageContent(): JSX.Element {
           <p className="text-xl font-medium text-white/90">
             Challenge your brain with clever puzzles!
           </p>
+          {stats && (
+            <p className="mt-2 text-sm font-medium text-white/75">
+              {stats.totalRiddleMcqs} riddles · {stats.totalSubjects} subjects ·{' '}
+              {stats.totalCategories} categories
+            </p>
+          )}
         </div>
 
         {/* Mode selection */}

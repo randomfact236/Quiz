@@ -90,20 +90,3 @@ export class BulkActionResponseDto {
   @ApiProperty({ description: 'Human-readable status message' })
   message: string;
 }
-
-/**
- * DTO for status count response
- */
-export class StatusCountResponseDto {
-  @ApiProperty({ description: 'Total number of items' })
-  total: number;
-
-  @ApiProperty({ description: 'Number of published items' })
-  published: number;
-
-  @ApiProperty({ description: 'Number of draft items' })
-  draft: number;
-
-  @ApiProperty({ description: 'Number of items in trash' })
-  trash: number;
-}

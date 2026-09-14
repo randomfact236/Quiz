@@ -29,7 +29,7 @@ import { useRiddleKeyboardNav } from './useRiddleKeyboardNav';
 
 export type ImageRiddleRevealSource = 'correct' | 'revealed' | null;
 
-export interface UseImageRiddleGameArgs {
+interface UseImageRiddleGameArgs {
   /** Visible (filtered/paginated) riddles, used for modal navigation. */
   riddles: ImageRiddle[];
   onSolved: (id: string) => void;

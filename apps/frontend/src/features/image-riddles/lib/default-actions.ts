@@ -101,7 +101,7 @@ function createShareAction(now: Date): IActionOption {
   };
 }
 
-export function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
+function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
   const now = new Date();
   return [
     createCheckAnswerAction(now),

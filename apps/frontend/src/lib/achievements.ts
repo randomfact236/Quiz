@@ -120,6 +120,48 @@ export function unlockAchievement(achievement: Achievement): boolean {
 }
 
 /**
+ * Server → client re-hydration (plan/06-achievements.md P3): pull the unlocks
+ * synced from this account/device and merge them into the local store, so
+ * achievements unlocked elsewhere appear here too. Earlier timestamp wins
+ * (mirroring the server's upsert); unknown ids are dropped.
+ */
+export async function hydrateUnlocksFromServer(): Promise<number> {
+  try {
+    const response = await api.get<{
+      data: Array<{ achievementId: string; unlockedAt: string }>;
+    }>(`/achievements/unlocks?guestId=${encodeURIComponent(getGuestId())}`);
+    const serverUnlocks = response.data.data;
+    if (serverUnlocks.length === 0) return 0;
+
+    const local = getItem<Record<string, Achievement>>(STORAGE_KEYS.ACHIEVEMENTS, {});
+    let merged = 0;
+
+    for (const { achievementId, unlockedAt } of serverUnlocks) {
+      const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
+      if (!achievement) continue;
+
+      const existing = local[achievementId];
+      if (existing) {
+        if (existing.unlockedAt && new Date(unlockedAt) < new Date(existing.unlockedAt)) {
+          local[achievementId] = { ...achievement, unlockedAt };
+        }
+        continue;
+      }
+
+      local[achievementId] = { ...achievement, unlockedAt };
+      merged++;
+    }
+
+    if (merged > 0) {
+      setItem(STORAGE_KEYS.ACHIEVEMENTS, local);
+    }
+    return merged;
+  } catch {
+    return 0;
+  }
+}
+
+/**
  * Combined completion history (plan/06-achievements.md P1 #1): quiz-mcq
  * sessions + riddle completions. Riddles have no chapter (blank chapter), so
  * chapter-keyed conditions skip them to stay chapter-scoped.

@@ -33,7 +33,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "type-check": "npm run type-check --workspaces --if-present",
-    "clean": "npm run clean --workspaces && rimraf node_modules",
+    "clean": "npm run clean --workspaces --if-present && rimraf node_modules",
     "validate:ports": "node scripts/validate-ports.js",
     "ports:status": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action status",
     "ports:setup": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action setup",

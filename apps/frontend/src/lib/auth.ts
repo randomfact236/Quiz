@@ -8,7 +8,7 @@ export interface AuthUser {
   role?: string;
 }
 
-export interface AuthResponse {
+interface AuthResponse {
   user: AuthUser;
   token: string;
   refreshToken: string;

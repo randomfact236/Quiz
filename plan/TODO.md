@@ -23,3 +23,4 @@
 | 12  | Admin Dashboard          | [12-admin-dashboard.md](12-admin-dashboard.md)     | ✅ P0–P3 worked (2 deferrals with rationale)                      |
 | 13  | Analytics                | [13-analytics.md](13-analytics.md)                 | ✅ P0–P3 worked (deferrals with rationale)                        |
 | 14  | Newsletter               | [14-newsletter.md](14-newsletter.md)               | ✅ Built (campaigns deferred per owner)                           |
+| 15  | Full SEO                 | [15-seo.md](15-seo.md)                             | ✅ P1 built (P2/P3 owner-gated — see future-features §5)          |

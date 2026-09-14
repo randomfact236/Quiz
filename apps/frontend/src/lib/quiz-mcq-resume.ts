@@ -22,7 +22,7 @@ const RESUME_QUESTIONS_KEY = STORAGE_KEYS.QUIZ_RESUME_QUESTIONS;
 const RESUME_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 /** Identity fields shared by both keys — used to bind snapshot ↔ progress. */
-export interface QuizResumeIdentity {
+interface QuizResumeIdentity {
   subject: string;
   chapter: string;
   level: string;
@@ -30,7 +30,7 @@ export interface QuizResumeIdentity {
 }
 
 /** Lightweight per-change progress payload (no questions). */
-export interface QuizResumeProgress {
+interface QuizResumeProgress {
   currentQuestionIndex: number;
   sessionSize: number;
   answers: Record<string, string>;

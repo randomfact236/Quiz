@@ -34,11 +34,7 @@ import { ContentStatus } from '../common/enums/content-status.enum';
 import { ContentImportDuplicate } from '../common/content/content.service';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
-import {
-  BulkActionDto,
-  BulkActionResponseDto,
-  StatusCountResponseDto,
-} from '../common/dto/bulk-action.dto';
+import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.dto';
 import { BulkQuestionDto } from '../common/dto/bulk-question.dto';
 import { ExportQueryDto } from './dto/export-query.dto';
 import { CreateQuizSessionDto } from './dto/create-quiz-session.dto';
@@ -493,20 +489,5 @@ export class QuizMcqController {
   @ApiOperation({ summary: 'Execute bulk action' })
   async executeBulkAction(@Body() dto: BulkActionDto): Promise<BulkActionResponseDto> {
     return this.quizService.bulkAction(dto.ids, dto.action);
-  }
-
-  @Get('subjects/:slug/status-counts')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get question counts by status for a subject (Admin only)' })
-  @ApiParam({ name: 'slug', example: 'animals' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns status counts for subject',
-    type: StatusCountResponseDto,
-  })
-  async getStatusCountsBySubject(@Param('slug') slug: string): Promise<StatusCountResponseDto> {
-    return this.quizService.getStatusCountsBySubject(slug);
   }
 }

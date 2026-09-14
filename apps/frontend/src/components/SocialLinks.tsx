@@ -2,10 +2,10 @@ import type { SiteSocialLinks } from '@/types/settings.types';
 import { normalizeExternalUrl } from '@/lib/public-settings';
 
 /**
- * Footer social icons. A platform renders only when its URL is configured —
- * empty settings fields stay hidden (matching the admin UI's promise).
+ * The canonical social platform list (key + display label) — shared with the
+ * admin SettingsSection form so labels can't drift between the two surfaces.
  */
-const SOCIAL_PLATFORMS: Array<{
+export const SOCIAL_PLATFORMS: Array<{
   key: keyof SiteSocialLinks;
   label: string;
   path: string;
@@ -42,6 +42,8 @@ export function SocialLinks({
 }: {
   socialLinks: SiteSocialLinks | undefined;
 }): JSX.Element {
+  // A platform renders only when its URL is configured — empty settings
+  // fields stay hidden (matching the admin UI's promise).
   const filled = SOCIAL_PLATFORMS.map((platform) => ({
     ...platform,
     href: normalizeExternalUrl(socialLinks?.[platform.key] ?? ''),

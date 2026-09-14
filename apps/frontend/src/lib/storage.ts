@@ -3,9 +3,8 @@
  * LOCAL STORAGE PERSISTENCE LAYER
  * ============================================================================
  * @module lib/storage
- * @description Typed localStorage wrapper for standalone data persistence.
- *              All app data (questions, jokes, riddles, settings) flows through
- *              this module so the website is fully self-contained.
+ * @description Typed localStorage wrapper. Auth tokens, gameplay progress,
+ *              achievements and offline fallbacks flow through this module.
  */
 
 // Storage key prefix to avoid collisions
@@ -18,16 +17,12 @@ export const STORAGE_KEYS = {
   REFRESH_TOKEN: `${PREFIX}refresh-token`,
   ADMIN_TOKEN: `${PREFIX}admin-token`,
   ADMIN_REFRESH_TOKEN: `${PREFIX}admin-refresh-token`,
-  SETTINGS: `${PREFIX}settings`,
-  SUBJECTS: `${PREFIX}subjects`,
-  QUESTIONS: `${PREFIX}questions`,
   JOKES: `${PREFIX}jokes`,
   JOKE_CATEGORIES: `${PREFIX}joke-categories`,
   VOTED_JOKES: `${PREFIX}voted-jokes`,
   JOKE_VOTE_COUNTS: `${PREFIX}joke-vote-counts`,
   // Seen-joke tracking (dad-jokes Workstream C): jokeId → ISO timestamp of first flip
   SEEN_JOKES: `${PREFIX}seen-jokes`,
-  RIDDLES: `${PREFIX}riddles`,
   // Image riddle game progress (solved vs revealed answers)
   IMAGE_RIDDLE_SOLVED: `${PREFIX}image-riddle-solved`,
   IMAGE_RIDDLE_REVEALED: `${PREFIX}image-riddle-revealed`,
@@ -36,9 +31,7 @@ export const STORAGE_KEYS = {
   QUIZ_RESUME_SESSION: `${PREFIX}quiz-resume-session`,
   QUIZ_RESUME_QUESTIONS: `${PREFIX}quiz-resume-questions`,
   CHAPTER_PROGRESS: `${PREFIX}chapter-progress`,
-  SUBJECT_PROGRESS: `${PREFIX}subject-progress`,
   ACHIEVEMENTS: `${PREFIX}achievements`,
-  CHALLENGE_HIGH_SCORE: `${PREFIX}challenge-high-score`,
   CHALLENGE_STREAK: `${PREFIX}challenge-streak`,
   // Riddle session and progress (Phase 0)
   RIDDLE_SESSION: `${PREFIX}riddle-session`,
@@ -108,34 +101,6 @@ export function removeItem(key: string): void {
   }
   localStorage.removeItem(key);
   sessionStorage.removeItem(key);
-}
-
-/**
- * Clear quiz-specific data (questions and subjects).
- */
-export function clearQuizData(): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  localStorage.removeItem('aiquiz:subjects');
-  localStorage.removeItem('aiquiz:questions');
-}
-
-/**
- * Clear all app data (keys starting with PREFIX).
- */
-export function clearAll(): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  const keysToRemove: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k?.startsWith(PREFIX)) {
-      keysToRemove.push(k);
-    }
-  }
-  keysToRemove.forEach((k) => localStorage.removeItem(k));
 }
 
 // ─── Debounced Save (for high-frequency state updates) ───────────────────────
