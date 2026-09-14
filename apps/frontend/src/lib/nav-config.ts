@@ -8,6 +8,7 @@ interface NavItem {
   label: string;
 }
 
+/** Primary destinations — the top bar (desktop) and the mobile menu drawer. */
 export const NAV_ITEMS: NavItem[] = [
   { href: '/', label: 'Home' },
   { href: '/play', label: 'Play Hub' },
@@ -16,9 +17,17 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/jokes', label: 'Dad Jokes' },
   { href: '/riddle-mcq', label: 'Riddles' },
   { href: '/image-riddles', label: 'Image Riddles' },
+];
+
+/**
+ * Secondary destinations — the footer and the logged-in user menu. Deliberately
+ * not in the top bar: Achievements is personal (meaningful when signed in) and
+ * About is secondary.
+ */
+export const NAV_SECONDARY_ITEMS: NavItem[] = [
   { href: '/achievements', label: 'Achievements' },
   { href: '/about', label: 'About' },
 ];
 
-/** Home is rendered as the logo in the Header, so nav menus skip it there. */
-export const NAV_MENU_ITEMS: NavItem[] = NAV_ITEMS.filter((item) => item.href !== '/');
+/** Mobile menu drawer: everything except Home (rendered as the logo there). */
+export const NAV_MENU_ITEMS: NavItem[] = [...NAV_ITEMS, ...NAV_SECONDARY_ITEMS];

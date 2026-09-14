@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
 import { SocialLinks } from '@/components/SocialLinks';
 
-import { NAV_ITEMS } from '@/lib/nav-config';
+import { NAV_ITEMS, NAV_SECONDARY_ITEMS } from '@/lib/nav-config';
 import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 
 const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
@@ -11,7 +11,7 @@ const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
 // Derived from nav-config so new modules appear here automatically.
 const footerLinks = {
   product: ['/play', '/quiz-mcq', '/games', '/image-riddles', '/jokes', '/riddle-mcq'].map(byHref),
-  company: [{ href: '/about', label: 'About' }],
+  company: NAV_SECONDARY_ITEMS,
 };
 
 const legalLinks = [

@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { NAV_ITEMS, NAV_MENU_ITEMS } from '@/lib/nav-config';
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { UserCircle } from 'lucide-react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { BrandMark } from '@/components/BrandMark';
 import { useSiteBrand } from '@/components/SiteBrandContext';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
 
@@ -73,10 +75,14 @@ export default function Header(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
 
   const isAdminPage = pathname?.startsWith('/admin');
+
+  useClickOutside(userMenuRef, () => setIsUserMenuOpen(false), isUserMenuOpen);
 
   useEffect(() => {
     const token = getItem<string | null>(STORAGE_KEYS.AUTH_TOKEN, null);
@@ -260,34 +266,65 @@ export default function Header(): JSX.Element {
             <div className="flex items-center gap-3">
               {/* Show logout when user OR admin is logged in */}
               {isUserLoggedIn || isAdminLoggedIn ? (
-                <div className="flex items-center gap-3">
-                  {isAdminLoggedIn && (
-                    <Link
-                      href="/admin"
-                      className="text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  {isUserLoggedIn && (
-                    <Link
-                      href="/profile"
-                      className="text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 font-medium dark:text-indigo-400 dark:hover:text-indigo-300"
-                    >
-                      Profile
-                    </Link>
-                  )}
-                  {isAdminLoggedIn && (
-                    <span className="text-sm bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded-full">
-                      Admin
-                    </span>
-                  )}
+                <div className="relative" ref={userMenuRef}>
                   <button
-                    onClick={handleLogout}
-                    className="text-sm bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    aria-expanded={isUserMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label={isUserMenuOpen ? 'Close account menu' : 'Open account menu'}
+                    className={`flex items-center gap-1 rounded-md p-1 text-indigo-600 transition-colors dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-200 ${
+                      isUserMenuOpen ? 'bg-indigo-50 dark:bg-indigo-500/10' : ''
+                    }`}
                   >
-                    Logout
+                    <UserCircle className="h-8 w-8" />
                   </button>
+                  {isUserMenuOpen && (
+                    <div
+                      role="menu"
+                      className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-secondary-200 dark:bg-secondary-800 dark:ring-secondary-700"
+                    >
+                      {isAdminLoggedIn && (
+                        <Link
+                          href="/admin"
+                          role="menuitem"
+                          className="block px-4 py-2.5 text-sm font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-secondary-700"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+                      {isUserLoggedIn && (
+                        <Link
+                          href="/profile"
+                          role="menuitem"
+                          className="block px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 dark:text-secondary-100 dark:hover:bg-secondary-700"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Profile
+                        </Link>
+                      )}
+                      <Link
+                        href="/achievements"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 dark:text-secondary-100 dark:hover:bg-secondary-700"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Achievements
+                      </Link>
+                      <div className="border-t border-gray-100 dark:border-secondary-700">
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setIsUserMenuOpen(false);
+                          }}
+                          role="menuitem"
+                          className="block w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-secondary-700"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Link

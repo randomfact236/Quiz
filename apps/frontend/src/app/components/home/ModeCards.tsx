@@ -71,6 +71,7 @@ const MODE_CARDS: ModeCardConfig[] = [
 const DIRECT_LINKS = [
   { href: '/riddle-mcq', emoji: '🎭', title: 'Riddles', subtitle: 'Brain Teasers' },
   { href: '/image-riddles', emoji: '🖼️', title: 'Image Riddles', subtitle: 'Visual Puzzles' },
+  { href: '/games', emoji: '🎮', title: 'Mini Games', subtitle: 'Quick Games' },
   { href: '/jokes', emoji: '😂', title: 'Dad Jokes', subtitle: 'Fun Time' },
 ];
 
