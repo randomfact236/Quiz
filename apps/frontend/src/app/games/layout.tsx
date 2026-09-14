@@ -10,9 +10,9 @@ const BREADCRUMBS = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Mini Games — Quick Reaction & Puzzle Games',
+  title: 'Games — Brain Exercise & Puzzle Games',
   description:
-    "Free browser mini games: test your reflexes in Tap or Don't Tap, a Go/No-Go reaction game. Playable one-handed on any device — no install, no signup.",
+    'Free browser brain games: train your memory, words and reflexes — from Memory Quiz to Word Puzzle. Playable one-handed on any device — no install, no signup.',
   alternates: { canonical: '/games' },
 };
 

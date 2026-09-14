@@ -148,7 +148,7 @@ export default function UnifiedGamePickerPage(): JSX.Element {
           })}
         </div>
 
-        {/* Mini games — quick one-handed games, no signup */}
+        {/* Games — brain exercises, no signup */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,9 +161,9 @@ export default function UnifiedGamePickerPage(): JSX.Element {
           >
             <Gamepad2 className="h-8 w-8 shrink-0" />
             <span className="flex-1">
-              <span className="block text-lg font-bold">Mini Games</span>
+              <span className="block text-lg font-bold">Games</span>
               <span className="block text-sm text-white/90">
-                Eight quick games — puzzles, runners, memory and more. No signup, plays offline.
+                Eight brain exercises — puzzles, memory, runners and more. No signup, plays offline.
               </span>
             </span>
             <span className="text-sm font-bold uppercase tracking-wider">Play →</span>

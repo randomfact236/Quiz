@@ -32,7 +32,7 @@ export const INDEXABLE_ROUTES: readonly IndexableRoute[] = [
   { path: '/quiz-mcq', label: 'Quiz MCQ', priority: 0.8, freq: 'weekly' },
   { path: '/riddle-mcq', label: 'Riddle MCQ', priority: 0.8, freq: 'weekly' },
   { path: '/image-riddles', label: 'Image Riddles', priority: 0.8, freq: 'weekly' },
-  { path: '/games', label: 'Mini Games', priority: 0.7, freq: 'weekly' },
+  { path: '/games', label: 'Games', priority: 0.7, freq: 'weekly' },
   { path: '/jokes', label: 'Dad Jokes', priority: 0.8, freq: 'daily' },
   { path: '/achievements', label: 'Achievements', priority: 0.6, freq: 'weekly' },
   { path: '/about', label: 'About', priority: 0.5, freq: 'monthly' },

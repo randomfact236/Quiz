@@ -87,10 +87,10 @@ export default function GamesPage(): JSX.Element {
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8 dark:from-indigo-950 dark:to-secondary-950">
       <div className="mx-auto max-w-4xl">
         <h1 className="mb-2 text-center text-4xl font-extrabold tracking-tight text-gray-800 dark:text-secondary-100">
-          🎮 Mini Games
+          🎮 Games
         </h1>
         <p className="mb-10 text-center text-gray-600 dark:text-secondary-300">
-          Quick games you can play one-handed — no install, no signup.
+          Brain exercises you can play one-handed — no install, no signup.
         </p>
 
         <div className="grid gap-6 sm:grid-cols-2">
