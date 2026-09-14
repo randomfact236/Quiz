@@ -39,9 +39,18 @@ function setupMiddleware(app: NestExpressApplication): void {
   });
   app.use(express.urlencoded({ extended: true, limit: DEFAULT_BODY_LIMIT }));
 
-  // Security: CORS configuration
+  // Security: CORS configuration. CORS_ORIGIN is a comma-separated list; it is
+  // split here because the cors package echoes per-request origins from an
+  // array, while a literal "a,b,c" string produces an invalid header browsers
+  // reject.
+  const corsOriginList = (
+    configService.get<string>('CORS_ORIGIN') ?? `http://localhost:${FRONTEND_PORT}`
+  )
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
   app.enableCors({
-    origin: configService.get('CORS_ORIGIN', `http://localhost:${FRONTEND_PORT}`),
+    origin: corsOriginList,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
     credentials: true,
