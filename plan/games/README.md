@@ -108,20 +108,21 @@ Markdown here is the single source of truth. Regenerate with:
 `node plan/games/build-html.mjs` (screen HTML → `plan/games/html/`) and
 `node plan/games/build-pdf.mjs` + pdf-skill conversion (PDFs → `plan/games/pdf/`).
 
-## 7. Isolation from the website (owner decision 2026-09-09 — binding)
+## 7. Site integration (owner decision 2026-09-15 — supersedes the 2026-09-09 isolation)
 
-- No nav/footer/sitemap links, no analytics events, no achievements integration, no
-  backend endpoints, no shared UI. Each game plan has a **Deferred coupling** section
-  listing what is intentionally NOT built.
-- ✅ **RESOLVED (2026-09-11/12):** the analytics POSTs were deleted in the Rev 2 commits
-  (verified 2026-09-12: isolation greps clean across all seven games then built — see
-  `plan/stale-code-scan-2026-09-12.md`; re-verified 2026-09-12 with game 08 included);
-  the local `/games` hub's `?api=` beacon
-  plumbing was removed 2026-09-12 (games take no hub parameters and post nothing);
-  game 02's Play-Hub header claim is gone. Isolation holds; shipping later remains the
-  explicit owner action below.
-- Shipping later is an explicit owner action: remove the `.gitignore` line
-  `apps/frontend/public/games/`, commit, and add any site references in one scoped change.
+- ✅ **SHIPPED (2026-09-15):** the isolation experiment is over and the games are part
+  of the site. The `.gitignore` games block is gone; the `/games` hub is linked from
+  the header/footer nav (`nav-config`), the Play Hub, and the sitemap route registry
+  (`lib/seo.ts` INDEXABLE_ROUTES); `games` is a valid analytics module on both ends
+  (`analytics.dto.ts` + `lib/analytics.ts`). Done as one scoped change per the
+  shipping checklist below.
+- History: the 2026-09-09 isolation decision (no nav/footer/sitemap links, no
+  analytics, no backend coupling) was fully honored while it held — analytics POSTs
+  were deleted in the Rev 2 commits (verified 2026-09-12, game 08 included) and the
+  hub's `?api=` beacon plumbing was removed 2026-09-12.
+- Each game plan's **Deferred coupling** section remains accurate for what each game
+  deliberately does NOT build (auth/account sync, leaderboards, achievements
+  integration) — those stay gated behind explicit future phases.
 
 ## 8. Decisions log (resolved — supersedes the sample plans' open questions)
 

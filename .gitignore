@@ -47,20 +47,5 @@ apps/backend/public/
 # External reference material (kept on disk, not part of the product)
 quiz-reference/
 
-# 2D games (kept on disk, git-isolated from the product until owner ships them — see plan/games/README.md).
-# Exception (owner decision 2026-09-11): all completed games are committed
-# (01 tap-or-dont-tap, 02 tic-tac-toe, 03 sliding-puzzle, 04 word-puzzle,
-# 05 hurdle-runner, 06 flying-snake, 07 spirit-runner, 08 memory-quiz). No site
-# coupling (footer/sitemap/Play Hub/analytics) exists.
-apps/frontend/public/games/*
-!apps/frontend/public/games/sliding-puzzle/
-!apps/frontend/public/games/tap-or-dont-tap/
-!apps/frontend/public/games/tic-tac-toe/
-!apps/frontend/public/games/flying-snake/
-!apps/frontend/public/games/word-puzzle/
-!apps/frontend/public/games/hurdle-runner/
-!apps/frontend/public/games/spirit-runner/
-!apps/frontend/public/games/memory-quiz/
-
 # ZCode CLI local workspace state (session artifacts)
 .zcode/

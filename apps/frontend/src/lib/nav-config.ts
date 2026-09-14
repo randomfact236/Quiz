@@ -15,6 +15,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/jokes', label: 'Dad Jokes' },
   { href: '/riddle-mcq', label: 'Riddles' },
   { href: '/image-riddles', label: 'Image Riddles' },
+  { href: '/games', label: 'Games' },
   { href: '/achievements', label: 'Achievements' },
   { href: '/about', label: 'About' },
 ];

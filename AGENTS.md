@@ -1,28 +1,18 @@
 # Repository Rules for AI Assistants
 
-## 2D Games — ISOLATED FEATURE (do not touch unless the owner explicitly says "2d games" / "games")
+## 2D Games — INTEGRATED WITH THE WEBSITE (owner decision 2026-09-15)
 
-The 2D games are deliberately kept separate from the website product (owner decision,
-`plan/games/README.md` "Site coupling"). **Any prompt/request that does not explicitly mention
-the 2D games must not touch them in any way.** Concretely, unless the owner names them:
+The eight 2D games (`apps/frontend/public/games/<slug>/`, hub at
+`apps/frontend/src/app/games/`) are part of the product as of the owner's 2026-09-15
+shipping decision. The former isolation rule (2026-09-09) is lifted: the hub is
+linked from the header/footer nav, the Play Hub, and the sitemap route registry,
+and `games` is a valid analytics module on both ends. Per-game plans in `plan/games/`
+remain the spec of record for each game's behavior.
 
-- **Do not read, modify, refactor, plan, analyze, delete, or reference** anything under:
-  - `apps/frontend/public/games/` — the static games (committed via a `.gitignore`
-    allowlist since 2026-09-11 — owner decision; still isolated from the product)
-  - `apps/frontend/src/app/games/` — the local games hub pages (untracked)
-  - `apps/frontend/src/__tests__/games-*` — the games tests (committed)
-  - `plan/games/` and `2d games plan.md` — the games build plans
-- **Do not re-add** games entries to product surfaces: the footer, nav config, sitemap,
-  the Play Hub (`app/play/page.tsx`), or the analytics module lists
-  (`ANALYTICS_MODULES` in `apps/backend/src/analytics/dto/analytics.dto.ts`,
-  `AnalyticsModuleName` / `MODULE_LABELS` in `apps/frontend/src/lib/analytics.ts`).
-  These couplings were removed on purpose so work on other features never has to
-  touch games code.
-- Work on any other feature must never require opening or changing the paths above.
-  If a task seems blocked on them, stop and ask the owner instead.
-
-**Shipping the games later** is an explicit owner action: remove the games lines in
-`.gitignore`'s games block, commit, and re-add the site references (footer/sitemap/Play
-Hub/analytics) in a single explicitly-scoped change.
+Games code follows the same production rules as every other feature (no dead,
+stale, or duplicated code). The static game folders are deliberately dependency-free
+and local-first: no backend calls, no auth, and no coupling beyond each game's
+documented `?debug`/`?locale`/`?seed`/`?theme` seams — keep it that way unless the
+owner asks otherwise.
 
 See `assistant-rules.md` for port configuration and development commands.

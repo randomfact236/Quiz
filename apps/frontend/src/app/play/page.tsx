@@ -12,7 +12,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Brain, GraduationCap, Timer } from 'lucide-react';
+import { ArrowLeft, Brain, Gamepad2, GraduationCap, Timer } from 'lucide-react';
 
 interface ContentOption {
   label: string;
@@ -147,6 +147,28 @@ export default function UnifiedGamePickerPage(): JSX.Element {
             );
           })}
         </div>
+
+        {/* Mini games — quick one-handed games, no signup */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-10"
+        >
+          <Link
+            href="/games"
+            className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-600 p-5 text-white shadow-lg transition-all hover:scale-[1.01] hover:shadow-xl"
+          >
+            <Gamepad2 className="h-8 w-8 shrink-0" />
+            <span className="flex-1">
+              <span className="block text-lg font-bold">Mini Games</span>
+              <span className="block text-sm text-white/90">
+                Eight quick games — puzzles, runners, memory and more. No signup, plays offline.
+              </span>
+            </span>
+            <span className="text-sm font-bold uppercase tracking-wider">Play →</span>
+          </Link>
+        </motion.div>
 
         <div className="mt-10 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-secondary-400">
           Know what you want already?

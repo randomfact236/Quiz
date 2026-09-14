@@ -26,6 +26,7 @@ export const ANALYTICS_MODULES = [
   'riddle-mcq',
   'jokes',
   'image-riddles',
+  'games',
   'site',
 ] as const;
 

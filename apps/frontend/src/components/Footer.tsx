@@ -10,7 +10,7 @@ const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
 
 // Derived from nav-config so new modules appear here automatically.
 const footerLinks = {
-  product: ['/play', '/quiz-mcq', '/image-riddles', '/jokes', '/riddle-mcq'].map(byHref),
+  product: ['/play', '/quiz-mcq', '/image-riddles', '/jokes', '/riddle-mcq', '/games'].map(byHref),
   company: [{ href: '/about', label: 'About' }],
 };
 
