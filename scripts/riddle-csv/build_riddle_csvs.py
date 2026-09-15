@@ -26,12 +26,47 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = Path(__file__).resolve().parent / "data"
+TXT_DIR = Path(__file__).resolve().parent / "data-txt"
 OUT_DIR = ROOT / "plan" / "imports" / "riddle-mcq"
 
 VALID_LEVELS = {"easy", "medium", "hard", "expert"}
 HEADER = "#,question,optionA,optionB,optionC,optionD,answer,level,subject,hint,explanation,status"
 EXPECTED_PER_CATEGORY = 300
 LETTERS = "ABCD"
+
+# Compact line format (data-txt/*.txt), one riddle per line, fields split by '~':
+#   MCQ:    question~o1~o2~o3~o4~L~level~subject~hint~explanation   (L = correct letter A-D)
+#   expert: question~~~~~~answer-text~expert~subject~hint~explanation
+# First line of a txt file must be:  #category: <Category Name>
+
+
+def parse_txt_shard(path: Path):
+    """Return (category, [riddle dict]) or (None, []) if the category line is missing."""
+    category = None
+    riddles = []
+    for ln, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("#category:"):
+            category = line.split(":", 1)[1].strip()
+            continue
+        parts = line.split("~")
+        if len(parts) != 10:
+            riddles.append({"__error__": f"{path.name} line {ln}: expected 10 '~'-separated fields, got {len(parts)}"})
+            continue
+        q, o1, o2, o3, o4, x, level, subject, hint, expl = (p.strip() for p in parts)
+        if level == "expert":
+            riddles.append({"question": q, "options": [], "answer": x, "level": "expert",
+                            "subject": subject, "hint": hint, "explanation": expl})
+        else:
+            if x.upper() not in ("A", "B", "C", "D"):
+                riddles.append({"__error__": f"{path.name} line {ln}: correct letter must be A-D, got '{x}'"})
+                continue
+            opts = [o1, o2, o3, o4]
+            riddles.append({"question": q, "options": opts, "correctIndex": "ABCD".index(x.upper()),
+                            "level": level, "subject": subject, "hint": hint, "explanation": expl})
+    return category, riddles
 
 
 def norm(q: str) -> str:
@@ -43,7 +78,75 @@ def slugify(name: str) -> str:
     return s
 
 
-def validate_shard(path: Path, seen_questions: dict, errors: list):
+SUSPICIOUS = re.compile(r"\b(banned|used up|hmm|close cousin|same as|clich|placeholder|too famous|not sure|tbd)\b", re.IGNORECASE)
+
+
+def validate_riddle(i: int, r: dict, where_prefix: str, category: str, seen_questions: dict, errors: list):
+    where = f"{where_prefix} riddle #{i}"
+    question = (r.get("question") or "").strip()
+    options = r.get("options")
+    level = (r.get("level") or "").strip()
+    subject = (r.get("subject") or "").strip()
+    hint = (r.get("hint") or "").strip()
+    explanation = (r.get("explanation") or "").strip()
+
+    all_text = " | ".join([question, subject, hint, explanation] + (options if isinstance(options, list) else [r.get("answer") or ""]))
+    if SUSPICIOUS.search(all_text):
+        errors.append(f"{where}: suspicious draft-note text — {SUSPICIOUS.search(all_text).group(0)}")
+
+    for field_name, val in [("question", question), ("subject", subject), ("hint", hint), ("explanation", explanation)]:
+        if not val:
+            errors.append(f"{where}: empty {field_name}")
+        if '"' in val or "\n" in val or "\r" in val:
+            errors.append(f"{where}: {field_name} contains a double quote or newline")
+
+    if not (10 <= len(question) <= 600):
+        errors.append(f"{where}: question length {len(question)} out of range")
+
+    if level not in VALID_LEVELS:
+        errors.append(f"{where}: invalid level '{level}'")
+        return None
+
+    if level == "expert":
+        if options:
+            errors.append(f"{where}: expert row must have empty options")
+        answer = (r.get("answer") or "").strip()
+        if not answer or '"' in answer or "\n" in answer:
+            errors.append(f"{where}: expert row needs a plain-text answer")
+        if len(answer) > 60:
+            errors.append(f"{where}: expert answer too long ({len(answer)} chars) — keep 1-3 words")
+        answer_cell = answer
+        options = ["", "", "", ""]
+    else:
+        if not isinstance(options, list) or len(options) != 4 or any(not (o or "").strip() for o in options):
+            errors.append(f"{where}: MCQ rows need exactly 4 non-empty options")
+            return None
+        options = [(o or "").strip() for o in options]
+        if len({norm(o) for o in options}) != 4:
+            errors.append(f"{where}: duplicate options — {question[:60]}")
+            return None
+        ci = r.get("correctIndex")
+        if not isinstance(ci, int) or not (0 <= ci <= 3):
+            errors.append(f"{where}: correctIndex must be 0-3")
+            return None
+        answer_cell = f"{LETTERS[ci]}. {options[ci]}"
+
+    key = (subject.lower(), norm(question))
+    if key in seen_questions:
+        errors.append(f"{where}: duplicate question within subject — {question[:70]}")
+    seen_questions[key] = where
+
+    return {
+        "category": category,
+        "cells": [question, options[0], options[1], options[2], options[3],
+                  answer_cell, level, subject, hint, explanation, "published"],
+        "level": level,
+        "subject": subject,
+        "correct_index": ci if level != "expert" else None,
+    }
+
+
+def validate_json_shard(path: Path, seen_questions: dict, errors: list):
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
@@ -61,65 +164,9 @@ def validate_shard(path: Path, seen_questions: dict, errors: list):
 
     rows = []
     for i, r in enumerate(riddles, start=1):
-        where = f"{path.name} riddle #{i}"
-        question = (r.get("question") or "").strip()
-        options = r.get("options")
-        level = (r.get("level") or "").strip()
-        subject = (r.get("subject") or "").strip()
-        hint = (r.get("hint") or "").strip()
-        explanation = (r.get("explanation") or "").strip()
-
-        for field_name, val in [("question", question), ("subject", subject), ("hint", hint), ("explanation", explanation)]:
-            if not val:
-                errors.append(f"{where}: empty {field_name}")
-            if '"' in val or "\n" in val or "\r" in val:
-                errors.append(f"{where}: {field_name} contains a double quote or newline")
-
-        if not (10 <= len(question) <= 240):
-            errors.append(f"{where}: question length {len(question)} out of range")
-
-        if level not in VALID_LEVELS:
-            errors.append(f"{where}: invalid level '{level}'")
-            continue
-
-        if level == "expert":
-            if options:
-                errors.append(f"{where}: expert row must have empty options")
-            answer = (r.get("answer") or "").strip()
-            if not answer or '"' in answer or "\n" in answer:
-                errors.append(f"{where}: expert row needs a plain-text answer")
-            if len(answer) > 60:
-                errors.append(f"{where}: expert answer too long ({len(answer)} chars) — keep 1-3 words")
-            answer_cell = answer
-            options = ["", "", "", ""]
-        else:
-            if not isinstance(options, list) or len(options) != 4 or any(not (o or "").strip() for o in options):
-                errors.append(f"{where}: MCQ rows need exactly 4 non-empty options")
-                continue
-            options = [(o or "").strip() for o in options]
-            if len({norm(o) for o in options}) != 4:
-                errors.append(f"{where}: duplicate options — {question[:60]}")
-                continue
-            ci = r.get("correctIndex")
-            if not isinstance(ci, int) or not (0 <= ci <= 3):
-                errors.append(f"{where}: correctIndex must be 0-3")
-                continue
-            answer_cell = f"{LETTERS[ci]}. {options[ci]}"
-
-        key = (subject.lower(), norm(question))
-        if key in seen_questions:
-            errors.append(f"{where}: duplicate question within subject — {question[:70]}")
-        seen_questions[key] = where
-
-        rows.append({
-            "category": category,
-            "cells": [question, options[0], options[1], options[2], options[3],
-                      answer_cell, level, subject, hint, explanation, "published"],
-            "level": level,
-            "subject": subject,
-            "correct_index": r.get("correctIndex") if level != "expert" else None,
-        })
-
+        row = validate_riddle(i, r, path.name, category, seen_questions, errors)
+        if row:
+            rows.append(row)
     return rows
 
 
@@ -181,9 +228,10 @@ def parse_site_row(row: str):
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    files = sorted(DATA_DIR.glob("*.json"))
-    if not files:
-        print(f"No JSON shard files found in {DATA_DIR}")
+    files = sorted(DATA_DIR.glob("*.json")) + sorted((DATA_DIR.parent / "data-json").glob("*.json"))
+    txt_files = sorted(TXT_DIR.glob("*.txt")) if TXT_DIR.exists() else []
+    if not files and not txt_files:
+        print(f"No JSON shards in {DATA_DIR} and no txt shards in {TXT_DIR}")
         sys.exit(1)
 
     errors: list = []
@@ -191,9 +239,28 @@ def main():
     by_category: dict = defaultdict(list)
 
     for path in files:
-        rows = validate_shard(path, seen_questions, errors)
+        rows = validate_json_shard(path, seen_questions, errors)
         if rows:
             by_category[rows[0]["category"]].extend(rows)
+
+    for path in txt_files:
+        category, riddles = parse_txt_shard(path)
+        if not category:
+            errors.append(f"{path.name}: missing '#category:' line")
+            continue
+        err_rows = [r for r in riddles if "__error__" in r]
+        for r in err_rows:
+            errors.append(r["__error__"])
+        rows = []
+        i = 0
+        for r in riddles:
+            if "__error__" in r:
+                continue
+            i += 1
+            row = validate_riddle(i, r, path.name, category, seen_questions, errors)
+            if row:
+                rows.append(row)
+        by_category[category].extend(rows)
 
     total = 0
     for category, rows in by_category.items():

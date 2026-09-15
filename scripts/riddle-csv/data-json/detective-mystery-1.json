@@ -1,0 +1,1074 @@
+{
+  "category": "Detective & Mystery",
+  "riddles": [
+    {
+      "question": "The golden pocket watch went missing from the school fete. Ivy was seen jogging past the pond at noon, Hugo signed the guest book at the bakery at noon, and Oscar claims to have been asleep all day. The bakery receipt proves Hugo's alibi, and Ivy's muddy shoes match the pond path. Who took the watch?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Hugo had the bakery receipt, so Ivy's muddy alibi is the lie that hides the theft.",
+      "answer": "Hugo"
+    },
+    {
+      "question": "The code word TEKRAM is written backwards. What is the real word?",
+      "options": ["MARKE", "NBSLFU", "MARKET", "MRKET"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "TEKRAM reversed spells MARKET."
+    },
+    {
+      "question": "The prize-winning pie vanished from the harbor cafe. Footprints in the flowerbed match Pearl's boots, Silas was on the ferry with a ticket stub, and Felix has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Pearl",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Pearl's boots."
+    },
+    {
+      "question": "At the harbor cafe, lucky fishing rod vanished. Hugo claims they were watering plants, Ivy says they were baking bread, and Silas insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the rod?",
+      "options": ["Hugo", "Ivy", "Silas", "an outside thief"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Ivy's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "The golden pocket watch went missing from the garden shed. Pearl was seen jogging past the pond at noon, Silas signed the guest book at the bakery at noon, and Hugo claims to have been asleep all day. The bakery receipt proves Silas's alibi, and Pearl's muddy shoes match the pond path. Who took the watch?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Silas had the bakery receipt, so Pearl's muddy alibi is the lie that hides the theft.",
+      "answer": "Silas"
+    },
+    {
+      "question": "A biscuit tin sits on the desk at the study beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The room was empty",
+        "Two people shared the room",
+        "The visitor left in a hurry",
+        "The tea was freshly made"
+      ],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "Decode the Caesar cipher: PSBOHF (each letter was shifted forward by 1). What is the word?",
+      "options": ["QTCPIG", "TRAIN", "ORANGE", "EGNARO"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 1.",
+      "explanation": "Shifting each letter back 1 spells ORANGE."
+    },
+    {
+      "question": "Decode the Caesar cipher: UOKNG (each letter was shifted forward by 2). What is the word?",
+      "options": ["SMILE", "ELIMS", "VPLOH", "TNJMF"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells SMILE."
+    },
+    {
+      "question": "A detective studies the study: a tipped cardboard box, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
+        "The tipped object proves a struggle"
+      ],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "At the boathouse, the detective finds a cold picnic basket, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The diary was borrowed",
+        "The desk was used at night",
+        "The fan was very old",
+        "The entries stopped when the power failed"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "The golden pocket watch went missing from the garden shed. Silas was seen jogging past the pond at noon, Hugo signed the guest book at the bakery at noon, and Ruby claims to have been asleep all day. The bakery receipt proves Hugo's alibi, and Silas's muddy shoes match the pond path. Who took the watch?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Hugo had the bakery receipt, so Silas's muddy alibi is the lie that hides the theft.",
+      "answer": "Hugo"
+    },
+    {
+      "question": "The garden trophy vanished from the manor kitchen. Footprints in the flowerbed match Silas's boots, Oscar was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Silas",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Silas's boots."
+    },
+    {
+      "question": "The code word DNALSI is written backwards. What is the real word?",
+      "options": ["ILAND", "ISLAN", "JTMBOE", "ISLAND"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "DNALSI reversed spells ISLAND."
+    },
+    {
+      "question": "The code word TENALP is written backwards. What is the real word?",
+      "options": ["PANET", "QMBOFU", "PLANE", "PLANET"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "TENALP reversed spells PLANET."
+    },
+    {
+      "question": "The rare stamp went missing from the garden shed. Pearl was seen jogging past the pond at noon, Silas signed the guest book at the bakery at noon, and Oscar claims to have been asleep all day. The bakery receipt proves Silas's alibi, and Pearl's muddy shoes match the pond path. Who took the stamp?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Silas had the bakery receipt, so Pearl's muddy alibi is the lie that hides the theft.",
+      "answer": "Silas"
+    },
+    {
+      "question": "At the boathouse, the detective finds a cold potted fern, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The entries stopped when the power failed",
+        "The diary was borrowed",
+        "The fan was very old",
+        "The desk was used at night"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "The prize-winning pie went missing from the school fete. Silas was seen jogging past the pond at noon, Oscar signed the guest book at the bakery at noon, and Felix claims to have been asleep all day. The bakery receipt proves Oscar's alibi, and Silas's muddy shoes match the pond path. Who took the pie?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Oscar had the bakery receipt, so Silas's muddy alibi is the lie that hides the theft.",
+      "answer": "Oscar"
+    },
+    {
+      "question": "At the village fair, garden trophy vanished. Ivy claims they were watering plants, Felix says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the trophy?",
+      "options": ["Ivy", "Felix", "Oscar", "an outside thief"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Felix's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "Decode the Caesar cipher: UVQPG (each letter was shifted forward by 2). What is the word?",
+      "options": ["TUPOF", "STONE", "VWRQH", "ENOTS"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells STONE."
+    },
+    {
+      "question": "Decode the Caesar cipher: TNJMF (each letter was shifted forward by 1). What is the word?",
+      "options": ["SMILE", "UOKNG", "TRAIN", "ELIMS"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 1.",
+      "explanation": "Shifting each letter back 1 spells SMILE."
+    },
+    {
+      "question": "A cardboard box sits on the desk at the boathouse beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The tea was freshly made",
+        "The room was empty",
+        "Two people shared the room",
+        "The visitor left in a hurry"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "The silver locket vanished from the garden shed. Footprints in the flowerbed match Felix's boots, Pearl was on the ferry with a ticket stub, and Ruby has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Felix",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Felix's boots."
+    },
+    {
+      "question": "The lucky fishing rod vanished from the village fair. Footprints in the flowerbed match Ivy's boots, Silas was on the ferry with a ticket stub, and Oscar has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ivy",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ivy's boots."
+    },
+    {
+      "question": "At the tea shop, the detective finds a cold picnic basket, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The entries stopped when the power failed",
+        "The diary was borrowed",
+        "The fan was very old",
+        "The desk was used at night"
+      ],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "A potted fern sits on the desk at the study beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The visitor left in a hurry",
+        "Two people shared the room",
+        "The tea was freshly made",
+        "The room was empty"
+      ],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "the boathouse shows a strange scene: a half-eaten biscuit tin, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
+      "options": [
+        "By picking the lock",
+        "Down the chimney",
+        "With a spare key",
+        "Through the open window"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Through the open window."
+    },
+    {
+      "question": "The recipe book vanished from the village fair. Footprints in the flowerbed match Ruby's boots, Oscar was on the ferry with a ticket stub, and Silas has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "A detective studies the garden room: a tipped teacup, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain",
+        "The tipped object proves a struggle",
+        "The mud tracks show the visit began in dry weather"
+      ],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "A picnic basket sits on the desk at the study beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The room was empty",
+        "Two people shared the room",
+        "The tea was freshly made",
+        "The visitor left in a hurry"
+      ],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "The garden trophy went missing from the manor kitchen. Oscar was seen jogging past the pond at noon, Felix signed the guest book at the bakery at noon, and Pearl claims to have been asleep all day. The bakery receipt proves Felix's alibi, and Oscar's muddy shoes match the pond path. Who took the trophy?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Felix had the bakery receipt, so Oscar's muddy alibi is the lie that hides the theft.",
+      "answer": "Felix"
+    },
+    {
+      "question": "The prize-winning pie went missing from the library annex. Hugo was seen jogging past the pond at noon, Nora signed the guest book at the bakery at noon, and Oscar claims to have been asleep all day. The bakery receipt proves Nora's alibi, and Hugo's muddy shoes match the pond path. Who took the pie?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Nora had the bakery receipt, so Hugo's muddy alibi is the lie that hides the theft.",
+      "answer": "Nora"
+    },
+    {
+      "question": "The golden pocket watch vanished from the school fete. Footprints in the flowerbed match Ruby's boots, Felix was on the ferry with a ticket stub, and Hugo has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "The code word TNALP is written backwards. What is the real word?",
+      "options": ["QMBOU", "PLAN", "PLANT", "PANT"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "TNALP reversed spells PLANT."
+    },
+    {
+      "question": "A detective studies the study: a tipped teacup, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain",
+        "The tipped object proves a struggle",
+        "The mud tracks show the visit began in dry weather"
+      ],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "The lucky fishing rod went missing from the school fete. Ruby was seen jogging past the pond at noon, Nora signed the guest book at the bakery at noon, and Pearl claims to have been asleep all day. The bakery receipt proves Nora's alibi, and Ruby's muddy shoes match the pond path. Who took the rod?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Nora had the bakery receipt, so Ruby's muddy alibi is the lie that hides the theft.",
+      "answer": "Nora"
+    },
+    {
+      "question": "The prize-winning pie vanished from the village fair. Footprints in the flowerbed match Oscar's boots, Pearl was on the ferry with a ticket stub, and Hugo has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Oscar",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Oscar's boots."
+    },
+    {
+      "question": "the study shows a strange scene: a half-eaten teacup, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
+      "options": [
+        "Through the open window",
+        "Down the chimney",
+        "With a spare key",
+        "By picking the lock"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Through the open window."
+    },
+    {
+      "question": "The silver locket vanished from the library annex. Footprints in the flowerbed match Oscar's boots, Ivy was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Oscar",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Oscar's boots."
+    },
+    {
+      "question": "the garden room shows a strange scene: a half-eaten cardboard box, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
+      "options": [
+        "Down the chimney",
+        "By picking the lock",
+        "With a spare key",
+        "Through the open window"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Through the open window."
+    },
+    {
+      "question": "Decode the Caesar cipher: LVODQG (each letter was shifted forward by 3). What is the word?",
+      "options": ["KUNCPF", "MWPERH", "ISLAND", "DNALSI"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 3.",
+      "explanation": "Shifting each letter back 3 spells ISLAND."
+    },
+    {
+      "question": "Decode the Caesar cipher: RNCPGV (each letter was shifted forward by 2). What is the word?",
+      "options": ["QMBOFU", "TENALP", "SODQHW", "PLANET"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells PLANET."
+    },
+    {
+      "question": "Decode the Caesar cipher: EUHDG (each letter was shifted forward by 3). What is the word?",
+      "options": ["DAERB", "FVIEH", "BREAD", "DTGCF"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 3.",
+      "explanation": "Shifting each letter back 3 spells BREAD."
+    },
+    {
+      "question": "The garden trophy vanished from the library annex. Footprints in the flowerbed match Ruby's boots, Felix was on the ferry with a ticket stub, and Ivy has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "A detective studies the attic loft: a tipped picnic basket, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
+        "The tipped object proves a struggle",
+        "The umbrella proves heavy rain"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "The golden pocket watch vanished from the manor kitchen. Footprints in the flowerbed match Oscar's boots, Ivy was on the ferry with a ticket stub, and Hugo has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Oscar",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Oscar's boots."
+    },
+    {
+      "question": "A1Z26 code: 2-1-4-7-5 (A=1, B=2 ... Z=26). Decode the word.",
+      "options": ["BEAD", "CABIN", "CAFE", "BADGE"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Convert each number to its alphabet letter.",
+      "explanation": "2-1-4-7-5 spells BADGE."
+    },
+    {
+      "question": "A cardboard box sits on the desk at the attic loft beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The visitor left in a hurry",
+        "Two people shared the room",
+        "The tea was freshly made",
+        "The room was empty"
+      ],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "A potted fern sits on the desk at the garden room beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The tea was freshly made",
+        "The visitor left in a hurry",
+        "The room was empty",
+        "Two people shared the room"
+      ],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "The antique violin went missing from the school fete. Pearl was seen jogging past the pond at noon, Ivy signed the guest book at the bakery at noon, and Silas claims to have been asleep all day. The bakery receipt proves Ivy's alibi, and Pearl's muddy shoes match the pond path. Who took the violin?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Ivy had the bakery receipt, so Pearl's muddy alibi is the lie that hides the theft.",
+      "answer": "Ivy"
+    },
+    {
+      "question": "At the manor kitchen, recipe book vanished. Ruby claims they were watering plants, Ivy says they were baking bread, and Silas insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the book?",
+      "options": ["Ruby", "Ivy", "Silas", "an outside thief"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Silas's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "The recipe book vanished from the village fair. Footprints in the flowerbed match Ruby's boots, Silas was on the ferry with a ticket stub, and Ivy has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "Decode the Caesar cipher: QTCPIG (each letter was shifted forward by 2). What is the word?",
+      "options": ["ORANGE", "EGNARO", "PSBOHF", "RUDQJH"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells ORANGE."
+    },
+    {
+      "question": "At the manor kitchen, recipe book vanished. Ruby claims they were watering plants, Hugo says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the book?",
+      "options": ["Ruby", "Hugo", "Nora", "an outside thief"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Hugo's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "The prize-winning pie vanished from the village fair. Footprints in the flowerbed match Ivy's boots, Nora was on the ferry with a ticket stub, and Silas has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ivy",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ivy's boots."
+    },
+    {
+      "question": "At the manor kitchen, silver locket vanished. Nora claims they were watering plants, Pearl says they were baking bread, and Hugo insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the locket?",
+      "options": ["Nora", "Pearl", "Hugo", "an outside thief"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Hugo's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "The silver locket went missing from the village fair. Pearl was seen jogging past the pond at noon, Ivy signed the guest book at the bakery at noon, and Ruby claims to have been asleep all day. The bakery receipt proves Ivy's alibi, and Pearl's muddy shoes match the pond path. Who took the locket?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Ivy had the bakery receipt, so Pearl's muddy alibi is the lie that hides the theft.",
+      "answer": "Ivy"
+    },
+    {
+      "question": "A1Z26 code: 6-1-3-5 (A=1, B=2 ... Z=26). Decode the word.",
+      "options": ["FEED", "BEEF", "FACE", "DEAF"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Convert each number to its alphabet letter.",
+      "explanation": "6-1-3-5 spells FACE."
+    },
+    {
+      "question": "A picnic basket sits on the desk at the attic loft beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The visitor left in a hurry",
+        "The room was empty",
+        "The tea was freshly made",
+        "Two people shared the room"
+      ],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "Decode the Caesar cipher: HNQYGT (each letter was shifted forward by 2). What is the word?",
+      "options": ["REWOLF", "GMPXFS", "IORZHU", "FLOWER"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells FLOWER."
+    },
+    {
+      "question": "At the boathouse, the detective finds a cold teacup, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The fan was very old",
+        "The entries stopped when the power failed",
+        "The diary was borrowed",
+        "The desk was used at night"
+      ],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "The code word DUOLC is written backwards. What is the real word?",
+      "options": ["CLOU", "CLOUD", "COUD", "DMPVE"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "DUOLC reversed spells CLOUD."
+    },
+    {
+      "question": "A detective studies the boathouse: a tipped biscuit tin, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
+        "The tipped object proves a struggle"
+      ],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "At the manor kitchen, garden trophy vanished. Nora claims they were watering plants, Ruby says they were baking bread, and Felix insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the trophy?",
+      "options": ["Nora", "Ruby", "Felix", "an outside thief"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Felix's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "A1Z26 code: 2-5-5-6 (A=1, B=2 ... Z=26). Decode the word.",
+      "options": ["DEAF", "FEED", "EGGS", "BEEF"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Convert each number to its alphabet letter.",
+      "explanation": "2-5-5-6 spells BEEF."
+    },
+    {
+      "question": "A detective studies the scout hut: a tipped board game, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The tipped object proves a struggle",
+        "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain"
+      ],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "At the tea shop, the detective finds a cold biscuit tin, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The diary was borrowed",
+        "The entries stopped when the power failed",
+        "The desk was used at night",
+        "The fan was very old"
+      ],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "A1Z26 code: 5-4-7-5 (A=1, B=2 ... Z=26). Decode the word.",
+      "options": ["FEED", "EDGE", "DEAF", "BEEF"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Convert each number to its alphabet letter.",
+      "explanation": "5-4-7-5 spells EDGE."
+    },
+    {
+      "question": "The silver locket went missing from the harbor cafe. Hugo was seen jogging past the pond at noon, Ivy signed the guest book at the bakery at noon, and Pearl claims to have been asleep all day. The bakery receipt proves Ivy's alibi, and Hugo's muddy shoes match the pond path. Who took the locket?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Ivy had the bakery receipt, so Hugo's muddy alibi is the lie that hides the theft.",
+      "answer": "Ivy"
+    },
+    {
+      "question": "At the tea shop, the detective finds a cold board game, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The entries stopped when the power failed",
+        "The fan was very old",
+        "The diary was borrowed",
+        "The desk was used at night"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "At the school fete, recipe book vanished. Pearl claims they were watering plants, Silas says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the book?",
+      "options": ["Pearl", "Silas", "Nora", "an outside thief"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Who Did It?",
+      "hint": "Check each alibi against the evidence.",
+      "explanation": "Pearl's alibi matched the physical evidence; the others' stories failed."
+    },
+    {
+      "question": "The silver locket went missing from the manor kitchen. Silas was seen jogging past the pond at noon, Oscar signed the guest book at the bakery at noon, and Ruby claims to have been asleep all day. The bakery receipt proves Oscar's alibi, and Silas's muddy shoes match the pond path. Who took the locket?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Oscar had the bakery receipt, so Silas's muddy alibi is the lie that hides the theft.",
+      "answer": "Oscar"
+    },
+    {
+      "question": "The recipe book vanished from the harbor cafe. Footprints in the flowerbed match Hugo's boots, Ivy was on the ferry with a ticket stub, and Oscar has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Hugo",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Hugo's boots."
+    },
+    {
+      "question": "A detective studies the attic loft: a tipped board game, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud proves rain during the visit",
+        "The mud tracks show the visit began in dry weather",
+        "The tipped object proves a struggle",
+        "The umbrella proves heavy rain"
+      ],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    },
+    {
+      "question": "The silver locket vanished from the garden shed. Footprints in the flowerbed match Felix's boots, Nora was on the ferry with a ticket stub, and Ruby has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Felix",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Felix's boots."
+    },
+    {
+      "question": "The antique violin went missing from the manor kitchen. Ivy was seen jogging past the pond at noon, Ruby signed the guest book at the bakery at noon, and Felix claims to have been asleep all day. The bakery receipt proves Ruby's alibi, and Ivy's muddy shoes match the pond path. Who took the violin?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Ruby had the bakery receipt, so Ivy's muddy alibi is the lie that hides the theft.",
+      "answer": "Ruby"
+    },
+    {
+      "question": "The antique violin vanished from the library annex. Footprints in the flowerbed match Ruby's boots, Hugo was on the ferry with a ticket stub, and Nora has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "The recipe book vanished from the harbor cafe. Footprints in the flowerbed match Pearl's boots, Hugo was on the ferry with a ticket stub, and Felix has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Pearl",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Pearl's boots."
+    },
+    {
+      "question": "The antique violin vanished from the village fair. Footprints in the flowerbed match Ruby's boots, Oscar was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ruby",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ruby's boots."
+    },
+    {
+      "question": "A potted fern sits on the desk at the boathouse beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The room was empty",
+        "Two people shared the room",
+        "The visitor left in a hurry",
+        "The tea was freshly made"
+      ],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "the boathouse shows a strange scene: a half-eaten teacup, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
+      "options": [
+        "Down the chimney",
+        "With a spare key",
+        "By picking the lock",
+        "Through the open window"
+      ],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Through the open window."
+    },
+    {
+      "question": "Decode the Caesar cipher: OHPRQ (each letter was shifted forward by 3). What is the word?",
+      "options": ["NOMEL", "LEMON", "PIQSR", "NGOQP"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 3.",
+      "explanation": "Shifting each letter back 3 spells LEMON."
+    },
+    {
+      "question": "The lucky fishing rod went missing from the village fair. Nora was seen jogging past the pond at noon, Silas signed the guest book at the bakery at noon, and Ruby claims to have been asleep all day. The bakery receipt proves Silas's alibi, and Nora's muddy shoes match the pond path. Who took the rod?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Follow the receipts and the mud.",
+      "explanation": "Silas had the bakery receipt, so Nora's muddy alibi is the lie that hides the theft.",
+      "answer": "Silas"
+    },
+    {
+      "question": "the garden room shows a strange scene: a half-eaten picnic basket, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
+      "options": [
+        "With a spare key",
+        "By picking the lock",
+        "Through the open window",
+        "Down the chimney"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Through the open window."
+    },
+    {
+      "question": "The rare stamp vanished from the garden shed. Footprints in the flowerbed match Oscar's boots, Hugo was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Oscar",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Oscar's boots."
+    },
+    {
+      "question": "At the boathouse, the detective finds a cold biscuit tin, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The diary was borrowed",
+        "The entries stopped when the power failed",
+        "The fan was very old",
+        "The desk was used at night"
+      ],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "Decode the Caesar cipher: QMBOFU (each letter was shifted forward by 1). What is the word?",
+      "options": ["TENALP", "TRAIN", "PLANET", "RNCPGV"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 1.",
+      "explanation": "Shifting each letter back 1 spells PLANET."
+    },
+    {
+      "question": "At the study, the detective finds a cold board game, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The entries stopped when the power failed",
+        "The diary was borrowed",
+        "The fan was very old",
+        "The desk was used at night"
+      ],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "Decode the Caesar cipher: ERWWOH (each letter was shifted forward by 3). What is the word?",
+      "options": ["FSXXPI", "DQVVNG", "ELTTOB", "BOTTLE"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 3.",
+      "explanation": "Shifting each letter back 3 spells BOTTLE."
+    },
+    {
+      "question": "The silver locket vanished from the school fete. Footprints in the flowerbed match Nora's boots, Pearl was on the ferry with a ticket stub, and Oscar has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Nora",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Nora's boots."
+    },
+    {
+      "question": "At the garden room, the detective finds a cold board game, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
+      "options": [
+        "The diary was borrowed",
+        "The desk was used at night",
+        "The entries stopped when the power failed",
+        "The fan was very old"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The entries stopped when the power failed."
+    },
+    {
+      "question": "Decode the Caesar cipher: UKNXGT (each letter was shifted forward by 2). What is the word?",
+      "options": ["REVLIS", "TJMWFS", "SILVER", "VLOYHU"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells SILVER."
+    },
+    {
+      "question": "The code word ELBAT is written backwards. What is the real word?",
+      "options": ["TABLE", "UBCMF", "TABL", "TBLE"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "ELBAT reversed spells TABLE."
+    },
+    {
+      "question": "A picnic basket sits on the desk at the garden room beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
+      "options": [
+        "The tea was freshly made",
+        "The visitor left in a hurry",
+        "The room was empty",
+        "Two people shared the room"
+      ],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "Two people shared the room."
+    },
+    {
+      "question": "Decode the Caesar cipher: IJQUV (each letter was shifted forward by 2). What is the word?",
+      "options": ["TSOHG", "HIPTU", "JKRVW", "GHOST"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 2.",
+      "explanation": "Shifting each letter back 2 spells GHOST."
+    },
+    {
+      "question": "The silver locket vanished from the manor kitchen. Footprints in the flowerbed match Ivy's boots, Hugo was on the ferry with a ticket stub, and Felix has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Ivy",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Ivy's boots."
+    },
+    {
+      "question": "The silver locket vanished from the harbor cafe. Footprints in the flowerbed match Hugo's boots, Nora was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Hugo",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Hugo's boots."
+    },
+    {
+      "question": "The garden trophy vanished from the library annex. Footprints in the flowerbed match Oscar's boots, Nora was on the ferry with a ticket stub, and Pearl has flour on both hands from the bake sale. Who took it?",
+      "options": [],
+      "answer": "Oscar",
+      "level": "expert",
+      "subject": "Who Did It?",
+      "hint": "Whose story puts them right at the flowerbed?",
+      "explanation": "The bootprints in the flowerbed match Oscar's boots."
+    },
+    {
+      "question": "Decode the Caesar cipher: GMPXFS (each letter was shifted forward by 1). What is the word?",
+      "options": ["FLOWER", "REWOLF", "TRAIN", "HNQYGT"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Code-Breaking",
+      "hint": "Shift each letter BACK by 1.",
+      "explanation": "Shifting each letter back 1 spells FLOWER."
+    },
+    {
+      "question": "The code word ELDNAC is written backwards. What is the real word?",
+      "options": ["CANDLE", "CANDL", "CNDLE", "DBOEMF"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Code-Breaking",
+      "hint": "Read it from right to left.",
+      "explanation": "ELDNAC reversed spells CANDLE."
+    },
+    {
+      "question": "A detective studies the tea shop: a tipped teacup, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
+      "options": [
+        "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain",
+        "The tipped object proves a struggle"
+      ],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Crime Scene",
+      "hint": "Compare each detail against the timeline.",
+      "explanation": "The mud tracks show the visit began in dry weather."
+    }
+  ]
+}

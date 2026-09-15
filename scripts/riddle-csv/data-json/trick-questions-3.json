@@ -1,0 +1,905 @@
+{
+  "category": "Trick Questions",
+  "riddles": [
+    {
+      "question": "A teacher shares 24 buns equally among 4 students. How many does each student get?",
+      "options": ["6", "20", "4", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 4 is 6."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["24", "7", "3", "12"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 4 = 12 combinations."
+    },
+    {
+      "question": "A teacher shares 18 crayons equally among 6 students. How many does each student get?",
+      "options": ["12", "3", "6", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "18 divided by 6 is 3."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["13", "7", "84", "42"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 6 = 42 combinations."
+    },
+    {
+      "question": "A teacher shares 24 marbles equally among 6 students. How many does each student get?",
+      "options": ["6", "4", "18", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 6 is 4."
+    },
+    {
+      "question": "A teacher shares 15 bagels equally among 3 students. How many does each student get?",
+      "options": ["3", "6", "12", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 3 flavors. How many bread-and-flavor combos exist?",
+      "options": ["18", "6", "9", "3"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 3 = 9 combinations."
+    },
+    {
+      "question": "A teacher shares 42 crayons equally among 7 students. How many does each student get?",
+      "options": ["35", "7", "6", "9"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "42 divided by 7 is 6."
+    },
+    {
+      "question": "A teacher shares 36 bagels equally among 6 students. How many does each student get?",
+      "options": ["9", "6", "30", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "36 divided by 6 is 6."
+    },
+    {
+      "question": "A teacher shares 6 buns equally among 3 students. How many does each student get?",
+      "options": ["2", "5", "16", "3"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "6 divided by 3 is 2."
+    },
+    {
+      "question": "A bakery sells 6 kinds of bread. Each kind comes in 3 flavors. How many bread-and-flavor combos exist?",
+      "options": ["9", "18", "6", "36"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "6 x 3 = 18 combinations."
+    },
+    {
+      "question": "A teacher shares 30 muffins equally among 6 students. How many does each student get?",
+      "options": ["24", "6", "8", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A teacher shares 24 apples equally among 6 students. How many does each student get?",
+      "options": ["5", "18", "4", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 6 is 4."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["14", "48", "8", "96"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 6 = 48 combinations."
+    },
+    {
+      "question": "A teacher shares 12 oranges equally among 6 students. How many does each student get?",
+      "options": ["5", "2", "3", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 6 is 2."
+    },
+    {
+      "question": "A teacher shares 24 bagels equally among 6 students. How many does each student get?",
+      "options": ["5", "6", "4", "18"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 6 is 4."
+    },
+    {
+      "question": "A teacher shares 30 cookies equally among 6 students. How many does each student get?",
+      "options": ["8", "24", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["36", "9", "3", "18"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 6 = 18 combinations."
+    },
+    {
+      "question": "A teacher shares 15 oranges equally among 3 students. How many does each student get?",
+      "options": ["3", "12", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 3 flavors. How many bread-and-flavor combos exist?",
+      "options": ["24", "8", "11", "48"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 3 = 24 combinations."
+    },
+    {
+      "question": "A teacher shares 36 oranges equally among 6 students. How many does each student get?",
+      "options": ["30", "7", "9", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "36 divided by 6 is 6."
+    },
+    {
+      "question": "A teacher shares 15 cookies equally among 5 students. How many does each student get?",
+      "options": ["3", "10", "4", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 5 flavors. How many bread-and-flavor combos exist?",
+      "options": ["35", "7", "12", "70"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 5 = 35 combinations."
+    },
+    {
+      "question": "A teacher shares 28 marbles equally among 7 students. How many does each student get?",
+      "options": ["5", "21", "7", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "28 divided by 7 is 4."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 7 flavors. How many bread-and-flavor combos exist?",
+      "options": ["49", "7", "14", "98"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 7 = 49 combinations."
+    },
+    {
+      "question": "A teacher shares 48 oranges equally among 8 students. How many does each student get?",
+      "options": ["7", "40", "8", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "48 divided by 8 is 6."
+    },
+    {
+      "question": "A teacher shares 12 marbles equally among 6 students. How many does each student get?",
+      "options": ["6", "3", "2", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 6 is 2."
+    },
+    {
+      "question": "A teacher shares 12 crayons equally among 3 students. How many does each student get?",
+      "options": ["9", "3", "5", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 3 is 4."
+    },
+    {
+      "question": "A bakery sells 4 kinds of bread. Each kind comes in 3 flavors. How many bread-and-flavor combos exist?",
+      "options": ["7", "24", "12", "4"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "4 x 3 = 12 combinations."
+    },
+    {
+      "question": "A teacher shares 32 apples equally among 8 students. How many does each student get?",
+      "options": ["8", "24", "5", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "32 divided by 8 is 4."
+    },
+    {
+      "question": "A bakery sells 6 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["96", "48", "6", "14"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "6 x 8 = 48 combinations."
+    },
+    {
+      "question": "A teacher shares 12 marbles equally among 3 students. How many does each student get?",
+      "options": ["5", "3", "9", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 3 is 4."
+    },
+    {
+      "question": "A teacher shares 40 oranges equally among 8 students. How many does each student get?",
+      "options": ["8", "6", "32", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "40 divided by 8 is 5."
+    },
+    {
+      "question": "A teacher shares 12 buns equally among 3 students. How many does each student get?",
+      "options": ["9", "5", "3", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 3 is 4."
+    },
+    {
+      "question": "A teacher shares 8 apples equally among 4 students. How many does each student get?",
+      "options": ["4", "2", "3", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A teacher shares 16 apples equally among 4 students. How many does each student get?",
+      "options": ["5", "12", "7", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "16 divided by 4 is 4."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["20", "9", "40", "5"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 4 = 20 combinations."
+    },
+    {
+      "question": "A teacher shares 30 cookies equally among 5 students. How many does each student get?",
+      "options": ["25", "6", "5", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 5 is 6."
+    },
+    {
+      "question": "A teacher shares 16 bagels equally among 8 students. How many does each student get?",
+      "options": ["5", "8", "2", "3"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "16 divided by 8 is 2."
+    },
+    {
+      "question": "A teacher shares 20 buns equally among 5 students. How many does each student get?",
+      "options": ["15", "4", "7", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 5 flavors. How many bread-and-flavor combos exist?",
+      "options": ["8", "40", "13", "80"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 5 = 40 combinations."
+    },
+    {
+      "question": "A teacher shares 54 apples equally among 9 students. How many does each student get?",
+      "options": ["7", "9", "6", "45"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "54 divided by 9 is 6."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 9 flavors. How many bread-and-flavor combos exist?",
+      "options": ["16", "126", "63", "7"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 9 = 63 combinations."
+    },
+    {
+      "question": "A teacher shares 27 bagels equally among 9 students. How many does each student get?",
+      "options": ["4", "3", "9", "18"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "27 divided by 9 is 3."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 9 flavors. How many bread-and-flavor combos exist?",
+      "options": ["144", "8", "72", "17"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 9 = 72 combinations."
+    },
+    {
+      "question": "A teacher shares 54 buns equally among 9 students. How many does each student get?",
+      "options": ["7", "45", "6", "9"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "54 divided by 9 is 6."
+    },
+    {
+      "question": "A teacher shares 30 oranges equally among 6 students. How many does each student get?",
+      "options": ["8", "5", "24", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A bakery sells 4 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["4", "48", "24", "10"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "4 x 6 = 24 combinations."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["5", "13", "80", "40"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 8 = 40 combinations."
+    },
+    {
+      "question": "A teacher shares 21 muffins equally among 7 students. How many does each student get?",
+      "options": ["14", "3", "4", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A teacher shares 27 marbles equally among 9 students. How many does each student get?",
+      "options": ["9", "18", "4", "3"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "27 divided by 9 is 3."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 9 flavors. How many bread-and-flavor combos exist?",
+      "options": ["45", "90", "14", "5"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 9 = 45 combinations."
+    },
+    {
+      "question": "A teacher shares 8 oranges equally among 4 students. How many does each student get?",
+      "options": ["5", "2", "3", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A bakery sells 4 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["16", "32", "4", "8"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "4 x 4 = 16 combinations."
+    },
+    {
+      "question": "A teacher shares 20 marbles equally among 4 students. How many does each student get?",
+      "options": ["4", "16", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 4 is 5."
+    },
+    {
+      "question": "A teacher shares 54 crayons equally among 9 students. How many does each student get?",
+      "options": ["9", "45", "6", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "54 divided by 9 is 6."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 9 flavors. How many bread-and-flavor combos exist?",
+      "options": ["3", "54", "12", "27"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 9 = 27 combinations."
+    },
+    {
+      "question": "A teacher shares 35 oranges equally among 7 students. How many does each student get?",
+      "options": ["28", "5", "7", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "35 divided by 7 is 5."
+    },
+    {
+      "question": "A teacher shares 24 buns equally among 8 students. How many does each student get?",
+      "options": ["8", "3", "16", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 8 is 3."
+    },
+    {
+      "question": "A teacher shares 15 crayons equally among 3 students. How many does each student get?",
+      "options": ["5", "6", "3", "12"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 3 flavors. How many bread-and-flavor combos exist?",
+      "options": ["15", "30", "8", "5"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 3 = 15 combinations."
+    },
+    {
+      "question": "A teacher shares 18 cookies equally among 3 students. How many does each student get?",
+      "options": ["3", "7", "6", "15"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "18 divided by 3 is 6."
+    },
+    {
+      "question": "A teacher shares 12 apples equally among 4 students. How many does each student get?",
+      "options": ["3", "6", "4", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 4 is 3."
+    },
+    {
+      "question": "A teacher shares 20 muffins equally among 5 students. How many does each student get?",
+      "options": ["15", "4", "5", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A teacher shares 18 buns equally among 6 students. How many does each student get?",
+      "options": ["6", "4", "12", "3"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "18 divided by 6 is 3."
+    },
+    {
+      "question": "A teacher shares 15 muffins equally among 3 students. How many does each student get?",
+      "options": ["12", "6", "5", "3"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A teacher shares 14 bagels equally among 7 students. How many does each student get?",
+      "options": ["2", "3", "7", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "14 divided by 7 is 2."
+    },
+    {
+      "question": "A teacher shares 27 cookies equally among 9 students. How many does each student get?",
+      "options": ["9", "4", "3", "18"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "27 divided by 9 is 3."
+    },
+    {
+      "question": "A teacher shares 20 apples equally among 4 students. How many does each student get?",
+      "options": ["5", "6", "4", "16"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 4 is 5."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["7", "11", "28", "56"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 4 = 28 combinations."
+    },
+    {
+      "question": "A teacher shares 9 bagels equally among 3 students. How many does each student get?",
+      "options": ["3", "6", "4", "17"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "9 divided by 3 is 3."
+    },
+    {
+      "question": "A teacher shares 24 cookies equally among 8 students. How many does each student get?",
+      "options": ["16", "8", "4", "3"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 8 is 3."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["24", "3", "48", "11"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 8 = 24 combinations."
+    },
+    {
+      "question": "A teacher shares 15 oranges equally among 5 students. How many does each student get?",
+      "options": ["5", "3", "4", "10"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A teacher shares 18 bagels equally among 6 students. How many does each student get?",
+      "options": ["3", "6", "4", "12"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "18 divided by 6 is 3."
+    },
+    {
+      "question": "A teacher shares 20 marbles equally among 5 students. How many does each student get?",
+      "options": ["15", "5", "4", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A teacher shares 9 crayons equally among 3 students. How many does each student get?",
+      "options": ["17", "3", "4", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "9 divided by 3 is 3."
+    },
+    {
+      "question": "A teacher shares 10 muffins equally among 5 students. How many does each student get?",
+      "options": ["2", "5", "16", "3"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "10 divided by 5 is 2."
+    },
+    {
+      "question": "A teacher shares 12 bagels equally among 4 students. How many does each student get?",
+      "options": ["4", "3", "8", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 4 is 3."
+    },
+    {
+      "question": "A teacher shares 30 marbles equally among 6 students. How many does each student get?",
+      "options": ["6", "24", "8", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A teacher shares 32 bagels equally among 8 students. How many does each student get?",
+      "options": ["8", "24", "4", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "32 divided by 8 is 4."
+    },
+    {
+      "question": "A bakery sells 7 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["7", "112", "56", "15"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "7 x 8 = 56 combinations."
+    },
+    {
+      "question": "A teacher shares 35 buns equally among 7 students. How many does each student get?",
+      "options": ["28", "7", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "35 divided by 7 is 5."
+    },
+    {
+      "question": "A bakery sells 6 kinds of bread. Each kind comes in 7 flavors. How many bread-and-flavor combos exist?",
+      "options": ["84", "42", "13", "6"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "6 x 7 = 42 combinations."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["64", "128", "16", "8"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 8 = 64 combinations."
+    },
+    {
+      "question": "A teacher shares 15 buns equally among 3 students. How many does each student get?",
+      "options": ["12", "5", "6", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 7 flavors. How many bread-and-flavor combos exist?",
+      "options": ["112", "56", "15", "8"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 7 = 56 combinations."
+    },
+    {
+      "question": "A teacher shares 24 oranges equally among 8 students. How many does each student get?",
+      "options": ["16", "8", "4", "3"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 8 is 3."
+    },
+    {
+      "question": "A teacher shares 16 crayons equally among 4 students. How many does each student get?",
+      "options": ["4", "7", "5", "12"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "16 divided by 4 is 4."
+    },
+    {
+      "question": "A teacher shares 45 buns equally among 9 students. How many does each student get?",
+      "options": ["6", "9", "36", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "45 divided by 9 is 5."
+    },
+    {
+      "question": "A teacher shares 32 cookies equally among 8 students. How many does each student get?",
+      "options": ["8", "4", "24", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "32 divided by 8 is 4."
+    },
+    {
+      "question": "A teacher shares 24 apples equally among 4 students. How many does each student get?",
+      "options": ["7", "4", "20", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 4 is 6."
+    },
+    {
+      "question": "A bakery sells 8 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["8", "32", "12", "64"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "8 x 4 = 32 combinations."
+    },
+    {
+      "question": "A teacher shares 24 cookies equally among 6 students. How many does each student get?",
+      "options": ["18", "5", "4", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "24 divided by 6 is 4."
+    },
+    {
+      "question": "A teacher shares 15 muffins equally among 5 students. How many does each student get?",
+      "options": ["10", "5", "3", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A teacher shares 30 buns equally among 5 students. How many does each student get?",
+      "options": ["7", "6", "25", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 5 is 6."
+    },
+    {
+      "question": "A teacher shares 40 buns equally among 8 students. How many does each student get?",
+      "options": ["8", "6", "32", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "40 divided by 8 is 5."
+    },
+    {
+      "question": "A teacher shares 36 bagels equally among 9 students. How many does each student get?",
+      "options": ["4", "27", "5", "9"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "36 divided by 9 is 4."
+    },
+    {
+      "question": "A teacher shares 40 apples equally among 8 students. How many does each student get?",
+      "options": ["32", "6", "5", "8"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "40 divided by 8 is 5."
+    },
+    {
+      "question": "A teacher shares 10 cookies equally among 5 students. How many does each student get?",
+      "options": ["16", "3", "2", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "10 divided by 5 is 2."
+    }
+  ]
+}

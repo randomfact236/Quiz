@@ -1,0 +1,1000 @@
+{
+  "category": "Trick Questions",
+  "riddles": [
+    {
+      "question": "A baker packs 42 buns equally into 7 baskets. How many buns per basket?",
+      "options": ["7", "6", "9", "35"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "42 divided by 7 is 6."
+    },
+    {
+      "question": "A baker packs 18 muffins equally into 9 baskets. How many muffins per basket?",
+      "options": ["3", "5", "9", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 9 is 2."
+    },
+    {
+      "question": "A baker packs 24 crayons equally into 4 baskets. How many crayons per basket?",
+      "options": ["20", "7", "4", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "24 divided by 4 is 6."
+    },
+    {
+      "question": "A baker packs 35 bagels equally into 7 baskets. How many bagels per basket?",
+      "options": ["5", "7", "28", "6"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "35 divided by 7 is 5."
+    },
+    {
+      "question": "A baker packs 21 crayons equally into 7 baskets. How many crayons per basket?",
+      "options": ["7", "14", "3", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A baker packs 21 cookies equally into 7 baskets. How many cookies per basket?",
+      "options": ["4", "7", "3", "14"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A baker packs 30 buns equally into 6 baskets. How many buns per basket?",
+      "options": ["6", "5", "8", "24"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A baker packs 20 crayons equally into 4 baskets. How many crayons per basket?",
+      "options": ["6", "5", "4", "16"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "20 divided by 4 is 5."
+    },
+    {
+      "question": "A baker packs 36 oranges equally into 6 baskets. How many oranges per basket?",
+      "options": ["30", "6", "9", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "36 divided by 6 is 6."
+    },
+    {
+      "question": "A baker packs 15 marbles equally into 5 baskets. How many marbles per basket?",
+      "options": ["5", "3", "10", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A baker packs 14 apples equally into 7 baskets. How many apples per basket?",
+      "options": ["2", "5", "3", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "14 divided by 7 is 2."
+    },
+    {
+      "question": "A baker packs 18 bagels equally into 9 baskets. How many bagels per basket?",
+      "options": ["2", "9", "3", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 9 is 2."
+    },
+    {
+      "question": "A baker packs 18 marbles equally into 3 baskets. How many marbles per basket?",
+      "options": ["7", "3", "6", "15"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 3 is 6."
+    },
+    {
+      "question": "A baker packs 18 apples equally into 6 baskets. How many apples per basket?",
+      "options": ["12", "4", "3", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 6 is 3."
+    },
+    {
+      "question": "A baker packs 45 cookies equally into 9 baskets. How many cookies per basket?",
+      "options": ["9", "36", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "45 divided by 9 is 5."
+    },
+    {
+      "question": "A baker packs 30 bagels equally into 5 baskets. How many bagels per basket?",
+      "options": ["6", "25", "5", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "30 divided by 5 is 6."
+    },
+    {
+      "question": "A baker packs 54 buns equally into 9 baskets. How many buns per basket?",
+      "options": ["9", "7", "45", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "54 divided by 9 is 6."
+    },
+    {
+      "question": "A baker packs 15 cookies equally into 5 baskets. How many cookies per basket?",
+      "options": ["3", "10", "5", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A baker packs 25 cookies equally into 5 baskets. How many cookies per basket?",
+      "options": ["8", "6", "5", "20"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "25 divided by 5 is 5."
+    },
+    {
+      "question": "A baker packs 12 oranges equally into 4 baskets. How many oranges per basket?",
+      "options": ["6", "8", "4", "3"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "12 divided by 4 is 3."
+    },
+    {
+      "question": "A baker packs 20 bagels equally into 5 baskets. How many bagels per basket?",
+      "options": ["7", "5", "15", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A baker packs 8 crayons equally into 4 baskets. How many crayons per basket?",
+      "options": ["4", "5", "3", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A baker packs 20 crayons equally into 5 baskets. How many crayons per basket?",
+      "options": ["7", "5", "4", "15"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A baker packs 18 marbles equally into 9 baskets. How many marbles per basket?",
+      "options": ["3", "9", "5", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 9 is 2."
+    },
+    {
+      "question": "A baker packs 18 cookies equally into 3 baskets. How many cookies per basket?",
+      "options": ["3", "6", "7", "15"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "18 divided by 3 is 6."
+    },
+    {
+      "question": "A baker packs 24 bagels equally into 4 baskets. How many bagels per basket?",
+      "options": ["7", "4", "6", "20"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "24 divided by 4 is 6."
+    },
+    {
+      "question": "A baker packs 54 bagels equally into 9 baskets. How many bagels per basket?",
+      "options": ["7", "6", "45", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "54 divided by 9 is 6."
+    },
+    {
+      "question": "A baker packs 8 bagels equally into 4 baskets. How many bagels per basket?",
+      "options": ["2", "4", "5", "3"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A baker packs 9 muffins equally into 3 baskets. How many muffins per basket?",
+      "options": ["4", "17", "3", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "9 divided by 3 is 3."
+    },
+    {
+      "question": "A baker packs 32 marbles equally into 8 baskets. How many marbles per basket?",
+      "options": ["24", "5", "8", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "32 divided by 8 is 4."
+    },
+    {
+      "question": "A baker packs 15 buns equally into 3 baskets. How many buns per basket?",
+      "options": ["6", "5", "12", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "15 divided by 3 is 5."
+    },
+    {
+      "question": "A baker packs 25 oranges equally into 5 baskets. How many oranges per basket?",
+      "options": ["6", "5", "8", "20"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "25 divided by 5 is 5."
+    },
+    {
+      "question": "A baker packs 48 muffins equally into 8 baskets. How many muffins per basket?",
+      "options": ["6", "7", "40", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "48 divided by 8 is 6."
+    },
+    {
+      "question": "A baker packs 21 oranges equally into 7 baskets. How many oranges per basket?",
+      "options": ["14", "3", "4", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A baker packs 48 oranges equally into 8 baskets. How many oranges per basket?",
+      "options": ["40", "6", "7", "8"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "48 divided by 8 is 6."
+    },
+    {
+      "question": "A baker packs 28 marbles equally into 7 baskets. How many marbles per basket?",
+      "options": ["7", "21", "4", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "28 divided by 7 is 4."
+    },
+    {
+      "question": "A baker packs 14 crayons equally into 7 baskets. How many crayons per basket?",
+      "options": ["3", "5", "7", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "14 divided by 7 is 2."
+    },
+    {
+      "question": "A baker packs 24 buns equally into 6 baskets. How many buns per basket?",
+      "options": ["5", "4", "6", "18"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "24 divided by 6 is 4."
+    },
+    {
+      "question": "A baker packs 12 cookies equally into 3 baskets. How many cookies per basket?",
+      "options": ["9", "4", "3", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "12 divided by 3 is 4."
+    },
+    {
+      "question": "A baker packs 30 oranges equally into 6 baskets. How many oranges per basket?",
+      "options": ["6", "5", "8", "24"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A baker packs 36 apples equally into 9 baskets. How many apples per basket?",
+      "options": ["27", "4", "5", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "36 divided by 9 is 4."
+    },
+    {
+      "question": "A baker packs 10 apples equally into 5 baskets. How many apples per basket?",
+      "options": ["2", "5", "3", "16"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "10 divided by 5 is 2."
+    },
+    {
+      "question": "A baker packs 12 bagels equally into 4 baskets. How many bagels per basket?",
+      "options": ["3", "8", "6", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "12 divided by 4 is 3."
+    },
+    {
+      "question": "A baker packs 21 buns equally into 7 baskets. How many buns per basket?",
+      "options": ["3", "4", "14", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A baker packs 8 oranges equally into 4 baskets. How many oranges per basket?",
+      "options": ["4", "2", "5", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A baker packs 36 crayons equally into 6 baskets. How many crayons per basket?",
+      "options": ["30", "7", "6", "9"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "36 divided by 6 is 6."
+    },
+    {
+      "question": "A baker packs 8 marbles equally into 4 baskets. How many marbles per basket?",
+      "options": ["2", "3", "5", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A baker packs 15 apples equally into 5 baskets. How many apples per basket?",
+      "options": ["5", "3", "10", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "A baker packs 30 bagels equally into 6 baskets. How many bagels per basket?",
+      "options": ["6", "5", "8", "24"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A baker packs 12 muffins equally into 6 baskets. How many muffins per basket?",
+      "options": ["3", "5", "2", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "12 divided by 6 is 2."
+    },
+    {
+      "question": "A baker packs 14 muffins equally into 7 baskets. How many muffins per basket?",
+      "options": ["5", "7", "2", "3"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "14 divided by 7 is 2."
+    },
+    {
+      "question": "A baker packs 30 apples equally into 6 baskets. How many apples per basket?",
+      "options": ["24", "8", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A baker packs 10 buns equally into 5 baskets. How many buns per basket?",
+      "options": ["3", "5", "16", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "10 divided by 5 is 2."
+    },
+    {
+      "question": "A baker packs 21 marbles equally into 7 baskets. How many marbles per basket?",
+      "options": ["7", "4", "3", "14"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "21 divided by 7 is 3."
+    },
+    {
+      "question": "A baker packs 48 marbles equally into 8 baskets. How many marbles per basket?",
+      "options": ["7", "6", "8", "40"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "48 divided by 8 is 6."
+    },
+    {
+      "question": "A baker packs 15 muffins equally into 5 baskets. How many muffins per basket?",
+      "options": ["5", "10", "3", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the baskets.",
+      "explanation": "15 divided by 5 is 3."
+    },
+    {
+      "question": "Half of the 28 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["28", "14", "16", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "28 divided by 2 is 14 chocolate cupcakes."
+    },
+    {
+      "question": "Half of the 16 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["4", "8", "16", "10"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "16 divided by 2 is 8 chocolate cupcakes."
+    },
+    {
+      "question": "Half of the 12 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["6", "3", "12", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "12 divided by 2 is 6 chocolate cupcakes."
+    },
+    {
+      "question": "Half of the 20 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["10", "12", "5", "20"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "20 divided by 2 is 10 chocolate cupcakes."
+    },
+    {
+      "question": "Half of the 24 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["14", "12", "24", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "24 divided by 2 is 12 chocolate cupcakes."
+    },
+    {
+      "question": "Half of the 36 cupcakes on the tray are chocolate. How many are chocolate?",
+      "options": ["20", "18", "9", "36"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Half means divide by two.",
+      "explanation": "36 divided by 2 is 18 chocolate cupcakes."
+    },
+    {
+      "question": "True or false: do bulls charge at the color red?",
+      "options": [
+        "Only bright red",
+        "Yes, red enrages them",
+        "Only in sunlight",
+        "No: bulls are red-green colorblind and react to movement"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "The cape's color does not matter.",
+      "explanation": "Bulls react to the moving cape, not its color."
+    },
+    {
+      "question": "True or false: do goldfish really have a three-second memory?",
+      "options": [
+        "No: they can remember for months",
+        "Only in small bowls",
+        "Yes, exactly three seconds",
+        "Only at night"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Their memory beats the myth.",
+      "explanation": "Goldfish learn routines and remember them for months."
+    },
+    {
+      "question": "True or false: is there no gravity in space?",
+      "options": [
+        "Gravity exists only on Earth",
+        "No gravity at all beyond the Moon",
+        "Gravity flips in orbit",
+        "There is microgravity everywhere astronauts go"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Think about what keeps the station circling.",
+      "explanation": "Orbiting stations are in free fall; gravity is only slightly weaker."
+    },
+    {
+      "question": "True or false: does shaving make hair grow back thicker?",
+      "options": [
+        "Only on the face",
+        "Yes, always",
+        "No: it feels coarser but grows the same",
+        "Only in winter"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "The tip changes, not the follicle.",
+      "explanation": "Shaving blunts the tip; thickness and growth stay the same."
+    },
+    {
+      "question": "True or false: do we swallow eight spiders a year in our sleep?",
+      "options": [
+        "Only in summer",
+        "Yes, exactly eight",
+        "Only if windows are open",
+        "No: that is an urban legend"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Spiders avoid sleeping giants.",
+      "explanation": "The spider statistic was invented to show how myths spread."
+    },
+    {
+      "question": "True or false: does sugar make children hyperactive?",
+      "options": ["Yes, always", "No: studies find no link", "Only chocolate", "Only at parties"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "The excitement was doing the work.",
+      "explanation": "Controlled studies show no hyperactivity link to sugar."
+    },
+    {
+      "question": "True or false: does lightning never strike the same place twice?",
+      "options": [
+        "It can and does strike the same spot repeatedly",
+        "Only in summer storms",
+        "Never twice",
+        "Only tall buildings"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Ask the tall buildings.",
+      "explanation": "Lightning strikes the same tall structures many times a year."
+    },
+    {
+      "question": "True or false: is the great wall of china visible from the moon with the naked eye?",
+      "options": [
+        "Only at night",
+        "Only in winter",
+        "Yes, clearly",
+        "No: it is not visible from the Moon"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Astronauts confirm it.",
+      "explanation": "Astronauts confirm the Wall is not visible from the Moon unaided."
+    },
+    {
+      "question": "True or false: do carrots improve your night vision?",
+      "options": [
+        "Only for pilots",
+        "Yes, dramatically",
+        "No: that was wartime propaganda",
+        "Only when raw"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "The vitamin A helps, but no magic.",
+      "explanation": "Carrots are healthy but do not give superhuman night vision."
+    },
+    {
+      "question": "True or false: do we use only ten percent of our brains?",
+      "options": [
+        "Only geniuses use more",
+        "Yes, ten percent",
+        "No: we use virtually all of it",
+        "Only in emergencies"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Scans show the whole brain at work.",
+      "explanation": "Brain imaging shows activity across virtually the entire brain."
+    },
+    {
+      "question": "True or false: did einstein fail math at school?",
+      "options": [
+        "Only geometry",
+        "He never studied math",
+        "Yes, he failed twice",
+        "No: he excelled at math as a child"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Check his actual school records.",
+      "explanation": "Einstein mastered calculus early; the failure story is a myth."
+    },
+    {
+      "question": "True or false: do hair and fingernails keep growing after death?",
+      "options": [
+        "No: the skin retracts, exposing more",
+        "Only in cold rooms",
+        "Yes, for weeks",
+        "Only fingernails"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "It is an illusion of shrinking skin.",
+      "explanation": "Dehydrated skin pulls back, making hair and nails look longer."
+    },
+    {
+      "question": "True or false: do ostriches bury their heads in the sand?",
+      "options": [
+        "Yes, fully hidden",
+        "Only when nesting",
+        "No: they lie low or run from danger",
+        "Only in pairs"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Check a farm documentary.",
+      "explanation": "Ostriches never bury their heads; they flee or lie flat."
+    },
+    {
+      "question": "True or false: do dogs sweat through their tongues?",
+      "options": [
+        "Yes, only the tongue",
+        "They do not cool at all",
+        "No: they pant and sweat through paw pads",
+        "Only through ears"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Panting is cooling by breath, not sweat.",
+      "explanation": "Dogs mainly cool by panting and sweat minimally through paws."
+    },
+    {
+      "question": "True or false: is tomato a vegetable botanically?",
+      "options": [
+        "Yes, always a vegetable",
+        "It is both botanically",
+        "It is a berry? no",
+        "No: botanically it is a fruit"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Think seeds.",
+      "explanation": "Botanically a tomato is a fruit; cooking treats it as a vegetable."
+    },
+    {
+      "question": "True or false: does cracking your knuckles cause arthritis?",
+      "options": [
+        "Only if done daily",
+        "Yes, eventually",
+        "No: studies find no arthritis link",
+        "Only for children"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "The pop is gas bubbles, not damage.",
+      "explanation": "Knuckle cracking has not been linked to arthritis in studies."
+    },
+    {
+      "question": "True or false: do chameleons change color mainly for camouflage?",
+      "options": [
+        "Only males change",
+        "Only at night",
+        "Yes, only to match walls",
+        "No: they mostly change for mood and temperature"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Communication comes first.",
+      "explanation": "Chameleons shift color mostly to regulate heat and signal mood."
+    },
+    {
+      "question": "True or false: is mount everest the tallest mountain measured from base to peak?",
+      "options": [
+        "No: Mauna Kea is taller from its base",
+        "Base measurements are impossible",
+        "K2 is taller from base",
+        "Yes, from base to peak"
+      ],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "One giant starts deep underwater.",
+      "explanation": "Mauna Kea is taller base-to-peak; Everest is highest above sea level."
+    },
+    {
+      "question": "True or false: do houseflies live only 24 hours?",
+      "options": ["Yes, exactly one day", "Only males", "No: they live for weeks", "Only indoors"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Your kitchen flies disagree.",
+      "explanation": "Houseflies typically live two to four weeks."
+    },
+    {
+      "question": "True or false: does the five-second rule make dropped food safe?",
+      "options": [
+        "Yes, under five seconds",
+        "Only dry foods",
+        "No: bacteria attach instantly",
+        "Only on carpet"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Contact is instant.",
+      "explanation": "Bacteria transfer to dropped food immediately; the rule is a myth."
+    },
+    {
+      "question": "True or false: is vitamin c a proven cold cure?",
+      "options": [
+        "Only with zinc",
+        "Yes, it cures colds",
+        "No: it may shorten colds slightly at most",
+        "Only in megadoses"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Studies are unimpressive.",
+      "explanation": "Research shows vitamin C does not cure colds."
+    },
+    {
+      "question": "A teacher shares 12 cookies equally among 6 students. How many does each student get?",
+      "options": ["6", "2", "5", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 6 is 2."
+    },
+    {
+      "question": "A bakery sells 6 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["6", "72", "12", "36"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "6 x 6 = 36 combinations."
+    },
+    {
+      "question": "A teacher shares 16 crayons equally among 8 students. How many does each student get?",
+      "options": ["2", "3", "8", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "16 divided by 8 is 2."
+    },
+    {
+      "question": "A bakery sells 4 kinds of bread. Each kind comes in 8 flavors. How many bread-and-flavor combos exist?",
+      "options": ["64", "4", "32", "12"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "4 x 8 = 32 combinations."
+    },
+    {
+      "question": "A teacher shares 8 crayons equally among 4 students. How many does each student get?",
+      "options": ["3", "2", "5", "4"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "8 divided by 4 is 2."
+    },
+    {
+      "question": "A bakery sells 6 kinds of bread. Each kind comes in 4 flavors. How many bread-and-flavor combos exist?",
+      "options": ["24", "10", "6", "48"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "6 x 4 = 24 combinations."
+    },
+    {
+      "question": "A teacher shares 30 apples equally among 6 students. How many does each student get?",
+      "options": ["24", "8", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "30 divided by 6 is 5."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 6 flavors. How many bread-and-flavor combos exist?",
+      "options": ["30", "5", "11", "60"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 6 = 30 combinations."
+    },
+    {
+      "question": "A teacher shares 28 muffins equally among 7 students. How many does each student get?",
+      "options": ["7", "5", "21", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "28 divided by 7 is 4."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 7 flavors. How many bread-and-flavor combos exist?",
+      "options": ["70", "12", "5", "35"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 7 = 35 combinations."
+    },
+    {
+      "question": "A teacher shares 25 buns equally among 5 students. How many does each student get?",
+      "options": ["5", "8", "6", "20"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "25 divided by 5 is 5."
+    },
+    {
+      "question": "A bakery sells 3 kinds of bread. Each kind comes in 5 flavors. How many bread-and-flavor combos exist?",
+      "options": ["15", "30", "8", "3"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "3 x 5 = 15 combinations."
+    },
+    {
+      "question": "A teacher shares 20 bagels equally among 5 students. How many does each student get?",
+      "options": ["4", "5", "15", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "20 divided by 5 is 4."
+    },
+    {
+      "question": "A bakery sells 5 kinds of bread. Each kind comes in 5 flavors. How many bread-and-flavor combos exist?",
+      "options": ["10", "50", "25", "5"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "5 x 5 = 25 combinations."
+    },
+    {
+      "question": "A teacher shares 36 cookies equally among 9 students. How many does each student get?",
+      "options": ["9", "27", "5", "4"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "36 divided by 9 is 4."
+    },
+    {
+      "question": "A bakery sells 4 kinds of bread. Each kind comes in 9 flavors. How many bread-and-flavor combos exist?",
+      "options": ["13", "72", "36", "4"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Common-Sense Traps",
+      "hint": "Multiply the kinds by the flavors.",
+      "explanation": "4 x 9 = 36 combinations."
+    },
+    {
+      "question": "A teacher shares 12 crayons equally among 6 students. How many does each student get?",
+      "options": ["3", "5", "6", "2"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Divide the total by the students.",
+      "explanation": "12 divided by 6 is 2."
+    }
+  ]
+}

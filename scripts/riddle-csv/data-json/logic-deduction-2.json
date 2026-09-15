@@ -1,0 +1,905 @@
+{
+  "category": "Logic & Deduction",
+  "riddles": [
+    {
+      "question": "Ben does not live in the blue house or the red house. David lives in the red house. Where does Ben live?",
+      "options": ["the green house", "the blue house", "the red house", "Next to David"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Ben cannot live in the blue house or the red house, so Ben lives in the green house."
+    },
+    {
+      "question": "Ben is slower than Jonas. David is slower than Ben. Henry is between Ben and Jonas in speed. Who is the fastest?",
+      "options": ["Ben", "Jonas", "Henry", "David"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: David < Ben < Henry < Jonas (with Henry in the middle). So Jonas is fastest."
+    },
+    {
+      "question": "Henry says: Isla always lies. Isla says: Henry always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both lie", "Isla", "Henry", "Both tell the truth"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Isla, making Henry the truth-teller."
+    },
+    {
+      "question": "Anna is shorter than Felix.  Felix is shorter than David.  David is shorter than Grace. Who is the tallest?",
+      "options": ["Felix", "Grace", "Anna", "David"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from shorter to greatest: Anna < Felix < David < Grace. So Grace is the tallest."
+    },
+    {
+      "question": "David says: Henry always lies. Henry says: David always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both lie", "Both tell the truth", "Henry", "David"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Henry, making David the truth-teller."
+    },
+    {
+      "question": "Felix is shorter than David.  David is shorter than Ben.  Ben is shorter than Elena. Who is the tallest?",
+      "options": ["Ben", "David", "Elena", "Felix"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from shorter to greatest: Felix < David < Ben < Elena. So Elena is the tallest."
+    },
+    {
+      "question": "Isla says: Jonas always lies. Jonas says: Isla always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Isla", "Jonas", "Both tell the truth", "Both lie"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Jonas, making Isla the truth-teller."
+    },
+    {
+      "question": "Jonas says: Grace always lies. Grace says: Jonas always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both lie", "Jonas", "Both tell the truth", "Grace"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Jonas the truth-teller."
+    },
+    {
+      "question": "Isla is slower than Clara.  Clara is slower than Henry.  Henry is slower than David. Who is the fastest?",
+      "options": ["Isla", "Clara", "David", "Henry"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Isla < Clara < Henry < David. So David is the fastest."
+    },
+    {
+      "question": "Felix does not live in the green house or the blue house. Henry lives in the blue house. Where does Felix live?",
+      "options": ["the green house", "the blue house", "the red house", "Next to Henry"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Felix cannot live in the green house or the blue house, so Felix lives in the red house."
+    },
+    {
+      "question": "Elena is younger than Grace. Felix is younger than Elena. Clara is between Elena and Grace in age. Who is the oldest?",
+      "options": ["Felix", "Grace", "Clara", "Elena"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Felix < Elena < Clara < Grace (with Clara in the middle). So Grace is oldest."
+    },
+    {
+      "question": "Isla says: Clara always lies. Clara says: Isla always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both lie", "Isla", "Clara", "Both tell the truth"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Clara, making Isla the truth-teller."
+    },
+    {
+      "question": "Felix says: Grace always lies. Grace says: Felix always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both lie", "Both tell the truth", "Grace", "Felix"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Felix the truth-teller."
+    },
+    {
+      "question": "David is slower than Jonas. Felix is slower than David. Ben is between David and Jonas in speed. Who is the fastest?",
+      "options": ["David", "Felix", "Ben", "Jonas"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Felix < David < Ben < Jonas (with Ben in the middle). So Jonas is fastest."
+    },
+    {
+      "question": "Jonas is shorter than Anna. Elena is shorter than Jonas. Isla is between Jonas and Anna in height. Who is the tallest?",
+      "options": ["Isla", "Jonas", "Anna", "Elena"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Elena < Jonas < Isla < Anna (with Isla in the middle). So Anna is tallest."
+    },
+    {
+      "question": "Isla does not live in the green house or the red house. Felix lives in the red house. Where does Isla live?",
+      "options": ["the green house", "the red house", "the blue house", "Next to Felix"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Isla cannot live in the green house or the red house, so Isla lives in the blue house."
+    },
+    {
+      "question": "Grace is slower than Clara. Isla is slower than Grace. Jonas is between Grace and Clara in speed. Who is the fastest?",
+      "options": ["Isla", "Clara", "Jonas", "Grace"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Isla < Grace < Jonas < Clara (with Jonas in the middle). So Clara is fastest."
+    },
+    {
+      "question": "Henry does not live in the green house or the red house. Ben lives in the red house. Where does Henry live?",
+      "options": ["the red house", "the green house", "the blue house", "Next to Ben"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Henry cannot live in the green house or the red house, so Henry lives in the blue house."
+    },
+    {
+      "question": "Isla is slower than Grace. Henry is slower than Isla. David is between Isla and Grace in speed. Who is the fastest?",
+      "options": ["Henry", "Isla", "David", "Grace"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Henry < Isla < David < Grace (with David in the middle). So Grace is fastest."
+    },
+    {
+      "question": "Anna is younger than Elena.  Elena is younger than Henry.  Henry is younger than Isla. Who is the oldest?",
+      "options": ["Elena", "Isla", "Henry", "Anna"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from younger to greatest: Anna < Elena < Henry < Isla. So Isla is the oldest."
+    },
+    {
+      "question": "David does not live in the red house or the green house. Henry lives in the green house. Where does David live?",
+      "options": ["the green house", "the red house", "Next to Henry", "the blue house"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "David cannot live in the red house or the green house, so David lives in the blue house."
+    },
+    {
+      "question": "Ben says: Anna always lies. Anna says: Ben always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Anna", "Ben", "Both tell the truth", "Both lie"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Anna, making Ben the truth-teller."
+    },
+    {
+      "question": "Anna is younger than Jonas.  Jonas is younger than Felix.  Felix is younger than Isla. Who is the oldest?",
+      "options": ["Isla", "Felix", "Jonas", "Anna"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from younger to greatest: Anna < Jonas < Felix < Isla. So Isla is the oldest."
+    },
+    {
+      "question": "Ben does not live in the green house or the red house. Isla lives in the red house. Where does Ben live?",
+      "options": ["Next to Isla", "the red house", "the green house", "the blue house"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Ben cannot live in the green house or the red house, so Ben lives in the blue house."
+    },
+    {
+      "question": "Isla is slower than Felix.  Felix is slower than Ben.  Ben is slower than Henry. Who is the fastest?",
+      "options": ["Felix", "Isla", "Henry", "Ben"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Isla < Felix < Ben < Henry. So Henry is the fastest."
+    },
+    {
+      "question": "Clara does not live in the green house or the blue house. Felix lives in the blue house. Where does Clara live?",
+      "options": ["the blue house", "Next to Felix", "the red house", "the green house"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Clara cannot live in the green house or the blue house, so Clara lives in the red house."
+    },
+    {
+      "question": "Henry does not live in the blue house or the red house. David lives in the red house. Where does Henry live?",
+      "options": ["the green house", "the blue house", "the red house", "Next to David"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Henry cannot live in the blue house or the red house, so Henry lives in the green house."
+    },
+    {
+      "question": "Felix is shorter than Clara.  Clara is shorter than Isla.  Isla is shorter than Jonas. Who is the tallest?",
+      "options": ["Jonas", "Felix", "Isla", "Clara"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from shorter to greatest: Felix < Clara < Isla < Jonas. So Jonas is the tallest."
+    },
+    {
+      "question": "Clara is slower than David. Anna is slower than Clara. Felix is between Clara and David in speed. Who is the fastest?",
+      "options": ["Clara", "David", "Felix", "Anna"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Anna < Clara < Felix < David (with Felix in the middle). So David is fastest."
+    },
+    {
+      "question": "David says: Grace always lies. Grace says: David always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both tell the truth", "David", "Grace", "Both lie"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making David the truth-teller."
+    },
+    {
+      "question": "Clara is younger than Grace.  Grace is younger than Henry.  Henry is younger than Ben. Who is the oldest?",
+      "options": ["Clara", "Grace", "Ben", "Henry"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from younger to greatest: Clara < Grace < Henry < Ben. So Ben is the oldest."
+    },
+    {
+      "question": "Felix does not live in the blue house or the green house. Jonas lives in the green house. Where does Felix live?",
+      "options": ["the green house", "the red house", "Next to Jonas", "the blue house"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Felix cannot live in the blue house or the green house, so Felix lives in the red house."
+    },
+    {
+      "question": "Jonas is slower than Grace.  Grace is slower than Henry.  Henry is slower than Elena. Who is the fastest?",
+      "options": ["Elena", "Henry", "Jonas", "Grace"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Jonas < Grace < Henry < Elena. So Elena is the fastest."
+    },
+    {
+      "question": "Clara is younger than David. Felix is younger than Clara. Grace is between Clara and David in age. Who is the oldest?",
+      "options": ["Grace", "David", "Clara", "Felix"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Felix < Clara < Grace < David (with Grace in the middle). So David is oldest."
+    },
+    {
+      "question": "David does not live in the red house or the blue house. Elena lives in the blue house. Where does David live?",
+      "options": ["the red house", "the blue house", "the green house", "Next to Elena"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "David cannot live in the red house or the blue house, so David lives in the green house."
+    },
+    {
+      "question": "Jonas is slower than David.  David is slower than Isla.  Isla is slower than Grace. Who is the fastest?",
+      "options": ["Grace", "Jonas", "Isla", "David"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Jonas < David < Isla < Grace. So Grace is the fastest."
+    },
+    {
+      "question": "Clara does not live in the red house or the green house. Jonas lives in the green house. Where does Clara live?",
+      "options": ["Next to Jonas", "the blue house", "the red house", "the green house"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "Clara cannot live in the red house or the green house, so Clara lives in the blue house."
+    },
+    {
+      "question": "Henry is slower than David.  David is slower than Ben.  Ben is slower than Isla. Who is the fastest?",
+      "options": ["Henry", "David", "Ben", "Isla"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Henry < David < Ben < Isla. So Isla is the fastest."
+    },
+    {
+      "question": "Henry is slower than Felix.  Felix is slower than Anna.  Anna is slower than Grace. Who is the fastest?",
+      "options": ["Henry", "Anna", "Grace", "Felix"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Henry < Felix < Anna < Grace. So Grace is the fastest."
+    },
+    {
+      "question": "Grace says: Jonas always lies. Jonas says: Grace always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Both tell the truth", "Both lie", "Grace", "Jonas"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Jonas, making Grace the truth-teller."
+    },
+    {
+      "question": "Clara is shorter than David. Anna is shorter than Clara. Isla is between Clara and David in height. Who is the tallest?",
+      "options": ["Clara", "David", "Anna", "Isla"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Anna < Clara < Isla < David (with Isla in the middle). So David is tallest."
+    },
+    {
+      "question": "Isla is shorter than Elena.  Elena is shorter than Jonas.  Jonas is shorter than Ben. Who is the tallest?",
+      "options": ["Elena", "Jonas", "Isla", "Ben"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from shorter to greatest: Isla < Elena < Jonas < Ben. So Ben is the tallest."
+    },
+    {
+      "question": "Anna is younger than Elena. Henry is younger than Anna. Felix is between Anna and Elena in age. Who is the oldest?",
+      "options": ["Henry", "Anna", "Elena", "Felix"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Henry < Anna < Felix < Elena (with Felix in the middle). So Elena is oldest."
+    },
+    {
+      "question": "David does not live in the red house or the green house. Grace lives in the green house. Where does David live?",
+      "options": ["Next to Grace", "the red house", "the green house", "the blue house"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Eliminate the impossible houses.",
+      "explanation": "David cannot live in the red house or the green house, so David lives in the blue house."
+    },
+    {
+      "question": "Ben is slower than Isla.  Isla is slower than Clara.  Clara is slower than Grace. Who is the fastest?",
+      "options": ["Isla", "Grace", "Ben", "Clara"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Ben < Isla < Clara < Grace. So Grace is the fastest."
+    },
+    {
+      "question": "Clara is slower than Felix.  Felix is slower than Isla.  Isla is slower than Elena. Who is the fastest?",
+      "options": ["Felix", "Elena", "Clara", "Isla"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Clara < Felix < Isla < Elena. So Elena is the fastest."
+    },
+    {
+      "question": "Clara is slower than Henry. Felix is slower than Clara. Ben is between Clara and Henry in speed. Who is the fastest?",
+      "options": ["Henry", "Felix", "Clara", "Ben"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Felix < Clara < Ben < Henry (with Ben in the middle). So Henry is fastest."
+    },
+    {
+      "question": "Felix is slower than Grace.  Grace is slower than Jonas.  Jonas is slower than Anna. Who is the fastest?",
+      "options": ["Anna", "Jonas", "Felix", "Grace"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Logic Puzzles",
+      "hint": "Line the comparisons up in a chain.",
+      "explanation": "Ordering from slower to greatest: Felix < Grace < Jonas < Anna. So Anna is the fastest."
+    },
+    {
+      "question": "Jonas is shorter than Anna. Ben is shorter than Jonas. Clara is between Jonas and Anna in height. Who is the tallest?",
+      "options": ["Ben", "Clara", "Anna", "Jonas"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Ben < Jonas < Clara < Anna (with Clara in the middle). So Anna is tallest."
+    },
+    {
+      "question": "Anna is shorter than Isla. Elena is shorter than Anna. Jonas is between Anna and Isla in height. Who is the tallest?",
+      "options": ["Isla", "Elena", "Jonas", "Anna"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Sketch the order, then slot in the middle one.",
+      "explanation": "From the clues: Elena < Anna < Jonas < Isla (with Jonas in the middle). So Isla is tallest."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 1, 2, 3, 5, 8, ...? What comes next?",
+      "options": ["12", "13", "14", "10"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "5 + 8 = 13."
+    },
+    {
+      "question": "What comes next: 1, 2, 4, 8, ...?",
+      "options": ["10", "32", "16", "17"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 2 each time: next is 16."
+    },
+    {
+      "question": "What comes next: 8, 25, 8, 25, 8, ...?",
+      "options": ["8", "9", "25", "26"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 8 and 25; next is 8."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 1, 5, 6, 11, 17, ...? What comes next?",
+      "options": ["27", "29", "22", "28"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "11 + 17 = 28."
+    },
+    {
+      "question": "What comes next: 13, 20, 27, 34, ...?",
+      "options": ["48", "41", "40", "44"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 7 each time: next is 41."
+    },
+    {
+      "question": "What comes next: 11, 30, 11, 30, 11, ...?",
+      "options": ["31", "30", "11", "12"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 11 and 30; next is 11."
+    },
+    {
+      "question": "What comes next: 10, 27, 10, 27, 10, ...?",
+      "options": ["11", "28", "27", "10"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 10 and 27; next is 10."
+    },
+    {
+      "question": "What comes next: 27, 38, 49, 60, ...?",
+      "options": ["71", "82", "74", "70"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 11 each time: next is 71."
+    },
+    {
+      "question": "What comes next: 5, 20, 5, 20, 5, ...?",
+      "options": ["20", "21", "5", "6"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 5 and 20; next is 5."
+    },
+    {
+      "question": "Which letter comes next: N, P, R, ...?",
+      "options": ["V", "U", "T", "W"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is T."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 3, 2, 5, 7, 12, ...? What comes next?",
+      "options": ["14", "19", "18", "20"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "7 + 12 = 19."
+    },
+    {
+      "question": "Which letter comes next: B, E, H, ...?",
+      "options": ["N", "L", "K", "M"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is K."
+    },
+    {
+      "question": "What comes next: 6, 17, 6, 17, 6, ...?",
+      "options": ["17", "7", "6", "18"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 6 and 17; next is 6."
+    },
+    {
+      "question": "What comes next: 3, 9, 27, 81, ...?",
+      "options": ["246", "84", "243", "486"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 3 each time: next is 243."
+    },
+    {
+      "question": "Which letter comes next: H, J, L, ...?",
+      "options": ["P", "N", "O", "Q"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is N."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 5, 2, 7, 9, 16, ...? What comes next?",
+      "options": ["18", "24", "26", "25"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "9 + 16 = 25."
+    },
+    {
+      "question": "What comes next: 12, 23, 34, 45, ...?",
+      "options": ["55", "56", "67", "59"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 11 each time: next is 56."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 5, 6, 11, 17, 28, ...? What comes next?",
+      "options": ["46", "45", "34", "44"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "17 + 28 = 45."
+    },
+    {
+      "question": "Which letter comes next: M, O, Q, ...?",
+      "options": ["T", "V", "U", "S"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is S."
+    },
+    {
+      "question": "What comes next: 15, 29, 15, 29, 15, ...?",
+      "options": ["15", "16", "29", "30"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 15 and 29; next is 15."
+    },
+    {
+      "question": "What comes next: 13, 23, 33, 43, ...?",
+      "options": ["52", "53", "56", "63"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 10 each time: next is 53."
+    },
+    {
+      "question": "Which letter comes next: E, H, K, ...?",
+      "options": ["O", "N", "P", "Q"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is N."
+    },
+    {
+      "question": "What comes next: 1, 3, 9, 27, ...?",
+      "options": ["82", "162", "30", "81"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 3 each time: next is 81."
+    },
+    {
+      "question": "Which letter comes next: N, Q, T, ...?",
+      "options": ["Z", "W", "X", "Y"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is W."
+    },
+    {
+      "question": "What comes next: 17, 19, 21, 23, ...?",
+      "options": ["28", "24", "25", "27"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 2 each time: next is 25."
+    },
+    {
+      "question": "Which letter comes next: L, N, P, ...?",
+      "options": ["T", "U", "S", "R"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is R."
+    },
+    {
+      "question": "Which letter comes next: I, L, O, ...?",
+      "options": ["U", "T", "S", "R"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is R."
+    },
+    {
+      "question": "What comes next: 15, 34, 15, 34, 15, ...?",
+      "options": ["16", "15", "35", "34"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 15 and 34; next is 15."
+    },
+    {
+      "question": "What comes next: 4, 12, 36, 108, ...?",
+      "options": ["648", "324", "328", "111"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 3 each time: next is 324."
+    },
+    {
+      "question": "What comes next: 26, 37, 48, 59, ...?",
+      "options": ["81", "73", "70", "69"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 11 each time: next is 70."
+    },
+    {
+      "question": "What comes next: 7, 18, 7, 18, 7, ...?",
+      "options": ["18", "19", "8", "7"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 7 and 18; next is 7."
+    },
+    {
+      "question": "What comes next: 14, 18, 22, 26, ...?",
+      "options": ["34", "30", "33", "29"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 4 each time: next is 30."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 2, 3, 5, 8, 13, ...? What comes next?",
+      "options": ["20", "22", "21", "16"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "8 + 13 = 21."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 4, 4, 8, 12, 20, ...? What comes next?",
+      "options": ["32", "24", "31", "33"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "12 + 20 = 32."
+    },
+    {
+      "question": "What comes next: 19, 28, 37, 46, ...?",
+      "options": ["58", "64", "55", "54"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 9 each time: next is 55."
+    },
+    {
+      "question": "Which letter comes next: S, V, Y, ...?",
+      "options": ["E", "B", "C", "D"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is B."
+    },
+    {
+      "question": "What comes next: 10, 20, 10, 20, 10, ...?",
+      "options": ["20", "10", "21", "11"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 10 and 20; next is 10."
+    },
+    {
+      "question": "What comes next: 6, 12, 6, 12, 6, ...?",
+      "options": ["7", "12", "13", "6"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 6 and 12; next is 6."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 5, 3, 8, 11, 19, ...? What comes next?",
+      "options": ["22", "31", "30", "29"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "11 + 19 = 30."
+    },
+    {
+      "question": "What comes next: 15, 33, 15, 33, 15, ...?",
+      "options": ["33", "15", "16", "34"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 15 and 33; next is 15."
+    },
+    {
+      "question": "What comes next: 2, 4, 8, 16, ...?",
+      "options": ["34", "18", "32", "64"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 2 each time: next is 32."
+    },
+    {
+      "question": "What comes next: 7, 24, 7, 24, 7, ...?",
+      "options": ["25", "8", "7", "24"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Two values take turns.",
+      "explanation": "The pattern alternates 7 and 24; next is 7."
+    },
+    {
+      "question": "What comes next: 21, 27, 33, 39, ...?",
+      "options": ["51", "45", "44", "48"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 6 each time: next is 45."
+    },
+    {
+      "question": "Which letter comes next: G, J, M, ...?",
+      "options": ["S", "R", "P", "Q"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is P."
+    },
+    {
+      "question": "What comes next: 21, 23, 25, 27, ...?",
+      "options": ["28", "31", "29", "32"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the gap between terms.",
+      "explanation": "Add 2 each time: next is 29."
+    },
+    {
+      "question": "Which letter comes next: E, G, I, ...?",
+      "options": ["M", "K", "N", "L"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is K."
+    },
+    {
+      "question": "Which letter comes next: O, R, U, ...?",
+      "options": ["Y", "X", "Z", "A"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 3 letters forward: next is X."
+    },
+    {
+      "question": "Each term is the sum of the previous two: 3, 3, 6, 9, 15, ...? What comes next?",
+      "options": ["18", "23", "24", "25"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Sequences & Patterns",
+      "hint": "Add the last two terms.",
+      "explanation": "9 + 15 = 24."
+    },
+    {
+      "question": "Which letter comes next: J, L, N, ...?",
+      "options": ["R", "Q", "S", "P"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Convert letters to positions, then back.",
+      "explanation": "Every step moves 2 letters forward: next is P."
+    },
+    {
+      "question": "What comes next: 2, 6, 18, 54, ...?",
+      "options": ["324", "57", "162", "164"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Sequences & Patterns",
+      "hint": "Check the multiplier.",
+      "explanation": "Multiply by 3 each time: next is 162."
+    }
+  ]
+}

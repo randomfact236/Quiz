@@ -1,0 +1,905 @@
+{
+  "category": "Kids & Family",
+  "riddles": [
+    {
+      "question": "I am not saying my name yet: I melt in the sunshine, and You lick me before I drip. What am I?",
+      "options": ["a milkshake", "an ice cream cone", "a popsicle", "a cupcake"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, cold, on a crunchy holder.",
+      "explanation": "Ice cream in a cone melts fast on hot days."
+    },
+    {
+      "question": "Riddle me this: i melt in the sunshine \u2014 and you lick me before I drip. What am I?",
+      "options": ["an ice cream cone", "a popsicle", "a cupcake", "a milkshake"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, cold, on a crunchy holder.",
+      "explanation": "Ice cream in a cone melts fast on hot days."
+    },
+    {
+      "question": "Two clues and one name: I melt in the sunshine. Also: You lick me before I drip. Can you name me?",
+      "options": ["a milkshake", "an ice cream cone", "a cupcake", "a popsicle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, cold, on a crunchy holder.",
+      "explanation": "Ice cream in a cone melts fast on hot days."
+    },
+    {
+      "question": "Guess who: i melt in the sunshine, and you lick me before I drip. Who or what am I?",
+      "options": ["an ice cream cone", "a cupcake", "a popsicle", "a milkshake"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, cold, on a crunchy holder.",
+      "explanation": "Ice cream in a cone melts fast on hot days."
+    },
+    {
+      "question": "I am not saying my name yet: I am born when rain collects, and You love to splash in me. What am I?",
+      "options": ["a glass of water", "a pool", "a pond", "a puddle"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Rainwater's favorite resting spot.",
+      "explanation": "Puddles form from rain and are perfect for splashing."
+    },
+    {
+      "question": "Riddle me this: i am born when rain collects \u2014 and you love to splash in me. What am I?",
+      "options": ["a glass of water", "a pool", "a puddle", "a pond"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Rainwater's favorite resting spot.",
+      "explanation": "Puddles form from rain and are perfect for splashing."
+    },
+    {
+      "question": "Two clues and one name: I am born when rain collects. Also: You love to splash in me. Can you name me?",
+      "options": ["a pool", "a glass of water", "a puddle", "a pond"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Rainwater's favorite resting spot.",
+      "explanation": "Puddles form from rain and are perfect for splashing."
+    },
+    {
+      "question": "Guess who: i am born when rain collects, and you love to splash in me. Who or what am I?",
+      "options": ["a pond", "a pool", "a glass of water", "a puddle"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Rainwater's favorite resting spot.",
+      "explanation": "Puddles form from rain and are perfect for splashing."
+    },
+    {
+      "question": "I am not saying my name yet: My grades tell your term's story, and Parents sign my envelope. What am I?",
+      "options": ["a report card", "a letter", "a diary", "a test"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Good marks live here.",
+      "explanation": "Report cards summarize each term's grades."
+    },
+    {
+      "question": "Riddle me this: my grades tell your term's story \u2014 and parents sign my envelope. What am I?",
+      "options": ["a letter", "a test", "a report card", "a diary"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Good marks live here.",
+      "explanation": "Report cards summarize each term's grades."
+    },
+    {
+      "question": "Two clues and one name: My grades tell your term's story. Also: Parents sign my envelope. Can you name me?",
+      "options": ["a diary", "a report card", "a letter", "a test"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Good marks live here.",
+      "explanation": "Report cards summarize each term's grades."
+    },
+    {
+      "question": "Guess who: my grades tell your term's story, and parents sign my envelope. Who or what am I?",
+      "options": ["a report card", "a test", "a letter", "a diary"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Good marks live here.",
+      "explanation": "Report cards summarize each term's grades."
+    },
+    {
+      "question": "I am not saying my name yet: I carry my baby in a pouch, and I have mighty hopping legs. What am I?",
+      "options": ["a wallaby", "a koala", "a rabbit", "a kangaroo"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Look for the pocket.",
+      "explanation": "A kangaroo keeps its joey safe in a pouch and hops on huge back legs."
+    },
+    {
+      "question": "Riddle me this: i carry my baby in a pouch \u2014 and i have mighty hopping legs. What am I?",
+      "options": ["a kangaroo", "a koala", "a wallaby", "a rabbit"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Look for the pocket.",
+      "explanation": "A kangaroo keeps its joey safe in a pouch and hops on huge back legs."
+    },
+    {
+      "question": "Two clues and one name: I carry my baby in a pouch. Also: I have mighty hopping legs. Can you name me?",
+      "options": ["a wallaby", "a koala", "a kangaroo", "a rabbit"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Look for the pocket.",
+      "explanation": "A kangaroo keeps its joey safe in a pouch and hops on huge back legs."
+    },
+    {
+      "question": "Guess who: i carry my baby in a pouch, and i have mighty hopping legs. Who or what am I?",
+      "options": ["a rabbit", "a wallaby", "a kangaroo", "a koala"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Look for the pocket.",
+      "explanation": "A kangaroo keeps its joey safe in a pouch and hops on huge back legs."
+    },
+    {
+      "question": "I am not saying my name yet: I guard your sandwiches till noon, and Moms pack me every morning. What am I?",
+      "options": ["a cooler", "a picnic basket", "a drawer", "a lunchbox"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Midday meals travel in me.",
+      "explanation": "A lunchbox keeps your meal safe until break time."
+    },
+    {
+      "question": "Riddle me this: i guard your sandwiches till noon \u2014 and moms pack me every morning. What am I?",
+      "options": ["a drawer", "a picnic basket", "a lunchbox", "a cooler"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Midday meals travel in me.",
+      "explanation": "A lunchbox keeps your meal safe until break time."
+    },
+    {
+      "question": "Two clues and one name: I guard your sandwiches till noon. Also: Moms pack me every morning. Can you name me?",
+      "options": ["a lunchbox", "a picnic basket", "a cooler", "a drawer"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Midday meals travel in me.",
+      "explanation": "A lunchbox keeps your meal safe until break time."
+    },
+    {
+      "question": "Guess who: i guard your sandwiches till noon, and moms pack me every morning. Who or what am I?",
+      "options": ["a cooler", "a drawer", "a picnic basket", "a lunchbox"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Midday meals travel in me.",
+      "explanation": "A lunchbox keeps your meal safe until break time."
+    },
+    {
+      "question": "I am not saying my name yet: I gallop without leaving the room, and My arc keeps me swaying. What am I?",
+      "options": ["a rocking horse", "a swing", "a teddy bear", "a bicycle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Ride the waves of the nursery.",
+      "explanation": "A rocking horse sways on curved runners."
+    },
+    {
+      "question": "Riddle me this: i gallop without leaving the room \u2014 and my arc keeps me swaying. What am I?",
+      "options": ["a rocking horse", "a swing", "a bicycle", "a teddy bear"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Ride the waves of the nursery.",
+      "explanation": "A rocking horse sways on curved runners."
+    },
+    {
+      "question": "Two clues and one name: I gallop without leaving the room. Also: My arc keeps me swaying. Can you name me?",
+      "options": ["a teddy bear", "a swing", "a rocking horse", "a bicycle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Ride the waves of the nursery.",
+      "explanation": "A rocking horse sways on curved runners."
+    },
+    {
+      "question": "Guess who: i gallop without leaving the room, and my arc keeps me swaying. Who or what am I?",
+      "options": ["a rocking horse", "a teddy bear", "a swing", "a bicycle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Ride the waves of the nursery.",
+      "explanation": "A rocking horse sways on curved runners."
+    },
+    {
+      "question": "I am not saying my name yet: Countries shrink onto my surface, and Spin me to travel the world. What am I?",
+      "options": ["a map", "a ball", "a balloon", "a globe of the earth"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Blue and green, desk sized.",
+      "explanation": "A desktop globe spins the whole planet in your hands."
+    },
+    {
+      "question": "Riddle me this: countries shrink onto my surface \u2014 and spin me to travel the world. What am I?",
+      "options": ["a balloon", "a map", "a ball", "a globe of the earth"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Blue and green, desk sized.",
+      "explanation": "A desktop globe spins the whole planet in your hands."
+    },
+    {
+      "question": "Two clues and one name: Countries shrink onto my surface. Also: Spin me to travel the world. Can you name me?",
+      "options": ["a globe of the earth", "a balloon", "a ball", "a map"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Blue and green, desk sized.",
+      "explanation": "A desktop globe spins the whole planet in your hands."
+    },
+    {
+      "question": "Guess who: countries shrink onto my surface, and spin me to travel the world. Who or what am I?",
+      "options": ["a ball", "a globe of the earth", "a balloon", "a map"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Blue and green, desk sized.",
+      "explanation": "A desktop globe spins the whole planet in your hands."
+    },
+    {
+      "question": "I am not saying my name yet: I change my skin color, and My eyes look two ways at once. What am I?",
+      "options": ["a gecko", "an iguana", "a chameleon", "a frog"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "The color-changing lizard.",
+      "explanation": "Chameleons shift colors and move each eye independently."
+    },
+    {
+      "question": "Riddle me this: i change my skin color \u2014 and my eyes look two ways at once. What am I?",
+      "options": ["a gecko", "a frog", "an iguana", "a chameleon"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "The color-changing lizard.",
+      "explanation": "Chameleons shift colors and move each eye independently."
+    },
+    {
+      "question": "Two clues and one name: I change my skin color. Also: My eyes look two ways at once. Can you name me?",
+      "options": ["a frog", "a gecko", "a chameleon", "an iguana"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Animal Riddles",
+      "hint": "The color-changing lizard.",
+      "explanation": "Chameleons shift colors and move each eye independently."
+    },
+    {
+      "question": "Guess who: i change my skin color, and my eyes look two ways at once. Who or what am I?",
+      "options": ["a gecko", "a chameleon", "an iguana", "a frog"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "The color-changing lizard.",
+      "explanation": "Chameleons shift colors and move each eye independently."
+    },
+    {
+      "question": "I am not saying my name yet: I love rolling in mud, and I have a curly little tail. What am I?",
+      "options": ["a pig", "a cow", "a dog", "a sheep"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Oink oink.",
+      "explanation": "Pigs wallow in mud to stay cool."
+    },
+    {
+      "question": "Riddle me this: i love rolling in mud \u2014 and i have a curly little tail. What am I?",
+      "options": ["a dog", "a sheep", "a pig", "a cow"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Oink oink.",
+      "explanation": "Pigs wallow in mud to stay cool."
+    },
+    {
+      "question": "Two clues and one name: I love rolling in mud. Also: I have a curly little tail. Can you name me?",
+      "options": ["a sheep", "a pig", "a dog", "a cow"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Oink oink.",
+      "explanation": "Pigs wallow in mud to stay cool."
+    },
+    {
+      "question": "Guess who: i love rolling in mud, and i have a curly little tail. Who or what am I?",
+      "options": ["a pig", "a sheep", "a dog", "a cow"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Oink oink.",
+      "explanation": "Pigs wallow in mud to stay cool."
+    },
+    {
+      "question": "I am not saying my name yet: I borrow adventures for free, and Stamps tell when I am due. What am I?",
+      "options": ["a library card", "a ticket", "an ID badge", "a coupon"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Your pass to endless stories.",
+      "explanation": "A library card lets you take books home to read."
+    },
+    {
+      "question": "Riddle me this: i borrow adventures for free \u2014 and stamps tell when I am due. What am I?",
+      "options": ["an ID badge", "a coupon", "a library card", "a ticket"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Your pass to endless stories.",
+      "explanation": "A library card lets you take books home to read."
+    },
+    {
+      "question": "Two clues and one name: I borrow adventures for free. Also: Stamps tell when I am due. Can you name me?",
+      "options": ["a library card", "an ID badge", "a coupon", "a ticket"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Your pass to endless stories.",
+      "explanation": "A library card lets you take books home to read."
+    },
+    {
+      "question": "Guess who: i borrow adventures for free, and stamps tell when I am due. Who or what am I?",
+      "options": ["a coupon", "an ID badge", "a library card", "a ticket"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Your pass to endless stories.",
+      "explanation": "A library card lets you take books home to read."
+    },
+    {
+      "question": "I am not saying my name yet: My back is full of spines, and I curl into a spiky ball. What am I?",
+      "options": ["a porcupine", "a mouse", "a hedgehog", "a mole"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Prickly little gardener.",
+      "explanation": "Hedgehogs curl into balls so spines point outward."
+    },
+    {
+      "question": "Riddle me this: my back is full of spines \u2014 and i curl into a spiky ball. What am I?",
+      "options": ["a hedgehog", "a porcupine", "a mouse", "a mole"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Prickly little gardener.",
+      "explanation": "Hedgehogs curl into balls so spines point outward."
+    },
+    {
+      "question": "Two clues and one name: My back is full of spines. Also: I curl into a spiky ball. Can you name me?",
+      "options": ["a mole", "a porcupine", "a hedgehog", "a mouse"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Prickly little gardener.",
+      "explanation": "Hedgehogs curl into balls so spines point outward."
+    },
+    {
+      "question": "Guess who: my back is full of spines, and i curl into a spiky ball. Who or what am I?",
+      "options": ["a hedgehog", "a mouse", "a mole", "a porcupine"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Prickly little gardener.",
+      "explanation": "Hedgehogs curl into balls so spines point outward."
+    },
+    {
+      "question": "I am not saying my name yet: I undo pencil mistakes, and I shrink as I help. What am I?",
+      "options": ["an eraser", "a marker", "a ruler", "a sharpener"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Second chances in pink or white.",
+      "explanation": "Erasers rub out pencil marks and wear away doing it."
+    },
+    {
+      "question": "Riddle me this: i undo pencil mistakes \u2014 and i shrink as I help. What am I?",
+      "options": ["a sharpener", "a marker", "an eraser", "a ruler"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Second chances in pink or white.",
+      "explanation": "Erasers rub out pencil marks and wear away doing it."
+    },
+    {
+      "question": "Two clues and one name: I undo pencil mistakes. Also: I shrink as I help. Can you name me?",
+      "options": ["a ruler", "a marker", "an eraser", "a sharpener"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Second chances in pink or white.",
+      "explanation": "Erasers rub out pencil marks and wear away doing it."
+    },
+    {
+      "question": "Guess who: i undo pencil mistakes, and i shrink as I help. Who or what am I?",
+      "options": ["a sharpener", "a ruler", "an eraser", "a marker"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Second chances in pink or white.",
+      "explanation": "Erasers rub out pencil marks and wear away doing it."
+    },
+    {
+      "question": "I am not saying my name yet: Pictures tell my story, and Speech bubbles shout my action words. What am I?",
+      "options": ["a coloring book", "a magazine", "a comic book", "a novel"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Read in panels, super fast.",
+      "explanation": "Comic books tell stories through drawn panels and bubbles."
+    },
+    {
+      "question": "Riddle me this: pictures tell my story \u2014 and speech bubbles shout my action words. What am I?",
+      "options": ["a novel", "a coloring book", "a comic book", "a magazine"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Read in panels, super fast.",
+      "explanation": "Comic books tell stories through drawn panels and bubbles."
+    },
+    {
+      "question": "Two clues and one name: Pictures tell my story. Also: Speech bubbles shout my action words. Can you name me?",
+      "options": ["a magazine", "a coloring book", "a novel", "a comic book"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Read in panels, super fast.",
+      "explanation": "Comic books tell stories through drawn panels and bubbles."
+    },
+    {
+      "question": "Guess who: pictures tell my story, and speech bubbles shout my action words. Who or what am I?",
+      "options": ["a novel", "a comic book", "a coloring book", "a magazine"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Read in panels, super fast.",
+      "explanation": "Comic books tell stories through drawn panels and bubbles."
+    },
+    {
+      "question": "I am not saying my name yet: I hatch in icy colonies, and I snuggle under a parent. What am I?",
+      "options": ["a penguin chick", "a gosling", "an owlet", "a duckling"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fluffy, gray, Antarctic.",
+      "explanation": "Penguin chicks hatch in cold colonies and huddle warm."
+    },
+    {
+      "question": "Riddle me this: i hatch in icy colonies \u2014 and i snuggle under a parent. What am I?",
+      "options": ["an owlet", "a duckling", "a penguin chick", "a gosling"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fluffy, gray, Antarctic.",
+      "explanation": "Penguin chicks hatch in cold colonies and huddle warm."
+    },
+    {
+      "question": "Two clues and one name: I hatch in icy colonies. Also: I snuggle under a parent. Can you name me?",
+      "options": ["a gosling", "a duckling", "an owlet", "a penguin chick"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fluffy, gray, Antarctic.",
+      "explanation": "Penguin chicks hatch in cold colonies and huddle warm."
+    },
+    {
+      "question": "Guess who: i hatch in icy colonies, and i snuggle under a parent. Who or what am I?",
+      "options": ["a duckling", "a gosling", "an owlet", "a penguin chick"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Fluffy, gray, Antarctic.",
+      "explanation": "Penguin chicks hatch in cold colonies and huddle warm."
+    },
+    {
+      "question": "I am not saying my name yet: I wear a black and white suit, and I waddle but cannot fly. What am I?",
+      "options": ["an ostrich", "a duck", "a puffin", "a penguin"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Think ice and tuxedos.",
+      "explanation": "Penguins are flightless birds that waddle across the ice."
+    },
+    {
+      "question": "Riddle me this: i wear a black and white suit \u2014 and i waddle but cannot fly. What am I?",
+      "options": ["a penguin", "a puffin", "a duck", "an ostrich"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Think ice and tuxedos.",
+      "explanation": "Penguins are flightless birds that waddle across the ice."
+    },
+    {
+      "question": "Two clues and one name: I wear a black and white suit. Also: I waddle but cannot fly. Can you name me?",
+      "options": ["a puffin", "a duck", "a penguin", "an ostrich"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Think ice and tuxedos.",
+      "explanation": "Penguins are flightless birds that waddle across the ice."
+    },
+    {
+      "question": "Guess who: i wear a black and white suit, and i waddle but cannot fly. Who or what am I?",
+      "options": ["a puffin", "a penguin", "an ostrich", "a duck"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Think ice and tuxedos.",
+      "explanation": "Penguins are flightless birds that waddle across the ice."
+    },
+    {
+      "question": "I am not saying my name yet: I am a tiny model of Earth, and I spin to show every continent. What am I?",
+      "options": ["a globe", "an atlas", "a map", "a telescope"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The world in your hands.",
+      "explanation": "A globe is a small spinning Earth for geography lessons."
+    },
+    {
+      "question": "Riddle me this: i am a tiny model of Earth \u2014 and i spin to show every continent. What am I?",
+      "options": ["an atlas", "a globe", "a map", "a telescope"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The world in your hands.",
+      "explanation": "A globe is a small spinning Earth for geography lessons."
+    },
+    {
+      "question": "Two clues and one name: I am a tiny model of Earth. Also: I spin to show every continent. Can you name me?",
+      "options": ["a telescope", "a map", "a globe", "an atlas"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "The world in your hands.",
+      "explanation": "A globe is a small spinning Earth for geography lessons."
+    },
+    {
+      "question": "Guess who: i am a tiny model of Earth, and i spin to show every continent. Who or what am I?",
+      "options": ["a telescope", "a globe", "a map", "an atlas"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The world in your hands.",
+      "explanation": "A globe is a small spinning Earth for geography lessons."
+    },
+    {
+      "question": "I am not saying my name yet: I wear seven colors after rain, and I arch across the sky. What am I?",
+      "options": ["a kite", "a rainbow", "a sunset", "a cloud"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Look up when sunshine meets showers.",
+      "explanation": "Rainbows appear when sunlight shines through raindrops."
+    },
+    {
+      "question": "Riddle me this: i wear seven colors after rain \u2014 and i arch across the sky. What am I?",
+      "options": ["a sunset", "a kite", "a cloud", "a rainbow"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Look up when sunshine meets showers.",
+      "explanation": "Rainbows appear when sunlight shines through raindrops."
+    },
+    {
+      "question": "Two clues and one name: I wear seven colors after rain. Also: I arch across the sky. Can you name me?",
+      "options": ["a kite", "a rainbow", "a sunset", "a cloud"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Look up when sunshine meets showers.",
+      "explanation": "Rainbows appear when sunlight shines through raindrops."
+    },
+    {
+      "question": "Guess who: i wear seven colors after rain, and i arch across the sky. Who or what am I?",
+      "options": ["a kite", "a sunset", "a cloud", "a rainbow"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Look up when sunshine meets showers.",
+      "explanation": "Rainbows appear when sunlight shines through raindrops."
+    },
+    {
+      "question": "I am not saying my name yet: I fight sugar twice a day, and I wear a cape of foam. What am I?",
+      "options": ["a comb", "a toothbrush", "a hairbrush", "a floss pick"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Bristles on a mission.",
+      "explanation": "A toothbrush scrubs teeth clean every morning and night."
+    },
+    {
+      "question": "Riddle me this: i fight sugar twice a day \u2014 and i wear a cape of foam. What am I?",
+      "options": ["a comb", "a hairbrush", "a floss pick", "a toothbrush"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Bristles on a mission.",
+      "explanation": "A toothbrush scrubs teeth clean every morning and night."
+    },
+    {
+      "question": "Two clues and one name: I fight sugar twice a day. Also: I wear a cape of foam. Can you name me?",
+      "options": ["a toothbrush", "a comb", "a floss pick", "a hairbrush"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Bristles on a mission.",
+      "explanation": "A toothbrush scrubs teeth clean every morning and night."
+    },
+    {
+      "question": "Guess who: i fight sugar twice a day, and i wear a cape of foam. Who or what am I?",
+      "options": ["a toothbrush", "a comb", "a floss pick", "a hairbrush"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Bristles on a mission.",
+      "explanation": "A toothbrush scrubs teeth clean every morning and night."
+    },
+    {
+      "question": "I am not saying my name yet: Everyone enters through me, and Names and art decorate my face. What am I?",
+      "options": ["a window", "a classroom door", "a gate", "a wall"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Lessons wait on the other side.",
+      "explanation": "The classroom door opens onto every school day."
+    },
+    {
+      "question": "Riddle me this: everyone enters through me \u2014 and names and art decorate my face. What am I?",
+      "options": ["a wall", "a window", "a gate", "a classroom door"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Lessons wait on the other side.",
+      "explanation": "The classroom door opens onto every school day."
+    },
+    {
+      "question": "Two clues and one name: Everyone enters through me. Also: Names and art decorate my face. Can you name me?",
+      "options": ["a classroom door", "a wall", "a gate", "a window"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Lessons wait on the other side.",
+      "explanation": "The classroom door opens onto every school day."
+    },
+    {
+      "question": "Guess who: everyone enters through me, and names and art decorate my face. Who or what am I?",
+      "options": ["a window", "a wall", "a gate", "a classroom door"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Lessons wait on the other side.",
+      "explanation": "The classroom door opens onto every school day."
+    },
+    {
+      "question": "I am not saying my name yet: I float on a puff of breath, and I pop the moment you touch me. What am I?",
+      "options": ["a bubble", "a balloon", "a soap bar", "a kite"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Round, shiny, gone in a blink.",
+      "explanation": "Bubbles float on air and pop at the lightest touch."
+    },
+    {
+      "question": "Riddle me this: i float on a puff of breath \u2014 and i pop the moment you touch me. What am I?",
+      "options": ["a soap bar", "a balloon", "a kite", "a bubble"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Round, shiny, gone in a blink.",
+      "explanation": "Bubbles float on air and pop at the lightest touch."
+    },
+    {
+      "question": "Two clues and one name: I float on a puff of breath. Also: I pop the moment you touch me. Can you name me?",
+      "options": ["a balloon", "a soap bar", "a bubble", "a kite"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Round, shiny, gone in a blink.",
+      "explanation": "Bubbles float on air and pop at the lightest touch."
+    },
+    {
+      "question": "Guess who: i float on a puff of breath, and i pop the moment you touch me. Who or what am I?",
+      "options": ["a kite", "a soap bar", "a bubble", "a balloon"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Round, shiny, gone in a blink.",
+      "explanation": "Bubbles float on air and pop at the lightest touch."
+    },
+    {
+      "question": "I am not saying my name yet: I make small things look huge, and I can focus sunlight to a dot. What am I?",
+      "options": ["a magnifying glass", "binoculars", "a camera", "a mirror"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Everything looks bigger through me.",
+      "explanation": "A magnifying glass bends light to enlarge tiny things."
+    },
+    {
+      "question": "Riddle me this: i make small things look huge \u2014 and i can focus sunlight to a dot. What am I?",
+      "options": ["a mirror", "a magnifying glass", "binoculars", "a camera"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Everything looks bigger through me.",
+      "explanation": "A magnifying glass bends light to enlarge tiny things."
+    },
+    {
+      "question": "Two clues and one name: I make small things look huge. Also: I can focus sunlight to a dot. Can you name me?",
+      "options": ["binoculars", "a magnifying glass", "a mirror", "a camera"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Everything looks bigger through me.",
+      "explanation": "A magnifying glass bends light to enlarge tiny things."
+    },
+    {
+      "question": "Guess who: i make small things look huge, and i can focus sunlight to a dot. Who or what am I?",
+      "options": ["a mirror", "binoculars", "a magnifying glass", "a camera"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Everything looks bigger through me.",
+      "explanation": "A magnifying glass bends light to enlarge tiny things."
+    },
+    {
+      "question": "I am not saying my name yet: I stay awake all night, and I turn my head almost all the way around. What am I?",
+      "options": ["a crow", "an owl", "a robin", "a falcon"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Whoo-whoo goes there?",
+      "explanation": "Owls hunt at night and can swivel their heads about 270 degrees."
+    },
+    {
+      "question": "Riddle me this: i stay awake all night \u2014 and i turn my head almost all the way around. What am I?",
+      "options": ["an owl", "a crow", "a robin", "a falcon"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Whoo-whoo goes there?",
+      "explanation": "Owls hunt at night and can swivel their heads about 270 degrees."
+    },
+    {
+      "question": "Two clues and one name: I stay awake all night. Also: I turn my head almost all the way around. Can you name me?",
+      "options": ["a falcon", "a crow", "a robin", "an owl"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Whoo-whoo goes there?",
+      "explanation": "Owls hunt at night and can swivel their heads about 270 degrees."
+    },
+    {
+      "question": "Guess who: i stay awake all night, and i turn my head almost all the way around. Who or what am I?",
+      "options": ["a crow", "a robin", "an owl", "a falcon"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Whoo-whoo goes there?",
+      "explanation": "Owls hunt at night and can swivel their heads about 270 degrees."
+    },
+    {
+      "question": "I am not saying my name yet: I swing from branch to branch, and I love bananas. What am I?",
+      "options": ["a monkey", "a lemur", "an ape", "a sloth"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Animal Riddles",
+      "hint": "Watch the trees.",
+      "explanation": "Monkeys swing through trees and adore bananas."
+    },
+    {
+      "question": "Riddle me this: i swing from branch to branch \u2014 and i love bananas. What am I?",
+      "options": ["a lemur", "an ape", "a sloth", "a monkey"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Watch the trees.",
+      "explanation": "Monkeys swing through trees and adore bananas."
+    },
+    {
+      "question": "Two clues and one name: I swing from branch to branch. Also: I love bananas. Can you name me?",
+      "options": ["a monkey", "an ape", "a sloth", "a lemur"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Watch the trees.",
+      "explanation": "Monkeys swing through trees and adore bananas."
+    },
+    {
+      "question": "Guess who: i swing from branch to branch, and i love bananas. Who or what am I?",
+      "options": ["a monkey", "a sloth", "an ape", "a lemur"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Watch the trees.",
+      "explanation": "Monkeys swing through trees and adore bananas."
+    },
+    {
+      "question": "I am not saying my name yet: I am built from three white balls, and A carrot often finishes my face. What am I?",
+      "options": ["an igloo", "a scarecrow", "a snowman", "a sandcastle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Winter's friendliest giant.",
+      "explanation": "Snowmen are rolled from snowballs with carrot noses."
+    },
+    {
+      "question": "Riddle me this: i am built from three white balls \u2014 and a carrot often finishes my face. What am I?",
+      "options": ["a scarecrow", "an igloo", "a sandcastle", "a snowman"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Winter's friendliest giant.",
+      "explanation": "Snowmen are rolled from snowballs with carrot noses."
+    },
+    {
+      "question": "Two clues and one name: I am built from three white balls. Also: A carrot often finishes my face. Can you name me?",
+      "options": ["a sandcastle", "an igloo", "a snowman", "a scarecrow"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Winter's friendliest giant.",
+      "explanation": "Snowmen are rolled from snowballs with carrot noses."
+    },
+    {
+      "question": "Guess who: i am built from three white balls, and a carrot often finishes my face. Who or what am I?",
+      "options": ["a sandcastle", "an igloo", "a scarecrow", "a snowman"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Winter's friendliest giant.",
+      "explanation": "Snowmen are rolled from snowballs with carrot noses."
+    },
+    {
+      "question": "I am not saying my name yet: I make tiny things enormous, and Scientists peer into my lens. What am I?",
+      "options": ["a microscope", "a telescope", "a magnifier", "binoculars"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The small world, super sized.",
+      "explanation": "Microscopes reveal cells and creatures too small to see."
+    },
+    {
+      "question": "Riddle me this: i make tiny things enormous \u2014 and scientists peer into my lens. What am I?",
+      "options": ["a magnifier", "binoculars", "a microscope", "a telescope"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The small world, super sized.",
+      "explanation": "Microscopes reveal cells and creatures too small to see."
+    },
+    {
+      "question": "Two clues and one name: I make tiny things enormous. Also: Scientists peer into my lens. Can you name me?",
+      "options": ["binoculars", "a microscope", "a magnifier", "a telescope"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "The small world, super sized.",
+      "explanation": "Microscopes reveal cells and creatures too small to see."
+    },
+    {
+      "question": "Guess who: i make tiny things enormous, and scientists peer into my lens. Who or what am I?",
+      "options": ["a microscope", "binoculars", "a telescope", "a magnifier"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The small world, super sized.",
+      "explanation": "Microscopes reveal cells and creatures too small to see."
+    }
+  ]
+}

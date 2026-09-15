@@ -1,0 +1,905 @@
+{
+  "category": "Words Letters",
+  "riddles": [
+    {
+      "question": "Which letter is a drink?",
+      "options": ["M", "P", "T", "N"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is T."
+    },
+    {
+      "question": "What letter is a question?",
+      "options": ["Y", "Q", "R", "B"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is Y."
+    },
+    {
+      "question": "Which letter is 8 from the start of the alphabet?",
+      "options": ["F", "Y", "L", "H"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 8 is H."
+    },
+    {
+      "question": "In the word 'octopus', which vowel sits at position 6?",
+      "options": ["U", "A", "I", "O"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 6 of 'octopus' is U."
+    },
+    {
+      "question": "In the word 'universe', which vowel sits at position 8?",
+      "options": ["U", "A", "I", "E"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 8 of 'universe' is E."
+    },
+    {
+      "question": "How many vowels does the word 'rhythm' contain?",
+      "options": ["2", "1", "candle", "0"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'rhythm' holds 0 vowels."
+    },
+    {
+      "question": "Which letter is 4 from the start of the alphabet?",
+      "options": ["F", "D", "I", "U"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 4 is D."
+    },
+    {
+      "question": "Which letter is a body of water?",
+      "options": ["C", "D", "S", "L"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is C."
+    },
+    {
+      "question": "Which letter is 13 from the start of the alphabet?",
+      "options": ["M", "G", "B", "A"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 13 is M."
+    },
+    {
+      "question": "In the word 'orange', which vowel sits at position 3?",
+      "options": ["U", "E", "O", "A"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 3 of 'orange' is A."
+    },
+    {
+      "question": "How many vowels does the word 'elephant' contain?",
+      "options": ["3", "2", "4", "5"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'elephant' holds 3 vowels."
+    },
+    {
+      "question": "How many vowels does the word 'moon' contain?",
+      "options": ["2", "1", "3", "4"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'moon' holds 2 vowels."
+    },
+    {
+      "question": "Which letter can you drink?",
+      "options": ["E", "O", "K", "T"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is T."
+    },
+    {
+      "question": "How many vowels does the word 'sky' contain?",
+      "options": ["2", "1", "0", "candle"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'sky' holds 0 vowels."
+    },
+    {
+      "question": "In the word 'octopus', which vowel sits at position 1?",
+      "options": ["E", "U", "I", "O"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'octopus' is O."
+    },
+    {
+      "question": "Which letter is 25 from the start of the alphabet?",
+      "options": ["X", "Y", "B", "S"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 25 is Y."
+    },
+    {
+      "question": "In the word 'iceberg', which vowel sits at position 1?",
+      "options": ["O", "E", "A", "I"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'iceberg' is I."
+    },
+    {
+      "question": "How many vowels does the word 'crocodile' contain?",
+      "options": ["4", "3", "6", "5"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'crocodile' holds 4 vowels."
+    },
+    {
+      "question": "How many vowels does the word 'strength' contain?",
+      "options": ["1", "0", "2", "3"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'strength' holds 1 vowels."
+    },
+    {
+      "question": "Which letter is 22 from the start of the alphabet?",
+      "options": ["S", "G", "N", "V"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 22 is V."
+    },
+    {
+      "question": "In the word 'umbrella', which vowel sits at position 1?",
+      "options": ["E", "U", "A", "I"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'umbrella' is U."
+    },
+    {
+      "question": "In the word 'universe', which vowel sits at position 3?",
+      "options": ["E", "U", "A", "I"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 3 of 'universe' is I."
+    },
+    {
+      "question": "How many vowels does the word 'kitchen' contain?",
+      "options": ["3", "4", "2", "1"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'kitchen' holds 2 vowels."
+    },
+    {
+      "question": "Which letter is 1 from the start of the alphabet?",
+      "options": ["A", "U", "W", "Z"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 1 is A."
+    },
+    {
+      "question": "Which letter is 4 from the END of the alphabet?",
+      "options": ["J", "P", "W", "F"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 4 is W."
+    },
+    {
+      "question": "Which letter is 21 from the END of the alphabet?",
+      "options": ["K", "B", "D", "F"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 21 is F."
+    },
+    {
+      "question": "Which letter is 14 from the END of the alphabet?",
+      "options": ["M", "H", "T", "P"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 14 is M."
+    },
+    {
+      "question": "Which letter is 11 from the END of the alphabet?",
+      "options": ["S", "Y", "P", "B"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 11 is P."
+    },
+    {
+      "question": "In the word 'iceberg', which vowel sits at position 3?",
+      "options": ["O", "E", "A", "I"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 3 of 'iceberg' is E."
+    },
+    {
+      "question": "How many vowels does the word 'orange' contain?",
+      "options": ["5", "3", "4", "2"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'orange' holds 3 vowels."
+    },
+    {
+      "question": "How many vowels does the word 'symphony' contain?",
+      "options": ["0", "1", "2", "3"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'symphony' holds 1 vowels."
+    },
+    {
+      "question": "In the word 'elephant', which vowel sits at position 1?",
+      "options": ["E", "U", "I", "A"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'elephant' is E."
+    },
+    {
+      "question": "How many vowels does the word 'education' contain?",
+      "options": ["4", "7", "5", "6"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'education' holds 5 vowels."
+    },
+    {
+      "question": "In the word 'elephant', which vowel sits at position 6?",
+      "options": ["E", "U", "A", "I"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 6 of 'elephant' is A."
+    },
+    {
+      "question": "How many vowels does the word 'adventure' contain?",
+      "options": ["5", "3", "4", "6"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'adventure' holds 4 vowels."
+    },
+    {
+      "question": "Which letter is 1 from the END of the alphabet?",
+      "options": ["X", "T", "Z", "I"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 1 is Z."
+    },
+    {
+      "question": "Which letter is 3 from the END of the alphabet?",
+      "options": ["X", "N", "W", "C"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 3 is X."
+    },
+    {
+      "question": "Which letter is 14 from the start of the alphabet?",
+      "options": ["J", "N", "S", "P"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 14 is N."
+    },
+    {
+      "question": "In the word 'orange', which vowel sits at position 6?",
+      "options": ["E", "U", "A", "I"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 6 of 'orange' is E."
+    },
+    {
+      "question": "How many vowels does the word 'butterfly' contain?",
+      "options": ["3", "4", "2", "1"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'butterfly' holds 2 vowels."
+    },
+    {
+      "question": "Which letter is 10 from the start of the alphabet?",
+      "options": ["Z", "C", "T", "J"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 10 is J."
+    },
+    {
+      "question": "How many vowels does the word 'imagination' contain?",
+      "options": ["6", "5", "8", "7"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'imagination' holds 6 vowels."
+    },
+    {
+      "question": "Which letter is 9 from the END of the alphabet?",
+      "options": ["R", "T", "L", "C"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 9 is R."
+    },
+    {
+      "question": "In the word 'apple', which vowel sits at position 1?",
+      "options": ["U", "I", "A", "E"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'apple' is A."
+    },
+    {
+      "question": "Which letter is 23 from the END of the alphabet?",
+      "options": ["P", "W", "D", "X"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 23 is D."
+    },
+    {
+      "question": "Which letter is 24 from the start of the alphabet?",
+      "options": ["T", "R", "J", "X"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 24 is X."
+    },
+    {
+      "question": "Which letter is 20 from the END of the alphabet?",
+      "options": ["Y", "Q", "Z", "G"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 20 is G."
+    },
+    {
+      "question": "Which letter is 2 from the END of the alphabet?",
+      "options": ["G", "Y", "B", "T"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 2 is Y."
+    },
+    {
+      "question": "Which letter is 26 from the END of the alphabet?",
+      "options": ["A", "H", "T", "J"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 26 is A."
+    },
+    {
+      "question": "Which letter is 20 from the start of the alphabet?",
+      "options": ["T", "O", "I", "F"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 20 is T."
+    },
+    {
+      "question": "In the word 'universe', which vowel sits at position 5?",
+      "options": ["O", "E", "A", "I"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 5 of 'universe' is E."
+    },
+    {
+      "question": "In the word 'orange', which vowel sits at position 1?",
+      "options": ["O", "E", "A", "U"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'orange' is O."
+    },
+    {
+      "question": "Which letter is 19 from the start of the alphabet?",
+      "options": ["S", "P", "M", "I"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 19 is S."
+    },
+    {
+      "question": "Which letter is 5 from the END of the alphabet?",
+      "options": ["L", "R", "V", "Q"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 5 is V."
+    },
+    {
+      "question": "In the word 'octopus', which vowel sits at position 4?",
+      "options": ["O", "E", "I", "U"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 4 of 'octopus' is O."
+    },
+    {
+      "question": "Which letter is 7 from the END of the alphabet?",
+      "options": ["X", "T", "F", "S"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 7 is T."
+    },
+    {
+      "question": "Which letter is 13 from the END of the alphabet?",
+      "options": ["Z", "F", "N", "A"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 13 is N."
+    },
+    {
+      "question": "Which letter is 9 from the start of the alphabet?",
+      "options": ["I", "O", "X", "T"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 9 is I."
+    },
+    {
+      "question": "Which letter is 7 from the start of the alphabet?",
+      "options": ["G", "J", "Q", "K"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 7 is G."
+    },
+    {
+      "question": "Which letter is 6 from the END of the alphabet?",
+      "options": ["I", "T", "U", "E"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 6 is U."
+    },
+    {
+      "question": "Which letter is 18 from the start of the alphabet?",
+      "options": ["L", "S", "R", "Y"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 18 is R."
+    },
+    {
+      "question": "Which letter is 21 from the start of the alphabet?",
+      "options": ["W", "U", "Q", "R"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 21 is U."
+    },
+    {
+      "question": "Which letter is 15 from the start of the alphabet?",
+      "options": ["P", "O", "C", "T"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 15 is O."
+    },
+    {
+      "question": "Which letter is 19 from the END of the alphabet?",
+      "options": ["H", "M", "B", "I"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 19 is H."
+    },
+    {
+      "question": "In the word 'iceberg', which vowel sits at position 5?",
+      "options": ["E", "U", "O", "I"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 5 of 'iceberg' is E."
+    },
+    {
+      "question": "Which letter is 15 from the END of the alphabet?",
+      "options": ["H", "V", "D", "L"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 15 is L."
+    },
+    {
+      "question": "Which letter is 6 from the start of the alphabet?",
+      "options": ["I", "F", "M", "D"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 6 is F."
+    },
+    {
+      "question": "Which letter is 24 from the END of the alphabet?",
+      "options": ["Y", "B", "V", "C"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 24 is C."
+    },
+    {
+      "question": "Which letter is 16 from the END of the alphabet?",
+      "options": ["L", "Q", "V", "K"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 16 is K."
+    },
+    {
+      "question": "Which letter is 8 from the END of the alphabet?",
+      "options": ["M", "B", "S", "V"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 8 is S."
+    },
+    {
+      "question": "Which letter is 18 from the END of the alphabet?",
+      "options": ["G", "R", "F", "I"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 18 is I."
+    },
+    {
+      "question": "Which letter is 11 from the start of the alphabet?",
+      "options": ["K", "Q", "V", "Z"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 11 is K."
+    },
+    {
+      "question": "Which letter is 3 from the start of the alphabet?",
+      "options": ["A", "C", "K", "R"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 3 is C."
+    },
+    {
+      "question": "Which letter is 17 from the start of the alphabet?",
+      "options": ["Q", "D", "E", "S"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 17 is Q."
+    },
+    {
+      "question": "Which letter is 12 from the END of the alphabet?",
+      "options": ["N", "J", "W", "O"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 12 is O."
+    },
+    {
+      "question": "Which letter is 5 from the start of the alphabet?",
+      "options": ["D", "J", "Y", "E"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 5 is E."
+    },
+    {
+      "question": "Which letter is 16 from the start of the alphabet?",
+      "options": ["W", "C", "N", "P"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 16 is P."
+    },
+    {
+      "question": "Which letter is 23 from the start of the alphabet?",
+      "options": ["N", "H", "U", "W"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 23 is W."
+    },
+    {
+      "question": "Which letter is 10 from the END of the alphabet?",
+      "options": ["C", "E", "Q", "T"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from Z backwards, number 10 is Q."
+    },
+    {
+      "question": "Which letter is 12 from the start of the alphabet?",
+      "options": ["Z", "F", "M", "L"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Recite the alphabet and count.",
+      "explanation": "Counting from A, number 12 is L."
+    },
+    {
+      "question": "Which double letter sits inside the word 'dollar'?",
+      "options": ["ll", "rr", "ee", "oo"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'dollar' contains double ll."
+    },
+    {
+      "question": "Spell 'drawer' backwards and you get a real word. Which one?",
+      "options": ["tab", "desserts", "warts", "reward"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'drawer' backwards is 'reward'."
+    },
+    {
+      "question": "Which word reads the same forwards and backwards?",
+      "options": ["level", "velvet", "planet", "civic"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Try reading each option backwards.",
+      "explanation": "'civic' is a palindrome."
+    },
+    {
+      "question": "Which word begins with S and lights the night sky?",
+      "options": ["spar", "scar", "star", "stir"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Think about the starting letter.",
+      "explanation": "The answer is star."
+    },
+    {
+      "question": "Which double letter sits inside the word 'muffin'?",
+      "options": ["ff", "ll", "tt", "ss"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'muffin' contains double ff."
+    },
+    {
+      "question": "Unscramble the letters of 'sitenl'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "silent", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Spell 'bat' backwards and you get a real word. Which one?",
+      "options": ["warts", "reward", "tab", "desserts"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'bat' backwards is 'tab'."
+    },
+    {
+      "question": "Unscramble the letters of 'geanl'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "thing", "notes", "glean"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'carrot'?",
+      "options": ["tt", "ll", "ss", "rr"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'carrot' contains double rr."
+    },
+    {
+      "question": "Which double letter sits inside the word 'kettle'?",
+      "options": ["rr", "oo", "tt", "ee"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'kettle' contains double tt."
+    },
+    {
+      "question": "Which double letter sits inside the word 'ribbon'?",
+      "options": ["ss", "tt", "ll", "bb"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'ribbon' contains double bb."
+    },
+    {
+      "question": "Which double letter sits inside the word 'gutter'?",
+      "options": ["tt", "rr", "oo", "ee"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'gutter' contains double tt."
+    },
+    {
+      "question": "Which double letter sits inside the word 'hammer'?",
+      "options": ["ss", "tt", "ll", "mm"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'hammer' contains double mm."
+    },
+    {
+      "question": "Unscramble the letters of 'ehsro'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "shore", "thing", "silent"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Spell 'straw' backwards and you get a real word. Which one?",
+      "options": ["desserts", "reward", "tab", "warts"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'straw' backwards is 'warts'."
+    },
+    {
+      "question": "Unscramble the letters of 'ditre'. Which of these words uses exactly the same letters?",
+      "options": ["tried", "notes", "thing", "silent"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Spell 'stressed' backwards and you get a real word. Which one?",
+      "options": ["tab", "warts", "desserts", "reward"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'stressed' backwards is 'desserts'."
+    },
+    {
+      "question": "Unscramble the letters of 'eagnl'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "silent", "thing", "notes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'summer'?",
+      "options": ["ll", "ss", "mm", "tt"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'summer' contains double mm."
+    },
+    {
+      "question": "Unscramble the letters of 'aelng'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "glean"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    }
+  ]
+}

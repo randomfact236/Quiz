@@ -1,0 +1,920 @@
+{
+  "category": "Math Numbers",
+  "riddles": [
+    {
+      "question": "Divide me by 4 and you get 10 with a remainder of 3. What am I?",
+      "options": ["42", "47", "40", "43"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "4 x 10 + 3 = 43."
+    },
+    {
+      "question": "A film runs 3 hours and 40 minutes. How many minutes long is it in total?",
+      "options": ["220", "7200", "180", "223"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "3 hours is 180 minutes, plus 40 = 220."
+    },
+    {
+      "question": "A farmyard has 3 chickens and 4 ducks. How many legs in total?",
+      "options": ["12", "14", "7", "18"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Both birds have two legs.",
+      "explanation": "7 birds x 2 legs = 14."
+    },
+    {
+      "question": "A father is 43 and his child is 18. In how many years will the father be exactly twice as old?",
+      "options": ["9", "6", "18", "7"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 7 years: 50 is double 25."
+    },
+    {
+      "question": "You have 4 five-dollar bills and 3 one-dollar coins. How much money in total?",
+      "options": ["12", "28", "7", "23"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "4 x 5 + 3 = 23."
+    },
+    {
+      "question": "A father is 46 and his child is 14. In how many years will the father be exactly twice as old?",
+      "options": ["20", "18", "17", "14"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 18 years: 64 is double 32."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 57. What am I?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 50, then halve: 25.",
+      "answer": "25"
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 37. What am I?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 30, then halve: 15.",
+      "answer": "15"
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 59. What am I?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 52, then halve: 26.",
+      "answer": "26"
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 74 pages?",
+      "options": ["148 seconds", "296 seconds", "74 seconds", "103"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "74 x 2 = 148 seconds."
+    },
+    {
+      "question": "A father is 50 and his child is 20. In how many years will the father be exactly twice as old?",
+      "options": ["9", "12", "20", "10"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 10 years: 60 is double 30."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 4, my tens digit is 7, and my ones digit is 1. My digits add up to what?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "4 + 7 + 1 = 12.",
+      "answer": "12"
+    },
+    {
+      "question": "Divide me by 5 and you get 11 with a remainder of 4. What am I?",
+      "options": ["64", "58", "59", "55"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "5 x 11 + 4 = 59."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 75. What am I?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 68, then halve: 34.",
+      "answer": "34"
+    },
+    {
+      "question": "Divide me by 6 and you get 6 with a remainder of 4. What am I?",
+      "options": ["36", "39", "46", "40"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "6 x 6 + 4 = 40."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 73 pages?",
+      "options": ["146 seconds", "73 seconds", "292 seconds", "103"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "73 x 2 = 146 seconds."
+    },
+    {
+      "question": "Half of me is 30. What number am I?",
+      "options": ["120", "30", "60", "62"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 30 is 60."
+    },
+    {
+      "question": "A carpenter saws a wooden plank 3 times, straight across. How many pieces does he end up with?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Counting Tricks",
+      "hint": "Each cut adds one piece.",
+      "explanation": "3 cuts make 4 pieces.",
+      "answer": "4"
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 3, my tens digit is 1, and my ones digit is 9. My digits add up to what?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "3 + 1 + 9 = 13.",
+      "answer": "13"
+    },
+    {
+      "question": "A father is 43 and his child is 13. In how many years will the father be exactly twice as old?",
+      "options": ["16", "19", "13", "17"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 17 years: 60 is double 30."
+    },
+    {
+      "question": "When I was 4, my sister was half my age. Now I am 45. How old is my sister?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Age & Time Puzzles",
+      "hint": "The age gap never changes.",
+      "explanation": "The gap was 2 years, so she is 43 now.",
+      "answer": "43"
+    },
+    {
+      "question": "A trip lasts 65 days. How many full weeks is that, and how many days are left over?",
+      "options": ["10 weeks", "9 weeks and 5 days", "9 weeks and 2 days", "8 weeks and 9 days"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Divide by seven.",
+      "explanation": "65 divided by 7 is 9 weeks remainder 2."
+    },
+    {
+      "question": "Divide me by 3 and you get 7 with a remainder of 2. What am I?",
+      "options": ["22", "23", "21", "26"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "3 x 7 + 2 = 23."
+    },
+    {
+      "question": "A film runs 2 hours and 20 minutes. How many minutes long is it in total?",
+      "options": ["120", "142", "140", "2400"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "2 hours is 120 minutes, plus 20 = 140."
+    },
+    {
+      "question": "A farmyard has 3 chickens and 3 ducks. How many legs in total?",
+      "options": ["10", "6", "12", "16"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Both birds have two legs.",
+      "explanation": "6 birds x 2 legs = 12."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 39. What am I?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 32, then halve: 16.",
+      "answer": "16"
+    },
+    {
+      "question": "It is exactly 6:00 on an analog clock. How many degrees between the hour and minute hands?",
+      "options": ["180", "210", "195", "150"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Each minute, the minute hand moves 6 degrees.",
+      "explanation": "The hands are 180 degrees apart at 6:00."
+    },
+    {
+      "question": "A farmyard has 2 chickens and 7 ducks. How many legs in total?",
+      "options": ["22", "18", "16", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Both birds have two legs.",
+      "explanation": "9 birds x 2 legs = 18."
+    },
+    {
+      "question": "Half of me is 26. What number am I?",
+      "options": ["104", "52", "26", "54"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 26 is 52."
+    },
+    {
+      "question": "When I was 30, my sister was half my age. Now I am 58. How old is my sister?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Age & Time Puzzles",
+      "hint": "The age gap never changes.",
+      "explanation": "The gap was 15 years, so she is 43 now.",
+      "answer": "43"
+    },
+    {
+      "question": "Half of me is 22. What number am I?",
+      "options": ["88", "22", "46", "44"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 22 is 44."
+    },
+    {
+      "question": "A farmyard has 2 chickens and 3 ducks. How many legs in total?",
+      "options": ["10", "14", "8", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Both birds have two legs.",
+      "explanation": "5 birds x 2 legs = 10."
+    },
+    {
+      "question": "Half of me is 27. What number am I?",
+      "options": ["54", "56", "27", "108"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 27 is 54."
+    },
+    {
+      "question": "It is exactly 6:30 on an analog clock. How many degrees between the hour and minute hands?",
+      "options": ["30", "15", "18", "45"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Each minute, the minute hand moves 6 degrees.",
+      "explanation": "The hands are 15 degrees apart at 6:30."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 81 pages?",
+      "options": ["324 seconds", "103", "81 seconds", "162 seconds"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "81 x 2 = 162 seconds."
+    },
+    {
+      "question": "Divide me by 4 and you get 5 with a remainder of 2. What am I?",
+      "options": ["21", "26", "20", "22"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "4 x 5 + 2 = 22."
+    },
+    {
+      "question": "You have 7 five-dollar bills and 4 one-dollar coins. How much money in total?",
+      "options": ["28", "11", "44", "39"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "7 x 5 + 4 = 39."
+    },
+    {
+      "question": "A trip lasts 20 days. How many full weeks is that, and how many days are left over?",
+      "options": ["2 weeks and 6 days", "3 weeks", "2 weeks and 1 days", "1 weeks and 13 days"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Divide by seven.",
+      "explanation": "20 divided by 7 is 2 weeks remainder 6."
+    },
+    {
+      "question": "You have 3 five-dollar bills and 5 one-dollar coins. How much money in total?",
+      "options": ["8", "15", "25", "20"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "3 x 5 + 5 = 20."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 40 pages?",
+      "options": ["80 seconds", "40 seconds", "160 seconds", "103"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "40 x 2 = 80 seconds."
+    },
+    {
+      "question": "A trip lasts 68 days. How many full weeks is that, and how many days are left over?",
+      "options": ["8 weeks and 12 days", "10 weeks", "9 weeks and 5 days", "9 weeks and 2 days"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Divide by seven.",
+      "explanation": "68 divided by 7 is 9 weeks remainder 5."
+    },
+    {
+      "question": "Half of me is 19. What number am I?",
+      "options": ["76", "19", "38", "40"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 19 is 38."
+    },
+    {
+      "question": "A film runs 5 hours and 25 minutes. How many minutes long is it in total?",
+      "options": ["7500", "300", "325", "330"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "5 hours is 300 minutes, plus 25 = 325."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 3, my tens digit is 0, and my ones digit is 7. My digits add up to what?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "3 + 0 + 7 = 10.",
+      "answer": "10"
+    },
+    {
+      "question": "When I was 28, my sister was half my age. Now I am 46. How old is my sister?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Age & Time Puzzles",
+      "hint": "The age gap never changes.",
+      "explanation": "The gap was 14 years, so she is 32 now.",
+      "answer": "32"
+    },
+    {
+      "question": "Half of me is 34. What number am I?",
+      "options": ["136", "34", "68", "70"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 34 is 68."
+    },
+    {
+      "question": "A trip lasts 71 days. How many full weeks is that, and how many days are left over?",
+      "options": ["9 weeks and 8 days", "10 weeks and 6 days", "11 weeks", "10 weeks and 1 days"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Divide by seven.",
+      "explanation": "71 divided by 7 is 10 weeks remainder 1."
+    },
+    {
+      "question": "7 friends each wave to every other friend exactly once. How many waves in total?",
+      "options": ["6", "49", "21", "42"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Counting Tricks",
+      "hint": "Each pair counts once, not twice.",
+      "explanation": "7 friends form 21 unique pairs."
+    },
+    {
+      "question": "Divide me by 4 and you get 9 with a remainder of 1. What am I?",
+      "options": ["37", "41", "36", "40"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "4 x 9 + 1 = 37."
+    },
+    {
+      "question": "You have 5 five-dollar bills and 9 one-dollar coins. How much money in total?",
+      "options": ["39", "14", "45", "34"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "5 x 5 + 9 = 34."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 3, my tens digit is 3, and my ones digit is 1. My digits add up to what?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "3 + 3 + 1 = 7.",
+      "answer": "7"
+    },
+    {
+      "question": "Solve my riddle, if you dare. My tens digit is double my ones digit, and our digits add up to 10. What number am I?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Number Riddles",
+      "hint": "Work out the tens digit first.",
+      "explanation": "Tens digit 8 is double the ones digit 2, and together they sum to 10.",
+      "answer": "82"
+    },
+    {
+      "question": "You have 6 five-dollar bills and 4 one-dollar coins. How much money in total?",
+      "options": ["24", "10", "34", "39"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "6 x 5 + 4 = 34."
+    },
+    {
+      "question": "A father is 45 and his child is 18. In how many years will the father be exactly twice as old?",
+      "options": ["11", "8", "9", "18"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 9 years: 54 is double 27."
+    },
+    {
+      "question": "You have 4 five-dollar bills and 5 one-dollar coins. How much money in total?",
+      "options": ["9", "30", "25", "20"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "4 x 5 + 5 = 25."
+    },
+    {
+      "question": "You have 9 five-dollar bills and 4 one-dollar coins. How much money in total?",
+      "options": ["36", "13", "49", "54"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "9 x 5 + 4 = 49."
+    },
+    {
+      "question": "A father is 35 and his child is 15. In how many years will the father be exactly twice as old?",
+      "options": ["4", "15", "5", "7"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 5 years: 40 is double 20."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 76 pages?",
+      "options": ["152 seconds", "103", "76 seconds", "304 seconds"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "76 x 2 = 152 seconds."
+    },
+    {
+      "question": "Divide me by 6 and you get 12 with a remainder of 4. What am I?",
+      "options": ["76", "82", "72", "75"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "6 x 12 + 4 = 76."
+    },
+    {
+      "question": "Divide me by 3 and you get 9 with a remainder of 1. What am I?",
+      "options": ["31", "27", "42", "28"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "3 x 9 + 1 = 28."
+    },
+    {
+      "question": "A straight fence is built from 5 sections, end to end in a line. How many fence posts hold it up?",
+      "options": ["10", "4", "5", "6"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Counting Tricks",
+      "hint": "A line needs a post at both ends.",
+      "explanation": "5 sections in a line need 6 posts."
+    },
+    {
+      "question": "A father is 33 and his child is 13. In how many years will the father be exactly twice as old?",
+      "options": ["13", "7", "6", "9"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 7 years: 40 is double 20."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 43 pages?",
+      "options": ["43 seconds", "86 seconds", "172 seconds", "103"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "43 x 2 = 86 seconds."
+    },
+    {
+      "question": "A carpenter saws a wooden plank 4 times, straight across. How many pieces does he end up with?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Counting Tricks",
+      "hint": "Each cut adds one piece.",
+      "explanation": "4 cuts make 5 pieces.",
+      "answer": "5"
+    },
+    {
+      "question": "A carpenter saws a wooden plank 2 times, straight across. How many pieces does he end up with?",
+      "options": ["4", "2", "6", "3"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Counting Tricks",
+      "hint": "Each cut adds one piece.",
+      "explanation": "2 cuts make 3 pieces."
+    },
+    {
+      "question": "A father is 53 and his child is 20. In how many years will the father be exactly twice as old?",
+      "options": ["20", "13", "12", "15"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 13 years: 66 is double 33."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 81. What am I?",
+      "options": ["44", "37", "41", "33"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 74, then halve: 37."
+    },
+    {
+      "question": "A straight fence is built from 3 sections, end to end in a line. How many fence posts hold it up?",
+      "options": ["6", "2", "4", "3"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Counting Tricks",
+      "hint": "A line needs a post at both ends.",
+      "explanation": "3 sections in a line need 4 posts."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 9, my tens digit is 7, and my ones digit is 6. My digits add up to what?",
+      "options": ["22", "51", "23", "69"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "9 + 7 + 6 = 22."
+    },
+    {
+      "question": "Each of 8 guests eats exactly 3 slices. How many slices must the pizza order contain?",
+      "options": ["11", "16", "27", "24"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply guests by slices each.",
+      "explanation": "8 x 3 = 24 slices."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 83. What am I?",
+      "options": ["42", "38", "34", "45"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 76, then halve: 38."
+    },
+    {
+      "question": "A printer prints one page every 2 seconds. How long to print 57 pages?",
+      "options": ["103", "228 seconds", "114 seconds", "57 seconds"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply pages by seconds per page.",
+      "explanation": "57 x 2 = 114 seconds."
+    },
+    {
+      "question": "A film runs 4 hours and 20 minutes. How many minutes long is it in total?",
+      "options": ["4800", "240", "264", "260"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "4 hours is 240 minutes, plus 20 = 260."
+    },
+    {
+      "question": "A father is 29 and his child is 11. In how many years will the father be exactly twice as old?",
+      "options": ["11", "7", "9", "6"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 7 years: 36 is double 18."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 45. What am I?",
+      "options": ["26", "23", "19", "15"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 38, then halve: 19."
+    },
+    {
+      "question": "You have 4 five-dollar bills and 6 one-dollar coins. How much money in total?",
+      "options": ["10", "31", "24", "26"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "4 x 5 + 6 = 26."
+    },
+    {
+      "question": "A straight fence is built from 6 sections, end to end in a line. How many fence posts hold it up?",
+      "options": ["5", "7", "6", "12"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Counting Tricks",
+      "hint": "A line needs a post at both ends.",
+      "explanation": "6 sections in a line need 7 posts."
+    },
+    {
+      "question": "A trip lasts 58 days. How many full weeks is that, and how many days are left over?",
+      "options": ["8 weeks and 2 days", "8 weeks and 5 days", "7 weeks and 9 days", "9 weeks"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Divide by seven.",
+      "explanation": "58 divided by 7 is 8 weeks remainder 2."
+    },
+    {
+      "question": "It is exactly 8:00 on an analog clock. How many degrees between the hour and minute hands?",
+      "options": ["90", "120", "135", "150"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Each minute, the minute hand moves 6 degrees.",
+      "explanation": "The hands are 120 degrees apart at 8:00."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 77. What am I?",
+      "options": ["39", "42", "35", "31"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 70, then halve: 35."
+    },
+    {
+      "question": "A film runs 4 hours and 40 minutes. How many minutes long is it in total?",
+      "options": ["9600", "240", "284", "280"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "4 hours is 240 minutes, plus 40 = 280."
+    },
+    {
+      "question": "When I was 18, my sister was half my age. Now I am 59. How old is my sister?",
+      "options": ["41", "9", "29", "50"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Age & Time Puzzles",
+      "hint": "The age gap never changes.",
+      "explanation": "The gap was 9 years, so she is 50 now."
+    },
+    {
+      "question": "Each of 3 guests eats exactly 3 slices. How many slices must the pizza order contain?",
+      "options": ["9", "12", "6", "23"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply guests by slices each.",
+      "explanation": "3 x 3 = 9 slices."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 9, my tens digit is 2, and my ones digit is 5. My digits add up to what?",
+      "options": ["16", "19", "17", "23"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "9 + 2 + 5 = 16."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 7, my tens digit is 7, and my ones digit is 9. My digits add up to what?",
+      "options": ["24", "23", "58", "70"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "7 + 7 + 9 = 23."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 2, my tens digit is 3, and my ones digit is 7. My digits add up to what?",
+      "options": ["12", "23", "13", "15"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "2 + 3 + 7 = 12."
+    },
+    {
+      "question": "When I was 6, my sister was half my age. Now I am 36. How old is my sister?",
+      "options": ["33", "18", "3", "30"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Age & Time Puzzles",
+      "hint": "The age gap never changes.",
+      "explanation": "The gap was 3 years, so she is 33 now."
+    },
+    {
+      "question": "A father is 45 and his child is 15. In how many years will the father be exactly twice as old?",
+      "options": ["14", "17", "18", "15"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Age & Time Puzzles",
+      "hint": "Try the gap between them.",
+      "explanation": "In 15 years: 60 is double 30."
+    },
+    {
+      "question": "I am a perfect square. Multiply my square root by itself and you get 64. What is my square root?",
+      "options": ["9", "8", "7", "10"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Which number times itself gives 64?",
+      "explanation": "8 times 8 equals 64."
+    },
+    {
+      "question": "You have 7 five-dollar bills and 9 one-dollar coins. How much money in total?",
+      "options": ["63", "16", "49", "44"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "7 x 5 + 9 = 44."
+    },
+    {
+      "question": "A film runs 2 hours and 25 minutes. How many minutes long is it in total?",
+      "options": ["120", "147", "3000", "145"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Age & Time Puzzles",
+      "hint": "Convert the hours first.",
+      "explanation": "2 hours is 120 minutes, plus 25 = 145."
+    },
+    {
+      "question": "I am a perfect square. Multiply my square root by itself and you get 144. What is my square root?",
+      "options": ["12", "13", "11", "14"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Which number times itself gives 144?",
+      "explanation": "12 times 12 equals 144."
+    },
+    {
+      "question": "I am a number: double me and add 7, and you land on 47. What am I?",
+      "options": ["16", "20", "27", "24"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Work backwards from the total.",
+      "explanation": "Subtract 7 to get 40, then halve: 20."
+    },
+    {
+      "question": "Each of 5 guests eats exactly 3 slices. How many slices must the pizza order contain?",
+      "options": ["10", "18", "8", "15"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply guests by slices each.",
+      "explanation": "5 x 3 = 15 slices."
+    },
+    {
+      "question": "Half of me is 16. What number am I?",
+      "options": ["16", "64", "32", "34"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Double the clue.",
+      "explanation": "Twice 16 is 32."
+    },
+    {
+      "question": "You have 3 five-dollar bills and 4 one-dollar coins. How much money in total?",
+      "options": ["7", "19", "24", "12"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Counting Tricks",
+      "hint": "Multiply, then add.",
+      "explanation": "3 x 5 + 4 = 19."
+    },
+    {
+      "question": "I am a perfect square. Multiply my square root by itself and you get 196. What is my square root?",
+      "options": ["13", "16", "14", "15"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Number Riddles",
+      "hint": "Which number times itself gives 196?",
+      "explanation": "14 times 14 equals 196."
+    },
+    {
+      "question": "I am a three-digit number. My hundreds digit is 9, my tens digit is 4, and my ones digit is 7. My digits add up to what?",
+      "options": ["21", "37", "20", "43"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Number Riddles",
+      "hint": "Just add the three digits.",
+      "explanation": "9 + 4 + 7 = 20."
+    },
+    {
+      "question": "Divide me by 6 and you get 8 with a remainder of 3. What am I?",
+      "options": ["57", "50", "48", "51"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "6 x 8 + 3 = 51."
+    },
+    {
+      "question": "Divide me by 4 and you get 10 with a remainder of 1. What am I?",
+      "options": ["45", "40", "41", "44"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Number Riddles",
+      "hint": "Multiply, then add the leftover.",
+      "explanation": "4 x 10 + 1 = 41."
+    }
+  ]
+}

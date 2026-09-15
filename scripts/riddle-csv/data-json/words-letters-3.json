@@ -1,0 +1,905 @@
+{
+  "category": "Words Letters",
+  "riddles": [
+    {
+      "question": "Which word begins with H and lives on your farm?",
+      "options": ["hose", "house", "horse", "horde"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Think about the starting letter.",
+      "explanation": "The answer is horse."
+    },
+    {
+      "question": "Which double letter sits inside the word 'cotton'?",
+      "options": ["ee", "oo", "tt", "rr"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'cotton' contains double tt."
+    },
+    {
+      "question": "Unscramble the letters of 'lyera'. Which of these words uses exactly the same letters?",
+      "options": ["early", "silent", "thing", "notes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tghin'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "silent", "notes", "thing"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'night' and 'thing' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'irted'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "tried", "notes", "silent"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Spell 'diaper' backwards and you get a real word. Which one?",
+      "options": ["desserts", "warts", "repaid", "reward"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'diaper' backwards is 'repaid'."
+    },
+    {
+      "question": "Which double letter sits inside the word 'dinner'?",
+      "options": ["tt", "ss", "nn", "ll"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'dinner' contains double nn."
+    },
+    {
+      "question": "Spell 'loop' backwards and you get a real word. Which one?",
+      "options": ["desserts", "reward", "warts", "pool"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Write it out backwards, letter by letter.",
+      "explanation": "'loop' backwards is 'pool'."
+    },
+    {
+      "question": "Unscramble the letters of 'tnhgi'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "thing", "silent", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'night' and 'thing' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'rseeuc'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "rescue", "thing", "silent"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'secure' and 'rescue' use exactly the same letters."
+    },
+    {
+      "question": "Which word begins with B and rings for dinner?",
+      "options": ["bell", "bull", "ball", "bill"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Think about the starting letter.",
+      "explanation": "The answer is bell."
+    },
+    {
+      "question": "Which double letter sits inside the word 'glasses'?",
+      "options": ["ee", "rr", "oo", "ss"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'glasses' contains double ss."
+    },
+    {
+      "question": "Unscramble the letters of 'obelw'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "below"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tlsea'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "stale", "thing", "silent"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'slate' and 'stale' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'rlyae'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "thing", "early"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'itred'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "tried", "silent", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'nghti'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "thing", "notes", "glean"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'night' and 'thing' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'esecur'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "rescue"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'secure' and 'rescue' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'balloon'?",
+      "options": ["ee", "oo", "ll", "rr"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'balloon' contains double ll."
+    },
+    {
+      "question": "Unscramble the letters of 'rdite'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "tried", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'pats'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "pats"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'onste'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "notes", "silent", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'rtide'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "tried"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'anleg'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "glean", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'rseho'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "shore", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'stnoe'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "glean", "thing", "notes"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'letter'?",
+      "options": ["ee", "rr", "tt", "oo"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'letter' contains double tt."
+    },
+    {
+      "question": "Unscramble the letters of 'elitsn'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "glean", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'reecus'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "rescue", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'secure' and 'rescue' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'orshe'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "shore"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'leayr'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "early", "silent"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ayler'. Which of these words uses exactly the same letters?",
+      "options": ["early", "thing", "notes", "silent"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'nselit'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "thing", "glean"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'puppy'?",
+      "options": ["ll", "ss", "tt", "pp"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'puppy' contains double pp."
+    },
+    {
+      "question": "Unscramble the letters of 'irecd'. Which of these words uses exactly the same letters?",
+      "options": ["cried", "silent", "notes", "thing"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'cider' and 'cried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'nesto'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "thing", "notes", "glean"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'genla'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "glean", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'esnot'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "glean"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'elwbo'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "below", "notes"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'lngae'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "thing", "silent"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'atles'. Which of these words uses exactly the same letters?",
+      "options": ["stale", "silent", "notes", "thing"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'slate' and 'stale' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'coffee'?",
+      "options": ["ll", "ss", "ff", "tt"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'coffee' contains double ff."
+    },
+    {
+      "question": "Unscramble the letters of 'cedri'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "cried"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'cider' and 'cried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'eangl'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "glean", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'etrdi'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "thing", "notes", "tried"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'stap'. Which of these words uses exactly the same letters?",
+      "options": ["pats", "silent", "notes", "thing"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'nteils'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "silent", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tpsa'. Which of these words uses exactly the same letters?",
+      "options": ["pats", "notes", "thing", "silent"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'elobw'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "thing", "notes", "below"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ptsa'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "pats", "silent"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'teilns'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "thing", "glean"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'pebble'?",
+      "options": ["tt", "ll", "ss", "bb"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'pebble' contains double bb."
+    },
+    {
+      "question": "Unscramble the letters of 'tseno'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "glean"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'eecusr'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "rescue", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'secure' and 'rescue' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'elntsi'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "thing", "silent"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tpas'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "pats", "thing", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'lgaen'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "thing", "notes", "silent"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'uecers'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "rescue"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'secure' and 'rescue' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'gaeln'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "notes", "glean"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'islnte'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "glean", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'redic'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "cried"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'cider' and 'cried' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'puddle'?",
+      "options": ["ll", "tt", "ss", "dd"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'puddle' contains double dd."
+    },
+    {
+      "question": "Unscramble the letters of 'tsap'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "pats"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'lates'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "notes", "stale"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'slate' and 'stale' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'astp'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "pats", "notes"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'eshro'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "shore"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'pepper'?",
+      "options": ["tt", "pp", "ss", "ll"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'pepper' contains double pp."
+    },
+    {
+      "question": "Unscramble the letters of 'ealyr'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "early", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tnsile'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "glean", "silent"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'teird'. Which of these words uses exactly the same letters?",
+      "options": ["tried", "thing", "silent", "notes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ngiht'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "glean"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'night' and 'thing' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ebwlo'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "thing", "silent", "below"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'enlsti'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "glean", "notes", "thing"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'galen'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "notes", "glean"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'snilte'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "silent", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'lnesti'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "glean", "silent", "notes"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ylaer'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "early"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'itlsen'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "notes", "thing", "silent"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'sreho'. Which of these words uses exactly the same letters?",
+      "options": ["shore", "thing", "silent", "notes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'neilts'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "thing", "silent"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'rhose'. Which of these words uses exactly the same letters?",
+      "options": ["shore", "thing", "silent", "notes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'bolwe'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "below", "silent"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ganel'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "glean", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'decri'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "cried", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'cider' and 'cried' use exactly the same letters."
+    },
+    {
+      "question": "Which double letter sits inside the word 'pillow'?",
+      "options": ["ee", "ll", "oo", "rr"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Wordplay",
+      "hint": "Read the word slowly, letter by letter.",
+      "explanation": "'pillow' contains double ll."
+    },
+    {
+      "question": "Unscramble the letters of 'hesro'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "shore", "silent", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'horse' and 'shore' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tsneo'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "silent", "thing", "glean"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'owbel'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "below", "thing", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'eilnts'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "notes", "silent", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'lsetni'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "glean"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'listen' and 'silent' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tnoes'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "silent", "notes", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'satp'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "pats"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'spat' and 'pats' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'eidcr'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "cried", "notes", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'cider' and 'cried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ithng'. Which of these words uses exactly the same letters?",
+      "options": ["glean", "notes", "silent", "thing"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'night' and 'thing' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tenos'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "notes", "silent", "glean"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'stone' and 'notes' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'detri'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "tried", "thing", "notes"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'ylare'. Which of these words uses exactly the same letters?",
+      "options": ["silent", "notes", "early", "thing"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'layer' and 'early' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'enalg'. Which of these words uses exactly the same letters?",
+      "options": ["notes", "glean", "silent", "thing"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'angel' and 'glean' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'tedri'. Which of these words uses exactly the same letters?",
+      "options": ["tried", "notes", "thing", "silent"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'tired' and 'tried' use exactly the same letters."
+    },
+    {
+      "question": "Unscramble the letters of 'elbwo'. Which of these words uses exactly the same letters?",
+      "options": ["thing", "silent", "below", "notes"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Wordplay",
+      "hint": "Same letters, different order.",
+      "explanation": "'elbow' and 'below' use exactly the same letters."
+    }
+  ]
+}

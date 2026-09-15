@@ -1,0 +1,905 @@
+{
+  "category": "Everyday Objects",
+  "riddles": [
+    {
+      "question": "I am not saying my name yet: I babble over pebbles downhill, and I am a small young river. What am I?",
+      "options": ["a river", "a stream", "a lake", "a pond"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Gurgling downhill chat.",
+      "explanation": "Streams bubble downhill, growing into rivers."
+    },
+    {
+      "question": "Riddle me this: i babble over pebbles downhill \u2014 and i am a small young river. What am I?",
+      "options": ["a stream", "a lake", "a pond", "a river"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Gurgling downhill chat.",
+      "explanation": "Streams bubble downhill, growing into rivers."
+    },
+    {
+      "question": "Two clues and one name: I babble over pebbles downhill. Also: I am a small young river. Can you name me?",
+      "options": ["a stream", "a lake", "a river", "a pond"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Gurgling downhill chat.",
+      "explanation": "Streams bubble downhill, growing into rivers."
+    },
+    {
+      "question": "Guess who: i babble over pebbles downhill, and i am a small young river. Who or what am I?",
+      "options": ["a pond", "a river", "a lake", "a stream"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Gurgling downhill chat.",
+      "explanation": "Streams bubble downhill, growing into rivers."
+    },
+    {
+      "question": "I am not saying my name yet: I flatten dough evenly, and I roll back and forth under your palms. What am I?",
+      "options": ["a rolling pin", "a knife", "a spoon", "a whisk"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's smooth wooden roller.",
+      "explanation": "Rolling pins flatten cookie and pie dough."
+    },
+    {
+      "question": "Riddle me this: i flatten dough evenly \u2014 and i roll back and forth under your palms. What am I?",
+      "options": ["a spoon", "a whisk", "a knife", "a rolling pin"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's smooth wooden roller.",
+      "explanation": "Rolling pins flatten cookie and pie dough."
+    },
+    {
+      "question": "Two clues and one name: I flatten dough evenly. Also: I roll back and forth under your palms. Can you name me?",
+      "options": ["a knife", "a whisk", "a rolling pin", "a spoon"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's smooth wooden roller.",
+      "explanation": "Rolling pins flatten cookie and pie dough."
+    },
+    {
+      "question": "Guess who: i flatten dough evenly, and i roll back and forth under your palms. Who or what am I?",
+      "options": ["a knife", "a rolling pin", "a whisk", "a spoon"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's smooth wooden roller.",
+      "explanation": "Rolling pins flatten cookie and pie dough."
+    },
+    {
+      "question": "I am not saying my name yet: I fold flat against the wall, and Hot irons slide across my cover. What am I?",
+      "options": ["an ironing board", "a table", "a rack", "a shelf"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Wrinkles fear my heat.",
+      "explanation": "Ironing boards hold clothes flat while irons press them."
+    },
+    {
+      "question": "Riddle me this: i fold flat against the wall \u2014 and hot irons slide across my cover. What am I?",
+      "options": ["a shelf", "a rack", "an ironing board", "a table"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Wrinkles fear my heat.",
+      "explanation": "Ironing boards hold clothes flat while irons press them."
+    },
+    {
+      "question": "Two clues and one name: I fold flat against the wall. Also: Hot irons slide across my cover. Can you name me?",
+      "options": ["a rack", "an ironing board", "a shelf", "a table"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Wrinkles fear my heat.",
+      "explanation": "Ironing boards hold clothes flat while irons press them."
+    },
+    {
+      "question": "Guess who: i fold flat against the wall, and hot irons slide across my cover. Who or what am I?",
+      "options": ["a rack", "a shelf", "a table", "an ironing board"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Wrinkles fear my heat.",
+      "explanation": "Ironing boards hold clothes flat while irons press them."
+    },
+    {
+      "question": "I am not saying my name yet: Bakers trust my markings, and I hold exact amounts. What am I?",
+      "options": ["a measuring cup", "a bowl", "a spoon", "a mug"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Level off the top.",
+      "explanation": "A measuring cup measures flour and liquids for recipes."
+    },
+    {
+      "question": "Riddle me this: bakers trust my markings \u2014 and i hold exact amounts. What am I?",
+      "options": ["a mug", "a spoon", "a measuring cup", "a bowl"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Level off the top.",
+      "explanation": "A measuring cup measures flour and liquids for recipes."
+    },
+    {
+      "question": "Two clues and one name: Bakers trust my markings. Also: I hold exact amounts. Can you name me?",
+      "options": ["a measuring cup", "a mug", "a spoon", "a bowl"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Level off the top.",
+      "explanation": "A measuring cup measures flour and liquids for recipes."
+    },
+    {
+      "question": "Guess who: bakers trust my markings, and i hold exact amounts. Who or what am I?",
+      "options": ["a bowl", "a measuring cup", "a spoon", "a mug"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Level off the top.",
+      "explanation": "A measuring cup measures flour and liquids for recipes."
+    },
+    {
+      "question": "I am not saying my name yet: Wet umbrellas rest inside me, and I live beside the front door. What am I?",
+      "options": ["a bin", "an umbrella stand", "a coat rack", "a bucket"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Dripping guests park here.",
+      "explanation": "An umbrella stand holds wet umbrellas by the door."
+    },
+    {
+      "question": "Riddle me this: wet umbrellas rest inside me \u2014 and i live beside the front door. What am I?",
+      "options": ["a coat rack", "a bin", "an umbrella stand", "a bucket"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Dripping guests park here.",
+      "explanation": "An umbrella stand holds wet umbrellas by the door."
+    },
+    {
+      "question": "Two clues and one name: Wet umbrellas rest inside me. Also: I live beside the front door. Can you name me?",
+      "options": ["a bin", "a coat rack", "a bucket", "an umbrella stand"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Dripping guests park here.",
+      "explanation": "An umbrella stand holds wet umbrellas by the door."
+    },
+    {
+      "question": "Guess who: wet umbrellas rest inside me, and i live beside the front door. Who or what am I?",
+      "options": ["a bucket", "a coat rack", "a bin", "an umbrella stand"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Dripping guests park here.",
+      "explanation": "An umbrella stand holds wet umbrellas by the door."
+    },
+    {
+      "question": "I am not saying my name yet: Hammers and screwdrivers sleep in me, and I clank when carried. What am I?",
+      "options": ["a shelf", "a toolbox", "a backpack", "a kitchen drawer"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Household Items",
+      "hint": "Fix-it things live here.",
+      "explanation": "A toolbox stores hammers, screws, and repair tools."
+    },
+    {
+      "question": "Riddle me this: hammers and screwdrivers sleep in me \u2014 and i clank when carried. What am I?",
+      "options": ["a shelf", "a toolbox", "a kitchen drawer", "a backpack"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Fix-it things live here.",
+      "explanation": "A toolbox stores hammers, screws, and repair tools."
+    },
+    {
+      "question": "Two clues and one name: Hammers and screwdrivers sleep in me. Also: I clank when carried. Can you name me?",
+      "options": ["a kitchen drawer", "a shelf", "a toolbox", "a backpack"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Fix-it things live here.",
+      "explanation": "A toolbox stores hammers, screws, and repair tools."
+    },
+    {
+      "question": "Guess who: hammers and screwdrivers sleep in me, and i clank when carried. Who or what am I?",
+      "options": ["a shelf", "a kitchen drawer", "a backpack", "a toolbox"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Fix-it things live here.",
+      "explanation": "A toolbox stores hammers, screws, and repair tools."
+    },
+    {
+      "question": "I am not saying my name yet: I sparkle on grass at dawn, and I vanish when the sun arrives. What am I?",
+      "options": ["a puddle", "a raindrop", "a dew drop", "a frost patch"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "The night leaves little jewels.",
+      "explanation": "Dew forms overnight on grass and shines until the sun dries it."
+    },
+    {
+      "question": "Riddle me this: i sparkle on grass at dawn \u2014 and i vanish when the sun arrives. What am I?",
+      "options": ["a dew drop", "a raindrop", "a puddle", "a frost patch"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "The night leaves little jewels.",
+      "explanation": "Dew forms overnight on grass and shines until the sun dries it."
+    },
+    {
+      "question": "Two clues and one name: I sparkle on grass at dawn. Also: I vanish when the sun arrives. Can you name me?",
+      "options": ["a puddle", "a frost patch", "a raindrop", "a dew drop"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "The night leaves little jewels.",
+      "explanation": "Dew forms overnight on grass and shines until the sun dries it."
+    },
+    {
+      "question": "Guess who: i sparkle on grass at dawn, and i vanish when the sun arrives. Who or what am I?",
+      "options": ["a raindrop", "a frost patch", "a puddle", "a dew drop"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "The night leaves little jewels.",
+      "explanation": "Dew forms overnight on grass and shines until the sun dries it."
+    },
+    {
+      "question": "I am not saying my name yet: I run to the sea without legs, and Fish travel inside me. What am I?",
+      "options": ["a road", "a stream", "a lake", "a river"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Always moving, never arriving.",
+      "explanation": "Rivers flow constantly toward the ocean."
+    },
+    {
+      "question": "Riddle me this: i run to the sea without legs \u2014 and fish travel inside me. What am I?",
+      "options": ["a stream", "a river", "a road", "a lake"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Nature & Weather",
+      "hint": "Always moving, never arriving.",
+      "explanation": "Rivers flow constantly toward the ocean."
+    },
+    {
+      "question": "Two clues and one name: I run to the sea without legs. Also: Fish travel inside me. Can you name me?",
+      "options": ["a road", "a river", "a lake", "a stream"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Always moving, never arriving.",
+      "explanation": "Rivers flow constantly toward the ocean."
+    },
+    {
+      "question": "Guess who: i run to the sea without legs, and fish travel inside me. Who or what am I?",
+      "options": ["a road", "a lake", "a river", "a stream"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Always moving, never arriving.",
+      "explanation": "Rivers flow constantly toward the ocean."
+    },
+    {
+      "question": "I am not saying my name yet: I rise on fire-warmed air, and I drift where the wind allows. What am I?",
+      "options": ["a blimp", "a hot air balloon", "a parachute", "a kite"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Look up at the colorful giant.",
+      "explanation": "Hot air balloons float by heating the air inside."
+    },
+    {
+      "question": "Riddle me this: i rise on fire-warmed air \u2014 and i drift where the wind allows. What am I?",
+      "options": ["a kite", "a parachute", "a blimp", "a hot air balloon"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Look up at the colorful giant.",
+      "explanation": "Hot air balloons float by heating the air inside."
+    },
+    {
+      "question": "Two clues and one name: I rise on fire-warmed air. Also: I drift where the wind allows. Can you name me?",
+      "options": ["a kite", "a parachute", "a blimp", "a hot air balloon"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Look up at the colorful giant.",
+      "explanation": "Hot air balloons float by heating the air inside."
+    },
+    {
+      "question": "Guess who: i rise on fire-warmed air, and i drift where the wind allows. Who or what am I?",
+      "options": ["a parachute", "a kite", "a hot air balloon", "a blimp"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Look up at the colorful giant.",
+      "explanation": "Hot air balloons float by heating the air inside."
+    },
+    {
+      "question": "I am not saying my name yet: Wet shirts dance on my line, and Sunshine dries what I hold. What am I?",
+      "options": ["a curtain rod", "a clothesline", "a dryer", "a fence"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Pegs and a breeze do the rest.",
+      "explanation": "Clotheslines hold wet laundry so the sun can dry it."
+    },
+    {
+      "question": "Riddle me this: wet shirts dance on my line \u2014 and sunshine dries what I hold. What am I?",
+      "options": ["a curtain rod", "a dryer", "a clothesline", "a fence"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Pegs and a breeze do the rest.",
+      "explanation": "Clotheslines hold wet laundry so the sun can dry it."
+    },
+    {
+      "question": "Two clues and one name: Wet shirts dance on my line. Also: Sunshine dries what I hold. Can you name me?",
+      "options": ["a dryer", "a fence", "a curtain rod", "a clothesline"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Pegs and a breeze do the rest.",
+      "explanation": "Clotheslines hold wet laundry so the sun can dry it."
+    },
+    {
+      "question": "Guess who: wet shirts dance on my line, and sunshine dries what I hold. Who or what am I?",
+      "options": ["a fence", "a clothesline", "a curtain rod", "a dryer"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Household Items",
+      "hint": "Pegs and a breeze do the rest.",
+      "explanation": "Clotheslines hold wet laundry so the sun can dry it."
+    },
+    {
+      "question": "I am not saying my name yet: I am small, rubber, and firm, and I keep the door from slamming. What am I?",
+      "options": ["a wedge", "a hook", "a lock", "a door stopper"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Doors lean on me politely.",
+      "explanation": "Door stoppers wedge doors open so they cannot slam."
+    },
+    {
+      "question": "Riddle me this: i am small, rubber, and firm \u2014 and i keep the door from slamming. What am I?",
+      "options": ["a lock", "a hook", "a wedge", "a door stopper"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Doors lean on me politely.",
+      "explanation": "Door stoppers wedge doors open so they cannot slam."
+    },
+    {
+      "question": "Two clues and one name: I am small, rubber, and firm. Also: I keep the door from slamming. Can you name me?",
+      "options": ["a wedge", "a lock", "a hook", "a door stopper"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Doors lean on me politely.",
+      "explanation": "Door stoppers wedge doors open so they cannot slam."
+    },
+    {
+      "question": "Guess who: i am small, rubber, and firm, and i keep the door from slamming. Who or what am I?",
+      "options": ["a lock", "a wedge", "a door stopper", "a hook"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Doors lean on me politely.",
+      "explanation": "Door stoppers wedge doors open so they cannot slam."
+    },
+    {
+      "question": "I am not saying my name yet: I unlock metal dinners, and My wheel bites the tin lid. What am I?",
+      "options": ["a knife", "a screwdriver", "a key", "a can opener"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Dinner in a tin, opened safely.",
+      "explanation": "Can openers cut tin lids open safely."
+    },
+    {
+      "question": "Riddle me this: i unlock metal dinners \u2014 and my wheel bites the tin lid. What am I?",
+      "options": ["a screwdriver", "a knife", "a can opener", "a key"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Dinner in a tin, opened safely.",
+      "explanation": "Can openers cut tin lids open safely."
+    },
+    {
+      "question": "Two clues and one name: I unlock metal dinners. Also: My wheel bites the tin lid. Can you name me?",
+      "options": ["a key", "a screwdriver", "a can opener", "a knife"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Dinner in a tin, opened safely.",
+      "explanation": "Can openers cut tin lids open safely."
+    },
+    {
+      "question": "Guess who: i unlock metal dinners, and my wheel bites the tin lid. Who or what am I?",
+      "options": ["a key", "a knife", "a can opener", "a screwdriver"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Dinner in a tin, opened safely.",
+      "explanation": "Can openers cut tin lids open safely."
+    },
+    {
+      "question": "I am not saying my name yet: Fruit lives inside my glass, and Spread me on morning toast. What am I?",
+      "options": ["a jam jar", "a pickle jar", "a honey pot", "a bottle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Sweet, sticky, spreadable.",
+      "explanation": "Jam jars preserve sweet crushed fruit for toast."
+    },
+    {
+      "question": "Riddle me this: fruit lives inside my glass \u2014 and spread me on morning toast. What am I?",
+      "options": ["a pickle jar", "a bottle", "a jam jar", "a honey pot"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Sweet, sticky, spreadable.",
+      "explanation": "Jam jars preserve sweet crushed fruit for toast."
+    },
+    {
+      "question": "Two clues and one name: Fruit lives inside my glass. Also: Spread me on morning toast. Can you name me?",
+      "options": ["a pickle jar", "a jam jar", "a honey pot", "a bottle"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Food & Kitchen",
+      "hint": "Sweet, sticky, spreadable.",
+      "explanation": "Jam jars preserve sweet crushed fruit for toast."
+    },
+    {
+      "question": "Guess who: fruit lives inside my glass, and spread me on morning toast. Who or what am I?",
+      "options": ["a jam jar", "a bottle", "a honey pot", "a pickle jar"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Sweet, sticky, spreadable.",
+      "explanation": "Jam jars preserve sweet crushed fruit for toast."
+    },
+    {
+      "question": "I am not saying my name yet: Tiny white crystals live in me, and Shake me over dinner. What am I?",
+      "options": ["a bowl", "a pepper mill", "a salt cellar", "a jar"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Season with a sprinkle.",
+      "explanation": "Salt cellars keep table salt ready for pinching."
+    },
+    {
+      "question": "Riddle me this: tiny white crystals live in me \u2014 and shake me over dinner. What am I?",
+      "options": ["a pepper mill", "a jar", "a salt cellar", "a bowl"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Season with a sprinkle.",
+      "explanation": "Salt cellars keep table salt ready for pinching."
+    },
+    {
+      "question": "Two clues and one name: Tiny white crystals live in me. Also: Shake me over dinner. Can you name me?",
+      "options": ["a salt cellar", "a bowl", "a pepper mill", "a jar"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Season with a sprinkle.",
+      "explanation": "Salt cellars keep table salt ready for pinching."
+    },
+    {
+      "question": "Guess who: tiny white crystals live in me, and shake me over dinner. Who or what am I?",
+      "options": ["a jar", "a salt cellar", "a pepper mill", "a bowl"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Season with a sprinkle.",
+      "explanation": "Salt cellars keep table salt ready for pinching."
+    },
+    {
+      "question": "I am not saying my name yet: I float and change shape all day, and I carry rain until I am heavy. What am I?",
+      "options": ["a cloud", "a balloon", "a fog bank", "a pillow"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Fluffy, gray, or white.",
+      "explanation": "Clouds drift overhead, changing shape and releasing rain."
+    },
+    {
+      "question": "Riddle me this: i float and change shape all day \u2014 and i carry rain until I am heavy. What am I?",
+      "options": ["a cloud", "a pillow", "a fog bank", "a balloon"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Nature & Weather",
+      "hint": "Fluffy, gray, or white.",
+      "explanation": "Clouds drift overhead, changing shape and releasing rain."
+    },
+    {
+      "question": "Two clues and one name: I float and change shape all day. Also: I carry rain until I am heavy. Can you name me?",
+      "options": ["a cloud", "a balloon", "a pillow", "a fog bank"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Nature & Weather",
+      "hint": "Fluffy, gray, or white.",
+      "explanation": "Clouds drift overhead, changing shape and releasing rain."
+    },
+    {
+      "question": "Guess who: i float and change shape all day, and i carry rain until I am heavy. Who or what am I?",
+      "options": ["a fog bank", "a balloon", "a pillow", "a cloud"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Fluffy, gray, or white.",
+      "explanation": "Clouds drift overhead, changing shape and releasing rain."
+    },
+    {
+      "question": "I am not saying my name yet: I sing a short song when pressed, and Visitors use me instead of knocking. What am I?",
+      "options": ["a doorbell", "a horn", "a chime", "a phone"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Ding-dong means company.",
+      "explanation": "A doorbell rings inside the house when visitors press it."
+    },
+    {
+      "question": "Riddle me this: i sing a short song when pressed \u2014 and visitors use me instead of knocking. What am I?",
+      "options": ["a doorbell", "a chime", "a phone", "a horn"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Household Items",
+      "hint": "Ding-dong means company.",
+      "explanation": "A doorbell rings inside the house when visitors press it."
+    },
+    {
+      "question": "Two clues and one name: I sing a short song when pressed. Also: Visitors use me instead of knocking. Can you name me?",
+      "options": ["a horn", "a doorbell", "a chime", "a phone"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Ding-dong means company.",
+      "explanation": "A doorbell rings inside the house when visitors press it."
+    },
+    {
+      "question": "Guess who: i sing a short song when pressed, and visitors use me instead of knocking. Who or what am I?",
+      "options": ["a chime", "a phone", "a horn", "a doorbell"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Ding-dong means company.",
+      "explanation": "A doorbell rings inside the house when visitors press it."
+    },
+    {
+      "question": "I am not saying my name yet: Bananas and apples rest inside me, and I sit in the middle of the table. What am I?",
+      "options": ["a shelf", "a basket", "a fruit bowl", "a fridge"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "The healthy snack station.",
+      "explanation": "Fruit bowls keep fresh fruit handy on the table."
+    },
+    {
+      "question": "Riddle me this: bananas and apples rest inside me \u2014 and i sit in the middle of the table. What am I?",
+      "options": ["a fridge", "a shelf", "a fruit bowl", "a basket"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Food & Kitchen",
+      "hint": "The healthy snack station.",
+      "explanation": "Fruit bowls keep fresh fruit handy on the table."
+    },
+    {
+      "question": "Two clues and one name: Bananas and apples rest inside me. Also: I sit in the middle of the table. Can you name me?",
+      "options": ["a basket", "a fruit bowl", "a fridge", "a shelf"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Food & Kitchen",
+      "hint": "The healthy snack station.",
+      "explanation": "Fruit bowls keep fresh fruit handy on the table."
+    },
+    {
+      "question": "Guess who: bananas and apples rest inside me, and i sit in the middle of the table. Who or what am I?",
+      "options": ["a shelf", "a fruit bowl", "a basket", "a fridge"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The healthy snack station.",
+      "explanation": "Fruit bowls keep fresh fruit handy on the table."
+    },
+    {
+      "question": "I am not saying my name yet: I am tall, gray, and rumbling, and Lightning escapes my belly. What am I?",
+      "options": ["a thundercloud", "a fog", "a breeze", "a rainbow"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "The storm's headquarters.",
+      "explanation": "Thunderclouds store rain and lightning until storms break."
+    },
+    {
+      "question": "Riddle me this: i am tall, gray, and rumbling \u2014 and lightning escapes my belly. What am I?",
+      "options": ["a rainbow", "a breeze", "a thundercloud", "a fog"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "The storm's headquarters.",
+      "explanation": "Thunderclouds store rain and lightning until storms break."
+    },
+    {
+      "question": "Two clues and one name: I am tall, gray, and rumbling. Also: Lightning escapes my belly. Can you name me?",
+      "options": ["a thundercloud", "a rainbow", "a fog", "a breeze"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Nature & Weather",
+      "hint": "The storm's headquarters.",
+      "explanation": "Thunderclouds store rain and lightning until storms break."
+    },
+    {
+      "question": "Guess who: i am tall, gray, and rumbling, and lightning escapes my belly. Who or what am I?",
+      "options": ["a fog", "a breeze", "a thundercloud", "a rainbow"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "The storm's headquarters.",
+      "explanation": "Thunderclouds store rain and lightning until storms break."
+    },
+    {
+      "question": "I am not saying my name yet: I am wind in a hurry, and I snatch hats and papers. What am I?",
+      "options": ["a breeze", "a whisper", "a storm", "a gust of wind"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Hold on to your hat.",
+      "explanation": "A gust is a sudden burst of moving air."
+    },
+    {
+      "question": "Riddle me this: i am wind in a hurry \u2014 and i snatch hats and papers. What am I?",
+      "options": ["a whisper", "a storm", "a gust of wind", "a breeze"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Hold on to your hat.",
+      "explanation": "A gust is a sudden burst of moving air."
+    },
+    {
+      "question": "Two clues and one name: I am wind in a hurry. Also: I snatch hats and papers. Can you name me?",
+      "options": ["a gust of wind", "a whisper", "a storm", "a breeze"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Nature & Weather",
+      "hint": "Hold on to your hat.",
+      "explanation": "A gust is a sudden burst of moving air."
+    },
+    {
+      "question": "Guess who: i am wind in a hurry, and i snatch hats and papers. Who or what am I?",
+      "options": ["a breeze", "a storm", "a whisper", "a gust of wind"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Hold on to your hat.",
+      "explanation": "A gust is a sudden burst of moving air."
+    },
+    {
+      "question": "I am not saying my name yet: Tiny jars of flavor line my shelves, and Cinnamon and cumin sleep here. What am I?",
+      "options": ["a spice rack", "a drawer", "a box", "a cupboard"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Little jars, big aromas.",
+      "explanation": "Spice racks organize jars of seasoning."
+    },
+    {
+      "question": "Riddle me this: tiny jars of flavor line my shelves \u2014 and cinnamon and cumin sleep here. What am I?",
+      "options": ["a drawer", "a cupboard", "a box", "a spice rack"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Little jars, big aromas.",
+      "explanation": "Spice racks organize jars of seasoning."
+    },
+    {
+      "question": "Two clues and one name: Tiny jars of flavor line my shelves. Also: Cinnamon and cumin sleep here. Can you name me?",
+      "options": ["a box", "a spice rack", "a cupboard", "a drawer"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "Little jars, big aromas.",
+      "explanation": "Spice racks organize jars of seasoning."
+    },
+    {
+      "question": "Guess who: tiny jars of flavor line my shelves, and cinnamon and cumin sleep here. Who or what am I?",
+      "options": ["a box", "a spice rack", "a drawer", "a cupboard"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Little jars, big aromas.",
+      "explanation": "Spice racks organize jars of seasoning."
+    },
+    {
+      "question": "I am not saying my name yet: I sizzle breakfast every morning, and Eggs slide across my flat face. What am I?",
+      "options": ["a frying pan", "a pot", "a wok", "a tray"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Hot surface, happy breakfast.",
+      "explanation": "Frying pans sizzle eggs and bacon over the flame."
+    },
+    {
+      "question": "Riddle me this: i sizzle breakfast every morning \u2014 and eggs slide across my flat face. What am I?",
+      "options": ["a wok", "a pot", "a tray", "a frying pan"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Food & Kitchen",
+      "hint": "Hot surface, happy breakfast.",
+      "explanation": "Frying pans sizzle eggs and bacon over the flame."
+    },
+    {
+      "question": "Two clues and one name: I sizzle breakfast every morning. Also: Eggs slide across my flat face. Can you name me?",
+      "options": ["a wok", "a tray", "a pot", "a frying pan"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Food & Kitchen",
+      "hint": "Hot surface, happy breakfast.",
+      "explanation": "Frying pans sizzle eggs and bacon over the flame."
+    },
+    {
+      "question": "Guess who: i sizzle breakfast every morning, and eggs slide across my flat face. Who or what am I?",
+      "options": ["a tray", "a pot", "a frying pan", "a wok"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "Hot surface, happy breakfast.",
+      "explanation": "Frying pans sizzle eggs and bacon over the flame."
+    },
+    {
+      "question": "I am not saying my name yet: I twirl to the ground in autumn, and I was green all summer. What am I?",
+      "options": ["a falling leaf", "a snowflake", "a feather", "a petal"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Autumn's slow spinner.",
+      "explanation": "Fallen leaves let trees rest through the cold months."
+    },
+    {
+      "question": "Riddle me this: i twirl to the ground in autumn \u2014 and i was green all summer. What am I?",
+      "options": ["a snowflake", "a petal", "a falling leaf", "a feather"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Nature & Weather",
+      "hint": "Autumn's slow spinner.",
+      "explanation": "Fallen leaves let trees rest through the cold months."
+    },
+    {
+      "question": "Two clues and one name: I twirl to the ground in autumn. Also: I was green all summer. Can you name me?",
+      "options": ["a petal", "a snowflake", "a feather", "a falling leaf"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Autumn's slow spinner.",
+      "explanation": "Fallen leaves let trees rest through the cold months."
+    },
+    {
+      "question": "Guess who: i twirl to the ground in autumn, and i was green all summer. Who or what am I?",
+      "options": ["a snowflake", "a feather", "a falling leaf", "a petal"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Nature & Weather",
+      "hint": "Autumn's slow spinner.",
+      "explanation": "Fallen leaves let trees rest through the cold months."
+    },
+    {
+      "question": "I am not saying my name yet: I eat crumbs with a loud hum, and I glide across carpets. What am I?",
+      "options": ["a vacuum", "a mop", "a duster", "a broom"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Loud suction, clean floors.",
+      "explanation": "Vacuums suck dust from floors with motor power."
+    },
+    {
+      "question": "Riddle me this: i eat crumbs with a loud hum \u2014 and i glide across carpets. What am I?",
+      "options": ["a duster", "a vacuum", "a mop", "a broom"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Loud suction, clean floors.",
+      "explanation": "Vacuums suck dust from floors with motor power."
+    },
+    {
+      "question": "Two clues and one name: I eat crumbs with a loud hum. Also: I glide across carpets. Can you name me?",
+      "options": ["a broom", "a mop", "a duster", "a vacuum"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Loud suction, clean floors.",
+      "explanation": "Vacuums suck dust from floors with motor power."
+    },
+    {
+      "question": "Guess who: i eat crumbs with a loud hum, and i glide across carpets. Who or what am I?",
+      "options": ["a duster", "a vacuum", "a mop", "a broom"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Loud suction, clean floors.",
+      "explanation": "Vacuums suck dust from floors with motor power."
+    },
+    {
+      "question": "I am not saying my name yet: I dust flour off counters, and Small bristles, small sweeps. What am I?",
+      "options": ["a brush", "a towel", "a whisk broom", "a sponge"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's little sweeper.",
+      "explanation": "Whisk brooms brush flour from benches and pastry."
+    },
+    {
+      "question": "Riddle me this: i dust flour off counters \u2014 and small bristles, small sweeps. What am I?",
+      "options": ["a brush", "a towel", "a whisk broom", "a sponge"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's little sweeper.",
+      "explanation": "Whisk brooms brush flour from benches and pastry."
+    },
+    {
+      "question": "Two clues and one name: I dust flour off counters. Also: Small bristles, small sweeps. Can you name me?",
+      "options": ["a brush", "a sponge", "a towel", "a whisk broom"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's little sweeper.",
+      "explanation": "Whisk brooms brush flour from benches and pastry."
+    },
+    {
+      "question": "Guess who: i dust flour off counters, and small bristles, small sweeps. Who or what am I?",
+      "options": ["a whisk broom", "a sponge", "a towel", "a brush"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Food & Kitchen",
+      "hint": "The baker's little sweeper.",
+      "explanation": "Whisk brooms brush flour from benches and pastry."
+    },
+    {
+      "question": "I am not saying my name yet: I smooth wrinkles with heat, and I slide across shirts. What am I?",
+      "options": ["a brush", "a steamer", "a dryer", "an iron"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Steam and press, no creases.",
+      "explanation": "An iron presses clothes flat with heated smooth plates."
+    },
+    {
+      "question": "Riddle me this: i smooth wrinkles with heat \u2014 and i slide across shirts. What am I?",
+      "options": ["a dryer", "a brush", "an iron", "a steamer"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Household Items",
+      "hint": "Steam and press, no creases.",
+      "explanation": "An iron presses clothes flat with heated smooth plates."
+    },
+    {
+      "question": "Two clues and one name: I smooth wrinkles with heat. Also: I slide across shirts. Can you name me?",
+      "options": ["a steamer", "a brush", "an iron", "a dryer"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Steam and press, no creases.",
+      "explanation": "An iron presses clothes flat with heated smooth plates."
+    },
+    {
+      "question": "Guess who: i smooth wrinkles with heat, and i slide across shirts. Who or what am I?",
+      "options": ["an iron", "a steamer", "a dryer", "a brush"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Household Items",
+      "hint": "Steam and press, no creases.",
+      "explanation": "An iron presses clothes flat with heated smooth plates."
+    }
+  ]
+}

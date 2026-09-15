@@ -1,0 +1,920 @@
+{
+  "category": "Trick Questions",
+  "riddles": [
+    {
+      "question": "How many letters are in the word MISSISSIPPI?",
+      "options": ["11", "10", "13", "12"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "MISSISSIPPI has exactly 11 letters."
+    },
+    {
+      "question": "How many letters are in the word BOOKKEEPER?",
+      "options": ["11", "9", "10", "12"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "BOOKKEEPER has exactly 10 letters."
+    },
+    {
+      "question": "How many letters are in the word STREETS?",
+      "options": ["6", "7", "9", "8"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "STREETS has exactly 7 letters."
+    },
+    {
+      "question": "How many letters are in the word BUBBLE?",
+      "options": ["7", "5", "8", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "BUBBLE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word FOOTBALL?",
+      "options": ["10", "7", "9", "8"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "FOOTBALL has exactly 8 letters."
+    },
+    {
+      "question": "How many letters are in the word BREAKFAST?",
+      "options": ["8", "10", "11", "9"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "BREAKFAST has exactly 9 letters."
+    },
+    {
+      "question": "How many letters are in the word SHEEP?",
+      "options": ["4", "7", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "SHEEP has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word COMMITTEE?",
+      "options": ["10", "11", "8", "9"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "COMMITTEE has exactly 9 letters."
+    },
+    {
+      "question": "How many letters are in the word HANDKERCHIEF?",
+      "options": ["12", "13", "14", "11"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "HANDKERCHIEF has exactly 12 letters."
+    },
+    {
+      "question": "How many letters are in the word WEDNESDAY?",
+      "options": ["9", "8", "10", "11"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "WEDNESDAY has exactly 9 letters."
+    },
+    {
+      "question": "How many letters are in the word BUZZARD?",
+      "options": ["6", "7", "9", "8"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "BUZZARD has exactly 7 letters."
+    },
+    {
+      "question": "How many letters are in the word AARDVARK?",
+      "options": ["10", "7", "9", "8"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "AARDVARK has exactly 8 letters."
+    },
+    {
+      "question": "How many letters are in the word SUCCESS?",
+      "options": ["8", "7", "9", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "SUCCESS has exactly 7 letters."
+    },
+    {
+      "question": "How many letters are in the word TOMORROW?",
+      "options": ["7", "9", "10", "8"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "TOMORROW has exactly 8 letters."
+    },
+    {
+      "question": "How many letters are in the word PINEAPPLE?",
+      "options": ["10", "8", "9", "11"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "PINEAPPLE has exactly 9 letters."
+    },
+    {
+      "question": "How many letters are in the word CHOOSE?",
+      "options": ["5", "8", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "CHOOSE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word QUEUE?",
+      "options": ["5", "7", "6", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "QUEUE has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word RHUBARB?",
+      "options": ["8", "9", "6", "7"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "RHUBARB has exactly 7 letters."
+    },
+    {
+      "question": "How many letters are in the word VACUUM?",
+      "options": ["8", "7", "5", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "VACUUM has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word ONION?",
+      "options": ["4", "5", "6", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "ONION has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word LADDER?",
+      "options": ["5", "8", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "LADDER has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word CABBAGE?",
+      "options": ["7", "8", "9", "6"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "CABBAGE has exactly 7 letters."
+    },
+    {
+      "question": "How many letters are in the word MIRROR?",
+      "options": ["5", "7", "8", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "MIRROR has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word ORANGE?",
+      "options": ["5", "8", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "ORANGE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word ELEPHANT?",
+      "options": ["8", "7", "9", "10"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "ELEPHANT has exactly 8 letters."
+    },
+    {
+      "question": "How many letters are in the word GUITAR?",
+      "options": ["5", "8", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "GUITAR has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word PLANET?",
+      "options": ["6", "5", "8", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "PLANET has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word SILVER?",
+      "options": ["6", "8", "7", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "SILVER has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word WINTER?",
+      "options": ["5", "7", "6", "8"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "WINTER has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word GARDEN?",
+      "options": ["5", "8", "6", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "GARDEN has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word MARKET?",
+      "options": ["5", "6", "8", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "MARKET has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word FLOWER?",
+      "options": ["6", "7", "5", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "FLOWER has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word CIRCLE?",
+      "options": ["8", "6", "5", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "CIRCLE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word BOTTLE?",
+      "options": ["7", "6", "8", "5"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "BOTTLE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word ISLAND?",
+      "options": ["7", "6", "5", "8"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "ISLAND has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word CANDLE?",
+      "options": ["8", "5", "6", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "CANDLE has exactly 6 letters."
+    },
+    {
+      "question": "How many letters are in the word SUGAR?",
+      "options": ["5", "7", "4", "6"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "SUGAR has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word TRAIN?",
+      "options": ["4", "6", "5", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "TRAIN has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word PAPER?",
+      "options": ["7", "6", "4", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "PAPER has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word CLOUD?",
+      "options": ["4", "7", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "CLOUD has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word LEMON?",
+      "options": ["4", "6", "5", "7"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "LEMON has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word MUSIC?",
+      "options": ["7", "4", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "MUSIC has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word TIGER?",
+      "options": ["4", "6", "7", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "TIGER has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word PLANT?",
+      "options": ["4", "7", "6", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "PLANT has exactly 5 letters."
+    },
+    {
+      "question": "How many letters are in the word STONE?",
+      "options": ["7", "4", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Gotchas",
+      "hint": "Count carefully, letter by letter.",
+      "explanation": "STONE has exactly 5 letters."
+    },
+    {
+      "question": "You are running a race and you overtake the runner in second place. What place are you in now?",
+      "options": ["First", "Third", "Second", "Depends on the speed"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Think again about who you passed.",
+      "explanation": "Overtaking the runner in second puts you in second place."
+    },
+    {
+      "question": "If you take two apples from three apples, how many apples do you have?",
+      "options": ["None", "Two", "Three", "One"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "You are the one taking them.",
+      "explanation": "You took two apples, so you have two."
+    },
+    {
+      "question": "You have one match and enter a dark room with a candle, an oil lamp, and a fireplace. What do you light first?",
+      "options": ["The match", "The fireplace", "The oil lamp", "The candle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Without this, nothing else burns.",
+      "explanation": "You must light the match first."
+    },
+    {
+      "question": "Two people played five games of chess and each won the same number of games, with no draws. How?",
+      "options": [
+        "They played online",
+        "It is impossible",
+        "One cheated",
+        "They were not playing each other"
+      ],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Who were they playing?",
+      "explanation": "They played different opponents, not each other."
+    },
+    {
+      "question": "What is the average number of birthdays a person has?",
+      "options": ["Seventy", "It varies by country", "One per year", "One"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "A birthday is a day, not a party.",
+      "explanation": "Everyone has exactly one birthday; you celebrate it many times."
+    },
+    {
+      "question": "Divide thirty by half and add ten. What do you get?",
+      "options": ["Twenty-five", "Seventy", "Forty", "Sixty"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Dividing by one half is not dividing by two.",
+      "explanation": "30 divided by 0.5 is 60, plus 10 makes 70."
+    },
+    {
+      "question": "If five machines make five widgets in five minutes, how long do 100 machines need to make 100 widgets?",
+      "options": ["Five minutes", "One hundred minutes", "One minute", "Twenty minutes"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Each machine still takes five minutes.",
+      "explanation": "100 machines working in parallel still finish in five minutes."
+    },
+    {
+      "question": "Two coins add up to 30 cents, and one of them is not a nickel. What are they?",
+      "options": [
+        "A dime and a penny",
+        "A quarter and five pennies",
+        "A quarter and a nickel",
+        "Two dimes"
+      ],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Read it again: only ONE of them is not a nickel.",
+      "explanation": "A quarter and a nickel: the quarter is the one that is not a nickel."
+    },
+    {
+      "question": "Which sentence is correct: the yolk of the egg IS white, or the yolk of the egg ARE white?",
+      "options": [
+        "Both are fine",
+        "Neither, the yolk is yellow",
+        "The first one",
+        "The second one"
+      ],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "Check the color, not the grammar.",
+      "explanation": "Neither: yolks are yellow, so both sentences are wrong."
+    },
+    {
+      "question": "What can you hold in your right hand but never in your left hand?",
+      "options": ["A glove", "Your left hand", "Your right elbow", "A mirror"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Gotchas",
+      "hint": "It is attached to you.",
+      "explanation": "Your right hand cannot reach your right elbow to hold it."
+    },
+    {
+      "question": "How many letters does the word MISSISSIPPI contain?",
+      "options": ["12", "11", "9", "10"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "MISSISSIPPI has 11 letters."
+    },
+    {
+      "question": "How many letters does the word BOOKKEEPER contain?",
+      "options": ["8", "10", "11", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "BOOKKEEPER has 10 letters."
+    },
+    {
+      "question": "How many letters does the word STREETS contain?",
+      "options": ["6", "5", "7", "8"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "STREETS has 7 letters."
+    },
+    {
+      "question": "How many letters does the word BUBBLE contain?",
+      "options": ["4", "7", "6", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "BUBBLE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word FOOTBALL contain?",
+      "options": ["7", "8", "6", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "FOOTBALL has 8 letters."
+    },
+    {
+      "question": "How many letters does the word BREAKFAST contain?",
+      "options": ["9", "10", "8", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "BREAKFAST has 9 letters."
+    },
+    {
+      "question": "How many letters does the word SHEEP contain?",
+      "options": ["4", "6", "5", "3"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "SHEEP has 5 letters."
+    },
+    {
+      "question": "How many letters does the word COMMITTEE contain?",
+      "options": ["9", "7", "10", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "COMMITTEE has 9 letters."
+    },
+    {
+      "question": "How many letters does the word HANDKERCHIEF contain?",
+      "options": ["13", "10", "12", "11"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "HANDKERCHIEF has 12 letters."
+    },
+    {
+      "question": "How many letters does the word WEDNESDAY contain?",
+      "options": ["9", "10", "8", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "WEDNESDAY has 9 letters."
+    },
+    {
+      "question": "How many letters does the word BUZZARD contain?",
+      "options": ["6", "8", "7", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "BUZZARD has 7 letters."
+    },
+    {
+      "question": "How many letters does the word AARDVARK contain?",
+      "options": ["8", "9", "6", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "AARDVARK has 8 letters."
+    },
+    {
+      "question": "How many letters does the word SUCCESS contain?",
+      "options": ["7", "5", "6", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "SUCCESS has 7 letters."
+    },
+    {
+      "question": "How many letters does the word TOMORROW contain?",
+      "options": ["7", "8", "6", "9"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "TOMORROW has 8 letters."
+    },
+    {
+      "question": "How many letters does the word PINEAPPLE contain?",
+      "options": ["9", "10", "7", "8"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "PINEAPPLE has 9 letters."
+    },
+    {
+      "question": "How many letters does the word CHOOSE contain?",
+      "options": ["5", "7", "6", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "CHOOSE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word QUEUE contain?",
+      "options": ["5", "4", "3", "6"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "QUEUE has 5 letters."
+    },
+    {
+      "question": "How many letters does the word RHUBARB contain?",
+      "options": ["6", "8", "5", "7"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "RHUBARB has 7 letters."
+    },
+    {
+      "question": "How many letters does the word VACUUM contain?",
+      "options": ["7", "5", "6", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "VACUUM has 6 letters."
+    },
+    {
+      "question": "How many letters does the word ONION contain?",
+      "options": ["5", "6", "3", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "ONION has 5 letters."
+    },
+    {
+      "question": "How many letters does the word LADDER contain?",
+      "options": ["5", "6", "4", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "LADDER has 6 letters."
+    },
+    {
+      "question": "How many letters does the word CABBAGE contain?",
+      "options": ["6", "5", "8", "7"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "CABBAGE has 7 letters."
+    },
+    {
+      "question": "How many letters does the word MIRROR contain?",
+      "options": ["4", "6", "5", "7"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "MIRROR has 6 letters."
+    },
+    {
+      "question": "How many letters does the word ORANGE contain?",
+      "options": ["7", "5", "4", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "ORANGE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word ELEPHANT contain?",
+      "options": ["9", "6", "7", "8"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "ELEPHANT has 8 letters."
+    },
+    {
+      "question": "How many letters does the word GUITAR contain?",
+      "options": ["5", "4", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "GUITAR has 6 letters."
+    },
+    {
+      "question": "How many letters does the word PLANET contain?",
+      "options": ["4", "7", "6", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "PLANET has 6 letters."
+    },
+    {
+      "question": "How many letters does the word SILVER contain?",
+      "options": ["5", "4", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "SILVER has 6 letters."
+    },
+    {
+      "question": "How many letters does the word WINTER contain?",
+      "options": ["6", "7", "4", "5"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "WINTER has 6 letters."
+    },
+    {
+      "question": "How many letters does the word GARDEN contain?",
+      "options": ["5", "7", "6", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "GARDEN has 6 letters."
+    },
+    {
+      "question": "How many letters does the word MARKET contain?",
+      "options": ["4", "7", "6", "5"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "MARKET has 6 letters."
+    },
+    {
+      "question": "How many letters does the word FLOWER contain?",
+      "options": ["5", "7", "6", "4"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "FLOWER has 6 letters."
+    },
+    {
+      "question": "How many letters does the word CIRCLE contain?",
+      "options": ["4", "7", "5", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "CIRCLE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word BOTTLE contain?",
+      "options": ["6", "5", "7", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "BOTTLE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word ISLAND contain?",
+      "options": ["6", "5", "4", "7"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "ISLAND has 6 letters."
+    },
+    {
+      "question": "How many letters does the word CANDLE contain?",
+      "options": ["5", "4", "7", "6"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "CANDLE has 6 letters."
+    },
+    {
+      "question": "How many letters does the word SUGAR contain?",
+      "options": ["4", "3", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "SUGAR has 5 letters."
+    },
+    {
+      "question": "How many letters does the word TRAIN contain?",
+      "options": ["6", "4", "3", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "TRAIN has 5 letters."
+    },
+    {
+      "question": "How many letters does the word PAPER contain?",
+      "options": ["3", "5", "4", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "PAPER has 5 letters."
+    },
+    {
+      "question": "How many letters does the word CLOUD contain?",
+      "options": ["3", "6", "4", "5"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "CLOUD has 5 letters."
+    },
+    {
+      "question": "How many letters does the word LEMON contain?",
+      "options": ["4", "5", "6", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "LEMON has 5 letters."
+    },
+    {
+      "question": "How many letters does the word MUSIC contain?",
+      "options": ["4", "5", "6", "3"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "MUSIC has 5 letters."
+    },
+    {
+      "question": "How many letters does the word TIGER contain?",
+      "options": ["3", "4", "5", "6"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "TIGER has 5 letters."
+    },
+    {
+      "question": "How many letters does the word PLANT contain?",
+      "options": ["5", "3", "6", "4"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "PLANT has 5 letters."
+    },
+    {
+      "question": "How many letters does the word STONE contain?",
+      "options": ["3", "5", "4", "6"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Common-Sense Traps",
+      "hint": "Slow, careful counting wins.",
+      "explanation": "STONE has 5 letters."
+    }
+  ]
+}

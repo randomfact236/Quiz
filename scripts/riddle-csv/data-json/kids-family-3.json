@@ -1,0 +1,905 @@
+{
+  "category": "Kids & Family",
+  "riddles": [
+    {
+      "question": "I am not saying my name yet: My ears are long, and I hop everywhere and love carrots. What am I?",
+      "options": ["a rabbit", "a squirrel", "a hare", "a mouse"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Bounce, bounce, nibble.",
+      "explanation": "Rabbits hop on strong legs and munch carrots."
+    },
+    {
+      "question": "Riddle me this: my ears are long \u2014 and i hop everywhere and love carrots. What am I?",
+      "options": ["a hare", "a rabbit", "a squirrel", "a mouse"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Bounce, bounce, nibble.",
+      "explanation": "Rabbits hop on strong legs and munch carrots."
+    },
+    {
+      "question": "Two clues and one name: My ears are long. Also: I hop everywhere and love carrots. Can you name me?",
+      "options": ["a rabbit", "a hare", "a squirrel", "a mouse"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Bounce, bounce, nibble.",
+      "explanation": "Rabbits hop on strong legs and munch carrots."
+    },
+    {
+      "question": "Guess who: my ears are long, and i hop everywhere and love carrots. Who or what am I?",
+      "options": ["a rabbit", "a mouse", "a hare", "a squirrel"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Bounce, bounce, nibble.",
+      "explanation": "Rabbits hop on strong legs and munch carrots."
+    },
+    {
+      "question": "I am not saying my name yet: I talk in clicks and whistles, and I leap from the sea like silver lightning. What am I?",
+      "options": ["a seal", "a dolphin", "a shark", "a whale"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "A clever ocean acrobat.",
+      "explanation": "Dolphins communicate with clicks and whistles and love to leap."
+    },
+    {
+      "question": "Riddle me this: i talk in clicks and whistles \u2014 and i leap from the sea like silver lightning. What am I?",
+      "options": ["a dolphin", "a whale", "a shark", "a seal"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "A clever ocean acrobat.",
+      "explanation": "Dolphins communicate with clicks and whistles and love to leap."
+    },
+    {
+      "question": "Two clues and one name: I talk in clicks and whistles. Also: I leap from the sea like silver lightning. Can you name me?",
+      "options": ["a seal", "a whale", "a shark", "a dolphin"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "A clever ocean acrobat.",
+      "explanation": "Dolphins communicate with clicks and whistles and love to leap."
+    },
+    {
+      "question": "Guess who: i talk in clicks and whistles, and i leap from the sea like silver lightning. Who or what am I?",
+      "options": ["a dolphin", "a shark", "a whale", "a seal"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "A clever ocean acrobat.",
+      "explanation": "Dolphins communicate with clicks and whistles and love to leap."
+    },
+    {
+      "question": "I am not saying my name yet: I carry my house on my back, and I leave a shiny trail behind me. What am I?",
+      "options": ["a slug", "a snail", "a turtle", "a beetle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Slow, with a spiral suitcase.",
+      "explanation": "A snail's spiral shell is its portable home."
+    },
+    {
+      "question": "Riddle me this: i carry my house on my back \u2014 and i leave a shiny trail behind me. What am I?",
+      "options": ["a turtle", "a slug", "a beetle", "a snail"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Slow, with a spiral suitcase.",
+      "explanation": "A snail's spiral shell is its portable home."
+    },
+    {
+      "question": "Two clues and one name: I carry my house on my back. Also: I leave a shiny trail behind me. Can you name me?",
+      "options": ["a beetle", "a snail", "a slug", "a turtle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Slow, with a spiral suitcase.",
+      "explanation": "A snail's spiral shell is its portable home."
+    },
+    {
+      "question": "Guess who: i carry my house on my back, and i leave a shiny trail behind me. Who or what am I?",
+      "options": ["a beetle", "a turtle", "a snail", "a slug"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Slow, with a spiral suitcase.",
+      "explanation": "A snail's spiral shell is its portable home."
+    },
+    {
+      "question": "I am not saying my name yet: Sweet treats sleep inside me, and My lid hides the crumbs. What am I?",
+      "options": ["a cookie jar", "a cabinet", "a lunchbox", "a drawer"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Hands sneak in at midnight.",
+      "explanation": "The cookie jar guards the household's sweet stash."
+    },
+    {
+      "question": "Riddle me this: sweet treats sleep inside me \u2014 and my lid hides the crumbs. What am I?",
+      "options": ["a cabinet", "a drawer", "a cookie jar", "a lunchbox"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Hands sneak in at midnight.",
+      "explanation": "The cookie jar guards the household's sweet stash."
+    },
+    {
+      "question": "Two clues and one name: Sweet treats sleep inside me. Also: My lid hides the crumbs. Can you name me?",
+      "options": ["a cabinet", "a lunchbox", "a cookie jar", "a drawer"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Hands sneak in at midnight.",
+      "explanation": "The cookie jar guards the household's sweet stash."
+    },
+    {
+      "question": "Guess who: sweet treats sleep inside me, and my lid hides the crumbs. Who or what am I?",
+      "options": ["a drawer", "a lunchbox", "a cabinet", "a cookie jar"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Hands sneak in at midnight.",
+      "explanation": "The cookie jar guards the household's sweet stash."
+    },
+    {
+      "question": "I am not saying my name yet: I have rows of sharp teeth, and I never stop swimming. What am I?",
+      "options": ["an orca", "a whale", "a dolphin", "a shark"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fin above the waves.",
+      "explanation": "Sharks swim constantly and grow new teeth in rows."
+    },
+    {
+      "question": "Riddle me this: i have rows of sharp teeth \u2014 and i never stop swimming. What am I?",
+      "options": ["an orca", "a shark", "a dolphin", "a whale"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fin above the waves.",
+      "explanation": "Sharks swim constantly and grow new teeth in rows."
+    },
+    {
+      "question": "Two clues and one name: I have rows of sharp teeth. Also: I never stop swimming. Can you name me?",
+      "options": ["a whale", "a shark", "a dolphin", "an orca"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fin above the waves.",
+      "explanation": "Sharks swim constantly and grow new teeth in rows."
+    },
+    {
+      "question": "Guess who: i have rows of sharp teeth, and i never stop swimming. Who or what am I?",
+      "options": ["an orca", "a whale", "a shark", "a dolphin"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Fin above the waves.",
+      "explanation": "Sharks swim constantly and grow new teeth in rows."
+    },
+    {
+      "question": "I am not saying my name yet: I carry humps of stored fat, and I can cross hot deserts for days. What am I?",
+      "options": ["a horse", "a donkey", "a camel", "a llama"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "The desert ship.",
+      "explanation": "Camel humps store fat for long desert journeys."
+    },
+    {
+      "question": "Riddle me this: i carry humps of stored fat \u2014 and i can cross hot deserts for days. What am I?",
+      "options": ["a camel", "a horse", "a llama", "a donkey"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "The desert ship.",
+      "explanation": "Camel humps store fat for long desert journeys."
+    },
+    {
+      "question": "Two clues and one name: I carry humps of stored fat. Also: I can cross hot deserts for days. Can you name me?",
+      "options": ["a camel", "a donkey", "a llama", "a horse"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "The desert ship.",
+      "explanation": "Camel humps store fat for long desert journeys."
+    },
+    {
+      "question": "Guess who: i carry humps of stored fat, and i can cross hot deserts for days. Who or what am I?",
+      "options": ["a camel", "a llama", "a horse", "a donkey"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "The desert ship.",
+      "explanation": "Camel humps store fat for long desert journeys."
+    },
+    {
+      "question": "I am not saying my name yet: I roll on four small wheels, and I ride ramps at the park. What am I?",
+      "options": ["roller skates", "a skateboard", "a bike", "a scooter"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Kick, push, balance.",
+      "explanation": "Skateboards roll on four wheels and ride ramps."
+    },
+    {
+      "question": "Riddle me this: i roll on four small wheels \u2014 and i ride ramps at the park. What am I?",
+      "options": ["a bike", "a skateboard", "a scooter", "roller skates"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Kick, push, balance.",
+      "explanation": "Skateboards roll on four wheels and ride ramps."
+    },
+    {
+      "question": "Two clues and one name: I roll on four small wheels. Also: I ride ramps at the park. Can you name me?",
+      "options": ["a skateboard", "a bike", "roller skates", "a scooter"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Kick, push, balance.",
+      "explanation": "Skateboards roll on four wheels and ride ramps."
+    },
+    {
+      "question": "Guess who: i roll on four small wheels, and i ride ramps at the park. Who or what am I?",
+      "options": ["roller skates", "a bike", "a skateboard", "a scooter"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Kick, push, balance.",
+      "explanation": "Skateboards roll on four wheels and ride ramps."
+    },
+    {
+      "question": "I am not saying my name yet: I bury nuts for winter, and My tail fluffs like a flag. What am I?",
+      "options": ["a mouse", "a squirrel", "a chipmunk", "a rabbit"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Chattering tree acrobat.",
+      "explanation": "Squirrels hoard nuts and flick bushy tails."
+    },
+    {
+      "question": "Riddle me this: i bury nuts for winter \u2014 and my tail fluffs like a flag. What am I?",
+      "options": ["a chipmunk", "a mouse", "a squirrel", "a rabbit"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Chattering tree acrobat.",
+      "explanation": "Squirrels hoard nuts and flick bushy tails."
+    },
+    {
+      "question": "Two clues and one name: I bury nuts for winter. Also: My tail fluffs like a flag. Can you name me?",
+      "options": ["a chipmunk", "a squirrel", "a mouse", "a rabbit"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Chattering tree acrobat.",
+      "explanation": "Squirrels hoard nuts and flick bushy tails."
+    },
+    {
+      "question": "Guess who: i bury nuts for winter, and my tail fluffs like a flag. Who or what am I?",
+      "options": ["a mouse", "a chipmunk", "a rabbit", "a squirrel"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Chattering tree acrobat.",
+      "explanation": "Squirrels hoard nuts and flick bushy tails."
+    },
+    {
+      "question": "I am not saying my name yet: I give pencils their points, and Shavings curl out of me. What am I?",
+      "options": ["a clip", "a pencil sharpener", "scissors", "a pen"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "Grind gently, write sharply.",
+      "explanation": "Sharpeners shave pencil wood into a fine point."
+    },
+    {
+      "question": "Riddle me this: i give pencils their points \u2014 and shavings curl out of me. What am I?",
+      "options": ["a pen", "a pencil sharpener", "a clip", "scissors"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Grind gently, write sharply.",
+      "explanation": "Sharpeners shave pencil wood into a fine point."
+    },
+    {
+      "question": "Two clues and one name: I give pencils their points. Also: Shavings curl out of me. Can you name me?",
+      "options": ["a clip", "a pencil sharpener", "a pen", "scissors"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Grind gently, write sharply.",
+      "explanation": "Sharpeners shave pencil wood into a fine point."
+    },
+    {
+      "question": "Guess who: i give pencils their points, and shavings curl out of me. Who or what am I?",
+      "options": ["a clip", "a pencil sharpener", "a pen", "scissors"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Grind gently, write sharply.",
+      "explanation": "Sharpeners shave pencil wood into a fine point."
+    },
+    {
+      "question": "I am not saying my name yet: I ask you to letters-in-order, and Ten words, every Friday. What am I?",
+      "options": ["a spelling test", "a quiz", "a riddle", "a crossword"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Say each word, write each word.",
+      "explanation": "A spelling test checks that you can write words correctly."
+    },
+    {
+      "question": "Riddle me this: i ask you to letters-in-order \u2014 and ten words, every Friday. What am I?",
+      "options": ["a riddle", "a crossword", "a quiz", "a spelling test"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Say each word, write each word.",
+      "explanation": "A spelling test checks that you can write words correctly."
+    },
+    {
+      "question": "Two clues and one name: I ask you to letters-in-order. Also: Ten words, every Friday. Can you name me?",
+      "options": ["a quiz", "a riddle", "a spelling test", "a crossword"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Say each word, write each word.",
+      "explanation": "A spelling test checks that you can write words correctly."
+    },
+    {
+      "question": "Guess who: i ask you to letters-in-order, and ten words, every Friday. Who or what am I?",
+      "options": ["a crossword", "a quiz", "a riddle", "a spelling test"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Say each word, write each word.",
+      "explanation": "A spelling test checks that you can write words correctly."
+    },
+    {
+      "question": "I am not saying my name yet: I measure in straight lines, and My edges are numbered. What am I?",
+      "options": ["a protractor", "a scale", "a tape", "a ruler"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Twelve inches of order.",
+      "explanation": "A ruler measures length and draws straight lines."
+    },
+    {
+      "question": "Riddle me this: i measure in straight lines \u2014 and my edges are numbered. What am I?",
+      "options": ["a tape", "a protractor", "a ruler", "a scale"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Twelve inches of order.",
+      "explanation": "A ruler measures length and draws straight lines."
+    },
+    {
+      "question": "Two clues and one name: I measure in straight lines. Also: My edges are numbered. Can you name me?",
+      "options": ["a scale", "a protractor", "a ruler", "a tape"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "Twelve inches of order.",
+      "explanation": "A ruler measures length and draws straight lines."
+    },
+    {
+      "question": "Guess who: i measure in straight lines, and my edges are numbered. Who or what am I?",
+      "options": ["a scale", "a ruler", "a protractor", "a tape"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "Twelve inches of order.",
+      "explanation": "A ruler measures length and draws straight lines."
+    },
+    {
+      "question": "I am not saying my name yet: I chug around a little track, and You connect my carriages. What am I?",
+      "options": ["a plane", "a bus", "a toy car", "a toy train"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Choo choo, all aboard.",
+      "explanation": "Toy trains pull carriages around a small track."
+    },
+    {
+      "question": "Riddle me this: i chug around a little track \u2014 and you connect my carriages. What am I?",
+      "options": ["a toy train", "a bus", "a plane", "a toy car"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Choo choo, all aboard.",
+      "explanation": "Toy trains pull carriages around a small track."
+    },
+    {
+      "question": "Two clues and one name: I chug around a little track. Also: You connect my carriages. Can you name me?",
+      "options": ["a toy car", "a toy train", "a bus", "a plane"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Choo choo, all aboard.",
+      "explanation": "Toy trains pull carriages around a small track."
+    },
+    {
+      "question": "Guess who: i chug around a little track, and you connect my carriages. Who or what am I?",
+      "options": ["a toy train", "a plane", "a bus", "a toy car"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Choo choo, all aboard.",
+      "explanation": "Toy trains pull carriages around a small track."
+    },
+    {
+      "question": "I am not saying my name yet: I gallop across fields, and I carry riders on my back. What am I?",
+      "options": ["a donkey", "a horse", "a cow", "a zebra"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Animal Riddles",
+      "hint": "Clop clop clop.",
+      "explanation": "Horses gallop, carry riders, and wear metal horseshoes."
+    },
+    {
+      "question": "Riddle me this: i gallop across fields \u2014 and i carry riders on my back. What am I?",
+      "options": ["a donkey", "a zebra", "a cow", "a horse"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Clop clop clop.",
+      "explanation": "Horses gallop, carry riders, and wear metal horseshoes."
+    },
+    {
+      "question": "Two clues and one name: I gallop across fields. Also: I carry riders on my back. Can you name me?",
+      "options": ["a zebra", "a horse", "a donkey", "a cow"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Animal Riddles",
+      "hint": "Clop clop clop.",
+      "explanation": "Horses gallop, carry riders, and wear metal horseshoes."
+    },
+    {
+      "question": "Guess who: i gallop across fields, and i carry riders on my back. Who or what am I?",
+      "options": ["a cow", "a zebra", "a horse", "a donkey"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Animal Riddles",
+      "hint": "Clop clop clop.",
+      "explanation": "Horses gallop, carry riders, and wear metal horseshoes."
+    },
+    {
+      "question": "I am not saying my name yet: I ring to start the day, and Everybody moves when I sound. What am I?",
+      "options": ["an alarm", "a school bell", "a doorbell", "a gong"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Its ding means line up.",
+      "explanation": "The school bell tells everyone when lessons begin and end."
+    },
+    {
+      "question": "Riddle me this: i ring to start the day \u2014 and everybody moves when I sound. What am I?",
+      "options": ["a gong", "an alarm", "a doorbell", "a school bell"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Its ding means line up.",
+      "explanation": "The school bell tells everyone when lessons begin and end."
+    },
+    {
+      "question": "Two clues and one name: I ring to start the day. Also: Everybody moves when I sound. Can you name me?",
+      "options": ["an alarm", "a gong", "a doorbell", "a school bell"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Its ding means line up.",
+      "explanation": "The school bell tells everyone when lessons begin and end."
+    },
+    {
+      "question": "Guess who: i ring to start the day, and everybody moves when I sound. Who or what am I?",
+      "options": ["an alarm", "a gong", "a doorbell", "a school bell"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "Its ding means line up.",
+      "explanation": "The school bell tells everyone when lessons begin and end."
+    },
+    {
+      "question": "I am not saying my name yet: I carry books on my back, and Zippers keep my secrets. What am I?",
+      "options": ["a suitcase", "a drawer", "a briefcase", "a backpack"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Student's portable shelf.",
+      "explanation": "A backpack hauls notebooks and pencils to school."
+    },
+    {
+      "question": "Riddle me this: i carry books on my back \u2014 and zippers keep my secrets. What am I?",
+      "options": ["a backpack", "a briefcase", "a drawer", "a suitcase"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Student's portable shelf.",
+      "explanation": "A backpack hauls notebooks and pencils to school."
+    },
+    {
+      "question": "Two clues and one name: I carry books on my back. Also: Zippers keep my secrets. Can you name me?",
+      "options": ["a drawer", "a backpack", "a briefcase", "a suitcase"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Student's portable shelf.",
+      "explanation": "A backpack hauls notebooks and pencils to school."
+    },
+    {
+      "question": "Guess who: i carry books on my back, and zippers keep my secrets. Who or what am I?",
+      "options": ["a briefcase", "a suitcase", "a drawer", "a backpack"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Student's portable shelf.",
+      "explanation": "A backpack hauls notebooks and pencils to school."
+    },
+    {
+      "question": "I am not saying my name yet: I puff up big and round, and I fear pointy things at parties. What am I?",
+      "options": ["a beach ball", "a balloon", "a bubble", "a ball"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Pop goes the party.",
+      "explanation": "A balloon inflates with air and pops on sharp points."
+    },
+    {
+      "question": "Riddle me this: i puff up big and round \u2014 and i fear pointy things at parties. What am I?",
+      "options": ["a ball", "a balloon", "a bubble", "a beach ball"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Pop goes the party.",
+      "explanation": "A balloon inflates with air and pops on sharp points."
+    },
+    {
+      "question": "Two clues and one name: I puff up big and round. Also: I fear pointy things at parties. Can you name me?",
+      "options": ["a balloon", "a ball", "a beach ball", "a bubble"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Pop goes the party.",
+      "explanation": "A balloon inflates with air and pops on sharp points."
+    },
+    {
+      "question": "Guess who: i puff up big and round, and i fear pointy things at parties. Who or what am I?",
+      "options": ["a beach ball", "a balloon", "a ball", "a bubble"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Pop goes the party.",
+      "explanation": "A balloon inflates with air and pops on sharp points."
+    },
+    {
+      "question": "I am not saying my name yet: Missing gloves wait inside me, and Unclaimed scarves too. What am I?",
+      "options": ["a shelf", "a bin", "a drawer", "a lost-and-found box"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Check here for lost things.",
+      "explanation": "The lost-and-found keeps unclaimed items safely."
+    },
+    {
+      "question": "Riddle me this: missing gloves wait inside me \u2014 and unclaimed scarves too. What am I?",
+      "options": ["a drawer", "a lost-and-found box", "a shelf", "a bin"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Check here for lost things.",
+      "explanation": "The lost-and-found keeps unclaimed items safely."
+    },
+    {
+      "question": "Two clues and one name: Missing gloves wait inside me. Also: Unclaimed scarves too. Can you name me?",
+      "options": ["a bin", "a lost-and-found box", "a drawer", "a shelf"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Check here for lost things.",
+      "explanation": "The lost-and-found keeps unclaimed items safely."
+    },
+    {
+      "question": "Guess who: missing gloves wait inside me, and unclaimed scarves too. Who or what am I?",
+      "options": ["a bin", "a lost-and-found box", "a drawer", "a shelf"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "Check here for lost things.",
+      "explanation": "The lost-and-found keeps unclaimed items safely."
+    },
+    {
+      "question": "I am not saying my name yet: I am a big box of grains, and Castles rise inside me. What am I?",
+      "options": ["a beach", "a sandbox", "a toy chest", "a garden"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Tiny stones you can build with.",
+      "explanation": "Sandbox sand is perfect for digging and building castles."
+    },
+    {
+      "question": "Riddle me this: i am a big box of grains \u2014 and castles rise inside me. What am I?",
+      "options": ["a sandbox", "a beach", "a garden", "a toy chest"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Tiny stones you can build with.",
+      "explanation": "Sandbox sand is perfect for digging and building castles."
+    },
+    {
+      "question": "Two clues and one name: I am a big box of grains. Also: Castles rise inside me. Can you name me?",
+      "options": ["a sandbox", "a toy chest", "a beach", "a garden"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Tiny stones you can build with.",
+      "explanation": "Sandbox sand is perfect for digging and building castles."
+    },
+    {
+      "question": "Guess who: i am a big box of grains, and castles rise inside me. Who or what am I?",
+      "options": ["a sandbox", "a beach", "a garden", "a toy chest"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Tiny stones you can build with.",
+      "explanation": "Sandbox sand is perfect for digging and building castles."
+    },
+    {
+      "question": "I am not saying my name yet: I have three wheels, and Pedals make me go. What am I?",
+      "options": ["a wagon", "a bicycle", "a tricycle", "a scooter"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Two little wheels and one in front.",
+      "explanation": "A tricycle rolls on three wheels powered by pedals."
+    },
+    {
+      "question": "Riddle me this: i have three wheels \u2014 and pedals make me go. What am I?",
+      "options": ["a scooter", "a bicycle", "a wagon", "a tricycle"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Two little wheels and one in front.",
+      "explanation": "A tricycle rolls on three wheels powered by pedals."
+    },
+    {
+      "question": "Two clues and one name: I have three wheels. Also: Pedals make me go. Can you name me?",
+      "options": ["a tricycle", "a bicycle", "a wagon", "a scooter"],
+      "correctIndex": 0,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Two little wheels and one in front.",
+      "explanation": "A tricycle rolls on three wheels powered by pedals."
+    },
+    {
+      "question": "Guess who: i have three wheels, and pedals make me go. Who or what am I?",
+      "options": ["a tricycle", "a scooter", "a bicycle", "a wagon"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Two little wheels and one in front.",
+      "explanation": "A tricycle rolls on three wheels powered by pedals."
+    },
+    {
+      "question": "I am not saying my name yet: I remember kings and voyages, and My pages are stacked with dates. What am I?",
+      "options": ["an atlas", "a novel", "a diary", "a history book"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The past, bound in covers.",
+      "explanation": "History books record events and dates long past."
+    },
+    {
+      "question": "Riddle me this: i remember kings and voyages \u2014 and my pages are stacked with dates. What am I?",
+      "options": ["a novel", "an atlas", "a diary", "a history book"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The past, bound in covers.",
+      "explanation": "History books record events and dates long past."
+    },
+    {
+      "question": "Two clues and one name: I remember kings and voyages. Also: My pages are stacked with dates. Can you name me?",
+      "options": ["an atlas", "a diary", "a novel", "a history book"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "School Riddles",
+      "hint": "The past, bound in covers.",
+      "explanation": "History books record events and dates long past."
+    },
+    {
+      "question": "Guess who: i remember kings and voyages, and my pages are stacked with dates. Who or what am I?",
+      "options": ["a diary", "an atlas", "a history book", "a novel"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "The past, bound in covers.",
+      "explanation": "History books record events and dates long past."
+    },
+    {
+      "question": "I am not saying my name yet: I wear candles on my head, and Everyone sings before you blow them out. What am I?",
+      "options": ["a birthday cake", "a cookie", "a cupcake", "a pie"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, with flickering lights.",
+      "explanation": "Birthday cakes carry candles that you blow out after the song."
+    },
+    {
+      "question": "Riddle me this: i wear candles on my head \u2014 and everyone sings before you blow them out. What am I?",
+      "options": ["a cupcake", "a birthday cake", "a cookie", "a pie"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, with flickering lights.",
+      "explanation": "Birthday cakes carry candles that you blow out after the song."
+    },
+    {
+      "question": "Two clues and one name: I wear candles on my head. Also: Everyone sings before you blow them out. Can you name me?",
+      "options": ["a cupcake", "a cookie", "a pie", "a birthday cake"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, with flickering lights.",
+      "explanation": "Birthday cakes carry candles that you blow out after the song."
+    },
+    {
+      "question": "Guess who: i wear candles on my head, and everyone sings before you blow them out. Who or what am I?",
+      "options": ["a cupcake", "a pie", "a cookie", "a birthday cake"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Sweet, with flickering lights.",
+      "explanation": "Birthday cakes carry candles that you blow out after the song."
+    },
+    {
+      "question": "I am not saying my name yet: I spin and spray on hot days, and Children run through my rain. What am I?",
+      "options": ["a sprinkler", "a fountain", "a shower", "a hose"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Summer's spinning shower.",
+      "explanation": "Sprinklers spin water sprays across summer lawns."
+    },
+    {
+      "question": "Riddle me this: i spin and spray on hot days \u2014 and children run through my rain. What am I?",
+      "options": ["a fountain", "a shower", "a hose", "a sprinkler"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Summer's spinning shower.",
+      "explanation": "Sprinklers spin water sprays across summer lawns."
+    },
+    {
+      "question": "Two clues and one name: I spin and spray on hot days. Also: Children run through my rain. Can you name me?",
+      "options": ["a shower", "a hose", "a sprinkler", "a fountain"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Summer's spinning shower.",
+      "explanation": "Sprinklers spin water sprays across summer lawns."
+    },
+    {
+      "question": "Guess who: i spin and spray on hot days, and children run through my rain. Who or what am I?",
+      "options": ["a hose", "a fountain", "a shower", "a sprinkler"],
+      "correctIndex": 3,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Summer's spinning shower.",
+      "explanation": "Sprinklers spin water sprays across summer lawns."
+    },
+    {
+      "question": "I am not saying my name yet: I am soft and stuffed with fluff, and I guard you while you sleep. What am I?",
+      "options": ["a puppet", "a robot", "a doll", "a teddy bear"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Cuddly, with round ears.",
+      "explanation": "A teddy bear is a soft stuffed friend for bedtime."
+    },
+    {
+      "question": "Riddle me this: i am soft and stuffed with fluff \u2014 and i guard you while you sleep. What am I?",
+      "options": ["a robot", "a puppet", "a teddy bear", "a doll"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Cuddly, with round ears.",
+      "explanation": "A teddy bear is a soft stuffed friend for bedtime."
+    },
+    {
+      "question": "Two clues and one name: I am soft and stuffed with fluff. Also: I guard you while you sleep. Can you name me?",
+      "options": ["a puppet", "a teddy bear", "a robot", "a doll"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Cuddly, with round ears.",
+      "explanation": "A teddy bear is a soft stuffed friend for bedtime."
+    },
+    {
+      "question": "Guess who: i am soft and stuffed with fluff, and i guard you while you sleep. Who or what am I?",
+      "options": ["a teddy bear", "a robot", "a doll", "a puppet"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Cuddly, with round ears.",
+      "explanation": "A teddy bear is a soft stuffed friend for bedtime."
+    },
+    {
+      "question": "I am not saying my name yet: I come in every color, and I get shorter as you draw. What am I?",
+      "options": ["a paintbrush", "a pencil", "a marker", "a crayon"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Wax that leaves rainbow lines.",
+      "explanation": "Crayons are colored wax sticks that shrink with use."
+    },
+    {
+      "question": "Riddle me this: i come in every color \u2014 and i get shorter as you draw. What am I?",
+      "options": ["a paintbrush", "a pencil", "a marker", "a crayon"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Easy Kids Riddles",
+      "hint": "Wax that leaves rainbow lines.",
+      "explanation": "Crayons are colored wax sticks that shrink with use."
+    },
+    {
+      "question": "Two clues and one name: I come in every color. Also: I get shorter as you draw. Can you name me?",
+      "options": ["a marker", "a crayon", "a pencil", "a paintbrush"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Easy Kids Riddles",
+      "hint": "Wax that leaves rainbow lines.",
+      "explanation": "Crayons are colored wax sticks that shrink with use."
+    },
+    {
+      "question": "Guess who: i come in every color, and i get shorter as you draw. Who or what am I?",
+      "options": ["a pencil", "a crayon", "a marker", "a paintbrush"],
+      "correctIndex": 1,
+      "level": "hard",
+      "subject": "Easy Kids Riddles",
+      "hint": "Wax that leaves rainbow lines.",
+      "explanation": "Crayons are colored wax sticks that shrink with use."
+    },
+    {
+      "question": "I am not saying my name yet: I soften every tumble, and I unroll before gymnastics. What am I?",
+      "options": ["a gym mat", "a towel", "a blanket", "a carpet"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Land on me, not the floor.",
+      "explanation": "Gym mats cushion jumps and tumbles in PE."
+    },
+    {
+      "question": "Riddle me this: i soften every tumble \u2014 and i unroll before gymnastics. What am I?",
+      "options": ["a towel", "a gym mat", "a blanket", "a carpet"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Land on me, not the floor.",
+      "explanation": "Gym mats cushion jumps and tumbles in PE."
+    },
+    {
+      "question": "Two clues and one name: I soften every tumble. Also: I unroll before gymnastics. Can you name me?",
+      "options": ["a towel", "a blanket", "a carpet", "a gym mat"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "School Riddles",
+      "hint": "Land on me, not the floor.",
+      "explanation": "Gym mats cushion jumps and tumbles in PE."
+    },
+    {
+      "question": "Guess who: i soften every tumble, and i unroll before gymnastics. Who or what am I?",
+      "options": ["a blanket", "a towel", "a gym mat", "a carpet"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "School Riddles",
+      "hint": "Land on me, not the floor.",
+      "explanation": "Gym mats cushion jumps and tumbles in PE."
+    }
+  ]
+}

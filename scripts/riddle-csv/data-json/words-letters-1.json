@@ -1,0 +1,925 @@
+{
+  "category": "Words Letters",
+  "riddles": [
+    {
+      "question": "There is a small word hiding inside vegetables. Can you spot it?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'table' appears inside 'vegetables' in order.",
+      "answer": "table"
+    },
+    {
+      "question": "There is a small word hiding inside classroom. Can you spot it?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than classroom.",
+      "explanation": "The word 'ass' appears inside 'classroom' in order.",
+      "answer": "ass"
+    },
+    {
+      "question": "There is a small word hiding inside passport. Can you spot it?",
+      "options": ["saddle", "marble", "ass", "candle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'ass' appears inside 'passport' in order."
+    },
+    {
+      "question": "There is a small word hiding inside alphabet. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'alpha' appears inside 'alphabet' in order.",
+      "answer": "alpha"
+    },
+    {
+      "question": "There is a small word hiding inside caterpillar. Can you spot it?",
+      "options": ["marble", "candle", "erpil", "saddle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'erpil' appears inside 'caterpillar' in order."
+    },
+    {
+      "question": "There is a small word hiding inside understand. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'tand' appears inside 'understand' in order.",
+      "answer": "tand"
+    },
+    {
+      "question": "There is a small word hiding inside strawberry. Can you spot it?",
+      "options": ["candle", "marble", "raw", "saddle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'raw' appears inside 'strawberry' in order."
+    },
+    {
+      "question": "There is a small word hiding inside watermelon. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'term' appears inside 'watermelon' in order.",
+      "answer": "term"
+    },
+    {
+      "question": "There is a small word hiding inside pineapple. Can you spot it?",
+      "options": ["candle", "apple", "marble", "saddle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'apple' appears inside 'pineapple' in order."
+    },
+    {
+      "question": "There is a small word hiding inside blueberry. Can you spot it?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'blue' appears inside 'blueberry' in order.",
+      "answer": "blue"
+    },
+    {
+      "question": "There is a small word hiding inside background. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'ground' appears inside 'background' in order.",
+      "answer": "ground"
+    },
+    {
+      "question": "There is a small word hiding inside masterpiece. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'aster' appears inside 'masterpiece' in order.",
+      "answer": "aster"
+    },
+    {
+      "question": "There is a small word hiding inside butterfly. Can you spot it?",
+      "options": ["marble", "saddle", "candle", "butter"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than butterfly.",
+      "explanation": "The word 'butter' appears inside 'butterfly' in order."
+    },
+    {
+      "question": "There is a small word hiding inside friendship. Can you spot it?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than friendship.",
+      "explanation": "The word 'end' appears inside 'friendship' in order.",
+      "answer": "end"
+    },
+    {
+      "question": "There is a small word hiding inside mountains. Can you spot it?",
+      "options": ["marble", "untai", "saddle", "candle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'untai' appears inside 'mountains' in order."
+    },
+    {
+      "question": "There is a small word hiding inside happiness. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'happi' appears inside 'happiness' in order.",
+      "answer": "happi"
+    },
+    {
+      "question": "There is a small word hiding inside knowledge. Can you spot it?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'nowled' appears inside 'knowledge' in order.",
+      "answer": "nowled"
+    },
+    {
+      "question": "There is a small word hiding inside courageous. Can you spot it?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'rage' appears inside 'courageous' in order.",
+      "answer": "rage"
+    },
+    {
+      "question": "There is a small word hiding inside dictionary. Can you spot it?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'ction' appears inside 'dictionary' in order.",
+      "answer": "ction"
+    },
+    {
+      "question": "There is a small word hiding inside hurricane. Can you spot it?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'urric' appears inside 'hurricane' in order.",
+      "answer": "urric"
+    },
+    {
+      "question": "There is a small word hiding inside lightning. Can you spot it?",
+      "options": ["marble", "candle", "saddle", "light"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'light' appears inside 'lightning' in order."
+    },
+    {
+      "question": "There is a small word hiding inside cardboard. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'card' appears inside 'cardboard' in order.",
+      "answer": "card"
+    },
+    {
+      "question": "There is a small word hiding inside notebook. Can you spot it?",
+      "options": [],
+      "correctIndex": 3,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'note' appears inside 'notebook' in order.",
+      "answer": "note"
+    },
+    {
+      "question": "There is a small word hiding inside toothpaste. Can you spot it?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'tooth' appears inside 'toothpaste' in order.",
+      "answer": "tooth"
+    },
+    {
+      "question": "There is a small word hiding inside sunflower. Can you spot it?",
+      "options": [],
+      "correctIndex": 1,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'sun' appears inside 'sunflower' in order.",
+      "answer": "sun"
+    },
+    {
+      "question": "There is a small word hiding inside horseshoe. Can you spot it?",
+      "options": [],
+      "correctIndex": 2,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'shoe' appears inside 'horseshoe' in order.",
+      "answer": "shoe"
+    },
+    {
+      "question": "There is a small word hiding inside rainbow. Can you spot it?",
+      "options": ["pain", "main", "grain", "rain"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'rain' appears inside 'rainbow' in order."
+    },
+    {
+      "question": "There is a small word hiding inside cupboard. Can you spot it?",
+      "options": [],
+      "correctIndex": 0,
+      "level": "expert",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'cup' appears inside 'cupboard' in order.",
+      "answer": "cup"
+    },
+    {
+      "question": "There is a small word hiding inside keyboard. Can you spot it?",
+      "options": ["sky", "buy", "hey", "key"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'key' appears inside 'keyboard' in order."
+    },
+    {
+      "question": "There is a small word hiding inside footprint. Can you spot it?",
+      "options": ["foot", "saddle", "candle", "marble"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'foot' appears inside 'footprint' in order."
+    },
+    {
+      "question": "There is a small word hiding inside handshake. Can you spot it?",
+      "options": ["saddle", "candle", "marble", "hand"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'hand' appears inside 'handshake' in order."
+    },
+    {
+      "question": "There is a small word hiding inside eyebrow. Can you spot it?",
+      "options": ["candle", "marble", "saddle", "brow"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'brow' appears inside 'eyebrow' in order."
+    },
+    {
+      "question": "There is a small word hiding inside overnight. Can you spot it?",
+      "options": ["candle", "saddle", "marble", "over"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'over' appears inside 'overnight' in order."
+    },
+    {
+      "question": "There is a small word hiding inside grandmother. Can you spot it?",
+      "options": ["saddle", "grand", "marble", "candle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than grandmother.",
+      "explanation": "The word 'grand' appears inside 'grandmother' in order."
+    },
+    {
+      "question": "There is a small word hiding inside teaspoon. Can you spot it?",
+      "options": ["marble", "saddle", "tea", "candle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'tea' appears inside 'teaspoon' in order."
+    },
+    {
+      "question": "There is a small word hiding inside bedroom. Can you spot it?",
+      "options": ["bed", "marble", "candle", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'bed' appears inside 'bedroom' in order."
+    },
+    {
+      "question": "There is a small word hiding inside bathroom. Can you spot it?",
+      "options": ["bath", "marble", "candle", "saddle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'bath' appears inside 'bathroom' in order."
+    },
+    {
+      "question": "There is a small word hiding inside snowflake. Can you spot it?",
+      "options": ["glow", "snow", "slow", "show"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'snow' appears inside 'snowflake' in order."
+    },
+    {
+      "question": "There is a small word hiding inside fireworks. Can you spot it?",
+      "options": ["fire", "candle", "saddle", "marble"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'fire' appears inside 'fireworks' in order."
+    },
+    {
+      "question": "There is a small word hiding inside waterfall. Can you spot it?",
+      "options": ["water", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'water' appears inside 'waterfall' in order."
+    },
+    {
+      "question": "There is a small word hiding inside windmill. Can you spot it?",
+      "options": ["wind", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'wind' appears inside 'windmill' in order."
+    },
+    {
+      "question": "There is a small word hiding inside peppermint. Can you spot it?",
+      "options": ["candle", "mint", "saddle", "marble"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'mint' appears inside 'peppermint' in order."
+    },
+    {
+      "question": "There is a small word hiding inside gingerbread. Can you spot it?",
+      "options": ["marble", "ginger", "saddle", "candle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'ginger' appears inside 'gingerbread' in order."
+    },
+    {
+      "question": "There is a small word hiding inside blackboard. Can you spot it?",
+      "options": ["candle", "saddle", "marble", "black"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'black' appears inside 'blackboard' in order."
+    },
+    {
+      "question": "There is a small word hiding inside newspaper. Can you spot it?",
+      "options": ["candle", "saddle", "marble", "news"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'news' appears inside 'newspaper' in order."
+    },
+    {
+      "question": "There is a small word hiding inside bookshelf. Can you spot it?",
+      "options": ["book", "saddle", "marble", "candle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'book' appears inside 'bookshelf' in order."
+    },
+    {
+      "question": "There is a small word hiding inside shoelace. Can you spot it?",
+      "options": ["marble", "candle", "lace", "saddle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'lace' appears inside 'shoelace' in order."
+    },
+    {
+      "question": "There is a small word hiding inside birthday. Can you spot it?",
+      "options": ["saddle", "day", "candle", "marble"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'day' appears inside 'birthday' in order."
+    },
+    {
+      "question": "There is a small word hiding inside daydream. Can you spot it?",
+      "options": ["candle", "dream", "marble", "saddle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than daydream.",
+      "explanation": "The word 'dream' appears inside 'daydream' in order."
+    },
+    {
+      "question": "There is a small word hiding inside nightmare. Can you spot it?",
+      "options": ["candle", "night", "marble", "saddle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than nightmare.",
+      "explanation": "The word 'night' appears inside 'nightmare' in order."
+    },
+    {
+      "question": "There is a small word hiding inside homework. Can you spot it?",
+      "options": ["candle", "marble", "saddle", "work"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than homework.",
+      "explanation": "The word 'work' appears inside 'homework' in order."
+    },
+    {
+      "question": "There is a small word hiding inside playground. Can you spot it?",
+      "options": ["marble", "saddle", "play", "candle"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'play' appears inside 'playground' in order."
+    },
+    {
+      "question": "There is a small word hiding inside underground. Can you spot it?",
+      "options": ["candle", "under", "saddle", "marble"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'under' appears inside 'underground' in order."
+    },
+    {
+      "question": "There is a small word hiding inside overcoat. Can you spot it?",
+      "options": ["candle", "marble", "saddle", "coat"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'coat' appears inside 'overcoat' in order."
+    },
+    {
+      "question": "There is a small word hiding inside raincoat. Can you spot it?",
+      "options": ["main", "rain", "pain", "grain"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'rain' appears inside 'raincoat' in order."
+    },
+    {
+      "question": "There is a small word hiding inside headache. Can you spot it?",
+      "options": ["marble", "candle", "head", "saddle"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'head' appears inside 'headache' in order."
+    },
+    {
+      "question": "There is a small word hiding inside toothache. Can you spot it?",
+      "options": ["candle", "marble", "tooth", "saddle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than toothache.",
+      "explanation": "The word 'tooth' appears inside 'toothache' in order."
+    },
+    {
+      "question": "There is a small word hiding inside earring. Can you spot it?",
+      "options": ["ear", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'ear' appears inside 'earring' in order."
+    },
+    {
+      "question": "There is a small word hiding inside fingerprint. Can you spot it?",
+      "options": ["marble", "print", "saddle", "candle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'print' appears inside 'fingerprint' in order."
+    },
+    {
+      "question": "There is a small word hiding inside handwriting. Can you spot it?",
+      "options": ["hand", "candle", "saddle", "marble"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'hand' appears inside 'handwriting' in order."
+    },
+    {
+      "question": "There is a small word hiding inside masterful. Can you spot it?",
+      "options": ["marble", "candle", "master", "saddle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'master' appears inside 'masterful' in order."
+    },
+    {
+      "question": "There is a small word hiding inside wonderful. Can you spot it?",
+      "options": ["saddle", "onder", "candle", "marble"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'onder' appears inside 'wonderful' in order."
+    },
+    {
+      "question": "There is a small word hiding inside colorful. Can you spot it?",
+      "options": ["candle", "color", "saddle", "marble"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'color' appears inside 'colorful' in order."
+    },
+    {
+      "question": "There is a small word hiding inside helpful. Can you spot it?",
+      "options": ["help", "marble", "candle", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than helpful.",
+      "explanation": "The word 'help' appears inside 'helpful' in order."
+    },
+    {
+      "question": "There is a small word hiding inside carefully. Can you spot it?",
+      "options": ["saddle", "care", "marble", "candle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than carefully.",
+      "explanation": "The word 'care' appears inside 'carefully' in order."
+    },
+    {
+      "question": "There is a small word hiding inside quickly. Can you spot it?",
+      "options": ["saddle", "marble", "candle", "quick"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'quick' appears inside 'quickly' in order."
+    },
+    {
+      "question": "There is a small word hiding inside slowly. Can you spot it?",
+      "options": ["saddle", "marble", "candle", "slow"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than slowly.",
+      "explanation": "The word 'slow' appears inside 'slowly' in order."
+    },
+    {
+      "question": "There is a small word hiding inside kindness. Can you spot it?",
+      "options": ["kind", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'kind' appears inside 'kindness' in order."
+    },
+    {
+      "question": "There is a small word hiding inside darkness. Can you spot it?",
+      "options": ["dark", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than darkness.",
+      "explanation": "The word 'dark' appears inside 'darkness' in order."
+    },
+    {
+      "question": "There is a small word hiding inside goodness. Can you spot it?",
+      "options": ["marble", "good", "candle", "saddle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than goodness.",
+      "explanation": "The word 'good' appears inside 'goodness' in order."
+    },
+    {
+      "question": "There is a small word hiding inside greatness. Can you spot it?",
+      "options": ["great", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'great' appears inside 'greatness' in order."
+    },
+    {
+      "question": "There is a small word hiding inside warmth. Can you spot it?",
+      "options": ["saddle", "candle", "warm", "marble"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'warm' appears inside 'warmth' in order."
+    },
+    {
+      "question": "There is a small word hiding inside strength. Can you spot it?",
+      "options": ["strength", "candle", "marble", "saddle"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'strength' appears inside 'strength' in order."
+    },
+    {
+      "question": "There is a small word hiding inside cabinet. Can you spot it?",
+      "options": ["candle", "saddle", "marble", "bin"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than cabinet.",
+      "explanation": "The word 'bin' appears inside 'cabinet' in order."
+    },
+    {
+      "question": "There is a small word hiding inside carousel. Can you spot it?",
+      "options": ["ouse", "saddle", "candle", "marble"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'ouse' appears inside 'carousel' in order."
+    },
+    {
+      "question": "There is a small word hiding inside cathedral. Can you spot it?",
+      "options": ["saddle", "marble", "candle", "hedral"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'hedral' appears inside 'cathedral' in order."
+    },
+    {
+      "question": "There is a small word hiding inside champion. Can you spot it?",
+      "options": ["marble", "saddle", "candle", "hampi"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'hampi' appears inside 'champion' in order."
+    },
+    {
+      "question": "There is a small word hiding inside character. Can you spot it?",
+      "options": ["saddle", "marble", "candle", "char"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'char' appears inside 'character' in order."
+    },
+    {
+      "question": "There is a small word hiding inside chocolate. Can you spot it?",
+      "options": ["saddle", "candle", "late", "marble"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "It does not have to start at the front.",
+      "explanation": "The word 'late' appears inside 'chocolate' in order."
+    },
+    {
+      "question": "There is a small word hiding inside civilize. Can you spot it?",
+      "options": ["vili", "marble", "saddle", "candle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'vili' appears inside 'civilize' in order."
+    },
+    {
+      "question": "There is a small word hiding inside climbable. Can you spot it?",
+      "options": ["candle", "limb", "marble", "saddle"],
+      "correctIndex": 1,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'limb' appears inside 'climbable' in order."
+    },
+    {
+      "question": "There is a small word hiding inside coconut. Can you spot it?",
+      "options": ["candle", "marble", "coco", "saddle"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'coco' appears inside 'coconut' in order."
+    },
+    {
+      "question": "There is a small word hiding inside comfortable. Can you spot it?",
+      "options": ["marble", "saddle", "candle", "fort"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'fort' appears inside 'comfortable' in order."
+    },
+    {
+      "question": "There is a small word hiding inside community. Can you spot it?",
+      "options": ["candle", "marble", "munit", "saddle"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Scan the letters slowly.",
+      "explanation": "The word 'munit' appears inside 'community' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside vegetables?",
+      "options": ["fable", "cable", "label", "table"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "The hidden word is shorter than vegetables.",
+      "explanation": "The word 'table' appears inside 'vegetables' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside classroom?",
+      "options": ["ass", "marble", "candle", "saddle"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'ass' appears inside 'classroom' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside passport?",
+      "options": ["marble", "candle", "saddle", "ass"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'ass' appears inside 'passport' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside alphabet?",
+      "options": ["saddle", "alpha", "marble", "candle"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'alpha' appears inside 'alphabet' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside caterpillar?",
+      "options": ["saddle", "marble", "erpil", "candle"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Hidden Words",
+      "hint": "Read the letters in order, no skipping.",
+      "explanation": "The word 'erpil' appears inside 'caterpillar' in order."
+    },
+    {
+      "question": "Which little word is tucked away inside understand?",
+      "options": ["saddle", "tand", "candle", "marble"],
+      "correctIndex": 1,
+      "level": "medium",
+      "subject": "Hidden Words",
+      "hint": "Keep the letters in their original order.",
+      "explanation": "The word 'tand' appears inside 'understand' in order."
+    },
+    {
+      "question": "Which letter is a vegetable?",
+      "options": ["P", "C", "B", "T"],
+      "correctIndex": 0,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is P."
+    },
+    {
+      "question": "In the word 'apple', which vowel sits at position 5?",
+      "options": ["E", "U", "O", "I"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 5 of 'apple' is E."
+    },
+    {
+      "question": "How many vowels does the word 'banana' contain?",
+      "options": ["2", "5", "3", "4"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'banana' holds 3 vowels."
+    },
+    {
+      "question": "In the word 'umbrella', which vowel sits at position 8?",
+      "options": ["A", "I", "O", "U"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 8 of 'umbrella' is A."
+    },
+    {
+      "question": "Which letter of the alphabet holds the most water?",
+      "options": ["W", "T", "P", "C"],
+      "correctIndex": 3,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is C."
+    },
+    {
+      "question": "In the word 'universe', which vowel sits at position 1?",
+      "options": ["A", "O", "U", "I"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 1 of 'universe' is U."
+    },
+    {
+      "question": "In the word 'umbrella', which vowel sits at position 5?",
+      "options": ["E", "I", "A", "U"],
+      "correctIndex": 0,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 5 of 'umbrella' is E."
+    },
+    {
+      "question": "In the word 'elephant', which vowel sits at position 3?",
+      "options": ["U", "A", "O", "E"],
+      "correctIndex": 3,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "Count the letters from the start.",
+      "explanation": "Position 3 of 'elephant' is E."
+    },
+    {
+      "question": "How many vowels does the word 'psychology' contain?",
+      "options": ["3", "1", "2", "4"],
+      "correctIndex": 2,
+      "level": "medium",
+      "subject": "Alphabet Riddles",
+      "hint": "A, E, I, O, U \u2014 count them in order.",
+      "explanation": "'psychology' holds 2 vowels."
+    },
+    {
+      "question": "Which letter is an insect?",
+      "options": ["G", "F", "B", "A"],
+      "correctIndex": 2,
+      "level": "easy",
+      "subject": "Alphabet Riddles",
+      "hint": "Say each option out loud.",
+      "explanation": "The answer is B."
+    }
+  ]
+}
