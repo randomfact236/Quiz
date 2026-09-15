@@ -8,7 +8,7 @@ import { BulkActionToolbar } from '@/components/ui/BulkActionToolbar';
 import { CollapsibleRows } from '@/components/ui/CollapsibleRows';
 import { toast } from '@/lib/toast';
 import {
-  getAllJokesAdmin,
+  getAllJokesAdminAllPages,
   createJokeAdmin,
   updateJokeAdmin,
   deleteJokeAdmin,
@@ -51,11 +51,13 @@ export function JokesSection({
   /** Load jokes + categories from the backend API. */
   const loadData = useCallback(async () => {
     try {
-      const [jokePage, cats] = await Promise.all([
-        getAllJokesAdmin(1, 100),
+      // Walk every page of /jokes/classic/all — a single 100-row page would
+      // hide the rest of the catalog and skew the status cards.
+      const [jokes, cats] = await Promise.all([
+        getAllJokesAdminAllPages(),
         getJokeCategoriesAdmin(),
       ]);
-      setAllJokes(jokePage.data.map(adaptJokeToAdmin));
+      setAllJokes(jokes.map(adaptJokeToAdmin));
       if (cats.length > 0) setJokeCategories(cats);
     } catch {
       toast.error('Failed to load jokes from server.');

@@ -250,6 +250,27 @@ export async function getAllJokesAdmin(page = 1, limit = 100): Promise<AdminPagi
   return response.data;
 }
 
+/**
+ * Fetch every joke (all statuses) by walking all pages of /jokes/classic/all,
+ * mirroring the public page's full-catalog loader. The admin panel filters,
+ * counts and bulk-edits client-side, so it needs the complete set — with
+ * 1,013+ jokes a single 100-row page would hide ~90% of the catalog.
+ */
+export async function getAllJokesAdminAllPages(): Promise<AdminJoke[]> {
+  const first = await getAllJokesAdmin(1);
+  const total = first.total ?? first.data.length;
+  const totalPages = Math.max(1, Math.ceil(total / 100));
+
+  let jokes = first.data ?? [];
+  if (totalPages > 1) {
+    const rest = await Promise.all(
+      Array.from({ length: totalPages - 1 }, (_, i) => getAllJokesAdmin(i + 2))
+    );
+    jokes = [...jokes, ...rest.flatMap((r) => r.data ?? [])];
+  }
+  return jokes;
+}
+
 export async function createJokeAdmin(dto: CreateJokeAdminDto): Promise<AdminJoke> {
   const response = await api.post<AdminJoke>('/jokes/classic', dto, { isAdmin: true });
   return response.data;
