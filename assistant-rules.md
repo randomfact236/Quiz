@@ -40,11 +40,11 @@ These are NOT used: 80, 443, 3000-3004, 4000-4001, 5433-5434, 6380-6381, 5672-56
 - Validate ports: `.\port-validator.ps1`
 - Check status: `.\check-status.ps1`
 
-## Feature Isolation — 2D Games (owner-mandated)
+## 2D Games — integrated (owner decision 2026-09-15)
 
-The **2D games** are isolated from the website product. Unless the owner's request explicitly
-mentions "2d games" / "games", do **not** read, modify, plan, analyze, delete, or link to anything
-under `apps/frontend/public/games/`, `apps/frontend/src/app/games/`, `apps/frontend/src/__tests__/games-*`,
-`plan/games/`, or `2d games plan.md` — and do not re-add games entries to the footer, nav,
-sitemap, Play Hub, or the analytics module lists. Full rule: **`AGENTS.md`**. To ship the games
-later, the owner must explicitly ask (that removes the `.gitignore` entries and re-links the site).
+The eight 2D games (`apps/frontend/public/games/<slug>/`) and the `/games` hub
+(`apps/frontend/src/app/games/`) are part of the product: linked from nav/footer/
+Play Hub/sitemap and included in the analytics module lists. The former
+isolation rule (2026-09-09) is lifted. Games follow the same production rules as
+every other feature and stay dependency-free/local-first by design. Full rule:
+**`AGENTS.md`**.

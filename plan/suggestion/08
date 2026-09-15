@@ -12,6 +12,16 @@
 > same `levels[id]` record); run end returns to the grid with refreshed
 > stars; zen cards no longer NaN the star calc. Canonical doc:
 > `plan/games/08-memory-quiz-upgrade.md`.
+>
+> **VERIFIED (2026-09-15):** `data/levels.js` + `data/modes.js` shipped as
+> described; `levelUnlocked`, `drawShuffleCards` ("Mystery Mix draw") and the
+> save v1→v2 migration are pinned by `games-memory-quiz.test.ts` (all 8 games
+> suites green, 343 tests). Live pass: the menu renders the six modes with the
+> 🃏 Mystery Mix entry ("Six mystery cards from your unlocked levels") and the
+> daily-board entry, and prefs persist across reloads; the campaign
+> level-picker tiles could not be click-through in the automation session due
+> to recurring in-app-browser guest instability — the suites remain the
+> verification of record for the picker/shuffle flow.
 
 ## Task 1: Level-Ladder System for Memory Quiz
 

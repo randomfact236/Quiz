@@ -7,6 +7,18 @@
 > first loss-or-draw vs Hard AI (1p only) shows a one-time toast — lifetime
 > flag in save v2's `flags.hardAiToast` (v1→v2 migration, survives prefs
 > saves); decision logic is the pure `hardAiToastDue` in core.js.
+>
+> **VERIFIED (2026-09-15, second pass — live click-through):** all three items
+> confirmed in the running UI. Item 1: the `cell--think` settle pulse was caught
+> live on the Medium AI during its think delay. Item 2: a first-round loss vs
+> Hard fired the one-time toast (verbatim copy "Hard AI never loses — try Medium
+> to actually win, or keep grinding for draws!") and the save flipped
+> `flags.hardAiToast: true` under series key `1p:hard`; the overlay fired
+> exactly once. Item 3: the "Misère: three in a row loses" tag renders
+> persistently under the board while misère is on, and the round-end overlay
+> names the mechanic ("X completed three in a row — misère rules say that
+> loses."). Misère/Easy prefs persist across reloads and the series tally
+> updates live. Screenshots: `gui-test-screenshots/ttt-*.png`.
 
 ## Task: Three User-Friendliness Upgrades
 

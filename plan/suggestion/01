@@ -8,6 +8,15 @@
 > the old `tooSlow`/`stroopLie` keys were replaced). "Too early!" for false
 > starts already existed and was kept. Manual QA note for item 1: the ✓ / ✕ /
 > △ silhouettes are dark ink distinct by shape — grayscale-safe by design.
+>
+> **VERIFIED (2026-09-15):** live browser play on the served build confirmed
+> the decoy tutorial toast fires and persists (`seenTutorials.decoy: true` in a
+> real save v2) and the "Missed it!" loss-reason overlay renders in play; decoy
+> generation (rounds 10+, yellow/blue, never-tap), rule-flip inversion, decoy
+> +50 scoring, and the v1→v2 tutorial-flag migration are pinned by
+> `games-tap-or-dont-tap.test.ts` (all 8 games suites green, 343 tests). The
+> 400 ms feedback overlay could not be screenshot-captured in the automation
+> runtime (input latency exceeds overlay dwell) — verified via DOM text.
 
 ## Task: Three User-Friendliness Upgrades
 

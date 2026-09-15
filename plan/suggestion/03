@@ -22,6 +22,19 @@
 >   tag under the hint banner (gates.js `ruleLabel`), non-blocking post-gate
 >   announce naming the rule's answer (gates.js `answerLine`, 10 cases), and
 >   a first-entry-per-run "Survive for a shard" line under the countdown.
+>
+> **VERIFIED (2026-09-15):** shipped symbols re-confirmed in the build and
+> pinned by the suites — sliding-puzzle `oneSwapFromSolved`, word-puzzle
+> `lineCells`/`themeSummary`, flying-snake `nextMedalFor`/`readyHintKind` plus
+> a dedicated "near-miss clearance" suite block, spirit-runner
+> `ruleLabel`/`answerLine`/shard math (all 8 games suites green, 343 tests).
+> The two PARKED sliding-puzzle items are confirmed correctly parked: the
+> shipped game has no campaign `levels.js`/`stageId` and no cross-session
+> resume snapshot to attach them to — fold into the future campaign build as
+> planned. (Same-day sibling pass click through tic-tac-toe live; the
+> sliding-puzzle/word-puzzle/flying-snake/spirit-runner interactive passes were
+> cut short by recurring in-app-browser guest instability — suites remain the
+> verification of record for those.)
 
 ---
 
