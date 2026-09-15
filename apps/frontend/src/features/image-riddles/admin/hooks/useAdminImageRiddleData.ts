@@ -26,11 +26,16 @@ export interface AdminImageRiddleCategory {
 
 /** Default categories (only used as labels before first server load) */
 export const defaultCategories: AdminImageRiddleCategory[] = [
-  { id: '1', name: 'Optical Illusions', emoji: '👁️', count: 0 },
-  { id: '2', name: 'Hidden Objects', emoji: '🔍', count: 0 },
-  { id: '3', name: 'Pattern Recognition', emoji: '🔲', count: 0 },
-  { id: '4', name: 'Perspective Puzzles', emoji: '📐', count: 0 },
-  { id: '5', name: 'Color Observation', emoji: '🎨', count: 0 },
+  { id: '1', name: 'Hidden Objects', emoji: '🔍', count: 0 },
+  { id: '2', name: 'Optical Illusions', emoji: '👁️', count: 0 },
+  { id: '3', name: 'Spot the Difference', emoji: '🔄', count: 0 },
+  { id: '4', name: 'Rebus Puzzles', emoji: '💬', count: 0 },
+  { id: '5', name: 'Emoji Riddles', emoji: '😄', count: 0 },
+  { id: '6', name: 'Close-up Challenges', emoji: '🔬', count: 0 },
+  { id: '7', name: 'Animal Camouflage', emoji: '🐾', count: 0 },
+  { id: '8', name: 'Counting Challenges', emoji: '🔢', count: 0 },
+  { id: '9', name: 'Landmarks & Places', emoji: '🌍', count: 0 },
+  { id: '10', name: 'Logos & Brands', emoji: '🏷️', count: 0 },
 ];
 
 export function useAdminImageRiddleData() {

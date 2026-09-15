@@ -1,0 +1,42 @@
+{
+  "optical-illusions": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "hidden-objects": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "spot-the-difference": {
+    "kept": 188,
+    "shortfall": 12
+  },
+  "rebus-puzzles": {
+    "kept": 160,
+    "shortfall": 40
+  },
+  "emoji-riddles": {
+    "kept": 60,
+    "shortfall": 140
+  },
+  "close-up-challenges": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "animal-camouflage": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "counting-challenges": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "landmarks-places": {
+    "kept": 200,
+    "shortfall": 0
+  },
+  "logos-brands": {
+    "kept": 158,
+    "shortfall": 42
+  }
+}

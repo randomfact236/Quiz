@@ -112,11 +112,29 @@ function getDefaultActions(_riddle: ImageRiddle): IActionOption[] {
 }
 
 /**
- * Render-time action list: custom options or local defaults, minus actions
- * with no frontend handler, minus Hint when the riddle has no hint text.
+ * Render-time action list for the riddle modal.
+ *
+ * Riddles with `useDefaultActions: false` keep the historical behavior: their
+ * custom `actionOptions` fully REPLACE the default set. Otherwise (the entity
+ * default, true) custom options are MERGED with the playable defaults, so a
+ * custom extra (e.g. an attribution "Source" link) can never strip
+ * Check Answer / Hint / Reveal / Share out of the modal. Custom entries win
+ * on id clashes. Actions without a frontend handler are dropped, and Hint is
+ * dropped when the riddle has no hint text.
  */
 export function selectModalActions(riddle: ImageRiddle): IActionOption[] {
-  const base = (riddle.actionOptions as unknown as IActionOption[]) || getDefaultActions(riddle);
+  const custom = (riddle.actionOptions as unknown as IActionOption[]) ?? [];
+  const replaceDefaults = riddle.useDefaultActions === false && custom.length > 0;
+
+  const seen = new Set<string>();
+  const base: IActionOption[] = [];
+  for (const action of replaceDefaults ? custom : [...custom, ...getDefaultActions(riddle)]) {
+    if (!seen.has(action.id)) {
+      seen.add(action.id);
+      base.push(action);
+    }
+  }
+
   return base.filter(
     (a) => !UNSUPPORTED_ACTION_IDS.has(a.id) && (a.id !== 'show-hint' || Boolean(riddle.hint))
   );
