@@ -2,7 +2,7 @@
  * ============================================================================
  * Memory Quiz — storage.js (Game 08, guarded persistence facade — save v2)
  * ============================================================================
- * Rev 2 pattern (plan/games/08-memory-quiz-upgrade.md §4.4): one versioned
+ * Rev 2 pattern (plan/games/08-memory-quiz.md §16.4): one versioned
  * save document plus per-day daily record keys, with a remote adapter slot a
  * host can inject for future account sync.
  *

@@ -1,13 +1,13 @@
 /**
  * ============================================================================
- * Memory Quiz — core.js (Game 08, upgrade architecture §4)
+ * Memory Quiz — core.js (Game 08, upgrade architecture §16)
  * ============================================================================
  * Pure model, zero DOM access — this module is the test surface. Plain ESM,
  * no build step: game.js imports it in the browser; the jest suite
  * (src/__tests__/games-memory-quiz.test.ts) and the folder's core.test.html
  * harness import it directly.
  *
- * Since the 08-memory-quiz-upgrade.md pass, the engine is **spec-driven**:
+ * Since the 08-memory-quiz.md Part II upgrade pass (§13–§21), the engine is **spec-driven**:
  * boards and questions are built from a level descriptor (`data/levels.js`)
  * and a question-type registry (`data/questions.js`) that the caller injects.
  * core.js owns only mechanics: rng, board construction, question composition,

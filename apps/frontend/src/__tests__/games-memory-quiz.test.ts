@@ -1,7 +1,7 @@
 /**
  * Pure-logic tests for the static game at
- * public/games/memory-quiz/ (plan/games/08-memory-quiz.md §8 + the upgrade
- * architecture in 08-memory-quiz-upgrade.md). The pure model lives in the
+ * public/games/memory-quiz/ (plan/games/08-memory-quiz.md §8 + the Part II
+ * upgrade architecture, §13–§21). The pure model lives in the
  * game's core.js (spec-driven), the level ladder in data/levels.js, the
  * question-type registry in data/questions.js, modes in data/modes.js,
  * persistence in storage.js (save v2 + v1 migration) and the config/flag
