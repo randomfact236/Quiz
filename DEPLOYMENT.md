@@ -231,17 +231,39 @@ This ensures clean deployment without conflicts.
 
 ## Production VPS Commands (Dokploy)
 
-### Recommended Deploy Command (prevents container conflicts)
+### Current deploy flow (since 2026-09-16 — Dokploy applications, push-only)
+
+Production runs as two Dokploy **applications** (`quiz-api`, `quiz-frontend`) that watch the
+`production` branch. A deploy is:
 
 ```bash
-cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker rm -f quiz-frontend quiz-backend quiz-postgres quiz-redis 2>/dev/null || true && docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+git push origin main:production   # Dokloy builds both apps automatically
 ```
 
-### Or use the dedicated script (after pulling latest code)
+No SSH, no `docker rm -f` (never force-remove `quiz-postgres` — its volume holds the data).
+If the Dokploy build fails, check the apps' Build settings: Dockerfile paths are
+`apps/backend/Dockerfile` / `apps/frontend/Dockerfile` with **Docker Context Path `.`**.
+
+The `/etc/dokploy/compose/quiz-stack-gz5jv5` compose stack below is the **retired** original
+setup, kept only for reference.
+
+### Recommended Deploy Command (retired compose stack — reference only)
 
 ```bash
-cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && chmod +x dokploy-deploy.sh && ./dokploy-deploy.sh
+cd /etc/dokploy/compose/quiz-stack-gz5jv5/code && docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
 ```
+
+### Database backups (automated since 2026-09-16)
+
+Nightly 03:30 VPS time: `/opt/quiz-backups/backup.sh` dumps the prod database (gzipped,
+last 7 kept) via a root cron. Re-install or re-verify any time from the repo:
+
+```bash
+bash scripts/setup-prod-db-backups.sh
+```
+
+The installer also runs a restore test (scratch database, row counts, dropped). Copy the
+newest `.sql.gz` off the VPS periodically — same-disk backups are only half a backup.
 
 ### Full restart (delete + recreate)
 
