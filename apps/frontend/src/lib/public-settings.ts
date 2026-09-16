@@ -18,8 +18,16 @@ interface PublicSettingsPayload {
 
 const API_ROOT = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
 const API_V1_ROOT = API_ROOT.endsWith('/v1') ? API_ROOT : `${API_ROOT}/v1`;
-/** Server origin — `/uploads/...` files are served from the host root, not the API prefix. */
-const SERVER_ORIGIN = API_ROOT.replace(/\/api(\/v[0-9]+)?\/?.*$/, '');
+/** Server origin — `/uploads/...` files are served from the host root, not the API prefix.
+ *  Parsed, not regex-stripped: with an api.pigzap.com-style host, a `/api…` strip would
+ *  match inside the subdomain and leave a broken `https:/` origin. */
+const SERVER_ORIGIN = (() => {
+  try {
+    return new URL(API_ROOT).origin;
+  } catch {
+    return API_ROOT.replace(/\/api(\/v[0-9]+)?\/?.*$/, '');
+  }
+})();
 
 /** Resolve a stored media path (/uploads/... or absolute URL) to an absolute URL. */
 export function resolveMediaUrl(url: string): string {
