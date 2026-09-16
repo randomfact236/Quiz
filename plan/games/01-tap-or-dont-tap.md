@@ -258,3 +258,20 @@ Recorded verbatim from a code audit; the plan text above is otherwise accurate.
 - **Back-link exists:** `← All games` to `/games` — §11's "no nav links" referred to
   the product footer/nav; the hub back-link ships in every game.
 - **No in-folder test.html:** tests are jest-only (31 cases).
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/01` (retired; full original task text in git history).
+
+Three user-friendliness upgrades, all shipped (commit `7eb296f`): colorblind shape cues on every
+flash (shape follows the actual color, never the word — grayscale-safe by design), one-time
+tutorial toasts for decoy/Stroop/rule-swap via save v2 (`prefs.seenTutorials`, v1→v2 migration),
+and distinct loss-reason copy (`missedIt`/`wasRed`/`wasDecoy`/`stroopTrap`; the old
+`tooSlow`/`stroopLie` keys were replaced). The "Too early!" false-start copy predates the pass
+and was kept. Verified 2026-09-15: live browser play confirmed the decoy tutorial toast fires and
+persists (`seenTutorials.decoy: true` in a real save v2) and the "Missed it!" loss-reason overlay
+renders; decoy generation (rounds 10+, yellow/blue, never-tap), rule-flip inversion, decoy +50
+scoring, and the v1→v2 tutorial-flag migration are pinned by `games-tap-or-dont-tap.test.ts`
+(all 8 games suites green, 343 tests).

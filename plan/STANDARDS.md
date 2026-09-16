@@ -1,6 +1,6 @@
 # Standards — Quality, Capacity & Architecture Rules
 
-> **Single cross-cutting reference** for all feature TODO files (`plan/01–15`).
+> **Single cross-cutting reference** for all feature TODO files (`plan/01–16`, `plan/games/`).
 
 ## 1. Phase basis (used by every feature TODO file)
 

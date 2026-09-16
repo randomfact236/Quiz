@@ -232,3 +232,15 @@ local persistence**. Mid-round resume: N/A (levels are short; stars already pers
   `?level=` QA hooks and 3-hint rings.
 - **Result overlay** also has a ⌂ Menu button (§4 lists Next/Replay/Share).
 - **Stars formula:** finish + ≤par + (no hints and ≤2 wrong picks).
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/03` (multi-game spec, retired; full text in git history).
+
+Items 1–3 shipped (commit `25a754e`): live invalid-direction drag state via the same `lineCells`
+call as release-time, a first-hint star-cost toast (session flag), and a theme-complete strip
+powered by core.js `themeSummary` (other themes shown ×/9, tap = first unsolved level).
+Verified 2026-09-15: `lineCells`/`themeSummary` pinned by the suite (all 8 games suites green,
+343 tests).

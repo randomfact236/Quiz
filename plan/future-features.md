@@ -2,7 +2,9 @@
 
 > Created 2026-09-08. The single checklist of known-but-not-built work, consolidated from
 > `plan/cosmetics-and-gaps-scan-2026-09-08.md` (post-execution "deliberately not applied" list),
-> `plan/stale-code-scan-2026-09-08.md` (owner-decision items), `BACKLOG.md`, and `plan/15-seo.md` P2/P3.
+> `plan/stale-code-scan-2026-09-08.md` (owner-decision items), `BACKLOG.md` (retired 2026-09-16 —
+> remaining items folded here, done items into [BUILD-BACKLOG.md](BUILD-BACKLOG.md)), and
+> `plan/15-seo.md` P2/P3.
 > Nothing here is a bug — these are new capabilities or deferred polish. Owner sign-off is the gate for
 > every item marked ⚠️; sizes are rough (S = hours, M = 1–2 days, L = multi-day).
 
@@ -88,6 +90,8 @@ the web has zero UI. A web duel mode is frontend-only work:
 - **Settings restore-to-defaults** (S) — no DELETE endpoint exists; once a key is overridden only manual
   re-typing restores it.
 - **SettingsSection tab keyboard navigation** (S) — roving tabindex/arrow keys.
+- **Admin sidebar grouping** (S, from retired BACKLOG.md) — flat tab list today; group into Content / People / Insights / System.
+- **Analytics: accuracy joined to content** (S–M, from retired BACKLOG.md; under discussion) — per-question drill-down joining analytics to content (per-module and per-level accuracy exist).
 
 ## 5. SEO (plan/15 P2/P3 — all gated on the owner decisions already logged)
 
@@ -120,7 +124,7 @@ the web has zero UI. A web duel mode is frontend-only work:
 - Newsletter double opt-in / campaigns / welcome mail / subscriber↔user linkage (plan/14 §6).
 - Quiz MCQ service split + JokesSection 1253-LOC page extraction (STANDARDS §3, behavior-neutral only
   with tests in place first).
-- Server-authoritative riddle sessions (BACKLOG #2 family — riddles remain localStorage-only by design).
+- Server-authoritative riddle sessions (BUILD-BACKLOG #2 family — riddles remain localStorage-only by design).
 - Retention-test harness (needs a DB-backed test rig).
 - PWA decision: `manifest.ts` + SVG icon now shipped; real PNG icon set + install experience needs a
   design asset (owner).
@@ -128,5 +132,6 @@ the web has zero UI. A web duel mode is frontend-only work:
 
 ---
 
-_Sources: cosmetics scan F01–F15 rows, stale-code scan owner-decision items, BACKLOG.md, plan/15 §3.
+_Sources: cosmetics scan F01–F15 rows, stale-code scan owner-decision items, BACKLOG.md (retired
+2026-09-16, folded here + BUILD-BACKLOG.md Done), plan/15 §3.
 Update this file (and the owning feature file, where one exists) when an item ships._

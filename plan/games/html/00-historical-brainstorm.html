@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2D Games Plan</title>
+<style>
+:root { --ink:#20233a; --muted:#6b6f85; --accent:#5450c8; --line:#e3e4ef; --card:#fff; --bg:#f4f5fa; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+header { background:linear-gradient(120deg,#191c3a,#32307a); color:#fff; padding:14px 20px; display:flex; gap:16px; align-items:baseline; flex-wrap:wrap; }
+header a { color:#c7c9ff; text-decoration:none; font-weight:600; }
+header a:hover { text-decoration:underline; }
+header .tag { font-size:.85rem; opacity:.75; }
+main { max-width:880px; margin:28px auto 60px; padding:0 20px; }
+.page { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 34px; box-shadow:0 1px 3px rgba(25,28,58,.06); }
+h1 { font-size:1.7rem; margin:.1em 0 .4em; }
+h2 { font-size:1.22rem; margin-top:1.8em; padding-bottom:.25em; border-bottom:2px solid var(--line); }
+h3 { font-size:1.05rem; margin-top:1.4em; }
+a { color:var(--accent); }
+blockquote { margin:1em 0; padding:.7em 1.1em; border-left:4px solid var(--accent); background:#f3f3fd; border-radius:0 8px 8px 0; }
+blockquote p { margin:.3em 0; }
+code { background:#eef0f8; border:1px solid var(--line); border-radius:5px; padding:.1em .35em; font-size:.88em; font-family:ui-monospace,Consolas,monospace; }
+pre { background:#171a30; color:#e8e9ff; padding:16px 18px; border-radius:10px; overflow-x:auto; }
+pre code { background:none; border:none; color:inherit; padding:0; font-size:.85rem; line-height:1.55; }
+table { border-collapse:collapse; width:100%; margin:1em 0; font-size:.93rem; }
+th, td { border:1px solid var(--line); padding:.5em .7em; text-align:left; vertical-align:top; }
+th { background:#eef0f8; }
+tbody tr:nth-child(even) { background:#fafbff; }
+ul, ol { padding-left:1.5em; }
+li { margin:.3em 0; }
+li > ul, li > ol { margin:.25em 0; }
+.cb { display:inline-block; width:.95em; height:.95em; border:2px solid var(--accent); border-radius:4px; margin-right:.45em; vertical-align:-.08em; }
+.cb.done { background:var(--accent); color:#fff; font-size:.75em; line-height:1; text-align:center; }
+hr { border:none; border-top:1px solid var(--line); margin:2em 0; }
+footer { max-width:880px; margin:0 auto 40px; padding:0 20px; color:var(--muted); font-size:.8rem; }
+@media print { body { background:#fff; } header, footer { display:none; } .page { border:none; box-shadow:none; padding:0; } }
+</style>
+</head>
+<body>
+<header><a href="index.html">&#8592; All game plans</a><span class="tag">2D Games &middot; sample build plans</span></header>
+<main><article class="page">
+<h1>2D Games Plan</h1><blockquote><p>Build plans per game: <a href="index.html"><code>plan/games/README.md</code></a> (sample plans created 2026-09-09).</p><p>**Historical brainstorm — superseded by <code>plan/games/README.md</code> + the per-game complete<br>plans.** Several specifics below were deliberately changed during planning (see the<br>README §8 decisions log): game 01 ships with no hearts/percentile leaderboard as<br>described, art is procedural rather than hand-drawn, and there is no background music.<br>Kept for history; do not build from this file. (Moved from the repo root<br><code>2d games plan.md</code> on 2026-09-16 so all games docs live in one place.)</p></blockquote><h2>1. &quot;Tap or Don't Tap&quot; — Solo Version</h2><p>This is based on a real psychology test called <strong>Go/No-Go</strong> (measures self-control) — that's why it feels so addictive. The game tricks your reflexes against themselves.</p><h3>How it works</h3><pre><code>1. Screen goes dark... random 1–3 second wait (you can't predict!)
+2. A signal flashes:  🟢 GREEN  or  🔴 RED
+3. GREEN  → TAP as fast as you can! ⚡
+   RED    → DON'T tap. Resist the urge. ✋
+4. Score → next round, faster</code></pre><p><strong>Lives:</strong> 3 hearts</p><ul><li>Tap on RED → lose a heart ❌</li><li>Miss a GREEN (too slow) → lose a heart ❌</li><li>Survive RED without tapping → ✅ +points</li></ul><h3>The addiction loop</h3><table><thead><tr><th>Mechanic</th><th>Why it hooks</th></tr></thead><tbody><tr><td><strong>Shows your reaction time</strong>: &quot;218ms! 🔥&quot;</td><td>A personal number to beat — like a sprint time</td></tr><tr><td><strong>Speed ramp</strong> — signal window shrinks each round</td><td>Round 20 feels genuinely intense</td></tr><tr><td><strong>Random wait</strong> — sometimes 0.5s, sometimes 3s</td><td>Punishes players who rhythm-tap early → false starts</td></tr><tr><td><strong>Streak multiplier</strong></td><td>Missing one green after a 15 streak hurts 😩</td></tr></tbody></table><h3>Progressive twists (add one per level to keep it fresh)</h3><ol><li><strong>Level 1:</strong> just green/red</li><li><strong>Level 2:</strong> decoy colors appear (yellow, blue) — _only green means tap_</li><li><strong>Level 3: THE TRAP</strong> 😈 — the word &quot;TAP&quot; appears but written in <strong>red</strong> color... or &quot;WAIT&quot; written in <strong>green</strong>. Rule: <strong>follow the color, ignore the word</strong>. Your brain will betray you. Everyone fails here. Everyone retries.</li><li><strong>Rule flip event:</strong> mid-game banner &quot;🔄 RULES SWAPPED!&quot; — now red = tap, green = don't</li></ol><h3>End screen (shareability, no device sharing needed)</h3><pre><code>┌──────────────────────────┐
+│   🚦 GAME OVER            │
+│   Score: 1,240            │
+│   Best reaction: 187ms 🔥 │
+│   Top 12% of players      │
+│   [📤 Share my score]     │
+└──────────────────────────┘</code></pre><p>Players individually share their <strong>millisecond score</strong> — that's the viral number. &quot;I got 187ms, can you beat that?&quot; works even between people playing separately.</p><hr><h2>2. Tic Tac Toe</h2><p>Classic two-player game implemented for web.</p><h3>Features</h3><ul><li>Two-player mode (local)</li><li>Win/draw detection</li><li>Score tracking</li><li>Responsive design for mobile</li></ul><hr><h2>3. Sliding Puzzle</h2><p>Classic 15-puzzle style game where players slide tiles into the correct order.</p><h3>Features</h3><ul><li>4x4 grid with 15 numbered tiles</li><li>Move counter</li><li>Timer</li><li>Shuffle/restart functionality</li><li>Win detection</li></ul><hr><h2>4. Word Puzzle (with highlighting)</h2><p>Word-based puzzle game with visual highlighting mechanics.</p><h3>Features</h3><ul><li>Word finding/matching gameplay</li><li>Visual highlighting for correct/incorrect answers</li><li>Score tracking</li><li>Progressive difficulty</li></ul><hr><h2>5. Continuous Running Game (with hurdles)</h2><p>Endless runner style game with obstacle/hurdle mechanics.</p><h3>Features</h3><ul><li>Continuous scrolling environment</li><li>Jump/dodge mechanics for hurdles</li><li>Progressive speed increase</li><li>Score based on distance/survival</li><li>Game over on collision</li></ul><hr><h2>6. Flying Snake (Flappy Bird style)</h2><p>Side-scrolling flying game inspired by Flappy Bird.</p><h3>Features</h3><ul><li>Tap/click to flap and gain altitude</li><li>Obstacles (pipes/gaps) to navigate through</li><li>Score based on obstacles passed</li><li>Progressive difficulty</li><li>Game over on collision</li></ul><hr><h2>7. Spirit Runner</h2><p><strong>Genre:</strong> Endless running game with light puzzle elements<br><strong>Theme:</strong> A mystical forest where spirits guide the player</p><h3>Core Loop</h3><ul><li>Player controls a character running through shifting forest paths.</li><li>Obstacles include fallen logs, magical traps, and spirit guardians.</li><li>Collect glowing orbs to unlock temporary powers (double jump, dash, slow time).</li></ul><h3>Unique Twist</h3><ul><li>Paths occasionally split into puzzles — choose the correct rune-marked gate to continue.</li><li>Wrong choice sends the player into a &quot;shadow realm&quot; with harder obstacles but higher rewards.</li></ul><h3>Progression</h3><ul><li>Levels get faster and more complex.</li><li>Unlock new characters (forest spirit, hunter, monk) with different abilities.</li></ul><h3>Visual Style</h3><ul><li>Hand-drawn 2D art with glowing effects.</li><li>Calm background music that intensifies as speed increases.</li></ul><p>This balances simplicity (easy to pick up) with depth (choices, upgrades, alternate paths).</p><hr><h2>Summary</h2><table><thead><tr><th>#</th><th>Game</th><th>Complexity</th><th>Estimated Time</th></tr></thead><tbody><tr><td>1</td><td>Tap or Don't Tap</td><td>⭐ Low</td><td>1–2 days</td></tr><tr><td>2</td><td>Tic Tac Toe</td><td>⭐ Low</td><td>1 day</td></tr><tr><td>3</td><td>Sliding Puzzle</td><td>⭐⭐ Medium</td><td>1–2 days</td></tr><tr><td>4</td><td>Word Puzzle</td><td>⭐⭐ Medium</td><td>2–3 days</td></tr><tr><td>5</td><td>Continuous Runner</td><td>⭐⭐ Medium</td><td>2–3 days</td></tr><tr><td>6</td><td>Flying Snake</td><td>⭐⭐ Medium</td><td>1–2 days</td></tr><tr><td>7</td><td>Spirit Runner</td><td>⭐⭐⭐ High</td><td>5–7 days</td></tr></tbody></table><p>All games should be built with:</p><ul><li>Plain HTML/CSS/JS (no frameworks required)</li><li>Mobile-ready responsive design</li><li>Score tracking and shareability features</li></ul>
+</article></main>
+<footer>Generated from <code>plan/games/00-historical-brainstorm.md</code> &middot; 2026-09-09 &middot; regenerate with <code>node plan/games/build-html.mjs</code></footer>
+</body>
+</html>

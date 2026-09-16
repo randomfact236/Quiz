@@ -286,3 +286,15 @@ copy but is a cache, not the source of truth.
 - **Outstanding (accurate in the header):** the analytic balance constants exist, but
   the median-first-run/learnability playtest and the owner's 10-minute phone session
   are still owed; ?seed= async challenges and P3 art/music/daily-depth not built.
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/03` (multi-game spec, retired; full text in git history).
+
+Items 1–3 shipped (commit `ccb47cf`): a persistent rule-name tag under the hint banner (gates.js
+`ruleLabel`), a non-blocking post-gate announce naming the rule's answer (gates.js `answerLine`,
+10 cases), and a first-entry-per-run "Survive for a shard" line under the countdown.
+Verified 2026-09-15: `ruleLabel`/`answerLine` and the shard math are pinned by the suite
+(all 8 games suites green, 343 tests).

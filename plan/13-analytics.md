@@ -146,7 +146,7 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 ## 5. Cross-feature touchpoints
 
 - **Features 02–05** — instrumentation sources: quiz 7 events (incl. abandonment), riddle 8 (incl. abandonment/extend/hint), image-riddles shim (supported actions only — A4), jokes page `joke_viewed`/`joke_shared` + server `joke_voted`.
-- **Achievements (06)** — `achievement_unlocked` from the quiz engine; image-riddles/jokes achievements don't exist yet (owner decision logged in BACKLOG.md).
+- **Achievements (06)** — `achievement_unlocked` from the quiz engine; image-riddles/jokes achievements don't exist yet (owner decision — future-features §2).
 - **Comments (07)** — server-side `comment_posted` event; `commentsTotal` KPI on the dashboard.
 - **Admin Dashboard (12)** — AnalyticsSection is a dashboard section; all `/admin/analytics/*` endpoints are admin-only.
 - **Guest Users (01)** — `session_completed` events drive guest `quizAttempts`/`totalScore` counter upserts; ingest resolves userId vs guestId via the optional JWT guard.
@@ -160,3 +160,10 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
   `session_started` counts (analytics_events) so the homepage Quiz Topics section can auto-order
   worlds and cards by clicks — highest first (owner request). Analytics now directly drive UI
   ordering, closing the loop between collection (§1) and presentation.
+
+## 9. Design provenance
+
+The tabbed dashboard was built natively (2026-09-04). The ecommerce repo's `admin/analytics/page.tsx`
+was used as a _style_ reference only (dark full-dashboard, KPI cards, sticky tab strip, range
+selector, export menu); its revenue/affiliate tabs do not apply here. (Folded from the retired
+root `BACKLOG.md`, 2026-09-16.)

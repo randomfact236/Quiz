@@ -499,7 +499,7 @@ gunzip -c backup_YYYYMMDD.sql.gz | docker exec -i quiz-postgres psql -U aiquiz -
 DNS and edge settings for pigzap.com are managed in Cloudflare (proxied A
 records for the apex and api.pigzap.com, SSL mode strict, HSTS and Always
 Use HTTPS enabled). The audited configuration (2026-09-15) and the change
-runbook live in [plans/00-CLOUDFLARE-CONFIG.md](plans/00-CLOUDFLARE-CONFIG.md).
+runbook live in [docs/cloudflare-config-runbook.md](docs/cloudflare-config-runbook.md).
 
 ---
 

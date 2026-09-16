@@ -217,3 +217,16 @@ instant restart by design).
   exists).
 - **Seeded async challenge (R2-2):** not built — `createSpawner(rng)` accepts a seed
   but main.js never threads one.
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/03` (multi-game spec, retired; full text in git history).
+
+Items 1–3 shipped (commit `0bd77c5`): sub-15%-of-gap passes flash the score gold + viewport edge
+glow + sparkle blip (no score change), the ready hint swaps to "Beat {best}?" from the third run's
+ready screen (session counter), and gameover names the distance to the next medal tier (core.js
+`nextMedalFor`; sub-bronze keeps the existing line, platinum shows nothing extra).
+Verified 2026-09-15: `nextMedalFor`/`readyHintKind` plus a dedicated "near-miss clearance" suite
+block pin the behavior (all 8 games suites green, 343 tests).

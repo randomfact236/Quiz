@@ -204,3 +204,20 @@ Mid-round resume: N/A (rounds are fast by design).
 - **Round-end overlay also carries a Share button** (§4 lists only Next/Menu).
 - **config.js** carries `aiThinkDelayMs` + the two share strings; round-end/series copy
   is hardcoded in the shell (§12's "per-locale strings" for those was not built).
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/02` (retired; full original task text in git history).
+
+Three user-friendliness upgrades, all shipped (items 1–2 in commit `5af0240`, item 3 pre-existing):
+deterministic Medium/Hard show a faint settle pulse (`cell--think`) on the cell being decided
+during the think delay (Easy stays instant/random); the first loss-or-draw vs Hard AI (1p only)
+fires a one-time toast via save v2 `flags.hardAiToast` (lifetime flag; decision logic is the pure
+`hardAiToastDue` in core.js); misère mode gets a persistent "three in a row loses" board tag and
+round-end copy that names the mechanic instead of bare win/lose language. Verified 2026-09-15 by
+live click-through: the settle pulse was caught on the Medium AI, the toast fired exactly once
+(verbatim copy) and flipped `flags.hardAiToast: true` under series key `1p:hard`, the misère tag
+and named round-end copy render, prefs persist across reloads, and the series tally updates live.
+Screenshots: `gui-test-screenshots/ttt-*.png`.

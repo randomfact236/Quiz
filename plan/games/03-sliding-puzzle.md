@@ -238,7 +238,7 @@ assists, stageId?}` (~200 B) and offers "Continue" on return — for everyone, g
       a round starts.
 - [x] `color-mix` fallback + `-webkit-backdrop-filter` on the overlays. (2026-09-12)
 - [x] Cache-busting: `/games/:path*` now sends `Cache-Control: public, max-age=0,
-  must-revalidate` from both Next configs, so a deploy is picked up on reload.
+must-revalidate` from both Next configs, so a deploy is picked up on reload.
       (2026-09-12)
 - [ ] (not done) Contrast to AA (primary gradient light stop, muted text)
 - [x] Determinism test fixed (two fresh streams - jest). STILL OPEN: timer/share helper extraction + tests; mid-board-blank and non-integer-index segment cases
@@ -300,3 +300,17 @@ best record (dual record, undocumented in §2/§3); §5's loose-key data model i
 superseded by the single versioned save; §9's claim that core.test.html
 mirrors all jest assertions holds only for core.js (scenes/storage/config are
 jest-only).
+
+---
+
+## Enhancements pass — shipped 2026-09-13, verified 2026-09-15
+
+> Folded 2026-09-16 from `plan/suggestion/03` (multi-game spec, retired; full text in git history).
+
+Item 2 shipped (commit `673c11b`): `oneSwapFromSolved` in core.js drives a one-time-per-round
+"So close! One swap away." banner on illegal moves, numbers mode only. Items 1 (campaign stage
+preview) and 3 (resume banner) remain **PARKED** until the campaign/resume phases are actually
+built (no `levels.js`/`stageId`/cross-session snapshot exists) — fold them into that future build.
+Verified 2026-09-15: the shipped symbol is pinned by the suite and both parked items were
+confirmed correctly parked — the built game has no campaign `levels.js`/`stageId` and no
+cross-session resume snapshot to attach them to (all 8 games suites green, 343 tests).
