@@ -33,13 +33,14 @@ function BrandLink(): JSX.Element {
           <BrandMark size={28} />
         )}
       </span>
-      {/* Larger screens — whole logo only */}
+      {/* Larger screens — whole logo only, filling the nav bar height
+          (h-20 with -my-4 cancels the nav's py-4 so it spans edge-to-edge) */}
       <span className="hidden md:block" aria-hidden="true">
         {fullLogo ? (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={fullLogo} alt="" className="h-12 w-auto max-w-[240px] object-contain" />
+          <img src={fullLogo} alt="" className="h-20 -my-4 w-auto max-w-[320px] object-contain" />
         ) : (
-          <BrandMark size={32} />
+          <BrandMark size={48} />
         )}
       </span>
       {/* Site name: always on mobile; on md+ only when no logo is uploaded
