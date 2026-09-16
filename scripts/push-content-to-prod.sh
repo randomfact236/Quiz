@@ -36,7 +36,7 @@ LOCAL_CONTAINER="${LOCAL_CONTAINER:-ai-quiz-postgres}"
 LOCAL_DB_USER="${LOCAL_DB_USER:-aiquiz}"
 LOCAL_DB_NAME="${LOCAL_DB_NAME:-aiquiz}"
 
-CONTENT_TABLES=(subjects chapters questions riddle_subjects riddle_mcqs \
+CONTENT_TABLES=(subjects chapters questions riddle_categories riddle_subjects riddle_mcqs \
   joke_categories dad_jokes joke_votes image_riddle_categories image_riddles)
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -80,10 +80,9 @@ ssh "$SSH_TARGET" "
   REDIS_PW=\$(printf '%s\n' \"\$API_ENV\" | grep '^REDIS_PASSWORD=' | cut -d= -f2-)
   echo \"    target: \$PG (db=\$DB_NAME)\"
   docker exec -i \"\$PG\" psql -U \"\$DB_USER\" -d \"\$DB_NAME\" -v ON_ERROR_STOP=1 -q < /tmp/$DUMP_NAME
-  KEYS=\$(docker exec \"\$REDIS\" redis-cli -a \"\$REDIS_PW\" --no-auth-warning --scan --pattern 'quiz:*')
-  [ -n \"\$KEYS\" ] && docker exec \"\$REDIS\" redis-cli -a \"\$REDIS_PW\" --no-auth-warning del \$KEYS || true
+  docker exec \"\$REDIS\" redis-cli -a \"\$REDIS_PW\" --no-auth-warning FLUSHALL
   rm -f /tmp/$DUMP_NAME
-  echo '    restore + quiz-cache flush done'
+  echo '    restore + cache flush done'
 "
 
 echo
