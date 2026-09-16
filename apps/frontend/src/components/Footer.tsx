@@ -50,7 +50,9 @@ export default async function Footer(): Promise<JSX.Element> {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={logo} alt="" className="h-12 w-auto max-w-[240px] object-contain" />
               )}
-              <span className="text-xl font-bold text-primary-600">{siteName}</span>
+              {/* With a logo uploaded the wordmark already carries the brand —
+                  show the text name only when there is no logo (header parity). */}
+              {!logo && <span className="text-xl font-bold text-primary-600">{siteName}</span>}
             </Link>
             <p className="mt-2 text-secondary-600 dark:text-secondary-400">{description}</p>
             <SocialLinks socialLinks={site?.socialLinks} />
