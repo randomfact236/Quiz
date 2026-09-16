@@ -126,15 +126,18 @@ function BrandPreviewChip({
 }
 
 /**
- * Image setting field: media-library upload with live light/dark previews,
- * plus a manual URL/path input and a Remove button (empty value = not set).
- * `variant` picks the placeholder shape: desktop header logo (mark + site
- * name), mobile header (square placeholder + site name), or square favicon.
+ * Image setting field: a self-contained brand-asset group — its own heading
+ * and respective info text, media-library upload with live light/dark
+ * previews, plus a manual URL/path input and a Remove button (empty value =
+ * not set). `variant` picks the placeholder shape: desktop header logo
+ * (mark + site name), mobile header (square placeholder + site name), or
+ * square favicon. `label` survives for aria/alt text only.
  */
 function ImageSettingField({
   id,
   label,
-  helpText,
+  heading,
+  infoText,
   value,
   onChange,
   variant = 'logo',
@@ -142,7 +145,8 @@ function ImageSettingField({
 }: {
   id: string;
   label: string;
-  helpText: string;
+  heading: string;
+  infoText: string;
   value: string;
   onChange: (url: string) => void;
   variant?: 'logo' | 'favicon';
@@ -171,8 +175,8 @@ function ImageSettingField({
 
   return (
     <div>
-      <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
-      <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">{helpText}</p>
+      <h5 className="text-md font-semibold mb-1 dark:text-gray-300">{heading}</h5>
+      <p className="text-sm text-gray-500 dark:text-secondary-400">{infoText}</p>
       <div className="mt-3 space-y-3">
         {variant === 'logo' ? (
           <>
@@ -507,105 +511,110 @@ export function SettingsSection(): JSX.Element {
         id={`settings-panel-${activeTab}`}
         aria-label={`${activeTab} settings`}
       >
-        {/* Site Information */}
+        {/* Site Information — identity text + logo + favicon, each grouped
+            with its respective info text */}
         {activeTab === 'site' && (
           <div className="space-y-8">
             <div>
-              <h4 className="text-lg font-semibold dark:text-gray-200">Site Information</h4>
+              <h4 className="text-lg font-semibold dark:text-gray-200">
+                🌐 Site Information &amp; Branding
+              </h4>
               <p className="mt-1 text-sm text-gray-500 dark:text-secondary-400">
-                Branding shown in the header, footer, browser tab, and homepage. Empty fields fall
-                back to the built-in defaults.
+                Everything that identifies the site — name, tagline, description, logo, and app icon
+                — shown in the header, footer, browser tab, and homepage. Empty fields fall back to
+                the built-in defaults.
               </p>
             </div>
 
-            {/* Names */}
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="site-name"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Site Name
-                </label>
-                <input
-                  id="site-name"
-                  type="text"
-                  value={formData.site?.siteName ?? ''}
-                  onChange={(e) => updateField('site.siteName', e.target.value)}
-                  placeholder="ProfitBenefit.com"
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
+            {/* Site identity — the text side of the brand */}
+            <div>
+              <h5 className="text-md font-semibold mb-1 dark:text-gray-300">Site Identity</h5>
+              <p className="text-sm text-gray-500 dark:text-secondary-400">
+                The name and description used across the header, footer, browser tab, and SEO
+                metadata.
+              </p>
+              <div className="mt-4 grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="site-name"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Site Name
+                  </label>
+                  <input
+                    id="site-name"
+                    type="text"
+                    value={formData.site?.siteName ?? ''}
+                    onChange={(e) => updateField('site.siteName', e.target.value)}
+                    placeholder="ProfitBenefit.com"
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="site-tagline"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Browser Tab Tagline
+                  </label>
+                  <input
+                    id="site-tagline"
+                    type="text"
+                    value={formData.site?.tabTagline ?? ''}
+                    onChange={(e) => updateField('site.tabTagline', e.target.value)}
+                    placeholder="best products"
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
+                    Shown in the browser tab as &quot;Page | Tagline&quot;. Leave empty to use the
+                    site name.
+                  </p>
+                </div>
               </div>
-              <div>
+              <div className="mt-6">
                 <label
-                  htmlFor="site-tagline"
+                  htmlFor="site-description"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
-                  Browser Tab Tagline
+                  Site Description
                 </label>
-                <input
-                  id="site-tagline"
-                  type="text"
-                  value={formData.site?.tabTagline ?? ''}
-                  onChange={(e) => updateField('site.tabTagline', e.target.value)}
-                  placeholder="best products"
+                <textarea
+                  id="site-description"
+                  value={formData.site?.siteDescription ?? ''}
+                  onChange={(e) => updateField('site.siteDescription', e.target.value)}
+                  rows={2}
+                  placeholder="find best product for you"
                   className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 />
-                <p className="mt-1 text-xs text-gray-500 dark:text-secondary-400">
-                  Shown in the browser tab as &quot;Page | Tagline&quot;. Leave empty to use the
-                  site name.
-                </p>
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="site-description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Site Description
-              </label>
-              <textarea
-                id="site-description"
-                value={formData.site?.siteDescription ?? ''}
-                onChange={(e) => updateField('site.siteDescription', e.target.value)}
-                rows={2}
-                placeholder="find best product for you"
-                className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            {/* Site Logo — own group, full width so the four theme previews stay readable */}
+            <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
+              <ImageSettingField
+                id="site-logo"
+                label="Site Logo"
+                heading="🖼️ Site Logo"
+                infoText="Whole (wide) logo shown on larger screens in the header and footer, with the Site Name rendered beside it. SVG, PNG, WebP, or JPG — each preview shows exactly how the asset sits in light and dark mode; until an asset is uploaded, the SVG placeholder mark is shown."
+                variant="logo"
+                siteName={formData.site?.siteName ?? ''}
+                value={formData.site?.logo ?? ''}
+                onChange={(url) => updateField('site.logo', url)}
               />
             </div>
 
-            {/* Brand images — logo and favicon grouped: both are image uploads
-                previewed side-by-side in light and dark mode. */}
+            {/* App Icon (Favicon) — own group */}
             <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
-              <h5 className="text-md font-semibold mb-1 dark:text-gray-300">
-                🖼️ Brand Images (Logo &amp; Favicon)
-              </h5>
-              <p className="mb-4 text-sm text-gray-500 dark:text-secondary-400">
-                SVG, PNG, WebP, or JPG. Each preview shows exactly how the asset sits in light and
-                dark mode; the text beside it is the Site Name above (live). Until an asset is
-                uploaded, the SVG placeholder mark is shown everywhere the brand appears.
-              </p>
-              <div className="grid gap-8 sm:grid-cols-2">
-                <ImageSettingField
-                  id="site-logo"
-                  label="Site Logo"
-                  helpText="Whole (wide) logo shown on larger screens in the header and footer. The Site Name is rendered beside it."
-                  variant="logo"
-                  siteName={formData.site?.siteName ?? ''}
-                  value={formData.site?.logo ?? ''}
-                  onChange={(url) => updateField('site.logo', url)}
-                />
-                <ImageSettingField
-                  id="site-favicon"
-                  label="App Icon (Square)"
-                  helpText="Square SVG/PNG, 192x192 or larger. Used as the compact icon in the mobile top bar, the mobile menu drawer, and the browser tab."
-                  variant="favicon"
-                  siteName={formData.site?.siteName ?? ''}
-                  value={formData.site?.favicon ?? ''}
-                  onChange={(url) => updateField('site.favicon', url)}
-                />
-              </div>
+              <ImageSettingField
+                id="site-favicon"
+                label="App Icon (Square)"
+                heading="🎨 App Icon (Favicon)"
+                infoText="Square SVG/PNG, 192x192 or larger. Used as the compact icon in the mobile top bar, the mobile menu drawer, and the browser tab — previewed in light and dark mode; until an asset is uploaded, the SVG placeholder mark is shown."
+                variant="favicon"
+                siteName={formData.site?.siteName ?? ''}
+                value={formData.site?.favicon ?? ''}
+                onChange={(url) => updateField('site.favicon', url)}
+              />
             </div>
 
             {/* Social Media Links */}
