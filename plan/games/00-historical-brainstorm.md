@@ -6,7 +6,8 @@
 > plans.** Several specifics below were deliberately changed during planning (see the
 > README §8 decisions log): game 01 ships with no hearts/percentile leaderboard as
 > described, art is procedural rather than hand-drawn, and there is no background music.
-> Kept for history; do not build from this file.
+> Kept for history; do not build from this file. (Moved from the repo root
+> `2d games plan.md` on 2026-09-16 so all games docs live in one place.)
 
 ## 1. "Tap or Don't Tap" — Solo Version
 
