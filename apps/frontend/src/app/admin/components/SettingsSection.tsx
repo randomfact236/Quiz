@@ -89,7 +89,7 @@ function BrandPreviewChip({
       <span className="text-xs font-medium text-gray-500 dark:text-gray-400">{label}</span>
       <div
         className={`mt-1 flex items-center gap-2 overflow-hidden rounded-lg border px-3 ${
-          variant === 'square' ? 'h-16 justify-center' : 'h-12'
+          variant === 'square' ? 'h-16 justify-center' : variant === 'desktop' ? 'h-14' : 'h-12'
         } ${onLight ? 'border-gray-200 bg-white' : 'border-gray-700 bg-gray-950'}`}
       >
         {previewUrl ? (
@@ -102,12 +102,12 @@ function BrandPreviewChip({
                 ? 'h-11 w-11 rounded-xl object-contain'
                 : variant === 'mobile'
                   ? 'h-7 w-7 rounded object-contain'
-                  : 'max-h-9 max-w-full object-contain'
+                  : 'max-h-12 max-w-full object-contain'
             }
           />
         ) : (
           <BrandMark
-            size={variant === 'square' ? 44 : variant === 'mobile' ? 24 : 28}
+            size={variant === 'square' ? 44 : variant === 'mobile' ? 24 : 36}
             tone={onLight ? 'on-light' : 'on-dark'}
           />
         )}

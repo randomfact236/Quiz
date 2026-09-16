@@ -37,7 +37,7 @@ function BrandLink(): JSX.Element {
       <span className="hidden md:block" aria-hidden="true">
         {fullLogo ? (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={fullLogo} alt="" className="h-9 w-auto max-w-[190px] object-contain" />
+          <img src={fullLogo} alt="" className="h-12 w-auto max-w-[240px] object-contain" />
         ) : (
           <BrandMark size={32} />
         )}
