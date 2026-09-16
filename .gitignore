@@ -49,3 +49,4 @@ quiz-reference/
 
 # ZCode CLI local workspace state (session artifacts)
 .zcode/
+backups/
