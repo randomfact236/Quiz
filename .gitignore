@@ -53,3 +53,7 @@ backups/
 
 # local prod-mode build output (NEXT_DIST_DIR override)
 .next.prod-build
+
+# Content push secrets/state
+scripts/content-push.env
+scripts/.content-push-state.json

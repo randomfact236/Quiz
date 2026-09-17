@@ -35,11 +35,11 @@
     "type-check": "npm run type-check --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rimraf node_modules",
     "validate:ports": "node scripts/validate-ports.js",
-    "push:content": "bash scripts/push-content-to-prod.sh",
     "ports:status": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action status",
     "ports:setup": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action setup",
     "ports:release": "powershell -ExecutionPolicy Bypass -File ./port-security-enforcer.ps1 -Action release",
-    "prepare": "husky"
+    "prepare": "husky",
+    "content:push": "node scripts/push-content.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
