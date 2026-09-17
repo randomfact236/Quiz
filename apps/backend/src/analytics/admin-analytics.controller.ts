@@ -7,7 +7,17 @@
  * ============================================================================
  */
 
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -18,6 +28,7 @@ import {
   AdminClicksQueryDto,
   AdminDashboardQueryDto,
   AdminEventsQueryDto,
+  ResetAnalyticsDto,
 } from './dto/analytics.dto';
 
 @ApiTags('Analytics (admin)')
@@ -86,5 +97,21 @@ export class AdminAnalyticsController {
       page: query.page ?? 1,
       limit: query.limit ?? 50,
     });
+  }
+
+  @Post('reset')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Fresh-start reset: delete ALL stored analytics events and zero guest play counters. Irreversible.',
+  })
+  resetAnalytics(@Body() body: ResetAnalyticsDto) {
+    // The word must travel with the request — a stray POST cannot wipe data.
+    if (body.confirm !== 'RESET') {
+      throw new BadRequestException(
+        "Pass { confirm: 'RESET' } to acknowledge the irreversible delete."
+      );
+    }
+    return this.analyticsService.resetAllAnalytics();
   }
 }

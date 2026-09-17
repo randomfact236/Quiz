@@ -61,4 +61,13 @@ export class GuestUsersService {
   async getCount(): Promise<number> {
     return this.guestUserRepo.count();
   }
+
+  /**
+   * Zero the public play counters (analytics fresh-start reset, BUG-012).
+   * Guest identities are kept so existing sessions/comments still resolve —
+   * only the homepage-visible totals are cleared.
+   */
+  async resetPlayCounters(): Promise<void> {
+    await this.guestUserRepo.update({}, { quizAttempts: 0, totalScore: 0 });
+  }
 }

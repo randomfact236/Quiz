@@ -111,6 +111,12 @@ export const settings = {
     logo: '',
     /** /uploads/... path or absolute URL; empty = file-convention icon.svg */
     favicon: '',
+    /** Dark-mode variant of the main logo; empty = the main logo in both themes */
+    logoDark: '',
+    /** Mobile-only header logo; empty = square icon + site name on phones */
+    mobileLogo: '',
+    /** Show the site-name text in the mobile header beside the icon */
+    mobileShowSiteName: true,
     /** Browser tab shows "Page | Tagline"; empty = the site name */
     tabTagline: '',
     /** Full profile URLs; footer icons render only for the filled links */

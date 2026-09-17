@@ -97,7 +97,7 @@ export default function GamesPage(): JSX.Element {
           {GAMES.map((game) => (
             <a
               key={game.slug}
-              href={`/games/${game.slug}/`}
+              href={`/games/${game.slug}/index.html`}
               className={`flex items-center gap-4 rounded-2xl bg-gradient-to-r ${game.gradient} p-5 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl`}
             >
               <span className="text-4xl">{game.emoji}</span>

@@ -63,6 +63,33 @@ describe('AnswerOptions — level-format forcing', () => {
   });
 });
 
+describe('AnswerOptions — riddle option-count spec (BUG-016)', () => {
+  it.each([
+    ['easy', 2],
+    ['medium', 3],
+    ['hard', 4],
+    ['expert', 4],
+  ] as const)('riddle %s shows %i options', (level, count) => {
+    render(
+      <AnswerOptions
+        options={fourOptions}
+        selectedKey={null}
+        onSelect={jest.fn()}
+        level={level}
+        game="riddle"
+      />
+    );
+    expect(screen.getAllByRole('radio')).toHaveLength(count);
+  });
+
+  it('quiz mapping is unchanged without the game prop (medium 2, hard 3)', () => {
+    render(
+      <AnswerOptions options={fourOptions} selectedKey={null} onSelect={jest.fn()} level="medium" />
+    );
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
+  });
+});
+
 describe('QuestionReview — answer states', () => {
   const baseQuestion = {
     id: 'q1',

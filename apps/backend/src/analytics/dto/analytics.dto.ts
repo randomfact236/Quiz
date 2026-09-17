@@ -181,3 +181,13 @@ export class AdminClicksQueryDto {
   @MaxLength(64)
   category?: string;
 }
+
+/**
+ * Fresh-start reset acknowledgment (BUG-012). The confirmation word must
+ * travel with the request so an accidental POST cannot wipe analytics.
+ */
+export class ResetAnalyticsDto {
+  @ApiProperty({ description: "Must be the literal word 'RESET'", example: 'RESET' })
+  @IsString()
+  confirm?: string;
+}

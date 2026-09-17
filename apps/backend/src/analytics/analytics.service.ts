@@ -173,6 +173,23 @@ export class AnalyticsService {
     private readonly cacheService: CacheService
   ) {}
 
+  // ==================== ADMIN RESET (BUG-012) ====================
+
+  /**
+   * Fresh-start reset: delete every stored analytics event and zero the guest
+   * play counters that feed the homepage statistics. Irreversible by design —
+   * the admin UI gates it behind a typed confirmation, and the controller
+   * requires the same word in the request body. Cached dashboards are dropped
+   * so the empty state is visible immediately.
+   */
+  async resetAllAnalytics(): Promise<{ eventsDeleted: number }> {
+    const eventsDeleted = await this.eventRepo.count();
+    await this.eventRepo.clear();
+    await this.guestUsersService.resetPlayCounters();
+    await this.cacheService.delPattern('analytics:*');
+    return { eventsDeleted };
+  }
+
   // ==================== INGEST ====================
 
   /**

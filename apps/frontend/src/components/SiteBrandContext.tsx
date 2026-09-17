@@ -12,11 +12,24 @@ export interface SiteBrand {
   siteName: string;
   /** Wide/whole logo URL for large screens, or '' when unset */
   logo: string;
+  /** Dark-mode variant of the main logo, or '' to reuse the main logo */
+  logoDark: string;
   /** Square icon URL (app icon) for mobile surfaces + browser tab, or '' */
   favicon: string;
+  /** Mobile-only header logo, or '' to use the square icon + site name */
+  mobileLogo: string;
+  /** Show the site-name text in the mobile header beside the icon */
+  mobileShowSiteName: boolean;
 }
 
-const DEFAULT_BRAND: SiteBrand = { siteName: 'AI Quiz', logo: '', favicon: '' };
+const DEFAULT_BRAND: SiteBrand = {
+  siteName: 'AI Quiz',
+  logo: '',
+  logoDark: '',
+  favicon: '',
+  mobileLogo: '',
+  mobileShowSiteName: true,
+};
 
 const SiteBrandContext = createContext<SiteBrand>(DEFAULT_BRAND);
 

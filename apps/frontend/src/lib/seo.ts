@@ -36,6 +36,7 @@ export const INDEXABLE_ROUTES: readonly IndexableRoute[] = [
   { path: '/jokes', label: 'Dad Jokes', priority: 0.8, freq: 'daily' },
   { path: '/achievements', label: 'Achievements', priority: 0.6, freq: 'weekly' },
   { path: '/about', label: 'About', priority: 0.5, freq: 'monthly' },
+  { path: '/faq', label: 'FAQ', priority: 0.4, freq: 'monthly' },
   { path: '/contact', label: 'Contact', priority: 0.3, freq: 'monthly' },
   { path: '/privacy', label: 'Privacy', priority: 0.3, freq: 'yearly' },
   { path: '/terms', label: 'Terms', priority: 0.3, freq: 'yearly' },

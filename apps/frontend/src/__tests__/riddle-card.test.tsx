@@ -45,10 +45,16 @@ describe('RiddleCard — level-format behavior', () => {
     expect(screen.queryByText('A car')).not.toBeInTheDocument();
   });
 
-  it('hard shows 3 options', () => {
-    renderCard(makeRiddle({ difficulty: 'hard', level: 'hard' }));
+  it('medium shows 3 options', () => {
+    renderCard(makeRiddle({ difficulty: 'medium', level: 'medium' }));
     expect(screen.getByText('A car')).toBeInTheDocument();
     expect(screen.queryByText('A bird')).not.toBeInTheDocument();
+  });
+
+  it('hard shows all 4 options (BUG-016 riddle spec)', () => {
+    renderCard(makeRiddle({ difficulty: 'hard', level: 'hard' }));
+    expect(screen.getByText('A car')).toBeInTheDocument();
+    expect(screen.getByText('A bird')).toBeInTheDocument();
   });
 
   it('expert (mapped to extreme) renders the text input instead of options', () => {

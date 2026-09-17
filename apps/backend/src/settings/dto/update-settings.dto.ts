@@ -451,6 +451,23 @@ class SiteSettingsDto {
   @MaxLength(2000)
   favicon?: string;
 
+  /** Dark-mode variant of the main logo; empty = the main logo in both themes */
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  logoDark?: string;
+
+  /** Mobile-only header logo; empty = square icon + site name on phones */
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  mobileLogo?: string;
+
+  /** Show the site-name text in the mobile header beside the icon */
+  @IsOptional()
+  @IsBoolean()
+  mobileShowSiteName?: boolean;
+
   /** Browser tab "Page | Tagline" */
   @IsOptional()
   @IsString()

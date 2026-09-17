@@ -2,9 +2,9 @@
   "category": "Detective & Mystery",
   "riddles": [
     {
-      "question": "At the harbor cafe, silver locket vanished. Ruby claims they were watering plants, Nora says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the locket?",
-      "options": ["Ruby", "Nora", "Oscar", "an outside thief"],
-      "correctIndex": 1,
+      "question": "At the harbor cafe, silver locket vanished. Ruby claims they were watering plants, Nora says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the locket?",
+      "options": ["Ruby", "Oscar", "Nora", "an outside thief"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -13,12 +13,12 @@
     {
       "question": "A detective studies the garden room: a tipped cardboard box, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The mud proves rain during the visit",
         "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
         "The tipped object proves a struggle",
         "The umbrella proves heavy rain"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -27,12 +27,12 @@
     {
       "question": "A board game sits on the desk at the attic loft beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
       "options": [
-        "The room was empty",
         "The tea was freshly made",
+        "Two people shared the room",
         "The visitor left in a hurry",
-        "Two people shared the room"
+        "The room was empty"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -41,12 +41,12 @@
     {
       "question": "the tea shop shows a strange scene: a half-eaten biscuit tin, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
-        "With a spare key",
         "Through the open window",
+        "With a spare key",
         "By picking the lock",
         "Down the chimney"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -55,12 +55,12 @@
     {
       "question": "A detective studies the study: a tipped potted fern, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The tipped object proves a struggle",
+        "The mud tracks show the visit began in dry weather",
         "The umbrella proves heavy rain",
         "The mud proves rain during the visit",
-        "The mud tracks show the visit began in dry weather"
+        "The tipped object proves a struggle"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -100,8 +100,8 @@
     },
     {
       "question": "Decode the Caesar cipher: NGOQP (each letter was shifted forward by 2). What is the word?",
-      "options": ["NOMEL", "OHPRQ", "MFNPO", "LEMON"],
-      "correctIndex": 3,
+      "options": ["NOMEL", "LEMON", "MFNPO", "OHPRQ"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -128,8 +128,8 @@
     },
     {
       "question": "Decode the Caesar cipher: NBSLFU (each letter was shifted forward by 1). What is the word?",
-      "options": ["TRAIN", "OCTMGV", "TEKRAM", "MARKET"],
-      "correctIndex": 3,
+      "options": ["OCTMGV", "MARKET", "TEKRAM", "TRAIN"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 1.",
@@ -138,21 +138,21 @@
     {
       "question": "A biscuit tin sits on the desk at the scout hut beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
       "options": [
-        "The visitor left in a hurry",
         "The tea was freshly made",
         "Two people shared the room",
+        "The visitor left in a hurry",
         "The room was empty"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
       "explanation": "Two people shared the room."
     },
     {
-      "question": "At the library annex, prize-winning pie vanished. Ruby claims they were watering plants, Oscar says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the pie?",
-      "options": ["Ruby", "Oscar", "Nora", "an outside thief"],
-      "correctIndex": 0,
+      "question": "At the library annex, prize-winning pie vanished. Ruby claims they were watering plants, Oscar says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the pie?",
+      "options": ["Oscar", "Ruby", "Nora", "an outside thief"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -160,8 +160,8 @@
     },
     {
       "question": "Decode the Caesar cipher: IWKVCT (each letter was shifted forward by 2). What is the word?",
-      "options": ["HVJUBS", "RATIUG", "GUITAR", "JXLWDU"],
-      "correctIndex": 2,
+      "options": ["HVJUBS", "GUITAR", "RATIUG", "JXLWDU"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -170,12 +170,12 @@
     {
       "question": "the attic loft shows a strange scene: a half-eaten biscuit tin, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
-        "Through the open window",
         "Down the chimney",
+        "Through the open window",
         "With a spare key",
         "By picking the lock"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -197,8 +197,8 @@
     },
     {
       "question": "A1Z26 code: 3-1-2 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["DAB", "FED", "BAD", "CAB"],
-      "correctIndex": 3,
+      "options": ["DAB", "CAB", "BAD", "FED"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -207,12 +207,12 @@
     {
       "question": "A detective studies the scout hut: a tipped biscuit tin, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
         "The mud proves rain during the visit",
         "The tipped object proves a struggle",
-        "The mud tracks show the visit began in dry weather"
+        "The umbrella proves heavy rain"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -228,9 +228,9 @@
       "explanation": "Shifting each letter back 2 spells MUSIC."
     },
     {
-      "question": "At the harbor cafe, prize-winning pie vanished. Hugo claims they were watering plants, Nora says they were baking bread, and Pearl insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the pie?",
-      "options": ["Hugo", "Nora", "Pearl", "an outside thief"],
-      "correctIndex": 2,
+      "question": "At the harbor cafe, prize-winning pie vanished. Hugo claims they were watering plants, Nora says they were baking bread, and Pearl insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the pie?",
+      "options": ["Pearl", "Hugo", "Nora", "an outside thief"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -238,8 +238,8 @@
     },
     {
       "question": "Decode the Caesar cipher: MJHIU (each letter was shifted forward by 1). What is the word?",
-      "options": ["TRAIN", "NKIJV", "THGIL", "LIGHT"],
-      "correctIndex": 3,
+      "options": ["LIGHT", "NKIJV", "THGIL", "TRAIN"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 1.",
@@ -256,8 +256,8 @@
     },
     {
       "question": "Decode the Caesar cipher: NKIJV (each letter was shifted forward by 2). What is the word?",
-      "options": ["OLJKW", "THGIL", "LIGHT", "MJHIU"],
-      "correctIndex": 2,
+      "options": ["LIGHT", "OLJKW", "THGIL", "MJHIU"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -265,8 +265,8 @@
     },
     {
       "question": "Decode the Caesar cipher: JKRVW (each letter was shifted forward by 3). What is the word?",
-      "options": ["TSOHG", "IJQUV", "GHOST", "KLSWX"],
-      "correctIndex": 2,
+      "options": ["TSOHG", "GHOST", "IJQUV", "KLSWX"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -274,8 +274,8 @@
     },
     {
       "question": "Decode the Caesar cipher: CSVTI (each letter was shifted forward by 1). What is the word?",
-      "options": ["TRAIN", "BRUSH", "HSURB", "DTWUJ"],
-      "correctIndex": 1,
+      "options": ["BRUSH", "TRAIN", "HSURB", "DTWUJ"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 1.",
@@ -283,8 +283,8 @@
     },
     {
       "question": "A1Z26 code: 1-3-9-4 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["FEED", "ACID", "DEAF", "BEEF"],
-      "correctIndex": 1,
+      "options": ["ACID", "FEED", "DEAF", "BEEF"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -294,11 +294,11 @@
       "question": "A detective studies the attic loft: a tipped biscuit tin, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
         "The mud proves rain during the visit",
-        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
         "The tipped object proves a struggle",
-        "The mud tracks show the visit began in dry weather"
+        "The umbrella proves heavy rain"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -306,8 +306,8 @@
     },
     {
       "question": "Decode the Caesar cipher: EJCKT (each letter was shifted forward by 2). What is the word?",
-      "options": ["DIBJS", "FKDLU", "CHAIR", "RIAHC"],
-      "correctIndex": 2,
+      "options": ["DIBJS", "CHAIR", "FKDLU", "RIAHC"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -366,8 +366,8 @@
     },
     {
       "question": "Decode the Caesar cipher: FLUFOH (each letter was shifted forward by 3). What is the word?",
-      "options": ["ELCRIC", "EKTENG", "CIRCLE", "GMVGPI"],
-      "correctIndex": 2,
+      "options": ["ELCRIC", "CIRCLE", "EKTENG", "GMVGPI"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -383,9 +383,9 @@
       "explanation": "The bootprints in the flowerbed match Ivy's boots."
     },
     {
-      "question": "At the garden shed, recipe book vanished. Felix claims they were watering plants, Nora says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the book?",
-      "options": ["Felix", "Nora", "Oscar", "an outside thief"],
-      "correctIndex": 2,
+      "question": "At the garden shed, recipe book vanished. Felix claims they were watering plants, Nora says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the book?",
+      "options": ["Felix", "Oscar", "Nora", "an outside thief"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -403,8 +403,8 @@
     },
     {
       "question": "Decode the Caesar cipher: DTWUJ (each letter was shifted forward by 2). What is the word?",
-      "options": ["HSURB", "EUXVK", "CSVTI", "BRUSH"],
-      "correctIndex": 3,
+      "options": ["BRUSH", "HSURB", "CSVTI", "EUXVK"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -426,8 +426,8 @@
     },
     {
       "question": "The code word DAERB is written backwards. What is the real word?",
-      "options": ["BREAD", "CSFBE", "BEAD", "BREA"],
-      "correctIndex": 0,
+      "options": ["BEAD", "CSFBE", "BREAD", "BREA"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -437,11 +437,11 @@
       "question": "the tea shop shows a strange scene: a half-eaten cardboard box, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
         "Down the chimney",
-        "With a spare key",
         "Through the open window",
+        "With a spare key",
         "By picking the lock"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -461,11 +461,11 @@
       "question": "At the garden room, the detective finds a cold picnic basket, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
       "options": [
         "The diary was borrowed",
-        "The fan was very old",
         "The entries stopped when the power failed",
+        "The fan was very old",
         "The desk was used at night"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -482,17 +482,17 @@
     },
     {
       "question": "Decode the Caesar cipher: OLJKW (each letter was shifted forward by 3). What is the word?",
-      "options": ["NKIJV", "PMKLX", "LIGHT", "THGIL"],
-      "correctIndex": 2,
+      "options": ["NKIJV", "LIGHT", "PMKLX", "THGIL"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
       "explanation": "Shifting each letter back 3 spells LIGHT."
     },
     {
-      "question": "At the school fete, garden trophy vanished. Nora claims they were watering plants, Felix says they were baking bread, and Silas insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the trophy?",
-      "options": ["Nora", "Felix", "Silas", "an outside thief"],
-      "correctIndex": 0,
+      "question": "At the school fete, garden trophy vanished. Nora claims they were watering plants, Felix says they were baking bread, and Silas insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the trophy?",
+      "options": ["Felix", "Nora", "Silas", "an outside thief"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -501,12 +501,12 @@
     {
       "question": "A detective studies the garden room: a tipped potted fern, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The mud proves rain during the visit",
-        "The umbrella proves heavy rain",
         "The mud tracks show the visit began in dry weather",
+        "The umbrella proves heavy rain",
+        "The mud proves rain during the visit",
         "The tipped object proves a struggle"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -514,8 +514,8 @@
     },
     {
       "question": "The code word ELIMS is written backwards. What is the real word?",
-      "options": ["SMIL", "TNJMF", "SILE", "SMILE"],
-      "correctIndex": 3,
+      "options": ["SMIL", "TNJMF", "SMILE", "SILE"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -525,11 +525,11 @@
       "question": "At the attic loft, the detective finds a cold teacup, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
       "options": [
         "The desk was used at night",
-        "The diary was borrowed",
         "The fan was very old",
-        "The entries stopped when the power failed"
+        "The entries stopped when the power failed",
+        "The diary was borrowed"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -538,12 +538,12 @@
     {
       "question": "the tea shop shows a strange scene: a half-eaten board game, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
-        "Down the chimney",
         "Through the open window",
+        "Down the chimney",
         "With a spare key",
         "By picking the lock"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -566,12 +566,12 @@
     {
       "question": "A biscuit tin sits on the desk at the tea shop beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
       "options": [
-        "The room was empty",
         "Two people shared the room",
+        "The room was empty",
         "The visitor left in a hurry",
         "The tea was freshly made"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -581,18 +581,18 @@
       "question": "A detective studies the boathouse: a tipped cardboard box, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
         "The mud proves rain during the visit",
-        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
         "The tipped object proves a struggle",
-        "The mud tracks show the visit began in dry weather"
+        "The umbrella proves heavy rain"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
       "explanation": "The mud tracks show the visit began in dry weather."
     },
     {
-      "question": "At the village fair, antique violin vanished. Oscar claims they were watering plants, Hugo says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the violin?",
+      "question": "At the village fair, antique violin vanished. Oscar claims they were watering plants, Hugo says they were baking bread, and Nora insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the violin?",
       "options": ["Oscar", "Hugo", "Nora", "an outside thief"],
       "correctIndex": 0,
       "level": "medium",
@@ -602,8 +602,8 @@
     },
     {
       "question": "Decode the Caesar cipher: PDUNHW (each letter was shifted forward by 3). What is the word?",
-      "options": ["OCTMGV", "MARKET", "QEVOIX", "TEKRAM"],
-      "correctIndex": 1,
+      "options": ["MARKET", "OCTMGV", "QEVOIX", "TEKRAM"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -625,8 +625,8 @@
     },
     {
       "question": "Decode the Caesar cipher: SODQW (each letter was shifted forward by 3). What is the word?",
-      "options": ["TNALP", "RNCPV", "TPERX", "PLANT"],
-      "correctIndex": 3,
+      "options": ["TPERX", "RNCPV", "PLANT", "TNALP"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -648,8 +648,8 @@
     },
     {
       "question": "Decode the Caesar cipher: FORXG (each letter was shifted forward by 3). What is the word?",
-      "options": ["DUOLC", "GPSYH", "ENQWF", "CLOUD"],
-      "correctIndex": 3,
+      "options": ["DUOLC", "CLOUD", "GPSYH", "ENQWF"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -659,11 +659,11 @@
       "question": "A detective studies the garden room: a tipped board game, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
         "The tipped object proves a struggle",
-        "The mud proves rain during the visit",
         "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
         "The umbrella proves heavy rain"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -671,8 +671,8 @@
     },
     {
       "question": "The code word NOMEL is written backwards. What is the real word?",
-      "options": ["MFNPO", "LMON", "LEMO", "LEMON"],
-      "correctIndex": 3,
+      "options": ["LEMON", "LMON", "LEMO", "MFNPO"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -689,8 +689,8 @@
     },
     {
       "question": "The code word EGNARO is written backwards. What is the real word?",
-      "options": ["ORANG", "OANGE", "PSBOHF", "ORANGE"],
-      "correctIndex": 3,
+      "options": ["ORANGE", "OANGE", "PSBOHF", "ORANG"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -699,12 +699,12 @@
     {
       "question": "A detective studies the tea shop: a tipped potted fern, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The umbrella proves heavy rain",
-        "The mud proves rain during the visit",
         "The mud tracks show the visit began in dry weather",
+        "The mud proves rain during the visit",
+        "The umbrella proves heavy rain",
         "The tipped object proves a struggle"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -722,8 +722,8 @@
     },
     {
       "question": "A1Z26 code: 6-5-5-4 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["EGGS", "FEED", "BEEF", "DEAF"],
-      "correctIndex": 1,
+      "options": ["FEED", "EGGS", "BEEF", "DEAF"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -731,8 +731,8 @@
     },
     {
       "question": "The code word THGIL is written backwards. What is the real word?",
-      "options": ["LIGH", "MJHIU", "LGHT", "LIGHT"],
-      "correctIndex": 3,
+      "options": ["LIGHT", "LIGH", "LGHT", "MJHIU"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -742,11 +742,11 @@
       "question": "At the attic loft, the detective finds a cold cardboard box, a stopped desk fan, and a diary whose last entry is at 3 PM. The power was cut at 2 PM. What does the diary's final entry time prove?",
       "options": [
         "The fan was very old",
-        "The entries stopped when the power failed",
         "The diary was borrowed",
+        "The entries stopped when the power failed",
         "The desk was used at night"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -755,12 +755,12 @@
     {
       "question": "A biscuit tin sits on the desk at the attic loft beside two teacups: one empty, one full and cold. Only one chair is pulled out. What does the second teacup suggest?",
       "options": [
-        "The visitor left in a hurry",
+        "Two people shared the room",
         "The room was empty",
         "The tea was freshly made",
-        "Two people shared the room"
+        "The visitor left in a hurry"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -769,12 +769,12 @@
     {
       "question": "the scout hut shows a strange scene: a half-eaten teacup, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
-        "By picking the lock",
         "Down the chimney",
         "Through the open window",
+        "By picking the lock",
         "With a spare key"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -782,17 +782,17 @@
     },
     {
       "question": "Decode the Caesar cipher: MFNPO (each letter was shifted forward by 1). What is the word?",
-      "options": ["TRAIN", "LEMON", "NGOQP", "NOMEL"],
-      "correctIndex": 1,
+      "options": ["LEMON", "TRAIN", "NGOQP", "NOMEL"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 1.",
       "explanation": "Shifting each letter back 1 spells LEMON."
     },
     {
-      "question": "At the garden shed, silver locket vanished. Oscar claims they were watering plants, Ivy says they were baking bread, and Felix insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the locket?",
-      "options": ["Oscar", "Ivy", "Felix", "an outside thief"],
-      "correctIndex": 0,
+      "question": "At the garden shed, silver locket vanished. Oscar claims they were watering plants, Ivy says they were baking bread, and Felix insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the locket?",
+      "options": ["Felix", "Ivy", "Oscar", "an outside thief"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -800,8 +800,8 @@
     },
     {
       "question": "A1Z26 code: 8-5-1-4 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["FEED", "BEEF", "HEAD", "DEAF"],
-      "correctIndex": 2,
+      "options": ["HEAD", "FEED", "BEEF", "DEAF"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -809,8 +809,8 @@
     },
     {
       "question": "Decode the Caesar cipher: UWICT (each letter was shifted forward by 2). What is the word?",
-      "options": ["TVHBS", "VXJDU", "SUGAR", "RAGUS"],
-      "correctIndex": 2,
+      "options": ["VXJDU", "SUGAR", "TVHBS", "RAGUS"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -827,8 +827,8 @@
     },
     {
       "question": "A1Z26 code: 2-5-1-4 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["BEAD", "DEAF", "BEEF", "FEED"],
-      "correctIndex": 0,
+      "options": ["DEAF", "BEAD", "BEEF", "FEED"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -869,8 +869,8 @@
     },
     {
       "question": "Decode the Caesar cipher: ZLQWHU (each letter was shifted forward by 3). What is the word?",
-      "options": ["AMRXIV", "YKPVGT", "WINTER", "RETNIW"],
-      "correctIndex": 2,
+      "options": ["AMRXIV", "WINTER", "YKPVGT", "RETNIW"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -878,17 +878,17 @@
     },
     {
       "question": "Decode the Caesar cipher: VCDNG (each letter was shifted forward by 2). What is the word?",
-      "options": ["WDEOH", "ELBAT", "TABLE", "UBCMF"],
-      "correctIndex": 2,
+      "options": ["ELBAT", "TABLE", "WDEOH", "UBCMF"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
       "explanation": "Shifting each letter back 2 spells TABLE."
     },
     {
-      "question": "At the manor kitchen, lucky fishing rod vanished. Nora claims they were watering plants, Felix says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere \u2014 who took the rod?",
-      "options": ["Nora", "Felix", "Oscar", "an outside thief"],
-      "correctIndex": 2,
+      "question": "At the manor kitchen, lucky fishing rod vanished. Nora claims they were watering plants, Felix says they were baking bread, and Oscar insists they never left the reading room. The plants are bone dry, the kitchen clock shows the oven was never on, and the reading room door was locked from inside by a librarian who saw nobody enter. Only one person told the truth about being elsewhere — who took the rod?",
+      "options": ["Oscar", "Nora", "Felix", "an outside thief"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Who Did It?",
       "hint": "Check each alibi against the evidence.",
@@ -896,8 +896,8 @@
     },
     {
       "question": "The code word ELCRIC is written backwards. What is the real word?",
-      "options": ["CIRCLE", "DJSDMF", "CRCLE", "CIRCL"],
-      "correctIndex": 0,
+      "options": ["DJSDMF", "CIRCLE", "CRCLE", "CIRCL"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -907,11 +907,11 @@
       "question": "A detective studies the tea shop: a tipped board game, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
         "The tipped object proves a struggle",
-        "The mud tracks show the visit began in dry weather",
         "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
         "The mud proves rain during the visit"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -929,8 +929,8 @@
     },
     {
       "question": "Decode the Caesar cipher: RNCPV (each letter was shifted forward by 2). What is the word?",
-      "options": ["PLANT", "QMBOU", "SODQW", "TNALP"],
-      "correctIndex": 0,
+      "options": ["QMBOU", "PLANT", "SODQW", "TNALP"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -940,11 +940,11 @@
       "question": "the study shows a strange scene: a half-eaten board game, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
         "Down the chimney",
-        "With a spare key",
         "Through the open window",
+        "With a spare key",
         "By picking the lock"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -952,8 +952,8 @@
     },
     {
       "question": "Decode the Caesar cipher: TVHBS (each letter was shifted forward by 1). What is the word?",
-      "options": ["UWICT", "TRAIN", "SUGAR", "RAGUS"],
-      "correctIndex": 2,
+      "options": ["SUGAR", "UWICT", "TRAIN", "RAGUS"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 1.",
@@ -961,8 +961,8 @@
     },
     {
       "question": "Decode the Caesar cipher: VXJDU (each letter was shifted forward by 3). What is the word?",
-      "options": ["WYKEV", "UWICT", "RAGUS", "SUGAR"],
-      "correctIndex": 3,
+      "options": ["WYKEV", "SUGAR", "UWICT", "RAGUS"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 3.",
@@ -970,8 +970,8 @@
     },
     {
       "question": "Decode the Caesar cipher: VKIGT (each letter was shifted forward by 2). What is the word?",
-      "options": ["WLJHU", "TIGER", "REGIT", "UJHFS"],
-      "correctIndex": 1,
+      "options": ["TIGER", "WLJHU", "REGIT", "UJHFS"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -981,11 +981,11 @@
       "question": "the boathouse shows a strange scene: a half-eaten potted fern, an open window, and swaying curtains. There is no broken glass and no forced lock. How did the visitor get in?",
       "options": [
         "By picking the lock",
-        "Down the chimney",
+        "Through the open window",
         "With a spare key",
-        "Through the open window"
+        "Down the chimney"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -994,12 +994,12 @@
     {
       "question": "A detective studies the scout hut: a tipped teacup, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The tipped object proves a struggle",
         "The mud tracks show the visit began in dry weather",
+        "The tipped object proves a struggle",
         "The mud proves rain during the visit",
         "The umbrella proves heavy rain"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -1007,8 +1007,8 @@
     },
     {
       "question": "A1Z26 code: 3-1-7-5 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["CAGE", "BEEF", "DEAF", "FEED"],
-      "correctIndex": 0,
+      "options": ["BEEF", "CAGE", "DEAF", "FEED"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -1016,8 +1016,8 @@
     },
     {
       "question": "Decode the Caesar cipher: OCTMGV (each letter was shifted forward by 2). What is the word?",
-      "options": ["PDUNHW", "TEKRAM", "MARKET", "NBSLFU"],
-      "correctIndex": 2,
+      "options": ["PDUNHW", "MARKET", "TEKRAM", "NBSLFU"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -1026,12 +1026,12 @@
     {
       "question": "A detective studies the tea shop: a tipped biscuit tin, a wet umbrella by the door, and mud tracks leading OUT. Whoever left arrived before the rain started. Which detail proves the visit began in dry weather?",
       "options": [
-        "The umbrella proves heavy rain",
+        "The mud tracks show the visit began in dry weather",
         "The tipped object proves a struggle",
         "The mud proves rain during the visit",
-        "The mud tracks show the visit began in dry weather"
+        "The umbrella proves heavy rain"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Crime Scene",
       "hint": "Compare each detail against the timeline.",
@@ -1039,8 +1039,8 @@
     },
     {
       "question": "Decode the Caesar cipher: DQVVNG (each letter was shifted forward by 2). What is the word?",
-      "options": ["ERWWOH", "CPUUMF", "BOTTLE", "ELTTOB"],
-      "correctIndex": 2,
+      "options": ["CPUUMF", "BOTTLE", "ERWWOH", "ELTTOB"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Shift each letter BACK by 2.",
@@ -1048,8 +1048,8 @@
     },
     {
       "question": "A1Z26 code: 3-1-2-9-14 (A=1, B=2 ... Z=26). Decode the word.",
-      "options": ["CAFE", "BADGE", "BEAD", "CABIN"],
-      "correctIndex": 3,
+      "options": ["BADGE", "CABIN", "BEAD", "CAFE"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Code-Breaking",
       "hint": "Convert each number to its alphabet letter.",
@@ -1057,8 +1057,8 @@
     },
     {
       "question": "The code word RIAHC is written backwards. What is the real word?",
-      "options": ["CHAIR", "CAIR", "CHAI", "DIBJS"],
-      "correctIndex": 0,
+      "options": ["CAIR", "CHAIR", "CHAI", "DIBJS"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",
@@ -1066,8 +1066,8 @@
     },
     {
       "question": "The code word REWOLF is written backwards. What is the real word?",
-      "options": ["FLOWER", "FOWER", "FLOWE", "GMPXFS"],
-      "correctIndex": 0,
+      "options": ["FOWER", "FLOWER", "FLOWE", "GMPXFS"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Code-Breaking",
       "hint": "Read it from right to left.",

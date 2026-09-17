@@ -362,7 +362,8 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           </motion.div>
         )}
 
-        {/* Answer Options — Using shared AnswerOptions for level-aware option count */}
+        {/* Answer Options — shared component with the riddle option-count spec
+            (easy 2 · medium 3 · hard 4 — BUG-016) */}
         <AnswerOptions
           options={options}
           selectedKey={selectedAnswer}
@@ -371,6 +372,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           disabled={disabled || timeUp}
           showFeedback={showFeedback || false}
           level={level}
+          game="riddle"
         />
       </motion.div>
     </>

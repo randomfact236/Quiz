@@ -15,18 +15,35 @@ import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
 
 /** Brand link from the Site Information settings. Mobile (<md) shows the
- *  square app icon + site name; md+ shows the whole logo only — it already
- *  carries the brand name, so no text is added beside it (unless no logo is
- *  uploaded, in which case the placeholder mark + name are shown). */
+ *  dedicated mobile logo when set, else the square app icon (+ site name
+ *  unless the admin turned the text off); md+ shows the whole logo only — it
+ *  already carries the brand name, so no text is added beside it (unless no
+ *  logo is uploaded, in which case the placeholder mark + name are shown).
+ *  A dark-mode logo variant swaps in under dark mode when uploaded. */
 function BrandLink(): JSX.Element {
-  const { siteName, logo, favicon } = useSiteBrand();
+  const { siteName, logo, logoDark, favicon, mobileLogo, mobileShowSiteName } = useSiteBrand();
   const squareIcon = favicon || logo;
   const fullLogo = logo || favicon;
+  // The site-name text is a mobile-only companion to the square icon; the
+  // dedicated mobile logo replaces both, and md+ keeps the old rule (text only
+  // when no logo exists, so the placeholder mark never leaves the brand
+  // nameless).
+  const mobileTextVisible = !mobileLogo && mobileShowSiteName;
+  const textVisibility = mobileTextVisible
+    ? fullLogo
+      ? 'md:hidden'
+      : ''
+    : fullLogo
+      ? 'hidden'
+      : 'hidden md:inline-block';
   return (
     <Link href="/" className="inline-flex items-center gap-2" aria-label={`${siteName} Home`}>
-      {/* Mobile top bar — square app icon */}
+      {/* Mobile top bar — dedicated mobile logo, else the square app icon */}
       <span className="md:hidden" aria-hidden="true">
-        {squareIcon ? (
+        {mobileLogo ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={mobileLogo} alt="" className="h-7 w-auto max-w-[160px] object-contain" />
+        ) : squareIcon ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img src={squareIcon} alt="" className="h-7 w-7 rounded object-contain" />
         ) : (
@@ -37,18 +54,28 @@ function BrandLink(): JSX.Element {
           (h-20 with -my-4 cancels the nav's py-4 so it spans edge-to-edge) */}
       <span className="hidden md:block" aria-hidden="true">
         {fullLogo ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={fullLogo} alt="" className="h-20 -my-4 w-auto max-w-[320px] object-contain" />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={fullLogo}
+              alt=""
+              className={`h-20 -my-4 w-auto max-w-[320px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
+            />
+            {logoDark && (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={logoDark}
+                alt=""
+                className="hidden h-20 -my-4 w-auto max-w-[320px] object-contain dark:block"
+              />
+            )}
+          </>
         ) : (
           <BrandMark size={48} />
         )}
       </span>
-      {/* Site name: always on mobile; on md+ only when no logo is uploaded
-          (the placeholder mark alone would leave the brand nameless) */}
       <span
-        className={`text-xl font-bold text-primary-600 hover:text-primary-700 ${
-          fullLogo ? 'md:hidden' : ''
-        }`}
+        className={`text-xl font-bold text-primary-600 hover:text-primary-700 ${textVisibility}`}
       >
         {siteName}
       </span>
@@ -180,6 +207,12 @@ export default function Header(): JSX.Element {
               </div>
             </div>
 
+            {/* Mobile top-bar theme toggle (BUG-009) — drawer-only placement
+                made switching undiscoverable on phones */}
+            <div className="flex items-center md:hidden">
+              <ThemeToggle size="sm" />
+            </div>
+
             <button
               type="button"
               className="rounded-lg p-2 text-secondary-600 hover:bg-secondary-100 md:hidden dark:text-secondary-300 dark:hover:bg-secondary-800"
@@ -211,16 +244,12 @@ export default function Header(): JSX.Element {
           {isMenuOpen && (
             <div className="mt-4 space-y-2 border-t border-secondary-200 dark:border-secondary-700 pt-4 md:hidden">
               <MobileDrawerBrand />
-              <div className="flex items-center justify-between rounded-lg px-4 py-2">
-                <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
-                <ThemeToggle size="sm" />
-              </div>
               {NAV_MENU_ITEMS.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActive(item.href) ? 'page' : undefined}
-                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
+                  className="block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
@@ -233,7 +262,7 @@ export default function Header(): JSX.Element {
                       handleAdminLogout();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800 dark:hover:bg-secondary-800"
+                    className="w-full text-left block rounded-lg px-4 py-2 text-secondary-600 hover:bg-secondary-100 dark:text-secondary-300 dark:hover:bg-secondary-800"
                   >
                     Logout
                   </button>
@@ -351,6 +380,12 @@ export default function Header(): JSX.Element {
               </div>
             </div>
 
+            {/* Mobile top-bar theme toggle (BUG-009) — drawer-only placement
+                made switching undiscoverable on phones */}
+            <div className="flex items-center md:hidden">
+              <ThemeToggle size="sm" />
+            </div>
+
             <button
               type="button"
               className="rounded-lg p-2 text-secondary-600 hover:bg-secondary-100 md:hidden dark:text-secondary-300 dark:hover:bg-secondary-800"
@@ -419,10 +454,6 @@ export default function Header(): JSX.Element {
               >
                 <X size={20} aria-hidden="true" />
               </button>
-            </div>
-            <div className="mb-2 flex items-center justify-between rounded-lg px-2 py-1">
-              <span className="text-sm text-secondary-500 dark:text-secondary-400">Theme</span>
-              <ThemeToggle size="sm" />
             </div>
             {NAV_MENU_ITEMS.map((item) => (
               <Link

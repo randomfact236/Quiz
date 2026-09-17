@@ -15,6 +15,7 @@ const footerLinks = {
 };
 
 const legalLinks = [
+  { href: '/faq', label: 'FAQ' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Service' },
   { href: '/contact', label: 'Contact' },
@@ -30,6 +31,7 @@ export default async function Footer(): Promise<JSX.Element> {
     site?.siteDescription?.trim() ||
     'Enterprise-grade interactive quiz platform. Test your knowledge and have fun!';
   const logo = resolveMediaUrl(site?.logo?.trim() ?? '');
+  const logoDark = resolveMediaUrl(site?.logoDark?.trim() ?? '');
 
   return (
     <footer
@@ -47,8 +49,22 @@ export default async function Footer(): Promise<JSX.Element> {
               aria-label={`${siteName} - Home`}
             >
               {logo && (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={logo} alt="" className="h-12 w-auto max-w-[240px] object-contain" />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={logo}
+                    alt=""
+                    className={`h-12 w-auto max-w-[240px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
+                  />
+                  {logoDark && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={logoDark}
+                      alt=""
+                      className="hidden h-12 w-auto max-w-[240px] object-contain dark:block"
+                    />
+                  )}
+                </>
               )}
               {/* With a logo uploaded the wordmark already carries the brand —
                   show the text name only when there is no logo (header parity). */}

@@ -36,7 +36,11 @@ const nextConfig = {
   // Output standalone for Docker
   output: 'standalone',
 
-  // Legacy /riddles path moved to /riddle-mcq — keep old links working
+  // The static games under /public/games are directories (…/index.html), which
+  // Next serves by exact file path only — a bare /games/<slug> would 404
+  // (BUG-015). Redirect the clean URL to the index.html path rather than
+  // rewriting: the games load their assets with relative URLs ("style.css"),
+  // so the document URL must sit inside /games/<slug>/ for them to resolve.
   async redirects() {
     return [
       {
@@ -44,22 +48,39 @@ const nextConfig = {
         destination: '/riddle-mcq',
         permanent: true,
       },
+      {
+        source: '/games/:slug',
+        destination: '/games/:slug/index.html',
+        permanent: false,
+      },
     ];
   },
 
   // The static games under /public/games are plain files with no fingerprint in
   // their names, so a long-lived cache would serve stale HTML/CSS/JS to players
   // after a deploy. Force revalidation on every load (conditional requests stay
-  // cheap); asset URLs keep their clean names.
+  // cheap); asset URLs keep their clean names. Browser-hardening headers apply
+  // to every page (HSTS is intentionally absent — Cloudflare terminates TLS for
+  // production and already injects it there; over plain-HTTP local dev it would
+  // be ignored anyway).
   async headers() {
     return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+        ],
+      },
       {
         source: '/games/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' }],
       },
     ];
   },
-  
+
   // Disable image optimization in dev
   images: {
     unoptimized: true,

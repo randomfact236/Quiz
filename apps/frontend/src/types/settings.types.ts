@@ -231,6 +231,12 @@ export interface SiteSettings {
   logo: string;
   /** /uploads/... path or absolute URL; empty = file-convention icon */
   favicon: string;
+  /** Dark-mode variant of the main logo; empty = the main logo in both themes */
+  logoDark: string;
+  /** Mobile-only header logo; empty = square icon + site name on phones */
+  mobileLogo: string;
+  /** Show the site-name text in the mobile header beside the icon */
+  mobileShowSiteName: boolean;
   /** Browser tab shows "Page | Tagline"; empty = the site name */
   tabTagline: string;
   socialLinks: SiteSocialLinks;

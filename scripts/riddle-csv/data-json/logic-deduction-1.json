@@ -8,7 +8,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Elena the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Grace, making Elena the truth-teller.",
       "answer": "Elena"
     },
     {
@@ -18,7 +18,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Elena, making Grace the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Elena, making Grace the truth-teller.",
       "answer": "Grace"
     },
     {
@@ -28,13 +28,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Isla, making Grace the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Isla, making Grace the truth-teller.",
       "answer": "Grace"
     },
     {
       "question": "Jonas is shorter than Anna.  Anna is shorter than David.  David is shorter than Felix. Who is the tallest?",
-      "options": ["Felix", "Jonas", "Anna", "David"],
-      "correctIndex": 0,
+      "options": ["Jonas", "Felix", "Anna", "David"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -52,8 +52,8 @@
     },
     {
       "question": "Isla is younger than Clara.  Clara is younger than Felix.  Felix is younger than Grace. Who is the oldest?",
-      "options": ["Isla", "Clara", "Felix", "Grace"],
-      "correctIndex": 3,
+      "options": ["Grace", "Clara", "Felix", "Isla"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -61,8 +61,8 @@
     },
     {
       "question": "Elena does not live in the green house or the red house. Isla lives in the red house. Where does Elena live?",
-      "options": ["the green house", "the blue house", "Next to Isla", "the red house"],
-      "correctIndex": 1,
+      "options": ["the blue house", "the green house", "Next to Isla", "the red house"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -98,8 +98,8 @@
     },
     {
       "question": "Henry is shorter than Clara.  Clara is shorter than Jonas.  Jonas is shorter than Ben. Who is the tallest?",
-      "options": ["Jonas", "Henry", "Clara", "Ben"],
-      "correctIndex": 3,
+      "options": ["Ben", "Henry", "Clara", "Jonas"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -107,8 +107,8 @@
     },
     {
       "question": "Felix is younger than Elena.  Elena is younger than Anna.  Anna is younger than David. Who is the oldest?",
-      "options": ["Felix", "David", "Anna", "Elena"],
-      "correctIndex": 1,
+      "options": ["David", "Felix", "Anna", "Elena"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -121,7 +121,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Ben the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Grace, making Ben the truth-teller.",
       "answer": "Ben"
     },
     {
@@ -136,8 +136,8 @@
     },
     {
       "question": "Henry does not live in the red house or the green house. Clara lives in the green house. Where does Henry live?",
-      "options": ["the green house", "the red house", "the blue house", "Next to Clara"],
-      "correctIndex": 2,
+      "options": ["the blue house", "the red house", "the green house", "Next to Clara"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -155,8 +155,8 @@
     },
     {
       "question": "Isla does not live in the red house or the green house. Clara lives in the green house. Where does Isla live?",
-      "options": ["Next to Clara", "the green house", "the blue house", "the red house"],
-      "correctIndex": 2,
+      "options": ["the green house", "the blue house", "Next to Clara", "the red house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -174,8 +174,8 @@
     },
     {
       "question": "Isla does not live in the red house or the green house. Elena lives in the green house. Where does Isla live?",
-      "options": ["the red house", "Next to Elena", "the green house", "the blue house"],
-      "correctIndex": 3,
+      "options": ["the blue house", "Next to Elena", "the green house", "the red house"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -188,7 +188,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Ben, making Isla the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Ben, making Isla the truth-teller.",
       "answer": "Isla"
     },
     {
@@ -198,13 +198,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Anna, making Jonas the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Anna, making Jonas the truth-teller.",
       "answer": "Jonas"
     },
     {
       "question": "Clara does not live in the blue house or the green house. Isla lives in the green house. Where does Clara live?",
-      "options": ["Next to Isla", "the blue house", "the green house", "the red house"],
-      "correctIndex": 3,
+      "options": ["the red house", "Next to Isla", "the green house", "the blue house"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -227,7 +227,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Felix, making Clara the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Felix, making Clara the truth-teller.",
       "answer": "Clara"
     },
     {
@@ -241,8 +241,8 @@
     },
     {
       "question": "Ben does not live in the green house or the red house. Jonas lives in the red house. Where does Ben live?",
-      "options": ["the blue house", "Next to Jonas", "the green house", "the red house"],
-      "correctIndex": 0,
+      "options": ["Next to Jonas", "the blue house", "the green house", "the red house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -255,7 +255,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Clara the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Grace, making Clara the truth-teller.",
       "answer": "Clara"
     },
     {
@@ -275,7 +275,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Ben, making Anna the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Ben, making Anna the truth-teller.",
       "answer": "Anna"
     },
     {
@@ -290,8 +290,8 @@
     },
     {
       "question": "Isla is slower than Felix.  Felix is slower than Anna.  Anna is slower than Elena. Who is the fastest?",
-      "options": ["Felix", "Anna", "Elena", "Isla"],
-      "correctIndex": 2,
+      "options": ["Anna", "Elena", "Felix", "Isla"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -304,13 +304,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be David, making Grace the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be David, making Grace the truth-teller.",
       "answer": "Grace"
     },
     {
       "question": "Isla is younger than Grace.  Grace is younger than Clara.  Clara is younger than Felix. Who is the oldest?",
-      "options": ["Felix", "Grace", "Isla", "Clara"],
-      "correctIndex": 0,
+      "options": ["Grace", "Felix", "Isla", "Clara"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -323,13 +323,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be David, making Isla the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be David, making Isla the truth-teller.",
       "answer": "Isla"
     },
     {
       "question": "Anna does not live in the red house or the green house. David lives in the green house. Where does Anna live?",
-      "options": ["the green house", "Next to David", "the red house", "the blue house"],
-      "correctIndex": 3,
+      "options": ["the blue house", "the green house", "the red house", "Next to David"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -337,8 +337,8 @@
     },
     {
       "question": "Isla is shorter than Jonas.  Jonas is shorter than Grace.  Grace is shorter than Felix. Who is the tallest?",
-      "options": ["Isla", "Jonas", "Felix", "Grace"],
-      "correctIndex": 2,
+      "options": ["Felix", "Isla", "Jonas", "Grace"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -351,7 +351,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Clara, making Henry the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Clara, making Henry the truth-teller.",
       "answer": "Henry"
     },
     {
@@ -365,8 +365,8 @@
     },
     {
       "question": "Anna does not live in the red house or the blue house. Elena lives in the blue house. Where does Anna live?",
-      "options": ["the red house", "the blue house", "Next to Elena", "the green house"],
-      "correctIndex": 3,
+      "options": ["the red house", "the green house", "Next to Elena", "the blue house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -374,8 +374,8 @@
     },
     {
       "question": "David is younger than Elena.  Elena is younger than Isla.  Isla is younger than Felix. Who is the oldest?",
-      "options": ["David", "Elena", "Isla", "Felix"],
-      "correctIndex": 3,
+      "options": ["David", "Felix", "Isla", "Elena"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -388,13 +388,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Anna, making Henry the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Anna, making Henry the truth-teller.",
       "answer": "Henry"
     },
     {
       "question": "Jonas does not live in the red house or the green house. David lives in the green house. Where does Jonas live?",
-      "options": ["the green house", "the blue house", "the red house", "Next to David"],
-      "correctIndex": 1,
+      "options": ["the blue house", "the green house", "the red house", "Next to David"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -402,8 +402,8 @@
     },
     {
       "question": "Felix is shorter than Clara.  Clara is shorter than Grace.  Grace is shorter than Jonas. Who is the tallest?",
-      "options": ["Clara", "Grace", "Felix", "Jonas"],
-      "correctIndex": 3,
+      "options": ["Grace", "Jonas", "Felix", "Clara"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -416,13 +416,13 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Henry, making Anna the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Henry, making Anna the truth-teller.",
       "answer": "Anna"
     },
     {
       "question": "Clara does not live in the blue house or the red house. Grace lives in the red house. Where does Clara live?",
-      "options": ["the green house", "Next to Grace", "the blue house", "the red house"],
-      "correctIndex": 0,
+      "options": ["Next to Grace", "the green house", "the blue house", "the red house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -439,8 +439,8 @@
     },
     {
       "question": "Anna is shorter than Ben.  Ben is shorter than Elena.  Elena is shorter than Clara. Who is the tallest?",
-      "options": ["Anna", "Elena", "Clara", "Ben"],
-      "correctIndex": 2,
+      "options": ["Clara", "Elena", "Anna", "Ben"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -453,7 +453,7 @@
       "level": "expert",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Ben, making Clara the truth-teller.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Ben, making Clara the truth-teller.",
       "answer": "Clara"
     },
     {
@@ -478,26 +478,26 @@
     },
     {
       "question": "Anna says: Jonas always lies. Jonas says: Anna always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Anna", "Jonas", "Both tell the truth", "Both lie"],
-      "correctIndex": 0,
+      "options": ["Jonas", "Anna", "Both tell the truth", "Both lie"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Jonas, making Anna the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Jonas, making Anna the truth-teller."
     },
     {
       "question": "Anna says: Elena always lies. Elena says: Anna always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Both lie", "Elena", "Both tell the truth", "Anna"],
-      "correctIndex": 3,
+      "options": ["Anna", "Elena", "Both lie", "Both tell the truth"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Elena, making Anna the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Elena, making Anna the truth-teller."
     },
     {
       "question": "Isla does not live in the green house or the red house. Grace lives in the red house. Where does Isla live?",
-      "options": ["the blue house", "the red house", "the green house", "Next to Grace"],
-      "correctIndex": 0,
+      "options": ["the red house", "the blue house", "the green house", "Next to Grace"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -510,12 +510,12 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Felix, making Henry the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Felix, making Henry the truth-teller."
     },
     {
       "question": "Ben is slower than Grace.  Grace is slower than Felix.  Felix is slower than David. Who is the fastest?",
-      "options": ["David", "Felix", "Grace", "Ben"],
-      "correctIndex": 0,
+      "options": ["Felix", "David", "Grace", "Ben"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -523,8 +523,8 @@
     },
     {
       "question": "Anna is shorter than Felix. Isla is shorter than Anna. Elena is between Anna and Felix in height. Who is the tallest?",
-      "options": ["Elena", "Anna", "Isla", "Felix"],
-      "correctIndex": 3,
+      "options": ["Elena", "Felix", "Anna", "Isla"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -541,8 +541,8 @@
     },
     {
       "question": "Henry is shorter than Ben. Elena is shorter than Henry. Anna is between Henry and Ben in height. Who is the tallest?",
-      "options": ["Ben", "Henry", "Anna", "Elena"],
-      "correctIndex": 0,
+      "options": ["Henry", "Ben", "Anna", "Elena"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -550,8 +550,8 @@
     },
     {
       "question": "Henry is shorter than Felix. Isla is shorter than Henry. Jonas is between Henry and Felix in height. Who is the tallest?",
-      "options": ["Jonas", "Isla", "Henry", "Felix"],
-      "correctIndex": 3,
+      "options": ["Henry", "Isla", "Felix", "Jonas"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -564,12 +564,12 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be David, making Jonas the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be David, making Jonas the truth-teller."
     },
     {
       "question": "Clara is younger than Felix. Jonas is younger than Clara. Anna is between Clara and Felix in age. Who is the oldest?",
-      "options": ["Clara", "Anna", "Jonas", "Felix"],
-      "correctIndex": 3,
+      "options": ["Clara", "Anna", "Felix", "Jonas"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -577,17 +577,17 @@
     },
     {
       "question": "David says: Clara always lies. Clara says: David always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["David", "Clara", "Both tell the truth", "Both lie"],
-      "correctIndex": 0,
+      "options": ["Both tell the truth", "Clara", "David", "Both lie"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Clara, making David the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Clara, making David the truth-teller."
     },
     {
       "question": "Henry does not live in the green house or the red house. Elena lives in the red house. Where does Henry live?",
-      "options": ["the green house", "the red house", "the blue house", "Next to Elena"],
-      "correctIndex": 2,
+      "options": ["the red house", "the blue house", "the green house", "Next to Elena"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -595,8 +595,8 @@
     },
     {
       "question": "Felix is slower than Henry.  Henry is slower than Elena.  Elena is slower than Isla. Who is the fastest?",
-      "options": ["Henry", "Isla", "Felix", "Elena"],
-      "correctIndex": 1,
+      "options": ["Isla", "Henry", "Felix", "Elena"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -609,7 +609,7 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Jonas, making Elena the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Jonas, making Elena the truth-teller."
     },
     {
       "question": "Isla does not live in the green house or the blue house. Anna lives in the blue house. Where does Isla live?",
@@ -622,8 +622,8 @@
     },
     {
       "question": "David does not live in the blue house or the red house. Isla lives in the red house. Where does David live?",
-      "options": ["the green house", "the red house", "the blue house", "Next to Isla"],
-      "correctIndex": 0,
+      "options": ["the red house", "the green house", "the blue house", "Next to Isla"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -631,8 +631,8 @@
     },
     {
       "question": "Jonas is younger than Elena.  Elena is younger than David.  David is younger than Henry. Who is the oldest?",
-      "options": ["David", "Elena", "Jonas", "Henry"],
-      "correctIndex": 3,
+      "options": ["Henry", "Elena", "Jonas", "David"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -640,8 +640,8 @@
     },
     {
       "question": "David is younger than Henry. Grace is younger than David. Jonas is between David and Henry in age. Who is the oldest?",
-      "options": ["Jonas", "Grace", "Henry", "David"],
-      "correctIndex": 2,
+      "options": ["Jonas", "Henry", "Grace", "David"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -649,8 +649,8 @@
     },
     {
       "question": "Jonas does not live in the green house or the red house. Isla lives in the red house. Where does Jonas live?",
-      "options": ["the red house", "the green house", "Next to Isla", "the blue house"],
-      "correctIndex": 3,
+      "options": ["the blue house", "the green house", "Next to Isla", "the red house"],
+      "correctIndex": 0,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -658,8 +658,8 @@
     },
     {
       "question": "Felix is shorter than David. Jonas is shorter than Felix. Henry is between Felix and David in height. Who is the tallest?",
-      "options": ["Felix", "Jonas", "Henry", "David"],
-      "correctIndex": 3,
+      "options": ["Henry", "Jonas", "David", "Felix"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -672,7 +672,7 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Isla, making Clara the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Isla, making Clara the truth-teller."
     },
     {
       "question": "Elena is shorter than Henry. Clara is shorter than Elena. David is between Elena and Henry in height. Who is the tallest?",
@@ -685,8 +685,8 @@
     },
     {
       "question": "Henry is younger than David. Clara is younger than Henry. Anna is between Henry and David in age. Who is the oldest?",
-      "options": ["Anna", "Clara", "Henry", "David"],
-      "correctIndex": 3,
+      "options": ["Anna", "David", "Henry", "Clara"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -694,8 +694,8 @@
     },
     {
       "question": "Ben does not live in the blue house or the green house. Felix lives in the green house. Where does Ben live?",
-      "options": ["Next to Felix", "the green house", "the blue house", "the red house"],
-      "correctIndex": 3,
+      "options": ["Next to Felix", "the red house", "the blue house", "the green house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -703,8 +703,8 @@
     },
     {
       "question": "Grace is shorter than Clara. Ben is shorter than Grace. Isla is between Grace and Clara in height. Who is the tallest?",
-      "options": ["Ben", "Grace", "Isla", "Clara"],
-      "correctIndex": 3,
+      "options": ["Ben", "Clara", "Isla", "Grace"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -712,26 +712,26 @@
     },
     {
       "question": "Isla says: Anna always lies. Anna says: Isla always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Anna", "Both tell the truth", "Both lie", "Isla"],
-      "correctIndex": 3,
+      "options": ["Isla", "Both tell the truth", "Anna", "Both lie"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Anna, making Isla the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Anna, making Isla the truth-teller."
     },
     {
       "question": "Grace says: Felix always lies. Felix says: Grace always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Both lie", "Grace", "Both tell the truth", "Felix"],
-      "correctIndex": 1,
+      "options": ["Grace", "Both lie", "Both tell the truth", "Felix"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Felix, making Grace the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Felix, making Grace the truth-teller."
     },
     {
       "question": "Henry is younger than Anna. Isla is younger than Henry. Grace is between Henry and Anna in age. Who is the oldest?",
-      "options": ["Anna", "Grace", "Isla", "Henry"],
-      "correctIndex": 0,
+      "options": ["Grace", "Anna", "Isla", "Henry"],
+      "correctIndex": 1,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -739,8 +739,8 @@
     },
     {
       "question": "Clara is slower than Felix.  Felix is slower than Jonas.  Jonas is slower than Grace. Who is the fastest?",
-      "options": ["Felix", "Clara", "Jonas", "Grace"],
-      "correctIndex": 3,
+      "options": ["Felix", "Grace", "Jonas", "Clara"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -748,8 +748,8 @@
     },
     {
       "question": "Henry is younger than Anna. Ben is younger than Henry. David is between Henry and Anna in age. Who is the oldest?",
-      "options": ["David", "Ben", "Anna", "Henry"],
-      "correctIndex": 2,
+      "options": ["Anna", "Ben", "David", "Henry"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -766,8 +766,8 @@
     },
     {
       "question": "Isla is slower than Jonas. Elena is slower than Isla. Felix is between Isla and Jonas in speed. Who is the fastest?",
-      "options": ["Felix", "Jonas", "Elena", "Isla"],
-      "correctIndex": 1,
+      "options": ["Felix", "Elena", "Jonas", "Isla"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -780,7 +780,7 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Elena, making Isla the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Elena, making Isla the truth-teller."
     },
     {
       "question": "David is younger than Grace. Anna is younger than David. Henry is between David and Grace in age. Who is the oldest?",
@@ -793,8 +793,8 @@
     },
     {
       "question": "David does not live in the red house or the green house. Felix lives in the green house. Where does David live?",
-      "options": ["the blue house", "the green house", "Next to Felix", "the red house"],
-      "correctIndex": 0,
+      "options": ["the green house", "the blue house", "Next to Felix", "the red house"],
+      "correctIndex": 1,
       "level": "medium",
       "subject": "Logic Puzzles",
       "hint": "Eliminate the impossible houses.",
@@ -811,8 +811,8 @@
     },
     {
       "question": "Felix is slower than David. Grace is slower than Felix. Isla is between Felix and David in speed. Who is the fastest?",
-      "options": ["Felix", "Grace", "Isla", "David"],
-      "correctIndex": 3,
+      "options": ["Felix", "Grace", "David", "Isla"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -820,17 +820,17 @@
     },
     {
       "question": "Clara says: David always lies. David says: Clara always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Both tell the truth", "Both lie", "Clara", "David"],
-      "correctIndex": 2,
+      "options": ["Clara", "Both lie", "Both tell the truth", "David"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be David, making Clara the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be David, making Clara the truth-teller."
     },
     {
       "question": "Grace is slower than Elena.  Elena is slower than Isla.  Isla is slower than Jonas. Who is the fastest?",
-      "options": ["Elena", "Grace", "Isla", "Jonas"],
-      "correctIndex": 3,
+      "options": ["Grace", "Jonas", "Isla", "Elena"],
+      "correctIndex": 1,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -838,17 +838,17 @@
     },
     {
       "question": "Elena says: Isla always lies. Isla says: Elena always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Isla", "Both tell the truth", "Both lie", "Elena"],
-      "correctIndex": 3,
+      "options": ["Elena", "Isla", "Both lie", "Both tell the truth"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Isla, making Elena the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Isla, making Elena the truth-teller."
     },
     {
       "question": "Ben is younger than Anna. Elena is younger than Ben. Jonas is between Ben and Anna in age. Who is the oldest?",
-      "options": ["Ben", "Anna", "Elena", "Jonas"],
-      "correctIndex": 1,
+      "options": ["Ben", "Elena", "Anna", "Jonas"],
+      "correctIndex": 2,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -865,8 +865,8 @@
     },
     {
       "question": "Henry is slower than Grace.  Grace is slower than Isla.  Isla is slower than Felix. Who is the fastest?",
-      "options": ["Grace", "Felix", "Henry", "Isla"],
-      "correctIndex": 1,
+      "options": ["Felix", "Grace", "Henry", "Isla"],
+      "correctIndex": 0,
       "level": "easy",
       "subject": "Logic Puzzles",
       "hint": "Line the comparisons up in a chain.",
@@ -874,8 +874,8 @@
     },
     {
       "question": "Grace is shorter than Anna. Elena is shorter than Grace. Isla is between Grace and Anna in height. Who is the tallest?",
-      "options": ["Elena", "Anna", "Isla", "Grace"],
-      "correctIndex": 1,
+      "options": ["Anna", "Elena", "Isla", "Grace"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Sketch the order, then slot in the middle one.",
@@ -883,30 +883,30 @@
     },
     {
       "question": "Anna says: Grace always lies. Grace says: Anna always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Anna", "Both lie", "Grace", "Both tell the truth"],
+      "options": ["Grace", "Both lie", "Anna", "Both tell the truth"],
+      "correctIndex": 2,
+      "level": "hard",
+      "subject": "Logic Puzzles",
+      "hint": "Assume one lies and test both cases.",
+      "explanation": "They contradict each other, so exactly one lies — and it must be Grace, making Anna the truth-teller."
+    },
+    {
+      "question": "Anna says: Clara always lies. Clara says: Anna always lies. Exactly one of them is a liar by nature. Who tells the truth?",
+      "options": ["Anna", "Both lie", "Both tell the truth", "Clara"],
       "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Grace, making Anna the truth-teller."
-    },
-    {
-      "question": "Anna says: Clara always lies. Clara says: Anna always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Both lie", "Clara", "Both tell the truth", "Anna"],
-      "correctIndex": 3,
-      "level": "hard",
-      "subject": "Logic Puzzles",
-      "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Clara, making Anna the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Clara, making Anna the truth-teller."
     },
     {
       "question": "Felix says: Jonas always lies. Jonas says: Felix always lies. Exactly one of them is a liar by nature. Who tells the truth?",
-      "options": ["Both lie", "Felix", "Both tell the truth", "Jonas"],
-      "correctIndex": 1,
+      "options": ["Felix", "Both lie", "Both tell the truth", "Jonas"],
+      "correctIndex": 0,
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Jonas, making Felix the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Jonas, making Felix the truth-teller."
     },
     {
       "question": "Anna is shorter than Jonas. Clara is shorter than Anna. Grace is between Anna and Jonas in height. Who is the tallest?",
@@ -924,7 +924,7 @@
       "level": "hard",
       "subject": "Logic Puzzles",
       "hint": "Assume one lies and test both cases.",
-      "explanation": "They contradict each other, so exactly one lies \u2014 and it must be Felix, making Isla the truth-teller."
+      "explanation": "They contradict each other, so exactly one lies — and it must be Felix, making Isla the truth-teller."
     }
   ]
 }

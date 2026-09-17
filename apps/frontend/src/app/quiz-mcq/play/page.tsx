@@ -168,6 +168,43 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.status, quiz.sessionId, router]);
 
+  // BUG-001: after answering, keep the correct-answer reveal up for a few
+  // seconds, then advance automatically. Practice/normal modes only — timer
+  // mode already advances on per-question expiry. Driven by the answer events
+  // themselves (not an answered-state effect), so resumed/shared sessions and
+  // Back-navigation to answered questions never auto-advance.
+  const AUTO_ADVANCE_MS = 3000;
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearAutoAdvance = useCallback(() => {
+    if (autoAdvanceTimer.current !== null) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
+  }, []);
+  const currentQuestionId = quiz.currentQuestion?.id ?? null;
+  // Question changed (advanced / went Back) or unmounted — no longer pending.
+  useEffect(() => clearAutoAdvance, [currentQuestionId, clearAutoAdvance]);
+  const scheduleAutoAdvance = useCallback(() => {
+    if (isTimerMode || quiz.status !== 'playing') return;
+    clearAutoAdvance();
+    autoAdvanceTimer.current = setTimeout(() => {
+      autoAdvanceTimer.current = null;
+      if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+        setShowConfirmSubmit(true);
+      } else {
+        questionCardRef.current?.clearBubbles();
+        quiz.goToNext();
+      }
+    }, AUTO_ADVANCE_MS);
+  }, [
+    isTimerMode,
+    quiz.status,
+    quiz.currentQuestionIndex,
+    quiz.totalQuestions,
+    quiz.goToNext,
+    clearAutoAdvance,
+  ]);
+
   // Keyboard shortcuts: 1-4 / A-D select an option, Enter = Next/Submit.
   // Skipped while typing in the extreme input or when a modal is open.
   useEffect(() => {
@@ -206,6 +243,7 @@ function QuizContent(): JSX.Element {
       ) {
         e.preventDefault();
         quiz.selectAnswer(letters[optionIndex]!);
+        scheduleAutoAdvance();
         return;
       }
 
@@ -231,6 +269,7 @@ function QuizContent(): JSX.Element {
     quiz.goToNext,
     level,
     isTimerMode,
+    scheduleAutoAdvance,
     showConfirmSubmit,
     showExtendQuiz,
   ]);
@@ -443,6 +482,7 @@ function QuizContent(): JSX.Element {
                   selectedAnswer={quiz.answers[quiz.currentQuestion.id] || null}
                   onSelectAnswer={(answer) => {
                     quiz.selectAnswer(answer);
+                    scheduleAutoAdvance();
                   }}
                   showFeedback={true}
                   disabled={quiz.status !== 'playing'}

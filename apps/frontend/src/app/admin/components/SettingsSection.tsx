@@ -564,6 +564,54 @@ export function SettingsSection(): JSX.Element {
               </div>
             </div>
 
+            {/* Mobile header & dark mode — per-device brand control (BUG-007/BUG-010) */}
+            <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
+              <h5 className="text-md font-semibold mb-1 dark:text-gray-300">
+                📱 Mobile Header &amp; Dark Mode
+              </h5>
+              <p className="text-sm text-gray-500 dark:text-secondary-400">
+                Fine-tune what phones show in the header and how the logo behaves in dark mode.
+                Empty fields fall back to the square icon + site name / the main logo.
+              </p>
+              <div className="mt-4">
+                <ImageSettingField
+                  id="site-mobile-logo"
+                  label="Mobile Logo"
+                  infoText="Optional header logo shown only on phones. When set it renders alone — the site-name text is hidden — so use a wide asset that carries the brand. Until then, phones show the square app icon + site name."
+                  variant="logo"
+                  siteName={formData.site?.siteName ?? ''}
+                  value={formData.site?.mobileLogo ?? ''}
+                  onChange={(url) => updateField('site.mobileLogo', url)}
+                />
+              </div>
+              <div className="mt-4 flex items-center gap-3">
+                <input
+                  id="mobile-show-site-name"
+                  type="checkbox"
+                  checked={formData.site?.mobileShowSiteName ?? true}
+                  onChange={(e) => updateField('site.mobileShowSiteName', e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300 text-blue-600 dark:border-gray-600"
+                />
+                <label
+                  htmlFor="mobile-show-site-name"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Show the site name text in the mobile header (beside the square icon)
+                </label>
+              </div>
+              <div className="mt-6">
+                <ImageSettingField
+                  id="site-logo-dark"
+                  label="Dark Mode Logo"
+                  infoText="Optional dark-mode variant of the main logo — used in the header and footer whenever dark mode is active. Use a version tuned for dark backgrounds (light strokes or transparency). Left empty, the main logo is reused in both themes."
+                  variant="logo"
+                  siteName={formData.site?.siteName ?? ''}
+                  value={formData.site?.logoDark ?? ''}
+                  onChange={(url) => updateField('site.logoDark', url)}
+                />
+              </div>
+            </div>
+
             {/* Site Description — SEO / homepage text */}
             <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
               <h5 className="text-md font-semibold mb-1 dark:text-gray-300">📝 Site Description</h5>

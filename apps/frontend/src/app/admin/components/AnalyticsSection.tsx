@@ -14,7 +14,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { BarChart3, Download, RefreshCw } from 'lucide-react';
+import { BarChart3, Download, RefreshCw, Trash2 } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
 import { EventsBrowser } from './EventsBrowser';
@@ -124,6 +124,27 @@ export function AnalyticsSection() {
     downloadCsv(`analytics-${tab}`, exportRowsForTab(tab, data, retention, funnel));
   };
 
+  // Fresh-start reset (BUG-012): gated behind a typed confirmation on top of
+  // the backend's own { confirm: 'RESET' } requirement.
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetConfirmText, setResetConfirmText] = useState('');
+  const [resetting, setResetting] = useState(false);
+
+  const handleReset = async (): Promise<void> => {
+    setResetting(true);
+    setError(null);
+    try {
+      await adminApi.post('/admin/analytics/reset', { confirm: resetConfirmText });
+      setShowResetConfirm(false);
+      setResetConfirmText('');
+      await load(days);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Analytics reset failed');
+    } finally {
+      setResetting(false);
+    }
+  };
+
   return (
     <div className="rounded-xl bg-gray-950 shadow-lg ring-1 ring-gray-800">
       {/* Header */}
@@ -163,8 +184,54 @@ export function AnalyticsSection() {
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
           </button>
+          <button
+            onClick={() => setShowResetConfirm(true)}
+            disabled={resetting}
+            title="Delete all stored analytics data (irreversible)"
+            className="flex items-center gap-1.5 rounded-lg border border-red-900/60 bg-red-500/10 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" /> Clear data
+          </button>
         </div>
       </div>
+
+      {/* Reset confirmation — typed gate over an irreversible delete (BUG-012) */}
+      {showResetConfirm && (
+        <div className="mx-5 mt-3 rounded-lg border border-red-900/60 bg-red-500/10 p-4">
+          <p className="text-sm font-medium text-red-300">
+            Delete every stored analytics event and zero the guest play counters? This is permanent
+            — nightly backups are the only recovery.
+          </p>
+          <p className="mt-1 text-xs text-red-400/80">
+            Type <span className="font-mono font-bold">RESET</span> to confirm.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <input
+              value={resetConfirmText}
+              onChange={(e) => setResetConfirmText(e.target.value)}
+              placeholder="RESET"
+              aria-label="Type RESET to confirm the analytics delete"
+              className="w-32 rounded-lg border border-red-900/60 bg-gray-900 px-3 py-1.5 font-mono text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500/50"
+            />
+            <button
+              onClick={() => void handleReset()}
+              disabled={resetConfirmText !== 'RESET' || resetting}
+              className="rounded-lg bg-red-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-red-500 disabled:opacity-50"
+            >
+              {resetting ? 'Deleting…' : 'Delete forever'}
+            </button>
+            <button
+              onClick={() => {
+                setShowResetConfirm(false);
+                setResetConfirmText('');
+              }}
+              className="rounded-lg border border-gray-800 bg-gray-900 px-4 py-1.5 text-sm text-gray-300 hover:bg-gray-800"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Tab strip — sticky within the admin scroll area */}
       <div className="sticky top-0 z-10 mt-4 bg-gray-950/95 px-5 pb-2 pt-1 backdrop-blur">

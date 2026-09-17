@@ -33,7 +33,6 @@ function getLevelBadge(level: string) {
         label: '🌲 Hard',
       };
     case 'expert':
-    case 'extreme':
       return {
         class: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
         label: '🔥 Expert',
@@ -60,7 +59,7 @@ export function RiddleTableRow({
   const levelBadge = getLevelBadge(riddle.level);
 
   const correctIndex = riddle.correctLetter ? riddle.correctLetter.charCodeAt(0) - 65 : -1;
-  const isExpert = riddle.level === 'expert' || riddle.level === 'extreme';
+  const isExpert = riddle.level === 'expert';
 
   return (
     <tr
