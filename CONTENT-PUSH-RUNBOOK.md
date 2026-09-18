@@ -37,18 +37,24 @@ riddle-mcqs, joke-categories, dad-jokes, image-riddle-categories, image-riddles`
 - **Conflict detection.** If an item was edited on live since the last push, the push
   reports `conflict` and **skips** it — your live edit wins. `--force` overwrites when
   you deliberately want the local version.
-- **Matched, not blind-inserted.** Items are matched by natural key (slug / text hash),
-  so re-pushes update in place instead of duplicating.
+- **Matched, not blind-inserted.** Items are matched by natural key, so re-pushes update
+  in place instead of duplicating. Quiz child types use **system-independent natural
+  keys**: subjects → `slug`, chapters → `subjectSlug#chapterNumber`, questions →
+  `subjectSlug#chapterNumber#hash(question)` — and child payloads get their parent ids
+  (subjectId / chapterId) remapped from local UUIDs to live UUIDs during the run.
 - State lives in `scripts/.content-push-state.json` (gitignored). Deleting it makes the
   next run treat everything as "first push" — never delete it while live holds content.
 
 ## 4. First push expectations
 
-The live catalog is currently empty (cleaned 2026-09-17), so the first `--apply` creates
-everything: ~12,032 questions (single-item creates, ~2.5 h — one-time), 3,022 riddles,
-1,013 jokes, 1,906 image riddles via bulk endpoints (minutes). Everything after that is
-diff-only and fast. Watch the first run once; it self-regulates on API rate limits (429 →
-waits 62 s and retries).
+The live quiz catalog was empty (wiped 2026-09-17, refilled 2026-09-18): 12 subjects +
+79 chapters push in seconds; **questions are single-item POSTs paced ~1/s — expect
+~3 h for 11,541**. The live DTOs are strict (`forbidNonWhitelisted`): payloads contain
+exactly the DTO fields — subjects deliberately omit `isActive` (not in the DTO; live
+defaults it to true), and single-item endpoints reject JSON arrays (that's why creates
+must be one POST per row). Riddles (3,022), jokes (1,013) and image riddles (1,906) use
+bulk endpoints (minutes). Everything after the first push is diff-only and fast. Failures
+are per item; re-run — it is idempotent (natural-key updates in place).
 
 ## 5. Safety properties
 

@@ -74,15 +74,22 @@ const TYPES = {
     listPath: '/quiz-mcq/subjects', listKey: (d) => d.data ?? d,
     create: { path: '/quiz-mcq/subjects', bulk: false }, update: { path: (id) => `/quiz-mcq/subjects/${id}`, verb: 'PUT' },
     keyOf: (r) => r.slug,
-    fields: ['name', 'slug', 'emoji', 'category', 'description', 'is_active:isActive'],
+    // isActive is deliberately NOT sent: CreateSubjectDto whitelists only these
+    // five fields (live ValidationPipe is forbidNonWhitelisted → 400 on extras)
+    // and the live column defaults to true, which matches our all-active local.
+    fields: ['name', 'slug', 'emoji', 'category', 'description'],
     localTable: 'subjects',
   },
   chapters: {
     listPath: '/quiz-mcq/chapters', listKey: (d) => d.data ?? d,
     create: { path: '/quiz-mcq/chapters', bulk: false }, update: { path: (id) => `/quiz-mcq/chapters/${id}`, verb: 'PATCH' },
     keyOf: (r) => `${r.subject_id ?? r.subjectId}#${r.chapter_number ?? r.chapterNumber}`,
-    fields: ['name', 'chapter_number:chapterNumber', 'subject_id:subjectId'],
+    // live's POST /chapters accepts {name, subjectId} and AUTO-numbers chapters
+    // (MAX(chapterNumber)+1) — local rows are read in number order (orderBy)
+    // so auto-numbering reproduces the local numbering exactly.
+    fields: ['name', 'subject_id:subjectId'],
     localTable: 'chapters',
+    orderBy: '"subjectId", "chapterNumber"',
   },
   questions: {
     listPath: '/quiz-mcq/questions', listKey: (d) => d.data ?? d.items ?? d,
@@ -91,6 +98,7 @@ const TYPES = {
     fields: ['question_text:question', 'correct_answer:correctAnswer', 'correct_letter:correctLetter',
       'options', 'explanation', 'level', 'chapter_id:chapterId', 'status', 'order'],
     localTable: 'questions',
+    orderBy: '"chapterId", "order"',
   },
   'riddle-categories': {
     listPath: '/riddle-mcq/categories/all', listKey: (d) => d.data ?? d,
@@ -170,8 +178,9 @@ function pickFields(row, fields) {
   return out;
 }
 
-function readLocalTable(table) {
-  const sql = `select coalesce(json_agg(t),'[]'::json) from (select * from ${table}) t`;
+function readLocalTable(table, orderBy) {
+  const sql = `select coalesce(json_agg(t),'[]'::json) from (select * from ${table}` +
+    (orderBy ? ` order by ${orderBy}` : '') + `) t`;
   const user = process.env.LOCAL_DB_USER || 'aiquiz';
   const out = execSync(
     `docker exec ${LOCAL_CONTAINER} psql -U ${user} -d ${LOCAL_DB} -tAc ${JSON.stringify(sql)}`,
@@ -254,16 +263,82 @@ async function fetchAllLive(T) {
   return all;
 }
 
+// ---------- quiz parent-chain context ----------
+// Chapters/questions natural keys must be system-independent: parent UUIDs
+// differ between local and live, so keys are built from subject SLUG (subjects)
+// and slug#chapterNumber (chapters). remap() translates a child payload's
+// parent id (payload.subjectId/chapterId) from local UUID to live UUID.
+const quizCache = {};
+async function liveListOf(type) {
+  if (!quizCache[type + ':live']) quizCache[type + ':live'] = await fetchAllLive(TYPES[type]);
+  return quizCache[type + ':live'];
+}
+function localRowsOf(type) {
+  if (!quizCache[type + ':local']) {
+    quizCache[type + ':local'] = readLocalTable(TYPES[type].localTable, TYPES[type].orderBy);
+  }
+  return quizCache[type + ':local'];
+}
+async function buildQuizCtx(type) {
+  const localSubjects = localRowsOf('subjects');
+  const subSlugLocal = new Map(localSubjects.map((s) => [s.id, s.slug]));
+  const liveSubjects = await liveListOf('subjects');
+  const subSlugLive = new Map(liveSubjects.map((s) => [s.id, s.slug]));
+  const liveSubjectIdBySlug = new Map(liveSubjects.map((s) => [s.slug, s.id]));
+  const liveSubKey = (subjectId) => subSlugLive.get(subjectId) ?? `?${subjectId}`;
+
+  if (type === 'chapters') {
+    return {
+      keyLocal: (row) => `${subSlugLocal.get(row.subjectId) ?? `?${row.subjectId}`}#${row.chapterNumber ?? row.chapter_number}`,
+      keyLive: (item) => `${liveSubKey(item.subjectId)}#${item.chapterNumber}`,
+      remap: (payload, row) => {
+        const slug = subSlugLocal.get(row.subjectId);
+        const liveId = slug && liveSubjectIdBySlug.get(slug);
+        if (!liveId) throw new Error(`parent subject not on live (slug=${slug ?? row.subjectId})`);
+        payload.subjectId = liveId;
+      },
+    };
+  }
+  // questions — chapter natural key = subjectSlug#chapterNumber
+  const localChapters = localRowsOf('chapters');
+  const chapterKeyLocal = new Map(
+    localChapters.map((c) => [
+      c.id,
+      `${subSlugLocal.get(c.subjectId) ?? `?${c.subjectId}`}#${c.chapterNumber ?? c.chapter_number}`,
+    ])
+  );
+  const liveChapters = await liveListOf('chapters');
+  const chapterKeyLive = new Map(
+    liveChapters.map((c) => [c.id, `${liveSubKey(c.subjectId)}#${c.chapterNumber}`])
+  );
+  const liveChapterIdByKey = new Map(
+    liveChapters.map((c) => [`${liveSubKey(c.subjectId)}#${c.chapterNumber}`, c.id])
+  );
+  return {
+    keyLocal: (row) =>
+      `${chapterKeyLocal.get(row.chapterId) ?? `?${row.chapterId}`}#${hash(row.question ?? row.question_text)}`,
+    keyLive: (item) =>
+      `${chapterKeyLive.get(item.chapterId) ?? `?${item.chapterId}`}#${hash(item.question ?? item.question_text)}`,
+    remap: (payload, row) => {
+      const ck = chapterKeyLocal.get(row.chapterId);
+      const liveId = ck && liveChapterIdByKey.get(ck);
+      if (!liveId) throw new Error(`parent chapter not on live (key=${ck ?? row.chapterId})`);
+      payload.chapterId = liveId;
+    },
+  };
+}
+
 // ---------- main ----------
 const state = loadState();
 const plan = {};
+const ctxByType = {};
 const summary = { created: 0, updated: 0, conflicts: 0, skipped: 0, errors: 0 };
 
 for (const type of ORDER) {
   if (ONLY_TYPES && !ONLY_TYPES.includes(type)) continue;
   const T = TYPES[type];
   process.stdout.write(`\n==> ${type}: reading local... `);
-  const localRows0 = readLocalTable(T.localTable);
+  const localRows0 = readLocalTable(T.localTable, T.orderBy);
   const localRows = LIMIT ? localRows0.slice(0, LIMIT) : localRows0;
   process.stdout.write(`${localRows.length} rows; reading live... `);
   let liveItems;
@@ -276,27 +351,37 @@ for (const type of ORDER) {
   }
   process.stdout.write(`${liveItems.length} rows\n`);
 
+  // quiz child types key on parent NATURAL keys (slug / slug#number) — parent
+  // UUIDs differ between local and live
+  let ctx = null;
+  if (type === 'chapters' || type === 'questions') {
+    ctx = await buildQuizCtx(type);
+    ctxByType[type] = ctx;
+  }
+  const keyOfRow = (row) => (ctx ? ctx.keyLocal(row) : T.keyOf(row));
+  const keyOfLive = (item) => (ctx ? ctx.keyLive(item) : T.keyOf(item));
+
   const liveByKey = new Map();
   for (const item of liveItems) {
-    const k = T.keyOf(item);
+    const k = keyOfLive(item);
     if (k !== undefined && k !== null) liveByKey.set(String(k), item);
   }
 
   const entries = [];
   for (const row of localRows) {
-    const key = String(T.keyOf(row));
+    const key = String(keyOfRow(row));
     const payload = pickFields(row, T.fields);
     const localChecksum = hash(stable(payload));
     const live = liveByKey.get(key);
     const st = state[type]?.[key];
     if (!live) {
-      entries.push({ type, key, action: 'create', payload });
+      entries.push({ type, key, action: 'create', payload, row, localChecksum });
     } else if (st && st.liveChecksum !== hash(stable(pickFields(live, T.fields)))) {
       // live changed since our last push → live edit wins unless forced
       entries.push({ type, key, action: 'conflict', liveId: live.id,
         note: 'edited on live since last push' });
     } else if (!st || st.localChecksum !== localChecksum) {
-      entries.push({ type, key, action: 'update', liveId: live.id, payload });
+      entries.push({ type, key, action: 'update', liveId: live.id, payload, row, localChecksum });
     } else {
       entries.push({ type, key, action: 'skip' });
     }
@@ -351,24 +436,69 @@ for (const type of ORDER) {
   const updates = entries.filter((e) => e.action === 'update');
   if (creates.length + updates.length === 0) continue;
 
-  // creates — bulk where available (arrays except quiz questions), chunked and paced
-  for (let i = 0; i < creates.length; i += 50) {
-    const chunk = creates.slice(i, i + 50);
+  // child types remap parent ids against FRESH live data — the parents were
+  // just created moments ago, so the plan-time live caches are stale
+  let actx = ctxByType[type] ?? null;
+  if (actx) {
+    delete quizCache['subjects:live'];
+    delete quizCache['chapters:live'];
+    actx = await buildQuizCtx(type);
+  }
+  const remap = (e) => {
+    if (!actx) return null;
     try {
-      const body = T.create.bulk
-        ? { [T.create.bulk]: chunk.map((e) => e.payload) }
-        : chunk.map((e) => e.payload);
-      await api('POST', T.create.path, body);
-      console.log(`   ${type}: created ${Math.min(i + 50, creates.length)}/${creates.length}`);
+      actx.remap(e.payload, e.row);
+      return null;
     } catch (err) {
-      failures += chunk.length;
-      console.log(`   ${type}: CREATE batch failed: ${err.message.slice(0, 200)}`);
+      return err.message;
     }
-    await sleep(700);
+  };
+
+  // creates — bulk endpoints take chunked arrays; single-item endpoints take
+  // ONE payload per POST (the live DTOs reject arrays with 400 — this lane was
+  // only ever exercised against the permissive local API before 2026-09-18)
+  if (T.create.bulk) {
+    for (let i = 0; i < creates.length; i += 50) {
+      const chunk = creates.slice(i, i + 50);
+      try {
+        await api('POST', T.create.path, { [T.create.bulk]: chunk.map((e) => e.payload) });
+        console.log(`   ${type}: created ${Math.min(i + 50, creates.length)}/${creates.length}`);
+      } catch (err) {
+        failures += chunk.length;
+        console.log(`   ${type}: CREATE batch failed: ${err.message.slice(0, 200)}`);
+      }
+      await sleep(700);
+    }
+  } else {
+    let ok = 0;
+    for (const e of creates) {
+      const remapErr = remap(e);
+      if (remapErr) {
+        failures += 1;
+        console.log(`   ${type}: CREATE skipped [${e.key}]: ${remapErr}`);
+        continue;
+      }
+      try {
+        await api('POST', T.create.path, e.payload);
+        ok += 1;
+      } catch (err) {
+        failures += 1;
+        console.log(`   ${type}: CREATE failed [${e.key}]: ${err.message.slice(0, 200)}`);
+      }
+      if (ok % 50 === 0) console.log(`   ${type}: created ${ok}/${creates.length}`);
+      await sleep(200); // paced: stay under the live API throttle (429 → waits 62s)
+    }
+    console.log(`   ${type}: created ${ok}/${creates.length}`);
   }
 
   // updates — one validated call each, paced
   for (const e of updates) {
+    const remapErr = actx ? remap(e) : null;
+    if (remapErr) {
+      failures += 1;
+      console.log(`   ${type}: UPDATE skipped [${e.key}]: ${remapErr}`);
+      continue;
+    }
     try {
       await api(T.update.verb, T.update.path(e.liveId), e.payload);
       console.log(`   ${type}: updated ${e.key}`);
@@ -386,13 +516,16 @@ for (const type of ORDER) {
     const written = new Map(creates.concat(updates).map((e) => [e.key, e]));
     try {
       const fresh = await fetchAllLive(T);
+      const sctx = ctxByType[type] ?? null;
       for (const item of fresh) {
-        const key = String(T.keyOf(item));
+        const key = String(sctx ? sctx.keyLive(item) : T.keyOf(item));
         if (!written.has(key)) continue;
         state[type] ??= {};
         state[type][key] = {
           liveId: item.id,
-          localChecksum: hash(stable(written.get(key).payload)),
+          // pre-remap checksum: computed from the LOCAL-shape payload so future
+          // runs comparing freshly-read local rows stay stable across runs
+          localChecksum: written.get(key).localChecksum ?? hash(stable(written.get(key).payload)),
           liveChecksum: hash(stable(pickFields(item, T.fields))),
         };
       }
