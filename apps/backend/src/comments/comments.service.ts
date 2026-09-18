@@ -34,6 +34,8 @@ import { AnalyticsService } from '../analytics/analytics.service';
 import { GuestUsersService } from '../guest-users/guest-users.service';
 import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
+import { Question } from '../quiz-mcq/entities/question.entity';
+import { RiddleMcq } from '../riddle-mcq/entities/riddle-mcq.entity';
 
 import { COMMENT_PAGINATION_DEFAULTS } from './dto/comments.dto';
 import { Comment, CommentChip, CommentContentType, CommentKind } from './entities/comment.entity';
@@ -90,6 +92,10 @@ export class CommentsService {
     private imageRiddleRepo: Repository<ImageRiddle>,
     @InjectRepository(DadJoke)
     private jokeRepo: Repository<DadJoke>,
+    @InjectRepository(Question)
+    private quizQuestionRepo: Repository<Question>,
+    @InjectRepository(RiddleMcq)
+    private riddleQuestionRepo: Repository<RiddleMcq>,
     private guestUsersService: GuestUsersService,
     private cacheService: CacheService,
     private bulkActionService: BulkActionService,
@@ -257,6 +263,16 @@ export class CommentsService {
       }
       if (dto.kind === CommentKind.GUESS) {
         isCorrect = this.isGuessCorrect(riddle, text);
+      }
+    } else if (dto.contentType === CommentContentType.QUIZ_QUESTION) {
+      const question = await this.quizQuestionRepo.findOne({ where: { id: dto.contentId } });
+      if (question === null) {
+        throw new NotFoundException('Quiz question not found');
+      }
+    } else if (dto.contentType === CommentContentType.RIDDLE_QUESTION) {
+      const question = await this.riddleQuestionRepo.findOne({ where: { id: dto.contentId } });
+      if (question === null) {
+        throw new NotFoundException('Riddle question not found');
       }
     } else {
       const joke = await this.jokeRepo.findOne({ where: { id: dto.contentId } });

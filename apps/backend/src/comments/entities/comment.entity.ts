@@ -18,6 +18,10 @@ import { ContentStatus } from '../../common/enums/content-status.enum';
 export enum CommentContentType {
   IMAGE_RIDDLE = 'image-riddle',
   JOKE = 'joke',
+  /** BUG-036: per-question comments on the quiz/riddle RESULTS/REVIEW screens
+   * (deliberately not the live play flow — owner scoping 2026-09-18). */
+  QUIZ_QUESTION = 'quiz-question',
+  RIDDLE_QUESTION = 'riddle-question',
 }
 
 /** Feed entry kinds: riddle guesses, reveal-chip taps, plain comments. */

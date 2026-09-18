@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
 import type { Question } from '@/types/quiz-mcq';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
 
 interface QuestionReviewProps {
   /** The question */
@@ -156,6 +157,10 @@ export function QuestionReview({
                   <p className="text-sm">{question.explanation}</p>
                 </div>
               )}
+
+              {/* BUG-036: per-question comments live on the review screen —
+                  never during play (owner scoping 2026-09-18). */}
+              <QuestionComments contentType="quiz-question" questionId={question.id} />
             </div>
           </motion.div>
         )}

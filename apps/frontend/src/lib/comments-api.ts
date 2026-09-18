@@ -15,7 +15,7 @@ import { getGuestId, getGuestName } from './guest-id';
 // Types — mirror the backend PublicComment shape
 // ============================================================================
 
-export type CommentContentType = 'image-riddle' | 'joke';
+export type CommentContentType = 'image-riddle' | 'joke' | 'quiz-question' | 'riddle-question';
 export type CommentKind = 'guess' | 'chip' | 'comment';
 export type CommentChipValue = 'never-got' | 'so-obvious' | 'so-close';
 

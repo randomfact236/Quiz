@@ -76,10 +76,14 @@ describe('CommentsService', () => {
     const bulkActionService = { executeBulkAction: jest.fn() };
     const analyticsService = { record: jest.fn(async () => undefined) };
 
+    const quizQuestionRepo = { findOne: jest.fn(async () => ({ id: 'quiz-q-1' })) };
+    const riddleQuestionRepo = { findOne: jest.fn(async () => ({ id: 'riddle-q-1' })) };
     const service = new CommentsService(
       commentRepo as unknown as never,
       imageRiddleRepo as unknown as never,
       jokeRepo as unknown as never,
+      quizQuestionRepo as unknown as never,
+      riddleQuestionRepo as unknown as never,
       guestUsersService as unknown as GuestUsersService,
       cacheService as unknown as CacheService,
       bulkActionService as unknown as BulkActionService,

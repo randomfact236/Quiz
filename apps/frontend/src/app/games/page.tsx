@@ -11,6 +11,8 @@
 
 import Link from 'next/link';
 
+import { GameShareButton } from '@/components/games/GameShareButton';
+
 interface GameCard {
   slug: string;
   emoji: string;
@@ -95,17 +97,24 @@ export default function GamesPage(): JSX.Element {
 
         <div className="grid gap-6 sm:grid-cols-2">
           {GAMES.map((game) => (
-            <a
+            <div
               key={game.slug}
-              href={`/games/${game.slug}/index.html`}
-              className={`flex items-center gap-4 rounded-2xl bg-gradient-to-r ${game.gradient} p-5 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl`}
+              className={`relative flex items-center gap-4 rounded-2xl bg-gradient-to-r ${game.gradient} p-5 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl`}
             >
-              <span className="text-4xl">{game.emoji}</span>
-              <span className="flex-1">
-                <span className="block text-lg font-bold">{game.title}</span>
-                <span className="block text-sm text-white/90">{game.blurb}</span>
-              </span>
-            </a>
+              <a
+                href={`/games/${game.slug}/index.html`}
+                className="flex min-w-0 flex-1 items-center gap-4"
+              >
+                <span className="text-4xl">{game.emoji}</span>
+                <span className="flex-1">
+                  <span className="block text-lg font-bold">{game.title}</span>
+                  <span className="block text-sm text-white/90">{game.blurb}</span>
+                </span>
+              </a>
+              {/* BUG-035: hub-level share — result shares live in each game's
+                  own result screen; this spreads the game itself. */}
+              <GameShareButton slug={game.slug} title={game.title} blurb={game.blurb} />
+            </div>
           ))}
         </div>
 

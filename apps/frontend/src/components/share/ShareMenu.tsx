@@ -25,10 +25,12 @@ interface ShareMenuProps {
   text: string;
   /** URL to share; defaults to the current page URL. */
   url?: string;
-  /** Bookmark namespace, e.g. 'jokes' | 'image-riddles'. */
-  saveNamespace: string;
+  /** Bookmark namespace, e.g. 'jokes' | 'image-riddles'. When omitted the
+   * Save target is hidden — result/hub shares have nothing worth bookmarking
+   * (quiz result links rot, game cards already live on the hub). */
+  saveNamespace?: string;
   /** Bookmark id within the namespace (joke/riddle id). */
-  saveId: string;
+  saveId?: string;
   onClose: () => void;
 }
 
@@ -107,9 +109,12 @@ export default function ShareMenu({
       .catch(() => toast.error('Copy failed'));
   };
 
-  const isSavedNow = isSaved(saveNamespace, saveId);
+  const saveable = Boolean(saveNamespace && saveId);
+  const isSavedNow =
+    saveNamespace !== undefined && saveId !== undefined ? isSaved(saveNamespace, saveId) : false;
 
   const handleSave = () => {
+    if (saveNamespace === undefined || saveId === undefined) return;
     const nowSaved = toggleSaved(saveNamespace, saveId);
     toast.success(nowSaved ? '🔖 Saved!' : 'Removed from saved');
     onClose();
@@ -168,20 +173,22 @@ export default function ShareMenu({
               Copy Link
             </span>
           </button>
-          <button
-            onClick={handleSave}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
-          >
-            <span
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20 text-sm"
-              aria-hidden="true"
+          {saveable && (
+            <button
+              onClick={handleSave}
+              className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
-              {isSavedNow ? '✓' : '🔖'}
-            </span>
-            <span className="text-sm font-bold text-gray-700 dark:text-secondary-200">
-              {isSavedNow ? 'Saved — tap to remove' : 'Save'}
-            </span>
-          </button>
+              <span
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20 text-sm"
+                aria-hidden="true"
+              >
+                {isSavedNow ? '✓' : '🔖'}
+              </span>
+              <span className="text-sm font-bold text-gray-700 dark:text-secondary-200">
+                {isSavedNow ? 'Saved — tap to remove' : 'Save'}
+              </span>
+            </button>
+          )}
         </div>
       </div>
     </div>

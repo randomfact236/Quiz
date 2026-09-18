@@ -24,8 +24,6 @@ import {
   BookOpen,
   List,
 } from 'lucide-react';
-import toast from '@/lib/toast';
-
 import type { QuizSession, QuizResult } from '@/types/quiz-mcq';
 import { STORAGE_KEYS, getItem } from '@/lib/storage';
 import { calculateResult } from '@/lib/quiz-mcq-scoring';
@@ -39,6 +37,7 @@ import { getGuestId } from '@/lib/guest-id';
 import { ScoreCard } from '@/components/quiz-mcq/ScoreCard';
 import { QuestionReview } from '@/components/quiz-mcq/QuestionReview';
 import { ResultsCelebration } from '@/components/quiz-mcq/ResultsCelebration';
+import ShareMenu from '@/components/share/ShareMenu';
 
 function ResultsContent(): JSX.Element {
   const searchParams = useSearchParams();
@@ -47,7 +46,7 @@ function ResultsContent(): JSX.Element {
 
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showReview, setShowReview] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [personalBest, setPersonalBest] = useState<QuizHighScore | null>(null);
   const [serverHistory, setServerHistory] = useState<QuizSessionHistoryEntry[] | null>(null);
@@ -79,22 +78,16 @@ function ResultsContent(): JSX.Element {
     getQuizSessionHistory(getGuestId()).then(setServerHistory);
   }, []);
 
-  // Share results
-  const handleShare = async () => {
-    if (!result) return;
-
-    const text = `I scored ${result.session.score}/${result.session.maxScore} (${Math.round(result.percentage)}%) on ${result.session.subjectName} - ${result.session.chapter}! Grade: ${result.grade}`;
-
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      toast.success('Results copied to clipboard!');
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback
-      toast.error('Failed to copy results to clipboard.');
-    }
-  };
+  // BUG-035: result share — the challenge line ("…— beat you!") plus a link to
+  // the subject's quiz (not the results URL: that renders only from the
+  // sharer's localStorage, a friend would just get redirected away).
+  const shareText =
+    result &&
+    `I scored ${result.session.score}/${result.session.maxScore} on ${result.session.subjectName} — beat you! 🧠`;
+  const shareUrl =
+    typeof window !== 'undefined' && sessionSubject(result)
+      ? `${window.location.origin}/quiz-mcq?subject=${sessionSubject(result)}`
+      : undefined;
 
   // Loading state
   if (!result) {
@@ -127,6 +120,16 @@ function ResultsContent(): JSX.Element {
         maxScore={result?.session.maxScore || 10}
       />
 
+      {/* BUG-035: result share menu (Facebook / X / WhatsApp / copy link) */}
+      {showShareMenu && (
+        <ShareMenu
+          title={`${session.subjectName} quiz`}
+          text={shareText ?? 'Beat my quiz score!'}
+          {...(shareUrl ? { url: shareUrl } : {})}
+          onClose={() => setShowShareMenu(false)}
+        />
+      )}
+
       <div className="mx-auto max-w-2xl">
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
@@ -140,11 +143,11 @@ function ResultsContent(): JSX.Element {
 
           <div className="flex gap-2">
             <button
-              onClick={handleShare}
+              onClick={() => setShowShareMenu(true)}
               className="inline-flex items-center gap-2 rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
             >
               <Share2 className="h-4 w-4" />
-              {copied ? 'Copied!' : 'Share'}
+              Share
             </button>
           </div>
         </div>
@@ -397,6 +400,12 @@ function buildRetryModeQuery(storedMode: string | undefined): string {
   const params = new URLSearchParams({ mode: baseMode ?? 'normal' });
   if (type) params.set('type', type);
   return `&${params.toString()}`;
+}
+
+/** Subject slug of a result's session, empty-safe for the share URL. */
+function sessionSubject(result: QuizResult | null): string | undefined {
+  const slug = result?.session.subject;
+  return slug && slug.trim() !== '' ? slug : undefined;
 }
 
 export default function QuizResultsPage(): JSX.Element {

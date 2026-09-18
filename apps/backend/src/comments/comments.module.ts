@@ -17,6 +17,8 @@ import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { GuestUsersModule } from '../guest-users/guest-users.module';
 import { AnalyticsModule } from '../analytics/analytics.module';
 import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
+import { Question } from '../quiz-mcq/entities/question.entity';
+import { RiddleMcq } from '../riddle-mcq/entities/riddle-mcq.entity';
 
 import { Comment } from './entities/comment.entity';
 import { CommentsAdminController } from './comments-admin.controller';
@@ -25,7 +27,7 @@ import { CommentsService } from './comments.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment, ImageRiddle, DadJoke]),
+    TypeOrmModule.forFeature([Comment, ImageRiddle, DadJoke, Question, RiddleMcq]),
     GuestUsersModule,
     AnalyticsModule,
   ],
