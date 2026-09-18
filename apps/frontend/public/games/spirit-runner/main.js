@@ -56,6 +56,7 @@ import {
   tickPowers,
   tickShadow,
   trapLit,
+  setPlayerX,
   setViewW,
 } from './core.js';
 import { createCamera, advanceCamera, createLoop, createRunnerInput } from './engine.js';
@@ -754,6 +755,9 @@ function fitCanvas() {
     canvas.height = h;
   }
   setViewW(VIEW_H * (canvas.width / canvas.height));
+  // BUG-033: keep the runner on-screen at narrow aspects — 45 % of the live
+  // world, capped at the desktop reference (see core.js setPlayerX).
+  setPlayerX(VIEW_W);
 }
 
 let lastSkyCss = '';

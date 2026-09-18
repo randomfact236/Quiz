@@ -660,9 +660,10 @@ describe('spawner sweep (tiers × density, 30 speeds × 400 spawns)', () => {
   });
 
   it('orb grab is generous: the full player box catches a running-height orb', () => {
-    const orb = { worldX: 225, y: GROUND_Y - 40, color: 'cyan', taken: false };
+    // orbs spawn at the player's x — PLAYER_X, not a hardcoded world x
+    const orb = { worldX: PLAYER_X, y: GROUND_Y - 40, color: 'cyan', taken: false };
     expect(orbHit(orb, playerBox(createPlayer()))).toBe(true);
-    const high = { worldX: 225, y: GROUND_Y - 140, color: 'gold', taken: false };
+    const high = { worldX: PLAYER_X, y: GROUND_Y - 140, color: 'gold', taken: false };
     expect(orbHit(high, playerBox(createPlayer()))).toBe(false); // needs a jump
   });
 });

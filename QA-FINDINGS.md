@@ -44,12 +44,49 @@
 | BUG-030 | Sliding puzzle: moved block not fully adjusted until next move        | Games (sliding-puzzle)        | P2       | Fixed    |
 | BUG-031 | "All games" back button only visible when game is paused              | Games (in-game nav)           | P2       | Fixed    |
 | BUG-032 | Runner game: runner too far left, should sit in the middle            | Games (runner)                | P2       | Fixed    |
+| BUG-033 | Mobile: runner invisible (hurdle-runner & spirit-runner)              | Games (runner, mobile)        | P1       | Fixed    |
+| BUG-034 | "All games" pill: hide during play, show only when paused             | Games (in-game nav)           | P2       | Open     |
 
 ---
 
 ## Work Log
 
 _(newest first)_
+
+### 2026-09-18 — BUG-033 fixed: responsive runner x keeps the actor on-screen at portrait aspects
+
+- **Scope:** hurdle-runner + spirit-runner (`core.js` + `main.js` each)
+- **Root cause (confirmed, as the filing suspected):** BUG-032 moved the runner to a FIXED
+  `PLAYER_X = 405`, but the logical world width flexes with the viewport aspect
+  (`setViewW(500 × aspect)`). The runner left the visible world at aspect < 0.81 — every
+  portrait phone (390×844 → world ≈ 231 px) and 3:4 portrait tablets. Reproduced in the
+  browser at 390×844: both games ran live with NO runner on screen; the blind hurdle run
+  died at 61 m with 0 cleared (`bug033_*_portrait_live_no_*.png`).
+- **Fix:** `PLAYER_X` is now a live binding re-derived on every resize via `setPlayerX(VIEW_W)`
+  — 45 % of the live world width, capped at the desktop reference 405 (`PLAYER_X_MAX`).
+  Desktop/wide look is byte-identical to the BUG-032 verification (405/1082 ≈ 37 % at
+  844×390); portrait now draws the runner at 45 % of the narrow world. Physics, scoring,
+  collisions, particles and render all read the same binding, so nothing was decoupled.
+  Same `setViewW` setter pattern core.js already uses for the flexing world width.
+- **Tests:** both runner suites re-run — 79/79 pass. One spirit-runner orb test had been
+  silently broken since BUG-032 (hardcoded `worldX: 225`, the pre-reposition player x);
+  updated to place the orb at `PLAYER_X`.
+- **Verified:** IDE browser pane on the live frontend (3010) — hurdle-runner and
+  spirit-runner at 390×844 both show the actor mid-screen during play
+  (`fix_bug033_*_portrait_*.png`); at 844×390 the position is unchanged
+  (`fix_bug033_*_landscape_*.png`).
+
+### 2026-09-18 — Follow-up: mobile runner invisibility + pill visibility directive
+
+- **Scope:** runner games on mobile (hurdle-runner, spirit-runner); "All games" pill
+  visibility during play
+- **Method:** owner-reported observations; no testing performed
+- **Result:** two items filed — BUG-033 (runner invisible on mobile in both runner games;
+  flagged as possibly interacting with the BUG-032 reposition) and BUG-034 (owner directive
+  reversing the BUG-031 fix direction: the pill must be HIDDEN during active play and shown
+  only while paused). Listing only.
+- **Bugs filed:** BUG-033, BUG-034
+- **Evidence:** none
 
 ### 2026-09-18 - Final round: BUG-001 auto-advance verified live on the rebuilt server
 
@@ -637,6 +674,35 @@ _(template for new sessions:)_
 - **Priority:** P2
 - **Reported:** The runner character is positioned too far to the left of the view; owner
   wants the view adjusted so the runner sits around the middle part.
+
+### BUG-033 — Mobile: runner invisible in hurdle-runner and spirit-runner
+
+- **Date found:** 2026-09-18 / **Date fixed:** 2026-09-18
+- **Area:** Games — runner games (hurdle-runner, spirit-runner) on mobile view
+- **Priority:** P1
+- **Reported:** In mobile view the runner character is invisible in both runner games,
+  leaving the game without its main actor on phones.
+- **Note:** check interaction with the BUG-032 fix (runner x moved from 25% to 45% of the
+  world, PLAYER_X 225 → 405) — verify whether the reposition pushes the runner outside the
+  mobile viewport/camera before changing anything.
+- **Fix:** the filing's suspicion was correct — the fixed `PLAYER_X = 405` sat outside the
+  flexing portrait world (aspect < 0.81 put the runner past the right edge). `PLAYER_X` is
+  now re-derived on every resize: 45 % of the live world width, capped at 405, via the same
+  live-binding setter pattern as `VIEW_W` (`setPlayerX` in core.js, called from fitCanvas).
+  Portrait phones draw the runner at 45 % of the narrow world; desktop unchanged. Verified
+  in the browser at 390×844 (actor visible mid-screen in both games) and 844×390 (position
+  identical to the BUG-032 look); 79/79 runner tests pass. Evidence:
+  `gui-test-screenshots/bug033_*.png` (repro) and `fix_bug033_*.png` (fixed).
+
+### BUG-034 — "All games" pill: hide during gameplay, show only when paused
+
+- **Date found:** 2026-09-18
+- **Area:** Games — in-game back navigation ("All games" pill)
+- **Priority:** P2
+- **Reported:** Owner directive: hide the "Back to all games" button while gameplay is on;
+  only display it when the game is paused.
+- **Note:** supersedes the BUG-031 fix, which deliberately made the pill visible and
+  clickable during active play — that behavior is to be reversed to paused-only visibility.
 
 ### BUG-027 - Quiz: mode selection inline under each subject chapter (first 2 open)
 

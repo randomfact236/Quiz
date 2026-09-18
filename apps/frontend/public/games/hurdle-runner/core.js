@@ -8,10 +8,13 @@
  * (src/__tests__/games-hurdle-runner.test.ts) imports it directly.
  *
  * World = 900×500 logical viewport, landscape, ground line at y=420 (§2).
- * The runner sits at a fixed x (25 % of the width); the world — hurdles,
- * barriers, scenery — scrolls left at a ramping speed (320 px/s, +6 px/s per
- * second, cap 900). Physics constants are exactly the plan's §2 table, stepped
- * at a fixed 1/120 s by main.js's accumulator loop.
+ * The runner sits at 45 % of the world width (BUG-032: around the middle),
+ * capped at the reference 405 — fitCanvas() narrows the logical world to the
+ * viewport aspect and re-derives the value via setPlayerX(), so the runner
+ * stays on-screen at portrait-phone aspects too (BUG-033); the world —
+ * hurdles, barriers, scenery — scrolls left at a ramping speed (320 px/s,
+ * +6 px/s per second, cap 900). Physics constants are exactly the plan's §2
+ * table, stepped at a fixed 1/120 s by main.js's accumulator loop.
  *
  * Coordinates: obstacles live in WORLD space (worldX is fixed at spawn); the
  * camera (`camera`, the px scrolled so far) converts to screen space via
@@ -37,7 +40,20 @@ export function setViewW(w) {
 }
 export const VIEW_H = 500;
 export const GROUND_Y = 420;
-export const PLAYER_X = 405; // BUG-032: 45 % of the width — runner around the middle
+
+/* BUG-032/033: the runner sits at 45 % of the world width — around the middle —
+ * but never past it. fitCanvas() flexes the logical world to the viewport
+ * aspect (portrait phones get VIEW_W ≈ 230), and a fixed 405 drew the runner
+ * clean off-screen (BUG-033). main.js re-derives the value on every resize via
+ * setPlayerX(); scoring, collisions, particles and render all read this same
+ * live binding, so the on-screen position and the physics stay one value. */
+export const PLAYER_X_MAX = 405; // 45 % of the 900×500 reference world
+export let PLAYER_X = PLAYER_X_MAX;
+
+/** Only core may reassign the live binding — main.js calls this from fitCanvas. */
+export function setPlayerX(viewW) {
+  PLAYER_X = Math.max(1, Math.min(PLAYER_X_MAX, Math.round(viewW * 0.45)));
+}
 
 /* ---- physics (plan §2 table, verbatim) ------------------------------------- */
 
