@@ -46,12 +46,80 @@
 | BUG-032 | Runner game: runner too far left, should sit in the middle            | Games (runner)                | P2       | Fixed    |
 | BUG-033 | Mobile: runner invisible (hurdle-runner & spirit-runner)              | Games (runner, mobile)        | P1       | Fixed    |
 | BUG-034 | "All games" pill: hide during play, show only when paused             | Games (in-game nav)           | P2       | Fixed    |
+| BUG-035 | Games: share option — Facebook, Twitter, WhatsApp, copy link          | Games (share)                 | P2       | Fixed    |
+| BUG-036 | Per-question comments for quiz/riddle questions                       | quiz-mcq / riddle-mcq         | P2       | Fixed    |
+| BUG-037 | Question like buckets: 1-like / 2-like / 3+-like containers           | quiz-mcq / riddle-mcq         | P2       | Open     |
 
 ---
 
 ## Work Log
 
 _(newest first)_
+
+### 2026-09-19 — BUG-035 + BUG-036 implemented (owner refinements applied)
+
+- **BUG-035 result share:** quiz results Share → ShareMenu with "I scored X/10 on
+  <Subject> — beat you! 🧠" + subject-quiz link; games hub cards get per-card share
+  buttons; ShareMenu Save target now optional. Static games keep their native result
+  share (4-target bar spread into the 8 static bundles = follow-up).
+- **BUG-036 review comments:** quiz review screen gains per-question comments
+  (inline, collapsed to a 💬 count, guest identity + delete-own). Backend: comment
+  enum + migration + question-existence checks for quiz/riddle questions. Riddle UI
+  placement deferred (no results screen there yet).
+- **Verified:** jest 10/10, tsc clean, GUI round-trips in the IDE pane (share text
+  matches the owner's example verbatim; comment posted via UI + API).
+- **Commit:** `07a8c0d` (main + production + backup branch).
+
+### 2026-09-19 — "AI Quiz" branding fully replaced with PigZap (owner: "you upload and you do")
+
+- **Root cause (mobile header showing "AI Quiz"):** `site.siteName` was EMPTY and
+  `seo.siteName` was literally stored as "AI Quiz" (local AND prod); with `mobileLogo` also
+  empty, the mobile header fell into the favicon-icon + site-name-text branch. Desktop looked
+  right only because `site.logo` was set.
+- **Settings fixed** via the admin API (local) and targeted SQL + API-container restart (prod;
+  rows snapshotted to `/opt/quiz-backups/settings/system_settings_site_seo_20260919.txt`
+  first): `site.siteName = "PigZap"`, `site.mobileLogo` = the uploaded horizontal PigZap logo
+  SVG (per-env path), `seo.siteName/titleDefault/titleTemplate` = PigZap. Verified via
+  `GET /settings/public` on both. The scratch local admin used for the API PATCH was deleted
+  afterwards.
+- **Code pass:** hardcoded "AI Quiz" replaced with "PigZap" in 12 frontend files (layout
+  DEFAULTS, manifest name/short_name, og-image alt + fallback, SiteBrandContext, Footer,
+  seo.ts JSON-LD fallback, admin SeoSection defaults, About/Privacy/Terms/Contact/FAQ copy).
+  `grep "AI Quiz"` over frontend src is now zero. tsc clean; lint warnings only pre-existing
+  in untouched files.
+- **Verified live (local):** homepage title "PigZap - Interactive Learning Platform", header
+  brand link "PigZap Home", mobile header renders the PigZap wordmark SVG. Known cosmetic
+  dev-server staleness: og/twitter image ALT strings still serve from the old compiled
+  opengraph-image route until dev-server restart/rebuild — source is fixed; prod gets the new
+  alt on next deploy.
+- **Manually verified in the browser (2026-09-19, mobile 390×844):** LOCAL — all 12 routes
+  swept: zero visible "AI Quiz", PigZap present on every page, every tab title PigZap; mobile
+  header renders the PigZap wordmark SVG; brand link reads "PigZap Home"
+  (`gui-test-screenshots/rebrand_mobile_home_header.png`). PROD (pigzap.com) — mobile header
+  shows the PigZap wordmark and titles are PigZap on all main pages (home, quiz, riddles,
+  image-riddles, jokes, games, login: zero "AI Quiz");
+  `gui-test-screenshots/rebrand_prod_mobile_home.png`. Remaining prod sightings are ONLY the
+  five static info pages (About ×2, FAQ ×3, Terms ×3, Privacy ×3, Contact ×2 mentions incl.
+  their tab titles) — fixed by the local code pass, goes live on next deploy.
+- **Evidence:** `gui-test-screenshots/rebrand_mobile_home_header.png`,
+  `rebrand_mobile_drawer.png`, `rebrand_prod_mobile_home.png`; browser text sweeps (local +
+  prod). Drawer could not be opened in the pane (known dropped-click pane defect) — drawer
+  brand row renders the same settings-driven `siteName` as the header link, which reads
+  "PigZap Home".
+
+### 2026-09-18 — Follow-up: games share + per-question comments + like-bucket feature requests
+
+- **Scope:** in-game sharing; per-question commenting on quiz/riddle questions; a three-bucket
+  like-recording system for questions
+- **Method:** owner feature requests (19:32 / 19:47 / 19:48 messages); no analysis or build
+  started
+- **Result:** three items filed — BUG-035 (share display with Facebook / Twitter / WhatsApp /
+  copy link in games), BUG-036 (comment on each question), BUG-037 (likes recorded into three
+  containers — exactly-1, exactly-2, 3-and-above — questions stay in place, only the like-count
+  classification is recorded). Owner asked for a size estimate per feature (delivered in the
+  session reply). Listing only.
+- **Bugs filed:** BUG-035, BUG-036, BUG-037
+- **Evidence:** none
 
 ### 2026-09-18 — BUG-034 fixed: All-games pill paused-only in the 3 canvas games
 
@@ -335,6 +403,18 @@ _(newest first)_
   (`games_smoke_*.png`). The only `/play` references flagged by the scan are absolute site
   routes to the Play Hub — correct by design. **No new bugs; no code changes needed.**
 - **Evidence:** `gui-test-screenshots/games_*.png`
+
+### 2026-09-17 — riddle letter-balance second pass (numeric rows)
+
+- **Scope:** the four number/word riddle files whose numeric-option rows were skipped by
+  the first rebalance's conservative guard (math-numbers, trick-questions, logic-deduction,
+  words-letters) still leaned on A/B because locked rows never reached C/D.
+- **Method:** re-ran the cycle rebalance with a smarter guard — only ascending-sorted
+  option sets stay locked (scrambled numerics like 43/47/40/42 are safe to permute).
+  254 rows permuted; answer letters now ~50/50 (easy), ~33×3 (medium), ~25×4 (hard)
+  in every category file.
+- **Result:** zero slice/empty/mismatch violations across all 10 files; category header
+  lines restored to exactly match git HEAD after a duplicate-header write slip.
 
 ### 2026-09-17 — pop-culture de-hint pass (manual-check follow-up)
 
@@ -716,6 +796,71 @@ _(template for new sessions:)_
   only display it when the game is paused.
 - **Note:** supersedes the BUG-031 fix, which deliberately made the pill visible and
   clickable during active play — that behavior is to be reversed to paused-only visibility.
+
+### BUG-035 — Games: share option with Facebook, Twitter, WhatsApp, copy link
+
+- **Date found:** 2026-09-18 (reported 19:32) / **Date fixed:** 2026-09-19
+- **Area:** Games — in-game / hub share UI
+- **Priority:** P2
+- **Reported:** Add a share option in games that displays Facebook, Twitter, WhatsApp, and
+  link copy.
+- **Note:** `components/share/ShareMenu.tsx` already implements exactly these four targets
+  (FB sharer, Twitter intent, WhatsApp, clipboard with desktop fallback) and is live on
+  image-riddles and jokes. The 8 games are deliberately dependency-free static folders, so
+  the work is embedding a self-contained share bar per static game (or hub-level only) —
+  placement decision when picked up.
+- **Fix (owner refinement applied — share a RESULT, not a game link):** quiz results page
+  Share button now opens the ShareMenu with the challenge copy "I scored 8/10 on
+  <Subject> — beat you! 🧠" linking to the subject quiz (not the results URL — it renders
+  only from the sharer's localStorage). Games hub: every card gets a share button
+  (`GameShareButton`) sharing the game + blurb. ShareMenu's Save target made optional
+  (hidden without namespace/id — results and hub cards have nothing to bookmark). Static
+  games already result-share natively; spreading the 4-target bar into their
+  dependency-free bundles remains the documented follow-up (owner: hub / result screens
+  first).
+
+### BUG-036 — Per-question comments for quiz/riddle questions
+
+- **Date found:** 2026-09-18 (reported 19:47) / **Date fixed:** 2026-09-19
+- **Area:** quiz-mcq / riddle-mcq (question-level social)
+- **Priority:** P2
+- **Reported:** Owner wants a feature to comment on each question.
+- **Note:** a full comments system already exists (`apps/backend/src/comments/` +
+  `lib/comments-api.ts` + admin moderation) serving jokes and image-riddles (as guess feed);
+  its contentType enum just needs quiz/riddle question types added, plus the UX placement
+  decision — where commenting lives in a fast-paced play flow (per-question during play vs
+  on the results/review screen).
+- **Fix (owner scoping applied — results/review screen, never the live play flow):**
+  `CommentContentType` extends with `quiz-question` / `riddle-question`; migration
+  1790000000000 adds the enum values (auto-runs on production boot); comments service now
+  validates existence against the quiz `Question` / riddle `RiddleMcq` repos instead of
+  falling through to jokes. New inline `QuestionComments` component (shared guest identity,
+  optimistic post, delete-own, 280 chars, count-only collapsed state so empty threads stay
+  invisible) mounted in each expanded `QuestionReview` card. Riddle-side UI placement
+  deferred — riddles have no results screen yet; the plumbing is ready.
+- **Verified:** comments jest suite 10/10; tsc clean both apps; GUI — hub share menu +
+  results share text/links (fb quote / wa text match the owner's example verbatim), and a
+  comment posted through the review UI round-trips via the real `quiz-question` API.
+
+### BUG-037 — Question like buckets: 1-like / 2-like / 3+-like containers
+
+- **Date found:** 2026-09-18 (reported 19:48)
+- **Area:** quiz-mcq / riddle-mcq (question likes + classification)
+- **Priority:** P2
+- **Reported:** When people like a question it gets recorded to a separate container — three
+  containers: 1 like, 2 likes, 3-and-above liked questions. The question itself doesn't move;
+  it is simply recorded/classified by its like count.
+- **Note:** no likes infrastructure exists for quiz/riddle questions today (liked-categories
+  is a different feature; image-riddles likes are a deferred owner decision). Needs a
+  question-likes table (guest/user dedupe), like API + UI on questions, and a report/surface
+  for the three buckets (bucketing logic itself is a trivial GROUP BY on like counts).
+- **Owner clarification (2026-09-19):** the buckets are INTERNAL ONLY — nothing exposed to
+  users. Likes are collected and classified; once enough likes accumulate, the owner can
+  publish selected questions under chosen headings. Scope when built: like capture (frictionless
+  one-tap in the question flow) + likes table with per-guest dedupe + internal admin view of
+  the three buckets. Buckets should be derived (query by count), not stored membership.
+  Publish-to-heading surfaces are phase 2 and deliberately out of scope until the owner calls
+  for them.
 - **Fix:** applied to the 3 canvas games that overlay the pill on the playing surface
   (hurdle-runner, spirit-runner, flying-snake). `showScreen(mode)` now toggles a
   `.back-link.hidden` rule: the pill is hidden while `mode === 'playing'` (snake also
@@ -744,3 +889,22 @@ _(template for new sessions:)_
 
 _(moved entries keep their **Verified** evidence lines; add **Date fixed** and **Fix** at
 the top.)_
+
+### BUG-038 - Backend: content list cache invalidation never matches (stale lists up to 1 h)
+
+- **Date found:** 2026-09-19 / **Date fixed:** not yet (code fix needs a deploy)
+- **Area:** API cache layer — `apps/backend/src/common/content/content-cache.util.ts` + call sites
+- **Priority:** P2
+- **Finding:** `invalidateCacheFamilies()` calls `cacheService.delPattern(\`${family}:_\`)`, but
+callers pass FULL cache keys (e.g. `jokes:categories:hasContent:true`), so the generated
+pattern `...:true:_`never matches the bare key`...:true`that`getOrSet` actually wrote.
+Cached content lists therefore survive writes until TTL (`DEFAULT_CACHE_TTL_S = 3600`).
+Observed live 2026-09-19: after creating 11 joke categories via the admin API,
+`GET /jokes/classic/categories`kept returning 0 rows; the empty list had been cached
+during a pre-create read. Same util is used by other content services — every list
+endpoint wrapped in`getOrSet` is exposed to the same staleness window.
+- **Workaround applied 2026-09-19:** manual `DEL jokes:categories:hasContent:false
+jokes:categories:hasContent:true` in quiz-redis (cache-only, no data touched).
+- **Suggested fix:** at call sites, pass the family PREFIX (e.g. `jokes:categories:hasContent`)
+  so `delPattern('...:*')` matches the `:true` / `:false` variants — or delete the exact key.
+  One-liner per call site; ship with the next regular deploy.
