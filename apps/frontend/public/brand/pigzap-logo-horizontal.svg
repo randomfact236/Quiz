@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 384" role="img" aria-label="PigZap — fun and games">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4C1D95"/>
+      <stop offset="1" stop-color="#2E1065"/>
+    </linearGradient>
+    <linearGradient id="hpig" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFC2DA"/>
+      <stop offset="1" stop-color="#FF9CC6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- icon mark -->
+  <g transform="translate(20,32) scale(0.625)">
+    <rect width="512" height="512" rx="120" fill="url(#hbg)"/>
+    <path d="M140 168 L84 74 Q78 58 96 64 L218 118 Z" fill="url(#hpig)" stroke="url(#hpig)" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M372 168 L428 74 Q434 58 416 64 L294 118 Z" fill="url(#hpig)" stroke="url(#hpig)" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M148 148 L110 92 L192 126 Z" fill="#FF8FBB"/>
+    <path d="M364 148 L402 92 L320 126 Z" fill="#FF8FBB"/>
+    <ellipse cx="256" cy="282" rx="158" ry="140" fill="url(#hpig)"/>
+    <ellipse cx="148" cy="314" rx="22" ry="14" fill="#FF87B8" opacity="0.55"/>
+    <ellipse cx="364" cy="314" rx="22" ry="14" fill="#FF87B8" opacity="0.55"/>
+    <circle cx="196" cy="250" r="17" fill="#2E1065"/>
+    <circle cx="202" cy="244" r="6" fill="#FFFFFF"/>
+    <circle cx="316" cy="250" r="17" fill="#2E1065"/>
+    <circle cx="322" cy="244" r="6" fill="#FFFFFF"/>
+    <ellipse cx="256" cy="320" rx="66" ry="48" fill="#FF8FBB"/>
+    <ellipse cx="234" cy="320" rx="10" ry="17" fill="#C94F7C"/>
+    <ellipse cx="278" cy="320" rx="10" ry="17" fill="#C94F7C"/>
+    <path d="M204 390 Q256 422 308 390" stroke="#C94F7C" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M466 84 L410 176 L444 176 L424 250 L502 146 L466 146 Z" fill="#FFD84D" stroke="#2E1065" stroke-width="9" stroke-linejoin="round"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="372" y="228" font-family="'Baloo 2','Fredoka',Nunito,'Arial Rounded MT Bold','Segoe UI',system-ui,sans-serif" font-weight="800" font-size="196" letter-spacing="-2">
+    <tspan fill="#E5397F">Pig</tspan><tspan fill="#1E1B4B">Zap</tspan>
+  </text>
+  <text x="1024" y="150" font-family="'Baloo 2','Fredoka',Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="56" fill="#64748B">.com</text>
+
+  <!-- green underline swoosh (echo of the original brand green) -->
+  <path d="M378 268 Q540 296 706 260" stroke="#22C55E" stroke-width="16" fill="none" stroke-linecap="round"/>
+
+  <!-- tagline -->
+  <text x="380" y="330" font-family="Nunito,'Segoe UI',system-ui,sans-serif" font-weight="700" font-size="36" letter-spacing="9" fill="#64748B">FUN AND GAMES</text>
+</svg>

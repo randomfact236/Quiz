@@ -15,7 +15,6 @@ import { SettingsService } from '@/services/settings.service';
 import { ApiError } from '@/lib/api-client';
 import { getErrorMessage, resolveMediaUrl, uploadMedia } from '@/lib/media-api';
 import { SOCIAL_PLATFORMS } from '@/components/SocialLinks';
-import { BrandMark } from '@/components/BrandMark';
 import type {
   SystemSettings,
   SettingsTab,
@@ -106,9 +105,19 @@ function BrandPreviewChip({
             }
           />
         ) : (
-          <BrandMark
-            size={variant === 'square' ? 44 : variant === 'mobile' ? 24 : 48}
-            tone={onLight ? 'on-light' : 'on-dark'}
+          // No upload yet — preview the BUILT-IN PigZap mark the public site
+          // actually falls back to (the generic placeholder is retired).
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src="/brand/pigzap-icon.svg"
+            alt=""
+            className={
+              variant === 'square'
+                ? 'h-11 w-11 rounded-xl object-contain'
+                : variant === 'mobile'
+                  ? 'h-7 w-7 rounded object-contain'
+                  : 'h-11 w-11 rounded-xl object-contain'
+            }
           />
         )}
         {variant !== 'square' && (

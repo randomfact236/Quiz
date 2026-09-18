@@ -8,7 +8,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { UserCircle, X } from 'lucide-react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { BrandMark } from '@/components/BrandMark';
 import { useSiteBrand } from '@/components/SiteBrandContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
@@ -19,23 +18,19 @@ import { authService } from '@/lib/auth';
  *  unless the admin turned the text off); md+ shows the whole logo only — it
  *  already carries the brand name, so no text is added beside it (unless no
  *  logo is uploaded, in which case the placeholder mark + name are shown).
- *  A dark-mode logo variant swaps in under dark mode when uploaded. */
+ *  A dark-mode logo variant swaps in under dark mode when uploaded. Built-in
+ *  PigZap marks are the floor: no surface ever falls back to a generic
+ *  placeholder. Mobile shows the square icon + the site domain (pigzap.com)
+ *  per owner directive; md+ shows the whole logo only. */
+const SITE_DOMAIN = 'pigzap.com';
+
 function BrandLink(): JSX.Element {
   const { siteName, logo, logoDark, favicon, mobileLogo, mobileShowSiteName } = useSiteBrand();
   const squareIcon = favicon || logo;
   const fullLogo = logo || favicon;
-  // The site-name text is a mobile-only companion to the square icon; the
-  // dedicated mobile logo replaces both, and md+ keeps the old rule (text only
-  // when no logo exists, so the placeholder mark never leaves the brand
-  // nameless).
+  // The domain text is a mobile-only companion to the square icon; the
+  // dedicated mobile logo replaces both.
   const mobileTextVisible = !mobileLogo && mobileShowSiteName;
-  const textVisibility = mobileTextVisible
-    ? fullLogo
-      ? 'md:hidden'
-      : ''
-    : fullLogo
-      ? 'hidden'
-      : 'hidden md:inline-block';
   return (
     <Link href="/" className="inline-flex items-center gap-2" aria-label={`${siteName} Home`}>
       {/* Mobile top bar — dedicated mobile logo, else the square app icon */}
@@ -43,59 +38,49 @@ function BrandLink(): JSX.Element {
         {mobileLogo ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img src={mobileLogo} alt="" className="h-7 w-auto max-w-[160px] object-contain" />
-        ) : squareIcon ? (
+        ) : (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img src={squareIcon} alt="" className="h-7 w-7 rounded object-contain" />
-        ) : (
-          <BrandMark size={28} />
         )}
       </span>
       {/* Larger screens — whole logo only, filling the nav bar height
           (h-20 with -my-4 cancels the nav's py-4 so it spans edge-to-edge) */}
       <span className="hidden md:block" aria-hidden="true">
-        {fullLogo ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={fullLogo}
-              alt=""
-              className={`h-20 -my-4 w-auto max-w-[320px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
-            />
-            {logoDark && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={logoDark}
-                alt=""
-                className="hidden h-20 -my-4 w-auto max-w-[320px] object-contain dark:block"
-              />
-            )}
-          </>
-        ) : (
-          <BrandMark size={48} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={fullLogo}
+          alt=""
+          className={`h-20 -my-4 w-auto max-w-[320px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
+        />
+        {logoDark && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={logoDark}
+            alt=""
+            className="hidden h-20 -my-4 w-auto max-w-[320px] object-contain dark:block"
+          />
         )}
       </span>
-      <span
-        className={`text-xl font-bold text-primary-600 hover:text-primary-700 ${textVisibility}`}
-      >
-        {siteName}
-      </span>
+      {mobileTextVisible && (
+        <span className="text-xl font-bold text-primary-600 hover:text-primary-700 md:hidden">
+          {SITE_DOMAIN}
+        </span>
+      )}
     </Link>
   );
 }
 
-/** Square icon + site name row shown at the top of the mobile menu drawer. */
+/** Square icon + site domain row shown at the top of the mobile menu drawer. */
 function MobileDrawerBrand(): JSX.Element {
-  const { siteName, favicon, logo } = useSiteBrand();
+  const { favicon, logo } = useSiteBrand();
   const squareIcon = favicon || logo;
   return (
     <div className="mb-2 flex items-center gap-2 border-b border-secondary-200 pb-3 dark:border-secondary-700">
-      {squareIcon ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={squareIcon} alt="" className="h-8 w-8 rounded object-contain" />
-      ) : (
-        <BrandMark size={32} />
-      )}
-      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">{siteName}</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={squareIcon} alt="" className="h-8 w-8 rounded object-contain" />
+      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+        {SITE_DOMAIN}
+      </span>
     </div>
   );
 }

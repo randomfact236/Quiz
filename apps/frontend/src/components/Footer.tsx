@@ -4,6 +4,7 @@ import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
 import { SocialLinks } from '@/components/SocialLinks';
 
 import { NAV_ITEMS, NAV_SECONDARY_ITEMS } from '@/lib/nav-config';
+import { BUILT_IN_BRAND_ASSETS } from '@/components/SiteBrandContext';
 import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 
 const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
@@ -26,12 +27,14 @@ export default async function Footer(): Promise<JSX.Element> {
 
   // Same cached fetch as the root layout (Next dedupes it within the pass).
   const { site, seo } = await getPublicSettings();
-  const siteName = site?.siteName?.trim() || seo?.siteName?.trim() || 'AI Quiz';
+  const siteName = site?.siteName?.trim() || seo?.siteName?.trim() || 'PigZap';
   const description =
     site?.siteDescription?.trim() ||
     'Enterprise-grade interactive quiz platform. Test your knowledge and have fun!';
-  const logo = resolveMediaUrl(site?.logo?.trim() ?? '');
-  const logoDark = resolveMediaUrl(site?.logoDark?.trim() ?? '');
+  // Built-in PigZap marks are the floor — an empty setting must not hide the
+  // footer logo (owner: the generic placeholder must never come back).
+  const logo = resolveMediaUrl(site?.logo?.trim() ?? '') || BUILT_IN_BRAND_ASSETS.logo;
+  const logoDark = resolveMediaUrl(site?.logoDark?.trim() ?? '') || BUILT_IN_BRAND_ASSETS.logoDark;
 
   return (
     <footer
@@ -48,27 +51,20 @@ export default async function Footer(): Promise<JSX.Element> {
               className="inline-flex items-center gap-2"
               aria-label={`${siteName} - Home`}
             >
-              {logo && (
-                <>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={logo}
-                    alt=""
-                    className={`h-12 w-auto max-w-[240px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
-                  />
-                  {logoDark && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={logoDark}
-                      alt=""
-                      className="hidden h-12 w-auto max-w-[240px] object-contain dark:block"
-                    />
-                  )}
-                </>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logo}
+                alt=""
+                className={`h-12 w-auto max-w-[240px] object-contain ${logoDark ? 'dark:hidden' : ''}`}
+              />
+              {logoDark && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={logoDark}
+                  alt=""
+                  className="hidden h-12 w-auto max-w-[240px] object-contain dark:block"
+                />
               )}
-              {/* With a logo uploaded the wordmark already carries the brand —
-                  show the text name only when there is no logo (header parity). */}
-              {!logo && <span className="text-xl font-bold text-primary-600">{siteName}</span>}
             </Link>
             <p className="mt-2 text-secondary-600 dark:text-secondary-400">{description}</p>
             <SocialLinks socialLinks={site?.socialLinks} />

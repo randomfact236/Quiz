@@ -22,11 +22,21 @@ export interface SiteBrand {
   mobileShowSiteName: boolean;
 }
 
+/** Built-in PigZap marks — the brand floor. An empty admin setting must never
+ * regress a surface to a generic placeholder: these ship with the app and are
+ * the defaults every consumer falls back to (BUG: old bolt placeholder regressed
+ * desktop/tablet when no logo was uploaded). Admin uploads still override. */
+export const BUILT_IN_BRAND_ASSETS = {
+  logo: '/brand/pigzap-logo-horizontal.svg',
+  logoDark: '/brand/pigzap-logo-horizontal-dark.svg',
+  favicon: '/brand/pigzap-icon.svg',
+};
+
 const DEFAULT_BRAND: SiteBrand = {
-  siteName: 'AI Quiz',
-  logo: '',
-  logoDark: '',
-  favicon: '',
+  siteName: 'PigZap',
+  logo: BUILT_IN_BRAND_ASSETS.logo,
+  logoDark: BUILT_IN_BRAND_ASSETS.logoDark,
+  favicon: BUILT_IN_BRAND_ASSETS.favicon,
   mobileLogo: '',
   mobileShowSiteName: true,
 };

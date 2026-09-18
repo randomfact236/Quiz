@@ -9,7 +9,7 @@ import Header from '@/components/Header';
 import MobileFooter from '@/components/MobileFooter';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { JsonLd } from '@/components/JsonLd';
-import { SiteBrandProvider } from '@/components/SiteBrandContext';
+import { SiteBrandProvider, BUILT_IN_BRAND_ASSETS } from '@/components/SiteBrandContext';
 import { APP_URL, siteJsonLd } from '@/lib/seo';
 import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 import { Providers } from './providers';
@@ -23,9 +23,9 @@ const inter = Inter({
 
 /** Built-in metadata — the fallback whenever the backend or the seo group is unavailable. */
 const DEFAULTS = {
-  siteName: 'AI Quiz',
-  titleDefault: 'AI Quiz - Interactive Learning Platform',
-  titleTemplate: '%s | AI Quiz',
+  siteName: 'PigZap',
+  titleDefault: 'PigZap - Interactive Learning Platform',
+  titleTemplate: '%s | PigZap',
   description:
     'Enterprise-grade interactive quiz platform with science quizzes, dad jokes, riddles, and more. Test your knowledge and have fun!',
   keywords: [
@@ -145,11 +145,14 @@ export default async function RootLayout({
 }>): Promise<JSX.Element> {
   // Same cached fetch as generateMetadata (Next dedupes it within the pass).
   const { seo, site } = await getPublicSettings();
+  // Empty settings fall back to the BUILT-IN PigZap marks, never a generic
+  // placeholder (the old bolt regressed desktop/tablet when nothing was
+  // uploaded). Admin uploads still win.
   const brand = {
-    siteName: site?.siteName?.trim() || seo?.siteName?.trim() || 'AI Quiz',
-    logo: resolveMediaUrl(site?.logo?.trim() ?? ''),
-    logoDark: resolveMediaUrl(site?.logoDark?.trim() ?? ''),
-    favicon: resolveMediaUrl(site?.favicon?.trim() ?? ''),
+    siteName: site?.siteName?.trim() || seo?.siteName?.trim() || 'PigZap',
+    logo: resolveMediaUrl(site?.logo?.trim() ?? '') || BUILT_IN_BRAND_ASSETS.logo,
+    logoDark: resolveMediaUrl(site?.logoDark?.trim() ?? '') || BUILT_IN_BRAND_ASSETS.logoDark,
+    favicon: resolveMediaUrl(site?.favicon?.trim() ?? '') || BUILT_IN_BRAND_ASSETS.favicon,
     mobileLogo: resolveMediaUrl(site?.mobileLogo?.trim() ?? ''),
     mobileShowSiteName: site?.mobileShowSiteName !== false,
   };
