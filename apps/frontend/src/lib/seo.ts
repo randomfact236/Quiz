@@ -11,7 +11,14 @@
 
 import type { Metadata } from 'next';
 
-export const APP_URL = process.env['NEXT_PUBLIC_APP_URL'] || 'http://localhost:3010';
+export const APP_URL = (() => {
+  const explicit = process.env['NEXT_PUBLIC_APP_URL'];
+  if (explicit) return explicit.replace(/\/$/, '');
+  // Production builds default to the real domain: NEXT_PUBLIC_* values are
+  // inlined at build time, and a missing env must never ship a localhost
+  // sitemap/canonical to crawlers (the live deployment shipped exactly that).
+  return process.env.NODE_ENV === 'production' ? 'https://pigzap.com' : 'http://localhost:3010';
+})();
 
 /**
  * The indexable route registry — the single list that both the sitemap's
