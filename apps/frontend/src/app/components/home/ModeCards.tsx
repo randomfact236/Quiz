@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 interface ContentOption {
@@ -67,28 +67,14 @@ const MODE_CARDS: ModeCardConfig[] = [
   },
 ];
 
-/** These stay direct links. Order is shuffled on every visit (owner request 2026-09-16):
- *  Quiz / Riddles / Image Riddles / Dad Jokes always render, in random positions. */
+/** Direct links under the mode cards — fixed order, no Quiz card
+ *  (owner request 2026-09-18; replaces the earlier per-visit shuffle). */
 const DIRECT_LINKS = [
-  { href: '/quiz-mcq', emoji: '🧠', title: 'Quiz', subtitle: 'Test Your Knowledge' },
   { href: '/riddle-mcq', emoji: '🎭', title: 'Riddles', subtitle: 'Brain Teasers' },
   { href: '/image-riddles', emoji: '🖼️', title: 'Image Riddles', subtitle: 'Visual Puzzles' },
   { href: '/games', emoji: '🎮', title: 'Games', subtitle: 'Brain Exercise' },
   { href: '/jokes', emoji: '😂', title: 'Dad Jokes', subtitle: 'Fun Time' },
 ];
-
-/** Fisher–Yates; returns a new array. */
-function shuffled<T>(items: T[]): T[] {
-  const out = [...items];
-  for (let i = out.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const a = out[i] as T;
-    const b = out[j] as T;
-    out[i] = b;
-    out[j] = a;
-  }
-  return out;
-}
 
 function ModeSection({
   card,
@@ -141,10 +127,6 @@ function ModeSection({
 }
 
 export function ModeCards(): JSX.Element {
-  // Shuffle after mount: SSR/prerender uses the fixed order so hydration matches,
-  // then every visit gets a fresh random order.
-  const [directLinks, setDirectLinks] = useState(DIRECT_LINKS);
-
   // BUG-003: both cards start open (Topics-section parity), but they act as
   // one accordion group — the first header click switches to exclusive mode,
   // so picking a card collapses the other instead of leaving both open.
@@ -153,10 +135,6 @@ export function ModeCards(): JSX.Element {
   const toggleCard = (id: 'timer' | 'practice'): void => {
     setOpenCard((prev) => (prev === id ? null : id));
   };
-
-  useEffect(() => {
-    setDirectLinks(shuffled(DIRECT_LINKS));
-  }, []);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 items-start gap-4">
@@ -169,7 +147,7 @@ export function ModeCards(): JSX.Element {
         />
       ))}
 
-      {directLinks.map((mode) => (
+      {DIRECT_LINKS.map((mode) => (
         <Link
           key={mode.title}
           href={mode.href}

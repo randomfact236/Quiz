@@ -2,128 +2,128 @@
 
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 1,Water is made of hydrogen and oxygen.,True,False,,,A,easy,Physics & Chemistry
-2,The human heart pumps blood around the body.,True,False,,,A,easy,Human Body & Biology
-3,The Sun rises in the west.,True,False,,,B,easy,Space & Astronomy
-4,Water covers most of the Earth's surface.,True,False,,,A,easy,Earth & Weather
-5,Penguins can fly.,True,False,,,B,easy,Plants & Animals
+2,The human heart pumps blood around the body.,False,True,,,B,easy,Human Body & Biology
+3,The Sun rises in the west.,False,True,,,A,easy,Space & Astronomy
+4,Water covers most of the Earth's surface.,False,True,,,B,easy,Earth & Weather
+5,Penguins can fly.,False,True,,,A,easy,Plants & Animals
 6,Thomas Edison invented the telephone.,True,False,,,B,easy,Scientists & Discoveries
 7,Ice is the solid form of water.,True,False,,,A,easy,Physics & Chemistry
 8,Blood is blue inside the human body.,True,False,,,B,easy,Human Body & Biology
 9,Earth is the third planet from the Sun.,True,False,,,A,easy,Space & Astronomy
 10,Lightning never strikes the same place twice.,True,False,,,B,easy,Earth & Weather
 11,Fish breathe underwater using gills.,True,False,,,A,easy,Plants & Animals
-12,Albert Einstein developed the theory of relativity.,True,False,,,A,easy,Scientists & Discoveries
-13,Sound travels faster through air than through water.,True,False,,,B,easy,Physics & Chemistry
-14,Babies are born with more bones than adults.,True,False,,,A,easy,Human Body & Biology
-15,The Moon makes its own light.,True,False,,,B,easy,Space & Astronomy
+12,Albert Einstein developed the theory of relativity.,False,True,,,B,easy,Scientists & Discoveries
+13,Sound travels faster through air than through water.,False,True,,,A,easy,Physics & Chemistry
+14,Babies are born with more bones than adults.,False,True,,,B,easy,Human Body & Biology
+15,The Moon makes its own light.,False,True,,,A,easy,Space & Astronomy
 16,Deserts are always hot places.,True,False,,,B,easy,Earth & Weather
 17,A baby frog is called a tadpole.,True,False,,,A,easy,Plants & Animals
 18,Galileo built the first telescope in ancient Egypt.,True,False,,,B,easy,Scientists & Discoveries
 19,Helium is lighter than air.,True,False,,,A,easy,Physics & Chemistry
 20,The adult human body has 500 bones.,True,False,,,B,easy,Human Body & Biology
 21,Jupiter is the largest planet in the solar system.,True,False,,,A,easy,Space & Astronomy
-22,The Pacific Ocean is the largest ocean on Earth.,True,False,,,A,easy,Earth & Weather
-23,Spiders are insects.,True,False,,,B,easy,Plants & Animals
-24,Charles Darwin sailed on a ship called the Beagle.,True,False,,,A,easy,Scientists & Discoveries
-25,Acids taste sweet.,True,False,,,B,easy,Physics & Chemistry
+22,The Pacific Ocean is the largest ocean on Earth.,False,True,,,B,easy,Earth & Weather
+23,Spiders are insects.,False,True,,,A,easy,Plants & Animals
+24,Charles Darwin sailed on a ship called the Beagle.,False,True,,,B,easy,Scientists & Discoveries
+25,Acids taste sweet.,False,True,,,A,easy,Physics & Chemistry
 26,Humans can survive for months without drinking water.,True,False,,,B,easy,Human Body & Biology
 27,Saturn is famous for its bright rings.,True,False,,,A,easy,Space & Astronomy
 28,Earth has more land surface than ocean.,True,False,,,B,easy,Earth & Weather
 29,Whales are mammals.,True,False,,,A,easy,Plants & Animals
 30,Benjamin Franklin invented the steam engine.,True,False,,,B,easy,Scientists & Discoveries
 31,Fire needs oxygen to burn.,True,False,,,A,easy,Physics & Chemistry
-32,Red blood cells carry oxygen.,True,False,,,A,easy,Human Body & Biology
-33,A light-year measures time.,True,False,,,B,easy,Space & Astronomy
-34,Antarctica is the coldest continent.,True,False,,,A,easy,Earth & Weather
-35,Sharks are mammals.,True,False,,,B,easy,Plants & Animals
+32,Red blood cells carry oxygen.,False,True,,,B,easy,Human Body & Biology
+33,A light-year measures time.,False,True,,,A,easy,Space & Astronomy
+34,Antarctica is the coldest continent.,False,True,,,B,easy,Earth & Weather
+35,Sharks are mammals.,False,True,,,A,easy,Plants & Animals
 36,Isaac Newton discovered X-rays.,True,False,,,B,easy,Scientists & Discoveries
 37,Atoms are the basic building blocks of matter.,True,False,,,A,easy,Physics & Chemistry
-38,White blood cells help the body fight infection.,True,False,,,A,easy,Human Body & Biology
-39,The Sun is a planet.,True,False,,,B,easy,Space & Astronomy
+38,White blood cells help the body fight infection.,False,True,,,B,easy,Human Body & Biology
+39,The Sun is a planet.,False,True,,,A,easy,Space & Astronomy
 40,Fog is a cloud made of smoke.,True,False,,,B,easy,Earth & Weather
 41,Butterflies begin life as caterpillars.,True,False,,,A,easy,Plants & Animals
-42,Gregor Mendel experimented with pea plants.,True,False,,,A,easy,Scientists & Discoveries
-43,Water boils at 50 degrees Celsius at sea level.,True,False,,,B,easy,Physics & Chemistry
-44,Sweating helps cool the human body.,True,False,,,A,easy,Human Body & Biology
-45,The Moon is larger than the Earth.,True,False,,,B,easy,Space & Astronomy
+42,Gregor Mendel experimented with pea plants.,False,True,,,B,easy,Scientists & Discoveries
+43,Water boils at 50 degrees Celsius at sea level.,False,True,,,A,easy,Physics & Chemistry
+44,Sweating helps cool the human body.,False,True,,,B,easy,Human Body & Biology
+45,The Moon is larger than the Earth.,False,True,,,A,easy,Space & Astronomy
 46,The Amazon rainforest is in Africa.,True,False,,,B,easy,Earth & Weather
 47,Cactus plants store water in their stems.,True,False,,,A,easy,Plants & Animals
 48,Guglielmo Marconi invented the printing press.,True,False,,,B,easy,Scientists & Discoveries
 49,Diamonds are made of carbon.,True,False,,,A,easy,Physics & Chemistry
 50,The heart is the largest bone in the human body.,True,False,,,B,easy,Human Body & Biology
 51,The Milky Way is a galaxy.,True,False,,,A,easy,Space & Astronomy
-52,Glaciers are made of ice.,True,False,,,A,easy,Earth & Weather
-53,Snakes have four legs.,True,False,,,B,easy,Plants & Animals
-54,Marie Curie won two Nobel Prizes.,True,False,,,A,easy,Scientists & Discoveries
-55,Oil and water mix easily.,True,False,,,B,easy,Physics & Chemistry
+52,Glaciers are made of ice.,False,True,,,B,easy,Earth & Weather
+53,Snakes have four legs.,False,True,,,A,easy,Plants & Animals
+54,Marie Curie won two Nobel Prizes.,False,True,,,B,easy,Scientists & Discoveries
+55,Oil and water mix easily.,False,True,,,A,easy,Physics & Chemistry
 56,The lungs pump blood through the body.,True,False,,,B,easy,Human Body & Biology
 57,Earth orbits the Sun.,True,False,,,A,easy,Space & Astronomy
 58,Earthquakes never happen under the sea.,True,False,,,B,easy,Earth & Weather
 59,Dolphins breathe air using lungs.,True,False,,,A,easy,Plants & Animals
 60,Nikola Tesla discovered gravity.,True,False,,,B,easy,Scientists & Discoveries
 61,Hydrogen is the lightest chemical element.,True,False,,,A,easy,Physics & Chemistry
-62,Genes are passed from parents to their children.,True,False,,,A,easy,Human Body & Biology
-63,Humans have built cities on Mars.,True,False,,,B,easy,Space & Astronomy
-64,Underwater earthquakes can cause tsunamis.,True,False,,,A,easy,Earth & Weather
-65,Bats are completely blind.,True,False,,,B,easy,Plants & Animals
+62,Genes are passed from parents to their children.,False,True,,,B,easy,Human Body & Biology
+63,Humans have built cities on Mars.,False,True,,,A,easy,Space & Astronomy
+64,Underwater earthquakes can cause tsunamis.,False,True,,,B,easy,Earth & Weather
+65,Bats are completely blind.,False,True,,,A,easy,Plants & Animals
 66,Copernicus placed the Earth at the center of the universe.,True,False,,,B,easy,Scientists & Discoveries
 67,Salt can be obtained by evaporating sea water.,True,False,,,A,easy,Physics & Chemistry
 68,The appendix is the largest human organ.,True,False,,,B,easy,Human Body & Biology
 69,Comets can grow tails as they approach the Sun.,True,False,,,A,easy,Space & Astronomy
 70,Wind is caused by the movement of clouds.,True,False,,,B,easy,Earth & Weather
 71,Worms help enrich garden soil.,True,False,,,A,easy,Plants & Animals
-72,Charles Darwin proposed evolution by natural selection.,True,False,,,A,easy,Scientists & Discoveries
-73,Neon is a liquid metal at room temperature.,True,False,,,B,easy,Physics & Chemistry
-74,The body makes vitamin D from sunlight.,True,False,,,A,easy,Human Body & Biology
-75,The Moon has moons of its own.,True,False,,,B,easy,Space & Astronomy
+72,Charles Darwin proposed evolution by natural selection.,False,True,,,B,easy,Scientists & Discoveries
+73,Neon is a liquid metal at room temperature.,False,True,,,A,easy,Physics & Chemistry
+74,The body makes vitamin D from sunlight.,False,True,,,B,easy,Human Body & Biology
+75,The Moon has moons of its own.,False,True,,,A,easy,Space & Astronomy
 76,Snow is made of tiny grains of sand.,True,False,,,B,easy,Earth & Weather
 77,Ladybugs are a type of beetle.,True,False,,,A,easy,Plants & Animals
 78,Alexander Graham Bell invented the airplane.,True,False,,,B,easy,Scientists & Discoveries
 79,Baking soda is a base.,True,False,,,A,easy,Physics & Chemistry
 80,Hair and nails keep growing after a person dies.,True,False,,,B,easy,Human Body & Biology
 81,Venus is the hottest planet in the solar system.,True,False,,,A,easy,Space & Astronomy
-82,Mount Everest is the tallest mountain above sea level.,True,False,,,A,easy,Earth & Weather
-83,Bats lay eggs.,True,False,,,B,easy,Plants & Animals
-84,Watson and Crick described the structure of DNA.,True,False,,,A,easy,Scientists & Discoveries
-85,Glass is a pure form of metal.,True,False,,,B,easy,Physics & Chemistry
+82,Mount Everest is the tallest mountain above sea level.,False,True,,,B,easy,Earth & Weather
+83,Bats lay eggs.,False,True,,,A,easy,Plants & Animals
+84,Watson and Crick described the structure of DNA.,False,True,,,B,easy,Scientists & Discoveries
+85,Glass is a pure form of metal.,False,True,,,A,easy,Physics & Chemistry
 86,Toenails grow faster than fingernails.,True,False,,,B,easy,Human Body & Biology
 87,Mercury is the closest planet to the Sun.,True,False,,,A,easy,Space & Astronomy
 88,Thunder usually arrives before the lightning that causes it.,True,False,,,B,easy,Earth & Weather
 89,Kangaroos carry their young in a pouch.,True,False,,,A,easy,Plants & Animals
 90,Stephen Hawking invented the telescope.,True,False,,,B,easy,Scientists & Discoveries
 91,Vinegar is a weak acid.,True,False,,,A,easy,Physics & Chemistry
-92,The immune system protects the body from germs.,True,False,,,A,easy,Human Body & Biology
-93,Neptune is the smallest planet in the solar system.,True,False,,,B,easy,Space & Astronomy
-94,Rainbows form when sunlight shines through raindrops.,True,False,,,A,easy,Earth & Weather
-95,Owls hunt only during the day.,True,False,,,B,easy,Plants & Animals
+92,The immune system protects the body from germs.,False,True,,,B,easy,Human Body & Biology
+93,Neptune is the smallest planet in the solar system.,False,True,,,A,easy,Space & Astronomy
+94,Rainbows form when sunlight shines through raindrops.,False,True,,,B,easy,Earth & Weather
+95,Owls hunt only during the day.,False,True,,,A,easy,Plants & Animals
 96,Marie Curie discovered the planet Saturn.,True,False,,,B,easy,Scientists & Discoveries
 97,Air is a mixture of gases.,True,False,,,A,easy,Physics & Chemistry
 98,The human brain stops working during sleep.,True,False,,,B,easy,Human Body & Biology
 99,Asteroids are rocky objects orbiting the Sun.,True,False,,,A,easy,Space & Astronomy
 100,Volcanoes erupt with cold ice.,True,False,,,B,easy,Earth & Weather
 101,Bees collect nectar to make honey.,True,False,,,A,easy,Plants & Animals
-102,Jane Goodall studied wild chimpanzees.,True,False,,,A,easy,Scientists & Discoveries
-103,Bleach is safe to drink.,True,False,,,B,easy,Physics & Chemistry
-104,The liver helps filter the blood.,True,False,,,A,easy,Human Body & Biology
-105,Stars are clearly visible during the day.,True,False,,,B,easy,Space & Astronomy
+102,Jane Goodall studied wild chimpanzees.,False,True,,,B,easy,Scientists & Discoveries
+103,Bleach is safe to drink.,False,True,,,A,easy,Physics & Chemistry
+104,The liver helps filter the blood.,False,True,,,B,easy,Human Body & Biology
+105,Stars are clearly visible during the day.,False,True,,,A,easy,Space & Astronomy
 106,Hailstones are made of hot ash.,True,False,,,B,easy,Earth & Weather
 107,A spider has eight legs.,True,False,,,A,easy,Plants & Animals
 108,Albert Einstein failed mathematics in school.,True,False,,,B,easy,Scientists & Discoveries
 109,Lemon juice is acidic.,True,False,,,A,easy,Physics & Chemistry
 110,Humans have two stomachs.,True,False,,,B,easy,Human Body & Biology
 111,The Sun gives Earth light and heat.,True,False,,,A,easy,Space & Astronomy
-112,Weather happens in the atmosphere.,True,False,,,A,easy,Earth & Weather
-113,All birds can fly.,True,False,,,B,easy,Plants & Animals
-114,Isaac Newton described three laws of motion.,True,False,,,A,easy,Scientists & Discoveries
-115,Frozen water is called steam.,True,False,,,B,easy,Physics & Chemistry
-116,The trachea is also called the windpipe.,True,False,,,A,easy,Human Body & Biology
-117,Earth is the largest planet in the solar system.,True,False,,,B,easy,Space & Astronomy
+112,Weather happens in the atmosphere.,False,True,,,B,easy,Earth & Weather
+113,All birds can fly.,False,True,,,A,easy,Plants & Animals
+114,Isaac Newton described three laws of motion.,False,True,,,B,easy,Scientists & Discoveries
+115,Frozen water is called steam.,False,True,,,A,easy,Physics & Chemistry
+116,The trachea is also called the windpipe.,False,True,,,B,easy,Human Body & Biology
+117,Earth is the largest planet in the solar system.,False,True,,,A,easy,Space & Astronomy
 118,The Richter scale measures rainfall.,True,False,,,B,easy,Earth & Weather
 119,Great white sharks are fish.,True,False,,,A,easy,Plants & Animals
 120,Alexander Fleming discovered the planet Neptune.,True,False,,,B,easy,Scientists & Discoveries
 121,Carbon dioxide gives fizzy drinks their bubbles.,True,False,,,A,easy,Physics & Chemistry
-122,An adult human has 32 teeth including wisdom teeth.,True,False,,,A,easy,Human Body & Biology
-123,Mercury is covered by thick bright rings.,True,False,,,B,easy,Space & Astronomy
+122,An adult human has 32 teeth including wisdom teeth.,False,True,,,B,easy,Human Body & Biology
+123,Mercury is covered by thick bright rings.,False,True,,,A,easy,Space & Astronomy
 124,Tsunamis are giant waves caused by wind.,True,False,,,B,easy,Earth & Weather
 125,A camel stores fat in its hump.,True,False,,,A,easy,Plants & Animals
 126,Archimedes discovered America.,True,False,,,B,easy,Scientists & Discoveries
@@ -132,70 +132,70 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 129,The Moon orbits the Earth.,True,False,,,A,easy,Space & Astronomy
 130,Rivers flow uphill.,True,False,,,B,easy,Earth & Weather
 131,Polar bears live in the Arctic region.,True,False,,,A,easy,Plants & Animals
-132,Neil Armstrong was the first person to walk on the Moon.,True,False,,,A,easy,Scientists & Discoveries
-133,Oxygen is the most abundant gas in the atmosphere.,True,False,,,B,easy,Physics & Chemistry
-134,Broken bones can heal over time.,True,False,,,A,easy,Human Body & Biology
-135,The Moon is a star.,True,False,,,B,easy,Space & Astronomy
+132,Neil Armstrong was the first person to walk on the Moon.,False,True,,,B,easy,Scientists & Discoveries
+133,Oxygen is the most abundant gas in the atmosphere.,False,True,,,A,easy,Physics & Chemistry
+134,Broken bones can heal over time.,False,True,,,B,easy,Human Body & Biology
+135,The Moon is a star.,False,True,,,A,easy,Space & Astronomy
 136,The Great Barrier Reef is in the Atlantic Ocean.,True,False,,,B,easy,Earth & Weather
 137,Owls can turn their heads almost all the way around.,True,False,,,A,easy,Plants & Animals
 138,Galileo discovered the planet Pluto.,True,False,,,B,easy,Scientists & Discoveries
 139,Water expands when it freezes.,True,False,,,A,easy,Physics & Chemistry
 140,The human body contains no bacteria.,True,False,,,B,easy,Human Body & Biology
 141,Shooting stars are small bits of rock burning in the air.,True,False,,,A,easy,Space & Astronomy
-142,Fossils are the preserved remains of ancient life.,True,False,,,A,easy,Earth & Weather
-143,Dolphins are a kind of fish.,True,False,,,B,easy,Plants & Animals
-144,Dmitri Mendeleev created the periodic table.,True,False,,,A,easy,Scientists & Discoveries
-145,Ice melts fastest inside a freezer.,True,False,,,B,easy,Physics & Chemistry
+142,Fossils are the preserved remains of ancient life.,False,True,,,B,easy,Earth & Weather
+143,Dolphins are a kind of fish.,False,True,,,A,easy,Plants & Animals
+144,Dmitri Mendeleev created the periodic table.,False,True,,,B,easy,Scientists & Discoveries
+145,Ice melts fastest inside a freezer.,False,True,,,A,easy,Physics & Chemistry
 146,The stomach is part of the nervous system.,True,False,,,B,easy,Human Body & Biology
 147,Jupiter has many known moons.,True,False,,,A,easy,Space & Astronomy
 148,Caves can only form in ice.,True,False,,,B,easy,Earth & Weather
 149,Male seahorses carry the babies.,True,False,,,A,easy,Plants & Animals
 150,Benjamin Franklin was a famous painter.,True,False,,,B,easy,Scientists & Discoveries
 151,The chemical formula of water is H2O.,True,False,,,A,easy,Physics & Chemistry
-152,Muscles help the body move.,True,False,,,A,easy,Human Body & Biology
-153,The Sun orbits the Earth.,True,False,,,B,easy,Space & Astronomy
-154,The water cycle moves water between oceans and sky.,True,False,,,A,easy,Earth & Weather
-155,Crocodiles are mammals.,True,False,,,B,easy,Plants & Animals
+152,Muscles help the body move.,False,True,,,B,easy,Human Body & Biology
+153,The Sun orbits the Earth.,False,True,,,A,easy,Space & Astronomy
+154,The water cycle moves water between oceans and sky.,False,True,,,B,easy,Earth & Weather
+155,Crocodiles are mammals.,False,True,,,A,easy,Plants & Animals
 156,Thomas Edison invented the computer mouse.,True,False,,,B,easy,Scientists & Discoveries
 157,Gold does not rust.,True,False,,,A,easy,Physics & Chemistry
 158,The smallest bone in the human body is the femur.,True,False,,,B,easy,Human Body & Biology
 159,Saturn is the second largest planet in the solar system.,True,False,,,A,easy,Space & Astronomy
 160,Deserts receive heavy rainfall every day.,True,False,,,B,easy,Earth & Weather
 161,Honeybees live in colonies with a queen.,True,False,,,A,easy,Plants & Animals
-162,Archimedes famously shouted Eureka.,True,False,,,A,easy,Scientists & Discoveries
-163,Salt water freezes faster than fresh water.,True,False,,,B,easy,Physics & Chemistry
-164,Regular exercise strengthens the heart.,True,False,,,A,easy,Human Body & Biology
-165,Empty space is full of air.,True,False,,,B,easy,Space & Astronomy
+162,Archimedes famously shouted Eureka.,False,True,,,B,easy,Scientists & Discoveries
+163,Salt water freezes faster than fresh water.,False,True,,,A,easy,Physics & Chemistry
+164,Regular exercise strengthens the heart.,False,True,,,B,easy,Human Body & Biology
+165,Empty space is full of air.,False,True,,,A,easy,Space & Astronomy
 166,Mount Everest is located in Europe.,True,False,,,B,easy,Earth & Weather
 167,Bats hunt insects using echoes.,True,False,,,A,easy,Plants & Animals
 168,Gregor Mendel studied fruit flies.,True,False,,,B,easy,Scientists & Discoveries
 169,Copper conducts electricity well.,True,False,,,A,easy,Physics & Chemistry
 170,The human skeleton contains exactly ten bones.,True,False,,,B,easy,Human Body & Biology
 171,Stars appear to twinkle when seen from Earth.,True,False,,,A,easy,Space & Astronomy
-172,Seawater is salty.,True,False,,,A,easy,Earth & Weather
-173,Whales lay eggs on beaches.,True,False,,,B,easy,Plants & Animals
-174,Alfred Wegener proposed that continents drift.,True,False,,,A,easy,Scientists & Discoveries
-175,Water and oil have the same density.,True,False,,,B,easy,Physics & Chemistry
+172,Seawater is salty.,False,True,,,B,easy,Earth & Weather
+173,Whales lay eggs on beaches.,False,True,,,A,easy,Plants & Animals
+174,Alfred Wegener proposed that continents drift.,False,True,,,B,easy,Scientists & Discoveries
+175,Water and oil have the same density.,False,True,,,A,easy,Physics & Chemistry
 176,The kidneys are located in the arms.,True,False,,,B,easy,Human Body & Biology
 177,Earth has one natural satellite.,True,False,,,A,easy,Space & Astronomy
 178,The Sun never shines at the South Pole.,True,False,,,B,easy,Earth & Weather
 179,Ants live in organized colonies.,True,False,,,A,easy,Plants & Animals
 180,Nikola Tesla was born in the year 1950.,True,False,,,B,easy,Scientists & Discoveries
 181,A magnet attracts iron objects.,True,False,,,A,easy,Physics & Chemistry
-182,The lungs bring oxygen into the blood.,True,False,,,A,easy,Human Body & Biology
-183,The constellation Orion is a planet.,True,False,,,B,easy,Space & Astronomy
-184,The Rocky Mountains are in North America.,True,False,,,A,easy,Earth & Weather
-185,Slugs have large outer shells.,True,False,,,B,easy,Plants & Animals
+182,The lungs bring oxygen into the blood.,False,True,,,B,easy,Human Body & Biology
+183,The constellation Orion is a planet.,False,True,,,A,easy,Space & Astronomy
+184,The Rocky Mountains are in North America.,False,True,,,B,easy,Earth & Weather
+185,Slugs have large outer shells.,False,True,,,A,easy,Plants & Animals
 186,Charles Darwin studied black holes.,True,False,,,B,easy,Scientists & Discoveries
 187,Sulfur is yellow.,True,False,,,A,easy,Physics & Chemistry
 188,Human ears contain no bones.,True,False,,,B,easy,Human Body & Biology
 189,Light travels faster than sound.,True,False,,,A,easy,Space & Astronomy
 190,Hurricanes form over land.,True,False,,,B,easy,Earth & Weather
 191,Octopuses have eight arms.,True,False,,,A,easy,Plants & Animals
-192,Thomas Edison held over one thousand patents.,True,False,,,A,easy,Scientists & Discoveries
-193,A block of iron floats in water.,True,False,,,B,easy,Physics & Chemistry
-194,The skin protects the body from germs.,True,False,,,A,easy,Human Body & Biology
-195,The Moon is about as large as the Sun.,True,False,,,B,easy,Space & Astronomy
+192,Thomas Edison held over one thousand patents.,False,True,,,B,easy,Scientists & Discoveries
+193,A block of iron floats in water.,False,True,,,A,easy,Physics & Chemistry
+194,The skin protects the body from germs.,False,True,,,B,easy,Human Body & Biology
+195,The Moon is about as large as the Sun.,False,True,,,A,easy,Space & Astronomy
 196,A peninsula is completely surrounded by water.,True,False,,,B,easy,Earth & Weather
 197,Reptiles are cold-blooded animals.,True,False,,,A,easy,Plants & Animals
 198,Copernicus discovered gravity.,True,False,,,B,easy,Scientists & Discoveries
@@ -203,32 +203,32 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 200,The human heart has five chambers.,True,False,,,B,easy,Human Body & Biology
 201,Which planet is larger: Jupiter or Venus?,Jupiter,Saturn,,,A,medium,Space & Astronomy
 202,Which ocean is bigger: the Atlantic or the Pacific?,the Atlantic,the Pacific,,,B,medium,Earth & Weather
-203,Which is faster: a lion or a cheetah?,a lion,a cheetah,,,B,medium,Plants & Animals
-204,Who described the laws of motion: Isaac Newton or Albert Einstein?,Isaac Newton,Albert Einstein,,,A,medium,Scientists & Discoveries
-205,Which freezes at a lower temperature: fresh water or salt water?,fresh water,salt water,,,B,medium,Physics & Chemistry
-206,Which organ pumps blood: the heart or the kidney?,the heart,the kidney,,,A,medium,Human Body & Biology
-207,Which planet is closer to the Sun: Mars or Mercury?,Mars,Mercury,,,B,medium,Space & Astronomy
-208,Which is the tallest mountain above sea level: K2 or Mount Everest?,K2,Mount Everest,,,A,medium,Earth & Weather
-209,Which bird cannot fly: the eagle or the penguin?,the eagle,the penguin,,,B,medium,Plants & Animals
-210,Who developed pasteurization: Louis Pasteur or Edward Jenner?,Louis Pasteur,Edward Jenner,,,A,medium,Scientists & Discoveries
+203,Which is faster: a lion or a cheetah?,a cheetah,a lion,,,A,medium,Plants & Animals
+204,Who described the laws of motion: Isaac Newton or Albert Einstein?,Albert Einstein,Isaac Newton,,,B,medium,Scientists & Discoveries
+205,Which freezes at a lower temperature: fresh water or salt water?,salt water,fresh water,,,A,medium,Physics & Chemistry
+206,Which organ pumps blood: the heart or the kidney?,the kidney,the heart,,,B,medium,Human Body & Biology
+207,Which planet is closer to the Sun: Mars or Mercury?,Mercury,Mars,,,A,medium,Space & Astronomy
+208,Which is the tallest mountain above sea level: K2 or Mount Everest?,Mount Everest,K2,,,B,medium,Earth & Weather
+209,Which bird cannot fly: the eagle or the penguin?,the penguin,the eagle,,,A,medium,Plants & Animals
+210,Who developed pasteurization: Louis Pasteur or Edward Jenner?,Edward Jenner,Louis Pasteur,,,B,medium,Scientists & Discoveries
 211,Which is lighter: helium or carbon dioxide?,helium,carbon dioxide,,,A,medium,Physics & Chemistry
 212,Which organs filter the blood: the lungs or the kidneys?,the lungs,the kidneys,,,B,medium,Human Body & Biology
-213,Which planet is famous for its rings: Mars or Saturn?,Ceres,Saturn,,,B,medium,Space & Astronomy
-214,Which region is colder: the Arctic or the Sahara?,the Arctic,the Sahara,,,A,medium,Earth & Weather
-215,Which animal has eight arms: the squid or the octopus?,the squid,the octopus,,,B,medium,Plants & Animals
-216,Who discovered penicillin: Alexander Fleming or Joseph Lister?,Alexander Fleming,Joseph Lister,,,A,medium,Scientists & Discoveries
-217,Which metal is liquid at room temperature: iron or mercury?,iron,mercury,,,B,medium,Physics & Chemistry
-218,Which body part contains the femur: the leg or the arm?,the leg,the arm,,,A,medium,Human Body & Biology
-219,What gives Mars its red color?,blue ice,iron oxide,,,B,medium,Space & Astronomy
-220,Which is the largest hot desert?,the Sahara,the Kalahari,,,A,medium,Earth & Weather
+213,Which planet is famous for its rings: Mars or Saturn?,Saturn,Ceres,,,A,medium,Space & Astronomy
+214,Which region is colder: the Arctic or the Sahara?,the Sahara,the Arctic,,,B,medium,Earth & Weather
+215,Which animal has eight arms: the squid or the octopus?,the octopus,the squid,,,A,medium,Plants & Animals
+216,Who discovered penicillin: Alexander Fleming or Joseph Lister?,Joseph Lister,Alexander Fleming,,,B,medium,Scientists & Discoveries
+217,Which metal is liquid at room temperature: iron or mercury?,mercury,iron,,,A,medium,Physics & Chemistry
+218,Which body part contains the femur: the leg or the arm?,the arm,the leg,,,B,medium,Human Body & Biology
+219,What gives Mars its red color?,iron oxide,blue ice,,,A,medium,Space & Astronomy
+220,Which is the largest hot desert?,the Kalahari,the Sahara,,,B,medium,Earth & Weather
 221,Which is the largest living ape: the gorilla or the chimpanzee?,the gorilla,the chimpanzee,,,A,medium,Plants & Animals
 222,Who proposed evolution by natural selection: Gregor Mendel or Charles Darwin?,Gregor Mendel,Charles Darwin,,,B,medium,Scientists & Discoveries
 223,Which gas do plants absorb for photosynthesis?,carbon dioxide,ammonia,,,A,medium,Physics & Chemistry
 224,Which is the largest human organ: the heart or the skin?,the heart,the skin,,,B,medium,Human Body & Biology
-225,Which star is closest to Earth: Sirius or the Sun?,Sirius,the Sun,,,B,medium,Space & Astronomy
-226,Which continent is the coldest: Australia or Antarctica?,Australia,Antarctica,,,A,medium,Earth & Weather
-227,Which insect makes honey: the wasp or the honeybee?,the wasp,the honeybee,,,B,medium,Plants & Animals
-228,Who improved the steam engine: James Watt or Rudolf Diesel?,James Watt,Rudolf Diesel,,,A,medium,Scientists & Discoveries
+225,Which star is closest to Earth: Sirius or the Sun?,the Sun,Sirius,,,A,medium,Space & Astronomy
+226,Which continent is the coldest: Australia or Antarctica?,Antarctica,Australia,,,B,medium,Earth & Weather
+227,Which insect makes honey: the wasp or the honeybee?,the honeybee,the wasp,,,A,medium,Plants & Animals
+228,Who improved the steam engine: James Watt or Rudolf Diesel?,Rudolf Diesel,James Watt,,,B,medium,Scientists & Discoveries
 229,Which element has the symbol O: osmium or oxygen?,osmium,oxygen,,,A,medium,Physics & Chemistry
 230,Which sense uses the ears: smell or hearing?,smell,hearing,,,B,medium,Human Body & Biology
 231,Which is bigger: the Sun or the Moon?,the Sun,the Moon,,,A,medium,Space & Astronomy
@@ -243,164 +243,164 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 240,Who studied wild apes in Africa: Marie Curie or Jane Goodall?,Marie Curie,Jane Goodall,,,B,medium,Scientists & Discoveries
 241,Which acid is found in lemons: lactic acid or citric acid?,lactic acid,citric acid,,,A,medium,Physics & Chemistry
 242,Which organ produces insulin: the liver or the pancreas?,the liver,the pancreas,,,B,medium,Human Body & Biology
-243,Which object orbits Earth: Venus or the International Space Station?,Venus,the International Space Station,,,B,medium,Space & Astronomy
-244,Which season follows winter: autumn or spring?,autumn,spring,,,A,medium,Earth & Weather
-245,Which big cat has stripes: the leopard or the tiger?,the leopard,the tiger,,,B,medium,Plants & Animals
-246,Who invented the telephone: Guglielmo Marconi or Alexander Graham Bell?,Guglielmo Marconi,Alexander Graham Bell,,,A,medium,Scientists & Discoveries
+243,Which object orbits Earth: Venus or the International Space Station?,the International Space Station,Venus,,,A,medium,Space & Astronomy
+244,Which season follows winter: autumn or spring?,spring,autumn,,,B,medium,Earth & Weather
+245,Which big cat has stripes: the leopard or the tiger?,the tiger,the leopard,,,A,medium,Plants & Animals
+246,Who invented the telephone: Guglielmo Marconi or Alexander Graham Bell?,Alexander Graham Bell,Guglielmo Marconi,,,B,medium,Scientists & Discoveries
 247,Which is a noble gas: argon or nitrogen?,argon,nitrogen,,,A,medium,Physics & Chemistry
 248,Which bone protects the brain: the ribs or the skull?,the ribs,the skull,,,B,medium,Human Body & Biology
-249,Which is a dwarf planet: Uranus or Pluto?,Uranus,Pluto,,,B,medium,Space & Astronomy
-250,Which is the largest rainforest: the Black Forest or the Amazon?,the Black Forest,the Amazon,,,A,medium,Earth & Weather
-251,Which is the fastest land animal: the giraffe or the cheetah?,the giraffe,the cheetah,,,B,medium,Plants & Animals
-252,Who discovered radium: Marie Curie or Irene Joliot-Curie?,Marie Curie,Irene Joliot-Curie,,,A,medium,Scientists & Discoveries
+249,Which is a dwarf planet: Uranus or Pluto?,Pluto,Uranus,,,A,medium,Space & Astronomy
+250,Which is the largest rainforest: the Black Forest or the Amazon?,the Amazon,the Black Forest,,,B,medium,Earth & Weather
+251,Which is the fastest land animal: the giraffe or the cheetah?,the cheetah,the giraffe,,,A,medium,Plants & Animals
+252,Who discovered radium: Marie Curie or Irene Joliot-Curie?,Irene Joliot-Curie,Marie Curie,,,B,medium,Scientists & Discoveries
 253,Which metal is magnetic: aluminum or iron?,iron,nickel,,,A,medium,Physics & Chemistry
 254,Which organ stores bile: the spleen or the gallbladder?,the spleen,the gallbladder,,,B,medium,Human Body & Biology
-255,Which planet is nearest the Sun: Earth or Mercury?,Earth,Mercury,,,B,medium,Space & Astronomy
-256,Which disaster shakes the ground: a flood or an earthquake?,a flood,an earthquake,,,A,medium,Earth & Weather
-257,Which insect produces silk: the locust or the silkworm?,the locust,the silkworm,,,B,medium,Plants & Animals
-258,Who developed general relativity: Albert Einstein or Henri Poincare?,Albert Einstein,Henri Poincare,,,A,medium,Scientists & Discoveries
+255,Which planet is nearest the Sun: Earth or Mercury?,Mercury,Earth,,,A,medium,Space & Astronomy
+256,Which disaster shakes the ground: a flood or an earthquake?,an earthquake,a flood,,,B,medium,Earth & Weather
+257,Which insect produces silk: the locust or the silkworm?,the silkworm,the locust,,,A,medium,Plants & Animals
+258,Who developed general relativity: Albert Einstein or Henri Poincare?,Henri Poincare,Albert Einstein,,,B,medium,Scientists & Discoveries
 259,Which state of matter keeps its shape: gas or solid?,gas,solid,,,A,medium,Physics & Chemistry
 260,Which teeth tear food: the molars or the canines?,the molars,the canines,,,B,medium,Human Body & Biology
-261,Which galaxy holds our solar system: Andromeda or the Milky Way?,Andromeda,the Milky Way,,,B,medium,Space & Astronomy
-262,Which is the largest coral reef system: the Belize Barrier Reef or the Great Barrier Reef?,the Belize Barrier Reef,the Great Barrier Reef,,,A,medium,Earth & Weather
+261,Which galaxy holds our solar system: Andromeda or the Milky Way?,the Milky Way,Andromeda,,,A,medium,Space & Astronomy
+262,Which is the largest coral reef system: the Belize Barrier Reef or the Great Barrier Reef?,the Great Barrier Reef,the Belize Barrier Reef,,,B,medium,Earth & Weather
 263,Which bird symbolizes peace: the crow or the dove?,the crow,the dove,,,A,medium,Plants & Animals
 264,Who discovered the neutron: Ernest Rutherford or James Chadwick?,Ernest Rutherford,James Chadwick,,,B,medium,Scientists & Discoveries
 265,Which gas dominates the Sun: oxygen or hydrogen?,oxygen,hydrogen,,,A,medium,Physics & Chemistry
 266,Where is the smallest human bone: the foot or the ear?,the foot,the ear,,,B,medium,Human Body & Biology
-267,Which planet orbits tilted almost completely on its side: Titania or Uranus?,Titania,Uranus,,,B,medium,Space & Astronomy
-268,Which storm is a spinning funnel of wind: a monsoon or a tornado?,a monsoon,a tornado,,,A,medium,Earth & Weather
-269,Which reptile changes color: the iguana or the chameleon?,the iguana,the chameleon,,,B,medium,Plants & Animals
-270,Who made the first powered airplane flight: Amelia Earhart or the Wright brothers?,Amelia Earhart,the Wright brothers,,,A,medium,Scientists & Discoveries
+267,Which planet orbits tilted almost completely on its side: Titania or Uranus?,Uranus,Titania,,,A,medium,Space & Astronomy
+268,Which storm is a spinning funnel of wind: a monsoon or a tornado?,a tornado,a monsoon,,,B,medium,Earth & Weather
+269,Which reptile changes color: the iguana or the chameleon?,the chameleon,the iguana,,,A,medium,Plants & Animals
+270,Who made the first powered airplane flight: Amelia Earhart or the Wright brothers?,the Wright brothers,Amelia Earhart,,,B,medium,Scientists & Discoveries
 271,Which metal burns with a bright white flame: zinc or magnesium?,zinc,magnesium,,,A,medium,Physics & Chemistry
 272,Which organ produces bile: the gallbladder or the liver?,the gallbladder,the liver,,,B,medium,Human Body & Biology
-273,Which body is Earth's natural satellite: Phobos or the Moon?,Phobos,the Moon,,,B,medium,Space & Astronomy
-274,Which is the largest island: Iceland or Greenland?,Iceland,Greenland,,,A,medium,Earth & Weather
-275,Which penguin is the largest: the rockhopper penguin or the emperor penguin?,the rockhopper penguin,the emperor penguin,,,B,medium,Plants & Animals
-276,Who developed the polio vaccine: Jonas Salk or Louis Pasteur?,Jonas Salk,Louis Pasteur,,,A,medium,Scientists & Discoveries
+273,Which body is Earth's natural satellite: Phobos or the Moon?,the Moon,Phobos,,,A,medium,Space & Astronomy
+274,Which is the largest island: Iceland or Greenland?,Greenland,Iceland,,,B,medium,Earth & Weather
+275,Which penguin is the largest: the rockhopper penguin or the emperor penguin?,the emperor penguin,the rockhopper penguin,,,A,medium,Plants & Animals
+276,Who developed the polio vaccine: Jonas Salk or Louis Pasteur?,Louis Pasteur,Jonas Salk,,,B,medium,Scientists & Discoveries
 277,Which household liquid is acidic: soap or vinegar?,soap,vinegar,,,A,medium,Physics & Chemistry
 278,Which body system includes the lungs: the digestive system or the respiratory system?,the digestive system,the respiratory system,,,B,medium,Human Body & Biology
-279,Which planet has the most known moons: Jupiter or Saturn?,Jupiter,Saturn,,,B,medium,Space & Astronomy
-280,Which mineral is table salt: quartz or halite?,quartz,halite,,,A,medium,Earth & Weather
-281,Which animal is called the ship of the desert: the horse or the camel?,the horse,the camel,,,B,medium,Plants & Animals
+279,Which planet has the most known moons: Jupiter or Saturn?,Saturn,Jupiter,,,A,medium,Space & Astronomy
+280,Which mineral is table salt: quartz or halite?,halite,quartz,,,B,medium,Earth & Weather
+281,Which animal is called the ship of the desert: the horse or the camel?,the camel,the horse,,,A,medium,Plants & Animals
 282,Who discovered blood circulation: Claudius Galen or William Harvey?,Claudius Galen,William Harvey,,,B,medium,Scientists & Discoveries
 283,Which element has the symbol Fe: cadmium or iron?,iron,cadmium,,,A,medium,Physics & Chemistry
 284,Which vessels carry blood away from the heart: veins or arteries?,veins,arteries,,,B,medium,Human Body & Biology
-285,Which constellation holds the North Star: Orion or Ursa Minor?,Orion,Ursa Minor,,,B,medium,Space & Astronomy
-286,Which lake is famously salty: Lake Superior or the Dead Sea?,Lake Superior,the Dead Sea,,,A,medium,Earth & Weather
-287,Which spider is dangerously venomous: the house spider or the black widow?,the house spider,the black widow,,,B,medium,Plants & Animals
-288,Who invented dynamite: Thomas Edison or Alfred Nobel?,Thomas Edison,Alfred Nobel,,,A,medium,Scientists & Discoveries
+285,Which constellation holds the North Star: Orion or Ursa Minor?,Ursa Minor,Orion,,,A,medium,Space & Astronomy
+286,Which lake is famously salty: Lake Superior or the Dead Sea?,the Dead Sea,Lake Superior,,,B,medium,Earth & Weather
+287,Which spider is dangerously venomous: the house spider or the black widow?,the black widow,the house spider,,,A,medium,Plants & Animals
+288,Who invented dynamite: Thomas Edison or Alfred Nobel?,Alfred Nobel,Thomas Edison,,,B,medium,Scientists & Discoveries
 289,Which gas does breathing mainly add to exhaled air: nitrous oxide or carbon dioxide?,carbon dioxide,nitrous oxide,,,A,medium,Physics & Chemistry
 290,Which brain part controls balance: the cerebrum or the cerebellum?,the cerebrum,the cerebellum,,,B,medium,Human Body & Biology
-291,Which space rock burns up as a meteor: a comet or a meteoroid?,a comet,a meteoroid,,,B,medium,Space & Astronomy
-292,Which waterfall is the tallest: Niagara Falls or Angel Falls?,Niagara Falls,Angel Falls,,,A,medium,Earth & Weather
-293,Which group includes frogs: mammals or amphibians?,mammals,amphibians,,,B,medium,Plants & Animals
-294,Who discovered X-rays: Wilhelm Roentgen or Henri Becquerel?,Wilhelm Roentgen,Henri Becquerel,,,A,medium,Scientists & Discoveries
+291,Which space rock burns up as a meteor: a comet or a meteoroid?,a meteoroid,a comet,,,A,medium,Space & Astronomy
+292,Which waterfall is the tallest: Niagara Falls or Angel Falls?,Angel Falls,Niagara Falls,,,B,medium,Earth & Weather
+293,Which group includes frogs: mammals or amphibians?,amphibians,mammals,,,A,medium,Plants & Animals
+294,Who discovered X-rays: Wilhelm Roentgen or Henri Becquerel?,Henri Becquerel,Wilhelm Roentgen,,,B,medium,Scientists & Discoveries
 295,Which is the lightest metal: lead or lithium?,lead,lithium,,,A,medium,Physics & Chemistry
 296,Which organ sits behind the ribs: the bladder or the heart?,the bladder,the heart,,,B,medium,Human Body & Biology
-297,Which planet has the greatest axial tilt: Mercury or Uranus?,Mercury,Uranus,,,B,medium,Space & Astronomy
-298,Which climate is drier: a rainforest or a desert?,a rainforest,a desert,,,A,medium,Earth & Weather
-299,Which snake is longer: the garden snake or the reticulated python?,the garden snake,the reticulated python,,,B,medium,Plants & Animals
-300,Who discovered Uranus: William Herschel or Edwin Hubble?,William Herschel,Edwin Hubble,,,A,medium,Scientists & Discoveries
+297,Which planet has the greatest axial tilt: Mercury or Uranus?,Uranus,Mercury,,,A,medium,Space & Astronomy
+298,Which climate is drier: a rainforest or a desert?,a desert,a rainforest,,,B,medium,Earth & Weather
+299,Which snake is longer: the garden snake or the reticulated python?,the reticulated python,the garden snake,,,A,medium,Plants & Animals
+300,Who discovered Uranus: William Herschel or Edwin Hubble?,Edwin Hubble,William Herschel,,,B,medium,Scientists & Discoveries
 301,Which acid is in the human stomach: acetic acid or hydrochloric acid?,acetic acid,hydrochloric acid,,,A,medium,Physics & Chemistry
 302,Which vitamin do we make from sunlight: vitamin C or vitamin D?,vitamin C,vitamin D,,,B,medium,Human Body & Biology
-303,Which is a gas giant: Pluto or Neptune?,Pluto,Neptune,,,B,medium,Space & Astronomy
-304,Which rock forms from cooling magma: sedimentary or igneous?,sedimentary,igneous,,,A,medium,Earth & Weather
-305,Which fish is the largest: the clownfish or the whale shark?,the clownfish,the whale shark,,,B,medium,Plants & Animals
-306,Who proposed continental drift: Harry Hess or Alfred Wegener?,Harry Hess,Alfred Wegener,,,A,medium,Scientists & Discoveries
+303,Which is a gas giant: Pluto or Neptune?,Neptune,Pluto,,,A,medium,Space & Astronomy
+304,Which rock forms from cooling magma: sedimentary or igneous?,igneous,sedimentary,,,B,medium,Earth & Weather
+305,Which fish is the largest: the clownfish or the whale shark?,the whale shark,the clownfish,,,A,medium,Plants & Animals
+306,Who proposed continental drift: Harry Hess or Alfred Wegener?,Alfred Wegener,Harry Hess,,,B,medium,Scientists & Discoveries
 307,Which solution turns red litmus blue: an acid or a base?,an acid,a base,,,A,medium,Physics & Chemistry
 308,Which cells carry oxygen: white blood cells or red blood cells?,white blood cells,red blood cells,,,B,medium,Human Body & Biology
-309,Which mission first landed humans on the Moon: Gemini 3 or Apollo 11?,Gemini 3,Apollo 11,,,B,medium,Space & Astronomy
-310,Which process wears mountains down: eruption or erosion?,eruption,erosion,,,A,medium,Earth & Weather
+309,Which mission first landed humans on the Moon: Gemini 3 or Apollo 11?,Apollo 11,Gemini 3,,,A,medium,Space & Astronomy
+310,Which process wears mountains down: eruption or erosion?,erosion,eruption,,,B,medium,Earth & Weather
 311,Which big cat swims well: the lynx or the tiger?,the lynx,the tiger,,,A,medium,Plants & Animals
 312,Who developed the mercury thermometer: Anders Celsius or Daniel Fahrenheit?,Anders Celsius,Daniel Fahrenheit,,,B,medium,Scientists & Discoveries
 313,Which element forms diamond: silicon or carbon?,silicon,carbon,,,A,medium,Physics & Chemistry
 314,Which joint connects forearm to upper arm: the knee or the elbow?,the knee,the elbow,,,B,medium,Human Body & Biology
-315,Which star is cooler at its surface: Polaris or Betelgeuse?,Polaris,Betelgeuse,,,B,medium,Space & Astronomy
-316,Which pole has penguins in the wild: the North Pole or the South Pole?,the North Pole,the South Pole,,,A,medium,Earth & Weather
-317,Which whale is the largest animal ever: the orca or the blue whale?,the orca,the blue whale,,,B,medium,Plants & Animals
-318,Who coined the word dinosaur: Charles Darwin or Richard Owen?,Charles Darwin,Richard Owen,,,A,medium,Scientists & Discoveries
+315,Which star is cooler at its surface: Polaris or Betelgeuse?,Betelgeuse,Polaris,,,A,medium,Space & Astronomy
+316,Which pole has penguins in the wild: the North Pole or the South Pole?,the South Pole,the North Pole,,,B,medium,Earth & Weather
+317,Which whale is the largest animal ever: the orca or the blue whale?,the blue whale,the orca,,,A,medium,Plants & Animals
+318,Who coined the word dinosaur: Charles Darwin or Richard Owen?,Richard Owen,Charles Darwin,,,B,medium,Scientists & Discoveries
 319,Which metal is most abundant in the Earth's crust: aluminum or silver?,aluminum,silver,,,A,medium,Physics & Chemistry
 320,Which organ stores urine: the small intestine or the bladder?,the small intestine,the bladder,,,B,medium,Human Body & Biology
-321,Which star is brightest in our night sky: Betelgeuse or Sirius?,Betelgeuse,Sirius,,,B,medium,Space & Astronomy
-322,Which Earth layer is hottest: the crust or the inner core?,the crust,the inner core,,,A,medium,Earth & Weather
-323,Which rodent builds dams: the otter or the beaver?,the otter,the beaver,,,B,medium,Plants & Animals
-324,Who developed the rabies vaccine: Louis Pasteur or Shibasaburo Kitasato?,Louis Pasteur,Shibasaburo Kitasato,,,A,medium,Scientists & Discoveries
+321,Which star is brightest in our night sky: Betelgeuse or Sirius?,Sirius,Betelgeuse,,,A,medium,Space & Astronomy
+322,Which Earth layer is hottest: the crust or the inner core?,the inner core,the crust,,,B,medium,Earth & Weather
+323,Which rodent builds dams: the otter or the beaver?,the beaver,the otter,,,A,medium,Plants & Animals
+324,Who developed the rabies vaccine: Louis Pasteur or Shibasaburo Kitasato?,Shibasaburo Kitasato,Louis Pasteur,,,B,medium,Scientists & Discoveries
 325,Which safe gas fills party balloons: hydrogen or helium?,hydrogen,helium,,,A,medium,Physics & Chemistry
 326,Which part of the eye focuses light: the cornea or the lens?,the cornea,the lens,,,B,medium,Human Body & Biology
-327,Which dwarf planet orbits in the asteroid belt: Eris or Ceres?,Eris,Ceres,,,B,medium,Space & Astronomy
-328,Which is the softest mineral: feldspar or talc?,feldspar,talc,,,A,medium,Earth & Weather
-329,Which snake is venomous: the python or the king cobra?,the python,the king cobra,,,B,medium,Plants & Animals
-330,Who developed the smallpox vaccine: Edward Jenner or Jonas Salk?,Edward Jenner,Jonas Salk,,,A,medium,Scientists & Discoveries
+327,Which dwarf planet orbits in the asteroid belt: Eris or Ceres?,Ceres,Eris,,,A,medium,Space & Astronomy
+328,Which is the softest mineral: feldspar or talc?,talc,feldspar,,,B,medium,Earth & Weather
+329,Which snake is venomous: the python or the king cobra?,the king cobra,the python,,,A,medium,Plants & Animals
+330,Who developed the smallpox vaccine: Edward Jenner or Jonas Salk?,Jonas Salk,Edward Jenner,,,B,medium,Scientists & Discoveries
 331,Which element has the symbol Au: silver or gold?,silver,gold,,,A,medium,Physics & Chemistry
 332,Which hormone regulates blood sugar: adrenaline or insulin?,adrenaline,insulin,,,B,medium,Human Body & Biology
-333,Which is more massive: the rest of the solar system combined or the Sun?,the rest of the solar system combined,the Sun,,,B,medium,Space & Astronomy
-334,Which ocean lies between Africa and Australia: the Arctic Ocean or the Indian Ocean?,the Arctic Ocean,the Indian Ocean,,,A,medium,Earth & Weather
-335,Which mammal truly flies: the flying squirrel or the bat?,the flying squirrel,the bat,,,B,medium,Plants & Animals
-336,Who discovered the electron: J. J. Thomson or Ernest Marsden?,J. J. Thomson,Ernest Marsden,,,A,medium,Scientists & Discoveries
+333,Which is more massive: the rest of the solar system combined or the Sun?,the Sun,the rest of the solar system combined,,,A,medium,Space & Astronomy
+334,Which ocean lies between Africa and Australia: the Arctic Ocean or the Indian Ocean?,the Indian Ocean,the Arctic Ocean,,,B,medium,Earth & Weather
+335,Which mammal truly flies: the flying squirrel or the bat?,the bat,the flying squirrel,,,A,medium,Plants & Animals
+336,Who discovered the electron: J. J. Thomson or Ernest Marsden?,Ernest Marsden,J. J. Thomson,,,B,medium,Scientists & Discoveries
 337,Which change is chemical: melting ice or rusting iron?,melting ice,rusting iron,,,A,medium,Physics & Chemistry
 338,Which tube carries food to the stomach: the trachea or the esophagus?,the trachea,the esophagus,,,B,medium,Human Body & Biology
-339,Which event can form a black hole: a solar flare or a supernova?,a solar flare,a supernova,,,B,medium,Space & Astronomy
-340,Which rock floats on water: granite or pumice?,granite,pumice,,,A,medium,Earth & Weather
+339,Which event can form a black hole: a solar flare or a supernova?,a supernova,a solar flare,,,A,medium,Space & Astronomy
+340,Which rock floats on water: granite or pumice?,pumice,granite,,,B,medium,Earth & Weather
 341,Which bird cannot fly: the ostrich or the swan?,the ostrich,the swan,,,A,medium,Plants & Animals
 342,Who proposed the heliocentric model: Ptolemy or Nicolaus Copernicus?,Ptolemy,Nicolaus Copernicus,,,B,medium,Scientists & Discoveries
 343,Which metal conducts heat best: silver or plastic?,silver,plastic,,,A,medium,Physics & Chemistry
 344,Which is the largest artery: the vena cava or the aorta?,the vena cava,the aorta,,,B,medium,Human Body & Biology
-345,Which spacecraft explored Saturn up close: Magellan or Cassini?,Magellan,Cassini,,,B,medium,Space & Astronomy
-346,Which is a metamorphic rock: sandstone or marble?,sandstone,marble,,,A,medium,Earth & Weather
-347,Which insects live with a queen: butterflies or bees?,butterflies,bees,,,B,medium,Plants & Animals
-348,Who measured Earth's circumference in ancient times: Aristotle or Eratosthenes?,Aristotle,Eratosthenes,,,A,medium,Scientists & Discoveries
+345,Which spacecraft explored Saturn up close: Magellan or Cassini?,Cassini,Magellan,,,A,medium,Space & Astronomy
+346,Which is a metamorphic rock: sandstone or marble?,marble,sandstone,,,B,medium,Earth & Weather
+347,Which insects live with a queen: butterflies or bees?,bees,butterflies,,,A,medium,Plants & Animals
+348,Who measured Earth's circumference in ancient times: Aristotle or Eratosthenes?,Eratosthenes,Aristotle,,,B,medium,Scientists & Discoveries
 349,Which gas smells like rotten eggs: hydrogen sulfide or water vapor?,hydrogen sulfide,water vapor,,,A,medium,Physics & Chemistry
 350,Which nutrient builds muscle: sugar or protein?,sugar,protein,,,B,medium,Human Body & Biology
-351,Which is the largest volcano in the solar system: Mauna Loa or Olympus Mons?,Mauna Loa,Olympus Mons,,,B,medium,Space & Astronomy
-352,Which current warms Western Europe: the California Current or the Gulf Stream?,the California Current,the Gulf Stream,,,A,medium,Earth & Weather
-353,Which shark filter-feeds on plankton: the great white shark or the basking shark?,the great white shark,the basking shark,,,B,medium,Plants & Animals
-354,Who discovered four moons of Jupiter: Tycho Brahe or Galileo Galilei?,Tycho Brahe,Galileo Galilei,,,A,medium,Scientists & Discoveries
+351,Which is the largest volcano in the solar system: Mauna Loa or Olympus Mons?,Olympus Mons,Mauna Loa,,,A,medium,Space & Astronomy
+352,Which current warms Western Europe: the California Current or the Gulf Stream?,the Gulf Stream,the California Current,,,B,medium,Earth & Weather
+353,Which shark filter-feeds on plankton: the great white shark or the basking shark?,the basking shark,the great white shark,,,A,medium,Plants & Animals
+354,Who discovered four moons of Jupiter: Tycho Brahe or Galileo Galilei?,Galileo Galilei,Tycho Brahe,,,B,medium,Scientists & Discoveries
 355,Which pH value is neutral: 2 or 7?,2,7,,,A,medium,Physics & Chemistry
 356,Which organ stores and churns food: the large intestine or the stomach?,the large intestine,the stomach,,,B,medium,Human Body & Biology
-357,Which moon orbits Saturn: Ganymede or Titan?,Ganymede,Titan,,,B,medium,Space & Astronomy
-358,What kind of rock is granite: metamorphic or igneous?,igneous,metamorphic,,,A,medium,Earth & Weather
-359,Which mammal wears quills: the hedgehog or the porcupine?,the hedgehog,the porcupine,,,B,medium,Plants & Animals
-360,Who invented the electric battery: Alessandro Volta or Michael Faraday?,Alessandro Volta,Michael Faraday,,,A,medium,Scientists & Discoveries
+357,Which moon orbits Saturn: Ganymede or Titan?,Titan,Ganymede,,,A,medium,Space & Astronomy
+358,What kind of rock is granite: metamorphic or igneous?,metamorphic,igneous,,,B,medium,Earth & Weather
+359,Which mammal wears quills: the hedgehog or the porcupine?,the porcupine,the hedgehog,,,A,medium,Plants & Animals
+360,Who invented the electric battery: Alessandro Volta or Michael Faraday?,Michael Faraday,Alessandro Volta,,,B,medium,Scientists & Discoveries
 361,Which color of light has the shortest wavelength: red or violet?,red,violet,,,A,medium,Physics & Chemistry
 362,Which sense detects chemicals in food: touch or taste?,touch,taste,,,B,medium,Human Body & Biology
-363,Which object is a ball of ice and dust: an asteroid or a comet?,an asteroid,a comet,,,B,medium,Space & Astronomy
-364,Which atmospheric layer holds most weather: the stratosphere or the troposphere?,the stratosphere,the troposphere,,,A,medium,Earth & Weather
-365,Which bird mimics sounds superbly: the penguin or the lyrebird?,the penguin,the lyrebird,,,B,medium,Plants & Animals
-366,Who discovered the first asteroid: Johann Bode or Giuseppe Piazzi?,Johann Bode,Giuseppe Piazzi,,,A,medium,Scientists & Discoveries
+363,Which object is a ball of ice and dust: an asteroid or a comet?,a comet,an asteroid,,,A,medium,Space & Astronomy
+364,Which atmospheric layer holds most weather: the stratosphere or the troposphere?,the troposphere,the stratosphere,,,B,medium,Earth & Weather
+365,Which bird mimics sounds superbly: the penguin or the lyrebird?,the lyrebird,the penguin,,,A,medium,Plants & Animals
+366,Who discovered the first asteroid: Johann Bode or Giuseppe Piazzi?,Giuseppe Piazzi,Johann Bode,,,B,medium,Scientists & Discoveries
 367,Which liquid is denser: vegetable oil or honey?,vegetable oil,honey,,,A,medium,Physics & Chemistry
 368,Which cells defend against germs: red blood cells or white blood cells?,red blood cells,white blood cells,,,B,medium,Human Body & Biology
-369,Which rover explored Mars: Juno or Curiosity?,Juno,Curiosity,,,B,medium,Space & Astronomy
-370,Which desert is the driest: the Mojave or the Atacama?,the Mojave,the Atacama,,,A,medium,Earth & Weather
-371,Which marsupial rides in a pouch: the sloth or the koala?,the sloth,the koala,,,B,medium,Plants & Animals
-372,Who formulated the laws of planetary motion: Johannes Kepler or Nicolaus Copernicus?,Johannes Kepler,Nicolaus Copernicus,,,A,medium,Scientists & Discoveries
+369,Which rover explored Mars: Juno or Curiosity?,Curiosity,Juno,,,A,medium,Space & Astronomy
+370,Which desert is the driest: the Mojave or the Atacama?,the Atacama,the Mojave,,,B,medium,Earth & Weather
+371,Which marsupial rides in a pouch: the sloth or the koala?,the koala,the sloth,,,A,medium,Plants & Animals
+372,Who formulated the laws of planetary motion: Johannes Kepler or Nicolaus Copernicus?,Nicolaus Copernicus,Johannes Kepler,,,B,medium,Scientists & Discoveries
 373,Which material writes in pencils: aluminum or graphite?,aluminum,graphite,,,A,medium,Physics & Chemistry
 374,Which joint type is the shoulder: a hinge joint or a ball-and-socket joint?,a hinge joint,a ball-and-socket joint,,,B,medium,Human Body & Biology
-375,Which is a moon of Jupiter: Titan or Europa?,Titan,Europa,,,B,medium,Space & Astronomy
-376,Which gas contributes to acid rain: oxygen or sulfur dioxide?,oxygen,sulfur dioxide,,,A,medium,Earth & Weather
-377,Which fish swims upstream to spawn: the tuna or the salmon?,the tuna,the salmon,,,B,medium,Plants & Animals
+375,Which is a moon of Jupiter: Titan or Europa?,Europa,Titan,,,A,medium,Space & Astronomy
+376,Which gas contributes to acid rain: oxygen or sulfur dioxide?,sulfur dioxide,oxygen,,,B,medium,Earth & Weather
+377,Which fish swims upstream to spawn: the tuna or the salmon?,the salmon,the tuna,,,A,medium,Plants & Animals
 378,Who discovered electromagnetic induction: Andre Ampere or Michael Faraday?,Andre Ampere,Michael Faraday,,,B,medium,Scientists & Discoveries
 379,Which change turns liquid into gas: condensation or evaporation?,condensation,evaporation,,,A,medium,Physics & Chemistry
 380,Which mineral strengthens bones: potassium or calcium?,potassium,calcium,,,B,medium,Human Body & Biology
 381,Which planet is colder on average: Uranus or Iapetus?,Uranus,Iapetus,,,A,medium,Space & Astronomy
 382,Which current circles Antarctica: the Canary Current or the Antarctic Circumpolar Current?,the Canary Current,the Antarctic Circumpolar Current,,,B,medium,Earth & Weather
-383,Which insect transmits malaria: the housefly or the mosquito?,the housefly,the mosquito,,,B,medium,Plants & Animals
-384,Who mathematically predicted Neptune: William Herschel or Urbain Le Verrier?,William Herschel,Urbain Le Verrier,,,A,medium,Scientists & Discoveries
-385,Which element is a liquid metal: bromine or mercury?,bromine,mercury,,,B,medium,Physics & Chemistry
+383,Which insect transmits malaria: the housefly or the mosquito?,the mosquito,the housefly,,,A,medium,Plants & Animals
+384,Who mathematically predicted Neptune: William Herschel or Urbain Le Verrier?,Urbain Le Verrier,William Herschel,,,B,medium,Scientists & Discoveries
+385,Which element is a liquid metal: bromine or mercury?,mercury,bromine,,,A,medium,Physics & Chemistry
 386,Which organs remove urea: the stomach or the kidneys?,the stomach,the kidneys,,,B,medium,Human Body & Biology
-387,Which galaxy will merge with the Milky Way: Triangulum or Andromeda?,Triangulum,Andromeda,,,B,medium,Space & Astronomy
-388,Which famous geyser erupts in Yellowstone: Angel Falls or Old Faithful?,Angel Falls,Old Faithful,,,A,medium,Earth & Weather
-389,Which animals have feathers: bats or birds?,bats,birds,,,B,medium,Plants & Animals
-390,Who founded modern taxonomy: Carl Linnaeus or Charles Darwin?,Carl Linnaeus,Charles Darwin,,,A,medium,Scientists & Discoveries
+387,Which galaxy will merge with the Milky Way: Triangulum or Andromeda?,Andromeda,Triangulum,,,A,medium,Space & Astronomy
+388,Which famous geyser erupts in Yellowstone: Angel Falls or Old Faithful?,Old Faithful,Angel Falls,,,B,medium,Earth & Weather
+389,Which animals have feathers: bats or birds?,birds,bats,,,A,medium,Plants & Animals
+390,Who founded modern taxonomy: Carl Linnaeus or Charles Darwin?,Charles Darwin,Carl Linnaeus,,,B,medium,Scientists & Discoveries
 391,Which noble gas is lightest: neon or helium?,helium,oganesson,,,A,medium,Physics & Chemistry
 392,Which tooth part sits above the gum: the root or the crown?,the root,the crown,,,B,medium,Human Body & Biology
-393,Which takes about 225 Earth days to orbit the Sun: Comet Encke or Venus?,Comet Encke,Venus,,,B,medium,Space & Astronomy
-394,Which lake has the largest surface area of freshwater: Lake Baikal or Lake Superior?,Lake Baikal,Lake Superior,,,A,medium,Earth & Weather
-395,Which marsupial is a famous hopper: the wombat or the kangaroo?,the wombat,the kangaroo,,,B,medium,Plants & Animals
-396,Who discovered the laws of heredity: Gregor Mendel or Alfred Russel Wallace?,Gregor Mendel,Alfred Russel Wallace,,,A,medium,Scientists & Discoveries
+393,Which takes about 225 Earth days to orbit the Sun: Comet Encke or Venus?,Venus,Comet Encke,,,A,medium,Space & Astronomy
+394,Which lake has the largest surface area of freshwater: Lake Baikal or Lake Superior?,Lake Superior,Lake Baikal,,,B,medium,Earth & Weather
+395,Which marsupial is a famous hopper: the wombat or the kangaroo?,the kangaroo,the wombat,,,A,medium,Plants & Animals
+396,Who discovered the laws of heredity: Gregor Mendel or Alfred Russel Wallace?,Alfred Russel Wallace,Gregor Mendel,,,B,medium,Scientists & Discoveries
 397,Which acid is in vinegar: citric acid or acetic acid?,citric acid,acetic acid,,,A,medium,Physics & Chemistry
 398,Which is the hardest substance in the human body: bone or tooth enamel?,bone,tooth enamel,,,B,medium,Human Body & Biology
-399,Which shines brighter in our night sky: Altair or Venus?,Altair,Venus,,,B,medium,Space & Astronomy
-400,Which monsoon brings summer rain to India: the northeast monsoon or the southwest monsoon?,the northeast monsoon,the southwest monsoon,,,A,medium,Earth & Weather
+399,Which shines brighter in our night sky: Altair or Venus?,Venus,Altair,,,A,medium,Space & Astronomy
+400,Which monsoon brings summer rain to India: the northeast monsoon or the southwest monsoon?,the southwest monsoon,the northeast monsoon,,,B,medium,Earth & Weather
 401,Which land animal has the highest blood pressure?,the giraffe,the hippopotamus,the walrus,,A,hard,Plants & Animals
 402,Who identified the atomic nucleus?,Niels Bohr,Ernest Rutherford,J. J. Thomson,,B,hard,Scientists & Discoveries
 403,What is the atomic number of carbon?,4,8,6,,C,hard,Physics & Chemistry
@@ -484,7 +484,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 481,Which acid fills car batteries?,nitric acid,carbonic acid,sulfuric acid,,C,hard,Physics & Chemistry
 482,What is the scientific name of the voice box?,the larynx,the pharynx,the bronchus,,A,hard,Human Body & Biology
 483,What powers the Sun?,nuclear fission,nuclear fusion,chemical burning,,B,hard,Space & Astronomy
-484,What is the largest cold desert on Earth?,Antarctica,Gobi,Patagonian,,A,hard,Earth & Weather
+484,What is the largest cold desert on Earth?,Patagonian,Gobi,Antarctica,,C,hard,Earth & Weather
 485,Which insect is strongest for its body size?,the dung beetle,the rhinoceros beetle,the leafcutter ant,,A,hard,Plants & Animals
 486,Who was the first human in space?,Neil Armstrong,Yuri Gagarin,Alan Shepard,,B,hard,Scientists & Discoveries
 487,What is the chemical symbol of sodium?,So,S,Na,,C,hard,Physics & Chemistry
@@ -618,14 +618,14 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 615,Which moon is the most volcanically active?,Rhea,Enceladus,Io,Triton,C,expert,Space & Astronomy
 616,Which supercontinent broke apart roughly 200 million years ago?,Gondwana,Laurasia,Rodinia,Pangaea,D,expert,Earth & Weather
 617,How long does an adult mayfly usually live?,about 24 hours,about one week,about one month,about one year,A,expert,Plants & Animals
-618,Which scientist proposed the laws of inheritance?,Gregor Mendel,Charles Darwin,Rosalind Franklin,Thomas Hunt Morgan,,A,expert,Scientists & Discoveries
+618,Which scientist proposed the laws of inheritance?,Charles Darwin,Gregor Mendel,Rosalind Franklin,Thomas Hunt Morgan,B,expert,Scientists & Discoveries
 619,What is the change from gas directly to solid called?,sublimation,condensation,deposition,crystallization,C,expert,Physics & Chemistry
 620,About how long are all blood vessels in an adult laid end to end?,about 1000 kilometers,about 10000 kilometers,about 50000 kilometers,about 100000 kilometers,D,expert,Human Body & Biology
 621,How strong is gravity on the Moon compared with Earth?,about one sixth,about one third,about one half,about one tenth,A,expert,Space & Astronomy
 622,Which is the deepest known cave?,Lamprechtsofen,Veryovkina Cave,Optimisticheskaya,Gouffre Jean-Bernard,B,expert,Earth & Weather
 623,Which bat has the largest wingspan?,the hammer-headed bat,the common vampire bat,the giant golden-crowned flying fox,the Indian flying fox,C,expert,Plants & Animals
-624,Who discovered ultraviolet light?,Johann Wilhelm Ritter,William Herschel,Thomas Young,Heinrich Hertz,,A,expert,Scientists & Discoveries
-625,What is the name of element 118?,moscovium,tennessine,nihonium,oganesson,D,expert,Physics & Chemistry
+624,Who discovered ultraviolet light?,Heinrich Hertz,William Herschel,Thomas Young,Johann Wilhelm Ritter,D,expert,Scientists & Discoveries
+625,What is the name of element 118?,oganesson,tennessine,nihonium,moscovium,A,expert,Physics & Chemistry
 626,How many basic taste qualities do humans recognize?,four,five,twenty,sixteen,B,expert,Human Body & Biology
 627,Which spacecraft first flew by Jupiter?,Voyager 1,Pioneer 11,Pioneer 10,Galileo,C,expert,Space & Astronomy
 628,How old are the Acasta Gneiss rocks among Earth's oldest?,about 2 billion years,about 600 million years,about 500000 years,about 4 billion years,D,expert,Earth & Weather

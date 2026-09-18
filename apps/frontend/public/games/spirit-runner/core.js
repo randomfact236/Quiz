@@ -28,7 +28,14 @@ export const SAVE_KEY = 'game:spirit-runner:save';
 
 /* ---- viewport (plan §3: virtual viewport 900×500 like 05) ------------------- */
 
-export const VIEW_W = 900;
+export let VIEW_W = 900; /* BUG-018/020: flexes with the screen — fitCanvas()
+   widens/narrows the logical world to the viewport aspect (uniform scale,
+   height-anchored), so the game fills the screen without distortion */
+
+/** Only core may reassign the live binding — main.js calls this from fitCanvas. */
+export function setViewW(w) {
+  VIEW_W = Math.max(1, Math.round(w));
+}
 export const VIEW_H = 500;
 export const GROUND_Y = 420;
 export const PLAYER_X = 225; // fixed 25 % of the width

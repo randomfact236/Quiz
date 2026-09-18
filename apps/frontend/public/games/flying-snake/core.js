@@ -23,8 +23,15 @@ export const PREFS_KEY = 'game:flying-snake:prefs'; // → { muted: false }
 
 /* ---- viewport ------------------------------------------------------------- */
 
-export const VIEW_W = 720;
-export const VIEW_H = 960;
+export let VIEW_W = 720;
+export let VIEW_H = 960;
+
+/** BUG-018/020 treatment for flying-snake: fitCanvas flexes both logical
+ *  dimensions to the stage aspect (uniform scale) so the game fills the screen. */
+export function setViewSize(w, h) {
+  VIEW_W = Math.max(1, Math.round(w));
+  VIEW_H = Math.max(1, Math.round(h));
+}
 export const GROUND_H = 90;
 
 /* ---- physics (plan §2 table, verbatim) ------------------------------------ */

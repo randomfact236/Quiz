@@ -128,6 +128,13 @@ export function paletteFor(m) {
   return out;
 }
 
+/** BUG-018: CSS sky gradient for the page behind the canvas — mirrors the
+ *  palette the canvas paints so the sky fills the viewport edge-to-edge. */
+export function skyCssGradient(m) {
+  const pal = paletteFor(m);
+  return `linear-gradient(180deg, ${pal.skyTop} 0%, ${pal.skyMid} 55%, ${pal.skyLow} 100%)`;
+}
+
 /* ---- helpers ------------------------------------------------------------------ */
 
 function roundRect(ctx, x, y, w, h, r) {

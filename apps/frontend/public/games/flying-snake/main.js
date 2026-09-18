@@ -33,6 +33,7 @@ import {
   readyHintKind,
   snakeHit,
   stepSnake,
+  setViewSize,
 } from './core.js';
 import { drawScene } from './render.js';
 import {
@@ -324,11 +325,11 @@ function fitCanvas() {
   // explicitly (not via auto/intrinsic) so resizing the buffer never feeds
   // back into layout.
   const box = els.stage.getBoundingClientRect();
-  const padX = 20;
-  const padY = 18;
-  const scale = Math.max(0.1, Math.min((box.width - padX) / VIEW_W, (box.height - padY) / VIEW_H));
-  const cssW = Math.floor(VIEW_W * scale);
-  const cssH = Math.floor(VIEW_H * scale);
+  /* BUG-018: full-screen game — the canvas fills the stage exactly and the
+     logical world flexes to the stage aspect (uniform scale anchored to the
+     width; the ground line rides the flexed height). */
+  const cssW = Math.max(1, Math.floor(box.width));
+  const cssH = Math.max(1, Math.floor(box.height));
   if (canvas.style.width !== cssW + 'px') canvas.style.width = cssW + 'px';
   if (canvas.style.height !== cssH + 'px') canvas.style.height = cssH + 'px';
   const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
@@ -338,6 +339,8 @@ function fitCanvas() {
     canvas.width = w;
     canvas.height = h;
   }
+  const fillScale = Math.min(cssW / VIEW_W, cssH / VIEW_H);
+  setViewSize(cssW / fillScale, cssH / fillScale);
 }
 
 /** The ready hint (suggestion 03 item 2): plain instruction for the first

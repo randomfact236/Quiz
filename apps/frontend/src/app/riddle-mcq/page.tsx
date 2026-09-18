@@ -30,7 +30,7 @@ import {
   type RiddleMcqSubject,
   type RiddleStats,
 } from '@/lib/riddle-mcq-api';
-import { parseModeParam, type RiddlePlayMode as Mode } from '@/lib/riddle-mode-param';
+import type { RiddlePlayMode as Mode } from '@/lib/riddle-mode-param';
 
 // ============================================================================
 // Level metadata (riddles have 4 levels)
@@ -116,15 +116,10 @@ function HubError({ message }: { message: string }): JSX.Element {
 // Shared mode + level picker (used at top level and inside categories)
 // ============================================================================
 
-function ModeLevelPicker({
-  counts,
-  defaultMode,
-}: {
-  counts: Record<Level, number>;
-  defaultMode?: Mode | null;
-}): JSX.Element {
-  const [normalOpen, setNormalOpen] = useState(!defaultMode || defaultMode === 'practice');
-  const [timerOpen, setTimerOpen] = useState(defaultMode === 'timer');
+function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Element {
+  // BUG-029: both mode sections render open by default (independently collapsible).
+  const [normalOpen, setNormalOpen] = useState(true);
+  const [timerOpen, setTimerOpen] = useState(true);
 
   const grid = (mode: Mode) => (
     <div className="p-6">
@@ -203,7 +198,6 @@ function ModeLevelPicker({
 function RiddlesPageContent(): JSX.Element {
   const searchParams = useSearchParams();
   const categorySlug = searchParams?.get('category') || '';
-  const mode = parseModeParam(searchParams?.get('mode'));
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -336,7 +330,7 @@ function RiddlesPageContent(): JSX.Element {
             <p className="font-medium text-white/90">Pick a mode and difficulty to start playing</p>
           </div>
 
-          <ModeLevelPicker counts={categoryCounts} defaultMode={mode} />
+          <ModeLevelPicker counts={categoryCounts} />
         </div>
       </main>
     );
@@ -377,7 +371,7 @@ function RiddlesPageContent(): JSX.Element {
 
         {/* Mode selection */}
         <section aria-label="Game mode selection" className="mb-12">
-          <ModeLevelPicker counts={allSubjectCounts} defaultMode={mode} />
+          <ModeLevelPicker counts={allSubjectCounts} />
         </section>
 
         {/* Categories — subject-listing tile style */}
@@ -386,7 +380,7 @@ function RiddlesPageContent(): JSX.Element {
             <h2 className="mb-4 text-center text-2xl font-bold text-white">
               📂 Browse by Category
             </h2>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
@@ -399,8 +393,8 @@ function RiddlesPageContent(): JSX.Element {
                   <span className="mt-2 font-bold text-gray-800 dark:text-secondary-100">
                     {cat.name}
                   </span>
-                  <span className="text-sm text-gray-500 dark:text-secondary-400">
-                    {cat.riddleTotal} riddles
+                  <span className="mt-1 text-xs font-medium text-green-600 dark:text-green-300">
+                    ✓ {cat.riddleTotal} riddles
                   </span>
                 </Link>
               ))}

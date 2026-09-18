@@ -3,1001 +3,998 @@
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 1,The Beatles formed in the city of Liverpool.,True,False,,,A,easy,Artists & Bands
 2,Mick Jagger is the lead singer of The Beach Boys.,True,False,,,B,easy,Artists & Bands
-3,Elvis Presley was nicknamed the King of Pop.,True,False,,,B,easy,Artists & Bands
-4,Freddie Mercury was the lead singer of Queen.,True,False,,,A,easy,Artists & Bands
+3,Elvis Presley was nicknamed the King of Pop.,False,True,,,A,easy,Artists & Bands
+4,Freddie Mercury was the lead singer of Queen.,False,True,,,B,easy,Artists & Bands
 5,Beyonce first found fame with Destiny's Child.,True,False,,,A,easy,Artists & Bands
 6,Taylor Swift is best known as a jazz trumpeter.,True,False,,,B,easy,Artists & Bands
 7,Michael Jackson was known as the King of Pop.,True,False,,,A,easy,Artists & Bands
 8,John Lennon was a member of The Rolling Stones.,True,False,,,B,easy,Artists & Bands
-9,Adele is an American country singer.,True,False,,,B,easy,Artists & Bands
-10,Bob Dylan won the Nobel Prize in Literature.,True,False,,,A,easy,Artists & Bands
+9,Adele is an American country singer.,False,True,,,A,easy,Artists & Bands
+10,Bob Dylan won the Nobel Prize in Literature.,False,True,,,B,easy,Artists & Bands
 11,Paul McCartney played bass guitar for The Beatles.,True,False,,,A,easy,Artists & Bands
 12,Ringo Starr was the lead singer of Led Zeppelin.,True,False,,,B,easy,Artists & Bands
-13,Madonna built her career mainly as an opera composer.,True,False,,,B,easy,Artists & Bands
-14,The Rolling Stones formed in London in 1962.,True,False,,,A,easy,Artists & Bands
+13,Madonna built her career mainly as an opera composer.,False,True,,,A,easy,Artists & Bands
+14,The Rolling Stones formed in London in 1962.,False,True,,,B,easy,Artists & Bands
 15,Whitney Houston was admired for her powerful singing voice.,True,False,,,A,easy,Artists & Bands
 16,Kurt Cobain was the drummer of Pearl Jam.,True,False,,,B,easy,Artists & Bands
 17,Stevie Wonder is a famous American singer and songwriter.,True,False,,,A,easy,Artists & Bands
 18,David Bowie was best known for playing classical piano concertos.,True,False,,,B,easy,Artists & Bands
-19,Justin Timberlake rose to fame in a heavy metal band.,True,False,,,B,easy,Artists & Bands
-20,Prince was known for his flamboyant stage style.,True,False,,,A,easy,Artists & Bands
+19,Justin Timberlake rose to fame in a heavy metal band.,False,True,,,A,easy,Artists & Bands
+20,Prince was known for his flamboyant stage style.,False,True,,,B,easy,Artists & Bands
 21,Dolly Parton is a celebrated country music songwriter.,True,False,,,A,easy,Artists & Bands
 22,Bono is the frontman of the band Oasis.,True,False,,,B,easy,Artists & Bands
-23,Aretha Franklin was known as the Queen of Surf Rock.,True,False,,,B,easy,Artists & Bands
-24,Elton John is famous for his flamboyant piano rock.,True,False,,,A,easy,Artists & Bands
+23,Aretha Franklin was known as the Queen of Surf Rock.,False,True,,,A,easy,Artists & Bands
+24,Elton John is famous for his flamboyant piano rock.,False,True,,,B,easy,Artists & Bands
 25,The Beach Boys are strongly linked to California surf music.,True,False,,,A,easy,Artists & Bands
 26,Rihanna is a famous violinist from Norway.,True,False,,,B,easy,Artists & Bands
 27,Bruce Springsteen is nicknamed the Boss.,True,False,,,A,easy,Artists & Bands
 28,Lady Gaga first became famous as a country fiddle player.,True,False,,,B,easy,Artists & Bands
-29,Frank Sinatra was a famous rapper of the 1990s.,True,False,,,B,easy,Artists & Bands
-30,Amy Winehouse was an English singer known for soul music.,True,False,,,A,easy,Artists & Bands
+29,Frank Sinatra was a famous rapper of the 1990s.,False,True,,,A,easy,Artists & Bands
+30,Amy Winehouse was an English singer known for soul music.,False,True,,,B,easy,Artists & Bands
 31,Beyonce is married to the rapper Jay-Z.,True,False,,,A,easy,Artists & Bands
 32,Harry Styles rose to fame with the metal band Slayer.,True,False,,,B,easy,Artists & Bands
-33,Shakira is a famous cellist from Canada.,True,False,,,B,easy,Artists & Bands
-34,Stevie Nicks was a singer with Fleetwood Mac.,True,False,,,A,easy,Artists & Bands
+33,Shakira is a famous cellist from Canada.,False,True,,,A,easy,Artists & Bands
+34,Stevie Nicks was a singer with Fleetwood Mac.,False,True,,,B,easy,Artists & Bands
 35,Hey Jude was a hit single for The Beatles.,True,False,,,A,easy,Songs & Albums
 36,Bohemian Rhapsody was recorded by the band ABBA.,True,False,,,B,easy,Songs & Albums
-37,Thriller is a famous album by Prince.,True,False,,,B,easy,Songs & Albums
-38,Like a Rolling Stone is a classic Bob Dylan song.,True,False,,,A,easy,Songs & Albums
-39,Hotel California is a famous song by Chicago.,True,False,,,B,easy,Songs & Albums
-40,Billie Jean appears on Michael Jackson's album Thriller.,True,False,,,A,easy,Songs & Albums
+37,Thriller is a famous album by Prince.,False,True,,,A,easy,Songs & Albums
+38,Like a Rolling Stone is a classic Bob Dylan song.,False,True,,,B,easy,Songs & Albums
+39,Hotel California is a famous song by Chicago.,False,True,,,A,easy,Songs & Albums
+40,Billie Jean appears on Michael Jackson's album Thriller.,False,True,,,B,easy,Songs & Albums
 41,Respect was a major hit for Aretha Franklin.,True,False,,,A,easy,Songs & Albums
 42,Imagine was written by Beethoven.,True,False,,,B,easy,Songs & Albums
-43,Stairway to Heaven is a song by the Monkees.,True,False,,,B,easy,Songs & Albums
-44,Purple Rain is both a song and an album by Prince.,True,False,,,A,easy,Songs & Albums
+43,Stairway to Heaven is a song by the Monkees.,False,True,,,A,easy,Songs & Albums
+44,Purple Rain is both a song and an album by Prince.,False,True,,,B,easy,Songs & Albums
 45,The album Abbey Road is by The Beatles.,True,False,,,A,easy,Songs & Albums
 46,Sweet Child o Mine is a song by NSYNC.,True,False,,,B,easy,Songs & Albums
-47,Single Ladies was a hit for Britney Spears.,True,False,,,B,easy,Songs & Albums
-48,Wonderwall was a hit song by Oasis.,True,False,,,A,easy,Songs & Albums
-49,Rolling in the Deep is a song by Celine Dion.,True,False,,,B,easy,Songs & Albums
-50,Smells Like Teen Spirit is a song by Nirvana.,True,False,,,A,easy,Songs & Albums
+47,Single Ladies was a hit for Britney Spears.,False,True,,,A,easy,Songs & Albums
+48,Wonderwall was a hit song by Oasis.,False,True,,,B,easy,Songs & Albums
+49,Rolling in the Deep is a song by Celine Dion.,False,True,,,A,easy,Songs & Albums
+50,Smells Like Teen Spirit is a song by Nirvana.,False,True,,,B,easy,Songs & Albums
 51,I Will Always Love You was a huge hit for Whitney Houston.,True,False,,,A,easy,Songs & Albums
 52,Yellow Submarine is a song by Simon and Garfunkel.,True,False,,,B,easy,Songs & Albums
-53,Bad Guy is a song by Taylor Swift.,True,False,,,B,easy,Songs & Albums
-54,Dancing Queen is one of ABBA's best known songs.,True,False,,,A,easy,Songs & Albums
+53,Bad Guy is a song by Taylor Swift.,False,True,,,A,easy,Songs & Albums
+54,Dancing Queen is one of ABBA's best known songs.,False,True,,,B,easy,Songs & Albums
 55,Uptown Funk was a hit for Mark Ronson and Bruno Mars.,True,False,,,A,easy,Songs & Albums
 56,Take Me Home Country Roads is a song by the Beastie Boys.,True,False,,,B,easy,Songs & Albums
-57,Piano Man is a famous song by Elton John.,True,False,,,B,easy,Songs & Albums
-58,Wish You Were Here is an album by Pink Floyd.,True,False,,,A,easy,Songs & Albums
-59,Lose Yourself is a song by Jay-Z.,True,False,,,B,easy,Songs & Albums
-60,Hound Dog was a big hit for Elvis Presley.,True,False,,,A,easy,Songs & Albums
+57,Piano Man is a famous song by Elton John.,False,True,,,A,easy,Songs & Albums
+58,Wish You Were Here is an album by Pink Floyd.,False,True,,,B,easy,Songs & Albums
+59,Lose Yourself is a song by Jay-Z.,False,True,,,A,easy,Songs & Albums
+60,Hound Dog was a big hit for Elvis Presley.,False,True,,,B,easy,Songs & Albums
 61,The album Dark Side of the Moon is by Pink Floyd.,True,False,,,A,easy,Songs & Albums
 62,My Heart Will Go On is sung by Dolly Parton.,True,False,,,B,easy,Songs & Albums
-63,Back in Black is an album by Bon Jovi.,True,False,,,B,easy,Songs & Albums
-64,Free Bird is a classic song by Lynyrd Skynyrd.,True,False,,,A,easy,Songs & Albums
+63,Back in Black is an album by Bon Jovi.,False,True,,,A,easy,Songs & Albums
+64,Free Bird is a classic song by Lynyrd Skynyrd.,False,True,,,B,easy,Songs & Albums
 65,Rocket Man is a song by Elton John.,True,False,,,A,easy,Songs & Albums
 66,Jolene is a famous song by Madonna.,True,False,,,B,easy,Songs & Albums
-67,Good Vibrations is a song by The Kinks.,True,False,,,B,easy,Songs & Albums
-70,A drum kit includes cymbals.,True,False,,,A,easy,Instruments
-69,The piano is classified as a woodwind instrument.,True,False,,,B,easy,Instruments
-68,A standard violin has five strings.,True,False,,,B,easy,Instruments
+67,Good Vibrations is a song by The Kinks.,False,True,,,A,easy,Songs & Albums
+68,A drum kit includes cymbals.,False,True,,,B,easy,Instruments
+69,The piano is classified as a woodwind instrument.,False,True,,,A,easy,Instruments
+70,A standard violin has five strings.,True,False,,,B,easy,Instruments
 71,The guitar is a stringed instrument.,True,False,,,A,easy,Instruments
 72,The flute is a brass instrument played with a mallet.,True,False,,,B,easy,Instruments
-73,A trombone makes sound with vibrating strings.,True,False,,,B,easy,Instruments
-74,The trumpet is a brass instrument.,True,False,,,A,easy,Instruments
+73,A trombone makes sound with vibrating strings.,False,True,,,A,easy,Instruments
+74,The trumpet is a brass instrument.,False,True,,,B,easy,Instruments
 75,A harp has many strings that are plucked.,True,False,,,A,easy,Instruments
 76,The clarinet is played by striking it with sticks.,True,False,,,B,easy,Instruments
-77,A cello is smaller than a violin.,True,False,,,B,easy,Instruments
-78,The saxophone is a signature instrument of jazz.,True,False,,,A,easy,Instruments
-79,The xylophone is a string instrument.,True,False,,,B,easy,Instruments
-80,An organ produces sound with pipes or electronics.,True,False,,,A,easy,Instruments
+77,A cello is smaller than a violin.,False,True,,,A,easy,Instruments
+78,The saxophone is a signature instrument of jazz.,False,True,,,B,easy,Instruments
+79,The xylophone is a string instrument.,False,True,,,A,easy,Instruments
+80,An organ produces sound with pipes or electronics.,False,True,,,B,easy,Instruments
 81,The banjo is a common instrument in bluegrass music.,True,False,,,A,easy,Instruments
 82,The oboe uses a metal mouthpiece like a trumpet.,True,False,,,B,easy,Instruments
-83,The bass guitar typically has eight strings.,True,False,,,B,easy,Instruments
-84,Pianos are played by pressing keys.,True,False,,,A,easy,Instruments
+83,The bass guitar typically has eight strings.,False,True,,,A,easy,Instruments
+84,Pianos are played by pressing keys.,False,True,,,B,easy,Instruments
 85,Cymbals are made of metal.,True,False,,,A,easy,Instruments
 86,The ukulele is a large brass instrument.,True,False,,,B,easy,Instruments
-87,Violins are played with drumsticks.,True,False,,,B,easy,Instruments
-88,The tuba is the largest common brass instrument.,True,False,,,A,easy,Instruments
-89,The harmonica needs electricity to play.,True,False,,,B,easy,Instruments
-90,A percussion instrument makes sound when struck.,True,False,,,A,easy,Instruments
+87,Violins are played with drumsticks.,False,True,,,A,easy,Instruments
+88,The tuba is the largest common brass instrument.,False,True,,,B,easy,Instruments
+89,The harmonica needs electricity to play.,False,True,,,A,easy,Instruments
+90,A percussion instrument makes sound when struck.,False,True,,,B,easy,Instruments
 91,An acoustic guitar has a hollow body.,True,False,,,A,easy,Instruments
 92,The double bass is the highest string instrument in an orchestra.,True,False,,,B,easy,Instruments
-93,A standard drum kit includes a grand piano.,True,False,,,B,easy,Instruments
-94,The electric guitar needs an amplifier to be heard well.,True,False,,,A,easy,Instruments
+93,A standard drum kit includes a grand piano.,False,True,,,A,easy,Instruments
+94,The electric guitar needs an amplifier to be heard well.,False,True,,,B,easy,Instruments
 95,The triangle is a small metal percussion instrument.,True,False,,,A,easy,Instruments
 96,The sitar is a traditional instrument from Brazil.,True,False,,,B,easy,Instruments
-97,Timpani are string instruments.,True,False,,,B,easy,Instruments
-98,The recorder is a simple wind instrument used in schools.,True,False,,,A,easy,Instruments
-99,The bagpipe is a common instrument in a string quartet.,True,False,,,B,easy,Instruments
-100,The violin is held under the chin while played.,True,False,,,A,easy,Instruments
+97,Timpani are string instruments.,False,True,,,A,easy,Instruments
+98,The recorder is a simple wind instrument used in schools.,False,True,,,B,easy,Instruments
+99,The bagpipe is a common instrument in a string quartet.,False,True,,,A,easy,Instruments
+100,The violin is held under the chin while played.,False,True,,,B,easy,Instruments
 101,The musical alphabet runs from A to G.,True,False,,,A,easy,Music Theory
 102,There are eleven letters in the musical alphabet.,True,False,,,B,easy,Music Theory
-103,The musical term piano means very loud.,True,False,,,B,easy,Music Theory
-104,A sharp symbol raises a note slightly.,True,False,,,A,easy,Music Theory
+103,The musical term piano means very loud.,False,True,,,A,easy,Music Theory
+104,A sharp symbol raises a note slightly.,False,True,,,B,easy,Music Theory
 105,A flat symbol lowers a note slightly.,True,False,,,A,easy,Music Theory
 106,Forte is the musical term for very quiet.,True,False,,,B,easy,Music Theory
-107,A chorus is the same thing as a drum solo.,True,False,,,B,easy,Music Theory
-108,A melody is a sequence of notes heard as one line.,True,False,,,A,easy,Music Theory
-109,The treble clef is also called the F clef.,True,False,,,B,easy,Music Theory
-110,The time signature 4/4 means four beats in each bar.,True,False,,,A,easy,Music Theory
+107,A chorus is the same thing as a drum solo.,False,True,,,A,easy,Music Theory
+108,A melody is a sequence of notes heard as one line.,False,True,,,B,easy,Music Theory
+109,The treble clef is also called the F clef.,False,True,,,A,easy,Music Theory
+110,The time signature 4/4 means four beats in each bar.,False,True,,,B,easy,Music Theory
 111,A duet is a performance by two people.,True,False,,,A,easy,Music Theory
 112,A symphony is a small group of exactly three singers.,True,False,,,B,easy,Music Theory
-113,An octave spans five notes.,True,False,,,B,easy,Music Theory
-114,Crescendo means gradually getting louder.,True,False,,,A,easy,Music Theory
+113,An octave spans five notes.,False,True,,,A,easy,Music Theory
+114,Crescendo means gradually getting louder.,False,True,,,B,easy,Music Theory
 115,The bass clef is used for lower pitched notes.,True,False,,,A,easy,Music Theory
 116,A ballad is always played at maximum speed.,True,False,,,B,easy,Music Theory
-117,Sharps and flats appear only in classical music.,True,False,,,B,easy,Music Theory
-118,Rhythm is the pattern of sounds in time.,True,False,,,A,easy,Music Theory
-119,Tempo refers to how loudly music is played.,True,False,,,B,easy,Music Theory
-120,A choir is a group of singers performing together.,True,False,,,A,easy,Music Theory
+117,Sharps and flats appear only in classical music.,False,True,,,A,easy,Music Theory
+118,Rhythm is the pattern of sounds in time.,False,True,,,B,easy,Music Theory
+119,Tempo refers to how loudly music is played.,False,True,,,A,easy,Music Theory
+120,A choir is a group of singers performing together.,False,True,,,B,easy,Music Theory
 121,Middle C sits near the middle of a piano keyboard.,True,False,,,A,easy,Music Theory
 122,Largo means to play as fast as possible.,True,False,,,B,easy,Music Theory
-123,A major scale contains twelve different notes.,True,False,,,B,easy,Music Theory
-124,Harmony is created when different notes sound together.,True,False,,,A,easy,Music Theory
+123,A major scale contains twelve different notes.,False,True,,,A,easy,Music Theory
+124,Harmony is created when different notes sound together.,False,True,,,B,easy,Music Theory
 125,The treble clef curls around the line for the note G.,True,False,,,A,easy,Music Theory
 126,Decrescendo means gradually getting faster.,True,False,,,B,easy,Music Theory
-127,Every song must be written in the key of C major.,True,False,,,B,easy,Music Theory
-128,A metronome helps musicians keep a steady beat.,True,False,,,A,easy,Music Theory
-129,Syncopation means playing with no rhythm at all.,True,False,,,B,easy,Music Theory
-130,Music notation uses a staff of five lines.,True,False,,,A,easy,Music Theory
+127,Every song must be written in the key of C major.,False,True,,,A,easy,Music Theory
+128,A metronome helps musicians keep a steady beat.,False,True,,,B,easy,Music Theory
+129,Syncopation means playing with no rhythm at all.,False,True,,,A,easy,Music Theory
+130,Music notation uses a staff of five lines.,False,True,,,B,easy,Music Theory
 131,A national anthem represents its country.,True,False,,,A,easy,Music Theory
 132,The tempo marking allegro means slow and solemn.,True,False,,,B,easy,Music Theory
-133,Bar lines appear only in jazz music.,True,False,,,B,easy,Music Theory
-134,Rock and roll became popular in America in the 1950s.,True,False,,,A,easy,Genres & History
+133,Bar lines appear only in jazz music.,False,True,,,A,easy,Music Theory
+134,Rock and roll became popular in America in the 1950s.,False,True,,,B,easy,Genres & History
 135,Reggae music developed in Jamaica.,True,False,,,A,easy,Genres & History
 136,Jazz originated in Norway.,True,False,,,B,easy,Genres & History
-137,Heavy metal is known for its quiet gentle sound.,True,False,,,B,easy,Genres & History
-138,Disco was a dance craze of the late 1970s.,True,False,,,A,easy,Genres & History
-139,Country music originated in South Korea.,True,False,,,B,easy,Genres & History
-140,Hip hop culture emerged in the Bronx.,True,False,,,A,easy,Genres & History
+137,Heavy metal is known for its quiet gentle sound.,False,True,,,A,easy,Genres & History
+138,Disco was a dance craze of the late 1970s.,False,True,,,B,easy,Genres & History
+139,Country music originated in South Korea.,False,True,,,A,easy,Genres & History
+140,Hip hop culture emerged in the Bronx.,False,True,,,B,easy,Genres & History
 141,Blues music shaped the birth of rock and roll.,True,False,,,A,easy,Genres & History
 142,Opera is performed entirely as silent mime.,True,False,,,B,easy,Genres & History
-143,Grunge is a style of classical Spanish guitar music.,True,False,,,B,easy,Genres & History
-144,Ludwig van Beethoven was a famous composer.,True,False,,,A,easy,Genres & History
+143,Grunge is a style of classical Spanish guitar music.,False,True,,,A,easy,Genres & History
+144,Ludwig van Beethoven was a famous composer.,False,True,,,B,easy,Genres & History
 145,Gospel music is rooted in church traditions.,True,False,,,A,easy,Genres & History
 146,K-pop comes from Brazil.,True,False,,,B,easy,Genres & History
-147,Salsa music has its origins in Italian folk dancing.,True,False,,,B,easy,Genres & History
-148,Wolfgang Amadeus Mozart composed in the classical period.,True,False,,,A,easy,Genres & History
-149,Techno is a style of acoustic folk singing.,True,False,,,B,easy,Genres & History
-150,Elvis Presley was a rock and roll icon of the 1950s.,True,False,,,A,easy,Genres & History
+147,Salsa music has its origins in Italian folk dancing.,False,True,,,A,easy,Genres & History
+148,Wolfgang Amadeus Mozart composed in the classical period.,False,True,,,B,easy,Genres & History
+149,Techno is a style of acoustic folk singing.,False,True,,,A,easy,Genres & History
+150,Elvis Presley was a rock and roll icon of the 1950s.,False,True,,,B,easy,Genres & History
 151,Flamenco is a traditional music style from Spain.,True,False,,,A,easy,Genres & History
 152,The Woodstock festival was held in Tokyo in 1935.,True,False,,,B,easy,Genres & History
-153,Punk rock fashion is famous for elegant ball gowns.,True,False,,,B,easy,Genres & History
-154,Johann Sebastian Bach worked as a church organist and composer.,True,False,,,A,easy,Genres & History
+153,Punk rock fashion is famous for elegant ball gowns.,False,True,,,A,easy,Genres & History
+154,Johann Sebastian Bach worked as a church organist and composer.,False,True,,,B,easy,Genres & History
 155,R&B stands for rhythm and blues.,True,False,,,A,easy,Genres & History
 156,Chamber music is written for one hundred players.,True,False,,,B,easy,Genres & History
-157,Bluegrass music comes from France.,True,False,,,B,easy,Genres & History
-158,The 1969 Woodstock festival was a landmark rock event.,True,False,,,A,easy,Genres & History
-159,Vivaldi was famous for electric guitar solos.,True,False,,,B,easy,Genres & History
-160,Swing was a popular jazz style of the 1930s and 1940s.,True,False,,,A,easy,Genres & History
+157,Bluegrass music comes from France.,False,True,,,A,easy,Genres & History
+158,The 1969 Woodstock festival was a landmark rock event.,False,True,,,B,easy,Genres & History
+159,Vivaldi was famous for electric guitar solos.,False,True,,,A,easy,Genres & History
+160,Swing was a popular jazz style of the 1930s and 1940s.,False,True,,,B,easy,Genres & History
 161,Bossa nova blends Brazilian samba with jazz.,True,False,,,A,easy,Genres & History
 162,Minimalism in music means using the largest orchestra possible.,True,False,,,B,easy,Genres & History
-163,Motown was a record label founded in Paris.,True,False,,,B,easy,Genres & History
-164,New Orleans is widely called the birthplace of jazz.,True,False,,,A,easy,Genres & History
+163,Motown was a record label founded in Paris.,False,True,,,A,easy,Genres & History
+164,New Orleans is widely called the birthplace of jazz.,False,True,,,B,easy,Genres & History
 165,Electronic dance music is built with synthesizers and computers.,True,False,,,A,easy,Genres & History
 166,Gregorian chant is famous for loud electric guitar solos.,True,False,,,B,easy,Genres & History
 167,The Grammy Awards honor achievements in music.,True,False,,,A,easy,Charts & Awards
 168,The Grammy Awards are handed out every week in Las Vegas.,True,False,,,B,easy,Charts & Awards
-169,The Oscar is the main award for country music.,True,False,,,B,easy,Charts & Awards
-170,Billboard publishes widely followed music charts.,True,False,,,A,easy,Charts & Awards
+169,The Oscar is the main award for country music.,False,True,,,A,easy,Charts & Awards
+170,Billboard publishes widely followed music charts.,False,True,,,B,easy,Charts & Awards
 171,Winning a Grammy is a major music honor.,True,False,,,A,easy,Charts & Awards
 172,The Grammy trophy is awarded for best halftime show.,True,False,,,B,easy,Charts & Awards
-173,The Rock and Roll Hall of Fame is located in Rome.,True,False,,,B,easy,Charts & Awards
-174,Elvis Presley had many chart topping singles.,True,False,,,A,easy,Charts & Awards
+173,The Rock and Roll Hall of Fame is located in Rome.,False,True,,,A,easy,Charts & Awards
+174,Elvis Presley had many chart topping singles.,False,True,,,B,easy,Charts & Awards
 175,The Beatles topped the American singles chart many times.,True,False,,,A,easy,Charts & Awards
 176,Streaming plays have no effect on chart rankings today.,True,False,,,B,easy,Charts & Awards
 177,The Mercury Prize honors albums by British and Irish acts.,True,False,,,A,easy,Charts & Awards
 178,A debut album is an artist's final album.,True,False,,,B,easy,Charts & Awards
-179,The Grammy statuette is shaped like a football.,True,False,,,B,easy,Charts & Awards
-180,A single is a song released on its own.,True,False,,,A,easy,Charts & Awards
+179,The Grammy statuette is shaped like a football.,False,True,,,A,easy,Charts & Awards
+180,A single is a song released on its own.,False,True,,,B,easy,Charts & Awards
 181,The Billboard Hot 100 lists one hundred songs.,True,False,,,A,easy,Charts & Awards
 182,An encore happens before the concert begins.,True,False,,,B,easy,Charts & Awards
-183,Busking means selling instruments at auction.,True,False,,,B,easy,Charts & Awards
-184,A greatest hits album collects an act's best known songs.,True,False,,,A,easy,Charts & Awards
+183,Busking means selling instruments at auction.,False,True,,,A,easy,Charts & Awards
+184,A greatest hits album collects an act's best known songs.,False,True,,,B,easy,Charts & Awards
 185,MTV launched in 1981 and boosted music videos.,True,False,,,A,easy,Charts & Awards
 186,The term one hit wonder describes an artist with fifty number ones.,True,False,,,B,easy,Charts & Awards
 187,The Grammy Awards include an Album of the Year prize.,True,False,,,A,easy,Charts & Awards
 188,The Eurovision Song Contest takes place every ten years.,True,False,,,B,easy,Charts & Awards
-189,The Rock and Roll Hall of Fame honors soap opera actors.,True,False,,,B,easy,Charts & Awards
-190,Sales and streaming feed into chart positions today.,True,False,,,A,easy,Charts & Awards
+189,The Rock and Roll Hall of Fame honors soap opera actors.,False,True,,,A,easy,Charts & Awards
+190,Sales and streaming feed into chart positions today.,False,True,,,B,easy,Charts & Awards
 191,The Super Bowl halftime show is a major music event.,True,False,,,A,easy,Charts & Awards
 192,The Grammy Awards began in the year 1200.,True,False,,,B,easy,Charts & Awards
-193,A platinum record has sold fewer copies than a gold record.,True,False,,,B,easy,Charts & Awards
-194,Billboard was founded in the United States.,True,False,,,A,easy,Charts & Awards
+193,A platinum record has sold fewer copies than a gold record.,False,True,,,A,easy,Charts & Awards
+194,Billboard was founded in the United States.,False,True,,,B,easy,Charts & Awards
 195,Vinyl records have enjoyed a big revival in recent years.,True,False,,,A,easy,Charts & Awards
 196,The Brit Awards are the main music awards of Japan.,True,False,,,B,easy,Charts & Awards
 197,The CMA Awards celebrate achievements in country music.,True,False,,,A,easy,Charts & Awards
 198,Record labels never pay attention to radio airplay.,True,False,,,B,easy,Charts & Awards
-199,An artist must win American Idol to reach number one.,True,False,,,B,easy,Charts & Awards
-200,Music charts rank songs by sales streams and airplay.,True,False,,,A,easy,Charts & Awards
+199,An artist must win American Idol to reach number one.,False,True,,,A,easy,Charts & Awards
+200,Music charts rank songs by sales streams and airplay.,False,True,,,B,easy,Charts & Awards
 201,Who was the lead singer of Nirvana?,Kurt Cobain,Layne Staley,,,A,medium,Artists & Bands
 202,Which band did Ozzy Osbourne front?,Judas Priest,Black Sabbath,,,B,medium,Artists & Bands
 203,Who is known as the Queen of Soul?,Aretha Franklin,Tina Turner,,,A,medium,Artists & Bands
 204,Which band features Bono as its lead singer?,Coldplay,U2,,,B,medium,Artists & Bands
-205,Who played drums for The Beatles?,Keith Moon,Ringo Starr,,,B,medium,Artists & Bands
-206,Which artist released the album 25?,Adele,Sia,,,A,medium,Artists & Bands
-207,Which group was formed by the Gibb brothers?,Earth Wind and Fire,Bee Gees,,,B,medium,Artists & Bands
-208,Who had a hit with the song Bad Guy?,Billie Eilish,Lorde,,,A,medium,Artists & Bands
+205,Who played drums for The Beatles?,Ringo Starr,Keith Moon,,,A,medium,Artists & Bands
+206,Which artist released the album 25?,Sia,Adele,,,B,medium,Artists & Bands
+207,Which group was formed by the Gibb brothers?,Bee Gees,Earth Wind and Fire,,,A,medium,Artists & Bands
+208,Who had a hit with the song Bad Guy?,Lorde,Billie Eilish,,,B,medium,Artists & Bands
 209,Which singer is famous for the song Piano Man?,Billy Joel,Elton John,,,A,medium,Artists & Bands
 210,Who was AC/DC's longtime lead guitarist?,Malcolm Young,Angus Young,,,B,medium,Artists & Bands
 211,Which member of One Direction sang Watermelon Sugar?,Harry Styles,Zayn Malik,,,A,medium,Artists & Bands
 212,Who composed the score for the Star Wars films?,Danny Elfman,John Williams,,,B,medium,Artists & Bands
 213,Which artist is nicknamed the Material Girl?,Madonna,Cher,,,A,medium,Artists & Bands
 214,Who leads the E Street Band?,Steven Van Zandt,Bruce Springsteen,,,B,medium,Artists & Bands
-215,Which singer starred in the 2018 remake of A Star Is Born?,Katy Perry,Lady Gaga,,,B,medium,Artists & Bands
-216,Who is the frontman of Radiohead?,Thom Yorke,Chris Martin,,,A,medium,Artists & Bands
-217,Which band includes drummer Lars Ulrich?,Megadeth,Metallica,,,B,medium,Artists & Bands
-218,Who sang the 2011 hit Someone Like You?,Adele,Duffy,,,A,medium,Artists & Bands
+215,Which singer starred in the 2018 remake of A Star Is Born?,Lady Gaga,Katy Perry,,,A,medium,Artists & Bands
+216,Who is the frontman of Radiohead?,Chris Martin,Thom Yorke,,,B,medium,Artists & Bands
+217,Which band includes drummer Lars Ulrich?,Metallica,Megadeth,,,A,medium,Artists & Bands
+218,Who sang the 2011 hit Someone Like You?,Duffy,Adele,,,B,medium,Artists & Bands
 219,Who is the lead vocalist of Coldplay?,Chris Martin,Jonny Buckland,,,A,medium,Artists & Bands
 220,Who recorded the album Graceland?,Neil Young,Paul Simon,,,B,medium,Artists & Bands
 221,Which guitarist is nicknamed Slowhand?,Eric Clapton,Mark Knopfler,,,A,medium,Artists & Bands
 222,Who was the bassist and singer of The Police?,Phil Collins,Sting,,,B,medium,Artists & Bands
 223,Which group released the album Rumours?,Fleetwood Mac,Boston,,,A,medium,Artists & Bands
 224,Which singer voiced a character in the film Trolls?,Bruno Mars,Justin Timberlake,,,B,medium,Artists & Bands
-225,Who is known as the Godfather of Soul?,Wilson Pickett,James Brown,,,B,medium,Artists & Bands
-226,Which artist released the visual album Lemonade?,Beyonce,Rihanna,,,A,medium,Artists & Bands
-227,Who played lead guitar for Queen?,Pete Townshend,Brian May,,,B,medium,Artists & Bands
-228,Which rapper released The Marshall Mathers LP?,Eminem,50 Cent,,,A,medium,Artists & Bands
+225,Who is known as the Godfather of Soul?,James Brown,Wilson Pickett,,,A,medium,Artists & Bands
+226,Which artist released the visual album Lemonade?,Rihanna,Beyonce,,,B,medium,Artists & Bands
+227,Who played lead guitar for Queen?,Brian May,Pete Townshend,,,A,medium,Artists & Bands
+228,Which rapper released The Marshall Mathers LP?,50 Cent,Eminem,,,B,medium,Artists & Bands
 229,Who founded Motown Records?,Berry Gordy,Quincy Jones,,,A,medium,Artists & Bands
 230,Which singer performed the Bond theme Skyfall?,Sam Smith,Adele,,,B,medium,Artists & Bands
 231,Which artist released the album Anti?,Rihanna,SZA,,,A,medium,Artists & Bands
 232,Who composed West Side Story?,Aaron Copland,Leonard Bernstein,,,B,medium,Artists & Bands
 233,Which band did Jimmy Page play guitar for?,Led Zeppelin,Deep Purple,,,A,medium,Artists & Bands
 234,Who is known as the First Lady of Song?,Billie Holiday,Ella Fitzgerald,,,B,medium,Artists & Bands
-235,Which duo recorded The Sound of Silence?,Hall and Oates,Simon and Garfunkel,,,B,medium,Songs & Albums
-236,Which band released A Night at the Opera?,Queen,Electric Light Orchestra,,,A,medium,Songs & Albums
-237,Who sang Firework?,Kesha,Katy Perry,,,B,medium,Songs & Albums
-238,Which album features the song Come Together?,Abbey Road,Let It Be,,,A,medium,Songs & Albums
+235,Which duo recorded The Sound of Silence?,Simon and Garfunkel,Hall and Oates,,,A,medium,Songs & Albums
+236,Which band released A Night at the Opera?,Electric Light Orchestra,Queen,,,B,medium,Songs & Albums
+237,Who sang Firework?,Katy Perry,Kesha,,,A,medium,Songs & Albums
+238,Which album features the song Come Together?,Let It Be,Abbey Road,,,B,medium,Songs & Albums
 239,Who recorded Good Vibrations?,The Beach Boys,The Mamas and the Papas,,,A,medium,Songs & Albums
 240,Which song was a hit for Soft Cell?,Blue Monday,Tainted Love,,,B,medium,Songs & Albums
 241,Who sang Total Eclipse of the Heart?,Bonnie Tyler,Stevie Nicks,,,A,medium,Songs & Albums
 242,Which album opens with the track Speak to Me?,Wish You Were Here,The Dark Side of the Moon,,,B,medium,Songs & Albums
 243,Who performed the 1984 hit Like a Virgin?,Madonna,Debbie Harry,,,A,medium,Songs & Albums
 244,Which song is Stevie Wonder famous for?,Isn't She Lovely,Superstition,,,B,medium,Songs & Albums
-245,Who recorded the album Nevermind?,Pearl Jam,Nirvana,,,B,medium,Songs & Albums
-246,Which was the debut hit for Britney Spears?,Baby One More Time,Oops I Did It Again,,,A,medium,Songs & Albums
-247,Who sang the theme song for the film Titanic?,Mariah Carey,Celine Dion,,,B,medium,Songs & Albums
-248,Which band recorded the song Africa?,Toto,Foreigner,,,A,medium,Songs & Albums
+245,Who recorded the album Nevermind?,Nirvana,Pearl Jam,,,A,medium,Songs & Albums
+246,Which was the debut hit for Britney Spears?,Oops I Did It Again,Baby One More Time,,,B,medium,Songs & Albums
+247,Who sang the theme song for the film Titanic?,Celine Dion,Mariah Carey,,,A,medium,Songs & Albums
+248,Which band recorded the song Africa?,Foreigner,Toto,,,B,medium,Songs & Albums
 249,Who released the album Born to Run?,John Mellencamp,Bruce Springsteen,,,A,medium,Songs & Albums
 250,Who had a 2013 hit with Royals?,Lana Del Rey,Lorde,,,B,medium,Songs & Albums
 251,Who performed the song Jailhouse Rock?,Elvis Presley,Chuck Berry,,,A,medium,Songs & Albums
 252,Which artist released the album 1989?,Selena Gomez,Taylor Swift,,,B,medium,Songs & Albums
 253,Who sang I Wanna Dance with Somebody?,Whitney Houston,Paula Abdul,,,A,medium,Songs & Albums
 254,Which band performed More Than a Feeling?,Chicago,Boston,,,B,medium,Songs & Albums
-255,Who recorded Blue Moon of Kentucky?,Hank Williams,Bill Monroe,,,B,medium,Songs & Albums
-256,Who performed Beat It?,Michael Jackson,Lionel Richie,,,A,medium,Songs & Albums
-257,Who sang Girls Just Want to Have Fun?,Pat Benatar,Cyndi Lauper,,,B,medium,Songs & Albums
-258,Which group recorded Rhiannon?,Fleetwood Mac,Heart,,,A,medium,Songs & Albums
+255,Who recorded Blue Moon of Kentucky?,Bill Monroe,Hank Williams,,,A,medium,Songs & Albums
+256,Who performed Beat It?,Lionel Richie,Michael Jackson,,,B,medium,Songs & Albums
+257,Who sang Girls Just Want to Have Fun?,Cyndi Lauper,Pat Benatar,,,A,medium,Songs & Albums
+258,Which group recorded Rhiannon?,Heart,Fleetwood Mac,,,B,medium,Songs & Albums
 259,Who performed the 1997 hit MmmBop?,Hanson,Backstreet Boys,,,A,medium,Songs & Albums
 260,Who released the album Thriller?,Janet Jackson,Michael Jackson,,,B,medium,Songs & Albums
 261,Who sang the 2016 hit Cheap Thrills?,Sia,Bebe Rexha,,,A,medium,Songs & Albums
 262,Who performed the song What's Going On?,Al Green,Marvin Gaye,,,B,medium,Songs & Albums
 263,Which group had a hit with My Girl?,The Temptations,The Four Tops,,,A,medium,Songs & Albums
 264,Who sang Poker Face?,Madonna,Lady Gaga,,,B,medium,Songs & Albums
-265,Who recorded the album OK Computer?,Oasis,Radiohead,,,B,medium,Songs & Albums
-266,Who performed Uptown Funk with Bruno Mars?,Mark Ronson,Pharrell Williams,,,A,medium,Songs & Albums
-267,Who sang Take On Me?,Erasure,A-ha,,,B,medium,Songs & Albums
-268,Which instrument has 88 keys?,Piano,Organ,,,A,medium,Instruments
-269,Which string instrument is the largest of the violin family?,Double bass,Cello,,,A,medium,Instruments
-270,Which family does the trumpet belong to?,Woodwind,Brass,,,B,medium,Instruments
-271,How many strings does a standard violin have?,Four,Five,,,A,medium,Instruments
-272,Which instrument is played with mallets?,Celesta,Xylophone,,,B,medium,Instruments
-273,Which instrument uses a slide to change pitch?,Trombone,Trumpet,,,A,medium,Instruments
-274,Which woodwind uses a double reed?,Clarinet,Bassoon,,,B,medium,Instruments
-275,How many strings does a standard bass guitar have?,Six,Four,,,B,medium,Instruments
-276,Which keyboard instrument plucks strings with quills?,Harpsichord,Virginal,,,A,medium,Instruments
-277,Which brass instrument is the largest?,Euphonium,Tuba,,,B,medium,Instruments
-278,Which stringed instrument uses pedals to change keys?,Harp,Zither,,,A,medium,Instruments
-279,Which family does the cymbal belong to?,Percussion,String,,,A,medium,Instruments
-280,Which instrument did Jimi Hendrix famously play?,Banjo,Guitar,,,B,medium,Instruments
-281,Which instrument is central to bluegrass music?,Banjo,Harmonica,,,A,medium,Instruments
-282,Which instrument uses bellows to push air over reeds?,Accordion,Ocarina,,,B,medium,Instruments
-283,Which stringed instrument is associated with India?,Sitar,Oud,,,A,medium,Instruments
-284,Which of these is an African thumb piano?,Cuatro,Kalimba,,,B,medium,Instruments
-285,Which drum is a shallow drum often played with brushes?,Snare drum,Timpani,,,B,medium,Instruments
-286,Which instrument did Louis Armstrong famously play?,Trumpet,Trombone,,,A,medium,Instruments
-287,Which keyboard instrument is a staple of rock organ sounds?,Mellotron,Hammond organ,,,B,medium,Instruments
-288,Which instrument is a large deep drum lying on its side?,Bass drum,Floor tom,,,A,medium,Instruments
-289,Which woodwind is made of brass despite its name?,Saxophone,Flute,,,A,medium,Instruments
-290,Which stringed instrument is struck with small hammers?,Psaltery,Hammered dulcimer,,,B,medium,Instruments
-291,Which instrument did Beethoven compose for despite losing his hearing?,Piano,Violin,,,A,medium,Instruments
-292,How many strings does a standard ukulele have?,Ten strings,Four,,,B,medium,Instruments
-293,Which brass instrument has a mellow conical bore and hand-in-bell technique?,French horn,Cornet,,,A,medium,Instruments
-294,Which section sits at the front of an orchestra?,Percussion,First violins,,,B,medium,Instruments
-295,Which of these instruments is tuned in fifths?,Guitar,Violin,,,B,medium,Instruments
-296,Which instrument is two concave wooden shells clicked together?,Castanets,Maracas,,,A,medium,Instruments
-297,Which wind instrument is popular in Scotland?,Pan flute,Bagpipes,,,B,medium,Instruments
-298,Which instrument did Miles Davis play?,Trumpet,Flugelhorn,,,A,medium,Instruments
-299,Which instrument originated in Trinidad and Tobago?,Steelpan,Didgeridoo,,,A,medium,Instruments
-300,Which instrument did Andres Segovia elevate to concert status?,Classical guitar,Bandurria,,,B,medium,Instruments
-301,How many lines does a musical staff have?,Five,Four,,,A,medium,Music Theory
-302,What does the term forte mean?,Soft,Loud,,,B,medium,Music Theory
-303,How many beats does a quarter note get in 4/4 time?,One,Two,,,A,medium,Music Theory
-304,What is the interval from C up to G called?,Fourth,Fifth,,,B,medium,Music Theory
-305,What does crescendo mean?,Gradually softer,Gradually louder,,,B,medium,Music Theory
-306,Which major scale has no sharps or flats?,C major,G major,,,A,medium,Music Theory
-307,What does the musical term tempo mean?,Volume,Speed,,,B,medium,Music Theory
-308,What symbol raises a note by a half step?,Sharp,Flat,,,A,medium,Music Theory
-309,What speed marking means slow and walking pace?,Andante,Allegro,,,A,medium,Music Theory
-310,What is a group of four musicians called?,Trio,Quartet,,,B,medium,Music Theory
-311,What does pp stand for as a dynamic?,Pianissimo,Mezzo piano,,,A,medium,Music Theory
-312,What is the first note of the major scale called?,Tonic,Dominant,,,B,medium,Music Theory
-313,What do two notes of the same pitch sounding together form?,Unison,Octave,,,A,medium,Music Theory
-314,How many notes are in an octave scale?,Seven,Eight,,,B,medium,Music Theory
-315,What does the term a cappella mean?,Singing with one instrument,Singing without instruments,,,B,medium,Music Theory
-316,What time signature is known as common time?,4/4,3/4,,,A,medium,Music Theory
-317,Which marking means very fast?,Presto,Moderato,,,B,medium,Music Theory
-318,What is the vertical arrangement of notes sounding together called?,Chord,Riff,,,A,medium,Music Theory
-319,What does rubato mean?,Flexible tempo,Fixed tempo,,,A,medium,Music Theory
-320,What clef is used for the right hand of most piano music?,Bass clef,Treble clef,,,B,medium,Music Theory
-321,What do we call the resting home note of a piece?,Tonic,Supertonic,,,A,medium,Music Theory
-322,What does da capo mean?,To the end,From the beginning,,,B,medium,Music Theory
-323,How many sharps are in the key of G major?,One,Fifteen,,,A,medium,Music Theory
-324,Which note sits on the middle line of the treble clef staff?,G,B,,,B,medium,Music Theory
-325,What is a glissando?,A sudden loud chord,A smooth slide between notes,,,B,medium,Music Theory
-326,What do we call the organization of music in time?,Rhythm,Melody,,,A,medium,Music Theory
-327,What dynamic means moderately soft?,Mezzo forte,Mezzo piano,,,B,medium,Music Theory
-328,What is a persistently repeated musical phrase called?,Ostinato,Rondo,,,A,medium,Music Theory
-329,What does legato mean?,Smooth and connected,Short and detached,,,A,medium,Music Theory
-330,What is the term for a three note chord?,Tritone,Triad,,,B,medium,Music Theory
-331,Which key signature has three flats?,E flat major,E flat minor,,,A,medium,Music Theory
-332,What is the term for the pattern of beats that repeats in a bar?,Timbre,Meter,,,B,medium,Music Theory
-333,What is vibrato?,A wobble in pitch,A change in volume,,,A,medium,Music Theory
-334,Which city is famous as a home of flamenco?,Lisbon,Seville,,,B,medium,Genres & History
-335,Which genre did Bob Marley spread worldwide?,Calypso,Reggae,,,B,medium,Genres & History
-336,Which genre features MCs rapping over beats?,Hip hop,House,,,A,medium,Genres & History
-337,Which style blends jazz harmony with Brazilian samba?,Mambo,Bossa nova,,,B,medium,Genres & History
-338,In which decade did punk rock explode in New York and London?,The 1970s,The 1950s,,,A,medium,Genres & History
-339,Which genre uses turntables and sampling as core tools?,Hip hop,Disco,,,A,medium,Genres & History
-340,Grunge emerged in which American city?,Portland,Seattle,,,B,medium,Genres & History
-341,Which genre grew from delta field hollers and work songs?,Blues,Ragtime,,,A,medium,Genres & History
-342,Which famed New York club was a disco landmark of 1977?,CBGB,Studio 54,,,B,medium,Genres & History
-343,Merengue and bachata come from which island nation?,The Dominican Republic,Cuba,,,A,medium,Genres & History
-344,Which genre is linked to Detroit and robotic beats?,Trance,Techno,,,B,medium,Genres & History
-345,Which genre blended country and rhythm and blues in 1950s Memphis?,Doo wop,Rockabilly,,,B,medium,Genres & History
-346,Afrobeats originates largely from which country?,Nigeria,Kenya,,,A,medium,Genres & History
-347,The K-pop industry is centered in which city?,Seoul,Bangkok,,,B,medium,Genres & History
-348,Which composer bridged the classical and romantic eras?,Beethoven,Haydn,,,A,medium,Genres & History
-349,Zydeco music comes from which US state?,Louisiana,Mississippi,,,A,medium,Genres & History
-350,Ska is the predecessor of which genre?,Dancehall,Reggae,,,B,medium,Genres & History
-351,In which year did J S Bach die?,1750,1809,,,A,medium,Genres & History
-352,Which composer is a pioneer of musical minimalism?,John Cage,Philip Glass,,,B,medium,Genres & History
-353,Doo wop harmonies flourished in which decade?,The 1950s,The 1960s,,,A,medium,Genres & History
-354,Gregorian chant belongs to which tradition?,Renaissance court music,Medieval church music,,,B,medium,Genres & History
-355,Which British city birthed Merseybeat?,Manchester,Liverpool,,,B,medium,Genres & History
-356,What did the Romantic era emphasize in music?,Emotion and expression,Order and restraint,,,A,medium,Genres & History
-357,Which genre features virtuosic improvisation over chord changes?,Bluegrass,Jazz,,,B,medium,Genres & History
-358,House music was born in which American city?,Chicago,Detroit,,,A,medium,Genres & History
-359,Opera was born in which country?,Italy,Germany,,,A,medium,Genres & History
-360,Who was ragtime's most famous composer?,Irving Berlin,Scott Joplin,,,B,medium,Genres & History
-361,In which year was the Woodstock festival held?,1969,1970,,,A,medium,Genres & History
-362,Motown Records was based in which city?,Memphis,Detroit,,,B,medium,Genres & History
-363,The Sex Pistols came from which country?,England,Australia,,,A,medium,Genres & History
-364,Who wrote The Four Seasons?,Handel,Vivaldi,,,B,medium,Genres & History
-365,Which act was booed for going electric at Newport in 1965?,The Byrds,Bob Dylan,,,B,medium,Genres & History
-366,Which city hosted the famous punk club CBGB?,New York City,Los Angeles,,,A,medium,Genres & History
-367,The Video Music Awards are presented by which network?,VH1,MTV,,,B,medium,Charts & Awards
-368,Which Billboard chart tracks album sales?,Billboard 200,Hot 100,,,A,medium,Charts & Awards
-369,What does a diamond certification from the RIAA represent?,Ten million units,Five million units,,,A,medium,Charts & Awards
-370,The Mercury Prize honors artists of which nations?,France and Belgium,Britain and Ireland,,,B,medium,Charts & Awards
-371,Record of the Year is an award at which ceremony?,The Grammys,The Oscars,,,A,medium,Charts & Awards
-372,Who has won the most Grammy Awards of all time?,Georg Solti,Beyonce,,,B,medium,Charts & Awards
-373,An album certified gold in the US has sold how many units?,500000,250000,,,A,medium,Charts & Awards
-374,The Eurovision Song Contest is run by which body?,The United Nations,The European Broadcasting Union,,,B,medium,Charts & Awards
-375,The CMA Awards celebrate which genre?,Pop music,Country music,,,B,medium,Charts & Awards
-376,Which singer won American Idol in its first season?,Kelly Clarkson,Carrie Underwood,,,A,medium,Charts & Awards
-377,The Billboard Music Awards are based on what?,Fan votes,Chart performance,,,B,medium,Charts & Awards
-378,Which talent show launched One Direction?,The X Factor,The Voice,,,A,medium,Charts & Awards
-379,What is Spotify's popular year end recap called?,Wrapped,Discover Weekly,,,A,medium,Charts & Awards
-380,The Rock and Roll Hall of Fame museum is located in which city?,New York,Cleveland,,,B,medium,Charts & Awards
-381,What does RIAA stand for?,Recording Industry Association of America,Radio Industry Association of America,,,A,medium,Charts & Awards
-382,Which duo caused the 2004 halftime wardrobe controversy?,Madonna and Britney Spears,Janet Jackson and Justin Timberlake,,,B,medium,Charts & Awards
-383,Which is the main singles chart in the United Kingdom?,The Official UK Singles Chart,The ARIA chart,,,A,medium,Charts & Awards
-384,The Grammy telecast is presented by which organization?,The Film Academy,The Recording Academy,,,B,medium,Charts & Awards
-385,Which award honors Broadway musical theater?,The Emmy Awards,The Tony Awards,,,B,medium,Charts & Awards
-386,Which ceremony is nicknamed music's biggest night?,The Grammy Awards,The American Music Awards,,,A,medium,Charts & Awards
-387,The ARIA Awards belong to which country?,New Zealand,Australia,,,B,medium,Charts & Awards
-388,Which publisher runs the Global 200 chart?,Billboard,Rolling Stone,,,A,medium,Charts & Awards
-389,Who won the first Eurovision Song Contest in 1956?,Switzerland,France,,,A,medium,Charts & Awards
-390,What is the top honor at the CMA Awards called?,Album of the Year,Entertainer of the Year,,,B,medium,Charts & Awards
-391,The Juno Awards honor music from which country?,Canada,Ireland,,,A,medium,Charts & Awards
-392,Which act holds the record for most Hot 100 number ones?,Drake,The Beatles,,,B,medium,Charts & Awards
-393,In which year was the first MTV Video Music Awards held?,1984,1981,,,A,medium,Charts & Awards
-394,The Polar Music Prize is awarded in which country?,Norway,Sweden,,,B,medium,Charts & Awards
-395,Glastonbury is a famous festival in which country?,Scotland,England,,,B,medium,Charts & Awards
-396,The Grand Ole Opry is a famous stage in which city?,Memphis,Nashville,,,A,medium,Charts & Awards
-397,Which venue hosted the 1971 Concert for Bangladesh?,Carnegie Hall,Madison Square Garden,,,B,medium,Charts & Awards
-398,Which country won the Eurovision Song Contest in 2023?,Sweden,Ukraine,,,A,medium,Charts & Awards
-399,Which Bronx address is called the birthplace of hip hop?,1520 Sedgwick Avenue,2120 Michigan Avenue,,,A,medium,Charts & Awards
-400,Coachella takes place in which US state?,Arizona,California,,,B,medium,Charts & Awards
-401,Who was known as the fifth Beatle for his production work?,George Martin,Brian Epstein,Phil Spector,,A,hard,Artists & Bands
-402,Which Wrecking Crew bassist featured on Good Vibrations?,Leland Sklar,Carol Kaye,Joe Osborn,,B,hard,Artists & Bands
-403,Which house band backed the Motown hits?,The Wrecking Crew,The Muscle Shoals Rhythm Section,The Funk Brothers,,C,hard,Artists & Bands
-404,Who produced Michael Jackson's Thriller?,Quincy Jones,Teddy Riley,Bruce Swedien,,A,hard,Artists & Bands
-405,Which Eagles member co-wrote Take It Easy with Jackson Browne?,Don Felder,Glenn Frey,Randy Meisner,,B,hard,Artists & Bands
-406,Who sang lead on the Eagles' Hotel California?,Timothy B Schmit,Bernie Leadon,Don Henley,,C,hard,Artists & Bands
-407,Which Nirvana drummer later fronted the Foo Fighters?,Chad Channing,Dave Grohl,Krist Novoselic,,B,hard,Artists & Bands
-408,Which bassist anchored Booker T and the MGs?,James Jamerson,Donald Duck Dunn,Bootsy Collins,,B,hard,Artists & Bands
-409,Which singer fronted AC/DC on Highway to Hell?,Dave Evans,Brian Johnson,Bon Scott,,C,hard,Artists & Bands
-410,Who designed the cover of Sgt Pepper's Lonely Hearts Club Band?,Andy Warhol,Klaus Voormann,Peter Blake,,C,hard,Artists & Bands
-411,Which producer created the wall of sound?,Phil Spector,George Martin,Brian Wilson,,A,hard,Artists & Bands
-412,Who played bass for the Who?,John Entwistle,Keith Moon,Roger Daltrey,,B,hard,Artists & Bands
-413,Which singer replaced David Lee Roth in Van Halen?,Gary Cherone,Steve Perry,Sammy Hagar,,C,hard,Artists & Bands
-414,Which member of the Doors was the keyboardist?,Ray Manzarek,Robby Krieger,John Densmore,,A,hard,Artists & Bands
-415,Who was Elvis Presley's early Memphis guitarist?,Scotty Moore,James Burton,Chet Atkins,,A,hard,Artists & Bands
-416,Who was the founding bassist of the Rolling Stones?,Charlie Watts,Bill Wyman,Mick Taylor,,B,hard,Artists & Bands
-417,Which jazz trumpeter recorded Kind of Blue?,Dizzy Gillespie,Chet Baker,Miles Davis,,C,hard,Artists & Bands
-418,Who is the lead singer of Pearl Jam?,Eddie Vedder,Chris Cornell,Mike McCready,,A,hard,Artists & Bands
-419,Who sang the Bond theme Live and Let Die?,Paul McCartney and Wings,Shirley Bassey,Tom Jones,,B,hard,Artists & Bands
-420,Which violinist composed the 24 Caprices?,Fritz Kreisler,Jascha Heifetz,Niccolo Paganini,,C,hard,Artists & Bands
-421,Who was the first woman inducted into the Rock and Roll Hall of Fame?,Aretha Franklin,Patti Smith,Joan Baez,,A,hard,Artists & Bands
-422,Which rapper founded Death Row Records with Suge Knight?,Ice Cube,Dr Dre,Snoop Dogg,,B,hard,Artists & Bands
-423,Which original Sex Pistols bassist was replaced by Sid Vicious?,Steve Jones,Glen Matlock,Paul Cook,,B,hard,Artists & Bands
-424,Who recorded Sledgehammer after leaving Genesis?,Mike Rutherford,Ray Wilson,Peter Gabriel,,C,hard,Artists & Bands
-425,Which bluesman was born McKinley Morganfield?,Muddy Waters,Howlin Wolf,B B King,,A,hard,Artists & Bands
-426,Whose birth name was Reginald Kenneth Dwight?,Rod Stewart,Elton John,George Michael,,B,hard,Artists & Bands
-427,Who co-founded Def Jam with Rick Rubin?,Sean Combs,Jermaine Dupri,Russell Simmons,,C,hard,Artists & Bands
-428,Which artist starred in the film Purple Rain?,Prince,Morris Day,Rick James,,A,hard,Artists & Bands
-429,Which jazz pianist composed Round Midnight?,Duke Ellington,Count Basie,Thelonious Monk,,C,hard,Artists & Bands
-430,Who is widely credited as the father of bluegrass?,Ralph Stanley,Bill Monroe,Earl Scruggs,,B,hard,Artists & Bands
-431,Which singer completed an EGOT in 2022?,Jennifer Hudson,Whoopi Goldberg,John Legend,,A,hard,Artists & Bands
-432,Who was the lead guitarist of Cream?,Jack Bruce,Eric Clapton,Ginger Baker,,B,hard,Artists & Bands
-433,Who invented the Moog synthesizer?,Oskar Heil,Robert Moog,Alan Blumlein,,B,hard,Artists & Bands
-434,Which Beatles manager died in 1967?,Brian Epstein,Allen Klein,Mal Evans,,A,hard,Artists & Bands
-435,Which Stevie Wonder album features Superstition?,Talking Book,Innervisions,Songs in the Key of Life,,A,hard,Songs & Albums
-436,Which Fleetwood Mac album followed Rumours?,Mirage,Bare Trees,Tusk,,C,hard,Songs & Albums
-437,Which Marvin Gaye album features Inner City Blues and Mercy Mercy Me?,Let's Get It On,What's Going On,I Heard It Through the Grapevine,,B,hard,Songs & Albums
-438,Which Joni Mitchell album features Big Yellow Taxi?,Court and Spark,Blue,Ladies of the Canyon,,C,hard,Songs & Albums
-439,Which artist recorded Spirit in the Sky?,The Hollies,Norman Greenbaum,Steppenwolf,,B,hard,Songs & Albums
-440,Which Pink Floyd album is dedicated to Syd Barrett?,The Wall,Animals,Wish You Were Here,,C,hard,Songs & Albums
-441,Which Dolly Parton hit is named after a redheaded bank clerk?,Jolene,Coat of Many Colors,9 to 5,,A,hard,Songs & Albums
-442,Which disco hit did Giorgio Moroder produce for Donna Summer?,Hot Stuff,I Feel Love,On the Radio,,B,hard,Songs & Albums
-443,Which 1982 Queen album features Under Pressure?,The Game,A Kind of Magic,Hot Space,,C,hard,Songs & Albums
-444,Which Springsteen album features Dancing in the Dark?,Born in the USA,Born to Run,The River,,A,hard,Songs & Albums
-445,Which song gave the Eagles their first number one hit?,Best of My Love,Take It Easy,One of These Nights,,A,hard,Songs & Albums
-446,Which rap group released Straight Outta Compton?,NWA,Public Enemy,Geto Boys,,B,hard,Songs & Albums
-447,Which Carole King album won the 1972 Album of the Year Grammy?,Tapestry,Music,Rhymes and Reasons,,C,hard,Songs & Albums
-448,Which Don McLean song refers to the day the music died?,American Pie,Vincent,Castles in the Air,,A,hard,Songs & Albums
-449,Which Michael Jackson album followed Thriller?,Bad,Off the Wall,Dangerous,,B,hard,Songs & Albums
-450,Which 1997 Verve hit is built on a Rolling Stones orchestral sample?,The Drugs Don't Work,Lucky Man,Bitter Sweet Symphony,,C,hard,Songs & Albums
-451,Which David Bowie album features Starman?,Ziggy Stardust,Hunky Dory,Aladdin Sane,,A,hard,Songs & Albums
-452,Which rap album features the track Juicy?,Ready to Die,Illmatic,Reasonable Doubt,,B,hard,Songs & Albums
-453,On which album does Prince's When Doves Cry appear?,1999,Purple Rain,Sign o the Times,,B,hard,Songs & Albums
-454,Which Fleetwood Mac song reached number one in 1977?,Go Your Own Way,Rhiannon,Dreams,,C,hard,Songs & Albums
-455,Which Radiohead album followed OK Computer?,Kid A,Amnesiac,In Rainbows,,A,hard,Songs & Albums
-456,Which Sister Sledge hit did Nile Rodgers produce?,Lost in Music,We Are Family,Thinking of You,,B,hard,Songs & Albums
-457,Which synth pop duo recorded Sweet Dreams?,Blancmange,Eurythmics,Yazoo,,B,hard,Songs & Albums
-458,Which Bob Marley song was released posthumously as an acoustic ballad?,Redemption Song,One Love,No Woman No Cry,,A,hard,Songs & Albums
-459,Which 1991 R.E.M. single became their biggest hit?,The One I Love,Stand,Losing My Religion,,C,hard,Songs & Albums
-460,Which trumpeter released the album Bitches Brew?,Herbie Hancock,Freddie Hubbard,Miles Davis,,C,hard,Songs & Albums
-461,Which Blondie hit was the first rap themed song to top the Hot 100?,Rapture,Heart of Glass,Call Me,,A,hard,Songs & Albums
-462,Who co-produced U2's The Joshua Tree?,Steve Lillywhite,Brian Eno,Flood,,B,hard,Songs & Albums
-463,Which Sinead O Connor hit is a Prince composition?,The Emperor's New Clothes,Mandinka,Nothing Compares 2 U,,C,hard,Songs & Albums
-464,Which Beastie Boys album was the first rap album to top the Billboard 200?,Licensed to Ill,Paul's Boutique,Ill Communication,,A,hard,Songs & Albums
-465,Which girl group recorded Waterfalls?,En Vogue,TLC,SWV,,B,hard,Songs & Albums
-466,Which Green Day album brought pop punk to the mainstream in 1994?,Insomniac,Nimrod,Dookie,,C,hard,Songs & Albums
-467,What was the Spice Girls debut single?,Wannabe,Say You'll Be There,2 Become 1,,A,hard,Songs & Albums
-468,Which clef does the viola read most often?,Treble clef,Alto clef,Tenor clef,,B,hard,Instruments
-469,Where does the viola sit in pitch?,Higher than the violin,Lower than the double bass,Between violin and cello,,C,hard,Instruments
-470,What is the name for the orchestral kettledrums?,Tom toms,Tablas,Timpani,,C,hard,Instruments
-471,Which woodwind is pitched in B flat and uses a single reed?,Clarinet,Oboe,Bassoon,,A,hard,Instruments
-472,Despite its name the English horn belongs to which family?,Horn family,Oboe family,Clarinet family,,B,hard,Instruments
-473,How many pedals does a concert harp have?,Twelve,Nine,Seven,,C,hard,Instruments
-474,Which double reed instrument is larger than the bassoon?,Contrabassoon,Cor anglais,Oboe d'amore,,A,hard,Instruments
-475,What does the left pedal on a piano do?,Softens the sound,Raises the pitch,Sustains the notes,,A,hard,Instruments
-476,Which kit cymbal pair is operated by a foot pedal?,Ride cymbal,Hi hat,Crash cymbal,,B,hard,Instruments
-477,What material is strung inside a violin bow?,Steel,Nylon,Horsehair,,C,hard,Instruments
-478,What is the standard tuning of a viola?,C G D A,G D A E,E A D G,,A,hard,Instruments
-479,The mbira is also known by which name?,Kora,Thumb piano,Djembe,,B,hard,Instruments
-480,What accessories does the pedal steel guitar use?,Hammers and mutes,A bow and slides,A steel bar and knee levers,,C,hard,Instruments
-481,Which tuning system divides the octave into twelve equal parts?,Equal temperament,Just intonation,Pythagorean tuning,,A,hard,Instruments
-482,What is a tabla pair composed of?,Snare and bass,Dayan and bayan,Conga and tumba,,B,hard,Instruments
-483,Which female vocal range sits between soprano and alto?,Contralto,Mezzo soprano,Coloratura,,B,hard,Instruments
-484,What do harp pedals change?,The volume,The string material,The string pitch by semitones,,C,hard,Instruments
-485,How many reeds does an oboe use?,Two,One,Zero,,A,hard,Instruments
-486,What does palm muting do on an electric guitar?,Lowers the pitch,Dampens the strings for a chugging tone,Adds reverb,,B,hard,Instruments
-487,What is the flared end of a brass instrument called?,The bore,The mouthpipe,The bell,,C,hard,Instruments
-488,Which bars does the glockenspiel use?,Metal bars,Wooden bars,Glass bars,,A,hard,Instruments
-489,Which string instrument is tuned in fourths an octave above the cello?,Viola,Bass guitar,Double bass,,C,hard,Instruments
-490,What does the sound post inside a violin do?,Holds the bridge in place,Supports the top and transmits vibrations,Tunes the strings,,B,hard,Instruments
-491,What are a harmonica's free reeds made of?,Metal,Bamboo,Plastic,,A,hard,Instruments
-492,Which instruments does a luthier build?,Brass instruments,Stringed instruments,Woodwinds,,B,hard,Instruments
-493,How many strings does a piano note have in the middle register?,Thirty,Forty,Three,,C,hard,Instruments
-494,Which saxophone is pitched in E flat and larger than the tenor?,Baritone sax,Alto sax,Soprano sax,,A,hard,Instruments
-495,Which bass technique uses the thumb to strike the strings?,Tapping,Slap bass,Sweep picking,,B,hard,Instruments
-496,Which Tchaikovsky piece famously features the celesta?,Swan Lake,The Dance of the Sugar Plum Fairy,The Nutcracker Overture,,B,hard,Instruments
-497,What gives the sitar its characteristic buzzing sound?,Sympathetic strings,A double reed,Metal frets,,A,hard,Instruments
-498,Which note does the oboe sound for orchestral tuning?,C above middle C,E above middle C,A above middle C,,C,hard,Instruments
-499,Which gourd rattle with a bead net comes from West Africa?,Ganza,Cabasa,Shekere,,C,hard,Instruments
-500,What is the lowest note on a guitar in standard tuning?,A2,D2,E2,,C,hard,Instruments
-501,Which mode matches the natural minor scale?,Aeolian,Dorian,Phrygian,,A,hard,Music Theory
-502,What is the interval of three whole tones called?,A perfect fourth,A tritone,A minor sixth,,B,hard,Music Theory
-503,How many sharps does the key of A major contain?,Three,Six sharps,Two,,C,hard,Music Theory
-504,What is the first beat of a measure called?,The downbeat,The upbeat,The backbeat,,A,hard,Music Theory
-505,What is a cadence ending on the dominant chord called?,A half cadence,A perfect cadence,A plagal cadence,,A,hard,Music Theory
-506,What is the relative minor of C major?,A minor,E minor,D minor,,B,hard,Music Theory
-507,What does the Italian term dolce mean?,Loudly,Quickly,Sweetly,,C,hard,Music Theory
-508,How many flats are in the key signature of F major?,One,Eight,Six flats,,A,hard,Music Theory
-509,What do we call the fifth degree of a major scale?,The mediant,The dominant,The subdominant,,B,hard,Music Theory
-510,In which time signature is a minuet written?,4/4,6/8,3/4,,C,hard,Music Theory
-511,Which pattern of steps builds a major scale?,Whole whole half whole whole whole half,Half whole whole whole half whole whole,Whole half whole whole half whole whole,,A,hard,Music Theory
-512,What does the marking fff indicate?,Fortississimo,Fortissimo,Fortepiano,,B,hard,Music Theory
-513,Who developed the twelve tone serial method?,Anton Webern,Arnold Schoenberg,Alban Berg,,B,hard,Music Theory
-514,What does the term arpeggio describe?,Two notes together,A rapid trill,Notes of a chord played in sequence,,C,hard,Music Theory
-515,What is the interval from C up to E?,A major third,A minor third,A diminished fifth,,A,hard,Music Theory
-516,In 6/8 time how many eighth notes fill one bar?,Ten,Six,Eleven,,B,hard,Music Theory
-517,What is the term for music without a key center?,Polytonality,Modality,Atonality,,C,hard,Music Theory
-518,What is an augmented fourth also known as?,A tritone,A perfect fifth,A diminished third,,A,hard,Music Theory
-519,What term describes a gradual slowing of tempo?,Accelerando,Rubato,Ritardando,,C,hard,Music Theory
-520,What is a repeated guitar pattern in rock called?,A bridge,A riff,A vamp,,B,hard,Music Theory
-521,What does bel canto describe?,A lyrical Italian singing style,A type of opera stage,A string technique,,A,hard,Music Theory
-522,How many movements does a typical classical symphony have?,Five movements,Three,Seven movements,,B,hard,Music Theory
-523,What is the term for a rapid alternation between two adjacent notes?,A mordent,A glissando,A trill,,C,hard,Music Theory
-524,Which clef places middle C on its center line?,The alto clef,The tenor clef,The soprano clef,,A,hard,Music Theory
-525,What is the weaving of independent melodies together called?,Counterpoint,Homophony,Monophony,,B,hard,Music Theory
-526,What does the marking sforzando indicate?,A soft ending,A quick run,A sudden strong accent,,C,hard,Music Theory
-527,Which intervals build a major triad above its root?,A major third then a minor third,A minor third then a major third,Two perfect fourths,,A,hard,Music Theory
-528,What does syncopation emphasize?,Offbeats and weak beats,Downbeats,Only the first beat,,B,hard,Music Theory
-529,Which major key has four sharps?,A major,B major,E major,,C,hard,Music Theory
-530,Which scale built entirely of whole steps appears in Debussy's Voiles?,The octatonic scale,The Lydian scale,The whole tone scale,,C,hard,Music Theory
-531,What is the main theme of a fugue called?,The subject,The countersubject,The episode,,A,hard,Music Theory
-532,What does the bottom number of a time signature indicate?,Which note value gets the beat,How fast to play,How loud to play,,B,hard,Music Theory
-533,Which era in music history followed the Baroque period?,The Classical era,The Romantic era,The Renaissance,,C,hard,Music Theory
-534,Delta blues comes from which region?,The Mississippi Delta,Kansas City,New Orleans,,A,hard,Genres & History
-535,Which instrument electrified the blues in Chicago?,The electric guitar,The banjo,The accordion,,A,hard,Genres & History
-536,Bluegrass draws heavily from which older tradition?,Appalachian folk,Mexican mariachi,Cajun zydeco,,B,hard,Genres & History
-537,Stax Records was based in which city?,Atlanta,Muscle Shoals,Memphis,,C,hard,Genres & History
-538,Which Nigerian star pioneered Afrobeat in the 1970s?,Fela Kuti,King Sunny Ade,Youssou N'Dour,,A,hard,Genres & History
-539,Highlife is a guitar based genre from which country?,Mali,Ghana,Senegal,,B,hard,Genres & History
-540,Whose Kingston studio invented the dub mix around 1972?,Coxsone Dodd,Duke Reid,King Tubby,,C,hard,Genres & History
-541,Which 19th century dance helped shape ragtime?,The cakewalk,The tango,The polka,,A,hard,Genres & History
-542,Tuvan throat singing comes from which region?,Mongolia,Siberia,Tibet,,B,hard,Genres & History
-543,Bossa nova grew from which Brazilian root?,Forro,Samba,Sertanejo,,B,hard,Genres & History
-544,Which band recorded the first jazz record in 1917?,King Oliver's Creole Jazz Band,Buddy Bolden's band,The Original Dixieland Jass Band,,C,hard,Genres & History
-545,What was payola?,Paying radio DJs to play records,Selling fake tickets,Bootlegging albums,,A,hard,Genres & History
-546,The Grand Ole Opry started in 1925 as what?,A vaudeville revue,A radio barn dance,A church choir festival,,B,hard,Genres & History
-547,Which technology made modern multitrack recording possible in the 1950s?,Vinyl discs,Wire spools,Magnetic tape,,C,hard,Genres & History
-548,Which festival launched Jimi Hendrix to US fame in 1967?,Monterey Pop,Newport Folk,Isle of Wight,,A,hard,Genres & History
-549,Cumbia originated along the Caribbean coast of which country?,Venezuela,Panama,Colombia,,C,hard,Genres & History
-550,What was the chitlin circuit?,A radio show,A network of venues open to Black performers,A record label,,B,hard,Genres & History
-551,The Roland TB 303 bass synth fueled which late 1980s genre?,Acid house,Euro disco,Synthwave,,A,hard,Genres & History
-552,Moombahton blends house music with which Caribbean rooted style?,Ska,Reggaeton,Soca,,B,hard,Genres & History
-553,Which band headlined the ill fated Altamont concert in 1969?,The Grateful Dead,Jefferson Airplane,The Rolling Stones,,C,hard,Genres & History
-554,Where did doo wop vocal groups typically form?,On city street corners,In church choirs only,In college bands,,A,hard,Genres & History
-555,Which DJ is famous for the quick mix theory?,Afrika Bambaataa,Grandmaster Flash,Kool Herc,,B,hard,Genres & History
-556,The Royal Albert Hall is in which city?,Liverpool,Birmingham,London,,C,hard,Genres & History
-557,The Nashville sound of the late 1950s smoothed which rougher country style?,Honky tonk,Gospel,Western swing,,A,hard,Genres & History
-558,The Bakersfield sound was a raw reaction against what?,The polished Nashville sound,Texas swing,Outlaw country,,B,hard,Genres & History
-559,Which 1979 record became the first commercially successful rap hit?,The Message,Planet Rock,Rapper's Delight,,C,hard,Genres & History
-560,Which song opened MTV on August 1 1981?,Thriller,Bills Bills Bills,Video Killed the Radio Star,,C,hard,Genres & History
-561,Who composed The Well Tempered Clavier?,J S Bach,Vivaldi,Telemann,,A,hard,Genres & History
-562,Who wrote Music for 18 Musicians?,Philip Glass,Steve Reich,Terry Riley,,B,hard,Genres & History
-563,Which 12th century abbess composed sacred chant?,Hildegard Knef,Eleanor of Aquitaine,Hildegard of Bingen,,C,hard,Genres & History
-564,Who is called the father of the string quartet?,Joseph Haydn,Mozart,Beethoven,,A,hard,Genres & History
-565,Who composed The Marriage of Figaro?,Wolfgang Amadeus Mozart,Verdi,Puccini,,A,hard,Genres & History
-566,Who wrote the opera Carmen?,Offenbach,Georges Bizet,Gounod,,B,hard,Genres & History
-567,Which metrics feed the Billboard Hot 100?,Radio only,Jukebox plays,Sales plus streaming plus airplay,,C,hard,Charts & Awards
-568,Which female artist has the most Hot 100 number ones?,Mariah Carey,Diana Ross,Pink,,A,hard,Charts & Awards
-569,Which 2019 single set the record of 19 weeks at number one?,Despacito,Old Town Road,One Sweet Day,,B,hard,Charts & Awards
-570,Which soundtrack holds the record for most weeks at number one on the Billboard 200?,Saturday Night Fever,The Bodyguard,West Side Story,,C,hard,Charts & Awards
-571,Which Grammy category honors a producer's yearly work?,Producer of the Year,Engineer of the Year,Remixer of the Year,,A,hard,Charts & Awards
-572,The Dove Awards recognize achievements in which genre?,Southern rock,Contemporary Christian music,Worship dance,,B,hard,Charts & Awards
-573,Which rap act won the first Grammy for rap performance in 1989?,Run DMC,DJ Jazzy Jeff and the Fresh Prince,Public Enemy,,B,hard,Charts & Awards
-574,Which awards honor Spanish and Portuguese language recordings?,The Billboard Latin Awards,The Lo Nuestro Awards,The Latin Grammys,,C,hard,Charts & Awards
-575,Which song topped Billboard's 2021 all time Hot 100 list?,Blinding Lights,Rolling in the Deep,Uptown Funk,,A,hard,Charts & Awards
-576,Which record label did the Beatles found?,Yellow Submarine Records,Apple Records,Parlophone,,B,hard,Charts & Awards
-577,Who won the first Album of the Year Grammy in 1959?,Henry Mancini,Ella Fitzgerald,Frank Sinatra,,C,hard,Charts & Awards
-578,Which Italian song won the first Record of the Year Grammy?,Nel Blu Dipinto Di Blu,O Sole Mio,Con Te Partiro,,A,hard,Charts & Awards
-579,Which London venue hosted Live Aid in 1985?,Royal Albert Hall,The O2 Arena,Wembley Stadium,,C,hard,Charts & Awards
-580,Which 1985 supergroup recorded We Are the World?,Band Aid,USA for Africa,Northern Lights,,B,hard,Charts & Awards
-581,How many Grammys did the album 21 win in 2012?,Six,Eighteen,Twenty,,A,hard,Charts & Awards
-582,Which song did Billboard name the top hit of the 2000s decade?,Crazy in Love,We Belong Together,Hey Ya,,B,hard,Charts & Awards
-583,Which rapper won the Pulitzer Prize for music in 2018?,Jay-Z,Nas,Kendrick Lamar,,C,hard,Charts & Awards
-584,What was the official name of the 1969 Woodstock festival?,An Aquarian Exposition,The Woodstock Music Fair,The Bethlehem Music and Art Festival,,A,hard,Charts & Awards
-585,Which album won the 1971 Album of the Year Grammy?,Abbey Road,Bridge Over Troubled Water,Deja Vu,,B,hard,Charts & Awards
-586,In which year did Spotify launch its service?,2005,2011,2008,,C,hard,Charts & Awards
-587,Which artist has the most Grammy nominations of all time?,Beyonce,Paul McCartney,Stevie Wonder,,A,hard,Charts & Awards
-588,Which singer won Eurovision in both 1980 and 1987?,Cliff Richard,Johnny Logan,Dana,,B,hard,Charts & Awards
-589,What defined the MTV Unplugged series?,Electric solos,Studio outtakes,Acoustic performances,,C,hard,Charts & Awards
-590,Which singer had the first ever UK number one single in 1952?,Bing Crosby,Frank Sinatra,Al Martino,,C,hard,Charts & Awards
-591,In which year did the Rock and Roll Hall of Fame hold its first ceremony?,1986,1984,1988,,A,hard,Charts & Awards
-592,Which Dire Straits album was among the first million selling CDs?,Love Over Gold,Brothers in Arms,Making Movies,,B,hard,Charts & Awards
-593,Which hip hop album won the Album of the Year Grammy in 1999?,Illmatic,The Score,The Miseducation of Lauryn Hill,,C,hard,Charts & Awards
-594,What was the Grammy award originally called?,The Gramophone Award,The Phonograph Prize,The Golden Needle,,A,hard,Charts & Awards
-595,Which song was the first number one on the Hot 100 in 1958?,Poor Little Fool,Tutti Frutti,Great Balls of Fire,,A,hard,Charts & Awards
-596,The Ivor Novello Awards celebrate which craft?,Album artwork,Songwriting and composing,Live promotion,,B,hard,Charts & Awards
-597,Which city hosts the SXSW music festival?,Denver,Seattle,Austin,,C,hard,Charts & Awards
-598,Who won the first Best New Artist Grammy in 1960?,Bob Newhart,Bobby Darin,Elvis Presley,,A,hard,Charts & Awards
-599,After whom is MTV's Video Vanguard Award named?,Whitney Houston,Michael Jackson,David Bowie,,B,hard,Charts & Awards
-600,Which Michael Jackson video broke MTV's early rotation barriers in 1983?,Rock With You,Beat It,Billie Jean,,C,hard,Charts & Awards
-601,Which Wrecking Crew drummer anchored Pet Sounds?,Hal Blaine,Earl Palmer,Jim Keltner,Frank Capp,A,expert,Artists & Bands
-602,Who played electric bass on the Byrds' Mr Tambourine Man?,Larry Knechtel,Carol Kaye,Jerry Scheff,Max Bennett,B,expert,Artists & Bands
-603,Which bassist played on the Supremes' hits for Motown?,Uriel Jones,Bob Babbitt,James Jamerson,Tony Newton,C,expert,Artists & Bands
-604,Which session drummer played the intro on the Ronettes' Be My Baby?,Buddy Saltzman,Al Jackson Jr,Sandy Nelson,Hal Blaine,D,expert,Artists & Bands
-605,Which bassist played on Steely Dan's Aja?,Chuck Rainey,Bernard Edwards,Marcus Miller,Will Lee,A,expert,Artists & Bands
-606,Which James Brown drummer created the Funky Drummer break?,Jabo Starks,Clyde Stubblefield,John Starks,Melvin Parker,B,expert,Artists & Bands
-607,Who engineered Pink Floyd's Dark Side of the Moon?,Bob Ludwig,James Guthrie,Alan Parsons,Bernie Grundman,C,expert,Artists & Bands
-608,Who played the guitar solo on Steely Dan's Kid Charlemagne?,Dean Parks,Steve Khan,Jay Graydon,Larry Carlton,D,expert,Artists & Bands
-609,Which drummer anchored the MGs behind Green Onions?,Steve Cropper,Isaac Hayes,Al Jackson Jr,Lewie Steinberg,C,expert,Artists & Bands
-610,Which Muscle Shoals guitarist played the riff on Respect?,Duane Allman,Eddie Hinton,Travis Wammack,Jimmy Johnson,D,expert,Artists & Bands
-611,Who played the organ part on Like a Rolling Stone?,Al Kooper,Garth Hudson,Booker T Jones,Billy Preston,A,expert,Artists & Bands
-612,Which session drummer played on Bridge Over Troubled Water?,Hal Blaine,Jim Gordon,Russ Kunkel,Eddie Bayers,A,expert,Artists & Bands
-613,Which guest keyboardist joined the Beatles on Get Back?,Booker T. Jones,Nicky Hopkins,Leon Russell,Gary Brooker,B,expert,Artists & Bands
-614,Which Motown bassist laid down What's Going On in one take?,Carol Kaye,Ralphe Armstrong,James Jamerson,Chuck Rainey,C,expert,Artists & Bands
-615,Which guitarist played the solo on Michael Jackson's Beat It?,Steve Lukather,Slash,Nile Rodgers,Eddie Van Halen,D,expert,Artists & Bands
-616,Who arranged Phil Spector's wall of sound sessions?,Jack Nitzsche,Gene Page,Barry White,Van Dyke Parks,A,expert,Artists & Bands
-617,Which keyboardist from the Crusaders played on many soul sessions?,Joe Zawinul,Joe Sample,Chick Corea,George Duke,B,expert,Artists & Bands
-618,Which jazz saxophonist played the flute solo on California Dreamin?,Paul Horn,Bud Shank,Herbie Mann,Jeremy Steig,B,expert,Artists & Bands
-619,Which drummer played on Carole King's Tapestry?,Hal Blaine,Steve Gadd,Russ Kunkel,Andy Newmark,C,expert,Artists & Bands
-620,Which bassist was part of the Muscle Shoals Swampers?,Roger Hawkins,Jimmy Johnson,Barry Beckett,David Hood,D,expert,Artists & Bands
-621,Who produced Nirvana's Nevermind?,Butch Vig,Steve Albini,Andy Wallace,Brendan OBrien,A,expert,Artists & Bands
-622,Who mixed Nirvana's Nevermind?,Brendan O Brien,Andy Wallace,Terry Date,Bob Rock,B,expert,Artists & Bands
-623,Who recorded Nirvana's In Utero?,Adam Kasper,Butch Vig,Steve Albini,Garth Richardson,C,expert,Artists & Bands
-624,Who produced Billie Eilish's When We All Fall Asleep Where Do We Go?,Jack Antonoff,Greg Kurstin,Ricky Reed,Finneas,D,expert,Artists & Bands
-625,Which producer co-wrote Rolling in the Deep with Adele?,Paul Epworth,Max Martin,Shellback,Dan Wilson,A,expert,Artists & Bands
-626,Who co-produced Amy Winehouse's Back to Black with Mark Ronson?,Salaam Remi,Timbaland,The Neptunes,Kanye West,B,expert,Artists & Bands
-627,Which producer formed the Neptunes with Chad Hugo?,Chad Hugo,Bryan Michael Cox,Pharrell Williams,The-Dream,C,expert,Artists & Bands
-628,Who produced Usher's 2004 hit Yeah?,Scott Storch,Bryan-Michael Cox,Rodney Jerkins,Lil Jon,D,expert,Artists & Bands
-629,Who produced Outkast's debut album?,Mannie Fresh,DJ Toomp,Organized Noize,DJ Paul,C,expert,Artists & Bands
-630,Who produced Missy Elliott's futuristic 1997 debut?,Jazze Pha,Dallas Austin,Mike WiLL Made-It,Timbaland,D,expert,Artists & Bands
-631,Who engineered and mixed Michael Jackson's Thriller?,Bruce Swedien,Bob Clearmountain,Hugh Padgham,Bill Price,A,expert,Artists & Bands
-632,Who produced the Clash's London Calling?,Sandy Pearlman,Guy Stevens,Martin Rushent,Nigel Gray,A,expert,Artists & Bands
-633,Who produced the Pixies' Surfer Rosa?,Gil Norton,Steve Albini,Gary Smith,Paul Kolderie,B,expert,Artists & Bands
-634,Which production team built Public Enemy's wall of noise?,The Dust Brothers,The Beatnuts,The Bomb Squad,The Hitmen,C,expert,Artists & Bands
-635,Which unlisted track closes Nirvana's Nevermind?,Something in the Way,Territorial Pissings,Sifting,Endless Nameless,D,expert,Songs & Albums
-636,Which song opens Abbey Road?,Come Together,Something,Maxwell's Silver Hammer,Octopus's Garden,A,expert,Songs & Albums
-637,Which single was released with Revolution as its B-side?,Get Back,Hey Jude,Lady Madonna,The Ballad of John and Yoko,B,expert,Songs & Albums
-638,Which Queen song was the B-side of Bohemian Rhapsody?,You're My Best Friend,I'm in Love with My Car,Death on Two Legs,Seaside Rendezvous,B,expert,Songs & Albums
-639,Which is the longest track on Dark Side of the Moon?,Time,Breathe,Us and Them,Brain Damage,C,expert,Songs & Albums
-640,Who sang the wordless vocals on The Great Gig in the Sky?,Doris Troy,Madeline Bell,Venetta Fields,Clare Torry,D,expert,Songs & Albums
-641,What is the opening track of Steely Dan's Aja?,Black Cow,Aja,Deacon Blues,Peg,A,expert,Songs & Albums
-642,Who plays the saxophone solo on Aja?,Pete Christlieb,Wayne Shorter,Tom Scott,Michael Brecker,B,expert,Songs & Albums
-643,On which Prince album did he play every instrument himself?,Prince,Dirty Mind,For You,Controversy,C,expert,Songs & Albums
-644,Which Prince single was his first Hot 100 number one?,Little Red Corvette,I Wanna Be Your Lover,Let's Go Crazy,When Doves Cry,D,expert,Songs & Albums
-645,Which Prince album launched the Paisley Park label?,Around the World in a Day,Purple Rain,Parade,Lovesexy,A,expert,Songs & Albums
-646,What was the name of Prince's band on the Purple Rain tour?,The New Power Generation,The Revolution,3rdeyegirl,The Time,B,expert,Songs & Albums
-647,Which 1986 album accompanied Prince's second film?,Around the World in a Day,The Gold Experience,Parade,Batman,C,expert,Songs & Albums
-648,Under what pen name did Prince write Manic Monday?,Jamie Starr,Alexander Nevermind,Camille,Christopher,D,expert,Songs & Albums
-649,Which Iggy Pop album recorded in Berlin features Bowie on keyboards?,Lust for Life,New Values,The Idiot,Soldier,C,expert,Songs & Albums
-650,Which David Bowie album came out two days before his death?,The Next Day,Reality,Heathen,Blackstar,D,expert,Songs & Albums
-651,Which song closes Stevie Wonder's Songs in the Key of Life?,Another Star,As,Sir Duke,I Wish,A,expert,Songs & Albums
-652,Which 1963 live single made Stevie Wonder a star at thirteen?,Fingertips Part 2,Uptight,For Once in My Life,Signed Sealed Delivered,A,expert,Songs & Albums
-653,Which double LP did Stevie Wonder record for a 1979 film?,Fulfillingness First Finale,Journey Through the Secret Life of Plants,Talking Book,Music of My Mind,B,expert,Songs & Albums
-654,Which track opens Marvin Gaye's What's Going On?,Mercy Mercy Me,Inner City Blues,What's Going On,God Is Love,C,expert,Songs & Albums
-655,At which Detroit studio was What's Going On recorded?,Motown Recording Studios,United Sound Systems,Golden World,Hitsville USA,D,expert,Songs & Albums
-656,Which song was Elvis Presley's first single at Sun?,That's All Right,Good Rockin Tonight,Mystery Train,Baby Let's Play House,A,expert,Songs & Albums
-657,What was the B-side of That's All Right?,Harbor Lights,Blue Moon of Kentucky,I Love You Because,My Happiness,B,expert,Songs & Albums
-658,Which song shared Ritchie Valens' double sided hit La Bamba?,Come On Let's Go,Donna,Ooh My Head,Framed,B,expert,Songs & Albums
-659,At which Iowa ballroom did Buddy Holly play his final show?,The Winter Dance Party,The Armory,The Surf Ballroom,The Moondog Coronation Ball,C,expert,Songs & Albums
-660,Who died in the 1959 plane crash with Buddy Holly and Ritchie Valens?,Eddie Cochran,Gene Vincent,Johnny Burnette,The Big Bopper,D,expert,Songs & Albums
-661,Which song was the B-side of Like a Rolling Stone?,Gates of Eden,Mr Tambourine Man,It's All Over Now Baby Blue,Subterranean Homesick Blues,A,expert,Songs & Albums
-662,On which album does Like a Rolling Stone appear?,Bringing It All Back Home,Highway 61 Revisited,Blonde on Blonde,Another Side of Bob Dylan,B,expert,Songs & Albums
-663,What was Bob Dylan's 1965 1966 touring band later renamed?,The Hawks,The Crackers,The Band,The Flying Burrito Brothers,C,expert,Songs & Albums
-664,In which year did Bob Dylan go electric at Newport?,1964,1963,1962,1965,D,expert,Songs & Albums
-665,What was the Band's debut album called?,Music from Big Pink,The Band,Stage Fright,Northern Lights Southern Cross,A,expert,Songs & Albums
-666,Which classic song did the Band record at the Big Pink house?,Up on Cripple Creek,The Weight,Ophelia,It Makes No Difference,B,expert,Songs & Albums
-667,What was the Band's 1976 farewell concert called?,The Big Easy,The Final Winter,The Last Waltz,The Last Picture Show,C,expert,Songs & Albums
-668,Which model was Hendrix's Woodstock guitar?,Gibson SG,Les Paul,Gretsch White Falcon,Fender Stratocaster,D,expert,Instruments
-669,Who built the Octavia fuzz for Jimi Hendrix?,Jim Dunlop,Bob Bradshaw,Roger Mayer,Mike Fuller,C,expert,Instruments
-670,Which amp brand did Hendrix famously use?,Fender,Vox,Hiwatt,Marshall,D,expert,Instruments
-671,Which guitarist sold the 1959 Les Paul called Greeny to Kirk Hammett?,Gary Moore,Peter Green,Joe Perry,Rick Nielsen,A,expert,Instruments
-672,In which year did Fender introduce the Stratocaster?,1954,1950,1958,1961,A,expert,Instruments
-673,Who founded the Fender company?,Orville Gibson,Leo Fender,Adolph Rickenbacker,Gretsch,B,expert,Instruments
-674,What was the Telecaster originally called?,The Esquire,The Nocaster,The Broadcaster,The Deluxe,C,expert,Instruments
-675,In which year did Gibson launch the Les Paul model?,1948,1955,1959,1952,D,expert,Instruments
-676,What does PAF stand for on vintage Gibson pickups?,Patent Applied For,Performance Audio Filter,Pickup Adjusted Frequency,Professional Amplified Fidelity,A,expert,Instruments
-677,What alloy do premium cymbals use?,Brass,B20 bronze,Nickel silver,Titanium,B,expert,Instruments
-678,What is the most common snare drum diameter?,12 inch,14 inch,16 inch,13 inch,B,expert,Instruments
-679,Why did traditional grip develop?,For jazz brushes,For double bass speed,For drummers carrying slung marching drums,For studio volume control,C,expert,Instruments
-680,What is the raised center of a cymbal called?,The bow,The shoulder,The lip,The bell,D,expert,Instruments
-681,Which drum machine powered 1980s hits like Thriller?,The LinnDrum,The TR 808,The TR 909,The DMX,A,expert,Instruments
-682,Which Roland machine gave hip hop its booming sub kick?,The SP 1200,The TR 808,The Simmons SDS V,The RX5,B,expert,Instruments
-683,Which grip holds both sticks the same way?,French grip,Traditional grip,Matched grip,Reverse grip,C,expert,Instruments
-684,Which Italian maker builds the largest concert grand piano?,Bosendorfer,Bechstein,Petrof,Fazioli,D,expert,Instruments
-685,Which maker's grand extends to 97 keys?,Bosendorfer,Steinway,Yamaha,Bluthner,A,expert,Instruments
-686,Who invented the piano around 1700?,Gottfried Silbermann,Bartolomeo Cristofori,Sebastien Erard,John Broadwood,B,expert,Instruments
-687,Who invented the double escapement action?,Cristofori,Johannes Zumpe,Sebastien Erard,Ignaz Bosendorfer,C,expert,Instruments
-688,Which rarely played Stradivarius is nicknamed the Messiah?,Il Cremonese,The Lady Blunt,The Hammer,The Messiah,D,expert,Instruments
-689,What tonewood is used for a violin's top?,Maple,Ebony,Spruce,Rosewood,C,expert,Instruments
-690,What were Baroque violin strings made from?,Silk,Fluorocarbon,Silver wire,Sheep gut,D,expert,Instruments
-691,Which wooden strut runs under a violin's bass side top?,The bass bar,The sound post,The purfling,The fingerboard,A,expert,Instruments
-692,What is a stringed instrument craftsman called?,A luthier,A lutenist,A fiddler,A bowyer,A,expert,Instruments
-693,What is the term for plucked strings on a violin?,Col legno,Pizzicato,Spiccato,Sul ponticello,B,expert,Instruments
-694,What does the direction col legno ask players to do?,Mute the strings,Slide between notes,Strike strings with the stick,Pluck rapidly,C,expert,Instruments
-695,What is the first chair violinist of an orchestra called?,The principal cellist,The kapellmeister,The primarius,The concertmaster,D,expert,Instruments
-696,What do horn players call muting with the hand in the bell?,Hand stopping,Hand slapping,Bell damping,Fist placement,A,expert,Instruments
-697,What makes a French horn double?,Two bells,Two tubing lengths in one instrument,Two mouthpieces,Two players,B,expert,Instruments
-698,What is a trombone's F attachment for?,Raising pitch,Adding tubing to reach lower notes,Muting,Tuning the slide,B,expert,Instruments
-699,What makes a flute transverse?,It has reeds,It is metal,It is held sideways,It has keys only,C,expert,Instruments
-700,Which recorder is pitched above the soprano?,The alto,The tenor,The treble,The sopranino,D,expert,Instruments
-701,Which scale degree roots the Neapolitan chord?,Flattened second,Raised fourth,Flattened seventh,Mediant,A,expert,Music Theory
-702,Which mode raises the fourth degree of a major scale?,Hypophrygian,Lydian,Hypoaeolian,Hypolocrian,B,expert,Music Theory
-703,Which mode lowers the second degree of a major scale?,Ionian,Hypoionian,Phrygian,Enigmatic mode,C,expert,Music Theory
-704,Which mode has a natural sixth with a minor third?,Lydian,Ultralocrian,Mixolydian,Dorian,D,expert,Music Theory
-705,Which mode lacks a perfect fifth?,Locrian,Melodic minor,Harmonic minor,Whole tone,A,expert,Music Theory
-706,Which minor form raises the seventh degree?,The natural minor,The harmonic minor,The Dorian mode,The Phrygian mode,B,expert,Music Theory
-707,The augmented sixth chord typically resolves to which harmony?,The tonic,The submediant,The dominant,The leading tone,C,expert,Music Theory
-708,What is a shared chord that eases a key change called?,A passing chord,A suspended chord,A borrowed chord,A pivot chord,D,expert,Music Theory
-709,What does enharmonic describe?,Pitches an octave apart,Microtonal pitches,Pitches that sound the same with different names,Doubled pitches,C,expert,Music Theory
-710,What frequency ratio defines an octave?,3:2,4:3,5:4,2:1,D,expert,Music Theory
-711,Which ratio defines a just perfect fifth?,3:2,9:8,16:9,45:32,A,expert,Music Theory
-712,Which ratio defines a just major third?,5:4,6:5,81:64,16:15,A,expert,Music Theory
-713,Which tradition uses quarter tone intervals?,Indian raga,Arabic maqam,Gregorian chant,Balinese gamelan,B,expert,Music Theory
-714,What is the first note of Indian solfege?,Re,Pa,Sa,Ma,C,expert,Music Theory
-715,What is the Indian term for rhythmic cycles?,Raga,Shruti,Sutra,Tala,D,expert,Music Theory
-716,What is Japan's ancient court music called?,Gagaku,Kagura,Minyo,Noh theater music,A,expert,Music Theory
-717,Which gamelan tuning uses five uneven pitches?,Slendro,Pelog,Kecak,Wayang,B,expert,Music Theory
-718,What metal are classic gamelan keys made from?,Iron,Bronze,Bell metal,Copper,B,expert,Music Theory
-719,Which performance practice features a leader answered by a chorus?,Hocket,Ostinato,Call and response,Isorhythm,C,expert,Music Theory
-720,Which technique splits a melody between voices note by note?,Stretto,Cantus firmus,Soggetto cavato,Hocket,D,expert,Music Theory
-721,Which medieval technique repeats a rhythmic pattern across a tenor?,Isorhythm,Talea,Organum,Faburden,A,expert,Music Theory
-722,What is the earliest form of European polyphony called?,Conductus,Organum,Burden,Discant,B,expert,Music Theory
-723,Who wrote the treatise naming the Ars Nova?,Guillaume de Machaut,Leonin,Philippe de Vitry,Perotin,C,expert,Music Theory
-724,Which Notre Dame composer compiled the Magnus Liber?,Philippe de Vitry,Johannes Ciconia,Francesco Landini,Leonin,D,expert,Music Theory
-725,Which blind Italian medieval composer was famous as an organist?,Francesco Landini,Guillaume Dufay,John Dunstaple,Gilles Binchois,A,expert,Music Theory
-726,Which composer led the Burgundian school?,Johannes Ockeghem,Guillaume Dufay,Josquin des Prez,Jacob Obrecht,B,expert,Music Theory
-727,Which Franco Flemish composer is called the prince of music?,Palestrina,Orlando di Lasso,Josquin des Prez,Cipriano de Rore,C,expert,Music Theory
-728,Which council prompted reform of church music around 1560?,The First Vatican Council,The Synod of Dort,The Council of Nicaea,The Council of Trent,D,expert,Music Theory
-729,Which Palestrina mass is linked to saving polyphony?,Missa de Beata Virgine,Missa L'homme arme,Missa Papae Marcelli,Missa Inviolata,C,expert,Music Theory
-730,What did Monteverdi mean by prima pratica?,His own new style,Venetian polychoral style,The papal choir style,The Palestrina style of strict counterpoint,D,expert,Music Theory
-731,Which style did Monteverdi champion as seconda pratica?,Text driven melody over strict rules,Strict canon,Pure instrumentals,Equal temperament,A,expert,Music Theory
-732,Which composer founded the Venetian school at St Mark's?,Adrian Willaert,Andrea Gabrieli,Giovanni Gabrieli,Claudio Monteverdi,A,expert,Music Theory
-733,Whose Sonata pian e forte helped pioneer printed dynamics?,Claudio Merulo,Giovanni Gabrieli,Heinrich Schutz,Michael Praetorius,B,expert,Music Theory
-734,Which Harlem club birthed bebop jam sessions?,The Cotton Club,Birdland,Minton's Playhouse,The Village Vanguard,C,expert,Genres & History
-735,Which saxophonist was nicknamed Bird?,Johnny Hodges,Paul Desmond,Jackie McLean,Charlie Parker,D,expert,Genres & History
-736,Which Parker tune references his nickname directly?,Yardbird Suite,Ko Ko,Now's the Time,Billie's Bounce,A,expert,Genres & History
-737,Which guitarist amplified jazz with Benny Goodman before bebop?,Oscar Moore,Charlie Christian,Django Reinhardt,Tal Farlow,B,expert,Genres & History
-738,Which hand injury did Django Reinhardt overcome?,A broken wrist,Two burned fingers on his left hand,A shattered right thumb,A cut tendon,B,expert,Genres & History
-739,What was Django Reinhardt's famous group named?,The Paris String Trio,The Manouche Ensemble,The Quintette du Hot Club de France,The Hot Five,C,expert,Genres & History
-740,Which soprano sax pioneer led early jazz in the 1920s?,Bud Freeman,Pee Wee Russell,Frank Trumbauer,Sidney Bechet,D,expert,Genres & History
-741,Who is credited as jazz's first great soloist?,Louis Armstrong,Buddy Bolden,King Oliver,Bix Beiderbecke,A,expert,Genres & History
-742,Which early cornet king was never recorded?,Mutt Carey,Buddy Bolden,Freddie Keppard,Bunk Johnson,B,expert,Genres & History
-743,Which Armstrong ensemble recorded West End Blues in 1928?,The Hot Seven,The Savoy Ballroom Five,The Hot Five,The Dirty Dozen,C,expert,Genres & History
-744,Which Ellington piece revived his career at Newport in 1956?,Take the A Train,Caravan,Mood Indigo,Diminuendo and Crescendo in Blue,D,expert,Genres & History
-745,Who wrote Take the A Train?,Billy Strayhorn,Fletcher Henderson,Ben Webster,Juan Tizol,A,expert,Genres & History
-746,Which trombonist co wrote Caravan?,Barney Bigard,Juan Tizol,Tricky Sam Nanton,Lawrence Brown,B,expert,Genres & History
-747,Which New Jersey town was Count Basie from?,Asbury Park,Newark,Red Bank,Trenton,C,expert,Genres & History
-748,What was the Basie rhythm section nicknamed?,The Kansas City Stompers,The Big Eight,The Rhythm Kings,The All American Rhythm Section,D,expert,Genres & History
-749,Which tenor saxophonist was called Pres?,Herschel Evans,Don Byas,Lester Young,Paul Gonsalves,C,expert,Genres & History
-750,Which saxophonist faced Lester Young in Kansas City cutting contests?,Coleman Hawkins,Buddy Tate,Chu Berry,Herschel Evans,D,expert,Genres & History
-751,Who gave Billie Holiday the name Lady Day?,Lester Young,John Hammond,Teddy Wilson,Benny Goodman,A,expert,Genres & History
-752,Which legendary talent scout promoted Billie Holiday early?,John Hammond,Milt Gabler,Ahmet Ertegun,Norman Granz,A,expert,Genres & History
-753,Which label released Strange Fruit in 1939?,Vocalion,Commodore,Columbia,Decca,B,expert,Genres & History
-754,Who wrote the poem behind Strange Fruit?,Langston Hughes,Countee Cullen,Abel Meeropol,Sterling Brown,C,expert,Genres & History
-755,Which nursery rhyme song made Ella Fitzgerald a star?,Shiny Stockings,Airmail Special,Undecided,A Tisket A Tasket,D,expert,Genres & History
-756,Which drummer bandleader discovered and led Ella Fitzgerald?,Chick Webb,Gene Krupa,Jo Jones,Kenny Clarke,A,expert,Genres & History
-757,Which touring concert series did Norman Granz found?,The Newport Jazz Festival,Jazz at the Philharmonic,Birdland on Tour,Carnegie Jazz Nights,B,expert,Genres & History
-758,Which record label did Norman Granz launch for Ella's songbooks?,Blue Note,Verve,Prestige,Riverside,B,expert,Genres & History
-759,Who founded Blue Note Records with Francis Wolff?,Creed Taylor,Bob Thiele,Alfred Lion,Blue Mitchell,C,expert,Genres & History
-760,Who designed Blue Note's iconic 1950s 1960s covers?,Paul Bacon,Alex Steinweiss,David Stone Martin,Reid Miles,D,expert,Genres & History
-761,Which engineer recorded the classic Blue Note sound?,Rudy Van Gelder,Tom Dowd,Phil Ramone,Bill Putnam,A,expert,Genres & History
-762,In which New Jersey town did Van Gelder move his studio in 1959?,Teaneck,Englewood Cliffs,Montclair,Hoboken,B,expert,Genres & History
-763,Which label issued A Love Supreme?,Verve,Atlantic,Impulse,Candid,C,expert,Genres & History
-764,Which pianist anchored Coltrane's classic quartet?,Duke Pearson,Cedar Walton,Tommy Flanagan,McCoy Tyner,D,expert,Genres & History
-765,Which drummer powered the Coltrane quartet?,Elvin Jones,Roy Haynes,Art Blakey,Max Roach,A,expert,Genres & History
-766,Which bassist completed the Coltrane quartet?,Reggie Workman,Jimmy Garrison,Paul Chambers,Ron Carter,B,expert,Genres & History
-767,Which 2011 album logged 24 weeks at number one?,25,Red,21,Teenage Dream,C,expert,Charts & Awards
-768,Which act charted the most Hot 100 entries ever?,Michael Jackson,Taylor Swift,Lil Wayne,The Glee Cast,D,expert,Charts & Awards
-769,Which artist holds the UK record for most number one albums?,Britney Spears,ABBA,The Beatles,Take That,C,expert,Charts & Awards
-770,Which album topped the US chart for 24 weeks in 1978?,Rumours,Grease,Bridge Over Troubled Water,Saturday Night Fever,D,expert,Charts & Awards
-771,Which was the first music video on YouTube to hit a billion views?,Gangnam Style,Bad Romance,Waka Waka,Call Me Maybe,A,expert,Charts & Awards
-772,Which rapper became the first to claim 27 Hot 100 spots in one week in 2021?,Drake,Travis Scott,J Cole,Future,A,expert,Charts & Awards
-773,Which ten minute song hit number one in 2021?,American Pie,All Too Well,Hey Jude,Do They Know It's Christmas,B,expert,Charts & Awards
-774,Which 1965 novelty hit is the shortest number one in Hot 100 history?,Itsy Bitsy Teenie Weenie Yellow Polkadot Bikini,Sugar Sugar,I'm Henry the Eighth I Am,Telstar,C,expert,Charts & Awards
-775,Which 1994 holiday song hit number one in two different decades?,Last Christmas,Jingle Bell Rock,Rockin Around the Christmas Tree,All I Want for Christmas Is You,D,expert,Charts & Awards
-776,Which 1995 single was the first ever to debut at number one?,You Are Not Alone,Fantasy,Butterfly,Always Be My Baby,A,expert,Charts & Awards
-777,Which collaboration held the 16 week number one record from 1995?,I Will Always Love You,One Sweet Day,Endless Love,Because I Love You,B,expert,Charts & Awards
-778,Which 2017 Latin hit tied the sixteen week number one mark?,Mi Gente,Despacito,Bailando,Gasolina,B,expert,Charts & Awards
-779,Which Elton John album first debuted at number one in 1975?,Goodbye Yellow Brick Road,Rock of the Westies,Captain Fantastic and the Brown Dirt Cowboy,Honky Chateau,C,expert,Charts & Awards
-780,Which tribute single was the fastest selling single ever?,We Are the World,Sun City,Voices That Care,Candle in the Wind 1997,D,expert,Charts & Awards
-781,Which Kendrick Lamar album won the Pulitzer Prize?,DAMN,To Pimp a Butterfly,good kid mAAd city,Mr Morale and the Big Steppers,A,expert,Charts & Awards
-782,Which network ran Total Request Live from Times Square?,MuchMusic,MTV,BET,Fuse,B,expert,Charts & Awards
-783,Who hosted Total Request Live?,Ananda Lewis,Damien Fahey,Carson Daly,La La Anthony,C,expert,Charts & Awards
-784,Which Drake album set the 2016 one week streaming record?,Scorpion,Take Care,Nothing Was the Same,Views,D,expert,Charts & Awards
-785,Which song did Billboard crown the number one Hot 100 hit of the 2010s?,Uptown Funk,Blinding Lights,Shape of You,Party Rock Anthem,A,expert,Charts & Awards
-786,Which song leads Spotify's all time streaming chart?,Dance Monkey,Blinding Lights,One Dance,Get Lucky,B,expert,Charts & Awards
-787,Which 2022 album set Spotify's first day streaming record?,1989 Taylor's Version,Red Taylor's Version,Midnights,Folklore,C,expert,Charts & Awards
-788,Which artist topped Spotify's yearly most streamed list in 2024?,Bad Bunny,The Weeknd,Ariana Grande,Taylor Swift,D,expert,Charts & Awards
-789,Which K pop act first reached number one on the Hot 100?,Blackpink,Stray Kids,BTS,Twice,C,expert,Charts & Awards
-790,Which BTS song became their first Hot 100 number one?,Butter,Boy With Luv,Life Goes On,Dynamite,D,expert,Charts & Awards
-791,Which K pop girl group headlined Coachella in 2023?,Blackpink,2NE1,NewJeans,ITZY,A,expert,Charts & Awards
-792,Which Bad Bunny album led global streams in 2022?,Un Verano Sin Ti,YHLQMDLG,El Ultimo Tour Del Mundo,Nadie Sabe Lo Que Va a Pasar Manana,A,expert,Charts & Awards
-793,Which rhythm underpins reggaeton?,The tresillo,The dembow,The clave,The montuno,B,expert,Charts & Awards
-794,Which artist is widely called the King of Reggaeton?,Don Omar,Ivy Queen,Daddy Yankee,Tego Calderon,C,expert,Charts & Awards
-795,Which 2017 hit was the first mostly Spanish number one since the Macarena?,La Bicicleta,Danza Kuduro,Soy Yo,Despacito,D,expert,Charts & Awards
-796,Which duo recorded Macarena?,Los del Rio,Estopa,Amaral,Jarabe de Palo,A,expert,Charts & Awards
-797,Which Rosalia album won the 2018 Latin Grammy for Album of the Year?,Motomami,El Mal Querer,Sirope,Aute Cuture,B,expert,Charts & Awards
-798,Who joined Rosalia on Con Altura?,Ozuna,J Balvin,Maluma,Farruko,B,expert,Charts & Awards
-799,Who won the first Grammy for Best African Music Performance in 2024?,Burna Boy,Ayra Starr,Tyla,Davido,C,expert,Charts & Awards
-800,Which South African house genre flavors Water?,Gqom,Kwaito,Afroswing,Amapiano,D,expert,Charts & Awards
-801,Who was the Beatles' original drummer before Ringo Starr,,,,,Pete Best,extreme,Artists & Bands
-802,Who co founded Chess Records alongside Leonard Chess,,,,,Phil Chess,extreme,Artists & Bands
-803,Which drummer was Motown's main session drummer of the 1960s,,,,,Benny Benjamin,extreme,Artists & Bands
-804,Which Wrecking Crew drummer claimed 40 number one hits,,,,,Hal Blaine,extreme,Artists & Bands
-805,Which guitarist replaced Brian Jones in the Rolling Stones,,,,,Mick Taylor,extreme,Artists & Bands
-806,Who played the lead guitar solo on the Beatles' Taxman,,,,,Paul McCartney,extreme,Artists & Bands
-807,Who designed the Rolling Stones' tongue logo,,,,,John Pasche,extreme,Artists & Bands
-808,Who closed the Woodstock festival in 1969,,,,,Jimi Hendrix,extreme,Artists & Bands
-809,Who sang for both Free and Bad Company,,,,,Paul Rodgers,extreme,Artists & Bands
-810,Which drummer co-founded Cream with Eric Clapton,,,,,Ginger Baker,extreme,Artists & Bands
-811,Who was Jerry Garcia's lyricist partner in the Grateful Dead,,,,,Robert Hunter,extreme,Artists & Bands
-812,Which singer left the Supremes in 1970 to go solo,,,,,Diana Ross,extreme,Artists & Bands
-813,Which bassist played in the Rolling Stones from 1962 to 1993,,,,,Bill Wyman,extreme,Artists & Bands
-814,Who was Toto's original lead singer,,,,,Bobby Kimball,extreme,Artists & Bands
-815,Which Gibson president designed the Flying V,,,,,Ted McCarty,extreme,Artists & Bands
-816,Who engineered the Beatles' Sgt Pepper sessions,,,,,Geoff Emerick,extreme,Artists & Bands
-817,Who played piano on the Rolling Stones' Sympathy for the Devil,,,,,Nicky Hopkins,extreme,Artists & Bands
-818,Who managed the Rolling Stones from 1963 to 1967,,,,,Andrew Loog Oldham,extreme,Artists & Bands
-819,Which founding Byrd was dismissed in 1967,,,,,David Crosby,extreme,Artists & Bands
-820,Which drummer was a founding member of the Doors,,,,,John Densmore,extreme,Artists & Bands
-821,Which original Animals keyboardist arranged House of the Rising Sun,,,,,Alan Price,extreme,Artists & Bands
-822,Who co-founded Atlantic Records with Herb Abramson,,,,,Ahmet Ertegun,extreme,Artists & Bands
-823,Who lent his name to Gibson's classic solid body guitar,,,,,Les Paul,extreme,Artists & Bands
-824,Which guitarist played in both the Yardbirds and Cream,,,,,Eric Clapton,extreme,Artists & Bands
-825,Who played saxophone on the Rolling Stones' Brown Sugar,,,,,Bobby Keys,extreme,Artists & Bands
-826,Who played organ on Procol Harum's Whiter Shade of Pale,,,,,Matthew Fisher,extreme,Artists & Bands
-827,Who was Metallica's second guitarist,,,,,Dave Mustaine,extreme,Artists & Bands
-828,Which bassist replaced Cliff Burton in Metallica,,,,,Jason Newsted,extreme,Artists & Bands
-829,Which bassist replaced Jason Newsted in Metallica,,,,,Robert Trujillo,extreme,Artists & Bands
-830,Which drummer played on Nirvana's Bleach,,,,,Chad Channing,extreme,Artists & Bands
-831,Who was the Smashing Pumpkins' original drummer,,,,,Jimmy Chamberlin,extreme,Artists & Bands
-832,Who was Soundgarden's original bassist,,,,,Hiro Yamamoto,extreme,Artists & Bands
-833,Which drummer played on Pearl Jam's Ten,,,,,Dave Krusen,extreme,Artists & Bands
-834,Who played every instrument on the Foo Fighters' debut album,,,,,Dave Grohl,extreme,Artists & Bands
-835,Which Beatles album cover shows the band crossing a street,,,,,Abbey Road,extreme,Songs & Albums
-836,What is the best selling album of all time,,,,,Thriller,extreme,Songs & Albums
-837,What is the best selling country album of all time,,,,,Come On Over,extreme,Songs & Albums
-838,Which Eagles compilation is among the best selling albums ever,,,,,Their Greatest Hits,extreme,Songs & Albums
-839,What is the best selling single of all time,,,,,White Christmas,extreme,Songs & Albums
-840,Which 1951 song is often called the first rock and roll record,,,,,Rocket 88,extreme,Songs & Albums
-841,What was the Beatles' first single,,,,,Love Me Do,extreme,Songs & Albums
-842,Which Beatles album was the last they recorded together,,,,,Abbey Road,extreme,Songs & Albums
-843,What was the Rolling Stones' first single,,,,,Come On,extreme,Songs & Albums
-844,Which Who album grew from the abandoned Lifehouse project,,,,,Who's Next,extreme,Songs & Albums
-845,What was Led Zeppelin's only US top ten single,,,,,Whole Lotta Love,extreme,Songs & Albums
-846,Which Beatles single ran over seven minutes long,,,,,Hey Jude,extreme,Songs & Albums
-847,What was the B-side of Hey Jude,,,,,Revolution,extreme,Songs & Albums
-848,Which song opens David Bowie's Ziggy Stardust album,,,,,Five Years,extreme,Songs & Albums
-849,Which Pink Floyd album features Comfortably Numb,,,,,The Wall,extreme,Songs & Albums
-850,Which 1983 album was Roger Waters' last with Pink Floyd,,,,,The Final Cut,extreme,Songs & Albums
-851,Which Fleetwood Mac album followed Tusk,,,,,Mirage,extreme,Songs & Albums
-852,Which Springsteen album followed Born to Run,,,,,Darkness on the Edge of Town,extreme,Songs & Albums
-853,What was Nirvana's follow-up to Nevermind,,,,,In Utero,extreme,Songs & Albums
-854,What was the Ramones' first album called,,,,,Ramones,extreme,Songs & Albums
-855,Which U2 album followed The Joshua Tree,,,,,Rattle and Hum,extreme,Songs & Albums
-856,Which R.E.M. album followed Automatic for the People,,,,,Monster,extreme,Songs & Albums
-857,What was the Beastie Boys' follow-up to Licensed to Ill,,,,,Paul's Boutique,extreme,Songs & Albums
-858,What was Prince's follow-up to Purple Rain,,,,,Around the World in a Day,extreme,Songs & Albums
-859,What was Michael Jackson's follow-up to Bad,,,,,Dangerous,extreme,Songs & Albums
-860,What was Madonna's debut album titled,,,,,Madonna,extreme,Songs & Albums
-861,What was the lead single from Whitney Houston's debut album,,,,,You Give Good Love,extreme,Songs & Albums
-862,What was Alanis Morissette's breakthrough album,,,,,Jagged Little Pill,extreme,Songs & Albums
-863,What was TLC's follow-up to CrazySexyCool,,,,,FanMail,extreme,Songs & Albums
-864,What was Radiohead's debut single,,,,,Creep,extreme,Songs & Albums
-865,What was Oasis' third album,,,,,Be Here Now,extreme,Songs & Albums
-866,What was the Verve's comeback album,,,,,Urban Hymns,extreme,Songs & Albums
-867,What was Lauryn Hill's only solo studio album,,,,,The Miseducation of Lauryn Hill,extreme,Songs & Albums
-868,What is the smallest flute in the orchestral family,,,,,Piccolo,extreme,Instruments
-869,Which flute is pitched in G below the concert flute,,,,,Alto flute,extreme,Instruments
-870,What is the largest woodwind instrument in the orchestra,,,,,Contrabassoon,extreme,Instruments
-871,What is the tenor member of the oboe family called,,,,,English horn,extreme,Instruments
-872,Which saxophone is pitched above the soprano,,,,,Sopranino saxophone,extreme,Instruments
-873,Which instrument plays the tenor part in the tuba family,,,,,Euphonium,extreme,Instruments
-874,What is the large circular marching brass horn called,,,,,Sousaphone,extreme,Instruments
-875,What is the smallest trumpet pitched above B flat,,,,,Piccolo trumpet,extreme,Instruments
-876,Which marching instrument replaces the French horn,,,,,Mellophone,extreme,Instruments
-877,What are the orchestral kettledrums called,,,,,Timpani,extreme,Instruments
-878,Which Spanish wooden clackers accompany flamenco,,,,,Castanets,extreme,Instruments
-879,What small anvil is used for orchestral sound effects,,,,,Anvil,extreme,Instruments
-880,Which percussion instrument is also called a whip,,,,,Whip,extreme,Instruments
-881,Which theatrical percussion effect imitates blowing wind,,,,,Wind machine,extreme,Instruments
-882,Which scraped gourd instrument comes from Latin America,,,,,Guiro,extreme,Instruments
-883,Which Cuban instrument is two struck wooden sticks,,,,,Claves,extreme,Instruments
-884,Which keyboard percussion instrument has steel bars,,,,,Glockenspiel,extreme,Instruments
-885,Which keyboard percussion instrument has rosewood bars,,,,,Xylophone,extreme,Instruments
-886,What is the set of tuned metal tubes struck with a mallet,,,,,Tubular bells,extreme,Instruments
-887,Which frame drum carries metal jingles,,,,,Tambourine,extreme,Instruments
-888,What is the smaller tabla drum called,,,,,Dayan,extreme,Instruments
-889,What is the larger tabla drum called,,,,,Bayan,extreme,Instruments
-890,What is Japan's national zither called,,,,,Koto,extreme,Instruments
-891,What is the Chinese two string fiddle called,,,,,Erhu,extreme,Instruments
-892,What is the Japanese three string lute called,,,,,Shamisen,extreme,Instruments
-893,What is the Korean zither called,,,,,Gayageum,extreme,Instruments
-894,What is the Indian drone instrument called,,,,,Tanpura,extreme,Instruments
-895,What is the West African 21 string harp lute called,,,,,Kora,extreme,Instruments
-896,Which hourglass African drum changes pitch when squeezed,,,,,Talking drum,extreme,Instruments
-897,What wood forms a didgeridoo,,,,,Eucalyptus,extreme,Instruments
-898,What is the Irish frame drum called,,,,,Bodhran,extreme,Instruments
-899,Which instrument sounds its strings via a wheel,,,,,Hurdy gurdy,extreme,Instruments
-900,Which Swedish fiddle is played with keys,,,,,Nyckelharpa,extreme,Instruments
-901,What is the American term for a semitone,,,,,Half step,extreme,Music Theory
-902,What is the British name for the half note,,,,,Minim,extreme,Music Theory
-903,What is the British name for the whole note,,,,,Semibreve,extreme,Music Theory
-904,What is the British name for the quarter note,,,,,Crotchet,extreme,Music Theory
-905,What is the British name for the eighth note,,,,,Quaver,extreme,Music Theory
-906,What is the British name for the sixteenth note,,,,,Semiquaver,extreme,Music Theory
-907,What is the softest dynamic marking called,,,,,Pianississimo,extreme,Music Theory
-908,What is the Italian term for gradually slowing down,,,,,Ritardando,extreme,Music Theory
-909,What is the term for gradually becoming faster,,,,,Accelerando,extreme,Music Theory
-910,What is the term for detached short notes,,,,,Staccato,extreme,Music Theory
-911,Which marking calls for a sudden forceful accent,,,,,Sforzando,extreme,Music Theory
-912,What is the arc symbol that holds a note longer called,,,,,Fermata,extreme,Music Theory
-913,What is the symbol for a brief silent break called,,,,,Caesura,extreme,Music Theory
-914,Which marking directs a note to be held for its full value,,,,,Tenuto,extreme,Music Theory
-915,Which marking demands marked emphatic playing,,,,,Marcato,extreme,Music Theory
-916,What does the Italian phrase dal segno mean,,,,,From the sign,extreme,Music Theory
-917,What does the Italian phrase da capo mean,,,,,From the beginning,extreme,Music Theory
-918,What is a short concluding passage called,,,,,Codetta,extreme,Music Theory
-919,What is the Italian term for a concluding section,,,,,Coda,extreme,Music Theory
-920,What is the contrasting middle section of a minuet called,,,,,Trio,extreme,Music Theory
-921,What is a fugue's opening theme called,,,,,Subject,extreme,Music Theory
-922,What is the second voice's imitative entry in a fugue called,,,,,The answer,extreme,Music Theory
-923,What accompanies a fugue's subject on its return,,,,,Countersubject,extreme,Music Theory
-924,What is the overlapping of fugue voices called,,,,,Stretto,extreme,Music Theory
-925,What is a sustained bass note under changing harmony called,,,,,Pedal point,extreme,Music Theory
-926,What is a persistently repeated motif called,,,,,Ostinato,extreme,Music Theory
-927,What is a repeated bass line in Baroque variations called,,,,,Ground bass,extreme,Music Theory
-928,Which Baroque form builds variations over a repeated bass theme,,,,,Passacaglia,extreme,Music Theory
-929,Which virtuoso piece shows off a player's touch,,,,,Toccata,extreme,Music Theory
-930,Which Romantic piano piece evokes the night,,,,,Nocturne,extreme,Music Theory
-931,What is a study piece for technique called,,,,,Etude,extreme,Music Theory
-932,Which lively movement replaced the minuet in symphonies,,,,,Scherzo,extreme,Music Theory
-933,Which form alternates a theme with episodes,,,,,Rondo,extreme,Music Theory
-934,In which year did the first Newport Jazz Festival take place,,,,,1954,extreme,Genres & History
-935,In which year was the first Newport Folk Festival held,,,,,1959,extreme,Genres & History
-936,In which year was the Monterey Jazz Festival founded,,,,,1958,extreme,Genres & History
-937,In which year did the Isle of Wight festival debut,,,,,1968,extreme,Genres & History
-938,In which year was the Altamont free concert held,,,,,1969,extreme,Genres & History
-939,In which New York town did Woodstock actually take place,,,,,Bethel,extreme,Genres & History
-940,In which year was the first Glastonbury Festival held,,,,,1970,extreme,Genres & History
-941,In which year did Live Aid take place,,,,,1985,extreme,Genres & History
-942,Which American city hosted Live Aid,,,,,Philadelphia,extreme,Genres & History
-943,In which year was Farm Aid founded,,,,,1985,extreme,Genres & History
-944,Which country star organized Farm Aid,,,,,Willie Nelson,extreme,Genres & History
-945,In which year did the Concert for New York City take place,,,,,2001,extreme,Genres & History
-946,In which year was the Concert for Bangladesh held,,,,,1971,extreme,Genres & History
-947,Which venue hosted the Concert for Bangladesh,,,,,Madison Square Garden,extreme,Genres & History
-948,Which city hosted Live 8's flagship concert,,,,,London,extreme,Genres & History
-949,In which year were the first VMAs held,,,,,1984,extreme,Genres & History
-950,In which year did MTV Unplugged first air,,,,,1989,extreme,Genres & History
-951,In which year was Nirvana's MTV Unplugged session recorded,,,,,1993,extreme,Genres & History
-952,In which year did the Rock and Roll Hall of Fame museum open,,,,,1995,extreme,Genres & History
-953,In which year was the Grammy Hall of Fame created,,,,,1973,extreme,Genres & History
-954,In which year did the Latin Grammys debut,,,,,2000,extreme,Genres & History
-955,In which year were the first Brit Awards held,,,,,1977,extreme,Genres & History
-956,In which year were the first ARIA Awards held,,,,,1987,extreme,Genres & History
-957,In which year was the Mercury Prize first awarded,,,,,1992,extreme,Genres & History
-958,In which year was the Polar Music Prize founded,,,,,1989,extreme,Genres & History
-959,In which year was the first Eurovision Song Contest held,,,,,1956,extreme,Genres & History
-960,Which country won the first Eurovision Song Contest,,,,,Switzerland,extreme,Genres & History
-961,In which city was the first Eurovision held,,,,,Lugano,extreme,Genres & History
-962,In which year did ABBA win Eurovision,,,,,1974,extreme,Genres & History
-963,Which ABBA song won Eurovision,,,,,Waterloo,extreme,Genres & History
-964,In which year did Celine Dion win Eurovision,,,,,1988,extreme,Genres & History
-965,Which country hosted Eurovision in 1988,,,,,Ireland,extreme,Genres & History
-966,Which Canadian singer represented Switzerland in Eurovision 1988,,,,,Celine Dion,extreme,Genres & History
-967,Which act has the most number one albums on the Billboard 200,,,,,The Beatles,extreme,Charts & Awards
-968,Which artist scored five number one singles from one album with Teenage Dream,,,,,Katy Perry,extreme,Charts & Awards
-969,Which is the only album by a woman with five Hot 100 number ones,,,,,Teenage Dream,extreme,Charts & Awards
-970,Which classical conductor held the Grammy wins record before Beyonce,,,,,Georg Solti,extreme,Charts & Awards
-971,Who won eight Grammys in one night in 1984,,,,,Michael Jackson,extreme,Charts & Awards
-972,Which band won eight Grammys in one night in 2000,,,,,Santana,extreme,Charts & Awards
-973,Which album won Album of the Year at the 1984 Grammys,,,,,Thriller,extreme,Charts & Awards
-974,Which album won Album of the Year at the 1999 Grammys,,,,,The Miseducation of Lauryn Hill,extreme,Charts & Awards
-975,Which 2007 duet album won the 2009 Album of the Year Grammy,,,,,Raising Sand,extreme,Charts & Awards
-976,Which album made Taylor Swift a two time Album of the Year winner in 2016,,,,,1989,extreme,Charts & Awards
-977,Which Taylor Swift album won her third Album of the Year in 2021,,,,,Folklore,extreme,Charts & Awards
-978,Which album won Taylor Swift her record fourth Album of the Year,,,,,Midnights,extreme,Charts & Awards
-979,Which Beyonce album won Album of the Year at the 2025 Grammys,,,,,Cowboy Carter,extreme,Charts & Awards
-980,Which major label bought Elvis's contract from Sun in 1955,,,,,RCA Victor,extreme,Charts & Awards
-981,How much did RCA pay to acquire Elvis from Sun,,,,,40000 dollars,extreme,Charts & Awards
-982,Who managed Elvis Presley for over two decades,,,,,Colonel Tom Parker,extreme,Charts & Awards
-983,From which country did Elvis's manager emigrate,,,,,Netherlands,extreme,Charts & Awards
-984,What was Elvis Presley's first feature film,,,,,Love Me Tender,extreme,Charts & Awards
-985,What was Elvis's 1968 television special nicknamed,,,,,Comeback Special,extreme,Charts & Awards
-986,In which year did Elvis open his Las Vegas residency,,,,,1969,extreme,Charts & Awards
-987,What is the name of Elvis's Memphis estate,,,,,Graceland,extreme,Charts & Awards
-988,In which year did Graceland open to the public,,,,,1982,extreme,Charts & Awards
-989,In which year did Elvis Presley die,,,,,1977,extreme,Charts & Awards
-990,In which year was Elvis in the Rock Hall's first class,,,,,1986,extreme,Charts & Awards
-991,Which 1990 song was the first rap number one on the Hot 100,,,,,Ice Ice Baby,extreme,Charts & Awards
-992,In which year was the Parental Advisory label introduced,,,,,1985,extreme,Charts & Awards
-993,In which year did Napster launch,,,,,1999,extreme,Charts & Awards
-994,In which year did the iTunes Store launch,,,,,2003,extreme,Charts & Awards
-995,In which year did Apple Music launch,,,,,2015,extreme,Charts & Awards
-996,In which year did vinyl outsell CDs in the US again after 1987,,,,,2020,extreme,Charts & Awards
-997,In which year did Spotify reach 100 million paying subscribers,,,,,2019,extreme,Charts & Awards
-998,In which year did the Billboard Hot 100 debut,,,,,1958,extreme,Charts & Awards
-999,Which teen idol sang the first Hot 100 number one,,,,,Ricky Nelson,extreme,Charts & Awards
-1000,In which year was Billboard magazine founded,,,,,1894,extreme,Charts & Awards
+265,Who recorded the album OK Computer?,Radiohead,Oasis,,,A,medium,Songs & Albums
+266,Who performed Uptown Funk with Bruno Mars?,Pharrell Williams,Mark Ronson,,,B,medium,Songs & Albums
+267,Who sang Take On Me?,A-ha,Erasure,,,A,medium,Songs & Albums
+268,Which string instrument is the largest of the violin family?,Cello,Double bass,,,B,medium,Instruments
+269,Which family does the trumpet belong to?,Brass,Woodwind,,,A,medium,Instruments
+270,Which instrument is played with mallets?,Celesta,Xylophone,,,B,medium,Instruments
+271,Which instrument uses a slide to change pitch?,Trombone,Trumpet,,,A,medium,Instruments
+272,Which woodwind uses a double reed?,Clarinet,Bassoon,,,B,medium,Instruments
+273,Which keyboard instrument plucks strings with quills?,Harpsichord,Virginal,,,A,medium,Instruments
+274,Which brass instrument is the largest?,Euphonium,Tuba,,,B,medium,Instruments
+275,Which stringed instrument uses pedals to change keys?,Harp,Zither,,,A,medium,Instruments
+276,Which family does the cymbal belong to?,String,Percussion,,,B,medium,Instruments
+277,Which instrument did Jimi Hendrix famously play?,Guitar,Banjo,,,A,medium,Instruments
+278,Which instrument is central to bluegrass music?,Harmonica,Banjo,,,B,medium,Instruments
+279,Which instrument uses bellows to push air over reeds?,Ocarina,Accordion,,,A,medium,Instruments
+280,Which stringed instrument is associated with India?,Oud,Sitar,,,B,medium,Instruments
+281,Which of these is an African thumb piano?,Kalimba,Cuatro,,,A,medium,Instruments
+282,Which drum is a shallow drum often played with brushes?,Snare drum,Timpani,,,B,medium,Instruments
+283,Which instrument did Louis Armstrong famously play?,Trumpet,Trombone,,,A,medium,Instruments
+284,Which keyboard instrument is a staple of rock organ sounds?,Mellotron,Hammond organ,,,B,medium,Instruments
+285,Which instrument is a large deep drum lying on its side?,Bass drum,Floor tom,,,A,medium,Instruments
+286,Which woodwind is made of brass despite its name?,Flute,Saxophone,,,B,medium,Instruments
+287,Which stringed instrument is struck with small hammers?,Hammered dulcimer,Psaltery,,,A,medium,Instruments
+288,Which instrument did Beethoven compose for despite losing his hearing?,Violin,Piano,,,B,medium,Instruments
+289,How many strings does a standard ukulele have?,Four,Ten strings,,,A,medium,Instruments
+290,Which brass instrument has a mellow conical bore and hand-in-bell technique?,Cornet,French horn,,,B,medium,Instruments
+291,Which section sits at the front of an orchestra?,First violins,Percussion,,,A,medium,Instruments
+292,Which of these instruments is tuned in fifths?,Guitar,Violin,,,B,medium,Instruments
+293,Which instrument is two concave wooden shells clicked together?,Castanets,Maracas,,,A,medium,Instruments
+294,Which wind instrument is popular in Scotland?,Pan flute,Bagpipes,,,B,medium,Instruments
+295,Which instrument did Miles Davis play?,Trumpet,Flugelhorn,,,A,medium,Instruments
+296,Which instrument originated in Trinidad and Tobago?,Didgeridoo,Steelpan,,,B,medium,Instruments
+297,Which instrument did Andres Segovia elevate to concert status?,Bandurria,Classical guitar,,,A,medium,Instruments
+298,How many lines does a musical staff have?,Four,Five,,,B,medium,Music Theory
+299,What does the term forte mean?,Loud,Soft,,,A,medium,Music Theory
+300,How many beats does a quarter note get in 4/4 time?,Two,One,,,B,medium,Music Theory
+301,What is the interval from C up to G called?,Fifth,Fourth,,,A,medium,Music Theory
+302,What does crescendo mean?,Gradually softer,Gradually louder,,,B,medium,Music Theory
+303,Which major scale has no sharps or flats?,C major,G major,,,A,medium,Music Theory
+304,What does the musical term tempo mean?,Volume,Speed,,,B,medium,Music Theory
+305,What symbol raises a note by a half step?,Sharp,Flat,,,A,medium,Music Theory
+306,What speed marking means slow and walking pace?,Allegro,Andante,,,B,medium,Music Theory
+307,What is a group of four musicians called?,Quartet,Trio,,,A,medium,Music Theory
+308,What does pp stand for as a dynamic?,Mezzo piano,Pianissimo,,,B,medium,Music Theory
+309,What is the first note of the major scale called?,Dominant,Tonic,,,A,medium,Music Theory
+310,What do two notes of the same pitch sounding together form?,Octave,Unison,,,B,medium,Music Theory
+311,How many notes are in an octave scale?,Eight,Seven,,,A,medium,Music Theory
+312,What does the term a cappella mean?,Singing with one instrument,Singing without instruments,,,B,medium,Music Theory
+313,What time signature is known as common time?,4/4,3/4,,,A,medium,Music Theory
+314,Which marking means very fast?,Presto,Moderato,,,B,medium,Music Theory
+315,What is the vertical arrangement of notes sounding together called?,Chord,Riff,,,A,medium,Music Theory
+316,What does rubato mean?,Fixed tempo,Flexible tempo,,,B,medium,Music Theory
+317,What clef is used for the right hand of most piano music?,Treble clef,Bass clef,,,A,medium,Music Theory
+318,What do we call the resting home note of a piece?,Supertonic,Tonic,,,B,medium,Music Theory
+319,What does da capo mean?,From the beginning,To the end,,,A,medium,Music Theory
+320,How many sharps are in the key of G major?,Fifteen,One,,,B,medium,Music Theory
+321,Which note sits on the middle line of the treble clef staff?,B,G,,,A,medium,Music Theory
+322,What is a glissando?,A sudden loud chord,A smooth slide between notes,,,B,medium,Music Theory
+323,What do we call the organization of music in time?,Rhythm,Melody,,,A,medium,Music Theory
+324,What dynamic means moderately soft?,Mezzo forte,Mezzo piano,,,B,medium,Music Theory
+325,What is a persistently repeated musical phrase called?,Ostinato,Rondo,,,A,medium,Music Theory
+326,What does legato mean?,Short and detached,Smooth and connected,,,B,medium,Music Theory
+327,What is the term for a three note chord?,Triad,Tritone,,,A,medium,Music Theory
+328,Which key signature has three flats?,E flat minor,E flat major,,,B,medium,Music Theory
+329,What is the term for the pattern of beats that repeats in a bar?,Meter,Timbre,,,A,medium,Music Theory
+330,What is vibrato?,A change in volume,A wobble in pitch,,,B,medium,Music Theory
+331,Which city is famous as a home of flamenco?,Seville,Lisbon,,,A,medium,Genres & History
+332,Which genre did Bob Marley spread worldwide?,Calypso,Reggae,,,B,medium,Genres & History
+333,Which genre features MCs rapping over beats?,Hip hop,House,,,A,medium,Genres & History
+334,Which style blends jazz harmony with Brazilian samba?,Mambo,Bossa nova,,,B,medium,Genres & History
+335,In which decade did punk rock explode in New York and London?,The 1970s,The 1950s,,,A,medium,Genres & History
+336,Which genre uses turntables and sampling as core tools?,Disco,Hip hop,,,B,medium,Genres & History
+337,Grunge emerged in which American city?,Seattle,Portland,,,A,medium,Genres & History
+338,Which genre grew from delta field hollers and work songs?,Ragtime,Blues,,,B,medium,Genres & History
+339,Which famed New York club was a disco landmark of 1977?,Studio 54,CBGB,,,A,medium,Genres & History
+340,Merengue and bachata come from which island nation?,Cuba,The Dominican Republic,,,B,medium,Genres & History
+341,Which genre is linked to Detroit and robotic beats?,Techno,Trance,,,A,medium,Genres & History
+342,Which genre blended country and rhythm and blues in 1950s Memphis?,Doo wop,Rockabilly,,,B,medium,Genres & History
+343,Afrobeats originates largely from which country?,Nigeria,Kenya,,,A,medium,Genres & History
+344,The K-pop industry is centered in which city?,Seoul,Bangkok,,,B,medium,Genres & History
+345,Which composer bridged the classical and romantic eras?,Beethoven,Haydn,,,A,medium,Genres & History
+346,Zydeco music comes from which US state?,Mississippi,Louisiana,,,B,medium,Genres & History
+347,Ska is the predecessor of which genre?,Reggae,Dancehall,,,A,medium,Genres & History
+348,In which year did J S Bach die?,1750,1809,,,A,medium,Genres & History
+349,Which composer is a pioneer of musical minimalism?,Philip Glass,John Cage,,,A,medium,Genres & History
+350,Doo wop harmonies flourished in which decade?,The 1960s,The 1950s,,,B,medium,Genres & History
+351,Gregorian chant belongs to which tradition?,Medieval church music,Renaissance court music,,,A,medium,Genres & History
+352,Which British city birthed Merseybeat?,Manchester,Liverpool,,,B,medium,Genres & History
+353,What did the Romantic era emphasize in music?,Emotion and expression,Order and restraint,,,A,medium,Genres & History
+354,Which genre features virtuosic improvisation over chord changes?,Bluegrass,Jazz,,,B,medium,Genres & History
+355,House music was born in which American city?,Chicago,Detroit,,,A,medium,Genres & History
+356,Opera was born in which country?,Germany,Italy,,,B,medium,Genres & History
+357,Who was ragtime's most famous composer?,Scott Joplin,Irving Berlin,,,A,medium,Genres & History
+358,In which year was the Woodstock festival held?,1969,1970,,,A,medium,Genres & History
+359,Motown Records was based in which city?,Detroit,Memphis,,,A,medium,Genres & History
+360,The Sex Pistols came from which country?,Australia,England,,,B,medium,Genres & History
+361,Who wrote The Four Seasons?,Vivaldi,Handel,,,A,medium,Genres & History
+362,Which act was booed for going electric at Newport in 1965?,The Byrds,Bob Dylan,,,B,medium,Genres & History
+363,Which city hosted the famous punk club CBGB?,New York City,Los Angeles,,,A,medium,Genres & History
+364,The Video Music Awards are presented by which network?,VH1,MTV,,,B,medium,Charts & Awards
+365,Which Billboard chart tracks album sales?,Billboard 200,Hot 100,,,A,medium,Charts & Awards
+366,What does a diamond certification from the RIAA represent?,Five million units,Ten million units,,,B,medium,Charts & Awards
+367,The Mercury Prize honors artists of which nations?,Britain and Ireland,France and Belgium,,,A,medium,Charts & Awards
+368,Record of the Year is an award at which ceremony?,The Oscars,The Grammys,,,B,medium,Charts & Awards
+369,Who has won the most Grammy Awards of all time?,Beyonce,Georg Solti,,,A,medium,Charts & Awards
+370,An album certified gold in the US has sold how many units?,500000,250000,,,A,medium,Charts & Awards
+371,The Eurovision Song Contest is run by which body?,The European Broadcasting Union,The United Nations,,,A,medium,Charts & Awards
+372,The CMA Awards celebrate which genre?,Pop music,Country music,,,B,medium,Charts & Awards
+373,Which singer won American Idol in its first season?,Kelly Clarkson,Carrie Underwood,,,A,medium,Charts & Awards
+374,The Billboard Music Awards are based on what?,Fan votes,Chart performance,,,B,medium,Charts & Awards
+375,Which talent show launched One Direction?,The X Factor,The Voice,,,A,medium,Charts & Awards
+376,What is Spotify's popular year end recap called?,Discover Weekly,Wrapped,,,B,medium,Charts & Awards
+377,The Rock and Roll Hall of Fame museum is located in which city?,Cleveland,New York,,,A,medium,Charts & Awards
+378,What does RIAA stand for?,Radio Industry Association of America,Recording Industry Association of America,,,B,medium,Charts & Awards
+379,Which duo caused the 2004 halftime wardrobe controversy?,Janet Jackson and Justin Timberlake,Madonna and Britney Spears,,,A,medium,Charts & Awards
+380,Which is the main singles chart in the United Kingdom?,The ARIA chart,The Official UK Singles Chart,,,B,medium,Charts & Awards
+381,The Grammy telecast is presented by which organization?,The Recording Academy,The Film Academy,,,A,medium,Charts & Awards
+382,Which award honors Broadway musical theater?,The Emmy Awards,The Tony Awards,,,B,medium,Charts & Awards
+383,Which ceremony is nicknamed music's biggest night?,The Grammy Awards,The American Music Awards,,,A,medium,Charts & Awards
+384,The ARIA Awards belong to which country?,New Zealand,Australia,,,B,medium,Charts & Awards
+385,Which publisher runs the Global 200 chart?,Billboard,Rolling Stone,,,A,medium,Charts & Awards
+386,Who won the first Eurovision Song Contest in 1956?,France,Switzerland,,,B,medium,Charts & Awards
+387,What is the top honor at the CMA Awards called?,Entertainer of the Year,Album of the Year,,,A,medium,Charts & Awards
+388,The Juno Awards honor music from which country?,Ireland,Canada,,,B,medium,Charts & Awards
+389,Which act holds the record for most Hot 100 number ones?,The Beatles,Drake,,,A,medium,Charts & Awards
+390,In which year was the first MTV Video Music Awards held?,1984,1981,,,A,medium,Charts & Awards
+391,The Polar Music Prize is awarded in which country?,Sweden,Norway,,,A,medium,Charts & Awards
+392,Glastonbury is a famous festival in which country?,Scotland,England,,,B,medium,Charts & Awards
+393,The Grand Ole Opry is a famous stage in which city?,Memphis,Nashville,,,A,medium,Charts & Awards
+394,Which venue hosted the 1971 Concert for Bangladesh?,Carnegie Hall,Madison Square Garden,,,B,medium,Charts & Awards
+395,Which country won the Eurovision Song Contest in 2023?,Sweden,Ukraine,,,A,medium,Charts & Awards
+396,Which Bronx address is called the birthplace of hip hop?,2120 Michigan Avenue,1520 Sedgwick Avenue,,,B,medium,Charts & Awards
+397,Coachella takes place in which US state?,California,Arizona,,,A,medium,Charts & Awards
+398,Who was known as the fifth Beatle for his production work?,George Martin,Brian Epstein,Phil Spector,,A,hard,Artists & Bands
+399,Which Wrecking Crew bassist featured on Good Vibrations?,Leland Sklar,Carol Kaye,Joe Osborn,,B,hard,Artists & Bands
+400,Which house band backed the Motown hits?,The Wrecking Crew,The Muscle Shoals Rhythm Section,The Funk Brothers,,C,hard,Artists & Bands
+401,Who produced Michael Jackson's Thriller?,Quincy Jones,Teddy Riley,Bruce Swedien,,A,hard,Artists & Bands
+402,Which Eagles member co-wrote Take It Easy with Jackson Browne?,Don Felder,Glenn Frey,Randy Meisner,,B,hard,Artists & Bands
+403,Who sang lead on the Eagles' Hotel California?,Timothy B Schmit,Bernie Leadon,Don Henley,,C,hard,Artists & Bands
+404,Which Nirvana drummer later fronted the Foo Fighters?,Dave Grohl,Chad Channing,Krist Novoselic,,A,hard,Artists & Bands
+405,Which bassist anchored Booker T and the MGs?,James Jamerson,Donald Duck Dunn,Bootsy Collins,,B,hard,Artists & Bands
+406,Which singer fronted AC/DC on Highway to Hell?,Dave Evans,Brian Johnson,Bon Scott,,C,hard,Artists & Bands
+407,Who designed the cover of Sgt Pepper's Lonely Hearts Club Band?,Peter Blake,Klaus Voormann,Andy Warhol,,A,hard,Artists & Bands
+408,Which producer created the wall of sound?,George Martin,Phil Spector,Brian Wilson,,B,hard,Artists & Bands
+409,Who played bass for the Who?,John Entwistle,Roger Daltrey,Keith Moon,,C,hard,Artists & Bands
+410,Which singer replaced David Lee Roth in Van Halen?,Sammy Hagar,Steve Perry,Gary Cherone,,A,hard,Artists & Bands
+411,Which member of the Doors was the keyboardist?,Robby Krieger,Ray Manzarek,John Densmore,,B,hard,Artists & Bands
+412,Who was Elvis Presley's early Memphis guitarist?,Chet Atkins,James Burton,Scotty Moore,,C,hard,Artists & Bands
+413,Who was the founding bassist of the Rolling Stones?,Bill Wyman,Charlie Watts,Mick Taylor,,A,hard,Artists & Bands
+414,Which jazz trumpeter recorded Kind of Blue?,Dizzy Gillespie,Miles Davis,Chet Baker,,B,hard,Artists & Bands
+415,Who is the lead singer of Pearl Jam?,Mike McCready,Chris Cornell,Eddie Vedder,,C,hard,Artists & Bands
+416,Who sang the Bond theme Live and Let Die?,Shirley Bassey,Paul McCartney and Wings,Tom Jones,,A,hard,Artists & Bands
+417,Which violinist composed the 24 Caprices?,Fritz Kreisler,Niccolo Paganini,Jascha Heifetz,,B,hard,Artists & Bands
+418,Who was the first woman inducted into the Rock and Roll Hall of Fame?,Joan Baez,Patti Smith,Aretha Franklin,,C,hard,Artists & Bands
+419,Which rapper founded Death Row Records with Suge Knight?,Dr Dre,Ice Cube,Snoop Dogg,,A,hard,Artists & Bands
+420,Which original Sex Pistols bassist was replaced by Sid Vicious?,Steve Jones,Glen Matlock,Paul Cook,,B,hard,Artists & Bands
+421,Who recorded Sledgehammer after leaving Genesis?,Mike Rutherford,Ray Wilson,Peter Gabriel,,C,hard,Artists & Bands
+422,Which bluesman was born McKinley Morganfield?,Muddy Waters,Howlin Wolf,B B King,,A,hard,Artists & Bands
+423,Whose birth name was Reginald Kenneth Dwight?,Rod Stewart,Elton John,George Michael,,B,hard,Artists & Bands
+424,Who co-founded Def Jam with Rick Rubin?,Sean Combs,Jermaine Dupri,Russell Simmons,,C,hard,Artists & Bands
+425,Which artist starred in the film Purple Rain?,Prince,Morris Day,Rick James,,A,hard,Artists & Bands
+426,Which jazz pianist composed Round Midnight?,Duke Ellington,Thelonious Monk,Count Basie,,B,hard,Artists & Bands
+427,Who is widely credited as the father of bluegrass?,Ralph Stanley,Earl Scruggs,Bill Monroe,,C,hard,Artists & Bands
+428,Which singer completed an EGOT in 2022?,Jennifer Hudson,Whoopi Goldberg,John Legend,,A,hard,Artists & Bands
+429,Who was the lead guitarist of Cream?,Jack Bruce,Eric Clapton,Ginger Baker,,B,hard,Artists & Bands
+430,Who invented the Moog synthesizer?,Oskar Heil,Alan Blumlein,Robert Moog,,C,hard,Artists & Bands
+431,Which Beatles manager died in 1967?,Brian Epstein,Allen Klein,Mal Evans,,A,hard,Artists & Bands
+432,Which Stevie Wonder album features Superstition?,Innervisions,Talking Book,Songs in the Key of Life,,B,hard,Songs & Albums
+433,Which Fleetwood Mac album followed Rumours?,Mirage,Bare Trees,Tusk,,C,hard,Songs & Albums
+434,Which Marvin Gaye album features Inner City Blues and Mercy Mercy Me?,What's Going On,Let's Get It On,I Heard It Through the Grapevine,,A,hard,Songs & Albums
+435,Which Joni Mitchell album features Big Yellow Taxi?,Court and Spark,Ladies of the Canyon,Blue,,B,hard,Songs & Albums
+436,Which artist recorded Spirit in the Sky?,The Hollies,Steppenwolf,Norman Greenbaum,,C,hard,Songs & Albums
+437,Which Pink Floyd album is dedicated to Syd Barrett?,Wish You Were Here,Animals,The Wall,,A,hard,Songs & Albums
+438,Which Dolly Parton hit is named after a redheaded bank clerk?,Coat of Many Colors,Jolene,9 to 5,,B,hard,Songs & Albums
+439,Which disco hit did Giorgio Moroder produce for Donna Summer?,Hot Stuff,On the Radio,I Feel Love,,C,hard,Songs & Albums
+440,Which 1982 Queen album features Under Pressure?,Hot Space,A Kind of Magic,The Game,,A,hard,Songs & Albums
+441,Which Springsteen album features Dancing in the Dark?,Born to Run,Born in the USA,The River,,B,hard,Songs & Albums
+442,Which song gave the Eagles their first number one hit?,One of These Nights,Take It Easy,Best of My Love,,C,hard,Songs & Albums
+443,Which rap group released Straight Outta Compton?,Public Enemy,NWA,Geto Boys,,A,hard,Songs & Albums
+444,Which Carole King album won the 1972 Album of the Year Grammy?,Tapestry,Rhymes and Reasons,Music,,B,hard,Songs & Albums
+445,Which Don McLean song refers to the day the music died?,Castles in the Air,Vincent,American Pie,,C,hard,Songs & Albums
+446,Which Michael Jackson album followed Thriller?,Off the Wall,Bad,Dangerous,,A,hard,Songs & Albums
+447,Which 1997 Verve hit is built on a Rolling Stones orchestral sample?,The Drugs Don't Work,Bitter Sweet Symphony,Lucky Man,,B,hard,Songs & Albums
+448,Which David Bowie album features Starman?,Aladdin Sane,Hunky Dory,Ziggy Stardust,,C,hard,Songs & Albums
+449,Which rap album features the track Juicy?,Illmatic,Ready to Die,Reasonable Doubt,,A,hard,Songs & Albums
+450,On which album does Prince's When Doves Cry appear?,1999,Purple Rain,Sign o the Times,,B,hard,Songs & Albums
+451,Which Fleetwood Mac song reached number one in 1977?,Go Your Own Way,Rhiannon,Dreams,,C,hard,Songs & Albums
+452,Which Radiohead album followed OK Computer?,Kid A,Amnesiac,In Rainbows,,A,hard,Songs & Albums
+453,Which Sister Sledge hit did Nile Rodgers produce?,Lost in Music,We Are Family,Thinking of You,,B,hard,Songs & Albums
+454,Which synth pop duo recorded Sweet Dreams?,Blancmange,Yazoo,Eurythmics,,C,hard,Songs & Albums
+455,Which Bob Marley song was released posthumously as an acoustic ballad?,Redemption Song,One Love,No Woman No Cry,,A,hard,Songs & Albums
+456,Which 1991 R.E.M. single became their biggest hit?,The One I Love,Losing My Religion,Stand,,B,hard,Songs & Albums
+457,Which trumpeter released the album Bitches Brew?,Herbie Hancock,Freddie Hubbard,Miles Davis,,C,hard,Songs & Albums
+458,Which Blondie hit was the first rap themed song to top the Hot 100?,Rapture,Heart of Glass,Call Me,,A,hard,Songs & Albums
+459,Who co-produced U2's The Joshua Tree?,Steve Lillywhite,Brian Eno,Flood,,B,hard,Songs & Albums
+460,Which Sinead O Connor hit is a Prince composition?,The Emperor's New Clothes,Mandinka,Nothing Compares 2 U,,C,hard,Songs & Albums
+461,Which Beastie Boys album was the first rap album to top the Billboard 200?,Licensed to Ill,Paul's Boutique,Ill Communication,,A,hard,Songs & Albums
+462,Which girl group recorded Waterfalls?,En Vogue,TLC,SWV,,B,hard,Songs & Albums
+463,Which Green Day album brought pop punk to the mainstream in 1994?,Insomniac,Nimrod,Dookie,,C,hard,Songs & Albums
+464,What was the Spice Girls debut single?,Wannabe,Say You'll Be There,2 Become 1,,A,hard,Songs & Albums
+465,Which clef does the viola read most often?,Treble clef,Alto clef,Tenor clef,,B,hard,Instruments
+466,Where does the viola sit in pitch?,Higher than the violin,Lower than the double bass,Between violin and cello,,C,hard,Instruments
+467,What is the name for the orchestral kettledrums?,Timpani,Tablas,Tom toms,,A,hard,Instruments
+468,Which woodwind is pitched in B flat and uses a single reed?,Oboe,Clarinet,Bassoon,,B,hard,Instruments
+469,Despite its name the English horn belongs to which family?,Horn family,Clarinet family,Oboe family,,C,hard,Instruments
+470,How many pedals does a concert harp have?,Seven,Nine,Twelve,,A,hard,Instruments
+471,Which double reed instrument is larger than the bassoon?,Cor anglais,Contrabassoon,Oboe d'amore,,B,hard,Instruments
+472,What does the left pedal on a piano do?,Sustains the notes,Raises the pitch,Softens the sound,,C,hard,Instruments
+473,Which kit cymbal pair is operated by a foot pedal?,Hi hat,Ride cymbal,Crash cymbal,,A,hard,Instruments
+474,What material is strung inside a violin bow?,Steel,Horsehair,Nylon,,B,hard,Instruments
+475,What is the standard tuning of a viola?,E A D G,G D A E,C G D A,,C,hard,Instruments
+476,The mbira is also known by which name?,Thumb piano,Kora,Djembe,,A,hard,Instruments
+477,What accessories does the pedal steel guitar use?,Hammers and mutes,A steel bar and knee levers,A bow and slides,,B,hard,Instruments
+478,Which tuning system divides the octave into twelve equal parts?,Pythagorean tuning,Just intonation,Equal temperament,,C,hard,Instruments
+479,What is a tabla pair composed of?,Dayan and bayan,Snare and bass,Conga and tumba,,A,hard,Instruments
+480,Which female vocal range sits between soprano and alto?,Contralto,Mezzo soprano,Coloratura,,B,hard,Instruments
+481,What do harp pedals change?,The volume,The string material,The string pitch by semitones,,C,hard,Instruments
+482,How many reeds does an oboe use?,Two,One,Zero,,A,hard,Instruments
+483,What does palm muting do on an electric guitar?,Lowers the pitch,Dampens the strings for a chugging tone,Adds reverb,,B,hard,Instruments
+484,What is the flared end of a brass instrument called?,The bore,The mouthpipe,The bell,,C,hard,Instruments
+485,Which bars does the glockenspiel use?,Metal bars,Wooden bars,Glass bars,,A,hard,Instruments
+486,Which string instrument is tuned in fourths an octave above the cello?,Viola,Double bass,Bass guitar,,B,hard,Instruments
+487,What does the sound post inside a violin do?,Holds the bridge in place,Tunes the strings,Supports the top and transmits vibrations,,C,hard,Instruments
+488,What are a harmonica's free reeds made of?,Metal,Bamboo,Plastic,,A,hard,Instruments
+489,Which instruments does a luthier build?,Brass instruments,Stringed instruments,Woodwinds,,B,hard,Instruments
+490,How many strings does a piano note have in the middle register?,Thirty,Forty,Three,,C,hard,Instruments
+491,Which saxophone is pitched in E flat and larger than the tenor?,Baritone sax,Alto sax,Soprano sax,,A,hard,Instruments
+492,Which bass technique uses the thumb to strike the strings?,Tapping,Slap bass,Sweep picking,,B,hard,Instruments
+493,Which Tchaikovsky piece famously features the celesta?,Swan Lake,The Nutcracker Overture,The Dance of the Sugar Plum Fairy,,C,hard,Instruments
+494,What gives the sitar its characteristic buzzing sound?,Sympathetic strings,A double reed,Metal frets,,A,hard,Instruments
+495,Which note does the oboe sound for orchestral tuning?,C above middle C,A above middle C,E above middle C,,B,hard,Instruments
+496,Which gourd rattle with a bead net comes from West Africa?,Ganza,Cabasa,Shekere,,C,hard,Instruments
+497,What is the lowest note on a guitar in standard tuning?,E2,D2,A2,,A,hard,Instruments
+498,Which mode matches the natural minor scale?,Dorian,Aeolian,Phrygian,,B,hard,Music Theory
+499,What is the interval of three whole tones called?,A perfect fourth,A minor sixth,A tritone,,C,hard,Music Theory
+500,How many sharps does the key of A major contain?,Two,Six sharps,Three,,A,hard,Music Theory
+501,What is the first beat of a measure called?,The upbeat,The downbeat,The backbeat,,B,hard,Music Theory
+502,What is a cadence ending on the dominant chord called?,A plagal cadence,A perfect cadence,A half cadence,,C,hard,Music Theory
+503,What is the relative minor of C major?,E minor,A minor,D minor,,A,hard,Music Theory
+504,What does the Italian term dolce mean?,Loudly,Sweetly,Quickly,,B,hard,Music Theory
+505,How many flats are in the key signature of F major?,Six flats,Eight,One,,C,hard,Music Theory
+506,What do we call the fifth degree of a major scale?,The dominant,The mediant,The subdominant,,A,hard,Music Theory
+507,In which time signature is a minuet written?,4/4,3/4,6/8,,B,hard,Music Theory
+508,Which pattern of steps builds a major scale?,Whole half whole whole half whole whole,Half whole whole whole half whole whole,Whole whole half whole whole whole half,,C,hard,Music Theory
+509,What does the marking fff indicate?,Fortissimo,Fortississimo,Fortepiano,,A,hard,Music Theory
+510,Who developed the twelve tone serial method?,Anton Webern,Arnold Schoenberg,Alban Berg,,B,hard,Music Theory
+511,What does the term arpeggio describe?,Two notes together,A rapid trill,Notes of a chord played in sequence,,C,hard,Music Theory
+512,What is the interval from C up to E?,A major third,A minor third,A diminished fifth,,A,hard,Music Theory
+513,In 6/8 time how many eighth notes fill one bar?,Ten,Six,Eleven,,B,hard,Music Theory
+514,What is the term for music without a key center?,Polytonality,Modality,Atonality,,C,hard,Music Theory
+515,What is an augmented fourth also known as?,A tritone,A perfect fifth,A diminished third,,A,hard,Music Theory
+516,What term describes a gradual slowing of tempo?,Accelerando,Ritardando,Rubato,,B,hard,Music Theory
+517,What is a repeated guitar pattern in rock called?,A bridge,A vamp,A riff,,C,hard,Music Theory
+518,What does bel canto describe?,A lyrical Italian singing style,A type of opera stage,A string technique,,A,hard,Music Theory
+519,How many movements does a typical classical symphony have?,Five movements,Three,Seven movements,,B,hard,Music Theory
+520,What is the term for a rapid alternation between two adjacent notes?,A mordent,A glissando,A trill,,C,hard,Music Theory
+521,Which clef places middle C on its center line?,The alto clef,The tenor clef,The soprano clef,,A,hard,Music Theory
+522,What is the weaving of independent melodies together called?,Counterpoint,Homophony,Monophony,,B,hard,Music Theory
+523,What does the marking sforzando indicate?,A soft ending,A quick run,A sudden strong accent,,C,hard,Music Theory
+524,Which intervals build a major triad above its root?,A major third then a minor third,A minor third then a major third,Two perfect fourths,,A,hard,Music Theory
+525,What does syncopation emphasize?,Offbeats and weak beats,Downbeats,Only the first beat,,B,hard,Music Theory
+526,Which major key has four sharps?,A major,B major,E major,,C,hard,Music Theory
+527,Which scale built entirely of whole steps appears in Debussy's Voiles?,The whole tone scale,The Lydian scale,The octatonic scale,,A,hard,Music Theory
+528,What is the main theme of a fugue called?,The countersubject,The subject,The episode,,B,hard,Music Theory
+529,What does the bottom number of a time signature indicate?,Which note value gets the beat,How loud to play,How fast to play,,C,hard,Music Theory
+530,Which era in music history followed the Baroque period?,The Renaissance,The Romantic era,The Classical era,,A,hard,Music Theory
+531,Delta blues comes from which region?,Kansas City,The Mississippi Delta,New Orleans,,B,hard,Genres & History
+532,Which instrument electrified the blues in Chicago?,The accordion,The banjo,The electric guitar,,C,hard,Genres & History
+533,Bluegrass draws heavily from which older tradition?,Mexican mariachi,Appalachian folk,Cajun zydeco,,A,hard,Genres & History
+534,Stax Records was based in which city?,Atlanta,Memphis,Muscle Shoals,,B,hard,Genres & History
+535,Which Nigerian star pioneered Afrobeat in the 1970s?,Youssou N'Dour,King Sunny Ade,Fela Kuti,,C,hard,Genres & History
+536,Highlife is a guitar based genre from which country?,Ghana,Mali,Senegal,,A,hard,Genres & History
+537,Whose Kingston studio invented the dub mix around 1972?,Coxsone Dodd,King Tubby,Duke Reid,,B,hard,Genres & History
+538,Which 19th century dance helped shape ragtime?,The polka,The tango,The cakewalk,,C,hard,Genres & History
+539,Tuvan throat singing comes from which region?,Siberia,Mongolia,Tibet,,A,hard,Genres & History
+540,Bossa nova grew from which Brazilian root?,Forro,Samba,Sertanejo,,B,hard,Genres & History
+541,Which band recorded the first jazz record in 1917?,King Oliver's Creole Jazz Band,Buddy Bolden's band,The Original Dixieland Jass Band,,C,hard,Genres & History
+542,What was payola?,Paying radio DJs to play records,Selling fake tickets,Bootlegging albums,,A,hard,Genres & History
+543,The Grand Ole Opry started in 1925 as what?,A vaudeville revue,A radio barn dance,A church choir festival,,B,hard,Genres & History
+544,Which technology made modern multitrack recording possible in the 1950s?,Vinyl discs,Wire spools,Magnetic tape,,C,hard,Genres & History
+545,Which festival launched Jimi Hendrix to US fame in 1967?,Monterey Pop,Newport Folk,Isle of Wight,,A,hard,Genres & History
+546,Cumbia originated along the Caribbean coast of which country?,Venezuela,Colombia,Panama,,B,hard,Genres & History
+547,What was the chitlin circuit?,A radio show,A record label,A network of venues open to Black performers,,C,hard,Genres & History
+548,The Roland TB 303 bass synth fueled which late 1980s genre?,Acid house,Euro disco,Synthwave,,A,hard,Genres & History
+549,Moombahton blends house music with which Caribbean rooted style?,Ska,Reggaeton,Soca,,B,hard,Genres & History
+550,Which band headlined the ill fated Altamont concert in 1969?,The Grateful Dead,Jefferson Airplane,The Rolling Stones,,C,hard,Genres & History
+551,Where did doo wop vocal groups typically form?,On city street corners,In church choirs only,In college bands,,A,hard,Genres & History
+552,Which DJ is famous for the quick mix theory?,Afrika Bambaataa,Grandmaster Flash,Kool Herc,,B,hard,Genres & History
+553,The Royal Albert Hall is in which city?,Liverpool,Birmingham,London,,C,hard,Genres & History
+554,The Nashville sound of the late 1950s smoothed which rougher country style?,Honky tonk,Gospel,Western swing,,A,hard,Genres & History
+555,The Bakersfield sound was a raw reaction against what?,The polished Nashville sound,Texas swing,Outlaw country,,B,hard,Genres & History
+556,Which 1979 record became the first commercially successful rap hit?,The Message,Planet Rock,Rapper's Delight,,C,hard,Genres & History
+557,Which song opened MTV on August 1 1981?,Video Killed the Radio Star,Bills Bills Bills,Thriller,,A,hard,Genres & History
+558,Who composed The Well Tempered Clavier?,Vivaldi,J S Bach,Telemann,,B,hard,Genres & History
+559,Who wrote Music for 18 Musicians?,Philip Glass,Terry Riley,Steve Reich,,C,hard,Genres & History
+560,Which 12th century abbess composed sacred chant?,Hildegard of Bingen,Eleanor of Aquitaine,Hildegard Knef,,A,hard,Genres & History
+561,Who is called the father of the string quartet?,Mozart,Joseph Haydn,Beethoven,,B,hard,Genres & History
+562,Who composed The Marriage of Figaro?,Puccini,Verdi,Wolfgang Amadeus Mozart,,C,hard,Genres & History
+563,Who wrote the opera Carmen?,Georges Bizet,Offenbach,Gounod,,A,hard,Genres & History
+564,Which metrics feed the Billboard Hot 100?,Radio only,Sales plus streaming plus airplay,Jukebox plays,,B,hard,Charts & Awards
+565,Which female artist has the most Hot 100 number ones?,Pink,Diana Ross,Mariah Carey,,C,hard,Charts & Awards
+566,Which 2019 single set the record of 19 weeks at number one?,Old Town Road,Despacito,One Sweet Day,,A,hard,Charts & Awards
+567,Which soundtrack holds the record for most weeks at number one on the Billboard 200?,Saturday Night Fever,West Side Story,The Bodyguard,,B,hard,Charts & Awards
+568,Which Grammy category honors a producer's yearly work?,Remixer of the Year,Engineer of the Year,Producer of the Year,,C,hard,Charts & Awards
+569,The Dove Awards recognize achievements in which genre?,Contemporary Christian music,Southern rock,Worship dance,,A,hard,Charts & Awards
+570,Which rap act won the first Grammy for rap performance in 1989?,Run DMC,DJ Jazzy Jeff and the Fresh Prince,Public Enemy,,B,hard,Charts & Awards
+571,Which awards honor Spanish and Portuguese language recordings?,The Billboard Latin Awards,The Lo Nuestro Awards,The Latin Grammys,,C,hard,Charts & Awards
+572,Which song topped Billboard's 2021 all time Hot 100 list?,Blinding Lights,Rolling in the Deep,Uptown Funk,,A,hard,Charts & Awards
+573,Which record label did the Beatles found?,Yellow Submarine Records,Apple Records,Parlophone,,B,hard,Charts & Awards
+574,Who won the first Album of the Year Grammy in 1959?,Henry Mancini,Ella Fitzgerald,Frank Sinatra,,C,hard,Charts & Awards
+575,Which Italian song won the first Record of the Year Grammy?,Nel Blu Dipinto Di Blu,O Sole Mio,Con Te Partiro,,A,hard,Charts & Awards
+576,Which London venue hosted Live Aid in 1985?,Royal Albert Hall,Wembley Stadium,The O2 Arena,,B,hard,Charts & Awards
+577,Which 1985 supergroup recorded We Are the World?,Band Aid,Northern Lights,USA for Africa,,C,hard,Charts & Awards
+578,How many Grammys did the album 21 win in 2012?,Six,Eighteen,Twenty,,A,hard,Charts & Awards
+579,Which song did Billboard name the top hit of the 2000s decade?,Crazy in Love,We Belong Together,Hey Ya,,B,hard,Charts & Awards
+580,Which rapper won the Pulitzer Prize for music in 2018?,Jay-Z,Nas,Kendrick Lamar,,C,hard,Charts & Awards
+581,What was the official name of the 1969 Woodstock festival?,An Aquarian Exposition,The Woodstock Music Fair,The Bethlehem Music and Art Festival,,A,hard,Charts & Awards
+582,Which album won the 1971 Album of the Year Grammy?,Abbey Road,Bridge Over Troubled Water,Deja Vu,,B,hard,Charts & Awards
+583,In which year did Spotify launch its service?,2005,2011,2008,,C,hard,Charts & Awards
+584,Which artist has the most Grammy nominations of all time?,Beyonce,Paul McCartney,Stevie Wonder,,A,hard,Charts & Awards
+585,Which singer won Eurovision in both 1980 and 1987?,Cliff Richard,Johnny Logan,Dana,,B,hard,Charts & Awards
+586,What defined the MTV Unplugged series?,Electric solos,Studio outtakes,Acoustic performances,,C,hard,Charts & Awards
+587,Which singer had the first ever UK number one single in 1952?,Al Martino,Frank Sinatra,Bing Crosby,,A,hard,Charts & Awards
+588,In which year did the Rock and Roll Hall of Fame hold its first ceremony?,1986,1984,1988,,A,hard,Charts & Awards
+589,Which Dire Straits album was among the first million selling CDs?,Love Over Gold,Making Movies,Brothers in Arms,,C,hard,Charts & Awards
+590,Which hip hop album won the Album of the Year Grammy in 1999?,The Miseducation of Lauryn Hill,The Score,Illmatic,,A,hard,Charts & Awards
+591,What was the Grammy award originally called?,The Phonograph Prize,The Gramophone Award,The Golden Needle,,B,hard,Charts & Awards
+592,Which song was the first number one on the Hot 100 in 1958?,Great Balls of Fire,Tutti Frutti,Poor Little Fool,,C,hard,Charts & Awards
+593,The Ivor Novello Awards celebrate which craft?,Songwriting and composing,Album artwork,Live promotion,,A,hard,Charts & Awards
+594,Which city hosts the SXSW music festival?,Denver,Austin,Seattle,,B,hard,Charts & Awards
+595,Who won the first Best New Artist Grammy in 1960?,Elvis Presley,Bobby Darin,Bob Newhart,,C,hard,Charts & Awards
+596,After whom is MTV's Video Vanguard Award named?,Michael Jackson,Whitney Houston,David Bowie,,A,hard,Charts & Awards
+597,Which Michael Jackson video broke MTV's early rotation barriers in 1983?,Rock With You,Billie Jean,Beat It,,B,hard,Charts & Awards
+598,Which Wrecking Crew drummer anchored Pet Sounds?,Hal Blaine,Earl Palmer,Jim Keltner,Frank Capp,A,expert,Artists & Bands
+599,Who played electric bass on the Byrds' Mr Tambourine Man?,Larry Knechtel,Carol Kaye,Jerry Scheff,Max Bennett,B,expert,Artists & Bands
+600,Which bassist played on the Supremes' hits for Motown?,Uriel Jones,Bob Babbitt,James Jamerson,Tony Newton,C,expert,Artists & Bands
+601,Which session drummer played the intro on the Ronettes' Be My Baby?,Buddy Saltzman,Al Jackson Jr,Sandy Nelson,Hal Blaine,D,expert,Artists & Bands
+602,Which bassist played on Steely Dan's Aja?,Chuck Rainey,Bernard Edwards,Marcus Miller,Will Lee,A,expert,Artists & Bands
+603,Which James Brown drummer created the Funky Drummer break?,Jabo Starks,Clyde Stubblefield,John Starks,Melvin Parker,B,expert,Artists & Bands
+604,Who engineered Pink Floyd's Dark Side of the Moon?,Bob Ludwig,James Guthrie,Alan Parsons,Bernie Grundman,C,expert,Artists & Bands
+605,Who played the guitar solo on Steely Dan's Kid Charlemagne?,Dean Parks,Steve Khan,Jay Graydon,Larry Carlton,D,expert,Artists & Bands
+606,Which drummer anchored the MGs behind Green Onions?,Al Jackson Jr,Isaac Hayes,Steve Cropper,Lewie Steinberg,A,expert,Artists & Bands
+607,Which Muscle Shoals guitarist played the riff on Respect?,Duane Allman,Jimmy Johnson,Travis Wammack,Eddie Hinton,B,expert,Artists & Bands
+608,Who played the organ part on Like a Rolling Stone?,Booker T Jones,Garth Hudson,Al Kooper,Billy Preston,C,expert,Artists & Bands
+609,Which session drummer played on Bridge Over Troubled Water?,Eddie Bayers,Jim Gordon,Russ Kunkel,Hal Blaine,D,expert,Artists & Bands
+610,Which guest keyboardist joined the Beatles on Get Back?,Nicky Hopkins,Booker T. Jones,Leon Russell,Gary Brooker,A,expert,Artists & Bands
+611,Which Motown bassist laid down What's Going On in one take?,Carol Kaye,James Jamerson,Ralphe Armstrong,Chuck Rainey,B,expert,Artists & Bands
+612,Which guitarist played the solo on Michael Jackson's Beat It?,Steve Lukather,Slash,Eddie Van Halen,Nile Rodgers,C,expert,Artists & Bands
+613,Who arranged Phil Spector's wall of sound sessions?,Van Dyke Parks,Gene Page,Barry White,Jack Nitzsche,D,expert,Artists & Bands
+614,Which keyboardist from the Crusaders played on many soul sessions?,Joe Sample,Joe Zawinul,Chick Corea,George Duke,A,expert,Artists & Bands
+615,Which jazz saxophonist played the flute solo on California Dreamin?,Paul Horn,Bud Shank,Herbie Mann,Jeremy Steig,B,expert,Artists & Bands
+616,Which drummer played on Carole King's Tapestry?,Hal Blaine,Steve Gadd,Russ Kunkel,Andy Newmark,C,expert,Artists & Bands
+617,Which bassist was part of the Muscle Shoals Swampers?,Roger Hawkins,Jimmy Johnson,Barry Beckett,David Hood,D,expert,Artists & Bands
+618,Who produced Nirvana's Nevermind?,Butch Vig,Steve Albini,Andy Wallace,Brendan OBrien,A,expert,Artists & Bands
+619,Who mixed Nirvana's Nevermind?,Brendan O Brien,Andy Wallace,Terry Date,Bob Rock,B,expert,Artists & Bands
+620,Who recorded Nirvana's In Utero?,Adam Kasper,Butch Vig,Steve Albini,Garth Richardson,C,expert,Artists & Bands
+621,Who produced Billie Eilish's When We All Fall Asleep Where Do We Go?,Jack Antonoff,Greg Kurstin,Ricky Reed,Finneas,D,expert,Artists & Bands
+622,Which producer co-wrote Rolling in the Deep with Adele?,Paul Epworth,Max Martin,Shellback,Dan Wilson,A,expert,Artists & Bands
+623,Who co-produced Amy Winehouse's Back to Black with Mark Ronson?,Salaam Remi,Timbaland,The Neptunes,Kanye West,B,expert,Artists & Bands
+624,Which producer formed the Neptunes with Chad Hugo?,Chad Hugo,Bryan Michael Cox,Pharrell Williams,The-Dream,C,expert,Artists & Bands
+625,Who produced Usher's 2004 hit Yeah?,Scott Storch,Bryan-Michael Cox,Rodney Jerkins,Lil Jon,D,expert,Artists & Bands
+626,Who produced Outkast's debut album?,Organized Noize,DJ Toomp,Mannie Fresh,DJ Paul,A,expert,Artists & Bands
+627,Who produced Missy Elliott's futuristic 1997 debut?,Jazze Pha,Timbaland,Mike WiLL Made-It,Dallas Austin,B,expert,Artists & Bands
+628,Who engineered and mixed Michael Jackson's Thriller?,Hugh Padgham,Bob Clearmountain,Bruce Swedien,Bill Price,C,expert,Artists & Bands
+629,Who produced the Clash's London Calling?,Nigel Gray,Guy Stevens,Martin Rushent,Sandy Pearlman,D,expert,Artists & Bands
+630,Who produced the Pixies' Surfer Rosa?,Steve Albini,Gil Norton,Gary Smith,Paul Kolderie,A,expert,Artists & Bands
+631,Which production team built Public Enemy's wall of noise?,The Dust Brothers,The Bomb Squad,The Beatnuts,The Hitmen,B,expert,Artists & Bands
+632,Which unlisted track closes Nirvana's Nevermind?,Something in the Way,Territorial Pissings,Endless Nameless,Sifting,C,expert,Songs & Albums
+633,Which song opens Abbey Road?,Octopus's Garden,Something,Maxwell's Silver Hammer,Come Together,D,expert,Songs & Albums
+634,Which single was released with Revolution as its B-side?,Hey Jude,Get Back,Lady Madonna,The Ballad of John and Yoko,A,expert,Songs & Albums
+635,Which Queen song was the B-side of Bohemian Rhapsody?,You're My Best Friend,I'm in Love with My Car,Death on Two Legs,Seaside Rendezvous,B,expert,Songs & Albums
+636,Which is the longest track on Dark Side of the Moon?,Time,Breathe,Us and Them,Brain Damage,C,expert,Songs & Albums
+637,Who sang the wordless vocals on The Great Gig in the Sky?,Doris Troy,Madeline Bell,Venetta Fields,Clare Torry,D,expert,Songs & Albums
+638,What is the opening track of Steely Dan's Aja?,Black Cow,Aja,Deacon Blues,Peg,A,expert,Songs & Albums
+639,Who plays the saxophone solo on Aja?,Pete Christlieb,Wayne Shorter,Tom Scott,Michael Brecker,B,expert,Songs & Albums
+640,On which Prince album did he play every instrument himself?,Prince,Dirty Mind,For You,Controversy,C,expert,Songs & Albums
+641,Which Prince single was his first Hot 100 number one?,Little Red Corvette,I Wanna Be Your Lover,Let's Go Crazy,When Doves Cry,D,expert,Songs & Albums
+642,Which Prince album launched the Paisley Park label?,Around the World in a Day,Purple Rain,Parade,Lovesexy,A,expert,Songs & Albums
+643,What was the name of Prince's band on the Purple Rain tour?,The New Power Generation,The Revolution,3rdeyegirl,The Time,B,expert,Songs & Albums
+644,Which 1986 album accompanied Prince's second film?,Around the World in a Day,The Gold Experience,Parade,Batman,C,expert,Songs & Albums
+645,Under what pen name did Prince write Manic Monday?,Jamie Starr,Alexander Nevermind,Camille,Christopher,D,expert,Songs & Albums
+646,Which Iggy Pop album recorded in Berlin features Bowie on keyboards?,The Idiot,New Values,Lust for Life,Soldier,A,expert,Songs & Albums
+647,Which David Bowie album came out two days before his death?,The Next Day,Blackstar,Heathen,Reality,B,expert,Songs & Albums
+648,Which song closes Stevie Wonder's Songs in the Key of Life?,Sir Duke,As,Another Star,I Wish,C,expert,Songs & Albums
+649,Which 1963 live single made Stevie Wonder a star at thirteen?,Signed Sealed Delivered,Uptight,For Once in My Life,Fingertips Part 2,D,expert,Songs & Albums
+650,Which double LP did Stevie Wonder record for a 1979 film?,Journey Through the Secret Life of Plants,Fulfillingness First Finale,Talking Book,Music of My Mind,A,expert,Songs & Albums
+651,Which track opens Marvin Gaye's What's Going On?,Mercy Mercy Me,What's Going On,Inner City Blues,God Is Love,B,expert,Songs & Albums
+652,At which Detroit studio was What's Going On recorded?,Motown Recording Studios,United Sound Systems,Hitsville USA,Golden World,C,expert,Songs & Albums
+653,Which song was Elvis Presley's first single at Sun?,Baby Let's Play House,Good Rockin Tonight,Mystery Train,That's All Right,D,expert,Songs & Albums
+654,What was the B-side of That's All Right?,Blue Moon of Kentucky,Harbor Lights,I Love You Because,My Happiness,A,expert,Songs & Albums
+655,Which song shared Ritchie Valens' double sided hit La Bamba?,Come On Let's Go,Donna,Ooh My Head,Framed,B,expert,Songs & Albums
+656,At which Iowa ballroom did Buddy Holly play his final show?,The Winter Dance Party,The Armory,The Surf Ballroom,The Moondog Coronation Ball,C,expert,Songs & Albums
+657,Who died in the 1959 plane crash with Buddy Holly and Ritchie Valens?,Eddie Cochran,Gene Vincent,Johnny Burnette,The Big Bopper,D,expert,Songs & Albums
+658,Which song was the B-side of Like a Rolling Stone?,Gates of Eden,Mr Tambourine Man,It's All Over Now Baby Blue,Subterranean Homesick Blues,A,expert,Songs & Albums
+659,On which album does Like a Rolling Stone appear?,Bringing It All Back Home,Highway 61 Revisited,Blonde on Blonde,Another Side of Bob Dylan,B,expert,Songs & Albums
+660,What was Bob Dylan's 1965 1966 touring band later renamed?,The Hawks,The Crackers,The Band,The Flying Burrito Brothers,C,expert,Songs & Albums
+661,In which year did Bob Dylan go electric at Newport?,1964,1963,1962,1965,D,expert,Songs & Albums
+662,What was the Band's debut album called?,Music from Big Pink,The Band,Stage Fright,Northern Lights Southern Cross,A,expert,Songs & Albums
+663,Which classic song did the Band record at the Big Pink house?,Up on Cripple Creek,The Weight,Ophelia,It Makes No Difference,B,expert,Songs & Albums
+664,What was the Band's 1976 farewell concert called?,The Big Easy,The Final Winter,The Last Waltz,The Last Picture Show,C,expert,Songs & Albums
+665,Which model was Hendrix's Woodstock guitar?,Gibson SG,Les Paul,Gretsch White Falcon,Fender Stratocaster,D,expert,Instruments
+666,Who built the Octavia fuzz for Jimi Hendrix?,Roger Mayer,Bob Bradshaw,Jim Dunlop,Mike Fuller,A,expert,Instruments
+667,Which amp brand did Hendrix famously use?,Fender,Marshall,Hiwatt,Vox,B,expert,Instruments
+668,Which guitarist sold the 1959 Les Paul called Greeny to Kirk Hammett?,Joe Perry,Peter Green,Gary Moore,Rick Nielsen,C,expert,Instruments
+669,In which year did Fender introduce the Stratocaster?,1954,1950,1958,1961,A,expert,Instruments
+670,Who founded the Fender company?,Leo Fender,Orville Gibson,Adolph Rickenbacker,Gretsch,A,expert,Instruments
+671,What was the Telecaster originally called?,The Esquire,The Broadcaster,The Nocaster,The Deluxe,B,expert,Instruments
+672,In which year did Gibson launch the Les Paul model?,1948,1955,1959,1952,D,expert,Instruments
+673,What does PAF stand for on vintage Gibson pickups?,Professional Amplified Fidelity,Performance Audio Filter,Pickup Adjusted Frequency,Patent Applied For,D,expert,Instruments
+674,What alloy do premium cymbals use?,B20 bronze,Brass,Nickel silver,Titanium,A,expert,Instruments
+675,What is the most common snare drum diameter?,12 inch,14 inch,16 inch,13 inch,B,expert,Instruments
+676,Why did traditional grip develop?,For jazz brushes,For double bass speed,For drummers carrying slung marching drums,For studio volume control,C,expert,Instruments
+677,What is the raised center of a cymbal called?,The bow,The shoulder,The lip,The bell,D,expert,Instruments
+678,Which drum machine powered 1980s hits like Thriller?,The LinnDrum,The TR 808,The TR 909,The DMX,A,expert,Instruments
+679,Which Roland machine gave hip hop its booming sub kick?,The SP 1200,The TR 808,The Simmons SDS V,The RX5,B,expert,Instruments
+680,Which grip holds both sticks the same way?,French grip,Traditional grip,Matched grip,Reverse grip,C,expert,Instruments
+681,Which Italian maker builds the largest concert grand piano?,Bosendorfer,Bechstein,Petrof,Fazioli,D,expert,Instruments
+682,Which maker's grand extends to 97 keys?,Bosendorfer,Steinway,Yamaha,Bluthner,A,expert,Instruments
+683,Who invented the piano around 1700?,Gottfried Silbermann,Bartolomeo Cristofori,Sebastien Erard,John Broadwood,B,expert,Instruments
+684,Who invented the double escapement action?,Cristofori,Johannes Zumpe,Sebastien Erard,Ignaz Bosendorfer,C,expert,Instruments
+685,Which rarely played Stradivarius is nicknamed the Messiah?,Il Cremonese,The Lady Blunt,The Hammer,The Messiah,D,expert,Instruments
+686,What tonewood is used for a violin's top?,Spruce,Ebony,Maple,Rosewood,A,expert,Instruments
+687,What were Baroque violin strings made from?,Silk,Sheep gut,Silver wire,Fluorocarbon,B,expert,Instruments
+688,Which wooden strut runs under a violin's bass side top?,The purfling,The sound post,The bass bar,The fingerboard,C,expert,Instruments
+689,What is a stringed instrument craftsman called?,A bowyer,A lutenist,A fiddler,A luthier,D,expert,Instruments
+690,What is the term for plucked strings on a violin?,Pizzicato,Col legno,Spiccato,Sul ponticello,A,expert,Instruments
+691,What does the direction col legno ask players to do?,Mute the strings,Strike strings with the stick,Slide between notes,Pluck rapidly,B,expert,Instruments
+692,What is the first chair violinist of an orchestra called?,The principal cellist,The kapellmeister,The concertmaster,The primarius,C,expert,Instruments
+693,What do horn players call muting with the hand in the bell?,Fist placement,Hand slapping,Bell damping,Hand stopping,D,expert,Instruments
+694,What makes a French horn double?,Two tubing lengths in one instrument,Two bells,Two mouthpieces,Two players,A,expert,Instruments
+695,What is a trombone's F attachment for?,Raising pitch,Adding tubing to reach lower notes,Muting,Tuning the slide,B,expert,Instruments
+696,What makes a flute transverse?,It has reeds,It is metal,It is held sideways,It has keys only,C,expert,Instruments
+697,Which recorder is pitched above the soprano?,The alto,The tenor,The treble,The sopranino,D,expert,Instruments
+698,Which scale degree roots the Neapolitan chord?,Flattened second,Raised fourth,Flattened seventh,Mediant,A,expert,Music Theory
+699,Which mode raises the fourth degree of a major scale?,Hypophrygian,Lydian,Hypoaeolian,Hypolocrian,B,expert,Music Theory
+700,Which mode lowers the second degree of a major scale?,Ionian,Hypoionian,Phrygian,Enigmatic mode,C,expert,Music Theory
+701,Which mode has a natural sixth with a minor third?,Lydian,Ultralocrian,Mixolydian,Dorian,D,expert,Music Theory
+702,Which mode lacks a perfect fifth?,Locrian,Melodic minor,Harmonic minor,Whole tone,A,expert,Music Theory
+703,Which minor form raises the seventh degree?,The natural minor,The harmonic minor,The Dorian mode,The Phrygian mode,B,expert,Music Theory
+704,The augmented sixth chord typically resolves to which harmony?,The tonic,The submediant,The dominant,The leading tone,C,expert,Music Theory
+705,What is a shared chord that eases a key change called?,A passing chord,A suspended chord,A borrowed chord,A pivot chord,D,expert,Music Theory
+706,What does enharmonic describe?,Pitches that sound the same with different names,Microtonal pitches,Pitches an octave apart,Doubled pitches,A,expert,Music Theory
+707,What frequency ratio defines an octave?,3:2,2:1,5:4,4:3,B,expert,Music Theory
+708,Which ratio defines a just perfect fifth?,16:9,9:8,3:2,45:32,C,expert,Music Theory
+709,Which ratio defines a just major third?,16:15,6:5,81:64,5:4,D,expert,Music Theory
+710,Which tradition uses quarter tone intervals?,Arabic maqam,Indian raga,Gregorian chant,Balinese gamelan,A,expert,Music Theory
+711,What is the first note of Indian solfege?,Re,Sa,Pa,Ma,B,expert,Music Theory
+712,What is the Indian term for rhythmic cycles?,Raga,Shruti,Tala,Sutra,C,expert,Music Theory
+713,What is Japan's ancient court music called?,Noh theater music,Kagura,Minyo,Gagaku,D,expert,Music Theory
+714,Which gamelan tuning uses five uneven pitches?,Pelog,Slendro,Kecak,Wayang,A,expert,Music Theory
+715,What metal are classic gamelan keys made from?,Iron,Bronze,Bell metal,Copper,B,expert,Music Theory
+716,Which performance practice features a leader answered by a chorus?,Hocket,Ostinato,Call and response,Isorhythm,C,expert,Music Theory
+717,Which technique splits a melody between voices note by note?,Stretto,Cantus firmus,Soggetto cavato,Hocket,D,expert,Music Theory
+718,Which medieval technique repeats a rhythmic pattern across a tenor?,Isorhythm,Talea,Organum,Faburden,A,expert,Music Theory
+719,What is the earliest form of European polyphony called?,Conductus,Organum,Burden,Discant,B,expert,Music Theory
+720,Who wrote the treatise naming the Ars Nova?,Guillaume de Machaut,Leonin,Philippe de Vitry,Perotin,C,expert,Music Theory
+721,Which Notre Dame composer compiled the Magnus Liber?,Philippe de Vitry,Johannes Ciconia,Francesco Landini,Leonin,D,expert,Music Theory
+722,Which blind Italian medieval composer was famous as an organist?,Francesco Landini,Guillaume Dufay,John Dunstaple,Gilles Binchois,A,expert,Music Theory
+723,Which composer led the Burgundian school?,Johannes Ockeghem,Guillaume Dufay,Josquin des Prez,Jacob Obrecht,B,expert,Music Theory
+724,Which Franco Flemish composer is called the prince of music?,Palestrina,Orlando di Lasso,Josquin des Prez,Cipriano de Rore,C,expert,Music Theory
+725,Which council prompted reform of church music around 1560?,The First Vatican Council,The Synod of Dort,The Council of Nicaea,The Council of Trent,D,expert,Music Theory
+726,Which Palestrina mass is linked to saving polyphony?,Missa Papae Marcelli,Missa L'homme arme,Missa de Beata Virgine,Missa Inviolata,A,expert,Music Theory
+727,What did Monteverdi mean by prima pratica?,His own new style,The Palestrina style of strict counterpoint,The papal choir style,Venetian polychoral style,B,expert,Music Theory
+728,Which style did Monteverdi champion as seconda pratica?,Pure instrumentals,Strict canon,Text driven melody over strict rules,Equal temperament,C,expert,Music Theory
+729,Which composer founded the Venetian school at St Mark's?,Claudio Monteverdi,Andrea Gabrieli,Giovanni Gabrieli,Adrian Willaert,D,expert,Music Theory
+730,Whose Sonata pian e forte helped pioneer printed dynamics?,Giovanni Gabrieli,Claudio Merulo,Heinrich Schutz,Michael Praetorius,A,expert,Music Theory
+731,Which Harlem club birthed bebop jam sessions?,The Cotton Club,Minton's Playhouse,Birdland,The Village Vanguard,B,expert,Genres & History
+732,Which saxophonist was nicknamed Bird?,Johnny Hodges,Paul Desmond,Charlie Parker,Jackie McLean,C,expert,Genres & History
+733,Which Parker tune references his nickname directly?,Billie's Bounce,Ko Ko,Now's the Time,Yardbird Suite,D,expert,Genres & History
+734,Which guitarist amplified jazz with Benny Goodman before bebop?,Charlie Christian,Oscar Moore,Django Reinhardt,Tal Farlow,A,expert,Genres & History
+735,Which hand injury did Django Reinhardt overcome?,A broken wrist,Two burned fingers on his left hand,A shattered right thumb,A cut tendon,B,expert,Genres & History
+736,What was Django Reinhardt's famous group named?,The Paris String Trio,The Manouche Ensemble,The Quintette du Hot Club de France,The Hot Five,C,expert,Genres & History
+737,Which soprano sax pioneer led early jazz in the 1920s?,Bud Freeman,Pee Wee Russell,Frank Trumbauer,Sidney Bechet,D,expert,Genres & History
+738,Who is credited as jazz's first great soloist?,Louis Armstrong,Buddy Bolden,King Oliver,Bix Beiderbecke,A,expert,Genres & History
+739,Which early cornet king was never recorded?,Mutt Carey,Buddy Bolden,Freddie Keppard,Bunk Johnson,B,expert,Genres & History
+740,Which Armstrong ensemble recorded West End Blues in 1928?,The Hot Seven,The Savoy Ballroom Five,The Hot Five,The Dirty Dozen,C,expert,Genres & History
+741,Which Ellington piece revived his career at Newport in 1956?,Take the A Train,Caravan,Mood Indigo,Diminuendo and Crescendo in Blue,D,expert,Genres & History
+742,Who wrote Take the A Train?,Billy Strayhorn,Fletcher Henderson,Ben Webster,Juan Tizol,A,expert,Genres & History
+743,Which trombonist co wrote Caravan?,Barney Bigard,Juan Tizol,Tricky Sam Nanton,Lawrence Brown,B,expert,Genres & History
+744,Which New Jersey town was Count Basie from?,Asbury Park,Newark,Red Bank,Trenton,C,expert,Genres & History
+745,What was the Basie rhythm section nicknamed?,The Kansas City Stompers,The Big Eight,The Rhythm Kings,The All American Rhythm Section,D,expert,Genres & History
+746,Which tenor saxophonist was called Pres?,Lester Young,Don Byas,Herschel Evans,Paul Gonsalves,A,expert,Genres & History
+747,Which saxophonist faced Lester Young in Kansas City cutting contests?,Coleman Hawkins,Herschel Evans,Chu Berry,Buddy Tate,B,expert,Genres & History
+748,Who gave Billie Holiday the name Lady Day?,Teddy Wilson,John Hammond,Lester Young,Benny Goodman,C,expert,Genres & History
+749,Which legendary talent scout promoted Billie Holiday early?,Norman Granz,Milt Gabler,Ahmet Ertegun,John Hammond,D,expert,Genres & History
+750,Which label released Strange Fruit in 1939?,Commodore,Vocalion,Columbia,Decca,A,expert,Genres & History
+751,Who wrote the poem behind Strange Fruit?,Langston Hughes,Abel Meeropol,Countee Cullen,Sterling Brown,B,expert,Genres & History
+752,Which nursery rhyme song made Ella Fitzgerald a star?,Shiny Stockings,Airmail Special,A Tisket A Tasket,Undecided,C,expert,Genres & History
+753,Which drummer bandleader discovered and led Ella Fitzgerald?,Kenny Clarke,Gene Krupa,Jo Jones,Chick Webb,D,expert,Genres & History
+754,Which touring concert series did Norman Granz found?,Jazz at the Philharmonic,The Newport Jazz Festival,Birdland on Tour,Carnegie Jazz Nights,A,expert,Genres & History
+755,Which record label did Norman Granz launch for Ella's songbooks?,Blue Note,Verve,Prestige,Riverside,B,expert,Genres & History
+756,Who founded Blue Note Records with Francis Wolff?,Creed Taylor,Bob Thiele,Alfred Lion,Blue Mitchell,C,expert,Genres & History
+757,Who designed Blue Note's iconic 1950s 1960s covers?,Paul Bacon,Alex Steinweiss,David Stone Martin,Reid Miles,D,expert,Genres & History
+758,Which engineer recorded the classic Blue Note sound?,Rudy Van Gelder,Tom Dowd,Phil Ramone,Bill Putnam,A,expert,Genres & History
+759,In which New Jersey town did Van Gelder move his studio in 1959?,Teaneck,Englewood Cliffs,Montclair,Hoboken,B,expert,Genres & History
+760,Which label issued A Love Supreme?,Verve,Atlantic,Impulse,Candid,C,expert,Genres & History
+761,Which pianist anchored Coltrane's classic quartet?,Duke Pearson,Cedar Walton,Tommy Flanagan,McCoy Tyner,D,expert,Genres & History
+762,Which drummer powered the Coltrane quartet?,Elvin Jones,Roy Haynes,Art Blakey,Max Roach,A,expert,Genres & History
+763,Which bassist completed the Coltrane quartet?,Reggie Workman,Jimmy Garrison,Paul Chambers,Ron Carter,B,expert,Genres & History
+764,Which 2011 album logged 24 weeks at number one?,25,Red,21,Teenage Dream,C,expert,Charts & Awards
+765,Which act charted the most Hot 100 entries ever?,Michael Jackson,Taylor Swift,Lil Wayne,The Glee Cast,D,expert,Charts & Awards
+766,Which artist holds the UK record for most number one albums?,The Beatles,ABBA,Britney Spears,Take That,A,expert,Charts & Awards
+767,Which album topped the US chart for 24 weeks in 1978?,Rumours,Saturday Night Fever,Bridge Over Troubled Water,Grease,B,expert,Charts & Awards
+768,Which was the first music video on YouTube to hit a billion views?,Waka Waka,Bad Romance,Gangnam Style,Call Me Maybe,C,expert,Charts & Awards
+769,Which rapper became the first to claim 27 Hot 100 spots in one week in 2021?,Future,Travis Scott,J Cole,Drake,D,expert,Charts & Awards
+770,Which ten minute song hit number one in 2021?,All Too Well,American Pie,Hey Jude,Do They Know It's Christmas,A,expert,Charts & Awards
+771,Which 1965 novelty hit is the shortest number one in Hot 100 history?,Itsy Bitsy Teenie Weenie Yellow Polkadot Bikini,I'm Henry the Eighth I Am,Sugar Sugar,Telstar,B,expert,Charts & Awards
+772,Which 1994 holiday song hit number one in two different decades?,Last Christmas,Jingle Bell Rock,All I Want for Christmas Is You,Rockin Around the Christmas Tree,C,expert,Charts & Awards
+773,Which 1995 single was the first ever to debut at number one?,Always Be My Baby,Fantasy,Butterfly,You Are Not Alone,D,expert,Charts & Awards
+774,Which collaboration held the 16 week number one record from 1995?,One Sweet Day,I Will Always Love You,Endless Love,Because I Love You,A,expert,Charts & Awards
+775,Which 2017 Latin hit tied the sixteen week number one mark?,Mi Gente,Despacito,Bailando,Gasolina,B,expert,Charts & Awards
+776,Which Elton John album first debuted at number one in 1975?,Goodbye Yellow Brick Road,Rock of the Westies,Captain Fantastic and the Brown Dirt Cowboy,Honky Chateau,C,expert,Charts & Awards
+777,Which tribute single was the fastest selling single ever?,We Are the World,Sun City,Voices That Care,Candle in the Wind 1997,D,expert,Charts & Awards
+778,Which Kendrick Lamar album won the Pulitzer Prize?,DAMN,To Pimp a Butterfly,good kid mAAd city,Mr Morale and the Big Steppers,A,expert,Charts & Awards
+779,Which network ran Total Request Live from Times Square?,MuchMusic,MTV,BET,Fuse,B,expert,Charts & Awards
+780,Who hosted Total Request Live?,Ananda Lewis,Damien Fahey,Carson Daly,La La Anthony,C,expert,Charts & Awards
+781,Which Drake album set the 2016 one week streaming record?,Scorpion,Take Care,Nothing Was the Same,Views,D,expert,Charts & Awards
+782,Which song did Billboard crown the number one Hot 100 hit of the 2010s?,Uptown Funk,Blinding Lights,Shape of You,Party Rock Anthem,A,expert,Charts & Awards
+783,Which song leads Spotify's all time streaming chart?,Dance Monkey,Blinding Lights,One Dance,Get Lucky,B,expert,Charts & Awards
+784,Which 2022 album set Spotify's first day streaming record?,1989 Taylor's Version,Red Taylor's Version,Midnights,Folklore,C,expert,Charts & Awards
+785,Which artist topped Spotify's yearly most streamed list in 2024?,Bad Bunny,The Weeknd,Ariana Grande,Taylor Swift,D,expert,Charts & Awards
+786,Which K pop act first reached number one on the Hot 100?,BTS,Stray Kids,Blackpink,Twice,A,expert,Charts & Awards
+787,Which BTS song became their first Hot 100 number one?,Butter,Dynamite,Life Goes On,Boy With Luv,B,expert,Charts & Awards
+788,Which K pop girl group headlined Coachella in 2023?,NewJeans,2NE1,Blackpink,ITZY,C,expert,Charts & Awards
+789,Which Bad Bunny album led global streams in 2022?,Nadie Sabe Lo Que Va a Pasar Manana,YHLQMDLG,El Ultimo Tour Del Mundo,Un Verano Sin Ti,D,expert,Charts & Awards
+790,Which rhythm underpins reggaeton?,The dembow,The tresillo,The clave,The montuno,A,expert,Charts & Awards
+791,Which artist is widely called the King of Reggaeton?,Don Omar,Daddy Yankee,Ivy Queen,Tego Calderon,B,expert,Charts & Awards
+792,Which 2017 hit was the first mostly Spanish number one since the Macarena?,La Bicicleta,Danza Kuduro,Despacito,Soy Yo,C,expert,Charts & Awards
+793,Which duo recorded Macarena?,Jarabe de Palo,Estopa,Amaral,Los del Rio,D,expert,Charts & Awards
+794,Which Rosalia album won the 2018 Latin Grammy for Album of the Year?,El Mal Querer,Motomami,Sirope,Aute Cuture,A,expert,Charts & Awards
+795,Who joined Rosalia on Con Altura?,Ozuna,J Balvin,Maluma,Farruko,B,expert,Charts & Awards
+796,Who won the first Grammy for Best African Music Performance in 2024?,Burna Boy,Ayra Starr,Tyla,Davido,C,expert,Charts & Awards
+797,Which South African house genre flavors Water?,Gqom,Kwaito,Afroswing,Amapiano,D,expert,Charts & Awards
+798,Who was the Beatles' original drummer before Ringo Starr?,,,,,Pete Best,extreme,Artists & Bands
+799,Who co founded Chess Records alongside Leonard Chess?,,,,,Phil Chess,extreme,Artists & Bands
+800,Which drummer was Motown's main session drummer of the 1960s?,,,,,Benny Benjamin,extreme,Artists & Bands
+801,Which Wrecking Crew drummer claimed 40 number one hits?,,,,,Hal Blaine,extreme,Artists & Bands
+802,Which guitarist replaced Brian Jones in the Rolling Stones?,,,,,Mick Taylor,extreme,Artists & Bands
+803,Who played the lead guitar solo on the Beatles' Taxman?,,,,,Paul McCartney,extreme,Artists & Bands
+804,Who designed the Rolling Stones' tongue logo?,,,,,John Pasche,extreme,Artists & Bands
+805,Who closed the Woodstock festival in 1969?,,,,,Jimi Hendrix,extreme,Artists & Bands
+806,Who sang for both Free and Bad Company?,,,,,Paul Rodgers,extreme,Artists & Bands
+807,Which drummer co-founded Cream with Eric Clapton?,,,,,Ginger Baker,extreme,Artists & Bands
+808,Who was Jerry Garcia's lyricist partner in the Grateful Dead?,,,,,Robert Hunter,extreme,Artists & Bands
+809,Which singer left the Supremes in 1970 to go solo?,,,,,Diana Ross,extreme,Artists & Bands
+810,Which bassist played in the Rolling Stones from 1962 to 1993?,,,,,Bill Wyman,extreme,Artists & Bands
+811,Who was Toto's original lead singer?,,,,,Bobby Kimball,extreme,Artists & Bands
+812,Which Gibson president designed the Flying V?,,,,,Ted McCarty,extreme,Artists & Bands
+813,Who engineered the Beatles' Sgt Pepper sessions?,,,,,Geoff Emerick,extreme,Artists & Bands
+814,Who played piano on the Rolling Stones' Sympathy for the Devil?,,,,,Nicky Hopkins,extreme,Artists & Bands
+815,Who managed the Rolling Stones from 1963 to 1967?,,,,,Andrew Loog Oldham,extreme,Artists & Bands
+816,Which founding Byrd was dismissed in 1967?,,,,,David Crosby,extreme,Artists & Bands
+817,Which drummer was a founding member of the Doors?,,,,,John Densmore,extreme,Artists & Bands
+818,Which original Animals keyboardist arranged House of the Rising Sun?,,,,,Alan Price,extreme,Artists & Bands
+819,Who co-founded Atlantic Records with Herb Abramson?,,,,,Ahmet Ertegun,extreme,Artists & Bands
+820,Who lent his name to Gibson's classic solid body guitar?,,,,,Les Paul,extreme,Artists & Bands
+821,Which guitarist played in both the Yardbirds and Cream?,,,,,Eric Clapton,extreme,Artists & Bands
+822,Who played saxophone on the Rolling Stones' Brown Sugar?,,,,,Bobby Keys,extreme,Artists & Bands
+823,Who played organ on Procol Harum's Whiter Shade of Pale?,,,,,Matthew Fisher,extreme,Artists & Bands
+824,Who was Metallica's second guitarist?,,,,,Dave Mustaine,extreme,Artists & Bands
+825,Which bassist replaced Cliff Burton in Metallica?,,,,,Jason Newsted,extreme,Artists & Bands
+826,Which bassist replaced Jason Newsted in Metallica?,,,,,Robert Trujillo,extreme,Artists & Bands
+827,Which drummer played on Nirvana's Bleach?,,,,,Chad Channing,extreme,Artists & Bands
+828,Who was the Smashing Pumpkins' original drummer?,,,,,Jimmy Chamberlin,extreme,Artists & Bands
+829,Who was Soundgarden's original bassist?,,,,,Hiro Yamamoto,extreme,Artists & Bands
+830,Which drummer played on Pearl Jam's Ten?,,,,,Dave Krusen,extreme,Artists & Bands
+831,Who played every instrument on the Foo Fighters' debut album?,,,,,Dave Grohl,extreme,Artists & Bands
+832,Which Beatles album cover shows the band crossing a street?,,,,,Abbey Road,extreme,Songs & Albums
+833,What is the best selling album of all time?,,,,,Thriller,extreme,Songs & Albums
+834,What is the best selling country album of all time?,,,,,Come On Over,extreme,Songs & Albums
+835,Which Eagles compilation is among the best selling albums ever?,,,,,Their Greatest Hits,extreme,Songs & Albums
+836,What is the best selling single of all time?,,,,,White Christmas,extreme,Songs & Albums
+837,Which 1951 song is often called the first rock and roll record?,,,,,Rocket 88,extreme,Songs & Albums
+838,What was the Beatles' first single?,,,,,Love Me Do,extreme,Songs & Albums
+839,Which Beatles album was the last they recorded together?,,,,,Abbey Road,extreme,Songs & Albums
+840,What was the Rolling Stones' first single?,,,,,Come On,extreme,Songs & Albums
+841,Which Who album grew from the abandoned Lifehouse project?,,,,,Who's Next,extreme,Songs & Albums
+842,What was Led Zeppelin's only US top ten single?,,,,,Whole Lotta Love,extreme,Songs & Albums
+843,Which Beatles single ran over seven minutes long?,,,,,Hey Jude,extreme,Songs & Albums
+844,What was the B-side of Hey Jude?,,,,,Revolution,extreme,Songs & Albums
+845,Which song opens David Bowie's Ziggy Stardust album?,,,,,Five Years,extreme,Songs & Albums
+846,Which Pink Floyd album features Comfortably Numb?,,,,,The Wall,extreme,Songs & Albums
+847,Which 1983 album was Roger Waters' last with Pink Floyd?,,,,,The Final Cut,extreme,Songs & Albums
+848,Which Fleetwood Mac album followed Tusk?,,,,,Mirage,extreme,Songs & Albums
+849,Which Springsteen album followed Born to Run?,,,,,Darkness on the Edge of Town,extreme,Songs & Albums
+850,What was Nirvana's follow-up to Nevermind?,,,,,In Utero,extreme,Songs & Albums
+851,What was the Ramones' first album called?,,,,,Ramones,extreme,Songs & Albums
+852,Which U2 album followed The Joshua Tree?,,,,,Rattle and Hum,extreme,Songs & Albums
+853,Which R.E.M. album followed Automatic for the People?,,,,,Monster,extreme,Songs & Albums
+854,What was the Beastie Boys' follow-up to Licensed to Ill?,,,,,Paul's Boutique,extreme,Songs & Albums
+855,What was Prince's follow-up to Purple Rain?,,,,,Around the World in a Day,extreme,Songs & Albums
+856,What was Michael Jackson's follow-up to Bad?,,,,,Dangerous,extreme,Songs & Albums
+857,What was Madonna's debut album titled?,,,,,Madonna,extreme,Songs & Albums
+858,What was the lead single from Whitney Houston's debut album?,,,,,You Give Good Love,extreme,Songs & Albums
+859,What was Alanis Morissette's breakthrough album?,,,,,Jagged Little Pill,extreme,Songs & Albums
+860,What was TLC's follow-up to CrazySexyCool?,,,,,FanMail,extreme,Songs & Albums
+861,What was Radiohead's debut single?,,,,,Creep,extreme,Songs & Albums
+862,What was Oasis' third album?,,,,,Be Here Now,extreme,Songs & Albums
+863,What was the Verve's comeback album?,,,,,Urban Hymns,extreme,Songs & Albums
+864,What was Lauryn Hill's only solo studio album?,,,,,The Miseducation of Lauryn Hill,extreme,Songs & Albums
+865,What is the smallest flute in the orchestral family?,,,,,Piccolo,extreme,Instruments
+866,Which flute is pitched in G below the concert flute?,,,,,Alto flute,extreme,Instruments
+867,What is the largest woodwind instrument in the orchestra?,,,,,Contrabassoon,extreme,Instruments
+868,What is the tenor member of the oboe family called?,,,,,English horn,extreme,Instruments
+869,Which saxophone is pitched above the soprano?,,,,,Sopranino saxophone,extreme,Instruments
+870,Which instrument plays the tenor part in the tuba family?,,,,,Euphonium,extreme,Instruments
+871,What is the large circular marching brass horn called?,,,,,Sousaphone,extreme,Instruments
+872,What is the smallest trumpet pitched above B flat?,,,,,Piccolo trumpet,extreme,Instruments
+873,Which marching instrument replaces the French horn?,,,,,Mellophone,extreme,Instruments
+874,What are the orchestral kettledrums called?,,,,,Timpani,extreme,Instruments
+875,Which Spanish wooden clackers accompany flamenco?,,,,,Castanets,extreme,Instruments
+876,What small anvil is used for orchestral sound effects?,,,,,Anvil,extreme,Instruments
+877,Which percussion instrument is also called a whip?,,,,,Whip,extreme,Instruments
+878,Which theatrical percussion effect imitates blowing wind?,,,,,Wind machine,extreme,Instruments
+879,Which scraped gourd instrument comes from Latin America?,,,,,Guiro,extreme,Instruments
+880,Which Cuban instrument is two struck wooden sticks?,,,,,Claves,extreme,Instruments
+881,Which keyboard percussion instrument has steel bars?,,,,,Glockenspiel,extreme,Instruments
+882,Which keyboard percussion instrument has rosewood bars?,,,,,Xylophone,extreme,Instruments
+883,What is the set of tuned metal tubes struck with a mallet?,,,,,Tubular bells,extreme,Instruments
+884,Which frame drum carries metal jingles?,,,,,Tambourine,extreme,Instruments
+885,What is the smaller tabla drum called?,,,,,Dayan,extreme,Instruments
+886,What is the larger tabla drum called?,,,,,Bayan,extreme,Instruments
+887,What is Japan's national zither called?,,,,,Koto,extreme,Instruments
+888,What is the Chinese two string fiddle called?,,,,,Erhu,extreme,Instruments
+889,What is the Japanese three string lute called?,,,,,Shamisen,extreme,Instruments
+890,What is the Korean zither called?,,,,,Gayageum,extreme,Instruments
+891,What is the Indian drone instrument called?,,,,,Tanpura,extreme,Instruments
+892,What is the West African 21 string harp lute called?,,,,,Kora,extreme,Instruments
+893,Which hourglass African drum changes pitch when squeezed?,,,,,Talking drum,extreme,Instruments
+894,What wood forms a didgeridoo?,,,,,Eucalyptus,extreme,Instruments
+895,What is the Irish frame drum called?,,,,,Bodhran,extreme,Instruments
+896,Which instrument sounds its strings via a wheel?,,,,,Hurdy gurdy,extreme,Instruments
+897,Which Swedish fiddle is played with keys?,,,,,Nyckelharpa,extreme,Instruments
+898,What is the American term for a semitone?,,,,,Half step,extreme,Music Theory
+899,What is the British name for the half note?,,,,,Minim,extreme,Music Theory
+900,What is the British name for the whole note?,,,,,Semibreve,extreme,Music Theory
+901,What is the British name for the quarter note?,,,,,Crotchet,extreme,Music Theory
+902,What is the British name for the eighth note?,,,,,Quaver,extreme,Music Theory
+903,What is the British name for the sixteenth note?,,,,,Semiquaver,extreme,Music Theory
+904,What is the softest dynamic marking called?,,,,,Pianississimo,extreme,Music Theory
+905,What is the Italian term for gradually slowing down?,,,,,Ritardando,extreme,Music Theory
+906,What is the term for gradually becoming faster?,,,,,Accelerando,extreme,Music Theory
+907,What is the term for detached short notes?,,,,,Staccato,extreme,Music Theory
+908,Which marking calls for a sudden forceful accent?,,,,,Sforzando,extreme,Music Theory
+909,What is the arc symbol that holds a note longer called?,,,,,Fermata,extreme,Music Theory
+910,What is the symbol for a brief silent break called?,,,,,Caesura,extreme,Music Theory
+911,Which marking directs a note to be held for its full value?,,,,,Tenuto,extreme,Music Theory
+912,Which marking demands marked emphatic playing?,,,,,Marcato,extreme,Music Theory
+913,What does the Italian phrase dal segno mean?,,,,,From the sign,extreme,Music Theory
+914,What does the Italian phrase da capo mean?,,,,,From the beginning,extreme,Music Theory
+915,What is a short concluding passage called?,,,,,Codetta,extreme,Music Theory
+916,What is the Italian term for a concluding section?,,,,,Coda,extreme,Music Theory
+917,What is the contrasting middle section of a minuet called?,,,,,Trio,extreme,Music Theory
+918,What is a fugue's opening theme called?,,,,,Subject,extreme,Music Theory
+919,What is the second voice's imitative entry in a fugue called?,,,,,The answer,extreme,Music Theory
+920,What accompanies a fugue's subject on its return?,,,,,Countersubject,extreme,Music Theory
+921,What is the overlapping of fugue voices called?,,,,,Stretto,extreme,Music Theory
+922,What is a sustained bass note under changing harmony called?,,,,,Pedal point,extreme,Music Theory
+923,What is a persistently repeated motif called?,,,,,Ostinato,extreme,Music Theory
+924,What is a repeated bass line in Baroque variations called?,,,,,Ground bass,extreme,Music Theory
+925,Which Baroque form builds variations over a repeated bass theme?,,,,,Passacaglia,extreme,Music Theory
+926,Which virtuoso piece shows off a player's touch?,,,,,Toccata,extreme,Music Theory
+927,Which Romantic piano piece evokes the night?,,,,,Nocturne,extreme,Music Theory
+928,What is a study piece for technique called?,,,,,Etude,extreme,Music Theory
+929,Which lively movement replaced the minuet in symphonies?,,,,,Scherzo,extreme,Music Theory
+930,Which form alternates a theme with episodes?,,,,,Rondo,extreme,Music Theory
+931,In which year did the first Newport Jazz Festival take place?,,,,,1954,extreme,Genres & History
+932,In which year was the first Newport Folk Festival held?,,,,,1959,extreme,Genres & History
+933,In which year was the Monterey Jazz Festival founded?,,,,,1958,extreme,Genres & History
+934,In which year did the Isle of Wight festival debut?,,,,,1968,extreme,Genres & History
+935,In which year was the Altamont free concert held?,,,,,1969,extreme,Genres & History
+936,In which New York town did Woodstock actually take place?,,,,,Bethel,extreme,Genres & History
+937,In which year was the first Glastonbury Festival held?,,,,,1970,extreme,Genres & History
+938,In which year did Live Aid take place?,,,,,1985,extreme,Genres & History
+939,Which American city hosted Live Aid?,,,,,Philadelphia,extreme,Genres & History
+940,In which year was Farm Aid founded?,,,,,1985,extreme,Genres & History
+941,Which country star organized Farm Aid?,,,,,Willie Nelson,extreme,Genres & History
+942,In which year did the Concert for New York City take place?,,,,,2001,extreme,Genres & History
+943,In which year was the Concert for Bangladesh held?,,,,,1971,extreme,Genres & History
+944,Which venue hosted the Concert for Bangladesh?,,,,,Madison Square Garden,extreme,Genres & History
+945,Which city hosted Live 8's flagship concert?,,,,,London,extreme,Genres & History
+946,In which year were the first VMAs held?,,,,,1984,extreme,Genres & History
+947,In which year did MTV Unplugged first air?,,,,,1989,extreme,Genres & History
+948,In which year was Nirvana's MTV Unplugged session recorded?,,,,,1993,extreme,Genres & History
+949,In which year did the Rock and Roll Hall of Fame museum open?,,,,,1995,extreme,Genres & History
+950,In which year was the Grammy Hall of Fame created?,,,,,1973,extreme,Genres & History
+951,In which year did the Latin Grammys debut?,,,,,2000,extreme,Genres & History
+952,In which year were the first Brit Awards held?,,,,,1977,extreme,Genres & History
+953,In which year were the first ARIA Awards held?,,,,,1987,extreme,Genres & History
+954,In which year was the Mercury Prize first awarded?,,,,,1992,extreme,Genres & History
+955,In which year was the Polar Music Prize founded?,,,,,1989,extreme,Genres & History
+956,In which year was the first Eurovision Song Contest held?,,,,,1956,extreme,Genres & History
+957,Which country won the first Eurovision Song Contest?,,,,,Switzerland,extreme,Genres & History
+958,In which city was the first Eurovision held?,,,,,Lugano,extreme,Genres & History
+959,In which year did ABBA win Eurovision?,,,,,1974,extreme,Genres & History
+960,Which ABBA song won Eurovision?,,,,,Waterloo,extreme,Genres & History
+961,In which year did Celine Dion win Eurovision?,,,,,1988,extreme,Genres & History
+962,Which country hosted Eurovision in 1988?,,,,,Ireland,extreme,Genres & History
+963,Which Canadian singer represented Switzerland in Eurovision 1988?,,,,,Celine Dion,extreme,Genres & History
+964,Which act has the most number one albums on the Billboard 200?,,,,,The Beatles,extreme,Charts & Awards
+965,Which artist scored five number one singles from one album with Teenage Dream?,,,,,Katy Perry,extreme,Charts & Awards
+966,Which is the only album by a woman with five Hot 100 number ones?,,,,,Teenage Dream,extreme,Charts & Awards
+967,Which classical conductor held the Grammy wins record before Beyonce?,,,,,Georg Solti,extreme,Charts & Awards
+968,Who won eight Grammys in one night in 1984?,,,,,Michael Jackson,extreme,Charts & Awards
+969,Which band won eight Grammys in one night in 2000?,,,,,Santana,extreme,Charts & Awards
+970,Which album won Album of the Year at the 1984 Grammys?,,,,,Thriller,extreme,Charts & Awards
+971,Which album won Album of the Year at the 1999 Grammys?,,,,,The Miseducation of Lauryn Hill,extreme,Charts & Awards
+972,Which 2007 duet album won the 2009 Album of the Year Grammy?,,,,,Raising Sand,extreme,Charts & Awards
+973,Which album made Taylor Swift a two time Album of the Year winner in 2016?,,,,,1989,extreme,Charts & Awards
+974,Which Taylor Swift album won her third Album of the Year in 2021?,,,,,Folklore,extreme,Charts & Awards
+975,Which album won Taylor Swift her record fourth Album of the Year?,,,,,Midnights,extreme,Charts & Awards
+976,Which Beyonce album won Album of the Year at the 2025 Grammys?,,,,,Cowboy Carter,extreme,Charts & Awards
+977,Which major label bought Elvis's contract from Sun in 1955?,,,,,RCA Victor,extreme,Charts & Awards
+978,How much did RCA pay to acquire Elvis from Sun?,,,,,40000 dollars,extreme,Charts & Awards
+979,Who managed Elvis Presley for over two decades?,,,,,Colonel Tom Parker,extreme,Charts & Awards
+980,From which country did Elvis's manager emigrate?,,,,,Netherlands,extreme,Charts & Awards
+981,What was Elvis Presley's first feature film?,,,,,Love Me Tender,extreme,Charts & Awards
+982,What was Elvis's 1968 television special nicknamed?,,,,,Comeback Special,extreme,Charts & Awards
+983,In which year did Elvis open his Las Vegas residency?,,,,,1969,extreme,Charts & Awards
+984,What is the name of Elvis's Memphis estate?,,,,,Graceland,extreme,Charts & Awards
+985,In which year did Graceland open to the public?,,,,,1982,extreme,Charts & Awards
+986,In which year did Elvis Presley die?,,,,,1977,extreme,Charts & Awards
+987,In which year was Elvis in the Rock Hall's first class?,,,,,1986,extreme,Charts & Awards
+988,Which 1990 song was the first rap number one on the Hot 100?,,,,,Ice Ice Baby,extreme,Charts & Awards
+989,In which year was the Parental Advisory label introduced?,,,,,1985,extreme,Charts & Awards
+990,In which year did Napster launch?,,,,,1999,extreme,Charts & Awards
+991,In which year did the iTunes Store launch?,,,,,2003,extreme,Charts & Awards
+992,In which year did Apple Music launch?,,,,,2015,extreme,Charts & Awards
+993,In which year did vinyl outsell CDs in the US again after 1987?,,,,,2020,extreme,Charts & Awards
+994,In which year did Spotify reach 100 million paying subscribers?,,,,,2019,extreme,Charts & Awards
+995,In which year did the Billboard Hot 100 debut?,,,,,1958,extreme,Charts & Awards
+996,Which teen idol sang the first Hot 100 number one?,,,,,Ricky Nelson,extreme,Charts & Awards
+997,In which year was Billboard magazine founded?,,,,,1894,extreme,Charts & Awards

@@ -1,0 +1,138 @@
+======================================================================
+CSV CONTENT QUALITY AUDIT (read-only)
+======================================================================
+
+--- row counts ---
+quiz: total rows: 11541
+quiz:animals.csv: 787
+quiz:business.csv: 1000
+quiz:food-cooking.csv: 999
+quiz:general-knowledge.csv: 948
+quiz:geography.csv: 947
+quiz:history.csv: 999
+quiz:movies-tv.csv: 1000
+quiz:music.csv: 997
+quiz:pop-culture-celebrities.csv: 996
+quiz:science-nature.csv: 1000
+quiz:sports.csv: 877
+quiz:technology-video-games.csv: 991
+riddle: total rows: 3000
+riddle:brain-teasers.csv: 300
+riddle:detective-mystery.csv: 300
+riddle:everyday-objects.csv: 300
+riddle:funny-riddles.csv: 300
+riddle:kids-family.csv: 300
+riddle:lateral-thinking.csv: 300
+riddle:logic-deduction.csv: 300
+riddle:math-numbers.csv: 300
+riddle:trick-questions.csv: 300
+riddle:words-letters.csv: 300
+
+--- aggregate distributions ---
+QUIZ level: easy=2291 (19%), expert=2251 (19%), extreme=1842 (15%), hard=2366 (20%), medium=2791 (24%)
+QUIZ letter: A=3907 (40%), B=3892 (40%), C=1345 (13%), D=556 (5%)
+QUIZ tf: no=10393 (90%), yes=1148 (9%)
+RIDDLE level: easy=1010 (33%), expert=223 (7%), hard=480 (16%), medium=1287 (42%)
+RIDDLE letter: A=1071 (38%), B=1124 (40%), C=489 (17%), D=93 (3%)
+RIDDLE subjects: Age & Time Puzzles=90, Alphabet Riddles=90, Animal Riddles=100, Classic Riddles=100, Code-Breaking=100, Common-Sense Traps=245, Counting Tricks=90, Crime Scene=100, Easy Kids Riddles=100, Food & Kitchen=100, Gotchas=55, Hidden Words=90, Household Items=100, Lateral Puzzles=154, Logic Puzzles=150, Nature & Weather=100, Number Riddles=120, Pun Riddles=100, Riddles for Adults=100, School Riddles=100, Sequences & Patterns=150, Silly Riddles=200, Situation Puzzles=146, What Am I?=100, Who Did It?=100, Wordplay=120
+
+--- issue counts ---
+quiz: answer text appears in question: 400
+riddle: answer text appears in question: 175
+riddle: option contained in correct answer (or vice versa): 58
+quiz: option contained in correct answer (or vice versa): 44
+riddle: very long question: 30
+
+--- examples: quiz: answer text appears in question (showing up to 12 of 400) ---
+  [animals.csv | ID 198] Which group do frogs belong to: amphibians or reptiles?
+  [animals.csv | ID 199] Which animal has a trunk: an elephant or a zebra?
+  [animals.csv | ID 200] Which bird lays the largest egg: an ostrich or a sparrow?
+  [animals.csv | ID 201] Which animal slithers: a snake or a salamander?
+  [animals.csv | ID 202] Which sea animal has eight arms: an octopus or a seal?
+  [animals.csv | ID 203] Which creature spins a web: a spider or a snail?
+  [animals.csv | ID 205] Which bird cannot fly: a penguin or an eagle?
+  [animals.csv | ID 206] Which animal flicks its tongue to smell: a snake or a skunk?
+  [animals.csv | ID 207] Which animal is a mammal: a dolphin or a shark?
+  [animals.csv | ID 208] Which insect lives in a hive: a honeybee or a fox?
+  [animals.csv | ID 209] Which animal is a fish: a tuna or a turtle?
+  [animals.csv | ID 211] Which lizard changes color: a chameleon or a crocodile?
+
+--- examples: riddle: answer text appears in question (showing up to 12 of 175) ---
+  [detective-mystery.csv | line 20 (#18)] At the village fair, the garden trophy vanished. Ivy claims they were watering plants, Fel
+  [detective-mystery.csv | line 52 (#50)] At the manor kitchen, the recipe book vanished. Ruby insists they never left the reading r
+  [detective-mystery.csv | line 55 (#53)] At the manor kitchen, the recipe book vanished. Ruby insists they never left the reading r
+  [detective-mystery.csv | line 57 (#55)] At the manor kitchen, the silver locket vanished. Nora says they were baking bread, Pearl 
+  [detective-mystery.csv | line 65 (#63)] At the manor kitchen, the garden trophy vanished. Nora claims they were watering plants, R
+  [detective-mystery.csv | line 72 (#70)] At the school fete, the recipe book vanished. Pearl says they were baking bread, Silas ins
+  [detective-mystery.csv | line 103 (#101)] At the harbor cafe, the silver locket vanished. Ruby insists they never left the reading r
+  [detective-mystery.csv | line 116 (#114)] At the library annex, the prize-winning pie vanished. Ruby claims they were watering plant
+  [detective-mystery.csv | line 123 (#121)] At the harbor cafe, the prize-winning pie vanished. Hugo says they were baking bread, Nora
+  [detective-mystery.csv | line 139 (#137)] At the garden shed, the recipe book vanished. Felix insists they never left the reading ro
+  [detective-mystery.csv | line 149 (#147)] At the school fete, the garden trophy vanished. Nora claims they were watering plants, Fel
+  [detective-mystery.csv | line 157 (#155)] At the village fair, the antique violin vanished. Oscar insists they never left the readin
+
+--- examples: riddle: option contained in correct answer (or vice versa) (showing up to 12 of 58) ---
+  [brain-teasers.csv | line 136 (#134)] A='A pen' vs B='A pencil'
+  [detective-mystery.csv | line 4 (#2)] C='MARKE' vs A='MARKET'
+  [detective-mystery.csv | line 15 (#13)] B='ISLAN' vs C='ISLAND'
+  [detective-mystery.csv | line 16 (#14)] A='PLANE' vs D='PLANET'
+  [detective-mystery.csv | line 35 (#33)] B='PLAN' vs C='PLANT'
+  [detective-mystery.csv | line 63 (#61)] A='CLOU' vs B='CLOUD'
+  [detective-mystery.csv | line 94 (#92)] C='TABL' vs D='TABLE'
+  [detective-mystery.csv | line 101 (#99)] B='CANDL' vs A='CANDLE'
+  [detective-mystery.csv | line 143 (#141)] D='BREA' vs A='BREAD'
+  [detective-mystery.csv | line 151 (#149)] A='SMIL' vs C='SMILE'
+  [detective-mystery.csv | line 164 (#162)] C='LEMO' vs A='LEMON'
+  [detective-mystery.csv | line 166 (#164)] D='ORANG' vs B='ORANGE'
+
+--- examples: quiz: option contained in correct answer (or vice versa) (showing up to 12 of 44) ---
+  [animals.csv | ID 607] A='Canis lupus' vs D='Canis lupus familiaris'
+  [animals.csv | ID 611] C='Ovoviviparous' vs D='Viviparous'
+  [business.csv | ID 386] A='Peso' vs B='Argentine Peso'
+  [food-cooking.csv | ID 667] C='Form VI' vs D='Form V'
+  [food-cooking.csv | ID 762] A='Virgin' vs C='Extra virgin'
+  [general-knowledge.csv | ID 284] A='1000' vs B='1'
+  [general-knowledge.csv | ID 294] B='528' vs A='5280'
+  [general-knowledge.csv | ID 331] B='10000' vs A='1000'
+  [general-knowledge.csv | ID 524] A='68' vs B='8'
+  [general-knowledge.csv | ID 631] C='Twenty five' vs B='Five'
+  [general-knowledge.csv | ID 704] B='Pi' vs C='2 pi'
+  [history.csv | ID 262] A='George II' vs B='George III'
+
+--- examples: riddle: very long question (showing up to 12 of 30) ---
+  [detective-mystery.csv | line 6 (#4)] 387 chars
+  [detective-mystery.csv | line 20 (#18)] 396 chars
+  [detective-mystery.csv | line 52 (#50)] 392 chars
+  [detective-mystery.csv | line 55 (#53)] 378 chars
+  [detective-mystery.csv | line 57 (#55)] 383 chars
+  [detective-mystery.csv | line 65 (#63)] 382 chars
+  [detective-mystery.csv | line 72 (#70)] 392 chars
+  [detective-mystery.csv | line 103 (#101)] 381 chars
+  [detective-mystery.csv | line 116 (#114)] 391 chars
+  [detective-mystery.csv | line 123 (#121)] 389 chars
+  [detective-mystery.csv | line 139 (#137)] 392 chars
+  [detective-mystery.csv | line 149 (#147)] 382 chars
+
+--- correct-letter distribution per file (bias check) ---
+quiz animals.csv: A=39% B=39% C=14% D=6%
+quiz business.csv: A=39% B=39% C=14% D=6%
+quiz food-cooking.csv: A=39% B=39% C=14% D=6%
+quiz general-knowledge.csv: A=39% B=39% C=14% D=5%
+quiz geography.csv: A=39% B=39% C=14% D=6%
+quiz history.csv: A=39% B=39% C=14% D=6%
+quiz movies-tv.csv: A=39% B=39% C=14% D=6%
+quiz music.csv: A=40% B=38% C=14% D=6%
+quiz pop-culture-celebrities.csv: A=44% B=45% C=7% D=2%
+quiz science-nature.csv: A=39% B=39% C=14% D=6%
+quiz sports.csv: A=40% B=40% C=14% D=5%
+quiz technology-video-games.csv: A=39% B=39% C=15% D=6%
+riddle brain-teasers.csv: A=35% B=34% C=22% D=7%
+riddle detective-mystery.csv: A=34% B=33% C=24% D=7%
+riddle everyday-objects.csv: A=39% B=39% C=18% D=3%
+riddle funny-riddles.csv: A=37% B=37% C=23% D=2%
+riddle kids-family.csv: A=39% B=38% C=19% D=2%
+riddle lateral-thinking.csv: A=35% B=35% C=22% D=6%
+riddle logic-deduction.csv: A=38% B=40% C=16% D=5%
+riddle math-numbers.csv: A=43% B=48% C=8% D=0%
+riddle trick-questions.csv: A=42% B=54% C=3% D=0%
+riddle words-letters.csv: A=39% B=41% C=19% D=0%

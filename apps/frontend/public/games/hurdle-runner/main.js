@@ -41,9 +41,10 @@ import {
   speedAt,
   stepPlayer,
   tierFor,
+  setViewW,
 } from './core.js';
 import { advanceCamera, createCamera, createJumpInput, createLoop } from './engine.js';
-import { drawScene } from './render.js';
+import { drawScene, skyCssGradient } from './render.js';
 import {
   getBest as loadBest,
   getMuted as loadMuted,
@@ -384,11 +385,13 @@ function fitCanvas() {
   // explicitly (not via auto/intrinsic) so resizing the buffer never feeds
   // back into layout.
   const box = els.stage.getBoundingClientRect();
-  const padX = 20;
-  const padY = 18;
-  const scale = Math.max(0.1, Math.min((box.width - padX) / VIEW_W, (box.height - padY) / VIEW_H));
-  const cssW = Math.floor(VIEW_W * scale);
-  const cssH = Math.floor(VIEW_H * scale);
+  /* BUG-018/020: full-screen game — the canvas fills the stage exactly and the
+     logical world widens to the viewport aspect (uniform scale anchored to the
+     height, ground line included), so gameplay is unchanged at any size. */
+  const padY = 0;
+  const scale = Math.max(0.1, (box.height - padY) / VIEW_H);
+  const cssW = Math.max(1, Math.floor(box.width));
+  const cssH = Math.max(1, Math.floor(box.height - padY));
   if (canvas.style.width !== cssW + 'px') canvas.style.width = cssW + 'px';
   if (canvas.style.height !== cssH + 'px') canvas.style.height = cssH + 'px';
   const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
@@ -398,6 +401,7 @@ function fitCanvas() {
     canvas.width = w;
     canvas.height = h;
   }
+  setViewW(VIEW_H * (canvas.width / canvas.height));
 }
 
 function draw(t) {
@@ -419,6 +423,13 @@ function draw(t) {
   }
 
   const m = meters(state.cam.x);
+  // BUG-018: full-screen background — the page paints the same sky the canvas
+  // does, so the sky fills the viewport edge-to-edge at any screen size.
+  const sky = skyCssGradient(m);
+  if (sky !== lastSkyCss) {
+    lastSkyCss = sky;
+    document.body.style.background = sky;
+  }
   const tier = tierFor(m);
   const segStart = TIER_START_M[tier - 1];
   const segEnd = tier < 3 ? TIER_START_M[tier] : segStart + 1;
@@ -449,6 +460,10 @@ function draw(t) {
  * 8. Loop (engine: fixed 1/120 steps via accumulator, 250 ms clamp,
  *    auto-pause on visibilitychange — identical physics at 60 and 120 Hz)
  * ======================================================================= */
+
+let lastSkyCss = '';
+// Paint immediately at boot — the menu shows the full-screen sky too (BUG-018/020).
+document.body.style.background = skyCssGradient(0);
 
 const loop = createLoop({ update, render: draw, fixedDt: FIXED_DT, onAutoPause: pauseGame });
 

@@ -56,9 +56,17 @@ import {
   tickPowers,
   tickShadow,
   trapLit,
+  setViewW,
 } from './core.js';
 import { createCamera, advanceCamera, createLoop, createRunnerInput } from './engine.js';
-import { DEPTH_LABELS, drawScene, paletteFor, POWER_GLYPH, POWER_LABEL } from './render.js';
+import {
+  DEPTH_LABELS,
+  drawScene,
+  paletteFor,
+  POWER_GLYPH,
+  POWER_LABEL,
+  skyCssGradient,
+} from './render.js';
 import { makeGate, resolveChoice, shuffledRules, answerLine } from './gates.js';
 import { GAME_CONFIG, t } from './config.js';
 import { loadSave, saveSave, setRemoteAdapter } from './storage.js';
@@ -729,11 +737,13 @@ function spawnDashBurst(obs) {
 
 function fitCanvas() {
   const box = els.stage.getBoundingClientRect();
-  const padX = 20;
-  const padY = 18;
-  const scale = Math.max(0.1, Math.min((box.width - padX) / VIEW_W, (box.height - padY) / VIEW_H));
-  const cssW = Math.floor(VIEW_W * scale);
-  const cssH = Math.floor(VIEW_H * scale);
+  /* BUG-018/020: full-screen game — the canvas fills the stage exactly and the
+     logical world widens to the viewport aspect (uniform scale anchored to the
+     height, ground line included), so gameplay is unchanged at any size. */
+  const padY = 0;
+  const scale = Math.max(0.1, (box.height - padY) / VIEW_H);
+  const cssW = Math.max(1, Math.floor(box.width));
+  const cssH = Math.max(1, Math.floor(box.height - padY));
   if (canvas.style.width !== cssW + 'px') canvas.style.width = cssW + 'px';
   if (canvas.style.height !== cssH + 'px') canvas.style.height = cssH + 'px';
   const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
@@ -743,7 +753,12 @@ function fitCanvas() {
     canvas.width = w;
     canvas.height = h;
   }
+  setViewW(VIEW_H * (canvas.width / canvas.height));
 }
+
+let lastSkyCss = '';
+// Paint immediately at boot — the menu shows the full-screen sky too (BUG-018/020).
+document.body.style.background = skyCssGradient(0);
 
 function draw(t) {
   fitCanvas();
@@ -765,6 +780,13 @@ function draw(t) {
   }
 
   const m = meters(state.cam.x);
+  // BUG-020: full-screen background — the page paints the same depth-palette
+  // sky the canvas does, so the sky fills the viewport edge-to-edge.
+  const sky = skyCssGradient(m);
+  if (sky !== lastSkyCss) {
+    lastSkyCss = sky;
+    document.body.style.background = sky;
+  }
   const run = state.run;
   drawScene(ctx, {
     mode: state.mode,

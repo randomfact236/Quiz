@@ -35,7 +35,7 @@
   </head>
   <body>
     <main class="app">
-      <a class="back-link" href="/play">← AI Quiz games</a>
+      <a class="back-link" href="/games">← All games</a>
 
       <!-- ============================== MENU ============================== -->
       <section id="screen-menu" class="screen screen--active" aria-label="Sliding puzzle menu">
@@ -123,6 +123,16 @@
           <button type="button" class="ghost" id="btn-pause" aria-label="Pause game">⏸</button>
         </div>
 
+        <!-- target-picture reference (picture mode): sits outside the sliding
+             container so it never covers the board; tap to enlarge -->
+        <button
+          type="button"
+          id="pic-preview"
+          class="pic-preview hidden"
+          aria-label="Show the target picture"
+          aria-haspopup="dialog"
+        ></button>
+
         <div class="board-wrap">
           <div class="board-shell">
             <div id="board" class="board" role="group" aria-label="Sliding puzzle board, 3 by 3"></div>
@@ -132,15 +142,6 @@
 
             <!-- one-swap-away nudge (fires once per round, numbers mode) -->
             <div id="nudge" class="nudge" role="status" hidden>So close! One swap away.</div>
-
-            <!-- target-picture reference (picture mode): corner thumbnail, tap to enlarge -->
-            <button
-              type="button"
-              id="pic-preview"
-              class="pic-preview hidden"
-              aria-label="Show the target picture"
-              aria-haspopup="dialog"
-            ></button>
           </div>
 
           <!-- ============================= PAUSED ============================= -->

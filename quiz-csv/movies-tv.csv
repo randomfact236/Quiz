@@ -7,26 +7,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 4,Mickey Mouse was created by Warner Bros,True,False,,,B,easy,Animation
 5,Spider-Mans real name is Peter Parker,True,False,,,A,easy,Superheroes
 6,The Oscar ceremonies are held every year in London,True,False,,,B,easy,Awards and Records
-7,The Godfather is a Western about cowboys,True,False,,,B,easy,Classic Cinema
-8,In Titanic the ship sinks after hitting an iceberg,True,False,,,A,easy,Modern Blockbusters
+7,The Godfather is a Western about cowboys,False,True,,,A,easy,Classic Cinema
+8,In Titanic the ship sinks after hitting an iceberg,False,True,,,B,easy,Modern Blockbusters
 9,The BBC series Sherlock stars Benedict Cumberbatch,True,False,,,A,easy,TV Series
 10,In Frozen Elsa owns a reindeer named Sven,True,False,,,B,easy,Animation
-11,Casablanca is set in Brazil,True,False,,,B,easy,Classic Cinema
-12,The 2019 Lion King film is a remake of the 1994 animated version,True,False,,,A,easy,Modern Blockbusters
-13,The US version of The Office is set in London,True,False,,,B,easy,TV Series
-14,Toy Story was the first fully computer-animated feature film,True,False,,,A,easy,Animation
-15,Batman lives in Metropolis,True,False,,,B,easy,Superheroes
-16,Oscar winners receive a golden statuette,True,False,,,A,easy,Awards and Records
+11,Casablanca is set in Brazil,False,True,,,A,easy,Classic Cinema
+12,The 2019 Lion King film is a remake of the 1994 animated version,False,True,,,B,easy,Modern Blockbusters
+13,The US version of The Office is set in London,False,True,,,A,easy,TV Series
+14,Toy Story was the first fully computer-animated feature film,False,True,,,B,easy,Animation
+15,Batman lives in Metropolis,False,True,,,A,easy,Superheroes
+16,Oscar winners receive a golden statuette,False,True,,,B,easy,Awards and Records
 17,Alfred Hitchcock was known as the Master of Suspense,True,False,,,A,easy,Classic Cinema
 18,The Matrix is set in Paris,True,False,,,B,easy,Modern Blockbusters
-19,Stranger Things is set in the 1990s,True,False,,,B,easy,TV Series
-20,Shrek is a green ogre,True,False,,,A,easy,Animation
+19,Stranger Things is set in the 1990s,False,True,,,A,easy,TV Series
+20,Shrek is a green ogre,False,True,,,B,easy,Animation
 21,The first Star Wars film reached theaters in 1977,True,False,,,A,easy,Classic Cinema
 22,E.T. is a story about a friendly robot,True,False,,,B,easy,Modern Blockbusters
-23,The Simpsons is a live-action series,True,False,,,B,easy,TV Series
-24,Buzz Lightyear is a toy astronaut in Toy Story,True,False,,,A,easy,Animation
-25,Captain America carries a shield made of gold,True,False,,,B,easy,Superheroes
-26,The Academy Awards are also known as the Oscars,True,False,,,A,easy,Awards and Records
+23,The Simpsons is a live-action series,False,True,,,A,easy,TV Series
+24,Buzz Lightyear is a toy astronaut in Toy Story,False,True,,,B,easy,Animation
+25,Captain America carries a shield made of gold,False,True,,,A,easy,Superheroes
+26,The Academy Awards are also known as the Oscars,False,True,,,B,easy,Awards and Records
 27,The Wizard of Oz features a yellow brick road,True,False,,,A,easy,Classic Cinema
 28,In Harry Potter the school of wizardry is located in France,True,False,,,B,easy,Modern Blockbusters
 29,Game of Thrones aired on HBO,True,False,,,A,easy,TV Series
@@ -37,26 +37,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 34,Ratatouille is set in London,True,False,,,B,easy,Animation
 35,Thor is the Norse god of thunder,True,False,,,A,easy,Superheroes
 36,The Emmy Awards honor achievements in film,True,False,,,B,easy,Awards and Records
-37,Marilyn Monroe played Scarlett O'Hara,True,False,,,B,easy,Classic Cinema
-38,The Avengers team includes Iron Man and the Hulk,True,False,,,A,easy,Modern Blockbusters
+37,Marilyn Monroe played Scarlett O'Hara,False,True,,,A,easy,Classic Cinema
+38,The Avengers team includes Iron Man and the Hulk,False,True,,,B,easy,Modern Blockbusters
 39,Walter White is the main character of Breaking Bad,True,False,,,A,easy,TV Series
 40,The Incredibles are a family of wizards,True,False,,,B,easy,Animation
-41,Charlie Chaplins most famous character is a singing cowboy,True,False,,,B,easy,Classic Cinema
-42,In Avatar humans travel to a moon called Pandora,True,False,,,A,easy,Modern Blockbusters
-43,How I Met Your Mother is narrated by a woman,True,False,,,B,easy,TV Series
-44,Moana sails across the Pacific Ocean,True,False,,,A,easy,Animation
-45,Wonder Woman comes from Atlantis,True,False,,,B,easy,Superheroes
-46,The Academy Awards ceremony takes place once a year,True,False,,,A,easy,Awards and Records
+41,Charlie Chaplins most famous character is a singing cowboy,False,True,,,A,easy,Classic Cinema
+42,In Avatar humans travel to a moon called Pandora,False,True,,,B,easy,Modern Blockbusters
+43,How I Met Your Mother is narrated by a woman,False,True,,,A,easy,TV Series
+44,Moana sails across the Pacific Ocean,False,True,,,B,easy,Animation
+45,Wonder Woman comes from Atlantis,False,True,,,A,easy,Superheroes
+46,The Academy Awards ceremony takes place once a year,False,True,,,B,easy,Awards and Records
 47,Boris Karloff played the monster in the 1931 film Frankenstein,True,False,,,A,easy,Classic Cinema
 48,Dominic Toretto is the hero of the James Bond films,True,False,,,B,easy,Modern Blockbusters
-49,Greys Anatomy is set in a law firm,True,False,,,B,easy,TV Series
-50,Kung Fu Panda features a noodle-loving panda named Po,True,False,,,A,easy,Animation
+49,Greys Anatomy is set in a law firm,False,True,,,A,easy,TV Series
+50,Kung Fu Panda features a noodle-loving panda named Po,False,True,,,B,easy,Animation
 51,Audrey Hepburn stars in Breakfast at Tiffanys,True,False,,,A,easy,Classic Cinema
 52,James Cameron directed the Star Wars prequels,True,False,,,B,easy,Modern Blockbusters
-53,Michael Scott is the regional manager in Parks and Recreation,True,False,,,B,easy,TV Series
-54,Inside Out takes place largely inside a girls mind,True,False,,,A,easy,Animation
-55,Iron Mans real name is Steve Rogers,True,False,,,B,easy,Superheroes
-56,Oscar winners are announced from sealed envelopes,True,False,,,A,easy,Awards and Records
+53,Michael Scott is the regional manager in Parks and Recreation,False,True,,,A,easy,TV Series
+54,Inside Out takes place largely inside a girls mind,False,True,,,B,easy,Animation
+55,Iron Mans real name is Steve Rogers,False,True,,,A,easy,Superheroes
+56,Oscar winners are announced from sealed envelopes,False,True,,,B,easy,Awards and Records
 57,Casablanca stars Humphrey Bogart,True,False,,,A,easy,Classic Cinema
 58,In Back to the Future the time machine is a steam train,True,False,,,B,easy,Modern Blockbusters
 59,SpongeBob SquarePants lives in a pineapple under the sea,True,False,,,A,easy,TV Series
@@ -67,26 +67,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 64,Woody the cowboy is voiced by Tim Allen,True,False,,,B,easy,Animation
 65,The Hulk turns green when he gets angry,True,False,,,A,easy,Superheroes
 66,The Golden Globes honor only television,True,False,,,B,easy,Awards and Records
-67,Orson Welles directed Casablanca,True,False,,,B,easy,Classic Cinema
-68,In The Hunger Games Katniss volunteers to take her sisters place,True,False,,,A,easy,Modern Blockbusters
+67,Orson Welles directed Casablanca,False,True,,,A,easy,Classic Cinema
+68,In The Hunger Games Katniss volunteers to take her sisters place,False,True,,,B,easy,Modern Blockbusters
 69,In Doctor Who the hero is known simply as the Doctor,True,False,,,A,easy,TV Series
 70,Dory is a shark in Finding Nemo,True,False,,,B,easy,Animation
-71,In the 1933 film King Kong the giant ape climbs the Statue of Liberty,True,False,,,B,easy,Classic Cinema
-72,Jack Sparrow captains the Black Pearl in Pirates of the Caribbean,True,False,,,A,easy,Modern Blockbusters
-73,In The Fresh Prince of Bel-Air Will moves from Philadelphia to New York,True,False,,,B,easy,TV Series
-74,Remy the rat dreams of becoming a chef,True,False,,,A,easy,Animation
-75,Black Panther rules the nation of Zamunda,True,False,,,B,easy,Superheroes
-76,Meryl Streep holds the record for the most acting nominations,True,False,,,A,easy,Awards and Records
+71,In the 1933 film King Kong the giant ape climbs the Statue of Liberty,False,True,,,A,easy,Classic Cinema
+72,Jack Sparrow captains the Black Pearl in Pirates of the Caribbean,False,True,,,B,easy,Modern Blockbusters
+73,In The Fresh Prince of Bel-Air Will moves from Philadelphia to New York,False,True,,,A,easy,TV Series
+74,Remy the rat dreams of becoming a chef,False,True,,,B,easy,Animation
+75,Black Panther rules the nation of Zamunda,False,True,,,A,easy,Superheroes
+76,Meryl Streep holds the record for the most acting nominations,False,True,,,B,easy,Awards and Records
 77,Charlie Chaplin starred in the silent classic City Lights,True,False,,,A,easy,Classic Cinema
 78,In Die Hard John McClane is a professional chef,True,False,,,B,easy,Modern Blockbusters
-79,Squid Game was created in Japan,True,False,,,B,easy,TV Series
-80,Monsters Inc features a big blue monster named Sulley,True,False,,,A,easy,Animation
+79,Squid Game was created in Japan,False,True,,,A,easy,TV Series
+80,Monsters Inc features a big blue monster named Sulley,False,True,,,B,easy,Animation
 81,Citizen Kane centers on a newspaper magnate,True,False,,,A,easy,Classic Cinema
 82,Mad Max Fury Road is a quiet courtroom drama,True,False,,,B,easy,Modern Blockbusters
-83,In Friends Ross is Rachels brother,True,False,,,B,easy,TV Series
-84,Aladdin finds a magic lamp with a genie inside,True,False,,,A,easy,Animation
-85,Deadpool can fly,True,False,,,B,easy,Superheroes
-86,The Emmys recognize excellence in television,True,False,,,A,easy,Awards and Records
+83,In Friends Ross is Rachels brother,False,True,,,A,easy,TV Series
+84,Aladdin finds a magic lamp with a genie inside,False,True,,,B,easy,Animation
+85,Deadpool can fly,False,True,,,A,easy,Superheroes
+86,The Emmys recognize excellence in television,False,True,,,B,easy,Awards and Records
 87,In The Sound of Music Maria becomes a governess,True,False,,,A,easy,Classic Cinema
 88,Gladiator is set in ancient China,True,False,,,B,easy,Modern Blockbusters
 89,Sherlock Holmes lives at 221B Baker Street,True,False,,,A,easy,TV Series
@@ -97,26 +97,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 94,Simbas father is named Scar,True,False,,,B,easy,Animation
 95,Batmans sidekick is Robin,True,False,,,A,easy,Superheroes
 96,The Oscars have been held every year since 1990,True,False,,,B,easy,Awards and Records
-97,Grace Kelly became Queen of England,True,False,,,B,easy,Classic Cinema
-98,E.T. wants to phone home,True,False,,,A,easy,Modern Blockbusters
+97,Grace Kelly became Queen of England,False,True,,,A,easy,Classic Cinema
+98,E.T. wants to phone home,False,True,,,B,easy,Modern Blockbusters
 99,Homer Simpson works at a nuclear power plant,True,False,,,A,easy,TV Series
 100,In Toy Story the toys move freely even when people are watching,True,False,,,B,easy,Animation
-101,In Casablanca Rick owns a grand hotel,True,False,,,B,easy,Classic Cinema
-102,Frodo must destroy a magic ring in Mount Doom,True,False,,,A,easy,Modern Blockbusters
-103,In The Big Bang Theory Sheldon is a professional athlete,True,False,,,B,easy,TV Series
-104,Nemo is a clownfish,True,False,,,A,easy,Animation
-105,Superman is weakened by silver,True,False,,,B,easy,Superheroes
-106,Katharine Hepburn won four Best Actress Oscars,True,False,,,A,easy,Awards and Records
+101,In Casablanca Rick owns a grand hotel,False,True,,,A,easy,Classic Cinema
+102,Frodo must destroy a magic ring in Mount Doom,False,True,,,B,easy,Modern Blockbusters
+103,In The Big Bang Theory Sheldon is a professional athlete,False,True,,,A,easy,TV Series
+104,Nemo is a clownfish,False,True,,,B,easy,Animation
+105,Superman is weakened by silver,False,True,,,A,easy,Superheroes
+106,Katharine Hepburn won four Best Actress Oscars,False,True,,,B,easy,Awards and Records
 107,In 12 Angry Men a jury debates a murder case,True,False,,,A,easy,Classic Cinema
 108,In The Bourne Identity Jason Bourne is a ballet dancer,True,False,,,B,easy,Modern Blockbusters
-109,In the BBC series Sherlock Dr. Watson is a dentist,True,False,,,B,easy,TV Series
-110,Bambi is a young deer,True,False,,,A,easy,Animation
+109,In the BBC series Sherlock Dr. Watson is a dentist,False,True,,,A,easy,TV Series
+110,Bambi is a young deer,False,True,,,B,easy,Animation
 111,Psycho features a famous murder in a shower,True,False,,,A,easy,Classic Cinema
 112,John Wick works as a florist,True,False,,,B,easy,Modern Blockbusters
-113,In The Mandalorian the bounty hunter is paired with a Wookiee,True,False,,,B,easy,TV Series
-114,In Zootopia a rabbit joins the police force,True,False,,,A,easy,Animation
-115,Thors hammer is named Excalibur,True,False,,,B,easy,Superheroes
-116,The Academy Awards are given by the Academy of Motion Picture Arts and Sciences,True,False,,,A,easy,Awards and Records
+113,In The Mandalorian the bounty hunter is paired with a Wookiee,False,True,,,A,easy,TV Series
+114,In Zootopia a rabbit joins the police force,False,True,,,B,easy,Animation
+115,Thors hammer is named Excalibur,False,True,,,A,easy,Superheroes
+116,The Academy Awards are given by the Academy of Motion Picture Arts and Sciences,False,True,,,B,easy,Awards and Records
 117,The Marx Brothers were a comedy team,True,False,,,A,easy,Classic Cinema
 118,The Martian takes place on Venus,True,False,,,B,easy,Modern Blockbusters
 119,In Black Mirror each episode tells a different story,True,False,,,A,easy,TV Series
@@ -127,26 +127,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 124,In Up Carl attaches balloons to his motorcycle,True,False,,,B,easy,Animation
 125,In X-Men mutants are humans born with special powers,True,False,,,A,easy,Superheroes
 126,The Palme dor is the top prize at the Oscars,True,False,,,B,easy,Awards and Records
-127,In Gone with the Wind Rhett is Scarletts brother,True,False,,,B,easy,Classic Cinema
-128,In Avatar the Na vi are tall and blue,True,False,,,A,easy,Modern Blockbusters
+127,In Gone with the Wind Rhett is Scarletts brother,False,True,,,A,easy,Classic Cinema
+128,In Avatar the Na vi are tall and blue,False,True,,,B,easy,Modern Blockbusters
 129,In Suits Harvey Specter is a lawyer,True,False,,,A,easy,TV Series
 130,In Brave Merida is a champion flutist,True,False,,,B,easy,Animation
-131,In Vertigo the detective is afraid of water,True,False,,,B,easy,Classic Cinema
-132,In Interstellar Cooper is a former pilot and farmer,True,False,,,A,easy,Modern Blockbusters
-133,In Downton Abbey the story takes place in a hospital,True,False,,,B,easy,TV Series
-134,In Frozen Kristoff owns a reindeer named Sven,True,False,,,A,easy,Animation
-135,In Spider-Man Peter gets his powers from a magic ring,True,False,,,B,easy,Superheroes
-136,The Golden Raspberry Awards honor the worst films,True,False,,,A,easy,Awards and Records
+131,In Vertigo the detective is afraid of water,False,True,,,A,easy,Classic Cinema
+132,In Interstellar Cooper is a former pilot and farmer,False,True,,,B,easy,Modern Blockbusters
+133,In Downton Abbey the story takes place in a hospital,False,True,,,A,easy,TV Series
+134,In Frozen Kristoff owns a reindeer named Sven,False,True,,,B,easy,Animation
+135,In Spider-Man Peter gets his powers from a magic ring,False,True,,,A,easy,Superheroes
+136,The Golden Raspberry Awards honor the worst films,False,True,,,B,easy,Awards and Records
 137,In Casablanca the famous song is As Time Goes By,True,False,,,A,easy,Classic Cinema
 138,In Top Gun Maverick is a submarine captain,True,False,,,B,easy,Modern Blockbusters
-139,Squidward is SpongeBobs cheerful best friend,True,False,,,B,easy,TV Series
-140,In The Incredibles the family hides their superpowers,True,False,,,A,easy,Animation
+139,Squidward is SpongeBobs cheerful best friend,False,True,,,A,easy,TV Series
+140,In The Incredibles the family hides their superpowers,False,True,,,B,easy,Animation
 141,Mary Poppins is a magical nanny,True,False,,,A,easy,Classic Cinema
 142,In Mission Impossible Ethan Hunt leads a team of accountants,True,False,,,B,easy,Modern Blockbusters
-143,In Friends Chandler Bing is a paleontologist,True,False,,,B,easy,TV Series
-144,In Monsters Inc the city runs on childrens screams,True,False,,,A,easy,Animation
-145,In Guardians of the Galaxy the team is led by Aquaman,True,False,,,B,easy,Superheroes
-146,The Palme dor is the top prize at the Cannes Film Festival,True,False,,,A,easy,Awards and Records
+143,In Friends Chandler Bing is a paleontologist,False,True,,,A,easy,TV Series
+144,In Monsters Inc the city runs on childrens screams,False,True,,,B,easy,Animation
+145,In Guardians of the Galaxy the team is led by Aquaman,False,True,,,A,easy,Superheroes
+146,The Palme dor is the top prize at the Cannes Film Festival,False,True,,,B,easy,Awards and Records
 147,Marlon Brando plays Vito Corleone,True,False,,,A,easy,Classic Cinema
 148,Leonardo DiCaprio won his first Oscar for Titanic,True,False,,,B,easy,Modern Blockbusters
 149,In Game of Thrones dragons really exist,True,False,,,A,easy,TV Series
@@ -157,26 +157,26 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 154,Dory is a green turtle,True,False,,,B,easy,Animation
 155,In Avengers Endgame Tony Stark makes the final sacrifice,True,False,,,A,easy,Superheroes
 156,Oscar nominations are announced in midsummer,True,False,,,B,easy,Awards and Records
-157,The famous last word in Citizen Kane is Bacon,True,False,,,B,easy,Classic Cinema
-158,Gandalf is a wizard in The Lord of the Rings,True,False,,,A,easy,Modern Blockbusters
+157,The famous last word in Citizen Kane is Bacon,False,True,,,A,easy,Classic Cinema
+158,Gandalf is a wizard in The Lord of the Rings,False,True,,,B,easy,Modern Blockbusters
 159,Modern Family is filmed like a documentary,True,False,,,A,easy,TV Series
 160,In Moana Maui is a talking crab,True,False,,,B,easy,Animation
-161,In 2001 A Space Odyssey the computer is named R2-D2,True,False,,,B,easy,Classic Cinema
-162,George Clooney leads a casino heist in Oceans Eleven,True,False,,,A,easy,Modern Blockbusters
-163,In The Walking Dead the walkers are robots,True,False,,,B,easy,TV Series
-164,Sleeping Beauty is cursed by Maleficent,True,False,,,A,easy,Animation
-165,Clark Kent works as a chef in Metropolis,True,False,,,B,easy,Superheroes
-166,The Oscars include a category for Best Animated Film,True,False,,,A,easy,Awards and Records
+161,In 2001 A Space Odyssey the computer is named R2-D2,False,True,,,A,easy,Classic Cinema
+162,George Clooney leads a casino heist in Oceans Eleven,False,True,,,B,easy,Modern Blockbusters
+163,In The Walking Dead the walkers are robots,False,True,,,A,easy,TV Series
+164,Sleeping Beauty is cursed by Maleficent,False,True,,,B,easy,Animation
+165,Clark Kent works as a chef in Metropolis,False,True,,,A,easy,Superheroes
+166,The Oscars include a category for Best Animated Film,False,True,,,B,easy,Awards and Records
 167,Dorothys dog in The Wizard of Oz is named Toto,True,False,,,A,easy,Classic Cinema
 168,Bilbo is a dwarf in The Hobbit,True,False,,,B,easy,Modern Blockbusters
-169,In Breaking Bad Jesse Pinkman is Walter Whites brother-in-law,True,False,,,B,easy,TV Series
-170,Belle loves reading books in Beauty and the Beast,True,False,,,A,easy,Animation
+169,In Breaking Bad Jesse Pinkman is Walter Whites brother-in-law,False,True,,,A,easy,TV Series
+170,Belle loves reading books in Beauty and the Beast,False,True,,,B,easy,Animation
 171,In Rear Window the hero spies on neighbors from his apartment,True,False,,,A,easy,Classic Cinema
 172,The Ghostbusters hunt vampires,True,False,,,B,easy,Modern Blockbusters
-173,Lisa Simpson plays the trumpet,True,False,,,B,easy,TV Series
-174,Mowgli is raised by wolves,True,False,,,A,easy,Animation
-175,In the MCU Nick Fury is an alien,True,False,,,B,easy,Superheroes
-176,An EGOT winner has won all four major American entertainment awards,True,False,,,A,easy,Awards and Records
+173,Lisa Simpson plays the trumpet,False,True,,,A,easy,TV Series
+174,Mowgli is raised by wolves,False,True,,,B,easy,Animation
+175,In the MCU Nick Fury is an alien,False,True,,,A,easy,Superheroes
+176,An EGOT winner has won all four major American entertainment awards,False,True,,,B,easy,Awards and Records
 177,In North by Northwest Roger is mistaken for a spy,True,False,,,A,easy,Classic Cinema
 178,Bruce Willis plays a circus clown in The Sixth Sense,True,False,,,B,easy,Modern Blockbusters
 179,Schitts Creek begins when a rich family loses its fortune,True,False,,,A,easy,TV Series
@@ -187,817 +187,817 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 184,In Peter Pan the Lost Boys are pirates,True,False,,,B,easy,Animation
 185,Bruce Wayne trains with the League of Shadows,True,False,,,A,easy,Superheroes
 186,The Tony Awards honor movies,True,False,,,B,easy,Awards and Records
-187,The statue in The Maltese Falcon is made of solid gold,True,False,,,B,easy,Classic Cinema
-188,In Casino Royale James Bond plays high-stakes poker,True,False,,,A,easy,Modern Blockbusters
+187,The statue in The Maltese Falcon is made of solid gold,False,True,,,A,easy,Classic Cinema
+188,In Casino Royale James Bond plays high-stakes poker,False,True,,,B,easy,Modern Blockbusters
 189,In Fleabag the heroine often talks to the camera,True,False,,,A,easy,TV Series
 190,Olaf the snowman loves heat and hates winter,True,False,,,B,easy,Animation
-191,Sunset Boulevard is a cheerful musical,True,False,,,B,easy,Classic Cinema
-192,Charlize Theron plays Furiosa in Mad Max Fury Road,True,False,,,A,easy,Modern Blockbusters
-193,Wednesday Addams is a cheerful optimist,True,False,,,B,easy,TV Series
-194,Buzz Lightyear believes he is a real space ranger,True,False,,,A,easy,Animation
-195,Doctor Strange was once a professional chef,True,False,,,B,easy,Superheroes
-196,Parasite was the first non-English Best Picture winner,True,False,,,A,easy,Awards and Records
+191,Sunset Boulevard is a cheerful musical,False,True,,,A,easy,Classic Cinema
+192,Charlize Theron plays Furiosa in Mad Max Fury Road,False,True,,,B,easy,Modern Blockbusters
+193,Wednesday Addams is a cheerful optimist,False,True,,,A,easy,TV Series
+194,Buzz Lightyear believes he is a real space ranger,False,True,,,B,easy,Animation
+195,Doctor Strange was once a professional chef,False,True,,,A,easy,Superheroes
+196,Parasite was the first non-English Best Picture winner,False,True,,,B,easy,Awards and Records
 197,In My Fair Lady a professor teaches a flower girl to speak properly,True,False,,,A,easy,Classic Cinema
 198,In Avatar humans come to Pandora to mine gold,True,False,,,B,easy,Modern Blockbusters
-199,Squid Game players compete in card games,True,False,,,B,easy,TV Series
-200,Encanto features a family with magical gifts,True,False,,,A,easy,Animation
-201,Who directed the 1959 classic Some Like It Hot,Billy Wilder,Howard Hawks,,,A,medium,Classic Cinema
-202,Which studio produces the Marvel Cinematic Universe films,Warner Bros,Marvel Studios,,,B,medium,Superheroes
-203,Which network aired Game of Thrones,HBO,Showtime,,,A,medium,TV Series
-204,In Dumbo what animal is Dumbo,Tiger,Elephant,,,B,medium,Animation
-205,What is Batmans home city,Gotham City,Metropolis,,,A,medium,Superheroes
-206,Which film won the first Best Picture Oscar,The Jazz Singer,Wings,,,B,medium,Awards and Records
-207,Who played Indiana Jones,Tom Selleck,Harrison Ford,,,B,medium,Modern Blockbusters
-208,Which film features the famous line about not being able to handle the truth,A Few Good Men,Scent of a Woman,,,A,medium,Modern Blockbusters
-209,Who played Walter White,Bryan Cranston,Jon Hamm,,,A,medium,TV Series
-210,In Frozen who is Elsas sister,Rapunzel,Anna,,,B,medium,Animation
-211,Which 1942 film stars Humphrey Bogart as Rick Blaine,The Big Sleep,Casablanca,,,B,medium,Classic Cinema
-212,Who directed Jaws,Steven Spielberg,George Lucas,,,A,medium,Modern Blockbusters
-213,What is the coffee shop called in Friends,Cafe Des Amis,Central Perk,,,B,medium,TV Series
-214,Which Pixar film is set inside a girls mind,Inside Out,Soul,,,A,medium,Animation
-215,What color is the Hulk,Purple,Green,,,B,medium,Superheroes
-216,Who has won the most Best Director Oscars,John Ford,Steven Spielberg,,,A,medium,Awards and Records
-217,Which actor played the Tramp,Charlie Chaplin,Buster Keaton,,,A,medium,Classic Cinema
-218,In The Matrix which pill does Neo take,Blue,Red,,,B,medium,Modern Blockbusters
-219,Which show features the Upside Down,Riverdale,Stranger Things,,,B,medium,TV Series
-220,In The Lion King who is Simbas father,Mufasa,Scar,,,A,medium,Animation
-221,Who directed Psycho,Alfred Hitchcock,Orson Welles,,,A,medium,Classic Cinema
-222,Which 1994 film features a famous box of chocolates,Pulp Fiction,Forrest Gump,,,B,medium,Modern Blockbusters
-223,In Friends what is Rosses job,Cardiologist,Paleontologist,,,B,medium,TV Series
-224,Which animated film features a rat who cooks,Ratatouille,The Bear,,,A,medium,Animation
-225,Who played Iron Man,Chris Evans,Robert Downey Jr.,,,B,medium,Superheroes
-226,Which actress won four Best Actress Oscars,Katharine Hepburn,Meryl Streep,,,A,medium,Awards and Records
-227,Which film features the yellow brick road,The Wizard of Oz,Oz the Great and Powerful,,,A,medium,Classic Cinema
-228,Which director made Avatar,Ridley Scott,James Cameron,,,B,medium,Modern Blockbusters
-229,In The Simpsons what instrument does Lisa play,Saxophone,Trumpet,,,A,medium,TV Series
-230,Which studio makes the Shrek films,Pixar,DreamWorks,,,B,medium,Animation
-231,Who played Scarlett OHara,Vivien Leigh,Rita Hayworth,,,A,medium,Classic Cinema
-232,Which film features Jack Dawson and Rose,The Notebook,Titanic,,,B,medium,Modern Blockbusters
-233,Which sitcom is set in Scranton,The Office,Parks and Recreation,,,A,medium,TV Series
-234,Which fish is Nemo,Angelfish,Clownfish,,,B,medium,Animation
-235,What is Spider-Mans real name,Peter Parker,Harry Osborn,,,A,medium,Superheroes
-236,Which award honors Broadway theater,The Emmy,The Tony,,,B,medium,Awards and Records
-237,Which actor danced and sang in the rain in Singin in the Rain,Fred Astaire,Gene Kelly,,,B,medium,Classic Cinema
-238,Which film features the DeLorean time machine,Back to the Future,Timecop,,,A,medium,Modern Blockbusters
-239,Who plays Eleven in Stranger Things,Millie Bobby Brown,Sadie Sink,,,A,medium,TV Series
-240,In Frozen what is the snowmans name,Sven,Olaf,,,B,medium,Animation
-241,Which 1954 Hitchcock film stars Grace Kelly,Notorious,Rear Window,,,B,medium,Classic Cinema
-242,Who played Jack Sparrow,Johnny Depp,Orlando Bloom,,,A,medium,Modern Blockbusters
-243,Which medical drama is set at Seattle Grace,ER,Greys Anatomy,,,B,medium,TV Series
-244,Which Disney film features Maui the demigod,Moana,Hercules,,,A,medium,Animation
-245,What is Thors hammer called,Gungnir,Mjolnir,,,B,medium,Superheroes
-246,Which 2019 film won Best Picture,Parasite,1917,,,A,medium,Awards and Records
-247,Which silent star was famous for his stone face,Buster Keaton,Harold Lloyd,,,A,medium,Classic Cinema
-248,Which 1999 film features a secret fight club,Se7en,Fight Club,,,B,medium,Modern Blockbusters
-249,Who created The Simpsons,Seth MacFarlane,Matt Groening,,,B,medium,TV Series
-250,Which film features the song Let It Go,Frozen,Tangled,,,A,medium,Animation
-251,Who played Vito Corleone,Marlon Brando,Al Pacino,,,A,medium,Classic Cinema
-252,Which 1997 film is about a doomed ocean liner,Poseidon,Titanic,,,B,medium,Modern Blockbusters
-253,In Breaking Bad what does Walter White teach,Biology,Chemistry,,,B,medium,TV Series
-254,Which studio produced Spirited Away,Studio Ghibli,Toei Animation,,,A,medium,Animation
-255,Which hero is called the Merc with a Mouth,Venom,Deadpool,,,B,medium,Superheroes
-256,Which country is home to Bollywood,India,Egypt,,,A,medium,Awards and Records
-257,Who directed Vertigo,Alfred Hitchcock,David Lean,,,A,medium,Classic Cinema
-258,Which actor plays Neo,Hugo Weaving,Keanu Reeves,,,B,medium,Modern Blockbusters
-259,Which show follows the Dutton family,Yellowstone,Succession,,,A,medium,TV Series
-260,In Toy Story what kind of toy is Woody,Astronaut,Cowboy,,,B,medium,Animation
-261,Which 1957 film features a jury room debate,12 Angry Men,Witness for the Prosecution,,,A,medium,Classic Cinema
-262,Which film features shark attacks at Amity Island,Deep Blue Sea,Jaws,,,B,medium,Modern Blockbusters
-263,Who plays Sheldon Cooper,Jim Parsons,Kaley Cuoco,,,A,medium,TV Series
-264,Which Disney princess keeps a chameleon,Cinderella,Rapunzel,,,B,medium,Animation
-265,What is Supermans weakness,Kryptonite,Vibranium,,,A,medium,Superheroes
-266,The Golden Raspberry Awards honor what,The best films,The worst films,,,B,medium,Awards and Records
-267,Who plays Ilsa in Casablanca,Claude Rains,Ingrid Bergman,,,B,medium,Classic Cinema
-268,Which 1985 film follows five teens in detention,The Breakfast Club,Sixteen Candles,,,A,medium,Modern Blockbusters
-269,Which series features Tony Soprano,The Sopranos,Boardwalk Empire,,,A,medium,TV Series
-270,Which animated film features the song How Far Ill Go,Moana,Pocahontas,,,B,medium,Animation
-271,Who played Norman Bates,Anthony Hopkins,Anthony Perkins,,,B,medium,Classic Cinema
-272,Which franchise features Dominic Toretto,Fast and Furious,Die Hard,,,A,medium,Modern Blockbusters
-273,Which show features the Bluth family,Its Always Sunny in Philadelphia,Arrested Development,,,B,medium,TV Series
-274,Which 2001 film features Mike Wazowski,Monsters Inc,Shrek,,,A,medium,Animation
-275,Which blind hero is a lawyer by day,Hawkeye,Daredevil,,,B,medium,Superheroes
-276,Who won the first Best Actress Oscar,Janet Gaynor,Mary Pickford,,,A,medium,Awards and Records
-277,Who played Judah Ben-Hur in 1959,Charlton Heston,Kirk Douglas,,,A,medium,Classic Cinema
-278,Which 2015 film revived Star Wars,The Last Jedi,The Force Awakens,,,B,medium,Modern Blockbusters
-279,Who plays Dr. Watson opposite Benedict Cumberbatch,Jude Law,Martin Freeman,,,B,medium,TV Series
-280,Which film follows a clownfish dad across the ocean,Finding Nemo,Shark Tale,,,A,medium,Animation
-281,Which 1946 film features an angel named Clarence,Its a Wonderful Life,The Bishops Wife,,,A,medium,Classic Cinema
-282,Which director made Pulp Fiction,Martin Scorsese,Quentin Tarantino,,,B,medium,Modern Blockbusters
-283,Which reality show hands out roses,Love Island,The Bachelor,,,B,medium,TV Series
-284,Which Disney film features a flying elephant,Dumbo,Bambi,,,A,medium,Animation
-285,Which nation does TChalla rule,Zamunda,Wakanda,,,B,medium,Superheroes
-286,Which streaming service made The Crown,Netflix,Hulu,,,A,medium,Awards and Records
-287,Which 1939 film follows Dorothy to Oz,The Wizard of Oz,Alice in Wonderland,,,A,medium,Classic Cinema
-288,Who played Willy Wonka in 1971,Johnny Depp,Gene Wilder,,,B,medium,Modern Blockbusters
-289,Which island drama features Jack Shephard,Lost,Prison Break,,,A,medium,TV Series
-290,Which Disney film features a wooden puppet boy,Peter Pan,Pinocchio,,,B,medium,Animation
-291,Who played Rick Blaine,Humphrey Bogart,Cary Grant,,,A,medium,Classic Cinema
-292,Which 2008 film launched the MCU,The Incredible Hulk,Iron Man,,,B,medium,Modern Blockbusters
-293,Which series features a chemistry teacher turned drug maker,Breaking Bad,Better Call Saul,,,A,medium,TV Series
-294,Which Pixar film features Joy and Sadness,Coco,Inside Out,,,B,medium,Animation
-295,Who plays Wonder Woman,Gal Gadot,Margot Robbie,,,A,medium,Superheroes
-296,Which trophy shows a winged woman holding an atom,The Grammy,The Emmy,,,B,medium,Awards and Records
-297,Which 1950 film stars Bette Davis as an aging actress,Whatever Happened to Baby Jane,All About Eve,,,B,medium,Classic Cinema
-298,Which 1979 film features Ellen Ripley,Alien,Aliens vs Predator,,,A,medium,Modern Blockbusters
-299,Who plays Claire Underwood,Robin Wright,Viola Davis,,,A,medium,TV Series
-300,Which cartoon duo stars a coyote chasing a bird,Tom and Jerry,Wile E. Coyote and the Road Runner,,,B,medium,Animation
-301,Who directed Citizen Kane,William Wyler,Orson Welles,,,B,medium,Classic Cinema
-302,Which franchise features lightsabers,Star Wars,Star Trek,,,A,medium,Modern Blockbusters
-303,Which show features Don Draper,Mad About You,Mad Men,,,B,medium,TV Series
-304,Which Disney film is set in Agrabah,Aladdin,Mulan,,,A,medium,Animation
-305,What is Batmans butler called,Jarvis,Alfred Pennyworth,,,B,medium,Superheroes
-306,Which actress holds the record for most acting Oscars,Katharine Hepburn,Jack Nicholson,,,A,medium,Awards and Records
-307,Which 1967 film features two Depression-era outlaws,Bonnie and Clyde,Butch Cassidy and the Sundance Kid,,,A,medium,Classic Cinema
-308,Which 1999 film features a boy who sees dead people,The Others,The Sixth Sense,,,B,medium,Modern Blockbusters
-309,Which series features a Miami serial killer with a code,Hannibal,Dexter,,,B,medium,TV Series
-310,Which animated film features Simba and Scar,The Lion King,Madagascar,,,A,medium,Animation
-311,Which actress starred in Roman Holiday,Audrey Hepburn,Elizabeth Taylor,,,A,medium,Classic Cinema
-312,Which 2019 film stars Joaquin Phoenix as Arthur Fleck,Batman Begins,Joker,,,B,medium,Superheroes
-313,Which network airs The Simpsons,CBS,Fox,,,B,medium,TV Series
-314,Which 1995 Pixar film introduced Woody,Toy Story,Antz,,,A,medium,Animation
-315,Which stone sits in Visions forehead,Time Stone,Mind Stone,,,B,medium,Superheroes
-316,Which film festival takes place in France,Cannes,Venice,,,A,medium,Awards and Records
-317,Which 1968 film shows apes ruling Earth,Planet of the Apes,Tarzan,,,A,medium,Classic Cinema
-318,Who played Aragorn,Sean Bean,Viggo Mortensen,,,B,medium,Modern Blockbusters
-319,Which series features Daenerys Targaryen,Game of Thrones,The Witcher,,,A,medium,TV Series
-320,Which animated hero lives in a pineapple,Plankton,SpongeBob SquarePants,,,B,medium,Animation
-321,Which 1957 David Lean film is set in a prison camp,The Bridge on the River Kwai,Lawrence of Arabia,,,A,medium,Classic Cinema
-322,Which 1994 film features a prison escape over decades,The Green Mile,The Shawshank Redemption,,,B,medium,Modern Blockbusters
-323,Which series features Mike Ehrmantraut,Better Call Saul,Fargo,,,A,medium,TV Series
-324,Which Disney heroine loses a glass slipper,Snow White,Cinderella,,,B,medium,Animation
-325,Which Avenger lifts Mjolnir besides Thor,Captain America,Black Widow,,,A,medium,Superheroes
-326,Which awards show honors daytime dramas,The Tony Awards,The Daytime Emmys,,,B,medium,Awards and Records
-327,Which actor starred in The Great Escape,Paul Newman,Steve McQueen,,,B,medium,Classic Cinema
-328,Which 1996 film features tornado chasers,Twister,Into the Storm,,,A,medium,Modern Blockbusters
-329,Which series is a Breaking Bad prequel,Better Call Saul,El Camino,,,A,medium,TV Series
-330,Which animated film features an ice queen,Trolls,Frozen,,,B,medium,Animation
-331,Which 1960 Hitchcock film features the Bates Motel,Frenzy,Psycho,,,B,medium,Classic Cinema
-332,Which actor played James Bond first,Sean Connery,Roger Moore,,,A,medium,Modern Blockbusters
-333,Which drama features the Pearson family,Manifest,This Is Us,,,B,medium,TV Series
-334,Which Pixar film sends a house skyward with balloons,Up,The Red Balloon,,,A,medium,Animation
-335,What is Tony Starks AI butler called,Ultron,JARVIS,,,B,medium,Superheroes
-336,Which Oscar category honors movie songs,Best Original Song,Best Sound Mixing,,,A,medium,Awards and Records
-337,Who played Superman in 1978,Christopher Reeve,George Reeves,,,A,medium,Superheroes
-338,Which 2014 film revived a famous Japanese monster,Pacific Rim,Godzilla,,,B,medium,Modern Blockbusters
-339,Which series features Olivia Pope,How to Get Away with Murder,Scandal,,,B,medium,TV Series
-340,Which 2010 Pixar film sends toys to a daycare,Toy Story 3,Toy Story 2,,,A,medium,Animation
-341,In which film does a character yell for Stella,A Streetcar Named Desire,East of Eden,,,A,medium,Classic Cinema
-342,Which 2009 film is set on Pandora,Valerian,Avatar,,,B,medium,Modern Blockbusters
-343,Which sitcom follows a parks department in Indiana,The Office,Parks and Recreation,,,B,medium,TV Series
-344,Which animated film features the song Hakuna Matata,The Lion King,The Wild,,,A,medium,Animation
-345,Which hero is Natasha Romanoff,Wanda,Black Widow,,,B,medium,Superheroes
-346,Which Emmy category honors sitcoms,Outstanding Comedy Series,Outstanding Drama Series,,,A,medium,Awards and Records
-347,Which 1955 film stars James Dean as a troubled teen,Rebel Without a Cause,Giant,,,A,medium,Classic Cinema
-348,Which film features Lieutenant Dan,Platoon,Forrest Gump,,,B,medium,Modern Blockbusters
-349,Which animated series features the Belcher family,Bobs Burgers,Family Guy,,,A,medium,TV Series
-350,Which Disney film features Olaf,Lilo and Stitch,Frozen,,,B,medium,Animation
-351,Which 1934 film pairs a runaway heiress with a reporter,It Happened One Night,My Man Godfrey,,,A,medium,Classic Cinema
-352,Which 2016 musical follows two dreamers in Los Angeles,Chicago,La La Land,,,B,medium,Modern Blockbusters
-353,Which crime drama features Raymond Reddington,The Blacklist,Person of Interest,,,A,medium,TV Series
-354,Which Disney film features Quasimodo,The Swan Princess,The Hunchback of Notre Dame,,,B,medium,Animation
-355,Who plays Spider-Man in the MCU,Tom Holland,Andrew Garfield,,,A,medium,Superheroes
-356,Who won Best Director for The Shape of Water,Denis Villeneuve,Guillermo del Toro,,,B,medium,Awards and Records
-357,Who played Juror 8 in 12 Angry Men,Lee J. Cobb,Henry Fonda,,,B,medium,Classic Cinema
-358,Which 1980 film features a haunted hotel and a boy named Danny,The Shining,Psycho,,,A,medium,Modern Blockbusters
-359,Which procedural features Leroy Jethro Gibbs,NCIS,Criminal Minds,,,A,medium,TV Series
-360,Which animated film features a genie in a lamp,Wish,Aladdin,,,B,medium,Animation
-361,Which 1948 Italian film follows a man hunting his stolen bicycle,Rome Open City,Bicycle Thieves,,,B,medium,Classic Cinema
-362,Who played Geralt in The Witcher,Henry Cavill,Liam Hemsworth,,,A,medium,TV Series
-363,Which drama follows White House staffers,House of Cards,The West Wing,,,B,medium,TV Series
-364,Which 2001 film features a green ogre,Shrek,Monsters vs Aliens,,,A,medium,Animation
-365,Which MCU villain is called the Mad Titan,Loki,Thanos,,,B,medium,Superheroes
-366,Which historic Oscar did Halle Berry win in 2002,Best Actress,Best Supporting Actress,,,A,medium,Awards and Records
-367,Which 1967 film stars Sidney Poitier as a detective,In the Heat of the Night,To Sir with Love,,,A,medium,Classic Cinema
-368,Which 2012 musical is based on a Victor Hugo novel,The Phantom of the Opera,Les Miserables,,,B,medium,Modern Blockbusters
-369,Which series updates Sherlock Holmes to modern London,Elementary,Sherlock,,,B,medium,TV Series
-370,Which Pixar film features a trash-compacting robot,WALL-E,Big Hero 6,,,A,medium,Animation
-371,Which 1950 noir features Norma Desmond,Sunset Boulevard,Double Indemnity,,,A,medium,Classic Cinema
-372,Which 2015 action film features Furiosa,Mad Max Beyond Thunderdome,Mad Max Fury Road,,,B,medium,Modern Blockbusters
-373,Which sitcom features the Conner family,Married with Children,Roseanne,,,B,medium,TV Series
-374,Which 1998 Disney film features the dragon Mushu,Mulan,Brave,,,A,medium,Animation
-375,Which hero does Chris Evans play,Thor,Captain America,,,B,medium,Superheroes
-376,Which streaming platform made House of Cards,Netflix,Amazon Prime,,,A,medium,Awards and Records
-377,Who played Dracula in the 1931 Universal film,Bela Lugosi,Lon Chaney,,,A,medium,Classic Cinema
-378,Which 2019 South Korean film swept the Oscars,Burning,Parasite,,,B,medium,Awards and Records
-379,Which series features Peggy Olson,Mad Men,The Good Wife,,,A,medium,TV Series
-380,Which 1967 animated film follows a boy raised by wolves,George of the Jungle,The Jungle Book,,,B,medium,Animation
-381,Which 1931 film features a monster created by a scientist,Frankenstein,Dr. Jekyll and Mr. Hyde,,,A,medium,Classic Cinema
-382,Which 2018 film stars Chadwick Boseman as a king,Hotel Rwanda,Black Panther,,,B,medium,Superheroes
-383,Which couple gets together in The Office,Jim and Pam,Andy and Erin,,,A,medium,TV Series
-384,In which film does Tinker Bell appear,Sleeping Beauty,Peter Pan,,,B,medium,Animation
-385,Who plays Loki,Tom Hiddleston,Tom Hardy,,,A,medium,Superheroes
-386,Where is the Academy Awards ceremony held,New York,Los Angeles,,,B,medium,Awards and Records
-387,Who played Lina Lamont in Singin in the Rain,Debbie Reynolds,Jean Hagen,,,B,medium,Classic Cinema
-388,Which 1999 comedy satirizes office life,Office Space,Clockstoppers,,,A,medium,Modern Blockbusters
-389,Which series features a vampire named Angel,Buffy the Vampire Slayer,The Vampire Diaries,,,A,medium,TV Series
-390,Which animated film features Nick Wilde,Sing,Zootopia,,,B,medium,Animation
-391,Which 1944 noir centers on an insurance scheme,The Postman Always Rings Twice,Double Indemnity,,,B,medium,Classic Cinema
-392,Who played Gandalf,Ian McKellen,Christopher Lee,,,A,medium,Modern Blockbusters
-393,Which comedy features Captain Raymond Holt,The Good Place,Brooklyn Nine-Nine,,,B,medium,TV Series
-394,Which 2004 film features a superhero family,The Incredibles,Sky High,,,A,medium,Superheroes
-395,Which hero is called the Fastest Man Alive,Superman,The Flash,,,B,medium,Superheroes
-396,Which 2020 Best Picture winner explores nomadic life,Nomadland,Mank,,,A,medium,Awards and Records
-397,Who played the Man with No Name,Clint Eastwood,Lee Van Cleef,,,A,medium,Classic Cinema
-398,Which 2022 sequel brings back Maverick,Top Gun,Top Gun Maverick,,,B,medium,Modern Blockbusters
-399,Which series is set in the land of Gilead,Brave New World,The Handmaids Tale,,,B,medium,TV Series
-400,Which Disney film features a magical family house,Encanto,Luca,,,A,medium,Animation
-401,Which Infinity Stone is hidden inside the Tesseract,Space Stone,Reality Stone,Soul Stone,,A,hard,Superheroes
-402,Who has hosted the Academy Awards ceremony the most times,Billy Crystal,Bob Hope,Johnny Carson,,B,hard,Awards and Records
-403,Who played the title gunslinger in the 1953 western Shane,Joel McCrea,Randolph Scott,Alan Ladd,,C,hard,Classic Cinema
-404,Which 1994 film features a bus that cannot drop below 50 mph,Speed,Die Hard with a Vengeance,Broken Arrow,,A,hard,Modern Blockbusters
-405,Which sitcom features the Huang family,Kims Convenience,Fresh Off the Boat,Master of None,,B,hard,TV Series
-406,Which 2001 anime film won the first Japanese Best Animated Feature Oscar,Howls Moving Castle,Princess Mononoke,Spirited Away,,C,hard,Animation
-407,Which actor played Alfred in The Dark Knight trilogy,Michael Caine,Jeremy Irons,Gary Oldman,,A,hard,Superheroes
-408,Which director holds the record for most Best Director nominations,Frank Capra,William Wyler,Michael Curtiz,,B,hard,Awards and Records
-409,Who played Big Daddy in Cat on a Hot Tin Roof,Montgomery Clift,Karl Malden,Burl Ives,,C,hard,Classic Cinema
-410,Which 1998 film depicts the D-Day landings,The Thin Red Line,Black Hawk Down,Saving Private Ryan,,C,hard,Modern Blockbusters
-411,Which drama is set at the Sterling Cooper agency,Mad Men,Better Things,Casual,,A,hard,TV Series
-412,Which Disney film features the song Be Our Guest,Enchanted,Beauty and the Beast,The Little Mermaid,,B,hard,Animation
-413,Who directed Avengers Endgame,Joss Whedon,Jon Favreau,The Russo Brothers,,C,hard,Superheroes
-414,Who won Best Actress for The Silence of the Lambs,Susan Sarandon,Jodie Foster,Holly Hunter,,B,hard,Awards and Records
-415,Which 1960 western remakes a Kurosawa classic,The Magnificent Seven,A Fistful of Dollars,The Outlaw Josey Wales,,A,hard,Classic Cinema
-416,Which 1996 film stars Tom Cruise as a sports agent,Cocktail,Days of Thunder,Jerry Maguire,,C,hard,Modern Blockbusters
-417,Which series features Captain Olivia Benson,Blue Bloods,Law and Order SVU,Castle,,B,hard,TV Series
-418,Which 1989 Disney film features the song Under the Sea,The Little Mermaid,Oliver and Company,The Rescuers,,A,hard,Animation
-419,Which villain does Heath Ledger play in The Dark Knight,Two-Face,Scarecrow,The Joker,,C,hard,Superheroes
-420,Which film won the first Oscar for Best Animated Feature,Shrek,Spirited Away,Jimmy Neutron Boy Genius,,A,hard,Awards and Records
-421,Which series features the Gallagher family,Roseanne,Shameless,Weeds,,B,hard,TV Series
-422,Which 1994 Disney film features Timon and Pumbaa,The Lion King,The Jungle Book,Brother Bear,,A,hard,Animation
-423,Who plays Batman in Batman v Superman,Christian Bale,Michael Keaton,Ben Affleck,,C,hard,Superheroes
-424,Which western won Best Picture for 1990,Unforgiven,Open Range,Dances with Wolves,,C,hard,Awards and Records
-425,Which 1956 film follows a bet to circle the globe,Around the World in 80 Days,The Great Race,Monte Carlo or Bust,,A,hard,Classic Cinema
-426,Which 1998 film features oil drillers saving Earth from an asteroid,Deep Impact,Armageddon,Volcano,,B,hard,Modern Blockbusters
-427,Which series features Lorelai Gilmore,Gilmore Girls,Everwood,The O.C.,,A,hard,TV Series
-428,Which 1992 Disney film features the parrot Iago,Quest for Camelot,The Road to El Dorado,Aladdin,,C,hard,Animation
-429,What is the name of Peter Quills ship,Xandar,Milano,Knowhere,,B,hard,Superheroes
-430,Which actor won Best Actor in both 1994 and 1995,Daniel Day-Lewis,Tom Hanks,Russell Crowe,,B,hard,Awards and Records
-431,Which series centers on Saul Goodman,Barry,Justified,Better Call Saul,,C,hard,TV Series
-432,Which 2003 Pixar film is set mostly underwater,Finding Nemo,The Shape of Water,A Turtles Tale,,A,hard,Animation
-433,Which Infinity Stone powered Lokis scepter,Space Stone,Mind Stone,Power Stone,,B,hard,Superheroes
-434,Which film earned Leonardo DiCaprio his first Best Actor Oscar,Inception,The Revenant,The Wolf of Wall Street,,B,hard,Modern Blockbusters
-435,Who played Lawrence of Arabia,Omar Sharif,Alec Guinness,Peter OToole,,C,hard,Classic Cinema
-436,Which 2000 film features a volleyball named Wilson,Cast Away,The Beach,Bicentennial Man,,A,hard,Modern Blockbusters
-437,Which series features the 1980s Goldberg family,The Wonder Years,Everybody Hates Chris,The Goldbergs,,C,hard,TV Series
-438,Which 1991 Disney film features Belle,Anastasia,Beauty and the Beast,Thumbelina,,B,hard,Animation
-439,Who plays Gamora,Zoe Saldana,Karen Gillan,Pom Klementieff,,A,hard,Superheroes
-440,Which 1993 Holocaust drama won Best Picture,Schindlers List,The Piano,In the Name of the Father,,A,hard,Awards and Records
-441,Who directed Mr. Smith Goes to Washington,Frank Capra,Leo McCarey,George Cukor,,A,hard,Classic Cinema
-442,Which 1991 thriller features Clarice Starling,Seven,The Silence of the Lambs,Copycat,,B,hard,Modern Blockbusters
-443,Which drama features DEA agent Hank Schrader,Your Honor,The Wire,Breaking Bad,,C,hard,TV Series
-444,Which 1996 film features Bugs Bunny playing basketball,Space Jam,Looney Tunes Back in Action,Ready Player One,,A,hard,Animation
-445,Which hero does Brie Larson play,Scarlet Witch,Captain Marvel,Ms. Marvel,,B,hard,Superheroes
-446,Which 1959 epic won 11 Academy Awards,Cleopatra,Spartacus,Ben-Hur,,C,hard,Awards and Records
-447,Which 1952 film stars Gary Cooper as a small-town marshal,High Noon,Shane,My Darling Clementine,,A,hard,Classic Cinema
-448,Which 2003 film features a cursed pirate crew,Cutthroat Island,Pirates of the Caribbean The Curse of the Black Pearl,Treasure Planet,,B,hard,Modern Blockbusters
-449,Which sitcom features a mailman named Newman,Friends,Curb Your Enthusiasm,Seinfeld,,C,hard,TV Series
-450,Which villain dognaps 99 puppies,Ursula,Maleficent,Cruella de Vil,,C,hard,Animation
-451,Which series features the cable news channel ACN,The Newsroom,Sports Night,The West Wing,,A,hard,TV Series
-452,Which 2001 film features a robot boy named David,Short Circuit,A.I. Artificial Intelligence,Ex Machina,,B,hard,Animation
-453,Which metal is bonded to Wolverines skeleton,Carbonadium,Titanium,Adamantium,,C,hard,Superheroes
-454,Which 1972 mafia classic won Best Picture,Goodfellas,The Godfather,Casino,,B,hard,Classic Cinema
-455,In which film does Kim Novak play a dual role,Vertigo,Marnie,Rebecca,,A,hard,Classic Cinema
-456,Which 2014 film features a demanding jazz instructor,Boyhood,Birdman,Whiplash,,C,hard,Modern Blockbusters
-457,Which series features the Byers family,Dark,Stranger Things,The OA,,B,hard,TV Series
-458,Which 2010 film features dreams within dreams,Inception,Source Code,Vanilla Sky,,A,hard,Modern Blockbusters
-459,Who directed Man of Steel,Christopher Nolan,Patty Jenkins,Zack Snyder,,C,hard,Superheroes
-460,Which network aired Breaking Bad,AMC,FX,HBO,,A,hard,TV Series
-461,Which sitcom features Paddys Pub,The League,Its Always Sunny in Philadelphia,Workaholics,,B,hard,TV Series
-462,Which Disney film features the demon Chernabog,Fantasia,The Black Cauldron,The Adventures of Ichabod and Mr. Toad,,A,hard,Animation
-463,Which hero protects Star City,Nightwing,Green Lantern,Green Arrow,,C,hard,Superheroes
-464,Which boxing film won Best Picture for 1976,Raging Bull,Cinderella Man,Rocky,,C,hard,Awards and Records
-465,Which 1954 film features a longshoreman who testifies against the mob,On the Waterfront,Somebody Up There Likes Me,The Harder They Fall,,A,hard,Classic Cinema
-466,Which 2011 silent film salutes old Hollywood,Hugo,The Artist,Sing Street,,B,hard,Modern Blockbusters
-467,Which series features a fake psychic detective,Monk,Psych,The Mentalist,,A,hard,TV Series
-468,Which 2003 film features a fish tank support group,The Reef,A Fish Called Wanda,Finding Nemo,,C,hard,Animation
-469,Who plays Bane in The Dark Knight Rises,Javier Bardem,Tom Hardy,Josh Brolin,,B,hard,Superheroes
-470,Who won Best Actress for Erin Brockovich,Renee Zellweger,Julia Roberts,Sandra Bullock,,B,hard,Awards and Records
-471,Which series features Piper Chapman at Litchfield,GLOW,Wentworth,Orange Is the New Black,,C,hard,TV Series
-472,Which Disney film features Emperor Kuzco,Atlantis The Lost Empire,Home on the Range,The Emperors New Groove,,A,hard,Animation
-473,Which team includes Rocket Raccoon,The Defenders,Guardians of the Galaxy,The Eternals,,B,hard,Superheroes
-474,Which journalism drama won Best Picture for 2015,The Big Short,Spotlight,Steve Jobs,,B,hard,Awards and Records
-475,Which 1944 noir features Phyllis Dietrichson,Mildred Pierce,Laura,Double Indemnity,,C,hard,Classic Cinema
-476,Which 2009 Iraq bomb disposal drama won Best Picture,American Sniper,The Hurt Locker,Zero Dark Thirty,,B,hard,Awards and Records
-477,Which series features a Doctor who wears bow ties,Torchwood,Merlin,Doctor Who,,C,hard,TV Series
-478,Which 2001 Disney film explores a sunken city,Recess Schools Out,Atlantis The Lost Empire,Titan A.E.,,B,hard,Animation
-479,Who plays Killmonger in Black Panther,Michael B. Jordan,Chadwick Boseman,Daniel Kaluuya,,A,hard,Superheroes
-480,Which show holds the record for most Emmy wins,Game of Thrones,Frasier,Saturday Night Live,,C,hard,Awards and Records
-481,Which 1941 John Huston debut features a prized statuette,Key Largo,The Asphalt Jungle,The Maltese Falcon,,C,hard,Classic Cinema
-482,Which 2013 space survival film stars Sandra Bullock,Life of Pi,Gravity,The Martian,,B,hard,Modern Blockbusters
-483,Which sitcom features Jim Halpert,Scrubs,Brooklyn Nine-Nine,The Office,,C,hard,TV Series
-484,Which Disney film features the god Hades,The Prince of Egypt,Sinbad Legend of the Seven Seas,Hercules,,C,hard,Animation
-485,Which character says the line I am Iron Man,Bruce Banner,Tony Stark,Steve Rogers,,B,hard,Superheroes
-486,Which 1998 Best Picture winner riffs on Shakespeare,Shakespeare in Love,Elizabeth,The Truman Show,,A,hard,Awards and Records
-487,Which 1948 film centers on a ballet star torn between art and love,An American in Paris,The Red Shoes,The Turning Point,,B,hard,Classic Cinema
-488,Which 2008 Batman film features Heath Ledger,Batman v Superman,The Dark Knight,Batman Returns,,B,hard,Superheroes
-489,Which procedural features Tony DiNozzo,NCIS,CSI New York,Bones,,A,hard,TV Series
-490,Which 2012 Disney film features Merida,Rise of the Guardians,The Croods,Brave,,C,hard,Animation
-491,Which thriller series features assassin Villanelle,Killing Eve,Alias,Homeland,,A,hard,TV Series
-492,Which Disney film follows young Simba,Return to Oz,The Lion King,Dumbo,,B,hard,Animation
-493,Which stone does Thanos take first in Infinity War,The Tesseract,The Orb,Power Stone,,C,hard,Superheroes
-494,Which individual has won the most Academy Awards ever,Cedric Gibbons,Walt Disney,John Williams,,B,hard,Awards and Records
-495,Who directed the 1939 western Stagecoach,John Ford,Raoul Walsh,Henry King,,A,hard,Classic Cinema
-496,Which 2000 film stars Russell Crowe as a Roman general,King Arthur,Troy,Gladiator,,C,hard,Modern Blockbusters
-497,Which series features Joan Holloway,Pan Am,Mad Men,The Playboy Club,,B,hard,TV Series
-498,Which 1995 Disney film features John Smith and Pocahontas,Balto,Pocahontas,The Iron Giant,,B,hard,Animation
-499,Who plays Doctor Strange,Tom Hiddleston,Matt Smith,Benedict Cumberbatch,,C,hard,Superheroes
-500,Which 2003 fantasy film won all 11 Oscars it was nominated for,The Two Towers,Gangs of New York,The Return of the King,,C,hard,Awards and Records
-501,Which thriller series features Carrie Mathison,The Night Manager,Quantico,The Americans,,B,hard,TV Series
-502,Which 2007 Pixar film is set in a Paris kitchen,Ratatouille,The Lobster,Chocolat,,A,hard,Animation
-503,Which hero is also known as Diana Prince,Big Barda,Mera,Wonder Woman,,C,hard,Superheroes
-504,Which 1975 asylum drama won Best Picture,Network,Rocky,One Flew Over the Cuckoos Nest,,C,hard,Awards and Records
-505,Who played the title role in Mrs. Miniver,Greer Garson,Bette Davis,Olivia de Havilland,,A,hard,Classic Cinema
-506,Which 2012 western features a freed slave turned bounty hunter,Django Unchained,12 Years a Slave,The Hateful Eight,,B,hard,Modern Blockbusters
-507,Which comedy features Leslie Knope,30 Rock,Community,The Comeback,,A,hard,TV Series
-508,Which Disney film features the candlestick Lumiere,The Sword in the Stone,The Aristocats,Beauty and the Beast,,C,hard,Animation
-509,Who plays Black Widow,Brie Larson,Scarlett Johansson,Elizabeth Olsen,,B,hard,Superheroes
-510,Which 1950 theater drama won Best Picture,The Best Years of Our Lives,All About Eve,Born Yesterday,,B,hard,Awards and Records
-511,Which 1957 epic features Colonel Nicholson,The Guns of Navarone,The Caine Mutiny,The Bridge on the River Kwai,,C,hard,Classic Cinema
-512,Which 1986 comedy features a legendary day off in Chicago,The Breakfast Club,Ferris Buellers Day Off,Dirty Dancing,,A,hard,Modern Blockbusters
-513,Which sitcom features Barney Stinson,New Girl,How I Met Your Mother,The Big Bang Theory,,B,hard,TV Series
-514,Which 2017 Pixar film deals with grief during the Day of the Dead,The Book of Life,Coco,Encanto,,B,hard,Animation
-515,Which MCU hero fights with a bow and arrow,Roy Harper,Arsenal,Hawkeye,,C,hard,Superheroes
-516,Which actress has the most Best Actress nominations,Meryl Streep,Katharine Hepburn,Geraldine Page,,A,hard,Awards and Records
-517,Which 1957 film dramatizes the gunfight at the O.K. Corral,Wild Bill,The Sons of Katie Elder,Gunfight at the O.K. Corral,,C,hard,Classic Cinema
-518,Which 1985 adventure follows kids hunting pirate treasure,The Goonies,Stand by Me,The Lost Boys,,A,hard,Modern Blockbusters
-519,Which series features the Byrde family laundering money,Bloodline,Ozark,Sons of Anarchy,,A,hard,TV Series
-520,Which 1998 Pixar film parodies Seven Samurai with ants,The Ant Bully,Bee Movie,A Bugs Life,,C,hard,Animation
-521,Who plays Aquaman,Jason Momoa,Chris Hemsworth,Liam Neeson,,A,hard,Superheroes
-522,Which film gave Denzel Washington his first Best Actor Oscar,Glory,Training Day,Malcolm X,,B,hard,Awards and Records
-523,Which 1950 comedy features an invisible six-foot rabbit,The Shop Around the Corner,Arsenic and Old Lace,Harvey,,C,hard,Classic Cinema
-524,Which 1994 crime film features a mysterious briefcase,Pulp Fiction,Reservoir Dogs,Jackie Brown,,A,hard,Modern Blockbusters
-525,Which series follows the Fisher family funeral home,The Sopranos,Dead Like Me,Six Feet Under,,C,hard,TV Series
-526,Which 2004 Pixar film brings supers out of retirement,The Incredibles,Megamind,Hancock,,A,hard,Superheroes
-527,Which villain does Josh Brolin play in the MCU,Hela,Kang,Thanos,,A,hard,Superheroes
-528,Which 2017 fantasy romance won Best Picture,Call Me by Your Name,The Shape of Water,Three Billboards Outside Ebbing Missouri,,B,hard,Awards and Records
-529,Which 1970 film dramatizes a famous WWII general,Tora Tora Tora,Midway,Patton,,C,hard,Classic Cinema
-530,Which 2016 film features a conscientious objector medic,13 Hours,Deepwater Horizon,Hacksaw Ridge,,C,hard,Modern Blockbusters
-531,Which series features lawyer Kim Wexler,Bosch,Better Call Saul,Sneaky Pete,,B,hard,TV Series
-532,Which Pixar film features Lightning McQueen,Planes,Turbo,Cars,,C,hard,Animation
-533,Which nation does TChalla rule as king,Black Panther,Falcon,War Machine,,A,hard,Superheroes
-534,Which jazz-era musical won Best Picture for 2002,Moulin Rouge,Chicago,Cabaret,,B,hard,Awards and Records
-535,Which Orson Welles noir features a border town bomb plot,The Third Man,Fallen Angel,Touch of Evil,,C,hard,Classic Cinema
-536,Which 1998 film features a staged island life,Pleasantville,The Truman Show,EDtv,,B,hard,Modern Blockbusters
-537,Which sitcom features the Tanner household,Family Matters,Full House,Step by Step,,B,hard,TV Series
-538,Which 1999 Disney film features a man raised by gorillas,The Wild Thornberrys,Dinosaur,Tarzan,,C,hard,Animation
-539,Which villain is called the Clown Prince of Crime,Penguin,Riddler,The Joker,,C,hard,Superheroes
-540,Which 1985 Africa romance won Best Picture,The Color Purple,Gorillas in the Mist,Out of Africa,,A,hard,Awards and Records
-541,Which 1940 film features the estate Manderley,Jane Eyre,Rebecca,Wuthering Heights,,B,hard,Classic Cinema
-542,Which 1995 crime epic pits Pacino against De Niro,The Insider,Miami Vice,Heat,,A,hard,Modern Blockbusters
-543,Which series features Jessica Pearson,Boston Legal,Billions,Suits,,C,hard,TV Series
-544,Which 2002 Disney film features an alien landing in Hawaii,Meet the Robinsons,Cinderella II Dreams Come True,Lilo and Stitch,,C,hard,Animation
-545,Which hero is known as the Man Without Fear,Luke Cage,Iron Fist,Daredevil,,A,hard,Superheroes
-546,Which 1977 romantic comedy won Best Picture,Manhattan,Annie Hall,Kramer vs Kramer,,B,hard,Awards and Records
-547,Which 1965 film features the von Trapp family,The Sound of Music,The Music Man,Mary Poppins,,A,hard,Classic Cinema
-548,Which 2000 film features gravity-defying martial artists,Hero,The Raid,Crouching Tiger Hidden Dragon,,C,hard,Modern Blockbusters
-549,Which series prequels a famous 1960 horror film,Mindhunter,Bates Motel,The Following,,B,hard,TV Series
-550,Which 2004 Ghibli film features a wizard and a hat,Ponyo,Howls Moving Castle,The Wind Rises,,B,hard,Animation
-551,Which hero is also known as Wade Wilson,Cable,Domino,Deadpool,,C,hard,Superheroes
-552,Which 1967 Mississippi drama won Best Picture,The Graduate,Guess Whos Coming to Dinner,In the Heat of the Night,,C,hard,Awards and Records
-553,Who played the Sheik in the 1921 silent hit,Ramon Novarro,Rudolph Valentino,John Gilbert,,B,hard,Classic Cinema
-554,Which 2007 Coen thriller features a coin-flipping killer,Burn After Reading,No Country for Old Men,Blood Simple,,B,hard,Modern Blockbusters
-555,Which sitcom features Ray Barone,The King of Queens,According to Jim,Everybody Loves Raymond,,C,hard,TV Series
-556,Which 1988 film mixes toons with live action,Cool World,Osmosis Jones,Who Framed Roger Rabbit,,A,hard,Animation
-557,Which hero is called the God of Mischief,Enchantress,Amora,Loki,,C,hard,Superheroes
-558,Which 2004 Clint Eastwood drama won Best Picture,Mystic River,Million Dollar Baby,Gran Torino,,B,hard,Awards and Records
-559,Which 1962 film features lawyer Atticus Finch,Inherit the Wind,To Kill a Mockingbird,Anatomy of a Murder,,A,hard,Classic Cinema
-560,Which 2004 comedy features the Plastics,Clueless,Mean Girls,Legally Blonde,,B,hard,Modern Blockbusters
-561,Which sitcom features the Heck family,The Middle,The Conners,Raising Hope,,A,hard,TV Series
-562,Which 1997 animated film features the lost Russian duchess,The King and I,Anastasia,Joseph King of Dreams,,B,hard,Animation
-563,Which X-Men hero does Hugh Jackman play,Cyclops,Gambit,Wolverine,,C,hard,Superheroes
-564,Which 2019 WWI film won Sam Mendes Best Director,Dunkirk,Ford v Ferrari,1917,,C,hard,Awards and Records
-565,Which 1954 film features a chauffeurs daughter,Funny Face,Sabrina,Love in the Afternoon,,B,hard,Classic Cinema
-566,Which 2016 film features alien heptapods,Contact,Independence Day,Arrival,,C,hard,Modern Blockbusters
-567,Which series features the detective of Baker Street in modern day,Ripper Street,Luther,Sherlock,,C,hard,TV Series
-568,Which 2004 sequel sends the ogre to a faraway kingdom,Shrek 2,Shrek the Third,Puss in Boots,,A,hard,Animation
-569,Who plays Peggy Carter,Hayley Atwell,Emily VanCamp,Cobie Smulders,,A,hard,Superheroes
-570,Which 1973 con artist film won Best Picture,The Paper Chase,The Sting,Chinatown,,B,hard,Awards and Records
-571,Which 1956 Hitchcock remake features an assassination plot in London,Suspicion,Stage Fright,The Man Who Knew Too Much,,C,hard,Classic Cinema
-572,Which 2009 film features aliens in Johannesburg,Elysium,District 9,Chappie,,B,hard,Modern Blockbusters
-573,Which sitcom features the Wilkerson family,Grounded for Life,8 Simple Rules,Malcolm in the Middle,,C,hard,TV Series
-574,Which 2014 film features a construction toy hero,Wreck-It Ralph,The LEGO Movie,Smallfoot,,B,hard,Animation
-575,Which hero is known as the Sentinel of Liberty,The Punisher,Nova,Captain America,,C,hard,Superheroes
-576,Which 1999 suburb satire won Best Picture,American Beauty,American History X,American Gangster,,A,hard,Awards and Records
-577,Which 1934 comedy features sleuths Nick and Nora,His Girl Friday,The Thin Man,The Awful Truth,,B,hard,Classic Cinema
-578,Which 2011 film follows a writer in 1920s Paris,To Rome with Love,Cafe Society,Midnight in Paris,,C,hard,Modern Blockbusters
-579,Which sitcom features Karen Walker,Will and Grace,Hot in Cleveland,Sex and the City,,A,hard,TV Series
-580,Which 1990 film features a gentle man with blades for fingers,Beetlejuice,Edward Scissorhands,Dark Shadows,,B,hard,Animation
-581,Which X-Men leader does Patrick Stewart play,Professor X,Magneto,Mr. Sinister,,A,hard,Superheroes
-582,Which 1982 pacifist biopic won Best Picture,Chariots of Fire,Gandhi,A Passage to India,,B,hard,Awards and Records
-583,Which 1956 film features Robby the Robot,The Day the Earth Stood Still,Destination Moon,Forbidden Planet,,C,hard,Classic Cinema
-584,Which 2013 film depicts a mans years in slavery,The Butler,Selma,12 Years a Slave,,C,hard,Modern Blockbusters
-585,Which sitcom features Herman the gentle giant,The Munsters,The Addams Family,Bewitched,,A,hard,TV Series
-586,Which 2010 Disney film features a long-haired tower prisoner,Winnie the Pooh,Tangled,Ralph Breaks the Internet,,B,hard,Animation
-587,Which vampire hunter does Wesley Snipes play,Spawn,Blade,Steel,,B,hard,Superheroes
-588,Which 1969 film is the only X-rated Best Picture winner,MASH,The Apartment,Midnight Cowboy,,C,hard,Awards and Records
-589,Which 1966 western features the gunslinger Blondie,For a Few Dollars More,The Good the Bad and the Ugly,Once Upon a Time in the West,,B,hard,Classic Cinema
-590,Which 2014 film features an actor and his winged alter ego,Black Swan,Foxcatcher,Birdman,,C,hard,Modern Blockbusters
-591,Which drama features an undercover advertising executive,Person of Interest,Lost Girl,Continuum,,A,hard,TV Series
-592,Which 2015 Pixar film imagines dinosaurs and humans coexisting,The Good Dinosaur,Land Before Time,Ice Age,,B,hard,Animation
-593,Which hero is the God of Thunder,Odin,Thor,Heimdall,,B,hard,Superheroes
-594,Which 2016 coming-of-age drama won Best Picture,La La Land,Manchester by the Sea,Moonlight,,C,hard,Awards and Records
-595,Which 1959 comedy pairs Doris Day with Rock Hudson,Pillow Talk,Lover Come Back,Send Me No Flowers,,A,hard,Classic Cinema
-596,Which 2002 film features police who see crimes before they happen,I Robot,Paycheck,Minority Report,,C,hard,Modern Blockbusters
-597,Which Cold War drama features spy couple Philip and Elizabeth,Rubicon,The Americans,The Company,,B,hard,TV Series
-598,Which 2021 film features a sea monster boy on the Italian coast,Onward,The Sea Beast,Luca,,C,hard,Animation
-599,Which hero is known as the strongest one there is,The Hulk,The Thing,She-Hulk,,A,hard,Superheroes
-600,Which 1994 drama won Best Picture,Quiz Show,The Shawshank Redemption,Forrest Gump,,C,hard,Awards and Records
-601,Which cinematographer shot Citizen Kane,James Wong Howe,Karl Freund,Gregg Toland,Lee Garmes,C,expert,Classic Cinema
-602,Which composer scored Jaws and Star Wars,Hans Zimmer,John Williams,Jerry Goldsmith,James Horner,B,expert,Modern Blockbusters
-603,Which actor played Gunther in Friends,James Michael Tyler,Eddie Cahill,Mike Hagerty,Giovanni Ribisi,A,expert,TV Series
-604,Which Mickey Mouse short played before Frozen,Paperman,La Luna,Lava,Get a Horse,D,expert,Animation
-605,Who created the X-Men for Marvel Comics,Chris Claremont,Stan Lee and Jack Kirby,Roy Thomas,Steve Ditko,B,expert,Superheroes
-606,Which film won the first Palme dOr in 1955,Orpheus,Gervaise,Marty,Black Orpheus,C,expert,Awards and Records
-607,Who played the bride in Bride of Frankenstein,Valerie Hobson,Gloria Stuart,Elsa Lanchester,Mae Clarke,C,expert,Classic Cinema
-608,Who composed the 1994 Lion King score,Alan Menken,Danny Elfman,Patrick Doyle,Hans Zimmer,D,expert,Animation
-609,Who created The Twilight Zone,Gene Roddenberry,Nigel Kneale,Rod Serling,Sidney Lumet,A,expert,TV Series
-610,Which animated film features the song Colors of the Wind,All Dogs Go to Heaven,Pocahontas,An American Tail,Ferngully,B,expert,Animation
-611,Who drew the 1986 graphic novel The Dark Knight Returns,Alan Moore,Todd McFarlane,Frank Miller,Dave Gibbons,C,expert,Superheroes
-612,Which 1985 Spielberg drama got 11 nominations and zero wins,E.T. the Extra-Terrestrial,Crash,West Side Story,The Color Purple,D,expert,Awards and Records
-613,Which 1916 Griffith epic tells four parallel stories,Intolerance,The Birth of a Nation,Way Down East,Broken Blossoms,A,expert,Classic Cinema
-614,Which actor played Q from 1963 to 1999,Bernard Lee,Desmond Llewelyn,Lois Maxwell,Geoffrey Keen,B,expert,Modern Blockbusters
-615,Which sitcom spun off from Cheers in 1993,Wings,The Tortellis,Becker,Frasier,D,expert,TV Series
-616,Which Disney classic is based on a Dodie Smith novel,That Darn Cat,Lady and the Tramp,Robin Hood,One Hundred and One Dalmatians,D,expert,Animation
-617,Who played Jor-El in the 1978 Superman,Marlon Brando,Gene Hackman,Terence Stamp,Susannah York,A,expert,Superheroes
-618,Which costume designer won a record eight Oscars,Adrian,Cecil Beaton,Edith Head,Colleen Atwood,C,expert,Awards and Records
-619,Who played Hawkeye Pierce on the MASH series,Alan Alda,Donald Sutherland,Wayne Rogers,Mike Farrell,A,expert,TV Series
-620,Which 2020 Pixar film explores the Great Before,Monsters University,Soul,Turning Red,Lightyear,B,expert,Animation
-621,Which comedy features writer Liz Lemon,Up All Night,30 Rock,Cougar Town,Suburgatory,B,expert,TV Series
-622,Who voiced Bugs Bunny for nearly five decades,Jim Henson,Daws Butler,Frank Welker,Mel Blanc,D,expert,Animation
-623,Which MCU film first shows TChalla,Captain America Civil War,Black Panther,Avengers Age of Ultron,Thor Ragnarok,A,expert,Superheroes
-624,Who played Alfred in the 1989 Batman,Alan Rickman,Ian Holm,Michael Gough,Jack Palance,C,expert,Superheroes
-625,Who played Roger Thornhill,Cary Grant,James Stewart,David Niven,Tony Curtis,A,expert,Classic Cinema
-626,Which 1984 film unleashes creatures fed after midnight,Critters,Ghoulies,Troll,Gremlins,D,expert,Modern Blockbusters
-627,Which Golden Girl played Rose,Rue McClanahan,Bea Arthur,Betty White,Estelle Getty,C,expert,TV Series
-628,Which composer wrote Beauty and the Beast songs with Howard Ashman,Elton John,Phil Collins,Alan Menken,Stephen Schwartz,C,expert,Animation
-629,Who played Alfred in Batman v Superman,Ralph Fiennes,Jeremy Irons,Sean Pertwee,Andy Serkis,B,expert,Superheroes
-630,Which film won Best Original Song for My Heart Will Go On,Ghost,The Bodyguard,Evita,Titanic,D,expert,Awards and Records
-631,Who played Joe Gillis in Sunset Boulevard,Fred MacMurray,Ray Milland,Burt Lancaster,William Holden,D,expert,Classic Cinema
-632,Which 1989 Southern drama won Best Picture without a directing nomination,Driving Miss Daisy,My Left Foot,Born on the Fourth of July,Dead Poets Society,A,expert,Awards and Records
-633,Who played Fonzie,Ron Howard,Scott Baio,Henry Winkler,Anson Williams,C,expert,TV Series
-634,Which 1989 film won Best Original Song for Under the Sea,Rock-A-Doodle,The Little Mermaid,The Pebble and the Penguin,Song of the Sea,B,expert,Animation
-635,Who played the Joker in the 1989 Batman,Tommy Lee Jones,Mark Hamill,Cesar Romero,Jack Nicholson,D,expert,Superheroes
-636,Which 1933 backstage drama won Hepburn her first Oscar,Alice Adams,Morning Glory,The Philadelphia Story,Woman of the Year,B,expert,Awards and Records
-637,Who played Cosmo Brown in Singin in the Rain,Rita Moreno,Cyd Charisse,Donald OConnor,Dean Martin,C,expert,Classic Cinema
-638,Which 1995 epic won Best Picture for Mel Gibson,Apollo 13,Braveheart,Rob Roy,Batman Forever,B,expert,Awards and Records
-639,Who played Samantha in Bewitched,Agnes Moorehead,Erin Murphy,Elizabeth Montgomery,Sandra Gould,C,expert,TV Series
-640,Which 1937 film was Disneys first feature,The Reluctant Dragon,Saludos Amigos,Fantasia,Snow White and the Seven Dwarfs,D,expert,Animation
-641,Who played Mace Windu,Samuel L. Jackson,Jimmy Smits,Ewan McGregor,Denis Lawson,A,expert,Superheroes
-642,Which 1941 Wales mining drama won Best Picture,Sergeant York,How Green Was My Valley,The Little Foxes,Citizen Kane,B,expert,Awards and Records
-643,Who played Hawkeye in the 1970 MASH film,Elliott Gould,Tom Skerritt,Robert Duvall,Donald Sutherland,D,expert,Classic Cinema
-644,Who voiced Maleficent,Verna Felton,Betty Lou Gerson,Eleanor Audley,Barbara Luddy,C,expert,Animation
-645,Which 1953 film won Sinatra a supporting actor Oscar,Pal Joey,The Man with the Golden Arm,From Here to Eternity,Suddenly,C,expert,Classic Cinema
-646,Which 1994 film stars Tim Robbins as an escapee,The Shawshank Redemption,Cool Hand Luke,Papillon,Escape from Alcatraz,A,expert,Modern Blockbusters
-647,Who played Niles Crane,Kelsey Grammer,David Hyde Pierce,Peri Gilpin,John Mahoney,B,expert,TV Series
-648,Which 1942 Disney film features Thumper,The Three Caballeros,Bambi,Melody Time,Victory Through Air Power,B,expert,Animation
-649,Who played Laura in the 1944 noir Laura,Dana Andrews,Clifton Webb,Gene Tierney,Vincent Price,C,expert,Classic Cinema
-650,Which 1997 film features a janitor math genius,A Beautiful Mind,The Rainmaker,With Honors,Good Will Hunting,D,expert,Modern Blockbusters
-651,Who played Colonel Potter after the original commander,Harry Morgan,McLean Stevenson,Larry Linville,David Ogden Stiers,A,expert,TV Series
-652,Who wrote the songs for Toy Story,Howard Ashman,Randy Newman,James Newton Howard,Thomas Newman,B,expert,Animation
-653,Who played Yondu,Kurt Russell,Sylvester Stallone,Michael Rooker,Peter Serafinowicz,C,expert,Superheroes
-654,Which 1984 film was the first rated PG-13,Indiana Jones and the Temple of Doom,The Flamingo Kid,The Woman in Red,Red Dawn,D,expert,Awards and Records
-655,Who played Anita in the 1961 West Side Story,Rita Moreno,Marni Nixon,Chita Rivera,Suzie Kaye,A,expert,Classic Cinema
-656,Which 1982 film features Voight-Kampff tests,Total Recall,Blade Runner,The Running Man,Altered States,B,expert,Modern Blockbusters
-657,Which sitcom features Norm Peterson,Coach,Night Court,Cheers,Newhart,C,expert,TV Series
-658,Which 1998 animated film features When You Believe,The Mummy,Prince of Egypt,Patch Adams,Stepmom,B,expert,Animation
-659,Who played the Ancient One,Tilda Swinton,Cate Blanchett,Michelle Pfeiffer,Angela Bassett,A,expert,Superheroes
-660,Which 1940 Hitchcock film won Best Picture,The Grapes of Wrath,Rebecca,Kitty Foyle,Our Town,B,expert,Classic Cinema
-661,Who played Ashley Wilkes,Clark Gable,Victor Jory,Evelyn Keyes,Leslie Howard,D,expert,Classic Cinema
-662,Who scored The Good the Bad and the Ugly,Nino Rota,Piero Piccioni,Armando Trovajoli,Ennio Morricone,D,expert,Classic Cinema
-663,Who played Mary Richards,Mary Tyler Moore,Cloris Leachman,Valerie Harper,Georgia Engel,A,expert,TV Series
-664,Which Elton John song won an Oscar for The Lion King,Circle of Life,Can You Feel the Love Tonight,I Just Cant Wait to Be King,Shadowland,B,expert,Animation
-665,Who played Uncle Ben,Willem Dafoe,Rosemary Harris,Cliff Robertson,James Cromwell,C,expert,Superheroes
-666,Which 1939 epic won a record ten Oscars,Goodbye Mr. Chips,Dark Victory,Love Affair,Gone with the Wind,D,expert,Awards and Records
-667,Which show features Arnold Jackson,Webster,Punky Brewster,Diffrent Strokes,Silver Spoons,C,expert,TV Series
-668,Which Disney villain keeps a raven named Diablo,Song of the South,Make Mine Music,Sleeping Beauty,So Dear to My Heart,C,expert,Animation
-669,Who played Pepper Potts,Natalie Portman,Liv Tyler,Rebecca Hall,Gwyneth Paltrow,D,expert,Superheroes
-670,Which 1955 romance won both the Palme dOr and Best Picture,Marty,Mister Roberts,The Rose Tattoo,Picnic,A,expert,Awards and Records
-671,Who played Columbo,Telly Savalas,Peter Falk,Jack Webb,David Janssen,B,expert,TV Series
-672,Which 1996 film stars Glenn Close as a dognapper,Matilda,Jumanji,Michael,101 Dalmatians,D,expert,Animation
-673,Who played Wong in Doctor Strange,Benedict Wong,Donnie Yen,Chin Han,BD Wong,A,expert,Superheroes
-674,Who won Best Supporting Actress for Minari,Glenn Close,Olivia Colman,Youn Yuh-jung,Jodie Foster,C,expert,Awards and Records
-675,Who played Madeleine Elster,Grace Kelly,Kim Novak,Eva Marie Saint,Janet Leigh,B,expert,Classic Cinema
-676,Who scored The Lord of the Rings trilogy,Alan Silvestri,Klaus Badelt,Michael Giacchino,Howard Shore,D,expert,Modern Blockbusters
-677,Who played George Costanza,Jason Alexander,Michael Richards,Jerry Stiller,Wayne Knight,A,expert,TV Series
-678,Who voiced Philoctetes,Danny DeVito,James Woods,Rip Torn,Bobcat Goldthwait,A,expert,Animation
-679,Who played Happy Hogan,Clark Gregg,Jon Favreau,Paul Bettany,Don Cheadle,B,expert,Superheroes
-680,Who won Best Actress for Network,Beatrice Straight,Ingrid Bergman,Jane Fonda,Faye Dunaway,D,expert,Awards and Records
-681,Which sitcom features Al Bundy,Growing Pains,Family Ties,Head of the Class,Married with Children,D,expert,TV Series
-682,Which Disney film features Ursula,Babes in Toyland,The Fox and the Hound,Fun and Fancy Free,The Little Mermaid,D,expert,Animation
-683,Who played Nick Fury in the MCU,David Hasselhoff,Samuel L. Jackson,David Rasche,Lou Ferrigno,B,expert,Superheroes
-684,Which musical won Best Picture in 1929,The Broadway Melody,Hollywood Revue of 1929,The Desert Song,42nd Street,A,expert,Awards and Records
-685,Which actress played M starting with GoldenEye,Honor Blackman,Michelle Yeoh,Talisa Soto,Judi Dench,D,expert,Modern Blockbusters
-686,Who voiced Elsa,Kristen Bell,America Ferrera,Idina Menzel,Kerry Washington,C,expert,Animation
-687,Who played Bucky Barnes,Anthony Mackie,Frank Grillo,Sebastian Stan,Daniel Bruhl,C,expert,Superheroes
-688,Which 1960 film features a struggling advertising writer lending his home,The Apartment,Some Like It Hot,The Odd Couple,Breakfast at Tiffanys,A,expert,Classic Cinema
-689,Which 2004 film follows a wine tour in Santa Barbara,Bottle Shock,A Good Year,French Kiss,Sideways,D,expert,Modern Blockbusters
-690,Who played Roz on Frasier,Peri Gilpin,Bebe Neuwirth,Jane Leeves,Harriet Sansom Harris,A,expert,TV Series
-691,Which 1959 film is famously called the worst ever made,Glen or Glenda,Robot Monster,Plan 9 from Outer Space,The Blob,C,expert,Classic Cinema
-692,Which 1988 film grants a wish to be big,Splash,The Money Pit,Big,Joe Versus the Volcano,C,expert,Modern Blockbusters
-693,Who played Captain Barney Miller,Abe Vigoda,Hal Linden,Max Gail,Ron Glass,B,expert,TV Series
-694,Which 1981 Disney film pairs a fox and a hound,Pete C,The Many Adventures of Winnie the Pooh,The Great Mouse Detective,The Fox and the Hound,D,expert,Animation
-695,Who played Odin,Anthony Hopkins,Colin Farrell,Zachary Levi,Ray Stevenson,A,expert,Superheroes
-696,Which 1937 biopic won Best Picture,The Good Earth,Captains Courageous,The Life of Emile Zola,A Star Is Born,C,expert,Awards and Records
-697,Which sitcom features a butler named Benson,Soap,Benson,The Facts of Life,One Day at a Time,B,expert,TV Series
-698,Which Disney film features Scuttle,Bedknobs and Broomsticks,Summer Magic,Bolt,The Little Mermaid,D,expert,Animation
-699,Who played Korg,Jeff Goldblum,Karl Urban,Taika Waititi,Tadanobu Asano,C,expert,Superheroes
-700,Which 1958 MGM musical won Best Picture,Gigi,Les Girls,Auntie Mame,I Want to Live,A,expert,Awards and Records
-701,Who played Zemo,Daniel Bruhl,Ross Marquand,Noah Mills,Brian T. Delaney,A,expert,Superheroes
-702,Which 1981 werewolf film won the first Best Makeup Oscar,The Howling,An American Werewolf in London,The Fly,The Fog,B,expert,Awards and Records
-703,Who played Charlie Harper,Jon Cryer,Charlie Sheen,Angus T. Jones,Ashton Kutcher,B,expert,TV Series
-704,Which Pixar short features a lamp named Luxo,Tin Toy,Reds Dream,Luxo Jr.,Knick Knack,C,expert,Animation
-705,Which 1946 Ford western features Doc Holliday,My Darling Clementine,Red River,3 Godfathers,Fort Apache,A,expert,Classic Cinema
-706,Which 1991 film features a liquid metal assassin,The Terminator,Terminator 3 Rise of the Machines,Terminator Salvation,Terminator 2 Judgment Day,D,expert,Modern Blockbusters
-707,Which classic sitcom is set in a Boston bar,The Bob Newhart Show,The Mary Tyler Moore Show,Cheers,Murphy Brown,C,expert,TV Series
-708,Which Disney film features the Cheshire Cat,The Shaggy Dog,The Love Bug,Darby OGill and the Little People,Alice in Wonderland,D,expert,Animation
-709,Who played Drax,Dave Bautista,Chris Pratt,Vin Diesel,Bradley Cooper,A,expert,Superheroes
-710,Which 1932 Disney short won the first Best Animated Short Oscar,Three Little Pigs,Flowers and Trees,The Tortoise and the Hare,The Old Mill,B,expert,Awards and Records
-711,Who played Martin Crane,John Mahoney,Moose,Dan Butler,Edward Hibbert,A,expert,TV Series
-712,Who scored the 1998 Mulan,Mark Mancina,Harry Gregson-Williams,Michael Kamen,Jerry Goldsmith,D,expert,Animation
-713,Who voiced the Watcher,Paul Rudd,Mark Ruffalo,Jeffrey Wright,Danai Gurira,C,expert,Superheroes
-714,Who won Best Actor for The Theory of Everything,David Oyelowo,Eddie Redmayne,Rami Malek,Michael Fassbender,B,expert,Awards and Records
-715,Which 1955 film features a tough teacher in a city school,Blackboard Jungle,The Young Stranger,Splendor in the Grass,Up the Down Staircase,A,expert,Classic Cinema
-716,Which 1990 film features a pottery ghost,Always,Ghost,Ghostbusters II,The Butchers Wife,B,expert,Modern Blockbusters
-717,Who played Rebecca Howe,Shelley Long,Ted Danson,John Ratzenberger,Kirstie Alley,D,expert,TV Series
-718,Which Pixar film features Russell and Carl,Cars 3,The Incredibles 2,Up,Toy Story 4,C,expert,Animation
-719,Who played Howard Stark in Captain America The First Avenger,Gerard Sanders,Matt Riedy,John Slattery,Dominic Cooper,C,expert,Superheroes
-720,Which 1978 Vietnam drama won Best Picture,Coming Home,An Unmarried Woman,Heaven Can Wait,The Deer Hunter,D,expert,Awards and Records
-721,Which 1964 film features a generals coup plot,Fail Safe,Seven Days in May,Dr. Strangelove,Topaz,B,expert,Classic Cinema
-722,Who scored Up and Ratatouille,Randy Newman,Mychael Danna,Michael Giacchino,Alexandre Desplat,C,expert,Animation
-723,Who played Yon-Rogg,Jude Law,Anson Mount,Ben Mendelsohn,Rupert Evans,A,expert,Superheroes
-724,Who won Best Supporting Actress for Ghost,Demi Moore,Mary Steenburgen,Whoopi Goldberg,Debra Winger,C,expert,Awards and Records
-725,Which 1961 film features two gangs on Manhattan streets,The Hustler,West Side Story,Judgment at Nuremberg,Fanny,B,expert,Classic Cinema
-726,Which 2014 Disney film features a healthcare robot,Muppets Most Wanted,The Pirate Fairy,Tinker Bell and the Legend of the NeverBeast,Big Hero 6,D,expert,Animation
-727,Who played Kramer,Barney Martin,Richard Kind,Bryan Cranston,Michael Richards,D,expert,TV Series
-728,Which Disney film features Cogsworth,Into the Woods,Descendants,Snow White and the Huntsman,Beauty and the Beast,D,expert,Animation
-729,Who played Heimdall,Rene Russo,Idris Elba,Stellan Skarsgard,Dane DeHaan,B,expert,Superheroes
-730,Which 1935 sea adventure won Best Picture,Captain Blood,Midsummer Nights Dream,Mutiny on the Bounty,The Story of Louis Pasteur,C,expert,Awards and Records
-731,Which spinoff features Mrs. Garrett,Gimme a Break,Small Wonder,Alice,The Facts of Life,D,expert,TV Series
-732,Which film features the villain Syndrome,Elio,Zoom,Despicable Me,The Incredibles,D,expert,Animation
-733,Which 1961 film features Fast Eddie Felson,A Face in the Crowd,The Hustler,Sweet Smell of Success,Long Days Journey into Night,B,expert,Classic Cinema
-734,Which Disney film features the scientist Jumba,Lilo and Stitch,Leroy and Stitch,Stitch The Movie,Stitch Has a Glitch,A,expert,Animation
-735,Who played Kaecilius,Benjamin Bratt,Chiwetel Ejiofor,Scott Adkins,Mads Mikkelsen,D,expert,Superheroes
-736,Who won Best Supporting Actress for Chicago,Queen Latifah,Julianne Moore,Catherine Zeta-Jones,Taye Diggs,C,expert,Awards and Records
-737,Which 1962 thriller features a brainwashed war hero,Seconds,The Manchurian Candidate,Birdman of Alcatraz,Advise and Consent,B,expert,Classic Cinema
-738,Which 1973 Disney film casts Robin Hood as a fox,Robin Hood,The Shaggy D.A.,The Apple Dumpling Gang,The Computer Wore Tennis Shoes,A,expert,Animation
-739,Who played Red Guardian,Ray Winstone,O-T Fagbenle,David Harbour,William Hurt,C,expert,Superheroes
-740,Which 1966 film about Thomas More won Best Picture,A Man for All Seasons,Whos Afraid of Virginia Woolf,A Thousand Clowns,Alfie,A,expert,Awards and Records
-741,Who played Jack Tripper,Richard Kline,Norman Fell,Joyce DeWitt,John Ritter,D,expert,TV Series
-742,Which Pixar film features Barley and Ian,Elemental,Toy Story,Cars 2,Onward,D,expert,Animation
-743,Who played Daphne Moon,Wendie Malick,Jane Leeves,Laura San Giacomo,Marsha Mason,B,expert,TV Series
-744,Which Pixar film features EVE,Up,The Incredibles,WALL-E,Finding Nemo,C,expert,Animation
-745,Who voiced Ultron,James Spader,Toby Jones,Fred Tatasciore,Tom Kane,A,expert,Superheroes
-746,Which 1964 musical won Best Picture,Oliver,Fiddler on the Roof,My Fair Lady,Funny Girl,C,expert,Awards and Records
-747,Who played Mr. Roper,Audra Lindley,Norman Fell,Don Knotts,Tom Bosley,B,expert,TV Series
-748,Which Pixar film features Boo,Cars,Toy Story 3,WALL-E,Monsters Inc.,D,expert,Animation
-749,Who played Ayo,Florence Kasumba,Lupita Nyongo,Letitia Wright,Winston Duke,A,expert,Superheroes
-750,Which 1981 running drama won Best Picture,Personal Best,Running on Empty,Chariots of Fire,Prefontaine,C,expert,Awards and Records
-751,Which 1969 western sends two robbers fleeing to Bolivia,Butch Cassidy and the Sundance Kid,The Wild Bunch,True Grit,Hang Em High,A,expert,Classic Cinema
-752,Which 1997 noir follows three cops in 1950s Los Angeles,Mulholland Falls,LA Confidential,Cop Land,City Hall,B,expert,Modern Blockbusters
-753,Who played Lilith on Cheers,Woody Harrelson,Nicholas Colasanto,Bebe Neuwirth,Philip Baker Hall,C,expert,TV Series
-754,Who voiced Wreck-It Ralph,Jack McBrayer,Sarah Silverman,Jane Lynch,John C. Reilly,D,expert,Animation
-755,Who played Ego,Kurt Russell,Lee Pace,Djimon Hounsou,Benicio del Toro,A,expert,Superheroes
-756,Which 1934 comedy swept the top five Oscars,Twentieth Century,It Happened One Night,Libeled Lady,Mr. Deeds Goes to Town,B,expert,Awards and Records
-757,Who played Red Forman,Topher Grace,Wilmer Valderrama,Kurtwood Smith,Danny Masterson,C,expert,TV Series
-758,Which Disney film features Grand Pabbie,Raya and the Last Dragon,Strange World,Zootopia,Frozen,D,expert,Animation
-759,Who played Alexander Pierce,Robert Redford,Garry Shandling,Callan Mulvey,Maximiliano Hernandez,A,expert,Superheroes
-760,Which 1970 biopic won Best Picture,Airport,Patton,Love Story,Five Easy Pieces,B,expert,Awards and Records
-761,Which 1954 musical features seven brothers,Oklahoma,Carousel,Seven Brides for Seven Brothers,Brigadoon,C,expert,Classic Cinema
-762,Which 1992 western won Best Picture,Tombstone,Young Guns,Wyatt Earp,Unforgiven,D,expert,Modern Blockbusters
-763,Who played Cliff Clavin,John Ratzenberger,George Wendt,Keene Curtis,Paul Willson,A,expert,TV Series
-764,Which Pixar film features Linguini,Hotel Transylvania,Ratatouille,The Emoji Movie,The Mitchells vs the Machines,B,expert,Animation
-765,Who played Mysterio,Tobey Maguire,Rhys Ifans,Jake Gyllenhaal,Jamie Foxx,C,expert,Superheroes
-766,Who won Best Actress for The Piano,Emma Thompson,Mary McDonnell,Stockard Channing,Holly Hunter,D,expert,Awards and Records
-767,Who played Woody Boyd,Woody Harrelson,Roger Rees,Derek McGrath,Roger Clemens,A,expert,TV Series
-768,Which Disney film features Hans,Moana 2,Frozen,The Princess Bride,The Parent Trap,B,expert,Animation
-769,Who plays Ant-Man,Michael Douglas,Corey Stoll,Paul Rudd,Evangeline Lilly,C,expert,Superheroes
-770,Which 1988 road drama won Best Picture,Working Girl,Mississippi Burning,The Accidental Tourist,Rain Man,D,expert,Awards and Records
-771,Which 1959 western stars John Wayne as a sheriff,The Searchers,Rio Bravo,North to Alaska,Chisum,B,expert,Classic Cinema
-772,Who voiced Mufasa,Matthew Broderick,Jonathan Taylor Thomas,Moira Kelly,James Earl Jones,D,expert,Animation
-773,Who played Abraham Erskine,Stanley Tucci,Sebastian Stan,Richard Armitage,Derek Luke,A,expert,Superheroes
-774,Who won Best Supporting Actress for Beale Street,Emma Stone,Rachel Weisz,Regina King,Amy Adams,C,expert,Awards and Records
-775,Who played Auntie Mame,Irene Dunne,Rosalind Russell,Claudette Colbert,Barbara Stanwyck,B,expert,Classic Cinema
-776,Which Disney film features Jafar,The Return of Jafar,Aladdin and the King of Thieves,The Princess Diaries,Aladdin,D,expert,Animation
-777,Who played Carlton Banks,Alfonso Ribeiro,Will Smith,Tatyana Ali,James Avery,A,expert,TV Series
-778,Which Disney film features Baloo,Freaky Friday,The Sound of Music,The Jungle Book,Newsies,C,expert,Animation
-779,Who played Nebula,Carrie Coon,Karen Gillan,Ophelia Lovibond,Elizabeth Debicki,B,expert,Superheroes
-780,Which 1956 adventure won Best Picture,The Ten Commandments,War and Peace,Friendly Persuasion,Around the World in 80 Days,D,expert,Awards and Records
-781,Which 1953 film features a princess incognito in Rome,Sabrina,Three Coins in the Fountain,Summertime,Roman Holiday,D,expert,Classic Cinema
-782,Which Pixar film makes Dory the lead,Happy Feet,Swimfan,Finding Dory,Surfs Up,C,expert,Animation
-783,Which 1940 film features Hildy Johnson,The Lady Eve,His Girl Friday,The Great McGinty,The Palm Beach Story,B,expert,Classic Cinema
-784,Who voiced Jafar,Jonathan Freeman,Scott Weinger,Linda Larkin,Douglas Seale,A,expert,Animation
-785,Who played Kilgrave,Vincent Donofrio,Jon Bernthal,Elodie Yung,David Tennant,D,expert,Superheroes
-786,Which 1948 Olivier Shakespeare film won Best Picture,Henry V,Richard III,Hamlet,Othello,C,expert,Awards and Records
-787,Who played Archie Bunker,Jean Stapleton,Carroll OConnor,Sally Struthers,Rob Reiner,B,expert,TV Series
-788,Who voiced Sebastian,Samuel E. Wright,Pat Carroll,Christopher Daniel Barnes,Jodi Benson,A,expert,Animation
-789,Who played Kang,Kathryn Newton,Bill Murray,Tim Roth,Jonathan Majors,D,expert,Superheroes
-790,Which 1943 romance won Best Picture,Casablanca,Going My Way,The Lost Weekend,Since You Went Away,A,expert,Awards and Records
-791,Who played Batroc,Georges St-Pierre,Sam Rockwell,Jared Leto,Scott Eastwood,A,expert,Superheroes
-792,Which 1932 hotel drama won Best Picture,The Smiling Lieutenant,Arrowsmith,One Hour with You,Grand Hotel,D,expert,Awards and Records
-793,Who played Elaine on Seinfeld,Jerry Seinfeld,Julia Louis-Dreyfus,Larry David,Heidi Swedberg,B,expert,TV Series
-794,Who voiced Mowgli in the 1967 animated film,Phil Harris,Sebastian Cabot,Bruce Reitherman,George Sanders,C,expert,Animation
-795,Who played Valkyrie,Tessa Thompson,Jaimie Alexander,Saffron Burrows,Mary Elizabeth Winstead,A,expert,Superheroes
-796,Which 1936 showman biopic won Best Picture,San Francisco,Dodsworth,Anthony Adverse,The Great Ziegfeld,D,expert,Awards and Records
-797,Who played Radar OReilly,William Christopher,Gary Burghoff,Jamie Farr,Allan Arbus,B,expert,TV Series
-798,Who voiced the Evil Queen,Adriana Caselotti,Harry Stockwell,Lucille La Verne,Moroni Olsen,C,expert,Animation
-799,Who played Ned Leeds,Jacob Batalon,Marisa Tomei,Zendaya,Tony Revolori,A,expert,Superheroes
-800,Which 1949 political drama won Best Picture,Battleground,Twelve OClock High,Sands of Iwo Jima,All the Kings Men,D,expert,Awards and Records
-801,What is the surname of the hunter brothers in Supernatural,,,,,Winchester,extreme,TV Series
-802,What is the name of the little girl in Monsters Inc,,,,,Boo,extreme,Animation
-803,What is the real name of the Black Panther,,,,,TChalla,extreme,Superheroes
-804,Which studio has won the most Best Animated Feature Oscars,,,,,Pixar,extreme,Awards and Records
-805,Who scored the 1960 horror classic Psycho,,,,,Bernard Herrmann,extreme,Classic Cinema
-806,What is the name of the artificial intelligence in 2001 A Space Odyssey,,,,,HAL,extreme,Modern Blockbusters
-807,What is the name of the diner in Twin Peaks,,,,,Double R,extreme,TV Series
-808,What is the name of the toy restaurant in Toy Story,,,,,Pizza Planet,extreme,Animation
-809,What is the name of Thors home realm,,,,,Asgard,extreme,Superheroes
-810,In what year was the first Academy Awards ceremony held,,,,,1929,extreme,Awards and Records
-811,What is the name of the plantation in Gone with the Wind,,,,,Tara,extreme,Classic Cinema
-812,What is the name of the hotel in The Shining,,,,,Overlook,extreme,Modern Blockbusters
-813,What is the name of the coffee shop in Seinfeld,,,,,Monks,extreme,TV Series
-814,What is the name of Simbas home,,,,,Pride Rock,extreme,Animation
-815,What is the name of Batmans car,,,,,Batmobile,extreme,Superheroes
-816,How many Oscars did Ben-Hur win,,,,,11,extreme,Awards and Records
-817,In what city did Rick and Ilsa first fall in love,,,,,Paris,extreme,Classic Cinema
-818,What is the name of the spaceship in Alien,,,,,Nostromo,extreme,Modern Blockbusters
-819,What is the name of Dwights farm,,,,,Schrute Farms,extreme,TV Series
-820,What is the name of the leader of the fish tank gang in Finding Nemo,,,,,Gill,extreme,Animation
-821,What is Batmans butlers first name,,,,,Alfred,extreme,Superheroes
-822,How many competitive Oscars did Walt Disney win,,,,,22,extreme,Awards and Records
-823,What is the name of Charles Kanes estate,,,,,Xanadu,extreme,Classic Cinema
-824,What is the name of the mining company in Avatar,,,,,RDA,extreme,Modern Blockbusters
-825,What is the name of the starship in Star Trek The Original Series,,,,,Enterprise,extreme,TV Series
-826,What is the name of the kingdom in Frozen,,,,,Arendelle,extreme,Animation
-827,What is the name of Thors new weapon in Endgame,,,,,Stormbreaker,extreme,Superheroes
-828,What network aired I Love Lucy,,,,,CBS,extreme,Awards and Records
-829,Who directed The Seventh Seal,,,,,Ingmar Bergman,extreme,Classic Cinema
-830,What is the name of Cobbs wife in Inception,,,,,Mal,extreme,Modern Blockbusters
-831,What is the name of the coffee house in Beverly Hills 90210,,,,,Peach Pit,extreme,TV Series
-832,What is the name of Jasmines tiger,,,,,Rajah,extreme,Animation
-833,What is the name of the villain in Spider-Man Homecoming,,,,,Vulture,extreme,Superheroes
-834,Who won Best Actor for On the Waterfront,,,,,Marlon Brando,extreme,Awards and Records
-835,What is the name of the ranch in Giant,,,,,Reata,extreme,Classic Cinema
-836,What is the name of the hotel in Pretty Woman,,,,,Beverly Wilshire,extreme,Modern Blockbusters
-837,What is the name of the cruise ship in The Love Boat,,,,,Pacific Princess,extreme,TV Series
-838,What is the name of the crab in The Little Mermaid,,,,,Sebastian,extreme,Animation
-839,What is the name of the underwater kingdom in Aquaman,,,,,Atlantis,extreme,Superheroes
-840,What is the name of the top trophy at Cannes,,,,,Palme dor,extreme,Awards and Records
-841,What is Dorothys last name in The Wizard of Oz,,,,,Gale,extreme,Classic Cinema
-842,What is the name of the corporation in Alien,,,,,Weyland-Yutani,extreme,Modern Blockbusters
-843,What is the name of the school in Buffy,,,,,Sunnydale High,extreme,TV Series
-844,What is the name of the restaurant in Ratatouille,,,,,Gusteaus,extreme,Animation
-845,What is the name of Doctor Stranges assistant,,,,,Wong,extreme,Superheroes
-846,What rating was created in 1984 between PG and R,,,,,PG-13,extreme,Awards and Records
-847,What is the name of the family in Mary Poppins,,,,,Banks,extreme,Classic Cinema
-848,What is the name of the tiger in Life of Pi,,,,,Richard Parker,extreme,Modern Blockbusters
-849,What is the name of the hospital in ER,,,,,County General,extreme,TV Series
-850,What is the name of Woodys horse in Toy Story 2,,,,,Bullseye,extreme,Animation
-851,What is the name of the Flashs home city,,,,,Central City,extreme,Superheroes
-852,At what hotel was the first Academy Awards ceremony held,,,,,Roosevelt Hotel,extreme,Awards and Records
-853,What is the name of Ashley Wilkes home in Gone with the Wind,,,,,Twelve Oaks,extreme,Classic Cinema
-854,What is the name of the mountain in Close Encounters of the Third Kind,,,,,Devils Tower,extreme,Modern Blockbusters
-855,What is the name of the newspaper in the Superman films,,,,,Daily Planet,extreme,TV Series
-856,What is the name of the city in The Wizard of Oz,,,,,Emerald City,extreme,Animation
-857,What is the Green Lanterns home planet,,,,,Oa,extreme,Superheroes
-858,Who won the first Best Supporting Actor Oscar,,,,,Walter Brennan,extreme,Awards and Records
-859,What is the name of the killer in Halloween,,,,,Michael Myers,extreme,Classic Cinema
-860,What is Tom Cruises call sign in Top Gun,,,,,Maverick,extreme,Modern Blockbusters
-861,What is the name of the town in Stranger Things,,,,,Hawkins,extreme,TV Series
-862,What is the name of the shepherdess in Toy Story,,,,,Bo Peep,extreme,Animation
-863,What is the name of Batmans headquarters,,,,,Batcave,extreme,Superheroes
-864,Which studio released The Lord of the Rings films,,,,,New Line,extreme,Awards and Records
-865,What is the name of Marilyns character in Some Like It Hot,,,,,Sugar,extreme,Classic Cinema
-866,What is the name of the robot in I Robot,,,,,Sonny,extreme,Modern Blockbusters
-867,What are the call letters of Fraziers radio show,,,,,KACL,extreme,TV Series
-868,What is the name of the dragon in Mulan,,,,,Mushu,extreme,Animation
-869,What is the name of the villain in The Dark Knight Rises,,,,,Bane,extreme,Superheroes
-870,In what year were the first Emmy Awards presented,,,,,1949,extreme,Awards and Records
-871,What is Norma Desmonds butlers name,,,,,Max,extreme,Classic Cinema
-872,What is the name of the villain in Die Hard,,,,,Hans Gruber,extreme,Modern Blockbusters
-873,What is the number of the MASH unit,,,,,4077th,extreme,TV Series
-874,What is the name of the alley cat in The Aristocats,,,,,Thomas OMalley,extreme,Animation
-875,What is Professor Xs first name,,,,,Charles,extreme,Superheroes
-876,Which network has aired the Oscars since 1976,,,,,ABC,extreme,Awards and Records
-877,What is the name of the detective in The Big Sleep,,,,,Philip Marlowe,extreme,Classic Cinema
-878,What is the name of the town in The Truman Show,,,,,Seahaven,extreme,Modern Blockbusters
-879,What is the name of the paper company in The Office,,,,,Dunder Mifflin,extreme,TV Series
-880,What is the name of Dumbos mother,,,,,Mrs. Jumbo,extreme,Animation
-881,In what borough does Spider-Man live,,,,,Queens,extreme,Superheroes
-882,In what year were the Golden Globes first held,,,,,1944,extreme,Awards and Records
-883,What is the first name of Don Corleone,,,,,Vito,extreme,Classic Cinema
-884,What is the name of the computer in WarGames,,,,,WOPR,extreme,Modern Blockbusters
-885,What is the name of the high school in Beverly Hills 90210,,,,,West Beverly,extreme,TV Series
-886,What is the name of the cat in Cinderella,,,,,Lucifer,extreme,Animation
-887,What is the name of the villain in Avengers Age of Ultron,,,,,Ultron,extreme,Superheroes
-888,What is the name of the boat in The Perfect Storm,,,,,Andrea Gail,extreme,Modern Blockbusters
-889,What is the name of the housekeeper in Rebecca,,,,,Mrs. Danvers,extreme,Classic Cinema
-890,What is the name of the submarine in The Hunt for Red October,,,,,Red October,extreme,Modern Blockbusters
-891,What is the name of the ship in Firefly,,,,,Serenity,extreme,TV Series
-892,What is the name of the whale in Pinocchio,,,,,Monstro,extreme,Animation
-893,What is the name of Daredevils neighborhood,,,,,Hells Kitchen,extreme,Superheroes
-894,How many acting categories are at the Oscars,,,,,4,extreme,Awards and Records
-895,What is the name of the town in Its a Wonderful Life,,,,,Bedford Falls,extreme,Classic Cinema
-896,What is the name of the corporation in RoboCop,,,,,OCP,extreme,Modern Blockbusters
-897,What is the name of the school in Glee,,,,,McKinley,extreme,TV Series
-898,What is the name of the ant in A Bugs Life,,,,,Flik,extreme,Animation
-899,What is the name of TChallas sister,,,,,Shuri,extreme,Superheroes
-900,Which country has won the most Best Foreign Language Film Oscars,,,,,Italy,extreme,Awards and Records
-901,What is the name of Dorothys dog in The Wizard of Oz,,,,,Toto,extreme,Classic Cinema
-902,What is the name of the AI in Her,,,,,Samantha,extreme,Modern Blockbusters
-903,What is Kramers first name,,,,,Cosmo,extreme,TV Series
-904,What is the name of the boy in Up,,,,,Russell,extreme,Animation
-905,What is the last name of the founder of the X-Men,,,,,Xavier,extreme,Superheroes
-906,In what year did Parasite win Best Picture,,,,,2020,extreme,Awards and Records
-907,What is the name of the captain in Master and Commander,,,,,Aubrey,extreme,Classic Cinema
-908,What is the name of the plane in Con Air,,,,,Jailbird,extreme,Modern Blockbusters
-909,What is the name of the FBI agent in The X-Files,,,,,Mulder,extreme,TV Series
-910,What is the name of Remys brother in Ratatouille,,,,,Emile,extreme,Animation
-911,What is the metal bonded to Wolverines bones,,,,,Adamantium,extreme,Superheroes
-912,Who won the first Best Actor Oscar,,,,,Emil Jannings,extreme,Awards and Records
-913,What is the name of the marshal in High Noon,,,,,Kane,extreme,Classic Cinema
-914,What is the name of the lobby boy in The Grand Budapest Hotel,,,,,Zero,extreme,Modern Blockbusters
-915,What is the name of the town in Pretty Little Liars,,,,,Rosewood,extreme,TV Series
-916,What is the name of the owl in The Sword in the Stone,,,,,Archimedes,extreme,Animation
-917,Who forged the Infinity Gauntlet,,,,,Eitri,extreme,Superheroes
-918,Which 1971 cop drama won Best Picture,,,,,The French Connection,extreme,Awards and Records
-919,What is the name of the saloon in Tombstone,,,,,Oriental,extreme,Classic Cinema
-920,What power company does Erin Brockovich investigate,,,,,PG&E,extreme,Modern Blockbusters
-921,What is the name of the school in Dawsons Creek,,,,,Capeside,extreme,TV Series
-922,What is the name of the chef in The Little Mermaid,,,,,Louis,extreme,Animation
-923,What is the name of the Winter Soldier,,,,,Bucky,extreme,Superheroes
-924,What was the first sequel to win Best Picture,,,,,The Godfather Part II,extreme,Awards and Records
-925,What is the name of the captain in Moby Dick,,,,,Ahab,extreme,Classic Cinema
-926,What is the name of the villain in Blade Runner 2049,,,,,Wallace,extreme,Modern Blockbusters
-927,What is the name of the FBI agent in Twin Peaks,,,,,Cooper,extreme,TV Series
-928,What is the name of the penguin leader in Madagascar,,,,,Skipper,extreme,Animation
-929,What is the name of Aquamans mother,,,,,Atlanna,extreme,Superheroes
-930,What was the first color film to win Best Picture,,,,,Gone with the Wind,extreme,Awards and Records
-931,What is the name of the lead juror in 12 Angry Men,,,,,Davis,extreme,Classic Cinema
-932,What is the name of the robot in Short Circuit,,,,,Johnny 5,extreme,Modern Blockbusters
-933,What is the name of Archies band,,,,,The Archies,extreme,TV Series
-934,What is the name of the seagull in The Little Mermaid,,,,,Scuttle,extreme,Animation
-935,What is the name of Wonder Womans home island,,,,,Themyscira,extreme,Superheroes
-936,How many acting categories are at the Academy Awards,,,,,4,extreme,Awards and Records
-937,What is the full name of Orson Welles character in The Third Man,,,,,Harry Lime,extreme,Classic Cinema
-938,What is the name of the hotel in Dirty Dancing,,,,,Kellermans,extreme,Modern Blockbusters
-939,What is the name of the school in Community,,,,,Greendale,extreme,TV Series
-940,What is the name of the firefly in The Princess and the Frog,,,,,Ray,extreme,Animation
-941,What is the real name of the Dude in The Big Lebowski,,,,,Jeffrey Lebowski,extreme,Superheroes
-942,Which film won Best Animated Feature for 2020,,,,,Soul,extreme,Awards and Records
-943,What is the name of the detective in Chinatown,,,,,Gittes,extreme,Classic Cinema
-944,What is the name of the boy in A.I. Artificial Intelligence,,,,,David,extreme,Modern Blockbusters
-945,What is the name of Ted Mosbys wife,,,,,Tracy,extreme,TV Series
-946,What is the name of the head chef in Ratatouille,,,,,Skinner,extreme,Animation
-947,Who played Charlie Allnut in The African Queen,,,,,Humphrey Bogart,extreme,Classic Cinema
-948,What is the name of the ruler of the Citadel in Mad Max Fury Road,,,,,Immortan Joe,extreme,Modern Blockbusters
-949,What is the name of the precinct in Brooklyn Nine-Nine,,,,,99th Precinct,extreme,TV Series
-950,What is the name of the girl in Brave,,,,,Merida,extreme,Animation
-951,What is Peter Parkers aunts first name,,,,,May,extreme,Superheroes
-952,In what city are the Emmy Awards presented,,,,,Los Angeles,extreme,Awards and Records
-953,What is the name of the motel in Psycho,,,,,Bates Motel,extreme,Classic Cinema
-954,What is the name of the police chief in Jaws,,,,,Brody,extreme,Modern Blockbusters
-955,What is the name of the high school in Euphoria,,,,,East Highland,extreme,TV Series
-956,What is the name of the parrot in Aladdin,,,,,Iago,extreme,Animation
-957,What is Dr. Manhattans real name,,,,,Jon Osterman,extreme,Superheroes
-958,Which 1969 film won Best Picture,,,,,Midnight Cowboy,extreme,Awards and Records
-959,What is the name of the butler in The Remains of the Day,,,,,Stevens,extreme,Classic Cinema
-960,What is the name of the town in Jumanji,,,,,Brantford,extreme,Modern Blockbusters
-961,What is the name of the spaceship in Interstellar,,,,,Endurance,extreme,TV Series
-962,What is the name of the teapot in Beauty and the Beast,,,,,Mrs. Potts,extreme,Animation
-963,Who leads the Brotherhood of Mutants,,,,,Magneto,extreme,Superheroes
-964,In what year were the Oscars first televised,,,,,1953,extreme,Awards and Records
-965,What is the nickname of Dustin Hoffmans character in Midnight Cowboy,,,,,Ratso,extreme,Classic Cinema
-966,What is the name of the starship in WALL-E,,,,,Axiom,extreme,Modern Blockbusters
-967,What is the name of the club in The Sopranos,,,,,Bada Bing,extreme,TV Series
-968,What is the name of the chimp in the 2011 Planet of the Apes film,,,,,Caesar,extreme,Animation
-969,What is the real name of Carnages host in Venom 2,,,,,Cletus,extreme,Superheroes
-970,In what year did Halle Berry win Best Actress,,,,,2002,extreme,Awards and Records
-971,What is the name of Roses fiancé in Titanic,,,,,Cal,extreme,Classic Cinema
-972,What is the name of the corporation in Blade Runner,,,,,Tyrell,extreme,Modern Blockbusters
-973,What is the name of the sheriff in Stranger Things,,,,,Hopper,extreme,TV Series
-974,What is the name of Aladdins monkey,,,,,Abu,extreme,Animation
-975,What is the name of Ant-Mans daughter,,,,,Cassie,extreme,Superheroes
-976,How many films have won the big five Oscars,,,,,3,extreme,Awards and Records
-977,What is the name of the dog in The Artist,,,,,Uggie,extreme,Classic Cinema
-978,What is the name of the heroine in The Fifth Element,,,,,Leeloo,extreme,Modern Blockbusters
-979,What is the name of Tonys therapist in The Sopranos,,,,,Melfi,extreme,TV Series
-980,What is the name of Belles father,,,,,Maurice,extreme,Animation
-981,What is the name of Lokis biological father,,,,,Laufey,extreme,Superheroes
-982,Which streaming service released Squid Game,,,,,Netflix,extreme,Awards and Records
-983,What is the name of the youngest von Trapp child,,,,,Gretl,extreme,Classic Cinema
-984,What is the name of the robot in Interstellar,,,,,TARS,extreme,Modern Blockbusters
-985,What is the name of Lorelais inn,,,,,Dragonfly Inn,extreme,TV Series
-986,What is the name of the parrot in Rio,,,,,Blu,extreme,Animation
-987,What is the name of the villain in Batman Returns,,,,,Penguin,extreme,Superheroes
-988,What is the name of the heroine in Arrival,,,,,Louise,extreme,Modern Blockbusters
-989,What is the name of Alices cat in the 1951 animated film,,,,,Dinah,extreme,Animation
-990,What is the name of the dragon in Pete C,,,,,Elliott,extreme,Superheroes
-991,What is the name of Black Widows sister,,,,,Yelena,extreme,Superheroes
-992,What was the first animated film nominated for Best Picture,,,,,Beauty and the Beast,extreme,Awards and Records
-993,What is the name of the butler in Gone with the Wind,,,,,Pork,extreme,Classic Cinema
-994,What is the name of the lion in The Chronicles of Narnia,,,,,Aslan,extreme,Modern Blockbusters
-995,What is the name of the newspaper in Spider-Man,,,,,Daily Bugle,extreme,Superheroes
-996,What is the name of the caterpillar in the 2010 Alice in Wonderland,,,,,Absolem,extreme,Animation
-997,What is the Flashs real name,,,,,Barry Allen,extreme,Superheroes
-998,How many Oscars did The Shape of Water win,,,,,4,extreme,Awards and Records
-999,What is the name of the detective in The Maltese Falcon,,,,,Sam Spade,extreme,Classic Cinema
-1000,What is the name of the robot in Forbidden Planet,,,,,Robby,extreme,Modern Blockbusters
+199,Squid Game players compete in card games,False,True,,,A,easy,TV Series
+200,Encanto features a family with magical gifts,False,True,,,B,easy,Animation
+201,Who directed the 1959 classic Some Like It Hot?,Billy Wilder,Howard Hawks,,,A,medium,Classic Cinema
+202,Which studio produces the Marvel Cinematic Universe films?,Warner Bros,Marvel Studios,,,B,medium,Superheroes
+203,Which network aired Game of Thrones?,HBO,Showtime,,,A,medium,TV Series
+204,In Dumbo what animal is Dumbo?,Tiger,Elephant,,,B,medium,Animation
+205,What is Batmans home city?,Gotham City,Metropolis,,,A,medium,Superheroes
+206,Which film won the first Best Picture Oscar?,The Jazz Singer,Wings,,,B,medium,Awards and Records
+207,Who played Indiana Jones?,Harrison Ford,Tom Selleck,,,A,medium,Modern Blockbusters
+208,Which film features the famous line about not being able to handle the truth?,Scent of a Woman,A Few Good Men,,,B,medium,Modern Blockbusters
+209,Who played Walter White?,Bryan Cranston,Jon Hamm,,,A,medium,TV Series
+210,In Frozen who is Elsas sister?,Rapunzel,Anna,,,B,medium,Animation
+211,Which 1942 film stars Humphrey Bogart as Rick Blaine?,Casablanca,The Big Sleep,,,A,medium,Classic Cinema
+212,Who directed Jaws?,George Lucas,Steven Spielberg,,,B,medium,Modern Blockbusters
+213,What is the coffee shop called in Friends?,Central Perk,Cafe Des Amis,,,A,medium,TV Series
+214,Which Pixar film is set inside a girls mind?,Soul,Inside Out,,,B,medium,Animation
+215,What color is the Hulk?,Green,Purple,,,A,medium,Superheroes
+216,Who has won the most Best Director Oscars?,Steven Spielberg,John Ford,,,B,medium,Awards and Records
+217,Which actor played the Tramp?,Charlie Chaplin,Buster Keaton,,,A,medium,Classic Cinema
+218,In The Matrix which pill does Neo take?,Blue,Red,,,B,medium,Modern Blockbusters
+219,Which show features the Upside Down?,Stranger Things,Riverdale,,,A,medium,TV Series
+220,In The Lion King who is Simbas father?,Scar,Mufasa,,,B,medium,Animation
+221,Who directed Psycho?,Alfred Hitchcock,Orson Welles,,,A,medium,Classic Cinema
+222,Which 1994 film features a famous box of chocolates?,Pulp Fiction,Forrest Gump,,,B,medium,Modern Blockbusters
+223,In Friends what is Rosses job?,Paleontologist,Cardiologist,,,A,medium,TV Series
+224,Which animated film features a rat who cooks?,The Bear,Ratatouille,,,B,medium,Animation
+225,Who played Iron Man?,Robert Downey Jr.,Chris Evans,,,A,medium,Superheroes
+226,Which actress won four Best Actress Oscars?,Meryl Streep,Katharine Hepburn,,,B,medium,Awards and Records
+227,Which film features the yellow brick road?,The Wizard of Oz,Oz the Great and Powerful,,,A,medium,Classic Cinema
+228,Which director made Avatar?,Ridley Scott,James Cameron,,,B,medium,Modern Blockbusters
+229,In The Simpsons what instrument does Lisa play?,Saxophone,Trumpet,,,A,medium,TV Series
+230,Which studio makes the Shrek films?,Pixar,DreamWorks,,,B,medium,Animation
+231,Who played Scarlett OHara?,Vivien Leigh,Rita Hayworth,,,A,medium,Classic Cinema
+232,Which film features Jack Dawson and Rose?,The Notebook,Titanic,,,B,medium,Modern Blockbusters
+233,Which sitcom is set in Scranton?,The Office,Parks and Recreation,,,A,medium,TV Series
+234,Which fish is Nemo?,Angelfish,Clownfish,,,B,medium,Animation
+235,What is Spider-Mans real name?,Peter Parker,Harry Osborn,,,A,medium,Superheroes
+236,Which award honors Broadway theater?,The Emmy,The Tony,,,B,medium,Awards and Records
+237,Which actor danced and sang in the rain in Singin in the Rain?,Gene Kelly,Fred Astaire,,,A,medium,Classic Cinema
+238,Which film features the DeLorean time machine?,Timecop,Back to the Future,,,B,medium,Modern Blockbusters
+239,Who plays Eleven in Stranger Things?,Millie Bobby Brown,Sadie Sink,,,A,medium,TV Series
+240,In Frozen what is the snowmans name?,Sven,Olaf,,,B,medium,Animation
+241,Which 1954 Hitchcock film stars Grace Kelly?,Rear Window,Notorious,,,A,medium,Classic Cinema
+242,Who played Jack Sparrow?,Orlando Bloom,Johnny Depp,,,B,medium,Modern Blockbusters
+243,Which medical drama is set at Seattle Grace?,Greys Anatomy,ER,,,A,medium,TV Series
+244,Which Disney film features Maui the demigod?,Hercules,Moana,,,B,medium,Animation
+245,What is Thors hammer called?,Mjolnir,Gungnir,,,A,medium,Superheroes
+246,Which 2019 film won Best Picture?,1917,Parasite,,,B,medium,Awards and Records
+247,Which silent star was famous for his stone face?,Buster Keaton,Harold Lloyd,,,A,medium,Classic Cinema
+248,Which 1999 film features a secret fight club?,Se7en,Fight Club,,,B,medium,Modern Blockbusters
+249,Who created The Simpsons?,Matt Groening,Seth MacFarlane,,,A,medium,TV Series
+250,Which film features the song Let It Go?,Tangled,Frozen,,,B,medium,Animation
+251,Who played Vito Corleone?,Marlon Brando,Al Pacino,,,A,medium,Classic Cinema
+252,Which 1997 film is about a doomed ocean liner?,Poseidon,Titanic,,,B,medium,Modern Blockbusters
+253,In Breaking Bad what does Walter White teach?,Chemistry,Biology,,,A,medium,TV Series
+254,Which studio produced Spirited Away?,Toei Animation,Studio Ghibli,,,B,medium,Animation
+255,Which hero is called the Merc with a Mouth?,Deadpool,Venom,,,A,medium,Superheroes
+256,Which country is home to Bollywood?,Egypt,India,,,B,medium,Awards and Records
+257,Who directed Vertigo?,Alfred Hitchcock,David Lean,,,A,medium,Classic Cinema
+258,Which actor plays Neo?,Hugo Weaving,Keanu Reeves,,,B,medium,Modern Blockbusters
+259,Which show follows the Dutton family?,Yellowstone,Succession,,,A,medium,TV Series
+260,In Toy Story what kind of toy is Woody?,Astronaut,Cowboy,,,B,medium,Animation
+261,Which 1957 film features a jury room debate?,12 Angry Men,Witness for the Prosecution,,,A,medium,Classic Cinema
+262,Which film features shark attacks at Amity Island?,Deep Blue Sea,Jaws,,,B,medium,Modern Blockbusters
+263,Who plays Sheldon Cooper?,Jim Parsons,Kaley Cuoco,,,A,medium,TV Series
+264,Which Disney princess keeps a chameleon?,Cinderella,Rapunzel,,,B,medium,Animation
+265,What is Supermans weakness?,Kryptonite,Vibranium,,,A,medium,Superheroes
+266,The Golden Raspberry Awards honor what?,The best films,The worst films,,,B,medium,Awards and Records
+267,Who plays Ilsa in Casablanca?,Ingrid Bergman,Claude Rains,,,A,medium,Classic Cinema
+268,Which 1985 film follows five teens in detention?,Sixteen Candles,The Breakfast Club,,,B,medium,Modern Blockbusters
+269,Which series features Tony Soprano?,The Sopranos,Boardwalk Empire,,,A,medium,TV Series
+270,Which animated film features the song How Far Ill Go?,Moana,Pocahontas,,,B,medium,Animation
+271,Who played Norman Bates?,Anthony Perkins,Anthony Hopkins,,,A,medium,Classic Cinema
+272,Which franchise features Dominic Toretto?,Die Hard,Fast and Furious,,,B,medium,Modern Blockbusters
+273,Which show features the Bluth family?,Arrested Development,Its Always Sunny in Philadelphia,,,A,medium,TV Series
+274,Which 2001 film features Mike Wazowski?,Shrek,Monsters Inc,,,B,medium,Animation
+275,Which blind hero is a lawyer by day?,Daredevil,Hawkeye,,,A,medium,Superheroes
+276,Who won the first Best Actress Oscar?,Mary Pickford,Janet Gaynor,,,B,medium,Awards and Records
+277,Who played Judah Ben-Hur in 1959?,Charlton Heston,Kirk Douglas,,,A,medium,Classic Cinema
+278,Which 2015 film revived Star Wars?,The Last Jedi,The Force Awakens,,,B,medium,Modern Blockbusters
+279,Who plays Dr. Watson opposite Benedict Cumberbatch?,Martin Freeman,Jude Law,,,A,medium,TV Series
+280,Which film follows a clownfish dad across the ocean?,Shark Tale,Finding Nemo,,,B,medium,Animation
+281,Which 1946 film features an angel named Clarence?,Its a Wonderful Life,The Bishops Wife,,,A,medium,Classic Cinema
+282,Which director made Pulp Fiction?,Martin Scorsese,Quentin Tarantino,,,B,medium,Modern Blockbusters
+283,Which reality show hands out roses?,The Bachelor,Love Island,,,A,medium,TV Series
+284,Which Disney film features a flying elephant?,Bambi,Dumbo,,,B,medium,Animation
+285,Which nation does TChalla rule?,Wakanda,Zamunda,,,A,medium,Superheroes
+286,Which streaming service made The Crown?,Hulu,Netflix,,,B,medium,Awards and Records
+287,Which 1939 film follows Dorothy to Oz?,The Wizard of Oz,Alice in Wonderland,,,A,medium,Classic Cinema
+288,Who played Willy Wonka in 1971?,Johnny Depp,Gene Wilder,,,B,medium,Modern Blockbusters
+289,Which island drama features Jack Shephard?,Lost,Prison Break,,,A,medium,TV Series
+290,Which Disney film features a wooden puppet boy?,Peter Pan,Pinocchio,,,B,medium,Animation
+291,Who played Rick Blaine?,Humphrey Bogart,Cary Grant,,,A,medium,Classic Cinema
+292,Which 2008 film launched the MCU?,The Incredible Hulk,Iron Man,,,B,medium,Modern Blockbusters
+293,Which series features a chemistry teacher turned drug maker?,Breaking Bad,Better Call Saul,,,A,medium,TV Series
+294,Which Pixar film features Joy and Sadness?,Coco,Inside Out,,,B,medium,Animation
+295,Who plays Wonder Woman?,Gal Gadot,Margot Robbie,,,A,medium,Superheroes
+296,Which trophy shows a winged woman holding an atom?,The Grammy,The Emmy,,,B,medium,Awards and Records
+297,Which 1950 film stars Bette Davis as an aging actress?,All About Eve,Whatever Happened to Baby Jane,,,A,medium,Classic Cinema
+298,Which 1979 film features Ellen Ripley?,Aliens vs Predator,Alien,,,B,medium,Modern Blockbusters
+299,Who plays Claire Underwood?,Robin Wright,Viola Davis,,,A,medium,TV Series
+300,Which cartoon duo stars a coyote chasing a bird?,Tom and Jerry,Wile E. Coyote and the Road Runner,,,B,medium,Animation
+301,Who directed Citizen Kane?,Orson Welles,William Wyler,,,A,medium,Classic Cinema
+302,Which franchise features lightsabers?,Star Trek,Star Wars,,,B,medium,Modern Blockbusters
+303,Which show features Don Draper?,Mad Men,Mad About You,,,A,medium,TV Series
+304,Which Disney film is set in Agrabah?,Mulan,Aladdin,,,B,medium,Animation
+305,What is Batmans butler called?,Alfred Pennyworth,Jarvis,,,A,medium,Superheroes
+306,Which actress holds the record for most acting Oscars?,Jack Nicholson,Katharine Hepburn,,,B,medium,Awards and Records
+307,Which 1967 film features two Depression-era outlaws?,Bonnie and Clyde,Butch Cassidy and the Sundance Kid,,,A,medium,Classic Cinema
+308,Which 1999 film features a boy who sees dead people?,The Others,The Sixth Sense,,,B,medium,Modern Blockbusters
+309,Which series features a Miami serial killer with a code?,Dexter,Hannibal,,,A,medium,TV Series
+310,Which animated film features Simba and Scar?,Madagascar,The Lion King,,,B,medium,Animation
+311,Which actress starred in Roman Holiday?,Audrey Hepburn,Elizabeth Taylor,,,A,medium,Classic Cinema
+312,Which 2019 film stars Joaquin Phoenix as Arthur Fleck?,Batman Begins,Joker,,,B,medium,Superheroes
+313,Which network airs The Simpsons?,Fox,CBS,,,A,medium,TV Series
+314,Which 1995 Pixar film introduced Woody?,Antz,Toy Story,,,B,medium,Animation
+315,Which stone sits in Visions forehead?,Mind Stone,Time Stone,,,A,medium,Superheroes
+316,Which film festival takes place in France?,Venice,Cannes,,,B,medium,Awards and Records
+317,Which 1968 film shows apes ruling Earth?,Planet of the Apes,Tarzan,,,A,medium,Classic Cinema
+318,Who played Aragorn?,Sean Bean,Viggo Mortensen,,,B,medium,Modern Blockbusters
+319,Which series features Daenerys Targaryen?,Game of Thrones,The Witcher,,,A,medium,TV Series
+320,Which animated hero lives in a pineapple?,Plankton,SpongeBob SquarePants,,,B,medium,Animation
+321,Which 1957 David Lean film is set in a prison camp?,The Bridge on the River Kwai,Lawrence of Arabia,,,A,medium,Classic Cinema
+322,Which 1994 film features a prison escape over decades?,The Green Mile,The Shawshank Redemption,,,B,medium,Modern Blockbusters
+323,Which series features Mike Ehrmantraut?,Better Call Saul,Fargo,,,A,medium,TV Series
+324,Which Disney heroine loses a glass slipper?,Snow White,Cinderella,,,B,medium,Animation
+325,Which Avenger lifts Mjolnir besides Thor?,Captain America,Black Widow,,,A,medium,Superheroes
+326,Which awards show honors daytime dramas?,The Tony Awards,The Daytime Emmys,,,B,medium,Awards and Records
+327,Which actor starred in The Great Escape?,Steve McQueen,Paul Newman,,,A,medium,Classic Cinema
+328,Which 1996 film features tornado chasers?,Into the Storm,Twister,,,B,medium,Modern Blockbusters
+329,Which series is a Breaking Bad prequel?,Better Call Saul,El Camino,,,A,medium,TV Series
+330,Which animated film features an ice queen?,Trolls,Frozen,,,B,medium,Animation
+331,Which 1960 Hitchcock film features the Bates Motel?,Psycho,Frenzy,,,A,medium,Classic Cinema
+332,Which actor played James Bond first?,Roger Moore,Sean Connery,,,B,medium,Modern Blockbusters
+333,Which drama features the Pearson family?,This Is Us,Manifest,,,A,medium,TV Series
+334,Which Pixar film sends a house skyward with balloons?,The Red Balloon,Up,,,B,medium,Animation
+335,What is Tony Starks AI butler called?,JARVIS,Ultron,,,A,medium,Superheroes
+336,Which Oscar category honors movie songs?,Best Sound Mixing,Best Original Song,,,B,medium,Awards and Records
+337,Who played Superman in 1978?,Christopher Reeve,George Reeves,,,A,medium,Superheroes
+338,Which 2014 film revived a famous Japanese monster?,Pacific Rim,Godzilla,,,B,medium,Modern Blockbusters
+339,Which series features Olivia Pope?,Scandal,How to Get Away with Murder,,,A,medium,TV Series
+340,Which 2010 Pixar film sends toys to a daycare?,Toy Story 2,Toy Story 3,,,B,medium,Animation
+341,In which film does a character yell for Stella?,A Streetcar Named Desire,East of Eden,,,A,medium,Classic Cinema
+342,Which 2009 film is set on Pandora?,Valerian,Avatar,,,B,medium,Modern Blockbusters
+343,Which sitcom follows a parks department in Indiana?,Parks and Recreation,The Office,,,A,medium,TV Series
+344,Which animated film features the song Hakuna Matata?,The Wild,The Lion King,,,B,medium,Animation
+345,Which hero is Natasha Romanoff?,Black Widow,Wanda,,,A,medium,Superheroes
+346,Which Emmy category honors sitcoms?,Outstanding Drama Series,Outstanding Comedy Series,,,B,medium,Awards and Records
+347,Which 1955 film stars James Dean as a troubled teen?,Rebel Without a Cause,Giant,,,A,medium,Classic Cinema
+348,Which film features Lieutenant Dan?,Platoon,Forrest Gump,,,B,medium,Modern Blockbusters
+349,Which animated series features the Belcher family?,Bobs Burgers,Family Guy,,,A,medium,TV Series
+350,Which Disney film features Olaf?,Lilo and Stitch,Frozen,,,B,medium,Animation
+351,Which 1934 film pairs a runaway heiress with a reporter?,It Happened One Night,My Man Godfrey,,,A,medium,Classic Cinema
+352,Which 2016 musical follows two dreamers in Los Angeles?,Chicago,La La Land,,,B,medium,Modern Blockbusters
+353,Which crime drama features Raymond Reddington?,The Blacklist,Person of Interest,,,A,medium,TV Series
+354,Which Disney film features Quasimodo?,The Swan Princess,The Hunchback of Notre Dame,,,B,medium,Animation
+355,Who plays Spider-Man in the MCU?,Tom Holland,Andrew Garfield,,,A,medium,Superheroes
+356,Who won Best Director for The Shape of Water?,Denis Villeneuve,Guillermo del Toro,,,B,medium,Awards and Records
+357,Who played Juror 8 in 12 Angry Men?,Henry Fonda,Lee J. Cobb,,,A,medium,Classic Cinema
+358,Which 1980 film features a haunted hotel and a boy named Danny?,Psycho,The Shining,,,B,medium,Modern Blockbusters
+359,Which procedural features Leroy Jethro Gibbs?,NCIS,Criminal Minds,,,A,medium,TV Series
+360,Which animated film features a genie in a lamp?,Wish,Aladdin,,,B,medium,Animation
+361,Which 1948 Italian film follows a man hunting his stolen bicycle?,Bicycle Thieves,Rome Open City,,,A,medium,Classic Cinema
+362,Who played Geralt in The Witcher?,Liam Hemsworth,Henry Cavill,,,B,medium,TV Series
+363,Which drama follows White House staffers?,The West Wing,House of Cards,,,A,medium,TV Series
+364,Which 2001 film features a green ogre?,Monsters vs Aliens,Shrek,,,B,medium,Animation
+365,Which MCU villain is called the Mad Titan?,Thanos,Loki,,,A,medium,Superheroes
+366,Which historic Oscar did Halle Berry win in 2002?,Best Supporting Actress,Best Actress,,,B,medium,Awards and Records
+367,Which 1967 film stars Sidney Poitier as a detective?,In the Heat of the Night,To Sir with Love,,,A,medium,Classic Cinema
+368,Which 2012 musical is based on a Victor Hugo novel?,The Phantom of the Opera,Les Miserables,,,B,medium,Modern Blockbusters
+369,Which series updates Sherlock Holmes to modern London?,Sherlock,Elementary,,,A,medium,TV Series
+370,Which Pixar film features a trash-compacting robot?,Big Hero 6,WALL-E,,,B,medium,Animation
+371,Which 1950 noir features Norma Desmond?,Sunset Boulevard,Double Indemnity,,,A,medium,Classic Cinema
+372,Which 2015 action film features Furiosa?,Mad Max Beyond Thunderdome,Mad Max Fury Road,,,B,medium,Modern Blockbusters
+373,Which sitcom features the Conner family?,Roseanne,Married with Children,,,A,medium,TV Series
+374,Which 1998 Disney film features the dragon Mushu?,Brave,Mulan,,,B,medium,Animation
+375,Which hero does Chris Evans play?,Captain America,Thor,,,A,medium,Superheroes
+376,Which streaming platform made House of Cards?,Amazon Prime,Netflix,,,B,medium,Awards and Records
+377,Who played Dracula in the 1931 Universal film?,Bela Lugosi,Lon Chaney,,,A,medium,Classic Cinema
+378,Which 2019 South Korean film swept the Oscars?,Burning,Parasite,,,B,medium,Awards and Records
+379,Which series features Peggy Olson?,Mad Men,The Good Wife,,,A,medium,TV Series
+380,Which 1967 animated film follows a boy raised by wolves?,George of the Jungle,The Jungle Book,,,B,medium,Animation
+381,Which 1931 film features a monster created by a scientist?,Frankenstein,Dr. Jekyll and Mr. Hyde,,,A,medium,Classic Cinema
+382,Which 2018 film stars Chadwick Boseman as a king?,Hotel Rwanda,Black Panther,,,B,medium,Superheroes
+383,Which couple gets together in The Office?,Jim and Pam,Andy and Erin,,,A,medium,TV Series
+384,In which film does Tinker Bell appear?,Sleeping Beauty,Peter Pan,,,B,medium,Animation
+385,Who plays Loki?,Tom Hiddleston,Tom Hardy,,,A,medium,Superheroes
+386,Where is the Academy Awards ceremony held?,New York,Los Angeles,,,B,medium,Awards and Records
+387,Who played Lina Lamont in Singin in the Rain?,Jean Hagen,Debbie Reynolds,,,A,medium,Classic Cinema
+388,Which 1999 comedy satirizes office life?,Clockstoppers,Office Space,,,B,medium,Modern Blockbusters
+389,Which series features a vampire named Angel?,Buffy the Vampire Slayer,The Vampire Diaries,,,A,medium,TV Series
+390,Which animated film features Nick Wilde?,Sing,Zootopia,,,B,medium,Animation
+391,Which 1944 noir centers on an insurance scheme?,Double Indemnity,The Postman Always Rings Twice,,,A,medium,Classic Cinema
+392,Who played Gandalf?,Christopher Lee,Ian McKellen,,,B,medium,Modern Blockbusters
+393,Which comedy features Captain Raymond Holt?,Brooklyn Nine-Nine,The Good Place,,,A,medium,TV Series
+394,Which 2004 film features a superhero family?,Sky High,The Incredibles,,,B,medium,Superheroes
+395,Which hero is called the Fastest Man Alive?,The Flash,Superman,,,A,medium,Superheroes
+396,Which 2020 Best Picture winner explores nomadic life?,Mank,Nomadland,,,B,medium,Awards and Records
+397,Who played the Man with No Name?,Clint Eastwood,Lee Van Cleef,,,A,medium,Classic Cinema
+398,Which 2022 sequel brings back Maverick?,Top Gun,Top Gun Maverick,,,B,medium,Modern Blockbusters
+399,Which series is set in the land of Gilead?,The Handmaids Tale,Brave New World,,,A,medium,TV Series
+400,Which Disney film features a magical family house?,Luca,Encanto,,,B,medium,Animation
+401,Which Infinity Stone is hidden inside the Tesseract?,Space Stone,Reality Stone,Soul Stone,,A,hard,Superheroes
+402,Who has hosted the Academy Awards ceremony the most times?,Billy Crystal,Bob Hope,Johnny Carson,,B,hard,Awards and Records
+403,Who played the title gunslinger in the 1953 western Shane?,Joel McCrea,Randolph Scott,Alan Ladd,,C,hard,Classic Cinema
+404,Which 1994 film features a bus that cannot drop below 50 mph?,Speed,Die Hard with a Vengeance,Broken Arrow,,A,hard,Modern Blockbusters
+405,Which sitcom features the Huang family?,Kims Convenience,Fresh Off the Boat,Master of None,,B,hard,TV Series
+406,Which 2001 anime film won the first Japanese Best Animated Feature Oscar?,Howls Moving Castle,Princess Mononoke,Spirited Away,,C,hard,Animation
+407,Which actor played Alfred in The Dark Knight trilogy?,Michael Caine,Jeremy Irons,Gary Oldman,,A,hard,Superheroes
+408,Which director holds the record for most Best Director nominations?,Frank Capra,William Wyler,Michael Curtiz,,B,hard,Awards and Records
+409,Who played Big Daddy in Cat on a Hot Tin Roof?,Montgomery Clift,Karl Malden,Burl Ives,,C,hard,Classic Cinema
+410,Which 1998 film depicts the D-Day landings?,Saving Private Ryan,Black Hawk Down,The Thin Red Line,,A,hard,Modern Blockbusters
+411,Which drama is set at the Sterling Cooper agency?,Better Things,Mad Men,Casual,,B,hard,TV Series
+412,Which Disney film features the song Be Our Guest?,Enchanted,The Little Mermaid,Beauty and the Beast,,C,hard,Animation
+413,Who directed Avengers Endgame?,The Russo Brothers,Jon Favreau,Joss Whedon,,A,hard,Superheroes
+414,Who won Best Actress for The Silence of the Lambs?,Susan Sarandon,Jodie Foster,Holly Hunter,,B,hard,Awards and Records
+415,Which 1960 western remakes a Kurosawa classic?,The Outlaw Josey Wales,A Fistful of Dollars,The Magnificent Seven,,C,hard,Classic Cinema
+416,Which 1996 film stars Tom Cruise as a sports agent?,Jerry Maguire,Days of Thunder,Cocktail,,A,hard,Modern Blockbusters
+417,Which series features Captain Olivia Benson?,Blue Bloods,Law and Order SVU,Castle,,B,hard,TV Series
+418,Which 1989 Disney film features the song Under the Sea?,The Rescuers,Oliver and Company,The Little Mermaid,,C,hard,Animation
+419,Which villain does Heath Ledger play in The Dark Knight?,The Joker,Scarecrow,Two-Face,,A,hard,Superheroes
+420,Which film won the first Oscar for Best Animated Feature?,Spirited Away,Shrek,Jimmy Neutron Boy Genius,,B,hard,Awards and Records
+421,Which series features the Gallagher family?,Roseanne,Weeds,Shameless,,C,hard,TV Series
+422,Which 1994 Disney film features Timon and Pumbaa?,The Lion King,The Jungle Book,Brother Bear,,A,hard,Animation
+423,Who plays Batman in Batman v Superman?,Christian Bale,Ben Affleck,Michael Keaton,,B,hard,Superheroes
+424,Which western won Best Picture for 1990?,Unforgiven,Open Range,Dances with Wolves,,C,hard,Awards and Records
+425,Which 1956 film follows a bet to circle the globe?,Around the World in 80 Days,The Great Race,Monte Carlo or Bust,,A,hard,Classic Cinema
+426,Which 1998 film features oil drillers saving Earth from an asteroid?,Deep Impact,Armageddon,Volcano,,B,hard,Modern Blockbusters
+427,Which series features Lorelai Gilmore?,The O.C.,Everwood,Gilmore Girls,,C,hard,TV Series
+428,Which 1992 Disney film features the parrot Iago?,Aladdin,The Road to El Dorado,Quest for Camelot,,A,hard,Animation
+429,What is the name of Peter Quills ship?,Xandar,Milano,Knowhere,,B,hard,Superheroes
+430,Which actor won Best Actor in both 1994 and 1995?,Daniel Day-Lewis,Russell Crowe,Tom Hanks,,C,hard,Awards and Records
+431,Which series centers on Saul Goodman?,Better Call Saul,Justified,Barry,,A,hard,TV Series
+432,Which 2003 Pixar film is set mostly underwater?,The Shape of Water,Finding Nemo,A Turtles Tale,,B,hard,Animation
+433,Which Infinity Stone powered Lokis scepter?,Space Stone,Power Stone,Mind Stone,,C,hard,Superheroes
+434,Which film earned Leonardo DiCaprio his first Best Actor Oscar?,The Revenant,Inception,The Wolf of Wall Street,,A,hard,Modern Blockbusters
+435,Who played Lawrence of Arabia?,Omar Sharif,Peter OToole,Alec Guinness,,B,hard,Classic Cinema
+436,Which 2000 film features a volleyball named Wilson?,Bicentennial Man,The Beach,Cast Away,,C,hard,Modern Blockbusters
+437,Which series features the 1980s Goldberg family?,The Goldbergs,Everybody Hates Chris,The Wonder Years,,A,hard,TV Series
+438,Which 1991 Disney film features Belle?,Anastasia,Beauty and the Beast,Thumbelina,,B,hard,Animation
+439,Who plays Gamora?,Pom Klementieff,Karen Gillan,Zoe Saldana,,C,hard,Superheroes
+440,Which 1993 Holocaust drama won Best Picture?,Schindlers List,The Piano,In the Name of the Father,,A,hard,Awards and Records
+441,Who directed Mr. Smith Goes to Washington?,Leo McCarey,Frank Capra,George Cukor,,B,hard,Classic Cinema
+442,Which 1991 thriller features Clarice Starling?,Seven,Copycat,The Silence of the Lambs,,C,hard,Modern Blockbusters
+443,Which drama features DEA agent Hank Schrader?,Breaking Bad,The Wire,Your Honor,,A,hard,TV Series
+444,Which 1996 film features Bugs Bunny playing basketball?,Looney Tunes Back in Action,Space Jam,Ready Player One,,B,hard,Animation
+445,Which hero does Brie Larson play?,Scarlet Witch,Ms. Marvel,Captain Marvel,,C,hard,Superheroes
+446,Which 1959 epic won 11 Academy Awards?,Ben-Hur,Spartacus,Cleopatra,,A,hard,Awards and Records
+447,Which 1952 film stars Gary Cooper as a small-town marshal?,Shane,High Noon,My Darling Clementine,,B,hard,Classic Cinema
+448,Which 2003 film features a cursed pirate crew?,Cutthroat Island,Treasure Planet,Pirates of the Caribbean The Curse of the Black Pearl,,C,hard,Modern Blockbusters
+449,Which sitcom features a mailman named Newman?,Seinfeld,Curb Your Enthusiasm,Friends,,A,hard,TV Series
+450,Which villain dognaps 99 puppies?,Ursula,Cruella de Vil,Maleficent,,B,hard,Animation
+451,Which series features the cable news channel ACN?,The West Wing,Sports Night,The Newsroom,,C,hard,TV Series
+452,Which 2001 film features a robot boy named David?,A.I. Artificial Intelligence,Short Circuit,Ex Machina,,A,hard,Animation
+453,Which metal is bonded to Wolverines skeleton?,Carbonadium,Adamantium,Titanium,,B,hard,Superheroes
+454,Which 1972 mafia classic won Best Picture?,Goodfellas,Casino,The Godfather,,C,hard,Classic Cinema
+455,In which film does Kim Novak play a dual role?,Vertigo,Marnie,Rebecca,,A,hard,Classic Cinema
+456,Which 2014 film features a demanding jazz instructor?,Boyhood,Whiplash,Birdman,,B,hard,Modern Blockbusters
+457,Which series features the Byers family?,Dark,The OA,Stranger Things,,C,hard,TV Series
+458,Which 2010 film features dreams within dreams?,Inception,Source Code,Vanilla Sky,,A,hard,Modern Blockbusters
+459,Who directed Man of Steel?,Christopher Nolan,Zack Snyder,Patty Jenkins,,B,hard,Superheroes
+460,Which network aired Breaking Bad?,HBO,FX,AMC,,C,hard,TV Series
+461,Which sitcom features Paddys Pub?,Its Always Sunny in Philadelphia,The League,Workaholics,,A,hard,TV Series
+462,Which Disney film features the demon Chernabog?,The Black Cauldron,Fantasia,The Adventures of Ichabod and Mr. Toad,,B,hard,Animation
+463,Which hero protects Star City?,Nightwing,Green Lantern,Green Arrow,,C,hard,Superheroes
+464,Which boxing film won Best Picture for 1976?,Rocky,Cinderella Man,Raging Bull,,A,hard,Awards and Records
+465,Which 1954 film features a longshoreman who testifies against the mob?,Somebody Up There Likes Me,On the Waterfront,The Harder They Fall,,B,hard,Classic Cinema
+466,Which 2011 silent film salutes old Hollywood?,Hugo,Sing Street,The Artist,,C,hard,Modern Blockbusters
+467,Which series features a fake psychic detective?,Monk,Psych,The Mentalist,,A,hard,TV Series
+468,Which 2003 film features a fish tank support group?,The Reef,Finding Nemo,A Fish Called Wanda,,B,hard,Animation
+469,Who plays Bane in The Dark Knight Rises?,Javier Bardem,Josh Brolin,Tom Hardy,,C,hard,Superheroes
+470,Who won Best Actress for Erin Brockovich?,Julia Roberts,Renee Zellweger,Sandra Bullock,,A,hard,Awards and Records
+471,Which series features Piper Chapman at Litchfield?,GLOW,Orange Is the New Black,Wentworth,,B,hard,TV Series
+472,Which Disney film features Emperor Kuzco?,The Emperors New Groove,Home on the Range,Atlantis The Lost Empire,,C,hard,Animation
+473,Which team includes Rocket Raccoon?,Guardians of the Galaxy,The Defenders,The Eternals,,A,hard,Superheroes
+474,Which journalism drama won Best Picture for 2015?,The Big Short,Spotlight,Steve Jobs,,B,hard,Awards and Records
+475,Which 1944 noir features Phyllis Dietrichson?,Mildred Pierce,Laura,Double Indemnity,,C,hard,Classic Cinema
+476,Which 2009 Iraq bomb disposal drama won Best Picture?,The Hurt Locker,American Sniper,Zero Dark Thirty,,A,hard,Awards and Records
+477,Which series features a Doctor who wears bow ties?,Torchwood,Doctor Who,Merlin,,B,hard,TV Series
+478,Which 2001 Disney film explores a sunken city?,Recess Schools Out,Titan A.E.,Atlantis The Lost Empire,,C,hard,Animation
+479,Who plays Killmonger in Black Panther?,Michael B. Jordan,Chadwick Boseman,Daniel Kaluuya,,A,hard,Superheroes
+480,Which show holds the record for most Emmy wins?,Game of Thrones,Saturday Night Live,Frasier,,B,hard,Awards and Records
+481,Which 1941 John Huston debut features a prized statuette?,Key Largo,The Asphalt Jungle,The Maltese Falcon,,C,hard,Classic Cinema
+482,Which 2013 space survival film stars Sandra Bullock?,Gravity,Life of Pi,The Martian,,A,hard,Modern Blockbusters
+483,Which sitcom features Jim Halpert?,Scrubs,The Office,Brooklyn Nine-Nine,,B,hard,TV Series
+484,Which Disney film features the god Hades?,The Prince of Egypt,Sinbad Legend of the Seven Seas,Hercules,,C,hard,Animation
+485,Which character says the line I am Iron Man?,Tony Stark,Bruce Banner,Steve Rogers,,A,hard,Superheroes
+486,Which 1998 Best Picture winner riffs on Shakespeare?,Elizabeth,Shakespeare in Love,The Truman Show,,B,hard,Awards and Records
+487,Which 1948 film centers on a ballet star torn between art and love?,An American in Paris,The Turning Point,The Red Shoes,,C,hard,Classic Cinema
+488,Which 2008 Batman film features Heath Ledger?,The Dark Knight,Batman v Superman,Batman Returns,,A,hard,Superheroes
+489,Which procedural features Tony DiNozzo?,CSI New York,NCIS,Bones,,B,hard,TV Series
+490,Which 2012 Disney film features Merida?,Rise of the Guardians,The Croods,Brave,,C,hard,Animation
+491,Which thriller series features assassin Villanelle?,Killing Eve,Alias,Homeland,,A,hard,TV Series
+492,Which Disney film follows young Simba?,Return to Oz,The Lion King,Dumbo,,B,hard,Animation
+493,Which stone does Thanos take first in Infinity War?,The Tesseract,The Orb,Power Stone,,C,hard,Superheroes
+494,Which individual has won the most Academy Awards ever?,Walt Disney,Cedric Gibbons,John Williams,,A,hard,Awards and Records
+495,Who directed the 1939 western Stagecoach?,Raoul Walsh,John Ford,Henry King,,B,hard,Classic Cinema
+496,Which 2000 film stars Russell Crowe as a Roman general?,King Arthur,Troy,Gladiator,,C,hard,Modern Blockbusters
+497,Which series features Joan Holloway?,Mad Men,Pan Am,The Playboy Club,,A,hard,TV Series
+498,Which 1995 Disney film features John Smith and Pocahontas?,Balto,Pocahontas,The Iron Giant,,B,hard,Animation
+499,Who plays Doctor Strange?,Tom Hiddleston,Matt Smith,Benedict Cumberbatch,,C,hard,Superheroes
+500,Which 2003 fantasy film won all 11 Oscars it was nominated for?,The Return of the King,Gangs of New York,The Two Towers,,A,hard,Awards and Records
+501,Which thriller series features Carrie Mathison?,The Night Manager,Quantico,The Americans,,B,hard,TV Series
+502,Which 2007 Pixar film is set in a Paris kitchen?,Chocolat,The Lobster,Ratatouille,,C,hard,Animation
+503,Which hero is also known as Diana Prince?,Wonder Woman,Mera,Big Barda,,A,hard,Superheroes
+504,Which 1975 asylum drama won Best Picture?,Network,One Flew Over the Cuckoos Nest,Rocky,,B,hard,Awards and Records
+505,Who played the title role in Mrs. Miniver?,Olivia de Havilland,Bette Davis,Greer Garson,,C,hard,Classic Cinema
+506,Which 2012 western features a freed slave turned bounty hunter?,12 Years a Slave,Django Unchained,The Hateful Eight,,A,hard,Modern Blockbusters
+507,Which comedy features Leslie Knope?,Community,30 Rock,The Comeback,,B,hard,TV Series
+508,Which Disney film features the candlestick Lumiere?,The Sword in the Stone,The Aristocats,Beauty and the Beast,,C,hard,Animation
+509,Who plays Black Widow?,Scarlett Johansson,Brie Larson,Elizabeth Olsen,,A,hard,Superheroes
+510,Which 1950 theater drama won Best Picture?,The Best Years of Our Lives,All About Eve,Born Yesterday,,B,hard,Awards and Records
+511,Which 1957 epic features Colonel Nicholson?,The Guns of Navarone,The Caine Mutiny,The Bridge on the River Kwai,,C,hard,Classic Cinema
+512,Which 1986 comedy features a legendary day off in Chicago?,The Breakfast Club,Ferris Buellers Day Off,Dirty Dancing,,A,hard,Modern Blockbusters
+513,Which sitcom features Barney Stinson?,New Girl,How I Met Your Mother,The Big Bang Theory,,B,hard,TV Series
+514,Which 2017 Pixar film deals with grief during the Day of the Dead?,The Book of Life,Encanto,Coco,,C,hard,Animation
+515,Which MCU hero fights with a bow and arrow?,Hawkeye,Arsenal,Roy Harper,,A,hard,Superheroes
+516,Which actress has the most Best Actress nominations?,Katharine Hepburn,Meryl Streep,Geraldine Page,,B,hard,Awards and Records
+517,Which 1957 film dramatizes the gunfight at the O.K. Corral?,Wild Bill,The Sons of Katie Elder,Gunfight at the O.K. Corral,,C,hard,Classic Cinema
+518,Which 1985 adventure follows kids hunting pirate treasure?,The Goonies,Stand by Me,The Lost Boys,,A,hard,Modern Blockbusters
+519,Which series features the Byrde family laundering money?,Ozark,Bloodline,Sons of Anarchy,,B,hard,TV Series
+520,Which 1998 Pixar film parodies Seven Samurai with ants?,The Ant Bully,Bee Movie,A Bugs Life,,C,hard,Animation
+521,Who plays Aquaman?,Jason Momoa,Chris Hemsworth,Liam Neeson,,A,hard,Superheroes
+522,Which film gave Denzel Washington his first Best Actor Oscar?,Glory,Training Day,Malcolm X,,B,hard,Awards and Records
+523,Which 1950 comedy features an invisible six-foot rabbit?,The Shop Around the Corner,Arsenic and Old Lace,Harvey,,C,hard,Classic Cinema
+524,Which 1994 crime film features a mysterious briefcase?,Pulp Fiction,Reservoir Dogs,Jackie Brown,,A,hard,Modern Blockbusters
+525,Which series follows the Fisher family funeral home?,The Sopranos,Six Feet Under,Dead Like Me,,B,hard,TV Series
+526,Which 2004 Pixar film brings supers out of retirement?,Hancock,Megamind,The Incredibles,,C,hard,Superheroes
+527,Which villain does Josh Brolin play in the MCU?,Hela,Kang,Thanos,,A,hard,Superheroes
+528,Which 2017 fantasy romance won Best Picture?,Call Me by Your Name,The Shape of Water,Three Billboards Outside Ebbing Missouri,,B,hard,Awards and Records
+529,Which 1970 film dramatizes a famous WWII general?,Tora Tora Tora,Midway,Patton,,C,hard,Classic Cinema
+530,Which 2016 film features a conscientious objector medic?,Hacksaw Ridge,Deepwater Horizon,13 Hours,,A,hard,Modern Blockbusters
+531,Which series features lawyer Kim Wexler?,Bosch,Better Call Saul,Sneaky Pete,,B,hard,TV Series
+532,Which Pixar film features Lightning McQueen?,Planes,Turbo,Cars,,C,hard,Animation
+533,Which nation does TChalla rule as king?,Black Panther,Falcon,War Machine,,A,hard,Superheroes
+534,Which jazz-era musical won Best Picture for 2002?,Moulin Rouge,Chicago,Cabaret,,B,hard,Awards and Records
+535,Which Orson Welles noir features a border town bomb plot?,The Third Man,Fallen Angel,Touch of Evil,,C,hard,Classic Cinema
+536,Which 1998 film features a staged island life?,The Truman Show,Pleasantville,EDtv,,A,hard,Modern Blockbusters
+537,Which sitcom features the Tanner household?,Family Matters,Full House,Step by Step,,B,hard,TV Series
+538,Which 1999 Disney film features a man raised by gorillas?,The Wild Thornberrys,Dinosaur,Tarzan,,C,hard,Animation
+539,Which villain is called the Clown Prince of Crime?,The Joker,Riddler,Penguin,,A,hard,Superheroes
+540,Which 1985 Africa romance won Best Picture?,Gorillas in the Mist,The Color Purple,Out of Africa,,B,hard,Awards and Records
+541,Which 1940 film features the estate Manderley?,Jane Eyre,Wuthering Heights,Rebecca,,C,hard,Classic Cinema
+542,Which 1995 crime epic pits Pacino against De Niro?,The Insider,Miami Vice,Heat,,A,hard,Modern Blockbusters
+543,Which series features Jessica Pearson?,Boston Legal,Suits,Billions,,B,hard,TV Series
+544,Which 2002 Disney film features an alien landing in Hawaii?,Meet the Robinsons,Cinderella II Dreams Come True,Lilo and Stitch,,C,hard,Animation
+545,Which hero is known as the Man Without Fear?,Luke Cage,Iron Fist,Daredevil,,A,hard,Superheroes
+546,Which 1977 romantic comedy won Best Picture?,Manhattan,Annie Hall,Kramer vs Kramer,,B,hard,Awards and Records
+547,Which 1965 film features the von Trapp family?,Mary Poppins,The Music Man,The Sound of Music,,C,hard,Classic Cinema
+548,Which 2000 film features gravity-defying martial artists?,Crouching Tiger Hidden Dragon,The Raid,Hero,,A,hard,Modern Blockbusters
+549,Which series prequels a famous 1960 horror film?,Mindhunter,Bates Motel,The Following,,B,hard,TV Series
+550,Which 2004 Ghibli film features a wizard and a hat?,Ponyo,The Wind Rises,Howls Moving Castle,,C,hard,Animation
+551,Which hero is also known as Wade Wilson?,Deadpool,Domino,Cable,,A,hard,Superheroes
+552,Which 1967 Mississippi drama won Best Picture?,The Graduate,In the Heat of the Night,Guess Whos Coming to Dinner,,B,hard,Awards and Records
+553,Who played the Sheik in the 1921 silent hit?,Ramon Novarro,John Gilbert,Rudolph Valentino,,C,hard,Classic Cinema
+554,Which 2007 Coen thriller features a coin-flipping killer?,No Country for Old Men,Burn After Reading,Blood Simple,,A,hard,Modern Blockbusters
+555,Which sitcom features Ray Barone?,The King of Queens,Everybody Loves Raymond,According to Jim,,B,hard,TV Series
+556,Which 1988 film mixes toons with live action?,Who Framed Roger Rabbit,Osmosis Jones,Cool World,,C,hard,Animation
+557,Which hero is called the God of Mischief?,Loki,Amora,Enchantress,,A,hard,Superheroes
+558,Which 2004 Clint Eastwood drama won Best Picture?,Mystic River,Million Dollar Baby,Gran Torino,,B,hard,Awards and Records
+559,Which 1962 film features lawyer Atticus Finch?,Anatomy of a Murder,To Kill a Mockingbird,Inherit the Wind,,C,hard,Classic Cinema
+560,Which 2004 comedy features the Plastics?,Mean Girls,Clueless,Legally Blonde,,A,hard,Modern Blockbusters
+561,Which sitcom features the Heck family?,The Conners,The Middle,Raising Hope,,B,hard,TV Series
+562,Which 1997 animated film features the lost Russian duchess?,The King and I,Joseph King of Dreams,Anastasia,,C,hard,Animation
+563,Which X-Men hero does Hugh Jackman play?,Wolverine,Gambit,Cyclops,,A,hard,Superheroes
+564,Which 2019 WWI film won Sam Mendes Best Director?,Dunkirk,1917,Ford v Ferrari,,B,hard,Awards and Records
+565,Which 1954 film features a chauffeurs daughter?,Funny Face,Love in the Afternoon,Sabrina,,C,hard,Classic Cinema
+566,Which 2016 film features alien heptapods?,Arrival,Independence Day,Contact,,A,hard,Modern Blockbusters
+567,Which series features the detective of Baker Street in modern day?,Ripper Street,Sherlock,Luther,,B,hard,TV Series
+568,Which 2004 sequel sends the ogre to a faraway kingdom?,Puss in Boots,Shrek the Third,Shrek 2,,C,hard,Animation
+569,Who plays Peggy Carter?,Hayley Atwell,Emily VanCamp,Cobie Smulders,,A,hard,Superheroes
+570,Which 1973 con artist film won Best Picture?,The Paper Chase,The Sting,Chinatown,,B,hard,Awards and Records
+571,Which 1956 Hitchcock remake features an assassination plot in London?,Suspicion,Stage Fright,The Man Who Knew Too Much,,C,hard,Classic Cinema
+572,Which 2009 film features aliens in Johannesburg?,District 9,Elysium,Chappie,,A,hard,Modern Blockbusters
+573,Which sitcom features the Wilkerson family?,Grounded for Life,Malcolm in the Middle,8 Simple Rules,,B,hard,TV Series
+574,Which 2014 film features a construction toy hero?,Wreck-It Ralph,Smallfoot,The LEGO Movie,,C,hard,Animation
+575,Which hero is known as the Sentinel of Liberty?,Captain America,Nova,The Punisher,,A,hard,Superheroes
+576,Which 1999 suburb satire won Best Picture?,American History X,American Beauty,American Gangster,,B,hard,Awards and Records
+577,Which 1934 comedy features sleuths Nick and Nora?,His Girl Friday,The Awful Truth,The Thin Man,,C,hard,Classic Cinema
+578,Which 2011 film follows a writer in 1920s Paris?,Midnight in Paris,Cafe Society,To Rome with Love,,A,hard,Modern Blockbusters
+579,Which sitcom features Karen Walker?,Hot in Cleveland,Will and Grace,Sex and the City,,B,hard,TV Series
+580,Which 1990 film features a gentle man with blades for fingers?,Beetlejuice,Dark Shadows,Edward Scissorhands,,C,hard,Animation
+581,Which X-Men leader does Patrick Stewart play?,Professor X,Magneto,Mr. Sinister,,A,hard,Superheroes
+582,Which 1982 pacifist biopic won Best Picture?,Chariots of Fire,Gandhi,A Passage to India,,B,hard,Awards and Records
+583,Which 1956 film features Robby the Robot?,The Day the Earth Stood Still,Destination Moon,Forbidden Planet,,C,hard,Classic Cinema
+584,Which 2013 film depicts a mans years in slavery?,12 Years a Slave,Selma,The Butler,,A,hard,Modern Blockbusters
+585,Which sitcom features Herman the gentle giant?,The Addams Family,The Munsters,Bewitched,,B,hard,TV Series
+586,Which 2010 Disney film features a long-haired tower prisoner?,Winnie the Pooh,Ralph Breaks the Internet,Tangled,,C,hard,Animation
+587,Which vampire hunter does Wesley Snipes play?,Blade,Spawn,Steel,,A,hard,Superheroes
+588,Which 1969 film is the only X-rated Best Picture winner?,MASH,Midnight Cowboy,The Apartment,,B,hard,Awards and Records
+589,Which 1966 western features the gunslinger Blondie?,For a Few Dollars More,Once Upon a Time in the West,The Good the Bad and the Ugly,,C,hard,Classic Cinema
+590,Which 2014 film features an actor and his winged alter ego?,Birdman,Foxcatcher,Black Swan,,A,hard,Modern Blockbusters
+591,Which drama features an undercover advertising executive?,Lost Girl,Person of Interest,Continuum,,B,hard,TV Series
+592,Which 2015 Pixar film imagines dinosaurs and humans coexisting?,The Good Dinosaur,Ice Age,Land Before Time,,C,hard,Animation
+593,Which hero is the God of Thunder?,Thor,Odin,Heimdall,,A,hard,Superheroes
+594,Which 2016 coming-of-age drama won Best Picture?,La La Land,Moonlight,Manchester by the Sea,,B,hard,Awards and Records
+595,Which 1959 comedy pairs Doris Day with Rock Hudson?,Send Me No Flowers,Lover Come Back,Pillow Talk,,C,hard,Classic Cinema
+596,Which 2002 film features police who see crimes before they happen?,Minority Report,Paycheck,I Robot,,A,hard,Modern Blockbusters
+597,Which Cold War drama features spy couple Philip and Elizabeth?,Rubicon,The Americans,The Company,,B,hard,TV Series
+598,Which 2021 film features a sea monster boy on the Italian coast?,Onward,The Sea Beast,Luca,,C,hard,Animation
+599,Which hero is known as the strongest one there is?,The Hulk,The Thing,She-Hulk,,A,hard,Superheroes
+600,Which 1994 drama won Best Picture?,Quiz Show,Forrest Gump,The Shawshank Redemption,,B,hard,Awards and Records
+601,Which cinematographer shot Citizen Kane?,Gregg Toland,Karl Freund,James Wong Howe,Lee Garmes,A,expert,Classic Cinema
+602,Which composer scored Jaws and Star Wars?,Hans Zimmer,John Williams,Jerry Goldsmith,James Horner,B,expert,Modern Blockbusters
+603,Which actor played Gunther in Friends?,Mike Hagerty,Eddie Cahill,James Michael Tyler,Giovanni Ribisi,C,expert,TV Series
+604,Which Mickey Mouse short played before Frozen?,Paperman,La Luna,Lava,Get a Horse,D,expert,Animation
+605,Who created the X-Men for Marvel Comics?,Stan Lee and Jack Kirby,Chris Claremont,Roy Thomas,Steve Ditko,A,expert,Superheroes
+606,Which film won the first Palme dOr in 1955?,Orpheus,Marty,Gervaise,Black Orpheus,B,expert,Awards and Records
+607,Who played the bride in Bride of Frankenstein?,Valerie Hobson,Gloria Stuart,Elsa Lanchester,Mae Clarke,C,expert,Classic Cinema
+608,Who composed the 1994 Lion King score?,Alan Menken,Danny Elfman,Patrick Doyle,Hans Zimmer,D,expert,Animation
+609,Who created The Twilight Zone?,Gene Roddenberry,Nigel Kneale,Rod Serling,Sidney Lumet,A,expert,TV Series
+610,Which animated film features the song Colors of the Wind?,All Dogs Go to Heaven,Pocahontas,An American Tail,Ferngully,B,expert,Animation
+611,Who drew the 1986 graphic novel The Dark Knight Returns?,Alan Moore,Todd McFarlane,Frank Miller,Dave Gibbons,C,expert,Superheroes
+612,Which 1985 Spielberg drama got 11 nominations and zero wins?,E.T. the Extra-Terrestrial,Crash,West Side Story,The Color Purple,D,expert,Awards and Records
+613,Which 1916 Griffith epic tells four parallel stories?,Intolerance,The Birth of a Nation,Way Down East,Broken Blossoms,A,expert,Classic Cinema
+614,Which actor played Q from 1963 to 1999?,Bernard Lee,Desmond Llewelyn,Lois Maxwell,Geoffrey Keen,B,expert,Modern Blockbusters
+615,Which sitcom spun off from Cheers in 1993?,Wings,The Tortellis,Frasier,Becker,C,expert,TV Series
+616,Which Disney classic is based on a Dodie Smith novel?,That Darn Cat,Lady and the Tramp,Robin Hood,One Hundred and One Dalmatians,D,expert,Animation
+617,Who played Jor-El in the 1978 Superman?,Marlon Brando,Gene Hackman,Terence Stamp,Susannah York,A,expert,Superheroes
+618,Which costume designer won a record eight Oscars?,Adrian,Edith Head,Cecil Beaton,Colleen Atwood,B,expert,Awards and Records
+619,Who played Hawkeye Pierce on the MASH series?,Wayne Rogers,Donald Sutherland,Alan Alda,Mike Farrell,C,expert,TV Series
+620,Which 2020 Pixar film explores the Great Before?,Monsters University,Lightyear,Turning Red,Soul,D,expert,Animation
+621,Which comedy features writer Liz Lemon?,30 Rock,Up All Night,Cougar Town,Suburgatory,A,expert,TV Series
+622,Who voiced Bugs Bunny for nearly five decades?,Jim Henson,Mel Blanc,Frank Welker,Daws Butler,B,expert,Animation
+623,Which MCU film first shows TChalla?,Avengers Age of Ultron,Black Panther,Captain America Civil War,Thor Ragnarok,C,expert,Superheroes
+624,Who played Alfred in the 1989 Batman?,Alan Rickman,Ian Holm,Jack Palance,Michael Gough,D,expert,Superheroes
+625,Who played Roger Thornhill?,Cary Grant,James Stewart,David Niven,Tony Curtis,A,expert,Classic Cinema
+626,Which 1984 film unleashes creatures fed after midnight?,Critters,Gremlins,Troll,Ghoulies,B,expert,Modern Blockbusters
+627,Which Golden Girl played Rose?,Rue McClanahan,Bea Arthur,Betty White,Estelle Getty,C,expert,TV Series
+628,Which composer wrote Beauty and the Beast songs with Howard Ashman?,Elton John,Phil Collins,Stephen Schwartz,Alan Menken,D,expert,Animation
+629,Who played Alfred in Batman v Superman?,Jeremy Irons,Ralph Fiennes,Sean Pertwee,Andy Serkis,A,expert,Superheroes
+630,Which film won Best Original Song for My Heart Will Go On?,Ghost,Titanic,Evita,The Bodyguard,B,expert,Awards and Records
+631,Who played Joe Gillis in Sunset Boulevard?,Fred MacMurray,Ray Milland,William Holden,Burt Lancaster,C,expert,Classic Cinema
+632,Which 1989 Southern drama won Best Picture without a directing nomination?,Dead Poets Society,My Left Foot,Born on the Fourth of July,Driving Miss Daisy,D,expert,Awards and Records
+633,Who played Fonzie?,Henry Winkler,Scott Baio,Ron Howard,Anson Williams,A,expert,TV Series
+634,Which 1989 film won Best Original Song for Under the Sea?,Rock-A-Doodle,The Little Mermaid,The Pebble and the Penguin,Song of the Sea,B,expert,Animation
+635,Who played the Joker in the 1989 Batman?,Tommy Lee Jones,Mark Hamill,Jack Nicholson,Cesar Romero,C,expert,Superheroes
+636,Which 1933 backstage drama won Hepburn her first Oscar?,Alice Adams,Woman of the Year,The Philadelphia Story,Morning Glory,D,expert,Awards and Records
+637,Who played Cosmo Brown in Singin in the Rain?,Donald OConnor,Cyd Charisse,Rita Moreno,Dean Martin,A,expert,Classic Cinema
+638,Which 1995 epic won Best Picture for Mel Gibson?,Apollo 13,Braveheart,Rob Roy,Batman Forever,B,expert,Awards and Records
+639,Who played Samantha in Bewitched?,Agnes Moorehead,Erin Murphy,Elizabeth Montgomery,Sandra Gould,C,expert,TV Series
+640,Which 1937 film was Disneys first feature?,The Reluctant Dragon,Saludos Amigos,Fantasia,Snow White and the Seven Dwarfs,D,expert,Animation
+641,Who played Mace Windu?,Samuel L. Jackson,Jimmy Smits,Ewan McGregor,Denis Lawson,A,expert,Superheroes
+642,Which 1941 Wales mining drama won Best Picture?,Sergeant York,How Green Was My Valley,The Little Foxes,Citizen Kane,B,expert,Awards and Records
+643,Who played Hawkeye in the 1970 MASH film?,Elliott Gould,Tom Skerritt,Donald Sutherland,Robert Duvall,C,expert,Classic Cinema
+644,Who voiced Maleficent?,Verna Felton,Betty Lou Gerson,Barbara Luddy,Eleanor Audley,D,expert,Animation
+645,Which 1953 film won Sinatra a supporting actor Oscar?,From Here to Eternity,The Man with the Golden Arm,Pal Joey,Suddenly,A,expert,Classic Cinema
+646,Which 1994 film stars Tim Robbins as an escapee?,Cool Hand Luke,The Shawshank Redemption,Papillon,Escape from Alcatraz,B,expert,Modern Blockbusters
+647,Who played Niles Crane?,Kelsey Grammer,Peri Gilpin,David Hyde Pierce,John Mahoney,C,expert,TV Series
+648,Which 1942 Disney film features Thumper?,The Three Caballeros,Victory Through Air Power,Melody Time,Bambi,D,expert,Animation
+649,Who played Laura in the 1944 noir Laura?,Gene Tierney,Clifton Webb,Dana Andrews,Vincent Price,A,expert,Classic Cinema
+650,Which 1997 film features a janitor math genius?,A Beautiful Mind,Good Will Hunting,With Honors,The Rainmaker,B,expert,Modern Blockbusters
+651,Who played Colonel Potter after the original commander?,Larry Linville,McLean Stevenson,Harry Morgan,David Ogden Stiers,C,expert,TV Series
+652,Who wrote the songs for Toy Story?,Howard Ashman,Thomas Newman,James Newton Howard,Randy Newman,D,expert,Animation
+653,Who played Yondu?,Michael Rooker,Sylvester Stallone,Kurt Russell,Peter Serafinowicz,A,expert,Superheroes
+654,Which 1984 film was the first rated PG-13?,Indiana Jones and the Temple of Doom,Red Dawn,The Woman in Red,The Flamingo Kid,B,expert,Awards and Records
+655,Who played Anita in the 1961 West Side Story?,Chita Rivera,Marni Nixon,Rita Moreno,Suzie Kaye,C,expert,Classic Cinema
+656,Which 1982 film features Voight-Kampff tests?,Total Recall,Altered States,The Running Man,Blade Runner,D,expert,Modern Blockbusters
+657,Which sitcom features Norm Peterson?,Cheers,Night Court,Coach,Newhart,A,expert,TV Series
+658,Which 1998 animated film features When You Believe?,The Mummy,Prince of Egypt,Patch Adams,Stepmom,B,expert,Animation
+659,Who played the Ancient One?,Michelle Pfeiffer,Cate Blanchett,Tilda Swinton,Angela Bassett,C,expert,Superheroes
+660,Which 1940 Hitchcock film won Best Picture?,The Grapes of Wrath,Our Town,Kitty Foyle,Rebecca,D,expert,Classic Cinema
+661,Who played Ashley Wilkes?,Leslie Howard,Victor Jory,Evelyn Keyes,Clark Gable,A,expert,Classic Cinema
+662,Who scored The Good the Bad and the Ugly?,Nino Rota,Ennio Morricone,Armando Trovajoli,Piero Piccioni,B,expert,Classic Cinema
+663,Who played Mary Richards?,Valerie Harper,Cloris Leachman,Mary Tyler Moore,Georgia Engel,C,expert,TV Series
+664,Which Elton John song won an Oscar for The Lion King?,Circle of Life,Shadowland,I Just Cant Wait to Be King,Can You Feel the Love Tonight,D,expert,Animation
+665,Who played Uncle Ben?,Cliff Robertson,Rosemary Harris,Willem Dafoe,James Cromwell,A,expert,Superheroes
+666,Which 1939 epic won a record ten Oscars?,Goodbye Mr. Chips,Gone with the Wind,Love Affair,Dark Victory,B,expert,Awards and Records
+667,Which show features Arnold Jackson?,Webster,Punky Brewster,Diffrent Strokes,Silver Spoons,C,expert,TV Series
+668,Which Disney villain keeps a raven named Diablo?,Song of the South,Make Mine Music,So Dear to My Heart,Sleeping Beauty,D,expert,Animation
+669,Who played Pepper Potts?,Gwyneth Paltrow,Liv Tyler,Rebecca Hall,Natalie Portman,A,expert,Superheroes
+670,Which 1955 romance won both the Palme dOr and Best Picture?,Mister Roberts,Marty,The Rose Tattoo,Picnic,B,expert,Awards and Records
+671,Who played Columbo?,Telly Savalas,Jack Webb,Peter Falk,David Janssen,C,expert,TV Series
+672,Which 1996 film stars Glenn Close as a dognapper?,Matilda,Jumanji,Michael,101 Dalmatians,D,expert,Animation
+673,Who played Wong in Doctor Strange?,Benedict Wong,Donnie Yen,Chin Han,BD Wong,A,expert,Superheroes
+674,Who won Best Supporting Actress for Minari?,Glenn Close,Youn Yuh-jung,Olivia Colman,Jodie Foster,B,expert,Awards and Records
+675,Who played Madeleine Elster?,Grace Kelly,Eva Marie Saint,Kim Novak,Janet Leigh,C,expert,Classic Cinema
+676,Who scored The Lord of the Rings trilogy?,Alan Silvestri,Klaus Badelt,Michael Giacchino,Howard Shore,D,expert,Modern Blockbusters
+677,Who played George Costanza?,Jason Alexander,Michael Richards,Jerry Stiller,Wayne Knight,A,expert,TV Series
+678,Who voiced Philoctetes?,James Woods,Danny DeVito,Rip Torn,Bobcat Goldthwait,B,expert,Animation
+679,Who played Happy Hogan?,Clark Gregg,Paul Bettany,Jon Favreau,Don Cheadle,C,expert,Superheroes
+680,Who won Best Actress for Network?,Beatrice Straight,Ingrid Bergman,Jane Fonda,Faye Dunaway,D,expert,Awards and Records
+681,Which sitcom features Al Bundy?,Married with Children,Family Ties,Head of the Class,Growing Pains,A,expert,TV Series
+682,Which Disney film features Ursula?,Babes in Toyland,The Little Mermaid,Fun and Fancy Free,The Fox and the Hound,B,expert,Animation
+683,Who played Nick Fury in the MCU?,David Hasselhoff,David Rasche,Samuel L. Jackson,Lou Ferrigno,C,expert,Superheroes
+684,Which musical won Best Picture in 1929?,42nd Street,Hollywood Revue of 1929,The Desert Song,The Broadway Melody,D,expert,Awards and Records
+685,Which actress played M starting with GoldenEye?,Judi Dench,Michelle Yeoh,Talisa Soto,Honor Blackman,A,expert,Modern Blockbusters
+686,Who voiced Elsa?,Kristen Bell,Idina Menzel,America Ferrera,Kerry Washington,B,expert,Animation
+687,Who played Bucky Barnes?,Anthony Mackie,Frank Grillo,Sebastian Stan,Daniel Bruhl,C,expert,Superheroes
+688,Which 1960 film features a struggling advertising writer lending his home?,Breakfast at Tiffanys,Some Like It Hot,The Odd Couple,The Apartment,D,expert,Classic Cinema
+689,Which 2004 film follows a wine tour in Santa Barbara?,Sideways,A Good Year,French Kiss,Bottle Shock,A,expert,Modern Blockbusters
+690,Who played Roz on Frasier?,Bebe Neuwirth,Peri Gilpin,Jane Leeves,Harriet Sansom Harris,B,expert,TV Series
+691,Which 1959 film is famously called the worst ever made?,Glen or Glenda,Robot Monster,Plan 9 from Outer Space,The Blob,C,expert,Classic Cinema
+692,Which 1988 film grants a wish to be big?,Splash,The Money Pit,Joe Versus the Volcano,Big,D,expert,Modern Blockbusters
+693,Who played Captain Barney Miller?,Hal Linden,Abe Vigoda,Max Gail,Ron Glass,A,expert,TV Series
+694,Which 1981 Disney film pairs a fox and a hound?,Pete C,The Fox and the Hound,The Great Mouse Detective,The Many Adventures of Winnie the Pooh,B,expert,Animation
+695,Who played Odin?,Zachary Levi,Colin Farrell,Anthony Hopkins,Ray Stevenson,C,expert,Superheroes
+696,Which 1937 biopic won Best Picture?,The Good Earth,Captains Courageous,A Star Is Born,The Life of Emile Zola,D,expert,Awards and Records
+697,Which sitcom features a butler named Benson?,Benson,Soap,The Facts of Life,One Day at a Time,A,expert,TV Series
+698,Which Disney film features Scuttle?,Bedknobs and Broomsticks,The Little Mermaid,Bolt,Summer Magic,B,expert,Animation
+699,Who played Korg?,Jeff Goldblum,Karl Urban,Taika Waititi,Tadanobu Asano,C,expert,Superheroes
+700,Which 1958 MGM musical won Best Picture?,I Want to Live,Les Girls,Auntie Mame,Gigi,D,expert,Awards and Records
+701,Who played Zemo?,Daniel Bruhl,Ross Marquand,Noah Mills,Brian T. Delaney,A,expert,Superheroes
+702,Which 1981 werewolf film won the first Best Makeup Oscar?,The Howling,An American Werewolf in London,The Fly,The Fog,B,expert,Awards and Records
+703,Who played Charlie Harper?,Jon Cryer,Angus T. Jones,Charlie Sheen,Ashton Kutcher,C,expert,TV Series
+704,Which Pixar short features a lamp named Luxo?,Tin Toy,Reds Dream,Knick Knack,Luxo Jr.,D,expert,Animation
+705,Which 1946 Ford western features Doc Holliday?,My Darling Clementine,Red River,3 Godfathers,Fort Apache,A,expert,Classic Cinema
+706,Which 1991 film features a liquid metal assassin?,The Terminator,Terminator 2 Judgment Day,Terminator Salvation,Terminator 3 Rise of the Machines,B,expert,Modern Blockbusters
+707,Which classic sitcom is set in a Boston bar?,The Bob Newhart Show,The Mary Tyler Moore Show,Cheers,Murphy Brown,C,expert,TV Series
+708,Which Disney film features the Cheshire Cat?,The Shaggy Dog,The Love Bug,Darby OGill and the Little People,Alice in Wonderland,D,expert,Animation
+709,Who played Drax?,Dave Bautista,Chris Pratt,Vin Diesel,Bradley Cooper,A,expert,Superheroes
+710,Which 1932 Disney short won the first Best Animated Short Oscar?,Three Little Pigs,Flowers and Trees,The Tortoise and the Hare,The Old Mill,B,expert,Awards and Records
+711,Who played Martin Crane?,Dan Butler,Moose,John Mahoney,Edward Hibbert,C,expert,TV Series
+712,Who scored the 1998 Mulan?,Mark Mancina,Harry Gregson-Williams,Michael Kamen,Jerry Goldsmith,D,expert,Animation
+713,Who voiced the Watcher?,Jeffrey Wright,Mark Ruffalo,Paul Rudd,Danai Gurira,A,expert,Superheroes
+714,Who won Best Actor for The Theory of Everything?,David Oyelowo,Eddie Redmayne,Rami Malek,Michael Fassbender,B,expert,Awards and Records
+715,Which 1955 film features a tough teacher in a city school?,Splendor in the Grass,The Young Stranger,Blackboard Jungle,Up the Down Staircase,C,expert,Classic Cinema
+716,Which 1990 film features a pottery ghost?,Always,The Butchers Wife,Ghostbusters II,Ghost,D,expert,Modern Blockbusters
+717,Who played Rebecca Howe?,Kirstie Alley,Ted Danson,John Ratzenberger,Shelley Long,A,expert,TV Series
+718,Which Pixar film features Russell and Carl?,Cars 3,Up,The Incredibles 2,Toy Story 4,B,expert,Animation
+719,Who played Howard Stark in Captain America The First Avenger?,Gerard Sanders,Matt Riedy,John Slattery,Dominic Cooper,C,expert,Superheroes
+720,Which 1978 Vietnam drama won Best Picture?,Coming Home,An Unmarried Woman,Heaven Can Wait,The Deer Hunter,D,expert,Awards and Records
+721,Which 1964 film features a generals coup plot?,Seven Days in May,Fail Safe,Dr. Strangelove,Topaz,A,expert,Classic Cinema
+722,Who scored Up and Ratatouille?,Randy Newman,Michael Giacchino,Mychael Danna,Alexandre Desplat,B,expert,Animation
+723,Who played Yon-Rogg?,Ben Mendelsohn,Anson Mount,Jude Law,Rupert Evans,C,expert,Superheroes
+724,Who won Best Supporting Actress for Ghost?,Demi Moore,Mary Steenburgen,Debra Winger,Whoopi Goldberg,D,expert,Awards and Records
+725,Which 1961 film features two gangs on Manhattan streets?,West Side Story,The Hustler,Judgment at Nuremberg,Fanny,A,expert,Classic Cinema
+726,Which 2014 Disney film features a healthcare robot?,Muppets Most Wanted,Big Hero 6,Tinker Bell and the Legend of the NeverBeast,The Pirate Fairy,B,expert,Animation
+727,Who played Kramer?,Barney Martin,Richard Kind,Michael Richards,Bryan Cranston,C,expert,TV Series
+728,Which Disney film features Cogsworth?,Into the Woods,Descendants,Snow White and the Huntsman,Beauty and the Beast,D,expert,Animation
+729,Who played Heimdall?,Idris Elba,Rene Russo,Stellan Skarsgard,Dane DeHaan,A,expert,Superheroes
+730,Which 1935 sea adventure won Best Picture?,Captain Blood,Mutiny on the Bounty,Midsummer Nights Dream,The Story of Louis Pasteur,B,expert,Awards and Records
+731,Which spinoff features Mrs. Garrett?,Gimme a Break,Small Wonder,The Facts of Life,Alice,C,expert,TV Series
+732,Which film features the villain Syndrome?,Elio,Zoom,Despicable Me,The Incredibles,D,expert,Animation
+733,Which 1961 film features Fast Eddie Felson?,The Hustler,A Face in the Crowd,Sweet Smell of Success,Long Days Journey into Night,A,expert,Classic Cinema
+734,Which Disney film features the scientist Jumba?,Leroy and Stitch,Lilo and Stitch,Stitch The Movie,Stitch Has a Glitch,B,expert,Animation
+735,Who played Kaecilius?,Benjamin Bratt,Chiwetel Ejiofor,Mads Mikkelsen,Scott Adkins,C,expert,Superheroes
+736,Who won Best Supporting Actress for Chicago?,Queen Latifah,Julianne Moore,Taye Diggs,Catherine Zeta-Jones,D,expert,Awards and Records
+737,Which 1962 thriller features a brainwashed war hero?,The Manchurian Candidate,Seconds,Birdman of Alcatraz,Advise and Consent,A,expert,Classic Cinema
+738,Which 1973 Disney film casts Robin Hood as a fox?,The Shaggy D.A.,Robin Hood,The Apple Dumpling Gang,The Computer Wore Tennis Shoes,B,expert,Animation
+739,Who played Red Guardian?,Ray Winstone,O-T Fagbenle,David Harbour,William Hurt,C,expert,Superheroes
+740,Which 1966 film about Thomas More won Best Picture?,Alfie,Whos Afraid of Virginia Woolf,A Thousand Clowns,A Man for All Seasons,D,expert,Awards and Records
+741,Who played Jack Tripper?,John Ritter,Norman Fell,Joyce DeWitt,Richard Kline,A,expert,TV Series
+742,Which Pixar film features Barley and Ian?,Elemental,Onward,Cars 2,Toy Story,B,expert,Animation
+743,Who played Daphne Moon?,Wendie Malick,Laura San Giacomo,Jane Leeves,Marsha Mason,C,expert,TV Series
+744,Which Pixar film features EVE?,Up,The Incredibles,Finding Nemo,WALL-E,D,expert,Animation
+745,Who voiced Ultron?,James Spader,Toby Jones,Fred Tatasciore,Tom Kane,A,expert,Superheroes
+746,Which 1964 musical won Best Picture?,Oliver,My Fair Lady,Fiddler on the Roof,Funny Girl,B,expert,Awards and Records
+747,Who played Mr. Roper?,Audra Lindley,Don Knotts,Norman Fell,Tom Bosley,C,expert,TV Series
+748,Which Pixar film features Boo?,Cars,Toy Story 3,WALL-E,Monsters Inc.,D,expert,Animation
+749,Who played Ayo?,Florence Kasumba,Lupita Nyongo,Letitia Wright,Winston Duke,A,expert,Superheroes
+750,Which 1981 running drama won Best Picture?,Personal Best,Chariots of Fire,Running on Empty,Prefontaine,B,expert,Awards and Records
+751,Which 1969 western sends two robbers fleeing to Bolivia?,True Grit,The Wild Bunch,Butch Cassidy and the Sundance Kid,Hang Em High,C,expert,Classic Cinema
+752,Which 1997 noir follows three cops in 1950s Los Angeles?,Mulholland Falls,City Hall,Cop Land,LA Confidential,D,expert,Modern Blockbusters
+753,Who played Lilith on Cheers?,Bebe Neuwirth,Nicholas Colasanto,Woody Harrelson,Philip Baker Hall,A,expert,TV Series
+754,Who voiced Wreck-It Ralph?,Jack McBrayer,John C. Reilly,Jane Lynch,Sarah Silverman,B,expert,Animation
+755,Who played Ego?,Djimon Hounsou,Lee Pace,Kurt Russell,Benicio del Toro,C,expert,Superheroes
+756,Which 1934 comedy swept the top five Oscars?,Twentieth Century,Mr. Deeds Goes to Town,Libeled Lady,It Happened One Night,D,expert,Awards and Records
+757,Who played Red Forman?,Kurtwood Smith,Wilmer Valderrama,Topher Grace,Danny Masterson,A,expert,TV Series
+758,Which Disney film features Grand Pabbie?,Raya and the Last Dragon,Frozen,Zootopia,Strange World,B,expert,Animation
+759,Who played Alexander Pierce?,Callan Mulvey,Garry Shandling,Robert Redford,Maximiliano Hernandez,C,expert,Superheroes
+760,Which 1970 biopic won Best Picture?,Airport,Five Easy Pieces,Love Story,Patton,D,expert,Awards and Records
+761,Which 1954 musical features seven brothers?,Seven Brides for Seven Brothers,Carousel,Oklahoma,Brigadoon,A,expert,Classic Cinema
+762,Which 1992 western won Best Picture?,Tombstone,Unforgiven,Wyatt Earp,Young Guns,B,expert,Modern Blockbusters
+763,Who played Cliff Clavin?,Keene Curtis,George Wendt,John Ratzenberger,Paul Willson,C,expert,TV Series
+764,Which Pixar film features Linguini?,Hotel Transylvania,The Mitchells vs the Machines,The Emoji Movie,Ratatouille,D,expert,Animation
+765,Who played Mysterio?,Jake Gyllenhaal,Rhys Ifans,Tobey Maguire,Jamie Foxx,A,expert,Superheroes
+766,Who won Best Actress for The Piano?,Emma Thompson,Holly Hunter,Stockard Channing,Mary McDonnell,B,expert,Awards and Records
+767,Who played Woody Boyd?,Derek McGrath,Roger Rees,Woody Harrelson,Roger Clemens,C,expert,TV Series
+768,Which Disney film features Hans?,Moana 2,The Parent Trap,The Princess Bride,Frozen,D,expert,Animation
+769,Who plays Ant-Man?,Paul Rudd,Corey Stoll,Michael Douglas,Evangeline Lilly,A,expert,Superheroes
+770,Which 1988 road drama won Best Picture?,Working Girl,Rain Man,The Accidental Tourist,Mississippi Burning,B,expert,Awards and Records
+771,Which 1959 western stars John Wayne as a sheriff?,The Searchers,North to Alaska,Rio Bravo,Chisum,C,expert,Classic Cinema
+772,Who voiced Mufasa?,Matthew Broderick,Jonathan Taylor Thomas,Moira Kelly,James Earl Jones,D,expert,Animation
+773,Who played Abraham Erskine?,Stanley Tucci,Sebastian Stan,Richard Armitage,Derek Luke,A,expert,Superheroes
+774,Who won Best Supporting Actress for Beale Street?,Emma Stone,Regina King,Rachel Weisz,Amy Adams,B,expert,Awards and Records
+775,Who played Auntie Mame?,Irene Dunne,Claudette Colbert,Rosalind Russell,Barbara Stanwyck,C,expert,Classic Cinema
+776,Which Disney film features Jafar?,The Return of Jafar,Aladdin and the King of Thieves,The Princess Diaries,Aladdin,D,expert,Animation
+777,Who played Carlton Banks?,Alfonso Ribeiro,Will Smith,Tatyana Ali,James Avery,A,expert,TV Series
+778,Which Disney film features Baloo?,Freaky Friday,The Jungle Book,The Sound of Music,Newsies,B,expert,Animation
+779,Who played Nebula?,Carrie Coon,Ophelia Lovibond,Karen Gillan,Elizabeth Debicki,C,expert,Superheroes
+780,Which 1956 adventure won Best Picture?,The Ten Commandments,War and Peace,Friendly Persuasion,Around the World in 80 Days,D,expert,Awards and Records
+781,Which 1953 film features a princess incognito in Rome?,Roman Holiday,Three Coins in the Fountain,Summertime,Sabrina,A,expert,Classic Cinema
+782,Which Pixar film makes Dory the lead?,Happy Feet,Finding Dory,Swimfan,Surfs Up,B,expert,Animation
+783,Which 1940 film features Hildy Johnson?,The Lady Eve,The Great McGinty,His Girl Friday,The Palm Beach Story,C,expert,Classic Cinema
+784,Who voiced Jafar?,Douglas Seale,Scott Weinger,Linda Larkin,Jonathan Freeman,D,expert,Animation
+785,Who played Kilgrave?,David Tennant,Jon Bernthal,Elodie Yung,Vincent Donofrio,A,expert,Superheroes
+786,Which 1948 Olivier Shakespeare film won Best Picture?,Henry V,Hamlet,Richard III,Othello,B,expert,Awards and Records
+787,Who played Archie Bunker?,Jean Stapleton,Sally Struthers,Carroll OConnor,Rob Reiner,C,expert,TV Series
+788,Who voiced Sebastian?,Jodi Benson,Pat Carroll,Christopher Daniel Barnes,Samuel E. Wright,D,expert,Animation
+789,Who played Kang?,Jonathan Majors,Bill Murray,Tim Roth,Kathryn Newton,A,expert,Superheroes
+790,Which 1943 romance won Best Picture?,Going My Way,Casablanca,The Lost Weekend,Since You Went Away,B,expert,Awards and Records
+791,Who played Batroc?,Jared Leto,Sam Rockwell,Georges St-Pierre,Scott Eastwood,C,expert,Superheroes
+792,Which 1932 hotel drama won Best Picture?,The Smiling Lieutenant,Arrowsmith,One Hour with You,Grand Hotel,D,expert,Awards and Records
+793,Who played Elaine on Seinfeld?,Julia Louis-Dreyfus,Jerry Seinfeld,Larry David,Heidi Swedberg,A,expert,TV Series
+794,Who voiced Mowgli in the 1967 animated film?,Phil Harris,Bruce Reitherman,Sebastian Cabot,George Sanders,B,expert,Animation
+795,Who played Valkyrie?,Saffron Burrows,Jaimie Alexander,Tessa Thompson,Mary Elizabeth Winstead,C,expert,Superheroes
+796,Which 1936 showman biopic won Best Picture?,San Francisco,Dodsworth,Anthony Adverse,The Great Ziegfeld,D,expert,Awards and Records
+797,Who played Radar OReilly?,Gary Burghoff,William Christopher,Jamie Farr,Allan Arbus,A,expert,TV Series
+798,Who voiced the Evil Queen?,Adriana Caselotti,Lucille La Verne,Harry Stockwell,Moroni Olsen,B,expert,Animation
+799,Who played Ned Leeds?,Zendaya,Marisa Tomei,Jacob Batalon,Tony Revolori,C,expert,Superheroes
+800,Which 1949 political drama won Best Picture?,Battleground,Twelve OClock High,Sands of Iwo Jima,All the Kings Men,D,expert,Awards and Records
+801,What is the surname of the hunter brothers in Supernatural?,,,,,Winchester,extreme,TV Series
+802,What is the name of the little girl in Monsters Inc?,,,,,Boo,extreme,Animation
+803,What is the real name of the Black Panther?,,,,,TChalla,extreme,Superheroes
+804,Which studio has won the most Best Animated Feature Oscars?,,,,,Pixar,extreme,Awards and Records
+805,Who scored the 1960 horror classic Psycho?,,,,,Bernard Herrmann,extreme,Classic Cinema
+806,What is the name of the artificial intelligence in 2001 A Space Odyssey?,,,,,HAL,extreme,Modern Blockbusters
+807,What is the name of the diner in Twin Peaks?,,,,,Double R,extreme,TV Series
+808,What is the name of the toy restaurant in Toy Story?,,,,,Pizza Planet,extreme,Animation
+809,What is the name of Thors home realm?,,,,,Asgard,extreme,Superheroes
+810,In what year was the first Academy Awards ceremony held?,,,,,1929,extreme,Awards and Records
+811,What is the name of the plantation in Gone with the Wind?,,,,,Tara,extreme,Classic Cinema
+812,What is the name of the hotel in The Shining?,,,,,Overlook,extreme,Modern Blockbusters
+813,What is the name of the coffee shop in Seinfeld?,,,,,Monks,extreme,TV Series
+814,What is the name of Simbas home?,,,,,Pride Rock,extreme,Animation
+815,What is the name of Batmans car?,,,,,Batmobile,extreme,Superheroes
+816,How many Oscars did Ben-Hur win?,,,,,11,extreme,Awards and Records
+817,In what city did Rick and Ilsa first fall in love?,,,,,Paris,extreme,Classic Cinema
+818,What is the name of the spaceship in Alien?,,,,,Nostromo,extreme,Modern Blockbusters
+819,What is the name of Dwights farm?,,,,,Schrute Farms,extreme,TV Series
+820,What is the name of the leader of the fish tank gang in Finding Nemo?,,,,,Gill,extreme,Animation
+821,What is Batmans butlers first name?,,,,,Alfred,extreme,Superheroes
+822,How many competitive Oscars did Walt Disney win?,,,,,22,extreme,Awards and Records
+823,What is the name of Charles Kanes estate?,,,,,Xanadu,extreme,Classic Cinema
+824,What is the name of the mining company in Avatar?,,,,,RDA,extreme,Modern Blockbusters
+825,What is the name of the starship in Star Trek The Original Series?,,,,,Enterprise,extreme,TV Series
+826,What is the name of the kingdom in Frozen?,,,,,Arendelle,extreme,Animation
+827,What is the name of Thors new weapon in Endgame?,,,,,Stormbreaker,extreme,Superheroes
+828,What network aired I Love Lucy?,,,,,CBS,extreme,Awards and Records
+829,Who directed The Seventh Seal?,,,,,Ingmar Bergman,extreme,Classic Cinema
+830,What is the name of Cobbs wife in Inception?,,,,,Mal,extreme,Modern Blockbusters
+831,What is the name of the coffee house in Beverly Hills 90210?,,,,,Peach Pit,extreme,TV Series
+832,What is the name of Jasmines tiger?,,,,,Rajah,extreme,Animation
+833,What is the name of the villain in Spider-Man Homecoming?,,,,,Vulture,extreme,Superheroes
+834,Who won Best Actor for On the Waterfront?,,,,,Marlon Brando,extreme,Awards and Records
+835,What is the name of the ranch in Giant?,,,,,Reata,extreme,Classic Cinema
+836,What is the name of the hotel in Pretty Woman?,,,,,Beverly Wilshire,extreme,Modern Blockbusters
+837,What is the name of the cruise ship in The Love Boat?,,,,,Pacific Princess,extreme,TV Series
+838,What is the name of the crab in The Little Mermaid?,,,,,Sebastian,extreme,Animation
+839,What is the name of the underwater kingdom in Aquaman?,,,,,Atlantis,extreme,Superheroes
+840,What is the name of the top trophy at Cannes?,,,,,Palme dor,extreme,Awards and Records
+841,What is Dorothys last name in The Wizard of Oz?,,,,,Gale,extreme,Classic Cinema
+842,What is the name of the corporation in Alien?,,,,,Weyland-Yutani,extreme,Modern Blockbusters
+843,What is the name of the school in Buffy?,,,,,Sunnydale High,extreme,TV Series
+844,What is the name of the restaurant in Ratatouille?,,,,,Gusteaus,extreme,Animation
+845,What is the name of Doctor Stranges assistant?,,,,,Wong,extreme,Superheroes
+846,What rating was created in 1984 between PG and R?,,,,,PG-13,extreme,Awards and Records
+847,What is the name of the family in Mary Poppins?,,,,,Banks,extreme,Classic Cinema
+848,What is the name of the tiger in Life of Pi?,,,,,Richard Parker,extreme,Modern Blockbusters
+849,What is the name of the hospital in ER?,,,,,County General,extreme,TV Series
+850,What is the name of Woodys horse in Toy Story 2?,,,,,Bullseye,extreme,Animation
+851,What is the name of the Flashs home city?,,,,,Central City,extreme,Superheroes
+852,At what hotel was the first Academy Awards ceremony held?,,,,,Roosevelt Hotel,extreme,Awards and Records
+853,What is the name of Ashley Wilkes home in Gone with the Wind?,,,,,Twelve Oaks,extreme,Classic Cinema
+854,What is the name of the mountain in Close Encounters of the Third Kind?,,,,,Devils Tower,extreme,Modern Blockbusters
+855,What is the name of the newspaper in the Superman films?,,,,,Daily Planet,extreme,TV Series
+856,What is the name of the city in The Wizard of Oz?,,,,,Emerald City,extreme,Animation
+857,What is the Green Lanterns home planet?,,,,,Oa,extreme,Superheroes
+858,Who won the first Best Supporting Actor Oscar?,,,,,Walter Brennan,extreme,Awards and Records
+859,What is the name of the killer in Halloween?,,,,,Michael Myers,extreme,Classic Cinema
+860,What is Tom Cruises call sign in Top Gun?,,,,,Maverick,extreme,Modern Blockbusters
+861,What is the name of the town in Stranger Things?,,,,,Hawkins,extreme,TV Series
+862,What is the name of the shepherdess in Toy Story?,,,,,Bo Peep,extreme,Animation
+863,What is the name of Batmans headquarters?,,,,,Batcave,extreme,Superheroes
+864,Which studio released The Lord of the Rings films?,,,,,New Line,extreme,Awards and Records
+865,What is the name of Marilyns character in Some Like It Hot?,,,,,Sugar,extreme,Classic Cinema
+866,What is the name of the robot in I Robot?,,,,,Sonny,extreme,Modern Blockbusters
+867,What are the call letters of Fraziers radio show?,,,,,KACL,extreme,TV Series
+868,What is the name of the dragon in Mulan?,,,,,Mushu,extreme,Animation
+869,What is the name of the villain in The Dark Knight Rises?,,,,,Bane,extreme,Superheroes
+870,In what year were the first Emmy Awards presented?,,,,,1949,extreme,Awards and Records
+871,What is Norma Desmonds butlers name?,,,,,Max,extreme,Classic Cinema
+872,What is the name of the villain in Die Hard?,,,,,Hans Gruber,extreme,Modern Blockbusters
+873,What is the number of the MASH unit?,,,,,4077th,extreme,TV Series
+874,What is the name of the alley cat in The Aristocats?,,,,,Thomas OMalley,extreme,Animation
+875,What is Professor Xs first name?,,,,,Charles,extreme,Superheroes
+876,Which network has aired the Oscars since 1976?,,,,,ABC,extreme,Awards and Records
+877,What is the name of the detective in The Big Sleep?,,,,,Philip Marlowe,extreme,Classic Cinema
+878,What is the name of the town in The Truman Show?,,,,,Seahaven,extreme,Modern Blockbusters
+879,What is the name of the paper company in The Office?,,,,,Dunder Mifflin,extreme,TV Series
+880,What is the name of Dumbos mother?,,,,,Mrs. Jumbo,extreme,Animation
+881,In what borough does Spider-Man live?,,,,,Queens,extreme,Superheroes
+882,In what year were the Golden Globes first held?,,,,,1944,extreme,Awards and Records
+883,What is the first name of Don Corleone?,,,,,Vito,extreme,Classic Cinema
+884,What is the name of the computer in WarGames?,,,,,WOPR,extreme,Modern Blockbusters
+885,What is the name of the high school in Beverly Hills 90210?,,,,,West Beverly,extreme,TV Series
+886,What is the name of the cat in Cinderella?,,,,,Lucifer,extreme,Animation
+887,What is the name of the villain in Avengers Age of Ultron?,,,,,Ultron,extreme,Superheroes
+888,What is the name of the boat in The Perfect Storm?,,,,,Andrea Gail,extreme,Modern Blockbusters
+889,What is the name of the housekeeper in Rebecca?,,,,,Mrs. Danvers,extreme,Classic Cinema
+890,What is the name of the submarine in The Hunt for Red October?,,,,,Red October,extreme,Modern Blockbusters
+891,What is the name of the ship in Firefly?,,,,,Serenity,extreme,TV Series
+892,What is the name of the whale in Pinocchio?,,,,,Monstro,extreme,Animation
+893,What is the name of Daredevils neighborhood?,,,,,Hells Kitchen,extreme,Superheroes
+894,How many acting categories are at the Oscars?,,,,,4,extreme,Awards and Records
+895,What is the name of the town in Its a Wonderful Life?,,,,,Bedford Falls,extreme,Classic Cinema
+896,What is the name of the corporation in RoboCop?,,,,,OCP,extreme,Modern Blockbusters
+897,What is the name of the school in Glee?,,,,,McKinley,extreme,TV Series
+898,What is the name of the ant in A Bugs Life?,,,,,Flik,extreme,Animation
+899,What is the name of TChallas sister?,,,,,Shuri,extreme,Superheroes
+900,Which country has won the most Best Foreign Language Film Oscars?,,,,,Italy,extreme,Awards and Records
+901,What is the name of Dorothys dog in The Wizard of Oz?,,,,,Toto,extreme,Classic Cinema
+902,What is the name of the AI in Her?,,,,,Samantha,extreme,Modern Blockbusters
+903,What is Kramers first name?,,,,,Cosmo,extreme,TV Series
+904,What is the name of the boy in Up?,,,,,Russell,extreme,Animation
+905,What is the last name of the founder of the X-Men?,,,,,Xavier,extreme,Superheroes
+906,In what year did Parasite win Best Picture?,,,,,2020,extreme,Awards and Records
+907,What is the name of the captain in Master and Commander?,,,,,Aubrey,extreme,Classic Cinema
+908,What is the name of the plane in Con Air?,,,,,Jailbird,extreme,Modern Blockbusters
+909,What is the name of the FBI agent in The X-Files?,,,,,Mulder,extreme,TV Series
+910,What is the name of Remys brother in Ratatouille?,,,,,Emile,extreme,Animation
+911,What is the metal bonded to Wolverines bones?,,,,,Adamantium,extreme,Superheroes
+912,Who won the first Best Actor Oscar?,,,,,Emil Jannings,extreme,Awards and Records
+913,What is the name of the marshal in High Noon?,,,,,Kane,extreme,Classic Cinema
+914,What is the name of the lobby boy in The Grand Budapest Hotel?,,,,,Zero,extreme,Modern Blockbusters
+915,What is the name of the town in Pretty Little Liars?,,,,,Rosewood,extreme,TV Series
+916,What is the name of the owl in The Sword in the Stone?,,,,,Archimedes,extreme,Animation
+917,Who forged the Infinity Gauntlet?,,,,,Eitri,extreme,Superheroes
+918,Which 1971 cop drama won Best Picture?,,,,,The French Connection,extreme,Awards and Records
+919,What is the name of the saloon in Tombstone?,,,,,Oriental,extreme,Classic Cinema
+920,What power company does Erin Brockovich investigate?,,,,,PG&E,extreme,Modern Blockbusters
+921,What is the name of the school in Dawsons Creek?,,,,,Capeside,extreme,TV Series
+922,What is the name of the chef in The Little Mermaid?,,,,,Louis,extreme,Animation
+923,What is the name of the Winter Soldier?,,,,,Bucky,extreme,Superheroes
+924,What was the first sequel to win Best Picture?,,,,,The Godfather Part II,extreme,Awards and Records
+925,What is the name of the captain in Moby Dick?,,,,,Ahab,extreme,Classic Cinema
+926,What is the name of the villain in Blade Runner 2049?,,,,,Wallace,extreme,Modern Blockbusters
+927,What is the name of the FBI agent in Twin Peaks?,,,,,Cooper,extreme,TV Series
+928,What is the name of the penguin leader in Madagascar?,,,,,Skipper,extreme,Animation
+929,What is the name of Aquamans mother?,,,,,Atlanna,extreme,Superheroes
+930,What was the first color film to win Best Picture?,,,,,Gone with the Wind,extreme,Awards and Records
+931,What is the name of the lead juror in 12 Angry Men?,,,,,Davis,extreme,Classic Cinema
+932,What is the name of the robot in Short Circuit?,,,,,Johnny 5,extreme,Modern Blockbusters
+933,What is the name of Archies band?,,,,,The Archies,extreme,TV Series
+934,What is the name of the seagull in The Little Mermaid?,,,,,Scuttle,extreme,Animation
+935,What is the name of Wonder Womans home island?,,,,,Themyscira,extreme,Superheroes
+936,How many acting categories are at the Academy Awards?,,,,,4,extreme,Awards and Records
+937,What is the full name of Orson Welles character in The Third Man?,,,,,Harry Lime,extreme,Classic Cinema
+938,What is the name of the hotel in Dirty Dancing?,,,,,Kellermans,extreme,Modern Blockbusters
+939,What is the name of the school in Community?,,,,,Greendale,extreme,TV Series
+940,What is the name of the firefly in The Princess and the Frog?,,,,,Ray,extreme,Animation
+941,What is the real name of the Dude in The Big Lebowski?,,,,,Jeffrey Lebowski,extreme,Superheroes
+942,Which film won Best Animated Feature for 2020?,,,,,Soul,extreme,Awards and Records
+943,What is the name of the detective in Chinatown?,,,,,Gittes,extreme,Classic Cinema
+944,What is the name of the boy in A.I. Artificial Intelligence?,,,,,David,extreme,Modern Blockbusters
+945,What is the name of Ted Mosbys wife?,,,,,Tracy,extreme,TV Series
+946,What is the name of the head chef in Ratatouille?,,,,,Skinner,extreme,Animation
+947,Who played Charlie Allnut in The African Queen?,,,,,Humphrey Bogart,extreme,Classic Cinema
+948,What is the name of the ruler of the Citadel in Mad Max Fury Road?,,,,,Immortan Joe,extreme,Modern Blockbusters
+949,What is the name of the precinct in Brooklyn Nine-Nine?,,,,,99th Precinct,extreme,TV Series
+950,What is the name of the girl in Brave?,,,,,Merida,extreme,Animation
+951,What is Peter Parkers aunts first name?,,,,,May,extreme,Superheroes
+952,In what city are the Emmy Awards presented?,,,,,Los Angeles,extreme,Awards and Records
+953,What is the name of the motel in Psycho?,,,,,Bates Motel,extreme,Classic Cinema
+954,What is the name of the police chief in Jaws?,,,,,Brody,extreme,Modern Blockbusters
+955,What is the name of the high school in Euphoria?,,,,,East Highland,extreme,TV Series
+956,What is the name of the parrot in Aladdin?,,,,,Iago,extreme,Animation
+957,What is Dr. Manhattans real name?,,,,,Jon Osterman,extreme,Superheroes
+958,Which 1969 film won Best Picture?,,,,,Midnight Cowboy,extreme,Awards and Records
+959,What is the name of the butler in The Remains of the Day?,,,,,Stevens,extreme,Classic Cinema
+960,What is the name of the town in Jumanji?,,,,,Brantford,extreme,Modern Blockbusters
+961,What is the name of the spaceship in Interstellar?,,,,,Endurance,extreme,TV Series
+962,What is the name of the teapot in Beauty and the Beast?,,,,,Mrs. Potts,extreme,Animation
+963,Who leads the Brotherhood of Mutants?,,,,,Magneto,extreme,Superheroes
+964,In what year were the Oscars first televised?,,,,,1953,extreme,Awards and Records
+965,What is the nickname of Dustin Hoffmans character in Midnight Cowboy?,,,,,Ratso,extreme,Classic Cinema
+966,What is the name of the starship in WALL-E?,,,,,Axiom,extreme,Modern Blockbusters
+967,What is the name of the club in The Sopranos?,,,,,Bada Bing,extreme,TV Series
+968,What is the name of the chimp in the 2011 Planet of the Apes film?,,,,,Caesar,extreme,Animation
+969,What is the real name of Carnages host in Venom 2?,,,,,Cletus,extreme,Superheroes
+970,In what year did Halle Berry win Best Actress?,,,,,2002,extreme,Awards and Records
+971,What is the name of Roses fiancé in Titanic?,,,,,Cal,extreme,Classic Cinema
+972,What is the name of the corporation in Blade Runner?,,,,,Tyrell,extreme,Modern Blockbusters
+973,What is the name of the sheriff in Stranger Things?,,,,,Hopper,extreme,TV Series
+974,What is the name of Aladdins monkey?,,,,,Abu,extreme,Animation
+975,What is the name of Ant-Mans daughter?,,,,,Cassie,extreme,Superheroes
+976,How many films have won the big five Oscars?,,,,,3,extreme,Awards and Records
+977,What is the name of the dog in The Artist?,,,,,Uggie,extreme,Classic Cinema
+978,What is the name of the heroine in The Fifth Element?,,,,,Leeloo,extreme,Modern Blockbusters
+979,What is the name of Tonys therapist in The Sopranos?,,,,,Melfi,extreme,TV Series
+980,What is the name of Belles father?,,,,,Maurice,extreme,Animation
+981,What is the name of Lokis biological father?,,,,,Laufey,extreme,Superheroes
+982,Which streaming service released Squid Game?,,,,,Netflix,extreme,Awards and Records
+983,What is the name of the youngest von Trapp child?,,,,,Gretl,extreme,Classic Cinema
+984,What is the name of the robot in Interstellar?,,,,,TARS,extreme,Modern Blockbusters
+985,What is the name of Lorelais inn?,,,,,Dragonfly Inn,extreme,TV Series
+986,What is the name of the parrot in Rio?,,,,,Blu,extreme,Animation
+987,What is the name of the villain in Batman Returns?,,,,,Penguin,extreme,Superheroes
+988,What is the name of the heroine in Arrival?,,,,,Louise,extreme,Modern Blockbusters
+989,What is the name of Alices cat in the 1951 animated film?,,,,,Dinah,extreme,Animation
+990,What is the name of the dragon in Pete C?,,,,,Elliott,extreme,Superheroes
+991,What is the name of Black Widows sister?,,,,,Yelena,extreme,Superheroes
+992,What was the first animated film nominated for Best Picture?,,,,,Beauty and the Beast,extreme,Awards and Records
+993,What is the name of the butler in Gone with the Wind?,,,,,Pork,extreme,Classic Cinema
+994,What is the name of the lion in The Chronicles of Narnia?,,,,,Aslan,extreme,Modern Blockbusters
+995,What is the name of the newspaper in Spider-Man?,,,,,Daily Bugle,extreme,Superheroes
+996,What is the name of the caterpillar in the 2010 Alice in Wonderland?,,,,,Absolem,extreme,Animation
+997,What is the Flashs real name?,,,,,Barry Allen,extreme,Superheroes
+998,How many Oscars did The Shape of Water win?,,,,,4,extreme,Awards and Records
+999,What is the name of the detective in The Maltese Falcon?,,,,,Sam Spade,extreme,Classic Cinema
+1000,What is the name of the robot in Forbidden Planet?,,,,,Robby,extreme,Modern Blockbusters

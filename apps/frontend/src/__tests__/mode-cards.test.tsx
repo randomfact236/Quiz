@@ -43,9 +43,14 @@ describe('ModeCards — accordion behavior', () => {
     expect(practiceHeader()).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('still renders the direct-link tiles (shuffled deck, Quiz/Riddles/Games/Jokes/Images)', () => {
+  it('renders the direct-link tiles without a Quiz card (owner request 2026-09-18)', () => {
     render(<ModeCards />);
     expect(screen.getByRole('link', { name: /Games Brain Exercise/ })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Quiz Test Your Knowledge/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Riddles Brain Teasers/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Image Riddles Visual Puzzles/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Dad Jokes Fun Time/ })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /Quiz Test Your Knowledge/ })
+    ).not.toBeInTheDocument();
   });
 });

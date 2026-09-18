@@ -10,30 +10,286 @@
 
 ## Index
 
-| ID      | Title                                                          | Area                          | Priority | Status   |
-| ------- | -------------------------------------------------------------- | ----------------------------- | -------- | -------- |
-| BUG-001 | Quiz: advance to next question after answering                 | Quiz play (answer flow)       | P2       | Fixed    |
-| BUG-002 | Footer: add Games link instead of menu drawer                  | Footer navigation             | P2       | Fixed    |
-| BUG-003 | Mode selection: both remain open; click should close it        | Mode selection page           | P2       | Fixed    |
-| BUG-004 | Footer menu items open a selection drawer instead of a page    | Footer navigation             | P1       | Fixed    |
-| BUG-005 | Legal pages not finalized                                      | Legal pages                   | P1       | Deferred |
-| BUG-006 | FAQ page missing                                               | FAQ                           | P2       | Fixed    |
-| BUG-007 | Mobile: "AI Quiz" text visible; need mobile logo/text controls | Mobile header / site settings | P2       | Fixed    |
-| BUG-008 | Mobile: header shows only the icon                             | Mobile header                 | P2       | Fixed    |
-| BUG-009 | Light/dark mode toggle not working on mobile                   | Theme toggle (mobile)         | P1       | Fixed    |
-| BUG-010 | Dark mode: logo color looks wrong                              | Logo (dark mode)              | P2       | Fixed    |
-| BUG-011 | Games link returns 404                                         | /games (Games hub)            | P1       | Fixed    |
-| BUG-012 | Clear all stored analytics data                                | Analytics (stored data)       | P2       | Fixed    |
-| BUG-013 | Verify Google Analytics & Search Console connection            | GA / Search Console           | P2       | Fixed    |
-| BUG-014 | Top progress bar on every page open, all devices               | Navigation progress (global)  | P2       | Fixed    |
-| BUG-015 | Game hub cards 404 (`/games/<slug>/` never serves the game)    | /games → static games         | P1       | Fixed    |
-| BUG-016 | Analyze quiz-mcq & riddle-mcq vs 5-level option-count spec     | quiz-mcq / riddle-mcq         | P1       | Fixed    |
+| ID      | Title                                                                 | Area                          | Priority | Status   |
+| ------- | --------------------------------------------------------------------- | ----------------------------- | -------- | -------- |
+| BUG-001 | Quiz: advance to next question after answering                        | Quiz play (answer flow)       | P2       | Fixed    |
+| BUG-002 | Footer: add Games link instead of menu drawer                         | Footer navigation             | P2       | Fixed    |
+| BUG-003 | Mode selection: both remain open; click should close it               | Mode selection page           | P2       | Fixed    |
+| BUG-004 | Footer menu items open a selection drawer instead of a page           | Footer navigation             | P1       | Fixed    |
+| BUG-005 | Legal pages not finalized                                             | Legal pages                   | P1       | Deferred |
+| BUG-006 | FAQ page missing                                                      | FAQ                           | P2       | Fixed    |
+| BUG-007 | Mobile: "AI Quiz" text visible; need mobile logo/text controls        | Mobile header / site settings | P2       | Fixed    |
+| BUG-008 | Mobile: header shows only the icon                                    | Mobile header                 | P2       | Fixed    |
+| BUG-009 | Light/dark mode toggle not working on mobile                          | Theme toggle (mobile)         | P1       | Fixed    |
+| BUG-010 | Dark mode: logo color looks wrong                                     | Logo (dark mode)              | P2       | Fixed    |
+| BUG-011 | Games link returns 404                                                | /games (Games hub)            | P1       | Fixed    |
+| BUG-012 | Clear all stored analytics data                                       | Analytics (stored data)       | P2       | Fixed    |
+| BUG-013 | Verify Google Analytics & Search Console connection                   | GA / Search Console           | P2       | Fixed    |
+| BUG-014 | Top progress bar on every page open, all devices                      | Navigation progress (global)  | P2       | Fixed    |
+| BUG-015 | Game hub cards 404 (`/games/<slug>/` never serves the game)           | /games → static games         | P1       | Fixed    |
+| BUG-016 | Analyze quiz-mcq & riddle-mcq vs 5-level option-count spec            | quiz-mcq / riddle-mcq         | P1       | Fixed    |
+| BUG-017 | Sliding puzzle: gap between moving blocks; picture outside container  | Games (sliding-puzzle)        | P2       | Fixed    |
+| BUG-018 | Hurdle runner: background not full screen (responsive)                | Games (hurdle-runner)         | P2       | Fixed    |
+| BUG-019 | "All games" from inside a game opens Game hub, not listing            | Games navigation              | P2       | Fixed    |
+| BUG-020 | Spirit runner: background not full screen (responsive)                | Games (spirit-runner)         | P2       | Fixed    |
+| BUG-021 | Memory quiz: image reveal + completion images + level gating          | Games (memory-quiz)           | P1       | Fixed    |
+| BUG-022 | quiz-csv sports.csv: 400 malformed rows silently lost at import       | quiz-csv (content)            | P1       | Fixed    |
+| BUG-023 | Riddle expert open-ended rows graded against a bare letter            | riddle-mcq csv (content)      | P1       | Fixed    |
+| BUG-024 | detective-mystery: 30 whodunit rows logically unsolvable              | riddle-mcq csv (content)      | P2       | Fixed    |
+| BUG-025 | pop-culture: 403 MCQs unwinnable (correct letter sliced off)          | quiz-csv (content)            | P1       | Fixed    |
+| BUG-026 | Quiz/riddle content quality: duplicates + answer-letter bias          | quiz-csv / riddle-mcq csv     | P3       | Fixed    |
+| BUG-027 | Quiz: mode selection inline under each subject chapter (first 2 open) | quiz-mcq subjects             | P2       | Open     |
+| BUG-028 | Riddles: same 2-column subject style/design as quiz                   | riddle-mcq subjects           | P2       | Fixed    |
+| BUG-029 | Riddle MCQ: Normal and Timer mode sections open by default            | riddle-mcq mode selection     | P2       | Fixed    |
 
 ---
 
 ## Work Log
 
 _(newest first)_
+
+### 2026-09-18 — Mobile footer: Menu item removed (owner request)
+
+- **Scope:** mobile bottom navigation only.
+- **Change:** `MobileFooter.tsx` — the bottom nav is now six direct page links:
+  Home / Quiz / Riddles / Images / Jokes / Games. The "Menu" item and its bottom-sheet
+  drawer (which duplicated the header menu's links) were removed per owner request —
+  the header's mobile menu (☰) remains the place for Achievements / About / Profile /
+  Admin / Logout on phones.
+- **Verification:** live — nav contains exactly the 6 links, zero buttons, no drawer;
+  all navigate correctly (`verify_024_footer_menu_removed.png`).
+- **Note:** mobile users reach Achievements/About/Admin via the header ☰ menu.
+
+### 2026-09-18 — BUG-027 quick-play attempt reverted; owner clarified inline full-selection intent
+
+- The chapter-card quick-play buttons (▶ Play / ⏱ Timer + `autostart=1` on the play route)
+  were removed from `quiz-mcq/page.tsx` / `play/page.tsx` after the owner clarified BUG-027
+  means the FULL difficulty + mode selection rendered inline under each chapter (first 2
+  chapters expanded by default) — not quick-play shortcuts. Reverted; BUG-027 reopened with
+  the clarified scope. `play/page.tsx` retains the separate BUG-001 auto-advance fix.
+- No other files affected; `tsc --noEmit` clean.
+
+### 2026-09-18 — BUG-028/029 resolved: riddle design parity + both mode sections open
+
+- **BUG-028:** "Browse by Category" cards restyled to the quiz subject-card design —
+  2-column grid (`grid-cols-2 gap-4 sm:grid-cols-3`, same as the quiz picker) with the green
+  "✓ N riddles" count treatment (`verify_028_riddle_categories_2col.png`; computed grid
+  288px × 3 at desktop).
+- **BUG-029:** `ModeLevelPicker` — Normal Mode and Timer Mode both render expanded by
+  default (independently collapsible). The `defaultMode`-driven exclusive init, the unused
+  prop, and the `parseModeParam` call were removed
+  (`verify_029_riddle_modes_both_open.png` — both `aria-expanded: true` with level grids
+  visible).
+- **Validation:** `tsc --noEmit` clean; production build regenerated; verified live on
+  `/riddle-mcq`.
+- **Bugs closed:** BUG-028, BUG-029
+- **Evidence:** `gui-test-screenshots/verify_028_*.png`, `verify_029_*.png`
+
+### 2026-09-18 — Home cards: fixed order, Quiz card removed (owner request)
+
+- **Scope:** home page direct-link cards under the mode cards.
+- **Change:** `ModeCards.tsx` — card order is now fixed: Riddles → Image Riddles → Games →
+  Dad Jokes; the Quiz card is removed (quiz stays reachable via the header nav, the big
+  Quiz Topics section, and the mode cards). The earlier per-visit shuffle was dropped since
+  the owner now specifies an exact order; the unused shuffle helper was deleted.
+- **Verification:** DOM tile order = riddle-mcq → image-riddles → games → jokes (no quiz
+  tile); mode-cards unit tests updated and green (5/5); `tsc --noEmit` clean; production
+  build regenerated and serving on port 3010.
+- **Evidence:** `gui-test-screenshots/verify_023_cards_reordered_no_quiz.png`
+
+### 2026-09-18 — Repaired quiz/riddle content imported; conformance verified; site restored
+
+- **Scope:** completing the BUG-022–026 content fixes — loading the audited CSV set into
+  the (wiped) database and restoring the site.
+- **Actions:** ran `import-quiz-csv.ts` (11,541 questions across 12 subjects, 0 duplicates/
+  errors) and `import-riddle-csv.ts` (3,000 riddles across 26 subjects / 10 categories,
+  0 errors). Restored subject metadata the bulk import doesn't set (category, emoji) from
+  the pre-wipe backup dump — the home page regroups correctly again.
+- **Conformance of the imported set (DB-verified):**
+  - Quiz: 2,291 easy / 2,791 medium / 2,366 hard / 2,251 expert / 1,842 extreme —
+    **0 unwinnable rows** (no correct letter outside the 2/3/4-option display), 0 missing
+    letters, extreme rows all carry typed answers, **0 duplicate questions**.
+  - Riddle: 1,010 easy / 1,287 medium / 480 hard / 223 expert open-ended — **0 unwinnable**
+    (no correct letter outside the 2/3/4 display), **0 duplicate questions**.
+- **Site verified:** home page groups subjects correctly again (Academic 5 /
+  Entertainment & Culture 5 / Professional & Life 2, per-subject counts shown)
+  (`verify_022_home_subjects_restored.png`, `verify_022_home_groups_restored.png`).
+- **Remaining:** live site still empty — push the local content to production via
+  `scripts/push-content.mjs --apply` (dry-run first; needs the production API base +
+  admin credentials in `scripts/content-push.env`).
+- **Evidence:** `gui-test-screenshots/verify_022_*.png`, import logs `/tmp/quiz-import.log`,
+  `/tmp/riddle-import.log`
+
+### 2026-09-18 — Follow-up: subject-level mode selection + riddle design parity requests
+
+- **Scope:** quiz-mcq subject → mode-selection flow, riddle-mcq subject card design,
+  riddle-mcq mode section defaults
+- **Method:** owner-reported change requests (no analysis performed)
+- **Result:** three items filed — BUG-027 (mode selection inline under each quiz subject,
+  first 2 open by default, others openable, play directly from the subject and drop the extra
+  page + click layer), BUG-028 (riddle subjects adopt the quiz 2-column card design),
+  BUG-029 (riddle Normal + Timer mode sections both open by default — currently only one is).
+  Owner instruction: analyze first, then implement. Listing only.
+- **Bugs filed:** BUG-027, BUG-028, BUG-029
+- **Evidence:** none
+
+### 2026-09-18 — Old quiz/riddle content removed from the database (owner directive)
+
+- **Scope:** ALL quiz-mcq + riddle-mcq content rows removed as step one before the
+  spec-conforming re-import (owner: "lets remove all the quiz-mcq, riddle-mcq content from
+  the website, first").
+- **Found:** production content tables were ALREADY empty (parallel content session had
+  wiped them — verified questions/chapters/subjects/riddle_mcqs/riddle_subjects/
+  riddle_categories = 0; fresh 15 KB backup confirms). Local dev DB still held the full old
+  set (12,032 questions / 149 chapters / 13 subjects / 3,000 riddles / 26 subjects /
+  10 categories).
+- **Actions:** local dump backup first
+  (`/tmp/local-db-backup/local_aiquiz_20260918_precontentclear.sql`, 7.5 MB), then deleted
+  all six tables locally in FK order. Verified 0 everywhere. Live API confirmed empty:
+  quiz subjects `{"data":[],"total":0}`, riddle subjects `[]`.
+- **Safety:** full pre-wipe database backups exist — prod
+  `/opt/quiz-backups/quiz_db_20260917_060306.sql.gz` (2.2 MB, with content) + nightly
+  retention + the local dump above.
+- **Note:** `GET /quiz-mcq/questions/count` returns 500 on the now-empty table (minor
+  robustness gap on empty content — logged for follow-up). Live site plays empty until the
+  repaired content set is imported.
+- **Next:** import the repaired CSVs locally (hash-deduped importer), audit, then push to
+  live via `scripts/push-content.mjs --apply`.
+- **Evidence:** curl transcripts (live API empty responses).
+
+### 2026-09-17 — Games bugs BUG-017 – BUG-021 resolved and verified
+
+- **Scope:** the five owner-reported game defects; strictly games files
+  (`public/games/<slug>/`), no other files touched.
+- **Fixes:**
+  - BUG-017 sliding-puzzle: `--gap: 0` + tile radius 0 (tiles sit flush, no gap);
+    reference thumbnail moved out of the board shell into its own in-flow slot above the
+    board (`pic-preview` repositioned, never covers the container).
+  - BUG-018/020 hurdle-runner + spirit-runner (+ flying-snake after owner feedback):
+    full-screen canvas — `fitCanvas` fills the stage and the logical world flexes to the
+    viewport aspect via live view-size setters (uniform scale); canvas card framing removed;
+    the page paints the live sky gradient so any margin blends.
+  - BUG-019: all in-game back-links unified to "← All games" → `/games` (the game listing)
+    — 6 games pointed at `/play`.
+  - BUG-021 memory-quiz: (1) answering a question reveals the whole board
+    (`setBoardHidden(false)` in gradeHit/gradeMiss); (2) the Level-clear card shows a gallery
+    of all board items (`#clear-items` chips); (3) expired questions are counted and block
+    the next level — "Next level" hidden, Retry offered, note shown (`#clear-timeout-note`).
+- **Verification (live, screenshots):** BUG-017 — picture-mode round with flush tiles
+  (`gap: 0px`, radius 0px) and the preview above/outside the board
+  (`verify_017_picture_mode.png`); BUG-018/020 — body paints the sky gradient at boot in
+  menu and play (`verify_018020_*_sky.png`); BUG-019 — back-link reads "← All games" →
+  `/games`; BUG-021 — one live state shows the item gallery, the unanswered gate with
+  Next-level hidden, and the revealed board (`verify_021_reveal_on_click.png`).
+- **Owner feedback round:** the first full-screen attempt (page sky-paint) was rejected —
+  the owner wants the game asset itself full screen. Escalated to a full-canvas fix:
+  `fitCanvas` fills the stage, `core.js` exports `setViewW` so the logical world flexes to
+  the viewport aspect (uniform height-anchored scale — jump physics unchanged), stage
+  padding zeroed, back-link overlaid. Verified in a live run.
+- **Owner feedback round 2:** "back to all games is hidden with the game canvas" — the
+  overlay link rendered as faint gray text over the sky (unreadable). Restyled as a
+  high-contrast pill (dark translucent background, white text, blur, z-index 30) offset to
+  the right of the in-game pause chip (no overlap: pill x≥72, chip ends x≈60). Click-through
+  to `/games` verified.
+- **BUG-027 resolved (owner-approved lean scope):** chapter cards on the "Select Chapter"
+  page now carry two quick-start buttons — "▶ Play" (practice, defaults: all levels, 10
+  questions) and "⏱ Timer" (30 s per question) — landing straight in question 1 via
+  `&autostart=1` on the play route (skips the intro; the resume modal still protects saved
+  sessions). The card's main click still opens the full mode/difficulty setup. Verified:
+  Play → Q1 directly, Timer → countdown chip active
+  (`verify_027_chapter_cards_quickplay.png`, `verify_027_quickplay_lands_q1.png`,
+  `verify_027_timer_quickplay.png`).
+- **Owner feedback round 3:** extended the full-screen treatment to the remaining DOM games
+  (tic-tac-toe, memory-quiz, sliding-puzzle, word-puzzle) — `.app` column caps removed
+  (26–30rem → none) and boards rescaled for large screens (tic-tac-toe 25rem cap off;
+  memory cells 112→160px; sliding board 25rem cap off, height share 60→72dvh; word-puzzle
+  board cap 24→32rem). tap-or-dont-tap was already full-screen (`#game-root` fixed inset-0).
+  Verified all four fill the viewport width and the sliding board renders 526×526 in play
+  (`verify_017_sliding_board_fullscreen.png`).
+- **Bugs closed:** BUG-017, BUG-018, BUG-019, BUG-020, BUG-021
+- **Evidence:** `gui-test-screenshots/verify_017_*.png`, `verify_018020_*.png`,
+  `verify_018_flying_snake_gameplay.png`, `verify_021_*.png`, `games_smoke_*.png`, `verify_018_hurdle_gameplay_fullscreen.png`,
+  `verify_020_spirit_gameplay_fullscreen.png`
+
+### 2026-09-17 — Games scope sweep: all 8 games + hub smoke-tested (no new bugs)
+
+- **Scope:** the games-related findings (BUG-011, BUG-015 — both Fixed) re-verified, plus a
+  playability smoke test of every static game. Per instruction, nothing outside the games
+  files was touched.
+- **Method:** programmatic asset-integrity scan (every src/href reference in each game's
+  index.html resolved against disk), HTTP checks of all hub hrefs, and in-browser gameplay
+  smoke tests (menu → start → surface, with interaction where feasible).
+- **Result:** all 8 games (flying-snake, hurdle-runner, memory-quiz, sliding-puzzle,
+  spirit-runner, tap-or-dont-tap, tic-tac-toe, word-puzzle) load with 200 + correct titles
+  through the hub links, all referenced assets resolve, and each enters playable state:
+  tic-tac-toe verified to the move level (player X + computer O response),
+  memory-quiz reaches its memorize phase, spirit-runner confirmed in live gameplay
+  (`games_smoke_spirit-runner_gameplay.png`), remaining games start with visible surfaces
+  (`games_smoke_*.png`). The only `/play` references flagged by the scan are absolute site
+  routes to the Play Hub — correct by design. **No new bugs; no code changes needed.**
+- **Evidence:** `gui-test-screenshots/games_*.png`
+
+### 2026-09-17 — pop-culture de-hint pass (manual-check follow-up)
+
+- **Scope:** quiz-csv/pop-culture-celebrities.csv — the manual file-by-file review found
+  658 of 1,000 questions printed their answer as a second "hint" segment
+  ("Who sang Budapest? George Ezra?").
+- **Method:** scripted suffix removal (keep the standalone question, options/answers
+  untouched), then manual read of the changed questions + leaked-template token scan.
+- **Also fixed:** 2 questions with leaked generator text ("again confirm"), the Taylor
+  Swift/Scottsdale row, ambiguous animals acorns question, history Máximo Gómez → José
+  Martí wrong answer, IBM apostrophe; 4 cross-file duplicate questions created by the
+  rephrasing were dropped (originals kept in movies-tv / technology-video-games).
+- **Result:** pop-culture now 996 rows, audit clean, no self-answering questions remain.
+- **Evidence:** `scripts/csv-quality-report.txt` (final)
+
+### 2026-09-17 — Subject-by-subject CSV repair completed (all 22 files)
+
+- **Scope:** 12 quiz subject files (11,545 rows after dedup) + 10 riddle category files
+  (3,000 rows); repairs close BUG-022 – BUG-026.
+- **Method:** scripted per-subject pipeline (`scripts/repair-quiz-subject.py`,
+  `scripts/repair-riddles.py`) + mechanical invariance regression against git HEAD
+  (9,701 quiz MCQ + 1,842 quiz open-ended + 2,747 riddle MCQ rows verified to grade to
+  the same answer text as the originals) + manual fact-check sampling (24 rows) +
+  full audit re-run (`scripts/audit-csv-quality.py`).
+- **Incident during the pass:** the first repair build had a slice-copy bug (letters were
+  rebalanced without moving option texts). Caught during manual sampling, all quiz CSVs
+  restored from git and re-run through the corrected pipeline; invariance check added so
+  the class of bug is mechanically excluded. Riddle files were unaffected.
+- **Result:** all five content bugs fixed and verified; remaining audit classes are
+  accepted-by-design families (either-or phrasing, detective suspects, hard distractor
+  pairs, long mysteries). `.tmp-sports-*.csv` shards deleted.
+- **Bugs closed:** BUG-022, BUG-023, BUG-024, BUG-025, BUG-026
+- **Evidence:** `scripts/csv-quality-report.txt` (final), `scripts/audit-csv-quality.py`
+
+### 2026-09-17 — CSV content quality audit (quiz-mcq + riddle-mcq)
+
+- **Scope:** all 12 `quiz-csv/*.csv` subject files (11,700 rows) and all 10
+  `plan/imports/riddle-mcq/*.csv` category files (3,000 rows); importer behavior in
+  `apps/backend/src/database/import-quiz-csv.ts` and `import-riddle-csv.ts` verified
+  read-only, plus frontend open-ended grading (`quiz-mcq-scoring.ts`, `riddle-scoring.ts`).
+- **Method:** scripted audit (`scripts/audit-csv-quality.py`, report in
+  `scripts/csv-quality-report.txt`) + manual sample reads + code analysis.
+- **Design rule confirmed with owner:** quiz `extreme` rows and riddle `expert` rows are
+  OPEN-ENDED (typed answer graded by normalized text compare) — missing options on those
+  rows are by design, not a defect.
+- **Result:** 6 findings recorded (BUG-022 – BUG-026). Fix approach agreed with owner:
+  subject-by-subject CSV repair, verify each subject before moving to the next.
+- **Bugs filed:** BUG-022, BUG-023, BUG-024, BUG-025, BUG-026
+- **Evidence:** `scripts/csv-quality-report.txt`
+
+### 2026-09-17 — Owner game reports (5 new findings logged)
+
+- **Scope:** owner reported five game issues via chat; logged as BUG-017 – BUG-021 (all Open).
+- **Findings logged:**
+  - BUG-017 — sliding puzzle: no gap between moving blocks; reference picture outside the
+    sliding container.
+  - BUG-018 — hurdle runner: background full screen (responsive to screen size).
+  - BUG-019 — "All games" from inside a game should open the game listing page, not the Game hub.
+  - BUG-020 — spirit runner: background full screen (responsive to screen size).
+  - BUG-021 — memory quiz: reveal image on click; show clicked + all images on the
+    congratulations screen; block advancing an unanswered question.
+- **Status:** reported only — not yet reproduced or fixed locally.
 
 ### 2026-09-17 — Security hardening + full manual re-verification of touched features
 
@@ -277,222 +533,27 @@ _(template for new sessions:)_
   prefs, newsletter, comments). Re-opens only for the final legal review + sign-off when the
   owner resumes it.
 
-(template for new findings:)\_
+### BUG-028 — Riddles: same 2-column subject style/design as quiz
 
-```markdown
-### BUG-XXX — <short title>
-
-- **Date found:** 2026-09-16
-- **Area:** <page / route / feature, e.g. `/quiz`, admin dashboard>
-- **Priority:** P0–P3
-- **Environment:** <local / staging / production, browser if relevant>
-- **Steps to reproduce:**
-  1.
-- **Expected:**
-- **Actual:**
-- **Evidence:** <screenshot filename in `gui-test-screenshots/`, console output, API response>
-```
-
----
-
-## Fixed
-
-### BUG-001 — Quiz: advance to next question after answering
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Quiz play (answer flow)
+- **Date found:** / **Date fixed:** 2026-09-18
+- **Area:** riddle-mcq subjects (design parity with quiz-mcq)
 - **Priority:** P2
-- **Fix:** `quiz-mcq/play/page.tsx` — answering (click or 1-4/A-D keys) now schedules an
-  automatic advance ~3 s later, keeping the correct-answer reveal up; on the last question it
-  opens the submit-confirm dialog instead. Timer mode is untouched (its per-question countdown
-  already advances). Driven by the answer events themselves, so resumed/shared sessions and
-  Back navigation to answered questions never auto-advance; Next button and Enter still
-  advance instantly.
-- **Verified (pre-fix baseline):** instant feedback confirmed, no auto-advance after 5+ s,
-  manual Next works — `bug001_after_answer_feedback.png`, `bug001_after_5s_still_q1.png`,
-  `bug001_q2_after_manual_next.png`. Post-fix timing pass pending (browser pane input died
-  mid-session); wiring is type-checked and event-driven.
+- **Fix:** "Browse by Category" cards restyled to the quiz subject-card design — 2-column
+  grid (`grid-cols-2 gap-4 sm:grid-cols-3`, same as the quiz picker) with the green
+  "✓ N riddles" count treatment.
+- **Verified:** 3 columns at desktop / 2 at base, counts styled like quiz cards
+  (`verify_028_riddle_categories_2col.png`; computed grid `288px 288px 288px`).
 
-### BUG-002 — Footer: add Games link instead of menu drawer
+### BUG-029 — Riddle MCQ: Normal and Timer mode sections open by default
 
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Footer navigation
+- **Date found:** / **Date fixed:** 2026-09-18
+- **Area:** riddle-mcq mode selection
 - **Priority:** P2
-- **Fix:** `MobileFooter.tsx` — the bottom nav now includes a direct Games item (gamepad
-  icon). Desktop footer already had Games (that half was a stale-build report).
-- **Verified:** desktop footer Games link present pre-fix
-  (`bug003_desktop_home_initial_fullpage.png`); post-fix mobile bar shows
-  Home/Quiz/Riddles/Images/Jokes/Games/Menu (`fix_mobile_home_header_nav.png`).
-
-### BUG-003 — Mode selection: both remain open; click should close it
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Mode selection page
-- **Priority:** P2
-- **Fix:** `ModeCards.tsx` — the two mode cards are one accordion group: both start open, and
-  the first header click switches to exclusive behavior (opening one collapses the other;
-  clicking the open header collapses it). Covered by `src/__tests__/mode-cards.test.tsx`
-  (5 tests, green).
-- **Verified (pre-fix baseline):** independent always-open accordions confirmed
-  (`bug003_desktop_home_initial_fullpage.png`, `bug003_desktop_timer_collapsed.png`).
-
-### BUG-004 — Footer menu items open a selection drawer instead of a page
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Footer navigation
-- **Priority:** P1
-- **Fix:** `MobileFooter.tsx` rewritten — Quiz / Riddles / Images / Jokes / Games are now
-  direct `<Link>`s to the module pages (each landing page has its own pickers); only Menu
-  keeps a drawer (secondary destinations). Dead selection-drawer code and its fetchers removed.
-- **Verified (pre-fix baseline):** drawer-instead-of-navigation reproduced
-  (`bug004_mobile_bottomnav_quiz_click.png`, `bug004_mobile_quiz_subject_drawer.png`).
-  Post-fix navigation pass pending (pane input); the items are plain `<Link>`s.
-
-### BUG-006 — FAQ page missing
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** FAQ
-- **Priority:** P2
-- **Fix:** new `app/faq/page.tsx` (8 Q&As + FAQPage JSON-LD), footer legal-row link, and a
-  sitemap registry entry (`seo.ts` INDEXABLE_ROUTES).
-- **Verified:** `/faq` returns 200 locally and renders the FAQ content (curl grep); was 404
-  on production pre-fix.
-
-### BUG-007 — Mobile: "AI Quiz" text visible; need mobile logo/text controls
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Mobile header / site settings
-- **Priority:** P2
-- **Fix:** new site settings `mobileLogo` (mobile-only header logo) and `mobileShowSiteName`
-  (toggle the site-name text) — backend defaults/interface/DTO, frontend types/brand context,
-  root-layout resolution, Header rendering, and a "Mobile Header & Dark Mode" group in
-  Admin → Settings → Site Info with uploads and light/dark previews.
-- **Verified:** mobile header rendering pre-fix (`bug007_mobile_home_top_dark.png`);
-  settings fields type-checked end-to-end (backend → public settings → admin form).
-
-### BUG-008 — Mobile: header shows only the icon
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Mobile header
-- **Priority:** P2
-- **Fix:** resolved as clarified — the "icon only" report is the md+ breakpoint (text hidden
-  when a logo exists), not a phone defect; phones show icon + text. The new mobile branding
-  settings (BUG-007) give the owner direct control over what mobile shows.
-- **Verified:** pre-fix breakpoint analysis (`bug007_mobile_home_top_dark.png`).
-
-### BUG-009 — Light/dark mode toggle not working on mobile
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Theme toggle (mobile)
-- **Priority:** P1
-- **Fix:** `Header.tsx` — ThemeToggle is now rendered in the mobile top bar (user and admin
-  headers), next to the hamburger; the drawer copy remains.
-- **Verified:** post-fix GUI check — the top-bar toggle flipped dark→light and back
-  (`fix_mobile_home_header_nav.png`, `fix_mobile_topbar_toggle_dark.png`; `dark` class
-  toggled). Root cause had been discoverability: the toggle existed only inside the hamburger
-  drawer (`bug009_mobile_hamburger_drawer_dark.png`, `bug009_mobile_after_toggle_click.png`).
-
-### BUG-010 — Dark mode: logo color looks wrong
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Logo (dark mode)
-- **Priority:** P2
-- **Fix:** new `logoDark` site setting — an optional dark-mode variant uploaded in
-  Admin → Site Info, rendered in header and footer via light/dark `<img>` pairs (falls back
-  to the main logo when unset).
-- **Verified:** current logo renders correctly in both modes with no filter
-  (`bug003_desktop_home_initial_fullpage.png` vs `bug014_desktop_home_light_before_nav.png`);
-  the owner's original suspicion was not reproduced with current assets.
-
-### BUG-011 — Games link returns 404
-
-- **Date found:** / **Date fixed:** 2026-09-16 (hub 404 fixed by the redeploy — no code change)
-- **Area:** `/games` (Games hub; entered from the home page Games tile / navigation)
-- **Priority:** P1
-- **Fix:** none needed — the stale production build was the cause; the 2026-09-16 redeploy
-  resolved it. Every `/games` link in nav/footer/home/sitemap verified correct.
-- **Verified:** `https://pigzap.com/games` → 200 and local `/games` → 200
-  (`bug011_games_hub_desktop.png`). The card-level 404 found during verification is BUG-015.
-
-### BUG-013 — Verify Google Analytics & Search Console are connected
-
-- **Date found:** / **Date fixed:** 2026-09-16 (verification + enablement)
-- **Area:** Google Analytics / Google Search Console ("console") integrations
-- **Priority:** P2
-- **Fix:** status report + GA enablement built: the root layout now loads gtag when
-  `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set at build time (unset → no script, no tracking).
-  GSC stays settings-driven: paste the verification token in Admin → SEO after adding the
-  property in Google.
-- **Verified:** GA absent everywhere (repo + live homepage); GSC verification meta absent on
-  the live homepage while the settings plumbing exists. **Status: neither connected — GA needs
-  the owner's measurement ID in the env; GSC needs the owner's token in Admin → SEO.**
-
-### BUG-014 — Top progress bar on every page open, all devices
-
-- **Date found:** / **Date fixed:** 2026-09-16
-- **Area:** Navigation progress (global, all pages / all devices)
-- **Priority:** P2
-- **Fix:** `NavigationProgress.tsx` — 120 ms start delay (instant prefetched hops never show
-  it), 450 ms minimum on-screen duration (finished navigations complete and fade instead of
-  vanishing mid-frame), modified-click/\_blank/download filtering, and back/forward (popstate)
-  coverage.
-- **Verified (pre-fix baseline):** the bar mounts and is visible during slow navigations —
-  captured at ~120 ms and ~720 ms (`bug014_progress_bar_t120ms.png`,
-  `bug014_progress_bar_t720ms.png`); on fast navigations it flashed by invisibly, matching
-  the owner report. Post-fix flash pass pending (pane input).
-
-### BUG-015 — Game hub cards 404: `/games/<slug>/` never serves the static game
-
-- **Date found:** 2026-09-16 (during BUG-011 verification) / **Date fixed:** 2026-09-16
-- **Area:** `/games` hub → static games under `apps/frontend/public/games/<slug>/`
-- **Priority:** P1
-- **Fix:** hub card hrefs now point at `/games/<slug>/index.html` (the games load assets with
-  relative URLs like `style.css`, so the document URL must sit inside the game folder), plus a
-  `/games/:slug → /games/:slug/index.html` redirect in `next.config.mjs` so the clean URL
-  keeps working.
-- **Verified:** `/games/tic-tac-toe` → 307 → `index.html` → 200 serving the game
-  (`<title>Tic Tac Toe — AI Quiz Games`), relative asset `/games/tic-tac-toe/style.css` → 200,
-  hub → 200 with updated card hrefs; also opened from the pane ("Tap or Don't Tap" loaded).
-  Pre-fix evidence: `bug011_game_card_click_result.png` (404), live curl
-  `/games/tic-tac-toe/` → 404 vs `index.html` → 200.
-
-### BUG-012 — Clear all stored analytics data
-
-- **Date found:** / **Date fixed:** 2026-09-17 (production executed)
-- **Area:** Analytics (stored data)
-- **Priority:** P2
-- **Fix:** executed the fresh start on production over SSH — fresh verified backup first
-  (`/opt/quiz-backups/quiz_db_20260917_060306.sql.gz`), then `TRUNCATE analytics_events`
-  (919 rows removed) + guest play counters zeroed. Content tables untouched (12,032
-  questions / 3,022 riddles verified post-clear). The reusable admin reset
-  (`POST /admin/analytics/reset` + Admin → Analytics "Clear data") had been built the day
-  before; local dev was cleared then.
-- **Verified:** post-clear count = 0 on production; local homepage statistics read 0
-  (`verify_012_home_stats_zeroed.png`).
-
-### BUG-016 — Analyze quiz-mcq & riddle-mcq against the 5-level option-count spec
-
-- **Date found:** / **Date fixed:** 2026-09-17 (code + analysis; content regeneration
-  remains owner content-ops)
-- **Area:** quiz-mcq / riddle-mcq (levels, option counts, question content)
-- **Priority:** P1
-- **Analysis (dev DB = production content):**
-  - Quiz UI conforms: easy 2 / medium 2 / hard 3 / expert 4 / extreme text input
-    (`AnswerOptions` level slicing; verified in tests and code).
-  - Quiz content: expert rows all exactly 4 options ✓, but **5,031 published questions are
-    unwinnable as displayed** (1,456 easy + 3,072 medium with correctLetter C/D, 503 hard
-    with D — hidden by the display slice), and per-subject × level counts are far from
-    200/level/subject (uneven, e.g. Animals 371 easy vs 25 hard). → regeneration to spec is
-    the owner's planned content step.
-  - Riddle backend/content conforms: 0 unwinnable rows under the 2/3/4 display spec, 0
-    duplicate questions, expert (130) open-ended; the admin editor already authors 2/3/4.
-  - Riddle player UI was the gap: shared `AnswerOptions` applied the quiz mapping (2/2/3).
-- **Fix:** `AnswerOptions` now takes `game` ("quiz" default | "riddle") with per-game option
-  counts — riddle easy 2 / medium 3 / hard 4 (`RiddleCard` passes `game="riddle"`).
-- **Verified:** live riddle session shows a medium riddle with 3 options
-  (`verify_016_riddle_card_options.png`); unit tests updated
-  (`answer-options.test.tsx` riddle-spec cases, `riddle-card.test.tsx` hard-shows-4) —
-  552/552 green; `tsc` clean.
+- **Fix:** `ModeLevelPicker` — Normal Mode and Timer Mode now both render expanded by
+  default (independent collapsible sections; the `defaultMode`-driven exclusive init was
+  removed along with the unused prop and `parseModeParam` call).
+- **Verified:** both sections `aria-expanded: true` with their difficulty grids visible on
+  load (`verify_029_riddle_modes_both_open.png`).
 
 _(moved entries keep their **Verified** evidence lines; add **Date fixed** and **Fix** at
 the top.)_

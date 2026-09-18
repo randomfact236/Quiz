@@ -1,6 +1,7 @@
 # Subject: Animals
 
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+
 1,A dog is a mammal.,True,False,,,A,easy,Animal Basics
 2,A giraffe has a very short neck.,True,False,,,B,easy,Mammals
 3,A penguin is a bird.,True,False,,,A,easy,Birds
@@ -44,760 +45,747 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 41,A dolphin is a mammal.,True,False,,,A,easy,Sea Life
 42,A butterfly stays a caterpillar its whole life.,True,False,,,B,easy,Insects and Records
 43,Polar bears live in cold places.,True,False,,,A,easy,Mammals
-44,All birds can fly.,True,False,,,B,easy,Birds
-45,A tadpole lives in water.,True,False,,,A,easy,Reptiles and Amphibians
-46,Seahorses live in trees.,True,False,,,B,easy,Sea Life
-47,Ants live in big groups called colonies.,True,False,,,A,easy,Insects and Records
-48,All mammals can fly.,True,False,,,B,easy,Animal Basics
-49,A hummingbird is a very small bird.,True,False,,,A,easy,Birds
-50,A tortoise is as fast as a race car.,True,False,,,B,easy,Reptiles and Amphibians
-51,A clam has a shell.,True,False,,,A,easy,Sea Life
-52,A caterpillar can fly.,True,False,,,B,easy,Insects and Records
-53,A caterpillar changes into a butterfly.,True,False,,,A,easy,Animal Basics
-54,Gorillas eat meat every day.,True,False,,,B,easy,Mammals
-55,Frogs catch insects with their long tongues.,True,False,,,A,easy,Reptiles and Amphibians
-56,Dolphins are covered in feathers.,True,False,,,B,easy,Sea Life
-57,A dragonfly has four wings.,True,False,,,A,easy,Insects and Records
-58,Fish breathe using lungs.,True,False,,,B,easy,Animal Basics
-59,Bats sleep during the day and come out at night.,True,False,,,A,easy,Mammals
-60,A swan is a reptile.,True,False,,,B,easy,Birds
-61,An octopus can squirt ink.,True,False,,,A,easy,Sea Life
-62,A snail is one of the fastest animals on Earth.,True,False,,,B,easy,Insects and Records
-63,A herbivore eats plants.,True,False,,,A,easy,Animal Basics
-64,A zebra has spots.,True,False,,,B,easy,Mammals
-65,Owls can turn their heads almost all the way around.,True,False,,,A,easy,Birds
-66,Turtles have no shells.,True,False,,,B,easy,Reptiles and Amphibians
-67,A cricket makes chirping sounds.,True,False,,,A,easy,Insects and Records
-68,A penguin is a mammal.,True,False,,,B,easy,Animal Basics
-69,A baby cow is called a calf.,True,False,,,A,easy,Mammals
-70,Chickens give birth to live babies.,True,False,,,B,easy,Birds
-71,A salamander has a long tail and soft skin.,True,False,,,A,easy,Reptiles and Amphibians
-72,A whale is the smallest animal in the sea.,True,False,,,B,easy,Sea Life
-73,Mammals have hair or fur.,True,False,,,A,easy,Animal Basics
-74,Whales live in trees.,True,False,,,B,easy,Mammals
-75,A peacock is a colorful bird.,True,False,,,A,easy,Birds
-76,Crocodiles eat only fruit.,True,False,,,B,easy,Reptiles and Amphibians
-77,Coral reefs are built by tiny sea animals.,True,False,,,A,easy,Sea Life
-78,A centipede has exactly two legs.,True,False,,,B,easy,Insects and Records
-79,A rhinoceros has a horn on its nose.,True,False,,,A,easy,Mammals
-80,The ostrich is the smallest bird in the world.,True,False,,,B,easy,Birds
-81,An alligator is a large reptile.,True,False,,,A,easy,Reptiles and Amphibians
-82,Fish have fur.,True,False,,,B,easy,Sea Life
-83,A snail carries its shell on its back.,True,False,,,A,easy,Insects and Records
-84,A dolphin lays eggs.,True,False,,,B,easy,Animal Basics
-85,Most birds build nests.,True,False,,,A,easy,Birds
-86,The komodo dragon can breathe fire.,True,False,,,B,easy,Reptiles and Amphibians
-87,A sea star usually has five arms.,True,False,,,A,easy,Sea Life
-88,Spiders eat only lettuce.,True,False,,,B,easy,Insects and Records
-89,A puppy is a young dog.,True,False,,,A,easy,Animal Basics
-90,A horse walks slower than a snail.,True,False,,,B,easy,Mammals
-91,A gecko can climb up walls.,True,False,,,A,easy,Reptiles and Amphibians
-92,Sharks have no teeth.,True,False,,,B,easy,Sea Life
-93,Ants can carry things much heavier than themselves.,True,False,,,A,easy,Insects and Records
-94,A shark is a mammal.,True,False,,,B,easy,Animal Basics
-95,Squirrels like to eat nuts.,True,False,,,A,easy,Mammals
-96,A hummingbird is bigger than an eagle.,True,False,,,B,easy,Birds
-97,A seahorse is a fish.,True,False,,,A,easy,Sea Life
-98,An ant is bigger than an elephant.,True,False,,,B,easy,Insects and Records
-99,Animals need water to live.,True,False,,,A,easy,Animal Basics
-100,A mouse is bigger than an elephant.,True,False,,,B,easy,Mammals
-101,A woodpecker pecks holes in trees.,True,False,,,A,easy,Birds
-102,Snakes are covered in hair.,True,False,,,B,easy,Reptiles and Amphibians
-103,A firefly can light up at night.,True,False,,,A,easy,Insects and Records
-104,A lion is a type of reptile.,True,False,,,B,easy,Animal Basics
-105,A panda eats bamboo.,True,False,,,A,easy,Mammals
-106,Flamingos are black birds.,True,False,,,B,easy,Birds
-107,A lizard can drop its tail to escape danger.,True,False,,,A,easy,Reptiles and Amphibians
-108,A crab is a mammal.,True,False,,,B,easy,Sea Life
-109,A young frog is called a tadpole.,True,False,,,A,easy,Animal Basics
-110,Cows are meat eaters.,True,False,,,B,easy,Mammals
-111,A goose is bigger than a duck.,True,False,,,A,easy,Birds
-112,A python is a tiny snake.,True,False,,,B,easy,Reptiles and Amphibians
-113,Whales sing long songs.,True,False,,,A,easy,Sea Life
-114,A queen bee does all the work in the hive.,True,False,,,B,easy,Insects and Records
-115,A donkey has long ears.,True,False,,,A,easy,Mammals
-116,An ostrich is smaller than a sparrow.,True,False,,,B,easy,Birds
-117,A tortoise lives on land.,True,False,,,A,easy,Reptiles and Amphibians
-118,Jellyfish can fly in the sky.,True,False,,,B,easy,Sea Life
-119,Butterflies drink nectar from flowers.,True,False,,,A,easy,Insects and Records
-120,All insects have one hundred legs.,True,False,,,B,easy,Animal Basics
-121,An eagle is a bird of prey.,True,False,,,A,easy,Birds
-122,Crocodiles have no teeth.,True,False,,,B,easy,Reptiles and Amphibians
-123,A walrus has long tusks.,True,False,,,A,easy,Sea Life
-124,All insects can swim.,True,False,,,B,easy,Insects and Records
-125,An animal that eats meat is called a carnivore.,True,False,,,A,easy,Animal Basics
-126,Bats lay eggs.,True,False,,,B,easy,Mammals
-127,A rattlesnake has a rattle on its tail.,True,False,,,A,easy,Reptiles and Amphibians
-128,Sea otters hate water.,True,False,,,B,easy,Sea Life
-129,A grasshopper has big back legs for jumping.,True,False,,,A,easy,Insects and Records
-130,Birds have teeth.,True,False,,,B,easy,Animal Basics
-131,A beaver builds dams.,True,False,,,A,easy,Mammals
-132,The kiwi can fly across oceans.,True,False,,,B,easy,Birds
-133,A puffer fish can puff up its body.,True,False,,,A,easy,Sea Life
-134,Bees can say words like people.,True,False,,,B,easy,Insects and Records
-135,Mammal babies drink milk from their mothers.,True,False,,,A,easy,Animal Basics
-136,A sloth moves very quickly.,True,False,,,B,easy,Mammals
-137,A canary is a songbird kept as a pet.,True,False,,,A,easy,Birds
-138,Tadpoles have wings.,True,False,,,B,easy,Reptiles and Amphibians
-139,A scorpion has a stinger on its tail.,True,False,,,A,easy,Insects and Records
-140,A bat has feathers.,True,False,,,B,easy,Animal Basics
-141,A deer eats plants.,True,False,,,A,easy,Mammals
-142,Pelicans live only in deserts.,True,False,,,B,easy,Birds
-143,Frogs have long back legs for jumping.,True,False,,,A,easy,Reptiles and Amphibians
-144,A lobster is a soft squishy animal.,True,False,,,B,easy,Sea Life
-145,Some animals only come out at night.,True,False,,,A,easy,Animal Basics
-146,A koala is a kind of bear.,True,False,,,B,easy,Mammals
-147,A vulture eats animals that are already dead.,True,False,,,A,easy,Birds
-148,A toad can only live underwater.,True,False,,,B,easy,Reptiles and Amphibians
-149,A lobster has big claws.,True,False,,,A,easy,Sea Life
-150,Butterflies sleep all day and fly only at night.,True,False,,,B,easy,Insects and Records
-151,A wolf is a wild relative of the dog.,True,False,,,A,easy,Mammals
-152,An albatross has very short wings.,True,False,,,B,easy,Birds
-153,A snake smells with its tongue.,True,False,,,A,easy,Reptiles and Amphibians
-154,Eels have legs.,True,False,,,B,easy,Sea Life
-155,A stick insect looks like a twig.,True,False,,,A,easy,Insects and Records
-156,A tiger is a small cat.,True,False,,,B,easy,Animal Basics
-157,A swan glides on lakes and rivers.,True,False,,,A,easy,Birds
-158,Snakes can fly like birds.,True,False,,,B,easy,Reptiles and Amphibians
-159,A manatee swims slowly and eats plants.,True,False,,,A,easy,Sea Life
-160,A spider has wings.,True,False,,,B,easy,Insects and Records
-161,A vet is an animal doctor.,True,False,,,A,easy,Animal Basics
-162,An elephant has a tiny trunk.,True,False,,,B,easy,Mammals
-163,A crocodile lays eggs.,True,False,,,A,easy,Reptiles and Amphibians
-164,Sharks can live on land.,True,False,,,B,easy,Sea Life
-165,A beetle can glow in the dark.,True,False,,,A,easy,Insects and Records
-166,All animals have four legs.,True,False,,,B,easy,Animal Basics
-167,A fox has a bushy tail.,True,False,,,A,easy,Mammals
-168,A crow is bigger than an eagle.,True,False,,,B,easy,Birds
-169,A squid has eight arms and two long tentacles.,True,False,,,A,easy,Sea Life
-170,The elephant is the biggest animal that has ever lived.,True,False,,,B,easy,Insects and Records
-171,Eggs have a shell that protects the baby inside.,True,False,,,A,easy,Animal Basics
-172,Sheep can fly.,True,False,,,B,easy,Mammals
-173,The ostrich is the fastest running bird.,True,False,,,A,easy,Birds
-174,Alligators live in the snowy Arctic.,True,False,,,B,easy,Reptiles and Amphibians
-175,A wasp can sting.,True,False,,,A,easy,Insects and Records
-176,A goldfish is a mammal.,True,False,,,B,easy,Animal Basics
-177,A baby sheep is called a lamb.,True,False,,,A,easy,Mammals
-178,Penguins can fly high in the sky.,True,False,,,B,easy,Birds
-179,A gecko is a small lizard.,True,False,,,A,easy,Reptiles and Amphibians
-180,The blue whale eats sharks.,True,False,,,B,easy,Sea Life
-181,Cows and sheep eat grass.,True,False,,,A,easy,Animal Basics
-182,A goat is a sea animal.,True,False,,,B,easy,Mammals
-183,A robin has a red chest.,True,False,,,A,easy,Birds
-184,A mamba is a slow crawling worm.,True,False,,,B,easy,Reptiles and Amphibians
-185,Sea turtles lay their eggs on sandy beaches.,True,False,,,A,easy,Sea Life
-186,The tallest animal in the world is the horse.,True,False,,,B,easy,Insects and Records
-187,Otters love to swim.,True,False,,,A,easy,Mammals
-188,Ostriches hide by burying their heads in the sand.,True,False,,,B,easy,Birds
-189,Some turtles hide inside their shells.,True,False,,,A,easy,Reptiles and Amphibians
-190,Whales have scales.,True,False,,,B,easy,Sea Life
-191,The cheetah is the fastest land animal.,True,False,,,A,easy,Insects and Records
-192,A kangaroo is a fish.,True,False,,,B,easy,Animal Basics
-193,Ducks have webbed feet for swimming.,True,False,,,A,easy,Birds
-194,A crocodile feeds its babies milk.,True,False,,,B,easy,Reptiles and Amphibians
-195,A hermit crab moves into empty shells to live.,True,False,,,A,easy,Sea Life
-196,Insects have ten legs.,True,False,,,B,easy,Insects and Records
-197,Animals are living things.,True,False,,,A,easy,Animal Basics
-198,A hamster is larger than a horse.,True,False,,,B,easy,Mammals
-199,Frogs breathe through their skin as well as their lungs.,True,False,,,A,easy,Reptiles and Amphibians
-200,Fish sleep in beds with pillows.,True,False,,,B,easy,Sea Life
-201,Which group do frogs belong to: amphibians or reptiles?,Amphibians,Reptiles,,,A,medium,Animal Basics
-202,Which animal has a trunk: an elephant or a zebra?,Zebra,Elephant,,,B,medium,Mammals
-203,Which bird lays the largest egg: an ostrich or a sparrow?,Ostrich,Sparrow,,,A,medium,Birds
-204,Which animal slithers: a snake or a salamander?,Salamander,Snake,,,B,medium,Reptiles and Amphibians
-205,Which sea animal has eight arms: an octopus or a seal?,Octopus,Seal,,,A,medium,Sea Life
-206,Which creature spins a web: a spider or a snail?,Snail,Spider,,,B,medium,Insects and Records
-207,Which mammal can truly fly: a bat or a flying squirrel?,Bat,Flying squirrel,,,A,medium,Mammals
-208,Which bird cannot fly: a penguin or an eagle?,Eagle,Penguin,,,B,medium,Birds
-209,Which animal flicks its tongue to smell: a snake or a skunk?,Snake,Skunk,,,A,medium,Reptiles and Amphibians
-210,Which animal is a mammal: a dolphin or a shark?,Shark,Dolphin,,,B,medium,Sea Life
-211,Which insect lives in a hive: a honeybee or a fox?,Honeybee,Fox,,,A,medium,Insects and Records
-212,Which animal is a fish: a tuna or a turtle?,Turtle,Tuna,,,B,medium,Animal Basics
-213,Which bird is awake at night: an owl or a robin?,Owl,Robin,,,A,medium,Birds
-214,Which lizard changes color: a chameleon or a crocodile?,Crocodile,Chameleon,,,B,medium,Reptiles and Amphibians
-215,Which fish has a skeleton made of cartilage: a shark or a salmon?,Shark,Salmon,,,A,medium,Sea Life
-216,Which insect makes a chrysalis: a caterpillar or a kitten?,Kitten,Caterpillar,,,B,medium,Insects and Records
-217,Which baby animal hatches from an egg: a chick or a puppy?,Chick,Puppy,,,A,medium,Animal Basics
-218,Which big cat is the fastest: a cheetah or a lion?,Lion,Cheetah,,,B,medium,Mammals
-219,Which animal carries its home on its back: a turtle or a toad?,Turtle,Toad,,,A,medium,Reptiles and Amphibians
-220,Which animal walks sideways on the beach: a crab or a cow?,Cow,Crab,,,B,medium,Sea Life
-221,Which insect works for a queen: an ant or an alligator?,Ant,Alligator,,,A,medium,Insects and Records
-222,Which animal is an insect: a bee or a boa?,Boa,Bee,,,B,medium,Animal Basics
-223,Which animal carries its young in a pouch: a kangaroo or a deer?,Kangaroo,Deer,,,A,medium,Mammals
-224,Which bird copies human speech: a parrot or a penguin?,Penguin,Parrot,,,B,medium,Birds
-225,Which animal squirts ink to escape: a squid or a seagull?,Squid,Seagull,,,A,medium,Sea Life
-226,Which insect flashes light at night: a firefly or a ferret?,Ferret,Firefly,,,B,medium,Insects and Records
-227,Which animal breathes with gills: a goldfish or a gorilla?,Goldfish,Gorilla,,,A,medium,Animal Basics
-228,Which animal is the tallest: a giraffe or a rhinoceros?,Rhinoceros,Giraffe,,,B,medium,Mammals
-229,Which farm bird lays eggs: a hen or a goat?,Hen,Goat,,,A,medium,Birds
-230,Which reptile has a long snout and lives in rivers: a crocodile or a cassowary?,Cassowary,Crocodile,,,B,medium,Reptiles and Amphibians
-231,Which insect has stripes and a stinger: a bee or a butterfly?,Bee,Butterfly,,,A,medium,Insects and Records
-232,Which animal is a reptile: a cobra or a crow?,Crow,Cobra,,,B,medium,Animal Basics
-233,Which animal catches mice: a cat or a goldfish?,Cat,Goldfish,,,A,medium,Mammals
-234,Which animal is covered in feathers: an eagle or a dolphin?,Dolphin,Eagle,,,B,medium,Birds
-235,Which animal can regrow its tail: a lizard or a lamb?,Lizard,Lamb,,,A,medium,Reptiles and Amphibians
-236,Which giant animal breathes air and nurses babies: a whale or a tuna?,Tuna,Whale,,,B,medium,Sea Life
-237,Which animal drinks milk from its mother: a kitten or a chick?,Kitten,Chick,,,A,medium,Animal Basics
-238,Which big cat has stripes: a tiger or a cougar?,Cougar,Tiger,,,B,medium,Mammals
-239,Which bird has webbed feet: a duck or a dodo?,Duck,Dodo,,,A,medium,Birds
-240,Which animal is an amphibian: a frog or a finch?,Finch,Frog,,,B,medium,Reptiles and Amphibians
-241,Which fish looks like a tiny horse: a seahorse or a swordfish?,Seahorse,Swordfish,,,A,medium,Sea Life
-242,Which insect has a red shell with black spots: a ladybug or a locust?,Locust,Ladybug,,,B,medium,Insects and Records
-243,Which animal builds dams in rivers: a beaver or a rabbit?,Rabbit,Beaver,,,A,medium,Mammals
-244,Which bird waddles and swims: a penguin or a flamingo?,Flamingo,Penguin,,,B,medium,Birds
-245,Which animal has webbed feet and croaks: a toad or a tapir?,Toad,Tapir,,,A,medium,Reptiles and Amphibians
-246,Which animal has a hard shell and big claws: a lobster or a lark?,Lark,Lobster,,,B,medium,Sea Life
-247,Which arachnid has eight legs: a spider or a beetle?,Spider,Beetle,,,A,medium,Insects and Records
-248,Which animal is covered in scales: a lizard or a llama?,Llama,Lizard,,,B,medium,Animal Basics
-249,Which bird hunts mice in barns at night: an owl or a dove?,Owl,Dove,,,A,medium,Birds
-250,Which snake spreads a hood when threatened: a cobra or a copperhead?,Copperhead,Cobra,,,B,medium,Reptiles and Amphibians
-251,Which huge animal filter feeds on tiny krill: a blue whale or a barracuda?,Blue whale,Barracuda,,,A,medium,Sea Life
-252,Which insect sings by rubbing its wings: a cricket or a catfish?,Catfish,Cricket,,,B,medium,Insects and Records
-253,Which animal has feathers: a sparrow or a snake?,Sparrow,Snake,,,A,medium,Animal Basics
-254,Which farm animal gives us wool: a sheep or a chicken?,Chicken,Sheep,,,B,medium,Mammals
-255,Which animal has a rattle on its tail: a rattlesnake or a raccoon?,Rattlesnake,Raccoon,,,A,medium,Reptiles and Amphibians
-256,Which animal has a soft body and stinging tentacles: a jellyfish or a mackerel?,Mackerel,Jellyfish,,,B,medium,Sea Life
-257,Which insect looks like a stick: a stick insect or a stag beetle?,Stick insect,Stag beetle,,,A,medium,Insects and Records
-258,Which animal lives in a nest: a pigeon or a panther?,Panther,Pigeon,,,B,medium,Animal Basics
-259,Which animal has a mane around its neck: a lion or a leopard?,Leopard,Lion,,,A,medium,Mammals
-260,Which bird opens its tail like a fan: a peacock or a pigeon?,Pigeon,Peacock,,,B,medium,Birds
-261,Which fish swims upstream to spawn: a salmon or a sardine?,Salmon,Sardine,,,A,medium,Sea Life
-262,Which butterfly migrates to Mexico: a monarch butterfly or a mayfly?,Mayfly,Monarch butterfly,,,B,medium,Insects and Records
-263,Which animal is an amphibian: a newt or a nightingale?,Newt,Nightingale,,,A,medium,Animal Basics
-264,Which animal hibernates through winter: a gray wolf or a brown bear?,Gray wolf,Brown bear,,,B,medium,Mammals
-265,Which bird has a red breast: a robin or a raven?,Robin,Raven,,,A,medium,Birds
-266,Which animal is the largest lizard: a komodo dragon or a gecko?,Gecko,Komodo dragon,,,B,medium,Reptiles and Amphibians
-267,Which arachnid glows under UV light: a scorpion or a spider?,Scorpion,Spider,,,A,medium,Insects and Records
-268,Which animal lays eggs: a platypus or a poodle?,Poodle,Platypus,,,B,medium,Animal Basics
-269,Which animal has antlers: a moose or a hippopotamus?,Moose,Hippopotamus,,,A,medium,Mammals
-270,Which bird carries fish in its beak pouch: a pelican or a sparrow?,Sparrow,Pelican,,,B,medium,Birds
-271,Which turtle lives in the ocean and nests on beaches: a sea turtle or a sea otter?,Sea turtle,Sea otter,,,A,medium,Reptiles and Amphibians
-272,Which deep sea fish has a glowing lure: an anglerfish or an anchovy?,Anchovy,Anglerfish,,,B,medium,Sea Life
-273,Which animal has fur and nurses its young: a seal or a salmon?,Seal,Salmon,,,A,medium,Animal Basics
-274,Which animal lives in icy seas: a walrus or a camel?,Camel,Walrus,,,B,medium,Mammals
-275,Which bird runs fast but cannot fly: an ostrich or a parrot?,Ostrich,Parrot,,,A,medium,Birds
-276,Which animal can climb smooth walls: a gecko or a groundhog?,Groundhog,Gecko,,,B,medium,Reptiles and Amphibians
-277,Which animal can regrow lost arms: a sea star or a sea bass?,Sea star,Sea bass,,,A,medium,Sea Life
-278,Which fuzzy insect is a major pollinator: a bumblebee or a boll weevil?,Boll weevil,Bumblebee,,,B,medium,Insects and Records
-279,Which animal eats eucalyptus leaves: a koala or a panda?,Panda,Koala,,,A,medium,Mammals
-280,Which owl with a heart shaped face hunts at night: a barn owl or a goose?,Goose,Barn owl,,,B,medium,Birds
-281,Which frog is famous for its toxic skin: a poison dart frog or a parakeet?,Poison dart frog,Parakeet,,,A,medium,Reptiles and Amphibians
-282,Which fish swims in big schools: a herring or a hermit crab?,Hermit crab,Herring,,,B,medium,Sea Life
-283,Which insect can jump many times its own length: a grasshopper or a gnat?,Grasshopper,Gnat,,,A,medium,Insects and Records
-284,Which animal is an arachnid: a scorpion or a swallow?,Swallow,Scorpion,,,B,medium,Animal Basics
-285,Which bird wades on long legs in shallow water: a heron or a hawk?,Heron,Hawk,,,A,medium,Birds
-286,Which animal puffs its throat to sing: a frog or a fish?,Fish,Frog,,,B,medium,Reptiles and Amphibians
-287,Which fish shoots water at insects: an archerfish or an eel?,Archerfish,Eel,,,A,medium,Sea Life
-288,Which armored insect lifts many times its own weight: a dung beetle or a dragonfly?,Dragonfly,Dung beetle,,,B,medium,Insects and Records
-289,Which animal swims with fins: a trout or a tortoise?,Trout,Tortoise,,,A,medium,Animal Basics
-290,Which animal has a horn on its nose: a rhinoceros or a giraffe?,Giraffe,Rhinoceros,,,B,medium,Mammals
-291,Which reptile is famous for living a very long life: a giant tortoise or a guppy?,Giant tortoise,Guppy,,,A,medium,Reptiles and Amphibians
-292,Which gentle animal is called a sea cow: a manatee or a marlin?,Marlin,Manatee,,,B,medium,Sea Life
-293,Which insect delivers one of the most painful stings: a bullet ant or a bee?,Bullet ant,Bee,,,A,medium,Insects and Records
-294,Which animal is a rodent: a mouse or a magpie?,Magpie,Mouse,,,B,medium,Animal Basics
-295,Which animal is famous for a great memory: an elephant or a gopher?,Elephant,Gopher,,,A,medium,Mammals
-296,Which bird dives for fish and nests on sea cliffs: a puffin or a pelican?,Pelican,Puffin,,,B,medium,Birds
-297,Which whale is famous for leaping and singing: a humpback whale or a whale shark?,Humpback whale,Whale shark,,,A,medium,Sea Life
-298,Which creature has many legs: a centipede or a caterpillar?,Caterpillar,Centipede,,,B,medium,Insects and Records
-299,Which animal has a backbone: a frog or a fly?,Frog,Fly,,,A,medium,Animal Basics
-300,Which animal digs burrows: a rabbit or an eagle?,Eagle,Rabbit,,,B,medium,Mammals
-301,Which bird is a symbol of peace: a dove or a duck?,Dove,Duck,,,A,medium,Birds
-302,Which young amphibian has gills and a tail: a tern or a tadpole?,Tern,Tadpole,,,B,medium,Reptiles and Amphibians
-303,Which insect makes silk for cocoons: a silkworm or a stink bug?,Silkworm,Stink bug,,,A,medium,Insects and Records
-304,Which animal is warm blooded: a worm or a wolf?,Worm,Wolf,,,B,medium,Animal Basics
-305,Which animal crosses hot deserts: a gerbil or a camel?,Gerbil,Camel,,,A,medium,Mammals
-306,Which bird is a national symbol of the United States: an emu or a bald eagle?,Emu,Bald eagle,,,B,medium,Birds
-307,Which lizard flares the spiky scales under its chin: a bearded dragon or a blue tongue skink?,Bearded dragon,Blue tongue skink,,,A,medium,Reptiles and Amphibians
-308,Which fish can puff its body into a ball: a perch or a puffer fish?,Perch,Puffer fish,,,B,medium,Sea Life
-309,Which animal eats only plants: a rabbit or a raccoon?,Rabbit,Raccoon,,,A,medium,Animal Basics
-310,Which animal swings through trees: a monkey or a mole?,Mole,Monkey,,,B,medium,Mammals
-311,Which bird makes a cawing call: a crow or a crane?,Crow,Crane,,,A,medium,Birds
-312,Which crocodilian has a wide rounded snout: an iguana or an alligator?,Iguana,Alligator,,,B,medium,Reptiles and Amphibians
-313,Which flat fish has both eyes on one side of its head: a flounder or a flying fish?,Flounder,Flying fish,,,A,medium,Sea Life
-314,Which big cat is the fastest runner: a cougar or a cheetah?,Cougar,Cheetah,,,B,medium,Insects and Records
-315,Which animal is famous for raiding trash cans: a raccoon or a ram?,Raccoon,Ram,,,A,medium,Mammals
-316,Which bird has a huge colorful bill: a toucan or a turkey?,Turkey,Toucan,,,B,medium,Birds
-317,Which snake hisses and coils before striking: a viper or a vulture?,Viper,Vulture,,,A,medium,Reptiles and Amphibians
-318,Which clever sea animal can open jars: an oyster or an octopus?,Oyster,Octopus,,,B,medium,Sea Life
-319,Which animal is the largest that has ever lived: a blue whale or a brachiosaurus?,Blue whale,Brachiosaurus,,,A,medium,Insects and Records
-320,Which animal hunts other animals for food: an earthworm or an eagle?,Earthworm,Eagle,,,B,medium,Animal Basics
-321,Which giant bird is flightless and lives in Australia: an emu or an egret?,Emu,Egret,,,A,medium,Birds
-322,Which amphibian keeps feathery gills and stays aquatic for life: an adder or an axolotl?,Adder,Axolotl,,,B,medium,Reptiles and Amphibians
-323,Which fish produces a strong electric shock: an electric eel or an emperor penguin?,Electric eel,Emperor penguin,,,A,medium,Sea Life
-324,Which animal is the tallest in the world: a giraffe or a gerbil?,Giraffe,Gerbil,,,B,medium,Insects and Records
-325,Which animal is a marsupial: a wallaby or a wren?,Wallaby,Wren,,,A,medium,Animal Basics
-326,Which animal hunts in packs: a wolf or a hamster?,Hamster,Wolf,,,B,medium,Mammals
-327,Which snake squeezes its prey: a boa constrictor or a bullfrog?,Boa constrictor,Bullfrog,,,A,medium,Reptiles and Amphibians
-328,Which crustacean lives in borrowed shells: a hake or a hermit crab?,Hake,Hermit crab,,,B,medium,Sea Life
-329,Which bird is the fastest runner: an ostrich or an owl?,Ostrich,Owl,,,A,medium,Insects and Records
-330,Which animal begins life as a caterpillar: a bat or a butterfly?,Bat,Butterfly,,,B,medium,Animal Basics
-331,Which animal has hooves: an octopus or a horse?,Octopus,Horse,,,A,medium,Mammals
-332,Which tall wading bird is pink: a falcon or a flamingo?,Falcon,Flamingo,,,B,medium,Birds
-333,Which sea turtle is the largest: a leatherback turtle or a loggerhead turtle?,Leatherback turtle,Loggerhead turtle,,,A,medium,Sea Life
-334,Which bird dives at over 300 kilometers per hour: a puffin or a peregrine falcon?,Puffin,Peregrine falcon,,,B,medium,Insects and Records
-335,Which animal is a primate: a lemur or a loon?,Lemur,Loon,,,A,medium,Animal Basics
-336,Which Australian animal hops with a joey in its pouch: a kangaroo or a koala?,Koala,Kangaroo,,,B,medium,Mammals
-337,Which bird dives into water to catch fish: a kingfisher or a kiwi?,Kingfisher,Kiwi,,,A,medium,Birds
-338,Which lizard basks on rocks to warm up: an ibex or an iguana?,Ibex,Iguana,,,B,medium,Reptiles and Amphibians
-339,Which creature has the most legs: a millipede or a mantis?,Millipede,Mantis,,,A,medium,Insects and Records
-340,Which animal is a crustacean: a canary or a crab?,Canary,Crab,,,B,medium,Animal Basics
-341,Which animal says oink: a pig or a warthog?,Pig,Warthog,,,A,medium,Mammals
-342,Which bird has a call that sounds like laughter: a kestrel or a kookaburra?,Kestrel,Kookaburra,,,B,medium,Birds
-343,Which frog is enormous: a goliath frog or a glass frog?,Goliath frog,Glass frog,,,A,medium,Reptiles and Amphibians
-344,Which animal moves by jet propulsion: a nautilus or a squid?,Nautilus,Squid,,,B,medium,Sea Life
-345,Which animal is a bird: a finch or a flying fox?,Finch,Flying fox,,,A,medium,Animal Basics
-346,Which animal loves honey: a wolf or a bear?,Wolf,Bear,,,B,medium,Mammals
-347,Which bird builds one of the largest tree nests: a bald eagle or a barn swallow?,Bald eagle,Barn swallow,,,A,medium,Birds
-348,Which animal changes from a tadpole to an air breathing adult: a fawn or a frog?,Fawn,Frog,,,B,medium,Reptiles and Amphibians
-349,Which shark is the biggest fish: a whale shark or a great white shark?,Whale shark,Great white shark,,,A,medium,Sea Life
-350,Which animal is the largest rodent: a capybara or a coypu?,Coypu,Capybara,,,B,medium,Insects and Records
-351,Which animal gathers acorns: a jay or a squirrel?,Jay,Squirrel,,,A,medium,Mammals
-352,Which songbird sings beautifully at dawn: a starling or a song thrush?,Starling,Song thrush,,,B,medium,Birds
-353,Which crocodilian guards its nest and carries babies in its jaws: a Nile crocodile or a newt?,Nile crocodile,Newt,,,A,medium,Reptiles and Amphibians
-354,Which sea animal has a spiral shell and many tentacles: a lugworm or a nautilus?,Lugworm,Nautilus,,,B,medium,Sea Life
-355,Which animal is the only mammal that can truly fly: a bat or a sugar glider?,Bat,Sugar glider,,,A,medium,Insects and Records
-356,Which fish has fins and a tail: a shrew or a shark?,Shrew,Shark,,,B,medium,Animal Basics
-357,Which water bird dives and dries its wings in the sun: a cormorant or a canary?,Cormorant,Canary,,,A,medium,Birds
-358,Which turtle swims with flipper like limbs: a garter snake or a green sea turtle?,Garter snake,Green sea turtle,,,B,medium,Reptiles and Amphibians
-359,Which fish glows in the deep sea: a lantern fish or a lion fish?,Lantern fish,Lion fish,,,A,medium,Sea Life
-360,Which whale can live for over 200 years: a beluga whale or a bowhead whale?,Beluga whale,Bowhead whale,,,B,medium,Insects and Records
-361,Which animal is mostly awake at night: a possum or a pheasant?,Possum,Pheasant,,,A,medium,Animal Basics
-362,Which pet purrs when it is happy: a donkey or a domestic cat?,Donkey,Domestic cat,,,B,medium,Mammals
-363,Which lizard has a sticky tongue longer than its body: a chameleon or a chipmunk?,Chameleon,Chipmunk,,,A,medium,Reptiles and Amphibians
-364,Which marine mammal rides waves for fun: a dugong or a dolphin?,Dugong,Dolphin,,,B,medium,Sea Life
-365,Which reptile has one of the strongest bites on Earth: a saltwater crocodile or a seahorse?,Saltwater crocodile,Seahorse,,,A,medium,Insects and Records
-366,Which animal is a mollusk: an ocelot or an octopus?,Ocelot,Octopus,,,B,medium,Animal Basics
-367,Which animal howls at the moon: a coyote or a wombat?,Coyote,Wombat,,,A,medium,Mammals
-368,Which bird makes the longest migration: an albatross or an Arctic tern?,Albatross,Arctic tern,,,B,medium,Birds
-369,Which sea animal has eyes as big as dinner plates: a giant squid or a garfish?,Giant squid,Garfish,,,A,medium,Sea Life
-370,Which insect makes the loudest sound: an ant or an African cicada?,Ant,African cicada,,,B,medium,Insects and Records
-371,Which animal is a cetacean: a whale or a weasel?,Whale,Weasel,,,A,medium,Animal Basics
-372,Which dog pulls sleds across snow: a husky or a hen?,Hen,Husky,,,B,medium,Mammals
-373,Which bird hunts snakes by stomping on them: a secretary bird or a swift?,Secretary bird,Swift,,,A,medium,Birds
-374,Which snake wears bright bands of color: a chinchilla or a coral snake?,Chinchilla,Coral snake,,,B,medium,Reptiles and Amphibians
-375,Which bird is the smallest in the world: a bee hummingbird or a barn owl?,Bee hummingbird,Barn owl,,,A,medium,Insects and Records
-376,Which bird is a raptor: a heron or a hawk?,Heron,Hawk,,,B,medium,Animal Basics
-377,Which big cat climbs trees carrying its food: a leopard or a lynx?,Leopard,Lynx,,,A,medium,Mammals
-378,Which wading bird has a spoon shaped bill: a swan or a spoonbill?,Swan,Spoonbill,,,B,medium,Birds
-379,Which frog freezes solid in winter and thaws out alive: a wood frog or a water shrew?,Wood frog,Water shrew,,,A,medium,Reptiles and Amphibians
-380,Which fish helps make sandy beaches by crunching coral: a pike or a parrot fish?,Pike,Parrot fish,,,B,medium,Sea Life
-381,Which animal has its skeleton on the outside: a beetle or a bunny?,Beetle,Bunny,,,A,medium,Animal Basics
-382,Which Australian marsupial lives in burrows: a wombat or a woodpecker?,Woodpecker,Wombat,,,B,medium,Mammals
-383,Which bird collects shiny objects: a magpie or a maggot?,Magpie,Maggot,,,A,medium,Birds
-384,Which lizard is known for its blue tongue: a gecko or a blue tongue skink?,Gecko,Blue tongue skink,,,B,medium,Reptiles and Amphibians
-385,Which fish has a long saw on its snout: a sawfish or a sardine?,Sawfish,Sardine,,,A,medium,Sea Life
-386,Which sea animal has the biggest eyes: a coyote or a colossal squid?,Coyote,Colossal squid,,,B,medium,Insects and Records
-387,Which animal is the largest ape: a gorilla or a gibbon?,Gorilla,Gibbon,,,A,medium,Mammals
-388,Which bird is a flightless parrot from New Zealand: a kea or a kakapo?,Kea,Kakapo,,,B,medium,Birds
-389,Which frog has sticky toes for climbing trees: a tree frog or a tiger?,Tree frog,Tiger,,,A,medium,Reptiles and Amphibians
-390,Which ray is the largest: a mudskipper or a manta ray?,Mudskipper,Manta ray,,,B,medium,Sea Life
-391,Which spider is the biggest: a goliath birdeater or a garden spider?,Goliath birdeater,Garden spider,,,A,medium,Insects and Records
-392,Which group includes snakes and lizards: rodents or reptiles?,Rodents,Reptiles,,,B,medium,Animal Basics
-393,Which seabird has a red throat pouch: a frigatebird or a fulmar?,Frigatebird,Fulmar,,,A,medium,Birds
-394,Which reptile has a top shell and a bottom shell: a titmouse or a tortoise?,Titmouse,Tortoise,,,B,medium,Reptiles and Amphibians
-395,Which fish can walk on land using its fins: a mudskipper or a mullet?,Mudskipper,Mullet,,,A,medium,Sea Life
-396,Which snake is the longest: a rattlesnake or a reticulated python?,Rattlesnake,Reticulated python,,,B,medium,Insects and Records
-397,Which animal is an omnivore: a bear or a bison?,Bear,Bison,,,A,medium,Animal Basics
-398,Which animal has very thick skin: a reindeer or a rhinoceros?,Reindeer,Rhinoceros,,,B,medium,Mammals
-399,Which amphibian is the largest: a Chinese giant salamander or a chameleon?,Chinese giant salamander,Chameleon,,,A,medium,Reptiles and Amphibians
-400,Which animal filters food through its shell: an oyster or an osprey?,Oyster,Osprey,,,B,medium,Sea Life
-401,How many legs does an insect have?,Six,Eight,Ten,,A,hard,Animal Basics
-402,About how long is a giraffe tongue?,About 10 centimeters,About 50 centimeters,About 2 meters,,B,hard,Mammals
-403,Which bird has the longest wingspan?,Andean condor,Mute swan,Wandering albatross,,C,hard,Birds
-404,What is the largest crocodile species?,Saltwater crocodile,Nile crocodile,American alligator,,A,hard,Reptiles and Amphibians
-405,Which shark is the fastest swimmer?,Tiger shark,Shortfin mako,Hammerhead shark,,B,hard,Sea Life
-406,What is a group of bees flying together called?,Hive,Nest,Swarm,,C,hard,Insects and Records
-407,What is a group of lions called?,Pride,Pack,Herd,,A,hard,Mammals
-408,Which owl is the largest by length?,Barn owl,Great gray owl,Snowy owl,,B,hard,Birds
-409,Which snake has the most toxic venom drop for drop?,Black mamba,Inland taipan,King cobra,,B,hard,Reptiles and Amphibians
-410,What is a group of sharks called?,Shiver,Gam,Dule,,A,hard,Sea Life
-411,What is a group of ants living together called?,Party,Colony,Coven,,B,hard,Insects and Records
-412,What is the study of insects called?,Ornithology,Herpetology,Entomology,,C,hard,Animal Basics
-413,Which bird has the longest beak compared to its body?,Sword billed hummingbird,Toucan,Pelican,,A,hard,Birds
-414,Which snakes have heat sensing pits on their faces?,Sea snake,Egg eating snake,Pit viper,,C,hard,Reptiles and Amphibians
-415,Which ray can give an electric shock?,Thornback ray,Stingray,Electric ray,,C,hard,Sea Life
-416,What is a group of butterflies called?,Kaleidoscope,Conspiracy,Cluster,,A,hard,Insects and Records
-417,Which of these animals is cold blooded?,Chimpanzee,Chameleon,Chinchilla,,B,hard,Animal Basics
-418,Which bear is the largest species?,Brown bear,Sun bear,Polar bear,,C,hard,Mammals
-419,What is a group of snakes called?,Quiver,Bed,Kaleidoscope,,A,hard,Reptiles and Amphibians
-420,What is a baby shark called?,Fingerling,Pup,Spawn,,B,hard,Sea Life
-421,What is a group of spiders called?,Rabble,Hobble,Clutter,,C,hard,Insects and Records
-422,How many stomach compartments does a cow have?,Four,One,Two,,A,hard,Animal Basics
-423,What is a baby kangaroo called?,Cub,Joey,Kit,,B,hard,Mammals
-424,What is a group of owls called?,Charm,Murder,Parliament,,C,hard,Birds
-425,Which marine mammal uses rocks to crack open shellfish?,Sea otter,Walrus,Dolphin,,A,hard,Sea Life
-426,What is a group of cicadas singing together called?,Choir,Chorus,Band,,B,hard,Insects and Records
-427,What do you call an animal that eats both plants and animals?,Herbivore,Carnivore,Omnivore,,C,hard,Animal Basics
-428,What is a group of gorillas called?,Band,Troop,Swarm,,A,hard,Mammals
-429,What is a baby eagle called?,Owlet,Eaglet,Cygnet,,B,hard,Birds
-430,Which amphibian is blind and lives in European caves?,Axolotl,Hellbender,Olm,,C,hard,Reptiles and Amphibians
-431,Which insect is the loudest for its body size?,Water boatman,Cicada,Cricket,,A,hard,Insects and Records
-432,Which phylum do insects belong to?,Chordata,Arthropoda,Mollusca,,B,hard,Animal Basics
-433,What is a young goat called?,Foal,Cria,Kid,,C,hard,Mammals
-434,Which bird lays the largest egg for its body size?,Kiwi,Hummingbird,Ostrich,,A,hard,Birds
-435,Which turtle can absorb oxygen through its cloaca while resting underwater?,White throated snapping turtle,Leatherback turtle,Box turtle,,A,hard,Reptiles and Amphibians
-436,What is the largest species of octopus?,Common octopus,Blue ringed octopus,Giant Pacific octopus,,C,hard,Sea Life
-437,Which animal group has the most known species?,Insects,Birds,Fish,,A,hard,Animal Basics
-438,Which mammal has a prehensile tail?,Domestic cat,Spider monkey,Red fox,,B,hard,Mammals
-439,Which penguin dives the deepest?,Adelie penguin,Chinstrap penguin,Emperor penguin,,C,hard,Birds
-440,Which frog males carry tadpoles inside their vocal sacs?,Glass frog,Darwin frog,Pixie frog,,B,hard,Reptiles and Amphibians
-441,What is the largest species of jellyfish?,Box jellyfish,Lion mane jellyfish,Moon jelly,,B,hard,Sea Life
-442,Which ant is considered the most venomous insect?,Honeybee,Bullet ant,Harvester ant,,C,hard,Insects and Records
-443,Which whale has the largest brain?,Orca,Narwhal,Sperm whale,,C,hard,Mammals
-444,Which bird can mimic chainsaws and camera shutters?,Mockingbird,Lyrebird,Crow,,B,hard,Birds
-445,Which is the largest salamander in the Americas?,Tiger salamander,Mudpuppy,Hellbender,,C,hard,Reptiles and Amphibians
-446,What is a group of jellyfish called?,Smack,Cast,Gulp,,A,hard,Sea Life
-447,What is the largest wasp species?,Tarantula hawk,Asian giant hornet,Cicada killer,,B,hard,Insects and Records
-448,Which gas do animals need to breathe in?,Carbon dioxide,Nitrogen,Oxygen,,C,hard,Animal Basics
-449,Which bird of prey hovers in place while hunting?,Kestrel,Peregrine falcon,Goshawk,,A,hard,Birds
-450,Which reptile has barely changed in 200 million years?,Tuatara,Skink,Anole,,A,hard,Reptiles and Amphibians
-451,What is a group of eels called?,Shiver,Lounge,Bed,,C,hard,Sea Life
-452,Which insect can live for decades?,Queen bee,Termite queen,June bug,,B,hard,Insects and Records
-453,What do we call animals that mainly eat insects?,Frugivores,Insectivores,Piscivores,,B,hard,Animal Basics
-454,What is a group of wolves called?,Pride,Pack,Sounder,,B,hard,Mammals
-455,Which snake glides between trees?,Corn snake,Paradise tree snake,Emerald tree boa,,B,hard,Reptiles and Amphibians
-456,How many legs does a crab have in total?,Four,Ten,Twelve,,B,hard,Sea Life
-457,Which adult insect lives the shortest time?,Housefly,Mayfly,Fruit fly,,B,hard,Insects and Records
-458,How many main body parts does an insect have?,Three,Two,Four,,A,hard,Animal Basics
-459,Which big cat cannot roar?,Snow leopard,Cheetah,Serval,,B,hard,Mammals
-460,Which birds use sticks as tools to pull insects from holes?,Raven,Robin,New Caledonian crow,,C,hard,Birds
-461,What is a group of dolphins called?,Pod,Mischief,Harem,,A,hard,Sea Life
-462,Which insect can see the widest range of colors?,Moth,Common bluebottle butterfly,Firefly,,B,hard,Insects and Records
-463,What are the hard wing cases of a beetle called?,Carapace,Plastron,Elytra,,C,hard,Animal Basics
-464,What is the largest wild cat in the Americas?,Ocelot,Mountain lion,Jaguar,,C,hard,Mammals
-465,Which seabird chases other birds to steal food midair?,Gannet,Frigatebird,Booby,,B,hard,Birds
-466,Which frog is so clear you can see its organs?,Tree frog,Poison dart frog,Glass frog,,C,hard,Reptiles and Amphibians
-467,Which fly spreads sleeping sickness?,Horsefly,Tsetse fly,Sandfly,,B,hard,Insects and Records
-468,Which sense helps sharks find prey hidden under sand?,Echolocation,Electroreception,Magnetoreception,,B,hard,Animal Basics
-469,Which pet animal sleeps the most hours per day?,Dog,Goat,Cat,,C,hard,Mammals
-470,Which bird has a shoe shaped bill?,Shoebill,Stork,Ibis,,A,hard,Birds
-471,Which chameleon is the largest?,Parson chameleon,Veiled chameleon,Panther chameleon,,A,hard,Reptiles and Amphibians
-472,What is a group of whales called?,Pod,Gam,Cete,,C,hard,Sea Life
-473,What is the seasonal travel of animals called?,Migration,Hibernation,Estivation,,A,hard,Animal Basics
-474,What is a group of ferrets called?,Glaring,Business,Mystery,,B,hard,Mammals
-475,Which penguin is the fastest swimmer?,Rockhopper penguin,African penguin,Gentoo penguin,,C,hard,Birds
-476,Which reptile cannot stick out its tongue?,Lizard,Crocodile,Frog,,B,hard,Reptiles and Amphibians
-477,What is the largest species of seal?,Leopard seal,Southern elephant seal,Gray seal,,B,hard,Sea Life
-478,Which cicada is the largest?,African cicada,Dog day cicada,Empress cicada,,C,hard,Insects and Records
-479,What is a baby beaver called?,Puggle,Whelp,Kitten,,C,hard,Mammals
-480,What is a group of penguins in the water called?,Raft,Waddle,Rookery,,A,hard,Birds
-481,Which python is one of the smallest?,Ball python,Burmese python,Children's python,,C,hard,Reptiles and Amphibians
-482,What is a group of manatees called?,Flotilla,Aggregation,Litter,,B,hard,Sea Life
-483,Which spider carries its babies on its back?,Jumping spider,Wolf spider,Orb weaver,,B,hard,Insects and Records
-484,What is a rhinoceros horn made of?,Bone,Ivory,Keratin,,C,hard,Animal Basics
-485,Which bird has a beak that crosses at the tip?,Crossbill,Hawfinch,Skylark,,A,hard,Birds
-486,What is a group of crocodiles called?,Bask,Quiver,Shiver,,A,hard,Reptiles and Amphibians
-487,What is a group of otters called?,Court,Mews,Romp,,C,hard,Sea Life
-488,Which spider can jump many times its own length?,Jumping spider,Trapdoor spider,Funnel web spider,,A,hard,Insects and Records
-489,How many hearts does an earthworm have?,Three,Five,Seven,,B,hard,Animal Basics
-490,What is a group of domestic cats called?,Glaring,Murmuration,Clowder,,C,hard,Mammals
-491,What is a group of frogs called?,Drift,Army,Knot,,B,hard,Reptiles and Amphibians
-492,What is a group of narwhals called?,Romp,Blessing,Leash,,B,hard,Sea Life
-493,Which insect beats its wings about 1000 times per second?,Mosquito,Midge,Termite,,B,hard,Insects and Records
-494,What do we call animals that walk on two legs?,Bipedal,Quadrupedal,Aquatic,,A,hard,Animal Basics
-495,What is a baby platypus called?,Joey,Puggle,Fry,,B,hard,Mammals
-496,Which bird has been recorded flying the highest?,Bearded vulture,Hooded vulture,Ruppell's griffon vulture,,C,hard,Birds
-497,What is a group of stingrays called?,Fever,Frenzy,Cover,,A,hard,Sea Life
-498,Which insect mother lays the most eggs over her life?,Ladybug,Termite queen,Silkworm moth,,B,hard,Insects and Records
-499,Which teeth shear meat in carnivores?,Molars,Incisors,Carnassials,,C,hard,Animal Basics
-500,What is a group of hedgehogs called?,Drove,Array,Flock,,A,hard,Mammals
-501,Which bird migrates from pole to pole each year?,Sooty shearwater,Arctic tern,Barn swallow,,B,hard,Birds
-502,What is a group of toads called?,Army,Knot,Hive,,B,hard,Reptiles and Amphibians
-503,Which insect grows up without a pupa stage?,Grasshopper,Moth,Cockroach,,A,hard,Insects and Records
-504,Which mammal has the shortest pregnancy?,Opossum,Elephant,Whale,,B,hard,Animal Basics
-505,What is a group of monkeys called?,Array,Colony,Troop,,C,hard,Mammals
-506,Which bird weaves a hanging nest of grass?,Baya weaver,House sparrow,Coal tit,,A,hard,Birds
-507,Which turtle is named for its large head?,Loggerhead,Hawksbill,Flatback,,A,hard,Reptiles and Amphibians
-508,What is the heaviest bony fish?,Whale shark,Cod,Ocean sunfish,,C,hard,Sea Life
-509,What is winter dormancy in reptiles called?,Brumation,Torpor,Diapause,,A,hard,Animal Basics
-510,What is a group of rhinoceroses called?,Tower,Crash,Dazzle,,B,hard,Mammals
-511,Which bird has a tongue that wraps around its skull?,Nuthatch,Treecreeper,Woodpecker,,C,hard,Birds
-512,Which newt pushes its ribs through its skin as spines?,Fire salamander,Spanish ribbed newt,Siren,,B,hard,Reptiles and Amphibians
-513,Which round sea creature is covered in poisonous spines?,Sea cucumber,Sea urchin,Anemone,,B,hard,Sea Life
-514,What is the pupa of a butterfly called?,Cocoon,Tumbler,Chrysalis,,C,hard,Insects and Records
-515,What is a group of hippopotamuses called?,Bloat,Mob,Stampede,,A,hard,Mammals
-516,Which bird can fly backwards?,Bee eater,Hummingbird,Swift,,B,hard,Birds
-517,Which gecko is the largest?,Frog eyed gecko,Crested gecko,New Caledonian giant gecko,,C,hard,Reptiles and Amphibians
-518,Which deep sea fish has a transparent head?,Barreleye fish,Viperfish,Hatchetfish,,A,hard,Sea Life
-519,What is the larva of a beetle called?,Wriggler,Grub,Naiad,,B,hard,Insects and Records
-520,What color is a polar bear skin?,White,Cream,Black,,C,hard,Mammals
-521,Which bird has the most feathers?,Tundra swan,Peacock,Robin,,A,hard,Birds
-522,Which snake has the longest fangs?,Gaboon viper,Boomslang,Saw scaled viper,,A,hard,Reptiles and Amphibians
-523,Which crab waves a giant claw to attract mates?,Horseshoe crab,Ghost crab,Fiddler crab,,C,hard,Sea Life
-524,What is a young dragonfly called?,Nymph,Pupa,Tumbler,,A,hard,Insects and Records
-525,What do we call an animal ability to regrow lost body parts?,Photosynthesis,Regeneration,Digestion,,B,hard,Animal Basics
-526,What is a group of giraffes called?,Sleuth,Mischief,Tower,,C,hard,Mammals
-527,Which frog seals itself in mucus to survive droughts?,African bullfrog,Water holding frog,Cane toad,,B,hard,Reptiles and Amphibians
-528,Which sea turtle has a hawk like beak?,Green sea turtle,Hawksbill,Olive ridley,,B,hard,Sea Life
-529,What is a young mosquito larva called?,Bloodworm,Glassworm,Wriggler,,C,hard,Insects and Records
-530,Which animal has blood tinted blue by hemocyanin?,Octopus,Dog,Pig,,A,hard,Animal Basics
-531,What is a group of zebras called?,Skulk,Dazzle,Mob,,B,hard,Mammals
-532,Which bird has a hard casque on its head and a dagger claw?,Rhea,Kiwi,Cassowary,,C,hard,Birds
-533,What is the largest land snail?,Giant African land snail,Roman snail,Cone snail,,A,hard,Sea Life
-534,How many pairs of wings does an adult mayfly have?,One pair,Two pairs,Three pairs,,B,hard,Insects and Records
-535,What are cat whiskers mainly used for?,Smelling food,Breathing,Sensing nearby objects,,C,hard,Animal Basics
-536,What is a group of kangaroos called?,Mob,Sleuth,Clowder,,A,hard,Mammals
-537,What is a group of geese on the ground called?,Skein,Gaggle,Raft,,B,hard,Birds
-538,Which skink has a tail that grips branches?,Glass lizard,Sand skink,Prehensile tailed skink,,C,hard,Reptiles and Amphibians
-539,What is a young hare called?,Nymph,Leatherjacket,Leveret,,A,hard,Animal Basics
-540,What is a baby swan called?,Eaglet,Cygnet,Duckling,,B,hard,Birds
-541,What is a group of badgers called?,Cete,Run,Bind,,A,hard,Mammals
-542,What is a group of penguins in the water called?,Raft,Waddle,Rookery,,A,hard,Birds
-543,What is a newly hatched crocodile called?,Hatchling,Fledgling,Larva,,A,hard,Reptiles and Amphibians
-544,Which animal can regrow a whole body from a single arm?,Sand dollar,Sea squirt,Sea star,,C,hard,Sea Life
-545,What do we call animals that eat already dead animals?,Scavengers,Producers,Parasites,,A,hard,Animal Basics
-546,Which fox has huge ears for cooling down in the desert?,Arctic fox,Fennec fox,Gray fox,,B,hard,Mammals
-547,What is a group of crows called?,Parliament,Flamboyance,Murder,,C,hard,Birds
-548,What is a group of iguanas called?,Lounge,Mess,Scuttle,,B,hard,Reptiles and Amphibians
-549,Which whale has the longest baleen plates?,Gray whale,Bowhead whale,Fin whale,,B,hard,Sea Life
-550,What is the young crane fly larva called?,Glowworm,Wireworm,Leatherjacket,,C,hard,Insects and Records
-551,What is a group of squirrels called?,Scurry,Dray,Horde,,A,hard,Mammals
-552,What is a group of ravens called?,Tiding,Unkindness,Swarm,,B,hard,Birds
-553,How long can a Galapagos tortoise live?,About 10 years,About 30 years,Over 100 years,,C,hard,Reptiles and Amphibians
-554,What is a baby dolphin called?,Kid,Tadpole,Calf,,C,hard,Sea Life
-555,What do green lacewing larvae mainly eat?,Nectar,Aphids,Algae,,B,hard,Insects and Records
-556,Which organs filter waste from an animal blood?,Liver,Spleen,Kidneys,,C,hard,Animal Basics
-557,What is a group of larks called?,Exaltation,Ostentation,Sedge,,A,hard,Birds
-558,What is a baby snake called?,Snakelet,Eft,Elver,,A,hard,Reptiles and Amphibians
-559,Which dolphin is known for washing seals off ice floes?,Bottlenose dolphin,Porpoise,Orca,,C,hard,Sea Life
-560,How many legs does a ladybug have?,Six,Five,Seven,,A,hard,Insects and Records
-561,What is a female horse called?,Stallion,Mare,Filly,,B,hard,Mammals
-562,Which bat has a wingspan over one meter?,Vampire bat,Bumblebee bat,Large flying fox,,C,hard,Mammals
-563,What is a young toad called after leaving the water?,Polliwog,Toadlet,Smolt,,B,hard,Reptiles and Amphibians
-564,What is the smallest cetacean?,Humpback whale,Vaquita,Harbour porpoise,,B,hard,Sea Life
-565,What do dragonfly nymphs hunt underwater?,Plankton,Seaweed,Mosquito larvae,,C,hard,Sea Life
-566,What do we call animals that carry young in a pouch?,Marsupial,Monotreme,Placental,,A,hard,Animal Basics
-567,What is a group of apes called?,Trip,Shrewdness,Spring,,B,hard,Mammals
-568,What is a group of peacocks called?,Exaltation,Muster,Ostentation,,C,hard,Birds
-569,What is the scientific name of the bottlenose dolphin?,Tursiops truncatus,Delphinus delphis,Phocoena phocoena,,A,hard,Sea Life
-570,What do silkworms eat?,Grass,Mulberry leaves,Pine needles,,B,hard,Insects and Records
-571,What is the study of mammals called?,Mycology,Conchology,Mammalogy,,C,hard,Animal Basics
-572,What is a group of donkeys called?,Drove,Stud,Stable,,A,hard,Mammals
-573,What is a group of cranes called?,Fall,Sedge,Siege,,B,hard,Birds
-574,What is a group of turtles called?,Bale,Congregation,Gang,,A,hard,Reptiles and Amphibians
-575,Where do honeybees make their wax?,Wax glands,Honeycomb cells,Pollen baskets,,A,hard,Insects and Records
-576,What chemicals do animals release to signal each other?,Hormones,Pheromones,Enzymes,,B,hard,Animal Basics
-577,How long does a horse pregnancy last?,About 3 months,About 22 months,About 11 months,,C,hard,Mammals
-578,What is a huge flock of starlings flying together called?,Murmuration,Chatter,Cloud,,A,hard,Birds
-579,What is the scientific name of the saltwater crocodile?,Crocodylus porosus,Crocodylus niloticus,Crocodylus johnstoni,,A,hard,Reptiles and Amphibians
-580,What is the scientific name of the blue whale?,Megaptera novaeangliae,Physeter macrocephalus,Balaenoptera musculus,,C,hard,Sea Life
-581,What do we call animals that live mainly in trees?,Arboreal,Fossorial,Aerial,,A,hard,Animal Basics
-582,What is a male elk called?,Bevy,Bull,Stag,,B,hard,Mammals
-583,What gives flamingos their pink color?,Their feathers at birth,Sunlight,Their shrimp diet,,C,hard,Birds
-584,What does a leopard gecko tail store?,Swimming,Storing fat,Fighting,,B,hard,Reptiles and Amphibians
-585,What is the scientific name of the orca?,Delphinapterus leucas,Orcinus orca,Globicephala melas,,B,hard,Sea Life
-586,Which body part do ants use to smell?,Feet,Tongues,Antennae,,C,hard,Insects and Records
-587,What is a group of raccoons called?,Gang,Gaze,Scurry,,B,hard,Mammals
-588,What is a group of herons called?,Watch,Siege,Tiding,,B,hard,Birds
-589,Which toad gives birth to live young instead of eggs?,Golden toad,Surinam toad,Kihansi spray toad,,C,hard,Reptiles and Amphibians
-590,What is the scientific name of the great white shark?,Carcharodon carcharias,Carcharhinus leucas,Rhincodon typus,,A,hard,Sea Life
-591,What body part do crickets hear with?,Wings,Front legs,Belly,,B,hard,Insects and Records
-592,What is the flap that covers a fish gills called?,Mantle,Syrinx,Operculum,,C,hard,Animal Basics
-593,What is the nightingale most famous for?,Its beautiful song,Its bright colors,Its fast flight,,A,hard,Birds
-594,What is the scientific name of the axolotl?,Ambystoma mexicanum,Ambystoma tigrinum,Ambystoma opacum,,A,hard,Reptiles and Amphibians
-595,What is the scientific name of the green sea turtle?,Caretta caretta,Eretmochelys imbricata,Chelonia mydas,,C,hard,Sea Life
-596,Besides insects what can large praying mantises catch?,Birds and lizards,Only plants,Only fruit,,A,hard,Insects and Records
-597,What do we call animals that chew cud?,Rodents,Ruminants,Primates,,B,hard,Animal Basics
-598,What is a female pig called?,Boar,Gilt,Sow,,C,hard,Mammals
-599,What is the scientific name of the American alligator?,Caiman crocodilus,Alligator mississippiensis,Gavialis gangeticus,,B,hard,Reptiles and Amphibians
-600,What is the scientific name of the whale shark?,Sphyrna mokarran,Rhincodon typus,Ginglymostoma cirratum,,B,hard,Sea Life
-601,How many chambers does a mammal heart have?,Four chambers,Two chambers,Three chambers,One chamber,A,expert,Animal Basics
-602,What is the scientific name of the lion?,Panthera tigris,Panthera leo,Panthera pardus,Panthera onca,B,expert,Mammals
-603,What is the scientific name of the bald eagle?,Haliaeetus albicilla,Aquila chrysaetos,Haliaeetus leucocephalus,Aquila heliaca,C,expert,Birds
-604,Which monitor lizard is the largest?,Varanus salvator,Varanus niloticus,Varanus giganteus,Varanus komodoensis,D,expert,Reptiles and Amphibians
-605,What is the scientific name of the common octopus?,Octopus vulgaris,Octopus cyanea,Amphioctopus fangsiao,Abdopus aculeatus,A,expert,Sea Life
-606,What is the scientific name of the bumblebee?,Apis mellifera,Bombus terrestris,Xylocopa virginica,Melipona beecheii,B,expert,Insects and Records
-607,What is the scientific name of the tiger?,Neofelis nebulosa,Panthera uncia,Panthera tigris,Acinonyx jubatus,C,expert,Mammals
-608,What is the scientific name of the peregrine falcon?,Falco tinnunculus,Falco columbarius,Falco subbuteo,Falco peregrinus,D,expert,Birds
-609,What determines the sex of alligator hatchlings?,Nest temperature,Egg size,Chromosomes,Incubation time,A,expert,Reptiles and Amphibians
-610,What is the largest species of flatfish?,Dover sole,Atlantic halibut,Turbot,Pacific halibut,B,expert,Sea Life
-611,What is the scientific name of the housefly?,Musca autumnalis,Drosophila melanogaster,Musca domestica,Glossina morsitans,C,expert,Insects and Records
-612,What is the study of birds called?,Entomology,Herpetology,Ichthyology,Ornithology,D,expert,Animal Basics
-613,What is the scientific name of the barn owl?,Tyto alba,Asio otus,Athene noctua,Bubo scandiacus,A,expert,Birds
-614,What is summer dormancy called in desert animals?,Cryptobiosis,Estivation,Brumation,Dormancy,B,expert,Reptiles and Amphibians
-615,Which gas do animals exhale that plants use for photosynthesis?,Oxygen,Methane,Carbon dioxide,Hydrogen,C,expert,Sea Life
-616,What is the scientific name of the yellow fever mosquito?,Culex pipiens,Aedes albopictus,Toxorhynchites splendens,Aedes aegypti,D,expert,Insects and Records
-617,What do we call animals active at dawn and dusk?,Crepuscular,Nocturnal,Diurnal,Cathemeral,A,expert,Animal Basics
-618,What is the scientific name of the domestic dog?,Canis lupus,Canis lupus familiaris,Canis latrans,Canis aureus,B,expert,Mammals
-619,Which alligator lives in China?,Paleosuchus palpebrosus,Melanosuchus niger,Alligator sinensis,Tomistoma schlegelii,C,expert,Reptiles and Amphibians
-620,What is the scientific name of the clownfish?,Premnas biaculeatus,Amphiprion ocellaris,Chromis chromis,Abudefduf saxatilis,B,expert,Sea Life
-621,What is the scientific name of the red imported fire ant?,Solenopsis invicta,Formica rufa,Atta cephalotes,Camponotus pennsylvanicus,A,expert,Insects and Records
-622,What do we call animals that give birth to live young?,Oviparous,Viviparous,Ovoviviparous,Parthenogenesis,B,expert,Animal Basics
-623,What is the scientific name of the domestic cat?,Felis silvestris,Felis nigripes,Felis catus,Felis chaus,C,expert,Mammals
-624,What is the scientific name of the great horned owl?,Strix varia,Asio flammeus,Bubo bubo,Bubo virginianus,D,expert,Birds
-625,Which genus do seahorses belong to?,Hippocampus,Syngnathus,Solenostomus,Aulostomus,A,expert,Sea Life
-626,What is the scientific name of the two spotted ladybird?,Coccinella septempunctata,Adalia bipunctata,Cryptolaemus montrouzieri,Propylea quatuordecimpunctata,B,expert,Insects and Records
-627,What is the largest order of mammals?,Chiroptera,Carnivora,Rodentia,Cetartiodactyla,C,expert,Animal Basics
-628,What is the scientific name of the gray wolf?,Vulpes vulpes,Canis mesomelas,Otocyon megalotis,Canis lupus,D,expert,Mammals
-629,What is the scientific name of the snowy owl?,Bubo scandiacus,Strix nebulosa,Surnia ulula,Aegolius funereus,A,expert,Birds
-630,What is the scientific name of the king cobra?,Naja naja,Ophiophagus hannah,Bungarus multicinctus,Dendroaspis polylepis,B,expert,Reptiles and Amphibians
-631,What is the scientific name of the atlas moth?,Attacus taprobanis,Samia cynthia,Attacus atlas,Antheraea polyphemus,C,expert,Insects and Records
-632,Which kingdom do animals belong to?,Plantae,Fungi,Protista,Animalia,D,expert,Animal Basics
-633,What is the scientific name of the red fox?,Vulpes vulpes,Urocyon cinereoargenteus,Otocyon megalotis,Vulpes lagopus,A,expert,Mammals
-634,What is the scientific name of the ostrich?,Rhea americana,Struthio camelus,Apteryx australis,Casuarius casuarius,B,expert,Birds
-635,What is the scientific name of the black mamba?,Oxyuranus scutellatus,Naja nivea,Dendroaspis polylepis,Pseudonaja textilis,C,expert,Reptiles and Amphibians
-636,What is the largest species of tuna?,Yellowfin tuna,Skipjack tuna,Albacore,Atlantic bluefin tuna,D,expert,Sea Life
-637,What is the process of changing from larva to adult called?,Metamorphosis,Hibernation,Migration,Regeneration,A,expert,Animal Basics
-638,What is the scientific name of the horse?,Equus asinus,Equus caballus,Equus quagga,Equus ferus,B,expert,Mammals
-639,What is the scientific name of the emu?,Rhea pennata,Apteryx mantelli,Dromaius novaehollandiae,Casuarius unappendiculatus,C,expert,Birds
-640,What is the scientific name of the Burmese python?,Python regius,Python molurus,Python sebae,Python bivittatus,D,expert,Reptiles and Amphibians
-641,What is the scientific name of the leatherback turtle?,Dermochelys coriacea,Lepidochelys kempii,Natator depressus,Chelonia mydas,A,expert,Sea Life
-642,What is the scientific name of the stag beetle?,Lucanus elaphus,Lucanus cervus,Dynastes hercules,Chalcosoma atlas,B,expert,Insects and Records
-643,What is the scientific name of domestic cattle?,Bos grunniens,Bubalus bubalis,Bos taurus,Bison bison,C,expert,Mammals
-644,What is the scientific name of the emperor penguin?,Aptenodytes patagonicus,Pygoscelis papua,Eudyptes chrysolophus,Aptenodytes forsteri,D,expert,Birds
-645,What is the scientific name of the Gila monster?,Heloderma suspectum,Heloderma horridum,Lanthanotus borneensis,Varanus exanthematicus,A,expert,Reptiles and Amphibians
-646,What is the scientific name of the lionfish?,Pterois miles,Pterois volitans,Pterois antennata,Dendrochirus zebra,B,expert,Sea Life
-647,Which order do termites belong to?,Orthoptera,Hymenoptera,Blattodea,Lepidoptera,C,expert,Insects and Records
-648,Which phylum has a notochord at some stage of life?,Echinodermata,Annelida,Nematoda,Chordata,D,expert,Animal Basics
-649,What is the scientific name of the little penguin?,Eudyptula minor,Eudyptes chrysocome,Megadyptes antipodes,Spheniscus demersus,A,expert,Birds
-650,What is the scientific name of the veiled chameleon?,Furcifer pardalis,Chamaeleo calyptratus,Trioceros jacksonii,Brookesia micra,B,expert,Reptiles and Amphibians
-651,What is the scientific name of the humpback anglerfish?,Melanocetus murrayi,Lophius piscatorius,Melanocetus johnsonii,Himantolophus globulosa,C,expert,Sea Life
-652,What is the scientific name of the kissing bug?,Rhodnius prolixus,Panstrongylus megistus,Reduvius personatus,Triatoma infestans,D,expert,Insects and Records
-653,What do we call animals that mainly eat fish?,Piscivore,Insectivore,Granivore,Nectarivore,A,expert,Animal Basics
-654,What is the scientific name of the wild boar?,Babyrousa babyrussa,Sus scrofa,Potamochoerus porcus,Sus barbatus,B,expert,Mammals
-655,What is the scientific name of the tuatara?,Sphenodon guntheri,Tiliqua rugosa,Sphenodon punctatus,Oplurus cuvieri,C,expert,Reptiles and Amphibians
-656,Which genus do hammerhead sharks belong to?,Carcharhinus,Galeocerdo,Negaprion,Sphyrna,D,expert,Sea Life
-657,What is the scientific name of the human flea?,Pulex irritans,Ctenocephalides felis,Tunga penetrans,Xenopsylla cheopis,A,expert,Insects and Records
-658,What is a two part scientific name called?,Polynomial nomenclature,Binomial nomenclature,Cladistics,Taxonomy,B,expert,Animal Basics
-659,What is the scientific name of domestic sheep?,Capra hircus,Ovis canadensis,Ovis aries,Ovis dalli,C,expert,Mammals
-660,What is the scientific name of the wandering albatross?,Phoebastria immutabilis,Thalassarche melanophris,Phoebetria fusca,Diomedea exulans,D,expert,Birds
-661,What is the scientific name of the box jellyfish?,Chironex fleckeri,Chironex yamaguchii,Carukia barnesi,Malo kingi,A,expert,Sea Life
-662,Which species is the sacred scarab beetle?,Scarabaeus laticollis,Scarabaeus sacer,Copris lunaris,Geotrupes stercorarius,B,expert,Insects and Records
-663,What is warning coloration in animals called?,Camouflage,Mimicry,Aposematism,Countershading,C,expert,Animal Basics
-664,What is the scientific name of the domestic goat?,Ovis aries,Capra falconeri,Hemitragus jemlahicus,Capra aegagrus,D,expert,Mammals
-665,What is the scientific name of the bee hummingbird?,Calypte anna,Mellisuga helenae,Selasphorus rufus,Patagona gigas,B,expert,Birds
-666,What is the scientific name of the Indian cobra?,Naja kaouthia,Naja naja,Naja melanoleuca,Ophiophagus hannah,B,expert,Reptiles and Amphibians
-667,What is the scientific name of the cicada killer wasp?,Sphex pensylvanicus,Cerceris rybyensis,Sphecius speciosus,Ammophila sabulosa,C,expert,Insects and Records
-668,What is it called when a harmless species copies a dangerous one?,Mullerian mimicry,Automimicry,Egg mimicry,Batesian mimicry,D,expert,Animal Basics
-669,What is the scientific name of the house mouse?,Mus musculus,Rattus rattus,Cavia porcellus,Mesocricetus auratus,A,expert,Mammals
-670,Which is the greater flamingo?,Phoeniconaias minor,Phoenicopterus roseus,Phoenicoparrus andinus,Phoenicopterus chilensis,B,expert,Birds
-671,What is the scientific name of the golden poison frog?,Dendrobates tinctorius,Atelopus zeteki,Phyllobates terribilis,Phyllobates bicolor,C,expert,Reptiles and Amphibians
-672,What is the scientific name of the sailfish?,Makaira nigricans,Xiphias gladius,Tetrapturus albidus,Istiophorus platypterus,D,expert,Sea Life
-673,What is the study of animal behavior called?,Ethology,Ecology,Physiology,Anatomy,A,expert,Animal Basics
-674,What is the scientific name of the brown rat?,Mus musculus,Rattus norvegicus,Bandicota indica,Rattus exulans,B,expert,Mammals
-675,What is the scientific name of the American robin?,Erithacus rubecula,Turdus merula,Turdus migratorius,Sialia sialis,C,expert,Birds
-676,What is the scientific name of the eastern box turtle?,Trachemys scripta,Chrysemys picta,Glyptemys insculpta,Terrapene carolina,D,expert,Reptiles and Amphibians
-677,What is the scientific name of the giant squid?,Architeuthis dux,Architeuthis harttii,Mesonychoteuthis hamiltoni,Dosidicus gigas,A,expert,Sea Life
-678,What is the scientific name of the empress cicada?,Magicicada septendecim,Megapomponia imperatoria,Tacua speciosa,Cryptotympana atrata,B,expert,Insects and Records
-679,What is the scientific name of the European rabbit?,Sylvilagus floridanus,Lepus europaeus,Oryctolagus cuniculus,Ochotona princeps,C,expert,Mammals
-680,What is the scientific name of the common raven?,Corvus corone,Corvus frugilegus,Corvus monedula,Corvus corax,D,expert,Birds
-681,What is the scientific name of the desert tortoise?,Gopherus agassizii,Gopherus polyphemus,Testudo graeca,Astrochelys radiata,A,expert,Reptiles and Amphibians
-682,What is the scientific name of the chambered nautilus?,Nautilus macromphalus,Nautilus pompilius,Allonautilus scrobiculatus,Sepia officinalis,B,expert,Sea Life
-683,What is the scientific name of the brown recluse spider?,Loxosceles laeta,Latrodectus mactans,Loxosceles reclusa,Atrax robustus,C,expert,Insects and Records
-684,What do we call animals sleeping through hot dry seasons?,Cryptobiosis,Brumation,Dormancy,Estivation,D,expert,Animal Basics
-685,What is the scientific name of the house sparrow?,Passer domesticus,Passer montanus,Passer hispaniolensis,Fringilla coelebs,A,expert,Birds
-686,What is the scientific name of the leopard gecko?,Eublepharis angramainyu,Eublepharis macularius,Correlophus ciliatus,Phelsuma grandis,B,expert,Reptiles and Amphibians
-687,What is the scientific name of the reef stonefish?,Synanceia horrida,Synanceia alula,Synanceia verrucosa,Inimicus didactylus,C,expert,Sea Life
-688,What is the scientific name of the goliath birdeater?,Theraphosa apophysis,Poecilotheria regalis,Aphonopelma chalcodes,Theraphosa blondi,D,expert,Insects and Records
-689,Which gas do animals release during respiration?,Carbon dioxide,Methane,Hydrogen,Oxygen,A,expert,Animal Basics
-690,What is the scientific name of the polar bear?,Ursus arctos,Ursus maritimus,Ursus americanus,Melursus ursinus,B,expert,Mammals
-691,What is the scientific name of the central bearded dragon?,Pogona henrylawsoni,Pogona barbata,Pogona vitticeps,Uromastyx geyri,C,expert,Reptiles and Amphibians
-692,What is the largest species of seahorse?,Tiger tail seahorse,Thorny seahorse,Lined seahorse,Big bellied seahorse,D,expert,Sea Life
-693,What is the scientific name of the tarantula hawk wasp?,Pepsis thisbe,Pepsis grossa,Hemipepsis ustulata,Chrysis ignita,A,expert,Insects and Records
-694,What do we call a species that lives only in one region?,Native,Endemic,Invasive,Migratory,B,expert,Animal Basics
-695,What is the scientific name of the brown bear?,Ursus thibetanus,Tremarctos ornatus,Ursus arctos,Helarctos malayanus,C,expert,Mammals
-696,What is the scientific name of the blue jay?,Cyanocorax yncas,Garrulus glandarius,Pica pica,Cyanocitta cristata,D,expert,Birds
-697,What is the scientific name of the immortal jellyfish?,Turritopsis dohrnii,Aurelia aurita,Cyanea capillata,Physalia physalis,A,expert,Sea Life
-698,Which order do dragonflies and damselflies belong to?,Ephemeroptera,Odonata,Plecoptera,Neuroptera,B,expert,Insects and Records
-699,What is the smallest mammal by weight?,Bumblebee bat,African pygmy mouse,Etruscan shrew,Baluchistan pygmy jerboa,C,expert,Animal Basics
-700,What is the scientific name of the giant panda?,Procyon lotor,Nasua nasua,Bassariscus astutus,Ailuropoda melanoleuca,D,expert,Mammals
-701,What is the scientific name of the northern cardinal?,Cardinalis cardinalis,Pheucticus ludovicianus,Cardinalis sinuatus,Passerina caerulea,A,expert,Birds
-702,What is the scientific name of the water monitor?,Varanus salvadorii,Varanus salvator,Varanus jobiensis,Varanus doreanus,B,expert,Reptiles and Amphibians
-703,Which family do robber flies belong to?,Syrphidae,Tabanidae,Asilidae,Culicidae,C,expert,Insects and Records
-704,Which is the most numerous wild bird on Earth?,European starling,Rock pigeon,House finch,Red billed quelea,D,expert,Animal Basics
-705,What is the scientific name of the red panda?,Ailurus fulgens,Potos flavus,Eira barbara,Arctictis binturong,A,expert,Mammals
-706,What is the scientific name of the Atlantic puffin?,Cerorhinca monocerata,Fratercula arctica,Fratercula cirrhata,Alle alle,B,expert,Birds
-707,Which genus do rattlesnakes belong to?,Sistrurus,Bitis,Crotalus,Vipera,C,expert,Reptiles and Amphibians
-708,What is the scientific name of the goblin shark?,Odontaspis ferox,Carcharias taurus,Alopias vulpinus,Mitsukurina owstoni,D,expert,Sea Life
-709,Which is the loudest land animal?,Howler monkey,Hyena,Gorilla,Baboon,A,expert,Animal Basics
-710,What is the scientific name of the meerkat?,Helogale parvula,Suricata suricatta,Mungos mungo,Crossarchus obscurus,B,expert,Mammals
-711,What is the scientific name of the dodo?,Pezophaps solitaria,Ectopistes migratorius,Raphus cucullatus,Columba livia,C,expert,Birds
-712,What is the scientific name of the American bullfrog?,Lithobates pipiens,Rana temporaria,Lithobates clamitans,Lithobates catesbeianus,D,expert,Reptiles and Amphibians
-713,What is the scientific name of the shortfin mako?,Isurus oxyrinchus,Isurus paucus,Lamna nasus,Carcharodon,A,expert,Sea Life
-714,What is the scientific name of the desert locust?,Locusta migratoria,Schistocerca gregaria,Schistocerca americana,Nomadacris septemfasciata,B,expert,Insects and Records
-715,Which is the spotted hyena?,Hyaena hyaena,Proteles cristata,Crocuta crocuta,Parahyaena brunnea,C,expert,Mammals
-716,Which is the wild turkey?,Numida meleagris,Pavo cristatus,Gallus gallus,Meleagris gallopavo,D,expert,Birds
-717,What is the scientific name of the emerald tree boa?,Corallus caninus,Corallus hortulanus,Morelia viridis,Epicrates cenchria,A,expert,Reptiles and Amphibians
-718,What is the scientific name of the loggerhead turtle?,Dermochelys coriacea,Caretta caretta,Carettochelys insculpta,Trionyx triunguis,B,expert,Sea Life
-719,What is the scientific name of the firefly?,Photuris versicolor,Lampyris noctiluca,Photinus pyralis,Luciola italica,C,expert,Insects and Records
-720,Which land mammal has the most teeth?,African lion,Black rhinoceros,Grizzly bear,Giant armadillo,D,expert,Animal Basics
-721,What is the scientific name of the mallard?,Anas platyrhynchos,Anas crecca,Anas acuta,Anas americana,A,expert,Birds
-722,What is the scientific name of the frilled lizard?,Heloderma,Chlamydosaurus kingii,Sauromalus ater,Phrynosoma cornutum,B,expert,Reptiles and Amphibians
-723,What is the scientific name of the electric eel?,Electrophorus voltai,Gymnotus carapo,Electrophorus electricus,Eigenmannia virescens,C,expert,Sea Life
-724,What is the scientific name of the bed bug?,Cimex hemipterus,Triatoma infestans,Graphosoma lineatum,Cimex lectularius,D,expert,Insects and Records
-725,What is a group of kittens called?,Kindle,Clowder,Down,Brace,A,expert,Animal Basics
-726,What is the scientific name of the African bush elephant?,Elephas maximus,Loxodonta africana,Mammuthus primigenius,Palaeoloxodon antiquus,B,expert,Mammals
-727,What is the scientific name of the marine iguana?,Iguana iguana,Ctenosaura similis,Amblyrhynchus cristatus,Dipsosaurus dorsalis,C,expert,Reptiles and Amphibians
-728,What is the scientific name of the giant clam?,Tridacna derasa,Tridacna gigas,Tridacna squamosa,Hippopus hippopus,B,expert,Sea Life
-729,What is the scientific name of the deathstalker scorpion?,Leiurus quinquestriatus,Androctonus australis,Centruroides sculpturatus,Pandinus imperator,A,expert,Insects and Records
-730,Which is the largest land member of the weasel family?,Badger,Wolverine,Otter,Mink,B,expert,Animal Basics
-731,What is the scientific name of the Asian elephant?,Loxodonta cyclotis,Mammuthus columbi,Elephas maximus,Primelephas gomphotherioides,C,expert,Mammals
-732,What is the scientific name of the Canada goose?,Anser anser,Chen caerulescens,Branta leucopsis,Branta canadensis,D,expert,Birds
-733,What is the scientific name of the oarfish?,Regalecus glesne,Regalecus russelii,Lampris guttatus,Mola mola,A,expert,Sea Life
-734,What is the scientific name of the Sydney funnel web spider?,Hadronyche formidabilis,Atrax robustus,Macrothele calpeiana,Atrax sutherlandi,B,expert,Insects and Records
-735,What is a baby hedgehog called?,Piglet,Puggle,Hoglet,Calf,C,expert,Animal Basics
-736,What is the scientific name of the koala?,Vombatus ursinus,Dendrolagus matschiei,Sarcophilus harrisii,Phascolarctos cinereus,D,expert,Mammals
-737,What is the scientific name of the mute swan?,Cygnus olor,Cygnus cygnus,Cygnus atratus,Cygnus buccinator,A,expert,Birds
-738,What is the scientific name of the hellbender?,Andrias japonicus,Cryptobranchus alleganiensis,Andrias davidianus,Necturus maculosus,B,expert,Reptiles and Amphibians
-739,What is the scientific name of the emperor scorpion?,Heterometrus longimanus,Scorpio maurus,Pandinus imperator,Buthus occitanus,C,expert,Insects and Records
-740,Which animal has no teeth at all?,Sloth,Armadillo,White rhinoceros,Giant anteater,D,expert,Animal Basics
-741,What is the scientific name of the cheetah?,Acinonyx jubatus,Lynx lynx,Puma concolor,Leopardus pardalis,A,expert,Mammals
-742,What is the scientific name of the whooping crane?,Grus grus,Grus americana,Grus rubicunda,Grus japonensis,B,expert,Birds
-743,What is the scientific name of the thorny devil?,Phrynosoma solare,Chlamydosaurus kingii,Moloch horridus,Pogona minor,C,expert,Reptiles and Amphibians
-744,What is the scientific name of the Mediterranean moray?,Gymnothorax favagineus,Echidna nebulosa,Anguilla anguilla,Muraena helena,D,expert,Sea Life
-745,What is a group of rattlesnakes called?,Rhumba,Pandemonium,Congress,Fluther,A,expert,Animal Basics
-746,What is the scientific name of the common hippopotamus?,Choeropsis liberiensis,Hippopotamus amphibius,Hippopotamus gorgops,Kobus megaceros,B,expert,Mammals
-747,What is the scientific name of the great blue heron?,Ardea alba,Butorides virescens,Ardea herodias,Nycticorax nycticorax,C,expert,Birds
-748,What is the scientific name of the Texas horned lizard?,Phrynosoma platyrhinos,Phrynosoma mcallii,Phrynosoma hernandesi,Phrynosoma cornutum,D,expert,Reptiles and Amphibians
-749,What is the scientific name of the Japanese spider crab?,Macrocheira kaempferi,Limulus polyphemus,Carcinus maenas,Maja squinado,A,expert,Sea Life
-750,What is the scientific name of the brown marmorated stink bug?,Nezara viridula,Halyomorpha halys,Murgantia histrionica,Chinavia hilaris,B,expert,Insects and Records
-751,What is the scientific name of the white rhinoceros?,Diceros bicornis,Rhinoceros unicornis,Ceratotherium simum,Rhinoceros sondaicus,C,expert,Mammals
-752,What is the scientific name of the golden eagle?,Aquila clanga,Hieraaetus pennatus,Haliaeetus pelagicus,Aquila chrysaetos,D,expert,Birds
-753,What is the scientific name of the European green toad?,Bufotes viridis,Bufo bufo,Bufotes pewzowi,Anaxyrus americanus,A,expert,Reptiles and Amphibians
-754,What is the scientific name of the sea otter?,Lutra lutra,Enhydra lutris,Aonyx cinereus,Lontra canadensis,B,expert,Sea Life
-755,What is the scientific name of the luna moth?,Actias selene,Antheraea yamamai,Actias luna,Callosamia promethea,C,expert,Insects and Records
-756,Which bird has been observed sleeping while flying?,Albatross,Skua,Petrel,Frigatebird,D,expert,Birds
-757,What is the scientific name of the ruby throated hummingbird?,Archilochus colubris,Calothorax lucifer,Mellisuga minima,Amazilia tzacatl,A,expert,Birds
-758,Which family do poison dart frogs belong to?,Bufonidae,Dendrobatidae,Hylidae,Ranidae,B,expert,Reptiles and Amphibians
-759,What is the scientific name of the West Indian manatee?,Trichechus senegalensis,Trichechus inunguis,Trichechus manatus,Dugong dugon,C,expert,Sea Life
-760,What is the scientific name of the Asian lady beetle?,Adalia bipunctata,Cycloneda munda,Hippodamia convergens,Harmonia axyridis,D,expert,Insects and Records
-761,Which is the smallest bird of prey?,Black thighed falconet,American kestrel,Pearl kite,Bornean falconet,A,expert,Birds
-762,What is the scientific name of the western honey bee?,Amegilla cingulata,Apis mellifera,Braunsapis puangensis,Exoneurella tridentata,B,expert,Mammals
-763,What is the scientific name of the olm?,Eurycea tynerensis,Desmognathus fuscus,Proteus anguinus,Amphiuma means,C,expert,Reptiles and Amphibians
-764,What is the scientific name of the sperm whale?,Kogia breviceps,Ziphius cavirostris,Mesoplodon densirostris,Physeter macrocephalus,D,expert,Sea Life
-765,What is the scientific name of the periodical cicada?,Magicicada septendecim,Magicicada cassini,Magicicada tredecim,Okanagana rimosa,A,expert,Insects and Records
-766,Which bat forms the largest colonies on Earth?,Large flying fox,Mexican free tailed bat,Little brown bat,Hoary bat,B,expert,Mammals
-767,What is the scientific name of the monarch butterfly?,Vanessa cardui,Morpho peleides,Danaus plexippus,Heliconius melpomene,C,expert,Mammals
-768,What is the scientific name of the superb lyrebird?,Menura alberti,Atrichornis rufescens,Ptilonorhynchus violaceus,Menura novaehollandiae,D,expert,Birds
-769,What is the scientific name of the narwhal?,Monodon monoceros,Lagenorhynchus albirostris,Tursiops truncatus,Cephalorhynchus commersonii,A,expert,Sea Life
-770,Which family do katydids belong to?,Gryllidae,Tettigoniidae,Acrididae,Tetrigidae,B,expert,Insects and Records
-771,Which is the tallest flying bird?,Okapi,Buffalo,Giraffe,Elk,C,expert,Birds
-772,What is the scientific name of the cougar?,Herpailurus yagouaroundi,Leopardus wiedii,Lynx rufus,Puma concolor,D,expert,Mammals
-773,What is the scientific name of the great egret?,Ardea alba,Egretta thula,Bubulcus ibis,Egretta garzetta,A,expert,Birds
-774,What is the scientific name of the Nile monitor?,Varanus indicus,Varanus niloticus,Varanus bengalensis,Varanus griseus,B,expert,Reptiles and Amphibians
-775,Which family do fleas belong to?,Ceratophyllidae,Hystrichopsyllidae,Pulicidae,Leptopsyllidae,C,expert,Insects and Records
-776,Which animal heart can weigh about 180 kilograms?,African elephant,Bowhead whale,Minke whale,Blue whale,D,expert,Animal Basics
-777,What is the scientific name of the plains zebra?,Equus quagga,Equus grevyi,Equus zebra,Equus kiang,A,expert,Mammals
-778,What is the scientific name of the osprey?,Circus cyaneus,Pandion haliaetus,Accipiter gentilis,Milvus milvus,B,expert,Birds
-779,What is the scientific name of the Gaboon viper?,Bitis arietans,Atheris squamigera,Bitis gabonica,Bitis nasicornis,C,expert,Reptiles and Amphibians
-780,What is the scientific name of the bowhead whale?,Eubalaena glacialis,Caperea marginata,Eschrichtius robustus,Balaena mysticetus,D,expert,Sea Life
-781,Which bird builds huge communal apartment nests?,Sociable weaver,Baya weaver,Village weaver,Thick billed weaver,A,expert,Birds
-782,What is the scientific name of the wild yak?,Bos taurus,Bos mutus,Bison bonasus,Syncerus caffer,B,expert,Mammals
-783,What is the scientific name of the resplendent quetzal?,Trogon elegans,Pharomachrus antisianus,Pharomachrus mocinno,Euptilotis neoxenus,C,expert,Birds
-784,Which family includes the hard shelled sea turtles?,Dermochelyidae,Trionychidae,Kinosternidae,Cheloniidae,D,expert,Reptiles and Amphibians
-785,What is the scientific name of the vampire squid?,Vampyroteuthis infernalis,Octopoteuthis deletron,Japetella heathi,Stauroteuthis syrtensis,A,expert,Sea Life
-786,What is the scientific name of the European hornet?,Vespa mandarinia,Vespa crabro,Vespula vulgaris,Dolichovespula maculata,B,expert,Insects and Records
-787,What is the scientific name of the guinea pig?,Cavia aperea,Dolichotis patagonum,Cavia porcellus,Hydrochoerus hydrochaeris,C,expert,Mammals
-788,What is the scientific name of the gouldian finch?,Taeniopygia guttata,Poephila acuticauda,Erythrura trichroa,Chloebia gouldiae,D,expert,Birds
-789,What is the scientific name of the gharial?,Gavialis gangeticus,Mecistops cataphractus,Osteolaemus tetraspis,Paleosuchus trigonatus,A,expert,Reptiles and Amphibians
-790,What is the scientific name of the peacock mantis shrimp?,Gonodactylus smithii,Odontodactylus scyllarus,Squilla mantis,Lysiosquillina maculata,B,expert,Sea Life
-791,What is the scientific name of the silkworm?,Bombyx mandarina,Actias luna,Bombyx mori,Callosamia securifera,C,expert,Insects and Records
-792,Which is the wryneck?,Sunbird,Jacana,Crake,Wryneck,D,expert,Animal Basics
-793,What is the scientific name of the secretary bird?,Sagittarius serpentarius,Polemaetus bellicosus,Terathopius ecaudatus,Circaetus gallicus,A,expert,Birds
-794,What is the scientific name of the cane toad?,Rhinella schneideri,Rhinella marina,Rhinella icterica,Incilius nebulifer,B,expert,Reptiles and Amphibians
-795,What is the scientific name of the tiger pufferfish?,Arothron hispidus,Canthigaster valentini,Takifugu rubripes,Lagocephalus lunaris,C,expert,Sea Life
-796,What is the scientific name of the antlion?,Myrmeleon immaculatus,Euroleon nostras,Palpares libelluloides,Myrmeleon formicarius,D,expert,Insects and Records
-797,Which is the tallest flying bird?,Sarus crane,Whooping crane,Wandering albatross,Dalmatian pelican,A,expert,Birds
-798,What is the scientific name of the golden hamster?,Phodopus sungorus,Meriones unguiculatus,Cricetus cricetus,Mesocricetus auratus,D,expert,Mammals
-799,What is the scientific name of the panther chameleon?,Chamaeleo calyptratus,Furcifer oustaleti,Furcifer pardalis,Furcifer campani,C,expert,Reptiles and Amphibians
-800,What is the scientific name of the Atlantic hagfish?,Eptatretus stoutii,Myxine circifrons,Petromyzon marinus,Myxine glutinosa,D,expert,Sea Life
+44,A tadpole lives in water.,False,True,,,B,easy,Reptiles and Amphibians
+45,Seahorses live in trees.,False,True,,,A,easy,Sea Life
+46,Ants live in big groups called colonies.,False,True,,,B,easy,Insects and Records
+47,All mammals can fly.,False,True,,,A,easy,Animal Basics
+48,A hummingbird is a very small bird.,False,True,,,B,easy,Birds
+49,A tortoise is as fast as a race car.,False,True,,,A,easy,Reptiles and Amphibians
+50,A clam has a shell.,False,True,,,B,easy,Sea Life
+51,A caterpillar can fly.,False,True,,,A,easy,Insects and Records
+52,A caterpillar changes into a butterfly.,False,True,,,B,easy,Animal Basics
+53,Gorillas eat meat every day.,False,True,,,A,easy,Mammals
+54,Frogs catch insects with their long tongues.,False,True,,,B,easy,Reptiles and Amphibians
+55,Dolphins are covered in feathers.,False,True,,,A,easy,Sea Life
+56,A dragonfly has four wings.,False,True,,,B,easy,Insects and Records
+57,Fish breathe using lungs.,False,True,,,A,easy,Animal Basics
+58,Bats sleep during the day and come out at night.,False,True,,,B,easy,Mammals
+59,A swan is a reptile.,False,True,,,A,easy,Birds
+60,An octopus can squirt ink.,False,True,,,B,easy,Sea Life
+61,A snail is one of the fastest animals on Earth.,False,True,,,A,easy,Insects and Records
+62,A herbivore eats plants.,False,True,,,B,easy,Animal Basics
+63,A zebra has spots.,False,True,,,A,easy,Mammals
+64,Turtles have no shells.,True,False,,,B,easy,Reptiles and Amphibians
+65,A cricket makes chirping sounds.,True,False,,,A,easy,Insects and Records
+66,A penguin is a mammal.,True,False,,,B,easy,Animal Basics
+67,A baby cow is called a calf.,True,False,,,A,easy,Mammals
+68,Chickens give birth to live babies.,True,False,,,B,easy,Birds
+69,A salamander has a long tail and soft skin.,True,False,,,A,easy,Reptiles and Amphibians
+70,A whale is the smallest animal in the sea.,True,False,,,B,easy,Sea Life
+71,Mammals have hair or fur.,True,False,,,A,easy,Animal Basics
+72,Whales live in trees.,True,False,,,B,easy,Mammals
+73,A peacock is a colorful bird.,True,False,,,A,easy,Birds
+74,Crocodiles eat only fruit.,True,False,,,B,easy,Reptiles and Amphibians
+75,Coral reefs are built by tiny sea animals.,True,False,,,A,easy,Sea Life
+76,A centipede has exactly two legs.,True,False,,,B,easy,Insects and Records
+77,A rhinoceros has a horn on its nose.,True,False,,,A,easy,Mammals
+78,The ostrich is the smallest bird in the world.,True,False,,,B,easy,Birds
+79,An alligator is a large reptile.,True,False,,,A,easy,Reptiles and Amphibians
+80,Fish have fur.,True,False,,,B,easy,Sea Life
+81,A snail carries its shell on its back.,True,False,,,A,easy,Insects and Records
+82,A dolphin lays eggs.,True,False,,,B,easy,Animal Basics
+83,Most birds build nests.,True,False,,,A,easy,Birds
+84,The komodo dragon can breathe fire.,True,False,,,B,easy,Reptiles and Amphibians
+85,A sea star usually has five arms.,True,False,,,A,easy,Sea Life
+86,Spiders eat only lettuce.,True,False,,,B,easy,Insects and Records
+87,A puppy is a young dog.,True,False,,,A,easy,Animal Basics
+88,A horse walks slower than a snail.,True,False,,,B,easy,Mammals
+89,A gecko can climb up walls.,True,False,,,A,easy,Reptiles and Amphibians
+90,Sharks have no teeth.,True,False,,,B,easy,Sea Life
+91,Ants can carry things much heavier than themselves.,True,False,,,A,easy,Insects and Records
+92,A shark is a mammal.,True,False,,,B,easy,Animal Basics
+93,Squirrels like to eat nuts.,True,False,,,A,easy,Mammals
+94,A hummingbird is bigger than an eagle.,True,False,,,B,easy,Birds
+95,A seahorse is a fish.,True,False,,,A,easy,Sea Life
+96,An ant is bigger than an elephant.,True,False,,,B,easy,Insects and Records
+97,Animals need water to live.,True,False,,,A,easy,Animal Basics
+98,A mouse is bigger than an elephant.,True,False,,,B,easy,Mammals
+99,A woodpecker pecks holes in trees.,True,False,,,A,easy,Birds
+100,Snakes are covered in hair.,True,False,,,B,easy,Reptiles and Amphibians
+101,A firefly can light up at night.,True,False,,,A,easy,Insects and Records
+102,A lion is a type of reptile.,True,False,,,B,easy,Animal Basics
+103,A panda eats bamboo.,True,False,,,A,easy,Mammals
+104,Flamingos are black birds.,True,False,,,B,easy,Birds
+105,A lizard can drop its tail to escape danger.,True,False,,,A,easy,Reptiles and Amphibians
+106,A crab is a mammal.,True,False,,,B,easy,Sea Life
+107,A young frog is called a tadpole.,True,False,,,A,easy,Animal Basics
+108,Cows are meat eaters.,True,False,,,B,easy,Mammals
+109,A goose is bigger than a duck.,True,False,,,A,easy,Birds
+110,A python is a tiny snake.,True,False,,,B,easy,Reptiles and Amphibians
+111,Whales sing long songs.,True,False,,,A,easy,Sea Life
+112,A queen bee does all the work in the hive.,True,False,,,B,easy,Insects and Records
+113,A donkey has long ears.,True,False,,,A,easy,Mammals
+114,An ostrich is smaller than a sparrow.,True,False,,,B,easy,Birds
+115,A tortoise lives on land.,True,False,,,A,easy,Reptiles and Amphibians
+116,Jellyfish can fly in the sky.,True,False,,,B,easy,Sea Life
+117,Butterflies drink nectar from flowers.,True,False,,,A,easy,Insects and Records
+118,All insects have one hundred legs.,True,False,,,B,easy,Animal Basics
+119,An eagle is a bird of prey.,True,False,,,A,easy,Birds
+120,Crocodiles have no teeth.,True,False,,,B,easy,Reptiles and Amphibians
+121,A walrus has long tusks.,True,False,,,A,easy,Sea Life
+122,All insects can swim.,True,False,,,B,easy,Insects and Records
+123,An animal that eats meat is called a carnivore.,True,False,,,A,easy,Animal Basics
+124,A rattlesnake has a rattle on its tail.,False,True,,,B,easy,Reptiles and Amphibians
+125,Sea otters hate water.,False,True,,,A,easy,Sea Life
+126,A grasshopper has big back legs for jumping.,False,True,,,B,easy,Insects and Records
+127,Birds have teeth.,False,True,,,A,easy,Animal Basics
+128,A beaver builds dams.,False,True,,,B,easy,Mammals
+129,The kiwi can fly across oceans.,False,True,,,A,easy,Birds
+130,A puffer fish can puff up its body.,False,True,,,B,easy,Sea Life
+131,Bees can say words like people.,False,True,,,A,easy,Insects and Records
+132,Mammal babies drink milk from their mothers.,False,True,,,B,easy,Animal Basics
+133,A sloth moves very quickly.,False,True,,,A,easy,Mammals
+134,A canary is a songbird kept as a pet.,False,True,,,B,easy,Birds
+135,Tadpoles have wings.,False,True,,,A,easy,Reptiles and Amphibians
+136,A scorpion has a stinger on its tail.,False,True,,,B,easy,Insects and Records
+137,A bat has feathers.,False,True,,,A,easy,Animal Basics
+138,A deer eats plants.,False,True,,,B,easy,Mammals
+139,Pelicans live only in deserts.,False,True,,,A,easy,Birds
+140,Frogs have long back legs for jumping.,False,True,,,B,easy,Reptiles and Amphibians
+141,A lobster is a soft squishy animal.,False,True,,,A,easy,Sea Life
+142,Some animals only come out at night.,False,True,,,B,easy,Animal Basics
+143,A koala is a kind of bear.,False,True,,,A,easy,Mammals
+144,A vulture eats animals that are already dead.,False,True,,,B,easy,Birds
+145,A toad can only live underwater.,False,True,,,A,easy,Reptiles and Amphibians
+146,A lobster has big claws.,False,True,,,B,easy,Sea Life
+147,Butterflies sleep all day and fly only at night.,False,True,,,A,easy,Insects and Records
+148,A wolf is a wild relative of the dog.,False,True,,,B,easy,Mammals
+149,An albatross has very short wings.,False,True,,,A,easy,Birds
+150,A snake smells with its tongue.,False,True,,,B,easy,Reptiles and Amphibians
+151,Eels have legs.,False,True,,,A,easy,Sea Life
+152,A stick insect looks like a twig.,False,True,,,B,easy,Insects and Records
+153,A tiger is a small cat.,False,True,,,A,easy,Animal Basics
+154,A swan glides on lakes and rivers.,False,True,,,B,easy,Birds
+155,Snakes can fly like birds.,False,True,,,A,easy,Reptiles and Amphibians
+156,A manatee swims slowly and eats plants.,False,True,,,B,easy,Sea Life
+157,A spider has wings.,False,True,,,A,easy,Insects and Records
+158,A vet is an animal doctor.,False,True,,,B,easy,Animal Basics
+159,An elephant has a tiny trunk.,False,True,,,A,easy,Mammals
+160,A crocodile lays eggs.,False,True,,,B,easy,Reptiles and Amphibians
+161,Sharks can live on land.,False,True,,,A,easy,Sea Life
+162,A beetle can glow in the dark.,False,True,,,B,easy,Insects and Records
+163,All animals have four legs.,False,True,,,A,easy,Animal Basics
+164,A fox has a bushy tail.,False,True,,,B,easy,Mammals
+165,A crow is bigger than an eagle.,False,True,,,A,easy,Birds
+166,A squid has eight arms and two long tentacles.,False,True,,,B,easy,Sea Life
+167,The elephant is the biggest animal that has ever lived.,False,True,,,A,easy,Insects and Records
+168,Eggs have a shell that protects the baby inside.,False,True,,,B,easy,Animal Basics
+169,Sheep can fly.,False,True,,,A,easy,Mammals
+170,The ostrich is the fastest running bird.,False,True,,,B,easy,Birds
+171,Alligators live in the snowy Arctic.,False,True,,,A,easy,Reptiles and Amphibians
+172,A wasp can sting.,False,True,,,B,easy,Insects and Records
+173,A goldfish is a mammal.,False,True,,,A,easy,Animal Basics
+174,A baby sheep is called a lamb.,False,True,,,B,easy,Mammals
+175,Penguins can fly high in the sky.,False,True,,,A,easy,Birds
+176,A gecko is a small lizard.,False,True,,,B,easy,Reptiles and Amphibians
+177,The blue whale eats sharks.,False,True,,,A,easy,Sea Life
+178,Cows and sheep eat grass.,False,True,,,B,easy,Animal Basics
+179,A goat is a sea animal.,False,True,,,A,easy,Mammals
+180,A robin has a red chest.,False,True,,,B,easy,Birds
+181,A mamba is a slow crawling worm.,False,True,,,A,easy,Reptiles and Amphibians
+182,Sea turtles lay their eggs on sandy beaches.,False,True,,,B,easy,Sea Life
+183,The tallest animal in the world is the horse.,False,True,,,A,easy,Insects and Records
+184,Otters love to swim.,False,True,,,B,easy,Mammals
+185,Ostriches hide by burying their heads in the sand.,False,True,,,A,easy,Birds
+186,Some turtles hide inside their shells.,False,True,,,B,easy,Reptiles and Amphibians
+187,Whales have scales.,False,True,,,A,easy,Sea Life
+188,The cheetah is the fastest land animal.,False,True,,,B,easy,Insects and Records
+189,A kangaroo is a fish.,False,True,,,A,easy,Animal Basics
+190,Ducks have webbed feet for swimming.,False,True,,,B,easy,Birds
+191,A crocodile feeds its babies milk.,False,True,,,A,easy,Reptiles and Amphibians
+192,A hermit crab moves into empty shells to live.,False,True,,,B,easy,Sea Life
+193,Insects have ten legs.,False,True,,,A,easy,Insects and Records
+194,Animals are living things.,False,True,,,B,easy,Animal Basics
+195,A hamster is larger than a horse.,False,True,,,A,easy,Mammals
+196,Frogs breathe through their skin as well as their lungs.,False,True,,,B,easy,Reptiles and Amphibians
+197,Fish sleep in beds with pillows.,False,True,,,A,easy,Sea Life
+198,Which group do frogs belong to: amphibians or reptiles?,Amphibians,Reptiles,,,A,medium,Animal Basics
+199,Which animal has a trunk: an elephant or a zebra?,Zebra,Elephant,,,B,medium,Mammals
+200,Which bird lays the largest egg: an ostrich or a sparrow?,Ostrich,Sparrow,,,A,medium,Birds
+201,Which animal slithers: a snake or a salamander?,Salamander,Snake,,,B,medium,Reptiles and Amphibians
+202,Which sea animal has eight arms: an octopus or a seal?,Octopus,Seal,,,A,medium,Sea Life
+203,Which creature spins a web: a spider or a snail?,Snail,Spider,,,B,medium,Insects and Records
+204,Which mammal can truly fly: a bat or a flying squirrel?,Bat,Flying squirrel,,,A,medium,Mammals
+205,Which bird cannot fly: a penguin or an eagle?,Eagle,Penguin,,,B,medium,Birds
+206,Which animal flicks its tongue to smell: a snake or a skunk?,Snake,Skunk,,,A,medium,Reptiles and Amphibians
+207,Which animal is a mammal: a dolphin or a shark?,Shark,Dolphin,,,B,medium,Sea Life
+208,Which insect lives in a hive: a honeybee or a fox?,Honeybee,Fox,,,A,medium,Insects and Records
+209,Which animal is a fish: a tuna or a turtle?,Turtle,Tuna,,,B,medium,Animal Basics
+210,Which bird is awake at night: an owl or a robin?,Owl,Robin,,,A,medium,Birds
+211,Which lizard changes color: a chameleon or a crocodile?,Crocodile,Chameleon,,,B,medium,Reptiles and Amphibians
+212,Which fish has a skeleton made of cartilage: a shark or a salmon?,Shark,Salmon,,,A,medium,Sea Life
+213,Which insect makes a chrysalis: a caterpillar or a kitten?,Kitten,Caterpillar,,,B,medium,Insects and Records
+214,Which baby animal hatches from an egg: a chick or a puppy?,Chick,Puppy,,,A,medium,Animal Basics
+215,Which big cat is the fastest: a cheetah or a lion?,Lion,Cheetah,,,B,medium,Mammals
+216,Which animal carries its home on its back: a turtle or a toad?,Turtle,Toad,,,A,medium,Reptiles and Amphibians
+217,Which animal walks sideways on the beach: a crab or a cow?,Cow,Crab,,,B,medium,Sea Life
+218,Which insect works for a queen: an ant or an alligator?,Ant,Alligator,,,A,medium,Insects and Records
+219,Which animal is an insect: a bee or a boa?,Boa,Bee,,,B,medium,Animal Basics
+220,Which animal carries its young in a pouch: a kangaroo or a deer?,Kangaroo,Deer,,,A,medium,Mammals
+221,Which bird copies human speech: a parrot or a penguin?,Penguin,Parrot,,,B,medium,Birds
+222,Which animal squirts ink to escape: a squid or a seagull?,Squid,Seagull,,,A,medium,Sea Life
+223,Which insect flashes light at night: a firefly or a ferret?,Ferret,Firefly,,,B,medium,Insects and Records
+224,Which animal breathes with gills: a goldfish or a gorilla?,Goldfish,Gorilla,,,A,medium,Animal Basics
+225,Which animal is the tallest: a giraffe or a rhinoceros?,Rhinoceros,Giraffe,,,B,medium,Mammals
+226,Which farm bird lays eggs: a hen or a goat?,Hen,Goat,,,A,medium,Birds
+227,Which reptile has a long snout and lives in rivers: a crocodile or a cassowary?,Cassowary,Crocodile,,,B,medium,Reptiles and Amphibians
+228,Which insect has stripes and a stinger: a bee or a butterfly?,Bee,Butterfly,,,A,medium,Insects and Records
+229,Which animal is a reptile: a cobra or a crow?,Crow,Cobra,,,B,medium,Animal Basics
+230,Which animal catches mice: a cat or a goldfish?,Cat,Goldfish,,,A,medium,Mammals
+231,Which animal is covered in feathers: an eagle or a dolphin?,Dolphin,Eagle,,,B,medium,Birds
+232,Which animal can regrow its tail: a lizard or a lamb?,Lizard,Lamb,,,A,medium,Reptiles and Amphibians
+233,Which giant animal breathes air and nurses babies: a whale or a tuna?,Tuna,Whale,,,B,medium,Sea Life
+234,Which animal drinks milk from its mother: a kitten or a chick?,Kitten,Chick,,,A,medium,Animal Basics
+235,Which big cat has stripes: a tiger or a cougar?,Cougar,Tiger,,,B,medium,Mammals
+236,Which bird has webbed feet: a duck or a dodo?,Duck,Dodo,,,A,medium,Birds
+237,Which animal is an amphibian: a frog or a finch?,Finch,Frog,,,B,medium,Reptiles and Amphibians
+238,Which fish looks like a tiny horse: a seahorse or a swordfish?,Seahorse,Swordfish,,,A,medium,Sea Life
+239,Which insect has a red shell with black spots: a ladybug or a locust?,Locust,Ladybug,,,B,medium,Insects and Records
+240,Which animal builds dams in rivers: a beaver or a rabbit?,Rabbit,Beaver,,,A,medium,Mammals
+241,Which bird waddles and swims: a penguin or a flamingo?,Flamingo,Penguin,,,B,medium,Birds
+242,Which animal has webbed feet and croaks: a toad or a tapir?,Toad,Tapir,,,A,medium,Reptiles and Amphibians
+243,Which animal has a hard shell and big claws: a lobster or a lark?,Lark,Lobster,,,B,medium,Sea Life
+244,Which arachnid has eight legs: a spider or a beetle?,Spider,Beetle,,,A,medium,Insects and Records
+245,Which animal is covered in scales: a lizard or a llama?,Llama,Lizard,,,B,medium,Animal Basics
+246,Which bird hunts mice in barns at night: an owl or a dove?,Owl,Dove,,,A,medium,Birds
+247,Which snake spreads a hood when threatened: a cobra or a copperhead?,Copperhead,Cobra,,,B,medium,Reptiles and Amphibians
+248,Which huge animal filter feeds on tiny krill: a blue whale or a barracuda?,Blue whale,Barracuda,,,A,medium,Sea Life
+249,Which insect sings by rubbing its wings: a cricket or a catfish?,Catfish,Cricket,,,B,medium,Insects and Records
+250,Which animal has feathers: a sparrow or a snake?,Sparrow,Snake,,,A,medium,Animal Basics
+251,Which farm animal gives us wool: a sheep or a chicken?,Chicken,Sheep,,,B,medium,Mammals
+252,Which animal has a rattle on its tail: a rattlesnake or a raccoon?,Rattlesnake,Raccoon,,,A,medium,Reptiles and Amphibians
+253,Which animal has a soft body and stinging tentacles: a jellyfish or a mackerel?,Mackerel,Jellyfish,,,B,medium,Sea Life
+254,Which insect looks like a stick: a stick insect or a stag beetle?,Stick insect,Stag beetle,,,A,medium,Insects and Records
+255,Which animal lives in a nest: a pigeon or a panther?,Panther,Pigeon,,,B,medium,Animal Basics
+256,Which animal has a mane around its neck: a lion or a leopard?,Leopard,Lion,,,A,medium,Mammals
+257,Which bird opens its tail like a fan: a peacock or a pigeon?,Pigeon,Peacock,,,B,medium,Birds
+258,Which fish swims upstream to spawn: a salmon or a sardine?,Salmon,Sardine,,,A,medium,Sea Life
+259,Which butterfly migrates to Mexico: a monarch butterfly or a mayfly?,Mayfly,Monarch butterfly,,,B,medium,Insects and Records
+260,Which animal is an amphibian: a newt or a nightingale?,Newt,Nightingale,,,A,medium,Animal Basics
+261,Which animal hibernates through winter: a gray wolf or a brown bear?,Gray wolf,Brown bear,,,B,medium,Mammals
+262,Which bird has a red breast: a robin or a raven?,Robin,Raven,,,A,medium,Birds
+263,Which animal is the largest lizard: a komodo dragon or a gecko?,Gecko,Komodo dragon,,,B,medium,Reptiles and Amphibians
+264,Which arachnid glows under UV light: a scorpion or a spider?,Scorpion,Spider,,,A,medium,Insects and Records
+265,Which animal lays eggs: a platypus or a poodle?,Poodle,Platypus,,,B,medium,Animal Basics
+266,Which animal has antlers: a moose or a hippopotamus?,Moose,Hippopotamus,,,A,medium,Mammals
+267,Which bird carries fish in its beak pouch: a pelican or a sparrow?,Sparrow,Pelican,,,B,medium,Birds
+268,Which turtle lives in the ocean and nests on beaches: a sea turtle or a sea otter?,Sea turtle,Sea otter,,,A,medium,Reptiles and Amphibians
+269,Which deep sea fish has a glowing lure: an anglerfish or an anchovy?,Anchovy,Anglerfish,,,B,medium,Sea Life
+270,Which animal has fur and nurses its young: a seal or a salmon?,Seal,Salmon,,,A,medium,Animal Basics
+271,Which animal lives in icy seas: a walrus or a camel?,Camel,Walrus,,,B,medium,Mammals
+272,Which bird runs fast but cannot fly: an ostrich or a parrot?,Ostrich,Parrot,,,A,medium,Birds
+273,Which animal can climb smooth walls: a gecko or a groundhog?,Groundhog,Gecko,,,B,medium,Reptiles and Amphibians
+274,Which animal can regrow lost arms: a sea star or a sea bass?,Sea star,Sea bass,,,A,medium,Sea Life
+275,Which fuzzy insect is a major pollinator: a bumblebee or a boll weevil?,Boll weevil,Bumblebee,,,B,medium,Insects and Records
+276,Which animal eats eucalyptus leaves: a koala or a panda?,Panda,Koala,,,A,medium,Mammals
+277,Which owl with a heart shaped face hunts at night: a barn owl or a goose?,Goose,Barn owl,,,B,medium,Birds
+278,Which frog is famous for its toxic skin: a poison dart frog or a parakeet?,Poison dart frog,Parakeet,,,A,medium,Reptiles and Amphibians
+279,Which fish swims in big schools: a herring or a hermit crab?,Hermit crab,Herring,,,B,medium,Sea Life
+280,Which insect can jump many times its own length: a grasshopper or a gnat?,Grasshopper,Gnat,,,A,medium,Insects and Records
+281,Which animal is an arachnid: a scorpion or a swallow?,Swallow,Scorpion,,,B,medium,Animal Basics
+282,Which bird wades on long legs in shallow water: a heron or a hawk?,Heron,Hawk,,,A,medium,Birds
+283,Which animal puffs its throat to sing: a frog or a fish?,Fish,Frog,,,B,medium,Reptiles and Amphibians
+284,Which fish shoots water at insects: an archerfish or an eel?,Archerfish,Eel,,,A,medium,Sea Life
+285,Which armored insect lifts many times its own weight: a dung beetle or a dragonfly?,Dragonfly,Dung beetle,,,B,medium,Insects and Records
+286,Which animal swims with fins: a trout or a tortoise?,Trout,Tortoise,,,A,medium,Animal Basics
+287,Which animal has a horn on its nose: a rhinoceros or a giraffe?,Giraffe,Rhinoceros,,,B,medium,Mammals
+288,Which reptile is famous for living a very long life: a giant tortoise or a guppy?,Giant tortoise,Guppy,,,A,medium,Reptiles and Amphibians
+289,Which gentle animal is called a sea cow: a manatee or a marlin?,Marlin,Manatee,,,B,medium,Sea Life
+290,Which insect delivers one of the most painful stings: a bullet ant or a bee?,Bullet ant,Bee,,,A,medium,Insects and Records
+291,Which animal is a rodent: a mouse or a magpie?,Magpie,Mouse,,,B,medium,Animal Basics
+292,Which animal is famous for a great memory: an elephant or a gopher?,Elephant,Gopher,,,A,medium,Mammals
+293,Which bird dives for fish and nests on sea cliffs: a puffin or a pelican?,Pelican,Puffin,,,B,medium,Birds
+294,Which whale is famous for leaping and singing: a humpback whale or a whale shark?,Humpback whale,Whale shark,,,A,medium,Sea Life
+295,Which creature has many legs: a centipede or a caterpillar?,Caterpillar,Centipede,,,B,medium,Insects and Records
+296,Which animal has a backbone: a frog or a fly?,Frog,Fly,,,A,medium,Animal Basics
+297,Which animal digs burrows: a rabbit or an eagle?,Eagle,Rabbit,,,B,medium,Mammals
+298,Which bird is a symbol of peace: a dove or a duck?,Dove,Duck,,,A,medium,Birds
+299,Which young amphibian has gills and a tail: a tern or a tadpole?,Tern,Tadpole,,,B,medium,Reptiles and Amphibians
+300,Which insect makes silk for cocoons: a silkworm or a stink bug?,Silkworm,Stink bug,,,A,medium,Insects and Records
+301,Which animal is warm blooded: a worm or a wolf?,Worm,Wolf,,,B,medium,Animal Basics
+302,Which animal crosses hot deserts: a gerbil or a camel?,Gerbil,Camel,,,A,medium,Mammals
+303,Which bird is a national symbol of the United States: an emu or a bald eagle?,Emu,Bald eagle,,,B,medium,Birds
+304,Which lizard flares the spiky scales under its chin: a bearded dragon or a blue tongue skink?,Bearded dragon,Blue tongue skink,,,A,medium,Reptiles and Amphibians
+305,Which fish can puff its body into a ball: a perch or a puffer fish?,Perch,Puffer fish,,,B,medium,Sea Life
+306,Which animal eats only plants: a rabbit or a raccoon?,Rabbit,Raccoon,,,A,medium,Animal Basics
+307,Which animal swings through trees: a monkey or a mole?,Mole,Monkey,,,B,medium,Mammals
+308,Which bird makes a cawing call: a crow or a crane?,Crow,Crane,,,A,medium,Birds
+309,Which crocodilian has a wide rounded snout: an iguana or an alligator?,Iguana,Alligator,,,B,medium,Reptiles and Amphibians
+310,Which flat fish has both eyes on one side of its head: a flounder or a flying fish?,Flounder,Flying fish,,,A,medium,Sea Life
+311,Which big cat is the fastest runner: a cougar or a cheetah?,Cougar,Cheetah,,,B,medium,Insects and Records
+312,Which animal is famous for raiding trash cans: a raccoon or a ram?,Raccoon,Ram,,,A,medium,Mammals
+313,Which bird has a huge colorful bill: a toucan or a turkey?,Turkey,Toucan,,,B,medium,Birds
+314,Which snake hisses and coils before striking: a viper or a vulture?,Viper,Vulture,,,A,medium,Reptiles and Amphibians
+315,Which clever sea animal can open jars: an oyster or an octopus?,Oyster,Octopus,,,B,medium,Sea Life
+316,Which animal is the largest that has ever lived: a blue whale or a brachiosaurus?,Blue whale,Brachiosaurus,,,A,medium,Insects and Records
+317,Which animal hunts other animals for food: an earthworm or an eagle?,Earthworm,Eagle,,,B,medium,Animal Basics
+318,Which giant bird is flightless and lives in Australia: an emu or an egret?,Emu,Egret,,,A,medium,Birds
+319,Which amphibian keeps feathery gills and stays aquatic for life: an adder or an axolotl?,Adder,Axolotl,,,B,medium,Reptiles and Amphibians
+320,Which fish produces a strong electric shock: an electric eel or an emperor penguin?,Electric eel,Emperor penguin,,,A,medium,Sea Life
+321,Which animal is the tallest in the world: a giraffe or a gerbil?,Giraffe,Gerbil,,,B,medium,Insects and Records
+322,Which animal is a marsupial: a wallaby or a wren?,Wallaby,Wren,,,A,medium,Animal Basics
+323,Which animal hunts in packs: a wolf or a hamster?,Hamster,Wolf,,,B,medium,Mammals
+324,Which snake squeezes its prey: a boa constrictor or a bullfrog?,Boa constrictor,Bullfrog,,,A,medium,Reptiles and Amphibians
+325,Which crustacean lives in borrowed shells: a hake or a hermit crab?,Hake,Hermit crab,,,B,medium,Sea Life
+326,Which bird is the fastest runner: an ostrich or an owl?,Ostrich,Owl,,,A,medium,Insects and Records
+327,Which animal begins life as a caterpillar: a bat or a butterfly?,Bat,Butterfly,,,B,medium,Animal Basics
+328,Which animal has hooves: an octopus or a horse?,Octopus,Horse,,,A,medium,Mammals
+329,Which tall wading bird is pink: a falcon or a flamingo?,Falcon,Flamingo,,,B,medium,Birds
+330,Which sea turtle is the largest: a leatherback turtle or a loggerhead turtle?,Leatherback turtle,Loggerhead turtle,,,A,medium,Sea Life
+331,Which bird dives at over 300 kilometers per hour: a puffin or a peregrine falcon?,Puffin,Peregrine falcon,,,B,medium,Insects and Records
+332,Which animal is a primate: a lemur or a loon?,Lemur,Loon,,,A,medium,Animal Basics
+333,Which Australian animal hops with a joey in its pouch: a kangaroo or a koala?,Koala,Kangaroo,,,B,medium,Mammals
+334,Which bird dives into water to catch fish: a kingfisher or a kiwi?,Kingfisher,Kiwi,,,A,medium,Birds
+335,Which lizard basks on rocks to warm up: an ibex or an iguana?,Ibex,Iguana,,,B,medium,Reptiles and Amphibians
+336,Which creature has the most legs: a millipede or a mantis?,Millipede,Mantis,,,A,medium,Insects and Records
+337,Which animal is a crustacean: a canary or a crab?,Canary,Crab,,,B,medium,Animal Basics
+338,Which animal says oink: a pig or a warthog?,Pig,Warthog,,,A,medium,Mammals
+339,Which bird has a call that sounds like laughter: a kestrel or a kookaburra?,Kestrel,Kookaburra,,,B,medium,Birds
+340,Which frog is enormous: a goliath frog or a glass frog?,Goliath frog,Glass frog,,,A,medium,Reptiles and Amphibians
+341,Which animal moves by jet propulsion: a nautilus or a squid?,Nautilus,Squid,,,B,medium,Sea Life
+342,Which animal is a bird: a finch or a flying fox?,Finch,Flying fox,,,A,medium,Animal Basics
+343,Which animal loves honey: a wolf or a bear?,Wolf,Bear,,,B,medium,Mammals
+344,Which bird builds one of the largest tree nests: a bald eagle or a barn swallow?,Bald eagle,Barn swallow,,,A,medium,Birds
+345,Which animal changes from a tadpole to an air breathing adult: a fawn or a frog?,Fawn,Frog,,,B,medium,Reptiles and Amphibians
+346,Which shark is the biggest fish: a whale shark or a great white shark?,Whale shark,Great white shark,,,A,medium,Sea Life
+347,Which animal is the largest rodent: a capybara or a coypu?,Coypu,Capybara,,,B,medium,Insects and Records
+348,Which bird buries acorns and plants new oak trees?,Jay,Squirrel,,,A,easy,Birds
+349,Which songbird sings beautifully at dawn: a starling or a song thrush?,Starling,Song thrush,,,B,medium,Birds
+350,Which crocodilian guards its nest and carries babies in its jaws: a Nile crocodile or a newt?,Nile crocodile,Newt,,,A,medium,Reptiles and Amphibians
+351,Which sea animal has a spiral shell and many tentacles: a lugworm or a nautilus?,Lugworm,Nautilus,,,B,medium,Sea Life
+352,Which animal is the only mammal that can truly fly: a bat or a sugar glider?,Bat,Sugar glider,,,A,medium,Insects and Records
+353,Which fish has fins and a tail: a shrew or a shark?,Shrew,Shark,,,B,medium,Animal Basics
+354,Which water bird dives and dries its wings in the sun: a cormorant or a canary?,Cormorant,Canary,,,A,medium,Birds
+355,Which turtle swims with flipper like limbs: a garter snake or a green sea turtle?,Garter snake,Green sea turtle,,,B,medium,Reptiles and Amphibians
+356,Which fish glows in the deep sea: a lantern fish or a lion fish?,Lantern fish,Lion fish,,,A,medium,Sea Life
+357,Which whale can live for over 200 years: a beluga whale or a bowhead whale?,Beluga whale,Bowhead whale,,,B,medium,Insects and Records
+358,Which animal is mostly awake at night: a possum or a pheasant?,Possum,Pheasant,,,A,medium,Animal Basics
+359,Which pet purrs when it is happy: a donkey or a domestic cat?,Donkey,Domestic cat,,,B,medium,Mammals
+360,Which lizard has a sticky tongue longer than its body: a chameleon or a chipmunk?,Chameleon,Chipmunk,,,A,medium,Reptiles and Amphibians
+361,Which marine mammal rides waves for fun: a dugong or a dolphin?,Dugong,Dolphin,,,B,medium,Sea Life
+362,Which reptile has one of the strongest bites on Earth: a saltwater crocodile or a seahorse?,Saltwater crocodile,Seahorse,,,A,medium,Insects and Records
+363,Which animal is a mollusk: an ocelot or an octopus?,Ocelot,Octopus,,,B,medium,Animal Basics
+364,Which animal howls at the moon: a coyote or a wombat?,Coyote,Wombat,,,A,medium,Mammals
+365,Which bird makes the longest migration: an albatross or an Arctic tern?,Albatross,Arctic tern,,,B,medium,Birds
+366,Which sea animal has eyes as big as dinner plates: a giant squid or a garfish?,Giant squid,Garfish,,,A,medium,Sea Life
+367,Which insect makes the loudest sound: an ant or an African cicada?,Ant,African cicada,,,B,medium,Insects and Records
+368,Which animal is a cetacean: a whale or a weasel?,Whale,Weasel,,,A,medium,Animal Basics
+369,Which dog pulls sleds across snow: a husky or a hen?,Hen,Husky,,,B,medium,Mammals
+370,Which bird hunts snakes by stomping on them: a secretary bird or a swift?,Secretary bird,Swift,,,A,medium,Birds
+371,Which snake wears bright bands of color: a chinchilla or a coral snake?,Chinchilla,Coral snake,,,B,medium,Reptiles and Amphibians
+372,Which bird is the smallest in the world: a bee hummingbird or a barn owl?,Bee hummingbird,Barn owl,,,A,medium,Insects and Records
+373,Which bird is a raptor: a heron or a hawk?,Heron,Hawk,,,B,medium,Animal Basics
+374,Which big cat climbs trees carrying its food: a leopard or a lynx?,Leopard,Lynx,,,A,medium,Mammals
+375,Which wading bird has a spoon shaped bill: a swan or a spoonbill?,Swan,Spoonbill,,,B,medium,Birds
+376,Which frog freezes solid in winter and thaws out alive: a wood frog or a water shrew?,Wood frog,Water shrew,,,A,medium,Reptiles and Amphibians
+377,Which fish helps make sandy beaches by crunching coral: a pike or a parrot fish?,Pike,Parrot fish,,,B,medium,Sea Life
+378,Which animal has its skeleton on the outside: a beetle or a bunny?,Beetle,Bunny,,,A,medium,Animal Basics
+379,Which Australian marsupial lives in burrows: a wombat or a woodpecker?,Woodpecker,Wombat,,,B,medium,Mammals
+380,Which bird collects shiny objects: a magpie or a maggot?,Magpie,Maggot,,,A,medium,Birds
+381,Which lizard is known for its blue tongue: a gecko or a blue tongue skink?,Gecko,Blue tongue skink,,,B,medium,Reptiles and Amphibians
+382,Which fish has a long saw on its snout: a sawfish or a sardine?,Sawfish,Sardine,,,A,medium,Sea Life
+383,Which sea animal has the biggest eyes: a coyote or a colossal squid?,Coyote,Colossal squid,,,B,medium,Insects and Records
+384,Which animal is the largest ape: a gorilla or a gibbon?,Gorilla,Gibbon,,,A,medium,Mammals
+385,Which bird is a flightless parrot from New Zealand: a kea or a kakapo?,Kea,Kakapo,,,B,medium,Birds
+386,Which frog has sticky toes for climbing trees: a tree frog or a tiger?,Tree frog,Tiger,,,A,medium,Reptiles and Amphibians
+387,Which ray is the largest: a mudskipper or a manta ray?,Mudskipper,Manta ray,,,B,medium,Sea Life
+388,Which spider is the biggest: a goliath birdeater or a garden spider?,Goliath birdeater,Garden spider,,,A,medium,Insects and Records
+389,Which group includes snakes and lizards: rodents or reptiles?,Rodents,Reptiles,,,B,medium,Animal Basics
+390,Which seabird has a red throat pouch: a frigatebird or a fulmar?,Frigatebird,Fulmar,,,A,medium,Birds
+391,Which reptile has a top shell and a bottom shell: a titmouse or a tortoise?,Titmouse,Tortoise,,,B,medium,Reptiles and Amphibians
+392,Which fish can walk on land using its fins: a mudskipper or a mullet?,Mudskipper,Mullet,,,A,medium,Sea Life
+393,Which snake is the longest: a rattlesnake or a reticulated python?,Rattlesnake,Reticulated python,,,B,medium,Insects and Records
+394,Which animal is an omnivore: a bear or a bison?,Bear,Bison,,,A,medium,Animal Basics
+395,Which animal has very thick skin: a reindeer or a rhinoceros?,Reindeer,Rhinoceros,,,B,medium,Mammals
+396,Which amphibian is the largest: a Chinese giant salamander or a chameleon?,Chinese giant salamander,Chameleon,,,A,medium,Reptiles and Amphibians
+397,Which animal filters food through its shell: an oyster or an osprey?,Oyster,Osprey,,,B,medium,Sea Life
+398,How many legs does an insect have?,Six,Eight,Ten,,A,hard,Animal Basics
+399,About how long is a giraffe tongue?,About 10 centimeters,About 50 centimeters,About 2 meters,,B,hard,Mammals
+400,Which bird has the longest wingspan?,Andean condor,Mute swan,Wandering albatross,,C,hard,Birds
+401,What is the largest crocodile species?,Saltwater crocodile,Nile crocodile,American alligator,,A,hard,Reptiles and Amphibians
+402,Which shark is the fastest swimmer?,Tiger shark,Shortfin mako,Hammerhead shark,,B,hard,Sea Life
+403,What is a group of bees flying together called?,Hive,Nest,Swarm,,C,hard,Insects and Records
+404,What is a group of lions called?,Pride,Pack,Herd,,A,hard,Mammals
+405,Which owl is the largest by length?,Barn owl,Great gray owl,Snowy owl,,B,hard,Birds
+406,Which snake has the most toxic venom drop for drop?,Black mamba,King cobra,Inland taipan,,C,hard,Reptiles and Amphibians
+407,What is a group of sharks called?,Shiver,Gam,Dule,,A,hard,Sea Life
+408,What is a group of ants living together called?,Party,Colony,Coven,,B,hard,Insects and Records
+409,Which bird has the longest beak compared to its body?,Pelican,Toucan,Sword billed hummingbird,,C,hard,Birds
+410,Which snakes have heat sensing pits on their faces?,Pit viper,Egg eating snake,Sea snake,,A,hard,Reptiles and Amphibians
+411,Which ray can give an electric shock?,Thornback ray,Electric ray,Stingray,,B,hard,Sea Life
+412,What is a group of butterflies called?,Cluster,Conspiracy,Kaleidoscope,,C,hard,Insects and Records
+413,Which of these animals is cold blooded?,Chameleon,Chimpanzee,Chinchilla,,A,hard,Animal Basics
+414,Which bear is the largest species?,Brown bear,Polar bear,Sun bear,,B,hard,Mammals
+415,What is a group of snakes called?,Kaleidoscope,Bed,Quiver,,C,hard,Reptiles and Amphibians
+416,What is a baby shark called?,Pup,Fingerling,Spawn,,A,hard,Sea Life
+417,What is a group of spiders called?,Rabble,Clutter,Hobble,,B,hard,Insects and Records
+418,How many stomach compartments does a cow have?,Two,One,Four,,C,hard,Animal Basics
+419,What is a baby kangaroo called?,Joey,Cub,Kit,,A,hard,Mammals
+420,What is a group of owls called?,Charm,Parliament,Murder,,B,hard,Birds
+421,Which marine mammal uses rocks to crack open shellfish?,Dolphin,Walrus,Sea otter,,C,hard,Sea Life
+422,What is a group of cicadas singing together called?,Chorus,Choir,Band,,A,hard,Insects and Records
+423,What do you call an animal that eats both plants and animals?,Herbivore,Omnivore,Carnivore,,B,hard,Animal Basics
+424,What is a group of gorillas called?,Swarm,Troop,Band,,C,hard,Mammals
+425,What is a baby eagle called?,Eaglet,Owlet,Cygnet,,A,hard,Birds
+426,Which amphibian is blind and lives in European caves?,Axolotl,Olm,Hellbender,,B,hard,Reptiles and Amphibians
+427,Which insect is the loudest for its body size?,Cricket,Cicada,Water boatman,,C,hard,Insects and Records
+428,Which phylum do insects belong to?,Arthropoda,Chordata,Mollusca,,A,hard,Animal Basics
+429,What is a young goat called?,Foal,Kid,Cria,,B,hard,Mammals
+430,Which bird lays the largest egg for its body size?,Ostrich,Hummingbird,Kiwi,,C,hard,Birds
+431,Which turtle can absorb oxygen through its cloaca while resting underwater?,White throated snapping turtle,Leatherback turtle,Box turtle,,A,hard,Reptiles and Amphibians
+432,What is the largest species of octopus?,Common octopus,Giant Pacific octopus,Blue ringed octopus,,B,hard,Sea Life
+433,Which animal group has the most known species?,Fish,Birds,Insects,,C,hard,Animal Basics
+434,Which mammal has a prehensile tail?,Spider monkey,Domestic cat,Red fox,,A,hard,Mammals
+435,Which penguin dives the deepest?,Adelie penguin,Emperor penguin,Chinstrap penguin,,B,hard,Birds
+436,Which frog males carry tadpoles inside their vocal sacs?,Glass frog,Pixie frog,Darwin frog,,C,hard,Reptiles and Amphibians
+437,What is the largest species of jellyfish?,Lion mane jellyfish,Box jellyfish,Moon jelly,,A,hard,Sea Life
+438,Which ant is considered the most venomous insect?,Honeybee,Harvester ant,Bullet ant,,B,hard,Insects and Records
+439,Which whale has the largest brain?,Orca,Narwhal,Sperm whale,,C,hard,Mammals
+440,Which bird can mimic chainsaws and camera shutters?,Lyrebird,Mockingbird,Crow,,A,hard,Birds
+441,Which is the largest salamander in the Americas?,Tiger salamander,Hellbender,Mudpuppy,,B,hard,Reptiles and Amphibians
+442,What is a group of jellyfish called?,Gulp,Cast,Smack,,C,hard,Sea Life
+443,What is the largest wasp species?,Asian giant hornet,Tarantula hawk,Cicada killer,,A,hard,Insects and Records
+444,Which gas do animals need to breathe in?,Carbon dioxide,Oxygen,Nitrogen,,B,hard,Animal Basics
+445,Which bird of prey hovers in place while hunting?,Goshawk,Peregrine falcon,Kestrel,,C,hard,Birds
+446,Which reptile has barely changed in 200 million years?,Tuatara,Skink,Anole,,A,hard,Reptiles and Amphibians
+447,What is a group of eels called?,Shiver,Bed,Lounge,,B,hard,Sea Life
+448,What do we call animals that mainly eat insects?,Frugivores,Piscivores,Insectivores,,C,hard,Animal Basics
+449,What is a group of wolves called?,Pack,Pride,Sounder,,A,hard,Mammals
+450,Which snake glides between trees?,Corn snake,Paradise tree snake,Emerald tree boa,,B,hard,Reptiles and Amphibians
+451,How many legs does a crab have in total?,Four,Twelve,Ten,,C,hard,Sea Life
+452,Which adult insect lives the shortest time?,Mayfly,Housefly,Fruit fly,,A,hard,Insects and Records
+453,How many main body parts does an insect have?,Two,Three,Four,,B,hard,Animal Basics
+454,Which birds use sticks as tools to pull insects from holes?,Raven,Robin,New Caledonian crow,,C,hard,Birds
+455,What is a group of dolphins called?,Pod,Mischief,Harem,,A,hard,Sea Life
+456,Which insect can see the widest range of colors?,Moth,Common bluebottle butterfly,Firefly,,B,hard,Insects and Records
+457,What are the hard wing cases of a beetle called?,Carapace,Plastron,Elytra,,C,hard,Animal Basics
+458,What is the largest wild cat in the Americas?,Jaguar,Mountain lion,Ocelot,,A,hard,Mammals
+459,Which seabird chases other birds to steal food midair?,Gannet,Frigatebird,Booby,,B,hard,Birds
+460,Which frog is so clear you can see its organs?,Tree frog,Poison dart frog,Glass frog,,C,hard,Reptiles and Amphibians
+461,Which fly spreads sleeping sickness?,Tsetse fly,Horsefly,Sandfly,,A,hard,Insects and Records
+462,Which sense helps sharks find prey hidden under sand?,Echolocation,Electroreception,Magnetoreception,,B,hard,Animal Basics
+463,Which pet animal sleeps the most hours per day?,Dog,Goat,Cat,,C,hard,Mammals
+464,Which bird has a shoe shaped bill?,Shoebill,Stork,Ibis,,A,hard,Birds
+465,Which chameleon is the largest?,Veiled chameleon,Parson chameleon,Panther chameleon,,B,hard,Reptiles and Amphibians
+466,What is a group of whales called?,Pod,Gam,Cete,,C,hard,Sea Life
+467,What is the seasonal travel of animals called?,Migration,Hibernation,Estivation,,A,hard,Animal Basics
+468,What is a group of ferrets called?,Glaring,Business,Mystery,,B,hard,Mammals
+469,Which penguin is the fastest swimmer?,Rockhopper penguin,African penguin,Gentoo penguin,,C,hard,Birds
+470,Which reptile cannot stick out its tongue?,Crocodile,Lizard,Frog,,A,hard,Reptiles and Amphibians
+471,What is the largest species of seal?,Leopard seal,Southern elephant seal,Gray seal,,B,hard,Sea Life
+472,Which cicada is the largest?,African cicada,Dog day cicada,Empress cicada,,C,hard,Insects and Records
+473,What is a baby beaver called?,Kitten,Whelp,Puggle,,A,hard,Mammals
+474,What is a group of penguins in the water called?,Waddle,Raft,Rookery,,B,hard,Birds
+475,Which python is one of the smallest?,Ball python,Burmese python,Children's python,,C,hard,Reptiles and Amphibians
+476,What is a group of manatees called?,Aggregation,Flotilla,Litter,,A,hard,Sea Life
+477,Which spider carries its babies on its back?,Jumping spider,Wolf spider,Orb weaver,,B,hard,Insects and Records
+478,What is a rhinoceros horn made of?,Bone,Ivory,Keratin,,C,hard,Animal Basics
+479,Which bird has a beak that crosses at the tip?,Crossbill,Hawfinch,Skylark,,A,hard,Birds
+480,What is a group of crocodiles called?,Quiver,Bask,Shiver,,B,hard,Reptiles and Amphibians
+481,What is a group of otters called?,Court,Mews,Romp,,C,hard,Sea Life
+482,Which spider can jump many times its own length?,Jumping spider,Trapdoor spider,Funnel web spider,,A,hard,Insects and Records
+483,How many hearts does an earthworm have?,Three,Five,Seven,,B,hard,Animal Basics
+484,What is a group of domestic cats called?,Glaring,Murmuration,Clowder,,C,hard,Mammals
+485,What is a group of frogs called?,Army,Drift,Knot,,A,hard,Reptiles and Amphibians
+486,What is a group of narwhals called?,Romp,Blessing,Leash,,B,hard,Sea Life
+487,Which insect beats its wings about 1000 times per second?,Mosquito,Termite,Midge,,C,hard,Insects and Records
+488,What do we call animals that walk on two legs?,Bipedal,Quadrupedal,Aquatic,,A,hard,Animal Basics
+489,What is a baby platypus called?,Joey,Puggle,Fry,,B,hard,Mammals
+490,Which bird has been recorded flying the highest?,Bearded vulture,Hooded vulture,Ruppell's griffon vulture,,C,hard,Birds
+491,What is a group of stingrays called?,Fever,Frenzy,Cover,,A,hard,Sea Life
+492,Which insect mother lays the most eggs over her life?,Ladybug,Termite queen,Silkworm moth,,B,hard,Insects and Records
+493,Which teeth shear meat in carnivores?,Molars,Incisors,Carnassials,,C,hard,Animal Basics
+494,What is a group of hedgehogs called?,Drove,Array,Flock,,A,hard,Mammals
+495,Which bird migrates from pole to pole each year?,Sooty shearwater,Arctic tern,Barn swallow,,B,hard,Birds
+496,What is a group of toads called?,Army,Hive,Knot,,C,hard,Reptiles and Amphibians
+497,Which insect grows up without a pupa stage?,Grasshopper,Moth,Cockroach,,A,hard,Insects and Records
+498,What is a group of monkeys called?,Array,Troop,Colony,,B,hard,Mammals
+499,Which bird weaves a hanging nest of grass?,Coal tit,House sparrow,Baya weaver,,C,hard,Birds
+500,Which turtle is named for its large head?,Loggerhead,Hawksbill,Flatback,,A,hard,Reptiles and Amphibians
+501,What is the heaviest bony fish?,Whale shark,Ocean sunfish,Cod,,B,hard,Sea Life
+502,What is winter dormancy in reptiles called?,Diapause,Torpor,Brumation,,C,hard,Animal Basics
+503,What is a group of rhinoceroses called?,Crash,Tower,Dazzle,,A,hard,Mammals
+504,Which bird has a tongue that wraps around its skull?,Nuthatch,Woodpecker,Treecreeper,,B,hard,Birds
+505,Which newt pushes its ribs through its skin as spines?,Fire salamander,Siren,Spanish ribbed newt,,C,hard,Reptiles and Amphibians
+506,Which round sea creature is covered in poisonous spines?,Sea urchin,Sea cucumber,Anemone,,A,hard,Sea Life
+507,What is the pupa of a butterfly called?,Cocoon,Chrysalis,Tumbler,,B,hard,Insects and Records
+508,What is a group of hippopotamuses called?,Stampede,Mob,Bloat,,C,hard,Mammals
+509,Which bird can fly backwards?,Hummingbird,Bee eater,Swift,,A,hard,Birds
+510,Which gecko is the largest?,Frog eyed gecko,New Caledonian giant gecko,Crested gecko,,B,hard,Reptiles and Amphibians
+511,Which deep sea fish has a transparent head?,Hatchetfish,Viperfish,Barreleye fish,,C,hard,Sea Life
+512,What is the larva of a beetle called?,Grub,Wriggler,Naiad,,A,hard,Insects and Records
+513,What color is a polar bear skin?,White,Black,Cream,,B,hard,Mammals
+514,Which bird has the most feathers?,Robin,Peacock,Tundra swan,,C,hard,Birds
+515,Which crab waves a giant claw to attract mates?,Fiddler crab,Ghost crab,Horseshoe crab,,A,hard,Sea Life
+516,What is a young dragonfly called?,Pupa,Nymph,Tumbler,,B,hard,Insects and Records
+517,What do we call an animal ability to regrow lost body parts?,Photosynthesis,Digestion,Regeneration,,C,hard,Animal Basics
+518,What is a group of giraffes called?,Tower,Mischief,Sleuth,,A,hard,Mammals
+519,Which frog seals itself in mucus to survive droughts?,African bullfrog,Water holding frog,Cane toad,,B,hard,Reptiles and Amphibians
+520,Which sea turtle has a hawk like beak?,Green sea turtle,Olive ridley,Hawksbill,,C,hard,Sea Life
+521,What is a young mosquito larva called?,Wriggler,Glassworm,Bloodworm,,A,hard,Insects and Records
+522,Which animal has blood tinted blue by hemocyanin?,Dog,Octopus,Pig,,B,hard,Animal Basics
+523,What is a group of zebras called?,Skulk,Mob,Dazzle,,C,hard,Mammals
+524,Which bird has a hard casque on its head and a dagger claw?,Cassowary,Kiwi,Rhea,,A,hard,Birds
+525,What is the largest land snail?,Roman snail,Giant African land snail,Cone snail,,B,hard,Sea Life
+526,How many pairs of wings does an adult mayfly have?,One pair,Three pairs,Two pairs,,C,hard,Insects and Records
+527,What are cat whiskers mainly used for?,Sensing nearby objects,Breathing,Smelling food,,A,hard,Animal Basics
+528,What is a group of kangaroos called?,Sleuth,Mob,Clowder,,B,hard,Mammals
+529,What is a group of geese on the ground called?,Skein,Raft,Gaggle,,C,hard,Birds
+530,Which skink has a tail that grips branches?,Prehensile tailed skink,Sand skink,Glass lizard,,A,hard,Reptiles and Amphibians
+531,What is a young hare called?,Leatherjacket,Nymph,Leveret,,B,hard,Animal Basics
+532,What is a baby swan called?,Eaglet,Duckling,Cygnet,,C,hard,Birds
+533,What is a group of badgers called?,Cete,Run,Bind,,A,hard,Mammals
+534,What is a newly hatched crocodile called?,Fledgling,Hatchling,Larva,,B,hard,Reptiles and Amphibians
+535,Which animal can regrow a whole body from a single arm?,Sand dollar,Sea squirt,Sea star,,C,hard,Sea Life
+536,What do we call animals that eat already dead animals?,Scavengers,Producers,Parasites,,A,hard,Animal Basics
+537,Which fox has huge ears for cooling down in the desert?,Arctic fox,Fennec fox,Gray fox,,B,hard,Mammals
+538,What is a group of crows called?,Parliament,Flamboyance,Murder,,C,hard,Birds
+539,What is a group of iguanas called?,Mess,Lounge,Scuttle,,A,hard,Reptiles and Amphibians
+540,Which whale has the longest baleen plates?,Gray whale,Bowhead whale,Fin whale,,B,hard,Sea Life
+541,What is the young crane fly larva called?,Glowworm,Wireworm,Leatherjacket,,C,hard,Insects and Records
+542,What is a group of squirrels called?,Scurry,Dray,Horde,,A,hard,Mammals
+543,What is a group of ravens called?,Tiding,Unkindness,Swarm,,B,hard,Birds
+544,How long can a Galapagos tortoise live?,About 10 years,About 30 years,Over 100 years,,C,hard,Reptiles and Amphibians
+545,What is a baby dolphin called?,Calf,Tadpole,Kid,,A,hard,Sea Life
+546,What do green lacewing larvae mainly eat?,Nectar,Aphids,Algae,,B,hard,Insects and Records
+547,Which organs filter waste from an animal blood?,Liver,Spleen,Kidneys,,C,hard,Animal Basics
+548,What is a group of larks called?,Exaltation,Ostentation,Sedge,,A,hard,Birds
+549,What is a baby snake called?,Eft,Snakelet,Elver,,B,hard,Reptiles and Amphibians
+550,Which dolphin is known for washing seals off ice floes?,Bottlenose dolphin,Porpoise,Orca,,C,hard,Sea Life
+551,How many legs does a ladybug have?,Six,Five,Seven,,A,hard,Insects and Records
+552,What is a female horse called?,Stallion,Mare,Filly,,B,hard,Mammals
+553,Which bat has a wingspan over one meter?,Vampire bat,Bumblebee bat,Large flying fox,,C,hard,Mammals
+554,What is a young toad called after leaving the water?,Toadlet,Polliwog,Smolt,,A,hard,Reptiles and Amphibians
+555,What is the smallest cetacean?,Humpback whale,Vaquita,Harbour porpoise,,B,hard,Sea Life
+556,What do dragonfly nymphs hunt underwater?,Plankton,Seaweed,Mosquito larvae,,C,hard,Sea Life
+557,What do we call animals that carry young in a pouch?,Marsupial,Monotreme,Placental,,A,hard,Animal Basics
+558,What is a group of apes called?,Trip,Shrewdness,Spring,,B,hard,Mammals
+559,What is a group of peacocks called?,Exaltation,Muster,Ostentation,,C,hard,Birds
+560,What is the scientific name of the bottlenose dolphin?,Tursiops truncatus,Delphinus delphis,Phocoena phocoena,,A,hard,Sea Life
+561,What do silkworms eat?,Grass,Mulberry leaves,Pine needles,,B,hard,Insects and Records
+562,What is the study of mammals called?,Mycology,Conchology,Mammalogy,,C,hard,Animal Basics
+563,What is a group of donkeys called?,Drove,Stud,Stable,,A,hard,Mammals
+564,What is a group of cranes called?,Fall,Sedge,Siege,,B,hard,Birds
+565,What is a group of turtles called?,Gang,Congregation,Bale,,C,hard,Reptiles and Amphibians
+566,Where do honeybees make their wax?,Wax glands,Honeycomb cells,Pollen baskets,,A,hard,Insects and Records
+567,What chemicals do animals release to signal each other?,Hormones,Pheromones,Enzymes,,B,hard,Animal Basics
+568,How long does a horse pregnancy last?,About 3 months,About 22 months,About 11 months,,C,hard,Mammals
+569,What is a huge flock of starlings flying together called?,Murmuration,Chatter,Cloud,,A,hard,Birds
+570,What is the scientific name of the saltwater crocodile?,Crocodylus niloticus,Crocodylus porosus,Crocodylus johnstoni,,B,hard,Reptiles and Amphibians
+571,What is the scientific name of the blue whale?,Megaptera novaeangliae,Physeter macrocephalus,Balaenoptera musculus,,C,hard,Sea Life
+572,What do we call animals that live mainly in trees?,Arboreal,Fossorial,Aerial,,A,hard,Animal Basics
+573,What is a male elk called?,Bevy,Bull,Stag,,B,hard,Mammals
+574,What gives flamingos their pink color?,Their feathers at birth,Sunlight,Their shrimp diet,,C,hard,Birds
+575,What does a leopard gecko tail store?,Storing fat,Swimming,Fighting,,A,hard,Reptiles and Amphibians
+576,What is the scientific name of the orca?,Delphinapterus leucas,Orcinus orca,Globicephala melas,,B,hard,Sea Life
+577,Which body part do ants use to smell?,Feet,Tongues,Antennae,,C,hard,Insects and Records
+578,What is a group of raccoons called?,Gaze,Gang,Scurry,,A,hard,Mammals
+579,What is a group of herons called?,Watch,Siege,Tiding,,B,hard,Birds
+580,Which toad gives birth to live young instead of eggs?,Golden toad,Surinam toad,Kihansi spray toad,,C,hard,Reptiles and Amphibians
+581,What is the scientific name of the great white shark?,Carcharodon carcharias,Carcharhinus leucas,Rhincodon typus,,A,hard,Sea Life
+582,What body part do crickets hear with?,Wings,Front legs,Belly,,B,hard,Insects and Records
+583,What is the flap that covers a fish gills called?,Mantle,Syrinx,Operculum,,C,hard,Animal Basics
+584,What is the nightingale most famous for?,Its beautiful song,Its bright colors,Its fast flight,,A,hard,Birds
+585,What is the scientific name of the axolotl?,Ambystoma tigrinum,Ambystoma mexicanum,Ambystoma opacum,,B,hard,Reptiles and Amphibians
+586,What is the scientific name of the green sea turtle?,Caretta caretta,Eretmochelys imbricata,Chelonia mydas,,C,hard,Sea Life
+587,Besides insects what can large praying mantises catch?,Birds and lizards,Only plants,Only fruit,,A,hard,Insects and Records
+588,What do we call animals that chew cud?,Rodents,Ruminants,Primates,,B,hard,Animal Basics
+589,What is a female pig called?,Boar,Gilt,Sow,,C,hard,Mammals
+590,What is the scientific name of the American alligator?,Alligator mississippiensis,Caiman crocodilus,Gavialis gangeticus,,A,hard,Reptiles and Amphibians
+591,What is the scientific name of the whale shark?,Sphyrna mokarran,Rhincodon typus,Ginglymostoma cirratum,,B,hard,Sea Life
+592,How many chambers does a mammal heart have?,Four chambers,Two chambers,Three chambers,One chamber,A,expert,Animal Basics
+593,What is the scientific name of the lion?,Panthera tigris,Panthera leo,Panthera pardus,Panthera onca,B,expert,Mammals
+594,What is the scientific name of the bald eagle?,Haliaeetus albicilla,Aquila chrysaetos,Haliaeetus leucocephalus,Aquila heliaca,C,expert,Birds
+595,Which monitor lizard is the largest?,Varanus salvator,Varanus niloticus,Varanus giganteus,Varanus komodoensis,D,expert,Reptiles and Amphibians
+596,What is the scientific name of the common octopus?,Octopus vulgaris,Octopus cyanea,Amphioctopus fangsiao,Abdopus aculeatus,A,expert,Sea Life
+597,What is the scientific name of the bumblebee?,Apis mellifera,Bombus terrestris,Xylocopa virginica,Melipona beecheii,B,expert,Insects and Records
+598,What is the scientific name of the tiger?,Neofelis nebulosa,Panthera uncia,Panthera tigris,Acinonyx jubatus,C,expert,Mammals
+599,What is the scientific name of the peregrine falcon?,Falco tinnunculus,Falco columbarius,Falco subbuteo,Falco peregrinus,D,expert,Birds
+600,What determines the sex of alligator hatchlings?,Nest temperature,Egg size,Chromosomes,Incubation time,A,expert,Reptiles and Amphibians
+601,What is the largest species of flatfish?,Dover sole,Atlantic halibut,Turbot,Pacific halibut,B,expert,Sea Life
+602,What is the scientific name of the barn owl?,Athene noctua,Asio otus,Tyto alba,Bubo scandiacus,C,expert,Birds
+603,What is summer dormancy called in desert animals?,Cryptobiosis,Dormancy,Brumation,Estivation,D,expert,Reptiles and Amphibians
+604,Which gas do animals exhale that plants use for photosynthesis?,Carbon dioxide,Methane,Oxygen,Hydrogen,A,expert,Sea Life
+605,What is the scientific name of the yellow fever mosquito?,Culex pipiens,Aedes aegypti,Toxorhynchites splendens,Aedes albopictus,B,expert,Insects and Records
+606,What do we call animals active at dawn and dusk?,Diurnal,Nocturnal,Crepuscular,Cathemeral,C,expert,Animal Basics
+607,What is the scientific name of the domestic dog?,Canis lupus,Canis aureus,Canis latrans,Canis lupus familiaris,D,expert,Mammals
+608,Which alligator lives in China?,Alligator sinensis,Melanosuchus niger,Paleosuchus palpebrosus,Tomistoma schlegelii,A,expert,Reptiles and Amphibians
+609,What is the scientific name of the clownfish?,Premnas biaculeatus,Amphiprion ocellaris,Chromis chromis,Abudefduf saxatilis,B,expert,Sea Life
+610,What is the scientific name of the red imported fire ant?,Atta cephalotes,Formica rufa,Solenopsis invicta,Camponotus pennsylvanicus,C,expert,Insects and Records
+611,What do we call animals that give birth to live young?,Oviparous,Parthenogenesis,Ovoviviparous,Viviparous,D,expert,Animal Basics
+612,What is the scientific name of the domestic cat?,Felis catus,Felis nigripes,Felis silvestris,Felis chaus,A,expert,Mammals
+613,What is the scientific name of the great horned owl?,Strix varia,Bubo virginianus,Bubo bubo,Asio flammeus,B,expert,Birds
+614,Which genus do seahorses belong to?,Solenostomus,Syngnathus,Hippocampus,Aulostomus,C,expert,Sea Life
+615,What is the scientific name of the two spotted ladybird?,Coccinella septempunctata,Propylea quatuordecimpunctata,Cryptolaemus montrouzieri,Adalia bipunctata,D,expert,Insects and Records
+616,What is the largest order of mammals?,Rodentia,Carnivora,Chiroptera,Cetartiodactyla,A,expert,Animal Basics
+617,What is the scientific name of the snowy owl?,Strix nebulosa,Bubo scandiacus,Surnia ulula,Aegolius funereus,B,expert,Birds
+618,What is the scientific name of the king cobra?,Naja naja,Bungarus multicinctus,Ophiophagus hannah,Dendroaspis polylepis,C,expert,Reptiles and Amphibians
+619,What is the scientific name of the atlas moth?,Attacus taprobanis,Samia cynthia,Antheraea polyphemus,Attacus atlas,D,expert,Insects and Records
+620,Which kingdom do animals belong to?,Animalia,Fungi,Protista,Plantae,A,expert,Animal Basics
+621,What is the scientific name of the red fox?,Urocyon cinereoargenteus,Vulpes vulpes,Otocyon megalotis,Vulpes lagopus,B,expert,Mammals
+622,What is the scientific name of the ostrich?,Rhea americana,Apteryx australis,Struthio camelus,Casuarius casuarius,C,expert,Birds
+623,What is the scientific name of the black mamba?,Oxyuranus scutellatus,Naja nivea,Pseudonaja textilis,Dendroaspis polylepis,D,expert,Reptiles and Amphibians
+624,What is the largest species of tuna?,Atlantic bluefin tuna,Skipjack tuna,Albacore,Yellowfin tuna,A,expert,Sea Life
+625,What is the process of changing from larva to adult called?,Hibernation,Metamorphosis,Migration,Regeneration,B,expert,Animal Basics
+626,What is the scientific name of the horse?,Equus asinus,Equus quagga,Equus caballus,Equus ferus,C,expert,Mammals
+627,What is the scientific name of the emu?,Rhea pennata,Apteryx mantelli,Casuarius unappendiculatus,Dromaius novaehollandiae,D,expert,Birds
+628,What is the scientific name of the Burmese python?,Python bivittatus,Python molurus,Python sebae,Python regius,A,expert,Reptiles and Amphibians
+629,What is the scientific name of the leatherback turtle?,Lepidochelys kempii,Dermochelys coriacea,Natator depressus,Chelonia mydas,B,expert,Sea Life
+630,What is the scientific name of the stag beetle?,Lucanus elaphus,Dynastes hercules,Lucanus cervus,Chalcosoma atlas,C,expert,Insects and Records
+631,What is the scientific name of domestic cattle?,Bos grunniens,Bubalus bubalis,Bison bison,Bos taurus,D,expert,Mammals
+632,What is the scientific name of the emperor penguin?,Aptenodytes forsteri,Pygoscelis papua,Eudyptes chrysolophus,Aptenodytes patagonicus,A,expert,Birds
+633,What is the scientific name of the Gila monster?,Heloderma horridum,Heloderma suspectum,Lanthanotus borneensis,Varanus exanthematicus,B,expert,Reptiles and Amphibians
+634,What is the scientific name of the lionfish?,Pterois miles,Pterois antennata,Pterois volitans,Dendrochirus zebra,C,expert,Sea Life
+635,Which order do termites belong to?,Orthoptera,Hymenoptera,Lepidoptera,Blattodea,D,expert,Insects and Records
+636,Which phylum has a notochord at some stage of life?,Chordata,Annelida,Nematoda,Echinodermata,A,expert,Animal Basics
+637,What is the scientific name of the little penguin?,Eudyptes chrysocome,Eudyptula minor,Megadyptes antipodes,Spheniscus demersus,B,expert,Birds
+638,What is the scientific name of the veiled chameleon?,Furcifer pardalis,Trioceros jacksonii,Chamaeleo calyptratus,Brookesia micra,C,expert,Reptiles and Amphibians
+639,What is the scientific name of the humpback anglerfish?,Melanocetus murrayi,Lophius piscatorius,Himantolophus globulosa,Melanocetus johnsonii,D,expert,Sea Life
+640,What is the scientific name of the kissing bug?,Triatoma infestans,Panstrongylus megistus,Reduvius personatus,Rhodnius prolixus,A,expert,Insects and Records
+641,What do we call animals that mainly eat fish?,Insectivore,Piscivore,Granivore,Nectarivore,B,expert,Animal Basics
+642,What is the scientific name of the wild boar?,Babyrousa babyrussa,Potamochoerus porcus,Sus scrofa,Sus barbatus,C,expert,Mammals
+643,What is the scientific name of the tuatara?,Sphenodon guntheri,Tiliqua rugosa,Oplurus cuvieri,Sphenodon punctatus,D,expert,Reptiles and Amphibians
+644,Which genus do hammerhead sharks belong to?,Sphyrna,Galeocerdo,Negaprion,Carcharhinus,A,expert,Sea Life
+645,What is the scientific name of the human flea?,Ctenocephalides felis,Pulex irritans,Tunga penetrans,Xenopsylla cheopis,B,expert,Insects and Records
+646,What is a two part scientific name called?,Polynomial nomenclature,Cladistics,Binomial nomenclature,Taxonomy,C,expert,Animal Basics
+647,What is the scientific name of domestic sheep?,Capra hircus,Ovis canadensis,Ovis dalli,Ovis aries,D,expert,Mammals
+648,What is the scientific name of the wandering albatross?,Diomedea exulans,Thalassarche melanophris,Phoebetria fusca,Phoebastria immutabilis,A,expert,Birds
+649,What is the scientific name of the box jellyfish?,Chironex yamaguchii,Chironex fleckeri,Carukia barnesi,Malo kingi,B,expert,Sea Life
+650,Which species is the sacred scarab beetle?,Scarabaeus laticollis,Copris lunaris,Scarabaeus sacer,Geotrupes stercorarius,C,expert,Insects and Records
+651,What is warning coloration in animals called?,Camouflage,Mimicry,Countershading,Aposematism,D,expert,Animal Basics
+652,What is the scientific name of the domestic goat?,Capra aegagrus,Capra falconeri,Hemitragus jemlahicus,Ovis aries,A,expert,Mammals
+653,What is the scientific name of the bee hummingbird?,Calypte anna,Mellisuga helenae,Selasphorus rufus,Patagona gigas,B,expert,Birds
+654,What is the scientific name of the Indian cobra?,Naja kaouthia,Naja melanoleuca,Naja naja,Ophiophagus hannah,C,expert,Reptiles and Amphibians
+655,What is the scientific name of the cicada killer wasp?,Sphex pensylvanicus,Cerceris rybyensis,Ammophila sabulosa,Sphecius speciosus,D,expert,Insects and Records
+656,What is it called when a harmless species copies a dangerous one?,Batesian mimicry,Automimicry,Egg mimicry,Mullerian mimicry,A,expert,Animal Basics
+657,What is the scientific name of the house mouse?,Rattus rattus,Mus musculus,Cavia porcellus,Mesocricetus auratus,B,expert,Mammals
+658,Which is the greater flamingo?,Phoeniconaias minor,Phoenicoparrus andinus,Phoenicopterus roseus,Phoenicopterus chilensis,C,expert,Birds
+659,What is the scientific name of the golden poison frog?,Dendrobates tinctorius,Atelopus zeteki,Phyllobates bicolor,Phyllobates terribilis,D,expert,Reptiles and Amphibians
+660,What is the scientific name of the sailfish?,Istiophorus platypterus,Xiphias gladius,Tetrapturus albidus,Makaira nigricans,A,expert,Sea Life
+661,What is the study of animal behavior called?,Ecology,Ethology,Physiology,Anatomy,B,expert,Animal Basics
+662,What is the scientific name of the brown rat?,Mus musculus,Bandicota indica,Rattus norvegicus,Rattus exulans,C,expert,Mammals
+663,What is the scientific name of the American robin?,Erithacus rubecula,Turdus merula,Sialia sialis,Turdus migratorius,D,expert,Birds
+664,What is the scientific name of the eastern box turtle?,Terrapene carolina,Chrysemys picta,Glyptemys insculpta,Trachemys scripta,A,expert,Reptiles and Amphibians
+665,What is the scientific name of the giant squid?,Architeuthis harttii,Architeuthis dux,Mesonychoteuthis hamiltoni,Dosidicus gigas,B,expert,Sea Life
+666,What is the scientific name of the empress cicada?,Magicicada septendecim,Tacua speciosa,Megapomponia imperatoria,Cryptotympana atrata,C,expert,Insects and Records
+667,What is the scientific name of the European rabbit?,Sylvilagus floridanus,Lepus europaeus,Ochotona princeps,Oryctolagus cuniculus,D,expert,Mammals
+668,What is the scientific name of the common raven?,Corvus corax,Corvus frugilegus,Corvus monedula,Corvus corone,A,expert,Birds
+669,What is the scientific name of the desert tortoise?,Gopherus polyphemus,Gopherus agassizii,Testudo graeca,Astrochelys radiata,B,expert,Reptiles and Amphibians
+670,What is the scientific name of the chambered nautilus?,Nautilus macromphalus,Allonautilus scrobiculatus,Nautilus pompilius,Sepia officinalis,C,expert,Sea Life
+671,What is the scientific name of the brown recluse spider?,Loxosceles laeta,Latrodectus mactans,Atrax robustus,Loxosceles reclusa,D,expert,Insects and Records
+672,What do we call animals sleeping through hot dry seasons?,Estivation,Brumation,Dormancy,Cryptobiosis,A,expert,Animal Basics
+673,What is the scientific name of the house sparrow?,Passer montanus,Passer domesticus,Passer hispaniolensis,Fringilla coelebs,B,expert,Birds
+674,What is the scientific name of the leopard gecko?,Eublepharis angramainyu,Correlophus ciliatus,Eublepharis macularius,Phelsuma grandis,C,expert,Reptiles and Amphibians
+675,What is the scientific name of the reef stonefish?,Synanceia horrida,Synanceia alula,Inimicus didactylus,Synanceia verrucosa,D,expert,Sea Life
+676,What is the scientific name of the goliath birdeater?,Theraphosa blondi,Poecilotheria regalis,Aphonopelma chalcodes,Theraphosa apophysis,A,expert,Insects and Records
+677,Which gas do animals release during respiration?,Methane,Carbon dioxide,Hydrogen,Oxygen,B,expert,Animal Basics
+678,What is the scientific name of the polar bear?,Ursus arctos,Ursus americanus,Ursus maritimus,Melursus ursinus,C,expert,Mammals
+679,What is the scientific name of the central bearded dragon?,Pogona henrylawsoni,Pogona barbata,Uromastyx geyri,Pogona vitticeps,D,expert,Reptiles and Amphibians
+680,What is the largest species of seahorse?,Big bellied seahorse,Thorny seahorse,Lined seahorse,Tiger tail seahorse,A,expert,Sea Life
+681,What is the scientific name of the tarantula hawk wasp?,Pepsis grossa,Pepsis thisbe,Hemipepsis ustulata,Chrysis ignita,B,expert,Insects and Records
+682,What do we call a species that lives only in one region?,Native,Invasive,Endemic,Migratory,C,expert,Animal Basics
+683,What is the scientific name of the brown bear?,Ursus thibetanus,Tremarctos ornatus,Helarctos malayanus,Ursus arctos,D,expert,Mammals
+684,What is the scientific name of the blue jay?,Cyanocitta cristata,Garrulus glandarius,Pica pica,Cyanocorax yncas,A,expert,Birds
+685,What is the scientific name of the immortal jellyfish?,Aurelia aurita,Turritopsis dohrnii,Cyanea capillata,Physalia physalis,B,expert,Sea Life
+686,Which order do dragonflies and damselflies belong to?,Ephemeroptera,Plecoptera,Odonata,Neuroptera,C,expert,Insects and Records
+687,What is the smallest mammal by weight?,Bumblebee bat,African pygmy mouse,Baluchistan pygmy jerboa,Etruscan shrew,D,expert,Animal Basics
+688,What is the scientific name of the giant panda?,Ailuropoda melanoleuca,Nasua nasua,Bassariscus astutus,Procyon lotor,A,expert,Mammals
+689,What is the scientific name of the northern cardinal?,Pheucticus ludovicianus,Cardinalis cardinalis,Cardinalis sinuatus,Passerina caerulea,B,expert,Birds
+690,What is the scientific name of the water monitor?,Varanus salvadorii,Varanus jobiensis,Varanus salvator,Varanus doreanus,C,expert,Reptiles and Amphibians
+691,Which family do robber flies belong to?,Syrphidae,Tabanidae,Culicidae,Asilidae,D,expert,Insects and Records
+692,Which is the most numerous wild bird on Earth?,Red billed quelea,Rock pigeon,House finch,European starling,A,expert,Animal Basics
+693,What is the scientific name of the red panda?,Potos flavus,Ailurus fulgens,Eira barbara,Arctictis binturong,B,expert,Mammals
+694,What is the scientific name of the Atlantic puffin?,Cerorhinca monocerata,Fratercula cirrhata,Fratercula arctica,Alle alle,C,expert,Birds
+695,Which genus do rattlesnakes belong to?,Sistrurus,Bitis,Vipera,Crotalus,D,expert,Reptiles and Amphibians
+696,What is the scientific name of the goblin shark?,Mitsukurina owstoni,Carcharias taurus,Alopias vulpinus,Odontaspis ferox,A,expert,Sea Life
+697,Which is the loudest land animal?,Hyena,Howler monkey,Gorilla,Baboon,B,expert,Animal Basics
+698,What is the scientific name of the meerkat?,Helogale parvula,Mungos mungo,Suricata suricatta,Crossarchus obscurus,C,expert,Mammals
+699,What is the scientific name of the dodo?,Pezophaps solitaria,Ectopistes migratorius,Columba livia,Raphus cucullatus,D,expert,Birds
+700,What is the scientific name of the American bullfrog?,Lithobates catesbeianus,Rana temporaria,Lithobates clamitans,Lithobates pipiens,A,expert,Reptiles and Amphibians
+701,What is the scientific name of the shortfin mako?,Isurus paucus,Isurus oxyrinchus,Lamna nasus,Carcharodon,B,expert,Sea Life
+702,What is the scientific name of the desert locust?,Locusta migratoria,Schistocerca americana,Schistocerca gregaria,Nomadacris septemfasciata,C,expert,Insects and Records
+703,Which is the spotted hyena?,Hyaena hyaena,Proteles cristata,Parahyaena brunnea,Crocuta crocuta,D,expert,Mammals
+704,Which is the wild turkey?,Meleagris gallopavo,Pavo cristatus,Gallus gallus,Numida meleagris,A,expert,Birds
+705,What is the scientific name of the emerald tree boa?,Corallus hortulanus,Corallus caninus,Morelia viridis,Epicrates cenchria,B,expert,Reptiles and Amphibians
+706,What is the scientific name of the loggerhead turtle?,Dermochelys coriacea,Carettochelys insculpta,Caretta caretta,Trionyx triunguis,C,expert,Sea Life
+707,What is the scientific name of the firefly?,Photuris versicolor,Lampyris noctiluca,Luciola italica,Photinus pyralis,D,expert,Insects and Records
+708,Which land mammal has the most teeth?,Giant armadillo,Black rhinoceros,Grizzly bear,African lion,A,expert,Animal Basics
+709,What is the scientific name of the mallard?,Anas crecca,Anas platyrhynchos,Anas acuta,Anas americana,B,expert,Birds
+710,What is the scientific name of the frilled lizard?,Heloderma,Sauromalus ater,Chlamydosaurus kingii,Phrynosoma cornutum,C,expert,Reptiles and Amphibians
+711,What is the scientific name of the electric eel?,Electrophorus voltai,Gymnotus carapo,Eigenmannia virescens,Electrophorus electricus,D,expert,Sea Life
+712,What is the scientific name of the bed bug?,Cimex lectularius,Triatoma infestans,Graphosoma lineatum,Cimex hemipterus,A,expert,Insects and Records
+713,What is a group of kittens called?,Clowder,Kindle,Down,Brace,B,expert,Animal Basics
+714,What is the scientific name of the African bush elephant?,Elephas maximus,Mammuthus primigenius,Loxodonta africana,Palaeoloxodon antiquus,C,expert,Mammals
+715,What is the scientific name of the marine iguana?,Iguana iguana,Ctenosaura similis,Dipsosaurus dorsalis,Amblyrhynchus cristatus,D,expert,Reptiles and Amphibians
+716,What is the scientific name of the giant clam?,Tridacna gigas,Tridacna derasa,Tridacna squamosa,Hippopus hippopus,A,expert,Sea Life
+717,What is the scientific name of the deathstalker scorpion?,Androctonus australis,Leiurus quinquestriatus,Centruroides sculpturatus,Pandinus imperator,B,expert,Insects and Records
+718,Which is the largest land member of the weasel family?,Badger,Otter,Wolverine,Mink,C,expert,Animal Basics
+719,What is the scientific name of the Asian elephant?,Loxodonta cyclotis,Mammuthus columbi,Primelephas gomphotherioides,Elephas maximus,D,expert,Mammals
+720,What is the scientific name of the Canada goose?,Branta canadensis,Chen caerulescens,Branta leucopsis,Anser anser,A,expert,Birds
+721,What is the scientific name of the oarfish?,Regalecus russelii,Regalecus glesne,Lampris guttatus,Mola mola,B,expert,Sea Life
+722,What is the scientific name of the Sydney funnel web spider?,Hadronyche formidabilis,Macrothele calpeiana,Atrax robustus,Atrax sutherlandi,C,expert,Insects and Records
+723,What is a baby hedgehog called?,Piglet,Puggle,Calf,Hoglet,D,expert,Animal Basics
+724,What is the scientific name of the koala?,Phascolarctos cinereus,Dendrolagus matschiei,Sarcophilus harrisii,Vombatus ursinus,A,expert,Mammals
+725,What is the scientific name of the mute swan?,Cygnus cygnus,Cygnus olor,Cygnus atratus,Cygnus buccinator,B,expert,Birds
+726,What is the scientific name of the hellbender?,Andrias japonicus,Andrias davidianus,Cryptobranchus alleganiensis,Necturus maculosus,C,expert,Reptiles and Amphibians
+727,What is the scientific name of the emperor scorpion?,Heterometrus longimanus,Scorpio maurus,Buthus occitanus,Pandinus imperator,D,expert,Insects and Records
+728,Which animal has no teeth at all?,Giant anteater,Armadillo,White rhinoceros,Sloth,A,expert,Animal Basics
+729,What is the scientific name of the cheetah?,Lynx lynx,Acinonyx jubatus,Puma concolor,Leopardus pardalis,B,expert,Mammals
+730,What is the scientific name of the whooping crane?,Grus grus,Grus rubicunda,Grus americana,Grus japonensis,C,expert,Birds
+731,What is the scientific name of the thorny devil?,Phrynosoma solare,Chlamydosaurus kingii,Pogona minor,Moloch horridus,D,expert,Reptiles and Amphibians
+732,What is the scientific name of the Mediterranean moray?,Muraena helena,Echidna nebulosa,Anguilla anguilla,Gymnothorax favagineus,A,expert,Sea Life
+733,What is a group of rattlesnakes called?,Pandemonium,Rhumba,Congress,Fluther,B,expert,Animal Basics
+734,What is the scientific name of the common hippopotamus?,Choeropsis liberiensis,Hippopotamus gorgops,Hippopotamus amphibius,Kobus megaceros,C,expert,Mammals
+735,What is the scientific name of the great blue heron?,Ardea alba,Butorides virescens,Nycticorax nycticorax,Ardea herodias,D,expert,Birds
+736,What is the scientific name of the Texas horned lizard?,Phrynosoma cornutum,Phrynosoma mcallii,Phrynosoma hernandesi,Phrynosoma platyrhinos,A,expert,Reptiles and Amphibians
+737,What is the scientific name of the Japanese spider crab?,Limulus polyphemus,Macrocheira kaempferi,Carcinus maenas,Maja squinado,B,expert,Sea Life
+738,What is the scientific name of the brown marmorated stink bug?,Nezara viridula,Murgantia histrionica,Halyomorpha halys,Chinavia hilaris,C,expert,Insects and Records
+739,What is the scientific name of the white rhinoceros?,Diceros bicornis,Rhinoceros unicornis,Rhinoceros sondaicus,Ceratotherium simum,D,expert,Mammals
+740,What is the scientific name of the golden eagle?,Aquila chrysaetos,Hieraaetus pennatus,Haliaeetus pelagicus,Aquila clanga,A,expert,Birds
+741,What is the scientific name of the European green toad?,Bufo bufo,Bufotes viridis,Bufotes pewzowi,Anaxyrus americanus,B,expert,Reptiles and Amphibians
+742,What is the scientific name of the sea otter?,Lutra lutra,Aonyx cinereus,Enhydra lutris,Lontra canadensis,C,expert,Sea Life
+743,What is the scientific name of the luna moth?,Actias selene,Antheraea yamamai,Callosamia promethea,Actias luna,D,expert,Insects and Records
+744,Which bird has been observed sleeping while flying?,Frigatebird,Skua,Petrel,Albatross,A,expert,Birds
+745,What is the scientific name of the ruby throated hummingbird?,Calothorax lucifer,Archilochus colubris,Mellisuga minima,Amazilia tzacatl,B,expert,Birds
+746,Which family do poison dart frogs belong to?,Bufonidae,Hylidae,Dendrobatidae,Ranidae,C,expert,Reptiles and Amphibians
+747,What is the scientific name of the West Indian manatee?,Trichechus senegalensis,Trichechus inunguis,Dugong dugon,Trichechus manatus,D,expert,Sea Life
+748,What is the scientific name of the Asian lady beetle?,Harmonia axyridis,Cycloneda munda,Hippodamia convergens,Adalia bipunctata,A,expert,Insects and Records
+749,Which is the smallest bird of prey?,American kestrel,Black thighed falconet,Pearl kite,Bornean falconet,B,expert,Birds
+750,What is the scientific name of the western honey bee?,Amegilla cingulata,Braunsapis puangensis,Apis mellifera,Exoneurella tridentata,C,expert,Mammals
+751,What is the scientific name of the olm?,Eurycea tynerensis,Desmognathus fuscus,Amphiuma means,Proteus anguinus,D,expert,Reptiles and Amphibians
+752,What is the scientific name of the sperm whale?,Physeter macrocephalus,Ziphius cavirostris,Mesoplodon densirostris,Kogia breviceps,A,expert,Sea Life
+753,What is the scientific name of the periodical cicada?,Magicicada cassini,Magicicada septendecim,Magicicada tredecim,Okanagana rimosa,B,expert,Insects and Records
+754,Which bat forms the largest colonies on Earth?,Large flying fox,Little brown bat,Mexican free tailed bat,Hoary bat,C,expert,Mammals
+755,What is the scientific name of the monarch butterfly?,Vanessa cardui,Morpho peleides,Heliconius melpomene,Danaus plexippus,D,expert,Mammals
+756,What is the scientific name of the superb lyrebird?,Menura novaehollandiae,Atrichornis rufescens,Ptilonorhynchus violaceus,Menura alberti,A,expert,Birds
+757,What is the scientific name of the narwhal?,Lagenorhynchus albirostris,Monodon monoceros,Tursiops truncatus,Cephalorhynchus commersonii,B,expert,Sea Life
+758,Which family do katydids belong to?,Gryllidae,Acrididae,Tettigoniidae,Tetrigidae,C,expert,Insects and Records
+759,Which is the tallest flying bird?,Whooping crane,Wandering albatross,Dalmatian pelican,Sarus crane,D,expert,Birds
+760,What is the scientific name of the cougar?,Puma concolor,Leopardus wiedii,Lynx rufus,Herpailurus yagouaroundi,A,expert,Mammals
+761,What is the scientific name of the great egret?,Egretta thula,Ardea alba,Bubulcus ibis,Egretta garzetta,B,expert,Birds
+762,What is the scientific name of the Nile monitor?,Varanus indicus,Varanus bengalensis,Varanus niloticus,Varanus griseus,C,expert,Reptiles and Amphibians
+763,Which family do fleas belong to?,Ceratophyllidae,Hystrichopsyllidae,Leptopsyllidae,Pulicidae,D,expert,Insects and Records
+764,Which animal heart can weigh about 180 kilograms?,Blue whale,Bowhead whale,Minke whale,African elephant,A,expert,Animal Basics
+765,What is the scientific name of the plains zebra?,Equus grevyi,Equus quagga,Equus zebra,Equus kiang,B,expert,Mammals
+766,What is the scientific name of the osprey?,Circus cyaneus,Accipiter gentilis,Pandion haliaetus,Milvus milvus,C,expert,Birds
+767,What is the scientific name of the Gaboon viper?,Bitis arietans,Atheris squamigera,Bitis nasicornis,Bitis gabonica,D,expert,Reptiles and Amphibians
+768,What is the scientific name of the bowhead whale?,Balaena mysticetus,Caperea marginata,Eschrichtius robustus,Eubalaena glacialis,A,expert,Sea Life
+769,Which bird builds huge communal apartment nests?,Baya weaver,Sociable weaver,Village weaver,Thick billed weaver,B,expert,Birds
+770,What is the scientific name of the wild yak?,Bos taurus,Bison bonasus,Bos mutus,Syncerus caffer,C,expert,Mammals
+771,What is the scientific name of the resplendent quetzal?,Trogon elegans,Pharomachrus antisianus,Euptilotis neoxenus,Pharomachrus mocinno,D,expert,Birds
+772,Which family includes the hard shelled sea turtles?,Cheloniidae,Trionychidae,Kinosternidae,Dermochelyidae,A,expert,Reptiles and Amphibians
+773,What is the scientific name of the vampire squid?,Octopoteuthis deletron,Vampyroteuthis infernalis,Japetella heathi,Stauroteuthis syrtensis,B,expert,Sea Life
+774,What is the scientific name of the European hornet?,Vespa mandarinia,Vespula vulgaris,Vespa crabro,Dolichovespula maculata,C,expert,Insects and Records
+775,What is the scientific name of the guinea pig?,Cavia aperea,Dolichotis patagonum,Hydrochoerus hydrochaeris,Cavia porcellus,D,expert,Mammals
+776,What is the scientific name of the gouldian finch?,Chloebia gouldiae,Poephila acuticauda,Erythrura trichroa,Taeniopygia guttata,A,expert,Birds
+777,What is the scientific name of the gharial?,Mecistops cataphractus,Gavialis gangeticus,Osteolaemus tetraspis,Paleosuchus trigonatus,B,expert,Reptiles and Amphibians
+778,What is the scientific name of the peacock mantis shrimp?,Gonodactylus smithii,Squilla mantis,Odontodactylus scyllarus,Lysiosquillina maculata,C,expert,Sea Life
+779,What is the scientific name of the silkworm?,Bombyx mandarina,Actias luna,Callosamia securifera,Bombyx mori,D,expert,Insects and Records
+780,Which is the wryneck?,Wryneck,Jacana,Crake,Sunbird,A,expert,Animal Basics
+781,What is the scientific name of the secretary bird?,Polemaetus bellicosus,Sagittarius serpentarius,Terathopius ecaudatus,Circaetus gallicus,B,expert,Birds
+782,What is the scientific name of the cane toad?,Rhinella schneideri,Rhinella icterica,Rhinella marina,Incilius nebulifer,C,expert,Reptiles and Amphibians
+783,What is the scientific name of the tiger pufferfish?,Arothron hispidus,Canthigaster valentini,Lagocephalus lunaris,Takifugu rubripes,D,expert,Sea Life
+784,What is the scientific name of the antlion?,Myrmeleon formicarius,Euroleon nostras,Palpares libelluloides,Myrmeleon immaculatus,A,expert,Insects and Records
+785,What is the scientific name of the golden hamster?,Phodopus sungorus,Mesocricetus auratus,Cricetus cricetus,Meriones unguiculatus,B,expert,Mammals
+786,What is the scientific name of the panther chameleon?,Chamaeleo calyptratus,Furcifer oustaleti,Furcifer pardalis,Furcifer campani,C,expert,Reptiles and Amphibians
+787,What is the scientific name of the Atlantic hagfish?,Eptatretus stoutii,Myxine circifrons,Petromyzon marinus,Myxine glutinosa,D,expert,Sea Life

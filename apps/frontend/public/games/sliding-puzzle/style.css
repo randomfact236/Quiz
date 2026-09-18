@@ -72,7 +72,7 @@ body {
 .app {
   min-height: 100vh;
   min-height: 100dvh;
-  max-width: 26rem; /* comfortable at 360 px wide too */
+  max-width: none; /* BUG-016 sweep: full-screen per owner request */
   margin: 0 auto;
   padding: 0.75rem 1rem 1.25rem;
   display: flex;
@@ -420,11 +420,10 @@ a:focus-visible {
 
 .board {
   --n: 3;
-  --gap: 4px;
+  --gap: 0px; /* BUG-017: tiles sit flush — no visible gap between moving blocks */
   position: relative;
-  width: min(92vw, 60vh);
-  width: min(92vw, 60dvh);
-  max-width: 25rem;
+  width: min(92vw, 72dvh); /* BUG-016 sweep: fills the viewport height */
+  max-width: none;
   aspect-ratio: 1;
   background: var(--socket);
   border: 1px solid var(--board);
@@ -441,7 +440,7 @@ a:focus-visible {
   border: var(--gap) solid transparent;
   background-clip: padding-box; /* the border is the gutter between tiles */
   background-color: var(--tile);
-  border-radius: 16px;
+  border-radius: 0; /* BUG-017: flush tiles — rounded corners would leave notches */
   color: var(--text);
   font: inherit;
   font-weight: 800;
@@ -476,9 +475,9 @@ a:focus-visible {
    slices can be matched to cells; tap to enlarge */
 
 .pic-preview {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
+  position: static; /* BUG-017: reference sits outside the sliding container */
+  display: block;
+  margin: 0 auto 0.6rem;
   width: clamp(48px, 15vw, 68px);
   aspect-ratio: 1;
   padding: 0;

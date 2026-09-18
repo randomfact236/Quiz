@@ -73,7 +73,7 @@ body {
 .app {
   min-height: 100vh;
   min-height: 100dvh;
-  max-width: 26rem; /* 416px — comfortable at 360px wide too */
+  max-width: none; /* BUG-016 sweep: full-screen per owner request */
   margin: 0 auto;
   padding: 0.75rem 1rem 1.25rem;
   display: flex;
@@ -385,7 +385,7 @@ a:focus-visible,
   /* fit narrow phones and short landscape viewports alike */
   width: min(100%, 58vh);
   width: min(100%, 58vh, 58dvh);
-  max-width: 25rem;
+  max-width: none; /* scales with the screen (full-screen treatment) */
   aspect-ratio: 1;
 }
 

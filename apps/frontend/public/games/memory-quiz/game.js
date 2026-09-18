@@ -153,6 +153,7 @@ function phaseExpired() {
       beginQuestion(0);
       break;
     case 'question':
+      state.unanswered += 1; // BUG-021: an expired question counts as unanswered
       gradeMiss(1, 'timeout');
       break;
     case 'feedback':
@@ -288,6 +289,7 @@ function startBoard() {
   );
   state.questionIndex = 0;
   state.removedCell = -1;
+  state.unanswered = 0; // BUG-021: timeouts block the next-level advance
 
   // Campaign levels are gated by completion; ladder modes climb waves — the
   // HUD never calls a wave a "level" so the two can't be confused.
@@ -371,6 +373,7 @@ function answer(picked) {
 
 function gradeHit(points) {
   applyTruth(activeTruth(false));
+  setBoardHidden(false); // BUG-021: the clicked answer reveals the board images
   showFeedback(true, t('feedbackHit', { points }));
   announce('Correct. Plus ' + points + ' points.');
   blip(523, 70);
@@ -391,8 +394,9 @@ function gradeMiss(heartsLost, reason = 'wrong') {
           return t(m.key, m.vars);
         })();
   // The truth is always revealed (plan §10), pulsing on a miss.
-  showFeedback(false, message);
   applyTruth(activeTruth(true));
+  setBoardHidden(false); // BUG-021: the clicked answer reveals the board images
+  showFeedback(false, message);
   state.hearts -= heartsLost;
   state.streak = 0;
   renderHearts();
@@ -667,10 +671,32 @@ function showLevelClear() {
     'Level best ' + record.best.score + ' · best streak ' + record.best.bestStreak;
   const onShuffleCard = state.mode === 'shuffle';
   const nextId = onShuffleCard ? null : nextLevelId(state.levelId);
-  els.btnNext.classList.toggle('hidden', !nextId);
+  // BUG-021: a question left unanswered (timer ran out) blocks the next level —
+  // the player must replay it instead of advancing.
+  const blockedByTimeout = state.unanswered > 0;
+  els.btnNext.classList.toggle('hidden', !nextId || blockedByTimeout);
   els.btnCards.classList.toggle('hidden', !onShuffleCard);
+  els.clearTimeoutNote.classList.toggle('hidden', !blockedByTimeout);
+  // BUG-021: the congratulations card shows every image of the board — the
+  // ones the questions clicked plus all the others.
+  els.clearItems.innerHTML = '';
+  for (const cell of state.board.cells) {
+    if (!cell) continue; // sockets stay out of the gallery
+    const chip = document.createElement('span');
+    chip.className = 'clear-item';
+    chip.textContent = cell.emoji;
+    chip.setAttribute('aria-label', itemName(cell, GAME_CONFIG.locale));
+    els.clearItems.appendChild(chip);
+  }
   openOverlay('levelclear');
-  (nextId ? els.btnNext : onShuffleCard ? els.btnCards : els.btnRetry2).focus();
+  (blockedByTimeout
+    ? els.btnRetry2
+    : nextId
+      ? els.btnNext
+      : onShuffleCard
+        ? els.btnCards
+        : els.btnRetry2
+  ).focus();
   blip(523, 90, 'triangle', 0);
   blip(659, 90, 'triangle', 0.1);
   blip(784, 160, 'triangle', 0.2);
@@ -1088,6 +1114,8 @@ function init() {
   els.clearStars = document.getElementById('clear-stars');
   els.clearStats = document.getElementById('clear-stats');
   els.clearBest = document.getElementById('clear-best');
+  els.clearItems = document.getElementById('clear-items');
+  els.clearTimeoutNote = document.getElementById('clear-timeout-note');
   els.badgeLevelBest = document.getElementById('badge-levelbest');
   els.badgeLevelStars = document.getElementById('badge-levelstars');
   els.btnNext = document.getElementById('btn-next');
