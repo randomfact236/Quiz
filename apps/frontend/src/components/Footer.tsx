@@ -4,7 +4,7 @@ import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
 import { SocialLinks } from '@/components/SocialLinks';
 
 import { NAV_ITEMS, NAV_SECONDARY_ITEMS } from '@/lib/nav-config';
-import { BUILT_IN_BRAND_ASSETS } from '@/components/SiteBrandContext';
+import { BUILT_IN_BRAND_ASSETS } from '@/lib/brand-assets';
 import { getPublicSettings, resolveMediaUrl } from '@/lib/public-settings';
 
 const byHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;

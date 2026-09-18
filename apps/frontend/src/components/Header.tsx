@@ -9,6 +9,7 @@ import { UserCircle, X } from 'lucide-react';
 
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useSiteBrand } from '@/components/SiteBrandContext';
+import { SITE_DOMAIN } from '@/lib/brand-assets';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
 import { authService } from '@/lib/auth';
@@ -22,7 +23,6 @@ import { authService } from '@/lib/auth';
  *  PigZap marks are the floor: no surface ever falls back to a generic
  *  placeholder. Mobile shows the square icon + the site domain (pigzap.com)
  *  per owner directive; md+ shows the whole logo only. */
-const SITE_DOMAIN = 'pigzap.com';
 
 function BrandLink(): JSX.Element {
   const { siteName, logo, logoDark, favicon, mobileLogo, mobileShowSiteName } = useSiteBrand();
