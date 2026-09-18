@@ -37,7 +37,7 @@ export function setViewW(w) {
 }
 export const VIEW_H = 500;
 export const GROUND_Y = 420;
-export const PLAYER_X = 225; // fixed 25 % of the width
+export const PLAYER_X = 405; // BUG-032: 45 % of the width — runner around the middle
 
 /* ---- physics (plan §2 table, verbatim) ------------------------------------- */
 

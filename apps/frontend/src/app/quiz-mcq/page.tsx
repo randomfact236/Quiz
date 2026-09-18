@@ -377,12 +377,16 @@ interface ChapterInfo {
   name: string;
   questionCount: number;
   levels: Set<string>;
+  /** Per-level published counts (keyed lowercase, e.g. 'easy') for the
+   *  inline mode/difficulty picker (BUG-027). */
+  levelCounts: Record<string, number>;
   isCompleted: boolean;
   bestScore: number;
   attempts: number;
 }
 
 function ChapterSelection({ subject }: { subject: string }): JSX.Element {
+  const [expandedChapters, setExpandedChapters] = useState<Record<number, boolean>>({});
   const subjectQuery = useQuery({
     queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
     queryFn: () => getSubjectBySlug(subject),
@@ -401,6 +405,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
               name: chapter.name,
               questionCount: 0,
               levels: new Set<string>(),
+              levelCounts: {},
               isCompleted: progress?.completed ?? false,
               bestScore: progress?.bestScore ?? 0,
               attempts: progress?.attempts ?? 0,
@@ -434,6 +439,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         ...info,
         questionCount: stats.count,
         levels: new Set(Object.keys(stats.levels).sort(levelOrder)),
+        levelCounts: stats.levels,
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -512,37 +518,98 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {chapters.map((chapter, index) => (
-            <Link
-              key={chapter.name}
-              href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}`}
-              className="flex items-center gap-4 rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-lg transition-all hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl"
-            >
+          {chapters.map((chapter, index) => {
+            // BUG-027: the mode selection (Normal / Timer) lives inline under the
+            // chapter — the first 2 chapters render it expanded, the rest start
+            // collapsed but openable. Picking a mode goes straight to its level
+            // selection, removing the separate mode-selection page hop.
+            const isExpanded = expandedChapters[index] ?? index < 2;
+            return (
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/30 dark:bg-green-500/20 text-green-600 dark:text-green-300' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/30 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300' : 'bg-indigo-200 dark:bg-indigo-500/30 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300'}`}
+                key={chapter.name}
+                className="overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg transition-all hover:bg-white dark:hover:bg-secondary-700"
               >
-                {chapter.isCompleted ? <CheckCircle className="h-6 w-6" /> : index + 1}
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-gray-800 dark:text-secondary-100">{chapter.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-secondary-400">
-                  {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
-                </p>
-                {chapter.attempts > 0 && (
-                  <div className="mt-1 flex items-center gap-2 text-xs">
-                    <span className="flex items-center gap-1 text-green-600 dark:text-green-300">
-                      <Trophy className="h-3 w-3" />
-                      Best: {chapter.bestScore}
-                    </span>
-                    <span className="text-gray-400 dark:text-secondary-400">
-                      ({chapter.attempts} attempt{chapter.attempts !== 1 ? 's' : ''})
-                    </span>
+                <button
+                  type="button"
+                  onClick={() => setExpandedChapters((prev) => ({ ...prev, [index]: !isExpanded }))}
+                  aria-expanded={isExpanded}
+                  className="flex w-full items-center gap-4 p-5 text-left"
+                >
+                  <div
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/30 dark:bg-green-500/20 text-green-600 dark:text-green-300' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/30 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300' : 'bg-indigo-200 dark:bg-indigo-500/30 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300'}`}
+                  >
+                    {chapter.isCompleted ? <CheckCircle className="h-6 w-6" /> : index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-800 dark:text-secondary-100">
+                      {chapter.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-secondary-400">
+                      {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
+                    </p>
+                    {chapter.attempts > 0 && (
+                      <div className="mt-1 flex items-center gap-2 text-xs">
+                        <span className="flex items-center gap-1 text-green-600 dark:text-green-300">
+                          <Trophy className="h-3 w-3" />
+                          Best: {chapter.bestScore}
+                        </span>
+                        <span className="text-gray-400 dark:text-secondary-400">
+                          ({chapter.attempts} attempt{chapter.attempts !== 1 ? 's' : ''})
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <ChevronDown
+                    className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {isExpanded && (
+                  <div className="space-y-4 border-t border-gray-100 p-4 dark:border-secondary-700">
+                    {[
+                      {
+                        mode: 'normal' as const,
+                        icon: '🎯',
+                        title: 'Normal Mode',
+                        tint: 'font-bold text-indigo-600 dark:text-indigo-300',
+                      },
+                      {
+                        mode: 'timer' as const,
+                        icon: '⏱️',
+                        title: 'Timer Mode',
+                        tint: 'font-bold text-orange-600 dark:text-orange-300',
+                      },
+                    ].map(({ mode, icon, title, tint }) => (
+                      <div key={mode}>
+                        <p className={`mb-2 text-sm ${tint}`}>
+                          {icon} {title} — select difficulty:
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                          {levels.map((level) => {
+                            const count = chapter.levelCounts[level.toLowerCase()] ?? 0;
+                            return (
+                              <Link
+                                key={`${mode}-${level}`}
+                                href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}&level=${level.toLowerCase()}&mode=${mode}`}
+                                className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'pointer-events-none opacity-50' : ''}`}
+                                aria-disabled={count === 0}
+                              >
+                                <span className="mb-1 text-xl">{levelEmojis[level]}</span>
+                                <span className="text-xs font-semibold capitalize">{level}</span>
+                                <span className="mt-1 text-[10px] opacity-90">
+                                  {count} questions
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
-              <span className="text-2xl text-gray-400 dark:text-secondary-400">→</span>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

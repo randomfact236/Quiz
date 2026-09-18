@@ -458,10 +458,8 @@ a:focus-visible {
   transition: transform 180ms ease;
 }
 
-.tile:not(:disabled):hover {
-  background-color: var(--tile-hover);
-  background-clip: padding-box;
-}
+/* BUG-030: no per-tile hover tint — every block must look fully adjusted
+   at all times (a lingering tint read as an "active" unadjusted block). */
 
 .tile:focus-visible {
   outline: 3px solid var(--primary-a);
@@ -557,10 +555,7 @@ a:focus-visible {
   background-color: transparent;
 }
 
-.board--picture .tile:not(:disabled):hover {
-  background-color: transparent;
-  filter: brightness(1.12);
-}
+/* BUG-030: picture-mode tiles also stay uniform — no hover brightness flash. */
 
 .board--picture .tile-num {
   display: none;

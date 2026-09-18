@@ -38,15 +38,72 @@
 | BUG-024 | detective-mystery: 30 whodunit rows logically unsolvable              | riddle-mcq csv (content)      | P2       | Fixed    |
 | BUG-025 | pop-culture: 403 MCQs unwinnable (correct letter sliced off)          | quiz-csv (content)            | P1       | Fixed    |
 | BUG-026 | Quiz/riddle content quality: duplicates + answer-letter bias          | quiz-csv / riddle-mcq csv     | P3       | Fixed    |
-| BUG-027 | Quiz: mode selection inline under each subject chapter (first 2 open) | quiz-mcq subjects             | P2       | Open     |
+| BUG-027 | Quiz: mode selection inline under each subject chapter (first 2 open) | quiz-mcq subjects             | P2       | Fixed    |
 | BUG-028 | Riddles: same 2-column subject style/design as quiz                   | riddle-mcq subjects           | P2       | Fixed    |
 | BUG-029 | Riddle MCQ: Normal and Timer mode sections open by default            | riddle-mcq mode selection     | P2       | Fixed    |
+| BUG-030 | Sliding puzzle: moved block not fully adjusted until next move        | Games (sliding-puzzle)        | P2       | Fixed    |
+| BUG-031 | "All games" back button only visible when game is paused              | Games (in-game nav)           | P2       | Fixed    |
+| BUG-032 | Runner game: runner too far left, should sit in the middle            | Games (runner)                | P2       | Fixed    |
 
 ---
 
 ## Work Log
 
 _(newest first)_
+
+### 2026-09-18 - Final round: BUG-001 auto-advance verified live on the rebuilt server
+
+- Rebuilt the frontend (build8) with all pending fixes and re-verified end-to-end on the
+  Animals/Animal Basics practice session: answering Q1 auto-advanced to Q2 within the ~3 s
+  window with zero interaction (`verify_001_autoadvance_after_4s.png`, URL question=2,
+  progress 2/10) - BUG-001 verified live at last.
+- Also live-verified this round: BUG-027 v2 inline picker (chapters 1-2 expanded with
+  Normal/Timer sections + per-level difficulty chips; Easy chip opens the correct play
+  session) - `verify_027_inline_modes_first2.png`, `verify_027_chip_leads_to_play.png`.
+- Security re-checked on the rebuilt server: all four browser-hardening headers present on
+  quiz pages; admin analytics reset still 401 unauthenticated.
+
+_(newest first)_
+
+### 2026-09-18 - Home cards: fixed order, Quiz card removed (owner request)
+
+- **Scope:** home page direct-link cards under the mode cards.
+- **Change:** `ModeCards.tsx` - card order is now fixed: Riddles -> Image Riddles -> Games
+  -> Dad Jokes; the Quiz card is removed (quiz stays reachable via the header nav, the big
+  Quiz Topics section, and the mode cards). The earlier per-visit shuffle was dropped since
+  the owner now specifies an exact order; the unused shuffle helper was deleted.
+- **Verification:** DOM tile order = riddle-mcq -> image-riddles -> games -> jokes (no quiz
+  tile); mode-cards unit tests updated and green (5/5); production build regenerated.
+- **Evidence:** `gui-test-screenshots/verify_023_cards_reordered_no_quiz.png`
+
+### 2026-09-18 - Games bugs BUG-030/031/032 resolved and verified
+
+- **BUG-030 sliding-puzzle:** both per-tile hover rules removed (numbers-mode tint +
+  picture-mode brightness flash) - a lingering hover highlight on the moved block read as
+  an "active, not fully adjusted" tile. Blocks now render uniform at all times. Served CSS
+  confirmed clean (0 tile hover rules on tiles).
+- **BUG-031:** the "All games" pill is verified visible and clickable during active play
+  (hurdle-runner live run - pill top-left, elementFromPoint = the pill itself); the earlier
+  invisible state was the pre-pill gray text, superseded by the pill restyle.
+- **BUG-032:** runner x moved from 25% to 45% of the world (PLAYER_X 225 -> 405) in both
+  hurdle-runner and spirit-runner - the runner now sits around the middle with full
+  reaction room ahead. Verified in live gameplay (hurdle-runner) and menu scene
+  (spirit-runner).
+- **Bugs closed:** BUG-030, BUG-031, BUG-032
+- **Evidence:** `gui-test-screenshots/verify_032_runner_middle.png`,
+  `verify_032_spirit_gameplay_middle.png`, curl transcripts for the sliding-puzzle CSS.
+
+### 2026-09-18 — Follow-up: sliding-puzzle alignment + in-game UI reports
+
+- **Scope:** sliding-puzzle block alignment; in-game "All games" back-button visibility;
+  runner-game character positioning
+- **Method:** owner-reported observations (07:57 / 08:00 messages); no testing performed
+- **Result:** three items filed — BUG-030 (moved puzzle block shows as an active,
+  not-fully-adjusted block until the next move; owner wants every block fully adjusted at all
+  times), BUG-031 ("All games" back button visible only while the game is paused), BUG-032
+  (runner sits too far left; owner wants it in the middle of the view). Listing only.
+- **Bugs filed:** BUG-030, BUG-031, BUG-032
+- **Evidence:** none
 
 ### 2026-09-18 — Mobile footer: Menu item removed (owner request)
 
@@ -554,6 +611,44 @@ _(template for new sessions:)_
   removed along with the unused prop and `parseModeParam` call).
 - **Verified:** both sections `aria-expanded: true` with their difficulty grids visible on
   load (`verify_029_riddle_modes_both_open.png`).
+
+### BUG-030 — Sliding puzzle: moved block not fully adjusted until next move
+
+- **Date found:** 2026-09-18
+- **Area:** Games — sliding-puzzle
+- **Priority:** P2
+- **Reported:** After moving a slide, it renders as an "active" block that is not fully
+  adjusted/aligned with the surrounding blocks; only when another block is clicked does the
+  previous one settle fully into place. Owner wants all blocks fully adjusted at all times.
+
+### BUG-031 — "All games" back button only visible when the game is paused
+
+- **Date found:** 2026-09-18 (reported 07:57)
+- **Area:** Games — in-game back navigation ("All games")
+- **Priority:** P2
+- **Reported:** The "All games" back button is only visible while the game is paused; it is
+  not available during normal play (expected: reachable at all times — confirm placement
+  when picked up).
+
+### BUG-032 — Runner game: runner sits too far left; bring to the middle
+
+- **Date found:** 2026-09-18 (reported 08:00)
+- **Area:** Games — runner games (hurdle-runner / spirit-runner; exact game not specified)
+- **Priority:** P2
+- **Reported:** The runner character is positioned too far to the left of the view; owner
+  wants the view adjusted so the runner sits around the middle part.
+
+### BUG-027 - Quiz: mode selection inline under each subject chapter (first 2 open)
+
+- **Date found:** / **Date fixed:** 2026-09-18
+- **Area:** quiz-mcq subjects/chapters (subject -> mode-selection flow)
+- **Priority:** P2
+- **Fix:** chapter cards on the "Select Chapter" page embed the full mode + difficulty
+  selection inline - Normal Mode and Timer Mode sections with 4 difficulty chips each
+  (per-level counts shown; Extreme dimmed at 0) - navigating straight to that mode+level's
+  play session. First 2 chapters render expanded by default; every header toggles its panel.
+- **Verified:** live - chips carry per-level counts and open the correct play session
+  (`verify_027_inline_full_selection.png`, `verify_027_chip_leads_to_play.png`).
 
 _(moved entries keep their **Verified** evidence lines; add **Date fixed** and **Fix** at
 the top.)_
