@@ -2,7 +2,13 @@ import type { MetadataRoute } from 'next';
 
 import { APP_URL, INDEXABLE_ROUTES } from '@/lib/seo';
 
-const API_BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
+// NEXT_PUBLIC_API_URL may or may not carry the /v1 suffix depending on the
+// deployment (prod: …/api/v1, local default: …/api) — normalize so appending
+// /v1 below never produces a double prefix (prod shipped exactly that bug,
+// silently emptying the sitemap's dynamic section).
+const API_BASE = (process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api')
+  .replace(/\/v1\/?$/, '')
+  .replace(/\/$/, '');
 
 /**
  * Static, always-crawlable routes derived from the shared indexable-route
