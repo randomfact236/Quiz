@@ -11,7 +11,9 @@
  * core.test.html harness import it directly.
  *
  * World = 900×500 logical viewport, ground line at y=420 (§3, like 05).
- * The runner sits at a fixed x (25 %); the world scrolls left, ramping
+ * The runner sits at 45 % of the world width (BUG-032), capped at the
+ * reference 405 — setPlayerX() re-derives it on resize so it stays on-screen
+ * at portrait aspects (BUG-033); the world scrolls left, ramping
  * 320→900 px/s exactly like Game 05 (plan §2: "Speed ramp as 05").
  *
  * Coordinates: obstacles/orbs/gates live in WORLD space (worldX fixed at
