@@ -94,6 +94,12 @@ body {
   text-decoration: none;
 }
 
+/* BUG-034: the pill must not sit over live gameplay — main.js's showScreen
+   toggles this class: hidden while playing, back on pause/menu/game-over. */
+.back-link.hidden {
+  display: none;
+}
+
 /* ---- stage + canvas ------------------------------------------------------ */
 
 .stage {

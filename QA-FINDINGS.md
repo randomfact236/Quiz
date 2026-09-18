@@ -45,13 +45,26 @@
 | BUG-031 | "All games" back button only visible when game is paused              | Games (in-game nav)           | P2       | Fixed    |
 | BUG-032 | Runner game: runner too far left, should sit in the middle            | Games (runner)                | P2       | Fixed    |
 | BUG-033 | Mobile: runner invisible (hurdle-runner & spirit-runner)              | Games (runner, mobile)        | P1       | Fixed    |
-| BUG-034 | "All games" pill: hide during play, show only when paused             | Games (in-game nav)           | P2       | Open     |
+| BUG-034 | "All games" pill: hide during play, show only when paused             | Games (in-game nav)           | P2       | Fixed    |
 
 ---
 
 ## Work Log
 
 _(newest first)_
+
+### 2026-09-18 — BUG-034 fixed: All-games pill paused-only in the 3 canvas games
+
+- **Scope:** hurdle-runner, spirit-runner, flying-snake (the games whose pill overlays the
+  playing surface); DOM games keep their in-flow links
+- **Result:** pill hidden while `mode === 'playing'` (snake also `dying`), visible on
+  paused / menu / ready / game-over, via one toggle in each game's `showScreen()` plus a
+  `.back-link.hidden` CSS rule. Owner directive applied as given — reverses the
+  always-visible direction of the BUG-031 fix.
+- **Verified:** live in the IDE browser pane on 3010 — playing hidden / paused visible on
+  both runners (+ menu & game-over states), snake playing hidden (pause path is the
+  tab-hidden handler; same showScreen toggle, pane can't fake document.hidden).
+  Evidence: `gui-test-screenshots/fix_bug034_*.png`.
 
 ### 2026-09-18 — BUG-033 fixed: responsive runner x keeps the actor on-screen at portrait aspects
 
@@ -696,13 +709,26 @@ _(template for new sessions:)_
 
 ### BUG-034 — "All games" pill: hide during gameplay, show only when paused
 
-- **Date found:** 2026-09-18
+- **Date found:** 2026-09-18 / **Date fixed:** 2026-09-18
 - **Area:** Games — in-game back navigation ("All games" pill)
 - **Priority:** P2
 - **Reported:** Owner directive: hide the "Back to all games" button while gameplay is on;
   only display it when the game is paused.
 - **Note:** supersedes the BUG-031 fix, which deliberately made the pill visible and
   clickable during active play — that behavior is to be reversed to paused-only visibility.
+- **Fix:** applied to the 3 canvas games that overlay the pill on the playing surface
+  (hurdle-runner, spirit-runner, flying-snake). `showScreen(mode)` now toggles a
+  `.back-link.hidden` rule: the pill is hidden while `mode === 'playing'` (snake also
+  while the brief `dying` crash transition) and back on every other state — paused,
+  menu, ready, game-over. The 5 DOM games keep their in-flow links (no canvas, no pause
+  mechanic — nothing to hide). Anchor got `id="back-link"`; registered in els per the
+  codebase's getElementById convention.
+- **Verified (live, IDE browser pane on 3010):** hurdle-runner pill visible in menu,
+  hidden mid-run, visible over the Paused overlay, visible on game-over;
+  spirit-runner menu/playing/paused likewise; flying-snake menu/ready visible and pill
+  hidden in flight (its only pause trigger is the tab going hidden — same showScreen
+  path, not synthesizable from the pane). Evidence:
+  `gui-test-screenshots/fix_bug034_*.png`.
 
 ### BUG-027 - Quiz: mode selection inline under each subject chapter (first 2 open)
 

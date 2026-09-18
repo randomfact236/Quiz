@@ -171,6 +171,10 @@ function showScreen(mode) {
   els.screenMenu.classList.toggle('hidden', mode !== 'menu');
   els.overlayPause.classList.toggle('hidden', mode !== 'paused');
   els.overlayOver.classList.toggle('hidden', mode !== 'gameover');
+  // BUG-034: the All-games exit pill must not sit over live gameplay — visible
+  // again the moment the run is paused (or on any non-playing screen). 'dying'
+  // is the brief crash transition into 'gameover', gameplay is already over.
+  els.backLink.classList.toggle('hidden', mode === 'playing' || mode === 'dying');
   if (mode === 'menu') renderMenuBest();
 }
 
@@ -517,6 +521,7 @@ function init() {
   els.screenMenu = document.getElementById('screen-menu');
   els.overlayPause = document.getElementById('overlay-pause');
   els.overlayOver = document.getElementById('overlay-over');
+  els.backLink = document.getElementById('back-link');
   els.menuBest = document.getElementById('menu-best');
   els.overScore = document.getElementById('over-score');
   els.overBest = document.getElementById('over-best');

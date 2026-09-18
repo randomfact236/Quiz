@@ -191,6 +191,9 @@ function showScreen(mode) {
   els.overlayPause.classList.toggle('hidden', mode !== 'paused');
   els.overlayOver.classList.toggle('hidden', mode !== 'gameover');
   els.btnPause.classList.toggle('hidden', mode !== 'playing');
+  // BUG-034: the All-games exit pill must not sit over live gameplay — visible
+  // again the moment the run is paused (or on any non-playing screen).
+  els.backLink.classList.toggle('hidden', mode === 'playing');
   if (mode === 'menu') renderMenuBest();
 }
 
@@ -539,6 +542,7 @@ function init() {
   els.btnMute = document.getElementById('btn-mute');
   els.btnPause = document.getElementById('btn-pause');
   els.btnRetry = document.getElementById('btn-retry');
+  els.backLink = document.getElementById('back-link');
   els.toast = document.getElementById('toast');
 
   state.muted = loadMuted();
