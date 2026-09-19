@@ -13,7 +13,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { toast } from '@/lib/toast';
-import { getAllImageRiddlesAdmin, getImageRiddleCategoriesAdmin } from '@/lib/image-riddles-api';
+import {
+  getAllImageRiddlesAdminAllPages,
+  getImageRiddleCategoriesAdmin,
+} from '@/lib/image-riddles-api';
 import type { ImageRiddle } from '@/app/admin/types';
 
 /** Category row used by the admin UI (count included). */
@@ -52,7 +55,7 @@ export function useAdminImageRiddleData() {
     setIsLoadingData(true);
     try {
       const [riddlePage, cats] = await Promise.all([
-        getAllImageRiddlesAdmin({}, 1, 500),
+        getAllImageRiddlesAdminAllPages(),
         getImageRiddleCategoriesAdmin(),
       ]);
       setImageRiddles(

@@ -176,6 +176,24 @@ export async function getAllImageRiddlesAdmin(
 }
 
 /**
+ * Get ALL riddles (any status) for the admin panel by walking every page.
+ * The admin endpoint clamps limit to 100, so the table's "load everything"
+ * request must page through; rows are concatenated into one list.
+ */
+export async function getAllImageRiddlesAdminAllPages(
+  params: GetAllImageRiddlesParams = {}
+): Promise<{ data: ImageRiddle[]; total: number }> {
+  const first = await getAllImageRiddlesAdmin(params, 1, 100);
+  const data = [...first.data];
+  const totalPages = Math.ceil(first.total / 100) || 1;
+  for (let page = 2; page <= totalPages; page++) {
+    const next = await getAllImageRiddlesAdmin(params, page, 100);
+    data.push(...next.data);
+  }
+  return { data, total: first.total };
+}
+
+/**
  * Create a riddle (Admin). New riddles start as DRAFT.
  */
 export async function createImageRiddle(dto: CreateImageRiddleDto): Promise<ImageRiddle> {
