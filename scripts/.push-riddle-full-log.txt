@@ -1,0 +1,73 @@
+
+==> riddle-subjects: reading local... 26 rows; reading live... ==> logging in to live admin API... ok
+0 rows
+   plan: 26 create, 0 update, 0 conflict (live edits — kept), 0 unchanged
+
+==> riddle-mcqs: reading local... 3000 rows; reading live... 0 rows
+   plan: 3000 create, 0 update, 0 conflict (live edits — kept), 0 unchanged
+
+======== PLAN: 3026 create, 0 update, 0 conflicts kept on live, 0 unchanged ========
+   riddle-subjects: created 26/26
+   riddle-mcqs: created 50/3000
+   riddle-mcqs: created 100/3000
+   riddle-mcqs: created 150/3000
+   riddle-mcqs: created 200/3000
+   riddle-mcqs: created 250/3000
+   riddle-mcqs: created 300/3000
+   riddle-mcqs: created 350/3000
+   riddle-mcqs: created 400/3000
+   riddle-mcqs: created 450/3000
+   riddle-mcqs: created 500/3000
+   riddle-mcqs: created 550/3000
+   riddle-mcqs: created 600/3000
+   riddle-mcqs: created 650/3000
+   riddle-mcqs: created 700/3000
+   riddle-mcqs: created 750/3000
+   riddle-mcqs: created 800/3000
+   riddle-mcqs: created 850/3000
+   riddle-mcqs: created 900/3000
+   riddle-mcqs: created 950/3000
+   riddle-mcqs: created 1000/3000
+   riddle-mcqs: created 1050/3000
+   riddle-mcqs: created 1100/3000
+   riddle-mcqs: created 1150/3000
+   riddle-mcqs: created 1200/3000
+   riddle-mcqs: created 1250/3000
+   riddle-mcqs: created 1300/3000
+   riddle-mcqs: created 1350/3000
+   riddle-mcqs: created 1400/3000
+   riddle-mcqs: created 1450/3000
+   riddle-mcqs: created 1500/3000
+   riddle-mcqs: created 1550/3000
+   riddle-mcqs: created 1600/3000
+   riddle-mcqs: created 1650/3000
+   riddle-mcqs: created 1700/3000
+   riddle-mcqs: created 1750/3000
+   riddle-mcqs: created 1800/3000
+   riddle-mcqs: created 1850/3000
+   riddle-mcqs: created 1900/3000
+   riddle-mcqs: created 1950/3000
+   riddle-mcqs: created 2000/3000
+   riddle-mcqs: created 2050/3000
+   riddle-mcqs: created 2100/3000
+   riddle-mcqs: created 2150/3000
+   riddle-mcqs: created 2200/3000
+   riddle-mcqs: created 2250/3000
+   riddle-mcqs: created 2300/3000
+   riddle-mcqs: created 2350/3000
+   riddle-mcqs: created 2400/3000
+   riddle-mcqs: created 2450/3000
+   riddle-mcqs: created 2500/3000
+   riddle-mcqs: created 2550/3000
+   riddle-mcqs: created 2600/3000
+   riddle-mcqs: created 2650/3000
+   riddle-mcqs: created 2700/3000
+   riddle-mcqs: created 2750/3000
+   riddle-mcqs: created 2800/3000
+   riddle-mcqs: created 2850/3000
+   riddle-mcqs: created 2900/3000
+   riddle-mcqs: created 2950/3000
+   riddle-mcqs: created 3000/3000
+
+Done. Failures: 0. Conflicts (live edits) were preserved. State saved to scripts/.content-push-state.json.
+EXIT:0

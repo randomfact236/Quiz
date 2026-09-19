@@ -14,6 +14,7 @@ import { Throttle } from '@nestjs/throttler';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
 import { _Public } from '../common/decorators/public.decorator';
 import { CreateQuestionLikeDto, MyQuestionLikeQueryDto } from './dto/question-like.dto';
+import { QuestionLikeContentType } from './entities/question-like.entity';
 import { QuestionLikesService } from './question-likes.service';
 
 @ApiTags('Question Likes')
@@ -36,6 +37,16 @@ export class QuestionLikesController {
       dto.guestId,
       req.user?.id ?? null
     );
+  }
+
+  @Get('counts')
+  @_Public()
+  @ApiOperation({ summary: 'Public like totals per question id (BUG-048)' })
+  counts(
+    @Query('contentType') contentType: QuestionLikeContentType,
+    @Query('ids') ids: string
+  ): Promise<Record<string, number>> {
+    return this.likesService.likeCounts(contentType, ids);
   }
 
   @Get('my')

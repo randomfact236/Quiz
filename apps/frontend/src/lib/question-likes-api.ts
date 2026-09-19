@@ -36,6 +36,22 @@ export async function likeQuestion(
   }
 }
 
+/** Public like totals per question id (BUG-048: counts visible to all). */
+export async function getQuestionLikeCounts(
+  contentType: QuestionLikeContentType,
+  questionIds: string[]
+): Promise<Record<string, number>> {
+  if (questionIds.length === 0) return {};
+  try {
+    const response = await api.get<Record<string, number>>(
+      `/question-likes/counts?contentType=${contentType}&ids=${encodeURIComponent(questionIds.join(','))}`
+    );
+    return response.data;
+  } catch {
+    return {};
+  }
+}
+
 /** Did this guest already like the question (restores the filled heart). */
 export async function likedByMe(
   contentType: QuestionLikeContentType,

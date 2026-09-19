@@ -77,6 +77,30 @@ export class QuestionLikesService {
     return { liked: true, alreadyLiked: false };
   }
 
+  /** Public like totals keyed by question id (BUG-048). Unknown ids omitted. */
+  async likeCounts(
+    contentType: QuestionLikeContentType,
+    ids: string
+  ): Promise<Record<string, number>> {
+    const idList = ids
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .slice(0, 100);
+    if (idList.length === 0) return {};
+    const rows: Array<{ questionId: string; likes: string }> = await this.likesRepo
+      .createQueryBuilder('like')
+      .select('like.questionId', 'questionId')
+      .addSelect('COUNT(*)', 'likes')
+      .where('like.contentType = :contentType', { contentType })
+      .andWhere('like.questionId IN (:...ids)', { ids: idList })
+      .groupBy('like.questionId')
+      .getRawMany();
+    const out: Record<string, number> = {};
+    for (const r of rows) out[r.questionId] = Number(r.likes);
+    return out;
+  }
+
   async likedByMe(
     contentType: QuestionLikeContentType,
     questionId: string,

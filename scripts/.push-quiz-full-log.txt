@@ -1,0 +1,160 @@
+
+==> subjects: reading local... 13 rows; reading live... ==> logging in to live admin API... ok
+13 rows
+   plan: 0 create, 0 update, 0 conflict (live edits — kept), 13 unchanged
+
+==> chapters: reading local... 79 rows; reading live... 0 rows
+   plan: 79 create, 0 update, 0 conflict (live edits — kept), 0 unchanged
+
+==> questions: reading local... 11541 rows; reading live... 0 rows
+   plan: 11541 create, 0 update, 0 conflict (live edits — kept), 0 unchanged
+
+======== PLAN: 11620 create, 0 update, 0 conflicts kept on live, 13 unchanged ========
+   chapters: created 50/79
+   chapters: created 79/79
+   questions: created 50/11541
+   questions: created 100/11541
+429 rate-limited, waiting 62s...
+   questions: created 150/11541
+   questions: created 200/11541
+429 rate-limited, waiting 62s...
+   questions: created 250/11541
+   questions: created 300/11541
+429 rate-limited, waiting 62s...
+   questions: created 350/11541
+   questions: created 400/11541
+429 rate-limited, waiting 62s...
+   questions: created 450/11541
+   questions: created 500/11541
+429 rate-limited, waiting 62s...
+   questions: created 550/11541
+   questions: created 600/11541
+429 rate-limited, waiting 62s...
+   questions: created 650/11541
+   questions: created 700/11541
+429 rate-limited, waiting 62s...
+   questions: created 750/11541
+   questions: created 800/11541
+429 rate-limited, waiting 62s...
+   questions: CREATE failed [geography#3#99b2a30d35b81ccd]: POST /quiz-mcq/questions -> 401: {"statusCode":401,"timestamp":"2026-09-19T20:52:42.381Z","requestId":"a665196b-d013-49e2-ac0c-a52c53d4f0a5","path":"/api/v1/quiz-mcq/questions","method":"POST","messag
+   questions: created 800/11541
+==> logging in to live admin API... ok
+   questions: created 850/11541
+429 rate-limited, waiting 62s...
+   questions: created 900/11541
+   questions: created 950/11541
+429 rate-limited, waiting 62s...
+   questions: created 1000/11541
+   questions: created 1050/11541
+429 rate-limited, waiting 62s...
+   questions: created 1100/11541
+   questions: created 1150/11541
+429 rate-limited, waiting 62s...
+   questions: created 1200/11541
+   questions: created 1250/11541
+429 rate-limited, waiting 62s...
+   questions: created 1300/11541
+   questions: created 1350/11541
+429 rate-limited, waiting 62s...
+   questions: created 1400/11541
+   questions: created 1450/11541
+429 rate-limited, waiting 62s...
+   questions: created 1500/11541
+   questions: created 1550/11541
+429 rate-limited, waiting 62s...
+   questions: created 1600/11541
+   questions: created 1650/11541
+==> logging in to live admin API... ok
+429 rate-limited, waiting 62s...
+   questions: created 1700/11541
+   questions: created 1750/11541
+429 rate-limited, waiting 62s...
+   questions: created 1800/11541
+   questions: created 1850/11541
+429 rate-limited, waiting 62s...
+   questions: created 1900/11541
+   questions: created 1950/11541
+429 rate-limited, waiting 62s...
+   questions: created 2000/11541
+   questions: created 2050/11541
+429 rate-limited, waiting 62s...
+   questions: created 2100/11541
+   questions: created 2150/11541
+429 rate-limited, waiting 62s...
+   questions: created 2200/11541
+   questions: created 2250/11541
+429 rate-limited, waiting 62s...
+   questions: CREATE failed [technology--video-games#5#52fe6ca1dc228079]: POST /quiz-mcq/questions -> 502: <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<
+   questions: CREATE failed [technology--video-games#5#f1109236b6d24c82]: POST /quiz-mcq/questions -> 502: <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<
+   questions: created 2300/11541
+   questions: created 2350/11541
+429 rate-limited, waiting 62s...
+   questions: created 2400/11541
+   questions: created 2450/11541
+429 rate-limited, waiting 62s...
+   questions: CREATE failed [pop-culture--celebrities#3#53940deabc103242]: POST /quiz-mcq/questions -> 401: {"statusCode":401,"timestamp":"2026-09-19T21:23:32.828Z","requestId":"c18b8899-cef8-4241-81d9-90b79b304be7","path":"/api/v1/quiz-mcq/questions","method":"POST","messag
+==> logging in to live admin API... ok
+   questions: created 2500/11541
+   questions: created 2550/11541
+429 rate-limited, waiting 62s...
+   questions: created 2600/11541
+   questions: created 2650/11541
+429 rate-limited, waiting 62s...
+   questions: created 2700/11541
+   questions: created 2750/11541
+429 rate-limited, waiting 62s...
+   questions: created 2800/11541
+   questions: created 2850/11541
+429 rate-limited, waiting 62s...
+   questions: created 2900/11541
+   questions: created 2950/11541
+429 rate-limited, waiting 62s...
+   questions: created 3000/11541
+   questions: created 3050/11541
+429 rate-limited, waiting 62s...
+   questions: created 3100/11541
+   questions: created 3150/11541
+429 rate-limited, waiting 62s...
+   questions: created 3200/11541
+   questions: created 3250/11541
+429 rate-limited, waiting 62s...
+   questions: created 3300/11541
+   questions: created 3350/11541
+==> logging in to live admin API... ok
+429 rate-limited, waiting 62s...
+   questions: created 3400/11541
+   questions: created 3450/11541
+429 rate-limited, waiting 62s...
+   questions: created 3500/11541
+   questions: created 3550/11541
+429 rate-limited, waiting 62s...
+   questions: created 3600/11541
+   questions: created 3650/11541
+   questions: created 3700/11541
+   questions: created 3750/11541
+429 rate-limited, waiting 62s...
+   questions: created 3800/11541
+   questions: created 3850/11541
+429 rate-limited, waiting 62s...
+   questions: created 3900/11541
+   questions: created 3950/11541
+429 rate-limited, waiting 62s...
+   questions: created 4000/11541
+   questions: created 4050/11541
+429 rate-limited, waiting 62s...
+   questions: created 4100/11541
+   questions: created 4150/11541
+429 rate-limited, waiting 62s...
+   questions: created 4200/11541
+==> logging in to live admin API... ok
+   questions: created 4250/11541
+429 rate-limited, waiting 62s...
+   questions: created 4300/11541
+   questions: created 4350/11541
+429 rate-limited, waiting 62s...

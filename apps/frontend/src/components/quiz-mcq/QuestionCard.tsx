@@ -17,6 +17,7 @@ import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
+import { getCommentCounts } from '@/lib/comments-api';
 import { MessageCircle } from 'lucide-react';
 import { LikeButton } from '@/components/likes/LikeButton';
 import type { Question } from '@/types/quiz-mcq';
@@ -222,6 +223,20 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
     },
   }));
 
+  // BUG-048: public comment count for the action-row chip
+  const [commentCount, setCommentCount] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    getCommentCounts('quiz-question', [question.id])
+      .then((c) => {
+        if (!cancelled) setCommentCount(c[question.id] ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [question.id]);
+
   // Handle question navigation - clear bubbles when question changes
   useEffect(() => {
     if (question.id !== prevQuestionIdRef.current) {
@@ -348,6 +363,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
                 >
                   <MessageCircle className="h-3.5 w-3.5" />
                   Comment
+                  {commentCount !== null && commentCount > 0 && (
+                    <span className="font-black">{commentCount}</span>
+                  )}
                 </button>
               )}
               {onShare && (
